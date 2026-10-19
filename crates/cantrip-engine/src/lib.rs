@@ -4,6 +4,7 @@
 use std::sync::OnceLock;
 
 pub mod undo;
+pub mod visibility;
 
 pub use cantrip_api::*;
 pub use cantrip_rules::{Game, Rejected, Setup, activation_costs, cast_costs, cast_total, exile_cast_texts, granted_cast_cost, life_for_cast, chars, check_answer, describe, distribution_problem, live, name_problem, summoning_sick, granted_cast_total, special_action_costs, sacrifices_for_reduction};
@@ -28,7 +29,7 @@ pub fn greedy_distribution(cards: &[ObjectId], destinations: &[Destination]) -> 
     }
     placements
 }
-pub use cantrip_state::{Frame, FrameKind, Mark};
+pub use cantrip_state::{Frame, FrameKind, Mark, Rng};
 
 /// Every card, sorted by name.
 pub fn cards() -> &'static CardTable {

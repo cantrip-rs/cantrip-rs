@@ -86,6 +86,8 @@ keeps it).
 | [KI-73](#ki-73-older-you-may-draw-cards-offer-a-draw-a-cant-draw-rule-forbids) | Older "you may draw" cards offer a draw a can't-draw rule forbids | Low | Open |
 | [KI-74](#ki-74-a-question-a-replacement-asks-mid-run-is-not-watched-for-loops) | A question a replacement asks mid-run is not watched for loops | Low | Suspected |
 | [KI-75](#ki-75-words-of-winds-return-a-permanent-question-may-be-captioned-as-a-cost) | Words of Wind's "return a permanent" question may be captioned as a cost | Low | Suspected |
+| [KI-76](#ki-76-a-searchs-world-keeps-what-the-real-game-did-with-hidden-cards-it-cannot-resample) | A search's world keeps what the real game did with hidden cards it cannot resample | Low | Open |
+| [KI-77](#ki-77-a-sacrifice-cost-with-nothing-left-to-sacrifice-is-asked-not-taken-back) | A sacrifice cost with nothing left to sacrifice is asked, not taken back | Low | Open |
 
 ## Issues
 
@@ -959,3 +961,50 @@ to pay for it"). The caption would then say the return pays for something, which
 own purpose or caption. Not checked in the browser.
 
 **Scenarios.** none yet.
+
+### KI-76: A search's world keeps what the real game did with hidden cards it cannot resample
+
+| Severity | Status | Area | Found |
+| --- | --- | --- | --- |
+| Low | Open | engine | 2026-10-18, building `cantrip_ai::determinize` |
+
+**Notes.** `determinize` (`crates/cantrip-ai/src/worlds.rs`, docs/ai-player-plan.md "Worlds") deals the hidden cards of a
+fork again, without journalling, and asks the waiting question again (`Game::ask_again`). Some facts of the real game stay
+in the world, and a seat's search could read them:
+- **Which hidden object an event named.** If the opponent discards a card, the history says whether it was the card just
+  drawn or one it had kept (two different objects). The world keeps that object, with a new card. Two real games that
+  differ only there make different worlds. The redaction test skips dealing a world for such a pair ("histories apart":
+  10 positions of 176 pairs, `accumulate-wisdom` among them). A fix renumbers the seat's unseen hand objects too, or
+  deals the hidden objects as a set.
+- A library the journal tail rearranges (a resolution in progress drew from it or put a card in it) keeps its real order
+  (`zone_order_touched`).
+- In hidden mode, the cards that began outside the game (sideboards) stay what they are when the prior has no list for
+  them.
+- A face-down object (morph, manifest) may be rebound to a card that could not have been face down that way.
+- A staged question (`Game::ask_then`, Duress's choice) is not asked again, so its options are those of the real cards.
+  So are the runs of the lower frames, and the answers `ask_again` replays may not fit the new cards.
+- What the opponent has looked at in its library (Ponder) is not kept as a constraint. The seat does not know it either,
+  but the opponent's play in the world assumes a library it never looked at.
+- `loop_watch` keeps the hashes of the real positions, so a world catches only loops that begin after the fork.
+- Dead rows the seat never saw keep their real timestamps. On live objects, a timestamp whose move an event
+  recorded is kept, and an unrecorded one becomes 0.
+- Under `CANTRIP_VERIFY`, the pool sizes are asserted. An object from a library that went to a zone no seat sees (Gone)
+  would make that assert fire. Whether any card in content does that has not been checked.
+
+**Scenarios.** none: these are properties of a search's world, checked by `crates/cantrip-ai/tests/redaction.rs`.
+
+### KI-77: A sacrifice cost with nothing left to sacrifice is asked, not taken back
+
+| Severity | Status | Area | Found |
+| --- | --- | --- | --- |
+| Low | Open | engine | 2026-10-18, the redaction test's long run (Fanatical Offering and Black Lotus in a Hidden-mode prior deck) |
+
+**Notes.** A player casts Fanatical Offering ("As an additional cost to cast this spell, sacrifice an artifact or creature")
+and, while paying its mana, sacrifices their only artifact, Black Lotus, for mana. The cost can't be paid, so the cast is
+taken back (CR 601.2h). The engine asks the sacrifice anyway: `actions::choose_permanents` puts a `ChooseCards` with
+nothing eligible, count 1, and cancel allowed. Only a cancel answers it. A cost of tapped permanents with too few left is
+taken back without asking; this one is not, because the guard reads `p.tapped`. The bench's random seat
+(`cantrip_bench::decide`) now cancels such a question; before, it answered with no cards, which was rejected. A fix
+takes the cast back without asking whenever too few are eligible, which changes what a real game asks.
+
+**Scenarios.** none yet: Fanatical Offering cast with Black Lotus as the only artifact, Black Lotus activated while paying.

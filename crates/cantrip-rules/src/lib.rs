@@ -438,6 +438,66 @@ impl Game {
         self.state.reseed(seed);
     }
 
+    /// Asks the waiting question again, of the position as it is now: for a fork whose hidden cards were dealt anew
+    /// (`rebind_hidden`, `GameState::reorder_library`) after the question was put to the real ones - a priority's
+    /// options, the cards a choice is among, and whatever the run did before it asked. The run that asked is rolled
+    /// back to where it began and run again, the answers it was given replayed, as an answer would. A question asked
+    /// between the stages of a staged frame (`ask_then`) is left as it was asked: its stage cannot be run again. Only
+    /// on a fork still at its root.
+    pub fn ask_again(&mut self) {
+        assert_eq!(self.tree.len(), 1, "asking again in a game whose tree has left its root");
+        let Some(at) = self.state.agenda.len().checked_sub(1) else { return };
+        let frame = &self.state.agenda[at];
+        if frame.pending.is_none() || frame.staged {
+            return;
+        }
+        let (mark, log_mark) = (Mark(frame.mark), frame.log_mark as usize);
+        self.state.revert(mark);
+        self.log.truncate(log_mark);
+        self.state.update_frame(at, |f| f.pending = None);
+        self.run();
+    }
+
+    /// Gives a hidden object another card, for a search's world (`cantrip_ai::determinize`): `id` and the rows it
+    /// became from (`chain`, `id` first, every one of them hidden from the player the world is for). Only on a fork
+    /// still at its root (`fork_for_search`): the rebind is no part of the journal (`GameState::rebind_hidden`), and a
+    /// node the fork's tree had left would bring the old cards back. The history's records of those objects' abilities
+    /// are rewritten too (a face-down spell's, a hidden card's ability activated from a hand).
+    pub fn rebind_hidden(&mut self, chain: &[ObjectId], card: CardId) {
+        assert_eq!(self.tree.len(), 1, "rebinding a hidden object of a game whose tree has left its root");
+        let old = self.state.obj(chain[0]).card;
+        if old == card {
+            return;
+        }
+        let mut abilities = vec![(old, card)];
+        let (old_back, new_back) = (self.cards.face(old, true), self.cards.face(card, true));
+        if old_back != old {
+            abilities.push((old_back, new_back));
+        }
+        let statics = [card, new_back].iter().any(|c| self.cards.statics[c.0 as usize]);
+        self.state.rebind_hidden(chain, card, &abilities, statics);
+        let patch = |source: ObjectId, ability: &mut AbilityRef| {
+            if chain.contains(&source)
+                && let Some(&(_, to)) = abilities.iter().find(|(from, _)| *from == ability.card)
+            {
+                ability.card = to;
+            }
+        };
+        for record in &mut self.log {
+            if let Cause::Ability { source, ability } = &mut record.cause {
+                patch(*source, ability);
+            }
+            match &mut record.event {
+                Event::AbilityActivated { source, ability, .. }
+                | Event::Resolved { source, ability }
+                | Event::Triggered { source, ability }
+                | Event::ModesChosen { source, ability, .. }
+                | Event::Done { source, ability, .. } => patch(*source, ability),
+                _ => {}
+            }
+        }
+    }
+
     /// Back to a node a search left from: [`Game::goto`].
     pub fn rollback(&mut self, to: tree::NodeId) {
         self.goto(to);
@@ -562,6 +622,7 @@ impl<'a> Cx<'a> {
         if self.cursor < frame.answers.len() {
             let answer = frame.answers[self.cursor].clone();
             self.cursor += 1;
+            self.shown(player, &kind);
             return Ok(answer);
         }
         // A question is already waiting: an operation that cannot carry the suspension out (a zone change asking
@@ -576,6 +637,27 @@ impl<'a> Cx<'a> {
         self.g.state.update_frame(at, |f| f.pending = Some(Request { id, player, kind, may_cancel }));
         loops::waiting(&mut self.g.state, id, key);
         Err(Stop::Suspend)
+    }
+
+    /// The hidden cards a question showed its player, recorded as it is answered (`Event::Shown`): the cards a scry,
+    /// surveil or look at the top looked at, a library searched, a hand chosen from. Only the questions that show cards;
+    /// priority and combat name nothing hidden.
+    fn shown(&mut self, player: PlayerId, kind: &RequestKind) {
+        if !matches!(
+            kind,
+            RequestKind::DistributeCards { .. } | RequestKind::SearchLibrary { .. } | RequestKind::ChooseCards { .. } | RequestKind::ChooseName { .. } | RequestKind::ChooseTarget { .. }
+        ) {
+            return;
+        }
+        let mut hidden: Vec<ObjectId> = Vec::new();
+        kind.objects(&mut |id| {
+            if id.index() < self.g.state.objects.len() && !hidden.contains(&id) && hidden_from(&self.g.state, player, id) {
+                hidden.push(id);
+            }
+        });
+        for card in hidden {
+            self.record(Event::Shown { player, card });
+        }
     }
 
     /// A reflexive triggered ability triggers (CR 603.12): `count` is the number its "that many" counts, if it has one.
@@ -1019,7 +1101,7 @@ impl cantrip_api::Game for Cx<'_> {
     }
 
     fn shuffle(&mut self, player: PlayerId) {
-        turn::shuffle(&mut self.g.state, Zone::library(player));
+        turn::shuffle_library(self, player);
     }
 
     fn roll_die_modified(&mut self, player: PlayerId, sides: u32, modifier: i32) -> Roll {
@@ -1447,6 +1529,18 @@ pub use cantrip_state::ContinuousEffect;
 
 #[allow(dead_code)]
 fn _assert_rng_is_state(_: Rng) {}
+
+/// Whether `player` may not see what `id` is: a card in a library, in another player's hand or sideboard, or face down
+/// where they have not seen it (CR 401.2, 402.3, 406.3, 708.5).
+fn hidden_from(state: &GameState, player: PlayerId, id: ObjectId) -> bool {
+    let obj = state.obj(id);
+    match obj.zone.kind() {
+        ZoneKind::Library => true,
+        ZoneKind::Hand | ZoneKind::Sideboard => obj.zone.player != player,
+        ZoneKind::Battlefield | ZoneKind::PhasedOut => obj.face_down && obj.controller != player,
+        _ => obj.face_down && obj.seen_by & (1 << player.0) == 0,
+    }
+}
 
 #[cfg(test)]
 mod tests {

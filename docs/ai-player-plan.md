@@ -152,21 +152,70 @@ The search needs a complete game. It makes one without reading what is hidden.
    up the real path. A plain `GameState::clone()` already drops the journal, so `clone_with_journal` (state.rs:982)
    is the starting point. A scenario test answers and cancels inside a resolution prompt after a fork.
 2. **Reseed.** The fork's RNG comes from the search's own generator; the real seed would tell it every shuffle.
-3. **Determinize.** `determinize(&mut Game, &Knowledge, seat, mode, &Belief, rng)` reassigns the identity of every
-   hidden object the seat does not know. One journalled engine operation, `GameState::rebind_hidden(obj, card)`,
-   does it whole:
-   - the object, and every earlier object in its `became` chain that was itself hidden (a card drawn from the
-     library);
-   - any `last_known` and `left_stack` entries of those, and `exiled`, `copy`, `cast_from` and `permissions` links
-     that name them;
-   - `statics_seen` for the new card (`see_statics`), and an `epoch` bump so the RefCell caches (`static_sources`,
-     `lost_to_statics`, `land_text_lost`) recompute;
-   - the history: events naming a hidden object by id are reconciled, or verified to carry no identity.
+3. **Determinize.** `cantrip_ai::determinize(&mut Game, &Knowledge, seat, mode, &Prior, rng)`
+   (`cantrip-ai/src/worlds.rs`) gives every hidden object the seat does not know another card, and resamples where
+   the library cards it knows but cannot place lie. Only a fork's root is touched (`Game::rebind_hidden` asserts the
+   tree has not left it). The engine operations are **not journalled**: a re-run inside a resolution prompt reverts
+   to its frame's mark, and a journalled rebind would be undone by it, bringing the real cards back. Like
+   `GameState::reseed`, they rewrite the stored copies in the journal's tail instead.
+   - `GameState::rebind_hidden(chain, card, abilities, statics)`, wrapped by `Game::rebind_hidden(chain, card)`, rebinds
+     one object together with the rows it became from while it stayed hidden;
+   - `GameState::reorder_library`, used only when no `ZoneInserted`/`ZoneRemoved` entry in the tail touches that
+     library (`zone_order_touched`);
+   - `GameState::restamp_hidden(id, 0)`;
+   - and `Game::ask_again`: the waiting question was put to the real cards (a Priority request's castable options),
+     so after a change it is asked again of the world's. It reverts to the top frame's mark, truncates the log and
+     re-runs, replaying the frame's answers.
 
-   The phase-1 read of `cantrip-state` lists every place an identity lives, and the worlds test above keeps it
-   honest. **The fallback**, if that list will not close: build each world by replaying the real game's public
-   answers in a fresh game whose decks are the sampled ones. That is slower (a game's length per world) but sound
-   by construction.
+   **Where an identity lives** (read from the code, and kept honest by the worlds test above):
+   - `Obj::card` of the live object. For a face-down object, `card` is the real card and `copy` holds the face-down
+     values, so only `card` is rebound.
+   - Its `became` predecessors that were themselves hidden from the seat, which are dead rows of `objects`. The
+     history and `roots` (the deck as dealt) read identity through these rows. The chain stops at the first row the
+     seat saw: it was shown, or it stood where the seat looks.
+   - The journal tail: `Undo::Object(id, _)`, and `Undo::ObjectPopped(_)`, whose index is found by walking back from
+     `objects.len()`.
+   - `AbilityRef { card, .. }` (the card and its back face) in the `stack`, `left_stack`, `triggers` and `delayed`
+     entries of a rebound object, and in the tail's `StackPopped`, `StackSet`, `LeftStackPopped`, `TriggerRemoved`
+     and `DelayedRemoved`.
+   - The history: no event carries a `CardId` directly, but `AbilityActivated`, `Resolved`, `Triggered`,
+     `ModesChosen`, `Done` and `Cause::Ability` carry an `AbilityRef`. `Game::rebind_hidden` patches those in the log
+     where the source is rebound.
+   - `LastKnown` is kept only for objects leaving the battlefield or the stack, which are public; a face-down
+     permanent is revealed as it leaves (CR 708.9). Debug builds assert it.
+   - Caches: an `epoch` bump makes `static_sources`, `lost_to_statics` and `land_text_lost` recompute. When the new
+     card has static abilities, `statics_seen` is set, and so is every `Undo::StaticsSeen` in the tail.
+   - Timestamps. Every move takes a new timestamp, and a dealt card has 0. An object whose arrival no event records
+     (no `ZoneChange` or `Drew` makes it: a card of the opening hand) takes 0, so that the world does not keep its
+     place in the deal. That applies even when the seat sees the card now (a hand Duress shows).
+   - The pending request, above.
+   - Left as they are: `loop_watch` (hashes of the real positions, so a world catches only loops that begin after the
+     fork); `Marks::chosen_card`, `Duration::AsLongAs`, effects, delayed triggers and permissions (public cards, or
+     objects named by id); `rng` (`reseed`).
+
+   **The deal.**
+   - Hidden objects are classified: those the seat sees or knows keep their card. A known card it cannot place in a
+     library is K; the rest are U.
+   - A pool is made per owner and per origin (library roots, or sideboard roots). It holds the deck as dealt (the
+     seat's own; also the opponent's in decklist mode; a list drawn from `Prior` in hidden mode), less the cards of
+     that owner's objects of that origin that are seen or known. Under `CANTRIP_VERIFY` it must come out at exactly
+     |U|.
+   - Each library's unplaced places are dealt again, with the rng, among its K and U objects. Objects are ordered by
+     what the seat can tell apart: the card of a K object, the timestamp, the first event naming the object, and then
+     the real place.
+   - The pools are then shuffled onto the U objects, by zone and place.
+
+   **Approximations, accepted** (docs/known-issues.md):
+   - A library the tail rearranges keeps its order.
+   - In hidden mode, the cards that began outside the game (sideboards) stay what they are.
+   - A face-down object may be rebound to a card that could not have been face down.
+   - A staged question (`ask_then`, Duress's choice) is not asked again.
+   - The lower frames' runs, and the answers `ask_again` replays, were made against the real cards.
+   - Which hidden object an event named stays as it was, for example whether the opponent discarded the card it just
+     drew or one it had kept.
+
+   **The fallback**, had the list not closed, was to build each world by replaying the real game's public answers
+   in a fresh game dealt from the sampled decks.
 
 What is sampled, by mode:
 
@@ -514,6 +563,12 @@ parity and gate runs.
   (or the replay fallback); `determinize` with metagame priors and legality.
 - Done: `fork_for_search` with its journal tail and `Game::reseed` (tests in `cantrip-rules` and
   `cantrip-script/tests/fork.rs`), and library ids in dealt order. Engine 10.0 → 9.8 µs a decision.
+- Done: the identity inventory (under Worlds); `rebind_hidden`, `reorder_library`, `restamp_hidden` and
+  `Game::ask_again`, none of them journalled; `determinize` with `Prior` (`cantrip-ai/src/worlds.rs`). The redaction
+  test deals worlds in A and B and checks they are the same game. It plays some of them on for 40 decisions, and it
+  deals a world inside a resolution prompt and inside a cast, then answers and cancels; its ignored run (300 bot games
+  and every scenario that looks into a hidden zone) passes in 31 minutes. Engine 10.1 → 9.8 µs a decision (noise: a real
+  game takes none of these paths).
 - **Gate:**
   - the three redaction tests over the scenario corpus and a few hundred bot games, with `CANTRIP_VERIFY=1`;
   - the fork and resolution-prompt scenario;

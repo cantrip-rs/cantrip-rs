@@ -283,7 +283,7 @@ fn leave_stack(cx: &mut Cx, item: &StackItem, reason: ZoneReason) {
         } else {
             ops::move_to_for(cx, item.object, Zone::library(obj.owner), reason);
         }
-        crate::turn::shuffle(cx.st(), Zone::library(obj.owner));
+        crate::turn::shuffle_library(cx, obj.owner);
         return;
     }
     // A copy of a card leaves the stack for nowhere: it ceases to exist (CR 707.10a, 722.3c).

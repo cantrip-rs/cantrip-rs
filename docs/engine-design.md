@@ -132,6 +132,14 @@ a search branch is a sibling path that shares everything above it.
   a waiting frame needs (so a question asked mid-resolution or mid-payment can still be answered and taken back), and
   a tree of its own rooted at the current position, whose ids follow the real tree's. Going above its root panics.
   `Game::reseed` gives it its own generator.
+- **A search's world is dealt on a fork's root** (`cantrip_ai::determinize`). The operations it uses are not
+  journalled, since a re-run reverting to its frame's mark would undo them. They rewrite the journal tail's stored
+  copies instead, as `reseed` does:
+  - `GameState::rebind_hidden` and `Game::rebind_hidden` give a hidden object, and the hidden rows it became from,
+    another card, and patch the `AbilityRef`s naming it in the stack, triggers and log;
+  - `GameState::reorder_library` reorders a library the tail does not touch (`zone_order_touched`);
+  - `GameState::restamp_hidden` resets a timestamp no event recorded;
+  - `Game::ask_again` asks the waiting question again of the new cards.
 - **An answer without stages redoes its run from the run's start**, so its node begins before the events the run
   recorded until it asked; the node keeps those events (`displaced`) and gives them back when the game goes up to its
   parent.

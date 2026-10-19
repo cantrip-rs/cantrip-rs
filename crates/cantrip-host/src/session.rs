@@ -23,7 +23,7 @@ use serde_json::{Value, json};
 use crate::answer::{Untranslatable, payload_of, translate};
 use crate::events::{Proto, Teller, Tracker};
 use crate::handles::HandleSpace;
-use crate::prompt::{prompt, request_objects};
+use crate::prompt::prompt;
 use crate::protocol::*;
 use crate::view::*;
 
@@ -343,11 +343,7 @@ impl Session {
 
     /// The log up to where it can no longer be cut back.
     fn publishable(&self) -> usize {
-        let len = self.game.log.len();
-        match self.game.state.agenda.last() {
-            Some(frame) if frame.pending.is_some() => (frame.log_mark as usize).min(len),
-            _ => len,
-        }
+        publishable(&self.game)
     }
 
     fn pending(&self) -> Option<Request> {
@@ -356,8 +352,7 @@ impl Session {
 
     fn view_for(&mut self, p: PlayerId, mentioned: &HashSet<ObjectId>) -> PlayerView {
         // A run in progress is the answering player's alone (see the module doc).
-        if self.publishable() < self.game.log.len()
-            && self.pending().is_some_and(|r| r.player != p)
+        if deferred(&self.game, p)
             && let Some(sent) = &self.sent[p.index()]
         {
             return sent.clone();

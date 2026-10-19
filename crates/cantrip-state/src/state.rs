@@ -1007,6 +1007,117 @@ impl GameState {
         }
     }
 
+    /// Gives the hidden objects of `chain` (one object and the rows it became from while it stayed hidden) another card,
+    /// for a search's world (`cantrip_ai::determinize`): never on a real game. Not journalled, so that a rollback inside
+    /// the fork keeps the world: the journal's stored copies of those rows are rewritten too, as `reseed` rewrites the
+    /// generator's. `abilities` maps the cards their abilities name (the card, and its back face) to the new ones, for
+    /// the stack items, triggers and delayed triggers of those objects (a face-down spell's). `statics` says whether
+    /// the new card has static abilities, which the layers' guard must then not skip. The caches are made stale.
+    pub fn rebind_hidden(&mut self, chain: &[ObjectId], new: CardId, abilities: &[(CardId, CardId)], statics: bool) {
+        let patch = |ability: &mut AbilityRef| {
+            if let Some(&(_, to)) = abilities.iter().find(|(from, _)| *from == ability.card) {
+                ability.card = to;
+            }
+        };
+        let old = self.objects[chain[0].index()].card;
+        for &id in chain {
+            debug_assert_eq!(self.objects[id.index()].card, old, "a chain of rows of one card");
+            debug_assert!(self.last_known.iter().all(|l| l.id != id), "a hidden object has no last-known snapshot");
+            self.objects[id.index()].card = new;
+        }
+        let rebound = |id: ObjectId| chain.contains(&id);
+        for item in self.stack.iter_mut().chain(self.left_stack.iter_mut()) {
+            if rebound(item.object) {
+                patch(&mut item.ability);
+            }
+        }
+        for trigger in &mut self.triggers {
+            if rebound(trigger.source) {
+                patch(&mut trigger.ability);
+            }
+        }
+        for delayed in &mut self.delayed {
+            if rebound(delayed.source) {
+                patch(&mut delayed.ability);
+            }
+        }
+        // The stored copies, walking back from the present: an object pushed later is not there earlier, and a popped
+        // one stood at the end.
+        let mut len = self.objects.len();
+        for entry in self.journal.entries.iter_mut().rev() {
+            match entry {
+                Undo::ObjectPushed => len -= 1,
+                Undo::ObjectPopped(obj) => {
+                    if rebound(ObjectId(len as u32)) && obj.card == old {
+                        obj.card = new;
+                    }
+                    len += 1;
+                }
+                Undo::Object(id, obj) if rebound(*id) && obj.card == old => obj.card = new,
+                Undo::StackPopped(item) | Undo::StackSet(_, item) | Undo::LeftStackPopped(item) if rebound(item.object) => {
+                    patch(&mut item.ability)
+                }
+                Undo::TriggerRemoved(_, trigger) if rebound(trigger.source) => patch(&mut trigger.ability),
+                Undo::DelayedRemoved(_, delayed) if rebound(delayed.source) => patch(&mut delayed.ability),
+                Undo::LastKnownPopped(last) => debug_assert!(!rebound(last.id), "a hidden object has no last-known snapshot"),
+                Undo::StaticsSeen(seen) if statics => *seen = true,
+                _ => {}
+            }
+        }
+        if statics {
+            self.statics_seen = true;
+        }
+        self.epoch += 1;
+    }
+
+    /// Gives a hidden object another timestamp, for a search's world: never on a real game. Not journalled, as
+    /// `rebind_hidden` is not, and the journal's stored copies of the row are rewritten too. A hidden object's timestamp
+    /// is when it went where it is; one whose arrival no event records (a card of an opening hand) would otherwise tell
+    /// a world in what order its zone was dealt.
+    pub fn restamp_hidden(&mut self, id: ObjectId, timestamp: u32) {
+        let old = self.objects[id.index()].timestamp;
+        self.objects[id.index()].timestamp = timestamp;
+        let mut len = self.objects.len();
+        for entry in self.journal.entries.iter_mut().rev() {
+            match entry {
+                Undo::ObjectPushed => len -= 1,
+                Undo::ObjectPopped(obj) => {
+                    if len == id.index() && obj.timestamp == old {
+                        obj.timestamp = timestamp;
+                    }
+                    len += 1;
+                }
+                Undo::Object(at, obj) if *at == id && obj.timestamp == old => obj.timestamp = timestamp,
+                _ => {}
+            }
+        }
+        self.epoch += 1;
+    }
+
+    /// Puts a library's objects in another order, for a search's world: never on a real game. Not journalled, as
+    /// `rebind_hidden` is not. Only for a library whose order the journal's tail never changes (`zone_order_touched`),
+    /// since a rollback inside the fork would put the old order's insertions and removals at the wrong places.
+    pub fn reorder_library(&mut self, slot: usize, order: Vec<ObjectId>) {
+        debug_assert!(!self.zone_order_touched(slot), "reordering a zone the journal's tail rearranges");
+        debug_assert!({
+            let mut a = order.clone();
+            let mut b = self.zones[slot].clone();
+            a.sort();
+            b.sort();
+            a == b
+        });
+        self.zones[slot] = order;
+        self.epoch += 1;
+    }
+
+    /// Whether the journal's tail inserts into or removes from a zone slot: one a rollback would rearrange.
+    pub fn zone_order_touched(&self, slot: usize) -> bool {
+        self.journal.entries.iter().any(|e| match e {
+            Undo::ZoneInserted { slot: s, .. } | Undo::ZoneRemoved { slot: s, .. } => *s as usize == slot,
+            _ => false,
+        })
+    }
+
     pub fn step_back(&mut self, mark: Mark) -> (Vec<Undo>, Vec<Undo>) {
         assert!(mark.0 >= self.journal.base, "stepping back past what the journal still holds");
         let mut undos = Vec::new();

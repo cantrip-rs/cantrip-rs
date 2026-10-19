@@ -13,6 +13,8 @@ members = [
     "crates/cantrip-script",
     "crates/cantrip-bench",
     "crates/cantrip-host",
+    "crates/cantrip-obs",
+    "crates/cantrip-ai",
 ]
 
 [workspace.package]
@@ -31,6 +33,9 @@ cantrip-cards = { path = "crates/cantrip-cards" }
 cantrip-engine = { path = "crates/cantrip-engine" }
 cantrip-script = { path = "crates/cantrip-script" }
 cantrip-host = { path = "crates/cantrip-host" }
+cantrip-obs = { path = "crates/cantrip-obs" }
+cantrip-ai = { path = "crates/cantrip-ai" }
+cantrip-bench = { path = "crates/cantrip-bench" }
 
 [profile.release]
 opt-level = 3

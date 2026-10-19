@@ -27,6 +27,12 @@ pub fn shuffle(state: &mut GameState, zone: Zone) {
     }
 }
 
+/// Shuffles a player's library and records it (`Event::Shuffled`): whatever anyone knew of its order is gone.
+pub fn shuffle_library(cx: &mut Cx, player: PlayerId) {
+    shuffle(cx.st(), Zone::library(player));
+    cx.record(Event::Shuffled { player });
+}
+
 /// Puts a list in random order with the state's own generator (Fisher-Yates), drawing as `shuffle` does.
 pub fn permute<T>(state: &mut GameState, items: &mut [T]) {
     for i in (1..items.len()).rev() {
@@ -233,7 +239,7 @@ pub fn opening(cx: &mut Cx) -> R<Flow> {
             for id in cx.s().zone(Zone::hand(p)).to_vec() {
                 ops::move_to(cx, id, Zone::library(p));
             }
-            shuffle(cx.st(), Zone::library(p));
+            shuffle_library(cx, p);
             for _ in 0..7 {
                 ops::draw(cx, p);
             }

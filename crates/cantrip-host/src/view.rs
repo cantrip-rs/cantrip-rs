@@ -1,6 +1,6 @@
 //! A seat's `PlayerView` from the native engine's state: what that seat may see and nothing else.
 //!
-//! Visibility follows the C# projector (`Cantrip.Projection.PlayerViewProjector`): the battlefield, the stack, the
+//! Visibility (`cantrip_engine::visibility`, shared with the AI's observations) follows the C# projector (`Cantrip.Projection.PlayerViewProjector`): the battlefield, the stack, the
 //! graveyards, exile and the command zone to everyone, a hand to its owner, a library to nobody (CR 401.2). Cards a
 //! prompt or a reveal is showing right now cross to the seat they are shown to (`extra`), as the C# `alsoReveal` does:
 //! they are objects of the view with handles, though the zone they sit in stays closed.
@@ -10,8 +10,9 @@
 //!
 //! # Left at the default, because the engine has no notion of it
 //!
-//! - `ObjectView::fingerprint`, `spent_lines`, `known_by` and `ZoneView::known`: the engine keeps
-//!   no record of who has been shown which hidden card, so only a reveal of this step crosses (as an object).
+//! - `ObjectView::fingerprint` and `spent_lines`.
+//! - `known_by` and `ZoneView::known`: the AI's `Knowledge` (cantrip-ai) folds who has been shown which hidden card
+//!   from the history, but the host does not use it yet, so only a reveal of this step crosses (as an object).
 //! - `SpellTargetView::text` is empty and `still_legal` always true.
 //! - Face-down permanents (morph, manifest) are not in the engine yet.
 //! - `PlayerSummaryView::counters`: not filled.
@@ -19,19 +20,10 @@
 use std::collections::HashSet;
 
 use cantrip_engine::*;
+pub use cantrip_engine::visibility::*;
 
 use crate::handles::HandleSpace;
 use crate::protocol::*;
-
-/// The key an ability on the stack has in a handle space: abilities are no objects of the engine, but a client points
-/// at one (to target it, to order it), so each is named by the serial it was put on the stack with.
-pub fn ability_key(serial: u32) -> ObjectId {
-    ObjectId(0x8000_0000 | serial)
-}
-
-pub fn is_ability_key(id: ObjectId) -> bool {
-    id.0 & 0x8000_0000 != 0
-}
 
 /// Seat number of a player: one-based.
 pub fn seat(player: PlayerId) -> i32 {
@@ -41,16 +33,6 @@ pub fn seat(player: PlayerId) -> i32 {
 /// The player at a seat number, or none for zero.
 pub fn player_at(seat: i32) -> Option<PlayerId> {
     (seat > 0).then(|| PlayerId((seat - 1) as u8))
-}
-
-/// Whether `viewer` may look into a zone.
-pub fn looks_into(viewer: PlayerId, zone: Zone) -> bool {
-    match zone.kind() {
-        // A player may look at their own sideboard at any time (CR 400.11a; North Wind Avatar's ruling); nobody else may.
-        ZoneKind::Hand | ZoneKind::Sideboard => zone.player == viewer,
-        ZoneKind::Library | ZoneKind::Gone => false,
-        _ => true,
-    }
 }
 
 pub fn zone_kind_view(kind: ZoneKind) -> ZoneKindView {
@@ -368,74 +350,6 @@ pub fn printed(def: &CardDef) -> ObjectView {
 /// card: it is part of the card in every zone, though the card has only its normal characteristics there (CR 715.4, 720.4).
 fn inset_spell(def: &CardDef) -> Option<Box<ObjectView>> {
     def.inset_faces().next().map(|(_, _, face)| Box::new(printed(face)))
-}
-
-/// One entry of the stack, bottom first.
-#[derive(Clone, Copy, Debug)]
-pub enum StackEntry {
-    /// A spell (its object), and the item announced for it once it is paid for.
-    Spell { id: ObjectId, item: Option<StackItem> },
-    /// An activated or triggered ability, named by its serial.
-    Ability { item: StackItem },
-}
-
-impl StackEntry {
-    /// What a handle space keys it by.
-    pub fn key(&self) -> ObjectId {
-        match self {
-            StackEntry::Spell { id, .. } => *id,
-            StackEntry::Ability { item } => ability_key(item.serial),
-        }
-    }
-}
-
-/// The stack as the rules have it, bottom first: its items, then a spell still being announced (on the stack by its
-/// zone, with no item yet).
-pub fn stack_entries(state: &GameState) -> Vec<StackEntry> {
-    let mut out: Vec<StackEntry> = Vec::new();
-    for item in &state.stack {
-        match item.kind {
-            StackKind::Spell => out.push(StackEntry::Spell { id: item.object, item: Some(*item) }),
-            _ => out.push(StackEntry::Ability { item: *item }),
-        }
-    }
-    for &id in state.zone(Zone::STACK) {
-        if !out.iter().any(|e| matches!(e, StackEntry::Spell { id: s, .. } if *s == id)) {
-            out.push(StackEntry::Spell { id, item: None });
-        }
-    }
-    out
-}
-
-/// Every object this viewer can observe: the contents of the zones they may look into, every spell and ability on the
-/// stack, and what is being shown to them right now (`extra`).
-pub fn observable(game: &Game, viewer: PlayerId, extra: &HashSet<ObjectId>) -> HashSet<ObjectId> {
-    let s = &game.state;
-    let mut visible = HashSet::new();
-    for p in s.seats() {
-        if p == viewer {
-            visible.extend(s.zone(Zone::hand(p)).iter().copied());
-            visible.extend(s.zone(Zone::sideboard(p)).iter().copied());
-        }
-        visible.extend(s.zone(Zone::graveyard(p)).iter().copied());
-        visible.extend(s.zone(Zone::exile(p)).iter().copied());
-    }
-    visible.extend(s.battlefield().iter().copied());
-    visible.extend(s.zone(Zone::PHASED_OUT).iter().copied());
-    visible.extend(s.zone(Zone::COMMAND).iter().copied());
-    // "You may look at the top card of your library any time" (CR 401.2): its player sees it while a permanent says so.
-    if game.may_look_at_library_top(viewer)
-        && let Some(&top) = s.zone(Zone::library(viewer)).first()
-    {
-        visible.insert(top);
-    }
-    visible.extend(stack_entries(s).iter().map(StackEntry::key));
-    for &id in extra {
-        if !is_ability_key(id) && (id.index() < s.objects.len()) && live(s, id) {
-            visible.insert(id);
-        }
-    }
-    visible
 }
 
 fn target_view(game: &Game, handles: &mut HandleSpace, target: Target) -> Option<TargetMessage> {
@@ -1310,7 +1224,7 @@ impl<'a> Projector<'a> {
             // Face down (CR 708.2a, 406.3): what it is face down goes to every seat, a nameless 2/2 on the battlefield and no
             // characteristics at all in exile; what it really is only to a seat that may look at it, its controller
             // for a permanent (CR 708.5) and those who saw it go there for a card (CR 406.3).
-            let looks = if on_battlefield { obj.controller == self.viewer } else { obj.seen_by & (1 << self.viewer.0) != 0 };
+            let looks = knows_face(s, self.viewer, id);
             if !on_battlefield {
                 view.name = String::new();
                 view.mana_cost = String::new();

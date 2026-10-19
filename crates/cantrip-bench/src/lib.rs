@@ -50,7 +50,15 @@ fn cost_of(game: &Game, option: &ActionOption) -> Option<ManaCost> {
     match option.kind {
         ActionKind::CastSpell => {
             let def = game.cards.get(game.state.obj(source).card);
-            Some(if option.index == 0 { def.cost } else { def.ways[option.index as usize - 1].cost.mana })
+            // The card's own alternative costs come first; the special ways (a back face, a split half, an Adventure
+            // or Omen) cast a face at its own cost.
+            match (option.index, def.split) {
+                (0, _) => Some(def.cost),
+                (WAY_BACK_FACE, _) => def.back.map(|b| b.cost),
+                (WAY_SPLIT_LEFT, Some((left, _))) => Some(left.cost),
+                (WAY_SPLIT_RIGHT, Some((_, right))) => Some(right.cost),
+                (way, _) => def.ways.get(way as usize - 1).map(|w| w.cost.mana).or_else(|| def.inset_face(way).map(|f| f.cost)),
+            }
         }
         ActionKind::ActivateAbility => {
             let ability = game.chars(source).abilities().nth(option.index as usize)?;
@@ -173,6 +181,11 @@ pub fn decide(game: &Game, random: &mut Random, request: &Request) -> Answer {
             Answer::Act(Action::of(options.iter().find(|o| o.kind == ActionKind::DeclineCost).expect("decline")))
         }
         RequestKind::ChooseCards { eligible, count, up_to, total, .. } => {
+            // Too few to choose (a sacrifice cost whose only artifact was sacrificed for mana while paying): the one
+            // answer is to take the announcement back.
+            if !*up_to && eligible.len() < *count as usize && request.may_cancel {
+                return Answer::Cancel;
+            }
             let n = if *up_to { random.below(*count as usize + 1) } else { *count as usize };
             let chosen = random.some(eligible, n);
             // "With total mana value N or less": a random choice over it is cut back to the cards that fit, in the order drawn.

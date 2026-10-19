@@ -31,117 +31,11 @@
 //! | `SearchLibrary`        | `SearchLibraryPromptMessage`                                                       |
 //! | `ChooseReplacement`    | `ChooseReplacementPromptMessage`                                                   |
 
-use std::collections::HashSet;
-
 use cantrip_engine::*;
 
 use crate::handles::HandleSpace;
 use crate::protocol::*;
 use crate::view::*;
-
-/// The objects a request names, which its player must be able to see for as long as it is outstanding: a library being
-/// searched, the cards looked at, an opponent's hand taken from. They are shown to that seat alone and the handles go
-/// when the request does.
-pub fn request_objects(request: &Request) -> HashSet<ObjectId> {
-    let mut out: HashSet<ObjectId> = HashSet::new();
-    let mut add = |ids: &[ObjectId]| out.extend(ids.iter().copied());
-    match &request.kind {
-        RequestKind::Priority { options } | RequestKind::UnlessPays { options, .. } => {
-            add_options(&mut add, options);
-            if let RequestKind::UnlessPays { source, subject, .. } = &request.kind {
-                add(&[*source, *subject]);
-            }
-        }
-        RequestKind::PayCosts { source, options, attackers, .. } => {
-            add(&[*source]);
-            add(attackers);
-            add_options(&mut add, options);
-        }
-        RequestKind::ChooseCards { source, cards, eligible, .. } => {
-            add(&[*source]);
-            add(cards);
-            add(eligible);
-        }
-        RequestKind::ChooseTarget { source, candidates, .. } | RequestKind::ChooseDividedTargets { source, candidates, .. } => {
-            add(&[*source]);
-            add(&candidates.iter().filter_map(|t| t.object()).collect::<Vec<_>>());
-        }
-        RequestKind::ChooseModes { source, .. }
-        | RequestKind::ChooseColors { source, .. }
-        | RequestKind::ChooseSubtype { source, .. }
-        | RequestKind::May { source, .. }
-        | RequestKind::ChoosePlayer { source, .. } => add(&[*source]),
-        RequestKind::ChooseName { source, looked_at, .. } => {
-            add(&[*source]);
-            add(looked_at);
-        }
-        RequestKind::TapForPower { source, cards, .. } | RequestKind::CollectEvidence { source, cards, .. } | RequestKind::Craft { source, cards, .. } => {
-            add(&[*source]);
-            add(cards);
-        }
-        RequestKind::RemoveCounters { source, pools, .. } => {
-            add(&[*source]);
-            add(&pools.iter().map(|p| p.object).collect::<Vec<_>>());
-        }
-        RequestKind::DeclareAttackers { eligible, requirements, battles, planeswalkers, .. } => {
-            add(battles);
-            add(planeswalkers);
-            add(eligible);
-            add(requirements);
-        }
-        RequestKind::AssignCombatDamage { divisions } => {
-            for d in divisions {
-                add(&[d.source]);
-                add(&d.creatures);
-                if let Target::Object(id) = d.defender {
-                    add(&[id]);
-                }
-            }
-        }
-        RequestKind::DeclareBlockers { eligible, attackers, allowed, .. } => {
-            add(eligible);
-            add(attackers);
-            add(&allowed.iter().flat_map(|(a, b)| [*a, *b]).collect::<Vec<_>>());
-        }
-        RequestKind::DiscardToHandSize { hand, .. } => add(hand),
-        RequestKind::Mulligan { .. } | RequestKind::ChooseStartingPlayer { .. } => {}
-        RequestKind::OrderTriggers { sources, .. } => add(sources),
-        RequestKind::DistributeCards { source, cards, destinations, .. } => {
-            add(&[*source]);
-            add(cards);
-            for d in destinations {
-                add(&d.eligible);
-            }
-        }
-        RequestKind::SearchLibrary { source, library, eligible, .. } => {
-            add(&[*source]);
-            add(library);
-            add(eligible);
-        }
-        RequestKind::ChooseReplacement { subject, sources, damage, .. } => {
-            if let Some(s) = subject {
-                add(&[*s]);
-            }
-            add(sources);
-            if let Some(d) = damage {
-                add(&[d.source]);
-                if let Target::Object(to) = d.to {
-                    add(&[to]);
-                }
-            }
-        }
-    }
-    out
-}
-
-fn add_options(add: &mut impl FnMut(&[ObjectId]), options: &[ActionOption]) {
-    for o in options {
-        if let Some(s) = o.source {
-            add(&[s]);
-        }
-        add(&o.target_candidates.iter().filter_map(|t| t.object()).collect::<Vec<_>>());
-    }
-}
 
 /// What a prompt may not say about an object that is gone: a source that has left and is no longer in the view is no
 /// handle, and the client draws the ability from its text.
