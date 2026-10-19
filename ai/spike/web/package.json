@@ -1,0 +1,7 @@
+{
+  "name": "cantrip-ai-spike-web",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node run.mjs" },
+  "dependencies": { "onnxruntime-web": "1.23.2" }
+}

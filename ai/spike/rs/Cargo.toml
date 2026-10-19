@@ -1,0 +1,20 @@
+[package]
+name = "cantrip-ai-spike"
+description = "Phase 0 of docs/ai-player-plan.md: the spike model through ort and tract, parity and positions a second."
+version = "0.1.0"
+edition = "2024"
+publish = false
+license = "Unlicense"
+
+# Its own workspace, so the engine's `cargo test --workspace` never builds ort.
+[workspace]
+
+[profile.release]
+opt-level = 3
+
+[dependencies]
+ort = { version = "=2.0.0-rc.14", default-features = false, features = ["std", "download-binaries", "tls-rustls", "copy-dylibs", "api-24"] }
+tract-onnx = "0.23"
+
+[features]
+cuda = ["ort/cuda"]

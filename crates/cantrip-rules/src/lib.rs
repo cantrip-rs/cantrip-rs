@@ -111,6 +111,12 @@ impl Game {
         state.outside_supply = setup.basic_lands_outside.clone();
         for (seat, deck) in setup.decks.iter().enumerate() {
             let p = PlayerId(seat as u8);
+            // A shuffled library is dealt in its shuffled order, so that an object's id says nothing of where its card
+            // was in the decklist. The generator draws as shuffling the dealt library would.
+            let mut deck = deck.clone();
+            if setup.shuffle {
+                turn::permute(&mut state, &mut deck);
+            }
             let library = deck.iter().map(|&card| (card, Zone::library(p)));
             let sideboard = setup.sideboards.get(seat).into_iter().flatten().chain(&setup.basic_lands_outside).map(|&card| (card, Zone::sideboard(p)));
             for (card, zone) in library.chain(sideboard).collect::<Vec<_>>() {
@@ -160,11 +166,6 @@ impl Game {
         }
 
         let real = setup.shuffle || setup.opening_chooser.is_some();
-        if setup.shuffle {
-            for p in state.seats() {
-                turn::shuffle(&mut state, Zone::library(p));
-            }
-        }
         let chooser = match (setup.opening_chooser, setup.shuffle) {
             (Some(p), _) => p,
             (None, true) => PlayerId(state.random(players as u32) as u8),
@@ -325,9 +326,15 @@ impl Game {
         let here = self.marks();
         self.tree.close(self.at, here);
         // A run answered without stages is redone from its start, so the events it had recorded are thrown away and
-        // the child's begin where the run did; the journal only grows (a revert appends the inverse entries).
-        let child_start = if self.state.agenda[at].staged { here } else { (here.0, self.state.agenda[at].log_mark as usize) };
-        let child = self.tree.add(self.at, (request, player, answer.clone()), child_start);
+        // the child's begin where the run did, the child keeping them to give back to its parent; the journal only grows (a
+        // revert appends the inverse entries).
+        let (child_start, displaced) = if self.state.agenda[at].staged {
+            (here, Vec::new())
+        } else {
+            let log_mark = self.state.agenda[at].log_mark as usize;
+            ((here.0, log_mark), self.log[log_mark..].to_vec())
+        };
+        let child = self.tree.add(self.at, (request, player, answer.clone()), child_start, displaced);
 
         let frame = &self.state.agenda[at];
         if frame.staged {
@@ -356,6 +363,7 @@ impl Game {
             let (state, log) = (self.state.clone(), self.log.clone());
             let parent = self.tree.parent(child).expect("a parent");
             self.goto(parent);
+            assert_eq!(self.log.len(), here.1, "going back up to the node the answer was given at did not restore its history");
             self.goto(child);
             assert!(self.state == state && self.log == log, "moving through the game tree did not restore the position");
         }
@@ -382,11 +390,13 @@ impl Game {
             let (mark, events_from) = self.tree.start(node);
             let (undos, redos) = self.state.step_back(mark);
             let events = self.log.split_off(events_from);
+            self.log.extend_from_slice(self.tree.displaced(node));
             self.tree.put_away(node, undos, redos, events);
         }
         for &node in &to[shared..] {
             let (undos, redos, events) = self.tree.take_back(node);
             self.state.step_forward(undos, redos);
+            self.log.truncate(self.tree.start(node).1);
             self.log.extend(events);
         }
         self.at = target;
@@ -406,6 +416,26 @@ impl Game {
     /// The node the game is at, for a search to come back to with [`Game::goto`].
     pub fn checkpoint(&self) -> tree::NodeId {
         self.at
+    }
+
+    /// A copy of the game for a search to play on: the working state, the journal back only as far as a run still
+    /// waiting can be redone from (what `forget` keeps), the history, and a tree of its own rooted here. It answers,
+    /// cancels and moves through its tree as the game would, at or after the fork and never before it: its tree's ids
+    /// begin past the game's, so `goto` to a node of the true past panics. Costs the state and the journal's tail, not
+    /// the game so far. The generator is the game's own; [`Game::reseed`] gives it another.
+    pub fn fork_for_search(&self) -> Game {
+        let waiting = self.state.agenda.iter().filter(|f| f.pending.is_some() || !f.answers.is_empty()).map(|f| f.mark).min();
+        let floor = Mark(waiting.unwrap_or(self.state.mark().0));
+        let state = self.state.clone_with_journal_from(floor);
+        let root = self.tree.next();
+        let tree = tree::Tree::rooted(root, (state.mark(), self.log.len()));
+        Game { state, log: self.log.clone(), tree, at: root, cards: self.cards, verify: self.verify }
+    }
+
+    /// Gives the game's generator another seed (`GameState::reseed`): a fork for search that must not shuffle or roll
+    /// as the real game will.
+    pub fn reseed(&mut self, seed: u64) {
+        self.state.reseed(seed);
     }
 
     /// Back to a node a search left from: [`Game::goto`].
@@ -1417,3 +1447,160 @@ pub use cantrip_state::ContinuousEffect;
 
 #[allow(dead_code)]
 fn _assert_rng_is_state(_: Rng) {}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// A zero-cost 1/1, to cast and attack with.
+    static BODY: CardDef = CardDef {
+        name: "Fork Body",
+        types: TypeSet::of(&[CardType::Creature]),
+        power: Some(1),
+        toughness: Some(1),
+        ..CardDef::BLANK
+    };
+
+    static OTHER: CardDef = CardDef { name: "Fork Other", types: TypeSet::of(&[CardType::Creature]), power: Some(2), toughness: Some(2), ..CardDef::BLANK };
+
+    /// A real deal (shuffled, mulligans asked) of twenty bodies each, checked as it plays.
+    fn deal() -> Game {
+        let cards: &'static CardTable = Box::leak(Box::new(CardTable::new([&BODY])));
+        let deck = vec![cards.id_of(&BODY); 20];
+        let mut game = Game::new(cards, &Setup { decks: vec![deck.clone(), deck], seed: 7, shuffle: true, ..Setup::default() });
+        game.verify = true;
+        game.run();
+        game
+    }
+
+    /// The same answer to the same question every time: keep, cast what is free, attack with everything, never block.
+    fn answer_for(request: &Request) -> Answer {
+        match &request.kind {
+            RequestKind::Mulligan { .. } => Answer::No,
+            RequestKind::ChooseStartingPlayer { candidates } => Answer::Player(candidates[0]),
+            RequestKind::Priority { options } => match options.iter().find(|o| o.kind == ActionKind::CastSpell && o.targets_required == 0) {
+                Some(cast) => Answer::Act(Action::of(cast)),
+                None => Answer::Pass,
+            },
+            RequestKind::DeclareAttackers { eligible, players, .. } => Answer::Attack(eligible.iter().map(|&a| (a, Target::Player(players[0]))).collect()),
+            RequestKind::DeclareBlockers { .. } => Answer::Block(Vec::new()),
+            RequestKind::DiscardToHandSize { count, hand } => Answer::Cards(hand[..*count as usize].to_vec()),
+            RequestKind::OrderTriggers { sources, .. } => Answer::Order((0..sources.len() as u8).collect()),
+            other => panic!("no answer for {other:?}"),
+        }
+    }
+
+    /// Plays up to `n` answers, and gives them back.
+    fn play(game: &mut Game, n: usize) -> Vec<(u32, PlayerId, Answer)> {
+        let mut given = Vec::new();
+        for _ in 0..n {
+            let Some(request) = game.pending().cloned() else { break };
+            let answer = answer_for(&request);
+            game.answer(request.id, request.player, answer.clone()).expect("legal");
+            given.push((request.id, request.player, answer));
+        }
+        given
+    }
+
+    fn replay(game: &mut Game, answers: &[(u32, PlayerId, Answer)]) {
+        for (request, player, answer) in answers {
+            game.answer(*request, *player, answer.clone()).expect("legal");
+        }
+    }
+
+    /// A fork plays on, goes back to its root and plays the same answers again to the same position, as a second fork and
+    /// the real game do; the real game is untouched by any of it, and the fork holds only the journal's tail.
+    #[test]
+    fn a_game_forked_for_search_plays_on_and_comes_back_as_the_game_would() {
+        let mut game = deal();
+        while game.state.turn.number < 3 {
+            assert!(!play(&mut game, 1).is_empty());
+        }
+        let (state, log, entries, nodes, at) = (game.state.clone(), game.log.clone(), game.state.journal.entries.len(), game.tree.len(), game.at);
+
+        let mut fork = game.fork_for_search();
+        let root = fork.checkpoint();
+        assert!(root.0 as usize >= nodes, "the fork's ids begin past the game's");
+        assert!(fork.state.journal.entries.len() < entries / 2, "the fork holds the journal's tail, not the game's");
+        assert!(fork.state == state && fork.log == log);
+        let answers = play(&mut fork, 40);
+        assert!(answers.len() == 40 && fork.state.turn.number > state.turn.number);
+        let (after, after_log) = (fork.state.clone(), fork.log.clone());
+
+        fork.goto(root);
+        assert!(fork.state == state && fork.log == log, "back at the root of the fork");
+        // Another branch, then the same answers again: the tree's nodes are found and gone back down.
+        play(&mut fork, 3);
+        fork.goto(root);
+        replay(&mut fork, &answers);
+        assert!(fork.state == after && fork.log == after_log);
+
+        let mut again = game.fork_for_search();
+        replay(&mut again, &answers);
+        assert!(again.state == after && again.log == after_log, "a second fork plays the answers out to the same position");
+
+        assert!(game.state == state && game.log == log && game.tree.len() == nodes && game.at == at, "the real game is untouched");
+        assert_eq!(game.state.journal.entries.len(), entries);
+        replay(&mut game, &answers);
+        assert!(game.state == after && game.log == after_log, "the real game plays the same answers to the same position");
+    }
+
+    /// A fork cannot go back into the true past: the game's own nodes are before its root.
+    #[test]
+    #[should_panic(expected = "before the root of a game forked for search")]
+    fn a_fork_cannot_go_to_a_node_before_its_root() {
+        let mut game = deal();
+        play(&mut game, 10);
+        let past = game.checkpoint();
+        play(&mut game, 1);
+        let mut fork = game.fork_for_search();
+        fork.goto(past);
+    }
+
+    /// A reseeded fork draws from its own generator, and rolling back past a draw in the journal's tail does not bring the
+    /// game's back.
+    #[test]
+    fn a_reseeded_fork_keeps_its_own_generator_through_its_journal() {
+        let mut game = deal();
+        play(&mut game, 10);
+        let mut fork = game.fork_for_search();
+        // A draw from the game's generator in the tail, before the reseed.
+        fork.state.random(1000);
+        fork.reseed(99);
+        let seeded = fork.state.rng;
+        assert_ne!(seeded, game.state.rng);
+        let floor = Mark(fork.state.journal.base);
+        fork.state.random(1000);
+        fork.state.rollback(floor);
+        assert_eq!(fork.state.rng, seeded, "every generator entry of the fork's journal is its own");
+    }
+
+    /// A shuffled library is dealt in the order shuffling the decklist's cards in place would have given, the generator drawing
+    /// as it did, and its objects are numbered in that order: an id says where a card was dealt, not where it was listed.
+    #[test]
+    fn a_shuffled_library_is_dealt_in_shuffled_order_with_ids_in_that_order() {
+        let cards: &'static CardTable = Box::leak(Box::new(CardTable::new([&BODY, &OTHER])));
+        let decks: Vec<Vec<CardId>> = (0..2).map(|seat| (0..30).map(|i| cards.id_of(if (i * 7 + seat) % 3 == 0 { &OTHER } else { &BODY })).collect()).collect();
+        let game = Game::new(cards, &Setup { decks: decks.clone(), seed: 7, shuffle: true, ..Setup::default() });
+        // As it was dealt before: objects numbered in decklist order, each library shuffled in place, then the chooser drawn.
+        let mut before = GameState::new(2, 7);
+        for (seat, deck) in decks.iter().enumerate() {
+            for &card in deck {
+                let id = before.push_obj(Obj::new(card, PlayerId(seat as u8), Zone::library(PlayerId(seat as u8))));
+                before.zone_push(Zone::library(PlayerId(seat as u8)), id);
+            }
+        }
+        for p in before.seats() {
+            turn::shuffle(&mut before, Zone::library(p));
+        }
+        let chooser = PlayerId(before.random(2) as u8);
+        for p in game.state.seats() {
+            let library = game.state.zone(Zone::library(p));
+            let order = |s: &GameState, z: &[ObjectId]| z.iter().map(|&id| s.obj(id).card).collect::<Vec<_>>();
+            assert_eq!(order(&game.state, library), order(&before, before.zone(Zone::library(p))));
+            assert!(library.windows(2).all(|w| w[0] < w[1]), "ids in library order");
+        }
+        assert_eq!(game.state.turn.starting, chooser);
+        assert_eq!(game.state.rng, before.rng);
+    }
+}

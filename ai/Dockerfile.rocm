@@ -1,0 +1,20 @@
+# The AMD environment: PyTorch on ROCm (torch.cuda is HIP there) and the phase-0 spike. Not yet built (no AMD GPU on
+# the machine it was written on). Needs a ROCm-capable GPU and the amdgpu driver on the host:
+#
+#   docker build -f ai/Dockerfile.rocm -t cantrip-ai-rocm ai
+#   docker run --rm --device /dev/kfd --device /dev/dri --group-add video --security-opt seccomp=unconfined cantrip-ai-rocm
+#
+# A consumer card outside ROCm's list may need HSA_OVERRIDE_GFX_VERSION (e.g. -e HSA_OVERRIDE_GFX_VERSION=11.0.0 for
+# RDNA3). onnxruntime's MIGraphX provider has no prebuilt wheel or `ort` binary; it is built from source in here when
+# the ort-MIGraphX target is taken up.
+FROM rocm/pytorch:latest
+
+RUN pip install --no-cache-dir uv && uv pip install --system --no-cache "onnx>=1.16" "onnxruntime>=1.18" "numpy>=1.26"
+
+RUN useradd --create-home --uid 1001 cantrip
+USER cantrip
+WORKDIR /home/cantrip/ai
+COPY --chown=cantrip . .
+
+WORKDIR /home/cantrip/ai/spike
+CMD ["sh", "-c", "python export.py && python bench_torch.py"]

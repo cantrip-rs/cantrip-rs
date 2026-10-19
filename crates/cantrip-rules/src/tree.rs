@@ -41,19 +41,45 @@ struct Node {
     /// Where they end, once it has been left; none while the game is still running in it.
     end: Option<(Mark, usize)>,
     away: Option<Away>,
+    /// The events its parent had recorded that its run threw away: an answer without stages redoes the run from its start,
+    /// so it begins where the run did, before the events the run recorded until it asked. They are its parent's again once
+    /// the working state goes back up to it.
+    displaced: Vec<Record>,
 }
 
 /// The tree of every position the game has been in and every branch a search has looked at.
 #[derive(Clone, Debug)]
 pub struct Tree {
+    /// The root's id: 0 for a game's own tree; one past the last node of the tree it was forked from for a search's
+    /// (`Game::fork_for_search`), so that no node of the true past names one of its nodes.
+    first: u32,
     nodes: Vec<Node>,
 }
 
 impl Tree {
     pub fn new() -> Tree {
-        Tree {
-            nodes: vec![Node { parent: None, answer: None, children: Vec::new(), start: (Mark(0), 0), end: None, away: None }],
-        }
+        Tree::rooted(NodeId::ROOT, (Mark(0), 0))
+    }
+
+    /// A tree whose root is `root`, beginning at this journal mark and history length.
+    pub fn rooted(root: NodeId, start: (Mark, usize)) -> Tree {
+        Tree { first: root.0, nodes: vec![Node { parent: None, answer: None, children: Vec::new(), start, end: None, away: None, displaced: Vec::new() }] }
+    }
+
+    pub fn root(&self) -> NodeId {
+        NodeId(self.first)
+    }
+
+    /// The id the next node will have.
+    pub fn next(&self) -> NodeId {
+        NodeId(self.first + self.nodes.len() as u32)
+    }
+
+    fn ix(&self, node: NodeId) -> usize {
+        assert!(node.0 >= self.first, "node {} is before the root of a game forked for search: a fork cannot go back past it", node.0);
+        let i = (node.0 - self.first) as usize;
+        assert!(i < self.nodes.len(), "node {} is not in this tree", node.0);
+        i
     }
 
     pub fn len(&self) -> usize {
@@ -65,22 +91,22 @@ impl Tree {
     }
 
     pub fn parent(&self, node: NodeId) -> Option<NodeId> {
-        self.nodes[node.0 as usize].parent
+        self.nodes[self.ix(node)].parent
     }
 
     pub fn children(&self, node: NodeId) -> &[NodeId] {
-        &self.nodes[node.0 as usize].children
+        &self.nodes[self.ix(node)].children
     }
 
     /// The answer that led to a node (the request's id, who answered, the answer).
     pub fn answer(&self, node: NodeId) -> Option<&(u32, PlayerId, Answer)> {
-        self.nodes[node.0 as usize].answer.as_ref()
+        self.nodes[self.ix(node)].answer.as_ref()
     }
 
     /// The child of `node` made by this answer, if it has been given before.
     pub fn child(&self, node: NodeId, request: u32, player: PlayerId, answer: &Answer) -> Option<NodeId> {
         self.children(node).iter().copied().find(|&c| {
-            matches!(&self.nodes[c.0 as usize].answer, Some((r, p, a)) if *r == request && *p == player && a == answer)
+            matches!(&self.nodes[self.ix(c)].answer, Some((r, p, a)) if *r == request && *p == player && a == answer)
         })
     }
 
@@ -96,34 +122,42 @@ impl Tree {
         path
     }
 
-    pub(crate) fn add(&mut self, parent: NodeId, answer: (u32, PlayerId, Answer), start: (Mark, usize)) -> NodeId {
-        let id = NodeId(self.nodes.len() as u32);
-        self.nodes.push(Node { parent: Some(parent), answer: Some(answer), children: Vec::new(), start, end: None, away: None });
-        self.nodes[parent.0 as usize].children.push(id);
+    pub(crate) fn add(&mut self, parent: NodeId, answer: (u32, PlayerId, Answer), start: (Mark, usize), displaced: Vec<Record>) -> NodeId {
+        let id = self.next();
+        self.nodes.push(Node { parent: Some(parent), answer: Some(answer), children: Vec::new(), start, end: None, away: None, displaced });
+        let i = self.ix(parent);
+        self.nodes[i].children.push(id);
         id
     }
 
     pub(crate) fn start(&self, node: NodeId) -> (Mark, usize) {
-        self.nodes[node.0 as usize].start
+        self.nodes[self.ix(node)].start
+    }
+
+    pub(crate) fn displaced(&self, node: NodeId) -> &[Record] {
+        &self.nodes[self.ix(node)].displaced
     }
 
     pub fn end(&self, node: NodeId) -> Option<(Mark, usize)> {
-        self.nodes[node.0 as usize].end
+        self.nodes[self.ix(node)].end
     }
 
     pub(crate) fn close(&mut self, node: NodeId, end: (Mark, usize)) {
-        let n = &mut self.nodes[node.0 as usize];
+        let i = self.ix(node);
+        let n = &mut self.nodes[i];
         if n.end.is_none() {
             n.end = Some(end);
         }
     }
 
     pub(crate) fn put_away(&mut self, node: NodeId, undos: Vec<Undo>, redos: Vec<Undo>, events: Vec<Record>) {
-        self.nodes[node.0 as usize].away = Some(Away { undos, redos, events });
+        let i = self.ix(node);
+        self.nodes[i].away = Some(Away { undos, redos, events });
     }
 
     pub(crate) fn take_back(&mut self, node: NodeId) -> (Vec<Undo>, Vec<Undo>, Vec<Record>) {
-        let away = self.nodes[node.0 as usize].away.take().expect("a node off the path holds its writes");
+        let i = self.ix(node);
+        let away = self.nodes[i].away.take().expect("a node off the path holds its writes");
         (away.undos, away.redos, away.events)
     }
 }

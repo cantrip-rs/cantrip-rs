@@ -1,0 +1,4 @@
+spike/out/
+spike/rs/target/
+spike/web/node_modules/
+**/__pycache__/

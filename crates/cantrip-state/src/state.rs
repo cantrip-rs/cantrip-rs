@@ -985,6 +985,28 @@ impl GameState {
         copy
     }
 
+    /// A copy of the state and the journal from `mark` on: one that can roll back as far as `mark`, and no further.
+    pub fn clone_with_journal_from(&self, mark: Mark) -> GameState {
+        assert!(mark.0 >= self.journal.base && mark.0 <= self.mark().0, "copying a journal from a mark it does not hold");
+        let mut copy = self.clone();
+        let from = (mark.0 - self.journal.base) as usize;
+        copy.journal = Journal { entries: self.journal.entries[from..].to_vec(), base: mark.0, holds: self.journal.holds };
+        copy
+    }
+
+    /// Replaces the generator with one from `seed`, keeping any die rolls a script has fixed, for a copy that must not
+    /// draw what the game it was copied from will (a search's fork). The journal's generator entries are rewritten too,
+    /// so that rolling back past a draw does not bring back the old generator.
+    pub fn reseed(&mut self, seed: u64) {
+        let rng = Rng { forced: self.rng.forced, forced_len: self.rng.forced_len, ..Rng::new(seed) };
+        self.rng = rng;
+        for entry in &mut self.journal.entries {
+            if let Undo::Rng(old) = entry {
+                *old = rng;
+            }
+        }
+    }
+
     pub fn step_back(&mut self, mark: Mark) -> (Vec<Undo>, Vec<Undo>) {
         assert!(mark.0 >= self.journal.base, "stepping back past what the journal still holds");
         let mut undos = Vec::new();

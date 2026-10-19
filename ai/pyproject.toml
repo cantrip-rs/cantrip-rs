@@ -1,0 +1,15 @@
+# The Python side of the AI player (docs/ai-player-plan.md). On the NixOS host, `nix-shell shell.nix` provides the same
+# packages; in the containers torch comes from the base image and `uv pip install --system .` adds the rest.
+[project]
+name = "cantrip-ai"
+version = "0.0.0"
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.4",
+    "onnx>=1.16",
+    "onnxruntime>=1.18",
+    "numpy>=1.26",
+]
+
+[tool.uv]
+package = false

@@ -18,15 +18,20 @@ const BEGIN_ON_BATTLEFIELD: Question = Question::new(
 /// Shuffles a zone with the state's own generator (Fisher-Yates).
 pub fn shuffle(state: &mut GameState, zone: Zone) {
     let mut cards: Vec<ObjectId> = state.zone(zone).to_vec();
-    for i in (1..cards.len()).rev() {
-        let j = state.random(i as u32 + 1) as usize;
-        cards.swap(i, j);
-    }
+    permute(state, &mut cards);
     for &id in &cards {
         state.zone_remove(zone, id);
     }
     for id in cards {
         state.zone_push(zone, id);
+    }
+}
+
+/// Puts a list in random order with the state's own generator (Fisher-Yates), drawing as `shuffle` does.
+pub fn permute<T>(state: &mut GameState, items: &mut [T]) {
+    for i in (1..items.len()).rev() {
+        let j = state.random(i as u32 + 1) as usize;
+        items.swap(i, j);
     }
 }
 

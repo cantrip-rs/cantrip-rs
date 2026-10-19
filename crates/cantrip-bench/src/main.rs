@@ -1,7 +1,7 @@
 //! cantrip-bench: what the engine costs per decision, on games the random seat plays (docs/engine-design.md,
 //! "Performance"). The numbers are reported the way the old C# engine's were measured, so the two compare.
 //!
-//!   cantrip-bench [--games N] [--seed N] [--deck PATH --deck PATH] [--copies N] [--scaling]
+//!   cantrip-bench [--games N] [--seed N] [--deck PATH --deck PATH] [--copies N] [--scaling] [--forks]
 
 use std::alloc::{GlobalAlloc, Layout, System};
 use std::cell::Cell;
@@ -260,6 +260,64 @@ fn main() {
         println!("    state hash: {} us", summary(&mut hash_us));
         println!("    answer and come back (the game-log tree): {} us", summary(&mut unmake_us));
     }
+    // --- A fork for a search ------------------------------------------------------------------------------------
+    if args.iter().any(|a| a == "--forks") {
+        println!();
+        println!("Forking a game for a search, on {} games at the start of turns 1, 5 and 15:", copies.min(games));
+        for turn in [1, 5, 15] {
+            let mut entries = Vec::new();
+            let mut state_us = Vec::new();
+            let mut journal_us = Vec::new();
+            let mut journal_kb = Vec::new();
+            let mut game_us = Vec::new();
+            let mut game_kb = Vec::new();
+            let mut fork_us = Vec::new();
+            let mut fork_kb = Vec::new();
+            let mut tail = Vec::new();
+            for i in 0..copies.min(games) {
+                let mut g = table.deal(i);
+                let mut random = table.policy(i);
+                while g.state.turn.number < turn && !g.is_over() {
+                    play(&mut g, &mut random, 1);
+                }
+                if g.is_over() {
+                    continue;
+                }
+                entries.push(g.state.journal.entries.len() as f64);
+                const TIMES: u32 = 200;
+                let time = |f: &dyn Fn()| {
+                    let t = Instant::now();
+                    for _ in 0..TIMES {
+                        f();
+                    }
+                    t.elapsed().as_secs_f64() * 1e6 / TIMES as f64
+                };
+                state_us.push(time(&|| drop(std::hint::black_box(g.state.clone()))));
+                journal_us.push(time(&|| drop(std::hint::black_box(g.state.clone_with_journal()))));
+                game_us.push(time(&|| drop(std::hint::black_box(g.clone()))));
+                fork_us.push(time(&|| drop(std::hint::black_box(g.fork_for_search()))));
+                let before = allocated();
+                let copy = g.state.clone_with_journal();
+                journal_kb.push((allocated() - before) as f64 / 1024.0);
+                drop(copy);
+                let before = allocated();
+                let copy = g.clone();
+                game_kb.push((allocated() - before) as f64 / 1024.0);
+                drop(copy);
+                let before = allocated();
+                let copy = g.fork_for_search();
+                fork_kb.push((allocated() - before) as f64 / 1024.0);
+                tail.push(copy.state.journal.entries.len() as f64);
+                drop(copy);
+            }
+            println!("  turn {turn}: {} journal entries", summary(&mut entries));
+            println!("    state clone: {} us", summary(&mut state_us));
+            println!("    state with its journal: {} us, {} KB", summary(&mut journal_us), summary(&mut journal_kb));
+            println!("    whole game (journal, history, tree): {} us, {} KB", summary(&mut game_us), summary(&mut game_kb));
+            println!("    fork for search (journal tail, history, own tree): {} us, {} KB, {} entries in the tail", summary(&mut fork_us), summary(&mut fork_kb), summary(&mut tail));
+        }
+    }
+
     // --- Card code that asks ---------------------------------------------------------------------------------
     println!();
     println!("Answering a question asked mid-resolution, from the position a scenario hands over at:");

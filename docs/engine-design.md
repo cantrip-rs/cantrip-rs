@@ -128,6 +128,13 @@ a search branch is a sibling path that shares everything above it.
   4-9 us. **Search moves through the tree, never by copying the game.**
 - **A working state is the quick reference.** The live game, and each search thread, holds one fully built state and
   moves it through the tree. A value lookup is a read of the working state, never a rebuild.
+- **A search thread starts from `Game::fork_for_search`**: the working state, the journal back to the lowest mark
+  a waiting frame needs (so a question asked mid-resolution or mid-payment can still be answered and taken back), and
+  a tree of its own rooted at the current position, whose ids follow the real tree's. Going above its root panics.
+  `Game::reseed` gives it its own generator.
+- **An answer without stages redoes its run from the run's start**, so its node begins before the events the run
+  recorded until it asked; the node keeps those events (`displaced`) and gives them back when the game goes up to its
+  parent.
 - `CANTRIP_VERIFY=1` turns on the engine's own checks while it plays: every answer is round-tripped through the tree
   and the position it lands on is compared.
 
