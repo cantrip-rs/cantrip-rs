@@ -1,0 +1,38 @@
+# Extrapolate the Impossible: "You may reveal exactly two cards..." - the may is the first card's choice, and choosing
+# none is declining (CR 608.2d): nothing is revealed, Bot1 is asked no second card and Bot2 is asked nothing, and both of
+# Bot1's cards outside the game stay there. The positive control is
+# extrapolate-the-impossible-reveals-two-and-puts-the-opponents-pick-into-hand, where the same choice is taken.
+
+[Bot1 Deck]
+Extrapolate the Impossible
+Swamp
+Swamp
+Swamp
+Island
+Island
+Island
+Island x13
+
+[Bot1 Sideboard]
+Lightning Bolt
+Counterspell
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Extrapolate the Impossible.Cast
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Choose()
+! Bot1.Choose
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Swamp; Island; Island; Island; Island
+Bot1.Sideboard = Lightning Bolt; Counterspell
+Bot1.Graveyard = Extrapolate the Impossible
+Stack.Count = 0

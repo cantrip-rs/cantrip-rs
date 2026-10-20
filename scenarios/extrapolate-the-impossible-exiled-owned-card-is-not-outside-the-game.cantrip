@@ -1,0 +1,44 @@
+# Swords to Plowshares exiles Bot1's own Ornithopter in-game (CR 701.13a); it cannot join the two legal sideboard
+# choices Extrapolate reveals from outside the game (CR 400.11a-b).
+
+[Bot1 Deck]
+Extrapolate the Impossible
+Ornithopter
+Swords to Plowshares
+Plains
+Swamp
+Swamp
+Island x20
+
+[Bot1 Sideboard]
+Lightning Bolt
+Counterspell
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Plains.Play
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Plains.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Extrapolate the Impossible.Cast
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Lightning Bolt)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Counterspell)
+Bot2.Choose(Counterspell)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Counterspell; Island; Island; Island
+Bot1.Sideboard = Lightning Bolt
+Exile = Ornithopter
+Bot1.Graveyard = Extrapolate the Impossible; Swords to Plowshares
+Stack.Count = 0

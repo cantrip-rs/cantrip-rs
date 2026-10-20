@@ -1,0 +1,42 @@
+# Extrapolate the Impossible: "You may reveal exactly two cards you own with different names from outside the game."
+# Bot1 owns two Lightning Bolts and a Counterspell outside the game. Either Bolt can be the first card revealed (each has
+# the Counterspell to pair with), but once one is revealed the other Bolt is not a card of a different name, so it is not
+# offered for the second card (CR 608.2d: the reveal is exactly two cards of different names, and an illegal choice is
+# never offered). Bot2 then names the Bolt, which comes into Bot1's hand; the Counterspell stays outside the game.
+
+[Bot1 Deck]
+Extrapolate the Impossible
+Swamp
+Swamp
+Swamp
+Island
+Island
+Island
+Island x13
+
+[Bot1 Sideboard]
+Lightning Bolt
+Lightning Bolt
+Counterspell
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Extrapolate the Impossible.Cast
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Choose(Lightning Bolt)
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Counterspell)
+Bot2.Choose(Lightning Bolt)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Lightning Bolt; Swamp; Island; Island; Island; Island
+Bot1.Sideboard = Lightning Bolt; Counterspell
+Bot1.Graveyard = Extrapolate the Impossible
+Stack.Count = 0

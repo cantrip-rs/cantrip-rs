@@ -1,0 +1,38 @@
+# Extrapolate the Impossible wants two cards with different names from outside the game, and Bot1 owns only two Lightning
+# Bolts there: one name twice over is no pair, so there is no reveal to make and nothing is asked - Bot1 is not asked to
+# choose, and neither is Bot2 (CR 608.2d). The positive control is
+# extrapolate-the-impossible-reveals-two-and-puts-the-opponents-pick-into-hand, where a second name makes the question.
+
+[Bot1 Deck]
+Extrapolate the Impossible
+Swamp
+Swamp
+Swamp
+Island
+Island
+Island
+Island x13
+
+[Bot1 Sideboard]
+Lightning Bolt
+Lightning Bolt
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Extrapolate the Impossible.Cast
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Pass
+! Bot1.Choose
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Swamp; Island; Island; Island; Island
+Bot1.Sideboard = Lightning Bolt; Lightning Bolt
+Bot1.Graveyard = Extrapolate the Impossible
+Stack.Count = 0

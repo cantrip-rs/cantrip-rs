@@ -1,0 +1,46 @@
+# A copy of Extrapolate the Impossible is a copy of the whole spell (CR 707.10): the copy resolves first, its controller
+# (Bot1, who controls the copy, CR 707.10a) reveals two cards of their own from outside the game again, and the card Bot2
+# names is brought into Bot1's hand - so the original, resolving afterwards, chooses from a sideboard the copy has already
+# taken one card out of. Bot1's three Moxen and Black Lotus pay for both spells on the first turn.
+
+[Bot1 Deck]
+Extrapolate the Impossible
+Lutri, the Spellchaser
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Island
+Island
+Island x13
+
+[Bot1 Sideboard]
+Lightning Bolt
+Counterspell
+Duress
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Extrapolate the Impossible.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Lutri, the Spellchaser.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Stack.Count = 2
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Counterspell)
+Bot2.Choose(Counterspell)
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Duress)
+Bot2.Choose(Lightning Bolt)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Counterspell; Island; Island; Lightning Bolt
+Bot1.Sideboard = Duress
+Bot1.Graveyard = Extrapolate the Impossible; Black Lotus
+Stack.Count = 0

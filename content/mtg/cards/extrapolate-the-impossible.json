@@ -1,0 +1,6 @@
+{
+  "name": "Extrapolate the Impossible",
+  "manaCost": "{1}{B}",
+  "type": "Sorcery",
+  "oracleText": "You may reveal exactly two cards you own with different names from outside the game. An opponent chooses one of them. You put that card into your hand."
+}

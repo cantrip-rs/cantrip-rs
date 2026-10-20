@@ -1,0 +1,37 @@
+# Extrapolate the Impossible with nothing outside the game: there is no card to reveal, so nothing is asked and nothing
+# moves - Bot2's Shock is outside the game too, but it is Bot2's and not a card Bot1 owns (CR 108.3b, 400.11a). The
+# positive control is extrapolate-the-impossible-reveals-two-and-puts-the-opponents-pick-into-hand.
+
+[Bot1 Deck]
+Extrapolate the Impossible
+Swamp
+Swamp
+Swamp
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Bot2 Sideboard]
+Shock
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Extrapolate the Impossible.Cast
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Pass
+! Bot1.Choose
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Swamp; Island; Island; Island; Island
+Bot1.Sideboard.Count = 0
+Bot2.Sideboard = Shock
+Bot1.Graveyard = Extrapolate the Impossible
+Stack.Count = 0

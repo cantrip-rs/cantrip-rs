@@ -1,0 +1,42 @@
+# In Limited, a basic land brought into the game leaves another outside under tournament rules; Lutri's copy and the
+# original can each reveal Island with the same outside Bolt.
+
+[Bot1 Deck]
+Extrapolate the Impossible
+Lutri, the Spellchaser
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Island x20
+
+[Bot1 Sideboard]
+Lightning Bolt
+
+[Basic Lands Outside]
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Extrapolate the Impossible.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Lutri, the Spellchaser.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Island)
+Bot1.Choose(Lightning Bolt)
+Bot2.Choose(Island)
+Bot1.Choose(Island)
+Bot1.Choose(Lightning Bolt)
+Bot2.Choose(Island)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island
+Bot1.Sideboard = Lightning Bolt; Island
+Bot1.Graveyard = Extrapolate the Impossible; Black Lotus
+Stack.Count = 0

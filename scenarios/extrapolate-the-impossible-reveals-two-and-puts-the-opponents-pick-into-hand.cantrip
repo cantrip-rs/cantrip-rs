@@ -1,0 +1,48 @@
+# Extrapolate the Impossible: "You may reveal exactly two cards you own with different names from outside the game. An
+# opponent chooses one of them. You put that card into your hand." Bot1's sideboard holds Lightning Bolt and Counterspell
+# (CR 400.11a: a sideboard is outside the game), so both are offered. Bot1 reveals the pair and Bot2 - the opponent -
+# names Counterspell, which Bot1 puts into their hand (CR 400.11b); the Bolt stays outside the game, where the spell left
+# it (CR 701.20b, 400.11c), so the sideboard holds it still. Bot2's Shock is outside the game too, but it is not a card
+# Bot1 owns, so it is not among those Bot1 may reveal (CR 108.3b, 400.11a).
+
+[Bot1 Deck]
+Extrapolate the Impossible
+Swamp
+Swamp
+Swamp
+Island
+Island
+Island
+Island x13
+
+[Bot1 Sideboard]
+Lightning Bolt
+Counterspell
+
+[Bot2 Deck]
+Island x20
+
+[Bot2 Sideboard]
+Shock
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Extrapolate the Impossible.Cast
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+? Stack.Count = 1
+! Bot1.Choose(Shock)
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Counterspell)
+Bot2.Choose(Counterspell)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Counterspell; Swamp; Island; Island; Island; Island
+Bot1.Sideboard = Lightning Bolt
+Bot1.Graveyard = Extrapolate the Impossible
+Bot2.Sideboard = Shock
+Bot2.Hand.Count = 7
+Stack.Count = 0

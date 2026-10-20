@@ -1,0 +1,39 @@
+# Bot1 draws for the turn, then Extrapolate puts a sideboard card into their hand under Bot2's Narset (CR 121.5).
+
+[Bot1 Deck]
+Extrapolate the Impossible
+Swamp
+Swamp
+Island x20
+
+[Bot1 Sideboard]
+Lightning Bolt
+Counterspell
+
+[Bot2 Deck]
+Black Lotus
+Narset, Parter of Veils
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Narset, Parter of Veils.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Extrapolate the Impossible.Cast
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Counterspell)
+Bot2.Choose(Counterspell)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Counterspell; Island; Island; Island; Island; Island
+Bot1.Sideboard = Lightning Bolt
+Bot2.Battlefield = Narset, Parter of Veils
+Bot1.Graveyard = Extrapolate the Impossible
+Stack.Count = 0

@@ -1,0 +1,35 @@
+# The opponent must choose between the revealed Bolt and Counterspell; the unrevealed Duress is refused and stays
+# outside (CR 701.20a-b).
+
+[Bot1 Deck]
+Extrapolate the Impossible
+Swamp
+Swamp
+Island x20
+
+[Bot1 Sideboard]
+Lightning Bolt
+Counterspell
+Duress
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Extrapolate the Impossible.Cast
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Counterspell)
+! Bot2.Choose(Duress)
+Bot2.Choose(Counterspell)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Counterspell; Island; Island; Island; Island; Island
+Bot1.Sideboard = Lightning Bolt; Duress
+Bot1.Graveyard = Extrapolate the Impossible
+Stack.Count = 0

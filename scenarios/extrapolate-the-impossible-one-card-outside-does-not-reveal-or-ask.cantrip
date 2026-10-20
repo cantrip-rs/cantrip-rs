@@ -1,0 +1,32 @@
+# One outside card cannot make a pair: resolving Extrapolate asks neither Bot1 to reveal nor Bot2 to choose (CR 608.2d).
+
+[Bot1 Deck]
+Extrapolate the Impossible
+Swamp
+Swamp
+Island x20
+
+[Bot1 Sideboard]
+Lightning Bolt
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Extrapolate the Impossible.Cast
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Pass
+! Bot1.Choose
+! Bot2.Choose
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Island
+Bot1.Sideboard = Lightning Bolt
+Bot1.Graveyard = Extrapolate the Impossible
+Bot2.Hand.Count = 7
+Stack.Count = 0
