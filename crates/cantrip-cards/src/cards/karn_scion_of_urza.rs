@@ -13,20 +13,7 @@ fn reveal_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         return Ok(());
     }
     g.reveal(you, &revealed);
-    let mut taken = revealed[0];
-    if revealed.len() > 1 {
-        let opponents: Vec<PlayerId> = g.state().opponents(you).collect();
-        let chooser = match opponents.len() {
-            0 => None,
-            1 => Some(opponents[0]),
-            _ => choose::player(g, you, item.object, opponents, "ChooseRevealedCard", 0)?,
-        };
-        if let Some(chooser) = chooser
-            && let Some(card) = choose::card(g, chooser, item.object, Purpose::PutIntoHand, revealed.clone())?
-        {
-            taken = card;
-        }
-    }
+    let taken = choose::opponent_chooses_one(g, you, item.object, revealed.clone())?.unwrap_or(revealed[0]);
     g.return_to_hand(&[taken]);
     for &other in &revealed {
         if other != taken {
