@@ -1,0 +1,38 @@
+# Tenured Tethermage killed in response to its own enters trigger: Shock deals two to the 1/1 while the trigger is on the
+# stack, but the trigger is independent of its source (CR 603.3a, 113.7a) and resolves with its controller - the player who
+# controlled it as it triggered - choosing the Forest and making the two tapped Heartwood tokens. The Tethermage itself is
+# in the graveyard and gets no counters.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Lotus Petal
+Mox Emerald
+Tenured Tethermage
+Shock
+Forest
+Forest x9
+
+[Bot2 Deck]
+Opt x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tenured Tethermage.Cast
+Bot1.Battlefield.Lotus Petal.Activate(Color: Red)
+Bot1.Hand.Shock.Cast(Tenured Tethermage)
+Bot1.Pass
+Bot1.Choose(Forest)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Forest; Tenured Tethermage; Shock; Lotus Petal
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Heartwood Token#1.Tapped = true
+Bot1.Battlefield.Heartwood Token#2.Tapped = true

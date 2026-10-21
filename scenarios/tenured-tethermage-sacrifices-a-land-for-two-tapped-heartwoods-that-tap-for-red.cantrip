@@ -1,0 +1,43 @@
+# Tenured Tethermage: "When this creature enters, you may sacrifice a land. If you do, create two tapped Heartwood
+# tokens." Bot1 sacrifices its only land for two Heartwood tokens (CR 111.10x), created together (CR 101.4) and tapped
+# as the card says, and on the next turn one untaps and taps for red with its mana ability (CR 605.1a).
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Tenured Tethermage
+Forest
+Forest
+Forest
+Forest x8
+
+[Bot2 Deck]
+Opt x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tenured Tethermage.Cast
+Bot1.Pass
+Bot1.Choose(Forest)
+? Bot1.Battlefield.Heartwood Token#1.Tapped = true
+? Bot1.Battlefield.Heartwood Token#2.Tapped = true
+? Bot1.Battlefield.Heartwood Token#1.Types = Artifact
+? Bot1.Battlefield.Heartwood Token#1.Subtypes = Heartwood
+? Bot1.Battlefield.Heartwood Token#1.Colors = Green; Red
+[T3 Bot1.Main1]
+Bot1.Battlefield.Heartwood Token#1.Activate(Color: Red)
+Bot1.Battlefield.Heartwood Token#2.Activate(Color: Green)
+? Bot1.Mana = {R}{G}
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Forest
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Heartwood Token#1.Tapped = true
+Bot1.Battlefield.Heartwood Token#2.Tapped = true

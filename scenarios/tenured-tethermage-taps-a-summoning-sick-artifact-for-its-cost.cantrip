@@ -1,0 +1,38 @@
+# "Tap two untapped artifacts you control" is a cost, not the {T} symbol of those artifacts (CR 118.3, 107.5, 302.6), so
+# an artifact creature that entered this turn may be tapped for it: Ornithopter, cast this turn, and the Mox Ruby pay the
+# cost and the Tethermage gets its two +1/+1 counters.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Tenured Tethermage
+Ornithopter
+Forest
+Forest
+Forest x8
+
+[Bot2 Deck]
+Opt x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tenured Tethermage.Cast
+Bot1.Pass
+Bot1.Choose()
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Tenured Tethermage.Activate
+Bot1.Choose(Ornithopter; Mox Ruby)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Tenured Tethermage.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Mox Ruby.Tapped = true

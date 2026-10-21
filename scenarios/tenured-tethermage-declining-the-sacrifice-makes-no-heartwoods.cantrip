@@ -1,0 +1,31 @@
+# Tenured Tethermage's sacrifice is a "may": choosing none (CR 608.2d) keeps the Forest and creates no Heartwood tokens,
+# so the battlefield is the Forest, the two Moxen and the Tethermage, and the graveyard is empty.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Tenured Tethermage
+Forest
+Forest
+Forest
+Forest x8
+
+[Bot2 Deck]
+Opt x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tenured Tethermage.Cast
+Bot1.Pass
+Bot1.Choose()
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Count = 4

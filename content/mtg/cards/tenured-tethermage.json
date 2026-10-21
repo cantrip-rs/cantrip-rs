@@ -1,0 +1,8 @@
+{
+  "name": "Tenured Tethermage",
+  "manaCost": "{1}{R}{G}",
+  "type": "Creature — Human Artificer",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, you may sacrifice a land. If you do, create two tapped Heartwood tokens. (They're red and green artifacts with \"{T}: Add {R} or {G}.\")\nTap two untapped artifacts you control: Put two +1/+1 counters on this creature."
+}

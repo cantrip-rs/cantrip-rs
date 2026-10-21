@@ -1,0 +1,31 @@
+# Tenured Tethermage with no land under its controller's control: nothing can be sacrificed, so the trigger asks nothing
+# (the bare refusal; CR 608.2d), no Heartwood tokens are made, and the Moxen it was cast with are untouched.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Tenured Tethermage
+Mox Sapphire
+Mox Pearl
+Black Lotus
+Island x13
+
+[Bot2 Deck]
+Opt x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tenured Tethermage.Cast
+Bot1.Pass
+! Bot1.Choose
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Count = 4

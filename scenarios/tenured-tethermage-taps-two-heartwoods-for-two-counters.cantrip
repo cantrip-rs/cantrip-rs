@@ -1,0 +1,38 @@
+# Tenured Tethermage: "Tap two untapped artifacts you control: Put two +1/+1 counters on this creature." The two Heartwood
+# tokens it made are artifacts and have untapped by turn three, and both are chosen for the cost (CR 118.3, asked as a
+# choice of exactly two), so the 1/1 becomes a 3/3 with two +1/+1 counters and both tokens are tapped.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Tenured Tethermage
+Forest
+Forest
+Forest
+Forest x8
+
+[Bot2 Deck]
+Opt x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tenured Tethermage.Cast
+Bot1.Pass
+Bot1.Choose(Forest)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Tenured Tethermage.Activate
+Bot1.Choose(Heartwood Token#1; Heartwood Token#2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Tenured Tethermage.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Tenured Tethermage.Power = 3
+Bot1.Battlefield.Tenured Tethermage.Toughness = 3
+Bot1.Battlefield.Heartwood Token#1.Tapped = true
+Bot1.Battlefield.Heartwood Token#2.Tapped = true
