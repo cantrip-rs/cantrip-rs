@@ -1,0 +1,65 @@
+# Mass Polymorph: "Exile all creatures you control, then reveal cards from the top of your library until you reveal that
+# many creature cards." Tokens that are exiled count for "that many" (CR 111.7: they cease to exist, but they were
+# creatures exiled): Bot1's two Faerie tokens and one Llanowar Elves make the number 3, so three creature cards are
+# revealed and put onto the battlefield, past three Islands that stay in the library. Only the Llanowar Elves card is in
+# exile; the tokens are gone.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Llanowar Elves
+Faebloom Trick
+Mass Polymorph
+Island
+Elvish Mystic
+Island
+Birds of Paradise
+Island
+Llanowar Elves
+Island x4
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faebloom Trick.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mass Polymorph.Cast
+[T7 Bot1.Main2]
+? Exile.Count = 1
+? Exile = Llanowar Elves
+? Bot1.Library.Count = 7
+? Bot1.Battlefield.Count = 9
+[T9 Bot1.Main1]
+
+[Expect]
+Turn = 9
+Bot1.Battlefield = Birds of Paradise; Elvish Mystic; Llanowar Elves; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Swamp
+Bot1.Library.Count = 6
+Exile = Llanowar Elves
+Bot1.Graveyard = Mass Polymorph; Black Lotus; Faebloom Trick

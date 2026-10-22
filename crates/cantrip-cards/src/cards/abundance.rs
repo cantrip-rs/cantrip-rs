@@ -25,9 +25,9 @@ fn reveal_until_kind(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Re
     // The labels are Abundance's own.
     let card = g.card_id(&CARD);
     let land = choose::one_of(g, player, source, vec![Label::Card(card, 0), Label::Card(card, 1)])? == 0;
-    let (found, rest) = reveal_until(g, player, &|q, c| q.chars(c).is(CardType::Land) == land);
-    if let Some(found) = found {
-        g.return_to_hand(&[found]);
+    let (found, rest) = reveal_until(g, player, 1, &|q, c| q.chars(c).is(CardType::Land) == land);
+    if !found.is_empty() {
+        g.return_to_hand(&found);
     }
     let bottom = ask_library_order(g, player, source, &rest, DestinationKind::LibraryBottom)?;
     g.arrange_library(player, &[], &bottom);

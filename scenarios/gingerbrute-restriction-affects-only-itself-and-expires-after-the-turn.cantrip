@@ -1,0 +1,63 @@
+# The activated Gingerbrutes refuse blockers without haste (CR 509.1b).
+# A hasty blocker can block one; Llanowar Elves can block an unactivated third Gingerbrute.
+# On the next turn Gingerbrute attacks, its old activation no longer bars Ornithopter.
+
+[Bot1 Deck]
+Gingerbrute x3
+Island
+Sol Ring
+Mox Sapphire
+Island
+Island x10
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Ruby
+Fanatical Firebrand
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Gingerbrute.Cast
+Bot1.Hand.Gingerbrute.Cast
+
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gingerbrute.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Fanatical Firebrand.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gingerbrute#1.Activate(Ability: can't be blocked)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gingerbrute#2.Activate(Ability: can't be blocked)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Gingerbrute#1 > Bot2; Gingerbrute#2 > Bot2; Gingerbrute#3 > Bot2)
+! Bot2.Block(Llanowar Elves > Gingerbrute#1)
+Bot2.Block(Fanatical Firebrand > Gingerbrute#2; Llanowar Elves > Gingerbrute#3)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Gingerbrute > Bot2)
+Bot2.Block(Ornithopter > Gingerbrute)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield = Gingerbrute; Island; Mox Sapphire; Sol Ring
+Bot1.Battlefield.Gingerbrute.Token = (absent)
+Bot1.Graveyard = Gingerbrute; Gingerbrute
+Bot2.Battlefield = Forest; Mox Ruby; Ornithopter
+Bot2.Battlefield.Ornithopter.Damage = 1

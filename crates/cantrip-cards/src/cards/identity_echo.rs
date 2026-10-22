@@ -20,8 +20,8 @@ fn exile_and_reveal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
     let Some(target) = targets::object(g, item, 0) else { return Ok(()) };
     g.exile(target);
-    let (found, rest) = library::reveal_until(g, you, &is_creature_or_planeswalker);
-    if let Some(card) = found {
+    let (found, rest) = library::reveal_until(g, you, 1, &is_creature_or_planeswalker);
+    if let Some(card) = found.first().copied() {
         g.put_onto_battlefield(card, you, false)?;
     }
     g.bottom_in_random_order(you, &rest);

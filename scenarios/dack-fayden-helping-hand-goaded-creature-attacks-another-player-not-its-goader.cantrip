@@ -1,0 +1,47 @@
+# Dack Fayden, Helping Hand goads each creature he gives away, and a goaded creature attacks a player other than the one
+# who goaded it if able (CR 701.15b). Bot1 gives one Llanowar Elves to Bot2 and one to Bot3, both goaded by Bot1; on
+# Bot2's turn 2 its Elves may not attack Bot1, its goader, while Bot3 is there to attack instead - and does, for 1 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Dack Fayden, Helping Hand
+Island
+Island
+Forest
+Forest
+Llanowar Elves
+Island
+Llanowar Elves
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dack Fayden, Helping Hand.Cast
+Bot1.ChoosePlayer(Bot2)
+[T2 Bot2.DeclareAttackers]
+! Bot2.Attack(Llanowar Elves > Bot1)
+Bot2.Attack(Llanowar Elves > Bot3)
+[T2 Bot2.Main2]
+
+[Expect]
+Turn = 2
+Bot2.Battlefield.Llanowar Elves.GoadedBy = Bot1
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Life = 20
+Bot3.Life = 19

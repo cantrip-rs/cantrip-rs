@@ -7,11 +7,11 @@ use cantrip_oracle as oracle;
 /// tapped and attacking and the rest on the bottom of your library in a random order.
 fn reveal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
-    let (creature, revealed) = library::reveal_until(g, you, &|q, card| q.chars(card).is(CardType::Creature));
-    if creature.is_none() && revealed.is_empty() {
+    let (creature, revealed) = library::reveal_until(g, you, 1, &|q, card| q.chars(card).is(CardType::Creature));
+    if creature.is_empty() && revealed.is_empty() {
         return Ok(());
     }
-    if let Some(card) = creature {
+    if let Some(card) = creature.first().copied() {
         let defender = choose_attack_target(g, you, item.object)?;
         match defender {
             Some(d) => {

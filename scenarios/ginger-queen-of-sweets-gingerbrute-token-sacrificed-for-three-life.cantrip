@@ -1,0 +1,41 @@
+# Ginger, Queen of Sweets: the Gingerbrute token's "{2}, {T}, Sacrifice this token: You gain 3 life." The token has haste,
+# so it may tap the turn it arrives: Bot1 pays exactly two mana and gains exactly 3 life, 20 + 3 = 23, and the token is
+# gone.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Emerald
+Ginger, Queen of Sweets
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ginger, Queen of Sweets.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gingerbrute.Activate(Ability: You gain 3 life)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Life = 23
+Bot1.Battlefield = Ginger, Queen of Sweets; Gingerbrute; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Mox Jet.Tapped = true
+Bot1.Battlefield.Mox Emerald.Tapped = true
+Bot1.Battlefield.Mox Ruby.Tapped = false

@@ -2343,6 +2343,9 @@ pub struct CardDef {
     pub spell_rules: &'static [SpellRule],
     /// Its static abilities that limit blocking (CR 509.1b), while it is on the battlefield.
     pub block_rules: &'static [BlockRule],
+    /// Blocking restrictions made by resolving spells or abilities (CR 611.2a), indexed by
+    /// `EffectKind::BlockRestriction`. Unlike static block rules, these survive the source losing abilities.
+    pub resolved_block_rules: &'static [BlockRule],
     /// Its static abilities that require creatures to block (CR 509.1c), while it is on the battlefield.
     pub block_requirements: &'static [BlockRequirement],
     /// Its static abilities that keep creatures from attacking (CR 508.1c), while it is on the battlefield.
@@ -2553,6 +2556,7 @@ impl CardDef {
         cast_rules: &[],
         spell_rules: &[],
         block_rules: &[],
+        resolved_block_rules: &[],
         block_requirements: &[],
         attack_rules: &[],
         attack_costs: &[],

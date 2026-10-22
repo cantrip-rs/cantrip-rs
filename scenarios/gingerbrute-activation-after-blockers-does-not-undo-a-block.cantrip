@@ -1,0 +1,37 @@
+# Gingerbrute attacks the turn it is cast thanks to haste (CR 702.10b).
+# Its activation after Ornithopter blocks does not remove that block (CR 509.1b).
+
+[Bot1 Deck]
+Island
+Gingerbrute
+Mox Sapphire
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Gingerbrute.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Attack(Gingerbrute > Bot2)
+Bot2.Block(Ornithopter > Gingerbrute)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gingerbrute.Activate(Ability: can't be blocked)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield = Gingerbrute; Island; Mox Sapphire
+Bot1.Battlefield.Gingerbrute.Power = 1
+Bot1.Battlefield.Gingerbrute.Toughness = 1
+Bot1.Battlefield.Gingerbrute.Types = Artifact; Creature
+Bot1.Battlefield.Gingerbrute.Subtypes = Food; Golem
+Bot1.Battlefield.Gingerbrute.Keywords = Haste
+Bot1.Battlefield.Gingerbrute.ManaValue = 1
+Bot2.Battlefield.Ornithopter.Damage = 1

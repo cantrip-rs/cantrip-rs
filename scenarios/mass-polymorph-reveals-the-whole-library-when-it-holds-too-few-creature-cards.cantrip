@@ -1,0 +1,56 @@
+# Mass Polymorph: a library with fewer creature cards than the creatures exiled is revealed whole, and every creature
+# card in it arrives (2010-08-15 ruling). Bot1 exiles two Llanowar Elves, reveals all ten cards left in her library for
+# the one creature among them, and puts Elvish Mystic onto the battlefield; the Islands are shuffled back.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Mass Polymorph
+Island
+Elvish Mystic
+Island x8
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T7 Bot1.Main1]
+? Bot1.Library.Count = 10
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mass Polymorph.Cast
+[T7 Bot1.Main2]
+? Exile.Count = 2
+? Bot1.Library.Count = 9
+? Bot1.Battlefield.Count = 7
+[T9 Bot1.Main1]
+
+[Expect]
+Turn = 9
+Bot1.Battlefield = Elvish Mystic; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Swamp
+Bot1.Library.Count = 8
+Bot1.Graveyard.Count = 2

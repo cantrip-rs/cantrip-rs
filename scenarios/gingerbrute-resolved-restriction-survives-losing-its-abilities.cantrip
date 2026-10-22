@@ -1,0 +1,50 @@
+# Losing abilities preserves Gingerbrute's already-resolved blocking restriction (CR 611.2a).
+# Dress Down resolves after the activation. Llanowar Elves must still be unable to block
+# that Gingerbrute, but can block the unactivated one (CR 509.1b).
+
+[Bot1 Deck]
+Island
+Sol Ring
+Gingerbrute x2
+Mox Sapphire
+Island x15
+
+[Bot2 Deck]
+Island
+Mox Emerald
+Mox Sapphire
+Llanowar Elves
+Dress Down
+Island x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Gingerbrute.Cast
+Bot1.Hand.Gingerbrute.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gingerbrute#1.Activate(Ability: can't be blocked)
+[T3 Bot1.BeginCombat]
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Dress Down.Cast
+Bot1.Attack(Gingerbrute#1 > Bot2; Gingerbrute#2 > Bot2)
+! Bot2.Block(Llanowar Elves > Gingerbrute#1)
+Bot2.Block(Llanowar Elves > Gingerbrute#2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield = Gingerbrute; Island; Mox Sapphire; Sol Ring
+Bot1.Graveyard = Gingerbrute
+Bot2.Graveyard = Llanowar Elves

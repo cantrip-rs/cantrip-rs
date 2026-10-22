@@ -1,0 +1,63 @@
+# Dack Fayden, Helping Hand goads for the rest of the game (Duration::Indefinite), while the Undercity's Arena goads only
+# until its controller's next turn. Bot1's Dack puts Bot2's Llanowar Elves onto the battlefield goaded by Bot1 on turn 1;
+# Bot2 takes the initiative on turn 2 and reaches the Arena on turn 6, goading the same Elves, so on turn 6 it is goaded
+# by both (CR 701.15b, two separate goads). On turn 8 the Arena's goad has expired and Dack's is still there.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Dack Fayden, Helping Hand
+Island
+Island
+Forest
+Island
+Llanowar Elves
+Island x10
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Caves of Chaos Adventurer
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dack Fayden, Helping Hand.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Caves of Chaos Adventurer.Cast
+Bot2.Search(Island)
+[T4 Bot2.Upkeep]
+Bot2.Modes(Lost Well)
+[T6 Bot2.Upkeep]
+Bot2.Modes(Arena)
+Bot2.Target(Bot2.Battlefield.Llanowar Elves)
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.GoadedBy = Bot1; Bot2
+[T8 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.GoadedBy = Bot1
+
+[Expect]
+Turn = 8
+Bot2.Battlefield.Llanowar Elves.GoadedBy = Bot1
+Bot2.Battlefield = Caves of Chaos Adventurer; Llanowar Elves; Mountain; Mox Jet; Mox Ruby; Mox Sapphire

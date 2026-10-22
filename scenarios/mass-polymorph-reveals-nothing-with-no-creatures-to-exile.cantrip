@@ -1,0 +1,47 @@
+# Mass Polymorph: with no creatures to exile it reveals nothing and puts nothing onto the battlefield, and the library
+# is shuffled all the same (2010-08-15 ruling: "If the number of creatures you exile is greater than the number of
+# creature cards remaining in your library, you'll wind up revealing your entire library" - with none, that is none of
+# it). Bot1 casts it with an empty board and an unchanged, shuffled library.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mass Polymorph
+Island x13
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 13
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mass Polymorph.Cast
+[T3 Bot1.Main2]
+? Exile.Count = 0
+? Bot1.Library.Count = 13
+? Bot1.Battlefield.Count = 6
+[T5 Bot1.Main1]
+
+[Expect]
+Turn = 5
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Swamp
+Bot1.Library.Count = 12
+Bot1.Graveyard.Count = 2

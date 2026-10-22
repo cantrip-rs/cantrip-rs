@@ -1,0 +1,8 @@
+{
+  "name": "Dack Fayden, Helping Hand",
+  "manaCost": "{4}{W}{W}",
+  "type": "Legendary Creature — Human Advisor",
+  "power": 4,
+  "toughness": 6,
+  "oracleText": "When Dack Fayden enters, reveal cards from the top of your library until you reveal X creature cards, where X is the number of opponents you have. Put those creature cards onto the battlefield, then shuffle. They're goaded for the rest of the game. For each of those permanents, choose a different opponent. Each opponent gains control of the permanent for which they were chosen."
+}

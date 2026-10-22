@@ -1,0 +1,69 @@
+# Mass Polymorph: "Exile all creatures you control, then reveal cards from the top of your library until you reveal that
+# many creature cards. Put all creature cards revealed this way onto the battlefield, then shuffle the rest of the
+# revealed cards into your library." Bot1 exiles two Llanowar Elves and reveals two Islands and two creature cards, so
+# Elvish Mystic and Birds of Paradise arrive while the Islands stay in the library. Bot2's Llanowar Elves is not a
+# creature Bot1 controls, so it stays where it is.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Mass Polymorph
+Island
+Elvish Mystic
+Island
+Birds of Paradise
+Island x6
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x5
+Forest x13
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mass Polymorph.Cast
+[T7 Bot1.Main2]
+? Exile.Count = 2
+? Bot1.Library.Count = 8
+? Bot1.Battlefield.Count = 8
+? Bot2.Battlefield.Count = 2
+[T9 Bot1.Main1]
+
+[Expect]
+Turn = 9
+Bot1.Battlefield = Birds of Paradise; Elvish Mystic; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Swamp
+Exile = Llanowar Elves; Llanowar Elves
+Bot1.Library.Count = 7
+Bot1.Graveyard.Count = 2
+Bot2.Battlefield = Forest; Llanowar Elves

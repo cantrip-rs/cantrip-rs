@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_api::ZoneKind::Graveyard;
-use cantrip_mechanics::{effects, tokens};
+use cantrip_mechanics::{effects, tokens, triggers};
 use cantrip_oracle as oracle;
 
 /// "Create a 2/2 colorless Wizard Soldier creature token named Cadet, then put a +1/+1 counter on each other
@@ -17,12 +17,13 @@ fn command_the_stage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     Ok(())
 }
 
-/// "At the beginning of each upkeep" (CR 503.1a): any player's upkeep.
-fn each_upkeep(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    match event {
-        Event::StepBegan { step: Step::Upkeep } if q.obj(source).zone.is(Graveyard) => Fired::PLAIN,
-        _ => None,
+/// "At the beginning of each upkeep" (CR 503.1a): any player's upkeep, with this card in the graveyard, since it is the only
+/// zone its ability works from (`.anywhere()`).
+fn each_upkeep_in_the_graveyard(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    if !q.obj(source).zone.is(Graveyard) {
+        return None;
     }
+    triggers::each_upkeep(q, source, event)
 }
 
 /// "If an opponent was dealt noncombat damage last turn" (CR 603.4): the turn before this one, an opponent of this card's
@@ -37,7 +38,7 @@ fn opponent_was_dealt_noncombat_damage_last_turn(q: &dyn Query, asker: &Asker) -
 
 pub static CARD: CardDef = CardDef {
     spell: spell(&[], command_the_stage),
-    abilities: &[triggered(when(EventMask::STEP_BEGAN, each_upkeep), effects::return_this_to_hand, "At the beginning of each upkeep, if an opponent was dealt noncombat damage last turn, return this card from your graveyard to your hand.")
+    abilities: &[triggered(when(EventMask::STEP_BEGAN, each_upkeep_in_the_graveyard), effects::return_this_to_hand, "At the beginning of each upkeep, if an opponent was dealt noncombat damage last turn, return this card from your graveyard to your hand.")
         .anywhere()
         .condition(opponent_was_dealt_noncombat_damage_last_turn)],
     ..oracle::COMMAND_THE_STAGE

@@ -1,0 +1,44 @@
+# Jhoira, Weatherlight Corsair: "Whenever Jhoira enters or attacks". The enters ability has already taken Bot2's first Mind
+# Stone on turn 1; on turn 3 Jhoira attacks Bot2 unblocked for 4 and the attack trigger takes the second, past one Island,
+# for 2 more life. Bot1 is at 16, Bot2 at 16.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Jhoira, Weatherlight Corsair
+Island
+Island x13
+
+[Bot2 Deck]
+Island x7
+Island
+Mind Stone
+Island
+Mind Stone
+Island x9
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Jhoira, Weatherlight Corsair.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Jhoira, Weatherlight Corsair > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Life = 16
+Bot2.Life = 16
+Bot1.Battlefield = Jhoira, Weatherlight Corsair; Mind Stone; Mind Stone; Mox Jet; Mox Pearl; Mox Sapphire
+Bot1.Graveyard = Black Lotus
+Bot2.Battlefield.Count = 0
+Bot2.Library.Count = 10

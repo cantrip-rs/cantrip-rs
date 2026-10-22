@@ -1,0 +1,54 @@
+# Jhoira, Weatherlight Corsair: "a historic permanent card" is an artifact, a legendary card or a Saga (CR 700.6). The
+# cards taken here are neither of them artifacts: Bot2 reveals two Islands and the legendary Thalia, Guardian of Thraben,
+# so Bot1 puts Thalia onto the battlefield and loses her mana value, 2 (turn 1); when Jhoira attacks on turn 3 Bot2
+# reveals an Island and the Saga Song of Freyalise, taken the same way for 2 more. Everything else is put on the bottom.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Jhoira, Weatherlight Corsair
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Thalia, Guardian of Thraben
+Island
+Song of Freyalise
+Island x8
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Jhoira, Weatherlight Corsair.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Jhoira, Weatherlight Corsair > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 16
+
+[Expect]
+Turn = 3
+Bot1.Life = 16
+Bot1.Battlefield = Jhoira, Weatherlight Corsair; Mox Jet; Mox Pearl; Mox Sapphire; Song of Freyalise; Thalia, Guardian of Thraben
+Bot1.Battlefield.Thalia, Guardian of Thraben.Supertypes = Legendary
+Bot1.Battlefield.Song of Freyalise.Subtypes = Saga
+Bot2.Life = 16
+Bot2.Battlefield.Count = 0
+Bot2.Library.Count = 10

@@ -1,0 +1,52 @@
+# Nissa, Leyline Tamer: "Landfall — Whenever a land you control enters, draw a card. Then if this is the first time this
+# ability has resolved this turn, reveal cards from the top of your library until you reveal a creature card." Bot1's
+# Forest on turn 3 is the first land of the turn: it draws a card, then reveals the Forest and the Llanowar Elves under it,
+# putting the Elves onto the battlefield and the Forest on the bottom. Bot2's lands (turn 2 and turn 4) are not lands Bot1
+# controls: Bot1 draws nothing for them. Nissa herself has deathtouch and vigilance.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Nissa, Leyline Tamer
+Forest
+Island
+Island
+Forest
+Llanowar Elves
+Island x16
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Nissa, Leyline Tamer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 20
+Bot1.Library.Count = 17
+Bot1.Hand.Count = 2
+Bot1.Hand = Island; Island
+Bot1.Battlefield = Forest; Llanowar Elves; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Nissa, Leyline Tamer
+Bot1.Battlefield.Nissa, Leyline Tamer.Keywords = Deathtouch; Vigilance
+Bot2.Battlefield = Island; Island

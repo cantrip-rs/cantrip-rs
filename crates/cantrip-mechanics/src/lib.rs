@@ -32,6 +32,7 @@ pub mod flashback;
 pub mod harmonize;
 pub mod flurry;
 pub mod gift;
+pub mod goad;
 pub mod goyf;
 pub mod harness;
 pub mod hexproof_from;

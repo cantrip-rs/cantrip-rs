@@ -710,6 +710,9 @@ pub enum EffectKind {
     Goaded,
     /// "Can't block" (CR 509.1b) for as long as the effect lasts.
     CantBlock,
+    /// A resolved restriction on blocking (CR 509.1b, 611.2a), the indexed rule of the card that created it.
+    /// It lasts independently of its source's current abilities, and ends when the affected object changes zones.
+    BlockRestriction { card: CardId, index: u8 },
     /// "Its activated abilities can't be activated" (CR 602.5) for as long as the effect lasts: every activated ability of
     /// the object, mana abilities (CR 605.1a) and abilities whose cost untaps it included, whoever would activate them. A
     /// resolved effect, so it outlasts its source (Braided Net).

@@ -1,0 +1,49 @@
+# Jhoira, Weatherlight Corsair: "target opponent reveals cards from the top of their library until they reveal a historic
+# permanent card. You put that card onto the battlefield under your control and lose life equal to that permanent's mana
+# value." Bot2 reveals two Islands and then Mind Stone, a {2} artifact: Bot1 puts it onto the battlefield under its own
+# control and loses 2. The Islands are the rest, put on the bottom of Bot2's library in a random order, so they stay there.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Jhoira, Weatherlight Corsair
+Island
+Island x13
+
+[Bot2 Deck]
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Mind Stone
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Jhoira, Weatherlight Corsair.Cast
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Life = 18
+Bot1.Hand.Count = 2
+Bot1.Battlefield = Jhoira, Weatherlight Corsair; Mind Stone; Mox Jet; Mox Pearl; Mox Sapphire
+Bot1.Graveyard = Black Lotus
+Bot2.Life = 20
+Bot2.Battlefield.Count = 0
+Bot2.Library.Count = 12

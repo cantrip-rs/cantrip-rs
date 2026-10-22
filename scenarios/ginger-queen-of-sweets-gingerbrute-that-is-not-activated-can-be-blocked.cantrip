@@ -1,0 +1,49 @@
+# Ginger, Queen of Sweets: the Gingerbrute token's "can't be blocked this turn except by creatures with haste" is only
+# what its {1} ability grants (CR 611.2a), so a token that is not activated can be blocked as any other creature. Bot1
+# attacks with the Gingerbrute made in the turn-2 upkeep and does not activate it, and Bot2's Llanowar Elves, with no
+# haste, blocks it and both die.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Emerald
+Ginger, Queen of Sweets
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x5
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ginger, Queen of Sweets.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Gingerbrute#1 > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Llanowar Elves > Gingerbrute#1)
+[T3 Bot1.End]
+
+[Expect]
+Turn = 3
+Bot1.Battlefield = Ginger, Queen of Sweets; Gingerbrute; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Gingerbrute.Token = true
+Bot2.Battlefield = Forest
+Bot2.Graveyard.Count = 1

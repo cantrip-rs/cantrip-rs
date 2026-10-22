@@ -694,29 +694,34 @@ pub fn object_has_name(q: &dyn Query, id: ObjectId, wanted: CardId) -> bool {
     object_names(q, id).contains(&name)
 }
 
-/// "Reveal cards from the top of your library until you reveal a card that `qualifies`" (CR 701.20, 400.3): the cards are
-/// revealed together from the top down to the first that qualifies, or the whole library when none does (nothing from an
-/// empty one). The card that qualified, if any, and the rest of the revealed cards in the order revealed, for the caller to
-/// put "on the bottom of your library in a random order" (`Game::bottom_in_random_order`). Raph & Mikey (a creature card),
-/// Heirloom Blade (a creature card sharing a type with the creature) and Identity Echo (a creature or planeswalker card)
-/// print it.
-pub fn reveal_until(g: &mut dyn Game, player: PlayerId, qualifies: &dyn Fn(&dyn Query, ObjectId) -> bool) -> (Option<ObjectId>, Vec<ObjectId>) {
-    let mut revealed: Vec<ObjectId> = Vec::new();
-    let mut found = None;
+/// "Reveal cards from the top of your library until you reveal `n` cards that `qualifies`" (CR 701.20, 400.3): the cards are
+/// revealed together from the top down to the `n`th that qualifies, or the whole library when it holds fewer (nothing from an
+/// empty one, and nothing at all for `n` of 0). The cards that qualified, in the order revealed, and every other revealed card,
+/// in the order revealed, for the caller to put where they go. Raph & Mikey (a creature card), Heirloom Blade (a creature card
+/// sharing a type with the creature) and Identity Echo (a creature or planeswalker card) print it with n = 1; Dack Fayden,
+/// Helping Hand (one for each opponent still in the game) and Mass Polymorph (one for each creature exiled) with more.
+pub fn reveal_until(
+    g: &mut dyn Game,
+    player: PlayerId,
+    n: usize,
+    qualifies: &dyn Fn(&dyn Query, ObjectId) -> bool,
+) -> (Vec<ObjectId>, Vec<ObjectId>) {
+    let mut shown: Vec<ObjectId> = Vec::new();
+    let mut found: Vec<ObjectId> = Vec::new();
     for card in g.state().zone(Zone::library(player)).to_vec() {
-        revealed.push(card);
-        if qualifies(&*g, card) {
-            found = Some(card);
+        if found.len() == n {
             break;
         }
+        shown.push(card);
+        if qualifies(&*g, card) {
+            found.push(card);
+        }
     }
-    if !revealed.is_empty() {
-        g.reveal(player, &revealed);
+    if !shown.is_empty() {
+        g.reveal(player, &shown);
     }
-    if found.is_some() {
-        revealed.pop();
-    }
-    (found, revealed)
+    let rest = shown.into_iter().filter(|card| !found.contains(card)).collect();
+    (found, rest)
 }
 
 /// "Exile cards from the top of your library until you exile a nonland card [that `qualifies`]" (CR 701.57a, 702.85a): each

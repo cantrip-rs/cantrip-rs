@@ -1,0 +1,29 @@
+# Haste allows the tap cost immediately (CR 702.10c); exactly two mana and sacrificing
+# the real card pay its Food ability. Unlike a token, Gingerbrute remains in the graveyard.
+
+[Bot1 Deck]
+Island
+Sol Ring
+Gingerbrute
+Mox Sapphire
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Gingerbrute.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gingerbrute.Activate(Ability: You gain 3 life)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot1.Graveyard = Gingerbrute
+Bot1.Battlefield = Island; Sol Ring; Mox Sapphire
+Bot1.Mana =

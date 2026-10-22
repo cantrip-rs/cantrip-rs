@@ -1,0 +1,11 @@
+{
+  "name": "Gingerbrute",
+  "manaCost": "{1}",
+  "type": "Artifact Creature — Food Golem",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Haste\n{1}: This creature can't be blocked this turn except by creatures with haste.\n{2}, {T}, Sacrifice this creature: You gain 3 life.",
+  "keywords": [
+    "Haste"
+  ]
+}

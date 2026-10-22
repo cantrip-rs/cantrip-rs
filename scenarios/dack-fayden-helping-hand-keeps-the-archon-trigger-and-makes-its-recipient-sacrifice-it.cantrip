@@ -1,0 +1,44 @@
+# Archon enters under Bot1's control during Dack's ability, so Bot1 controls its enters trigger
+# even after Dack gives Archon to Bot2 (CR 603.3a). Bot1 targets Bot2, who must sacrifice
+# their only creature, the Archon. Bot1 still draws a card and gains 3 life after Archon leaves.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Dack Fayden, Helping Hand
+Island
+Island
+Archon of Cruelty
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dack Fayden, Helping Hand.Cast
+Bot2.Choose(Island)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Battlefield = Dack Fayden, Helping Hand; Mox Jet; Mox Pearl; Mox Sapphire
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard = Archon of Cruelty; Black Lotus
+Bot2.Graveyard = Island
+Bot1.Life = 23
+Bot1.Crimes = Archon of Cruelty
+Bot2.Life = 17
+Bot1.Hand.Count = 3
+Bot2.Hand.Count = 6
+Bot1.Library.Count = 9

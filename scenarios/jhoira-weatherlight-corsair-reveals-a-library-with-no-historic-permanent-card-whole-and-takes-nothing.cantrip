@@ -1,0 +1,34 @@
+# Jhoira, Weatherlight Corsair: Bot2's library holds no historic permanent card, so it is revealed whole, nothing is put
+# onto the battlefield, no life is lost, and every card goes back to the bottom of Bot2's library.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Jhoira, Weatherlight Corsair
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Jhoira, Weatherlight Corsair.Cast
+[T2 Bot2.Main1]
+
+[Expect]
+Turn = 2
+Bot1.Life = 20
+Bot1.Battlefield = Jhoira, Weatherlight Corsair; Mox Jet; Mox Pearl; Mox Sapphire
+Bot2.Battlefield.Count = 0
+Bot2.Library.Count = 12

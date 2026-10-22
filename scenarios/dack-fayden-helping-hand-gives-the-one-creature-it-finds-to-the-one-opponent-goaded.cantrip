@@ -1,0 +1,45 @@
+# Dack Fayden, Helping Hand: X is the number of opponents, one here, so the enters ability reveals until it finds one
+# creature card - past a Forest and an Island, both of which stay in the library - puts it onto the battlefield under
+# Bot2's control (the only opponent, so no choice to make), goads it for good, and shuffles. The goad lasts for the rest
+# of the game (Duration::Indefinite, not the Undercity's until-its-controller's-next-turn): it is still there on turn 6.
+# Bot1 being the only other player, "attacks a player other than the one who goaded it if able" leaves nothing to choose
+# from, so the goad's must-attack half has it attack Bot1 on its turns (2 life by turn 4, CR 701.15b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Dack Fayden, Helping Hand
+Island
+Island
+Forest
+Island
+Llanowar Elves
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dack Fayden, Helping Hand.Cast
+[T2 Bot2.Main1]
+[T6 Bot2.DeclareAttackers]
+? Bot2.Battlefield.Llanowar Elves.GoadedBy = Bot1
+
+[Expect]
+Turn = 6
+Bot1.Library.Count = 10
+Bot1.Battlefield = Dack Fayden, Helping Hand; Mox Jet; Mox Pearl; Mox Sapphire
+Bot2.Battlefield = Llanowar Elves
+Bot2.Battlefield.Llanowar Elves.GoadedBy = Bot1
+Bot1.Life = 18
+Bot2.Life = 20

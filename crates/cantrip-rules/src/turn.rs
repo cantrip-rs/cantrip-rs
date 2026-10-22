@@ -721,6 +721,15 @@ fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[Obj
             return false;
         }
     }
+    // CR 611.2a: a resolved restriction is not an ability the source can lose. Its affected reference and
+    // duration are maintained by the ordinary effect lifecycle, including phasing and new-object identity.
+    for effect in &cx.s().effects {
+        if let EffectKind::BlockRestriction { card, index } = effect.kind {
+            if !(cx.card(card).resolved_block_rules[index as usize])(cx, effect.affected, blocker, attacker) {
+                return false;
+            }
+        }
+    }
     !a.protected_from_by(&b, cx.s().obj(blocker).controller)
 }
 

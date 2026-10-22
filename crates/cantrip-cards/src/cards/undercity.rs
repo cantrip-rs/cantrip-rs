@@ -1,7 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::tokens::{self, TREASURE};
 use cantrip_mechanics::library::{Find, search_to_hand};
-use cantrip_mechanics::{choose, effects, scry, targets};
+use cantrip_mechanics::{choose, effects, goad, scry, targets};
 
 // The Undercity dungeon (CR 309): nine rooms, the arrows between them, and each room's ability, which triggers as a
 // venture marker moves into it (CR 309.4c). The initiative ventures into it (CR 726.2); the rules (`venture`,
@@ -42,7 +42,7 @@ fn trap(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// Room 4, Arena: goad (CR 701.15a), until the controller's next turn.
 fn arena(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(creature) = targets::object(g, item, 0) {
-        g.add_effect(item.object, creature, EffectKind::Goaded, Duration::UntilNextTurnOf(item.controller));
+        goad::goad(g, item.object, creature, Duration::UntilNextTurnOf(item.controller));
     }
     Ok(())
 }

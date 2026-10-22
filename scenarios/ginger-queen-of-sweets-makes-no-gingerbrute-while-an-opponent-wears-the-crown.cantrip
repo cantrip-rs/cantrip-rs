@@ -1,0 +1,48 @@
+# Ginger, Queen of Sweets: "At the beginning of each upkeep, if you're the monarch, create a Gingerbrute token" is an
+# intervening-if about the ability's controller (CR 603.4), checked again as it resolves. Bot1 casts Ginger on turn 1 and
+# the turn-2 upkeep makes one Gingerbrute, but Bot2's hasty Fanatical Firebrand deals combat damage to Bot1, the monarch,
+# on turn 2 (CR 725.1), so the turn-3 upkeep and every one after makes nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Emerald
+Ginger, Queen of Sweets
+Island
+Island x13
+
+[Bot2 Deck]
+Mountain
+Fanatical Firebrand
+Mountain x5
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ginger, Queen of Sweets.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Fanatical Firebrand.Cast
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Fanatical Firebrand > Bot1)
+[T3 Bot1.Main1]
+
+[Expect]
+Turn = 3
+Monarch = Bot2
+Bot1.Life = 19
+Bot1.Battlefield = Ginger, Queen of Sweets; Gingerbrute; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Gingerbrute.Token = true
+Bot1.Battlefield.Gingerbrute.ManaValue = 1
+Bot2.Battlefield = Fanatical Firebrand; Mountain

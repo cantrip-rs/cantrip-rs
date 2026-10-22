@@ -1,0 +1,48 @@
+# Dack Fayden, Helping Hand in a game of three: X is two, so two creature cards are revealed - each past a land, which
+# stays in the library - put onto the battlefield together under Bot1's control, then shuffled and goaded. Bot1 chooses
+# Bot2 for the first of them; the second must go to a different opponent, so Bot3 has it, with no question asked. In a
+# game of more than two the player who goes first draws on turn 1 (CR 103.8a), so the Forest is in hand by turn 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Dack Fayden, Helping Hand
+Island
+Island
+Forest
+Forest
+Llanowar Elves
+Island
+Llanowar Elves
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dack Fayden, Helping Hand.Cast
+Bot1.ChoosePlayer(Bot2)
+[T2 Bot2.Main1]
+
+[Expect]
+Turn = 2
+Bot1.Library.Count = 11
+Bot1.Hand = Forest; Island; Island
+Bot1.Battlefield = Dack Fayden, Helping Hand; Mox Jet; Mox Pearl; Mox Sapphire
+Bot2.Battlefield = Llanowar Elves
+Bot2.Battlefield.Llanowar Elves.GoadedBy = Bot1
+Bot3.Battlefield = Llanowar Elves
+Bot3.Battlefield.Llanowar Elves.GoadedBy = Bot1

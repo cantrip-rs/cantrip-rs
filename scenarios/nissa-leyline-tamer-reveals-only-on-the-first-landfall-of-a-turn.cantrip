@@ -1,0 +1,57 @@
+# Nissa, Leyline Tamer: "... Then if this is the first time this ability has resolved this turn ..." Dryad of the Ilysian
+# Grove lets Bot1 play two lands in turn 5. The first Forest is that turn's first landfall: it draws a Forest and reveals
+# the Forest and the Llanowar Elves under it, putting the Elves onto the battlefield and the Forest on the bottom. The
+# second Forest is that turn's second landfall: it draws only, so the Llanowar Elves on top stays in Bot1's hand instead
+# of arriving.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Nissa, Leyline Tamer
+Forest
+Dryad of the Ilysian Grove
+Llanowar Elves
+Forest
+Forest
+Forest
+Llanowar Elves
+Llanowar Elves
+Island x12
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Nissa, Leyline Tamer.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dryad of the Ilysian Grove.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot1.Library.Count = 13
+Bot1.Hand = Llanowar Elves
+Bot1.Battlefield = Dryad of the Ilysian Grove; Forest; Forest; Forest; Llanowar Elves; Llanowar Elves; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Nissa, Leyline Tamer

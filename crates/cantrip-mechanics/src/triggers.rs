@@ -782,6 +782,16 @@ pub fn each_end_step(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired>
     }
 }
 
+/// "At the beginning of each upkeep" (CR 503.1a, 603.2): any player's upkeep step began. Ginger, Queen of Sweets prints it;
+/// Command the Stage and Oath of Druids ask it from a matcher of their own that adds their intervening condition or says
+/// which player the ability is about.
+pub fn each_upkeep(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::StepBegan { step: Step::Upkeep } => Fired::PLAIN,
+        _ => None,
+    }
+}
+
 /// "Whenever a creature you control enters" (CR 603.6a): any creature, this one included, under your control as it
 /// entered. Aura Shards and Warleader's Call print it.
 pub fn creature_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
@@ -1180,6 +1190,7 @@ pub const YOUR_SECOND_MAIN_PHASE: Trigger = when_asked(EventMask::STEP_BEGAN, yo
 pub const EACH_OPPONENTS_UPKEEP: Trigger = when_asked(EventMask::STEP_BEGAN, each_opponents_upkeep);
 pub const BEGINNING_OF_YOUR_COMBAT: Trigger = when_asked(EventMask::STEP_BEGAN, beginning_of_your_combat);
 pub const YOUR_END_STEP: Trigger = when_asked(EventMask::STEP_BEGAN, your_end_step);
+pub const EACH_UPKEEP: Trigger = when(EventMask::STEP_BEGAN, each_upkeep);
 pub const EACH_END_STEP: Trigger = when(EventMask::STEP_BEGAN, each_end_step);
 pub const CREATURE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_enters);
 pub const CREATURE_YOU_CONTROL_ATTACKS: Trigger = when_asked(EventMask::ATTACKS, creature_you_control_attacks);

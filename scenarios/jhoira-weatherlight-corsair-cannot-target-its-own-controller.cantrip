@@ -1,0 +1,42 @@
+# Jhoira, Weatherlight Corsair: "target opponent" (CR 115.1) - in a game of three the choice of opponent is asked, and
+# Bot1 naming itself is not one of the answers, while Bot2 is.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Jhoira, Weatherlight Corsair
+Island
+Island x13
+
+[Bot2 Deck]
+Island x7
+Island
+Mind Stone
+Island x11
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Jhoira, Weatherlight Corsair.Cast
+! Bot1.Target(Bot1)
+Bot1.Target(Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Life = 18
+Bot1.Battlefield = Jhoira, Weatherlight Corsair; Mind Stone; Mox Jet; Mox Pearl; Mox Sapphire
+Bot2.Library.Count = 12
+Bot3.Library.Count = 13

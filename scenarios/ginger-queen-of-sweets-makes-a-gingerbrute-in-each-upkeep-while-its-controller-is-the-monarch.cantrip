@@ -1,0 +1,44 @@
+# Ginger, Queen of Sweets: "When Ginger enters, you become the monarch" and "At the beginning of each upkeep, if you're the
+# monarch, create a Gingerbrute token." Bot1 casts Ginger on turn 1 and is the monarch, so the turn-2 upkeep (Bot2's), the
+# turn-3 upkeep (Bot1's) and the turn-4 upkeep (Bot2's) each make one Gingerbrute: three 1/1 colourless Food Golem artifact
+# creature tokens with haste, a mana value of 1 ({1}, CR 707.2, 202.3) and no colours.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Emerald
+Ginger, Queen of Sweets
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ginger, Queen of Sweets.Cast
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Monarch = Bot1
+Bot1.Battlefield = Ginger, Queen of Sweets; Gingerbrute; Gingerbrute; Gingerbrute; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Gingerbrute#1.Token = true
+Bot1.Battlefield.Gingerbrute#1.Power = 1
+Bot1.Battlefield.Gingerbrute#1.Toughness = 1
+Bot1.Battlefield.Gingerbrute#1.Subtypes = Food; Golem
+Bot1.Battlefield.Gingerbrute#1.Keywords = Haste
+Bot1.Battlefield.Gingerbrute#1.ManaValue = 1
+Bot1.Battlefield.Gingerbrute#1.Colors = (absent)
+Bot1.Battlefield.Gingerbrute#2.Token = true
+Bot1.Battlefield.Gingerbrute#2.Keywords = Haste

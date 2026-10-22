@@ -1,0 +1,63 @@
+# Ginger, Queen of Sweets: the Gingerbrute token's "{1}: This token can't be blocked this turn except by creatures with
+# haste." Bot1 activates it on turn 5 for each of its three attacking Gingerbrutes: Bot2's hasty Fanatical Firebrand may
+# block one (the tokens trade), the Llanowar Elves without haste may not block another, and the third goes through for 1
+# life. A fourth Gingerbrute, made in the same turn's upkeep, stays home.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Emerald
+Ginger, Queen of Sweets
+Island
+Island x13
+
+[Bot2 Deck]
+Mountain
+Forest
+Fanatical Firebrand
+Llanowar Elves
+Island
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ginger, Queen of Sweets.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Fanatical Firebrand.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gingerbrute#1.Activate(Ability: can't be blocked)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gingerbrute#2.Activate(Ability: can't be blocked)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gingerbrute#3.Activate(Ability: can't be blocked)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Gingerbrute#1 > Bot2; Gingerbrute#2 > Bot2; Gingerbrute#3 > Bot2)
+[T5 Bot1.DeclareBlockers]
+! Bot2.Block(Llanowar Elves > Gingerbrute#2)
+Bot2.Block(Fanatical Firebrand > Gingerbrute#1)
+[T5 Bot1.End]
+
+[Expect]
+Turn = 5
+Bot2.Life = 18
+Bot1.Battlefield = Ginger, Queen of Sweets; Gingerbrute; Gingerbrute; Gingerbrute; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
+Bot2.Battlefield = Forest; Llanowar Elves; Mountain

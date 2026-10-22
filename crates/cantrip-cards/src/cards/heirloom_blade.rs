@@ -28,15 +28,15 @@ fn reveal_until_shared(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     if !cantrip_mechanics::effects::ask_may(g, you, item.object, Purpose::Ask(&ASK))? {
         return Ok(());
     }
-    let (found, revealed) = cantrip_mechanics::library::reveal_until(g, you, &|q, card| {
+    let (found, revealed) = cantrip_mechanics::library::reveal_until(g, you, 1, &|q, card| {
         let c = q.chars(card);
         c.is(CardType::Creature) && Subtype::ALL.iter().any(|&s| s.is_creature_type() && types.has(s) && c.subtypes.has(s))
     });
-    if found.is_none() && revealed.is_empty() {
+    if found.is_empty() && revealed.is_empty() {
         return Ok(());
     }
-    if let Some(card) = found {
-        g.return_to_hand(&[card]);
+    if !found.is_empty() {
+        g.return_to_hand(&found);
     }
     g.bottom_in_random_order(you, &revealed);
     Ok(())
