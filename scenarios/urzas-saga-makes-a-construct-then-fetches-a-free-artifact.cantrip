@@ -29,15 +29,15 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Pass
 [T3 Bot1.Main2]
-? Bot1.Battlefield.Construct.Power = 3
-? Bot1.Battlefield.Construct.Toughness = 3
+? Bot1.Battlefield.Construct Token.Power = 3
+? Bot1.Battlefield.Construct Token.Toughness = 3
 [T5 Bot1.Main1]
 Bot1.Search(Mox Pearl)
 [T5 Bot1.Main2]
-? Bot1.Battlefield = Mox Ruby; Mox Emerald; Mox Pearl; Construct
+? Bot1.Battlefield = Mox Ruby; Mox Emerald; Mox Pearl; Construct Token
 
 [Expect]
 Turn = 5
-Bot1.Battlefield = Mox Ruby; Mox Emerald; Mox Pearl; Construct
-Bot1.Battlefield.Construct.Power = 4
-Bot1.Battlefield.Construct.Toughness = 4
+Bot1.Battlefield = Mox Ruby; Mox Emerald; Mox Pearl; Construct Token
+Bot1.Battlefield.Construct Token.Power = 4
+Bot1.Battlefield.Construct Token.Toughness = 4

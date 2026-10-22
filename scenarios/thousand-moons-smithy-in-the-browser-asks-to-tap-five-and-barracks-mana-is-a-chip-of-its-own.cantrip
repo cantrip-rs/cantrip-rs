@@ -36,7 +36,7 @@ Bot1.Pass
 ? Client.Bot1.Prompt.Detail = You choose the five next; they stay tapped until they untap
 Bot1.Accept
 ? Client.Bot1.Prompt.Title = Thousand Moons Smithy: choose 5 permanents to tap
-Bot1.Choose(Gnome Soldier; Ornithopter#1; Ornithopter#2; Ornithopter#3; Ornithopter#4)
+Bot1.Choose(Gnome Soldier Token; Ornithopter#1; Ornithopter#2; Ornithopter#3; Ornithopter#4)
 [T5 Bot1.Main1]
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Barracks of the Thousand.Activate
@@ -48,4 +48,4 @@ Bot1.Hand.Authority of the Consuls.Cast
 
 [Expect]
 Turn = 5
-Bot1.Battlefield = Authority of the Consuls; Barracks of the Thousand; Gnome Soldier; Gnome Soldier; Healer's Hawk; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Plains
+Bot1.Battlefield = Authority of the Consuls; Barracks of the Thousand; Gnome Soldier Token; Gnome Soldier Token; Healer's Hawk; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Plains

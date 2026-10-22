@@ -5,7 +5,8 @@ use cantrip_oracle as oracle;
 
 /// The 1/1 white and black Inkling creature token with flying.
 pub static INKLING: CardDef = CardDef {
-    name: "Inkling",
+    name: "Inkling Token",
+    token_name: Some(&[Subtype::Inkling]),
     has_cost: false,
     colors: Some(ColorSet(ColorSet::of(Color::White).0 | ColorSet::of(Color::Black).0)),
     types: TypeSet::of(&[CardType::Creature]),

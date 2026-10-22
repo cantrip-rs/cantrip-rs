@@ -59,10 +59,10 @@ Bot2.Pass
 Bot1.Battlefield.Jace, the Mind Sculptor.Activate(Ability: Create)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Leviathan.Token = true
+? Bot1.Battlefield.Leviathan Token.Token = true
 
 [Expect]
-Bot1.Battlefield.Leviathan.Power = 8
-Bot1.Battlefield.Leviathan.Toughness = 8
-Bot1.Battlefield.Leviathan.Keywords = Hexproof
+Bot1.Battlefield.Leviathan Token.Power = 8
+Bot1.Battlefield.Leviathan Token.Toughness = 8
+Bot1.Battlefield.Leviathan Token.Keywords = Hexproof
 Bot1.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 1

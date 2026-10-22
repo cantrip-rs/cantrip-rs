@@ -17,7 +17,7 @@ Bot1.Hand.Stadium Headliner.Cast
 Bot1.Attack(Stadium Headliner)
 [T3 Bot1.Main2]
 ? Bot1.Battlefield.Count = 3
-? Bot1.Battlefield.Warrior.Tapped = true
+? Bot1.Battlefield.Warrior Token.Tapped = true
 ? Bot2.Life = 18
 [T3 Bot1.End]
 Bot1.Pass

@@ -41,9 +41,9 @@ Bot1.Pass
 Turn = 1
 Bot1.Battlefield.Pet Avengers.Counters.PlusOnePlusOne = 1
 Bot1.Battlefield.Pet Avengers.Power = 5
-Bot1.Battlefield.Hero.Token = true
-Bot1.Battlefield.Hero.Colors = White
-Bot1.Battlefield.Hero.Subtypes = Hero
-Bot1.Battlefield.Hero.Keywords = Vigilance
-Bot1.Battlefield.Hero.Power = 3
-Bot1.Battlefield.Hero.Toughness = 2
+Bot1.Battlefield.Hero Token.Token = true
+Bot1.Battlefield.Hero Token.Colors = White
+Bot1.Battlefield.Hero Token.Subtypes = Hero
+Bot1.Battlefield.Hero Token.Keywords = Vigilance
+Bot1.Battlefield.Hero Token.Power = 3
+Bot1.Battlefield.Hero Token.Toughness = 2

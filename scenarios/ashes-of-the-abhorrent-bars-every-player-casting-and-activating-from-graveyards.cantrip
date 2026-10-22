@@ -80,6 +80,6 @@ Bot2.Graveyard.Faithless Looting.Cast(Ability: Flashback)
 [Expect]
 Turn = 6
 Exile = Seasoned Pyromancer; Faithless Looting; Faithless Looting
-Bot2.Battlefield.Elemental#2.Power = 1
+Bot2.Battlefield.Elemental Token#2.Power = 1
 Bot1.Life = 20
 Bot2.Life = 20

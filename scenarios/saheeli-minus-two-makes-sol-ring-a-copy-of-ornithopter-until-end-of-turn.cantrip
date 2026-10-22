@@ -34,7 +34,7 @@ Bot1.Pass
 
 [Expect]
 Turn = 3
-Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Ornithopter; Ornithopter; Saheeli, Sublime Artificer; Servo
+Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Ornithopter; Ornithopter; Saheeli, Sublime Artificer; Servo Token
 Bot1.Battlefield.Ornithopter#2.Keywords = Flying
 Bot1.Battlefield.Ornithopter#2.Types = Artifact; Creature
 Bot1.Battlefield.Saheeli, Sublime Artificer.Counters.Loyalty = 3

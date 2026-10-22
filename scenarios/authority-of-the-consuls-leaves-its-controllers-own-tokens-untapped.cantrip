@@ -28,8 +28,8 @@ Bot1.Hand.Lingering Souls.Cast
 [Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Spirit#1.Token = true
-Bot1.Battlefield.Spirit#1.Tapped = false
-Bot1.Battlefield.Spirit#2.Tapped = false
+Bot1.Battlefield.Spirit Token#1.Token = true
+Bot1.Battlefield.Spirit Token#1.Tapped = false
+Bot1.Battlefield.Spirit Token#2.Tapped = false
 Bot1.Life = 20
 Stack.Count = 0

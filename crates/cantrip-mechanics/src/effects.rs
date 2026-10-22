@@ -374,6 +374,17 @@ pub fn destroy_first_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Su
     Ok(())
 }
 
+/// "Destroy target [permanent]. Its controller creates a [token]" (CR 701.8, 608.2h): the ability's first target, its
+/// controller read before the destroy, and the token created whether or not it was destroyed (indestructible, regenerated);
+/// an illegal target creates nothing (CR 608.2b). Stroke of Midnight and Bovine Intervention print it.
+pub fn destroy_and_its_controller_creates(g: &mut dyn Game, item: &StackItem, token: &'static CardDef) -> Result<(), Suspend> {
+    let Some(target) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    let controller = g.controller(target);
+    g.destroy(target);
+    crate::tokens::create(g, controller, token, 1)?;
+    Ok(())
+}
+
 /// "{1}, Sacrifice this creature: Destroy target artifact or enchantment." Cathar Commando, Outland Liberator
 /// (and its back face) and Shattered Acolyte print it.
 pub const SACRIFICE_TO_DESTROY_ARTIFACT_OR_ENCHANTMENT: AbilityDef = ability(

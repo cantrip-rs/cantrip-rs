@@ -43,4 +43,4 @@ Bot1.Attack(Preacher of the Schism > Bot2)
 Bot1.Life = 10
 Bot2.Life = 18
 Bot1.Hand.Count = 4
-Bot1.Battlefield.Vampire.Token = true
+Bot1.Battlefield.Vampire Token.Token = true

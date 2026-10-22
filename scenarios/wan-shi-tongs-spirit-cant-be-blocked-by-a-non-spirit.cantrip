@@ -31,8 +31,8 @@ Bot2.Hand.Island.Play
 Bot2.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
 Bot1.Pass
-Bot1.Attack(Wan Shi Tong, All-Knowing; Spirit; Spirit)
-! Bot2.Block(Ornithopter > Spirit)
+Bot1.Attack(Wan Shi Tong, All-Knowing; Spirit Token; Spirit Token)
+! Bot2.Block(Ornithopter > Spirit Token)
 Bot2.Block(Ornithopter > Wan Shi Tong, All-Knowing)
 [T3 Bot1.Main2]
 

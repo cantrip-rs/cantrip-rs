@@ -117,7 +117,7 @@ fn play(hand: &[&str], steps: Vec<Step>, until: u32, mut watch: impl FnMut(&Game
                 _ => Answer::Pass,
             },
             RequestKind::PayCosts { options, .. } => {
-                let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s).starts_with("Mox")));
+                let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s).text().starts_with("Mox")));
                 let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
                 Answer::Act(Action::of(confirm.or(mox).expect("a Mox to pay with, or the payment to confirm")))
             }

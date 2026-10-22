@@ -34,5 +34,5 @@ Bot1.Arrange( | Guerrilla Gorilla; Forest; Island; Lightning Bolt)
 [Expect]
 Bot1.Graveyard = Malevolent Rumble; Lightning Bolt; Island; Forest; Guerrilla Gorilla
 Bot1.Hand.Count = 4
-Bot1.Battlefield.Eldrazi Spawn.Power = 0
+Bot1.Battlefield.Eldrazi Spawn Token.Power = 0
 Bot1.Library.Count = 6

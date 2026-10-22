@@ -34,10 +34,10 @@ Bot1.Attack(Adeline, Resplendent Cathar > Bot2)
 Bot1.Target(Bot2.Battlefield.Liliana of the Veil)
 Bot1.Pass
 Bot2.Pass
-? Combat.Attackers = Adeline, Resplendent Cathar > Bot2; Human > Liliana of the Veil
+? Combat.Attackers = Adeline, Resplendent Cathar > Bot2; Human Token > Liliana of the Veil
 [T3 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 18
 Bot2.Battlefield.Liliana of the Veil.Counters.Loyalty = 2
-Bot1.Battlefield = Adeline, Resplendent Cathar; Human
+Bot1.Battlefield = Adeline, Resplendent Cathar; Human Token

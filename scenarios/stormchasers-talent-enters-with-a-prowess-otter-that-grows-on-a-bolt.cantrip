@@ -28,10 +28,10 @@ Bot1.Hand.Lightning Bolt.Cast(Bot2)
 
 [Expect]
 Turn = 1
-Bot1.Battlefield = Island; Mox Ruby; Stormchaser's Talent; Otter
-Bot1.Battlefield.Otter.Power = 2
-Bot1.Battlefield.Otter.Toughness = 2
-Bot1.Battlefield.Otter.Subtypes = Otter
-Bot1.Battlefield.Otter.Types = Creature
+Bot1.Battlefield = Island; Mox Ruby; Stormchaser's Talent; Otter Token
+Bot1.Battlefield.Otter Token.Power = 2
+Bot1.Battlefield.Otter Token.Toughness = 2
+Bot1.Battlefield.Otter Token.Subtypes = Otter
+Bot1.Battlefield.Otter Token.Types = Creature
 Bot2.Life = 17
 Stack.Count = 0

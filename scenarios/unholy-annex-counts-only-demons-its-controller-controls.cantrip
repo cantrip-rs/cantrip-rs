@@ -46,6 +46,6 @@ Bot1.Hand.Swamp.Play
 [T4 Bot2.Upkeep]
 
 [Expect]
-Bot2.Battlefield.Demon.Power = 6
+Bot2.Battlefield.Demon Token.Power = 6
 Bot1.Life = 16
 Bot2.Life = 20

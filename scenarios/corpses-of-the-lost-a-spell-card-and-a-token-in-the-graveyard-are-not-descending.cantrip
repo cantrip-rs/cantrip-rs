@@ -27,7 +27,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Corpses of the Lost.Cast
 Bot1.Battlefield.Mountain.Activate
-Bot1.Hand.Lightning Bolt.Cast(Skeleton Pirate)
+Bot1.Hand.Lightning Bolt.Cast(Skeleton Pirate Token)
 [T1 Bot1.End]
 Bot1.Pass
 ! Bot1.Accept

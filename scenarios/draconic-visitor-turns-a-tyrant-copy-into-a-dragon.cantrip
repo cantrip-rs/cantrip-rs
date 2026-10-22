@@ -61,10 +61,10 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Vaultborn Tyrant)
 [Expect]
 Turn = 9
 Bot1.Life = 23
-Bot1.Battlefield = Mountain; Mox Ruby; Sol Ring; Forest; Forest; Forest; Draconic Visitor; Dragon
-Bot1.Battlefield.Dragon.Types = Creature
-Bot1.Battlefield.Dragon.Power = 5
-Bot1.Battlefield.Dragon.Toughness = 5
-Bot1.Battlefield.Dragon.Keywords = Flying
+Bot1.Battlefield = Mountain; Mox Ruby; Sol Ring; Forest; Forest; Forest; Draconic Visitor; Dragon Token
+Bot1.Battlefield.Dragon Token.Types = Creature
+Bot1.Battlefield.Dragon Token.Power = 5
+Bot1.Battlefield.Dragon Token.Toughness = 5
+Bot1.Battlefield.Dragon Token.Keywords = Flying
 Bot1.Battlefield.Vaultborn Tyrant = (absent)
 Bot1.Graveyard = Vaultborn Tyrant; Black Lotus

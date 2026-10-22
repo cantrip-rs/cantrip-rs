@@ -28,5 +28,5 @@ Bot1.Arrange(Guerrilla Gorilla | Lightning Bolt; Ponder; Forest)
 Turn = 3
 Bot1.Hand = Island; Island; Island; Island; Island; Guerrilla Gorilla
 Bot1.Graveyard = Malevolent Rumble; Forest; Ponder; Lightning Bolt
-Bot1.Battlefield = Eldrazi Spawn; Forest; Forest
+Bot1.Battlefield = Eldrazi Spawn Token; Forest; Forest
 Bot1.Library.Count = 8

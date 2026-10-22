@@ -165,7 +165,7 @@ impl Tracker {
                     return;
                 }
                 if from.is(ZoneKind::Gone) {
-                    let name = game.cards.get(game.chars(new).card).name.to_string();
+                    let name = game.chars(new).name.to_string();
                     out.push(Proto::Created { object: new, controller: game.state.obj(new).controller, name });
                 } else {
                     out.push(Proto::Moved { old, new, from, to, reason });

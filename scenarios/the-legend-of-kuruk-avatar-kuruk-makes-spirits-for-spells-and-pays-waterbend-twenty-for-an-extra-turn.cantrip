@@ -77,8 +77,8 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Spirit#1.Token = true
-? Bot1.Battlefield.Spirit#6.Power = 1
+? Bot1.Battlefield.Spirit Token#1.Token = true
+? Bot1.Battlefield.Spirit Token#6.Power = 1
 ? Bot1.Battlefield.Count = 17
 [T6 Bot2.Main1]
 Bot2.Hand.Mox Jet.Cast
@@ -97,7 +97,7 @@ Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
-Bot1.Battlefield.Avatar Kuruk.Activate(Convoke: Avatar Kuruk, Spirit, Spirit, Spirit, Spirit, Spirit, Spirit, Spirit, Ornithopter, Ornithopter, Ornithopter, Ornithopter, Ornithopter)
+Bot1.Battlefield.Avatar Kuruk.Activate(Convoke: Avatar Kuruk, Spirit Token, Spirit Token, Spirit Token, Spirit Token, Spirit Token, Spirit Token, Spirit Token, Ornithopter, Ornithopter, Ornithopter, Ornithopter, Ornithopter)
 Bot1.Pass
 Bot2.Pass
 [T8 Bot1.Main1]
@@ -112,6 +112,6 @@ Bot2.Pass
 Turn = 8
 ActivePlayer = Bot1
 Bot1.Battlefield.Count = 20
-Bot1.Battlefield.Spirit#8.Power = 1
-Bot1.Battlefield.Spirit#8.Colors = (absent)
+Bot1.Battlefield.Spirit Token#8.Power = 1
+Bot1.Battlefield.Spirit Token#8.Colors = (absent)
 Bot1.Battlefield.Avatar Kuruk.Tapped = false

@@ -27,10 +27,10 @@ Bot2.Pass
 ? Stack = Theorist's Proxy
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 3
-? Bot1.Battlefield.Jace.Token = true
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 3
+? Bot1.Battlefield.Jace Token.Token = true
 [T3 Bot1.Main1]
-Bot1.Battlefield.Jace.Activate(Ability: Draw)
+Bot1.Battlefield.Jace Token.Activate(Ability: Draw)
 Bot2.Pass
 
 [Expect]

@@ -43,8 +43,8 @@ Bot2.Pass
 Stack.Count = 0
 Bot1.Life = 26
 Bot1.Battlefield.Count = 5
-Bot1.Battlefield.Angel.Power = 4
-Bot1.Battlefield.Angel.Toughness = 4
-Bot1.Battlefield.Angel.Colors = White
-Bot1.Battlefield.Angel.Keywords = Flying; Vigilance
-Bot1.Battlefield.Angel.Token = true
+Bot1.Battlefield.Angel Token.Power = 4
+Bot1.Battlefield.Angel Token.Toughness = 4
+Bot1.Battlefield.Angel Token.Colors = White
+Bot1.Battlefield.Angel Token.Keywords = Flying; Vigilance
+Bot1.Battlefield.Angel Token.Token = true

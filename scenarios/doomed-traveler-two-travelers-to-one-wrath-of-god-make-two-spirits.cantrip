@@ -35,8 +35,8 @@ Bot1.Pass
 [T7 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Plains; Plains; Plains; Plains; Spirit; Spirit
+Bot1.Battlefield = Plains; Plains; Plains; Plains; Spirit Token; Spirit Token
 Bot1.Graveyard = Wrath of God; Doomed Traveler; Doomed Traveler
-Bot1.Battlefield.Spirit#1.Token = true
-Bot1.Battlefield.Spirit#2.Token = true
+Bot1.Battlefield.Spirit Token#1.Token = true
+Bot1.Battlefield.Spirit Token#2.Token = true
 Stack.Count = 0

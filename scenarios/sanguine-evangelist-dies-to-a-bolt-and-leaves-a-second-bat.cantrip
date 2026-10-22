@@ -28,5 +28,5 @@ Bot2.Hand.Lightning Bolt.Cast(Sanguine Evangelist)
 [Expect]
 Bot1.Graveyard = Sanguine Evangelist
 Bot2.Graveyard = Lightning Bolt
-Bot1.Battlefield.Bat#1.Power = 1
-Bot1.Battlefield.Bat#2.Power = 1
+Bot1.Battlefield.Bat Token#1.Power = 1
+Bot1.Battlefield.Bat Token#2.Power = 1

@@ -67,5 +67,5 @@ Stack.Count = 0
 Bot2.Life = 17
 Bot1.Life = 20
 Bot1.Graveyard = Bolt Bend; Giant Cindermaw
-Bot1.Battlefield.Ox.Token = true
+Bot1.Battlefield.Ox Token.Token = true
 Bot2.Graveyard = Lightning Bolt; Bovine Intervention

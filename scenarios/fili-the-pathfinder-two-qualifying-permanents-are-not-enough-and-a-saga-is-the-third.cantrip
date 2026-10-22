@@ -30,7 +30,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 [T5 Bot1.Main2]
 ? Bot1.EnduringStory = (absent)
 ? Bot1.Battlefield.Fíli the Pathfinder.Power = 2
-? Bot1.Battlefield.Dwarf.Power = 2
+? Bot1.Battlefield.Dwarf Token.Power = 2
 [T7 Bot1.Main1]
 Bot1.Hand.Urza's Saga.Play
 [T7 Bot1.Main2]
@@ -39,4 +39,4 @@ Bot1.Hand.Urza's Saga.Play
 Bot1.EnduringStory = true
 Bot1.Battlefield.Fíli the Pathfinder.Power = 3
 Bot1.Battlefield.Fíli the Pathfinder.Toughness = 3
-Bot1.Battlefield.Dwarf.Power = 3
+Bot1.Battlefield.Dwarf Token.Power = 3

@@ -30,7 +30,8 @@ fn create_birds(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// The 4/4 white Bird Soldier creature token with flying it makes.
 static BIRD_SOLDIER: CardDef = CardDef {
-    name: "Bird Soldier",
+    name: "Bird Soldier Token",
+    token_name: Some(&[Subtype::Bird, Subtype::Soldier]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),

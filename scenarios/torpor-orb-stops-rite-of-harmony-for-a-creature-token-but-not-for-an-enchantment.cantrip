@@ -46,5 +46,5 @@ Bot1.Hand.Ornithopter.Cast
 [Expect]
 Stack.Count = 0
 Bot1.Hand.Count = 2
-Bot1.Battlefield = Island; Mox Emerald; Mox Pearl; Mox Sapphire; Stormchaser's Talent; Otter; Ornithopter
-Bot1.Battlefield.Otter.Token = true
+Bot1.Battlefield = Island; Mox Emerald; Mox Pearl; Mox Sapphire; Stormchaser's Talent; Otter Token; Ornithopter
+Bot1.Battlefield.Otter Token.Token = true

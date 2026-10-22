@@ -1,0 +1,46 @@
+# Grand Crescendo: only "creatures you control" gain indestructible. Bot1 casts it with X = 1 - one Citizen, not two - and
+# then its own Wrath of God in the same turn destroys every creature: Bot1's Ornithopter and Citizen survive, Bot2's
+# Ornithopter dies.
+
+[Bot1 Deck]
+Grand Crescendo
+Wrath of God
+Ornithopter
+Black Lotus
+Mox Pearl
+Plains
+Plains
+Mox Pearl
+Plains x12
+
+[Bot2 Deck]
+Plains
+Ornithopter
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Grand Crescendo.Cast(X: 1)
+Bot1.Hand.Wrath of God.Cast
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Plains; Plains; Ornithopter; Citizen Token; Mox Pearl; Mox Pearl
+Bot1.Graveyard = Wrath of God; Grand Crescendo; Black Lotus
+Bot2.Battlefield = Plains
+Bot2.Graveyard = Ornithopter

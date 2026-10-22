@@ -67,4 +67,4 @@ Stack.Count = 0
 Exile = Ornithopter; Swamp
 Bot1.Graveyard = Pinnacle Starcage; Ornithopter
 Bot2.Graveyard = Swamp; Swamp
-Bot1.Battlefield = Dauthi Voidwalker; Mox Emerald; Mox Jet; Mox Pearl; Plains; Plains; Plains; Robot; Swamp; Swamp
+Bot1.Battlefield = Dauthi Voidwalker; Mox Emerald; Mox Jet; Mox Pearl; Plains; Plains; Plains; Robot Token; Swamp; Swamp

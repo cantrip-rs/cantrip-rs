@@ -33,6 +33,6 @@ Bot1.Hand.Lightning Bolt.Cast(Ornithopter)
 [T4 Bot2.Main1]
 
 [Expect]
-Bot1.Battlefield = Mox Jet; Mox Ruby; Elegy Acolyte; Robot
+Bot1.Battlefield = Mox Jet; Mox Ruby; Elegy Acolyte; Robot Token
 Bot2.Graveyard = Ornithopter
 Bot2.Battlefield.Count = 0

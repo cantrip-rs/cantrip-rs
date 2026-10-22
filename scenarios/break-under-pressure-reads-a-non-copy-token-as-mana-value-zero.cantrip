@@ -47,4 +47,4 @@ Bot1.Hand.Break Under Pressure.Cast(Bot2)
 [Expect]
 Bot1.Life = 22
 Bot2.Graveyard = Elvish Mystic
-Bot2.Battlefield.Goblin Shaman.Power = 2
+Bot2.Battlefield.Goblin Shaman Token.Power = 2

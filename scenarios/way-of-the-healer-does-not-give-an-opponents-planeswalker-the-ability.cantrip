@@ -50,14 +50,14 @@ Bot1.Pass
 Bot2.Battlefield.Narset, Parter of Veils.Activate(Ability: Look)
 Bot2.Pass
 [T3 Bot1.Main1]
-Bot1.Battlefield.Jace.Activate(Ability: Cadet)
+Bot1.Battlefield.Jace Token.Activate(Ability: Cadet)
 Bot1.Pass
 Bot2.Pass
 Bot1.Arrange(Plains)
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 3
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 3
 Bot1.Battlefield.Cadet.Token = true
 Bot2.Battlefield.Narset, Parter of Veils.Counters.Loyalty = 3
 Bot2.Battlefield = Island; Mox Sapphire; Mox Jet; Narset, Parter of Veils

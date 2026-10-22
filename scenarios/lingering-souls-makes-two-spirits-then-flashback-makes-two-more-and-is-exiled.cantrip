@@ -27,9 +27,9 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Lingering Souls.Cast
 Bot1.Pass
 [T1 Bot1.Main2]
-? Bot1.Battlefield.Spirit#1.Keywords = Flying
-? Bot1.Battlefield.Spirit#2.Power = 1
-? Bot1.Battlefield.Spirit#2.Types = Creature
+? Bot1.Battlefield.Spirit Token#1.Keywords = Flying
+? Bot1.Battlefield.Spirit Token#2.Power = 1
+? Bot1.Battlefield.Spirit Token#2.Types = Creature
 ? Bot1.Graveyard = Lingering Souls
 [T2 Bot2.Main1]
 ! Bot1.Graveyard.Lingering Souls.Cast
@@ -46,4 +46,4 @@ Bot1.Pass
 [Expect]
 Exile = Lingering Souls
 Bot1.Graveyard.Count = 0
-Bot1.Battlefield.Spirit#4.Keywords = Flying
+Bot1.Battlefield.Spirit Token#4.Keywords = Flying

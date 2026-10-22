@@ -27,9 +27,9 @@ Bot1.Hand.Esika's Chariot.Cast
 [T5 Bot1.Main1]
 Bot1.Battlefield.Esika's Chariot.Activate(Ability: Crew)
 Bot1.Attack(Esika's Chariot > Bot2)
-Bot1.Target(Cat)
+Bot1.Target(Cat Token)
 [Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Forest; Forest; Sol Ring; Esika's Chariot; Cat; Cat; Cat
+Bot1.Battlefield = Forest; Forest; Sol Ring; Esika's Chariot; Cat Token; Cat Token; Cat Token
 Bot2.Life = 16

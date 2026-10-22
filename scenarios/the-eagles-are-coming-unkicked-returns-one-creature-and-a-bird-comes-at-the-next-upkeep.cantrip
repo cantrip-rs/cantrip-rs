@@ -33,12 +33,12 @@ Bot1.Target(Ornithopter)
 [T2 Bot2.Main1]
 
 [Expect]
-Bot1.Battlefield = Plains; Mox Pearl; Ornithopter; Bird Soldier
-Bot1.Battlefield.Bird Soldier.Token = true
-Bot1.Battlefield.Bird Soldier.Power = 4
-Bot1.Battlefield.Bird Soldier.Toughness = 4
-Bot1.Battlefield.Bird Soldier.Colors = White
-Bot1.Battlefield.Bird Soldier.Subtypes = Bird; Soldier
-Bot1.Battlefield.Bird Soldier.Keywords = Flying
+Bot1.Battlefield = Plains; Mox Pearl; Ornithopter; Bird Soldier Token
+Bot1.Battlefield.Bird Soldier Token.Token = true
+Bot1.Battlefield.Bird Soldier Token.Power = 4
+Bot1.Battlefield.Bird Soldier Token.Toughness = 4
+Bot1.Battlefield.Bird Soldier Token.Colors = White
+Bot1.Battlefield.Bird Soldier Token.Subtypes = Bird; Soldier
+Bot1.Battlefield.Bird Soldier Token.Keywords = Flying
 Bot1.Hand = Ornithopter; Plains; Plains
 Bot1.Graveyard = The Eagles Are Coming!

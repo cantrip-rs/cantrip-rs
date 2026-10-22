@@ -73,14 +73,14 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Hand.Kaldra Compleat.Cast
 Bot1.Pass
-Bot1.Attack(Phyrexian Germ > Bot2)
-Bot2.Block(Myr Battlesphere > Phyrexian Germ)
+Bot1.Attack(Phyrexian Germ Token > Bot2)
+Bot2.Block(Myr Battlesphere > Phyrexian Germ Token)
 [T3 Bot1.Main2]
 
 [Expect]
 Turn = 3
 Exile.Count = 1
 Bot2.Life = 20
-Bot1.Battlefield.Phyrexian Germ.Power = 5
-Bot1.Battlefield.Phyrexian Germ.Toughness = 5
-Bot1.Battlefield.Phyrexian Germ.Keywords = FirstStrike; Haste; Indestructible; Trample
+Bot1.Battlefield.Phyrexian Germ Token.Power = 5
+Bot1.Battlefield.Phyrexian Germ Token.Toughness = 5
+Bot1.Battlefield.Phyrexian Germ Token.Keywords = FirstStrike; Haste; Indestructible; Trample

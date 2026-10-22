@@ -55,9 +55,9 @@ Bot1.Pass
 
 [Expect]
 Bot1.Graveyard.Count = 0
-Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Mox Jet; Mox Pearl; Mox Sapphire; The Fire Crystal; Doomed Traveler; Spirit
+Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Mox Jet; Mox Pearl; Mox Sapphire; The Fire Crystal; Doomed Traveler; Spirit Token
 Bot1.Battlefield.Doomed Traveler.Token = (absent)
-Bot1.Battlefield.Spirit.Token = true
-Bot1.Battlefield.Spirit.Keywords = Flying; Haste
-Bot1.Battlefield.Spirit.Colors = White
+Bot1.Battlefield.Spirit Token.Token = true
+Bot1.Battlefield.Spirit Token.Keywords = Flying; Haste
+Bot1.Battlefield.Spirit Token.Colors = White
 Bot2.Battlefield.Count = 0

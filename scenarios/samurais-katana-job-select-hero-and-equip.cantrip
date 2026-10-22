@@ -35,11 +35,11 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Hero.Power = 3
-? Bot1.Battlefield.Hero.Toughness = 3
-? Bot1.Battlefield.Hero.Subtypes = Hero; Samurai
-? Bot1.Battlefield.Hero.Keywords = Haste; Trample
-? Bot1.Battlefield.Samurai's Katana.AttachedTo = Hero
+? Bot1.Battlefield.Hero Token.Power = 3
+? Bot1.Battlefield.Hero Token.Toughness = 3
+? Bot1.Battlefield.Hero Token.Subtypes = Hero; Samurai
+? Bot1.Battlefield.Hero Token.Keywords = Haste; Trample
+? Bot1.Battlefield.Samurai's Katana.AttachedTo = Hero Token
 ! Bot1.Battlefield.Samurai's Katana.Activate(Ornithopter)
 [T3 Bot1.Main1]
 Bot1.Hand.Mox Emerald.Cast
@@ -55,8 +55,8 @@ Bot2.Pass
 
 [Expect]
 Turn = 3
-Bot1.Battlefield.Hero.Power = 1
-Bot1.Battlefield.Hero.Subtypes = Hero
+Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Battlefield.Hero Token.Subtypes = Hero
 Bot1.Battlefield.Ornithopter.Power = 2
 Bot1.Battlefield.Ornithopter.Toughness = 4
 Bot1.Battlefield.Ornithopter.Subtypes = Samurai; Thopter

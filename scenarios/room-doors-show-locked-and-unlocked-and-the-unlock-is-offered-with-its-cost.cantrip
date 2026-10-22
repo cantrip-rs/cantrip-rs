@@ -69,4 +69,4 @@ Bot1.Pass
 ? Client.Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex:unlocked; Ritual Chamber:unlocked
 
 [Expect]
-Bot1.Battlefield.Demon.Power = 6
+Bot1.Battlefield.Demon Token.Power = 6

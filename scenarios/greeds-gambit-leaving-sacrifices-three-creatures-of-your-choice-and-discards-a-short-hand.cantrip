@@ -39,7 +39,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Greed's Gambit.Cast
 [T1 Bot1.End]
 Bot1.Choose(Island)
-Bot1.Choose(Bat)
+Bot1.Choose(Bat Token)
 [T2 Bot2.Main1]
 ? Bot1.Hand.Count = 2
 ? Bot1.Battlefield.Count = 9
@@ -49,11 +49,11 @@ Bot2.Battlefield.Plains.Activate
 Bot2.Battlefield.Mox Jet.Activate
 Bot2.Hand.Disenchant.Cast(Greed's Gambit)
 Bot1.Choose(Forest; Mountain)
-Bot1.Choose(Bat; Ornithopter#1; Ornithopter#2)
+Bot1.Choose(Bat Token; Ornithopter#1; Ornithopter#2)
 
 [Expect]
 Bot1.Life = 18
 Bot1.Hand.Count = 0
 Bot1.Battlefield.Count = 5
-Bot1.Battlefield.Bat.Token = true
+Bot1.Battlefield.Bat Token.Token = true
 Bot1.Graveyard.Count = 6

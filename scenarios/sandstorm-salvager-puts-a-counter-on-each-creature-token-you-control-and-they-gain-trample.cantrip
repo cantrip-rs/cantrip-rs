@@ -38,13 +38,13 @@ Bot1.Battlefield.Forest#1.Activate
 Bot1.Battlefield.Forest#2.Activate
 
 [Expect]
-Bot1.Battlefield.Golem.Power = 4
-Bot1.Battlefield.Golem.Toughness = 4
-Bot1.Battlefield.Golem.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Golem.Keywords = Trample
+Bot1.Battlefield.Golem Token.Power = 4
+Bot1.Battlefield.Golem Token.Toughness = 4
+Bot1.Battlefield.Golem Token.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Golem Token.Keywords = Trample
 Bot1.Battlefield.Sandstorm Salvager.Power = 1
 Bot1.Battlefield.Sandstorm Salvager.Keywords = (absent)
 Bot1.Battlefield.Sandstorm Salvager.Tapped = true
-Bot2.Battlefield.Golem.Power = 3
-Bot2.Battlefield.Golem.Keywords = (absent)
-Bot2.Battlefield.Golem.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Golem Token.Power = 3
+Bot2.Battlefield.Golem Token.Keywords = (absent)
+Bot2.Battlefield.Golem Token.Counters.PlusOnePlusOne = (absent)

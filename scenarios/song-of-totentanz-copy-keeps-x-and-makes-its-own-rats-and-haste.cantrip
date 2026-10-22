@@ -27,11 +27,11 @@ Bot1.Pass
 Bot1.Pass
 Bot1.Pass
 [T1 Bot1.Main2]
-? Bot1.Battlefield.Rat#1.Keywords = CantBlock; Haste
-? Bot1.Battlefield.Rat#2.Keywords = CantBlock; Haste
+? Bot1.Battlefield.Rat Token#1.Keywords = CantBlock; Haste
+? Bot1.Battlefield.Rat Token#2.Keywords = CantBlock; Haste
 ? Bot1.Battlefield.Lutri, the Spellchaser.Keywords = Flash; Haste
 
 [Expect]
 Turn = 1
 Bot1.Graveyard = Song of Totentanz; Black Lotus
-Bot1.Battlefield = Mox Ruby; Sol Ring; Lutri, the Spellchaser; Rat; Rat
+Bot1.Battlefield = Mox Ruby; Sol Ring; Lutri, the Spellchaser; Rat Token; Rat Token

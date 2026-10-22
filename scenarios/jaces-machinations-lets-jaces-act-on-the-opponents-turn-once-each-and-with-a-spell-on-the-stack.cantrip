@@ -41,7 +41,7 @@ Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Battlefield.Mox Sapphire#3.Activate
 Bot2.Pass
 Bot1.Battlefield.Jace, the Mind Sculptor.Activate(Bot2; Ability: +2)
-? Bot1.Battlefield.Jace.Counters.Loyalty = 8
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 8
 Bot2.Pass
 ! Bot1.Battlefield.Jace, the Mind Sculptor.Activate
 ? Stack.Count = 0
@@ -49,7 +49,7 @@ Bot2.Pass
 Bot2.Hand.Mountain.Play
 Bot2.Hand.Lightning Bolt.Cast(Bot1)
 Bot2.Battlefield.Mountain.Activate
-Bot1.Battlefield.Jace.Activate(Ability: Draw)
+Bot1.Battlefield.Jace Token.Activate(Ability: Draw)
 ? Stack.Count = 2
 ? Bot1.Hand.Count = 0
 Bot2.Pass
@@ -59,7 +59,7 @@ Bot2.Pass
 [Expect]
 Turn = 2
 Bot1.Life = 17
-Bot1.Battlefield.Jace.Counters.Loyalty = 5
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 5
 Bot1.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 5
 Bot1.Hand.Count = 1
 Bot1.Graveyard = Jace's Machinations; Black Lotus

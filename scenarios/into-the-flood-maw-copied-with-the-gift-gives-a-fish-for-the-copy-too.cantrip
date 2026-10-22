@@ -43,6 +43,6 @@ Bot2.Pass
 
 [Expect]
 Stack.Count = 0
-Bot2.Battlefield = Fish; Fish
+Bot2.Battlefield = Fish Token; Fish Token
 Bot2.Battlefield.Count = 2
 Bot2.Hand.Count = 8

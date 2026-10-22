@@ -31,4 +31,4 @@ Bot1.Arrange(Guerrilla Gorilla | Lightning Bolt)
 Bot1.Hand.Count = 5
 Bot1.Graveyard = Malevolent Rumble; Lightning Bolt
 Bot1.Library.Count = 0
-Bot1.Battlefield.Eldrazi Spawn.Power = 0
+Bot1.Battlefield.Eldrazi Spawn Token.Power = 0

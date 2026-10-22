@@ -51,4 +51,4 @@ Bot2.Pass
 [Expect]
 Stack.Count = 0
 Bot1.Hand.Count = 1
-Bot1.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Sapphire; Mox Ruby; Delney, Streetwise Lookout; Sanguine Evangelist; Bat; Bat; Cryogen Relic
+Bot1.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Sapphire; Mox Ruby; Delney, Streetwise Lookout; Sanguine Evangelist; Bat Token; Bat Token; Cryogen Relic

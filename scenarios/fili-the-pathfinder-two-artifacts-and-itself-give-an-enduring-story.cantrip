@@ -32,10 +32,10 @@ Bot1.Battlefield.Mox Jet.Activate
 [Expect]
 Bot1.EnduringStory = true
 Bot2.EnduringStory = (absent)
-Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Jet; Fíli the Pathfinder; Dwarf
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Jet; Fíli the Pathfinder; Dwarf Token
 Bot1.Battlefield.Fíli the Pathfinder.Power = 3
 Bot1.Battlefield.Fíli the Pathfinder.Toughness = 3
-Bot1.Battlefield.Dwarf.Power = 3
-Bot1.Battlefield.Dwarf.Toughness = 3
-Bot1.Battlefield.Dwarf.Token = true
-Bot1.Battlefield.Dwarf.Colors = Red
+Bot1.Battlefield.Dwarf Token.Power = 3
+Bot1.Battlefield.Dwarf Token.Toughness = 3
+Bot1.Battlefield.Dwarf Token.Token = true
+Bot1.Battlefield.Dwarf Token.Colors = Red

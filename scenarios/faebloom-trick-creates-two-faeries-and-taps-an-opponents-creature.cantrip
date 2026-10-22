@@ -32,18 +32,18 @@ Bot2.Pass
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Faerie; Faerie
-Bot1.Battlefield.Faerie#1.Token = true
-Bot1.Battlefield.Faerie#1.Colors = Blue
-Bot1.Battlefield.Faerie#1.Subtypes = Faerie
-Bot1.Battlefield.Faerie#1.Keywords = Flying
-Bot1.Battlefield.Faerie#1.Power = 1
-Bot1.Battlefield.Faerie#1.Toughness = 1
-Bot1.Battlefield.Faerie#1.Tapped = false
-Bot1.Battlefield.Faerie#2.Tapped = false
-Bot1.Battlefield.Faerie#2.Token = true
-Bot1.Battlefield.Faerie#2.Colors = Blue
-Bot1.Battlefield.Faerie#2.Keywords = Flying
+Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Faerie Token; Faerie Token
+Bot1.Battlefield.Faerie Token#1.Token = true
+Bot1.Battlefield.Faerie Token#1.Colors = Blue
+Bot1.Battlefield.Faerie Token#1.Subtypes = Faerie
+Bot1.Battlefield.Faerie Token#1.Keywords = Flying
+Bot1.Battlefield.Faerie Token#1.Power = 1
+Bot1.Battlefield.Faerie Token#1.Toughness = 1
+Bot1.Battlefield.Faerie Token#1.Tapped = false
+Bot1.Battlefield.Faerie Token#2.Tapped = false
+Bot1.Battlefield.Faerie Token#2.Token = true
+Bot1.Battlefield.Faerie Token#2.Colors = Blue
+Bot1.Battlefield.Faerie Token#2.Keywords = Flying
 Bot2.Battlefield.Llanowar Elves.Tapped = true
 Bot1.Graveyard = Faebloom Trick
 Stack.Count = 0

@@ -26,13 +26,13 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Retrofitter Foundry.Activate(Ability: Servo artifact creature token)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Servo.Power = 1
+? Bot1.Battlefield.Servo Token.Power = 1
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Retrofitter Foundry.Activate(Ability: Sacrifice a Servo)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Thopter.Keywords = Flying
+? Bot1.Battlefield.Thopter Token.Keywords = Flying
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
@@ -43,6 +43,6 @@ Bot2.Pass
 Bot1.Battlefield.Retrofitter Foundry.Activate(Ability: Sacrifice a Thopter)
 
 [Expect]
-Bot1.Battlefield.Construct.Power = 4
+Bot1.Battlefield.Construct Token.Power = 4
 Bot1.Battlefield.Count = 7
 Bot1.Battlefield.Retrofitter Foundry.Tapped = true

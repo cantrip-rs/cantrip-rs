@@ -25,7 +25,7 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Hand.Keeper of the Quiet Hour.Cast
 
 [Expect]
-Bot1.Battlefield.Jace.Token = true
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Token = true
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot1.Battlefield.Keeper of the Quiet Hour.Power = 3
 Bot1.Battlefield.Keeper of the Quiet Hour.Toughness = 2

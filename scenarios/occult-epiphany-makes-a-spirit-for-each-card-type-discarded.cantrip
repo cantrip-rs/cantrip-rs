@@ -32,5 +32,5 @@ Turn = 1
 Stack.Count = 0
 Bot1.Graveyard = Occult Epiphany; Island; Black Lotus
 Bot1.Hand.Count = 3
-Bot1.Battlefield.Spirit#2.Power = 1
-Bot1.Battlefield.Spirit#2.Keywords = Flying
+Bot1.Battlefield.Spirit Token#2.Power = 1
+Bot1.Battlefield.Spirit Token#2.Keywords = Flying

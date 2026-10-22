@@ -41,7 +41,7 @@ Bot2.Hand.Disenchant.Cast(Cori-Steel Cutter)
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Mox Jet; Monk
-Bot1.Battlefield.Monk.Power = 1
+Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Mox Jet; Monk Token
+Bot1.Battlefield.Monk Token.Power = 1
 Bot1.Graveyard = Cori-Steel Cutter; Lightning Bolt
 Stack.Count = 0

@@ -44,7 +44,7 @@ Bot2.Pass
 Exile = Ornithopter
 Bot2.Graveyard.Count = 0
 Bot1.Graveyard = Wrath of God; Head of the Hunt; Black Lotus
-Bot1.Battlefield.Wolf.Power = 2
-Bot1.Battlefield.Wolf.Colors = Green
+Bot1.Battlefield.Wolf Token.Power = 2
+Bot1.Battlefield.Wolf Token.Colors = Green
 Bot1.Battlefield.Count = 5
 Stack.Count = 0

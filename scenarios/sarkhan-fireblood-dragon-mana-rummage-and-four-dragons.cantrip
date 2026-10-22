@@ -68,6 +68,6 @@ Bot2.Pass
 Turn = 9
 Stack.Count = 0
 Bot1.Graveyard = Sarkhan, Fireblood; Lightning Bolt
-Bot1.Battlefield = Mountain; Mox Ruby; Mox Jet; Mox Pearl; Swashbuckler Extraordinaire; Treasure Token; Dragon; Dragon; Dragon; Dragon
-Bot1.Battlefield.Dragon#1.Power = 5
-Bot1.Battlefield.Dragon#4.Toughness = 5
+Bot1.Battlefield = Mountain; Mox Ruby; Mox Jet; Mox Pearl; Swashbuckler Extraordinaire; Treasure Token; Dragon Token; Dragon Token; Dragon Token; Dragon Token
+Bot1.Battlefield.Dragon Token#1.Power = 5
+Bot1.Battlefield.Dragon Token#4.Toughness = 5

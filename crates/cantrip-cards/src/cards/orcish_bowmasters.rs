@@ -20,7 +20,8 @@ fn shoot_and_amass(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// The 0/0 black Orc Army creature token amass makes.
 pub static ORC_ARMY: CardDef = CardDef {
-    name: "Orc Army",
+    name: "Orc Army Token",
+    token_name: Some(&[Subtype::Orc, Subtype::Army]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),

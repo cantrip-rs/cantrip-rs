@@ -32,7 +32,7 @@ Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Lingering Souls.Cast
 Bot1.Pass
 Bot1.Battlefield.Mox Ruby.Activate
-Bot1.Hand.Lightning Bolt.Cast(Spirit)
+Bot1.Hand.Lightning Bolt.Cast(Spirit Token)
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Mox Pearl.Activate

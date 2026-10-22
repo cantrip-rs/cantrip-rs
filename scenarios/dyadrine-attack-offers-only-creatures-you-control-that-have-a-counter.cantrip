@@ -72,4 +72,4 @@ Bot1.Battlefield.Dyadrine, Synthesis Amalgam.Counters.PlusOnePlusOne = 1
 Bot1.Graveyard = Walking Ballista; Black Lotus
 Bot1.Battlefield.Boommobile.Counters.PlusOnePlusOne = 1
 Bot2.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Robot.Token = true
+Bot1.Battlefield.Robot Token.Token = true

@@ -42,7 +42,7 @@ Bot1.Hand.Ornithopter.Cast
 [T7 Bot1.Main1]
 Bot1.Hand.Ornithopter.Cast
 Bot1.Battlefield.Mox Ruby.Activate
-Bot1.Battlefield.Reflection of Kiki-Jiki.Activate(Goblin Shaman)
+Bot1.Battlefield.Reflection of Kiki-Jiki.Activate(Goblin Shaman Token)
 Bot1.Pass
 Bot1.Attack(Ocelot Pride)
 [T9 Bot1.Main1]
@@ -50,4 +50,4 @@ Bot1.Attack(Ocelot Pride)
 [Expect]
 Turn = 9
 Bot1.Life = 21
-Bot1.Battlefield = Cat; Cat; Goblin Shaman; Goblin Shaman; Mox Ruby; Ocelot Pride; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Plains; Reflection of Kiki-Jiki
+Bot1.Battlefield = Cat Token; Cat Token; Goblin Shaman Token; Goblin Shaman Token; Mox Ruby; Ocelot Pride; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Plains; Reflection of Kiki-Jiki

@@ -55,16 +55,16 @@ Bot1.Battlefield.Magda, the Hoardmaster.Activate
 ? Stack.Count = 1
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Scorpion Dragon.Power = 4
-Bot1.Attack(Scorpion Dragon > Bot2)
+? Bot1.Battlefield.Scorpion Dragon Token.Power = 4
+Bot1.Attack(Scorpion Dragon Token > Bot2)
 [T5 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mountain; Magda, the Hoardmaster; Scorpion Dragon
-Bot1.Battlefield.Scorpion Dragon.Token = true
-Bot1.Battlefield.Scorpion Dragon.Toughness = 4
-Bot1.Battlefield.Scorpion Dragon.Colors = Red
-Bot1.Battlefield.Scorpion Dragon.Subtypes = Dragon; Scorpion
-Bot1.Battlefield.Scorpion Dragon.Keywords = Flying; Haste
-Bot1.Battlefield.Scorpion Dragon.Tapped = true
+Bot1.Battlefield = Mountain; Mountain; Magda, the Hoardmaster; Scorpion Dragon Token
+Bot1.Battlefield.Scorpion Dragon Token.Token = true
+Bot1.Battlefield.Scorpion Dragon Token.Toughness = 4
+Bot1.Battlefield.Scorpion Dragon Token.Colors = Red
+Bot1.Battlefield.Scorpion Dragon Token.Subtypes = Dragon; Scorpion
+Bot1.Battlefield.Scorpion Dragon Token.Keywords = Flying; Haste
+Bot1.Battlefield.Scorpion Dragon Token.Tapped = true
 Bot2.Life = 4

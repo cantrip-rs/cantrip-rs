@@ -5,7 +5,8 @@ use cantrip_oracle as oracle;
 
 /// A 2/1 black Bat creature token with flying.
 pub static BAT: CardDef = CardDef {
-    name: "Bat",
+    name: "Bat Token",
+    token_name: Some(&[Subtype::Bat]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),

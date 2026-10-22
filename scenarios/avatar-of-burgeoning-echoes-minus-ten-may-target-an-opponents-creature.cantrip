@@ -31,22 +31,22 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Hand.Jace's Machinations.Cast
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 10
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 10
 [T2 Bot2.Main1]
 Bot2.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
 Bot1.Hand.Island.Play
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 12
-Bot1.Battlefield.Jace.Activate(Ability: Put a +1/+1 counter; Bot2.Battlefield.Ornithopter)
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 12
+Bot1.Battlefield.Jace Token.Activate(Ability: Put a +1/+1 counter; Bot2.Battlefield.Ornithopter)
 Bot2.Pass
 
 [Expect]
 Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
 Bot2.Battlefield.Ornithopter.Power = 2
 Bot2.Battlefield.Ornithopter.Toughness = 4
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot1.Battlefield.Avatar of Burgeoning Echoes.Power = 2
 Bot1.Battlefield.Avatar of Burgeoning Echoes.Toughness = 3
 Stack.Count = 0

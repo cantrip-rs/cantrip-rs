@@ -24,7 +24,8 @@ const FIREBENDING_4: AbilityDef = firebending::trigger::<4>("Firebending 4 (When
 
 /// The 4/4 red Dragon with flying and firebending 4.
 pub static DRAGON: CardDef = CardDef {
-    name: "Dragon",
+    name: "Dragon Token",
+    token_name: Some(&[Subtype::Dragon]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Red)),
     types: TypeSet::of(&[CardType::Creature]),

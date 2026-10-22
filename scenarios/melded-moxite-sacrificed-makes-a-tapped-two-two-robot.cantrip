@@ -32,8 +32,8 @@ Bot1.Battlefield.Melded Moxite.Activate
 [Expect]
 Stack.Count = 0
 Bot1.Graveyard = Melded Moxite
-Bot1.Battlefield.Robot.Tapped = true
-Bot1.Battlefield.Robot.Power = 2
-Bot1.Battlefield.Robot.Toughness = 2
-Bot1.Battlefield.Robot.Types = Artifact; Creature
-Bot1.Battlefield.Robot.Subtypes = Robot
+Bot1.Battlefield.Robot Token.Tapped = true
+Bot1.Battlefield.Robot Token.Power = 2
+Bot1.Battlefield.Robot Token.Toughness = 2
+Bot1.Battlefield.Robot Token.Types = Artifact; Creature
+Bot1.Battlefield.Robot Token.Subtypes = Robot

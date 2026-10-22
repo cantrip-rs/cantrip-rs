@@ -27,11 +27,11 @@ Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Myr Battlesphere.Cast
 [T5 Bot1.Main1]
 Bot1.Attack(Myr Battlesphere > Bot2)
-Bot1.Choose(Myr#1; Myr#2; Myr#3)
+Bot1.Choose(Myr Token#1; Myr Token#2; Myr Token#3)
 [Bot1.Main2]
 [Expect]
 Bot2.Life = 10
 Bot1.Battlefield.Myr Battlesphere.Power = 7
-Bot1.Battlefield.Myr#1.Tapped = true
-Bot1.Battlefield.Myr#3.Tapped = true
-Bot1.Battlefield.Myr#4.Tapped = false
+Bot1.Battlefield.Myr Token#1.Tapped = true
+Bot1.Battlefield.Myr Token#3.Tapped = true
+Bot1.Battlefield.Myr Token#4.Tapped = false

@@ -33,5 +33,5 @@ Bot1.Modes(Second from the top)
 Turn = 1
 Stack.Count = 0
 Bot1.Library = Plains; Wan Shi Tong, All-Knowing; Swamp
-Bot1.Battlefield = Island; Sol Ring; Spirit; Spirit
+Bot1.Battlefield = Island; Sol Ring; Spirit Token; Spirit Token
 Bot1.Graveyard = Black Lotus

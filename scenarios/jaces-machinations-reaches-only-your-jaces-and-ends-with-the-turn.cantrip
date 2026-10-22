@@ -45,18 +45,18 @@ Bot2.Pass
 ! Bot2.Battlefield.Jace, the Mind Sculptor.Activate
 Bot2.Pass
 ! Bot1.Battlefield.Liliana of the Veil.Activate
-Bot1.Battlefield.Jace.Activate(Ability: Surveil)
+Bot1.Battlefield.Jace Token.Activate(Ability: Surveil)
 ? Stack.Count = 1
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 7
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 7
 [T3 Bot1.Upkeep]
-! Bot1.Battlefield.Jace.Activate
+! Bot1.Battlefield.Jace Token.Activate
 [T3 Bot1.Main1]
-Bot1.Battlefield.Jace.Activate(Ability: Surveil)
+Bot1.Battlefield.Jace Token.Activate(Ability: Surveil)
 Bot2.Pass
 
 [Expect]
 Turn = 3
-Bot1.Battlefield.Jace.Counters.Loyalty = 6
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 6
 Bot1.Battlefield.Liliana of the Veil.Counters.Loyalty = 3
 Bot2.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 3

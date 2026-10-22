@@ -27,7 +27,7 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Hand.Ajani, Nacatl Pariah.Cast
 [T4 Bot2.Main1]
 Bot2.Battlefield.Mountain.Activate
-Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cat Warrior)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cat Warrior Token)
 Bot1.Accept
 [T5 Bot1.Main1]
 Bot1.Hand.Ornithopter.Cast
@@ -38,8 +38,8 @@ Bot1.Battlefield.Ajani, Nacatl Avenger.Activate(Ability: +2)
 
 [Expect]
 Turn = 7
-Bot1.Battlefield.Cat Warrior.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Cat Warrior.Power = 3
+Bot1.Battlefield.Cat Warrior Token.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Cat Warrior Token.Power = 3
 Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
 Bot1.Battlefield.Ajani, Nacatl Avenger.Counters.Loyalty = 5
 Stack.Count = 0

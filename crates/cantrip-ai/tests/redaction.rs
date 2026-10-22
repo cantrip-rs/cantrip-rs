@@ -184,7 +184,7 @@ fn short(game: &Game, seat: PlayerId, id: ObjectId) -> String {
         return format!("ability {}", id.0 & 0x7fff_ffff);
     }
     let o = game.state.obj(id);
-    let name = if knows_face(&game.state, seat, id) { game.name(id) } else { "?" };
+    let name = if knows_face(&game.state, seat, id) { game.name(id).to_string() } else { "?".into() };
     format!("{name}@{:?}{}", o.zone.kind(), o.zone.player.0)
 }
 

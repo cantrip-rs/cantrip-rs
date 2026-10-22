@@ -1,0 +1,42 @@
+# Artificial Evolution changes Zombie to Goblin in Dreadhorde Invasion's text before its first upkeep.
+# Amass creates a Goblin Army Token with that ordered name (CR 111.4, 612.4, 701.47a). At six power,
+# its attack satisfies the changed Goblin-token trigger and gains lifelink (CR 612.2).
+
+[Bot1 Deck]
+Swamp
+Dreadhorde Invasion
+Mox Jet
+Artificial Evolution
+Mox Sapphire
+Forest
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dreadhorde Invasion.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Dreadhorde Invasion)
+Bot1.Modes(Zombie)
+Bot1.Modes(Goblin)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Goblin Army Token.Token = true
+? Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
+[T13 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Army Token > Bot2)
+[T13 Bot1.Main2]
+
+[Expect]
+Turn = 13
+Stack.Count = 0
+Bot1.Battlefield.Goblin Army Token.Power = 6
+Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
+Bot1.Life = 20
+Bot2.Life = 14

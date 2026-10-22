@@ -47,7 +47,7 @@ Bot1.Battlefield.Baloth Prime.Activate
 Bot1.Choose(Forest)
 
 [Expect]
-Bot1.Battlefield = Mox Emerald; Mox Pearl; Mox Ruby; Baloth Prime; Beast
+Bot1.Battlefield = Mox Emerald; Mox Pearl; Mox Ruby; Baloth Prime; Beast Token
 Bot1.Battlefield.Baloth Prime.Counters.Stun = 4
-Bot1.Battlefield.Beast.Tapped = true
+Bot1.Battlefield.Beast Token.Tapped = true
 Bot1.Life = 22

@@ -51,11 +51,11 @@ Bot1.Pass
 Bot1.Pass
 ? Bot1.Hand.Count = 3
 Bot1.Attack(The Mighty Thor, Jane Foster > Bot2)
-! Bot1.Target(Inkling)
+! Bot1.Target(Inkling Token)
 Bot1.Target(Ornithopter)
 [T3 Bot1.Main2]
 
 [Expect]
 Bot2.Battlefield.Ornithopter.Tapped = true
-Bot2.Battlefield.Inkling.Tapped = false
+Bot2.Battlefield.Inkling Token.Tapped = false
 Bot2.Life = 17

@@ -10,7 +10,8 @@ use cantrip_oracle as oracle;
 
 /// The 6/6 black Demon creature token with flying.
 pub static DEMON: CardDef = CardDef {
-    name: "Demon",
+    name: "Demon Token",
+    token_name: Some(&[Subtype::Demon]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),

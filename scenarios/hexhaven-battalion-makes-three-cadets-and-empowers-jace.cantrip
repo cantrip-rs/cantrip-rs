@@ -23,5 +23,5 @@ Bot1.Pass
 Bot1.Battlefield.Cadet#1.Power = 2
 Bot1.Battlefield.Cadet#2.Toughness = 2
 Bot1.Battlefield.Cadet#3.Power = 2
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot1.Battlefield.Count = 4

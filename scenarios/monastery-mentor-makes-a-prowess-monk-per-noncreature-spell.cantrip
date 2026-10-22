@@ -30,7 +30,7 @@ Bot1.Hand.Mox Emerald.Cast
 [Expect]
 Bot1.Battlefield.Monastery Mentor.Power = 4
 Bot1.Battlefield.Monastery Mentor.Toughness = 4
-Bot1.Battlefield.Monk#1.Power = 2
-Bot1.Battlefield.Monk#2.Power = 1
-Bot1.Battlefield.Monk#1.Keywords = (absent)
+Bot1.Battlefield.Monk Token#1.Power = 2
+Bot1.Battlefield.Monk Token#2.Power = 1
+Bot1.Battlefield.Monk Token#1.Keywords = (absent)
 Bot1.Battlefield.Count = 8

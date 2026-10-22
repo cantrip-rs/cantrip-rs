@@ -24,11 +24,11 @@ Bot2.Hand.Ornithopter.Cast
 Bot1.Attack(Ornithopter > Bot2)
 Bot1.Pass
 Bot2.Pass
-? Combat.Attackers = Ornithopter > Bot2; Human > Bot2
+? Combat.Attackers = Ornithopter > Bot2; Human Token > Bot2
 ? Bot1.Battlefield.Adeline, Resplendent Cathar.Power = 3
 [T3 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 19
 Bot1.Battlefield.Adeline, Resplendent Cathar.Tapped = False
-Bot1.Battlefield = Adeline, Resplendent Cathar; Ornithopter; Human
+Bot1.Battlefield = Adeline, Resplendent Cathar; Ornithopter; Human Token

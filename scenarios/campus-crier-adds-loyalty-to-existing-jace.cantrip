@@ -30,5 +30,5 @@ Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Campus Crier)
 Bot1.Graveyard.Campus Crier.Activate
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 4
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 4
 Exile = Campus Crier; Campus Crier

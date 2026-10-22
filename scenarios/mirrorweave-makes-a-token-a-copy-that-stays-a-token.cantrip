@@ -46,7 +46,7 @@ Bot2.Pass
 [T4 Bot2.Main1]
 
 [Expect]
-Bot1.Battlefield = Plains; Mox Ruby; Fable of the Mirror-Breaker; Goblin Shaman; Ornithopter; Mox Pearl; Plains
-Bot1.Battlefield.Goblin Shaman.Token = true
-Bot1.Battlefield.Goblin Shaman.Power = 2
-Bot1.Battlefield.Goblin Shaman.Subtypes = Goblin; Shaman
+Bot1.Battlefield = Plains; Mox Ruby; Fable of the Mirror-Breaker; Goblin Shaman Token; Ornithopter; Mox Pearl; Plains
+Bot1.Battlefield.Goblin Shaman Token.Token = true
+Bot1.Battlefield.Goblin Shaman Token.Power = 2
+Bot1.Battlefield.Goblin Shaman Token.Subtypes = Goblin; Shaman

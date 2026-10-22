@@ -26,14 +26,14 @@ Bot1.Battlefield.Gleemox.Activate(Color: Blue)
 Bot1.Hand.Glimmer Lens.Cast
 Bot1.Pass
 [T3 Bot1.Main1]
-Bot1.Attack(Rebel; Ornithopter)
+Bot1.Attack(Rebel Token; Ornithopter)
 [T3 Bot1.Main2]
 ? Bot1.Hand.Count = 5
 [T5 Bot1.Main1]
-Bot1.Attack(Rebel)
+Bot1.Attack(Rebel Token)
 [T5 Bot1.Main2]
 
 [Expect]
 Bot1.Hand.Count = 6
-Bot1.Battlefield.Glimmer Lens.AttachedTo = Rebel
+Bot1.Battlefield.Glimmer Lens.AttachedTo = Rebel Token
 Bot2.Life = 16

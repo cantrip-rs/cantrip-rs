@@ -33,7 +33,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-Bot1.Battlefield.Jace.Activate(Ability: Surveil 1)
+Bot1.Battlefield.Jace Token.Activate(Ability: Surveil 1)
 Bot1.Pass
 Bot2.Pass
 [T2 Bot2.Main1]
@@ -60,4 +60,4 @@ Bot2.Pass
 
 [Expect]
 Bot2.Graveyard = Liliana of the Veil
-Bot1.Battlefield.Jace.Types = Planeswalker
+Bot1.Battlefield.Jace Token.Types = Planeswalker

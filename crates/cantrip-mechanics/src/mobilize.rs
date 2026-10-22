@@ -8,7 +8,8 @@ use cantrip_api::*;
 
 /// The 1/1 red Warrior creature token mobilize makes.
 pub static WARRIOR: CardDef = CardDef {
-    name: "Warrior",
+    name: "Warrior Token",
+    token_name: Some(&[Subtype::Warrior]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Red)),
     types: TypeSet::of(&[CardType::Creature]),

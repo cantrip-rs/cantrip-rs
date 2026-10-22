@@ -48,5 +48,5 @@ Bot1.Target(Bot2.Graveyard.Lotus Petal)
 Exile = Lotus Petal
 Bot1.Graveyard = Lotus Petal
 Bot2.Graveyard.Count = 0
-Bot1.Battlefield.Rat.Power = 1
-Bot1.Battlefield.Rat.Keywords = CantBlock
+Bot1.Battlefield.Rat Token.Power = 1
+Bot1.Battlefield.Rat Token.Keywords = CantBlock

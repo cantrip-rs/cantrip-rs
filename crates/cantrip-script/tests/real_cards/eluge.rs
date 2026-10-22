@@ -173,7 +173,7 @@ fn play(hands: [&[&str]; 2], steps: Vec<Step>, until: u32, mut watch: impl FnMut
                 }
             }
             RequestKind::PayCosts { options, .. } => {
-                let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s).starts_with("Mox")));
+                let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s).text().starts_with("Mox")));
                 let land = options.iter().find(|o| o.kind == ActionKind::ActivateAbility);
                 let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
                 Answer::Act(Action::of(confirm.or(mox).or(land).expect("mana to pay with, or the payment to confirm")))
@@ -374,7 +374,7 @@ fn announced(card: &str, choose: Vec<u8>) -> (Vec<String>, Vec<String>) {
                     options
                         .iter()
                         .find(|o| o.kind == ActionKind::ConfirmCasting)
-                        .or_else(|| options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| Some(game.name(s)) == mox)))
+                        .or_else(|| options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| mox.is_some_and(|name| game.name(s) == name))))
                         .expect("a way to pay"),
                 ))
             }
@@ -386,7 +386,7 @@ fn announced(card: &str, choose: Vec<u8>) -> (Vec<String>, Vec<String>) {
         game.answer(request.id, request.player, answer).unwrap();
     }
     assert!(cast, "{card} was cast");
-    let tapped = game.state.battlefield().iter().filter(|&&id| game.state.obj(id).tapped && game.name(id).starts_with("Mox")).map(|&id| game.name(id).to_string()).collect();
+    let tapped = game.state.battlefield().iter().filter(|&&id| game.state.obj(id).tapped && game.name(id).to_string().starts_with("Mox")).map(|&id| game.name(id).to_string()).collect();
     (options, tapped)
 }
 

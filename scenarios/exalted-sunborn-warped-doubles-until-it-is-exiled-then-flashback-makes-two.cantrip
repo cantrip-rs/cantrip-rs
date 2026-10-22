@@ -40,4 +40,4 @@ Bot1.Graveyard.Lingering Souls.Cast(Ability: Flashback)
 [Expect]
 Exile = Exalted Sunborn; Lingering Souls
 Bot1.Battlefield.Count = 9
-Bot1.Battlefield.Spirit#6.Token = true
+Bot1.Battlefield.Spirit Token#6.Token = true

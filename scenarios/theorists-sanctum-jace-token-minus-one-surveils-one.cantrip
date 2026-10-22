@@ -21,10 +21,10 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Theorist's Sanctum.Activate(Ability: Empower)
 Bot2.Pass
 [T1 Bot1.Main2]
-Bot1.Battlefield.Jace.Activate(Ability: Surveil)
+Bot1.Battlefield.Jace Token.Activate(Ability: Surveil)
 Bot2.Pass
 Bot1.Arrange( | Mountain)
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 1
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 1
 Bot1.Graveyard = Mountain; Black Lotus

@@ -41,6 +41,6 @@ Bot1.Hand.Aether Spellbomb.Cast
 Turn = 7
 Bot1.Battlefield.Thieving Skydiver.Subtypes = Merfolk; Rogue; Wizard
 Bot1.Battlefield.Thieving Skydiver.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Hero.Subtypes = Hero
-Bot1.Battlefield.Hero.Power = 1
+Bot1.Battlefield.Hero Token.Subtypes = Hero
+Bot1.Battlefield.Hero Token.Power = 1
 Stack.Count = 0

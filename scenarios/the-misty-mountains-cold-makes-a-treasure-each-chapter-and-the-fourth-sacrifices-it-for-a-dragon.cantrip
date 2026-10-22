@@ -42,12 +42,12 @@ Bot1.Pass
 
 [Expect]
 Turn = 7
-Bot1.Battlefield = Mountain; Mox Ruby; Sol Ring; Treasure Token; Treasure Token; Treasure Token; Treasure Token; Dragon
+Bot1.Battlefield = Mountain; Mox Ruby; Sol Ring; Treasure Token; Treasure Token; Treasure Token; Treasure Token; Dragon Token
 Bot1.Battlefield.Count = 8
-Bot1.Battlefield.Dragon.Power = 6
-Bot1.Battlefield.Dragon.Toughness = 6
-Bot1.Battlefield.Dragon.Keywords = Flying
-Bot1.Battlefield.Dragon.Colors = Red
-Bot1.Battlefield.Dragon.Subtypes = Dragon
-Bot1.Battlefield.Dragon.Token = true
+Bot1.Battlefield.Dragon Token.Power = 6
+Bot1.Battlefield.Dragon Token.Toughness = 6
+Bot1.Battlefield.Dragon Token.Keywords = Flying
+Bot1.Battlefield.Dragon Token.Colors = Red
+Bot1.Battlefield.Dragon Token.Subtypes = Dragon
+Bot1.Battlefield.Dragon Token.Token = true
 Bot1.Graveyard = The Misty Mountains Cold

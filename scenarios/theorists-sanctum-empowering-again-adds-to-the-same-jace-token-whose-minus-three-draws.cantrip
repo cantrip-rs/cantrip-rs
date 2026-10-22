@@ -26,20 +26,20 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Theorist's Sanctum.Activate(Ability: Empower)
 Bot2.Pass
 [T1 Bot1.Main2]
-? Bot1.Battlefield.Jace.Counters.Loyalty = 2
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 [T3 Bot1.Main1]
 Bot1.Hand.Theorist's Sanctum.Play
-Bot1.Choose(Jace)
+Bot1.Choose(Jace Token)
 Bot1.Battlefield.Theorist's Sanctum#2.Activate(Ability: Empower)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Battlefield.Theorist's Sanctum#1.Activate
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 4
-Bot1.Battlefield.Jace.Activate(Ability: Draw)
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 4
+Bot1.Battlefield.Jace Token.Activate(Ability: Draw)
 Bot2.Pass
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 1
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 1
 Bot1.Battlefield.Count = 5
 Bot1.Hand.Count = 4

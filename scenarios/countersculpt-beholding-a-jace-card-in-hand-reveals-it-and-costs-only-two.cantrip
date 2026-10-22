@@ -41,4 +41,4 @@ Bot1.Life = 20
 Bot1.Revealed = Jace, the Mind Sculptor
 Bot1.Hand = Jace, the Mind Sculptor; Island; Island; Island
 Bot2.Graveyard = Lightning Bolt
-Bot1.Battlefield.Jace.Counters.Loyalty = 1
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 1

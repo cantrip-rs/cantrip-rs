@@ -72,7 +72,7 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Hand.Kaldra Compleat.Cast
 Bot1.Pass
-Bot1.Attack(Phyrexian Germ > Bot2)
+Bot1.Attack(Phyrexian Germ Token > Bot2)
 [T3 Bot1.Main2]
 
 [Expect]

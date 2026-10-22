@@ -29,11 +29,11 @@ Bot2.Pass
 Bot1.Hand.Swamp.Play
 Bot1.Battlefield.Swamp.Activate
 Bot1.Hand.Innocent Blood.Cast
-Bot1.Choose(Rabbit#2)
+Bot1.Choose(Rabbit Token#2)
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mox Pearl; Mox Pearl; Plains; Rabbit; Rabbit; Swamp
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Plains; Rabbit Token; Rabbit Token; Swamp
 Bot1.Battlefield.Count = 6
 Bot1.Graveyard = Innocent Blood; Hop to It
 Bot2.Battlefield.Count = 0

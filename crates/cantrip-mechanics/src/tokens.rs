@@ -6,13 +6,26 @@ use crate::statics::itself;
 /// A 1/1 colorless Thopter artifact creature token with flying (CR 111).
 /// Pia, Determined Rebuilder and Retrofitter Foundry create this exact token.
 pub static THOPTER: CardDef = CardDef {
-    name: "Thopter",
+    name: "Thopter Token",
+    token_name: Some(&[Subtype::Thopter]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Thopter]),
     power: Some(1),
     toughness: Some(1),
     keywords: Keywords::of(&[Keyword::Flying]),
+    ..CardDef::BLANK
+};
+
+/// A 1/1 colorless Myr artifact creature token (CR 111). Memnarch, the Warden and Myr Battlesphere create this exact token.
+pub static MYR: CardDef = CardDef {
+    name: "Myr Token",
+    token_name: Some(&[Subtype::Myr]),
+    has_cost: false,
+    types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
+    subtypes: SubtypeSet::of(&[Subtype::Myr]),
+    power: Some(1),
+    toughness: Some(1),
     ..CardDef::BLANK
 };
 
@@ -168,7 +181,8 @@ fn explore_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// A colorless 2/2 Robot artifact creature token. Melded Moxite and Pinnacle Starcage create it. It shares its name with
 /// the 1/1 Robot (Ravenous Robots'), so the card table keeps the definitions apart.
 pub static ROBOT_2_2: CardDef = CardDef {
-    name: "Robot",
+    name: "Robot Token",
+    token_name: Some(&[Subtype::Robot]),
     has_cost: false,
     colors: Some(ColorSet::NONE),
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
@@ -226,7 +240,8 @@ pub fn create_food(g: &mut dyn Game, controller: PlayerId) -> Result<(), Suspend
 
 /// A 1/1 white Monk creature token with prowess. Cori-Steel Cutter's flurry and Monastery Mentor make it.
 pub static MONK: CardDef = CardDef {
-    name: "Monk",
+    name: "Monk Token",
+    token_name: Some(&[Subtype::Monk]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -240,7 +255,8 @@ pub static MONK: CardDef = CardDef {
 
 /// The 1/1 blue and red Otter creature token with prowess. Ral, Crackling Wit's +1 and Stormchaser's Talent make it.
 pub static OTTER: CardDef = CardDef {
-    name: "Otter",
+    name: "Otter Token",
+    token_name: Some(&[Subtype::Otter]),
     has_cost: false,
     colors: Some(ColorSet(ColorSet::of(Color::Blue).0 | ColorSet::of(Color::Red).0)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -254,7 +270,8 @@ pub static OTTER: CardDef = CardDef {
 
 /// The 0/0 black Phyrexian Germ creature token living weapon makes (CR 702.92a): Nettlecyst, Kaldra Compleat.
 pub static GERM: CardDef = CardDef {
-    name: "Phyrexian Germ",
+    name: "Phyrexian Germ Token",
+    token_name: Some(&[Subtype::Phyrexian, Subtype::Germ]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -279,7 +296,8 @@ pub static DOOMBOT: CardDef = CardDef {
 
 /// A colorless 3/3 Golem artifact creature token. Legion Extruder and Sandstorm Salvager make it.
 pub static GOLEM: CardDef = CardDef {
-    name: "Golem",
+    name: "Golem Token",
+    token_name: Some(&[Subtype::Golem]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Golem]),
@@ -290,7 +308,8 @@ pub static GOLEM: CardDef = CardDef {
 
 /// The 1/1 colorless Gnome artifact creature token. Cosmium Kiln and The Golden-Gear Colossus make it.
 pub static GNOME: CardDef = CardDef {
-    name: "Gnome",
+    name: "Gnome Token",
+    token_name: Some(&[Subtype::Gnome]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Gnome]),
@@ -302,7 +321,8 @@ pub static GNOME: CardDef = CardDef {
 /// The 1/1 colorless Pilot creature token: "This token crews Vehicles as though its power were 2 greater." Shorikai,
 /// Genesis Engine and Reckoner Bankbuster make it.
 pub static PILOT: CardDef = CardDef {
-    name: "Pilot",
+    name: "Pilot Token",
+    token_name: Some(&[Subtype::Pilot]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Pilot]),
@@ -317,7 +337,8 @@ pub static PILOT: CardDef = CardDef {
 /// greater." Defend the Rider, the Roads lands (Country Roads, Foul Roads, Reef Roads, Rocky Roads, Wild Roads),
 /// Roadside Assistance, Back on Track, Cloudspire Coordinator and Valor's Flagship make it.
 pub static PILOT_SADDLES_AND_CREWS: CardDef = CardDef {
-    name: "Pilot",
+    name: "Pilot Token",
+    token_name: Some(&[Subtype::Pilot]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Pilot]),
@@ -331,7 +352,8 @@ pub static PILOT_SADDLES_AND_CREWS: CardDef = CardDef {
 /// The 0/0 colorless Construct artifact creature token with "This token gets +1/+1 for each artifact you control". Urza's Saga
 /// and Urza, Lord High Artificer make it.
 pub static CONSTRUCT: CardDef = CardDef {
-    name: "Construct",
+    name: "Construct Token",
+    token_name: Some(&[Subtype::Construct]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Construct]),
@@ -386,7 +408,8 @@ fn gain_a_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// The 1/1 black and green Pest creature token with "When this token dies, you gain 1 life."
 pub static PEST: CardDef = CardDef {
-    name: "Pest",
+    name: "Pest Token",
+    token_name: Some(&[Subtype::Pest]),
     has_cost: false,
     colors: Some(ColorSet(0b10100)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -407,7 +430,8 @@ fn gain_a_life_on_attack(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
 /// The 1/1 black and green Pest creature token with "Whenever this token attacks, you gain 1 life." Moseo, Vein's New Dean makes
 /// it; the Pest with "When this token dies, you gain 1 life" is `PEST`.
 pub static PEST_THAT_GAINS_LIFE_ON_ATTACK: CardDef = CardDef {
-    name: "Pest",
+    name: "Pest Token",
+    token_name: Some(&[Subtype::Pest]),
     has_cost: false,
     colors: Some(ColorSet(0b10100)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -497,7 +521,8 @@ pub fn create_emblem(g: &mut dyn Game, player: PlayerId, def: &'static CardDef) 
 
 /// The 1/1 white Ally creature token. Appa, Steadfast Guardian and Iroh, Tea Master make it.
 pub static ALLY: CardDef = CardDef {
-    name: "Ally",
+    name: "Ally Token",
+    token_name: Some(&[Subtype::Ally]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -509,7 +534,8 @@ pub static ALLY: CardDef = CardDef {
 
 /// The 1/1 red Goblin creature token. Frontline Rush and Den of the Bugbear make it.
 pub static GOBLIN: CardDef = CardDef {
-    name: "Goblin",
+    name: "Goblin Token",
+    token_name: Some(&[Subtype::Goblin]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Red)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -519,10 +545,37 @@ pub static GOBLIN: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// The 1/1 green and white Citizen creature token (CR 111.4). Grand Crescendo and Rakish Revelers make it.
+pub static CITIZEN: CardDef = CardDef {
+    name: "Citizen Token",
+    token_name: Some(&[Subtype::Citizen]),
+    has_cost: false,
+    colors: Some(ColorSet(0b10001)),
+    types: TypeSet::of(&[CardType::Creature]),
+    subtypes: SubtypeSet::of(&[Subtype::Citizen]),
+    power: Some(1),
+    toughness: Some(1),
+    ..CardDef::BLANK
+};
+
+/// The 1/1 white Human creature token (CR 111.4). Adeline, Resplendent Cathar and Stroke of Midnight make it.
+pub static HUMAN: CardDef = CardDef {
+    name: "Human Token",
+    token_name: Some(&[Subtype::Human]),
+    has_cost: false,
+    colors: Some(ColorSet::of(Color::White)),
+    types: TypeSet::of(&[CardType::Creature]),
+    subtypes: SubtypeSet::of(&[Subtype::Human]),
+    power: Some(1),
+    toughness: Some(1),
+    ..CardDef::BLANK
+};
+
 /// The 1/1 white Soldier creature token. Hero of Bladehold, Elspeth, Storm Slayer and Torsten, Founder of Benalia make
 /// it. (Third Path Iconoclast's is an artifact Soldier of the same name.)
 pub static SOLDIER: CardDef = CardDef {
-    name: "Soldier",
+    name: "Soldier Token",
+    token_name: Some(&[Subtype::Soldier]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -535,7 +588,8 @@ pub static SOLDIER: CardDef = CardDef {
 
 /// The 4/4 white Angel creature token with flying and vigilance. Resplendent Angel and Parhelion II make it.
 pub static ANGEL: CardDef = CardDef {
-    name: "Angel",
+    name: "Angel Token",
+    token_name: Some(&[Subtype::Angel]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -548,7 +602,8 @@ pub static ANGEL: CardDef = CardDef {
 
 /// The 2/1 green Spider creature token with reach. Spiders-Man, Heroic Horde and Peter Parker make it.
 pub static SPIDER: CardDef = CardDef {
-    name: "Spider",
+    name: "Spider Token",
+    token_name: Some(&[Subtype::Spider]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -561,7 +616,8 @@ pub static SPIDER: CardDef = CardDef {
 
 /// The 1/1 green and white Human Citizen creature token. Silk, Web Weaver and News Helicopter make it.
 pub static HUMAN_CITIZEN: CardDef = CardDef {
-    name: "Human Citizen",
+    name: "Human Citizen Token",
+    token_name: Some(&[Subtype::Human, Subtype::Citizen]),
     has_cost: false,
     colors: Some(ColorSet(0b10001)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -573,7 +629,8 @@ pub static HUMAN_CITIZEN: CardDef = CardDef {
 
 /// The 1/1 white Human Soldier creature token. Cosmogrand Zenith makes it, and recruit (CR 701.70a: The Queen of Dale) does.
 pub static HUMAN_SOLDIER: CardDef = CardDef {
-    name: "Human Soldier",
+    name: "Human Soldier Token",
+    token_name: Some(&[Subtype::Human, Subtype::Soldier]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -585,7 +642,8 @@ pub static HUMAN_SOLDIER: CardDef = CardDef {
 
 /// The 2/2 red Rebel creature token. Glimmer Lens and Otharri, Suns' Glory make it.
 pub static REBEL: CardDef = CardDef {
-    name: "Rebel",
+    name: "Rebel Token",
+    token_name: Some(&[Subtype::Rebel]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Red)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -597,7 +655,8 @@ pub static REBEL: CardDef = CardDef {
 
 /// The 1/1 colorless Servo artifact creature token. Retrofitter Foundry and Saheeli, Sublime Artificer make it.
 pub static SERVO: CardDef = CardDef {
-    name: "Servo",
+    name: "Servo Token",
+    token_name: Some(&[Subtype::Servo]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Servo]),
@@ -609,7 +668,8 @@ pub static SERVO: CardDef = CardDef {
 
 /// The 2/2 green Wolf creature token (CR 111.4). Chief Warg's Company and Head of the Hunt make it.
 pub static WOLF: CardDef = CardDef {
-    name: "Wolf",
+    name: "Wolf Token",
+    token_name: Some(&[Subtype::Wolf]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -622,7 +682,8 @@ pub static WOLF: CardDef = CardDef {
 
 /// A 1/1 blue Fish creature token (CR 702.174f). Into the Flood Maw's gift makes it, tapped.
 pub static FISH: CardDef = CardDef {
-    name: "Fish",
+    name: "Fish Token",
+    token_name: Some(&[Subtype::Fish]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Blue)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -634,7 +695,8 @@ pub static FISH: CardDef = CardDef {
 
 /// An 8/8 blue Octopus creature token (CR 702.174i). "Gift an Octopus" makes it.
 pub static OCTOPUS: CardDef = CardDef {
-    name: "Octopus",
+    name: "Octopus Token",
+    token_name: Some(&[Subtype::Octopus]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Blue)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -646,7 +708,8 @@ pub static OCTOPUS: CardDef = CardDef {
 
 /// A 4/4 green Beast creature token with trample. Garruk, Curse Breaker and Garruk, Veiled Butcher make it.
 pub static BEAST_4_4_TRAMPLE: CardDef = CardDef {
-    name: "Beast",
+    name: "Beast Token",
+    token_name: Some(&[Subtype::Beast]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -659,7 +722,8 @@ pub static BEAST_4_4_TRAMPLE: CardDef = CardDef {
 
 /// A 1/1 white Rabbit creature token. Jacked Rabbit and Hop to It make it.
 pub static RABBIT: CardDef = CardDef {
-    name: "Rabbit",
+    name: "Rabbit Token",
+    token_name: Some(&[Subtype::Rabbit]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -683,7 +747,8 @@ pub static CADET: CardDef = CardDef {
 
 /// A 1/1 black Bat creature token with flying. Sanguine Evangelist and Aclazotz, Deepest Betrayal make it.
 pub static BAT: CardDef = CardDef {
-    name: "Bat",
+    name: "Bat Token",
+    token_name: Some(&[Subtype::Bat]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -697,7 +762,8 @@ pub static BAT: CardDef = CardDef {
 /// The 1/1 black Rat creature token with "This token can't block." (CR 111.1, 509.1b). Song of Totentanz and Lord Skitter,
 /// Sewer King make it; the card file lists it in its `EXTRA`.
 pub static RAT_CANT_BLOCK: CardDef = CardDef {
-    name: "Rat",
+    name: "Rat Token",
+    token_name: Some(&[Subtype::Rat]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -722,7 +788,8 @@ fn spirit_blocking(q: &dyn Query, source: ObjectId, blocker: ObjectId, attacker:
 /// The 1/1 colorless Spirit creature token with "This token can't block or be blocked by non-Spirit creatures." Wan Shi
 /// Tong, All-Knowing and Realm of Koh make it.
 pub static SPIRIT: CardDef = CardDef {
-    name: "Spirit",
+    name: "Spirit Token",
+    token_name: Some(&[Subtype::Spirit]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Spirit]),
@@ -737,7 +804,8 @@ pub static SPIRIT: CardDef = CardDef {
 /// The 1/1 white Spirit creature token with flying. Lingering Souls, Occult Epiphany, Staff of the Storyteller and Doomed
 /// Traveler make it. It shares its name with the colorless [`SPIRIT`].
 pub static WHITE_FLYING_SPIRIT: CardDef = CardDef {
-    name: "Spirit",
+    name: "Spirit Token",
+    token_name: Some(&[Subtype::Spirit]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -760,7 +828,8 @@ pub fn create_a_treasure(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
 /// The 0/0 black Goblin Army creature token amass Goblins makes when its controller has no Army (CR 701.47a). Down, Down to
 /// Goblin Town and Azog, Moria's Ruin amass Goblins.
 pub static GOBLIN_ARMY: CardDef = CardDef {
-    name: "Goblin Army",
+    name: "Goblin Army Token",
+    token_name: Some(&[Subtype::Goblin, Subtype::Army]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),
@@ -773,7 +842,8 @@ pub static GOBLIN_ARMY: CardDef = CardDef {
 /// A 5/5 red Dragon creature token with flying. Sarkhan, Fireblood and Kiora of Fire and Ashes make it, and Draconic
 /// Visitor makes it instead of artifact tokens.
 pub static DRAGON_5_5: CardDef = CardDef {
-    name: "Dragon",
+    name: "Dragon Token",
+    token_name: Some(&[Subtype::Dragon]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Red)),
     types: TypeSet::of(&[CardType::Creature]),

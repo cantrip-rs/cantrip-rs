@@ -47,7 +47,7 @@ Bot1.Attack(Lyra, Tolarian Archangel > Bot2)
 Bot1.Pass
 Bot2.Pass
 [Expect]
-Bot1.Battlefield.Angel.Power = 3
-Bot1.Battlefield.Angel.Keywords = Flying
+Bot1.Battlefield.Angel Token.Power = 3
+Bot1.Battlefield.Angel Token.Keywords = Flying
 Bot2.Life = 17
 Bot1.Battlefield.Count = 7

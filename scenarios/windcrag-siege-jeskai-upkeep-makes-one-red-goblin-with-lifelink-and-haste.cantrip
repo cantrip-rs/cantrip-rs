@@ -1,0 +1,41 @@
+# Windcrag Siege: "As this enchantment enters, choose Mardu or Jeskai" and "• Jeskai — At the beginning of your upkeep,
+# create a 1/1 red Goblin creature token. It gains lifelink and haste until end of turn." Bot1 chooses Jeskai on turn 3 and
+# its turn-5 upkeep makes exactly one Goblin: a 1/1 red Goblin token with lifelink and haste.
+
+[Bot1 Deck]
+Mountain
+Windcrag Siege
+Mox Ruby
+Plains
+Plains
+Plains
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Windcrag Siege.Cast
+Bot1.Name(Jeskai)
+[T5 Bot1.Main1]
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Battlefield = Goblin Token; Mountain; Mox Ruby; Plains; Windcrag Siege
+Bot1.Battlefield.Windcrag Siege.ChosenOption = Jeskai
+Bot1.Battlefield.Goblin Token.Token = true
+Bot1.Battlefield.Goblin Token.Power = 1
+Bot1.Battlefield.Goblin Token.Toughness = 1
+Bot1.Battlefield.Goblin Token.Colors = Red
+Bot1.Battlefield.Goblin Token.Types = Creature
+Bot1.Battlefield.Goblin Token.Subtypes = Goblin
+Bot1.Battlefield.Goblin Token.Keywords = Haste; Lifelink

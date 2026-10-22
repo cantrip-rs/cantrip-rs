@@ -48,6 +48,6 @@ Bot2.Decline
 Turn = 2
 Bot1.Life = 17
 Bot2.Life = 17
-Bot1.Battlefield.Pest.Types = Creature
+Bot1.Battlefield.Pest Token.Types = Creature
 Bot2.Graveyard = Chain Lightning
 Stack.Count = 0

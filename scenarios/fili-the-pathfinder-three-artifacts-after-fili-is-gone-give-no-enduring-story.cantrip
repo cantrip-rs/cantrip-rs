@@ -41,6 +41,6 @@ Bot1.Hand.Mox Ruby.Cast
 
 [Expect]
 Bot1.Graveyard = Fíli the Pathfinder
-Bot1.Battlefield = Plains; Plains; Plains; Mox Pearl; Mox Jet; Mox Ruby; Dwarf
+Bot1.Battlefield = Plains; Plains; Plains; Mox Pearl; Mox Jet; Mox Ruby; Dwarf Token
 Bot1.EnduringStory = (absent)
-Bot1.Battlefield.Dwarf.Power = 2
+Bot1.Battlefield.Dwarf Token.Power = 2

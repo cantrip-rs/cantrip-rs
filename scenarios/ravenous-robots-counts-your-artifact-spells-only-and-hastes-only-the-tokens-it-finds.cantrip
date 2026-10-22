@@ -31,7 +31,7 @@ Bot2.Pass
 Bot1.Hand.Mox Jet.Cast
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Robot.Types = Artifact; Creature
+? Bot1.Battlefield.Robot Token.Types = Artifact; Creature
 [T2 Bot2.Main1]
 Bot2.Hand.Mox Sapphire.Cast
 [T3 Bot1.Main1]
@@ -53,10 +53,10 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Robot#2.Keywords = Haste
-? Bot1.Battlefield.Robot#3.Keywords = (absent)
+? Bot1.Battlefield.Robot Token#2.Keywords = Haste
+? Bot1.Battlefield.Robot Token#3.Keywords = (absent)
 ? Bot1.Battlefield.Ornithopter.Keywords = Flying
-Bot1.Attack(Robot#2 > Bot2)
+Bot1.Attack(Robot Token#2 > Bot2)
 [T3 Bot1.Main2]
 
 

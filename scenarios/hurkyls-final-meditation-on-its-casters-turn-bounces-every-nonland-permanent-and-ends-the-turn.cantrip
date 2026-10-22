@@ -39,7 +39,7 @@ Bot2.Battlefield.Swamp.Activate
 Bot2.Battlefield.Mox Emerald.Activate
 Bot2.Target(Bot1)
 [T3 Bot1.Main1]
-? Bot2.Battlefield = Swamp; Mox Emerald; Orcish Bowmasters; Orc Army
+? Bot2.Battlefield = Swamp; Mox Emerald; Orcish Bowmasters; Orc Army Token
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Mox Jet.Activate

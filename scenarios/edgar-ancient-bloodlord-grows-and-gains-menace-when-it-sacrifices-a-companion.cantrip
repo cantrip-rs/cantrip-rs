@@ -26,6 +26,7 @@ Bot1.Pass
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Edgar, Ancient Bloodlord.Activate
+! Bot1.Choose(Edgar, Ancient Bloodlord)
 Bot1.Choose(Ornithopter)
 Bot1.Pass
 [T3 Bot1.Main2]

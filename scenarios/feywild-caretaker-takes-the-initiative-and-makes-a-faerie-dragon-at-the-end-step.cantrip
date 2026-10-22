@@ -39,6 +39,6 @@ Bot1.Search(Forest)
 [Expect]
 Turn = 2
 Initiative = Bot1
-Bot1.Battlefield = Island; Mox Sapphire; Mox Jet; Mox Ruby; Sol Ring; Feywild Caretaker; Faerie Dragon
-Bot1.Battlefield.Faerie Dragon.Power = 1
-Bot1.Battlefield.Faerie Dragon.Keywords = Flying
+Bot1.Battlefield = Island; Mox Sapphire; Mox Jet; Mox Ruby; Sol Ring; Feywild Caretaker; Faerie Dragon Token
+Bot1.Battlefield.Faerie Dragon Token.Power = 1
+Bot1.Battlefield.Faerie Dragon Token.Keywords = Flying

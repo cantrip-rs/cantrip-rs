@@ -5,7 +5,8 @@ use cantrip_oracle as oracle;
 
 /// The 1/1 colorless Drone artifact creature token with flying and "This token can block only creatures with flying."
 pub static DRONE: CardDef = CardDef {
-    name: "Drone",
+    name: "Drone Token",
+    token_name: Some(&[Subtype::Drone]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Drone]),

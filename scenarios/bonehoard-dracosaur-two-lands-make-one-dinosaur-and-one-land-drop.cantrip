@@ -36,10 +36,10 @@ Bot1.Pass
 
 [Expect]
 Turn = 3
-Bot1.Battlefield.Dinosaur.Power = 3
-Bot1.Battlefield.Dinosaur.Toughness = 1
-Bot1.Battlefield.Dinosaur.Colors = Red
-Bot1.Battlefield.Dinosaur.Subtypes = Dinosaur
+Bot1.Battlefield.Dinosaur Token.Power = 3
+Bot1.Battlefield.Dinosaur Token.Toughness = 1
+Bot1.Battlefield.Dinosaur Token.Colors = Red
+Bot1.Battlefield.Dinosaur Token.Subtypes = Dinosaur
 Bot1.Battlefield.Treasure Token = (absent)
 Bot1.LandsPlayed = 1
 Exile = Forest

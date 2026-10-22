@@ -1,0 +1,49 @@
+# Changing Spirit to Bird on the copying spell cannot change the original token's copiable name or type
+# (CR 707.2, 111.4, 612.2a). Only text that assigns token characteristics is used, not unrelated copying text.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Sapphire
+Lingering Souls
+Sol Ring
+Three Steps Ahead
+Artificial Evolution
+Island
+Island x20
+
+[Bot2 Deck]
+Island x28
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot1.Hand.Sol Ring.Cast
+[T1 Bot1.Main2]
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Three Steps Ahead.Cast
+Bot1.Modes(Create a token)
+Bot1.Target(Spirit Token)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Artificial Evolution.Cast(Stack.Three Steps Ahead)
+Bot1.Modes(Spirit)
+Bot1.Modes(Bird)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Island; Mox Sapphire; Sol Ring; Spirit Token; Spirit Token; Spirit Token
+Bot1.Battlefield.Spirit Token#3.Subtypes = Spirit
+Bot1.Battlefield.Spirit Token#3.Colors = White
+Bot1.Battlefield.Spirit Token#3.Keywords = Flying
+Bot1.Battlefield.Spirit Token#3.Token = true

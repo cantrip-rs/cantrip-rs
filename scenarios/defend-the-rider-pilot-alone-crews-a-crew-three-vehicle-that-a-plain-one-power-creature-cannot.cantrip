@@ -33,11 +33,11 @@ Bot1.Pass
 Bot2.Pass
 [T3 Bot1.Main1]
 Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Crew 3)
-Bot1.Choose(Pilot)
+Bot1.Choose(Pilot Token)
 Bot1.Attack(Reckoner Bankbuster > Bot2)
 [T3 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 16
-Bot1.Battlefield.Pilot.Tapped = True
+Bot1.Battlefield.Pilot Token.Tapped = True
 Bot1.Battlefield.Mother of Runes.Tapped = False

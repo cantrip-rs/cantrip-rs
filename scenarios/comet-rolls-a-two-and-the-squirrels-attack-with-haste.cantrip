@@ -30,10 +30,10 @@ Bot1.Hand.Comet, Stellar Pup.Cast
 Bot1.Pass
 Bot1.Battlefield.Comet, Stellar Pup.Activate
 Bot1.Pass
-Bot1.Attack(Squirrel; Squirrel > Bot2)
+Bot1.Attack(Squirrel Token; Squirrel Token > Bot2)
 [T3 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 18
 Bot1.Battlefield.Comet, Stellar Pup.Counters.Loyalty = 7
-Bot1.Battlefield.Squirrel#1.Subtypes = Squirrel
+Bot1.Battlefield.Squirrel Token#1.Subtypes = Squirrel

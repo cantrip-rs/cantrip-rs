@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// The 3/4 green Treefolk creature token with reach that Sapling Nursery makes.
 pub static TREEFOLK: CardDef = CardDef {
-    name: "Treefolk",
+    name: "Treefolk Token",
+    token_name: Some(&[Subtype::Treefolk]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),

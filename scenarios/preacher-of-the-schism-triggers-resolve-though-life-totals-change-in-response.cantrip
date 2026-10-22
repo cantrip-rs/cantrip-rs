@@ -51,5 +51,5 @@ Bot2.Battlefield.Plains.Activate
 Bot2.Life = 20
 Bot1.Life = 19
 Bot1.Hand.Count = 5
-Bot1.Battlefield.Vampire.Token = true
+Bot1.Battlefield.Vampire Token.Token = true
 Exile = Embereth Shieldbreaker

@@ -20,11 +20,11 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Sanguine Evangelist.Cast
 [T3 Bot1.Main1]
-? Bot1.Battlefield.Bat.Keywords = Flying
-Bot1.Attack(Sanguine Evangelist > Bot2; Bat > Bot2)
+? Bot1.Battlefield.Bat Token.Keywords = Flying
+Bot1.Attack(Sanguine Evangelist > Bot2; Bat Token > Bot2)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Bat.Power = 2
+? Bot1.Battlefield.Bat Token.Power = 2
 ? Bot1.Battlefield.Sanguine Evangelist.Power = 2
 [T3 Bot1.Main2]
 

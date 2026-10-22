@@ -61,5 +61,5 @@ Bot2.Pass
 
 [Expect]
 Bot2.Battlefield.Mind Control.AttachedTo = Llanowar Elves
-Bot1.Battlefield.Ally.Power = 2
-Bot1.Battlefield.Ally.Toughness = 2
+Bot1.Battlefield.Ally Token.Power = 2
+Bot1.Battlefield.Ally Token.Toughness = 2

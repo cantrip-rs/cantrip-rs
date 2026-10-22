@@ -36,7 +36,7 @@ Bot2.Hand.Forest.Play
 Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Llanowar Elves.Cast
 Bot2.Battlefield.Mountain.Activate
-Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cat Warrior)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cat Warrior Token)
 Bot1.Accept
 [T5 Bot1.Main1]
 Bot1.Battlefield.Ajani, Nacatl Avenger.Activate(Ability: +2)

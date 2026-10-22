@@ -25,5 +25,5 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Chromatic Star.Activate(Color: Red)
 
 [Expect]
-Bot1.Battlefield = Mox Sapphire; Mox Ruby; Third Path Iconoclast; Soldier
+Bot1.Battlefield = Mox Sapphire; Mox Ruby; Third Path Iconoclast; Soldier Token
 Bot1.Graveyard = Chromatic Star

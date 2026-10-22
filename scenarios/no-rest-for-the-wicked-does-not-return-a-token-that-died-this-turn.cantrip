@@ -40,9 +40,9 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Plains#2.Activate
 [T5 Bot1.Main2]
-? Bot1.Battlefield.Goblin Shaman.Types = Creature
+? Bot1.Battlefield.Goblin Shaman Token.Types = Creature
 [T5 Bot1.End]
-Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goblin Shaman)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goblin Shaman Token)
 Bot2.Battlefield.Mountain.Activate
 Bot2.Pass
 Bot1.Pass

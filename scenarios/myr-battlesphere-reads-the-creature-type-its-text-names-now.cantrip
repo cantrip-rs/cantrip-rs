@@ -39,13 +39,13 @@ Bot1.Modes(Goblin)
 Bot1.Pass
 Bot2.Pass
 [T5 Bot1.Main1]
-? Bot1.Battlefield.Goblin#1.Subtypes = Goblin
+? Bot1.Battlefield.Goblin Token#1.Subtypes = Goblin
 Bot1.Attack(Myr Battlesphere > Bot2)
-Bot1.Choose(Goblin#1; Goblin#2; Goblin#3)
+Bot1.Choose(Goblin Token#1; Goblin Token#2; Goblin Token#3)
 [Bot1.Main2]
 
 [Expect]
 Bot2.Life = 10
 Bot1.Battlefield.Myr Battlesphere.Power = 7
-Bot1.Battlefield.Goblin#1.Tapped = true
-Bot1.Battlefield.Goblin#4.Tapped = false
+Bot1.Battlefield.Goblin Token#1.Tapped = true
+Bot1.Battlefield.Goblin Token#4.Tapped = false

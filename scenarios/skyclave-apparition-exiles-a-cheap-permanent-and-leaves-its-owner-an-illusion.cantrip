@@ -41,6 +41,6 @@ Bot2.Pass
 
 [Expect]
 Bot1.Graveyard = Skyclave Apparition
-Bot2.Battlefield.Illusion.Power = 2
-Bot2.Battlefield.Illusion.Toughness = 2
-Bot2.Battlefield.Illusion.Subtypes = Illusion
+Bot2.Battlefield.Illusion Token.Power = 2
+Bot2.Battlefield.Illusion Token.Toughness = 2
+Bot2.Battlefield.Illusion Token.Subtypes = Illusion

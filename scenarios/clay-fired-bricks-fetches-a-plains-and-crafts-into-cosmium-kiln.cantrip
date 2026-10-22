@@ -48,10 +48,10 @@ Bot1.Choose(Mox Ruby)
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Jet; Ornithopter; Cosmium Kiln; Gnome; Gnome
-Bot1.Battlefield.Gnome#1.Power = 2
-Bot1.Battlefield.Gnome#2.Toughness = 2
-Bot1.Battlefield.Gnome#1.Types = Artifact; Creature
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Jet; Ornithopter; Cosmium Kiln; Gnome Token; Gnome Token
+Bot1.Battlefield.Gnome Token#1.Power = 2
+Bot1.Battlefield.Gnome Token#2.Toughness = 2
+Bot1.Battlefield.Gnome Token#1.Types = Artifact; Creature
 Bot1.Battlefield.Ornithopter.Toughness = 3
 Bot2.Battlefield.Ornithopter.Toughness = 2
 Bot1.Battlefield.Cosmium Kiln.Colors = White

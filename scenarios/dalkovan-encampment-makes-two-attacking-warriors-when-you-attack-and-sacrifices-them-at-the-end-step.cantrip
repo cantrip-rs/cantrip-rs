@@ -41,16 +41,16 @@ Bot2.Pass
 Bot1.Attack(Ornithopter > Bot2)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Warrior#1.Tapped = true
-? Bot1.Battlefield.Warrior#2.Tapped = true
-? Bot1.Battlefield.Warrior#1.Colors = Red
-? Bot1.Battlefield.Warrior#1.Subtypes = Warrior
-? Bot1.Battlefield.Warrior#1.Power = 1
-? Bot1.Battlefield.Warrior#2.Toughness = 1
+? Bot1.Battlefield.Warrior Token#1.Tapped = true
+? Bot1.Battlefield.Warrior Token#2.Tapped = true
+? Bot1.Battlefield.Warrior Token#1.Colors = Red
+? Bot1.Battlefield.Warrior Token#1.Subtypes = Warrior
+? Bot1.Battlefield.Warrior Token#1.Power = 1
+? Bot1.Battlefield.Warrior Token#2.Toughness = 1
 ? Combat.Attackers.Count = 3
 [T3 Bot1.Main2]
 ? Bot2.Life = 18
-? Bot1.Battlefield = Mountain; Dalkovan Encampment; Mox Pearl; Mox Jet; Mox Ruby; Ornithopter; Warrior; Warrior
+? Bot1.Battlefield = Mountain; Dalkovan Encampment; Mox Pearl; Mox Jet; Mox Ruby; Ornithopter; Warrior Token; Warrior Token
 [T3 Bot1.End]
 Bot1.Pass
 

@@ -24,5 +24,5 @@ Bot1.Attack(Repurposed Enforcer > Bot2)
 [Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot2.Life = 17

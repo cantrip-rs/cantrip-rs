@@ -5,7 +5,8 @@ use cantrip_oracle as oracle;
 /// The 6/6 red Dragon creature token with flying. The words of the Saga's text make its color and creature type
 /// (CR 612.4, 111.4), so nothing here reads them.
 static DRAGON: CardDef = CardDef {
-    name: "Dragon",
+    name: "Dragon Token",
+    token_name: Some(&[Subtype::Dragon]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Red)),
     types: TypeSet::of(&[CardType::Creature]),

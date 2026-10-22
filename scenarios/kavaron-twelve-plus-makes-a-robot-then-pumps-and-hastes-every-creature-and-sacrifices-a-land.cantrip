@@ -59,19 +59,19 @@ Bot1.Choose(Island)
 Bot1.Pass
 Bot2.Pass
 [T3 Bot1.DeclareAttackers]
-Bot1.Attack(Robot > Bot2)
+Bot1.Attack(Robot Token > Bot2)
 [T3 Bot1.Main2]
-? Bot1.Battlefield.Robot.Power = 3
-? Bot1.Battlefield.Robot.Toughness = 2
+? Bot1.Battlefield.Robot Token.Power = 3
+? Bot1.Battlefield.Robot Token.Toughness = 2
 ? Bot1.Battlefield.Lake-town Mariners.Power = 7
 [T5 Bot1.Main1]
 Bot1.Battlefield.Kavaron, Memorial World.Activate(Ability: {T}: Add {R}.)
 ? Bot1.Mana = {R}
 
 [Expect]
-Bot1.Battlefield = Kavaron, Memorial World; Mox Sapphire; Mox Emerald; Mox Jet; Mox Ruby; Lake-town Mariners; Robot
+Bot1.Battlefield = Kavaron, Memorial World; Mox Sapphire; Mox Emerald; Mox Jet; Mox Ruby; Lake-town Mariners; Robot Token
 Bot1.Graveyard = Island; Black Lotus
-Bot1.Battlefield.Robot.Power = 2
+Bot1.Battlefield.Robot Token.Power = 2
 Bot1.Battlefield.Lake-town Mariners.Power = 6
 Bot1.Battlefield.Kavaron, Memorial World.Tapped = true
 Bot2.Life = 17

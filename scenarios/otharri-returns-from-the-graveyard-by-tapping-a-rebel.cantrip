@@ -50,4 +50,4 @@ Bot1.Battlefield.Plains.Activate
 Turn = 11
 Bot1.Graveyard.Count = 0
 Bot1.Battlefield.Otharri, Suns' Glory.Tapped = true
-Bot1.Battlefield.Rebel.Tapped = true
+Bot1.Battlefield.Rebel Token.Tapped = true

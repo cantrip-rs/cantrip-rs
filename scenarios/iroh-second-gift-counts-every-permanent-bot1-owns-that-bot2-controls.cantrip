@@ -49,7 +49,7 @@ Bot2.Pass
 
 [Expect]
 Bot2.Battlefield = Plains; Food Token; Mountain
-Bot1.Battlefield = Plains; Plains; Iroh, Tea Master; Ally; Ally
-Bot1.Battlefield.Ally#1.Power = 2
-Bot1.Battlefield.Ally#2.Power = 3
-Bot1.Battlefield.Ally#2.Toughness = 3
+Bot1.Battlefield = Plains; Plains; Iroh, Tea Master; Ally Token; Ally Token
+Bot1.Battlefield.Ally Token#1.Power = 2
+Bot1.Battlefield.Ally Token#2.Power = 3
+Bot1.Battlefield.Ally Token#2.Toughness = 3

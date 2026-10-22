@@ -49,6 +49,6 @@ Bot1.Battlefield.Island.Activate
 Bot1.Hand.Echoing Truth.Cast(Bot2.Battlefield.Unholy Annex)
 
 [Expect]
-Bot2.Battlefield = Demon; Mox Jet; Mox Jet; Mox Jet; Mox Jet; Ritual Chamber; Swamp
+Bot2.Battlefield = Demon Token; Mox Jet; Mox Jet; Mox Jet; Mox Jet; Ritual Chamber; Swamp
 Bot2.Hand = Swamp; Unholy Annex // Ritual Chamber
 Bot1.Graveyard = Echoing Truth

@@ -25,12 +25,12 @@ Bot1.Choose()
 Bot1.Pass
 [T7 Bot1.End]
 Bot1.Battlefield.Mox Ruby.Activate
-Bot1.Battlefield.Reflection of Kiki-Jiki.Activate(Goblin Shaman)
+Bot1.Battlefield.Reflection of Kiki-Jiki.Activate(Goblin Shaman Token)
 Bot1.Pass
 [T8 Bot2.Main1]
-? Bot1.Battlefield.Goblin Shaman#2.Keywords = Haste
+? Bot1.Battlefield.Goblin Shaman Token#2.Keywords = Haste
 [T9 Bot1.Main1]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mox Ruby; Reflection of Kiki-Jiki; Goblin Shaman
-Bot1.Battlefield.Goblin Shaman.Keywords = (absent)
+Bot1.Battlefield = Mountain; Mox Ruby; Reflection of Kiki-Jiki; Goblin Shaman Token
+Bot1.Battlefield.Goblin Shaman Token.Keywords = (absent)

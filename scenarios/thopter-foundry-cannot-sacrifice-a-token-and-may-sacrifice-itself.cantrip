@@ -41,7 +41,7 @@ Bot1.Pass
 Bot1.Hand.Plains.Play
 Bot1.Battlefield.Plains#3.Activate
 Bot1.Battlefield.Thopter Foundry.Activate
-! Bot1.Choose(Thopter)
+! Bot1.Choose(Thopter Token)
 Bot1.Choose(Thopter Foundry)
 Bot1.Pass
 [T5 Bot1.Main2]
@@ -49,4 +49,4 @@ Bot1.Pass
 [Expect]
 Bot1.Life = 23
 Bot1.Graveyard = Thopter Foundry; Mox Sapphire; Mox Jet
-Bot1.Battlefield.Thopter#3.Keywords = Flying
+Bot1.Battlefield.Thopter Token#3.Keywords = Flying

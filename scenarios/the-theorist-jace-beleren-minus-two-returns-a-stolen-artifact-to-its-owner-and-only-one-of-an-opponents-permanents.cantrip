@@ -35,7 +35,7 @@ Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot2.Hand.Thieving Skydiver.Cast(Kicked: 1)
 [T3 Bot1.Main1]
 Bot1.Battlefield.The Theorist, Jace Beleren.Activate(Ability: For each opponent)
-! Bot1.Target(Bot1.Battlefield.Illusion)
+! Bot1.Target(Bot1.Battlefield.Illusion Token)
 ! Bot1.Target(Bot2.Battlefield.Island)
 Bot1.Target(Bot2.Battlefield.Sol Ring)
 ! Bot1.Target
@@ -45,6 +45,6 @@ Bot1.Target(Bot2.Battlefield.Sol Ring)
 Bot1.Hand = Island; Island; Island; Island; Island; Sol Ring
 Bot2.Hand.Count = 5
 Bot2.Battlefield = Island; Thieving Skydiver
-Bot1.Battlefield = Island; Illusion; The Theorist, Jace Beleren
+Bot1.Battlefield = Island; Illusion Token; The Theorist, Jace Beleren
 Bot1.Battlefield.The Theorist, Jace Beleren.Counters.Loyalty = 2
 Stack.Count = 0

@@ -44,5 +44,5 @@ Bot1.Triggers(Tireless Tracker; Baloth Prime)
 
 [Expect]
 Stack.Count = 0
-Bot1.Battlefield = Mox Emerald; Mox Jet; Sol Ring; Beast
-Bot1.Battlefield.Beast.Tapped = true
+Bot1.Battlefield = Mox Emerald; Mox Jet; Sol Ring; Beast Token
+Bot1.Battlefield.Beast Token.Tapped = true

@@ -45,5 +45,5 @@ Turn = 3
 Stack.Count = 0
 Bot2.Life = 17
 Bot2.Graveyard = Lightning Bolt
-Bot1.Battlefield.Pest.Types = Creature
+Bot1.Battlefield.Pest Token.Types = Creature
 Bot1.Battlefield.Sedgemoor Witch.Damage = 0

@@ -43,5 +43,5 @@ Bot1.Pass
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mox Sapphire; Mox Ruby; Mox Jet; Pinnacle Emissary; Pinnacle Emissary; Drone
+Bot1.Battlefield = Mountain; Mox Sapphire; Mox Ruby; Mox Jet; Pinnacle Emissary; Pinnacle Emissary; Drone Token
 Bot2.Life = 17

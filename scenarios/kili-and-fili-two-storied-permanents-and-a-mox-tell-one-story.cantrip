@@ -39,6 +39,6 @@ Bot1.Battlefield.Mox Pearl.Activate
 [Expect]
 Bot1.EnduringStory = true
 Bot1.Hand.Count = 4
-Bot1.Battlefield = Plains; Plains; Plains; Mox Pearl; Kíli the Resourceful; Fíli the Pathfinder; Dwarf
+Bot1.Battlefield = Plains; Plains; Plains; Mox Pearl; Kíli the Resourceful; Fíli the Pathfinder; Dwarf Token
 Bot1.Battlefield.Kíli the Resourceful.Power = 2
 Bot1.Battlefield.Kíli the Resourceful.Toughness = 3

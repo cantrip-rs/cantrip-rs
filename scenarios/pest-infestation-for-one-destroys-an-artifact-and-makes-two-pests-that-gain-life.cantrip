@@ -30,12 +30,12 @@ Bot1.Hand.Pest Infestation.Cast(X: 1)
 Bot1.Target(Mox Pearl)
 [T4 Bot2.Main1]
 Bot2.Battlefield.Mox Ruby.Activate
-Bot2.Hand.Lightning Bolt.Cast(Pest#1)
+Bot2.Hand.Lightning Bolt.Cast(Pest Token#1)
 [T4 Bot2.Main2]
 
 [Expect]
 Turn = 4
 Stack.Count = 0
 Bot1.Life = 21
-Bot1.Battlefield = Mox Emerald; Mox Ruby; Mox Jet; Pest
+Bot1.Battlefield = Mox Emerald; Mox Ruby; Mox Jet; Pest Token
 Bot2.Graveyard = Lightning Bolt; Mox Pearl

@@ -33,12 +33,12 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
 Bot1.Accept
-Bot1.Choose(Gnome Soldier; Ornithopter#1; Ornithopter#2; Ornithopter#3; Ornithopter#4)
+Bot1.Choose(Gnome Soldier Token; Ornithopter#1; Ornithopter#2; Ornithopter#3; Ornithopter#4)
 Bot1.Battlefield.Barracks of the Thousand.Activate
 Bot1.Hand.Healer's Hawk.Cast
 ? Stack = Barracks of the Thousand; Healer's Hawk
 [T4 Bot2.Main1]
-? Bot1.Battlefield.Gnome Soldier#2.Power = 8
+? Bot1.Battlefield.Gnome Soldier Token#2.Power = 8
 Bot2.Hand.Ornithopter.Cast
 ? Stack = Ornithopter
 [T5 Bot1.Main1]
@@ -52,7 +52,7 @@ Bot1.Hand.Ornithopter.Cast
 
 [Expect]
 Turn = 7
-Bot1.Battlefield = Barracks of the Thousand; Gnome Soldier; Gnome Soldier; Healer's Hawk; Healer's Hawk; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Plains
-Bot1.Battlefield.Gnome Soldier#1.Power = 10
-Bot1.Battlefield.Gnome Soldier#2.Toughness = 10
+Bot1.Battlefield = Barracks of the Thousand; Gnome Soldier Token; Gnome Soldier Token; Healer's Hawk; Healer's Hawk; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Plains
+Bot1.Battlefield.Gnome Soldier Token#1.Power = 10
+Bot1.Battlefield.Gnome Soldier Token#2.Toughness = 10
 Bot2.Battlefield = Ornithopter

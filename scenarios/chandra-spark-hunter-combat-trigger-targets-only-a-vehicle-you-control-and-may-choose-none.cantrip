@@ -33,7 +33,7 @@ Bot2.Pass
 [T1 Bot1.BeginCombat]
 Bot1.Target()
 [T1 Bot1.Main2]
-? Bot1.Battlefield.Vehicle.Types = Artifact
+? Bot1.Battlefield.Vehicle Token.Types = Artifact
 [T2 Bot2.Main1]
 Bot2.Hand.Mox Ruby.Cast
 Bot2.Hand.Mox Sapphire.Cast
@@ -43,14 +43,14 @@ Bot2.Hand.Smuggler's Copter.Cast
 [T3 Bot1.BeginCombat]
 ! Bot1.Target(Bot2.Battlefield.Smuggler's Copter)
 ! Bot1.Target(Mox Ruby)
-Bot1.Target(Vehicle)
+Bot1.Target(Vehicle Token)
 [T3 Bot1.DeclareAttackers]
-Bot1.Attack(Vehicle > Bot2)
+Bot1.Attack(Vehicle Token > Bot2)
 [T3 Bot1.Main2]
 
 [Expect]
 Turn = 3
 Bot2.Life = 17
-Bot1.Battlefield.Vehicle.Types = Artifact; Creature
-Bot1.Battlefield.Vehicle.Keywords = Haste
+Bot1.Battlefield.Vehicle Token.Types = Artifact; Creature
+Bot1.Battlefield.Vehicle Token.Keywords = Haste
 Bot2.Battlefield.Smuggler's Copter.Types = Artifact

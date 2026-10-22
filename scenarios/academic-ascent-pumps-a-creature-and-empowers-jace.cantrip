@@ -27,6 +27,6 @@ Bot1.Hand.Academic Ascent.Cast(Ornithopter)
 Bot1.Battlefield.Ornithopter.Power = 2
 Bot1.Battlefield.Ornithopter.Toughness = 4
 Bot1.Battlefield.Ornithopter.Keywords = Flying
-Bot1.Battlefield.Jace.Token = true
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Token = true
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot1.Graveyard = Academic Ascent

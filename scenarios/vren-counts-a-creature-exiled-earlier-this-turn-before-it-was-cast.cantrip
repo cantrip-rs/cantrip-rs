@@ -45,5 +45,5 @@ Bot2.Pass
 [Expect]
 Exile = Llanowar Elves
 Bot1.Battlefield.Count = 5
-Bot1.Battlefield.Rat.Power = 2
-Bot1.Battlefield.Rat.Toughness = 2
+Bot1.Battlefield.Rat Token.Power = 2
+Bot1.Battlefield.Rat Token.Toughness = 2

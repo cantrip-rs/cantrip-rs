@@ -30,8 +30,8 @@ Bot1.Hand.Myr Battlesphere.Cast
 Bot1.Battlefield.Myr Battlesphere.Power = 4
 Bot1.Battlefield.Myr Battlesphere.Toughness = 7
 Bot1.Battlefield.Count = 8
-Bot1.Battlefield.Myr#1.Types = Artifact; Creature
-Bot1.Battlefield.Myr#1.Subtypes = Myr
-Bot1.Battlefield.Myr#1.Power = 1
-Bot1.Battlefield.Myr#1.Toughness = 1
-Bot1.Battlefield.Myr#4.Power = 1
+Bot1.Battlefield.Myr Token#1.Types = Artifact; Creature
+Bot1.Battlefield.Myr Token#1.Subtypes = Myr
+Bot1.Battlefield.Myr Token#1.Power = 1
+Bot1.Battlefield.Myr Token#1.Toughness = 1
+Bot1.Battlefield.Myr Token#4.Power = 1

@@ -45,5 +45,5 @@ Bot2.Pass
 [Expect]
 Bot2.Life = 18
 Bot1.Life = 21
-Bot1.Battlefield = Mox Pearl; Mox Ruby; Mox Emerald; Mox Jet; Mox Sapphire; Bontu's Monument; Orcish Bowmasters; Orc Army
+Bot1.Battlefield = Mox Pearl; Mox Ruby; Mox Emerald; Mox Jet; Mox Sapphire; Bontu's Monument; Orcish Bowmasters; Orc Army Token
 Stack.Count = 0

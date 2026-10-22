@@ -33,6 +33,6 @@ Bot1.Hand.Pinnacle Emissary.Cast(Ability: Warp)
 [T4 Bot2.Main1]
 
 [Expect]
-Bot1.Battlefield = Mox Jet; Mox Ruby; Elegy Acolyte; Robot
+Bot1.Battlefield = Mox Jet; Mox Ruby; Elegy Acolyte; Robot Token
 Exile = Pinnacle Emissary
-Bot1.Battlefield.Robot.Token = true
+Bot1.Battlefield.Robot Token.Token = true

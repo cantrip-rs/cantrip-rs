@@ -48,7 +48,7 @@ Bot2.Pass
 ? Bot1.Battlefield.Ral, Crackling Wit.Counters.Loyalty = 5
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
-Bot1.Triggers(Ral, Crackling Wit; Otter)
+Bot1.Triggers(Ral, Crackling Wit; Otter Token)
 ? Stack.Count = 3
 Bot2.Battlefield.Island.Activate
 Bot2.Battlefield.Mox Sapphire.Activate
@@ -58,7 +58,7 @@ Bot1.Pass
 
 [Expect]
 Bot1.Battlefield.Ral, Crackling Wit.Counters.Loyalty = 6
-Bot1.Battlefield.Otter.Power = 2
+Bot1.Battlefield.Otter Token.Power = 2
 Bot2.Life = 20
 Bot1.Graveyard = Lightning Bolt
 Bot2.Graveyard = Counterspell

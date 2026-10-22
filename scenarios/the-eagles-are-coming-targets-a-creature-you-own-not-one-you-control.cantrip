@@ -48,6 +48,6 @@ Bot1.Target(Bot2.Battlefield.Ornithopter)
 
 [Expect]
 Bot1.Hand = Ornithopter; Plains
-Bot1.Battlefield = Plains; Mox Sapphire; Mox Pearl; Thieving Skydiver; Ornithopter; Bird Soldier
+Bot1.Battlefield = Plains; Mox Sapphire; Mox Pearl; Thieving Skydiver; Ornithopter; Bird Soldier Token
 Bot2.Battlefield = Island; Thieving Skydiver
 Bot2.Graveyard = Black Lotus

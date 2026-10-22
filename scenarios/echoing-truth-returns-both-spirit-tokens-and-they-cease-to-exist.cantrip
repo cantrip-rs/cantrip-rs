@@ -27,7 +27,7 @@ Bot2.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Island.Activate
-Bot1.Hand.Echoing Truth.Cast(Bot2.Battlefield.Spirit)
+Bot1.Hand.Echoing Truth.Cast(Bot2.Battlefield.Spirit Token)
 
 [Expect]
 Turn = 3

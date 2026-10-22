@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// The 1/1 colorless Shapeshifter creature token with changeling (CR 702.73a) that Personify makes.
 static SHAPESHIFTER: CardDef = CardDef {
-    name: "Shapeshifter",
+    name: "Shapeshifter Token",
+    token_name: Some(&[Subtype::Shapeshifter]),
     has_cost: false,
     colors: Some(ColorSet::NONE),
     types: TypeSet::of(&[CardType::Creature]),

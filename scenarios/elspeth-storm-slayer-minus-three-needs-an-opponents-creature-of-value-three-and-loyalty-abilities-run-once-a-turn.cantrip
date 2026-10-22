@@ -37,7 +37,7 @@ Bot2.Hand.Tireless Tracker.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Elspeth, Storm Slayer.Activate(Ability: #2)
 [T3 Bot1.Main2]
-? Bot1.Battlefield.Soldier#1.Power = 2
+? Bot1.Battlefield.Soldier Token#1.Power = 2
 ? Bot2.Battlefield.Tireless Tracker.Power = 3
 ? Bot2.Battlefield.Tireless Tracker.Keywords = (absent)
 [T4 Bot2.Main1]
@@ -46,7 +46,7 @@ Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Elvish Mystic.Cast
 [T5 Bot1.Main1]
 ! Bot1.Battlefield.Elspeth, Storm Slayer.Activate(Ability: #3; Bot2.Battlefield.Elvish Mystic)
-! Bot1.Battlefield.Elspeth, Storm Slayer.Activate(Ability: #3; Bot1.Battlefield.Soldier)
+! Bot1.Battlefield.Elspeth, Storm Slayer.Activate(Ability: #3; Bot1.Battlefield.Soldier Token)
 Bot1.Battlefield.Elspeth, Storm Slayer.Activate(Ability: #3; Bot2.Battlefield.Tireless Tracker)
 [T5 Bot1.Main2]
 

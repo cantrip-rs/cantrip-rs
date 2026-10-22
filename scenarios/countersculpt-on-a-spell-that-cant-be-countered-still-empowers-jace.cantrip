@@ -35,11 +35,11 @@ Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Hand.Countersculpt.Cast
 Bot1.Target(Stack.Abrupt Decay)
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 1
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 1
 ? Stack = Abrupt Decay
 [T2 Bot2.Main2]
 
 [Expect]
 Bot1.Graveyard = Mox Pearl; Countersculpt
 Bot2.Graveyard = Abrupt Decay; Black Lotus
-Bot1.Battlefield.Jace.Counters.Loyalty = 1
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 1

@@ -18,7 +18,8 @@ fn plus_one_for_each_other_rat(q: &dyn LayerQuery, source: ObjectId, chars: &mut
 
 /// The 1/1 black Rat creature token with "This token gets +1/+1 for each other Rat you control." (CR 111.1).
 pub static RAT: CardDef = CardDef {
-    name: "Rat",
+    name: "Rat Token",
+    token_name: Some(&[Subtype::Rat]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),

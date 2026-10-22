@@ -39,7 +39,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Construct.Power = 3
+? Bot1.Battlefield.Construct Token.Power = 3
 [T7 Bot1.Main1]
 Bot1.Battlefield.Urza's Saga.Activate(Ability: Add {C})
 ? Bot1.Mana = {C}
@@ -52,4 +52,4 @@ Turn = 9
 Bot1.Battlefield.Urza's Saga.Counters.Lore = 2
 Bot1.Battlefield.Urza's Saga.Subtypes = Mountain; Saga
 Bot1.Battlefield.Urza's Saga.Types = Enchantment; Land
-Bot1.Battlefield.Construct.Power = 3
+Bot1.Battlefield.Construct Token.Power = 3

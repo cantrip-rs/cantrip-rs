@@ -43,7 +43,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Attack(Otharri, Suns' Glory > Bot2)
 Bot1.Target(Bot2.Battlefield.Liliana of the Veil)
-? Combat.Attackers = Otharri, Suns' Glory > Bot2; Rebel > Liliana of the Veil
+? Combat.Attackers = Otharri, Suns' Glory > Bot2; Rebel Token > Liliana of the Veil
 [T9 Bot1.Main2]
 
 [Expect]

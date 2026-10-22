@@ -33,7 +33,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Jeskai Revelation.Cast
-Bot1.Target(Bot2.Battlefield.Spirit)
+Bot1.Target(Bot2.Battlefield.Spirit Token)
 Bot1.Target(Bot2)
 [T3 Bot1.Main2]
 

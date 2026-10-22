@@ -23,17 +23,17 @@ Bot1.Battlefield.Theorist's Sanctum.Activate(Ability: Empower)
 ? Stack.Count = 1
 Bot2.Pass
 [T1 Bot1.Main2]
-? Bot1.Battlefield.Jace.Counters.Loyalty = 2
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 ? Bot1.Battlefield.Theorist's Sanctum.Tapped = true
 [T3 Bot1.Main1]
 Bot1.Hand.Theorist's Sanctum.Play
-Bot1.Choose(Jace)
+Bot1.Choose(Jace Token)
 ? Bot1.Battlefield.Theorist's Sanctum#2.Tapped = false
 
 [Expect]
-Bot1.Battlefield.Jace.Types = Planeswalker
-Bot1.Battlefield.Jace.Subtypes = Jace
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Types = Planeswalker
+Bot1.Battlefield.Jace Token.Subtypes = Jace
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot1.Battlefield.Theorist's Sanctum#1.Tapped = false
 Bot1.Battlefield.Theorist's Sanctum#2.Tapped = false
 Bot1.Revealed = Jace, the Mind Sculptor

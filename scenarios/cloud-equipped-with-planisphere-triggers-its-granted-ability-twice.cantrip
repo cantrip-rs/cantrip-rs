@@ -35,5 +35,5 @@ Bot1.Pass
 Bot1.Battlefield.Cloud, Midgar Mercenary.Counters.PlusOnePlusOne = 2
 Bot1.Battlefield.Cloud, Midgar Mercenary.Power = 4
 Bot1.Battlefield.Cloud, Midgar Mercenary.Toughness = 3
-Bot1.Battlefield.Hero.Power = 1
+Bot1.Battlefield.Hero Token.Power = 1
 Stack.Count = 0

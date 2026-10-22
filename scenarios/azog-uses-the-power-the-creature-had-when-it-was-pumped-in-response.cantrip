@@ -44,7 +44,7 @@ Bot2.Pass
 [Expect]
 Bot1.Hand.Count = 4
 Bot2.Graveyard = Llanowar Elves; Giant Growth
-Bot2.Battlefield = Forest; Mox Emerald; Goblin Army
-Bot2.Battlefield.Goblin Army.Power = 4
-Bot2.Battlefield.Goblin Army.Toughness = 4
-Bot2.Battlefield.Goblin Army.Counters.PlusOnePlusOne = 4
+Bot2.Battlefield = Forest; Mox Emerald; Goblin Army Token
+Bot2.Battlefield.Goblin Army Token.Power = 4
+Bot2.Battlefield.Goblin Army Token.Toughness = 4
+Bot2.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 4

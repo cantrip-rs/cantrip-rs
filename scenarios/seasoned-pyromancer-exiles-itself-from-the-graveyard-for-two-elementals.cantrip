@@ -30,4 +30,4 @@ Bot1.Graveyard.Seasoned Pyromancer.Activate
 
 [Expect]
 Exile = Seasoned Pyromancer
-Bot1.Battlefield = Mountain; Mox Ruby; Mox Jet; Elemental; Elemental
+Bot1.Battlefield = Mountain; Mox Ruby; Mox Jet; Elemental Token; Elemental Token

@@ -36,7 +36,7 @@ Bot1.Pass
 [T2 Bot2.Main1]
 Bot2.Hand.Mountain.Play
 Bot2.Battlefield.Mountain.Activate
-Bot2.Hand.Lightning Bolt.Cast(Zombie)
+Bot2.Hand.Lightning Bolt.Cast(Zombie Token)
 Bot2.Pass
 [T2 Bot2.Main2]
 

@@ -46,4 +46,4 @@ Bot1.Attack(Otharri, Suns' Glory > Bot2)
 
 [Expect]
 Bot1.Experience = 2
-Bot1.Battlefield = Forest; Innkeeper's Talent; Mox Emerald; Mox Pearl; Mox Ruby; Otharri, Suns' Glory; Rebel; Rebel; Sol Ring
+Bot1.Battlefield = Forest; Innkeeper's Talent; Mox Emerald; Mox Pearl; Mox Ruby; Otharri, Suns' Glory; Rebel Token; Rebel Token; Sol Ring

@@ -6,7 +6,8 @@ use cantrip_oracle as oracle;
 
 /// The 1/1 white Cat creature token it makes.
 pub static CAT: CardDef = CardDef {
-    name: "Cat",
+    name: "Cat Token",
+    token_name: Some(&[Subtype::Cat]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),

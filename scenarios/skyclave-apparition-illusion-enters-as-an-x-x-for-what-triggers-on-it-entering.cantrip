@@ -58,6 +58,6 @@ Bot2.Pass
 [Expect]
 Exile = Ulvenwald Oddity
 Bot1.Graveyard = Skyclave Apparition
-Bot2.Battlefield.Illusion.Power = 4
-Bot2.Battlefield.Illusion.Toughness = 4
+Bot2.Battlefield.Illusion Token.Power = 4
+Bot2.Battlefield.Illusion Token.Toughness = 4
 Bot2.Library.Count = 15

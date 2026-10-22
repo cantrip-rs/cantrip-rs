@@ -41,4 +41,4 @@ Bot1.Pass
 [Expect]
 Stack.Count = 0
 Bot1.Graveyard = Brainstorm
-Bot1.Battlefield = Island; Island; Mox Jet; Mox Pearl; Mox Sapphire; Spirit; Spirit; Spirit; Spirit; Wan Shi Tong, All-Knowing
+Bot1.Battlefield = Island; Island; Mox Jet; Mox Pearl; Mox Sapphire; Spirit Token; Spirit Token; Spirit Token; Spirit Token; Wan Shi Tong, All-Knowing

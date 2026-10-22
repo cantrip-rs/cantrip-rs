@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// A 1/1 green Squirrel creature token.
 pub static SQUIRREL: CardDef = CardDef {
-    name: "Squirrel",
+    name: "Squirrel Token",
+    token_name: Some(&[Subtype::Squirrel]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),

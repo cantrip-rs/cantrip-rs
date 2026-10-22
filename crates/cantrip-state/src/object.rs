@@ -368,8 +368,8 @@ pub struct Copiable {
     pub pt: Option<(i16, i16)>,
     /// "Except it has no mana cost" (CR 707.9b): its mana value is 0 and it cannot be cast for a cost.
     pub no_cost: bool,
-    /// "Except its name is X" (CR 707.9b): its name, whatever the copied card is called.
-    pub name: Option<&'static str>,
+    /// "Except its name is X" (CR 707.9b), or the assigned name of a copied unnamed token (CR 111.4, 707.2).
+    pub name: Option<crate::ObjectName>,
     /// "Except it's legendary" (CR 707.9b): legendary in addition to the supertypes the copied card has.
     pub legendary: bool,
     /// The words of its text changed from the card's (CR 612.4, 612.2a): a token made by an ability whose text was
@@ -398,7 +398,7 @@ impl Copiable {
 
     /// "Except its name is X."
     pub fn named(mut self, name: &'static str) -> Copiable {
-        self.name = Some(name);
+        self.name = Some(crate::ObjectName::Literal(name));
         self
     }
 
@@ -1093,7 +1093,7 @@ pub const MAX_ABILITIES: usize = 32;
 pub struct LastKnown {
     pub id: ObjectId,
     /// Its name as it last had it (CR 201.2): a copy's, a face-down permanent's none, or one an effect set (CR 612.8).
-    pub name: &'static str,
+    pub name: crate::ObjectName,
     /// An effect set its name (`Chars::name_set`).
     pub name_set: bool,
     pub supertypes: Supertypes,

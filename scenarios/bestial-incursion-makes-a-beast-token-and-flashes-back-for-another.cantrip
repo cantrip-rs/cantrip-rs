@@ -38,11 +38,11 @@ Bot1.Battlefield.Mox Emerald#5.Activate
 Bot1.Graveyard.Bestial Incursion.Cast(Ability: Flashback)
 
 [Expect]
-Bot1.Battlefield.Beast#1.Token = true
-Bot1.Battlefield.Beast#1.Power = 4
-Bot1.Battlefield.Beast#1.Toughness = 4
-Bot1.Battlefield.Beast#1.Keywords = Trample
-Bot1.Battlefield.Beast#2.Token = true
-Bot1.Battlefield.Beast#2.Power = 4
+Bot1.Battlefield.Beast Token#1.Token = true
+Bot1.Battlefield.Beast Token#1.Power = 4
+Bot1.Battlefield.Beast Token#1.Toughness = 4
+Bot1.Battlefield.Beast Token#1.Keywords = Trample
+Bot1.Battlefield.Beast Token#2.Token = true
+Bot1.Battlefield.Beast Token#2.Power = 4
 Exile = Bestial Incursion
 Bot1.Graveyard.Count = 0

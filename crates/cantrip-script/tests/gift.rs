@@ -159,6 +159,6 @@ fn a_copied_permanent_spell_keeps_the_promise() {
     let mut game = deal(&["Probe Body", "Copier"], &[]);
     play(&mut game, [&[("Probe Body", ""), ("Copier", "Probe Body")], &[]], |g| gave(g, 1, Gift::TappedFish) == 2 && g.state.stack.is_empty());
     let bodies = game.state.battlefield().iter().filter(|&&id| game.name(id) == "Probe Body").count();
-    let fish = game.state.battlefield().iter().filter(|&&id| game.name(id) == "Fish").count();
+    let fish = game.state.battlefield().iter().filter(|&&id| game.name(id) == "Fish Token").count();
     assert_eq!((bodies, fish), (2, 2));
 }

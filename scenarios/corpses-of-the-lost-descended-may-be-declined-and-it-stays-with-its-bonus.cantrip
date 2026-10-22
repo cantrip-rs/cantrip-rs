@@ -37,5 +37,5 @@ Bot1.Decline
 Bot1.Life = 20
 Bot1.Hand = Plains
 Bot1.Battlefield.Count = 6
-Bot1.Battlefield.Skeleton Pirate.Power = 3
-Bot1.Battlefield.Skeleton Pirate.Keywords = Haste
+Bot1.Battlefield.Skeleton Pirate Token.Power = 3
+Bot1.Battlefield.Skeleton Pirate Token.Keywords = Haste

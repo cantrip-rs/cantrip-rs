@@ -39,12 +39,12 @@ Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Pass
 [T7 Bot1.Main2]
-? Bot1.Battlefield.Dragon.Power = 4
+? Bot1.Battlefield.Dragon Token.Power = 4
 
 [Expect]
 Bot1.Mana = 
-Bot1.Battlefield.Dragon.Power = 4
-Bot1.Battlefield.Dragon.Toughness = 4
-Bot1.Battlefield.Dragon.Types = Creature
-Bot1.Battlefield.Dragon.Subtypes = Dragon
-Bot1.Battlefield.Dragon.Keywords = Flying
+Bot1.Battlefield.Dragon Token.Power = 4
+Bot1.Battlefield.Dragon Token.Toughness = 4
+Bot1.Battlefield.Dragon Token.Types = Creature
+Bot1.Battlefield.Dragon Token.Subtypes = Dragon
+Bot1.Battlefield.Dragon Token.Keywords = Flying

@@ -59,7 +59,7 @@ Bot2.Pass
 
 [Expect]
 Stack.Count = 0
-Bot1.Battlefield = Beast; Forest; Garruk, Veiled Butcher; Mox Jet; Mox Jet; Ornithopter
+Bot1.Battlefield = Beast Token; Forest; Garruk, Veiled Butcher; Mox Jet; Mox Jet; Ornithopter
 Bot1.Graveyard = Elvish Mystic; Black Lotus
 Bot2.Battlefield = Elvish Mystic; Mox Emerald
 Exile = Ornithopter

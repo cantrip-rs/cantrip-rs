@@ -19,10 +19,10 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Case of the Stashed Skeleton.Cast
 [T2 Bot2.Upkeep]
-? Client.Bot1.Battlefield.Skeleton.Status = SUSPECTED
-? Client.Bot1.Battlefield.Skeleton.Rules = Menace / This creature can't block.
+? Client.Bot1.Battlefield.Skeleton Token.Status = SUSPECTED
+? Client.Bot1.Battlefield.Skeleton Token.Rules = Menace / This creature can't block.
 ? Client.Bot1.Battlefield.Case of the Stashed Skeleton.Status =
 
 [Expect]
-Bot1.Battlefield.Skeleton.Suspected = true
+Bot1.Battlefield.Skeleton Token.Suspected = true
 Bot1.Battlefield.Case of the Stashed Skeleton.Solved = (absent)

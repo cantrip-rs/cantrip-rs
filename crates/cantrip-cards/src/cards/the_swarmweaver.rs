@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// A 1/1 black and green Insect creature token with flying (CR 111.4, 205.3m).
 pub static INSECT: CardDef = CardDef {
-    name: "Insect",
+    name: "Insect Token",
+    token_name: Some(&[Subtype::Insect]),
     has_cost: false,
     // Black and green: bits 2 and 4 of W, U, B, R, G.
     colors: Some(ColorSet(0b10100)),

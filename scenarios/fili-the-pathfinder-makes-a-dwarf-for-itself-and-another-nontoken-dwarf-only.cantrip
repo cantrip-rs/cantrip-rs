@@ -31,7 +31,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 [T1 Bot1.Main2]
-? Bot1.Battlefield = Plains; Mox Pearl; Mox Ruby; Mox Emerald; Fíli the Pathfinder; Dwarf
+? Bot1.Battlefield = Plains; Mox Pearl; Mox Ruby; Mox Emerald; Fíli the Pathfinder; Dwarf Token
 Bot2.Hand.Mountain.Play
 [T3 Bot1.Main1]
 Bot1.Hand.Mountain.Play
@@ -39,7 +39,7 @@ Bot1.Hand.Magda, Brazen Outlaw.Cast
 Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Plains.Activate
 [T3 Bot1.Main2]
-? Bot1.Battlefield = Plains; Mountain; Mox Pearl; Mox Ruby; Mox Emerald; Fíli the Pathfinder; Magda, Brazen Outlaw; Dwarf; Dwarf
+? Bot1.Battlefield = Plains; Mountain; Mox Pearl; Mox Ruby; Mox Emerald; Fíli the Pathfinder; Magda, Brazen Outlaw; Dwarf Token; Dwarf Token
 Bot1.Hand.Elvish Mystic.Cast
 Bot1.Battlefield.Mox Emerald.Activate
 [T4 Bot2.Main1]
@@ -51,7 +51,7 @@ Bot2.Battlefield.Mountain.Activate
 
 [Expect]
 Bot1.EnduringStory = true
-Bot1.Battlefield = Plains; Mountain; Mox Pearl; Mox Ruby; Mox Emerald; Fíli the Pathfinder; Magda, Brazen Outlaw; Elvish Mystic; Dwarf; Dwarf
+Bot1.Battlefield = Plains; Mountain; Mox Pearl; Mox Ruby; Mox Emerald; Fíli the Pathfinder; Magda, Brazen Outlaw; Elvish Mystic; Dwarf Token; Dwarf Token
 Bot1.Battlefield.Elvish Mystic.Power = 2
 Bot1.Battlefield.Elvish Mystic.Toughness = 2
 Bot2.Battlefield = Mountain; Mountain; Magda, Brazen Outlaw

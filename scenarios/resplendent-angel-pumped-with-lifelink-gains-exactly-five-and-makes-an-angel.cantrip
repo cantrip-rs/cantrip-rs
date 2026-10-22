@@ -48,5 +48,5 @@ Bot2.Life = 15
 Bot1.Battlefield.Resplendent Angel.Power = 5
 Bot1.Battlefield.Resplendent Angel.Toughness = 5
 Bot1.Battlefield.Resplendent Angel.Keywords = Flying; Lifelink
-Bot1.Battlefield.Angel.Power = 4
-Bot1.Battlefield.Angel.Keywords = Flying; Vigilance
+Bot1.Battlefield.Angel Token.Power = 4
+Bot1.Battlefield.Angel Token.Keywords = Flying; Vigilance

@@ -58,5 +58,5 @@ Bot1.Battlefield.The Theorist, Jace Beleren.Activate(Ability: Draw three cards)
 
 [Expect]
 Result = Bot2 won
-Bot1.Battlefield.Illusion#1.Counters.PlusOnePlusOne = (absent)
-Bot1.Battlefield.Illusion#1.Power = 1
+Bot1.Battlefield.Illusion Token#1.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Illusion Token#1.Power = 1

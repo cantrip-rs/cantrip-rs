@@ -25,16 +25,16 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Corpses of the Lost.Cast
 ! Bot1.Attack(Ornithopter > Bot2)
-Bot1.Attack(Skeleton Pirate > Bot2)
+Bot1.Attack(Skeleton Pirate Token > Bot2)
 [T1 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 17
-Bot1.Battlefield.Skeleton Pirate.Power = 3
-Bot1.Battlefield.Skeleton Pirate.Toughness = 2
-Bot1.Battlefield.Skeleton Pirate.Keywords = Haste
-Bot1.Battlefield.Skeleton Pirate.Subtypes = Pirate; Skeleton
-Bot1.Battlefield.Skeleton Pirate.Colors = Black
-Bot1.Battlefield.Skeleton Pirate.Token = true
+Bot1.Battlefield.Skeleton Pirate Token.Power = 3
+Bot1.Battlefield.Skeleton Pirate Token.Toughness = 2
+Bot1.Battlefield.Skeleton Pirate Token.Keywords = Haste
+Bot1.Battlefield.Skeleton Pirate Token.Subtypes = Pirate; Skeleton
+Bot1.Battlefield.Skeleton Pirate Token.Colors = Black
+Bot1.Battlefield.Skeleton Pirate Token.Token = true
 Bot1.Battlefield.Ornithopter.Power = 0
 Bot1.Battlefield.Ornithopter.Keywords = Flying

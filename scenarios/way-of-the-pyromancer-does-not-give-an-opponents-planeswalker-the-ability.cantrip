@@ -43,12 +43,12 @@ Bot1.Pass
 Bot2.Battlefield.Narset, Parter of Veils.Activate(Ability: Look)
 Bot2.Pass
 [T3 Bot1.Main1]
-Bot1.Battlefield.Jace.Activate(Ability: Add)
+Bot1.Battlefield.Jace Token.Activate(Ability: Add)
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Mana = {R}
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 3
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 3
 Bot2.Battlefield.Narset, Parter of Veils.Counters.Loyalty = 3

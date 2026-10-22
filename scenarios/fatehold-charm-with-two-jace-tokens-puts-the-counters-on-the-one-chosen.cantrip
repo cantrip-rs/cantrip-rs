@@ -44,7 +44,7 @@ Bot2.Battlefield.Mox Sapphire.Activate
 Bot2.Hand.Jace, the Mind Sculptor.Cast
 Bot1.Pass
 [T3 Bot1.Main1]
-? Bot1.Battlefield.Jace.Counters.Loyalty = 2
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Mox Sapphire.Activate
@@ -65,5 +65,5 @@ Bot1.Choose(Jace, the Mind Sculptor)
 [Expect]
 Bot1.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 5
 Bot1.Battlefield.Jace, the Mind Sculptor.Token = true
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Exile = Jace, the Mind Sculptor

@@ -31,7 +31,7 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
 Bot1.Accept
-Bot1.Choose(Thousand Moons Smithy; Gnome Soldier; Ornithopter#1; Ornithopter#2; Ornithopter#3)
+Bot1.Choose(Thousand Moons Smithy; Gnome Soldier Token; Ornithopter#1; Ornithopter#2; Ornithopter#3)
 Bot1.Hand.Mountain.Play
 [T5 Bot1.Main1]
 Bot1.Battlefield.Barracks of the Thousand.Activate
@@ -49,4 +49,4 @@ Bot1.Hand.Healer's Hawk.Cast
 
 [Expect]
 Turn = 7
-Bot1.Battlefield = Barracks of the Thousand; Gnome Soldier; Gnome Soldier; Healer's Hawk; Healer's Hawk; Mana Flare; Mountain; Ornithopter; Ornithopter; Ornithopter; Plains
+Bot1.Battlefield = Barracks of the Thousand; Gnome Soldier Token; Gnome Soldier Token; Healer's Hawk; Healer's Hawk; Mana Flare; Mountain; Ornithopter; Ornithopter; Ornithopter; Plains

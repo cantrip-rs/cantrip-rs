@@ -190,7 +190,7 @@ pub fn search_to_exile(
 /// any number (CR 701.23b), so cards of the name may be left. A card matches by sharing one of `names` (CR 201.2); the cards found go to exile together, and `owner` draws one card for each that
 /// reached exile from their hand. Deadly Cover-Up (the owner of a card it exiled) and The End (the controller of the
 /// permanent it exiled) print it.
-pub fn exile_same_name_from_graveyard_hand_and_library(g: &mut dyn Game, searcher: PlayerId, owner: PlayerId, source: ObjectId, names: &[&'static str]) -> Result<(), Suspend> {
+pub fn exile_same_name_from_graveyard_hand_and_library(g: &mut dyn Game, searcher: PlayerId, owner: PlayerId, source: ObjectId, names: &[ObjectName]) -> Result<(), Suspend> {
     let has_name = |q: &dyn Query, c: ObjectId| object_names(q, c).iter().any(|n| names.contains(n));
     let graveyard: Vec<ObjectId> = g.state().zone(Zone::graveyard(owner)).iter().copied().filter(|&c| has_name(g, c)).collect();
     let mut found = crate::choose::any_number_of(g, searcher, source, Purpose::Exile, "", graveyard.clone(), graveyard)?;
@@ -666,7 +666,7 @@ pub fn card_has_name(q: &dyn Query, card: CardId, wanted: CardId) -> bool {
 /// with neither unlocked (CR 709.5); any other split card both halves' (CR 709.4a); a copy that says "except its name is X"
 /// only that (CR 707.9b), and so has one whose name an effect set (CR 612.8); and anything else its own name, one for each
 /// of the two faces' names of a card written "A // B".
-pub fn object_names(q: &dyn Query, id: ObjectId) -> Vec<&'static str> {
+pub fn object_names(q: &dyn Query, id: ObjectId) -> Vec<ObjectName> {
     let c = q.chars(id);
     let obj = q.obj(id);
     if c.name_set || (obj.face_down_values().is_none() && obj.copy.as_ref().is_some_and(|copy| copy.name.is_some())) {
@@ -674,16 +674,22 @@ pub fn object_names(q: &dyn Query, id: ObjectId) -> Vec<&'static str> {
     }
     let def = q.card(c.card);
     if def.is_room() && obj.zone.is(ZoneKind::Battlefield) {
-        return def.unlocked_doors(obj.marks.doors).map(|half| half.name).collect();
+        return def.unlocked_doors(obj.marks.doors).map(|half| ObjectName::Literal(half.name)).collect();
     }
     // One that has left is as it last was (CR 608.2h): a Room the names of the doors it had unlocked, "A // B" both.
     if def.is_room() && q.state().last_known(id).is_some() {
-        return c.name.split(" // ").filter(|name| !name.is_empty()).collect();
+        return match c.name {
+            ObjectName::Literal(name) => name.split(" // ").filter(|name| !name.is_empty()).map(ObjectName::Literal).collect(),
+            name => vec![name],
+        };
     }
     if let Some((left, right)) = def.split {
-        return vec![left.name, right.name];
+        return vec![ObjectName::Literal(left.name), ObjectName::Literal(right.name)];
     }
-    c.name.split(" // ").filter(|name| !name.is_empty()).collect()
+    match c.name {
+        ObjectName::Literal(name) => name.split(" // ").filter(|name| !name.is_empty()).map(ObjectName::Literal).collect(),
+        name => vec![name],
+    }
 }
 
 /// Whether the object `id` has the name `wanted` (CR 201.2a, 709.4a): "an object has the chosen name if one of its names is
@@ -691,7 +697,7 @@ pub fn object_names(q: &dyn Query, id: ObjectId) -> Vec<&'static str> {
 /// card that asks of a permanent, a spell or a card in a zone whether it is named so.
 pub fn object_has_name(q: &dyn Query, id: ObjectId, wanted: CardId) -> bool {
     let name = q.card(wanted).name;
-    object_names(q, id).contains(&name)
+    object_names(q, id).iter().any(|n| *n == name)
 }
 
 /// "Reveal cards from the top of your library until you reveal a card that `qualifies`" (CR 701.20, 400.3): the cards are

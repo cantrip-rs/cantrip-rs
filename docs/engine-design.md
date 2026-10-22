@@ -1882,6 +1882,12 @@ engine does not have yet is skipped; one that can run must pass.
 
 ## Correctness
 
+- **Unnamed token names (CR 111.4, 612.2a, 612.4, 707.2).** `CardDef::token_name` distinguishes ordered assigned
+  subtype words from explicit names. `ObjectName` is a literal or those words plus their creating text and the Token
+  suffix, kept in computed characteristics, LKI and copy values. Copying freezes the created name even when copy
+  exceptions change types; later source/text/subtype changes do not rename an existing token. Equality, same-name
+  rules and hashing compare actual name text, not its representation. No runtime global/interned string cache; string
+  construction is only when text is requested or compared, and literal names remain borrowed.
 - **The scenarios are the reference.** A card is done when it is exact and its scenarios pass; a scenario that is
   wrong by the rules is fixed, with the rule.
 - **`CANTRIP_VERIFY=1`** runs the engine's own consistency checks while it plays; `tools\test.cmd` sets it.

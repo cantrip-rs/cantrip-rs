@@ -22,22 +22,22 @@ Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Lingering Souls.Cast
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Spirit#1.Token = true
+? Bot1.Battlefield.Spirit Token#1.Token = true
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Clone.Cast
 Bot1.Accept
-Bot1.Target(Spirit)
+Bot1.Target(Spirit Token)
 [Bot1.Main2]
 
 [Expect]
 Turn = 1
-Bot1.Battlefield = Mox Sapphire; Spirit; Spirit; Spirit
-Bot1.Battlefield.Spirit#3.Token = (absent)
-Bot1.Battlefield.Spirit#3.Types = Creature
-Bot1.Battlefield.Spirit#3.Subtypes = Spirit
-Bot1.Battlefield.Spirit#3.Colors = White
-Bot1.Battlefield.Spirit#3.Keywords = Flying
-Bot1.Battlefield.Spirit#3.Power = 1
-Bot1.Battlefield.Spirit#3.Toughness = 1
+Bot1.Battlefield = Mox Sapphire; Spirit Token; Spirit Token; Spirit Token
+Bot1.Battlefield.Spirit Token#3.Token = (absent)
+Bot1.Battlefield.Spirit Token#3.Types = Creature
+Bot1.Battlefield.Spirit Token#3.Subtypes = Spirit
+Bot1.Battlefield.Spirit Token#3.Colors = White
+Bot1.Battlefield.Spirit Token#3.Keywords = Flying
+Bot1.Battlefield.Spirit Token#3.Power = 1
+Bot1.Battlefield.Spirit Token#3.Toughness = 1
 Bot1.Graveyard = Black Lotus; Lingering Souls; Black Lotus

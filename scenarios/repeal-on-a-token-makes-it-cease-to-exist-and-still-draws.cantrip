@@ -31,7 +31,7 @@ Bot1.Pass
 Bot1.Hand.Island.Play
 Bot1.Battlefield.Island.Activate
 Bot1.Hand.Repeal.Cast(X: 0)
-Bot1.Target(Spirit)
+Bot1.Target(Spirit Token)
 [T3 Bot1.Main2]
 
 [Expect]

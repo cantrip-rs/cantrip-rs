@@ -43,4 +43,4 @@ Bot1.Pass
 Turn = 3
 Stack.Count = 0
 Bot2.Graveyard = Llanowar Elves
-Bot1.Battlefield.Orc Army.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Orc Army Token.Counters.PlusOnePlusOne = 1

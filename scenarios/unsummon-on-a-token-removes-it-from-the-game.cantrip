@@ -25,11 +25,11 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lingering Souls.Cast
 Bot1.Pass
 Bot1.Battlefield.Mox Sapphire.Activate
-Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Spirit#1)
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Spirit Token#1)
 Bot1.Pass
 [T1 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mox Pearl; Mox Jet; Mox Ruby; Mox Sapphire; Spirit
+Bot1.Battlefield = Mox Pearl; Mox Jet; Mox Ruby; Mox Sapphire; Spirit Token
 Bot1.Hand = Island
 Bot1.Graveyard = Unsummon; Lingering Souls

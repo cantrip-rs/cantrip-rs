@@ -1,0 +1,50 @@
+# Ob Nixilis, the Ascended: Bot2's creatures are all untapped when Ob Nixilis enters, so nothing is destroyed, nothing is
+# gained, and - no life gained this turn - no Angel is made at the end step either.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ob Nixilis, the Ascended
+Forest
+Island x13
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ob Nixilis, the Ascended.Cast
+[T5 Bot1.Main1]
+
+[Expect]
+Turn = 5
+Bot1.Life = 20
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ob Nixilis, the Ascended
+Bot1.Graveyard = Black Lotus
+Bot2.Life = 20
+Bot2.Battlefield = Forest; Llanowar Elves; Llanowar Elves; Mox Emerald
+Bot2.Graveyard.Count = 0

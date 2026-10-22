@@ -44,6 +44,6 @@ Bot1.Battlefield.Plains.Activate
 [Expect]
 Bot1.EnduringStory = true
 Bot1.Graveyard = Fíli the Pathfinder
-Bot1.Battlefield = Plains; Plains; Plains; Plains; Mox Pearl; Fíli the Pathfinder; Dwarf; Dwarf; Dwarf
+Bot1.Battlefield = Plains; Plains; Plains; Plains; Mox Pearl; Fíli the Pathfinder; Dwarf Token; Dwarf Token; Dwarf Token
 Bot1.Battlefield.Fíli the Pathfinder.Power = 3
-Bot1.Battlefield.Dwarf#1.Power = 3
+Bot1.Battlefield.Dwarf Token#1.Power = 3

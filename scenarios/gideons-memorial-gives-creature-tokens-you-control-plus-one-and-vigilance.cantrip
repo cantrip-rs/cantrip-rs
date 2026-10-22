@@ -38,19 +38,19 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Cat Warrior.Power = 3
-? Bot1.Battlefield.Cat Warrior.Toughness = 1
-? Bot1.Battlefield.Cat Warrior.Keywords = Vigilance
+? Bot1.Battlefield.Cat Warrior Token.Power = 3
+? Bot1.Battlefield.Cat Warrior Token.Toughness = 1
+? Bot1.Battlefield.Cat Warrior Token.Keywords = Vigilance
 ? Bot1.Battlefield.Ajani, Nacatl Pariah.Power = 1
 ? Bot1.Battlefield.Ajani, Nacatl Pariah.Keywords = (absent)
-? Bot2.Battlefield.Cat Warrior.Power = 2
-? Bot2.Battlefield.Cat Warrior.Keywords = (absent)
+? Bot2.Battlefield.Cat Warrior Token.Power = 2
+? Bot2.Battlefield.Cat Warrior Token.Keywords = (absent)
 [T5 Bot1.Main1]
-Bot1.Attack(Cat Warrior > Bot2)
+Bot1.Attack(Cat Warrior Token > Bot2)
 [T5 Bot1.Main2]
 
 [Expect]
 Turn = 5
 Bot2.Life = 17
-Bot1.Battlefield.Cat Warrior.Tapped = false
-Bot1.Battlefield.Cat Warrior.Token = true
+Bot1.Battlefield.Cat Warrior Token.Tapped = false
+Bot1.Battlefield.Cat Warrior Token.Token = true

@@ -42,4 +42,4 @@ Bot1.Pass
 [Expect]
 Turn = 3
 Stack.Count = 0
-Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Mox Sapphire; Mox Ruby; Sedgemoor Witch; Pest; Pest; Pest
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Mox Sapphire; Mox Ruby; Sedgemoor Witch; Pest Token; Pest Token; Pest Token

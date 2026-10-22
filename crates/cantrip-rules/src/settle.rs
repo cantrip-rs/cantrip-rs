@@ -162,7 +162,7 @@ fn state_based_actions(cx: &mut Cx) -> R<bool> {
     let mut unattach = Vec::new();
     let mut unbestow = Vec::new();
     let mut sagas = Vec::new();
-    let mut legends: Vec<(ObjectId, &'static str)> = Vec::new();
+    let mut legends: Vec<(ObjectId, ObjectName)> = Vec::new();
     let mut bound: Vec<crate::day_night::Bound> = Vec::new();
     let mut battles: Vec<(ObjectId, bool)> = Vec::new();
     let mut annihilate: Vec<(ObjectId, i16)> = Vec::new();
@@ -336,9 +336,9 @@ fn state_based_actions(cx: &mut Cx) -> R<bool> {
     let mut surplus = Vec::new();
     if legends.len() > 1 {
         for p in cx.s().apnap().collect::<Vec<_>>() {
-            let mine: Vec<(ObjectId, &'static str)> =
+            let mine: Vec<(ObjectId, ObjectName)> =
                 legends.iter().copied().filter(|&(id, _)| cx.s().obj(id).controller == p).collect();
-            let mut asked: Vec<&'static str> = Vec::new();
+            let mut asked: Vec<ObjectName> = Vec::new();
             for &(_, name) in &mine {
                 if asked.contains(&name) {
                     continue;

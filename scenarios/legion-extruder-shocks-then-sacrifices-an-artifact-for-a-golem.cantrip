@@ -32,8 +32,8 @@ Bot1.Battlefield.Legion Extruder.Activate
 Stack.Count = 0
 Bot2.Life = 18
 Bot1.Graveyard = Mox Ruby
-Bot1.Battlefield.Golem.Power = 3
-Bot1.Battlefield.Golem.Toughness = 3
-Bot1.Battlefield.Golem.Types = Artifact; Creature
-Bot1.Battlefield.Golem.Subtypes = Golem
+Bot1.Battlefield.Golem Token.Power = 3
+Bot1.Battlefield.Golem Token.Toughness = 3
+Bot1.Battlefield.Golem Token.Types = Artifact; Creature
+Bot1.Battlefield.Golem Token.Subtypes = Golem
 Bot1.Battlefield.Legion Extruder.Tapped = true

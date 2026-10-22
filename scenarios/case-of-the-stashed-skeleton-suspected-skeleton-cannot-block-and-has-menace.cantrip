@@ -32,19 +32,19 @@ Bot2.Hand.Ornithopter.Cast
 Bot2.Hand.Ornithopter.Cast
 [T4 Bot2.DeclareAttackers]
 Bot2.Attack(Llanowar Elves > Bot1)
-! Bot1.Block(Skeleton > Llanowar Elves)
+! Bot1.Block(Skeleton Token > Llanowar Elves)
 Bot1.Block(Ornithopter > Llanowar Elves)
 [T5 Bot1.DeclareAttackers]
-Bot1.Attack(Skeleton > Bot2)
-! Bot2.Block(Ornithopter > Skeleton)
-Bot2.Block(Ornithopter#1 > Skeleton; Ornithopter#2 > Skeleton)
+Bot1.Attack(Skeleton Token > Bot2)
+! Bot2.Block(Ornithopter > Skeleton Token)
+Bot2.Block(Ornithopter#1 > Skeleton Token; Ornithopter#2 > Skeleton Token)
 [T5 Bot1.Main2]
-? Bot1.Battlefield.Skeleton.Suspected = true
+? Bot1.Battlefield.Skeleton Token.Suspected = true
 
 [Expect]
 Bot1.Life = 20
 Bot2.Life = 20
-Bot1.Battlefield = Case of the Stashed Skeleton; Mox Jet; Ornithopter; Skeleton; Swamp
+Bot1.Battlefield = Case of the Stashed Skeleton; Mox Jet; Ornithopter; Skeleton Token; Swamp
 Bot2.Battlefield = Forest; Llanowar Elves; Ornithopter
 Bot2.Graveyard = Ornithopter
-Bot1.Battlefield.Skeleton.Keywords = CantBlock; Menace
+Bot1.Battlefield.Skeleton Token.Keywords = CantBlock; Menace

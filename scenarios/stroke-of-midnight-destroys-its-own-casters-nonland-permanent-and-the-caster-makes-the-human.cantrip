@@ -1,0 +1,37 @@
+# Stroke of Midnight: "Destroy target nonland permanent. Its controller creates a 1/1 white Human creature token." The
+# caster's own nonland permanent is a legal target (CR 115.1: "target nonland permanent", whoever controls it): Bot1's
+# Mox Ruby is destroyed and Bot1 - its controller - creates the Human, exactly one, and Bot2 creates none.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Stroke of Midnight
+Island x13
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stroke of Midnight.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Battlefield = Plains; Mox Pearl; Human Token
+Bot1.Battlefield.Count = 3
+Bot1.Battlefield.Human Token.Token = true
+Bot1.Battlefield.Human Token.Power = 1
+Bot1.Battlefield.Human Token.Toughness = 1
+Bot1.Battlefield.Human Token.Colors = White
+Bot1.Battlefield.Human Token.Types = Creature
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard = Stroke of Midnight; Mox Ruby

@@ -37,5 +37,5 @@ Bot1.Hand.Rewrite Regrets.Cast(Graveyard.Ornithopter)
 
 [Expect]
 Bot1.Battlefield.Ornithopter.Toughness = 2
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot1.Graveyard = Rewrite Regrets; Black Lotus; Thought Scour; Island; Platinum Angel; Black Lotus; Lightning Bolt

@@ -24,11 +24,11 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Nettlecyst.Cast
 [Bot1.Main2]
-? Bot1.Battlefield.Phyrexian Germ.Power = 4
+? Bot1.Battlefield.Phyrexian Germ Token.Power = 4
 Bot1.Hand.Mox Emerald.Cast
 
 [Expect]
-Bot1.Battlefield.Phyrexian Germ.Power = 5
-Bot1.Battlefield.Phyrexian Germ.Toughness = 5
-Bot1.Battlefield.Phyrexian Germ.Subtypes = Germ; Phyrexian
-Bot1.Battlefield.Nettlecyst.AttachedTo = Phyrexian Germ
+Bot1.Battlefield.Phyrexian Germ Token.Power = 5
+Bot1.Battlefield.Phyrexian Germ Token.Toughness = 5
+Bot1.Battlefield.Phyrexian Germ Token.Subtypes = Germ; Phyrexian
+Bot1.Battlefield.Nettlecyst.AttachedTo = Phyrexian Germ Token

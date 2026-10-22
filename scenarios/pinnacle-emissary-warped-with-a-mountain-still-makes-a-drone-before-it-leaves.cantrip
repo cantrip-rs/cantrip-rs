@@ -22,5 +22,5 @@ Bot1.Pass
 [T2 Bot2.Main1]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mox Jet; Drone
+Bot1.Battlefield = Mountain; Mox Jet; Drone Token
 Exile = Pinnacle Emissary

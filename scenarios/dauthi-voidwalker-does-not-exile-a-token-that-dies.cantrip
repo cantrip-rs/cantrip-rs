@@ -40,7 +40,7 @@ Bot2.Hand.Pest Infestation.Cast(X: 1)
 Bot1.Hand.Swamp.Play
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp#2.Activate
-Bot1.Hand.Infernal Grasp.Cast(Bot2.Battlefield.Pest)
+Bot1.Hand.Infernal Grasp.Cast(Bot2.Battlefield.Pest Token)
 Bot1.Pass
 Bot2.Pass
 [T7 Bot1.Main2]

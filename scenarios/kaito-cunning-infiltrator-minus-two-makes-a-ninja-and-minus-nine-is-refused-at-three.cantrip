@@ -24,7 +24,7 @@ Bot1.Battlefield.Kaito, Cunning Infiltrator.Activate(Ability: Create a)
 
 [Expect]
 Bot1.Battlefield.Kaito, Cunning Infiltrator.Counters.Loyalty = 1
-Bot1.Battlefield.Ninja.Power = 2
-Bot1.Battlefield.Ninja.Toughness = 1
-Bot1.Battlefield.Ninja.Colors = Blue
+Bot1.Battlefield.Ninja Token.Power = 2
+Bot1.Battlefield.Ninja Token.Toughness = 1
+Bot1.Battlefield.Ninja Token.Colors = Blue
 Bot1.Emblems.Count = 0

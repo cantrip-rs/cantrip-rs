@@ -1,0 +1,44 @@
+# Windcrag Siege: only the chosen word's ability works. Bot1 chooses Jeskai, so the Mardu ability does not apply and the
+# turn-5 attack with Hero of Bladehold makes just the printed two 1/1 white Soldiers; the Jeskai Goblin comes only at the
+# next upkeep, the enchantment having been cast this turn.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Pearl
+Hero of Bladehold
+Windcrag Siege
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hero of Bladehold.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Windcrag Siege.Cast
+Bot1.Name(Jeskai)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Hero of Bladehold > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Battlefield.Windcrag Siege.ChosenOption = Jeskai
+Bot1.Battlefield = Hero of Bladehold; Mountain; Mox Pearl; Mox Ruby; Plains; Plains; Soldier Token; Soldier Token; Windcrag Siege

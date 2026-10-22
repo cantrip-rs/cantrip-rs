@@ -44,7 +44,7 @@ Bot1.Pass
 [T3 Bot1.Main1]
 ? Bot2.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 3
 Bot1.Hand.Theorist's Sanctum.Play
-Bot1.Choose(Jace)
+Bot1.Choose(Jace Token)
 Bot1.Hand.Mox Jet.Cast
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
@@ -60,10 +60,10 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot2.Pass
-Bot1.Choose(Jace)
+Bot1.Choose(Jace Token)
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 4
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 4
 Bot1.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 3
 Bot1.Battlefield.Jace, the Mind Sculptor.Token = true
 Exile = Jace, the Mind Sculptor

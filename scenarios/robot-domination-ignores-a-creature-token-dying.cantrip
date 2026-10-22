@@ -42,12 +42,12 @@ Bot1.Hand.Mox Ruby.Cast
 Bot1.Pass
 [T5 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
-Bot1.Hand.Lightning Bolt.Cast(Spirit#1)
+Bot1.Hand.Lightning Bolt.Cast(Spirit Token#1)
 [T5 Bot1.Main2]
 
 [Expect]
 Bot1.Life = 20
 Bot1.Battlefield.Robot Domination.Counters.Plan = (absent)
-Bot1.Battlefield = Mox Jet; Robot Domination; Mox Pearl; Mox Emerald; Mox Sapphire; Mox Ruby; Spirit
-Bot1.Battlefield.Spirit.Token = true
+Bot1.Battlefield = Mox Jet; Robot Domination; Mox Pearl; Mox Emerald; Mox Sapphire; Mox Ruby; Spirit Token
+Bot1.Battlefield.Spirit Token.Token = true
 Bot1.Library.Count = 11

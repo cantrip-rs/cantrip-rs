@@ -39,11 +39,11 @@ Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Fountainport.Activate(Ability: Fish)
 [T5 Bot1.Main2]
 ? Bot1.Life = 19
-? Bot1.Battlefield = Island; Island; Sol Ring; Fountainport; Fish
+? Bot1.Battlefield = Island; Island; Sol Ring; Fountainport; Fish Token
 ? Bot1.Battlefield.Fountainport.Tapped = true
-? Bot1.Battlefield.Fish.Colors = Blue
-? Bot1.Battlefield.Fish.Power = 1
-? Bot1.Battlefield.Fish.Types = Creature
+? Bot1.Battlefield.Fish Token.Colors = Blue
+? Bot1.Battlefield.Fish Token.Power = 1
+? Bot1.Battlefield.Fish Token.Types = Creature
 [T7 Bot1.Upkeep]
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Island#2.Activate

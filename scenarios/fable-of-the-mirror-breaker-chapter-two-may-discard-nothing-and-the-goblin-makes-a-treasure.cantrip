@@ -23,11 +23,11 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Hand.Fable of the Mirror-Breaker.Cast
 [T3 Bot1.Main1]
 Bot1.Choose()
-Bot1.Attack(Goblin Shaman > Bot2)
+Bot1.Attack(Goblin Shaman Token > Bot2)
 [T3 Bot1.Main2]
 
 [Expect]
 Bot1.Hand = Island; Swamp; Plains; Forest
 Bot1.Graveyard = Black Lotus
-Bot1.Battlefield = Mountain; Mox Ruby; Fable of the Mirror-Breaker; Goblin Shaman; Treasure Token
+Bot1.Battlefield = Mountain; Mox Ruby; Fable of the Mirror-Breaker; Goblin Shaman Token; Treasure Token
 Bot2.Life = 18

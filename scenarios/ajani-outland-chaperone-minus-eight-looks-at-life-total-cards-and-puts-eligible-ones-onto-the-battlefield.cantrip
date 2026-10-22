@@ -77,7 +77,7 @@ Bot1.Choose(Agent Bishop, Man in Black; Walking Ballista; Ornithopter; Basking R
 
 [Expect]
 Bot1.Graveyard = Walking Ballista; Ajani, Outland Chaperone; Tezzeret's Gambit; Tezzeret's Gambit; Black Lotus
-Bot1.Battlefield = Plains; Mox Ruby; Mox Pearl; Kithkin; Kithkin; Kithkin; Agent Bishop, Man in Black; Ornithopter; Basking Rootwalla
+Bot1.Battlefield = Plains; Mox Ruby; Mox Pearl; Kithkin Token; Kithkin Token; Kithkin Token; Agent Bishop, Man in Black; Ornithopter; Basking Rootwalla
 Bot1.Hand.Count = 7
 Bot1.Library.Count = 23
 Stack.Count = 0

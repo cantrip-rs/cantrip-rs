@@ -1,0 +1,75 @@
+# Ob Nixilis, the Ascended: "destroy all tapped creatures your opponents control. You gain 1 life for each creature
+# destroyed this way." An indestructible creature is not destroyed, so it buys no life (CR 701.8, 119.3): Bot1's Ob Nixilis
+# arrives with two of Bot2's Llanowar Elves tapped, and Bot2 answers the trigger with Divine Resilience, making one of them
+# indestructible until end of turn. Only the other one is destroyed, so Bot1 gains 1 rather than 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ob Nixilis, the Ascended
+Forest
+Llanowar Elves
+Island x12
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Llanowar Elves
+Plains
+Divine Resilience
+Island
+Island x11
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves#1.Activate
+Bot2.Battlefield.Llanowar Elves#2.Activate
+Bot2.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ob Nixilis, the Ascended.Cast
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Divine Resilience.Cast
+Bot2.Target(Bot2.Battlefield.Llanowar Elves#1)
+[T5 Bot1.Main2]
+? Bot1.Life = 21
+
+[Expect]
+Turn = 5
+Bot1.Life = 21
+Bot1.Battlefield = Forest; Llanowar Elves; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ob Nixilis, the Ascended
+Bot1.Graveyard = Black Lotus
+Bot2.Battlefield = Forest; Llanowar Elves; Llanowar Elves; Mox Emerald; Mox Emerald; Plains
+Bot2.Battlefield.Llanowar Elves#1.Tapped = true
+Bot2.Graveyard.Count = 2

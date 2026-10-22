@@ -58,8 +58,8 @@ Bot2.Pass
 [Expect]
 Bot1.Graveyard = Black Lotus
 Bot1.Library.Count = 11
-Bot1.Battlefield = Ancient Tomb; Forest; Mana Crypt; Mox Emerald; Sol Ring; Wurm; Wurm; Wurm
-Bot1.Battlefield.Wurm#1.Power = 5
-Bot1.Battlefield.Wurm#1.Toughness = 5
-Bot1.Battlefield.Wurm#1.Keywords = Trample
+Bot1.Battlefield = Ancient Tomb; Forest; Mana Crypt; Mox Emerald; Sol Ring; Wurm Token; Wurm Token; Wurm Token
+Bot1.Battlefield.Wurm Token#1.Power = 5
+Bot1.Battlefield.Wurm Token#1.Toughness = 5
+Bot1.Battlefield.Wurm Token#1.Keywords = Trample
 Bot2.Graveyard = Wrath of God

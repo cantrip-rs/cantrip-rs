@@ -30,8 +30,8 @@ Bot1.Hand.Frontline Rush.Cast
 Bot1.Modes(Create two 1/1 red Goblin creature tokens.)
 
 [Expect]
-Bot1.Battlefield.Goblin#4.Token = true
-Bot1.Battlefield.Goblin#4.Colors = Red
-Bot1.Battlefield.Goblin#1.Token = true
+Bot1.Battlefield.Goblin Token#4.Token = true
+Bot1.Battlefield.Goblin Token#4.Colors = Red
+Bot1.Battlefield.Goblin Token#1.Token = true
 Bot1.Battlefield.Count = 7
 Bot1.Graveyard = Frontline Rush; Black Lotus

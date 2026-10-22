@@ -34,7 +34,7 @@ Bot1.Battlefield.Drake Hatcher.Activate(Ability: Create a 2/2)
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Battlefield.Drake Hatcher.Counters.Incubation = 2
-? Bot1.Battlefield.Drake.Power = 2
+? Bot1.Battlefield.Drake Token.Power = 2
 [T5 Bot1.Main1]
 Bot1.Attack(Drake Hatcher)
 [T5 Bot1.Main2]
@@ -45,5 +45,5 @@ Bot2.Pass
 
 [Expect]
 Bot2.Life = 14
-Bot1.Battlefield = Drake; Drake; Drake Hatcher; Island; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Battlefield = Drake Token; Drake Token; Drake Hatcher; Island; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
 Bot1.Battlefield.Drake Hatcher.Counters.Incubation = (absent)

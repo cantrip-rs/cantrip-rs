@@ -36,14 +36,14 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Combat.Attackers = Hero of Bladehold > Bot2; Soldier > Bot2; Soldier > Bot2
-? Bot1.Battlefield.Soldier#1.Tapped = true
-? Bot1.Battlefield.Soldier#1.Power = 2
-? Bot1.Battlefield.Soldier#1.Toughness = 1
-? Bot1.Battlefield.Soldier#2.Power = 2
+? Combat.Attackers = Hero of Bladehold > Bot2; Soldier Token > Bot2; Soldier Token > Bot2
+? Bot1.Battlefield.Soldier Token#1.Tapped = true
+? Bot1.Battlefield.Soldier Token#1.Power = 2
+? Bot1.Battlefield.Soldier Token#1.Toughness = 1
+? Bot1.Battlefield.Soldier Token#2.Power = 2
 ? Bot1.Battlefield.Hero of Bladehold.Power = 3
 [T9 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 13
-Bot1.Battlefield = Hero of Bladehold; Plains; Plains; Plains; Plains; Soldier; Soldier
+Bot1.Battlefield = Hero of Bladehold; Plains; Plains; Plains; Plains; Soldier Token; Soldier Token

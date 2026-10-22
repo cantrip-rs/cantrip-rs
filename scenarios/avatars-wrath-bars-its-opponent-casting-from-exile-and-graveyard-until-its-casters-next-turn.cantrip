@@ -82,5 +82,5 @@ Bot2.Graveyard.Lingering Souls.Cast(Ability: Flashback)
 Turn = 10
 Exile = Avatar's Wrath; Lingering Souls
 Bot1.Battlefield = Plains; Plains; Plains; Plains; Sol Ring; Giver of Runes
-Bot2.Battlefield = Island; Island; Plains; Swamp; Ornithopter; Snapcaster Mage; Spirit; Spirit
+Bot2.Battlefield = Island; Island; Plains; Swamp; Ornithopter; Snapcaster Mage; Spirit Token; Spirit Token
 Bot2.Graveyard.Count = 0

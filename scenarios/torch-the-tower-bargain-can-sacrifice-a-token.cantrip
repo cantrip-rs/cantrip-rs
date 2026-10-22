@@ -36,7 +36,7 @@ Bot1.Hand.Mountain.Play
 Bot1.Hand.Torch the Tower.Cast(Bot2.Battlefield.Keen-Eyed Curator)
 Bot1.Modes(Bargain:)
 Bot1.Battlefield.Mox Ruby.Activate
-Bot1.Choose(Ninja Turtle Spirit)
+Bot1.Choose(Ninja Turtle Spirit Token)
 Bot1.Arrange(Mountain | )
 [T3 Bot1.Main2]
 

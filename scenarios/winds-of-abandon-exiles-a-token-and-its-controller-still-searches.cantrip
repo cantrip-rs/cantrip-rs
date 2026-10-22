@@ -34,7 +34,7 @@ Bot1.Hand.Plains.Play
 Bot1.Hand.Mox Jet.Cast
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Mox Jet.Activate
-Bot1.Hand.Winds of Abandon.Cast(Bot2.Battlefield.Drone)
+Bot1.Hand.Winds of Abandon.Cast(Bot2.Battlefield.Drone Token)
 Bot2.Search(Forest)
 [T3 Bot1.Main2]
 

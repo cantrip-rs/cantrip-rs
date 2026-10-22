@@ -36,7 +36,7 @@ Bot2.Pass
 ? Client.Bot1.Prompt.Detail = Choose what it attacks as it enters attacking: a player, a planeswalker or a battle.  ·  2 possible choices
 Bot1.Target(Bot2.Battlefield.Liliana of the Veil)
 Bot1.Target(Bot2)
-? Combat.Attackers = Voice of Victory > Bot2; Warrior > Liliana of the Veil; Warrior > Bot2
+? Combat.Attackers = Voice of Victory > Bot2; Warrior Token > Liliana of the Veil; Warrior Token > Bot2
 ? Client.Bot1.Combat = Attacking Bot2: Voice of Victory, Warrior; Attacking Liliana of the Veil: Warrior
 [T3 Bot1.Main2]
 

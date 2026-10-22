@@ -42,12 +42,12 @@ Bot1.Pass
 Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Hand.Mox Emerald.Cast
-Bot1.Target(Spirit)
+Bot1.Target(Spirit Token)
 Bot1.Pass
 Bot1.Pass
 
 [Expect]
 Turn = 3
 Stack.Count = 0
-Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Jet; Mox Sapphire; Mox Emerald; Displacer Kitten; Spirit
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Jet; Mox Sapphire; Mox Emerald; Displacer Kitten; Spirit Token
 Exile.Count = 0

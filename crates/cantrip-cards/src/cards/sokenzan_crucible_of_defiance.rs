@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// The 1/1 colorless Spirit creature token this card makes (CR 111.1): no abilities of its own.
 static SPIRIT: CardDef = CardDef {
-    name: "Spirit",
+    name: "Spirit Token",
+    token_name: Some(&[Subtype::Spirit]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Spirit]),

@@ -1,0 +1,44 @@
+# Compound unnamed-token names gain "Token" and follow changes to the creating text (CR 111.4, 612.2a).
+# Artificial Evolution changes Gnome to Tentacle while Thousand Moons Smithy is a spell. The permanent keeps that text
+# change (CR 400.7a), so its enters trigger must create a Tentacle Soldier Token, not a Gnome Soldier. Its subtypes and
+# other characteristics are asserted separately; no new card or card-level naming workaround is involved.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Thousand Moons Smithy
+Mox Sapphire
+Artificial Evolution
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Plains x27
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Thousand Moons Smithy.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Stack.Thousand Moons Smithy)
+Bot1.Modes(Gnome)
+Bot1.Modes(Tentacle)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Step = Main2
+Stack.Count = 0
+Bot1.Battlefield = Plains; Mox Sapphire; Thousand Moons Smithy; Tentacle Soldier Token
+Bot1.Battlefield.Tentacle Soldier Token.Token = true
+Bot1.Battlefield.Tentacle Soldier Token.Types = Artifact; Creature
+Bot1.Battlefield.Tentacle Soldier Token.Subtypes = Soldier; Tentacle
+Bot1.Battlefield.Tentacle Soldier Token.Colors = White
+Bot1.Battlefield.Tentacle Soldier Token.Power = 3
+Bot1.Battlefield.Tentacle Soldier Token.Toughness = 3

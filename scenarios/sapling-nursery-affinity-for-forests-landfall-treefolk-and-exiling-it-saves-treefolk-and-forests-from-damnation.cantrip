@@ -61,10 +61,10 @@ Bot2.Pass
 Bot1.Hand.Forest.Play
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Treefolk.Power = 3
-? Bot1.Battlefield.Treefolk.Toughness = 4
-? Bot1.Battlefield.Treefolk.Keywords = Reach
-? Bot1.Battlefield.Treefolk.Colors = Green
+? Bot1.Battlefield.Treefolk Token.Power = 3
+? Bot1.Battlefield.Treefolk Token.Toughness = 4
+? Bot1.Battlefield.Treefolk Token.Keywords = Reach
+? Bot1.Battlefield.Treefolk Token.Colors = Green
 [T8 Bot2.Main1]
 Bot2.Battlefield.Mox Jet#1.Activate
 Bot2.Battlefield.Mox Jet#2.Activate
@@ -82,7 +82,7 @@ Bot2.Pass
 
 [Expect]
 Exile = Sapling Nursery
-Bot1.Battlefield.Treefolk.Keywords = Indestructible; Reach
+Bot1.Battlefield.Treefolk Token.Keywords = Indestructible; Reach
 Bot1.Battlefield.Forest#1.Keywords = Indestructible
 Bot1.Battlefield.Island.Keywords = (absent)
 Bot2.Battlefield.Forest#1.Keywords = (absent)

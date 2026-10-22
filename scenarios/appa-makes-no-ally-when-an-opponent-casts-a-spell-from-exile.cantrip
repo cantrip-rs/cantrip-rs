@@ -60,6 +60,6 @@ Bot2.Exile.Giver of Runes.Cast
 [Expect]
 Turn = 10
 Bot1.Battlefield = Plains; Plains; Plains; Plains; Appa, Steadfast Guardian
-Bot2.Battlefield = Plains; Plains; Plains; Plains; Plains; Appa, Steadfast Guardian; Giver of Runes; Ally
+Bot2.Battlefield = Plains; Plains; Plains; Plains; Plains; Appa, Steadfast Guardian; Giver of Runes; Ally Token
 Exile.Count = 0
 Stack.Count = 0

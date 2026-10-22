@@ -34,13 +34,13 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.The Eagles Are Coming!.Cast(Kicked: 1)
-Bot1.Target(Spirit#1; Spirit#2; Ornithopter)
+Bot1.Target(Spirit Token#1; Spirit Token#2; Ornithopter)
 [T3 Bot1.End]
 ? Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Mox Ruby
 ? Bot1.Hand = Ornithopter
 [T4 Bot2.Main1]
 
 [Expect]
-Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Mox Ruby; Bird Soldier; Bird Soldier; Bird Soldier
+Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Mox Ruby; Bird Soldier Token; Bird Soldier Token; Bird Soldier Token
 Bot1.Hand = Ornithopter
 Exile.Count = 0

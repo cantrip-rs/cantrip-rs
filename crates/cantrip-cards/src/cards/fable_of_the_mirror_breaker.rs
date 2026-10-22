@@ -7,7 +7,8 @@ use cantrip_oracle as oracle;
 
 /// The 2/2 red Goblin Shaman token chapter I makes.
 pub static GOBLIN_SHAMAN: CardDef = CardDef {
-    name: "Goblin Shaman",
+    name: "Goblin Shaman Token",
+    token_name: Some(&[Subtype::Goblin, Subtype::Shaman]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Red)),
     types: TypeSet::of(&[CardType::Creature]),

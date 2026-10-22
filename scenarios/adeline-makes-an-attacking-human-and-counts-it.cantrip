@@ -29,12 +29,12 @@ Bot1.Hand.Adeline, Resplendent Cathar.Cast
 Bot1.Attack(Adeline, Resplendent Cathar > Bot2)
 Bot1.Pass
 Bot2.Pass
-? Combat.Attackers = Adeline, Resplendent Cathar > Bot2; Human > Bot2
-? Bot1.Battlefield.Human.Tapped = True
+? Combat.Attackers = Adeline, Resplendent Cathar > Bot2; Human Token > Bot2
+? Bot1.Battlefield.Human Token.Tapped = True
 ? Bot1.Battlefield.Adeline, Resplendent Cathar.Power = 2
 ? Bot1.Battlefield.Adeline, Resplendent Cathar.Tapped = False
 [T7 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 17
-Bot1.Battlefield = Plains; Plains; Plains; Adeline, Resplendent Cathar; Human
+Bot1.Battlefield = Plains; Plains; Plains; Adeline, Resplendent Cathar; Human Token

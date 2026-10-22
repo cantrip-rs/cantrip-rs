@@ -21,10 +21,10 @@ Bot1.Hand.Astrologian's Planisphere.Cast
 
 [Expect]
 Turn = 3
-Bot1.Battlefield = Island; Island; Astrologian's Planisphere; Hero
-Bot1.Battlefield.Astrologian's Planisphere.AttachedTo = Hero
-Bot1.Battlefield.Hero.Power = 1
-Bot1.Battlefield.Hero.Toughness = 1
-Bot1.Battlefield.Hero.Types = Creature
-Bot1.Battlefield.Hero.Subtypes = Hero; Wizard
+Bot1.Battlefield = Island; Island; Astrologian's Planisphere; Hero Token
+Bot1.Battlefield.Astrologian's Planisphere.AttachedTo = Hero Token
+Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Battlefield.Hero Token.Toughness = 1
+Bot1.Battlefield.Hero Token.Types = Creature
+Bot1.Battlefield.Hero Token.Subtypes = Hero; Wizard
 Stack.Count = 0

@@ -5,7 +5,8 @@ use cantrip_oracle as oracle;
 
 /// The 3/1 red Dinosaur creature token it makes.
 pub static DINOSAUR: CardDef = CardDef {
-    name: "Dinosaur",
+    name: "Dinosaur Token",
+    token_name: Some(&[Subtype::Dinosaur]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Red)),
     types: TypeSet::of(&[CardType::Creature]),

@@ -45,4 +45,4 @@ Bot2.Hand.Mox Emerald.Cast
 Bot1.EnduringStory = (absent)
 Bot2.EnduringStory = true
 Bot2.Battlefield.Fíli the Pathfinder.Power = 3
-Bot2.Battlefield.Dwarf.Power = 3
+Bot2.Battlefield.Dwarf Token.Power = 3

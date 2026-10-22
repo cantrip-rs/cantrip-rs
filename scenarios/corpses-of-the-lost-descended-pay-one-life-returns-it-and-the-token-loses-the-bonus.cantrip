@@ -40,5 +40,5 @@ Bot1.Life = 19
 Bot1.Hand = Corpses of the Lost; Plains
 Bot1.Graveyard = Faithless Looting; Plains; Ornithopter
 Bot1.Battlefield.Count = 5
-Bot1.Battlefield.Skeleton Pirate.Power = 2
-Bot1.Battlefield.Skeleton Pirate.Keywords = (absent)
+Bot1.Battlefield.Skeleton Pirate Token.Power = 2
+Bot1.Battlefield.Skeleton Pirate Token.Keywords = (absent)

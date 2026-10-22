@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// The 0/1 colorless Eldrazi Spawn creature token with "Sacrifice this token: Add {C}."
 pub static ELDRAZI_SPAWN: CardDef = CardDef {
-    name: "Eldrazi Spawn",
+    name: "Eldrazi Spawn Token",
+    token_name: Some(&[Subtype::Eldrazi, Subtype::Spawn]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Eldrazi, Subtype::Spawn]),

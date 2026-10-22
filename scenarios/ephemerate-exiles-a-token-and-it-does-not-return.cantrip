@@ -21,7 +21,7 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Ajani, Nacatl Pariah.Cast
 Bot1.Battlefield.Mox Pearl#2.Activate
-Bot1.Hand.Ephemerate.Cast(Cat Warrior)
+Bot1.Hand.Ephemerate.Cast(Cat Warrior Token)
 [Bot1.Main2]
 
 [Expect]

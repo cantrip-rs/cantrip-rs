@@ -40,6 +40,6 @@ Bot1.Search()
 [T4 Bot2.Main1]
 
 [Expect]
-Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Emerald; Mox Sapphire; Elegy Acolyte; Biotech Specialist; Robot
-Bot1.Battlefield.Robot.Token = true
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Emerald; Mox Sapphire; Elegy Acolyte; Biotech Specialist; Robot Token
+Bot1.Battlefield.Robot Token.Token = true
 Bot2.Life = 18

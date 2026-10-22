@@ -45,10 +45,10 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Hand.Shatterskull Smashing.Cast(X: 5)
-Bot1.Divide(Bot2.Battlefield.Soldier#1: 1; Bot2.Battlefield.Elspeth, Storm Slayer: 4)
+Bot1.Divide(Bot2.Battlefield.Soldier Token#1: 1; Bot2.Battlefield.Elspeth, Storm Slayer: 4)
 [T3 Bot1.Main2]
 
 [Expect]
 Bot2.Battlefield.Elspeth, Storm Slayer.Counters.Loyalty = 2
-Bot2.Battlefield.Soldier.Toughness = 1
+Bot2.Battlefield.Soldier Token.Toughness = 1
 Bot1.Graveyard.Count = 2

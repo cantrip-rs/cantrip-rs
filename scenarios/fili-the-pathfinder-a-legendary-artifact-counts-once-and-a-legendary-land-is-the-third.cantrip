@@ -39,4 +39,4 @@ Bot1.Hand.Boseiju, Who Endures.Play
 [Expect]
 Bot1.EnduringStory = true
 Bot1.Battlefield.Fíli the Pathfinder.Power = 3
-Bot1.Battlefield.Dwarf.Power = 3
+Bot1.Battlefield.Dwarf Token.Power = 3

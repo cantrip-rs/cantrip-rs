@@ -1,0 +1,54 @@
+# Dreadhorde Invasion: "a Zombie token you control" - Bot1's enchantment leaves a Zombie token someone else controls
+# alone. Bot2 takes Bot1's 2/2 Army with Act of Treason (which untaps it and gives it haste), two Giant Growths make it an
+# 8/8, and its attack takes 8 life from Bot1 while Bot1 gains none: the token is no Zombie token of Bot1's any more.
+
+[Bot1 Deck]
+Swamp
+Dreadhorde Invasion
+Mox Jet
+Island x17
+
+[Bot2 Deck]
+Mountain
+Mountain
+Act of Treason
+Forest
+Mox Ruby
+Mox Emerald
+Giant Growth
+Giant Growth
+Mountain x12
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dreadhorde Invasion.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Zombie Army Token)
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Zombie Army Token)
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Zombie Army Token)
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Zombie Army Token > Bot1)
+[T6 Bot2.End]
+
+[Expect]
+Turn = 6
+Stack.Count = 0
+Bot1.Life = 10
+Bot2.Life = 20
+Bot2.Battlefield.Zombie Army Token.Power = 8
+Bot2.Battlefield.Zombie Army Token.Keywords = Haste

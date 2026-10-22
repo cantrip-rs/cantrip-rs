@@ -46,11 +46,11 @@ Bot2.Pass
 Bot1.Attack(Ornithopter > Bot2)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Warrior#1.Colors = Blue
-? Bot1.Battlefield.Warrior#2.Colors = Blue
-? Bot1.Battlefield.Warrior#1.Subtypes = Warrior
+? Bot1.Battlefield.Warrior Token#1.Colors = Blue
+? Bot1.Battlefield.Warrior Token#2.Colors = Blue
+? Bot1.Battlefield.Warrior Token#1.Subtypes = Warrior
 [T3 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 18
-Bot1.Battlefield.Warrior#2.Colors = Blue
+Bot1.Battlefield.Warrior Token#2.Colors = Blue

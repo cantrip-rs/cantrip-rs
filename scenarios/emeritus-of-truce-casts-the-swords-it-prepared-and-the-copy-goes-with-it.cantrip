@@ -36,6 +36,6 @@ Bot1.Exile.Swords to Plowshares.Cast(Bot1.Battlefield.Emeritus of Truce)
 
 [Expect]
 Bot1.Life = 23
-Bot1.Battlefield = Plains; Plains; Plains; Plains; Inkling
+Bot1.Battlefield = Plains; Plains; Plains; Plains; Inkling Token
 Exile = Emeritus of Truce
 Bot1.Graveyard.Count = 0

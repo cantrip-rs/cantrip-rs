@@ -26,5 +26,5 @@ Bot1.Target(Ornithopter)
 [T3 Bot1.Main1]
 
 [Expect]
-Bot1.Battlefield = Plains; Mox Pearl; Bird Soldier
+Bot1.Battlefield = Plains; Mox Pearl; Bird Soldier Token
 Bot2.Battlefield = Island

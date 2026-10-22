@@ -75,7 +75,7 @@ Bot2.Hand.Counterspell.Cast(Lightning Bolt)
 
 [Expect]
 Turn = 5
-Bot1.Battlefield = Island; Mox Sapphire; Mox Ruby; Stormchaser's Talent; Ornithopter; Otter; Otter; Otter
+Bot1.Battlefield = Island; Mox Sapphire; Mox Ruby; Stormchaser's Talent; Ornithopter; Otter Token; Otter Token; Otter Token
 Bot1.Life = 17
 Bot2.Life = 20
 Bot2.Graveyard = Counterspell; Lightning Bolt

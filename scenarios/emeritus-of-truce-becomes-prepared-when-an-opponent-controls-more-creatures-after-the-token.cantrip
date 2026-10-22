@@ -30,5 +30,5 @@ Bot1.Target(Bot1)
 ? Exile = Swords to Plowshares
 
 [Expect]
-Bot1.Battlefield = Plains; Plains; Plains; Emeritus of Truce; Inkling
+Bot1.Battlefield = Plains; Plains; Plains; Emeritus of Truce; Inkling Token
 Bot2.Battlefield.Count = 3

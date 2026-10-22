@@ -1,0 +1,52 @@
+# Grand Crescendo: X = 0 makes no tokens at all, but the indestructible it grants is still there and lasts only until the
+# end of the turn it was cast (CR 514.2). Bot1 casts it with X = 0 and then Wrath of God in the same turn: the
+# indestructible Ornithopter survives that one. On turn 5, one Wrath of God later, it is destroyed like anything else.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Wrath of God
+Plains
+Grand Crescendo
+Wrath of God
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Grand Crescendo.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Indestructible
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Pearl; Mox Sapphire; Ornithopter; Plains
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wrath of God.Cast
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Plains; Plains
+Bot1.Battlefield.Count = 4
+Bot1.Graveyard = Wrath of God; Ornithopter; Wrath of God; Grand Crescendo; Black Lotus

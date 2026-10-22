@@ -26,6 +26,6 @@ Bot1.Choose(Ornithopter; Ornithopter)
 [T3 Bot1.Upkeep]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mox Ruby; Seasoned Pyromancer; Elemental; Elemental
+Bot1.Battlefield = Mountain; Mox Ruby; Seasoned Pyromancer; Elemental Token; Elemental Token
 Bot1.Hand.Count = 3
 Bot1.Graveyard.Count = 3

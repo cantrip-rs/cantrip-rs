@@ -40,9 +40,9 @@ Bot1.Pass
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Golem.Power = 4
-Bot1.Battlefield.Golem.Keywords = Trample
-Bot2.Battlefield.Golem.Power = 3
-Bot2.Battlefield.Golem.Keywords = (absent)
+Bot1.Battlefield.Golem Token.Power = 4
+Bot1.Battlefield.Golem Token.Keywords = Trample
+Bot2.Battlefield.Golem Token.Power = 3
+Bot2.Battlefield.Golem Token.Keywords = (absent)
 Bot1.Battlefield.Sandstorm Salvager.Power = 1
 Bot2.Battlefield.Sandstorm Salvager.Power = 1

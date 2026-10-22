@@ -28,7 +28,7 @@ Bot1.Battlefield.Island.Activate
 Bot1.Hand.Protege's Awakening.Cast
 
 [Expect]
-Bot1.Battlefield.Jace.Token = true
-Bot1.Battlefield.Jace.Counters.Loyalty = 6
+Bot1.Battlefield.Jace Token.Token = true
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 6
 Bot1.Graveyard = Protege's Awakening
 Bot1.Hand = Island; Island; Island; Ornithopter

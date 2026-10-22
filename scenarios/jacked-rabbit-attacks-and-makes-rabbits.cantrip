@@ -22,7 +22,7 @@ Bot1.Hand.Jacked Rabbit.Cast(X: 1)
 Bot1.Attack(Jacked Rabbit)
 
 [Expect]
-Bot1.Battlefield = Plains; Plains; Plains; Jacked Rabbit; Rabbit; Rabbit
+Bot1.Battlefield = Plains; Plains; Plains; Jacked Rabbit; Rabbit Token; Rabbit Token
 Bot1.Battlefield.Jacked Rabbit.Power = 2
 Bot1.Battlefield.Jacked Rabbit.Toughness = 3
 Step = Attackers

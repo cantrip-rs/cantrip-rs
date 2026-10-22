@@ -9,7 +9,8 @@ use crate::{tokens, triggers};
 
 /// The 1/1 colorless Hero creature token job select makes.
 pub static HERO: CardDef = CardDef {
-    name: "Hero",
+    name: "Hero Token",
+    token_name: Some(&[Subtype::Hero]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Hero]),

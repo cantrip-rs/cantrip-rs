@@ -50,4 +50,4 @@ Bot1.Pass
 [Expect]
 Bot1.Battlefield.Monastery Mentor.Power = 2
 Bot1.Battlefield.Monastery Mentor.Toughness = 2
-Bot1.Battlefield.Monk.Power = 1
+Bot1.Battlefield.Monk Token.Power = 1

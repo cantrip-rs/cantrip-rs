@@ -39,7 +39,7 @@ Bot2.Battlefield.Forest#3.Activate
 Bot2.Hand.Pest Infestation.Cast(X: 1)
 [T7 Bot1.Main1]
 Bot1.Battlefield.Mountain.Activate
-Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Pest)
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Pest Token)
 Bot1.Pass
 Bot2.Pass
 Bot1.Pass
@@ -55,7 +55,7 @@ Bot2.Pass
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Mountain#2.Activate
-Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Pest)
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Pest Token)
 Bot1.Pass
 Bot2.Pass
 [T7 Bot1.Main2]

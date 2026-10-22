@@ -28,7 +28,7 @@ Bot1.Battlefield.Grist, the Hunger Tide.Activate(Ability: +1)
 
 [Expect]
 Bot1.Battlefield.Grist, the Hunger Tide.Counters.Loyalty = 4
-Bot1.Battlefield.Insect.Types = Creature
-Bot1.Battlefield.Insect.Power = 1
-Bot1.Battlefield.Insect.Toughness = 1
+Bot1.Battlefield.Insect Token.Types = Creature
+Bot1.Battlefield.Insect Token.Power = 1
+Bot1.Battlefield.Insect Token.Toughness = 1
 Bot1.Graveyard = Llanowar Elves

@@ -31,9 +31,9 @@ Bot2.Pass
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Faerie; Faerie
-Bot1.Battlefield.Faerie#1.Tapped = false
-Bot1.Battlefield.Faerie#2.Tapped = false
+Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Faerie Token; Faerie Token
+Bot1.Battlefield.Faerie Token#1.Tapped = false
+Bot1.Battlefield.Faerie Token#2.Tapped = false
 Bot2.Battlefield = Mox Jet
 Bot2.Battlefield.Mox Jet.Tapped = false
 Bot1.Graveyard = Faebloom Trick

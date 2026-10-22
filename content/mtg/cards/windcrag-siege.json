@@ -1,0 +1,6 @@
+{
+  "name": "Windcrag Siege",
+  "manaCost": "{1}{R}{W}",
+  "type": "Enchantment",
+  "oracleText": "As this enchantment enters, choose Mardu or Jeskai.\n• Mardu — If a creature attacking causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.\n• Jeskai — At the beginning of your upkeep, create a 1/1 red Goblin creature token. It gains lifelink and haste until end of turn."
+}

@@ -38,9 +38,9 @@ Bot1.Pass
 ? Bot1.Mana =
 
 [Expect]
-Bot1.Battlefield.Dwarf.Token = true
-Bot1.Battlefield.Dwarf.Power = 2
-Bot1.Battlefield.Dwarf.Toughness = 2
-Bot1.Battlefield.Dwarf.Colors = Red
-Bot1.Battlefield.Dwarf.Subtypes = Dwarf
+Bot1.Battlefield.Dwarf Token.Token = true
+Bot1.Battlefield.Dwarf Token.Power = 2
+Bot1.Battlefield.Dwarf Token.Toughness = 2
+Bot1.Battlefield.Dwarf Token.Colors = Red
+Bot1.Battlefield.Dwarf Token.Subtypes = Dwarf
 Bot1.Battlefield.The Lonely Mountain.Tapped = true

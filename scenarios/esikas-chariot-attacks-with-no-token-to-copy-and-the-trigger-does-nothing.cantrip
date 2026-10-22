@@ -37,9 +37,9 @@ Bot1.Hand.Esika's Chariot.Cast
 Bot2.Hand.Mox Ruby.Cast
 Bot2.Hand.Mox Ruby.Cast
 Bot2.Battlefield.Mox Ruby#1.Activate
-Bot2.Hand.Lightning Bolt.Cast(Cat)
+Bot2.Hand.Lightning Bolt.Cast(Cat Token)
 Bot2.Battlefield.Mox Ruby#2.Activate
-Bot2.Hand.Lightning Bolt.Cast(Cat)
+Bot2.Hand.Lightning Bolt.Cast(Cat Token)
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate

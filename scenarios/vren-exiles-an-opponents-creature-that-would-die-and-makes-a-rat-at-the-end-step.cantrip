@@ -46,7 +46,7 @@ Bot2.Pass
 [T3 Bot1.End]
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Rat.Power = 2
+? Bot1.Battlefield.Rat Token.Power = 2
 [T4 Bot2.End]
 Bot2.Pass
 Bot1.Pass
@@ -55,8 +55,8 @@ Bot1.Pass
 Exile = Llanowar Elves
 Bot2.Graveyard.Count = 0
 Bot1.Battlefield.Count = 5
-Bot1.Battlefield.Rat.Power = 2
-Bot1.Battlefield.Rat.Toughness = 2
-Bot1.Battlefield.Rat.Token = true
+Bot1.Battlefield.Rat Token.Power = 2
+Bot1.Battlefield.Rat Token.Toughness = 2
+Bot1.Battlefield.Rat Token.Token = true
 Bot1.Battlefield.Vren, the Relentless.Power = 3
 Bot1.Battlefield.Vren, the Relentless.Toughness = 4

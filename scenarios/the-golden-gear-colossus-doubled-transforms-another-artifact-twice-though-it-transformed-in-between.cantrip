@@ -63,4 +63,4 @@ Bot2.Pass
 
 [Expect]
 Stack.Count = 0
-Bot1.Battlefield = Mountain; Mox Jet; Panharmonicon; Dire Flail; The Golden-Gear Colossus; Gnome; Gnome; Gnome; Gnome
+Bot1.Battlefield = Mountain; Mox Jet; Panharmonicon; Dire Flail; The Golden-Gear Colossus; Gnome Token; Gnome Token; Gnome Token; Gnome Token

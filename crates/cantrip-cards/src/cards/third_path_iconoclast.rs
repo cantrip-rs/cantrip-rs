@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// The 1/1 colorless Soldier artifact creature token it makes.
 pub static SOLDIER: CardDef = CardDef {
-    name: "Soldier",
+    name: "Soldier Token",
+    token_name: Some(&[Subtype::Soldier]),
     has_cost: false,
     colors: Some(ColorSet::NONE),
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),

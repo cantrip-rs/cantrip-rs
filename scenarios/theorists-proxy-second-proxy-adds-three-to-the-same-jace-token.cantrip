@@ -22,7 +22,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 3
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 3
 Bot1.Hand.Theorist's Proxy.Cast
 Bot1.Pass
 Bot2.Pass
@@ -31,5 +31,5 @@ Bot2.Pass
 
 [Expect]
 Stack.Count = 0
-Bot1.Battlefield = Jace; Mox Sapphire; Theorist's Proxy; Theorist's Proxy
-Bot1.Battlefield.Jace.Counters.Loyalty = 6
+Bot1.Battlefield = Jace Token; Mox Sapphire; Theorist's Proxy; Theorist's Proxy
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 6

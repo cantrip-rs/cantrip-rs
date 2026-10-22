@@ -1,0 +1,70 @@
+# Ob Nixilis, the Ascended: "destroy all tapped creatures your opponents control. You gain 1 life for each creature destroyed
+# this way." Bot2 tapped two of its three Llanowar Elves for mana and keeps the third untapped: the two tapped ones die and
+# Bot1 gains 2 life (20 to 22), the untapped one stays. Bot1's own tapped Llanowar Elves stays too - it is not an opponent's
+# - and so do the tapped Moxen, which are no creatures. Ob Nixilis has flying.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ob Nixilis, the Ascended
+Forest
+Llanowar Elves
+Island x12
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Llanowar Elves
+Llanowar Elves
+Llanowar Elves
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves#1.Activate
+Bot2.Battlefield.Llanowar Elves#2.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ob Nixilis, the Ascended.Cast
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot1.Life = 22
+Bot1.Battlefield = Forest; Llanowar Elves; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ob Nixilis, the Ascended
+Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Ob Nixilis, the Ascended.Keywords = Flying
+Bot1.Graveyard = Black Lotus
+Bot2.Life = 20
+Bot2.Battlefield = Forest; Llanowar Elves; Mox Emerald; Mox Emerald
+Bot2.Battlefield.Llanowar Elves.Tapped = false
+Bot2.Graveyard = Llanowar Elves; Llanowar Elves

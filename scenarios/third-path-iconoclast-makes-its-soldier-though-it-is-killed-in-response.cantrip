@@ -30,5 +30,5 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Third Path Iconoclast)
 
 [Expect]
 Bot1.Graveyard = Lightning Bolt; Third Path Iconoclast
-Bot1.Battlefield.Soldier.Types = Artifact; Creature
+Bot1.Battlefield.Soldier Token.Types = Artifact; Creature
 Bot2.Life = 17

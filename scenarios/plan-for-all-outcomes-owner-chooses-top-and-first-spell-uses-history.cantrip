@@ -32,5 +32,5 @@ Bot1.Hand.Brainstorm.Cast
 [Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 1
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 1
 Bot1.Battlefield.Count = 3

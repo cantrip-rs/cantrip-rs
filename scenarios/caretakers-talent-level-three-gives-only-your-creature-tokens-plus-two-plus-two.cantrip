@@ -51,10 +51,10 @@ Bot1.Hand.Lingering Souls.Cast
 [Bot1.Main2]
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Caretaker's Talent.Activate(Ability: Level 2)
-Bot1.Target(Bot1.Battlefield.Spirit)
+Bot1.Target(Bot1.Battlefield.Spirit Token)
 [T5 Bot1.Main1]
-? Bot1.Battlefield.Spirit#1.Power = 1
-? Bot1.Battlefield.Spirit#3.Toughness = 1
+? Bot1.Battlefield.Spirit Token#1.Power = 1
+? Bot1.Battlefield.Spirit Token#3.Toughness = 1
 Bot1.Hand.Plains.Play
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Plains.Activate
@@ -72,18 +72,18 @@ Stack.Count = 0
 Bot1.Battlefield.Caretaker's Talent.ClassLevel = 3
 Bot1.Battlefield.Ornithopter.Power = 0
 Bot1.Battlefield.Ornithopter.Toughness = 2
-Bot1.Battlefield.Spirit#1.Power = 3
-Bot1.Battlefield.Spirit#1.Toughness = 3
-Bot1.Battlefield.Spirit#2.Power = 3
-Bot1.Battlefield.Spirit#2.Toughness = 3
-Bot1.Battlefield.Spirit#3.Power = 3
-Bot1.Battlefield.Spirit#3.Toughness = 3
-Bot1.Battlefield.Spirit#4.Power = 3
-Bot1.Battlefield.Spirit#4.Toughness = 3
-Bot1.Battlefield.Spirit#5.Power = 3
-Bot1.Battlefield.Spirit#5.Toughness = 3
-Bot2.Battlefield.Spirit#1.Power = 1
-Bot2.Battlefield.Spirit#1.Toughness = 1
-Bot2.Battlefield.Spirit#2.Power = 1
-Bot2.Battlefield.Spirit#2.Toughness = 1
-Bot1.Battlefield = Caretaker's Talent; Plains; Plains; Plains; Mox Pearl; Mox Jet; Mox Ruby; Ornithopter; Spirit; Spirit; Spirit; Spirit; Spirit
+Bot1.Battlefield.Spirit Token#1.Power = 3
+Bot1.Battlefield.Spirit Token#1.Toughness = 3
+Bot1.Battlefield.Spirit Token#2.Power = 3
+Bot1.Battlefield.Spirit Token#2.Toughness = 3
+Bot1.Battlefield.Spirit Token#3.Power = 3
+Bot1.Battlefield.Spirit Token#3.Toughness = 3
+Bot1.Battlefield.Spirit Token#4.Power = 3
+Bot1.Battlefield.Spirit Token#4.Toughness = 3
+Bot1.Battlefield.Spirit Token#5.Power = 3
+Bot1.Battlefield.Spirit Token#5.Toughness = 3
+Bot2.Battlefield.Spirit Token#1.Power = 1
+Bot2.Battlefield.Spirit Token#1.Toughness = 1
+Bot2.Battlefield.Spirit Token#2.Power = 1
+Bot2.Battlefield.Spirit Token#2.Toughness = 1
+Bot1.Battlefield = Caretaker's Talent; Plains; Plains; Plains; Mox Pearl; Mox Jet; Mox Ruby; Ornithopter; Spirit Token; Spirit Token; Spirit Token; Spirit Token; Spirit Token

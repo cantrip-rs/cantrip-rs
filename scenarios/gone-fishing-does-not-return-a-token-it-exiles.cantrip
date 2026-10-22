@@ -38,13 +38,13 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lake-town Mariners.Cast(Ability: Adventure)
-Bot1.Target(Spirit#1; Ornithopter)
+Bot1.Target(Spirit Token#1; Ornithopter)
 Bot1.Pass
 Bot2.Pass
 
 [Expect]
 Turn = 3
 Stack.Count = 0
-Bot1.Battlefield.Spirit.Types = Creature
+Bot1.Battlefield.Spirit Token.Types = Creature
 Bot1.Battlefield.Ornithopter.SummoningSick = true
 Exile = Lake-town Mariners

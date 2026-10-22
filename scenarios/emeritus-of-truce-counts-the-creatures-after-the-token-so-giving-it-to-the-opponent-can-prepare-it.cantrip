@@ -30,8 +30,8 @@ Bot1.Target(Bot2)
 [Expect]
 Bot1.Battlefield = Plains; Plains; Plains; Emeritus of Truce
 Bot2.Battlefield.Count = 2
-Bot2.Battlefield.Inkling.Keywords = Flying
-Bot2.Battlefield.Inkling.Power = 1
-Bot2.Battlefield.Inkling.Toughness = 1
-Bot2.Battlefield.Inkling.Types = Creature
-Bot2.Battlefield.Inkling.Subtypes = Inkling
+Bot2.Battlefield.Inkling Token.Keywords = Flying
+Bot2.Battlefield.Inkling Token.Power = 1
+Bot2.Battlefield.Inkling Token.Toughness = 1
+Bot2.Battlefield.Inkling Token.Types = Creature
+Bot2.Battlefield.Inkling Token.Subtypes = Inkling

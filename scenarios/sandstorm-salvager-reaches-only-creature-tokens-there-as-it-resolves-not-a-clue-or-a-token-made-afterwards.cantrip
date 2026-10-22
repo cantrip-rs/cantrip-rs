@@ -40,13 +40,13 @@ Bot1.Battlefield.Forest#3.Activate
 Bot1.Battlefield.Forest#4.Activate
 
 [Expect]
-Bot1.Battlefield.Golem#1.Counters.PlusOnePlusOne = 2
-Bot1.Battlefield.Golem#1.Power = 5
-Bot1.Battlefield.Golem#1.Toughness = 5
-Bot1.Battlefield.Golem#1.Keywords = Trample
-Bot1.Battlefield.Golem#2.Counters.PlusOnePlusOne = (absent)
-Bot1.Battlefield.Golem#2.Power = 3
-Bot1.Battlefield.Golem#2.Keywords = (absent)
+Bot1.Battlefield.Golem Token#1.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Golem Token#1.Power = 5
+Bot1.Battlefield.Golem Token#1.Toughness = 5
+Bot1.Battlefield.Golem Token#1.Keywords = Trample
+Bot1.Battlefield.Golem Token#2.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Golem Token#2.Power = 3
+Bot1.Battlefield.Golem Token#2.Keywords = (absent)
 Bot1.Battlefield.Clue Token.Counters.PlusOnePlusOne = (absent)
 Bot1.Battlefield.Clue Token.Keywords = (absent)
 Bot1.Battlefield.Thraben Inspector.Counters.PlusOnePlusOne = (absent)

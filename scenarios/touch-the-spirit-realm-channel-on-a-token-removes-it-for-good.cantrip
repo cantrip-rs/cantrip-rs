@@ -29,7 +29,7 @@ Bot2.Battlefield.Forest#3.Activate
 Bot2.Hand.Pest Infestation.Cast(X: 1)
 [T7 Bot1.Main1]
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
-Bot1.Hand.Touch the Spirit Realm.Activate(Bot2.Battlefield.Pest#1)
+Bot1.Hand.Touch the Spirit Realm.Activate(Bot2.Battlefield.Pest Token#1)
 [T7 Bot1.Main2]
 ? Bot2.Battlefield.Count = 4
 [T8 Bot2.Main1]

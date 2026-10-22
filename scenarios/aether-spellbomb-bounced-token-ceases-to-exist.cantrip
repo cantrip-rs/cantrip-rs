@@ -30,14 +30,14 @@ Bot2.Battlefield.Plains#3.Activate
 Bot2.Hand.Lingering Souls.Cast
 [T7 Bot1.Main1]
 Bot1.Hand.Island.Play
-Bot1.Battlefield.Aether Spellbomb.Activate(Bot2.Battlefield.Spirit; Ability: Return target creature)
+Bot1.Battlefield.Aether Spellbomb.Activate(Bot2.Battlefield.Spirit Token; Ability: Return target creature)
 Bot1.Battlefield.Island.Activate
 [Bot1.Main2]
 
 [Expect]
 Turn = 7
 Bot1.Graveyard = Aether Spellbomb
-Bot2.Battlefield.Spirit.Types = Creature
+Bot2.Battlefield.Spirit Token.Types = Creature
 Bot2.Hand.Count = 6
 Bot2.Battlefield.Count = 4
 Bot2.Graveyard = Lingering Souls

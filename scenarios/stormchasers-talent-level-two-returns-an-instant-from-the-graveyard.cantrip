@@ -25,7 +25,7 @@ Bot1.Pass
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 [T3 Bot1.Main1]
-? Bot1.Battlefield.Otter.Power = 1
+? Bot1.Battlefield.Otter Token.Power = 1
 Bot1.Hand.Island.Play
 ! Bot1.Battlefield.Stormchaser's Talent.Activate(Ability: Level 3)
 Bot1.Battlefield.Island.Activate
@@ -41,5 +41,5 @@ Turn = 3
 Bot1.Battlefield.Stormchaser's Talent.ClassLevel = 2
 Bot1.Hand = Island; Island; Lightning Bolt
 Bot1.Graveyard.Count = 0
-Bot1.Battlefield.Otter.Power = 1
+Bot1.Battlefield.Otter Token.Power = 1
 Stack.Count = 0

@@ -38,6 +38,6 @@ Bot1.Pass
 ? Bot1.Mana =
 
 [Expect]
-Bot1.Battlefield.Dwarf.Token = true
+Bot1.Battlefield.Dwarf Token.Token = true
 Bot1.Battlefield.Mox Sapphire.Tapped = false
 Bot1.Battlefield.The Lonely Mountain.Tapped = true

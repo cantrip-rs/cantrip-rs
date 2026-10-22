@@ -30,4 +30,4 @@ Bot1.Modes(2)
 
 [Expect]
 Bot1.Battlefield.Arni, Humble Scribe.Tapped = true
-Bot1.Battlefield.Pilot.Token = true
+Bot1.Battlefield.Pilot Token.Token = true

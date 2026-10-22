@@ -36,6 +36,6 @@ Bot1.Target(Bot2)
 Turn = 2
 Stack.Count = 0
 Bot2.Life = 18
-Bot1.Battlefield.Orc Army.Power = 2
-Bot1.Battlefield.Orc Army.Counters.PlusOnePlusOne = 2
-Bot1.Battlefield.Orc Army.Subtypes = Army; Orc
+Bot1.Battlefield.Orc Army Token.Power = 2
+Bot1.Battlefield.Orc Army Token.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Orc Army Token.Subtypes = Army; Orc

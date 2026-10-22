@@ -50,6 +50,6 @@ Bot1.Target(Bot1.Battlefield.Llanowar Elves)
 Bot1.Hand.Count = 3
 Bot1.Graveyard = Mind Control
 Bot2.Graveyard = Llanowar Elves
-Bot1.Battlefield = Mox Sapphire; Mox Sapphire; Mox Jet; Mox Ruby; Mox Pearl; Azog, Moria's Ruin; Goblin Army
-Bot1.Battlefield.Goblin Army.Power = 1
+Bot1.Battlefield = Mox Sapphire; Mox Sapphire; Mox Jet; Mox Ruby; Mox Pearl; Azog, Moria's Ruin; Goblin Army Token
+Bot1.Battlefield.Goblin Army Token.Power = 1
 Bot2.Battlefield = Forest

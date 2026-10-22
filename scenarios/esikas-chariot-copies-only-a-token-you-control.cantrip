@@ -41,11 +41,11 @@ Bot2.Hand.Esika's Chariot.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Esika's Chariot.Activate(Ability: Crew)
 Bot1.Attack(Esika's Chariot > Bot2)
-! Bot1.Target(Bot2.Battlefield.Cat)
-Bot1.Target(Bot1.Battlefield.Cat)
+! Bot1.Target(Bot2.Battlefield.Cat Token)
+Bot1.Target(Bot1.Battlefield.Cat Token)
 [Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Cat#3.Power = 2
-Bot2.Battlefield.Cat#2.Power = 2
+Bot1.Battlefield.Cat Token#3.Power = 2
+Bot2.Battlefield.Cat Token#2.Power = 2
 Bot2.Life = 16

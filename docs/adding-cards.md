@@ -137,6 +137,9 @@ kicker: kicker(mana("{2}{B}")),                                   // `multikicke
 
 Definitions a card brings with it (a token, a copy's exception) go in `pub static EXTRA: &[&CardDef]` in the same
 file. The generator's constant name is the card name upper-cased with every run of non-alphanumerics as `_`.
+An unnamed token's definition has its subtype words in the creating instruction's order, followed by `Token`, as
+`name`, and those words as `token_name: Some(&[Subtype::Forest, Subtype::Tentacle])` (CR 111.4, 612.2a). Explicitly
+named tokens and copy exceptions leave `token_name` unset; the core freezes the created name as a copiable value.
 
 What a `CardDef` can carry (see `crates/cantrip-api/src/card.rs`):
 

@@ -27,7 +27,7 @@ Bot1.Battlefield.Forest#2.Activate
 
 [Expect]
 Turn = 8
-Bot1.Battlefield.Golem.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Golem.Power = 4
-Bot1.Battlefield.Golem.Toughness = 4
-Bot1.Battlefield.Golem.Keywords = (absent)
+Bot1.Battlefield.Golem Token.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Golem Token.Power = 4
+Bot1.Battlefield.Golem Token.Toughness = 4
+Bot1.Battlefield.Golem Token.Keywords = (absent)

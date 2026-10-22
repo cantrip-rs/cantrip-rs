@@ -37,8 +37,8 @@ Bot2.Hand.Counterspell.Cast(Lightning Bolt)
 Bot2.Life = 20
 Bot1.Graveyard = Lightning Bolt
 Bot2.Graveyard = Counterspell
-Bot1.Battlefield.Soldier.Types = Artifact; Creature
-Bot1.Battlefield.Soldier.Subtypes = Soldier
-Bot1.Battlefield.Soldier.Power = 1
-Bot1.Battlefield.Soldier.Toughness = 1
+Bot1.Battlefield.Soldier Token.Types = Artifact; Creature
+Bot1.Battlefield.Soldier Token.Subtypes = Soldier
+Bot1.Battlefield.Soldier Token.Power = 1
+Bot1.Battlefield.Soldier Token.Toughness = 1
 Bot1.Battlefield.Count = 5

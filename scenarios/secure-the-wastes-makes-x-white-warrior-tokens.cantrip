@@ -1,0 +1,38 @@
+# Secure the Wastes: "Create X 1/1 white Warrior creature tokens." X = 3 makes exactly three, each a 1/1 white Warrior token.
+
+[Bot1 Deck]
+Secure the Wastes
+Plains
+Plains
+Mox Pearl
+Mox Pearl
+Island
+Island
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Secure the Wastes.Cast(X: 3)
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Pearl; Warrior Token; Warrior Token; Warrior Token
+Bot1.Battlefield.Warrior Token#1.Token = true
+Bot1.Battlefield.Warrior Token#1.Power = 1
+Bot1.Battlefield.Warrior Token#1.Toughness = 1
+Bot1.Battlefield.Warrior Token#1.Colors = White
+Bot1.Battlefield.Warrior Token#1.Types = Creature
+Bot1.Battlefield.Warrior Token#1.Subtypes = Warrior
+Bot1.Graveyard = Secure the Wastes

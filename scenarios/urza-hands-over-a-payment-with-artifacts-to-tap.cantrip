@@ -36,5 +36,5 @@ Turn = 5
 Stack.Count = 1
 Bot1.Graveyard.Count = 0
 Bot1.Battlefield.Sol Ring.Tapped = false
-Bot1.Battlefield.Construct.Tapped = false
+Bot1.Battlefield.Construct Token.Tapped = false
 Bot1.Battlefield.Urza, Lord High Artificer.Tapped = false

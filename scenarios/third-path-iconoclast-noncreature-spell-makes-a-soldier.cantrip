@@ -22,10 +22,10 @@ Bot1.Hand.Lightning Bolt.Cast(Bot2)
 [Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Soldier#1.Types = Artifact; Creature
-Bot1.Battlefield.Soldier#1.Subtypes = Soldier
-Bot1.Battlefield.Soldier#1.Power = 1
-Bot1.Battlefield.Soldier#1.Toughness = 1
-Bot1.Battlefield.Soldier#2.Types = Artifact; Creature
-Bot1.Battlefield.Soldier#2.Power = 1
+Bot1.Battlefield.Soldier Token#1.Types = Artifact; Creature
+Bot1.Battlefield.Soldier Token#1.Subtypes = Soldier
+Bot1.Battlefield.Soldier Token#1.Power = 1
+Bot1.Battlefield.Soldier Token#1.Toughness = 1
+Bot1.Battlefield.Soldier Token#2.Types = Artifact; Creature
+Bot1.Battlefield.Soldier Token#2.Power = 1
 Bot2.Life = 17

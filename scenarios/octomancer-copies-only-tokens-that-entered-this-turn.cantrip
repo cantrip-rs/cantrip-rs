@@ -34,5 +34,5 @@ Bot2.Pass
 [T3 Bot1.Upkeep]
 
 [Expect]
-Bot1.Battlefield = Forest; Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Octomancer; Octopus
-Bot2.Battlefield = Octopus
+Bot1.Battlefield = Forest; Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Octomancer; Octopus Token
+Bot2.Battlefield = Octopus Token

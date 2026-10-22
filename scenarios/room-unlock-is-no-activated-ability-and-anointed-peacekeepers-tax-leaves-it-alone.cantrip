@@ -58,4 +58,4 @@ Bot1.Pass
 
 [Expect]
 Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
-Bot1.Battlefield.Demon.Power = 6
+Bot1.Battlefield.Demon Token.Power = 6

@@ -6,7 +6,8 @@ const ASK: Question = Question::new("ExileAndReturn", "exile Ajani, then return 
 
 /// The 2/1 white Cat Warrior token both faces make.
 pub static CAT_WARRIOR: CardDef = CardDef {
-    name: "Cat Warrior",
+    name: "Cat Warrior Token",
+    token_name: Some(&[Subtype::Cat, Subtype::Warrior]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),

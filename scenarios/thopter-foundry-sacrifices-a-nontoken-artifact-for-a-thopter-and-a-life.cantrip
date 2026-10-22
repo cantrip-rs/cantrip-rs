@@ -30,6 +30,6 @@ Bot1.Choose(Mox Pearl)
 [Expect]
 Bot1.Life = 21
 Bot1.Graveyard = Mox Pearl
-Bot1.Battlefield = Mox Jet; Mox Sapphire; Mox Ruby; Thopter Foundry; Thopter
-Bot1.Battlefield.Thopter.Power = 1
-Bot1.Battlefield.Thopter.Keywords = Flying
+Bot1.Battlefield = Mox Jet; Mox Sapphire; Mox Ruby; Thopter Foundry; Thopter Token
+Bot1.Battlefield.Thopter Token.Power = 1
+Bot1.Battlefield.Thopter Token.Keywords = Flying

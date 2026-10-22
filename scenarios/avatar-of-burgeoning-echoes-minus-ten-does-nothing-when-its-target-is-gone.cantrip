@@ -31,12 +31,12 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Hand.Jace's Machinations.Cast
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 10
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 10
 [T2 Bot2.Main1]
 Bot2.Hand.Ornithopter.Cast
 Bot2.Hand.Mox Ruby.Cast
 [T3 Bot1.Main1]
-Bot1.Battlefield.Jace.Activate(Ability: Put a +1/+1 counter; Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Jace Token.Activate(Ability: Put a +1/+1 counter; Bot2.Battlefield.Ornithopter)
 Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
 Bot1.Pass

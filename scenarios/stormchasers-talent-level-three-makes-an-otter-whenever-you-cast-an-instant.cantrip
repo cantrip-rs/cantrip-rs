@@ -50,8 +50,8 @@ Bot1.Hand.Lightning Bolt.Cast(Bot2)
 [Expect]
 Turn = 5
 Bot1.Battlefield.Stormchaser's Talent.ClassLevel = 3
-Bot1.Battlefield = Island; Island; Island; Mox Ruby; Mox Sapphire; Stormchaser's Talent; Otter; Otter
-Bot1.Battlefield.Otter#1.Power = 3
-Bot1.Battlefield.Otter#2.Power = 1
+Bot1.Battlefield = Island; Island; Island; Mox Ruby; Mox Sapphire; Stormchaser's Talent; Otter Token; Otter Token
+Bot1.Battlefield.Otter Token#1.Power = 3
+Bot1.Battlefield.Otter Token#2.Power = 1
 Bot2.Life = 17
 Stack.Count = 0

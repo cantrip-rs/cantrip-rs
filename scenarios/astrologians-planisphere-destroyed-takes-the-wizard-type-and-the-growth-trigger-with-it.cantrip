@@ -28,7 +28,7 @@ Bot1.Battlefield.Island#2.Activate
 Bot1.Hand.Astrologian's Planisphere.Cast
 Bot1.Pass
 [T3 Bot1.Main2]
-? Bot1.Battlefield.Hero.Subtypes = Hero; Wizard
+? Bot1.Battlefield.Hero Token.Subtypes = Hero; Wizard
 [T4 Bot2.Main1]
 Bot2.Hand.Plains.Play
 Bot2.Battlefield.Plains.Activate
@@ -41,7 +41,7 @@ Bot1.Pass
 [T5 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Hero.Subtypes = Hero
-Bot1.Battlefield.Hero.Power = 1
-Bot1.Battlefield.Hero.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Hero Token.Subtypes = Hero
+Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Battlefield.Hero Token.Counters.PlusOnePlusOne = (absent)
 Bot1.Graveyard = Astrologian's Planisphere

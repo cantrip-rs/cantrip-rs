@@ -32,13 +32,13 @@ Bot1.Attack(Gut, True Soul Zealot > Bot2)
 Bot1.Pass
 Bot2.Pass
 Bot1.Choose(Mind Stone)
-? Combat.Attackers = Gut, True Soul Zealot > Bot2; Skeleton > Bot2
-? Bot1.Battlefield.Skeleton.Tapped = True
-? Bot1.Battlefield.Skeleton.Power = 4
-? Bot1.Battlefield.Skeleton.Toughness = 1
+? Combat.Attackers = Gut, True Soul Zealot > Bot2; Skeleton Token > Bot2
+? Bot1.Battlefield.Skeleton Token.Tapped = True
+? Bot1.Battlefield.Skeleton Token.Power = 4
+? Bot1.Battlefield.Skeleton Token.Toughness = 1
 ? Bot1.Graveyard = Mind Stone
 [T7 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 14
-Bot1.Battlefield = Mountain; Mountain; Mountain; Gut, True Soul Zealot; Skeleton
+Bot1.Battlefield = Mountain; Mountain; Mountain; Gut, True Soul Zealot; Skeleton Token

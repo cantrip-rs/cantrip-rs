@@ -55,8 +55,8 @@ Bot2.Hand.Walking Ballista.Cast(X: 1)
 Bot2.Pass
 
 [Expect]
-Bot1.Battlefield = Doubling Season; Forest; Plains; Sol Ring; Spirit; Spirit; Spirit; Spirit
-Bot1.Battlefield.Spirit#4.Token = true
-Bot1.Battlefield.Spirit#4.Keywords = Flying
-Bot2.Battlefield = Plains; Plains; Sol Ring; Spirit; Spirit; Walking Ballista
+Bot1.Battlefield = Doubling Season; Forest; Plains; Sol Ring; Spirit Token; Spirit Token; Spirit Token; Spirit Token
+Bot1.Battlefield.Spirit Token#4.Token = true
+Bot1.Battlefield.Spirit Token#4.Keywords = Flying
+Bot2.Battlefield = Plains; Plains; Sol Ring; Spirit Token; Spirit Token; Walking Ballista
 Bot2.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1

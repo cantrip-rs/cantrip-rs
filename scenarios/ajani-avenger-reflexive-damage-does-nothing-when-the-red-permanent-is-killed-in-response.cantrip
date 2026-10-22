@@ -31,7 +31,7 @@ Bot1.Hand.Ajani, Nacatl Pariah.Cast
 [T4 Bot2.Main1]
 Bot2.Hand.Mountain.Play
 Bot2.Battlefield.Mountain.Activate
-Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cat Warrior)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cat Warrior Token)
 Bot1.Accept
 [T5 Bot1.Main1]
 Bot1.Hand.Mountain.Play
@@ -47,5 +47,5 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ragavan, Nimble Pilferer)
 Turn = 5
 Bot2.Life = 20
 Bot1.Graveyard = Ragavan, Nimble Pilferer
-Bot1.Battlefield.Cat Warrior.Power = 2
+Bot1.Battlefield.Cat Warrior Token.Power = 2
 Stack.Count = 0

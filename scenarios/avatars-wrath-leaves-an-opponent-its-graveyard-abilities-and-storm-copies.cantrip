@@ -57,5 +57,5 @@ Exile = Avatar's Wrath; Seasoned Pyromancer
 Bot1.Library.Count = 9
 Bot1.Graveyard.Count = 22
 Bot2.Graveyard = Brain Freeze; Black Lotus; Faithless Looting; Island
-Bot2.Battlefield.Elemental#2.Power = 1
+Bot2.Battlefield.Elemental Token#2.Power = 1
 Bot2.Battlefield.Count = 7

@@ -57,7 +57,7 @@ Bot2.Pass
 
 [Expect]
 Turn = 4
-Bot1.Battlefield.Golem.Colors = Red; White
+Bot1.Battlefield.Golem Token.Colors = Red; White
 Bot1.Battlefield.Sphinx of the Guildpact.Colors = Black; Blue; Green; Red; White
 Bot1.Battlefield.Sphinx of the Guildpact.Keywords = Flying
 Bot1.Battlefield.Sphinx of the Guildpact.HexproofFrom = Monocolored

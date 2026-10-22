@@ -45,8 +45,8 @@ Bot1.Hand.Lingering Souls.Cast
 [Expect]
 Bot2.Battlefield.Count = 2
 Bot1.Battlefield.Count = 8
-Bot1.Battlefield.Spirit#4.Power = 1
-Bot1.Battlefield.Spirit#4.Token = true
+Bot1.Battlefield.Spirit Token#4.Power = 1
+Bot1.Battlefield.Spirit Token#4.Token = true
 Bot1.Battlefield.Exalted Sunborn.Power = 4
 Bot1.Battlefield.Exalted Sunborn.Toughness = 5
 Bot1.Battlefield.Exalted Sunborn.Keywords = Flying; Lifelink

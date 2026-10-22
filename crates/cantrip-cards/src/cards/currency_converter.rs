@@ -18,7 +18,8 @@ fn exile_discarded(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 pub static ROGUE: CardDef = CardDef {
-    name: "Rogue",
+    name: "Rogue Token",
+    token_name: Some(&[Subtype::Rogue]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),

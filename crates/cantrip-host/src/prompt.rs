@@ -618,7 +618,7 @@ fn counter_words(game: &Game, subject: Option<ObjectId>, counters: &[(CounterKin
         .iter()
         .map(|&(kind, n)| format!("{n} {} counter{}", kind.name(), if n == 1 { "" } else { "s" }))
         .collect();
-    let on = subject.map_or("it", |s| game.name(s));
+    let on = subject.map_or(ObjectName::Literal("it"), |s| game.name(s));
     format!("{} would be put on {on}", kinds.join(" and "))
 }
 

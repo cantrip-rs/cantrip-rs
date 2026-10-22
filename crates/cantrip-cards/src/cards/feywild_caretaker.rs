@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// The 1/1 blue Faerie Dragon creature token with flying.
 pub static FAERIE_DRAGON: CardDef = CardDef {
-    name: "Faerie Dragon",
+    name: "Faerie Dragon Token",
+    token_name: Some(&[Subtype::Faerie, Subtype::Dragon]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Blue)),
     types: TypeSet::of(&[CardType::Creature]),

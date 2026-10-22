@@ -33,7 +33,7 @@ Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Elvish Mystic.Cast
 [T4 Bot2.Main1]
 Bot2.Attack(Elvish Mystic > Bot1)
-! Bot1.Block(Spirit > Elvish Mystic)
+! Bot1.Block(Spirit Token > Elvish Mystic)
 Bot1.Block(Wan Shi Tong, All-Knowing > Elvish Mystic)
 [T4 Bot2.Main2]
 

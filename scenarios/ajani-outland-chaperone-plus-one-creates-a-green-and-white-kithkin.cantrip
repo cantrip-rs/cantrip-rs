@@ -18,10 +18,10 @@ Bot1.Battlefield.Ajani, Outland Chaperone.Activate(Ability: Kithkin)
 
 [Expect]
 Bot1.Battlefield.Ajani, Outland Chaperone.Counters.Loyalty = 4
-Bot1.Battlefield.Kithkin.Token = true
-Bot1.Battlefield.Kithkin.Power = 1
-Bot1.Battlefield.Kithkin.Toughness = 1
-Bot1.Battlefield.Kithkin.Colors = Green; White
-Bot1.Battlefield.Kithkin.Subtypes = Kithkin
-Bot1.Battlefield.Kithkin.Types = Creature
+Bot1.Battlefield.Kithkin Token.Token = true
+Bot1.Battlefield.Kithkin Token.Power = 1
+Bot1.Battlefield.Kithkin Token.Toughness = 1
+Bot1.Battlefield.Kithkin Token.Colors = Green; White
+Bot1.Battlefield.Kithkin Token.Subtypes = Kithkin
+Bot1.Battlefield.Kithkin Token.Types = Creature
 Stack.Count = 0

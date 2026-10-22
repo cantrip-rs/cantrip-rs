@@ -1,0 +1,52 @@
+# Martial Coup: "Create X 1/1 white Soldier creature tokens. If X is 5 or more, destroy all other creatures." With X = 5 -
+# exactly at the limit - Bot1 makes five Soldiers and then every other creature dies, its own Ornithopter and both of
+# Bot2's: "all other creatures" is the whole battlefield bar the new Soldiers, which stay.
+
+[Bot1 Deck]
+Martial Coup
+Black Lotus
+Mox Pearl
+Mox Pearl
+Plains
+Plains
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Plains
+Ornithopter
+Ornithopter
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Martial Coup.Cast(X: 5)
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Pearl; Soldier Token; Soldier Token; Soldier Token; Soldier Token; Soldier Token
+Bot1.Battlefield.Soldier Token#1.Token = true
+Bot1.Battlefield.Soldier Token#1.Power = 1
+Bot1.Battlefield.Soldier Token#1.Toughness = 1
+Bot1.Battlefield.Soldier Token#1.Colors = White
+Bot1.Battlefield.Soldier Token#1.Types = Creature
+Bot1.Battlefield.Soldier Token#1.Subtypes = Soldier
+Bot1.Graveyard = Martial Coup; Ornithopter; Black Lotus
+Bot2.Battlefield = Plains
+Bot2.Graveyard = Ornithopter; Ornithopter

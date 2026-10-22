@@ -34,4 +34,4 @@ Bot1.Exile.Lindblum, Industrial Regency.Play
 [Expect]
 Turn = 3
 Bot1.Battlefield.Lindblum, Industrial Regency.Tapped = true
-Bot1.Battlefield.Wizard.Power = 0
+Bot1.Battlefield.Wizard Token.Power = 0

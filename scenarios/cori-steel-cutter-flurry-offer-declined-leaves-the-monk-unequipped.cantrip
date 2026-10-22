@@ -31,8 +31,8 @@ Bot1.Decline
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Mox Jet; Cori-Steel Cutter; Monk
-Bot1.Battlefield.Monk.Power = 1
-Bot1.Battlefield.Monk.Keywords = (absent)
-Bot1.Battlefield.Monk.SummoningSick = true
+Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Mox Jet; Cori-Steel Cutter; Monk Token
+Bot1.Battlefield.Monk Token.Power = 1
+Bot1.Battlefield.Monk Token.Keywords = (absent)
+Bot1.Battlefield.Monk Token.SummoningSick = true
 Bot1.Battlefield.Cori-Steel Cutter.AttachedTo = (absent)

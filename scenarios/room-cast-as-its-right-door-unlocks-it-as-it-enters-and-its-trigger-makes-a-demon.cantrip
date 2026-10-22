@@ -31,14 +31,14 @@ Bot1.Pass
 ? Bot1.Battlefield.Ritual Chamber.Doors = Ritual Chamber
 ? Bot1.Battlefield.Ritual Chamber.ManaValue = 5
 ? Bot1.Battlefield.Ritual Chamber.Colors = Black
-? Bot1.Battlefield.Demon.Power = 6
-? Bot1.Battlefield.Demon.Toughness = 6
-? Bot1.Battlefield.Demon.Keywords = Flying
-? Bot1.Battlefield.Demon.Colors = Black
-? Bot1.Battlefield.Demon.Token = true
+? Bot1.Battlefield.Demon Token.Power = 6
+? Bot1.Battlefield.Demon Token.Toughness = 6
+? Bot1.Battlefield.Demon Token.Keywords = Flying
+? Bot1.Battlefield.Demon Token.Colors = Black
+? Bot1.Battlefield.Demon Token.Token = true
 [T2 Bot2.Upkeep]
 
 [Expect]
-Bot1.Battlefield = Demon; Mox Jet; Ritual Chamber; Swamp
+Bot1.Battlefield = Demon Token; Mox Jet; Ritual Chamber; Swamp
 Bot1.Life = 20
 Bot1.Hand.Count = 3

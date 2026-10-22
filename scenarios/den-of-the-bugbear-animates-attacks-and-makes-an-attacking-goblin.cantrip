@@ -33,8 +33,8 @@ Bot1.Attack(Den of the Bugbear > Bot2)
 ? Bot1.Battlefield.Den of the Bugbear.Toughness = 2
 [T3 Bot1.Main2]
 ? Bot2.Life = 16
-? Bot1.Battlefield.Goblin.Power = 1
-? Bot1.Battlefield.Goblin.Tapped = true
+? Bot1.Battlefield.Goblin Token.Power = 1
+? Bot1.Battlefield.Goblin Token.Tapped = true
 [T4 Bot2.Main1]
 
 [Expect]
@@ -42,4 +42,4 @@ Turn = 4
 Bot2.Life = 16
 Bot1.Battlefield.Den of the Bugbear.Types = Land
 Bot1.Battlefield.Den of the Bugbear.Colors = (absent)
-Bot1.Battlefield.Goblin.Colors = Red
+Bot1.Battlefield.Goblin Token.Colors = Red

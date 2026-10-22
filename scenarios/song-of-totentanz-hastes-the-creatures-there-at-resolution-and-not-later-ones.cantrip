@@ -32,20 +32,20 @@ Bot1.Battlefield.Mountain#3.Activate
 Bot1.Hand.Song of Totentanz.Cast(X: 2)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Rat#1.Keywords = CantBlock; Haste
+? Bot1.Battlefield.Rat Token#1.Keywords = CantBlock; Haste
 ? Bot1.Battlefield.Ornithopter.Keywords = Flying; Haste
 ? Bot2.Battlefield.Ornithopter.Keywords = Flying
 Bot1.Hand.Ornithopter.Cast
 ! Bot1.Attack(Ornithopter#2 > Bot2)
-Bot1.Attack(Rat#1 > Bot2; Rat#2 > Bot2; Ornithopter#1 > Bot2)
+Bot1.Attack(Rat Token#1 > Bot2; Rat Token#2 > Bot2; Ornithopter#1 > Bot2)
 [T5 Bot1.Main2]
 
 [Expect]
 Turn = 5
 Bot1.Graveyard = Song of Totentanz
-Bot1.Battlefield.Rat#1.Token = true
-Bot1.Battlefield.Rat#1.Colors = Black
-Bot1.Battlefield.Rat#1.Subtypes = Rat
-Bot1.Battlefield.Rat#1.Power = 1
-Bot1.Battlefield.Rat#1.Toughness = 1
+Bot1.Battlefield.Rat Token#1.Token = true
+Bot1.Battlefield.Rat Token#1.Colors = Black
+Bot1.Battlefield.Rat Token#1.Subtypes = Rat
+Bot1.Battlefield.Rat Token#1.Power = 1
+Bot1.Battlefield.Rat Token#1.Toughness = 1
 Bot2.Life = 18

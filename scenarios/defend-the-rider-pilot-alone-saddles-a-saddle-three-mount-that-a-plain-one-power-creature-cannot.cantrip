@@ -32,12 +32,12 @@ Bot1.Hand.Defend the Rider.Cast
 Bot1.Modes(Create a 1/1 colorless Pilot creature token with "This token saddles Mounts and crews Vehicles as though its power were 2 greater.")
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Pilot.Power = 1
+? Bot1.Battlefield.Pilot Token.Power = 1
 Bot1.Battlefield.Caustic Bronco.Activate
-Bot1.Choose(Pilot)
+Bot1.Choose(Pilot Token)
 [T1 Bot1.Main2]
 
 [Expect]
 Bot1.Battlefield.Caustic Bronco.Saddled = true
-Bot1.Battlefield.Pilot.Tapped = True
+Bot1.Battlefield.Pilot Token.Tapped = True
 Bot1.Battlefield.Mother of Runes.Tapped = False

@@ -34,14 +34,14 @@ Bot2.Hand.Tireless Tracker.Cast
 [T3 Bot1.Main1]
 Bot1.Battlefield.Elspeth, Storm Slayer.Activate(Ability: #2)
 [T3 Bot1.Main2]
-? Bot1.Battlefield.Soldier#1.Power = 2
-? Bot1.Battlefield.Soldier#1.Keywords = Flying
+? Bot1.Battlefield.Soldier Token#1.Power = 2
+? Bot1.Battlefield.Soldier Token#1.Keywords = Flying
 [T5 Bot1.Main1]
-? Bot1.Battlefield.Soldier#1.Keywords = (absent)
+? Bot1.Battlefield.Soldier Token#1.Keywords = (absent)
 Bot1.Battlefield.Elspeth, Storm Slayer.Activate(Ability: #3; Bot2.Battlefield.Tireless Tracker)
 [T5 Bot1.Main2]
 
 [Expect]
 Bot2.Graveyard = Tireless Tracker; Black Lotus
 Bot1.Battlefield.Elspeth, Storm Slayer.Counters.Loyalty = 3
-Bot1.Battlefield.Soldier#1.Power = 2
+Bot1.Battlefield.Soldier Token#1.Power = 2

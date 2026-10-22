@@ -1,0 +1,51 @@
+# Stroke of Midnight: a target that is illegal as the spell resolves makes it not resolve at all (CR 608.2b), so nothing is
+# destroyed and no Human is created. Bot1 casts it at Bot2's Ornithopter and Bot2 answers with Blossoming Defense, giving
+# it hexproof: the spell fizzles, the Ornithopter stays a 2/4 from the Defense, and Bot2 gets no Human.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Stroke of Midnight
+Island x16
+
+[Bot2 Deck]
+Mox Emerald
+Ornithopter
+Blossoming Defense
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stroke of Midnight.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Blossoming Defense.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Battlefield = Mox Emerald; Ornithopter
+Bot2.Battlefield.Count = 2
+Bot2.Battlefield.Ornithopter.Keywords = Flying; Hexproof
+Bot2.Battlefield.Ornithopter.Power = 2
+Bot2.Battlefield.Ornithopter.Toughness = 4
+Bot2.Graveyard = Blossoming Defense
+Bot1.Graveyard = Stroke of Midnight

@@ -4,7 +4,7 @@
 
 pub use cantrip_state::{
     AbilityRef, Action, ActionKind, ActionOption, Answer, Attacker, Block, CardId, CardType, Color, ColorSet, Copiable, HexproofFrom,
-    CounterKind, DayNight, Duration, EffectKind, Gift, GameState, Keyword, Keywords, Label, Mana, ManaCost, ManaFrom, ManaPool, ManaTally, Marks, MiracleOf, NameKind, Obj, ObjectId,
+    CounterKind, DayNight, Duration, EffectKind, Gift, GameState, Keyword, Keywords, Label, Mana, ManaCost, ManaFrom, ManaPool, ManaTally, Marks, MiracleOf, NameKind, Obj, ObjectId, ObjectName,
     ColorUse, WordUse, Outcome, PlayerId, Purpose, Question, Request, RequestKind, StackItem, StackKind, Step, Subtype, SubtypeSet, Supertypes,
     Target, TypeSet, Word, Words, Zone, ZoneKind, ZoneKinds, ZoneReason, DelayedWhen, ChosenOption, ExileLink, Expiry, PlayCondition, PlayGrant, PlayPermission, LastKnown, ManaPayment, ManaRestriction, ManaValueSpells, SubtypeSpells, MANA_GIVES_HASTE, MANA_MAKES_UNCOUNTERABLE, Destination, DestinationKind, TotalAtMost, Count, Selection, Part, DamageDivision, DamageAbout, AttackCost, BlockRequirements, CounterPool, SearchDestination, WAY_ADVENTURE, WAY_BACK_FACE, WAY_OMEN, Grant, WAY_BESTOW, WAY_OVERLOAD, WAY_SPLIT_LEFT, WAY_SPLIT_RIGHT, WAY_FUSED, WAY_TRANSFORMED,
 };

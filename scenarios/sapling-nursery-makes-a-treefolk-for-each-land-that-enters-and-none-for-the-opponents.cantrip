@@ -50,15 +50,15 @@ Bot2.Hand.Island.Play
 Bot1.Hand.Wooded Foothills.Play
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Treefolk.Power = 3
+? Bot1.Battlefield.Treefolk Token.Power = 3
 Bot1.Battlefield.Wooded Foothills.Activate
 Bot1.Search(Forest)
 Bot1.Pass
 Bot2.Pass
 
 [Expect]
-Bot1.Battlefield.Treefolk#1.Token = true
-Bot1.Battlefield.Treefolk#2.Token = true
-Bot1.Battlefield.Treefolk#2.Toughness = 4
-Bot1.Battlefield.Treefolk#2.Keywords = Reach
+Bot1.Battlefield.Treefolk Token#1.Token = true
+Bot1.Battlefield.Treefolk Token#2.Token = true
+Bot1.Battlefield.Treefolk Token#2.Toughness = 4
+Bot1.Battlefield.Treefolk Token#2.Keywords = Reach
 Bot1.Battlefield.Count = 12

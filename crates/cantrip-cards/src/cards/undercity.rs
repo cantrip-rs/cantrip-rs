@@ -54,7 +54,8 @@ fn stash(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// A 4/1 black Skeleton creature token with menace.
 pub static SKELETON: CardDef = CardDef {
-    name: "Skeleton",
+    name: "Skeleton Token",
+    token_name: Some(&[Subtype::Skeleton]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),

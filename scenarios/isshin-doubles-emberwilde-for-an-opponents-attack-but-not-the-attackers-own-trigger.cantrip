@@ -53,4 +53,4 @@ Bot1.Triggers(Emberwilde Captain; Emberwilde Captain)
 ? Bot2.Life = 10
 
 [Expect]
-Bot2.Battlefield = Plains; Mox Pearl; Hero of Bladehold; Soldier; Soldier
+Bot2.Battlefield = Plains; Mox Pearl; Hero of Bladehold; Soldier Token; Soldier Token

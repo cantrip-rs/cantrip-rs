@@ -30,6 +30,6 @@ Bot1.Hand.Brainstorm.Cast
 
 [Expect]
 Turn = 5
-Bot1.Battlefield.Hero.Counters.PlusOnePlusOne = 2
-Bot1.Battlefield.Hero.Power = 3
+Bot1.Battlefield.Hero Token.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Hero Token.Power = 3
 Stack.Count = 0

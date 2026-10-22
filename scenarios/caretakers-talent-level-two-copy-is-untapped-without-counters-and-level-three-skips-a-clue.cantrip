@@ -38,20 +38,20 @@ Bot1.Hand.Lingering Souls.Cast
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Thraben Inspector.Cast
 [T5 Bot1.DeclareAttackers]
-Bot1.Attack(Spirit#1 > Bot2)
+Bot1.Attack(Spirit Token#1 > Bot2)
 Bot1.Battlefield.Mox Jet.Activate
-Bot1.Hand.Revitalizing Repast.Cast(Bot1.Battlefield.Spirit#1)
+Bot1.Hand.Revitalizing Repast.Cast(Bot1.Battlefield.Spirit Token#1)
 [Bot1.Main2]
-? Bot1.Battlefield.Spirit#1.Power = 2
+? Bot1.Battlefield.Spirit Token#1.Power = 2
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Caretaker's Talent.Activate(Ability: Level 2)
-Bot1.Target(Bot1.Battlefield.Spirit#1)
+Bot1.Target(Bot1.Battlefield.Spirit Token#1)
 [T5 Bot1.End]
-? Bot1.Battlefield.Spirit#1.Tapped = true
-? Bot1.Battlefield.Spirit#1.Counters.PlusOnePlusOne = 1
-? Bot1.Battlefield.Spirit#3.Tapped = false
-? Bot1.Battlefield.Spirit#3.Power = 1
-? Bot1.Battlefield.Spirit#3.Toughness = 1
+? Bot1.Battlefield.Spirit Token#1.Tapped = true
+? Bot1.Battlefield.Spirit Token#1.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Spirit Token#3.Tapped = false
+? Bot1.Battlefield.Spirit Token#3.Power = 1
+? Bot1.Battlefield.Spirit Token#3.Toughness = 1
 [T7 Bot1.Main1]
 Bot1.Hand.Plains.Play
 Bot1.Battlefield.Plains.Activate
@@ -65,7 +65,7 @@ Bot1.Battlefield.Caretaker's Talent.Activate(Ability: Level 3)
 Turn = 7
 Stack.Count = 0
 Bot1.Battlefield.Caretaker's Talent.ClassLevel = 3
-Bot1.Battlefield.Spirit#1.Power = 4
-Bot1.Battlefield.Spirit#2.Power = 3
-Bot1.Battlefield.Spirit#3.Power = 3
+Bot1.Battlefield.Spirit Token#1.Power = 4
+Bot1.Battlefield.Spirit Token#2.Power = 3
+Bot1.Battlefield.Spirit Token#3.Power = 3
 Bot1.Battlefield.Clue Token.Types = Artifact

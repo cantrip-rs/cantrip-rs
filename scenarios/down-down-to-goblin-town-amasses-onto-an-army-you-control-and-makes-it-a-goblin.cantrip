@@ -28,8 +28,8 @@ Bot1.Target(Bot2)
 Bot1.Pass
 Bot2.Pass
 ? Bot2.Life = 19
-? Bot1.Battlefield.Orc Army.Subtypes = Army; Orc
-? Bot1.Battlefield.Orc Army.Power = 1
+? Bot1.Battlefield.Orc Army Token.Subtypes = Army; Orc
+? Bot1.Battlefield.Orc Army Token.Power = 1
 [T3 Bot1.Main1]
 Bot1.Hand.Mox Ruby.Cast
 Bot1.Battlefield.Mox Jet.Activate
@@ -46,13 +46,13 @@ Bot2.Pass
 [T5 Bot1.Main1]
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Orc Army.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Orc Army Token.Counters.PlusOnePlusOne = 2
 [T5 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Orcish Bowmasters; Orc Army; Down, Down to Goblin-town
-Bot1.Battlefield.Orc Army.Subtypes = Army; Goblin; Orc
-Bot1.Battlefield.Orc Army.Power = 2
-Bot1.Battlefield.Orc Army.Toughness = 2
-Bot1.Battlefield.Orc Army.Colors = Black
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Orcish Bowmasters; Orc Army Token; Down, Down to Goblin-town
+Bot1.Battlefield.Orc Army Token.Subtypes = Army; Goblin; Orc
+Bot1.Battlefield.Orc Army Token.Power = 2
+Bot1.Battlefield.Orc Army Token.Toughness = 2
+Bot1.Battlefield.Orc Army Token.Colors = Black
 Bot1.Battlefield.Down, Down to Goblin-town.Counters.Lore = 2

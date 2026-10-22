@@ -8,7 +8,8 @@ use cantrip_api::*;
 
 /// The 2/2 red Rebel creature token For Mirrodin! makes.
 pub static REBEL: CardDef = CardDef {
-    name: "Rebel",
+    name: "Rebel Token",
+    token_name: Some(&[Subtype::Rebel]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Red)),
     types: TypeSet::of(&[CardType::Creature]),

@@ -43,7 +43,7 @@ Bot1.Battlefield.Grist, the Hunger Tide.Activate(Ability: +1)
 [Expect]
 Bot1.Battlefield.Grist, the Hunger Tide.Counters.Loyalty = 5
 Bot1.Battlefield.Grist, the Hunger Tide.Subtypes = Grist
-Bot1.Battlefield.Elf#1.Subtypes = Elf
-Bot1.Battlefield.Elf#2.Subtypes = Elf
-Bot1.Battlefield.Elf#1.Colors = Black; Green
+Bot1.Battlefield.Elf Token#1.Subtypes = Elf
+Bot1.Battlefield.Elf Token#2.Subtypes = Elf
+Bot1.Battlefield.Elf Token#1.Colors = Black; Green
 Bot1.Graveyard = Island; Llanowar Elves

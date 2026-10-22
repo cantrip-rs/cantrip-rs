@@ -2072,7 +2072,7 @@ impl<'s> Run<'s> {
             };
         }
         let found = (0..sources.len())
-            .find(|&i| self.game.known_name(sources[i]).to_lowercase() == wanted || hints[i].to_lowercase().contains(&wanted));
+            .find(|&i| self.game.known_name(sources[i]).to_string().to_lowercase() == wanted || hints[i].to_lowercase().contains(&wanted));
         match found {
             Some(i) => Ok(Answer::Index(i as u8)),
             None => fail(format!("line {}: \"{spec}\" is not one of: {}", step.line, offered())),
@@ -2085,7 +2085,7 @@ impl<'s> Run<'s> {
             let wanted = spec.trim().to_lowercase();
             let found = (0..sources.len()).find(|&i| {
                 !order.contains(&count_u32(i))
-                    && (self.game.known_name(sources[i]).to_lowercase() == wanted
+                    && (self.game.known_name(sources[i]).to_string().to_lowercase() == wanted
                         || self.game.cards.ability(abilities[i]).text().to_lowercase().contains(&wanted))
             });
             match found {

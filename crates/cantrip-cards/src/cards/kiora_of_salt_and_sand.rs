@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// The 8/8 blue Leviathan creature token with hexproof.
 pub static LEVIATHAN: CardDef = CardDef {
-    name: "Leviathan",
+    name: "Leviathan Token",
+    token_name: Some(&[Subtype::Leviathan]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Blue)),
     types: TypeSet::of(&[CardType::Creature]),

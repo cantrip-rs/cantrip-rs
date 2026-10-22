@@ -33,9 +33,9 @@ Bot1.Choose(Llanowar Elves)
 Turn = 3
 Stack.Count = 0
 Bot1.Life = 23
-Bot1.Battlefield = Forest; Forest; Spiders-Man, Heroic Horde; Spider; Spider
-Bot1.Battlefield.Spider#1.Power = 2
-Bot1.Battlefield.Spider#1.Toughness = 1
-Bot1.Battlefield.Spider#1.Colors = Green
-Bot1.Battlefield.Spider#1.Keywords = Reach
+Bot1.Battlefield = Forest; Forest; Spiders-Man, Heroic Horde; Spider Token; Spider Token
+Bot1.Battlefield.Spider Token#1.Power = 2
+Bot1.Battlefield.Spider Token#1.Toughness = 1
+Bot1.Battlefield.Spider Token#1.Colors = Green
+Bot1.Battlefield.Spider Token#1.Keywords = Reach
 Bot1.Hand = Llanowar Elves; Plains; Plains; Plains

@@ -44,7 +44,7 @@ Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Hand.Lingering Souls.Cast
 [T3 Bot1.Main1]
 ? Bot1.Hand.Count = 3
-? Bot2.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Ruby; Spirit; Spirit
+? Bot2.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Ruby; Spirit Token; Spirit Token
 Bot1.Hand.Mox Emerald.Cast
 Bot1.Hand.Plains.Play
 ? Bot1.Hand.Count = 1

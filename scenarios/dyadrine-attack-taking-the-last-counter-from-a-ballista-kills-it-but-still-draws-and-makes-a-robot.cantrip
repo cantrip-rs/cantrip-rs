@@ -38,7 +38,7 @@ Bot1.Pass
 
 [Expect]
 Bot1.Battlefield.Dyadrine, Synthesis Amalgam.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Robot.Token = true
+Bot1.Battlefield.Robot Token.Token = true
 Bot1.Graveyard = Walking Ballista; Black Lotus
 Bot1.Battlefield.Count = 5
 Bot1.Hand.Count = 3

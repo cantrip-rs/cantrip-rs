@@ -45,7 +45,7 @@ Bot1.Battlefield.Forest#1.Activate
 Bot1.Battlefield.Forest#2.Activate
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Mox Pearl.Activate
-Bot1.Choose(Spirit)
+Bot1.Choose(Spirit Token)
 [T5 Bot1.Main2]
 
 [Expect]

@@ -56,4 +56,4 @@ Bot2.Graveyard.Lingering Souls.Cast(Ability: Flashback)
 Turn = 4
 Exile = Lingering Souls
 Bot1.Graveyard = Avatar's Wrath; Giver of Runes
-Bot2.Battlefield = Mountain; Swamp; Spirit; Spirit; Spirit; Spirit
+Bot2.Battlefield = Mountain; Swamp; Spirit Token; Spirit Token; Spirit Token; Spirit Token

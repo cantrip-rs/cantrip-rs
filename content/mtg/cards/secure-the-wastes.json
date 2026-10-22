@@ -1,0 +1,6 @@
+{
+  "name": "Secure the Wastes",
+  "manaCost": "{X}{W}",
+  "type": "Instant",
+  "oracleText": "Create X 1/1 white Warrior creature tokens."
+}

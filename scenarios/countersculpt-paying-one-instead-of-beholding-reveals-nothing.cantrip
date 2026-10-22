@@ -38,4 +38,4 @@ Bot1.Target(Stack.Lightning Bolt)
 Bot1.Life = 20
 Bot1.Hand = Jace, the Mind Sculptor; Island; Island
 Bot2.Graveyard = Lightning Bolt
-Bot1.Battlefield.Jace.Counters.Loyalty = 1
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 1

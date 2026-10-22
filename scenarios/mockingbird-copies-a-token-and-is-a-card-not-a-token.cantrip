@@ -30,13 +30,13 @@ Bot1.Battlefield.Island.Activate
 Bot1.Hand.Mockingbird.Cast
 Bot1.Pass
 Bot1.Accept
-Bot1.Target(Bot2.Battlefield.Spirit#1)
+Bot1.Target(Bot2.Battlefield.Spirit Token#1)
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Island; Spirit
-Bot1.Battlefield.Spirit.Subtypes = Bird; Spirit
-Bot1.Battlefield.Spirit.Keywords = Flying
-Bot1.Battlefield.Spirit.Colors = White
-Bot1.Battlefield.Spirit.Token = (absent)
-Bot2.Battlefield = Mox Pearl; Mox Jet; Mox Ruby; Spirit; Spirit
+Bot1.Battlefield = Island; Spirit Token
+Bot1.Battlefield.Spirit Token.Subtypes = Bird; Spirit
+Bot1.Battlefield.Spirit Token.Keywords = Flying
+Bot1.Battlefield.Spirit Token.Colors = White
+Bot1.Battlefield.Spirit Token.Token = (absent)
+Bot2.Battlefield = Mox Pearl; Mox Jet; Mox Ruby; Spirit Token; Spirit Token

@@ -62,7 +62,7 @@ Bot1.Choose()
 [T7 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Plains; Mox Ruby; Mox Pearl; Kithkin; Kithkin; Kithkin
+Bot1.Battlefield = Plains; Mox Ruby; Mox Pearl; Kithkin Token; Kithkin Token; Kithkin Token
 Bot1.Graveyard = Ajani, Outland Chaperone; Tezzeret's Gambit; Tezzeret's Gambit; Black Lotus
 Bot1.Library.Count = 3
 Stack.Count = 0

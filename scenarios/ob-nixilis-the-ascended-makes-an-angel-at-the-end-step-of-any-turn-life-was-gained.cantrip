@@ -1,0 +1,50 @@
+# Ob Nixilis, the Ascended: "At the beginning of each end step, if you gained life this turn, create a 4/4 white Angel
+# creature token with flying." Bot1 gains none on turn 3, so turn 3's end step makes nothing; on turn 4, Bot2's turn, Bot1
+# casts Healing Salve on itself for 3 life, and that turn's end step - Bot2's - makes the Angel: each end step, not only
+# Bot1's. The token is 4/4, white, flying.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ob Nixilis, the Ascended
+Forest
+Healing Salve
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Ob Nixilis, the Ascended.Cast
+[T4 Bot2.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Turn = 5
+Bot1.Life = 23
+Bot1.Battlefield = Angel Token; Forest; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ob Nixilis, the Ascended
+Bot1.Battlefield.Angel Token.Power = 4
+Bot1.Battlefield.Angel Token.Toughness = 4
+Bot1.Battlefield.Angel Token.Colors = White
+Bot1.Battlefield.Angel Token.Keywords = Flying
+Bot2.Life = 20

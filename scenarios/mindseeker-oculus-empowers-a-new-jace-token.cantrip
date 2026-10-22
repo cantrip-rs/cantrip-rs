@@ -25,7 +25,7 @@ Bot1.Battlefield.Island.Activate
 Bot1.Hand.Mindseeker Oculus.Cast
 
 [Expect]
-Bot1.Battlefield.Jace.Token = true
-Bot1.Battlefield.Jace.Counters.Loyalty = 4
+Bot1.Battlefield.Jace Token.Token = true
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 4
 Bot1.Battlefield.Mindseeker Oculus.Power = 2
 Bot1.Battlefield.Mindseeker Oculus.Toughness = 1

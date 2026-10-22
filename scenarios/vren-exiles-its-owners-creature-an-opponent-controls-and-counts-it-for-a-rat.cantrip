@@ -53,5 +53,5 @@ Bot2.Pass
 Exile = Ornithopter
 Bot1.Graveyard = Lightning Bolt; Harmless Offering
 Bot1.Battlefield.Count = 6
-Bot1.Battlefield.Rat.Power = 2
-Bot1.Battlefield.Rat.Toughness = 2
+Bot1.Battlefield.Rat Token.Power = 2
+Bot1.Battlefield.Rat Token.Toughness = 2

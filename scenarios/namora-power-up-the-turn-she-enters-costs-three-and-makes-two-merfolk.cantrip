@@ -35,9 +35,9 @@ Bot1.Pass
 
 [Expect]
 Turn = 1
-Bot1.Battlefield = Island; Merfolk; Merfolk; Mox Jet; Namora, the Sea Queen; Sol Ring
+Bot1.Battlefield = Island; Merfolk Token; Merfolk Token; Mox Jet; Namora, the Sea Queen; Sol Ring
 Bot1.Battlefield.Namora, the Sea Queen.Counters.PlusOnePlusOne = 1
 Bot1.Battlefield.Namora, the Sea Queen.Power = 3
-Bot1.Battlefield.Merfolk#1.Colors = Blue
-Bot1.Battlefield.Merfolk#1.Power = 1
-Bot1.Battlefield.Merfolk#2.Toughness = 1
+Bot1.Battlefield.Merfolk Token#1.Colors = Blue
+Bot1.Battlefield.Merfolk Token#1.Power = 1
+Bot1.Battlefield.Merfolk Token#2.Toughness = 1

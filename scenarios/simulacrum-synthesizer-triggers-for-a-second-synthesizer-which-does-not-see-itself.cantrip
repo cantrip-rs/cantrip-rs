@@ -45,6 +45,6 @@ Bot1.Pass
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Construct.Power = 8
-Bot1.Battlefield.Construct.Toughness = 8
+Bot1.Battlefield.Construct Token.Power = 8
+Bot1.Battlefield.Construct Token.Toughness = 8
 Bot1.Battlefield.Count = 9

@@ -28,7 +28,7 @@ Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Swamp#2.Activate
 Bot1.Hand.Sheoldred's Edict.Cast
 Bot1.Modes(2)
-Bot2.Choose(Spirit)
+Bot2.Choose(Spirit Token)
 [Bot1.Main2]
 
 [Expect]

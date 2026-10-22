@@ -40,5 +40,5 @@ Bot1.Modes(Ritual Chamber)
 [Expect]
 Bot1.Mana = {C}{C}
 Bot1.Battlefield.Ritual Chamber.Doors = Ritual Chamber
-Bot1.Battlefield.Demon.Power = 6
+Bot1.Battlefield.Demon Token.Power = 6
 Bot1.Hand = Island

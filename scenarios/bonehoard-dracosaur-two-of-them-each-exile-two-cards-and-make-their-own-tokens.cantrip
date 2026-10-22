@@ -57,6 +57,6 @@ Bot1.Pass
 
 [Expect]
 Turn = 5
-Bot1.Battlefield.Dinosaur#1.Power = 3
-Bot1.Battlefield.Dinosaur#2.Power = 3
+Bot1.Battlefield.Dinosaur Token#1.Power = 3
+Bot1.Battlefield.Dinosaur Token#2.Power = 3
 Bot1.Battlefield.Treasure Token.Tapped = false

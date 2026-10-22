@@ -44,5 +44,5 @@ Bot2.Hand.Disenchant.Cast(Bot2.Battlefield.Mox Ruby)
 [Expect]
 Turn = 3
 Bot2.Battlefield = Mox Pearl
-Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Sapphire; Mox Ruby; Mox Pearl; Pest; Pest; Pest; Pest
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Sapphire; Mox Ruby; Mox Pearl; Pest Token; Pest Token; Pest Token; Pest Token
 Stack.Count = 0

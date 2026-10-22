@@ -1,0 +1,49 @@
+# Ajani creates an explicitly named Ajani's Pridemate token. Changing his "Cat" to "Goblin" changes the token's
+# assigned subtype, not the explicit name (CR 111.4, 612.2). A name containing a subtype word is not derived-name text.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Black Lotus
+Ajani Resolute
+Mox Sapphire
+Artificial Evolution
+Plains
+Plains x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Ajani Resolute.Cast
+[T1 Bot1.Main2]
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ajani Resolute.Activate(Ability: gain 1 life)
+[T3 Bot1.Main2]
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ajani Resolute.Activate(Ability: gain 1 life)
+[T5 Bot1.Main2]
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Ajani Resolute)
+Bot1.Modes(Cat)
+Bot1.Modes(Goblin)
+Bot1.Battlefield.Ajani Resolute.Activate(Ability: Create)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ajani's Pridemate.Token = true
+Bot1.Battlefield.Ajani's Pridemate.Subtypes = Goblin; Soldier
+Bot1.Battlefield.Ajani's Pridemate.Colors = White
+Bot1.Battlefield.Ajani's Pridemate.Power = 2
+Bot1.Battlefield.Ajani's Pridemate.Toughness = 2

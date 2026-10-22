@@ -45,7 +45,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Lightning Helix.Cast(Bot2)
 Bot1.Pass
 Bot1.Pass
-? Bot1.Battlefield.Golem.Power = 4
+? Bot1.Battlefield.Golem Token.Power = 4
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
 Bot1.Pass
@@ -58,11 +58,11 @@ Bot2.Pass
 [Expect]
 Turn = 4
 Bot1.Graveyard = General Ferrous Rokiric; Lightning Bolt; Lightning Helix
-Bot1.Battlefield = Mountain; Mox Pearl; Mox Ruby; Golem
-Bot1.Battlefield.Golem.Colors = Red; White
-Bot1.Battlefield.Golem.Types = Artifact; Creature
-Bot1.Battlefield.Golem.Subtypes = Golem
-Bot1.Battlefield.Golem.Toughness = 4
-Bot1.Battlefield.Golem.Token = true
+Bot1.Battlefield = Mountain; Mox Pearl; Mox Ruby; Golem Token
+Bot1.Battlefield.Golem Token.Colors = Red; White
+Bot1.Battlefield.Golem Token.Types = Artifact; Creature
+Bot1.Battlefield.Golem Token.Subtypes = Golem
+Bot1.Battlefield.Golem Token.Toughness = 4
+Bot1.Battlefield.Golem Token.Token = true
 Bot1.Life = 23
 Bot2.Life = 14

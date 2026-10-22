@@ -29,32 +29,32 @@ Bot2.Pass
 Bot1.Hand.Island.Play
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 2
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 [T2 Bot2.Main1]
 Bot2.Hand.Island.Play
 [T3 Bot1.Main1]
 Bot1.Hand.Island.Play
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 4
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 4
 [T4 Bot2.Main1]
 Bot2.Hand.Island.Play
 [T5 Bot1.Main1]
-? Bot1.Battlefield.Jace.Counters.Loyalty = 4
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 4
 Bot1.Hand.Island.Play
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 6
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 6
 Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Hand.Jace's Machinations.Cast
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 14
-Bot1.Battlefield.Jace.Activate(Ability: Put a +1/+1 counter; Bot1.Battlefield.Avatar of Burgeoning Echoes)
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 14
+Bot1.Battlefield.Jace Token.Activate(Ability: Put a +1/+1 counter; Bot1.Battlefield.Avatar of Burgeoning Echoes)
 Bot2.Pass
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 4
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 4
 Bot1.Battlefield.Avatar of Burgeoning Echoes.Counters.PlusOnePlusOne = 3
 Bot1.Battlefield.Avatar of Burgeoning Echoes.Power = 5
 Bot1.Battlefield.Avatar of Burgeoning Echoes.Toughness = 6

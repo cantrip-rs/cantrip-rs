@@ -39,4 +39,4 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grist, the Hunger Tide)
 
 [Expect]
 Bot1.Graveyard = Llanowar Elves; Icetill Explorer; Haywire Mite; Grist, the Hunger Tide
-Bot1.Battlefield = Bayou; Bayou; Bayou; Insect; Insect; Insect
+Bot1.Battlefield = Bayou; Bayou; Bayou; Insect Token; Insect Token; Insect Token

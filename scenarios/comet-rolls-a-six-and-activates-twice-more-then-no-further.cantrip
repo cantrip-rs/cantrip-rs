@@ -42,5 +42,5 @@ Bot1.Pass
 
 [Expect]
 Bot1.Battlefield.Comet, Stellar Pup.Counters.Loyalty = 7
-Bot1.Battlefield.Squirrel#1.Power = 1
-Bot1.Battlefield.Squirrel#2.SummoningSick = false
+Bot1.Battlefield.Squirrel Token#1.Power = 1
+Bot1.Battlefield.Squirrel Token#2.SummoningSick = false

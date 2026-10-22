@@ -40,4 +40,4 @@ Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Draw a card)
 
 [Expect]
 Bot1.Battlefield.Reckoner Bankbuster.Counters.Charge = (absent)
-Bot1.Battlefield.Pilot.Power = 1
+Bot1.Battlefield.Pilot Token.Power = 1

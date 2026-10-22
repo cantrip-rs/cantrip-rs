@@ -5,7 +5,8 @@ use cantrip_oracle as oracle;
 
 /// A 4/4 red Scorpion Dragon creature token with flying and haste.
 pub static SCORPION_DRAGON: CardDef = CardDef {
-    name: "Scorpion Dragon",
+    name: "Scorpion Dragon Token",
+    token_name: Some(&[Subtype::Scorpion, Subtype::Dragon]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Red)),
     types: TypeSet::of(&[CardType::Creature]),

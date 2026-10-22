@@ -26,6 +26,6 @@ Bot1.Battlefield.The Theorist, Jace Beleren.Activate(Ability: For each opponent)
 [Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Illusion; Island; The Theorist, Jace Beleren
+Bot1.Battlefield = Illusion Token; Island; The Theorist, Jace Beleren
 Bot1.Battlefield.The Theorist, Jace Beleren.Counters.Loyalty = 2
 Stack.Count = 0

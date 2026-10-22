@@ -68,19 +68,19 @@ fn game(library: &[&str]) -> Game {
 }
 
 /// The library's cards that are not fillers, by name, in the order a search lists them.
-fn named(game: &Game) -> Vec<(ObjectId, &'static str)> {
-    searched_cards(game, YOU).into_iter().map(|c| (c, game.name(c))).filter(|&(_, n)| n != "Filler").collect()
+fn named(game: &Game) -> Vec<(ObjectId, String)> {
+    searched_cards(game, YOU).into_iter().map(|c| (c, game.name(c).to_string())).filter(|(_, n)| n != "Filler").collect()
 }
 
 fn of(game: &Game, name: &str) -> ObjectId {
-    named(game).into_iter().find(|&(_, n)| n == name).unwrap_or_else(|| panic!("{name} in the library")).0
+    named(game).into_iter().find(|(_, n)| n == name).unwrap_or_else(|| panic!("{name} in the library")).0
 }
 
 /// What `rule` says of `selected` among the library's cards: complete, and the names of the cards that may be added.
-fn verdict(game: &Game, rule: &Selection, selected: &[ObjectId]) -> (bool, Vec<&'static str>) {
+fn verdict(game: &Game, rule: &Selection, selected: &[ObjectId]) -> (bool, Vec<String>) {
     let candidates = searched_cards(game, YOU);
     let v = judge(game, rule, &Choice { chooser: YOU, source: ObjectId::NONE, candidates: &candidates, selected });
-    let mut names: Vec<&'static str> = v.addable_cards(&Choice { chooser: YOU, source: ObjectId::NONE, candidates: &candidates, selected }).into_iter().map(|c| game.name(c)).filter(|&n| n != "Filler").collect();
+    let mut names: Vec<String> = v.addable_cards(&Choice { chooser: YOU, source: ObjectId::NONE, candidates: &candidates, selected }).into_iter().map(|c| game.name(c).to_string()).filter(|n| n != "Filler").collect();
     names.dedup();
     (v.complete, names)
 }
@@ -96,12 +96,12 @@ fn different_names_keeps_a_split_card_from_a_card_named_for_either_half() {
     // With the split card chosen, neither half's namesake may join it; a filler may.
     let (complete, addable) = verdict(&game, &rule, &[split]);
     assert!(complete);
-    assert!(!addable.contains(&"Probe Ice") && !addable.contains(&"Probe Fire"), "{addable:?}");
+    assert!(!addable.contains(&"Probe Ice".to_string()) && !addable.contains(&"Probe Fire".to_string()), "{addable:?}");
     assert!(verdict(&game, &rule, &[split, ice]).0 == false, "a split card and its half's namesake share a name");
     assert!(verdict(&game, &rule, &[fire, split]).0 == false);
     // Two cards whose names differ.
     let (complete, addable) = verdict(&game, &rule, &[ice]);
-    assert!(complete && addable.contains(&"Probe Fire") && !addable.contains(&"Probe Fire // Probe Ice"), "{addable:?}");
+    assert!(complete && addable.contains(&"Probe Fire".to_string()) && !addable.contains(&"Probe Fire // Probe Ice".to_string()), "{addable:?}");
     assert!(verdict(&game, &rule, &[ice, fire]).0);
 }
 
@@ -119,7 +119,7 @@ fn the_counts_take_what_they_say() {
     assert!(verdict(&game, &any, &[]).0 && verdict(&game, &any, &[bear, wastes, fire]).0);
     // "A basic land card" with as many as can be found: the one there is, and nothing less (CR 701.23b aside).
     let found = select::basic_land_cards(select::as_many_as_can(2));
-    assert_eq!(verdict(&game, &found, &[]), (false, vec!["Probe Wastes"]));
+    assert_eq!(verdict(&game, &found, &[]), (false, vec!["Probe Wastes".into()]));
     assert_eq!(verdict(&game, &found, &[wastes]), (true, vec![]));
     assert!(!verdict(&game, &found, &[bear]).0, "a creature is no basic land card");
 }
@@ -131,10 +131,10 @@ fn the_qualities_allow_only_the_cards_that_have_them() {
     assert_eq!(verdict(&game, &select::BASIC_LAND_CARD, &[]).1, vec!["Probe Wastes"]);
     assert_eq!(verdict(&game, &select::CREATURE_CARD, &[]).1, vec!["Probe Bear"]);
     let land = verdict(&game, &select::LAND_CARD, &[]).1;
-    assert!(land.contains(&"Probe Wastes") && !land.contains(&"Probe Bear"));
+    assert!(land.contains(&"Probe Wastes".to_string()) && !land.contains(&"Probe Bear".to_string()));
     let cheap = select::cards(select::up_to(1)).with(select::mana_value_at_most(2));
     let names = verdict(&game, &cheap, &[]).1;
-    assert!(!names.contains(&"Probe Bear") && names.contains(&"Probe Wastes"), "{names:?}");
+    assert!(!names.contains(&"Probe Bear".to_string()) && names.contains(&"Probe Wastes".to_string()), "{names:?}");
     // A split card has the name of each half (CR 201.2a).
     let named = select::cards(select::up_to(1)).with(select::named(card("Probe Ice")));
     assert_eq!(verdict(&game, &named, &[]).1, vec!["Probe Fire // Probe Ice"]);
@@ -148,7 +148,7 @@ fn a_total_mana_value_limits_the_cards_together() {
     let (fire, ice, bear) = (of(&game, "Probe Fire"), of(&game, "Probe Ice"), of(&game, "Probe Bear"));
     let four = select::cards(select::up_to(2)).with(select::total_mana_value_at_most(4));
     assert!(verdict(&game, &four, &[fire, ice]).0);
-    assert!(!verdict(&game, &four, &[fire]).1.contains(&"Probe Bear"), "2 and 3 make 5");
+    assert!(!verdict(&game, &four, &[fire]).1.contains(&"Probe Bear".to_string()), "2 and 3 make 5");
     let three = select::cards(select::up_to(2)).with(select::total_mana_value_at_most(3));
     assert!(!verdict(&game, &three, &[fire, ice]).0);
     assert!(verdict(&game, &three, &[bear]).0);
@@ -194,8 +194,8 @@ fn the_core_refuses_an_answer_its_rule_refuses() {
                 assert!(game.answer(request.id, request.player, Answer::Cards(vec![split, ice])).is_err(), "Probe Fire // Probe Ice and Probe Ice share a name");
                 assert!(game.answer(request.id, request.player, Answer::Cards(vec![ice, ice])).is_err(), "the same card twice");
                 game.answer(request.id, request.player, Answer::Cards(vec![ice, fire])).expect("different names");
-                let hand: Vec<&str> = game.state.zone(Zone::hand(YOU)).iter().map(|&c| game.name(c)).collect();
-                assert!(hand.contains(&"Probe Ice") && hand.contains(&"Probe Fire"), "{hand:?}");
+                let hand: Vec<String> = game.state.zone(Zone::hand(YOU)).iter().map(|&c| game.name(c).to_string()).collect();
+                assert!(hand.contains(&"Probe Ice".to_string()) && hand.contains(&"Probe Fire".to_string()), "{hand:?}");
                 return;
             }
             other => panic!("unexpected question {other:?}"),
@@ -239,7 +239,7 @@ fn a_rule_holds_more_than_four_parts() {
         .with(select::mana_value_at_most(0))
         .with(select::total_mana_value_at_most(1));
     assert_eq!(rule.parts().count(), 7);
-    assert_eq!(verdict(&game, &rule, &[]), (true, vec!["Probe Wastes"]));
+    assert_eq!(verdict(&game, &rule, &[]), (true, vec!["Probe Wastes".into()]));
     assert!(verdict(&game, &rule, &[wastes]).0);
     // The fifth (and sixth) parts still judge: a fixed-cost card is refused by mana_value_at_most(0).
     let strict = select::cards(select::up_to(1)).with(select::mana_value_at_most(5)).with(select::mana_value_at_most(5)).with(select::mana_value_at_most(5)).with(select::mana_value_at_most(5)).with(select::mana_value_at_most(0));

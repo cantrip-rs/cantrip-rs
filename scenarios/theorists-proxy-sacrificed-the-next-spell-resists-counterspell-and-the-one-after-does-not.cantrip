@@ -43,7 +43,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 3
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 3
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Theorist's Proxy.Activate(Ability: next spell)
 ? Stack = Theorist's Proxy
@@ -74,4 +74,4 @@ Stack.Count = 0
 Bot2.Life = 17
 Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Theorist's Proxy
 Bot2.Graveyard = Counterspell; Counterspell
-Bot1.Battlefield.Jace.Counters.Loyalty = 3
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 3

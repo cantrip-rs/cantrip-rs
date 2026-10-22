@@ -35,7 +35,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Gleemox.Activate(Color: Blue)
 Bot1.Battlefield.Glimmer Lens.Activate(Ornithopter)
 Bot1.Pass
-Bot1.Attack(Ornithopter; Rebel)
+Bot1.Attack(Ornithopter; Rebel Token)
 [T5 Bot1.Main2]
 
 [Expect]

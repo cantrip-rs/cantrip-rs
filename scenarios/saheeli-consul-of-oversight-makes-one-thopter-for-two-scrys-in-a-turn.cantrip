@@ -46,7 +46,7 @@ Bot2.Pass
 
 [Expect]
 Stack.Count = 0
-Bot1.Battlefield.Thopter.Power = 1
-Bot1.Battlefield.Thopter.Toughness = 1
-Bot1.Battlefield.Thopter.Keywords = Flying
+Bot1.Battlefield.Thopter Token.Power = 1
+Bot1.Battlefield.Thopter Token.Toughness = 1
+Bot1.Battlefield.Thopter Token.Keywords = Flying
 Bot1.Battlefield.Count = 4

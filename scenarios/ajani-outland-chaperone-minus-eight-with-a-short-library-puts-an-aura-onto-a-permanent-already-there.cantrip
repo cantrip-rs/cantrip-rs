@@ -65,7 +65,7 @@ Bot1.Choose(Rancor; Ornithopter)
 [T7 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Plains; Mox Ruby; Mox Pearl; Kithkin; Kithkin; Kithkin; Rancor; Ornithopter
-Bot1.Battlefield.Rancor.AttachedTo = Kithkin
+Bot1.Battlefield = Plains; Mox Ruby; Mox Pearl; Kithkin Token; Kithkin Token; Kithkin Token; Rancor; Ornithopter
+Bot1.Battlefield.Rancor.AttachedTo = Kithkin Token
 Bot1.Library.Count = 1
 Stack.Count = 0

@@ -41,4 +41,4 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
 [Expect]
 Bot1.Hand = Ornithopter; Plains
 Bot1.Graveyard = The Eagles Are Coming!; Ornithopter; Black Lotus
-Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Bird Soldier
+Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Bird Soldier Token

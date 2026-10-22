@@ -33,7 +33,7 @@ Bot1.Pass
 [T3 Bot1.Main1]
 ? Exile = Mountain; Lightning Bolt
 ? Bot1.Battlefield.Count = 5
-? Bot1.Battlefield.Dinosaur.Power = 3
+? Bot1.Battlefield.Dinosaur Token.Power = 3
 ? Bot1.Battlefield.Treasure Token.Tapped = false
 [T5 Bot1.Main1]
 ! Bot1.Exile.Lightning Bolt.Cast

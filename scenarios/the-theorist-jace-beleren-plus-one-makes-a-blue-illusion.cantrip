@@ -22,12 +22,12 @@ Bot1.Battlefield.The Theorist, Jace Beleren.Activate(Ability: +1)
 [Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Illusion; Island; The Theorist, Jace Beleren
+Bot1.Battlefield = Illusion Token; Island; The Theorist, Jace Beleren
 Bot1.Battlefield.The Theorist, Jace Beleren.Counters.Loyalty = 4
-Bot1.Battlefield.Illusion.Colors = Blue
-Bot1.Battlefield.Illusion.Types = Creature
-Bot1.Battlefield.Illusion.Subtypes = Illusion
-Bot1.Battlefield.Illusion.Power = 1
-Bot1.Battlefield.Illusion.Toughness = 1
+Bot1.Battlefield.Illusion Token.Colors = Blue
+Bot1.Battlefield.Illusion Token.Types = Creature
+Bot1.Battlefield.Illusion Token.Subtypes = Illusion
+Bot1.Battlefield.Illusion Token.Power = 1
+Bot1.Battlefield.Illusion Token.Toughness = 1
 Bot1.Hand.Count = 4
 Stack.Count = 0

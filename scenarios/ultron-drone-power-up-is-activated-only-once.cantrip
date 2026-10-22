@@ -47,5 +47,5 @@ Bot1.Pass
 [Expect]
 Turn = 3
 Bot1.Battlefield.Ultron Drone.Counters.PlusOnePlusOne = 2
-Bot1.Battlefield.Robot Villain.Power = 2
+Bot1.Battlefield.Robot Villain Token.Power = 2
 Bot1.Battlefield.Mana Crypt.Tapped = false

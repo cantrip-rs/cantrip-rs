@@ -31,11 +31,11 @@ Bot2.Pass
 Bot1.Battlefield.Ral, Crackling Wit.Activate(Ability: Create a 1/1)
 Bot2.Pass
 ? Bot1.Battlefield.Ral, Crackling Wit.Counters.Loyalty = 5
-? Bot1.Battlefield.Otter.Power = 1
-? Bot1.Battlefield.Otter.Toughness = 1
-? Bot1.Battlefield.Otter.Colors = Blue; Red
-? Bot1.Battlefield.Otter.Subtypes = Otter
-? Bot1.Battlefield.Otter.Token = true
+? Bot1.Battlefield.Otter Token.Power = 1
+? Bot1.Battlefield.Otter Token.Toughness = 1
+? Bot1.Battlefield.Otter Token.Colors = Blue; Red
+? Bot1.Battlefield.Otter Token.Subtypes = Otter
+? Bot1.Battlefield.Otter Token.Token = true
 ! Bot1.Battlefield.Ral, Crackling Wit.Activate(Ability: Draw three cards, then discard)
 [T3 Bot1.Main1]
 ! Bot1.Battlefield.Ral, Crackling Wit.Activate(Ability: You get an emblem)
@@ -45,6 +45,6 @@ Bot2.Pass
 
 [Expect]
 Bot1.Battlefield.Ral, Crackling Wit.Counters.Loyalty = 6
-Bot1.Battlefield.Otter#1.Power = 1
-Bot1.Battlefield.Otter#2.Power = 1
+Bot1.Battlefield.Otter Token#1.Power = 1
+Bot1.Battlefield.Otter Token#2.Power = 1
 Bot1.Emblems.Count = 0

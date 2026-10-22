@@ -87,4 +87,4 @@ Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Robot Domination)
 [Expect]
 Bot1.Life = 17
 Bot2.Graveyard.Count = 3
-Bot1.Battlefield = Mox Jet; Mox Sapphire; Island; Mountain; Robot Villain; Robot Villain; Robot Villain
+Bot1.Battlefield = Mox Jet; Mox Sapphire; Island; Mountain; Robot Villain Token; Robot Villain Token; Robot Villain Token

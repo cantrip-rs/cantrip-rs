@@ -25,9 +25,9 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Nettlecyst.Cast
 [Bot1.Main2]
-? Bot1.Battlefield.Phyrexian Germ.Toughness = 5
+? Bot1.Battlefield.Phyrexian Germ Token.Toughness = 5
 Bot1.Battlefield.Mox Emerald.Activate
-Bot1.Hand.Rancor.Cast(Phyrexian Germ)
+Bot1.Hand.Rancor.Cast(Phyrexian Germ Token)
 [T2 Bot2.Main1]
 Bot2.Hand.Island.Play
 Bot2.Battlefield.Island.Activate
@@ -35,6 +35,6 @@ Bot2.Hand.Sol Ring.Cast
 [T2 Bot2.Main2]
 
 [Expect]
-Bot1.Battlefield.Phyrexian Germ.Toughness = 6
-Bot1.Battlefield.Phyrexian Germ.Power = 8
+Bot1.Battlefield.Phyrexian Germ Token.Toughness = 6
+Bot1.Battlefield.Phyrexian Germ Token.Power = 8
 Bot2.Battlefield = Island; Sol Ring

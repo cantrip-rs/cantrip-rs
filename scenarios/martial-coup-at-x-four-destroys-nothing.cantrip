@@ -1,0 +1,43 @@
+# Martial Coup: "If X is 5 or more" - one short of the limit destroys nothing. With X = 4 Bot1 makes four Soldier tokens and
+# every other creature stays: its Ornithopter and both of Bot2's.
+
+[Bot1 Deck]
+Martial Coup
+Black Lotus
+Mox Pearl
+Plains
+Plains
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains
+Ornithopter
+Ornithopter
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Martial Coup.Cast(X: 4)
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Ornithopter; Soldier Token; Soldier Token; Soldier Token; Soldier Token
+Bot1.Graveyard = Martial Coup; Black Lotus
+Bot2.Battlefield = Plains; Ornithopter; Ornithopter
+Bot2.Graveyard.Count = 0

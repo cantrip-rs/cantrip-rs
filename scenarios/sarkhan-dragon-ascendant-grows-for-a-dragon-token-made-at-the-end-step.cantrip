@@ -45,9 +45,9 @@ Bot1.Search(Forest)
 
 [Expect]
 Turn = 4
-Bot1.Battlefield = Mountain; Mox Ruby; Mox Sapphire; Mox Jet; Sol Ring; Sarkhan, Dragon Ascendant; Feywild Caretaker; Faerie Dragon
+Bot1.Battlefield = Mountain; Mox Ruby; Mox Sapphire; Mox Jet; Sol Ring; Sarkhan, Dragon Ascendant; Feywild Caretaker; Faerie Dragon Token
 Bot1.Battlefield.Sarkhan, Dragon Ascendant.Power = 3
 Bot1.Battlefield.Sarkhan, Dragon Ascendant.Toughness = 3
 Bot1.Battlefield.Sarkhan, Dragon Ascendant.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Faerie Dragon.Token = true
-Bot1.Battlefield.Faerie Dragon.Subtypes = Dragon; Faerie
+Bot1.Battlefield.Faerie Dragon Token.Token = true
+Bot1.Battlefield.Faerie Dragon Token.Subtypes = Dragon; Faerie

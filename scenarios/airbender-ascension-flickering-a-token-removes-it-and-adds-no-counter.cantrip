@@ -48,13 +48,13 @@ Bot1.Pass
 [T3 Bot1.BeginCombat]
 ? Bot1.Battlefield.Airbender Ascension.Counters.Quest = 4
 [T3 Bot1.End]
-Bot1.Target(Spirit)
+Bot1.Target(Spirit Token)
 Bot1.Pass
 Bot2.Pass
 [T4 Bot2.Upkeep]
 
 [Expect]
-Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Jet; Airbender Ascension; Ornithopter; Ornithopter; Spirit
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Jet; Airbender Ascension; Ornithopter; Ornithopter; Spirit Token
 Bot1.Battlefield.Airbender Ascension.Counters.Quest = 4
 Bot1.Graveyard = Lingering Souls
 Exile = 

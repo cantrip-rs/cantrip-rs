@@ -1,0 +1,51 @@
+# Stroke of Midnight: "Destroy target nonland permanent. Its controller creates a 1/1 white Human creature token." Bot2's
+# Brazen Borrower (a nonland permanent) is destroyed and Bot2 - its controller - creates exactly one 1/1 white Human; Bot1
+# gets none. A land is the one permanent type outside the filter: targeting Bot2's Island is refused, and the same action
+# at the Borrower is accepted (the positive control).
+
+[Bot1 Deck]
+Plains
+Plains
+Mox Pearl
+Stroke of Midnight
+Island x13
+
+[Bot2 Deck]
+Island
+Black Lotus
+Brazen Borrower
+Island x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Brazen Borrower.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Stroke of Midnight.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Stroke of Midnight.Cast(Bot2.Battlefield.Brazen Borrower)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Battlefield = Island; Human Token
+Bot2.Battlefield.Count = 2
+Bot2.Battlefield.Human Token.Token = true
+Bot2.Battlefield.Human Token.Power = 1
+Bot2.Battlefield.Human Token.Toughness = 1
+Bot2.Battlefield.Human Token.Colors = White
+Bot2.Battlefield.Human Token.Colors.Count = 1
+Bot2.Battlefield.Human Token.Types = Creature
+Bot2.Battlefield.Human Token.Subtypes = Human
+Bot2.Graveyard = Brazen Borrower; Black Lotus
+Bot1.Battlefield = Plains; Plains; Mox Pearl
+Bot1.Graveyard = Stroke of Midnight

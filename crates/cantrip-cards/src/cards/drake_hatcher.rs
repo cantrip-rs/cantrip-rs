@@ -22,7 +22,8 @@ fn hatch(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// The 2/2 blue Drake creature token with flying that Drake Hatcher makes.
 static DRAKE: CardDef = CardDef {
-    name: "Drake",
+    name: "Drake Token",
+    token_name: Some(&[Subtype::Drake]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Blue)),
     types: TypeSet::of(&[CardType::Creature]),

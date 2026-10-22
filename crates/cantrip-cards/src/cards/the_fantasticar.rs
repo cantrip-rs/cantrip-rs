@@ -10,7 +10,8 @@ const ASK_2: Question = Question::new("SacrificeForTokens", "sacrifice it?", "If
 /// A 4/4 colorless Construct artifact creature token with flying and haste. Other Constructs of the same name are
 /// different definitions (Urza's, Retrofitter Foundry's).
 pub static CONSTRUCT: CardDef = CardDef {
-    name: "Construct",
+    name: "Construct Token",
+    token_name: Some(&[Subtype::Construct]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Construct]),

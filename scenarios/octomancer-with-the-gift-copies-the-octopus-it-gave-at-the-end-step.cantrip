@@ -30,16 +30,16 @@ Bot1.Accept
 Bot1.Pass
 Bot2.Pass
 [T2 Bot2.Upkeep]
-? Bot2.Battlefield = Octopus
-? Bot1.Battlefield.Octopus.Power = 8
-? Bot1.Battlefield.Octopus.Token = true
+? Bot2.Battlefield = Octopus Token
+? Bot1.Battlefield.Octopus Token.Power = 8
+? Bot1.Battlefield.Octopus Token.Token = true
 
 [Expect]
-Bot1.Battlefield = Forest; Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Octomancer; Octopus
-Bot1.Battlefield.Octopus.Power = 8
-Bot1.Battlefield.Octopus.Toughness = 8
-Bot1.Battlefield.Octopus.Colors = Blue
-Bot1.Battlefield.Octopus.Tapped = false
-Bot1.Battlefield.Octopus.Token = true
-Bot2.Battlefield = Octopus
-Bot2.Battlefield.Octopus.Token = true
+Bot1.Battlefield = Forest; Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Octomancer; Octopus Token
+Bot1.Battlefield.Octopus Token.Power = 8
+Bot1.Battlefield.Octopus Token.Toughness = 8
+Bot1.Battlefield.Octopus Token.Colors = Blue
+Bot1.Battlefield.Octopus Token.Tapped = false
+Bot1.Battlefield.Octopus Token.Token = true
+Bot2.Battlefield = Octopus Token
+Bot2.Battlefield.Octopus Token.Token = true

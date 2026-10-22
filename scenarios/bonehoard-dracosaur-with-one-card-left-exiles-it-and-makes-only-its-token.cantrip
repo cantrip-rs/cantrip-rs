@@ -31,5 +31,5 @@ Bot1.Pass
 
 [Expect]
 Exile = Mountain
-Bot1.Battlefield.Dinosaur.Power = 3
+Bot1.Battlefield.Dinosaur Token.Power = 3
 Bot1.Battlefield.Treasure Token = (absent)

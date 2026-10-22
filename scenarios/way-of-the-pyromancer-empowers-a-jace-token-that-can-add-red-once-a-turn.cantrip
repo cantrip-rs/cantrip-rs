@@ -24,18 +24,18 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 2
-Bot1.Battlefield.Jace.Activate(Ability: Add)
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Activate(Ability: Add)
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Mana = {R}
-? Bot1.Battlefield.Jace.Counters.Loyalty = 3
-! Bot1.Battlefield.Jace.Activate(Ability: Surveil)
-! Bot1.Battlefield.Jace.Activate(Ability: Draw)
-! Bot1.Battlefield.Jace.Activate(Ability: Add)
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 3
+! Bot1.Battlefield.Jace Token.Activate(Ability: Surveil)
+! Bot1.Battlefield.Jace Token.Activate(Ability: Draw)
+! Bot1.Battlefield.Jace Token.Activate(Ability: Add)
 Bot1.Pass
 [T1 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mox Ruby; Way of the Pyromancer; Jace
-Bot1.Battlefield.Jace.Counters.Loyalty = 3
+Bot1.Battlefield = Mountain; Mox Ruby; Way of the Pyromancer; Jace Token
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 3

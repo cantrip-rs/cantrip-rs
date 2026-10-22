@@ -45,7 +45,7 @@ Bot1.Battlefield.Swamp#1.Activate
 Bot1.Battlefield.Swamp#2.Activate
 Bot1.Battlefield.Swamp#3.Activate
 Bot1.Hand.Altar of the Wretched.Cast
-! Bot1.Choose(Spirit)
+! Bot1.Choose(Spirit Token)
 Bot1.Choose(Healer's Hawk)
 [T7 Bot1.Main1]
 ? Bot1.Graveyard = Lightning Bolt; Healer's Hawk
@@ -53,7 +53,7 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Altar of the Wretched.Activate(Ability: Craft)
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Battlefield.Mox Jet.Activate
-Bot1.Choose(Barrowgoyf; Graveyard.Healer's Hawk; Spirit)
+Bot1.Choose(Barrowgoyf; Graveyard.Healer's Hawk; Spirit Token)
 [T7 Bot1.Main2]
 ? Bot1.Battlefield.Wretched Bonemass.Power = 4
 ? Bot1.Battlefield.Wretched Bonemass.Toughness = 4

@@ -28,16 +28,16 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Case of the Stashed Skeleton.Cast
 [T1 Bot1.End]
 ? Stack.Count = 0
-? Bot1.Battlefield.Skeleton.Suspected = true
-? Bot1.Battlefield.Skeleton.Keywords = CantBlock; Menace
-? Bot1.Battlefield.Skeleton.Token = true
-? Bot1.Battlefield.Skeleton.Power = 2
-? Bot1.Battlefield.Skeleton.Toughness = 1
-? Bot1.Battlefield.Skeleton.Colors = Black
+? Bot1.Battlefield.Skeleton Token.Suspected = true
+? Bot1.Battlefield.Skeleton Token.Keywords = CantBlock; Menace
+? Bot1.Battlefield.Skeleton Token.Token = true
+? Bot1.Battlefield.Skeleton Token.Power = 2
+? Bot1.Battlefield.Skeleton Token.Toughness = 1
+? Bot1.Battlefield.Skeleton Token.Colors = Black
 [T2 Bot2.Main1]
 Bot2.Hand.Mountain.Play
 Bot2.Battlefield.Mountain.Activate
-Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Skeleton)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Skeleton Token)
 [T3 Bot1.Main1]
 ! Bot1.Battlefield.Case of the Stashed Skeleton.Activate
 [T3 Bot1.End]

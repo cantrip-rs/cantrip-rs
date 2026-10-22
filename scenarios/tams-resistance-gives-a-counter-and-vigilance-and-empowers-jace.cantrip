@@ -25,4 +25,4 @@ Bot1.Battlefield.Ornithopter.Power = 1
 Bot1.Battlefield.Ornithopter.Toughness = 3
 Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
 Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
-Bot1.Battlefield.Jace.Counters.Loyalty = 4
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 4

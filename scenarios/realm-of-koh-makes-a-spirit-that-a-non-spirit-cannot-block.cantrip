@@ -37,20 +37,20 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 [T3 Bot1.Main2]
-? Bot1.Battlefield.Spirit.Token = true
-? Bot1.Battlefield.Spirit.Power = 1
-? Bot1.Battlefield.Spirit.Toughness = 1
-? Bot1.Battlefield.Spirit.Subtypes = Spirit
-? Bot1.Battlefield.Spirit.Colors = (absent)
+? Bot1.Battlefield.Spirit Token.Token = true
+? Bot1.Battlefield.Spirit Token.Power = 1
+? Bot1.Battlefield.Spirit Token.Toughness = 1
+? Bot1.Battlefield.Spirit Token.Subtypes = Spirit
+? Bot1.Battlefield.Spirit Token.Colors = (absent)
 ? Bot1.Battlefield.Realm of Koh.Tapped = true
 [T5 Bot1.Main1]
-Bot1.Attack(Spirit; Embereth Shieldbreaker > Bot2)
-! Bot2.Block(Ornithopter > Spirit)
+Bot1.Attack(Spirit Token; Embereth Shieldbreaker > Bot2)
+! Bot2.Block(Ornithopter > Spirit Token)
 Bot2.Block(Ornithopter > Embereth Shieldbreaker)
 [T5 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 19
 Bot2.Battlefield.Count = 0
-Bot1.Battlefield.Spirit.Token = true
+Bot1.Battlefield.Spirit Token.Token = true
 Bot1.Battlefield.Embereth Shieldbreaker.Damage = 0

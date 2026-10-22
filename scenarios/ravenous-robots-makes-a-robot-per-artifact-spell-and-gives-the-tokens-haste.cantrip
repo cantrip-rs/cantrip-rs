@@ -34,13 +34,13 @@ Bot1.Pass
 Bot1.Hand.Mox Sapphire.Cast
 Bot1.Pass
 Bot1.Pass
-? Bot1.Battlefield.Robot#1.Keywords = Haste
-? Bot1.Battlefield.Robot#2.Keywords = (absent)
+? Bot1.Battlefield.Robot Token#1.Keywords = Haste
+? Bot1.Battlefield.Robot Token#2.Keywords = (absent)
 [T3 Bot1.DeclareAttackers]
-Bot1.Attack(Robot#1 > Bot2)
+Bot1.Attack(Robot Token#1 > Bot2)
 [T3 Bot1.Main2]
 
 [Expect]
 Turn = 3
 Bot2.Life = 19
-Bot1.Battlefield.Robot#1.Power = 1
+Bot1.Battlefield.Robot Token#1.Power = 1

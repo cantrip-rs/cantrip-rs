@@ -48,5 +48,5 @@ Bot1.Pass
 [Expect]
 Turn = 3
 Bot1.Battlefield.Pet Avengers.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Hero.Power = 3
+Bot1.Battlefield.Hero Token.Power = 3
 Bot1.Battlefield.Mana Crypt.Tapped = false

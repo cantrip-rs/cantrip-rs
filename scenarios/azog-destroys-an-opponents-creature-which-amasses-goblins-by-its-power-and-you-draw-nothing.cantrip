@@ -41,9 +41,9 @@ Bot1.Target(Bot2.Battlefield.Thalia, Guardian of Thraben)
 Bot1.Hand.Count = 4
 Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Azog, Moria's Ruin
 Bot2.Graveyard = Thalia, Guardian of Thraben
-Bot2.Battlefield = Plains; Mox Pearl; Goblin Army
-Bot2.Battlefield.Goblin Army.Power = 2
-Bot2.Battlefield.Goblin Army.Toughness = 2
-Bot2.Battlefield.Goblin Army.Counters.PlusOnePlusOne = 2
-Bot2.Battlefield.Goblin Army.Subtypes = Army; Goblin
-Bot2.Battlefield.Goblin Army.Colors = Black
+Bot2.Battlefield = Plains; Mox Pearl; Goblin Army Token
+Bot2.Battlefield.Goblin Army Token.Power = 2
+Bot2.Battlefield.Goblin Army Token.Toughness = 2
+Bot2.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
+Bot2.Battlefield.Goblin Army Token.Colors = Black

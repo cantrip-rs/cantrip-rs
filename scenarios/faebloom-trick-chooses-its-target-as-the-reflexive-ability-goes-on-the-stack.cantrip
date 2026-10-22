@@ -40,6 +40,6 @@ Bot2.Hand.Hired Blade.Cast
 [Expect]
 Bot2.Battlefield = Swamp; Mox Jet; Mox Ruby; Hired Blade
 Bot2.Battlefield.Hired Blade.Tapped = true
-Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Faerie; Faerie
+Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Faerie Token; Faerie Token
 Bot1.Graveyard = Faebloom Trick
 Stack.Count = 0

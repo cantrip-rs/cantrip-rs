@@ -1065,7 +1065,8 @@ pub fn create_emblem(cx: &mut Cx, def: CardId, player: PlayerId) -> ObjectId {
 /// Creates tokens that are copies of a permanent (CR 707.2, 111.1): the permanent's copiable values, its own copy
 /// effect's exceptions included.
 pub fn create_token_copies(cx: &mut Cx, values: Copiable, controller: PlayerId, count: u32) -> R<Vec<ObjectId>> {
-    create_tokens_as(cx, values.card, controller, count, false, if values.has_exceptions() { Some(values) } else { None }, &[])
+    // A copy does not acquire text changes on the copying instruction (CR 707.2, 612.4).
+    create_tokens_as(cx, values.card, controller, count, false, Some(values), &[])
 }
 
 /// An object that ceases to exist where it is, in no zone it can be in (CR 111.7, 111.8, 707.10a, 704.5d, 800.4a), as it
@@ -1161,7 +1162,11 @@ fn create_tokens_as(
 
 /// Token copy values, including text changes in the creating instruction (CR 612.4, 707.2).
 fn token_copy(card: CardId, copy: Option<Copiable>, words: Words) -> Option<Copiable> {
-    if words.is_printed() { copy } else { Some(Copiable { words, ..Copiable::of(card) }) }
+    match copy {
+        Some(values) => Some(values),
+        None if words.is_printed() => None,
+        None => Some(Copiable { words, ..Copiable::of(card) }),
+    }
 }
 
 /// Creates tokens of several definitions as one instruction (CR 111.1, 101.4): all enter at once, and what watches

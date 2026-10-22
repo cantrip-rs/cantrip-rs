@@ -22,7 +22,7 @@ Bot1.Battlefield.Forest#3.Activate
 [Expect]
 Bot1.Battlefield.Sandstorm Salvager.Power = 1
 Bot1.Battlefield.Sandstorm Salvager.Toughness = 1
-Bot1.Battlefield.Golem.Power = 3
-Bot1.Battlefield.Golem.Toughness = 3
-Bot1.Battlefield.Golem.Types = Artifact; Creature
-Bot1.Battlefield.Golem.Subtypes = Golem
+Bot1.Battlefield.Golem Token.Power = 3
+Bot1.Battlefield.Golem Token.Toughness = 3
+Bot1.Battlefield.Golem Token.Types = Artifact; Creature
+Bot1.Battlefield.Golem Token.Subtypes = Golem

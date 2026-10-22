@@ -24,14 +24,14 @@ Bot1.Battlefield.Mox Pearl#3.Activate
 Bot1.Hand.Lingering Souls.Cast
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield = Plains; Mox Pearl; Mox Pearl; Mox Pearl; Spirit; Spirit
+? Bot1.Battlefield = Plains; Mox Pearl; Mox Pearl; Mox Pearl; Spirit Token; Spirit Token
 Bot1.Battlefield.Plains.Activate
-Bot1.Hand.Daydream.Cast(Spirit)
+Bot1.Hand.Daydream.Cast(Spirit Token)
 Bot1.Pass
 Bot2.Pass
 
 [Expect]
-Bot1.Battlefield = Plains; Mox Pearl; Mox Pearl; Mox Pearl; Spirit
-Bot1.Battlefield.Spirit.Power = 1
+Bot1.Battlefield = Plains; Mox Pearl; Mox Pearl; Mox Pearl; Spirit Token
+Bot1.Battlefield.Spirit Token.Power = 1
 Bot1.Graveyard = Daydream; Lingering Souls
 Exile =

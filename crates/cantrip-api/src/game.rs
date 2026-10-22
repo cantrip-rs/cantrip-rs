@@ -244,7 +244,17 @@ pub trait Query {
     /// included, and the face that is up for a double-faced permanent (CR 707.8).
     fn copiable_values(&self, id: ObjectId) -> Copiable {
         let obj = self.obj(id);
-        obj.copiable().unwrap_or_else(|| Copiable::of(self.chars(id).card))
+        let mut values = obj.copiable().unwrap_or_else(|| Copiable::of(self.chars(id).card));
+        // CR 111.4, 707.2: assigned token-name words are fixed at creation, even when a copy exception changes types.
+        let definition = self.card(values.card);
+        if values.name.is_none() && let Some(subtypes) = definition.token_name {
+            values.name = Some(if values.words.is_printed() {
+                ObjectName::Literal(definition.name)
+            } else {
+                ObjectName::Token { subtypes, words: values.words }
+            });
+        }
+        values
     }
 
     /// The cards `player` owns outside the game (CR 400.11, 108.3b) - in a match, their sideboard (CR 100.4, 400.11a) - in

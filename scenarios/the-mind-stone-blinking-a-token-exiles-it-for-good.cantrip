@@ -29,7 +29,7 @@ Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.The Mind Stone.Activate(Ability: Harness)
 [T1 Bot1.Main2]
-Bot1.Target(Cat Warrior)
+Bot1.Target(Cat Warrior Token)
 
 [Expect]
 Turn = 1

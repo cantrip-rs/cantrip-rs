@@ -128,7 +128,7 @@ fn a_creature_blocking_a_band_blocks_each_member() {
     let script = GameScript::load(&path).unwrap();
     let result = run(&script).unwrap_or_else(|f| panic!("\n{}", f.report));
     let game = &result.game;
-    let blocks: Vec<(&str, &str, bool)> = game
+    let blocks: Vec<(cantrip_engine::ObjectName, cantrip_engine::ObjectName, bool)> = game
         .history()
         .all()
         .iter()
@@ -137,5 +137,6 @@ fn a_creature_blocking_a_band_blocks_each_member() {
             _ => None,
         })
         .collect();
-    assert_eq!(blocks, vec![("Smuggler's Copter", "Benalish Hero", true), ("Smuggler's Copter", "Guerrilla Gorilla", false)]);
+    use cantrip_engine::ObjectName::Literal;
+    assert_eq!(blocks, vec![(Literal("Smuggler's Copter"), Literal("Benalish Hero"), true), (Literal("Smuggler's Copter"), Literal("Guerrilla Gorilla"), false)]);
 }

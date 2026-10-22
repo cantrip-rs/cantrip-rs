@@ -42,13 +42,13 @@ Turn = 1
 Bot1.Hand = Plains; Containment Priest
 Bot1.Graveyard = Island
 Bot1.Library.Count = 10
-Bot1.Battlefield = Tundra; Mox Pearl; Mox Sapphire; Mox Jet; Sol Ring; Shorikai, Genesis Engine; Pilot
+Bot1.Battlefield = Tundra; Mox Pearl; Mox Sapphire; Mox Jet; Sol Ring; Shorikai, Genesis Engine; Pilot Token
 Bot1.Battlefield.Shorikai, Genesis Engine.Tapped = true
 Bot1.Battlefield.Shorikai, Genesis Engine.Types = Artifact
-Bot1.Battlefield.Pilot.Types = Creature
-Bot1.Battlefield.Pilot.Subtypes = Pilot
-Bot1.Battlefield.Pilot.Power = 1
-Bot1.Battlefield.Pilot.Toughness = 1
+Bot1.Battlefield.Pilot Token.Types = Creature
+Bot1.Battlefield.Pilot Token.Subtypes = Pilot
+Bot1.Battlefield.Pilot Token.Power = 1
+Bot1.Battlefield.Pilot Token.Toughness = 1
 # What the Pilot's ability does (it crews as though its power were 2 greater, CR 702.122b) is proven in
 # shorikai-is-crewed-for-eight-by-two-pilots-and-a-two-power-creature-but-not-by-the-pilots-alone.
-Bot1.Battlefield.Pilot.Tapped = false
+Bot1.Battlefield.Pilot Token.Tapped = false

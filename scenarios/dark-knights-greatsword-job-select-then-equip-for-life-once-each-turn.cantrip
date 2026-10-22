@@ -32,26 +32,26 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Hero.Power = 4
-? Bot1.Battlefield.Hero.Subtypes = Hero; Knight
-? Bot1.Battlefield.Dark Knight's Greatsword.AttachedTo = Hero
+? Bot1.Battlefield.Hero Token.Power = 4
+? Bot1.Battlefield.Hero Token.Subtypes = Hero; Knight
+? Bot1.Battlefield.Dark Knight's Greatsword.AttachedTo = Hero Token
 Bot1.Battlefield.Dark Knight's Greatsword.Activate(Ornithopter)
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Life = 17
 ? Bot1.Battlefield.Ornithopter.Power = 3
 ? Bot1.Battlefield.Ornithopter.Subtypes = Knight; Thopter
-! Bot1.Battlefield.Dark Knight's Greatsword.Activate(Hero)
-? Bot1.Battlefield.Hero.Power = 1
+! Bot1.Battlefield.Dark Knight's Greatsword.Activate(Hero Token)
+? Bot1.Battlefield.Hero Token.Power = 1
 [T3 Bot1.Main1]
-Bot1.Battlefield.Dark Knight's Greatsword.Activate(Hero)
+Bot1.Battlefield.Dark Knight's Greatsword.Activate(Hero Token)
 Bot1.Pass
 Bot2.Pass
 
 [Expect]
 Turn = 3
 Bot1.Life = 14
-Bot1.Battlefield.Hero.Power = 4
-Bot1.Battlefield.Hero.Subtypes = Hero; Knight
+Bot1.Battlefield.Hero Token.Power = 4
+Bot1.Battlefield.Hero Token.Subtypes = Hero; Knight
 Bot1.Battlefield.Ornithopter.Power = 0
 Bot1.Battlefield.Ornithopter.Subtypes = Thopter

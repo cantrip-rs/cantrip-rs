@@ -49,5 +49,5 @@ Bot2.Pass
 [Expect]
 Bot1.Hand.Count = 4
 Bot2.Graveyard = Boros Charm
-Bot2.Battlefield = Forest; Mox Ruby; Mox Pearl; Llanowar Elves; Goblin Army
-Bot2.Battlefield.Goblin Army.Power = 1
+Bot2.Battlefield = Forest; Mox Ruby; Mox Pearl; Llanowar Elves; Goblin Army Token
+Bot2.Battlefield.Goblin Army Token.Power = 1

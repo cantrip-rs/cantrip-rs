@@ -22,7 +22,8 @@ fn plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// A 2/2 white Samurai creature token with vigilance.
 pub static SAMURAI: CardDef = CardDef {
-    name: "Samurai",
+    name: "Samurai Token",
+    token_name: Some(&[Subtype::Samurai]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),

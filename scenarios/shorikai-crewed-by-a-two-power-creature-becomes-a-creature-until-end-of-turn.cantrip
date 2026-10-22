@@ -46,20 +46,20 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Brazen Borrower.Cast
 Bot1.Pass
 Bot1.Battlefield.Shorikai, Genesis Engine.Activate(Ability: Crew)
-Bot1.Choose(Pilot; Pilot; Brazen Borrower)
+Bot1.Choose(Pilot Token; Pilot Token; Brazen Borrower)
 [T3 Bot1.Main2]
 ? Bot1.Battlefield.Shorikai, Genesis Engine.Types = Artifact; Creature
 ? Bot1.Battlefield.Shorikai, Genesis Engine.Power = 8
 ? Bot1.Battlefield.Shorikai, Genesis Engine.Toughness = 8
 ? Bot1.Battlefield.Brazen Borrower.Tapped = true
-? Bot1.Battlefield.Pilot#1.Tapped = true
-? Bot1.Battlefield.Pilot#2.SummoningSick = true
-? Bot1.Battlefield.Pilot#2.Tapped = true
+? Bot1.Battlefield.Pilot Token#1.Tapped = true
+? Bot1.Battlefield.Pilot Token#2.SummoningSick = true
+? Bot1.Battlefield.Pilot Token#2.Tapped = true
 [T5 Bot1.Main1]
 
 [Expect]
 Turn = 5
-Bot1.Battlefield = Tundra; Plains; Mox Pearl; Mox Sapphire; Mox Jet; Sol Ring; Shorikai, Genesis Engine; Pilot; Pilot; Brazen Borrower
+Bot1.Battlefield = Tundra; Plains; Mox Pearl; Mox Sapphire; Mox Jet; Sol Ring; Shorikai, Genesis Engine; Pilot Token; Pilot Token; Brazen Borrower
 Bot1.Battlefield.Shorikai, Genesis Engine.Types = Artifact
 Bot1.Battlefield.Shorikai, Genesis Engine.Tapped = false
 Bot1.Graveyard = Island; Island

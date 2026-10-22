@@ -3,7 +3,8 @@ use cantrip_oracle as oracle;
 
 /// The 2/2 red Human Knight creature token with trample and haste.
 pub static HUMAN_KNIGHT: CardDef = CardDef {
-    name: "Human Knight",
+    name: "Human Knight Token",
+    token_name: Some(&[Subtype::Human, Subtype::Knight]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Red)),
     types: TypeSet::of(&[CardType::Creature]),

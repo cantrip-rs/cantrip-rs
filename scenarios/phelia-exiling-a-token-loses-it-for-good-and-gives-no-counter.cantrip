@@ -40,7 +40,7 @@ Bot1.Pass
 Bot2.Pass
 [T3 Bot1.DeclareAttackers]
 Bot1.Attack(Phelia, Exuberant Shepherd > Bot2)
-Bot1.Target(Eldrazi Spawn)
+Bot1.Target(Eldrazi Spawn Token)
 [T3 Bot1.Main2]
 ? Exile.Count = 0
 ? Bot1.Battlefield.Count = 5

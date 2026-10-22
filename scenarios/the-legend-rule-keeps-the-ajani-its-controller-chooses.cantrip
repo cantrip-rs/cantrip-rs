@@ -27,5 +27,5 @@ Bot1.Choose(Ajani, Nacatl Pariah#1)
 
 [Expect]
 Bot1.Graveyard = Ajani, Nacatl Pariah
-Bot1.Battlefield = Plains; Plains; Mox Pearl; Ajani, Nacatl Pariah; Cat Warrior; Cat Warrior
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Ajani, Nacatl Pariah; Cat Warrior Token; Cat Warrior Token
 Bot1.Battlefield.Ajani, Nacatl Pariah.SummoningSick = false

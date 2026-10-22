@@ -29,12 +29,12 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Sokenzan, Crucible of Defiance.Activate
 Bot1.Pass
-Bot1.Attack(Spirit; Spirit > Bot2)
+Bot1.Attack(Spirit Token; Spirit Token > Bot2)
 [T2 Bot2.Upkeep]
 
 [Expect]
 Bot2.Life = 18
 Bot1.Graveyard = Sokenzan, Crucible of Defiance
-Bot1.Battlefield.Spirit#1.Keywords = (absent)
-Bot1.Battlefield.Spirit#2.Keywords = (absent)
-Bot1.Battlefield.Spirit#1.Power = 1
+Bot1.Battlefield.Spirit Token#1.Keywords = (absent)
+Bot1.Battlefield.Spirit Token#2.Keywords = (absent)
+Bot1.Battlefield.Spirit Token#1.Power = 1

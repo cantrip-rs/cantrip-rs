@@ -41,7 +41,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Faebloom Trick.Cast
 Bot2.Pass
 ! Bot1.Target(Sylvan Caryatid)
-! Bot1.Target(Faerie)
+! Bot1.Target(Faerie Token)
 Bot1.Target(Ornithopter)
 [T3 Bot1.Main2]
 
@@ -49,6 +49,6 @@ Bot1.Target(Ornithopter)
 Bot2.Battlefield.Ornithopter.Tapped = true
 Bot2.Battlefield.Llanowar Elves.Tapped = false
 Bot2.Battlefield.Sylvan Caryatid.Tapped = false
-Bot1.Battlefield.Faerie#1.Tapped = false
-Bot1.Battlefield.Faerie#2.Tapped = false
+Bot1.Battlefield.Faerie Token#1.Tapped = false
+Bot1.Battlefield.Faerie Token#2.Tapped = false
 Stack.Count = 0

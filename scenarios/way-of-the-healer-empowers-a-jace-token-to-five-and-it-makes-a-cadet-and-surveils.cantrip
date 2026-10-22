@@ -31,16 +31,16 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 5
-Bot1.Battlefield.Jace.Activate(Ability: Cadet)
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 5
+Bot1.Battlefield.Jace Token.Activate(Ability: Cadet)
 Bot1.Pass
 Bot2.Pass
 Bot1.Arrange(| Swamp)
 [T1 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mox Pearl; Mox Ruby; Mox Jet; Mox Emerald; Way of the Healer; Jace; Cadet
-Bot1.Battlefield.Jace.Counters.Loyalty = 3
+Bot1.Battlefield = Mox Pearl; Mox Ruby; Mox Jet; Mox Emerald; Way of the Healer; Jace Token; Cadet
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 3
 Bot1.Battlefield.Cadet.Token = true
 Bot1.Battlefield.Cadet.Power = 2
 Bot1.Battlefield.Cadet.Toughness = 2

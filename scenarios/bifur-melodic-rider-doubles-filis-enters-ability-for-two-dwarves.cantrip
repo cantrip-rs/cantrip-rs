@@ -41,5 +41,5 @@ Bot1.Battlefield.Mox Emerald.Activate
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mox Ruby; Mox Pearl; Mox Jet; Mox Emerald; Mox Sapphire; Bifur, Melodic Rider; Fíli the Pathfinder; Dwarf; Dwarf
-Bot1.Battlefield.Dwarf#1.Power = 3
+Bot1.Battlefield = Mountain; Mox Ruby; Mox Pearl; Mox Jet; Mox Emerald; Mox Sapphire; Bifur, Melodic Rider; Fíli the Pathfinder; Dwarf Token; Dwarf Token
+Bot1.Battlefield.Dwarf Token#1.Power = 3

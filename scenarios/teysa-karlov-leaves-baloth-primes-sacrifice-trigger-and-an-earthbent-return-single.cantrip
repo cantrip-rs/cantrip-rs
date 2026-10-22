@@ -69,11 +69,11 @@ Bot1.Choose(Forest)
 Stack.Count = 0
 Bot1.Life = 22
 Bot1.Graveyard = Black Lotus
-Bot1.Battlefield = Forest; Mox Emerald; Mox Pearl; Sol Ring; Badgermole Cub; Teysa Karlov; Baloth Prime; Beast
+Bot1.Battlefield = Forest; Mox Emerald; Mox Pearl; Sol Ring; Badgermole Cub; Teysa Karlov; Baloth Prime; Beast Token
 Bot1.Battlefield.Forest.Tapped = true
 Bot1.Battlefield.Forest.Types = Land
 Bot1.Battlefield.Baloth Prime.Counters.Stun = 4
-Bot1.Battlefield.Beast.Tapped = true
-Bot1.Battlefield.Beast.Keywords = Lifelink; Vigilance
+Bot1.Battlefield.Beast Token.Tapped = true
+Bot1.Battlefield.Beast Token.Keywords = Lifelink; Vigilance
 Bot1.Battlefield.Badgermole Cub.Keywords = (absent)
-Bot2.Battlefield.Bat.Keywords = Flying
+Bot2.Battlefield.Bat Token.Keywords = Flying

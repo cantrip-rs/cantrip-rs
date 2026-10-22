@@ -35,7 +35,7 @@ Bot1.Hand.Elspeth, Storm Slayer.Cast
 Bot1.Pass
 Bot1.Attack(Voice of Victory > Bot2)
 [T3 Bot1.Blockers]
-? Bot1.Battlefield.Warrior#4.Tapped = true
+? Bot1.Battlefield.Warrior Token#4.Tapped = true
 ? Combat.Attackers.Count = 5
 [T3 Bot1.Main2]
 

@@ -29,7 +29,7 @@ Bot2.Pass
 Bot1.Modes(Skeleton)
 Bot1.Modes(Goblin)
 [T1 Bot1.End]
-? Bot1.Battlefield.Skeleton.Suspected = true
+? Bot1.Battlefield.Skeleton Token.Suspected = true
 ? Stack.Count = 1
 [T3 Bot1.End]
 ? Bot1.Battlefield.Case of the Stashed Skeleton.Solved = true
@@ -37,6 +37,6 @@ Bot1.Modes(Goblin)
 
 [Expect]
 Bot1.Battlefield.Case of the Stashed Skeleton.Solved = true
-Bot1.Battlefield.Skeleton.Suspected = true
-Bot1.Battlefield.Skeleton.Subtypes = Skeleton
+Bot1.Battlefield.Skeleton Token.Suspected = true
+Bot1.Battlefield.Skeleton Token.Subtypes = Skeleton
 Bot1.Graveyard = Artificial Evolution

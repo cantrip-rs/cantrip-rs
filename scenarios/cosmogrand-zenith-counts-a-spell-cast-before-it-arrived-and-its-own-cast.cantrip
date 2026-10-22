@@ -34,5 +34,5 @@ Bot1.Pass
 [Expect]
 Turn = 3
 Stack.Count = 0
-Bot1.Battlefield.Human Soldier#2.Power = 1
+Bot1.Battlefield.Human Soldier Token#2.Power = 1
 Bot1.Battlefield.Human Soldier#3 = (absent)

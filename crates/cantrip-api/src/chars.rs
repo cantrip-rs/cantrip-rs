@@ -8,8 +8,8 @@ use cantrip_state::*;
 pub struct Chars {
     /// The card whose name and printed values it has: its own, or the one it copies.
     pub card: CardId,
-    /// Its name: the card's, or the one a copy effect says it has (CR 707.9b).
-    pub name: &'static str,
+    /// Its name: the card's, an unnamed token's assigned words (CR 111.4), or a copy/name effect's (CR 707.9b, 612.8).
+    pub name: ObjectName,
     pub types: TypeSet,
     pub supertypes: Supertypes,
     pub subtypes: SubtypeSet,

@@ -23,10 +23,10 @@ Bot1.Pass
 [T2 Bot2.Main1]
 
 [Expect]
-Bot1.Battlefield = Mox Jet; Elegy Acolyte; Robot
-Bot1.Battlefield.Robot.Token = true
-Bot1.Battlefield.Robot.Types = Artifact; Creature
-Bot1.Battlefield.Robot.Power = 2
-Bot1.Battlefield.Robot.Toughness = 2
-Bot1.Battlefield.Robot.Colors = (absent)
+Bot1.Battlefield = Mox Jet; Elegy Acolyte; Robot Token
+Bot1.Battlefield.Robot Token.Token = true
+Bot1.Battlefield.Robot Token.Types = Artifact; Creature
+Bot1.Battlefield.Robot Token.Power = 2
+Bot1.Battlefield.Robot Token.Toughness = 2
+Bot1.Battlefield.Robot Token.Colors = (absent)
 Bot1.Graveyard = Black Lotus

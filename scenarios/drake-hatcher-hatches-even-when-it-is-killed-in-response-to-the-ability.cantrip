@@ -38,4 +38,4 @@ Bot2.Pass
 [Expect]
 Stack.Count = 0
 Bot1.Graveyard = Drake Hatcher
-Bot1.Battlefield = Drake; Island; Mox Sapphire
+Bot1.Battlefield = Drake Token; Island; Mox Sapphire

@@ -33,7 +33,7 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Hand.Invasion of Gobakhan.Cast
 Bot1.Attack(Myr Battlesphere > Bot1.Battlefield.Invasion of Gobakhan)
-Bot1.Choose(Myr#1; Myr#2)
+Bot1.Choose(Myr Token#1; Myr Token#2)
 ? Bot1.Battlefield.Invasion of Gobakhan.Counters.Defense = 3
 ? Bot1.Battlefield.Myr Battlesphere.Power = 6
 ? Bot2.Life = 20
@@ -41,5 +41,5 @@ Bot1.Choose(Myr#1; Myr#2)
 [Expect]
 Bot2.Life = 20
 Bot1.Battlefield.Myr Battlesphere.Power = 6
-Bot1.Battlefield.Myr#1.Tapped = true
-Bot1.Battlefield.Myr#3.Tapped = false
+Bot1.Battlefield.Myr Token#1.Tapped = true
+Bot1.Battlefield.Myr Token#3.Tapped = false

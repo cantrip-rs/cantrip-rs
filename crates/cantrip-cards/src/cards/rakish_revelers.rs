@@ -1,20 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::THIS_ENTERS;
-use cantrip_mechanics::{land_until_cast, tokens};
+use cantrip_mechanics::{land_until_cast, tokens::{self, CITIZEN}};
 use cantrip_oracle as oracle;
-
-/// The 1/1 green and white Citizen creature token (CR 111.4).
-pub static CITIZEN: CardDef = CardDef {
-    name: "Citizen",
-    has_cost: false,
-    // White (bit 0) and green (bit 4).
-    colors: Some(ColorSet(0b10001)),
-    types: TypeSet::of(&[CardType::Creature]),
-    subtypes: SubtypeSet::of(&[Subtype::Citizen]),
-    power: Some(1),
-    toughness: Some(1),
-    ..CardDef::BLANK
-};
 
 /// "When this creature enters, create a 1/1 green and white Citizen creature token."
 fn citizen(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

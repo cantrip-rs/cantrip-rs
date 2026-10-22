@@ -27,7 +27,7 @@ fn on_battlefield_and_nine_or_fewer(q: &dyn Query, asker: &Asker) -> bool {
         .permanents_of(asker.controller)
         .into_iter()
         // A creature's names as it has them now (CR 201.2a): a copy's, or one an effect named (CR 612.8).
-        .filter(|&id| q.chars(id).is(CardType::Creature) && library::object_names(q, id).contains(&NAME))
+        .filter(|&id| q.chars(id).is(CardType::Creature) && library::object_names(q, id).iter().any(|name| *name == NAME))
         .count();
     named <= 9
 }

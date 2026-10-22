@@ -24,7 +24,7 @@ Bot2.Battlefield.Mox Jet.Activate
 Bot2.Battlefield.Mox Ruby.Activate
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Pearl.Activate
-Bot1.Hand.Oust.Cast(Bot2.Battlefield.Spirit)
+Bot1.Hand.Oust.Cast(Bot2.Battlefield.Spirit Token)
 
 [Expect]
 Turn = 3

@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// The 3/2 white Hero creature token with vigilance.
 pub static HERO: CardDef = CardDef {
-    name: "Hero",
+    name: "Hero Token",
+    token_name: Some(&[Subtype::Hero]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),

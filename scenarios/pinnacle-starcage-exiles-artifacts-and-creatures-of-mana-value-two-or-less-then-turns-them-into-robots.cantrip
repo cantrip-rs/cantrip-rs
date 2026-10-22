@@ -83,11 +83,11 @@ Bot1.Pass
 
 [Expect]
 Exile = 
-Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Plains; Plains; Plains; Plains; Plains; Robot; Robot; Robot
-Bot1.Battlefield.Robot#1.Power = 2
-Bot1.Battlefield.Robot#1.Toughness = 2
-Bot1.Battlefield.Robot#1.Types = Artifact; Creature
-Bot1.Battlefield.Robot#1.Colors = (absent)
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Plains; Plains; Plains; Plains; Plains; Robot Token; Robot Token; Robot Token
+Bot1.Battlefield.Robot Token#1.Power = 2
+Bot1.Battlefield.Robot Token#1.Toughness = 2
+Bot1.Battlefield.Robot Token#1.Types = Artifact; Creature
+Bot1.Battlefield.Robot Token#1.Colors = (absent)
 Bot1.Graveyard = Pinnacle Starcage; Ornithopter
 Bot2.Battlefield = Barrowgoyf; Swamp; Swamp; Swamp
 Bot2.Graveyard = Dauthi Voidwalker; Ornithopter

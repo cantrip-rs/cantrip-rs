@@ -40,6 +40,6 @@ Bot2.Pass
 
 [Expect]
 Bot1.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 3
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
-Bot1.Battlefield.Jace.Token = true
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Token = true
 Bot1.Revealed = (absent)

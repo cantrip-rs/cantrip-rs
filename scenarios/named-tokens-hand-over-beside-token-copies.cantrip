@@ -36,12 +36,12 @@ Bot1.Battlefield.Sol Ring.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Hand.Fable of the Mirror-Breaker.Cast
 [T5 Bot1.Main1]
-Bot1.Attack(Goblin Shaman > Bot2)
+Bot1.Attack(Goblin Shaman Token > Bot2)
 [T5 Bot1.Main2]
 [Handover Bot1.Pass]
 
 [Expect]
 Turn = 5
 Step = Main2
-Bot1.Battlefield = Fable of the Mirror-Breaker; Goblin Shaman; Island; Mountain; Mox Pearl; Mox Sapphire; Sicarian Infiltrator; Sicarian Infiltrator; Sicarian Infiltrator; Sol Ring; Treasure Token
+Bot1.Battlefield = Fable of the Mirror-Breaker; Goblin Shaman Token; Island; Mountain; Mox Pearl; Mox Sapphire; Sicarian Infiltrator; Sicarian Infiltrator; Sicarian Infiltrator; Sol Ring; Treasure Token
 Bot2.Life = 18

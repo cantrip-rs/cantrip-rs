@@ -41,7 +41,7 @@ Bot1.Target(Bot2.Battlefield.Orcish Bowmasters)
 Bot1.Life = 19
 Bot1.Hand.Count = 4
 Bot2.Graveyard = Orcish Bowmasters
-Bot2.Battlefield = Mox Jet; Mox Ruby; Orc Army
-Bot2.Battlefield.Orc Army.Power = 2
-Bot2.Battlefield.Orc Army.Subtypes = Army; Goblin; Orc
-Bot2.Battlefield.Orc Army.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield = Mox Jet; Mox Ruby; Orc Army Token
+Bot2.Battlefield.Orc Army Token.Power = 2
+Bot2.Battlefield.Orc Army Token.Subtypes = Army; Goblin; Orc
+Bot2.Battlefield.Orc Army Token.Counters.PlusOnePlusOne = 2

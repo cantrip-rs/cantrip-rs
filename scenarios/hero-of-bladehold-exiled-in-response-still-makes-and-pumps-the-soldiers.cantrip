@@ -43,8 +43,8 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Soldier#1.Power = 2
-? Bot1.Battlefield.Soldier#2.Power = 2
+? Bot1.Battlefield.Soldier Token#1.Power = 2
+? Bot1.Battlefield.Soldier Token#2.Power = 2
 [T9 Bot1.Main2]
 
 [Expect]

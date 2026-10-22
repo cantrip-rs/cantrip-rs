@@ -47,6 +47,6 @@ Bot1.Pass
 Turn = 3
 Stack.Count = 0
 Bot2.Graveyard = Bovine Intervention; Sol Ring
-Bot1.Battlefield = Island; Thieving Skydiver; Ox
-Bot1.Battlefield.Ox.Token = true
+Bot1.Battlefield = Island; Thieving Skydiver; Ox Token
+Bot1.Battlefield.Ox Token.Token = true
 Bot2.Battlefield = Mox Jet; Mox Pearl; Island

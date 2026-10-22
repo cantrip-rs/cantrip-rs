@@ -29,5 +29,5 @@ Bot2.Hand.Brainstorm.Cast
 [Expect]
 Turn = 4
 Bot2.Graveyard = Brainstorm
-Bot1.Battlefield.Hero.Power = 1
+Bot1.Battlefield.Hero Token.Power = 1
 Stack.Count = 0

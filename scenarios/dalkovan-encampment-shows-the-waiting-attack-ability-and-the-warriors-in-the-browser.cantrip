@@ -41,7 +41,7 @@ Bot2.Pass
 Bot1.Attack(Ornithopter > Bot2)
 Bot1.Pass
 Bot2.Pass
-? Client.Bot1.Battlefield.Warrior.TypeLine = Token Creature - Warrior
+? Client.Bot1.Battlefield.Warrior Token.TypeLine = Token Creature - Warrior
 [T3 Bot1.Main2]
 ? Client.Bot1.Battlefield.Count = 8
 [T4 Bot2.Main1]

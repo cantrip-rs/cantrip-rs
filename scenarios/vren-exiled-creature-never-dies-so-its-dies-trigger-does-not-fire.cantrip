@@ -46,4 +46,4 @@ Exile = Haywire Mite
 Bot2.Life = 20
 Bot2.Graveyard.Count = 0
 Bot1.Battlefield.Count = 5
-Bot1.Battlefield.Rat.Power = 2
+Bot1.Battlefield.Rat Token.Power = 2

@@ -25,5 +25,5 @@ Bot1.Hand.Arcane Amphisbaena.Cast
 [Expect]
 Bot1.Battlefield.Arcane Amphisbaena.Keywords = Deathtouch
 Bot1.Battlefield.Arcane Amphisbaena.Power = 1
-Bot1.Battlefield.Jace.Token = true
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Token = true
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2

@@ -26,7 +26,7 @@ Bot1.Battlefield.Inspired Tethermage.Activate
 [T1 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Jace.Token = true
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Token = true
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot1.Battlefield.Inspired Tethermage.Counters.PlusOnePlusOne = 1
 Bot1.Battlefield.Inspired Tethermage.Power = 4

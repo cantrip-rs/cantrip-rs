@@ -1,0 +1,19 @@
+# Secure the Wastes: X may be 0, and then it makes no tokens at all - the spell does nothing but go to the graveyard.
+
+[Bot1 Deck]
+Secure the Wastes
+Plains x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Secure the Wastes.Cast(X: 0)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Battlefield = Plains
+Bot1.Graveyard = Secure the Wastes

@@ -41,9 +41,9 @@ Bot1.Pass
 [Expect]
 Bot1.Battlefield.Dyadrine, Synthesis Amalgam.Counters.PlusOnePlusOne = 1
 Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Robot.Power = 2
-Bot1.Battlefield.Robot.Toughness = 2
-Bot1.Battlefield.Robot.Token = true
-Bot1.Battlefield.Robot.Types = Artifact; Creature
+Bot1.Battlefield.Robot Token.Power = 2
+Bot1.Battlefield.Robot Token.Toughness = 2
+Bot1.Battlefield.Robot Token.Token = true
+Bot1.Battlefield.Robot Token.Types = Artifact; Creature
 Bot1.Hand.Count = 3
 Bot2.Life = 19

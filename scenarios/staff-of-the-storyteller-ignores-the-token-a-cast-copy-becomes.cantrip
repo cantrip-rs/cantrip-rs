@@ -45,6 +45,6 @@ Bot1.Choose(Black Lotus)
 [Expect]
 Bot1.Battlefield.Staff of the Storyteller.Counters.Story = 1
 Bot1.Battlefield.Ornithopter.Token = true
-Bot1.Battlefield.Spirit.Token = true
+Bot1.Battlefield.Spirit Token.Token = true
 Exile = Black Lotus; Ornithopter
 Stack.Count = 0

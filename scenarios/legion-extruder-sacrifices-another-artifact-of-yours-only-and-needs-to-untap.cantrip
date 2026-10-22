@@ -47,7 +47,7 @@ Bot1.Battlefield.Mountain.Activate
 Bot1.Battlefield.Mountain.Activate
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Golem.Power = 3
+? Bot1.Battlefield.Golem Token.Power = 3
 ! Bot1.Battlefield.Legion Extruder.Activate
 [T7 Bot1.Main1]
 Bot1.Hand.Mountain.Play
@@ -61,5 +61,5 @@ Bot2.Pass
 Bot2.Graveyard = Ornithopter
 Bot2.Battlefield = Island; Sol Ring
 Bot1.Graveyard = Mox Ruby
-Bot1.Battlefield.Golem.Power = 3
+Bot1.Battlefield.Golem Token.Power = 3
 Bot1.Battlefield.Legion Extruder.Tapped = true

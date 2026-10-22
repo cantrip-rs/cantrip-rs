@@ -5,7 +5,8 @@ use cantrip_oracle as oracle;
 
 /// A blue Illusion creature token: the generic definition, its size X/X given as it is made (`illusion_for_owner`).
 pub static ILLUSION: CardDef = CardDef {
-    name: "Illusion",
+    name: "Illusion Token",
+    token_name: Some(&[Subtype::Illusion]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Blue)),
     types: TypeSet::of(&[CardType::Creature]),

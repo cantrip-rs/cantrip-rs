@@ -35,12 +35,12 @@ Bot1.Accept
 Bot1.Hand.Mox Sapphire.Cast
 Bot1.Pass
 Bot1.Pass
-? Bot1.Battlefield.Monk.Keywords = Haste; Trample
-? Bot1.Battlefield.Monk.Power = 3
-Bot1.Attack(Monk > Bot2)
+? Bot1.Battlefield.Monk Token.Keywords = Haste; Trample
+? Bot1.Battlefield.Monk Token.Power = 3
+Bot1.Attack(Monk Token > Bot2)
 [T3 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 14
-Bot1.Battlefield.Cori-Steel Cutter.AttachedTo = Monk
-Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Mox Jet; Mox Sapphire; Cori-Steel Cutter; Monk
+Bot1.Battlefield.Cori-Steel Cutter.AttachedTo = Monk Token
+Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Mox Jet; Mox Sapphire; Cori-Steel Cutter; Monk Token

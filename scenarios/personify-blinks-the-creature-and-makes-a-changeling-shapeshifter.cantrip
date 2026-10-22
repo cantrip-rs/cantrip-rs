@@ -27,11 +27,11 @@ Bot1.Hand.Personify.Cast(Thraben Inspector)
 
 [Expect]
 Turn = 1
-Bot1.Battlefield = Plains; Mox Pearl; Mox Pearl; Mox Pearl; Thraben Inspector; Shapeshifter; Clue Token; Clue Token
-Bot1.Battlefield.Shapeshifter.Token = true
-Bot1.Battlefield.Shapeshifter.Power = 1
-Bot1.Battlefield.Shapeshifter.Toughness = 1
-Bot1.Battlefield.Shapeshifter.Subtypes = (every creature type)
-Bot1.Battlefield.Shapeshifter.Keywords = Changeling
+Bot1.Battlefield = Plains; Mox Pearl; Mox Pearl; Mox Pearl; Thraben Inspector; Shapeshifter Token; Clue Token; Clue Token
+Bot1.Battlefield.Shapeshifter Token.Token = true
+Bot1.Battlefield.Shapeshifter Token.Power = 1
+Bot1.Battlefield.Shapeshifter Token.Toughness = 1
+Bot1.Battlefield.Shapeshifter Token.Subtypes = (every creature type)
+Bot1.Battlefield.Shapeshifter Token.Keywords = Changeling
 Bot1.Graveyard = Personify
 Stack.Count = 0

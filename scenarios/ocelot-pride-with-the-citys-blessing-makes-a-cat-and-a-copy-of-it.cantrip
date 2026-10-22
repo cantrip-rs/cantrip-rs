@@ -37,4 +37,4 @@ Bot1.Attack(Ocelot Pride)
 [Expect]
 Turn = 9
 Bot1.Life = 21
-Bot1.Battlefield = Plains; Ocelot Pride; Mox Pearl; Mox Sapphire; Mox Jet; Mox Ruby; Mox Emerald; Ornithopter; Ornithopter; Ornithopter; Cat; Cat
+Bot1.Battlefield = Plains; Ocelot Pride; Mox Pearl; Mox Sapphire; Mox Jet; Mox Ruby; Mox Emerald; Ornithopter; Ornithopter; Ornithopter; Cat Token; Cat Token

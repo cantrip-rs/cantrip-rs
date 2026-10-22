@@ -34,7 +34,7 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
 Bot1.Accept
-Bot1.Choose(Gnome Soldier; Ornithopter#1; Ornithopter#2; Ornithopter#3; Ornithopter#4)
+Bot1.Choose(Gnome Soldier Token; Ornithopter#1; Ornithopter#2; Ornithopter#3; Ornithopter#4)
 [T5 Bot1.Main1]
 Bot1.Battlefield.Barracks of the Thousand.Activate
 Bot1.Battlefield.Plains.Activate
@@ -52,4 +52,4 @@ Bot1.Hand.Healer's Hawk.Cast
 
 [Expect]
 Turn = 9
-Bot1.Battlefield = Authority of the Consuls; Authority of the Consuls; Barracks of the Thousand; Gnome Soldier; Gnome Soldier; Healer's Hawk; Healer's Hawk; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Plains
+Bot1.Battlefield = Authority of the Consuls; Authority of the Consuls; Barracks of the Thousand; Gnome Soldier Token; Gnome Soldier Token; Healer's Hawk; Healer's Hawk; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Plains

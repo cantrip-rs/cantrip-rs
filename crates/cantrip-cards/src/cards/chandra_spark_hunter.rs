@@ -34,7 +34,8 @@ fn emblem(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// The 3/2 colorless Vehicle artifact token with crew 1.
 pub static VEHICLE: CardDef = CardDef {
-    name: "Vehicle",
+    name: "Vehicle Token",
+    token_name: Some(&[Subtype::Vehicle]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Artifact]),
     subtypes: SubtypeSet::of(&[Subtype::Vehicle]),

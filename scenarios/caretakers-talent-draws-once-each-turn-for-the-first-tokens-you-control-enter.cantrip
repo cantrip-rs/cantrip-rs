@@ -35,7 +35,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Lingering Souls.Cast
 [Bot1.Main2]
 ? Bot1.Hand.Count = 2
-? Bot1.Battlefield = Caretaker's Talent; Mox Jet; Mox Pearl; Mox Ruby; Plains; Plains; Spirit; Spirit
+? Bot1.Battlefield = Caretaker's Talent; Mox Jet; Mox Pearl; Mox Ruby; Plains; Plains; Spirit Token; Spirit Token
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Graveyard.Lingering Souls.Cast(Ability: Flashback)
@@ -46,4 +46,4 @@ Turn = 3
 Stack.Count = 0
 Bot1.Hand.Count = 2
 Exile = Lingering Souls
-Bot1.Battlefield = Caretaker's Talent; Mox Jet; Mox Pearl; Mox Ruby; Plains; Plains; Spirit; Spirit; Spirit; Spirit
+Bot1.Battlefield = Caretaker's Talent; Mox Jet; Mox Pearl; Mox Ruby; Plains; Plains; Spirit Token; Spirit Token; Spirit Token; Spirit Token

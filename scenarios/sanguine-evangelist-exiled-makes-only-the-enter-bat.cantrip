@@ -34,4 +34,4 @@ Stack.Count = 0
 Exile = Sanguine Evangelist
 Bot1.Life = 22
 Bot1.Battlefield.Count = 4
-Bot1.Battlefield.Bat.Power = 1
+Bot1.Battlefield.Bat Token.Power = 1

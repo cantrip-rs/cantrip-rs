@@ -23,13 +23,13 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Chief Warg's Company.Cast
 Bot1.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
-? Bot1.Battlefield = Chief Warg's Company; Forest; Mox Emerald; Mox Jet; Ornithopter; Wolf
+? Bot1.Battlefield = Chief Warg's Company; Forest; Mox Emerald; Mox Jet; Ornithopter; Wolf Token
 ! Bot1.Attack(Chief Warg's Company > Bot2)
 [T5 Bot1.Main1]
-? Bot1.Battlefield = Chief Warg's Company; Forest; Mox Emerald; Mox Jet; Ornithopter; Wolf; Wolf
-Bot1.Attack(Chief Warg's Company; Wolf#1 > Bot2)
+? Bot1.Battlefield = Chief Warg's Company; Forest; Mox Emerald; Mox Jet; Ornithopter; Wolf Token; Wolf Token
+Bot1.Attack(Chief Warg's Company; Wolf Token#1 > Bot2)
 [T5 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 13
-Bot1.Battlefield = Chief Warg's Company; Forest; Mox Emerald; Mox Jet; Ornithopter; Wolf; Wolf
+Bot1.Battlefield = Chief Warg's Company; Forest; Mox Emerald; Mox Jet; Ornithopter; Wolf Token; Wolf Token

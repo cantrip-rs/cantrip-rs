@@ -1,0 +1,11 @@
+{
+  "name": "Ob Nixilis, the Ascended",
+  "manaCost": "{5}{W}{W}",
+  "type": "Legendary Creature — Angel",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nWhen Ob Nixilis enters, destroy all tapped creatures your opponents control. You gain 1 life for each creature destroyed this way.\nAt the beginning of each end step, if you gained life this turn, create a 4/4 white Angel creature token with flying.",
+  "keywords": [
+    "Flying"
+  ]
+}

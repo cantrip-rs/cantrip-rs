@@ -31,15 +31,15 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Hand.Jace's Machinations.Cast
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 10
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 10
 [T2 Bot2.Main1]
 Bot2.Hand.Strip Mine.Play
 [T3 Bot1.Main1]
 Bot1.Hand.Island.Play
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 12
-Bot1.Battlefield.Jace.Activate(Ability: Put a +1/+1 counter; Bot1.Battlefield.Avatar of Burgeoning Echoes)
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 12
+Bot1.Battlefield.Jace Token.Activate(Ability: Put a +1/+1 counter; Bot1.Battlefield.Avatar of Burgeoning Echoes)
 Bot2.Battlefield.Strip Mine.Activate(Ability: Destroy target land; Bot1.Battlefield.Island#1)
 Bot1.Pass
 Bot2.Pass
@@ -48,7 +48,7 @@ Bot2.Pass
 
 [Expect]
 Bot1.Battlefield.Avatar of Burgeoning Echoes.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot1.Graveyard = Island; Jace's Machinations; Black Lotus
 Bot2.Graveyard = Strip Mine
 Stack.Count = 0

@@ -35,7 +35,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Retrofitter Foundry.Activate(Ability: {2}, {T})
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Goblin.Subtypes = Goblin
+? Bot1.Battlefield.Goblin Token.Subtypes = Goblin
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Retrofitter Foundry.Activate(Ability: Thopter artifact creature token with flying; Sacrifice: Goblin)
@@ -45,5 +45,5 @@ Bot2.Pass
 [Expect]
 Turn = 3
 Stack.Count = 0
-Bot1.Battlefield.Thopter.Subtypes = Thopter
+Bot1.Battlefield.Thopter Token.Subtypes = Thopter
 Bot1.Battlefield.Count = 6

@@ -39,4 +39,4 @@ Bot1.Battlefield.Curious Farm Animals.Activate(Bot2.Battlefield.Corpses of the L
 [Expect]
 Bot1.Life = 23
 Bot2.Graveyard = Corpses of the Lost
-Bot2.Battlefield.Skeleton Pirate.Power = 2
+Bot2.Battlefield.Skeleton Pirate Token.Power = 2

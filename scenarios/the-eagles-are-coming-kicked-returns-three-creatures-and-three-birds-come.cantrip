@@ -36,6 +36,6 @@ Bot1.Target(Ornithopter#1; Ornithopter#2; Ornithopter#3)
 [T4 Bot2.Main1]
 
 [Expect]
-Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Bird Soldier; Bird Soldier; Bird Soldier
+Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Bird Soldier Token; Bird Soldier Token; Bird Soldier Token
 Bot1.Hand = Ornithopter; Ornithopter; Ornithopter
 Bot1.Graveyard = The Eagles Are Coming!; Black Lotus

@@ -39,5 +39,5 @@ Stack.Count = 0
 Bot1.Graveyard = Into the Flood Maw
 Bot2.Battlefield = 
 Bot2.Hand.Count = 8
-Bot3.Battlefield = Ornithopter; Fish
-Bot3.Battlefield.Fish.Tapped = true
+Bot3.Battlefield = Ornithopter; Fish Token
+Bot3.Battlefield.Fish Token.Tapped = true

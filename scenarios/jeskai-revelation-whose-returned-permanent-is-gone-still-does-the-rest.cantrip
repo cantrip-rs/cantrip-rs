@@ -44,7 +44,7 @@ Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
 Bot2.Graveyard = Ornithopter; Lightning Bolt
 Bot2.Life = 16
 Bot1.Life = 24
-Bot1.Battlefield.Monk#2.Power = 1
+Bot1.Battlefield.Monk Token#2.Power = 1
 Bot1.Battlefield.Count = 6
 Bot1.Hand.Count = 4
 Bot2.Hand.Count = 5

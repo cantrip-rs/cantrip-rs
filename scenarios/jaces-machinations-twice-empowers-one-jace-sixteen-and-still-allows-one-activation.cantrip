@@ -34,15 +34,15 @@ Bot1.Battlefield.Mox Sapphire#1.Activate
 Bot1.Battlefield.Mox Sapphire#2.Activate
 ? Stack.Count = 2
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 8
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 8
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 16
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 16
 [T1 Bot1.End]
-Bot1.Battlefield.Jace.Activate(Ability: Surveil)
+Bot1.Battlefield.Jace Token.Activate(Ability: Surveil)
 Bot2.Pass
-! Bot1.Battlefield.Jace.Activate
+! Bot1.Battlefield.Jace Token.Activate
 
 [Expect]
 Turn = 1
-Bot1.Battlefield.Jace.Counters.Loyalty = 15
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 15
 Bot1.Battlefield.Count = 5

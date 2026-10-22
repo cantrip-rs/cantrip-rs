@@ -52,4 +52,4 @@ Turn = 3
 Stack.Count = 0
 Bot1.Battlefield.Caretaker's Talent.ClassLevel = 2
 Bot1.Battlefield = Caretaker's Talent; Plains; Mox Pearl; Mox Jet; Mox Ruby; Ornithopter
-Bot2.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Ruby; Spirit; Spirit
+Bot2.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Ruby; Spirit Token; Spirit Token

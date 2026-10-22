@@ -69,7 +69,7 @@ Bot1.Pass
 Bot2.Battlefield = Plains; Crystal Barricade
 Bot2.Graveyard = Benalish Hero; Plains; Mox Pearl
 Bot1.Battlefield.Count = 6
-Bot1.Battlefield.Zombie#1.Power = 2
-Bot1.Battlefield.Zombie#1.Toughness = 2
-Bot1.Battlefield.Zombie#1.Colors = Black
+Bot1.Battlefield.Zombie Token#1.Power = 2
+Bot1.Battlefield.Zombie Token#1.Toughness = 2
+Bot1.Battlefield.Zombie Token#1.Colors = Black
 Bot1.Graveyard = Liliana, Dreadhorde General; Black Lotus

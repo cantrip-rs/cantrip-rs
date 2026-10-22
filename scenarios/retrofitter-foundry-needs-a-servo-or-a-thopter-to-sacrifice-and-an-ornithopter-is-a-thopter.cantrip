@@ -31,5 +31,5 @@ Bot1.Pass
 [Expect]
 Stack.Count = 0
 Bot1.Graveyard = Ornithopter
-Bot1.Battlefield.Construct.Power = 4
+Bot1.Battlefield.Construct Token.Power = 4
 Bot1.Battlefield.Retrofitter Foundry.Tapped = true

@@ -42,7 +42,7 @@ Bot2.Battlefield.Sol Ring.Activate
 Bot2.Hand.Karn, Scion of Urza.Cast
 [T5 Bot1.Main1]
 Bot1.Attack(Myr Battlesphere > Bot2.Battlefield.Karn, Scion of Urza)
-Bot1.Choose(Myr#1; Myr#2; Myr#3)
+Bot1.Choose(Myr Token#1; Myr Token#2; Myr Token#3)
 ? Bot2.Battlefield.Karn, Scion of Urza.Counters.Loyalty = 2
 ? Bot2.Life = 20
 [Bot1.Main2]

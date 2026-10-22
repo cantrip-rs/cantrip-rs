@@ -33,15 +33,15 @@ Bot1.Pass
 ? Bot1.Battlefield.Reflection of Kiki-Jiki.Counters.Lore = (absent)
 [T7 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
-Bot1.Battlefield.Reflection of Kiki-Jiki.Activate(Goblin Shaman)
+Bot1.Battlefield.Reflection of Kiki-Jiki.Activate(Goblin Shaman Token)
 Bot1.Pass
 [T7 Bot1.Main2]
-? Bot1.Battlefield.Goblin Shaman#1.Keywords = (absent)
-? Bot1.Battlefield.Goblin Shaman#2.Keywords = Haste
-? Bot1.Battlefield.Goblin Shaman#2.Power = 2
+? Bot1.Battlefield.Goblin Shaman Token#1.Keywords = (absent)
+? Bot1.Battlefield.Goblin Shaman Token#2.Keywords = Haste
+? Bot1.Battlefield.Goblin Shaman Token#2.Power = 2
 [T9 Bot1.Main1]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mox Ruby; Reflection of Kiki-Jiki; Goblin Shaman
+Bot1.Battlefield = Mountain; Mox Ruby; Reflection of Kiki-Jiki; Goblin Shaman Token
 Bot1.Graveyard = Mountain; Black Lotus
 Bot1.Library.Count = 8

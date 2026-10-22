@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// A 1/1 blue Thopter artifact creature token with flying.
 pub static THOPTER: CardDef = CardDef {
-    name: "Thopter",
+    name: "Thopter Token",
+    token_name: Some(&[Subtype::Thopter]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Blue)),
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),

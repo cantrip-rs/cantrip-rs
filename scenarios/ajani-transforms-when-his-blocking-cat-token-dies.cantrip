@@ -29,7 +29,7 @@ Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Fanatic of Rhonas.Cast
 [T6 Bot2.DeclareAttackers]
 Bot2.Attack(Fanatic of Rhonas > Bot1)
-Bot1.Block(Cat Warrior > Fanatic of Rhonas)
+Bot1.Block(Cat Warrior Token > Fanatic of Rhonas)
 Bot1.Accept
 
 [Expect]

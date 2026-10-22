@@ -62,4 +62,4 @@ Bot1.Accept
 [Expect]
 Bot1.Battlefield.Lorehold, the Historian.Subtypes = Dragon; Elder; Illusion
 Bot1.Graveyard = Hop to It
-Bot1.Battlefield.Rabbit#3.Token = true
+Bot1.Battlefield.Rabbit Token#3.Token = true

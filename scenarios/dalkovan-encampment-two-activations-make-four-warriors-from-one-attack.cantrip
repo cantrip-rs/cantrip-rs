@@ -51,8 +51,8 @@ Bot2.Pass
 Bot1.Pass
 Bot2.Pass
 [T5 Bot1.Main2]
-? Bot1.Battlefield.Warrior#4.Tapped = true
-? Bot1.Battlefield = Mountain; Dalkovan Encampment; Dalkovan Encampment; Mox Pearl; Mox Jet; Mox Ruby; Ornithopter; Warrior; Warrior; Warrior; Warrior
+? Bot1.Battlefield.Warrior Token#4.Tapped = true
+? Bot1.Battlefield = Mountain; Dalkovan Encampment; Dalkovan Encampment; Mox Pearl; Mox Jet; Mox Ruby; Ornithopter; Warrior Token; Warrior Token; Warrior Token; Warrior Token
 [T5 Bot1.End]
 Bot1.Pass
 

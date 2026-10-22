@@ -26,16 +26,16 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Pass
 Bot1.Pass
 [T3 Bot1.Main2]
-? Bot1.Battlefield.Ninja Turtle Spirit#1.Tapped = true
-? Bot1.Battlefield.Ninja Turtle Spirit#1.Token = true
-? Bot1.Battlefield.Ninja Turtle Spirit#2.Tapped = true
-? Bot1.Battlefield.Ninja Turtle Spirit#2.Token = true
-? Bot1.Battlefield.Ninja Turtle Spirit#3.Tapped = true
-? Bot1.Battlefield.Ninja Turtle Spirit#3.Token = true
-? Bot1.Battlefield.Ninja Turtle Spirit#1.Subtypes = Ninja; Spirit; Turtle
-? Bot1.Battlefield.Ninja Turtle Spirit#1.Colors = White
-? Bot1.Battlefield.Ninja Turtle Spirit#1.Power = 1
-? Bot1.Battlefield.Ninja Turtle Spirit#1.Toughness = 1
+? Bot1.Battlefield.Ninja Turtle Spirit Token#1.Tapped = true
+? Bot1.Battlefield.Ninja Turtle Spirit Token#1.Token = true
+? Bot1.Battlefield.Ninja Turtle Spirit Token#2.Tapped = true
+? Bot1.Battlefield.Ninja Turtle Spirit Token#2.Token = true
+? Bot1.Battlefield.Ninja Turtle Spirit Token#3.Tapped = true
+? Bot1.Battlefield.Ninja Turtle Spirit Token#3.Token = true
+? Bot1.Battlefield.Ninja Turtle Spirit Token#1.Subtypes = Ninja; Spirit; Turtle
+? Bot1.Battlefield.Ninja Turtle Spirit Token#1.Colors = White
+? Bot1.Battlefield.Ninja Turtle Spirit Token#1.Power = 1
+? Bot1.Battlefield.Ninja Turtle Spirit Token#1.Toughness = 1
 
 [Expect]
 Bot2.Life = 17

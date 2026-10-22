@@ -35,7 +35,7 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Emeritus of Truce)
 ? Exile.Count = 0
 
 [Expect]
-Bot1.Battlefield = Plains; Plains; Plains; Inkling
+Bot1.Battlefield = Plains; Plains; Plains; Inkling Token
 Bot1.Graveyard = Emeritus of Truce
 Bot2.Graveyard = Lightning Bolt
 Bot2.Battlefield.Count = 4

@@ -39,10 +39,10 @@ Bot1.Battlefield.Island.Activate
 Turn = 3
 Stack.Count = 0
 Exile.Count = 0
-Bot1.Battlefield = Island; Rakish Revelers; Citizen
+Bot1.Battlefield = Island; Rakish Revelers; Citizen Token
 Bot1.Graveyard = Black Lotus; Black Lotus; Black Lotus
-Bot1.Battlefield.Citizen.Token = true
-Bot1.Battlefield.Citizen.Colors = Green; White
-Bot1.Battlefield.Citizen.Subtypes = Citizen
-Bot1.Battlefield.Citizen.Power = 1
-Bot1.Battlefield.Citizen.Toughness = 1
+Bot1.Battlefield.Citizen Token.Token = true
+Bot1.Battlefield.Citizen Token.Colors = Green; White
+Bot1.Battlefield.Citizen Token.Subtypes = Citizen
+Bot1.Battlefield.Citizen Token.Power = 1
+Bot1.Battlefield.Citizen Token.Toughness = 1

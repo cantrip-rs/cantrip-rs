@@ -34,7 +34,7 @@ Bot1.Pass
 [Expect]
 Bot1.Hand.Count = 4
 Bot1.Battlefield.Garruk, Curse Breaker.Counters.Loyalty = 2
-Bot1.Battlefield.Beast.Power = 4
-Bot1.Battlefield.Beast.Toughness = 4
-Bot1.Battlefield.Beast.Keywords = Trample
-Bot1.Battlefield.Beast.Colors = Green
+Bot1.Battlefield.Beast Token.Power = 4
+Bot1.Battlefield.Beast Token.Toughness = 4
+Bot1.Battlefield.Beast Token.Keywords = Trample
+Bot1.Battlefield.Beast Token.Colors = Green

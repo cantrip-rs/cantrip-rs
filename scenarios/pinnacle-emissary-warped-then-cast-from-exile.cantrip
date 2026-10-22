@@ -56,16 +56,16 @@ Bot1.Exile.Pinnacle Emissary.Cast
 Bot1.Hand.Mishra's Bauble.Cast
 [T6 Bot2.DeclareAttackers]
 Bot2.Attack(Fanatic of Rhonas > Bot1; Ornithopter > Bot1)
-! Bot1.Block(Drone > Fanatic of Rhonas)
-Bot1.Block(Drone > Ornithopter; Pinnacle Emissary > Fanatic of Rhonas)
+! Bot1.Block(Drone Token > Fanatic of Rhonas)
+Bot1.Block(Drone Token > Ornithopter; Pinnacle Emissary > Fanatic of Rhonas)
 
 [Expect]
 Turn = 6
 Stack.Count = 0
 Exile.Count = 0
-Bot1.Battlefield = Drone; Island; Island; Mishra's Bauble; Mountain; Pinnacle Emissary
+Bot1.Battlefield = Drone Token; Island; Island; Mishra's Bauble; Mountain; Pinnacle Emissary
 Bot1.Battlefield.Pinnacle Emissary.Power = 3
 Bot1.Battlefield.Pinnacle Emissary.Toughness = 3
-Bot1.Battlefield.Drone.Power = 1
-Bot1.Battlefield.Drone.Toughness = 1
-Bot1.Battlefield.Drone.Types = Artifact; Creature
+Bot1.Battlefield.Drone Token.Power = 1
+Bot1.Battlefield.Drone Token.Toughness = 1
+Bot1.Battlefield.Drone Token.Types = Artifact; Creature

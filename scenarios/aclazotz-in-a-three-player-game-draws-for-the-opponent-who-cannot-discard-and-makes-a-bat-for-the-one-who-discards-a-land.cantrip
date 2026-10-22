@@ -79,6 +79,6 @@ Bot3.Graveyard = Mountain
 Bot3.Hand.Count = 6
 Bot1.Hand.Count = 5
 Bot1.Library.Count = 10
-Bot1.Battlefield.Bat.Token = true
+Bot1.Battlefield.Bat Token.Token = true
 Bot1.Battlefield.Count = 5
 Stack.Count = 0

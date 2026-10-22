@@ -41,4 +41,4 @@ Bot1.Battlefield.The Wandering Emperor.Activate(Ability: +1)
 [Expect]
 Turn = 4
 Bot1.Battlefield.The Wandering Emperor.Counters.Loyalty = 3
-Bot1.Battlefield.Samurai.Power = 2
+Bot1.Battlefield.Samurai Token.Power = 2

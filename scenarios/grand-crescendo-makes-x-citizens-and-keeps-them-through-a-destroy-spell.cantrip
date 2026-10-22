@@ -1,0 +1,52 @@
+# Grand Crescendo: "Create X 1/1 green and white Citizen creature tokens. Creatures you control gain indestructible until
+# end of turn." Bot1 casts it with X = 3, so exactly three Citizens arrive, each a 1/1 green and white Citizen token, and
+# the indestructible the spell grants keeps its Ornithopter alive through Bot2's Infernal Grasp later that same turn -
+# though the destroys' caster still loses its 2 life.
+
+[Bot1 Deck]
+Black Lotus
+Grand Crescendo
+Plains
+Plains
+Ornithopter
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Black Lotus
+Infernal Grasp
+Swamp
+Swamp
+Swamp x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Grand Crescendo.Cast(X: 3)
+[T3 Bot1.Main2]
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Infernal Grasp.Cast(Bot1.Battlefield.Ornithopter)
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Plains; Plains; Ornithopter; Citizen Token; Citizen Token; Citizen Token
+Bot1.Battlefield.Citizen Token#1.Token = true
+Bot1.Battlefield.Citizen Token#1.Power = 1
+Bot1.Battlefield.Citizen Token#1.Toughness = 1
+Bot1.Battlefield.Citizen Token#1.Colors = Green; White
+Bot1.Battlefield.Citizen Token#1.Types = Creature
+Bot1.Battlefield.Citizen Token#1.Subtypes = Citizen
+Bot1.Graveyard = Grand Crescendo; Black Lotus
+Bot2.Life = 18
+Bot2.Graveyard = Infernal Grasp; Black Lotus

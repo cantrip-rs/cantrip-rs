@@ -58,6 +58,6 @@ Bot1.Choose(Forest)
 Stack.Count = 0
 Bot1.Life = 22
 Bot1.Graveyard = Forest; Black Lotus
-Bot1.Battlefield = Mox Emerald; Mox Pearl; Sol Ring; Badgermole Cub; Baloth Prime; Beast
+Bot1.Battlefield = Mox Emerald; Mox Pearl; Sol Ring; Badgermole Cub; Baloth Prime; Beast Token
 Bot1.Battlefield.Baloth Prime.Counters.Stun = 4
-Bot1.Battlefield.Beast.Tapped = true
+Bot1.Battlefield.Beast Token.Tapped = true

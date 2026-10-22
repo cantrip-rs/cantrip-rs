@@ -45,6 +45,6 @@ Bot1.Pass
 [Expect]
 Bot1.Battlefield.Ritual Chamber.Doors = Ritual Chamber
 Bot1.Battlefield.Ritual Chamber.ManaValue = 5
-Bot1.Battlefield.Demon.Power = 6
+Bot1.Battlefield.Demon Token.Power = 6
 Bot1.Graveyard.Count = 0
 Exile.Count = 3

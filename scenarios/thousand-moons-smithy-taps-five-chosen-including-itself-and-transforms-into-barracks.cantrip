@@ -30,7 +30,7 @@ Bot1.Hand.Ornithopter.Cast
 Bot1.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
 Bot1.Accept
-Bot1.Choose(Thousand Moons Smithy; Gnome Soldier; Ornithopter#1; Ornithopter#2; Ornithopter#3)
+Bot1.Choose(Thousand Moons Smithy; Gnome Soldier Token; Ornithopter#1; Ornithopter#2; Ornithopter#3)
 ! Bot1.Battlefield.Barracks of the Thousand.Activate
 [T3 Bot1.Main2]
 
@@ -39,9 +39,9 @@ Turn = 3
 Bot1.Battlefield.Barracks of the Thousand.Tapped = true
 Bot1.Battlefield.Barracks of the Thousand.Types = Artifact; Land
 Bot1.Battlefield.Barracks of the Thousand.Supertypes = Legendary
-Bot1.Battlefield = Barracks of the Thousand; Gnome Soldier; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Plains
-Bot1.Battlefield.Gnome Soldier.Tapped = true
-Bot1.Battlefield.Gnome Soldier.Power = 6
+Bot1.Battlefield = Barracks of the Thousand; Gnome Soldier Token; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Plains
+Bot1.Battlefield.Gnome Soldier Token.Tapped = true
+Bot1.Battlefield.Gnome Soldier Token.Power = 6
 Bot1.Battlefield.Ornithopter#1.Tapped = true
 Bot1.Battlefield.Ornithopter#2.Tapped = true
 Bot1.Battlefield.Ornithopter#3.Tapped = true

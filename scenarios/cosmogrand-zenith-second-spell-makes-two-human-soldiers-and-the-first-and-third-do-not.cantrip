@@ -39,9 +39,9 @@ Bot1.Pass
 [Expect]
 Turn = 3
 Stack.Count = 0
-Bot1.Battlefield.Human Soldier#1.Colors = White
-Bot1.Battlefield.Human Soldier#1.Subtypes = Human; Soldier
-Bot1.Battlefield.Human Soldier#2.Toughness = 1
-Bot1.Battlefield.Human Soldier#1.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Human Soldier Token#1.Colors = White
+Bot1.Battlefield.Human Soldier Token#1.Subtypes = Human; Soldier
+Bot1.Battlefield.Human Soldier Token#2.Toughness = 1
+Bot1.Battlefield.Human Soldier Token#1.Counters.PlusOnePlusOne = (absent)
 Bot1.Battlefield.Human Soldier#3 = (absent)
 Bot1.Battlefield.Cosmogrand Zenith.Power = 2

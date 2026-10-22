@@ -57,7 +57,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Blasting Station.Cast
 Bot1.Pass
 [T3 Bot1.Main2]
-? Bot1.Battlefield.Construct.Power = 8
+? Bot1.Battlefield.Construct Token.Power = 8
 [T5 Bot1.Main1]
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Pearl.Activate
@@ -66,8 +66,8 @@ Bot1.Pass
 [T5 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Construct.Power = 9
-Bot1.Battlefield.Construct.Toughness = 9
-Bot1.Battlefield.Construct.Token = true
-Bot1.Battlefield.Construct.Types = Artifact; Creature
+Bot1.Battlefield.Construct Token.Power = 9
+Bot1.Battlefield.Construct Token.Toughness = 9
+Bot1.Battlefield.Construct Token.Token = true
+Bot1.Battlefield.Construct Token.Types = Artifact; Creature
 Bot2.Battlefield = Blasting Station

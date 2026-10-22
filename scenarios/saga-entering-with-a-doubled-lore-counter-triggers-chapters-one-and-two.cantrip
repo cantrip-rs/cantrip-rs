@@ -50,6 +50,6 @@ Bot1.Choose(Island)
 
 [Expect]
 Bot1.Battlefield.Fable of the Mirror-Breaker.Counters.Lore = 2
-Bot1.Battlefield.Goblin Shaman.Token = true
+Bot1.Battlefield.Goblin Shaman Token.Token = true
 Bot1.Hand = Swamp
 Bot1.Graveyard = Island; Black Lotus

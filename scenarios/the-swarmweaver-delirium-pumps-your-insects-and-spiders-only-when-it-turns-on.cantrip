@@ -48,9 +48,9 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.The Swarmweaver.Cast
 [T3 Bot1.Main2]
-? Bot1.Battlefield.Insect#1.Power = 1
-? Bot1.Battlefield.Insect#1.Keywords = Flying
-? Bot1.Battlefield.Insect#1.Colors = Black; Green
+? Bot1.Battlefield.Insect Token#1.Power = 1
+? Bot1.Battlefield.Insect Token#1.Keywords = Flying
+? Bot1.Battlefield.Insect Token#1.Colors = Black; Green
 [T5 Bot1.Main1]
 Bot1.Battlefield.Swamp.Activate
 Bot1.Hand.Entomb.Cast
@@ -58,13 +58,13 @@ Bot1.Search(Swamp)
 [T5 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Insect#1.Power = 2
-Bot1.Battlefield.Insect#1.Toughness = 2
-Bot1.Battlefield.Insect#1.Keywords = Deathtouch; Flying
-Bot1.Battlefield.Insect#2.Power = 2
-Bot1.Battlefield.Insect#2.Keywords = Deathtouch; Flying
+Bot1.Battlefield.Insect Token#1.Power = 2
+Bot1.Battlefield.Insect Token#1.Toughness = 2
+Bot1.Battlefield.Insect Token#1.Keywords = Deathtouch; Flying
+Bot1.Battlefield.Insect Token#2.Power = 2
+Bot1.Battlefield.Insect Token#2.Keywords = Deathtouch; Flying
 Bot1.Battlefield.The Swarmweaver.Power = 2
 Bot1.Battlefield.The Swarmweaver.Toughness = 3
 Bot1.Battlefield.The Swarmweaver.Keywords = (absent)
-Bot2.Battlefield.Insect.Power = 1
-Bot2.Battlefield.Insect.Keywords = (absent)
+Bot2.Battlefield.Insect Token.Power = 1
+Bot2.Battlefield.Insect Token.Keywords = (absent)

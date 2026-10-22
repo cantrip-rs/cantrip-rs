@@ -46,8 +46,8 @@ Bot1.Target(Bot2.Battlefield.Ornithopter)
 Bot1.Modes(Catacombs)
 [T7 Bot1.Main1]
 ? Bot1.Dungeon = Undercity: Catacombs
-? Bot1.Battlefield.Skeleton.Power = 4
-? Bot1.Battlefield.Skeleton.Keywords = Menace
+? Bot1.Battlefield.Skeleton Token.Power = 4
+? Bot1.Battlefield.Skeleton Token.Keywords = Menace
 
 [Expect]
 Initiative = Bot1

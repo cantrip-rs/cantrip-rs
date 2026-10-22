@@ -41,12 +41,12 @@ Bot1.Hand.Greed's Gambit.Cast
 [T1 Bot1.Main2]
 ? Bot1.Life = 26
 ? Bot1.Hand.Count = 4
-? Bot1.Battlefield.Bat#1.Power = 2
-? Bot1.Battlefield.Bat#1.Toughness = 1
-? Bot1.Battlefield.Bat#1.Keywords = Flying
-? Bot1.Battlefield.Bat#1.Colors = Black
-? Bot1.Battlefield.Bat#1.Subtypes = Bat
-? Bot1.Battlefield.Bat#3.Token = true
+? Bot1.Battlefield.Bat Token#1.Power = 2
+? Bot1.Battlefield.Bat Token#1.Toughness = 1
+? Bot1.Battlefield.Bat Token#1.Keywords = Flying
+? Bot1.Battlefield.Bat Token#1.Colors = Black
+? Bot1.Battlefield.Bat Token#1.Subtypes = Bat
+? Bot1.Battlefield.Bat Token#3.Token = true
 [T1 Bot1.End]
 Bot1.Choose(Island)
 Bot1.Choose(Ornithopter)
@@ -56,5 +56,5 @@ Bot1.Choose(Ornithopter)
 Bot1.Life = 24
 Bot1.Hand.Count = 4
 Bot1.Graveyard = Ornithopter; Island
-Bot1.Battlefield.Bat#3.Token = true
+Bot1.Battlefield.Bat Token#3.Token = true
 Bot1.Battlefield.Greed's Gambit.Types = Enchantment

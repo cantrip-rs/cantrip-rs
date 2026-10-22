@@ -25,7 +25,7 @@ Bot1.Hand.Glimmer Lens.Cast
 Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Hand.Island.Play
-Bot1.Attack(Rebel > Bot2)
+Bot1.Attack(Rebel Token > Bot2)
 [Bot1.Main2]
 Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Gleemox.Activate(Color: Blue)

@@ -46,4 +46,4 @@ Bot1.Attack(Reckoner Bankbuster > Bot2)
 
 [Expect]
 Bot2.Life = 16
-Bot1.Battlefield.Pilot.Tapped = True
+Bot1.Battlefield.Pilot Token.Tapped = True

@@ -52,7 +52,7 @@ Bot2.Pass
 ? Bot1.Library.Count = 13
 [T4 Bot2.Main1]
 ? Exile = Bonehoard Dracosaur; Mountain; Lightning Bolt
-? Bot2.Battlefield.Dinosaur.Power = 3
+? Bot2.Battlefield.Dinosaur Token.Power = 3
 ? Bot2.Battlefield.Treasure Token.Tapped = false
 Bot2.Exile.Lightning Bolt.Cast(Bot1)
 Bot2.Battlefield.Treasure Token.Activate(Color: Red)

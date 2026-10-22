@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// A 5/3 green Elemental creature token.
 pub static ELEMENTAL: CardDef = CardDef {
-    name: "Elemental",
+    name: "Elemental Token",
+    token_name: Some(&[Subtype::Elemental]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),

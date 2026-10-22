@@ -12,7 +12,8 @@ const COPY: Question = Question::new(
 
 /// The 1/1 green Insect creature token it makes.
 pub static INSECT: CardDef = CardDef {
-    name: "Insect",
+    name: "Insect Token",
+    token_name: Some(&[Subtype::Insect]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),

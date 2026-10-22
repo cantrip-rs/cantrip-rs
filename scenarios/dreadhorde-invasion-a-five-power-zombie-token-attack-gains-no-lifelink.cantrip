@@ -1,0 +1,40 @@
+# Dreadhorde Invasion: "Whenever a Zombie token you control with power 6 or greater attacks, it gains lifelink until end of
+# turn." One short of the limit does nothing: the Army is a 2/2 by turn 5 and one Giant Growth makes it 5/5, so its attack
+# takes 5 life from Bot2 without giving Bot1 any back.
+
+[Bot1 Deck]
+Swamp
+Dreadhorde Invasion
+Mox Jet
+Forest
+Giant Growth
+Giant Growth
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dreadhorde Invasion.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Zombie Army Token)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Zombie Army Token > Bot2)
+[T5 Bot1.End]
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Life = 18
+Bot2.Life = 15
+Bot1.Battlefield.Zombie Army Token.Power = 5
+Bot1.Battlefield.Zombie Army Token.Keywords = (absent)

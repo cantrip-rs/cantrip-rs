@@ -20,7 +20,8 @@ fn draw_a_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// The 1/1 blue Illusion creature token the +1 makes.
 pub static ILLUSION: CardDef = CardDef {
-    name: "Illusion",
+    name: "Illusion Token",
+    token_name: Some(&[Subtype::Illusion]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Blue)),
     types: TypeSet::of(&[CardType::Creature]),

@@ -87,10 +87,10 @@ fn play(hand: &[&str], answer: fn(&[u8]) -> Vec<u8>) -> Played {
         let reply = match &request.kind {
             RequestKind::Priority { options } if request.player == PlayerId(0) => {
                 let named = |kind: ActionKind, prefix: &str| {
-                    options.iter().find(|o| o.kind == kind && o.index == 0 && o.source.is_some_and(|s| game.name(s).starts_with(prefix)))
+                    options.iter().find(|o| o.kind == kind && o.index == 0 && o.source.is_some_and(|s| game.name(s).text().starts_with(prefix)))
                 };
                 offered = named(ActionKind::CastSpell, "Probe Severance").is_some();
-                match named(ActionKind::CastSpell, "Probe ").filter(|o| game.name(o.source.unwrap()).ends_with("Mox"))
+                match named(ActionKind::CastSpell, "Probe ").filter(|o| game.name(o.source.unwrap()).text().ends_with("Mox"))
                     .or_else(|| named(ActionKind::ActivateAbility, "Probe "))
                     .or_else(|| named(ActionKind::CastSpell, "Probe Severance"))
                 {

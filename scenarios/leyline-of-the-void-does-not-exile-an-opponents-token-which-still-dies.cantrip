@@ -32,7 +32,7 @@ Bot2.Battlefield.Mox Emerald#3.Activate
 Bot2.Pass
 Bot1.Pass
 [T3 Bot1.Main1]
-Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Pest)
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Pest Token)
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Pass
 Bot1.Pass

@@ -59,4 +59,4 @@ Bot2.Hand.Infernal Grasp.Cast(Bot1.Battlefield.Torsten, Founder of Benalia)
 Bot1.Graveyard = Torsten, Founder of Benalia
 Bot1.Hand = Llanowar Elves; Elvish Mystic; Forest
 Bot2.Life = 18
-Bot1.Battlefield.Soldier#7.Power = 1
+Bot1.Battlefield.Soldier Token#7.Power = 1

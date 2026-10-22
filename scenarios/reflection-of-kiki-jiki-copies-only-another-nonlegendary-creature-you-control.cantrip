@@ -40,15 +40,15 @@ Bot1.Pass
 ! Bot1.Battlefield.Reflection of Kiki-Jiki.Activate(Bot2.Battlefield.Ornithopter)
 ! Bot1.Battlefield.Reflection of Kiki-Jiki.Activate(Reflection of Kiki-Jiki)
 Bot1.Battlefield.Mox Ruby.Activate
-Bot1.Battlefield.Reflection of Kiki-Jiki.Activate(Goblin Shaman)
+Bot1.Battlefield.Reflection of Kiki-Jiki.Activate(Goblin Shaman Token)
 Bot1.Pass
-Bot1.Attack(Goblin Shaman#1 > Bot2; Goblin Shaman#2 > Bot2)
+Bot1.Attack(Goblin Shaman Token#1 > Bot2; Goblin Shaman Token#2 > Bot2)
 [T7 Bot1.Main2]
-? Bot1.Battlefield.Goblin Shaman#2.Keywords = Haste
+? Bot1.Battlefield.Goblin Shaman Token#2.Keywords = Haste
 ? Bot2.Life = 16
 ? Bot1.Battlefield.Treasure Token#2.Tapped = false
 [T8 Bot2.Main1]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Reflection of Kiki-Jiki; Ragavan, Nimble Pilferer; Goblin Shaman; Treasure Token; Treasure Token
-Bot1.Battlefield.Goblin Shaman.Keywords = (absent)
+Bot1.Battlefield = Mountain; Mountain; Mox Ruby; Reflection of Kiki-Jiki; Ragavan, Nimble Pilferer; Goblin Shaman Token; Treasure Token; Treasure Token
+Bot1.Battlefield.Goblin Shaman Token.Keywords = (absent)

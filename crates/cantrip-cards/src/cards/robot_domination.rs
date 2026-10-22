@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// A 2/2 colorless Robot Villain artifact creature token (CR 111.4).
 pub static ROBOT_VILLAIN: CardDef = CardDef {
-    name: "Robot Villain",
+    name: "Robot Villain Token",
+    token_name: Some(&[Subtype::Robot, Subtype::Villain]),
     has_cost: false,
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
     subtypes: SubtypeSet::of(&[Subtype::Robot, Subtype::Villain]),

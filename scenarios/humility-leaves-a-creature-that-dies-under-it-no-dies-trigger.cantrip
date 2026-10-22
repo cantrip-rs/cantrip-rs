@@ -34,7 +34,7 @@ Bot2.Hand.Lightning Bolt.Cast(Doomed Traveler)
 Bot2.Pass
 Bot1.Pass
 [T2 Bot2.Main2]
-? Bot1.Battlefield.Spirit.Token = true
+? Bot1.Battlefield.Spirit Token.Token = true
 [T3 Bot1.Main1]
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Plains.Activate
@@ -54,6 +54,6 @@ Bot1.Pass
 Turn = 4
 Stack.Count = 0
 Bot1.Graveyard = Doomed Traveler; Black Lotus; Doomed Traveler
-Bot1.Battlefield = Plains; Mox Pearl; Humility; Spirit
-Bot1.Battlefield.Spirit.Power = 1
-Bot1.Battlefield.Spirit.Keywords = (absent)
+Bot1.Battlefield = Plains; Mox Pearl; Humility; Spirit Token
+Bot1.Battlefield.Spirit Token.Power = 1
+Bot1.Battlefield.Spirit Token.Keywords = (absent)

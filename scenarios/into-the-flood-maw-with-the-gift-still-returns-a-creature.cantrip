@@ -26,6 +26,6 @@ Bot2.Pass
 [Expect]
 Stack.Count = 0
 Bot1.Graveyard = Into the Flood Maw
-Bot2.Battlefield = Fish
-Bot2.Battlefield.Fish.Tapped = true
+Bot2.Battlefield = Fish Token
+Bot2.Battlefield.Fish Token.Tapped = true
 Bot2.Hand.Count = 8

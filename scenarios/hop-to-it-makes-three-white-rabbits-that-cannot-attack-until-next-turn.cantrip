@@ -29,18 +29,18 @@ Bot1.Battlefield.Mox Pearl#2.Activate
 Bot1.Hand.Hop to It.Cast
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Rabbit#1.Token = true
-? Bot1.Battlefield.Rabbit#1.Colors = White
-? Bot1.Battlefield.Rabbit#1.Power = 1
-? Bot1.Battlefield.Rabbit#1.Toughness = 1
-? Bot1.Battlefield.Rabbit#1.SummoningSick = true
-! Bot1.Attack(Rabbit > Bot2)
+? Bot1.Battlefield.Rabbit Token#1.Token = true
+? Bot1.Battlefield.Rabbit Token#1.Colors = White
+? Bot1.Battlefield.Rabbit Token#1.Power = 1
+? Bot1.Battlefield.Rabbit Token#1.Toughness = 1
+? Bot1.Battlefield.Rabbit Token#1.SummoningSick = true
+! Bot1.Attack(Rabbit Token > Bot2)
 Bot1.Attack(Mother of Runes)
 [T5 Bot1.Main1]
-Bot1.Attack(Rabbit > Bot2)
+Bot1.Attack(Rabbit Token > Bot2)
 
 [Expect]
-Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Pearl; Mother of Runes; Rabbit; Rabbit; Rabbit
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Pearl; Mother of Runes; Rabbit Token; Rabbit Token; Rabbit Token
 Bot1.Graveyard = Hop to It
 Step = Attackers
-Combat.Attackers = Rabbit > Bot2
+Combat.Attackers = Rabbit Token > Bot2

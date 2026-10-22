@@ -40,5 +40,5 @@ Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Spiders-Man, Heroic Horde)
 Turn = 3
 Stack.Count = 0
 Bot1.Life = 23
-Bot1.Battlefield = Forest; Forest; Spider; Spider
+Bot1.Battlefield = Forest; Forest; Spider Token; Spider Token
 Bot1.Graveyard = Spiders-Man, Heroic Horde; Black Lotus

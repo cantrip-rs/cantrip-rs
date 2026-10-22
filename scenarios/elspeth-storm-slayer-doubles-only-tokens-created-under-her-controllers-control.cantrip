@@ -32,7 +32,7 @@ Bot2.Battlefield.Black Lotus.Activate(Color: White)
 Bot2.Hand.Lingering Souls.Cast
 [T2 Bot2.Main2]
 ? Bot2.Battlefield.Count = 2
-? Bot2.Battlefield.Spirit#2.Power = 1
+? Bot2.Battlefield.Spirit Token#2.Power = 1
 [T3 Bot1.Main1]
 Bot1.Hand.Plains.Play
 Bot1.Battlefield.Plains.Activate
@@ -44,4 +44,4 @@ Bot1.Hand.Lingering Souls.Cast
 [Expect]
 Bot2.Battlefield.Count = 2
 Bot1.Battlefield.Count = 8
-Bot1.Battlefield.Spirit#4.Power = 1
+Bot1.Battlefield.Spirit Token#4.Power = 1

@@ -36,13 +36,13 @@ Bot2.Pass
 ? Bot1.Battlefield.Overlord of the Mistmoors.Counters.Time = 4
 ? Bot1.Battlefield.Overlord of the Mistmoors.Types = Enchantment
 ? Bot1.Battlefield.Overlord of the Mistmoors.Subtypes = (absent)
-? Bot1.Battlefield.Insect#1.Power = 2
-? Bot1.Battlefield.Insect#1.Toughness = 1
-? Bot1.Battlefield.Insect#1.Keywords = Flying
-? Bot1.Battlefield.Insect#2.Keywords = Flying
+? Bot1.Battlefield.Insect Token#1.Power = 2
+? Bot1.Battlefield.Insect Token#1.Toughness = 1
+? Bot1.Battlefield.Insect Token#1.Keywords = Flying
+? Bot1.Battlefield.Insect Token#2.Keywords = Flying
 [T9 Bot1.Main1]
 ? Bot1.Battlefield.Overlord of the Mistmoors.Counters.Time = 3
 
 [Expect]
-Bot1.Battlefield = Insect; Insect; Overlord of the Mistmoors; Plains; Plains; Plains; Plains
+Bot1.Battlefield = Insect Token; Insect Token; Overlord of the Mistmoors; Plains; Plains; Plains; Plains
 Bot1.Battlefield.Overlord of the Mistmoors.Types = Enchantment

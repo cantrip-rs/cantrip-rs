@@ -70,5 +70,5 @@ Bot2.Search(Island)
 Bot1.Battlefield.Count = 7
 Bot2.Battlefield.Count = 7
 Initiative = Bot2
-Bot1.Battlefield.Faerie Dragon.Power = 1
-Bot2.Battlefield.Faerie Dragon.Power = 1
+Bot1.Battlefield.Faerie Dragon Token.Power = 1
+Bot2.Battlefield.Faerie Dragon Token.Power = 1

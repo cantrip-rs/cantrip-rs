@@ -43,15 +43,15 @@ Bot1.Target(Sol Ring)
 Bot1.Modes(Second from the top)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Goblin#1.Subtypes = Goblin
+? Bot1.Battlefield.Goblin Token#1.Subtypes = Goblin
 [T2 Bot2.Main1]
 Bot2.Hand.Forest.Play
 Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Ignoble Hierarch.Cast
 [T3 Bot1.Main1]
 Bot1.Pass
-Bot1.Attack(Wan Shi Tong, All-Knowing; Goblin; Goblin)
-Bot2.Block(Ignoble Hierarch > Goblin)
+Bot1.Attack(Wan Shi Tong, All-Knowing; Goblin Token; Goblin Token)
+Bot2.Block(Ignoble Hierarch > Goblin Token)
 [T3 Bot1.Main2]
 
 [Expect]

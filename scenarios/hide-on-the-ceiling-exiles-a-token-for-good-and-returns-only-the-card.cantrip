@@ -36,7 +36,7 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Hide on the Ceiling.Cast(X: 2)
-Bot1.Target(Bot2.Battlefield.Spirit#1; Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Spirit Token#1; Bot1.Battlefield.Ornithopter)
 Bot1.Pass
 [T3 Bot1.Main2]
 ? Exile = Ornithopter
@@ -47,4 +47,4 @@ Bot2.Pass
 [Expect]
 Exile.Count = 0
 Bot1.Battlefield = Mox Sapphire; Mox Jet; Mox Ruby; Ornithopter
-Bot2.Battlefield = Mox Pearl; Mox Jet; Mox Ruby; Spirit
+Bot2.Battlefield = Mox Pearl; Mox Jet; Mox Ruby; Spirit Token

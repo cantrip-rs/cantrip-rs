@@ -21,7 +21,7 @@ Bot1.Hand.Voice of Victory.Cast
 Bot1.Attack(Voice of Victory)
 [T3 Bot1.Main2]
 ? Bot1.Battlefield.Count = 5
-? Bot1.Battlefield.Warrior#1.Tapped = true
+? Bot1.Battlefield.Warrior Token#1.Tapped = true
 ? Bot2.Life = 17
 [T3 Bot1.End]
 Bot1.Pass

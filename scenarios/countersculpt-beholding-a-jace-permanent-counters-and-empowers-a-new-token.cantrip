@@ -45,6 +45,6 @@ Bot1.Choose(Jace, the Mind Sculptor)
 Bot1.Life = 20
 Bot2.Graveyard = Lightning Bolt
 Bot1.Graveyard = Countersculpt; Black Lotus
-Bot1.Battlefield.Jace.Counters.Loyalty = 1
-Bot1.Battlefield.Jace.Token = true
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 1
+Bot1.Battlefield.Jace Token.Token = true
 Bot1.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 3

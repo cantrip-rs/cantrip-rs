@@ -27,13 +27,13 @@ Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Hand.Thousand Moons Smithy.Cast
 Bot1.Hand.Ornithopter.Cast
 ? Stack = Ornithopter
-? Bot1.Battlefield.Gnome Soldier.Power = 2
-? Bot1.Battlefield.Gnome Soldier.Toughness = 2
+? Bot1.Battlefield.Gnome Soldier Token.Power = 2
+? Bot1.Battlefield.Gnome Soldier Token.Toughness = 2
 Bot1.Hand.Ornithopter.Cast
 [T2 Bot2.Main1]
-? Bot1.Battlefield.Gnome Soldier.Power = 4
+? Bot1.Battlefield.Gnome Soldier Token.Power = 4
 Bot2.Hand.Ornithopter.Cast
-? Bot1.Battlefield.Gnome Soldier.Power = 4
+? Bot1.Battlefield.Gnome Soldier Token.Power = 4
 [T3 Bot1.Main1]
 ? Stack = Thousand Moons Smithy
 Bot1.Pass
@@ -42,7 +42,7 @@ Bot1.Hand.Plains.Play
 Bot1.Battlefield.Plains#2.Activate
 Bot1.Hand.Sol Ring.Cast
 [T4 Bot2.Upkeep]
-? Bot1.Battlefield.Gnome Soldier.Power = 5
+? Bot1.Battlefield.Gnome Soldier Token.Power = 5
 [T4 Bot2.Main1]
 ? Stack.Count = 0
 ! Bot1.Accept
@@ -53,12 +53,12 @@ Bot1.Decline
 [Expect]
 Turn = 5
 Bot1.Battlefield.Thousand Moons Smithy.Tapped = false
-Bot1.Battlefield.Gnome Soldier.Tapped = false
-Bot1.Battlefield.Gnome Soldier.Power = 5
-Bot1.Battlefield.Gnome Soldier.Toughness = 5
-Bot1.Battlefield.Gnome Soldier.Colors = White
-Bot1.Battlefield.Gnome Soldier.Types = Artifact; Creature
-Bot1.Battlefield.Gnome Soldier.Subtypes = Gnome; Soldier
-Bot1.Battlefield.Gnome Soldier.Token = true
+Bot1.Battlefield.Gnome Soldier Token.Tapped = false
+Bot1.Battlefield.Gnome Soldier Token.Power = 5
+Bot1.Battlefield.Gnome Soldier Token.Toughness = 5
+Bot1.Battlefield.Gnome Soldier Token.Colors = White
+Bot1.Battlefield.Gnome Soldier Token.Types = Artifact; Creature
+Bot1.Battlefield.Gnome Soldier Token.Subtypes = Gnome; Soldier
+Bot1.Battlefield.Gnome Soldier Token.Token = true
 Bot1.Battlefield.Ornithopter#1.Tapped = false
 Bot1.Battlefield.Sol Ring.Tapped = false

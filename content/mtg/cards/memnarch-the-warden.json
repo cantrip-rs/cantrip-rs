@@ -1,0 +1,11 @@
+{
+  "name": "Memnarch, the Warden",
+  "manaCost": "{10}",
+  "type": "Legendary Artifact Creature — Wizard",
+  "power": 8,
+  "toughness": 9,
+  "oracleText": "Indestructible\nWhen Memnarch enters, create two 1/1 colorless Myr artifact creature tokens.\nWhenever Memnarch attacks, draw a card for each artifact you control.",
+  "keywords": [
+    "Indestructible"
+  ]
+}

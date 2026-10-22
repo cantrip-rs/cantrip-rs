@@ -38,4 +38,4 @@ Bot1.Battlefield.Elspeth, Storm Slayer.Activate(Ability: #1)
 
 [Expect]
 Bot1.Battlefield.Count = 11
-Bot1.Battlefield.Soldier#4.Token = true
+Bot1.Battlefield.Soldier Token#4.Token = true

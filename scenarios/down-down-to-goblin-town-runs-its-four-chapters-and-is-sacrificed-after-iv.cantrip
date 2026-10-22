@@ -37,12 +37,12 @@ Bot2.Pass
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Battlefield.Down, Down to Goblin-town.Counters.Lore = 2
-? Bot1.Battlefield.Goblin Army.Token = true
-? Bot1.Battlefield.Goblin Army.Power = 1
-? Bot1.Battlefield.Goblin Army.Toughness = 1
-? Bot1.Battlefield.Goblin Army.Counters.PlusOnePlusOne = 1
-? Bot1.Battlefield.Goblin Army.Subtypes = Army; Goblin
-? Bot1.Battlefield.Goblin Army.Colors = Black
+? Bot1.Battlefield.Goblin Army Token.Token = true
+? Bot1.Battlefield.Goblin Army Token.Power = 1
+? Bot1.Battlefield.Goblin Army Token.Toughness = 1
+? Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
+? Bot1.Battlefield.Goblin Army Token.Colors = Black
 [T5 Bot1.Main1]
 Bot1.Pass
 Bot2.Pass
@@ -57,6 +57,6 @@ Bot2.Pass
 [Expect]
 Bot2.Life = 18
 Bot1.Life = 22
-Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Goblin Army
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Goblin Army Token
 Bot1.Graveyard = Down, Down to Goblin-town
 Stack.Count = 0

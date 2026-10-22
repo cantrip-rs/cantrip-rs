@@ -28,19 +28,19 @@ Bot1.Pass
 Bot1.Battlefield.Chandra, Spark Hunter.Activate(Ability: Create a 3/2)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Vehicle.Types = Artifact
-Bot1.Battlefield.Vehicle.Activate(Ability: Crew)
+? Bot1.Battlefield.Vehicle Token.Types = Artifact
+Bot1.Battlefield.Vehicle Token.Activate(Ability: Crew)
 Bot1.Pass
 Bot2.Pass
 [T1 Bot1.Main2]
 
 [Expect]
 Turn = 1
-Bot1.Battlefield.Vehicle.Types = Artifact; Creature
-Bot1.Battlefield.Vehicle.Power = 3
-Bot1.Battlefield.Vehicle.Toughness = 2
-Bot1.Battlefield.Vehicle.Token = true
-Bot1.Battlefield.Vehicle.Subtypes = Vehicle
-Bot1.Battlefield.Vehicle.Colors = (absent)
-Bot1.Battlefield.Vehicle.SummoningSick = true
+Bot1.Battlefield.Vehicle Token.Types = Artifact; Creature
+Bot1.Battlefield.Vehicle Token.Power = 3
+Bot1.Battlefield.Vehicle Token.Toughness = 2
+Bot1.Battlefield.Vehicle Token.Token = true
+Bot1.Battlefield.Vehicle Token.Subtypes = Vehicle
+Bot1.Battlefield.Vehicle Token.Colors = (absent)
+Bot1.Battlefield.Vehicle Token.SummoningSick = true
 Bot1.Battlefield.Llanowar Elves.Tapped = true

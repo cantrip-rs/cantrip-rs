@@ -23,6 +23,6 @@ Bot1.Battlefield.The Wandering Emperor.Activate(Ability: Create a 2/2)
 Turn = 2
 Step = BeginCombat
 Bot1.Battlefield.The Wandering Emperor.Counters.Loyalty = 2
-Bot1.Battlefield.Samurai.Power = 2
-Bot1.Battlefield.Samurai.Toughness = 2
-Bot1.Battlefield.Samurai.Keywords = Vigilance
+Bot1.Battlefield.Samurai Token.Power = 2
+Bot1.Battlefield.Samurai Token.Toughness = 2
+Bot1.Battlefield.Samurai Token.Keywords = Vigilance

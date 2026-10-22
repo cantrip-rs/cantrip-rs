@@ -48,5 +48,5 @@ Exile = Llanowar Elves
 Bot2.Graveyard.Count = 0
 Turn = 2
 Bot1.Battlefield.Count = 5
-Bot1.Battlefield.Rat.Power = 2
-Bot1.Battlefield.Rat.Toughness = 2
+Bot1.Battlefield.Rat Token.Power = 2
+Bot1.Battlefield.Rat Token.Toughness = 2

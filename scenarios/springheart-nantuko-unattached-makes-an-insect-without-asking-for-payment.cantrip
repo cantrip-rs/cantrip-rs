@@ -23,6 +23,6 @@ Bot1.Pass
 Bot1.Pass
 
 [Expect]
-Bot1.Battlefield.Insect.Power = 1
+Bot1.Battlefield.Insect Token.Power = 1
 Bot1.Battlefield.Forest#2.Tapped = false
 Bot1.Battlefield.Count = 5

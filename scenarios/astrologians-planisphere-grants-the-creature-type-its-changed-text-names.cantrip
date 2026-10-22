@@ -30,5 +30,5 @@ Bot1.Modes(Wizard)
 Bot1.Modes(Goblin)
 
 [Expect]
-Bot1.Battlefield.Astrologian's Planisphere.AttachedTo = Hero
-Bot1.Battlefield.Hero.Subtypes = Goblin; Hero
+Bot1.Battlefield.Astrologian's Planisphere.AttachedTo = Hero Token
+Bot1.Battlefield.Hero Token.Subtypes = Goblin; Hero

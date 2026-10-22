@@ -62,10 +62,10 @@ Bot1.Pass
 ? Bot1.Battlefield.Unholy Annex // Ritual Chamber.Doors = Unholy Annex; Ritual Chamber
 ? Bot1.Battlefield.Unholy Annex // Ritual Chamber.ManaValue = 8
 ? Bot1.Battlefield.Unholy Annex // Ritual Chamber.Colors = Black
-? Bot1.Battlefield.Demon.Power = 6
+? Bot1.Battlefield.Demon Token.Power = 6
 [T6 Bot2.Upkeep]
 
 [Expect]
-Bot1.Battlefield = Demon; Mox Jet; Mox Jet; Mox Jet; Swamp; Swamp; Unholy Annex // Ritual Chamber
+Bot1.Battlefield = Demon Token; Mox Jet; Mox Jet; Mox Jet; Swamp; Swamp; Unholy Annex // Ritual Chamber
 Bot1.Life = 18
 Bot2.Life = 18

@@ -19,5 +19,5 @@ Bot1.Hand.No Admittance.Cast(Bot2)
 
 [Expect]
 Bot2.Life = 17
-Bot1.Battlefield.Jace.Counters.Loyalty = 1
-Bot1.Battlefield.Jace.Token = true
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 1
+Bot1.Battlefield.Jace Token.Token = true

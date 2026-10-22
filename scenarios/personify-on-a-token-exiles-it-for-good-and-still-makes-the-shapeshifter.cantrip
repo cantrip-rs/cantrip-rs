@@ -23,11 +23,11 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Ajani, Nacatl Pariah.Cast
 Bot1.Battlefield.Mox Pearl#2.Activate
 Bot1.Battlefield.Mox Pearl#3.Activate
-Bot1.Hand.Personify.Cast(Cat Warrior)
+Bot1.Hand.Personify.Cast(Cat Warrior Token)
 [Bot1.Main2]
 
 [Expect]
 Turn = 1
-Bot1.Battlefield = Plains; Mox Pearl; Mox Pearl; Mox Pearl; Ajani, Nacatl Pariah; Shapeshifter
-Bot1.Battlefield.Shapeshifter.Token = true
+Bot1.Battlefield = Plains; Mox Pearl; Mox Pearl; Mox Pearl; Ajani, Nacatl Pariah; Shapeshifter Token
+Bot1.Battlefield.Shapeshifter Token.Token = true
 Bot1.Graveyard = Personify

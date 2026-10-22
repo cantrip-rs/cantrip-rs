@@ -44,11 +44,11 @@ Bot2.Pass
 ? Bot1.Mana = {R}
 ? Bot1.Battlefield.Narset, Parter of Veils.Counters.Loyalty = 6
 ! Bot1.Battlefield.Narset, Parter of Veils.Activate(Ability: Look)
-Bot1.Battlefield.Jace.Activate(Ability: Surveil)
+Bot1.Battlefield.Jace Token.Activate(Ability: Surveil)
 Bot1.Pass
 Bot1.Arrange(Island)
 [T3 Bot1.Main2]
 
 [Expect]
 Bot1.Battlefield.Narset, Parter of Veils.Counters.Loyalty = 6
-Bot1.Battlefield.Jace.Counters.Loyalty = 1
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 1

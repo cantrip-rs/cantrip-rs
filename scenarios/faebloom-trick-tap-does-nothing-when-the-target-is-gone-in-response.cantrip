@@ -33,7 +33,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Faebloom Trick.Cast
 Bot2.Pass
 ? Stack.Count = 1
-? Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Faerie; Faerie
+? Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Faerie Token; Faerie Token
 ? Bot2.Battlefield = Forest; Mox Ruby; Llanowar Elves
 Bot2.Battlefield.Mox Ruby.Activate
 Bot2.Hand.Lightning Bolt.Cast(Llanowar Elves)
@@ -41,8 +41,8 @@ Bot2.Hand.Lightning Bolt.Cast(Llanowar Elves)
 
 [Expect]
 Bot2.Graveyard = Llanowar Elves; Lightning Bolt
-Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Faerie; Faerie
-Bot1.Battlefield.Faerie#1.Tapped = false
-Bot1.Battlefield.Faerie#2.Tapped = false
+Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Pearl; Faerie Token; Faerie Token
+Bot1.Battlefield.Faerie Token#1.Tapped = false
+Bot1.Battlefield.Faerie Token#2.Tapped = false
 Bot1.Graveyard = Faebloom Trick
 Stack.Count = 0

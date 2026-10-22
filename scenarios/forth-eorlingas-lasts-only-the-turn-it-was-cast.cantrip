@@ -23,7 +23,7 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Forth Eorlingas!.Cast(X: 1)
 Bot1.Pass
 [T3 Bot1.Main1]
-Bot1.Attack(Human Knight)
+Bot1.Attack(Human Knight Token)
 [T3 Bot1.Main2]
 
 [Expect]

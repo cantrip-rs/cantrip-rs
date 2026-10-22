@@ -29,5 +29,5 @@ Bot2.Hand.Aether Spellbomb.Cast
 [Expect]
 Turn = 4
 Bot2.Battlefield = Island; Island; Aether Spellbomb
-Bot1.Battlefield.Hero.Power = 1
+Bot1.Battlefield.Hero Token.Power = 1
 Stack.Count = 0

@@ -5,7 +5,8 @@ use cantrip_oracle as oracle;
 
 /// The 2/2 black Skeleton Pirate creature token.
 pub static SKELETON_PIRATE: CardDef = CardDef {
-    name: "Skeleton Pirate",
+    name: "Skeleton Pirate Token",
+    token_name: Some(&[Subtype::Skeleton, Subtype::Pirate]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),

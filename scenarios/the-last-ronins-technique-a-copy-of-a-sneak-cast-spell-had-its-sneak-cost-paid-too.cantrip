@@ -40,9 +40,9 @@ Bot1.Pass
 Bot1.Pass
 Bot1.Pass
 [T3 Bot1.Main2]
-? Bot1.Battlefield.Ninja Turtle Spirit#4.Tapped = true
-? Bot1.Battlefield.Ninja Turtle Spirit#1.Tapped = true
-? Bot1.Battlefield.Ninja Turtle Spirit#1.Token = true
+? Bot1.Battlefield.Ninja Turtle Spirit Token#4.Tapped = true
+? Bot1.Battlefield.Ninja Turtle Spirit Token#1.Tapped = true
+? Bot1.Battlefield.Ninja Turtle Spirit Token#1.Token = true
 
 [Expect]
 Bot2.Life = 14

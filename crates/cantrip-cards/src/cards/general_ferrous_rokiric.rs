@@ -20,7 +20,8 @@ fn make_golem(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// The 4/4 red and white Golem artifact creature token.
 pub static GOLEM: CardDef = CardDef {
-    name: "Golem",
+    name: "Golem Token",
+    token_name: Some(&[Subtype::Golem]),
     has_cost: false,
     colors: Some(ColorSet(ColorSet::of(Color::Red).0 | ColorSet::of(Color::White).0)),
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),

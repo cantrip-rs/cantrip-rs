@@ -42,10 +42,10 @@ Bot1.Accept
 
 [Expect]
 Turn = 7
-Bot1.Battlefield = Mountain; Mountain; Mountain; Goblin Welder; Cori-Steel Cutter; Pyrite Spellbomb; Monk
-Bot1.Battlefield.Cori-Steel Cutter.AttachedTo = Monk
-Bot1.Battlefield.Monk.Power = 2
-Bot1.Battlefield.Monk.Toughness = 2
+Bot1.Battlefield = Mountain; Mountain; Mountain; Goblin Welder; Cori-Steel Cutter; Pyrite Spellbomb; Monk Token
+Bot1.Battlefield.Cori-Steel Cutter.AttachedTo = Monk Token
+Bot1.Battlefield.Monk Token.Power = 2
+Bot1.Battlefield.Monk Token.Toughness = 2
 Bot1.Battlefield.Goblin Welder.Power = 1
 Bot1.Graveyard = Lightning Bolt
 Bot2.Life = 17

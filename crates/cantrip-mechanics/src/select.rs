@@ -110,8 +110,8 @@ pub const fn named(card: CardId) -> Part {
 }
 
 fn different_names(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    let chosen: Vec<Vec<&'static str>> = choice.selected.iter().map(|&c| crate::library::object_names(q, c)).collect();
-    let apart = |a: &[&'static str], b: &[&'static str]| !a.iter().any(|name| b.contains(name));
+    let chosen: Vec<_> = choice.selected.iter().map(|&c| crate::library::object_names(q, c)).collect();
+    let apart = |a: &[cantrip_api::ObjectName], b: &[cantrip_api::ObjectName]| !a.iter().any(|name| b.contains(name));
     // CR 201.2b: each has at least one name, and no two of them a name in common.
     let complete = chosen.iter().enumerate().all(|(i, names)| !names.is_empty() && chosen[..i].iter().all(|other| apart(names, other)));
     let addable = Bits::of(choice.candidates.len(), |i| {

@@ -34,7 +34,7 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Search(Llanowar Elves)
 Bot1.Pass
 [T3 Bot1.DeclareAttackers]
-Bot1.Attack(Pest > Bot2)
+Bot1.Attack(Pest Token > Bot2)
 [T3 Bot1.End]
 Bot1.Target()
 

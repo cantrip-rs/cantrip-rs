@@ -38,7 +38,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Dragon.Token = true
+? Bot1.Battlefield.Dragon Token.Token = true
 [T3 Bot1.Main1]
 Bot1.Hand.Mountain.Play
 [T5 Bot1.Main1]
@@ -53,11 +53,11 @@ Bot1.Battlefield.Mountain#2.Activate
 Bot1.Battlefield.Kiora of Fire and Ashes.Activate(Ability: Create)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Dragon#2.Token = true
+? Bot1.Battlefield.Dragon Token#2.Token = true
 
 [Expect]
 Turn = 5
-Bot1.Battlefield.Dragon#1.Power = 5
-Bot1.Battlefield.Dragon#1.Keywords = Flying
-Bot1.Battlefield.Dragon#2.Power = 5
-Bot1.Battlefield.Dragon#2.Keywords = Flying
+Bot1.Battlefield.Dragon Token#1.Power = 5
+Bot1.Battlefield.Dragon Token#1.Keywords = Flying
+Bot1.Battlefield.Dragon Token#2.Power = 5
+Bot1.Battlefield.Dragon Token#2.Keywords = Flying

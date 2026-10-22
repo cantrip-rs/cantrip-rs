@@ -40,6 +40,6 @@ Bot1.Accept
 [Expect]
 Bot1.Mana = {C}
 Bot1.Battlefield.Overlord of the Mistmoors.Types = Enchantment; Creature
-Bot1.Battlefield.Insect#2.Token = true
+Bot1.Battlefield.Insect Token#2.Token = true
 Bot1.Graveyard = Swamp
 Bot1.Hand = Island

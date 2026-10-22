@@ -36,7 +36,7 @@ Bot2.Pass
 
 [Expect]
 Stack.Count = 0
-Bot1.Battlefield.Thopter#1.Keywords = Flying; Haste
-Bot1.Battlefield.Thopter#2.Keywords = Flying; Haste
+Bot1.Battlefield.Thopter Token#1.Keywords = Flying; Haste
+Bot1.Battlefield.Thopter Token#2.Keywords = Flying; Haste
 Bot1.Battlefield.Count = 6
 Bot1.Battlefield.Saheeli, Jewel of Avishkar.Power = 2

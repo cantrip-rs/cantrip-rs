@@ -31,7 +31,7 @@ Bot1.Hand.Lindblum, Industrial Regency.Cast(Ability: Adventure)
 Bot1.Pass
 Bot2.Pass
 ? Exile = Lindblum, Industrial Regency
-? Bot1.Battlefield.Wizard.Power = 0
+? Bot1.Battlefield.Wizard Token.Power = 0
 [T3 Bot1.Main1]
 Bot1.Hand.Mountain.Play
 ! Bot1.Exile.Lindblum, Industrial Regency.Play
@@ -45,5 +45,5 @@ Bot1.Hand.Mox Pearl.Cast
 Turn = 5
 Exile.Count = 0
 Bot1.Battlefield.Lindblum, Industrial Regency.Tapped = true
-Bot1.Battlefield.Wizard.Toughness = 1
+Bot1.Battlefield.Wizard Token.Toughness = 1
 Bot2.Life = 19

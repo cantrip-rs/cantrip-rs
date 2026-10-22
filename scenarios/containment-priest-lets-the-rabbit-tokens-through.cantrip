@@ -33,5 +33,5 @@ Bot1.Attack(Jacked Rabbit)
 [Expect]
 Step = Attackers
 Bot2.Battlefield = Plains; Plains; Containment Priest
-Bot1.Battlefield = Plains; Plains; Plains; Jacked Rabbit; Rabbit; Rabbit
+Bot1.Battlefield = Plains; Plains; Plains; Jacked Rabbit; Rabbit Token; Rabbit Token
 Exile.Count = 0

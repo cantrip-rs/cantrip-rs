@@ -88,7 +88,7 @@ Bot2.Pass
 Bot1.Pass
 [T5 Bot1.Main1]
 ? Bot1.Battlefield = Ajani Unrelenting; Mox Ruby; Mox Jet; Mox Pearl; Ornithopter; Cadet
-? Bot2.Battlefield = Plains; Plains; Mox Pearl; Mox Emerald; Mox Jet; Elspeth, Storm Slayer; Soldier; Soldier; Fanatic of Rhonas; Elesh Norn, Mother of Machines
+? Bot2.Battlefield = Plains; Plains; Mox Pearl; Mox Emerald; Mox Jet; Elspeth, Storm Slayer; Soldier Token; Soldier Token; Fanatic of Rhonas; Elesh Norn, Mother of Machines
 Bot1.Battlefield.Ajani Unrelenting.Activate(Ability: Ajani deals 4 damage)
 Bot1.Pass
 Bot1.Pass

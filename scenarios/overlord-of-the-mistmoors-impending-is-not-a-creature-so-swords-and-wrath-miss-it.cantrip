@@ -31,7 +31,7 @@ Bot2.Hand.Mox Pearl.Cast
 Bot2.Hand.Black Lotus.Cast
 Bot2.Battlefield.Black Lotus.Activate(Color: White)
 ! Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Overlord of the Mistmoors)
-Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Insect)
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Insect Token)
 Bot2.Battlefield.Mox Pearl.Activate
 Bot2.Pass
 Bot1.Pass

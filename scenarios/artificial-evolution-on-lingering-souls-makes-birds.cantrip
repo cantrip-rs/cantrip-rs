@@ -1,5 +1,5 @@
 # A token's creature types and name are the words of the text that makes it (CR 612.2a, 612.4): Bot1 changes Bot2's
-# Lingering Souls on the stack, Spirit to Bird, and it makes two 1/1 white Bird tokens with flying, named Bird.
+# Lingering Souls on the stack, Spirit to Bird, and it makes two 1/1 white Bird tokens with flying, named Bird Token.
 
 [Bot1 Deck]
 Island
@@ -36,8 +36,8 @@ Bot1.Modes(Bird)
 [Expect]
 Turn = 6
 Stack.Count = 0
-Bot2.Battlefield = Plains; Plains; Plains; Bird; Bird
-Bot2.Battlefield.Bird#1.Subtypes = Bird
-Bot2.Battlefield.Bird#2.Subtypes = Bird
-Bot2.Battlefield.Bird#1.Colors = White
-Bot2.Battlefield.Bird#2.Keywords = Flying
+Bot2.Battlefield = Plains; Plains; Plains; Bird Token; Bird Token
+Bot2.Battlefield.Bird Token#1.Subtypes = Bird
+Bot2.Battlefield.Bird Token#2.Subtypes = Bird
+Bot2.Battlefield.Bird Token#1.Colors = White
+Bot2.Battlefield.Bird Token#2.Keywords = Flying

@@ -41,8 +41,8 @@ Bot2.Battlefield.Plains.Activate
 Bot2.Hand.Lingering Souls.Cast
 [T2 Bot2.End]
 ? Bot1.Battlefield.Count = 4
-? Bot2.Battlefield.Spirit#1.Power = 1
-? Bot2.Battlefield.Spirit#2.Power = 1
+? Bot2.Battlefield.Spirit Token#1.Power = 1
+? Bot2.Battlefield.Spirit Token#2.Power = 1
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Sol Ring.Activate
@@ -50,9 +50,9 @@ Bot1.Hand.Lingering Souls.Cast
 
 [Expect]
 Stack.Count = 0
-Bot1.Battlefield.Spirit#1.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Spirit#2.Counters.PlusOnePlusOne = 1
-Bot1.Battlefield.Spirit#1.Power = 2
-Bot2.Battlefield.Spirit#1.Power = 1
-Bot2.Battlefield.Spirit#2.Power = 1
-Bot2.Battlefield.Spirit#1.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Spirit Token#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Spirit Token#2.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Spirit Token#1.Power = 2
+Bot2.Battlefield.Spirit Token#1.Power = 1
+Bot2.Battlefield.Spirit Token#2.Power = 1
+Bot2.Battlefield.Spirit Token#1.Counters.PlusOnePlusOne = (absent)

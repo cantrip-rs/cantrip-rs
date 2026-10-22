@@ -38,5 +38,5 @@ Bot2.Pass
 Bot1.Pass
 
 [Expect]
-Bot2.Battlefield.Spirit#1.Tapped = true
-Bot2.Battlefield.Spirit#2.Tapped = true
+Bot2.Battlefield.Spirit Token#1.Tapped = true
+Bot2.Battlefield.Spirit Token#2.Tapped = true

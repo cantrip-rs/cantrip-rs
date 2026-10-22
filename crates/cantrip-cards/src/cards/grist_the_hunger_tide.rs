@@ -5,7 +5,8 @@ use cantrip_oracle as oracle;
 
 /// The 1/1 black and green Insect creature token the +1 makes.
 pub static INSECT: CardDef = CardDef {
-    name: "Insect",
+    name: "Insect Token",
+    token_name: Some(&[Subtype::Insect]),
     has_cost: false,
     colors: Some(ColorSet(0b10100)),
     types: TypeSet::of(&[CardType::Creature]),

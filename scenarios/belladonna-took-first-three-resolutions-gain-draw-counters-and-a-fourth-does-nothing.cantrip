@@ -54,6 +54,6 @@ Bot1.Pass
 Bot1.Life = 21
 Bot1.Hand.Count = 1
 Bot1.Battlefield.Belladonna Took.Power = 3
-Bot1.Battlefield.Spirit#1.Power = 2
-Bot1.Battlefield.Spirit#4.Power = 2
+Bot1.Battlefield.Spirit Token#1.Power = 2
+Bot1.Battlefield.Spirit Token#4.Power = 2
 Bot2.Life = 20

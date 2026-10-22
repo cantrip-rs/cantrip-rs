@@ -4,7 +4,8 @@ use cantrip_oracle as oracle;
 
 /// The 1/1 blue Faerie creature token with flying (colors and creature type are those of the text that makes it, CR 612.4).
 pub static FAERIE: CardDef = CardDef {
-    name: "Faerie",
+    name: "Faerie Token",
+    token_name: Some(&[Subtype::Faerie]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Blue)),
     types: TypeSet::of(&[CardType::Creature]),

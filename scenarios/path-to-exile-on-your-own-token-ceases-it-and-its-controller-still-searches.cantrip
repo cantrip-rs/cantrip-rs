@@ -31,7 +31,7 @@ Bot1.Pass
 [T3 Bot1.Main1]
 Bot1.Hand.Plains.Play
 Bot1.Battlefield.Plains#2.Activate
-Bot1.Hand.Path to Exile.Cast(Spirit)
+Bot1.Hand.Path to Exile.Cast(Spirit Token)
 Bot1.Accept
 Bot1.Search(Island)
 [T3 Bot1.Main2]
@@ -40,4 +40,4 @@ Bot1.Search(Island)
 Exile.Count = 0
 Bot1.Graveyard = Path to Exile; Lingering Souls
 Bot1.Battlefield.Island.Tapped = true
-Bot1.Battlefield.Spirit.Keywords = Flying
+Bot1.Battlefield.Spirit Token.Keywords = Flying

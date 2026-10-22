@@ -18,10 +18,10 @@ Bot1.Battlefield.Black Lotus.Activate(Color: White)
 Bot1.Battlefield.Plains.Activate
 Bot1.Pass
 Bot1.Pass
-? Bot1.Battlefield.Ninja Turtle Spirit#1.Tapped = false
-? Bot1.Battlefield.Ninja Turtle Spirit#2.Tapped = false
-? Bot1.Battlefield.Ninja Turtle Spirit#3.Tapped = false
-? Bot1.Battlefield.Ninja Turtle Spirit#1.Token = true
+? Bot1.Battlefield.Ninja Turtle Spirit Token#1.Tapped = false
+? Bot1.Battlefield.Ninja Turtle Spirit Token#2.Tapped = false
+? Bot1.Battlefield.Ninja Turtle Spirit Token#3.Tapped = false
+? Bot1.Battlefield.Ninja Turtle Spirit Token#1.Token = true
 ? Combat.Attackers.Count = 0
 
 [Expect]

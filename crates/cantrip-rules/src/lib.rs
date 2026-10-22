@@ -72,6 +72,8 @@ mod speed;
 mod static_rules;
 #[cfg(test)]
 mod transformed_cast_tests;
+#[cfg(test)]
+mod token_name_tests;
 mod turn;
 #[cfg(test)]
 mod untap_others_tests;
@@ -715,15 +717,15 @@ impl Game {
     }
 
     /// The name an object shows (its copiable values' name).
-    pub fn name(&self, id: ObjectId) -> &'static str {
+    pub fn name(&self, id: ObjectId) -> ObjectName {
         self.chars(id).name
     }
 
     /// The name of what an object is to one who knows every card, as a script or a log does: its name (`name`), but for a
     /// card exiled face down, which has none (CR 406.3a), its card's. Never what a player is shown.
-    pub fn known_name(&self, id: ObjectId) -> &'static str {
+    pub fn known_name(&self, id: ObjectId) -> ObjectName {
         let obj = self.state.obj(id);
-        if obj.face_down_card() { self.cards.get(obj.card).name } else { self.name(id) }
+        if obj.face_down_card() { ObjectName::Literal(self.cards.get(obj.card).name) } else { self.name(id) }
     }
 
     /// Whether `player` can't gain life right now (CR 119.7): an effect or a static ability on the battlefield says so.

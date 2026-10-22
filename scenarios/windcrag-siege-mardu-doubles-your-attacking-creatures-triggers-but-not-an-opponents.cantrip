@@ -1,0 +1,68 @@
+# Windcrag Siege: "• Mardu — If a creature attacking causes a triggered ability of a permanent you control to trigger, that
+# ability triggers an additional time." Bot1 chooses Mardu, then attacks with Hero of Bladehold on turn 5: "Whenever Hero of
+# Bladehold attacks, create two 1/1 white Soldier creature tokens" triggers twice, so four Soldiers arrive. On turn 6 Bot2's
+# own Hero of Bladehold attacks and makes only two - it is not a permanent Bot1 controls - and Bot1's upkeep made no Goblin,
+# the Jeskai ability not being the chosen one.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Pearl
+Hero of Bladehold
+Windcrag Siege
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains
+Plains
+Mox Pearl
+Mox Ruby
+Hero of Bladehold
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hero of Bladehold.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hero of Bladehold.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Windcrag Siege.Cast
+Bot1.Name(Mardu)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Hero of Bladehold > Bot2)
+[T5 Bot1.End]
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Hero of Bladehold > Bot1)
+[T6 Bot2.End]
+
+[Expect]
+Turn = 6
+Stack.Count = 0
+Bot1.Battlefield.Windcrag Siege.ChosenOption = Mardu
+Bot1.Battlefield = Hero of Bladehold; Mountain; Mox Pearl; Mox Ruby; Plains; Plains; Soldier Token; Soldier Token; Soldier Token; Soldier Token; Windcrag Siege
+Bot2.Battlefield = Hero of Bladehold; Mox Pearl; Mox Ruby; Plains; Plains; Soldier Token; Soldier Token

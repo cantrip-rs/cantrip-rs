@@ -32,4 +32,4 @@ Bot1.Modes(On the bottom)
 [Expect]
 Turn = 1
 Bot1.Library = Plains; Swamp; Ornithopter
-Bot1.Battlefield = Island; Sol Ring; Wan Shi Tong, All-Knowing; Spirit; Spirit
+Bot1.Battlefield = Island; Sol Ring; Wan Shi Tong, All-Knowing; Spirit Token; Spirit Token

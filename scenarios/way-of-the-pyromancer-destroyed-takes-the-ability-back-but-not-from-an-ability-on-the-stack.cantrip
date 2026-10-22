@@ -33,7 +33,7 @@ Bot2.Hand.Plains.Play
 Bot2.Hand.Mox Pearl.Cast
 Bot2.Pass
 [T3 Bot1.Main1]
-Bot1.Battlefield.Jace.Activate(Ability: Add)
+Bot1.Battlefield.Jace Token.Activate(Ability: Add)
 Bot1.Pass
 Bot2.Battlefield.Plains.Activate
 Bot2.Battlefield.Mox Pearl.Activate
@@ -44,14 +44,14 @@ Bot1.Pass
 Bot2.Pass
 ? Bot1.Graveyard = Way of the Pyromancer
 ? Bot1.Mana = {R}
-? Bot1.Battlefield.Jace.Counters.Loyalty = 3
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 3
 [T5 Bot1.Main1]
-! Bot1.Battlefield.Jace.Activate(Ability: Add)
-Bot1.Battlefield.Jace.Activate(Ability: Surveil)
+! Bot1.Battlefield.Jace Token.Activate(Ability: Add)
+Bot1.Battlefield.Jace Token.Activate(Ability: Surveil)
 Bot1.Pass
 Bot2.Pass
 Bot1.Arrange(Island)
 [T5 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2

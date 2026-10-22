@@ -42,4 +42,4 @@ Turn = 3
 Bot1.Life = 19
 Bot2.Life = 20
 Bot2.Graveyard = Untimely Malfunction
-Bot1.Battlefield.Orc Army.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Orc Army Token.Counters.PlusOnePlusOne = 1

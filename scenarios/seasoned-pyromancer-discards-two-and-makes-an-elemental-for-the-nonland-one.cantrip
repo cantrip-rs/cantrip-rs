@@ -28,5 +28,5 @@ Bot1.Choose(Mox Pearl; Island)
 [Expect]
 Bot1.Graveyard.Count = 2
 Bot1.Hand.Count = 3
-Bot1.Battlefield = Mox Ruby; Mox Jet; Mountain; Seasoned Pyromancer; Elemental
-Bot1.Battlefield.Elemental.Power = 1
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mountain; Seasoned Pyromancer; Elemental Token
+Bot1.Battlefield.Elemental Token.Power = 1

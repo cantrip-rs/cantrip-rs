@@ -34,9 +34,9 @@ Bot1.Battlefield.Quintorius Kand.Activate(Ability: Create a 3/2)
 
 [Expect]
 Bot1.Battlefield.Quintorius Kand.Counters.Loyalty = 5
-Bot1.Battlefield.Spirit.Token = true
-Bot1.Battlefield.Spirit.Power = 3
-Bot1.Battlefield.Spirit.Toughness = 2
-Bot1.Battlefield.Spirit.Types = Creature
-Bot1.Battlefield.Spirit.Subtypes = Spirit
-Bot1.Battlefield.Spirit.Colors = Red; White
+Bot1.Battlefield.Spirit Token.Token = true
+Bot1.Battlefield.Spirit Token.Power = 3
+Bot1.Battlefield.Spirit Token.Toughness = 2
+Bot1.Battlefield.Spirit Token.Types = Creature
+Bot1.Battlefield.Spirit Token.Subtypes = Spirit
+Bot1.Battlefield.Spirit Token.Colors = Red; White

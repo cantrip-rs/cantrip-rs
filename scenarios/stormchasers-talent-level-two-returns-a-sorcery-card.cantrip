@@ -38,8 +38,8 @@ Bot1.Pass
 [Expect]
 Turn = 1
 Bot1.Battlefield.Stormchaser's Talent.ClassLevel = 2
-Bot1.Battlefield = Island; Mox Sapphire; Mox Ruby; Stormchaser's Talent; Otter
-Bot1.Battlefield.Otter.Power = 3
+Bot1.Battlefield = Island; Mox Sapphire; Mox Ruby; Stormchaser's Talent; Otter Token
+Bot1.Battlefield.Otter Token.Power = 3
 Bot1.Graveyard = Black Lotus
 Bot1.Hand = Ponder; Island; Island
 Stack.Count = 0

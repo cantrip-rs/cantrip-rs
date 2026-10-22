@@ -29,7 +29,7 @@ Bot1.Modes(Second from the top)
 [Expect]
 Turn = 1
 Bot1.Library = Plains; Sol Ring; Swamp
-Bot1.Battlefield = Island; Wan Shi Tong, All-Knowing; Spirit; Spirit
-Bot1.Battlefield.Spirit#1.Power = 1
+Bot1.Battlefield = Island; Wan Shi Tong, All-Knowing; Spirit Token; Spirit Token
+Bot1.Battlefield.Spirit Token#1.Power = 1
 Bot1.Graveyard = Black Lotus
 Stack.Count = 0

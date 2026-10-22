@@ -37,7 +37,7 @@ Bot2.Battlefield.Plains.Activate
 Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Bonehoard Dracosaur)
 [T3 Bot1.Main1]
 Bot1.Exile.Mountain.Play
-? Bot1.Battlefield.Dinosaur.Power = 3
+? Bot1.Battlefield.Dinosaur Token.Power = 3
 ? Bot1.Battlefield.Treasure Token.Tapped = false
 Bot1.Exile.Lightning Bolt.Cast(Bot2)
 Bot1.Battlefield.Mox Ruby.Activate

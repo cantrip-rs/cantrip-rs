@@ -48,4 +48,4 @@ Bot1.Battlefield.Currency Converter.Activate(Ability: Treasure)
 Turn = 3
 Exile = Forest
 Bot1.Graveyard = Lightning Bolt; Faithless Looting
-Bot1.Battlefield = Mox Ruby; Mox Jet; Currency Converter; Rogue
+Bot1.Battlefield = Mox Ruby; Mox Jet; Currency Converter; Rogue Token

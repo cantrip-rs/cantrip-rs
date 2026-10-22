@@ -34,7 +34,7 @@ Bot2.Hand.Ajani, Nacatl Pariah.Cast
 [T5 Bot1.Main1]
 Bot1.Hand.Mountain.Play
 Bot1.Battlefield.Mountain.Activate
-Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Cat Warrior)
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Cat Warrior Token)
 Bot1.Pass
 Bot2.Pass
 ? Stack.Count = 1
@@ -43,6 +43,6 @@ Bot2.Decline
 
 [Expect]
 Turn = 5
-Bot1.Battlefield = Plains; Plains; Mountain; Ajani, Nacatl Pariah; Cat Warrior
+Bot1.Battlefield = Plains; Plains; Mountain; Ajani, Nacatl Pariah; Cat Warrior Token
 Bot2.Battlefield = Plains; Plains; Ajani, Nacatl Pariah
 Stack.Count = 0

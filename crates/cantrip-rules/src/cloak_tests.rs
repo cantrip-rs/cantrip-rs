@@ -213,7 +213,7 @@ fn only_face_down_values_with_the_action_are_turned_face_up_and_losing_abilities
     cx.st().update_obj(turned, |o| o.copy = Some(Copiable::of(table.id_of(&TURNED_DOWN))));
     let turned = ops::put_onto_battlefield(&mut cx, &[(turned, YOU, false)], ZoneReason::Other).expect("nothing is asked")[0];
     assert!(cx.s().obj(turned).face_down);
-    assert_eq!((cx.chars(turned).name, cx.chars(turned).power), ("", Some(2)));
+    assert_eq!((cx.chars(turned).name, cx.chars(turned).power), (ObjectName::Literal(""), Some(2)));
     assert!(turns_face_up(&cx, manifested) && !turns_face_up(&cx, turned));
     let humbler = cx.st().push_obj(Obj::new(table.id_of(&HUMBLER), YOU, Zone::BATTLEFIELD));
     cx.st().zone_push(Zone::BATTLEFIELD, humbler);

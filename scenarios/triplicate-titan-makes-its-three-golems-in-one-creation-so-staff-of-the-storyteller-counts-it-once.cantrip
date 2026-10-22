@@ -41,5 +41,5 @@ Bot1.Battlefield.Phyrexian Altar.Activate(Sacrifice: Triplicate Titan; Color: Bl
 [Expect]
 Turn = 5
 Stack.Count = 0
-Bot1.Battlefield = Swamp; Swamp; Plains; Staff of the Storyteller; Spirit; Phyrexian Altar; Golem; Golem; Golem
+Bot1.Battlefield = Swamp; Swamp; Plains; Staff of the Storyteller; Spirit Token; Phyrexian Altar; Golem Token; Golem Token; Golem Token
 Bot1.Battlefield.Staff of the Storyteller.Counters.Story = 2

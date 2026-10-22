@@ -1,0 +1,39 @@
+# Dreadhorde Invasion: "At the beginning of your upkeep, you lose 1 life and amass Zombies 1." Bot1's turn-3 upkeep loses it 1
+# life (20 to 19) and, with no Army yet, amasses: a 0/0 black Zombie Army token arrives and one +1/+1 counter makes it a
+# 1/1.
+
+[Bot1 Deck]
+Swamp
+Dreadhorde Invasion
+Mox Jet
+Forest
+Giant Growth
+Giant Growth
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dreadhorde Invasion.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Life = 19
+Bot1.Battlefield = Dreadhorde Invasion; Forest; Mox Emerald; Mox Jet; Swamp; Zombie Army Token
+Bot1.Battlefield.Zombie Army Token.Token = true
+Bot1.Battlefield.Zombie Army Token.Power = 1
+Bot1.Battlefield.Zombie Army Token.Toughness = 1
+Bot1.Battlefield.Zombie Army Token.Colors = Black
+Bot1.Battlefield.Zombie Army Token.Types = Creature
+Bot1.Battlefield.Zombie Army Token.Subtypes = Army; Zombie
+Bot1.Battlefield.Zombie Army Token.Counters.PlusOnePlusOne = 1

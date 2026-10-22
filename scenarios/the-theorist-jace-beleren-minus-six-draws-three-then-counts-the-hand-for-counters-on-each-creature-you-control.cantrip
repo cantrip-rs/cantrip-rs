@@ -40,12 +40,12 @@ Bot1.Battlefield.The Theorist, Jace Beleren.Activate(Ability: Draw three cards)
 
 [Expect]
 Bot1.Hand.Count = 10
-Bot1.Battlefield = Island; Island; Island; Island; Illusion; Illusion; Illusion
-Bot1.Battlefield.Illusion#1.Counters.PlusOnePlusOne = 10
-Bot1.Battlefield.Illusion#2.Counters.PlusOnePlusOne = 10
-Bot1.Battlefield.Illusion#3.Counters.PlusOnePlusOne = 10
-Bot1.Battlefield.Illusion#1.Power = 11
-Bot1.Battlefield.Illusion#1.Toughness = 11
+Bot1.Battlefield = Island; Island; Island; Island; Illusion Token; Illusion Token; Illusion Token
+Bot1.Battlefield.Illusion Token#1.Counters.PlusOnePlusOne = 10
+Bot1.Battlefield.Illusion Token#2.Counters.PlusOnePlusOne = 10
+Bot1.Battlefield.Illusion Token#3.Counters.PlusOnePlusOne = 10
+Bot1.Battlefield.Illusion Token#1.Power = 11
+Bot1.Battlefield.Illusion Token#1.Toughness = 11
 Bot1.Graveyard = The Theorist, Jace Beleren; Black Lotus
 Bot2.Battlefield = Ornithopter
 Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)

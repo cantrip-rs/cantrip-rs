@@ -2116,6 +2116,9 @@ pub struct OpeningHandAction {
 #[derive(Clone, Copy)]
 pub struct CardDef {
     pub name: &'static str,
+    /// Ordered subtype words that name an unnamed token (CR 111.4, 612.2a). None for a card, explicitly named token
+    /// or copy exception; a token's creating text changes these name words, not any literal name.
+    pub token_name: Option<&'static [Subtype]>,
     /// Whether these are a card's characteristics, generated from its Oracle data (a face of a card included), rather than
     /// a token's or an emblem's written in code: only a card's name may be chosen as a card name (CR 201.4, 114.5). The
     /// oracle sets it; everything built on `CardDef::BLANK` leaves it false. A dungeon (CR 309), written in code, is a
@@ -2467,6 +2470,7 @@ pub struct GiftDef {
 impl CardDef {
     pub const BLANK: CardDef = CardDef {
         name: "",
+        token_name: None,
         oracle: false,
         cost: ManaCost::ZERO,
         has_cost: true,
@@ -2898,6 +2902,11 @@ impl CardTable {
         // A static ability given in layer 6 applies from there on (CR 613.1f): once given, in layer 6 itself, and from 7a on.
         // One of an earlier layer would come into being after its layer was done, and would be quietly absent: refused.
         for card in &cards {
+            if let Some(name) = card.token_name {
+                assert!(!card.oracle, "{}: a card's name is literal", card.name);
+                assert_eq!(ObjectName::Token { subtypes: name, words: Words::NONE }.to_string(), card.name, "token definition's name disagrees with CR 111.4");
+                assert!(name.iter().all(|&s| card.subtypes.has(s)), "{}: token-name words are assigned subtypes", card.name);
+            }
             for ability in card.abilities.iter().chain(card.delayed) {
                 if let AbilityDef::Static(s) = ability {
                     assert!(s.layer >= Layer::Ability, "{}: a granted static ability applies in layer 6 or later (CR 613.1f)", card.name);

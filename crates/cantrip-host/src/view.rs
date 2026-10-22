@@ -1115,7 +1115,7 @@ impl<'a> Projector<'a> {
             controller: seat(obj.controller),
             known: true,
             card_id: def.name.to_string(),
-            name: def.name.to_string(),
+            name: c.name.to_string(),
             mana_cost: cost_text(def),
             mana_value: Query::mana_value(game, id) as i32,
             oracle_text: crate::text::changed_text(def.text, def.name, Query::words(game, id)),

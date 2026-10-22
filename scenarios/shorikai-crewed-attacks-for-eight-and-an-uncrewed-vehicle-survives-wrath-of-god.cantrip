@@ -46,7 +46,7 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Hand.Brazen Borrower.Cast
 Bot1.Pass
 Bot1.Battlefield.Shorikai, Genesis Engine.Activate(Ability: Crew 8)
-Bot1.Choose(Pilot; Containment Priest; Brazen Borrower)
+Bot1.Choose(Pilot Token; Containment Priest; Brazen Borrower)
 Bot1.Attack(Shorikai, Genesis Engine > Bot2)
 [T3 Bot1.Main2]
 ? Bot2.Life = 12

@@ -33,15 +33,15 @@ Bot2.Hand.Llanowar Elves.Cast
 Bot2.Battlefield.Island.Activate
 Bot2.Battlefield.Mox Sapphire.Activate
 Bot2.Hand.The Wondrous Wasp.Cast
-Bot2.Target(Skeleton)
+Bot2.Target(Skeleton Token)
 [T3 Bot1.Main1]
-? Bot1.Battlefield.Skeleton.Suspected = true
-? Bot1.Battlefield.Skeleton.Keywords = (absent)
+? Bot1.Battlefield.Skeleton Token.Suspected = true
+? Bot1.Battlefield.Skeleton Token.Keywords = (absent)
 [T3 Bot1.End]
 ? Stack.Count = 0
 [T4 Bot2.DeclareAttackers]
 Bot2.Attack(Llanowar Elves > Bot1)
-Bot1.Block(Skeleton > Llanowar Elves)
+Bot1.Block(Skeleton Token > Llanowar Elves)
 [T4 Bot2.Main2]
 ? Bot1.Battlefield.Case of the Stashed Skeleton.Solved = (absent)
 [T5 Bot1.End]

@@ -45,14 +45,14 @@ Bot1.Accept
 Bot1.Pass
 Bot2.Pass
 ! Bot1.Target(Bot1.Battlefield.Octomancer)
-Bot1.Target(Bot2.Battlefield.Fish)
+Bot1.Target(Bot2.Battlefield.Fish Token)
 Bot1.Pass
 Bot2.Pass
-? Bot2.Battlefield.Fish.Tapped = true
+? Bot2.Battlefield.Fish Token.Tapped = true
 [T4 Bot2.Upkeep]
 
 [Expect]
-Bot1.Battlefield.Fish.Tapped = false
-Bot1.Battlefield.Fish.Token = true
-Bot1.Battlefield.Fish.Power = 1
-Bot2.Battlefield = Fish; Octopus
+Bot1.Battlefield.Fish Token.Tapped = false
+Bot1.Battlefield.Fish Token.Token = true
+Bot1.Battlefield.Fish Token.Power = 1
+Bot2.Battlefield = Fish Token; Octopus Token

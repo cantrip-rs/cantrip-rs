@@ -5,7 +5,8 @@ use cantrip_oracle as oracle;
 
 /// A 2/2 black Zombie creature token (CR 111.1, 111.4).
 static ZOMBIE: CardDef = CardDef {
-    name: "Zombie",
+    name: "Zombie Token",
+    token_name: Some(&[Subtype::Zombie]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Black)),
     types: TypeSet::of(&[CardType::Creature]),

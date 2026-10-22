@@ -1,0 +1,55 @@
+# Windcrag Siege: the Mardu word is "If a creature attacking causes a triggered ability of a permanent you control to
+# trigger, that ability triggers an additional time" - any creature attacking, not one you control (CR 603.2d, 508.2a).
+# Bot1 has Mardu and Curse of Predation enchanting Bot1; Bot2's Llanowar Elves attacks Bot1, and the Curse's "whenever a
+# creature attacks enchanted player" triggers twice, putting two +1/+1 counters on Bot2's attacker.
+
+[Bot1 Deck]
+Forest
+Plains
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Windcrag Siege
+Mountain
+Curse of Predation
+Island x12
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x5
+Island x13
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Windcrag Siege.Cast
+Bot1.Name(Mardu)
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Curse of Predation.Cast(Bot1)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1)
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Llanowar Elves.Power = 3
+? Bot2.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 2
+
+[Expect]
+Turn = 4
+Bot1.Life = 17
+Bot1.Battlefield.Windcrag Siege.ChosenOption = Mardu
+Bot2.Battlefield.Llanowar Elves.Power = 3
+Bot2.Battlefield.Llanowar Elves.Toughness = 3
+Bot2.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 2

@@ -43,8 +43,8 @@ Bot1.Attack(Otharri, Suns' Glory > Bot2)
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Experience = 1
-? Combat.Attackers = Otharri, Suns' Glory > Bot2; Rebel > Bot2
-? Bot1.Battlefield.Rebel.Tapped = True
+? Combat.Attackers = Otharri, Suns' Glory > Bot2; Rebel Token > Bot2
+? Bot1.Battlefield.Rebel Token.Tapped = True
 [T9 Bot1.Main2]
 ? Bot2.Life = 15
 ? Bot1.Life = 23
@@ -59,4 +59,4 @@ Bot2.Pass
 [Expect]
 Turn = 11
 Bot1.Experience = 2
-Bot1.Battlefield = Mountain; Mountain; Mountain; Plains; Plains; Otharri, Suns' Glory; Rebel; Rebel; Rebel
+Bot1.Battlefield = Mountain; Mountain; Mountain; Plains; Plains; Otharri, Suns' Glory; Rebel Token; Rebel Token; Rebel Token

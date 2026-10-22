@@ -45,8 +45,8 @@ Bot2.Pass
 Bot1.Pass
 Bot2.Pass
 ? Stack.Count = 0
-? Bot1.Battlefield.Ally.Power = 2
-? Bot1.Battlefield.Ally.Toughness = 1
+? Bot1.Battlefield.Ally Token.Power = 2
+? Bot1.Battlefield.Ally Token.Toughness = 1
 Bot1.Battlefield.Mox Pearl#1.Activate
 Bot1.Battlefield.Mox Pearl#2.Activate
 Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Pearl#1)
@@ -55,7 +55,7 @@ Bot2.Pass
 ? Stack.Count = 0
 
 [Expect]
-Bot1.Battlefield = Suki, Courageous Rescuer; Mox Pearl; Plains; Ally
+Bot1.Battlefield = Suki, Courageous Rescuer; Mox Pearl; Plains; Ally Token
 Bot1.Battlefield.Suki, Courageous Rescuer.Power = 2
-Bot1.Battlefield.Ally.Power = 2
+Bot1.Battlefield.Ally Token.Power = 2
 Bot1.Graveyard.Count = 4

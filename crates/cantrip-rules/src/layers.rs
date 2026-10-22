@@ -1039,7 +1039,13 @@ fn initial(cards: &CardTable, card: CardId, copy: Option<&Copiable>) -> Chars {
     }
     let mut chars = Chars {
         card,
-        name: copy_name.unwrap_or_else(|| renamed(def, words)),
+        name: copy_name.unwrap_or_else(|| {
+            match def.token_name {
+                Some(_) if words.is_printed() => ObjectName::Literal(def.name),
+                Some(subtypes) => ObjectName::Token { subtypes, words },
+                None => ObjectName::Literal(def.name),
+            }
+        }),
         types,
         supertypes: Supertypes { legendary: def.supertypes.legendary || legendary, ..def.supertypes },
         // CR 612.4: a token's subtypes are what the text that made it named.
@@ -1102,10 +1108,10 @@ fn doors(cards: &CardTable, card: CardId, unlocked: u8, copy: Option<&Copiable>,
     let (left_id, right_id) = cards.halves[card.0 as usize].expect("a Room's doors are in the card table");
     if copy.is_none_or(|c| c.name.is_none()) {
         chars.name = match unlocked & (DOOR_LEFT | DOOR_RIGHT) {
-            0 => "",
-            DOOR_LEFT => left.name,
-            DOOR_RIGHT => right.name,
-            _ => def.name,
+            0 => ObjectName::Literal(""),
+            DOOR_LEFT => ObjectName::Literal(left.name),
+            DOOR_RIGHT => ObjectName::Literal(right.name),
+            _ => ObjectName::Literal(def.name),
         };
     }
     if copy.is_none_or(|c| c.colors.is_none()) {
@@ -1145,18 +1151,6 @@ fn unlock_actions(cards: &CardTable, unlocked: u8, chars: &mut Chars) {
         if let Some(slot) = chars.abilities.iter().position(|a| a.is_none()) {
             chars.abilities[slot] = Some(action);
         }
-    }
-}
-
-/// A token's name under changed text (CR 612.2a): a token named for its creature type ("Spirit") is named for the type
-/// the text names now.
-fn renamed(def: &CardDef, words: Words) -> &'static str {
-    if words.is_printed() {
-        return def.name;
-    }
-    match Subtype::named(def.name) {
-        Some(s) if s.is_creature_type() && def.subtypes.has(s) => words.subtype(s).name(),
-        _ => def.name,
     }
 }
 
@@ -2157,7 +2151,7 @@ fn contract_pairs(base: Chars, ability: AbilityRef) -> Vec<(Chars, Chars)> {
     });
     vary(&|c| c.abilities = [None; MAX_ABILITIES]);
     // name
-    vary(&|c| c.name = "Another Name");
+    vary(&|c| c.name = ObjectName::Literal("Another Name"));
     // the other protections and attack requirement
     vary(&|c| c.protection_colorless = !c.protection_colorless);
     vary(&|c| c.protection_colored_spells = !c.protection_colored_spells);
@@ -2577,7 +2571,7 @@ fn apply_effect(effect: &ContinuousEffect, layer: Layer, chars: &mut Chars) {
             }
             // CR 612.8: an effect that sets the name is a text-changing effect; the object loses every name it had.
             (Layer::Text, EffectKind::SetName(name)) => {
-                chars.name = name;
+                chars.name = ObjectName::Literal(name);
                 chars.name_set = true;
             }
             // CR 612.2: a color word of a "hexproof from [color]" or "protection from [color]" ability is a word of the text;
@@ -2978,7 +2972,7 @@ mod tests {
         abilities[0] = Some(ability);
         let chars = Chars {
             card,
-            name: "Holder",
+            name: ObjectName::Literal("Holder"),
             types: TypeSet::NONE,
             supertypes: Supertypes::default(),
             subtypes: SubtypeSet::NONE,

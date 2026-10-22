@@ -382,6 +382,9 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
 
 - Any priority counts, upkeep included, and a sorcery-speed action is never offered in an upkeep or with a spell on
   the stack, so a refusal placed there holds for that reason alone.
+- A refused `Activate` is also checked at an outstanding mana-payment question (`PayCosts` or `UnlessPays`), including
+  spell/ability costs, combat taxes and ward. Put it immediately before the ordinary mana ability paying there, with
+  a priority activation as positive control when testing a priority-only restriction.
 - Targets are not considered unless the line names them, but a spell with no legal target is not offered at all. Give a
   targeted spell something to target, or it goes unoffered for the wrong reason. A refusal that names its targets,
   `! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Figure of Fable)`, refuses only the option that can be announced with

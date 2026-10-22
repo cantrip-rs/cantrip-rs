@@ -36,4 +36,4 @@ Bot1.Target(Bot2)
 [Expect]
 Turn = 2
 Bot2.Life = 16
-Bot1.Battlefield.Orc Army.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Orc Army Token.Counters.PlusOnePlusOne = 4

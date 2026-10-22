@@ -27,7 +27,7 @@ Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Hand.Fatehold Charm.Cast
 Bot1.Modes(Draw a card)
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 2
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Hand.Fatehold Charm.Cast
 Bot1.Modes(Draw a card)
@@ -35,7 +35,7 @@ Bot2.Pass
 [T1 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 4
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 4
 Bot1.Battlefield.Count = 4
 Bot1.Hand = Island; Ornithopter; Lightning Bolt
 Bot1.Graveyard = Fatehold Charm; Fatehold Charm; Black Lotus

@@ -49,7 +49,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Battlefield.Mountain.Activate
-Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Fish)
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Fish Token)
 Bot1.Pass
 Bot2.Pass
 Bot1.Pass

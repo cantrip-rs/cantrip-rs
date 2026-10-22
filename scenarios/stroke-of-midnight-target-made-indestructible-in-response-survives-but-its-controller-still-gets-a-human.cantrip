@@ -1,0 +1,63 @@
+# Stroke of Midnight: destroying an indestructible permanent does nothing, but its controller still creates the Human
+# (2023-09-01 ruling). Bot1 casts it at Bot2's Mind Stone - a nonland permanent - and Bot2 answers with Boros Charm
+# making its permanents indestructible: the Mind Stone stays, and Bot2, its controller, makes the 1/1 white Human.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Stroke of Midnight
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mind Stone
+Boros Charm
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mind Stone.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stroke of Midnight.Cast(Bot2.Battlefield.Mind Stone)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Boros Charm.Cast
+Bot2.Modes(Permanents you control gain indestructible)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mind Stone.Keywords = Indestructible
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Battlefield = Mind Stone; Human Token; Island; Mox Pearl; Mox Ruby
+Bot2.Battlefield.Human Token.Token = true
+Bot2.Battlefield.Human Token.Power = 1
+Bot2.Battlefield.Human Token.Colors = White
+Bot2.Graveyard = Boros Charm; Black Lotus
+Bot1.Battlefield = Mox Jet; Mox Pearl; Plains
+Bot1.Graveyard = Stroke of Midnight

@@ -52,7 +52,7 @@ Bot1.Pass
 Bot2.Battlefield.Karn, Scion of Urza.Activate(Ability: Construct)
 Bot2.Pass
 Bot1.Pass
-? Bot2.Battlefield.Construct.Token = true
+? Bot2.Battlefield.Construct Token.Token = true
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Ruby.Activate
@@ -60,10 +60,10 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Thieving Skydiver.Cast(Kicked: 1)
 Bot1.Pass
 Bot2.Pass
-Bot1.Target(Bot2.Battlefield.Construct)
+Bot1.Target(Bot2.Battlefield.Construct Token)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Construct.Token = true
+? Bot1.Battlefield.Construct Token.Token = true
 Bot1.Battlefield.Ajani Unrelenting.Activate(Ability: Ajani deals 4 damage)
 Bot1.Pass
 Bot1.Pass
@@ -71,8 +71,8 @@ Bot2.Pass
 [T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Ajani Unrelenting; Mox Ruby; Mox Jet; Mox Pearl; Mox Sapphire; Construct; Cadet
-Bot1.Battlefield.Construct.Damage = 0
+Bot1.Battlefield = Ajani Unrelenting; Mox Ruby; Mox Jet; Mox Pearl; Mox Sapphire; Construct Token; Cadet
+Bot1.Battlefield.Construct Token.Damage = 0
 Bot1.Battlefield.Cadet.Damage = 0
 Bot1.Graveyard = Thieving Skydiver; Black Lotus
 Bot2.Battlefield = Mox Jet; Karn, Scion of Urza

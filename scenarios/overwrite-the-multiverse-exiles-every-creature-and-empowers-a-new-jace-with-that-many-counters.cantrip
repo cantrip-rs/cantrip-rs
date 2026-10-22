@@ -43,10 +43,10 @@ Bot1.Hand.Overwrite the Multiverse.Cast
 
 [Expect]
 Exile = Ornithopter; Ornithopter; Llanowar Elves
-Bot1.Battlefield.Jace.Counters.Loyalty = 3
-Bot1.Battlefield.Jace.Token = true
-Bot1.Battlefield.Jace.Types = Planeswalker
-Bot1.Battlefield.Jace.Colors = Blue
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 3
+Bot1.Battlefield.Jace Token.Token = true
+Bot1.Battlefield.Jace Token.Types = Planeswalker
+Bot1.Battlefield.Jace Token.Colors = Blue
 Bot2.Battlefield = Forest
 Bot1.Graveyard = Overwrite the Multiverse; Black Lotus
 Bot2.Graveyard.Count = 0

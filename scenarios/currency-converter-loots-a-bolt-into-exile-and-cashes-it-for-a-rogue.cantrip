@@ -39,8 +39,8 @@ Bot1.Battlefield.Currency Converter.Activate(Ability: Treasure)
 Turn = 5
 Exile.Count = 0
 Bot1.Graveyard = Lightning Bolt
-Bot1.Battlefield = Currency Converter; Rogue; Swamp; Swamp
-Bot1.Battlefield.Rogue.Power = 2
-Bot1.Battlefield.Rogue.Toughness = 2
+Bot1.Battlefield = Currency Converter; Rogue Token; Swamp; Swamp
+Bot1.Battlefield.Rogue Token.Power = 2
+Bot1.Battlefield.Rogue Token.Toughness = 2
 Bot1.Battlefield.Currency Converter.Tapped = true
 Stack.Count = 0

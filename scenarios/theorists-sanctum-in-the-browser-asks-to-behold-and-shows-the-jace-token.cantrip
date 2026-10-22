@@ -24,9 +24,9 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Battlefield.Theorist's Sanctum.Activate(Ability: Empower)
 Bot2.Pass
 [T1 Bot1.Main2]
-? Client.Bot1.Battlefield.Jace.TypeLine = Token Planeswalker - Jace
-? Client.Bot1.Battlefield.Jace.Rules = −1: Surveil 1. / −3: Draw a card.
+? Client.Bot1.Battlefield.Jace Token.TypeLine = Token Planeswalker - Jace
+? Client.Bot1.Battlefield.Jace Token.Rules = −1: Surveil 1. / −3: Draw a card.
 
 [Expect]
-Bot1.Battlefield.Jace.Counters.Loyalty = 2
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 2
 Bot1.Revealed = Jace, the Mind Sculptor

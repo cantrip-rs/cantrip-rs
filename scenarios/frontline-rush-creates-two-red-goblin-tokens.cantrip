@@ -22,11 +22,11 @@ Bot1.Modes(Create two 1/1 red Goblin creature tokens.)
 ! Bot1.Target
 
 [Expect]
-Bot1.Battlefield.Goblin#1.Power = 1
-Bot1.Battlefield.Goblin#1.Toughness = 1
-Bot1.Battlefield.Goblin#1.Token = true
-Bot1.Battlefield.Goblin#1.Colors = Red
-Bot1.Battlefield.Goblin#1.Subtypes = Goblin
-Bot1.Battlefield.Goblin#2.Token = true
+Bot1.Battlefield.Goblin Token#1.Power = 1
+Bot1.Battlefield.Goblin Token#1.Toughness = 1
+Bot1.Battlefield.Goblin Token#1.Token = true
+Bot1.Battlefield.Goblin Token#1.Colors = Red
+Bot1.Battlefield.Goblin Token#1.Subtypes = Goblin
+Bot1.Battlefield.Goblin Token#2.Token = true
 Bot1.Graveyard = Frontline Rush
 Stack.Count = 0

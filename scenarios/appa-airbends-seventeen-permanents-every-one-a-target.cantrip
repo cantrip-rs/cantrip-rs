@@ -48,7 +48,7 @@ Bot1.Hand.Appa, Steadfast Guardian.Cast
 Bot1.Battlefield.Sol Ring#1.Activate
 Bot1.Pass
 Bot2.Pass
-Bot1.Target(Mox Emerald; Mox Pearl; Sol Ring#1; Sol Ring#2; Sol Ring#3; Sol Ring#4; Sol Ring#5; Pest#1; Pest#2; Pest#3; Pest#4; Pest#5; Pest#6; Pest#7; Pest#8; Pest#9; Pest#10)
+Bot1.Target(Mox Emerald; Mox Pearl; Sol Ring#1; Sol Ring#2; Sol Ring#3; Sol Ring#4; Sol Ring#5; Pest Token#1; Pest Token#2; Pest Token#3; Pest Token#4; Pest Token#5; Pest Token#6; Pest Token#7; Pest Token#8; Pest Token#9; Pest Token#10)
 [T7 Bot1.Main2]
 
 [Expect]

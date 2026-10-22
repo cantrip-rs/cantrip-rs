@@ -52,7 +52,7 @@ Bot1.Choose(Mox Sapphire; Mox Pearl; Mox Ruby; Bot1.Battlefield.Ornithopter; Gra
 Bot1.Target(Dire Flail)
 [T3 Bot1.Main2]
 ? Bot1.Battlefield.Dire Blunderbuss.Types = Artifact
-? Bot1.Battlefield = Mountain; Mox Jet; Dire Blunderbuss; The Golden-Gear Colossus; Gnome; Gnome
+? Bot1.Battlefield = Mountain; Mox Jet; Dire Blunderbuss; The Golden-Gear Colossus; Gnome Token; Gnome Token
 [T5 Bot1.DeclareAttackers]
 Bot1.Attack(The Golden-Gear Colossus > Bot2)
 ! Bot1.Target(The Golden-Gear Colossus)
@@ -65,7 +65,7 @@ Bot1.Target()
 [T7 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Mountain; Mox Jet; Dire Flail; The Golden-Gear Colossus; Gnome; Gnome; Gnome; Gnome; Gnome; Gnome
+Bot1.Battlefield = Mountain; Mox Jet; Dire Flail; The Golden-Gear Colossus; Gnome Token; Gnome Token; Gnome Token; Gnome Token; Gnome Token; Gnome Token
 Bot1.Battlefield.The Golden-Gear Colossus.Tapped = false
 Bot1.Battlefield.The Golden-Gear Colossus.Keywords = Trample; Vigilance
 Bot2.Life = 8

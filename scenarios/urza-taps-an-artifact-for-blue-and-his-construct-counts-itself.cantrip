@@ -30,5 +30,5 @@ Bot1.Hand.Preordain.Cast
 
 [Expect]
 Bot1.Battlefield.Sol Ring.Tapped = true
-Bot1.Battlefield.Construct.Power = 2
+Bot1.Battlefield.Construct Token.Power = 2
 Bot1.Graveyard = Preordain

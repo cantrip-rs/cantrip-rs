@@ -60,12 +60,12 @@ Bot1.Battlefield.Kavaron, Memorial World.Activate(Ability: Create a 2/2)
 Bot1.Choose(Kavaron, Memorial World)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Robot.Power = 3
+? Bot1.Battlefield.Robot Token.Power = 3
 ? Bot2.Battlefield.Cathar Commando.Power = 3
 [T5 Bot1.Main1]
-? Bot1.Battlefield.Robot.Power = 2
+? Bot1.Battlefield.Robot Token.Power = 2
 
 [Expect]
-Bot1.Battlefield = Mox Sapphire; Mox Emerald; Mox Jet; Mox Ruby; Lake-town Mariners; Robot
+Bot1.Battlefield = Mox Sapphire; Mox Emerald; Mox Jet; Mox Ruby; Lake-town Mariners; Robot Token
 Bot1.Battlefield.Lake-town Mariners.Power = 6
 Bot1.Graveyard = Kavaron, Memorial World; Black Lotus

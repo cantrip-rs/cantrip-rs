@@ -75,10 +75,10 @@ Bot1.Hand.Thought Scour.Cast(Bot1)
 [Expect]
 Bot1.Life = 17
 Bot1.Graveyard = Robot Domination; Thought Scour; Ornithopter; Ornithopter; Ornithopter; Lightning Bolt; Thought Scour; Island; Ornithopter; Thought Scour; Black Lotus
-Bot1.Battlefield = Mox Jet; Mox Sapphire; Island; Mountain; Robot Villain; Robot Villain; Robot Villain
-Bot1.Battlefield.Robot Villain#1.Token = true
-Bot1.Battlefield.Robot Villain#1.Power = 2
-Bot1.Battlefield.Robot Villain#1.Toughness = 2
-Bot1.Battlefield.Robot Villain#1.Types = Artifact; Creature
-Bot1.Battlefield.Robot Villain#1.Subtypes = Robot; Villain
-Bot1.Battlefield.Robot Villain#1.Colors = (absent)
+Bot1.Battlefield = Mox Jet; Mox Sapphire; Island; Mountain; Robot Villain Token; Robot Villain Token; Robot Villain Token
+Bot1.Battlefield.Robot Villain Token#1.Token = true
+Bot1.Battlefield.Robot Villain Token#1.Power = 2
+Bot1.Battlefield.Robot Villain Token#1.Toughness = 2
+Bot1.Battlefield.Robot Villain Token#1.Types = Artifact; Creature
+Bot1.Battlefield.Robot Villain Token#1.Subtypes = Robot; Villain
+Bot1.Battlefield.Robot Villain Token#1.Colors = (absent)

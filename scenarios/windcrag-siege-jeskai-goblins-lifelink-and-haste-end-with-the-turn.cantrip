@@ -1,0 +1,34 @@
+# Windcrag Siege: "It gains lifelink and haste until end of turn." The Goblin Jeskai makes in Bot1's turn-5 upkeep has both
+# keywords that turn; by Bot2's turn 6 (the cleanup step has passed) it has neither, and no new Goblin is made.
+
+[Bot1 Deck]
+Mountain
+Windcrag Siege
+Mox Ruby
+Plains
+Plains
+Plains
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Windcrag Siege.Cast
+Bot1.Name(Jeskai)
+[T6 Bot2.Main1]
+
+[Expect]
+Turn = 6
+Stack.Count = 0
+Bot1.Battlefield = Goblin Token; Mountain; Mox Ruby; Plains; Windcrag Siege
+Bot1.Battlefield.Goblin Token.Power = 1
+Bot1.Battlefield.Goblin Token.Keywords = (absent)

@@ -52,7 +52,7 @@ Bot1.Pass
 Bot2.Choose(Elvish Mystic)
 Bot2.Pass
 [T3 Bot1.Main2]
-? Bot1.Battlefield.Beast.Power = 4
+? Bot1.Battlefield.Beast Token.Power = 4
 [T5 Bot1.Main1]
 Bot1.Battlefield.Garruk, Veiled Butcher.Activate(Ability: Each player sacrifices)
 Bot1.Pass
@@ -66,6 +66,6 @@ Exile = Elvish Mystic; Ornithopter
 Bot2.Graveyard.Count = 0
 Bot2.Battlefield = Mox Emerald
 Bot1.Battlefield.Garruk, Veiled Butcher.Counters.Loyalty = 1
-Bot1.Battlefield = Beast; Garruk, Veiled Butcher; Mox Jet; Mox Jet
-Bot1.Battlefield.Beast.Power = 4
-Bot1.Battlefield.Beast.Keywords = Trample
+Bot1.Battlefield = Beast Token; Garruk, Veiled Butcher; Mox Jet; Mox Jet
+Bot1.Battlefield.Beast Token.Power = 4
+Bot1.Battlefield.Beast Token.Keywords = Trample

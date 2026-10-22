@@ -55,9 +55,9 @@ Bot1.Hand.Lingering Souls.Cast
 ! Bot1.Battlefield.Caretaker's Talent.Activate(Ability: Level 3)
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Caretaker's Talent.Activate(Ability: Level 2)
-! Bot1.Target(Bot2.Battlefield.Spirit)
+! Bot1.Target(Bot2.Battlefield.Spirit Token)
 ! Bot1.Target(Bot1.Battlefield.Ornithopter)
-Bot1.Target(Bot1.Battlefield.Spirit)
+Bot1.Target(Bot1.Battlefield.Spirit Token)
 [Bot1.Main2]
 Bot1.Battlefield.Plains.Activate
 ! Bot1.Battlefield.Caretaker's Talent.Activate(Ability: Level 2)
@@ -67,5 +67,5 @@ Turn = 5
 Stack.Count = 0
 Bot1.Battlefield.Caretaker's Talent.ClassLevel = 2
 Bot1.Hand.Count = 3
-Bot1.Battlefield = Caretaker's Talent; Plains; Plains; Mox Pearl; Mox Jet; Mox Ruby; Ornithopter; Spirit; Spirit; Spirit
-Bot2.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Ruby; Spirit; Spirit
+Bot1.Battlefield = Caretaker's Talent; Plains; Plains; Mox Pearl; Mox Jet; Mox Ruby; Ornithopter; Spirit Token; Spirit Token; Spirit Token
+Bot2.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Ruby; Spirit Token; Spirit Token

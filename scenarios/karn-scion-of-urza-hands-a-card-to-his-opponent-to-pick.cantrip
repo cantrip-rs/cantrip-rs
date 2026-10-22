@@ -46,15 +46,15 @@ Bot1.Hand.Sol Ring.Cast
 Bot1.Battlefield.Karn, Scion of Urza.Activate(Ability: Create a 0/0)
 Bot1.Pass
 Bot2.Pass
-? Bot1.Battlefield.Construct.Power = 2
-? Bot1.Battlefield.Construct.Toughness = 2
+? Bot1.Battlefield.Construct Token.Power = 2
+? Bot1.Battlefield.Construct Token.Toughness = 2
 [T11 Bot1.Main1]
 Bot1.Battlefield.Karn, Scion of Urza.Activate(Ability: Put a card you own)
 [T11 Bot1.Main2]
 
 [Expect]
 Turn = 11
-Bot1.Battlefield = Island; Island; Island; Island; Karn, Scion of Urza; Sol Ring; Construct
+Bot1.Battlefield = Island; Island; Island; Island; Karn, Scion of Urza; Sol Ring; Construct Token
 Bot1.Battlefield.Karn, Scion of Urza.Counters.Loyalty = 3
 Bot1.Hand = Mind Stone; Island; Island; Island; Island; Island; Guerrilla Gorilla; Lightning Bolt
 Exile.Count = 0

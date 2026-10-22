@@ -36,19 +36,19 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
-Bot1.Battlefield.Jace.Activate(Ability: Cadet)
+Bot1.Battlefield.Jace Token.Activate(Ability: Cadet)
 Bot1.Pass
 Bot2.Pass
 Bot1.Arrange(| Swamp)
 [T3 Bot1.Main1]
-Bot1.Battlefield.Jace.Activate(Ability: Cadet)
+Bot1.Battlefield.Jace Token.Activate(Ability: Cadet)
 Bot1.Pass
 Bot2.Pass
 Bot1.Arrange(| Mountain)
-? Bot1.Battlefield.Jace.Counters.Loyalty = 1
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 1
 [T5 Bot1.Main1]
-! Bot1.Battlefield.Jace.Activate(Ability: Cadet)
-Bot1.Battlefield.Jace.Activate(Ability: Surveil)
+! Bot1.Battlefield.Jace Token.Activate(Ability: Cadet)
+Bot1.Battlefield.Jace Token.Activate(Ability: Surveil)
 Bot1.Pass
 Bot2.Pass
 Bot1.Arrange(| Island)

@@ -43,15 +43,15 @@ Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Plains#2.Activate
 Bot1.Exile.Giver of Runes.Cast
 [T9 Bot1.Main2]
-? Bot1.Battlefield.Ally.Power = 1
+? Bot1.Battlefield.Ally Token.Power = 1
 Bot1.Battlefield.Plains#3.Activate
 Bot1.Hand.Giver of Runes.Cast
 
 [Expect]
 Turn = 9
 Bot1.Battlefield.Count = 9
-Bot1.Battlefield.Ally.Power = 1
-Bot1.Battlefield.Ally.Toughness = 1
-Bot1.Battlefield.Ally.Types = Creature
+Bot1.Battlefield.Ally Token.Power = 1
+Bot1.Battlefield.Ally Token.Toughness = 1
+Bot1.Battlefield.Ally Token.Types = Creature
 Exile = Mother of Runes
 Stack.Count = 0

@@ -37,7 +37,7 @@ Bot2.Pass
 Bot1.Pass
 Bot2.Pass
 Bot1.Battlefield.Mox Ruby.Activate
-Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Spirit)
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Spirit Token)
 Bot1.Pass
 Bot2.Pass
 ? Stack.Count = 1

@@ -40,4 +40,4 @@ Bot1.Decline
 
 [Expect]
 Bot1.Battlefield.Count = 9
-Bot1.Battlefield.Insect.Power = 1
+Bot1.Battlefield.Insect Token.Power = 1

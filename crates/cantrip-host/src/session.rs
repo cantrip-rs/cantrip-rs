@@ -668,6 +668,28 @@ mod tests {
         events.iter().filter(|e| e["$type"] == kind).collect()
     }
 
+    /// Created events and object views publish the actual characteristic name, not the token definition's name
+    /// (CR 111.4, 612.2a, 707.2). The existing scenarios force changed creating text, copies, and an explicit name.
+    #[test]
+    fn token_names_in_events_and_views_match_the_created_characteristics() {
+        for (name, text, token, count) in [
+            ("compound-name", include_str!("../../../scenarios/compound-token-name-follows-text-changing-its-creating-spell.cantrip"), "Tentacle Soldier Token", 1),
+            ("compound-copy", include_str!("../../../scenarios/compound-token-name-copy-keeps-creating-text-not-later-subtype.cantrip"), "Tentacle Soldier Token", 3),
+            ("explicit-name", include_str!("../../../scenarios/explicit-token-name-stays-literal-when-creating-types-change.cantrip"), "Ajani's Pridemate", 1),
+        ] {
+            let mut session = Session::scenario(text, name, Vec::new(), &[]).ok().unwrap();
+            let step = session.step();
+            assert_eq!(step["Scenario"]["Verdict"]["Passed"], true, "{name}: {step}");
+            for seat in ["1", "2"] {
+                let events = of_type(step["Events"][seat].as_array().unwrap(), "TokenCreatedEvent");
+                assert_eq!(events.len(), count, "{name}: seat {seat}");
+                assert!(events.iter().all(|e| e["Name"] == token), "{name}: {events:?}");
+                let objects = step["Views"][seat]["Objects"].as_array().unwrap();
+                assert_eq!(objects.iter().filter(|o| o["Name"] == token && o["Kind"] == "Token").count(), count, "{name}: seat {seat}");
+            }
+        }
+    }
+
     /// A mana ability is taken back: the game returns to before it, the land untapped and its mana gone, and nothing
     /// more is offered to take back. One that finishes paying for a spell is not offered: the spell is cast.
     #[test]

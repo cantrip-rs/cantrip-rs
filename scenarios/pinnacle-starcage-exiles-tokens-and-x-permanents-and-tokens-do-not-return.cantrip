@@ -47,7 +47,7 @@ Bot2.Hand.Engineered Explosives.Cast(X: 3)
 Bot2.Pass
 Bot2.Pass
 Bot2.Pass
-? Bot2.Battlefield = Engineered Explosives; Mountain; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Ravenous Robots; Robot; Robot
+? Bot2.Battlefield = Engineered Explosives; Mountain; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Ravenous Robots; Robot Token; Robot Token
 [T3 Bot1.Main1]
 Bot1.Hand.Plains.Play
 [T5 Bot1.Main1]

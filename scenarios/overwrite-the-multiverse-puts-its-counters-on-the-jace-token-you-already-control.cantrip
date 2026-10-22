@@ -41,7 +41,7 @@ Bot2.Battlefield.Forest.Activate
 Bot2.Hand.Llanowar Elves.Cast
 Bot2.Hand.Ornithopter.Cast
 [T3 Bot1.Main1]
-? Bot1.Battlefield.Jace.Counters.Loyalty = 8
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 8
 Bot1.Battlefield.Black Lotus.Activate(Color: Black)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
@@ -51,5 +51,5 @@ Bot1.Hand.Overwrite the Multiverse.Cast
 
 [Expect]
 Exile.Count = 3
-Bot1.Battlefield.Jace.Counters.Loyalty = 11
-Bot1.Battlefield.Jace.Token = true
+Bot1.Battlefield.Jace Token.Counters.Loyalty = 11
+Bot1.Battlefield.Jace Token.Token = true

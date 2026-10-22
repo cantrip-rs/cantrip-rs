@@ -38,9 +38,9 @@ Bot1.Battlefield.Mox Pearl#2.Activate
 Bot1.Battlefield.Mox Pearl#3.Activate
 Bot1.Battlefield.Mox Pearl#4.Activate
 Bot1.Hand.Conclave Tribunal.Cast
-Bot1.Target(Bot2.Battlefield.Spirit)
+Bot1.Target(Bot2.Battlefield.Spirit Token)
 [T3 Bot1.Main2]
-? Bot2.Battlefield = Plains; Mox Pearl; Mox Pearl; Spirit
+? Bot2.Battlefield = Plains; Mox Pearl; Mox Pearl; Spirit Token
 ? Exile.Count = 0
 [T4 Bot2.Main1]
 Bot2.Hand.Plains.Play
@@ -51,5 +51,5 @@ Bot2.Hand.Disenchant.Cast(Conclave Tribunal)
 
 [Expect]
 Bot1.Graveyard = Conclave Tribunal
-Bot2.Battlefield = Plains; Plains; Mox Pearl; Mox Pearl; Spirit
+Bot2.Battlefield = Plains; Plains; Mox Pearl; Mox Pearl; Spirit Token
 Exile.Count = 0

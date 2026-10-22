@@ -12,7 +12,8 @@ fn enters_stunned(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspe
 
 /// The tapped 4/4 green Beast creature token it makes.
 pub static BEAST: CardDef = CardDef {
-    name: "Beast",
+    name: "Beast Token",
+    token_name: Some(&[Subtype::Beast]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::Green)),
     types: TypeSet::of(&[CardType::Creature]),

@@ -35,12 +35,12 @@ Bot1.Hand.Hero of Bladehold.Cast
 Bot1.Attack(Hero of Bladehold > Bot2)
 Bot1.Triggers(battle cry; battle cry; Soldier; Soldier)
 [T5 Bot1.DeclareBlockers]
-? Combat.Attackers = Hero of Bladehold > Bot2; Soldier > Bot2; Soldier > Bot2; Soldier > Bot2; Soldier > Bot2
-? Bot1.Battlefield.Soldier#1.Power = 3
-? Bot1.Battlefield.Soldier#4.Power = 3
+? Combat.Attackers = Hero of Bladehold > Bot2; Soldier Token > Bot2; Soldier Token > Bot2; Soldier Token > Bot2; Soldier Token > Bot2
+? Bot1.Battlefield.Soldier Token#1.Power = 3
+? Bot1.Battlefield.Soldier Token#4.Power = 3
 ? Bot1.Battlefield.Hero of Bladehold.Power = 3
 [T5 Bot1.Main2]
 
 [Expect]
 Bot2.Life = 5
-Bot1.Battlefield = Plains; Mox Ruby; Mox Jet; Isshin, Two Heavens as One; Hero of Bladehold; Soldier; Soldier; Soldier; Soldier
+Bot1.Battlefield = Plains; Mox Ruby; Mox Jet; Isshin, Two Heavens as One; Hero of Bladehold; Soldier Token; Soldier Token; Soldier Token; Soldier Token

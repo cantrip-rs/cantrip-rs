@@ -29,8 +29,8 @@ Bot1.Pass
 [T1 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield.Dragon.Power = 5
-Bot1.Battlefield.Dragon.Toughness = 5
-Bot1.Battlefield.Dragon.Keywords = Flying
+Bot1.Battlefield.Dragon Token.Power = 5
+Bot1.Battlefield.Dragon Token.Toughness = 5
+Bot1.Battlefield.Dragon Token.Keywords = Flying
 Bot1.Battlefield.Blood Token = (absent)
 Bot2.Life = 19

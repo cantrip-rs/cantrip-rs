@@ -45,6 +45,6 @@ Bot2.Battlefield.Plains.Activate
 Bot2.Life = 20
 Bot1.Life = 21
 Bot1.Hand.Count = 5
-Bot1.Battlefield.Vampire.Token = true
+Bot1.Battlefield.Vampire Token.Token = true
 Bot1.Battlefield.Preacher of the Schism = (absent)
 Exile = Preacher of the Schism

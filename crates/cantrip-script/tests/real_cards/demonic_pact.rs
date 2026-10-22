@@ -63,7 +63,7 @@ fn demonic_pact_with_only_targeted_modes_left_and_no_target_does_nothing() {
             },
             RequestKind::Priority { .. } => Answer::Pass,
             RequestKind::PayCosts { options, .. } => {
-                let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s).starts_with("Mox")));
+                let mox = options.iter().find(|o| o.kind == ActionKind::ActivateAbility && o.source.is_some_and(|s| game.name(s).text().starts_with("Mox")));
                 let confirm = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting);
                 Answer::Act(Action::of(confirm.or(mox).expect("a Mox to pay with, or the payment to confirm")))
             }

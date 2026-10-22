@@ -25,11 +25,11 @@ Bot1.Accept
 Bot1.Accept
 
 [Expect]
-Bot1.Battlefield.Construct#1.Types = Artifact; Creature
-Bot1.Battlefield.Construct#1.Power = 4
-Bot1.Battlefield.Construct#1.Toughness = 4
-Bot1.Battlefield.Construct#1.Keywords = Flying; Haste
-Bot1.Battlefield.Construct#2.Power = 4
-Bot1.Battlefield.Construct#3.Power = 4
-Bot1.Battlefield.Construct#4.Power = 4
+Bot1.Battlefield.Construct Token#1.Types = Artifact; Creature
+Bot1.Battlefield.Construct Token#1.Power = 4
+Bot1.Battlefield.Construct Token#1.Toughness = 4
+Bot1.Battlefield.Construct Token#1.Keywords = Flying; Haste
+Bot1.Battlefield.Construct Token#2.Power = 4
+Bot1.Battlefield.Construct Token#3.Power = 4
+Bot1.Battlefield.Construct Token#4.Power = 4
 Bot1.Graveyard = The Fantasticar; Black Lotus

@@ -58,4 +58,4 @@ Bot2.Battlefield.Ghost Vacuum.Activate(Bot1.Graveyard.Otharri, Suns' Glory)
 Turn = 11
 Exile = Otharri, Suns' Glory
 Bot1.Graveyard.Count = 0
-Bot1.Battlefield.Rebel.Tapped = true
+Bot1.Battlefield.Rebel Token.Tapped = true

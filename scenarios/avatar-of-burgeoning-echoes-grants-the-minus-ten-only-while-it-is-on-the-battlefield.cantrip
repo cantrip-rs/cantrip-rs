@@ -27,21 +27,21 @@ Bot1.Hand.Black Lotus.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
 Bot1.Hand.Jace's Machinations.Cast
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 8
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 8
 Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Mox Sapphire#1.Activate
 Bot1.Hand.Fatehold Charm.Cast
 Bot1.Modes(Draw a card)
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 10
-! Bot1.Battlefield.Jace.Activate(Ability: Put a +1/+1 counter)
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 10
+! Bot1.Battlefield.Jace Token.Activate(Ability: Put a +1/+1 counter)
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Sapphire#2.Activate
 Bot1.Hand.Avatar of Burgeoning Echoes.Cast
 Bot2.Pass
-? Bot1.Battlefield.Jace.Counters.Loyalty = 10
-Bot1.Battlefield.Jace.Activate(Ability: Put a +1/+1 counter; Bot1.Battlefield.Avatar of Burgeoning Echoes)
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 10
+Bot1.Battlefield.Jace Token.Activate(Ability: Put a +1/+1 counter; Bot1.Battlefield.Avatar of Burgeoning Echoes)
 Bot2.Pass
 
 [Expect]

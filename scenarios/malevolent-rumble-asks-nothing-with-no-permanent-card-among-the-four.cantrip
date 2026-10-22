@@ -34,5 +34,5 @@ Bot2.Pass
 [Expect]
 Bot1.Graveyard.Count = 5
 Bot1.Hand.Count = 4
-Bot1.Battlefield.Eldrazi Spawn.Power = 0
+Bot1.Battlefield.Eldrazi Spawn Token.Power = 0
 Bot1.Library.Count = 6

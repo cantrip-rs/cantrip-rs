@@ -60,7 +60,7 @@ fn table() -> &'static CardTable {
 
 /// Bot1 casts Probe Seeker and activates it on turn 1, answering the search with the card named `pick` (or none). The
 /// game, the card found, and the search question's destination and eligible cards' names.
-fn play(pick: Option<&str>) -> (Game, Option<ObjectId>, SearchDestination, Vec<&'static str>) {
+fn play(pick: Option<&str>) -> (Game, Option<ObjectId>, SearchDestination, Vec<ObjectName>) {
     let filler = table().find("Filler").unwrap();
     let find = |n: &str| table().find(n).unwrap();
     // The opening hand is the first seven; the library below it holds one of each kind, then fillers.
@@ -94,7 +94,7 @@ fn play(pick: Option<&str>) -> (Game, Option<ObjectId>, SearchDestination, Vec<&
             RequestKind::Priority { .. } => Answer::Pass,
             RequestKind::SearchLibrary { destination, .. } => {
                 let eligible = first_choices(&game, &request);
-                let names: Vec<&'static str> = eligible.iter().map(|&c| game.name(c)).collect();
+                let names: Vec<ObjectName> = eligible.iter().map(|&c| game.name(c)).collect();
                 let chosen: Vec<ObjectId> = pick.map(|p| eligible.iter().copied().filter(|&c| game.name(c) == p).take(1).collect()).unwrap_or_default();
                 asked = Some((*destination, names, chosen.first().copied()));
                 Answer::Cards(chosen)
@@ -125,8 +125,8 @@ fn revealed(game: &Game, card: ObjectId) -> bool {
 fn the_search_announces_the_split_and_offers_only_creature_and_land_cards() {
     let (_, _, destination, names) = play(None);
     assert_eq!(destination, SearchDestination::LandTappedElseHand);
-    assert!(names.contains(&"Probe Bear") && names.contains(&"Probe Arbor") && names.contains(&"Filler"));
-    assert!(!names.contains(&"Probe Ritual"));
+    assert!(names.contains(&ObjectName::Literal("Probe Bear")) && names.contains(&ObjectName::Literal("Probe Arbor")) && names.contains(&ObjectName::Literal("Filler")));
+    assert!(!names.contains(&ObjectName::Literal("Probe Ritual")));
 }
 
 /// A land card found is revealed and put onto the battlefield tapped, not into the hand (CR 305.4: put, not played).

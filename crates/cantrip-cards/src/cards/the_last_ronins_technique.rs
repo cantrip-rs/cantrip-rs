@@ -5,7 +5,8 @@ use cantrip_oracle as oracle;
 
 /// The 1/1 white Ninja Turtle Spirit creature token.
 pub static NINJA_TURTLE_SPIRIT: CardDef = CardDef {
-    name: "Ninja Turtle Spirit",
+    name: "Ninja Turtle Spirit Token",
+    token_name: Some(&[Subtype::Ninja, Subtype::Turtle, Subtype::Spirit]),
     has_cost: false,
     colors: Some(ColorSet::of(Color::White)),
     types: TypeSet::of(&[CardType::Creature]),
