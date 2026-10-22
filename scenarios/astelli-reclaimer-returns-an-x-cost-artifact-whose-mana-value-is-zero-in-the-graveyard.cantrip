@@ -1,15 +1,17 @@
 # An {X} in a card's mana cost is 0 in the graveyard (CR 202.3e, its ruling): Engineered Explosives ({X}) has mana value 0 and is a legal
 # target for Astelli Reclaimer cast for its warp cost (X = 3), beside Door of Destinies (mana value 4), which is not. The Explosives
 # enters the battlefield without having been cast, so with no charge counters.
+# LED discards at priority first; Reclaimer drawn on turn 3 is paid with Plains and Sol Ring.
 
 [Bot1 Deck]
 Lion's Eye Diamond
-Astelli Reclaimer
+Plains
 Engineered Explosives
 Door of Destinies
 Mountain
 Lightning Bolt
 Sol Ring
+Astelli Reclaimer
 Mountain x13
 
 [Bot2 Deck]
@@ -17,15 +19,22 @@ Island x20
 
 [Actions]
 Bot1.Hand.Lion's Eye Diamond.Cast
-Bot1.Hand.Astelli Reclaimer.Cast(Ability: Warp)
+Bot1.Hand.Plains.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: White)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Astelli Reclaimer.Cast(Ability: Warp)
 ! Bot1.Target(Door of Destinies)
 Bot1.Target(Engineered Explosives)
 Bot1.Pass
-[T1 Bot1.Main2]
+[T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Astelli Reclaimer; Engineered Explosives
-Bot1.Graveyard = Lion's Eye Diamond; Sol Ring; Lightning Bolt; Mountain; Door of Destinies
+Bot1.Battlefield = Plains; Sol Ring; Astelli Reclaimer; Engineered Explosives
+Bot1.Graveyard = Lion's Eye Diamond; Lightning Bolt; Mountain; Door of Destinies
+Bot1.Battlefield.Engineered Explosives.Counters.Charge = (absent)
 Bot1.Hand.Count = 0
 Exile.Count = 0

@@ -18,6 +18,15 @@ pub fn chars(cards: &CardTable, state: &GameState, log: &[Record], id: ObjectId)
     chars_before(cards, state, log, id, Layer::End)
 }
 
+/// Expected-zone source information (CR 113.7a, 608.2h, 702.15c): a phased-out permanent is read as it most recently
+/// existed phased in. `chars` remains the live projected calculation; phase-in drops this snapshot link.
+pub fn source_chars(cards: &CardTable, state: &GameState, log: &[Record], id: ObjectId) -> Chars {
+    match state.phased_last_known(id) {
+        Some(last) => initial(cards, last.card, None).as_known(last),
+        None => chars(cards, state, log, id),
+    }
+}
+
 /// How many threads are working out an object's abilities' givers now (`ability_givers`): read first, so the layers pay one
 /// relaxed load per entry for the watching the rest of the time.
 static WATCHING: std::sync::atomic::AtomicU32 = std::sync::atomic::AtomicU32::new(0);
@@ -2791,12 +2800,12 @@ pub fn can_target(cards: &CardTable, state: &GameState, log: &[Record], asker: &
                 if target_chars.has(Keyword::Hexproof) && opponent && !targeting_rule(cards, state, log, TargetingRuleKind::IgnoreHexproof, id) {
                     return false;
                 }
-                let mut source_chars = chars(cards, state, log, asker.source);
+                let mut source_chars = source_chars(cards, state, log, asker.source);
                 // A card that is not on the battlefield or the stack and asks for a target is about to be cast: it
                 // moves to the stack before its targets are chosen (CR 601.2a), so it is judged as the spell it
                 // will be, which protection from spells (CR 702.16a) turns away.
                 let source = state.obj(asker.source);
-                if !source.zone.is(ZoneKind::Battlefield) && !source.zone.is(ZoneKind::Stack) {
+                if source.became.is_none() && !source.zone.is(ZoneKind::Battlefield) && !source.zone.is(ZoneKind::Stack) && !source.zone.is(ZoneKind::PhasedOut) {
                     source_chars.spell = true;
                 }
                 // Hexproof from [quality] (CR 702.11d): no [quality] spell an opponent controls, nor an ability an opponent

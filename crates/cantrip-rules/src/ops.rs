@@ -1094,13 +1094,15 @@ pub fn cease_together(cx: &mut Cx, objects: &[(Zone, ObjectId)]) {
 /// it, or a delayed ability it created, reads after (High Tide whose "Island" Magical Hack made "Swamp" watches Swamps;
 /// CR 603.7d). Nothing hidden reaches a player through it: it is read only where the rules read the object itself.
 pub fn last_known_of(cx: &Cx, id: ObjectId) -> LastKnown {
-    last_known_from(cx, id, &layers::chars(cx.cards(), cx.s(), &cx.g.log, id))
+    last_known_from(cx, id, &layers::source_chars(cx.cards(), cx.s(), &cx.g.log, id))
 }
 
 /// `last_known_of` with `id`'s characteristics `c` already worked out.
 pub fn last_known_from(cx: &Cx, id: ObjectId, c: &Chars) -> LastKnown {
     LastKnown {
         id,
+        card: c.card,
+        controller: cx.controller(id),
         name: c.name,
         name_set: c.name_set,
         supertypes: c.supertypes,
@@ -1111,6 +1113,15 @@ pub fn last_known_from(cx: &Cx, id: ObjectId, c: &Chars) -> LastKnown {
         power: c.power,
         toughness: c.toughness,
         keywords: c.keywords,
+        protection: c.protection,
+        protection_colorless: c.protection_colorless,
+        protection_players: c.protection_players,
+        protection_types: c.protection_types,
+        spell: c.spell,
+        protection_colored_spells: c.protection_colored_spells,
+        protection_everything: c.protection_everything,
+        hexproof_from: c.hexproof_from,
+        must_attack: c.must_attack,
         mana_value: cantrip_api::mana_value_of(&|card| cx.cards().get(card), cx.s(), id, c),
         abilities: c.abilities,
         words: cantrip_api::words(cx.s(), id),
@@ -1977,14 +1988,16 @@ pub fn damage_together(cx: &mut Cx, hits: &[(ObjectId, Target, u16)]) -> Vec<u16
 /// whose damage the shield prevents first, then the next while some is left; the damage of the others is dealt normally
 /// once it is used up. Everything else keeps its order. Players with such choices make them in APNAP order (CR 616.1).
 pub fn order_for_shields(cx: &mut Cx, hits: &[(ObjectId, Target, u16)], combat: bool) -> Vec<usize> {
-    let mut order: Vec<usize> = (0..hits.len()).collect();
+    let mut order: Vec<usize> = (0..hits.len())
+        .filter(|&i| !matches!(hits[i].1, Target::Player(p) if !cx.s().in_game(p)))
+        .collect();
     if hits.len() < 2 || !cx.s().effects.iter().any(|e| matches!(e.kind, EffectKind::Prevention { shield: Shield::Next(_), .. })) {
         return order;
     }
     let mut recipients: Vec<(PlayerId, Target)> = Vec::new();
     for &(_, to, _) in hits {
         let chooser = match to {
-            Target::Player(p) => p,
+            Target::Player(p) if cx.s().in_game(p) => p,
             Target::Object(id) if live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield) => cx.s().obj(id).controller,
             _ => continue,
         };
@@ -2108,7 +2121,8 @@ pub fn deal_damage_with(
     combat: bool,
     batch: &mut DamageBatch,
 ) -> Option<Event> {
-    if amount == 0 {
+    // CR 102.1, 120.1, 800.4a: a departed player receives no damage, nor replacements or prevention of that damage.
+    if amount == 0 || matches!(target, Target::Player(p) if !cx.s().in_game(p)) {
         return None;
     }
     // CR 614.1a, 614.6: the replacement effects may change whom the damage is dealt to ("is dealt to this creature
@@ -2116,13 +2130,13 @@ pub fn deal_damage_with(
     // infect, lifelink, deathtouch, loyalty and defense are judged against that recipient.
     let event = replace::damage(cx, DamageEvent { source, target, amount, combat, heal_marked: false });
     let (target, amount, heal_marked) = (event.target, event.amount, event.heal_marked);
-    if amount == 0 {
+    if amount == 0 || matches!(target, Target::Player(p) if !cx.s().in_game(p)) {
         return None;
     }
     // Protection prevents the damage (CR 702.16e, 702.16j, 702.16k) unless it can't be prevented (CR 615.12), and the
     // prevention is recorded (CR 615.6). Where replacement or other prevention effects applied, protection was ordered with them
     // (CR 616.1) and has prevented it already if it applies.
-    let source_chars = layers::chars(cx.cards(), cx.s(), &cx.g.log, source);
+    let source_chars = layers::source_chars(cx.cards(), cx.s(), &cx.g.log, source);
     let prevented = |cx: &mut Cx, by: ObjectId| -> Option<Event> {
         cx.emit(Event::DamagePrevented { source, target, amount, combat, by });
         None
@@ -2130,7 +2144,7 @@ pub fn deal_damage_with(
     match target {
         Target::None | Target::Ability(_) => None,
         Target::Player(p) => {
-            if let Some(by) = layers::player_protection(cx.cards(), cx.s(), &cx.g.log, p, cx.s().obj(source).controller)
+            if let Some(by) = layers::player_protection(cx.cards(), cx.s(), &cx.g.log, p, cx.controller(source))
                 && damage_can_be_prevented(cx, source, combat)
             {
                 return prevented(cx, by);
@@ -2140,20 +2154,20 @@ pub fn deal_damage_with(
                 // Damage from a source with infect is dealt to a player as that many poison counters (CR 702.90b,
                 // 120.3b), and so is damage dealt "as though its source had infect" (Phyrexian Unlife): "that source's
                 // controller" gives them, so "if you would put one or more counters" is theirs.
-                let by = cx.s().obj(source).controller;
+                let by = cx.controller(source);
                 counters::put_on_player(cx, p, counters::PlayerCounts { poison: amount, ..Default::default() }, by);
             } else {
                 change_life(cx, p, -(amount as i32));
             }
             lifelink(cx, source, &source_chars, amount, batch);
-            Some(Event::Damage { source, target, amount, combat, controller: cx.s().obj(source).controller, colors: source_chars.colors })
+            Some(Event::Damage { source, target, amount, combat, controller: cx.controller(source), colors: source_chars.colors })
         }
         Target::Object(id) => {
             if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) {
                 return None;
             }
             let target_chars = layers::chars(cx.cards(), cx.s(), &cx.g.log, id);
-            let source_controller = cx.s().obj(source).controller;
+            let source_controller = cx.controller(source);
             if target_chars.protected_from_by(&source_chars, source_controller) && damage_can_be_prevented(cx, source, combat) {
                 return prevented(cx, id);
             }
@@ -2191,7 +2205,7 @@ pub fn deal_damage_with(
                 counters::remove(cx, id, CounterKind::Loyalty, amount.min(i16::MAX as u16) as i16);
             }
             lifelink(cx, source, &source_chars, amount, batch);
-            Some(Event::Damage { source, target, amount, combat, controller: cx.s().obj(source).controller, colors: source_chars.colors })
+            Some(Event::Damage { source, target, amount, combat, controller: cx.controller(source), colors: source_chars.colors })
         }
     }
 }
@@ -2203,14 +2217,14 @@ pub fn deal_damage_with(
 /// (CR 616.1).
 pub(crate) fn protection_prevents(cx: &Cx, source: ObjectId, target: Target, combat: bool) -> Option<ObjectId> {
     let by = match target {
-        Target::Player(p) => layers::player_protection(cx.cards(), cx.s(), &cx.g.log, p, cx.s().obj(source).controller)?,
+        Target::Player(p) => layers::player_protection(cx.cards(), cx.s(), &cx.g.log, p, cx.controller(source))?,
         Target::Object(id) => {
             if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) {
                 return None;
             }
             let target_chars = layers::chars(cx.cards(), cx.s(), &cx.g.log, id);
-            let source_chars = layers::chars(cx.cards(), cx.s(), &cx.g.log, source);
-            if !target_chars.protected_from_by(&source_chars, cx.s().obj(source).controller) {
+            let source_chars = layers::source_chars(cx.cards(), cx.s(), &cx.g.log, source);
+            if !target_chars.protected_from_by(&source_chars, cx.controller(source)) {
                 return None;
             }
             id
@@ -2233,7 +2247,7 @@ pub(crate) fn damage_can_be_prevented(cx: &Cx, source: ObjectId, combat: bool) -
 /// the damage event, not a trigger: added to what the source has dealt in this event, gained once it is all dealt.
 fn lifelink(cx: &mut Cx, source: ObjectId, chars: &Chars, amount: u16, batch: &mut DamageBatch) {
     if chars.has(Keyword::Lifelink) {
-        let controller = cx.s().obj(source).controller;
+        let controller = cx.controller(source);
         match batch.lifelink.iter_mut().find(|(s, _, _)| *s == source) {
             Some(entry) => entry.2 += amount as u32,
             None => batch.lifelink.push((source, controller, amount as u32)),
@@ -2261,7 +2275,7 @@ pub fn life_total_cant_change(s: &GameState, player: PlayerId) -> bool {
 /// `player`'s life total goes up or down by `delta` (CR 119.3). Every gain and loss of life comes here: an effect's, a
 /// cost's (CR 119.4), damage (CR 120.3a), lifelink (CR 702.15b) and a life total set to a number (CR 119.5).
 pub fn change_life(cx: &mut Cx, player: PlayerId, delta: i32) {
-    if delta == 0 {
+    if delta == 0 || !cx.s().in_game(player) {
         return;
     }
     // CR 119.7: a player who can't gain life gains none, and nothing happens: no life gain event, so nothing that
@@ -2278,7 +2292,7 @@ pub fn change_life(cx: &mut Cx, player: PlayerId, delta: i32) {
     // history records the life that actually changed. A gain an effect turned into a loss, or a loss into a gain, the player
     // can't have is nothing (the Platinum Emperion rulings).
     let delta = crate::replace::life_change(cx, player, delta);
-    if delta == 0 || blocked(cx, player, delta) {
+    if delta == 0 || !cx.s().in_game(player) || blocked(cx, player, delta) {
         return;
     }
     cx.st().update_player(player, |p| p.life = p.life.saturating_add(delta));
@@ -3162,6 +3176,10 @@ pub fn leave_game(cx: &mut Cx, player: PlayerId) {
         move_together(cx, &moves, ZoneReason::Exile);
     }
 }
+
+#[cfg(test)]
+#[path = "departed_damage_tests.rs"]
+mod departed_damage_tests;
 
 #[cfg(test)]
 mod tests {

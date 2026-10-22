@@ -1,0 +1,46 @@
+# Negative power is less than 1 (CR 107.1b, 509.3f). Gorilla's -3/2 at declaration qualifies despite printed 2/2.
+# Icy Reception is cast by the opponent, so does not trigger Pursuer's prowess. Exactly one ping; no combat player damage.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Tetsuko Umezawa, Pursuer
+Mountain x30
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Guerrilla Gorilla
+Icy Reception
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Icy Reception.Cast
+Bot2.Modes(Target creature gets)
+Bot2.Target(Guerrilla Gorilla)
+Bot2.Block(Guerrilla Gorilla > Tetsuko Umezawa, Pursuer)
+? Stack.Count = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Power = 2
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Damage = 0
+Bot2.Graveyard = Guerrilla Gorilla; Icy Reception; Black Lotus
+Stack.Count = 0

@@ -1,0 +1,11 @@
+{
+  "name": "Tether Technician",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Minotaur Artificer",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Reach\nWhen this creature enters, you may discard a card. When you do, this creature deals 2 damage to any target.",
+  "keywords": [
+    "Reach"
+  ]
+}

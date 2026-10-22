@@ -1,0 +1,51 @@
+# APNAP choices begin with the active player, not Tinybones' controller (CR 101.4).
+# Bot1 blinks Tinybones during Bot3's turn: opponents choose Bot3, Bot4, then Bot2, and discard all three cards together.
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Tinybones, Pocket Nuisance
+Ephemerate
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Bot3 Deck]
+Forest x35
+
+[Bot4 Deck]
+Mountain x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+Bot3.Choose(Forest)
+Bot4.Choose(Mountain)
+Bot1.Triggers(Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance)
+[T3 Bot3.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ephemerate.Cast(Tinybones, Pocket Nuisance)
+Bot3.Choose(Forest)
+? Bot3.Graveyard.Count = 1
+Bot4.Choose(Mountain)
+? Bot4.Graveyard.Count = 1
+Bot2.Choose(Island)
+Bot1.Triggers(Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance)
+? Stack.Count = 3
+[T3 Bot3.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 14
+Bot3.Life = 14
+Bot4.Life = 14
+Bot2.Graveyard.Count = 2
+Bot3.Graveyard.Count = 2
+Bot4.Graveyard.Count = 2
+Exile = Ephemerate
+Stack.Count = 0

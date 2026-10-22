@@ -1,0 +1,49 @@
+# A Fractured Identity token copies all Pursuer abilities (CR 707.2), with "opponent" relative to its controller.
+# Original is exiled; Bot2's token attacks and pings Bot1 for its 1/1 block, killing the Elf in first-strike damage.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Emerald
+Tetsuko Umezawa, Pursuer
+Llanowar Elves
+Mountain x30
+
+[Bot2 Deck]
+Plains
+Mox Sapphire
+Black Lotus
+Fractured Identity
+Plains x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Fractured Identity.Cast(Tetsuko Umezawa, Pursuer)
+[T4 Bot2.Main1]
+Bot2.Attack(Tetsuko Umezawa, Pursuer > Bot1)
+Bot1.Block(Llanowar Elves > Tetsuko Umezawa, Pursuer)
+? Stack.Count = 1
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Bot1.Graveyard = Llanowar Elves; Black Lotus
+Bot2.Battlefield.Tetsuko Umezawa, Pursuer.Token = true
+Bot2.Battlefield.Tetsuko Umezawa, Pursuer.Keywords = DoubleStrike
+Exile = Tetsuko Umezawa, Pursuer
+Stack.Count = 0

@@ -1,0 +1,40 @@
+# Every opening card is played before Tether enters: discarding from an empty hand is impossible (CR 608.2d).
+# Neither the discard nor the reflexive target is asked; the accepting test is the positive control.
+
+[Bot1 Deck]
+Black Lotus x2
+Tether Technician
+Sol Ring
+Mox Ruby
+Ornithopter
+Mountain
+Mountain x25
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Tether Technician.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+! Bot1.Target
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Graveyard = Black Lotus; Black Lotus
+Bot1.Battlefield.Tether Technician.Damage = 0
+Bot1.Life = 20
+Bot2.Life = 20
+Stack.Count = 0

@@ -219,7 +219,9 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied]) -> Vec<Candidat
             if def.kind != kind || !functions || applied.contains(&(id, index, Origin::Printed)) {
                 continue;
             }
-            if (def.applies)(cx, &asker, proposal) {
+            if (def.applies)(cx, &asker, proposal)
+                && valid_redirection(cx, proposal, |after| (def.apply)(cx, &asker, after))
+            {
                 found.push(Candidate { source: id, index, origin: Origin::Printed });
             }
         }
@@ -287,7 +289,9 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied]) -> Vec<Candidat
             continue;
         }
         let asker = Asker { source: e.source, controller: e.controller };
-        if (def.applies)(cx, &asker, e.affected, proposal) {
+        if (def.applies)(cx, &asker, e.affected, proposal)
+            && valid_redirection(cx, proposal, |after| (def.apply)(cx, &asker, e.affected, after))
+        {
             found.push(Candidate { source: e.source, index, origin: Origin::Granted(e.timestamp) });
         }
     }
@@ -411,6 +415,27 @@ fn note_counters_by(before: &Proposal, after: &mut Proposal, controller: PlayerI
     }
 }
 
+/// CR 614.9: an invalid redirection does nothing; it does not replace valid damage with no damage.
+/// Replacement functions are pure, so an invalid effect is neither offered nor consumed nor followed by its `then`.
+fn valid_redirection(q: &dyn Query, before: &Proposal, apply: impl FnOnce(&mut Proposal)) -> bool {
+    let Proposal::Damage(original) = before else { return true };
+    let mut after = *before;
+    apply(&mut after);
+    let Proposal::Damage(changed) = after else { unreachable!("a replacement cannot change the event kind") };
+    original.target == changed.target || damage_recipient(q, original.target) && damage_recipient(q, changed.target)
+}
+
+fn damage_recipient(q: &dyn Query, target: Target) -> bool {
+    match target {
+        Target::Player(p) => q.state().players.get(p.index()).is_some_and(|p| !p.lost),
+        Target::Object(id) if id.index() < q.state().objects.len() && live(q.state(), id) && q.is_on_battlefield(id) => {
+            let chars = q.chars(id);
+            chars.is(CardType::Creature) || chars.is(CardType::Planeswalker) || chars.is(CardType::Battle)
+        }
+        _ => false,
+    }
+}
+
 /// Applies the effects to the proposal, one at a time: each is judged again after the one before it has changed the
 /// event (CR 616.1f), and none applies twice (CR 614.5), nor to an event that is part of what one of them made of an event
 /// it applied to already (`Cx::lineage`).
@@ -441,6 +466,7 @@ fn apply(cx: &mut Cx, proposal: &mut Proposal) {
                 let controller = if in_graveyard { cx.s().obj(source).owner } else { controller_of(cx, source, proposal) };
                 let asker = Asker { source, controller };
                 let before = *proposal;
+                if !valid_redirection(&*cx, &before, |after| apply(&*cx, &asker, after)) { continue; }
                 apply(&*cx, &asker, proposal);
                 note_counters_by(&before, proposal, controller);
                 if let Some(then) = then {
@@ -453,6 +479,9 @@ fn apply(cx: &mut Cx, proposal: &mut Proposal) {
                 let def = &cx.cards().get(card_of(cx, source)).granted_replacements[index as usize];
                 let (apply, then, once) = (def.apply, def.then, def.once);
                 let asker = Asker { source, controller: e.controller };
+                let before = *proposal;
+                if !valid_redirection(&*cx, &before, |after| apply(&*cx, &asker, e.affected, after)) { continue; }
+                apply(&*cx, &asker, e.affected, proposal);
                 // "The next time": used up by this event (CR 614.1a).
                 if once {
                     let effects_before = cx.s().effects.len();
@@ -462,8 +491,6 @@ fn apply(cx: &mut Cx, proposal: &mut Proposal) {
                         cx.state_changed();
                     }
                 }
-                let before = *proposal;
-                apply(&*cx, &asker, e.affected, proposal);
                 note_counters_by(&before, proposal, e.controller);
                 if let Some(then) = then {
                     let after = *proposal;

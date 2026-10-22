@@ -1,0 +1,41 @@
+# Paying Ghostly Prison is not a priority window (CR 508.1i-j). Ordinary Sol Ring can pay; LED is forbidden there.
+# After paying, LED is activated with priority as a positive control; its ability remains a mana ability (official ruling 2004-10-04).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Sol Ring
+Lion's Eye Diamond
+Guerrilla Gorilla
+Forest x30
+
+[Bot2 Deck]
+Black Lotus
+Ghostly Prison
+Plains x30
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+Bot1.Hand.Lion's Eye Diamond.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Ghostly Prison.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Guerrilla Gorilla > Bot2)
+! Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Hand.Count = 0
+Bot1.Battlefield = Forest; Mox Emerald; Sol Ring; Guerrilla Gorilla
+Stack.Count = 0

@@ -1,0 +1,61 @@
+# Fractured Identity's token copies Tetsuko's static ability (CR 707.2); "you" is the token's controller.
+# Original leaves before the token arrives. The token's 1/1 and itself evade; its 2/2 is a paired legal block.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Tetsuko Umezawa, Fugitive
+Guerrilla Gorilla
+Island x30
+
+[Bot2 Deck]
+Plains
+Mox Sapphire
+Black Lotus
+Fractured Identity
+Mox Emerald
+Llanowar Elves
+Guerrilla Gorilla
+Island x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tetsuko Umezawa, Fugitive.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Guerrilla Gorilla.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Fractured Identity.Cast(Tetsuko Umezawa, Fugitive)
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T6 Bot2.Main1]
+Bot2.Attack(Tetsuko Umezawa, Fugitive > Bot1; Llanowar Elves > Bot1; Guerrilla Gorilla > Bot1)
+! Bot1.Block(Guerrilla Gorilla > Tetsuko Umezawa, Fugitive)
+! Bot1.Block(Guerrilla Gorilla > Llanowar Elves)
+Bot1.Block(Guerrilla Gorilla > Guerrilla Gorilla)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot2.Battlefield.Tetsuko Umezawa, Fugitive.Token = true
+Bot2.Battlefield.Tetsuko Umezawa, Fugitive.Power = 1
+Exile = Tetsuko Umezawa, Fugitive
+Bot1.Graveyard = Guerrilla Gorilla; Black Lotus
+Bot2.Graveyard = Guerrilla Gorilla; Fractured Identity; Black Lotus
+Stack.Count = 0

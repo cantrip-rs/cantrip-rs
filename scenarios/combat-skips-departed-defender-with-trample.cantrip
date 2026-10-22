@@ -1,0 +1,47 @@
+# CR 800.4e: trample damage is not assigned to a departed defender after their blocker leaves with them.
+# Old cards only; Shadowspear must produce no lifelink from an illegal defender assignment.
+
+[Life]
+Bot2: 3
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Pearl
+Sol Ring
+Shadowspear
+Guerrilla Gorilla
+Lightning Bolt
+Mountain x30
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x30
+[Bot3 Deck]
+Island x35
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Guerrilla Gorilla.Cast
+Bot1.Hand.Shadowspear.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Shadowspear.Activate(Guerrilla Gorilla; Ability: Equip)
+Bot1.Attack(Guerrilla Gorilla > Bot2)
+Bot2.Block(Llanowar Elves > Guerrilla Gorilla)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T4 Bot1.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Status = Lost
+Bot2.Life = 0
+Bot3.Life = 20
+Stack.Count = 0

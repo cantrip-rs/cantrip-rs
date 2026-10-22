@@ -1,0 +1,43 @@
+# Mana Leak's unless-payment is inside resolution, not priority (CR 118.12, 304.5, 602.5e).
+# Two ordinary mana sources pay {3}; LED's own activation stays legal only after the payment.
+
+[Bot1 Deck]
+Mountain
+Sol Ring
+Lion's Eye Diamond
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mana Leak
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mountain.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Mana Leak.Cast(Stack.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.PayCost
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Graveyard = Mana Leak
+Bot1.Hand.Count = 0
+Stack.Count = 0

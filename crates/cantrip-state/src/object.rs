@@ -179,6 +179,9 @@ pub struct ChosenOption {
 /// How a permanent phased out (CR 702.26), which decides how it phases in.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct Phased {
+    /// The characteristics just before simultaneous phase-out (CR 608.2h, 702.26b): source information while absent,
+    /// not its projected current characteristics and not a zone-change/new-object snapshot.
+    pub last_known: u32,
     /// Who controlled it as it phased out: it phases in during that player's untap step (CR 502.1), under their control.
     pub under: PlayerId,
     /// It phased out indirectly, with the permanent it is attached to (CR 702.26g), and phases in with that one alone.
@@ -1088,10 +1091,12 @@ pub const MAX_ABILITIES: usize = 32;
 
 /// An object's characteristics as it last existed (CR 608.2h, 603.10, 400.7), kept when it ceases to be that object, or
 /// as a spell became cast (`StackItem::cast_known`, CR 601.2i): what the layers compute, which its row cannot give
-/// afterwards. Its last controller needs no copy here: the row keeps it (`Obj::controller`).
+/// afterwards. The controller is captured too: a same-identity phased-out object's live control may later change.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub struct LastKnown {
     pub id: ObjectId,
+    pub card: CardId,
+    pub controller: PlayerId,
     /// Its name as it last had it (CR 201.2): a copy's, a face-down permanent's none, or one an effect set (CR 612.8).
     pub name: &'static str,
     /// An effect set its name (`Chars::name_set`).
@@ -1105,6 +1110,15 @@ pub struct LastKnown {
     pub power: Option<i16>,
     pub toughness: Option<i16>,
     pub keywords: Keywords,
+    pub protection: ColorSet,
+    pub protection_colorless: bool,
+    pub protection_players: u8,
+    pub protection_types: TypeSet,
+    pub spell: bool,
+    pub protection_colored_spells: bool,
+    pub protection_everything: bool,
+    pub hexproof_from: HexproofFrom,
+    pub must_attack: bool,
     /// Its mana value as it last had it (CR 202.3; on the stack, X counted, CR 202.3e): a cast's is its mana value as it
     /// became cast (`history::Cast::value`).
     pub mana_value: u32,

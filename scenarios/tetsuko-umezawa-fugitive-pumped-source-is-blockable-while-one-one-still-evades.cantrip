@@ -1,0 +1,49 @@
+# Block rules see completed layer-7 P/T (CR 613.1g): Giant Growth makes Tetsuko 4/6, so it may be blocked.
+# Its unpumped 1/1 Elf still evades; cleanup restores Tetsuko 1/3 (CR 514.2).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Emerald
+Tetsuko Umezawa, Fugitive
+Llanowar Elves
+Giant Growth
+Island x30
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Guerrilla Gorilla
+Forest x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tetsuko Umezawa, Fugitive.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Tetsuko Umezawa, Fugitive)
+Bot1.Attack(Tetsuko Umezawa, Fugitive > Bot2; Llanowar Elves > Bot2)
+! Bot2.Block(Guerrilla Gorilla > Llanowar Elves)
+Bot2.Block(Guerrilla Gorilla > Tetsuko Umezawa, Fugitive)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Tetsuko Umezawa, Fugitive.Power = 4
+? Bot1.Battlefield.Tetsuko Umezawa, Fugitive.Damage = 2
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Tetsuko Umezawa, Fugitive.Power = 1
+Bot1.Battlefield.Tetsuko Umezawa, Fugitive.Toughness = 3
+Bot1.Battlefield.Tetsuko Umezawa, Fugitive.Damage = 0
+Bot2.Graveyard = Guerrilla Gorilla; Black Lotus
+Stack.Count = 0

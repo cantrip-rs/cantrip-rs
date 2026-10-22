@@ -1,0 +1,38 @@
+# Copying the triggered damage ability preserves source and ability controller without any new discard (CR 707.10).
+# One ETB discard triggers damage; Return the Favor copies that trigger. Opponent loses 2 life but discards only one.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Black Lotus
+Tinybones, Pocket Nuisance
+Return the Favor
+Mountain x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Return the Favor.Cast
+Bot1.Modes(Copy target)
+Bot1.Target(Stack.Tinybones, Pocket Nuisance)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot2.Graveyard.Count = 1
+Stack.Count = 0

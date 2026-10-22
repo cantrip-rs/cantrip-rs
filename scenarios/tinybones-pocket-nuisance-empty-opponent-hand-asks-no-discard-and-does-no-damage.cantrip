@@ -1,0 +1,35 @@
+# An empty hand discards nothing and is asked nothing (CR 701.9, 608.2d). No discard means no damage trigger.
+# Bot2 empties its hand through Lion's Eye Diamond before Tinybones enters; no cleanup draw is reached.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Tinybones, Pocket Nuisance
+Swamp x30
+
+[Bot2 Deck]
+Lion's Eye Diamond
+Island x30
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Lion's Eye Diamond.Cast
+[T3 Bot1.Main1]
+Bot2.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot2.Choose
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Hand.Count = 0
+Bot2.Graveyard.Count = 8
+Bot1.Battlefield.Tinybones, Pocket Nuisance.Power = 2
+Stack.Count = 0

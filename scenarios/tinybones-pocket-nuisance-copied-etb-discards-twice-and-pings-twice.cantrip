@@ -1,0 +1,40 @@
+# Copying the ETB ability is not another entry, but makes opponents discard again (CR 707.10).
+# Return the Favor copies Tinybones' ETB; two separately resolving discards each generate one damage trigger.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Black Lotus
+Tinybones, Pocket Nuisance
+Return the Favor
+Mountain x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Return the Favor.Cast
+Bot1.Modes(Copy target)
+Bot1.Target(Stack.Tinybones, Pocket Nuisance)
+Bot2.Choose(Island)
+Bot2.Choose(Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot2.Graveyard.Count = 3
+Bot1.Battlefield.Tinybones, Pocket Nuisance.Power = 2
+Stack.Count = 0

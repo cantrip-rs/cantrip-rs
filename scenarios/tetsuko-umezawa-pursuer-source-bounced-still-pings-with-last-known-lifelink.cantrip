@@ -1,0 +1,51 @@
+# A trigger resolves after its source leaves (CR 113.7a). Last-known lifelink applies to its damage (CR 608.2h, 702.15).
+# Shadowspear makes Pursuer 3/5. Opponent bounces it after blocking; the pending noncombat ping still gains Bot1 one life.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Pearl
+Sol Ring
+Shadowspear
+Tetsuko Umezawa, Pursuer
+Mountain x30
+
+[Bot2 Deck]
+Forest
+Mox Sapphire
+Llanowar Elves
+Unsummon
+Forest x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Shadowspear.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Shadowspear.Activate(Tetsuko Umezawa, Pursuer; Ability: Equip)
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Block(Llanowar Elves > Tetsuko Umezawa, Pursuer)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Unsummon.Cast(Tetsuko Umezawa, Pursuer)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.Hand = Mountain; Mountain; Tetsuko Umezawa, Pursuer
+Bot1.Battlefield.Shadowspear.AttachedTo = (absent)
+Bot2.Battlefield.Llanowar Elves.Damage = 0
+Stack.Count = 0

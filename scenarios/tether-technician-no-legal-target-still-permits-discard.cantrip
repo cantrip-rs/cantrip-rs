@@ -1,0 +1,70 @@
+# The first ability is untargeted: discard is permitted even if the reflexive ability will have no legal target (CR 603.12).
+# Both players and all creatures have shroud; the targetless reflexive ability is removed (CR 603.3d).
+# Safekeeper protects Tether in response to its ETB, then itself; equipping is not legal with the trigger on the stack.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+True Believer
+Sylvan Safekeeper
+Forest
+Tether Technician
+Black Lotus
+Lightning Greaves
+Forest
+Mountain x25
+
+[Bot2 Deck]
+True Believer
+Lightning Greaves
+Black Lotus
+Plains x30
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sylvan Safekeeper.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.True Believer.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Sol Ring.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.True Believer.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Lightning Greaves.Cast
+Bot2.Battlefield.Lightning Greaves.Activate(True Believer)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Hand.Lightning Greaves.Cast
+Bot1.Battlefield.Lightning Greaves.Activate(True Believer)
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sylvan Safekeeper.Activate(Tether Technician)
+Bot1.Choose(Forest)
+Bot1.Battlefield.Sylvan Safekeeper.Activate(Sylvan Safekeeper)
+Bot1.Choose(Forest)
+Bot1.Choose(Mountain)
+! Bot1.Target
+[T9 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Tether Technician.Keywords = Reach; Shroud
+Bot1.Battlefield.Sylvan Safekeeper.Keywords = Shroud
+Bot1.Graveyard = Mountain; Forest; Forest; Black Lotus; Black Lotus
+Stack.Count = 0

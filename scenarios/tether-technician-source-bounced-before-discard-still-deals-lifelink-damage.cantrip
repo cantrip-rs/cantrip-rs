@@ -1,0 +1,53 @@
+# The ETB ability is independent of its source (CR 113.7a). Scales grants lifelink, then Unsummon returns Tether before discard.
+# The reflexive ability still comes from that original creature, with last-known lifelink (CR 603.7d, 608.2h, 120.3f).
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Scales of Shale
+Mountain
+Black Lotus
+Mountain x25
+
+[Bot2 Deck]
+Mox Sapphire
+Unsummon
+Island x30
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Scales of Shale.Cast(Tether Technician)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tether Technician.Keywords = Indestructible; Lifelink; Reach
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Unsummon.Cast(Tether Technician)
+Bot1.Choose(Mountain)
+Bot1.Target(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Hand = Tether Technician
+Bot1.Graveyard = Mountain; Scales of Shale; Black Lotus; Black Lotus
+Bot2.Graveyard = Unsummon
+Stack.Count = 0

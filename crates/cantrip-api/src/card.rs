@@ -980,6 +980,9 @@ pub struct ActivatedDef {
     pub text: &'static str,
     pub cost: Cost,
     pub timing: Timing,
+    /// "Activate only as an instant" (CR 304.5, 602.5e): requires priority even for a mana ability (CR 605.3a).
+    /// Ordinary mana abilities may also be activated while paying; this restriction does not change their classification.
+    pub priority_only: bool,
     pub targets: &'static [TargetSpec],
     pub effect: Effect,
     /// A mana ability's own effect (CR 605.1a), where it does more than add the mana `adds` and `adds_any` list: it
@@ -1077,6 +1080,7 @@ impl ActivatedDef {
         text: "",
         cost: Cost::NONE,
         timing: Timing::Instant,
+        priority_only: false,
         targets: &[],
         effect: no_effect,
         mana: None,

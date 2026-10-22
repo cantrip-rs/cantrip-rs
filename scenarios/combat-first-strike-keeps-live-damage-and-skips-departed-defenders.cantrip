@@ -1,0 +1,50 @@
+# First strike/lifelink still deals damage to a live player; the Knight assigned to Bot2 after Bolt kills them assigns none.
+# A later combat attacks live Bot3: the same source gains three life for real damage (CR 510.4, 800.4e).
+
+[Life]
+Bot2: 3
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Pearl
+Sol Ring
+Shadowspear
+White Knight
+Lightning Bolt
+Mountain x30
+
+[Bot2 Deck]
+Island x35
+
+[Bot3 Deck]
+Island x35
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.White Knight.Cast
+Bot1.Hand.Shadowspear.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Shadowspear.Activate(White Knight; Ability: Equip)
+Bot1.Attack(White Knight > Bot2)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T4 Bot1.Main2]
+? Bot1.Life = 20
+? Bot2.Life = 0
+[T6 Bot1.Main1]
+Bot1.Attack(White Knight > Bot3)
+[T6 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Status = Lost
+Bot2.Life = 0
+Bot3.Life = 17
+Stack.Count = 0

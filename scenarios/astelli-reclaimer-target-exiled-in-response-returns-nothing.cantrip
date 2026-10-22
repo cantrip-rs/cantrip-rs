@@ -1,17 +1,15 @@
 # Astelli Reclaimer's enters trigger has one target, Basalt Monolith in Bot1's graveyard. Bot2 answers with Ghost Vacuum, exiling the
 # Monolith: the target is illegal as the ability resolves, so it does nothing (CR 608.2b), and the Sol Ring beside it is not
-# returned in its place. (Astelli Reclaimer is cast for its warp cost, paid with Lion's Eye Diamond, which puts the hand into the
-# graveyard.)
+# returned in its place. LED discards at priority on turn 1; Reclaimer drawn afterward is paid with Plains and Sol Ring.
 
 [Bot1 Deck]
 Lion's Eye Diamond
-Mountain
-Mountain
-Astelli Reclaimer
+Plains
+Sol Ring
 Basalt Monolith
 Sol Ring
-Mountain
-Mountain
+Mountain x2
+Astelli Reclaimer
 Mountain x12
 
 [Bot2 Deck]
@@ -21,14 +19,18 @@ Island x20
 
 [Actions]
 Bot1.Hand.Lion's Eye Diamond.Cast
-Bot1.Hand.Mountain.Play
+Bot1.Hand.Plains.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: White)
 [T2 Bot2.Main1]
 Bot2.Hand.Island.Play
 Bot2.Battlefield.Island.Activate
 Bot2.Hand.Ghost Vacuum.Cast
 [T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Sol Ring.Activate
 Bot1.Hand.Astelli Reclaimer.Cast(Ability: Warp)
-Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: White)
 Bot1.Target(Basalt Monolith)
 Bot1.Pass
 Bot2.Battlefield.Ghost Vacuum.Activate(Bot1.Graveyard.Basalt Monolith)
@@ -36,11 +38,11 @@ Bot2.Pass
 Bot1.Pass
 [T3 Bot1.Main2]
 ? Exile = Basalt Monolith
-? Bot1.Battlefield = Mountain; Astelli Reclaimer
-? Bot1.Graveyard.Count = 5
+? Bot1.Battlefield = Plains; Sol Ring; Astelli Reclaimer
+? Bot1.Graveyard.Count = 4
 
 [Expect]
-Bot1.Battlefield = Mountain; Astelli Reclaimer
+Bot1.Battlefield = Plains; Sol Ring; Astelli Reclaimer
 Exile = Basalt Monolith
 Bot1.Hand.Count = 0
-Bot1.Graveyard = Lion's Eye Diamond; Mountain; Mountain; Sol Ring; Mountain
+Bot1.Graveyard = Lion's Eye Diamond; Mountain; Mountain; Sol Ring

@@ -1,0 +1,34 @@
+# A single damage instruction hits opponents simultaneously (CR 120.2); both at 1 life lose together (CR 704.5a).
+# Two ETB discards create two pings; the first eliminates both opponents, so no remaining player is asked for the second.
+
+[Life]
+Bot2: 1
+Bot3: 1
+
+[Bot1 Deck]
+Black Lotus
+Tinybones, Pocket Nuisance
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Bot3 Deck]
+Forest x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+Bot3.Choose(Forest)
+Bot1.Triggers(Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance)
+
+[Expect]
+Result = Bot1 won
+Bot1.Life = 20
+Bot2.Status = Lost
+Bot3.Status = Lost
+Bot2.LostTo = Life
+Bot3.LostTo = Life

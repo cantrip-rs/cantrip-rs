@@ -1178,7 +1178,7 @@ impl Query for Game {
     }
 
     fn chars(&self, id: ObjectId) -> Chars {
-        layers::chars(self.cards, &self.state, &self.log, id)
+        layers::source_chars(self.cards, &self.state, &self.log, id)
     }
 
     fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
@@ -1214,7 +1214,7 @@ impl Query for Cx<'_> {
     fn chars(&self, id: ObjectId) -> Chars {
         match self.entering {
             Some(e) if e.object == id => e.chars,
-            _ => layers::chars(self.g.cards, &self.g.state, &self.g.log, id),
+            _ => layers::source_chars(self.g.cards, &self.g.state, &self.g.log, id),
         }
     }
 

@@ -1,0 +1,48 @@
+# Hall of Echoes permits two legendary Pursuers under one controller (CR 707.2, 704.5j).
+# Each independently triggers when the same 0/4 blocks the original, so one blocker causes exactly 2 damage to its controller.
+
+[Bot1 Deck]
+Hall of Echoes
+Mox Ruby
+Black Lotus
+Sol Ring x2
+Tetsuko Umezawa, Pursuer
+Mountain x30
+
+[Bot2 Deck]
+Black Lotus
+Spellskite
+Island x30
+
+[Actions]
+Bot1.Hand.Hall of Echoes.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Spellskite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Hall of Echoes.Activate(Tetsuko Umezawa, Pursuer; Ability: copy)
+Bot1.Attack(Tetsuko Umezawa, Pursuer#1 > Bot2)
+Bot2.Block(Spellskite > Tetsuko Umezawa, Pursuer#1)
+Bot1.Triggers(Tetsuko Umezawa, Pursuer; Tetsuko Umezawa, Pursuer)
+? Stack.Count = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer#1.Keywords = DoubleStrike
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer#2.Keywords = DoubleStrike
+Bot2.Graveyard = Spellskite; Black Lotus
+Stack.Count = 0

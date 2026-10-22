@@ -1,0 +1,41 @@
+# The ping is damage, not direct loss of life (CR 120.3a, 615.7).
+# Healing Salve prevents the triggered 1 before double strike kills the Elf; the blocked attacker deals no player combat damage.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Tetsuko Umezawa, Pursuer
+Mountain x30
+
+[Bot2 Deck]
+Forest
+Mox Pearl
+Llanowar Elves
+Healing Salve
+Forest x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Block(Llanowar Elves > Tetsuko Umezawa, Pursuer)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Prevent the next)
+Bot2.Target(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Llanowar Elves; Healing Salve
+Prevented = 1 Tetsuko Umezawa, Pursuer > Bot2 by Healing Salve
+Stack.Count = 0

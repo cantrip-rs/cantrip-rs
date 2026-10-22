@@ -1,0 +1,54 @@
+# Each damage instruction hits all current opponents together (CR 120.2); prevention can save one without changing the others.
+# Two ETB discarding players give two pings each. A 3-point Salve stops Bot2's two; lifelink gains Bot1 only Bot3's two.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Sol Ring
+Black Lotus
+Tinybones, Pocket Nuisance
+Scales of Shale
+Swamp x30
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Healing Salve
+Island x30
+
+[Bot3 Deck]
+Forest x35
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sol Ring.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T4 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+Bot3.Choose(Forest)
+Bot1.Triggers(Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Scales of Shale.Cast(Tinybones, Pocket Nuisance)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Prevent the next)
+Bot2.Target(Bot2)
+[T4 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot3.Life = 18
+Prevented = 1 Tinybones, Pocket Nuisance > Bot2 by Healing Salve; 1 Tinybones, Pocket Nuisance > Bot2 by Healing Salve
+Stack.Count = 0

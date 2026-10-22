@@ -1,0 +1,38 @@
+# Tether's optional ETB discard is not a casting cost (CR 701.9, 603.12): select the land only after it enters.
+# A noncreature artifact cannot be an "any target" (CR 115.4); its own 4/5 body can, taking exactly 2 damage.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Mountain x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Choose(Mountain)
+! Bot1.Target(Mox Ruby)
+Bot1.Target(Tether Technician)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Mountain; Black Lotus
+Bot1.Battlefield.Tether Technician.Power = 4
+Bot1.Battlefield.Tether Technician.Toughness = 5
+Bot1.Battlefield.Tether Technician.Damage = 2
+Bot1.Battlefield.Tether Technician.Keywords = Reach
+Bot1.Life = 20
+Bot2.Life = 20
+Stack.Count = 0

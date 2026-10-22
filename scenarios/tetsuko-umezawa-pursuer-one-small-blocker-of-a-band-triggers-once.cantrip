@@ -1,0 +1,49 @@
+# "Blocks" triggers once per blocker, not once per attacker it blocks (CR 509.3a, 702.22h).
+# A 0/4 Spellskite blocks a two-creature band, producing exactly one Pursuer trigger and no player combat damage.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Pearl
+Mox Emerald
+Tetsuko Umezawa, Pursuer
+Benalish Hero
+Guerrilla Gorilla
+Mountain x30
+
+[Bot2 Deck]
+Black Lotus
+Spellskite
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Benalish Hero.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Spellskite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Benalish Hero > Bot2; Guerrilla Gorilla > Bot2)
+Bot1.Choose(Guerrilla Gorilla)
+Bot2.Block(Spellskite > Benalish Hero)
+? Stack.Count = 1
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Spellskite.Damage = 3
+Bot1.Battlefield.Benalish Hero.Damage = 0
+Bot1.Battlefield.Guerrilla Gorilla.Damage = 0
+Stack.Count = 0

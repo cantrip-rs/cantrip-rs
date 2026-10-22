@@ -1,0 +1,59 @@
+# Ward applies to the reflexive ability, not the untargeted discard (CR 702.21a).
+# Declining preserves the discarded card in the graveyard; after blinking Tether, paying permits exactly 2 damage.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Ephemerate
+Mox Pearl
+Mountain x30
+
+[Bot2 Deck]
+Black Lotus
+Hexing Squelcher
+Mountain x30
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hexing Squelcher.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Choose(Mountain)
+Bot1.Target(Hexing Squelcher)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Hexing Squelcher.Damage = 0
+? Bot1.Life = 20
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ephemerate.Cast(Tether Technician)
+Bot1.Choose(Mountain)
+Bot1.Target(Hexing Squelcher)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot1.Graveyard = Mountain; Mountain; Black Lotus
+Bot2.Graveyard = Hexing Squelcher; Black Lotus
+Exile = Ephemerate
+Stack.Count = 0

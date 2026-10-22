@@ -1,0 +1,70 @@
+# Independent review A1: Collar attaches during the pending ETB, then Tether discards and reflexively targets Bot2.
+# Oubliette phases Tether and Collar out before its damage; source's most recent lifelink still gains two (CR 113.7a,
+# 608.2h, 702.15c, 702.26g). No damage or targeting ability is invented in the source's absence.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Pearl
+Sol Ring
+Tether Technician
+Mox Ruby
+Sigarda's Aid
+Basilisk Collar
+Mountain x30
+[Bot2 Deck]
+Forest
+Mox Jet
+Black Lotus
+Llanowar Elves
+Valley Floodcaller
+Oubliette
+Swamp
+Swamp x30
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sigarda's Aid.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Valley Floodcaller.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tether Technician.Power = 4
+? Stack.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Accept
+Bot1.Choose(Mountain)
+Bot1.Target(Bot2)
+? Stack.Count = 1
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Oubliette.Cast
+Bot2.Target(Tether Technician)
+[T7 Bot1.Main2]
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.PhasedOut.Count = 2
+Stack.Count = 0

@@ -1,15 +1,17 @@
 # An Aura card put onto the battlefield without being cast is attached to something it can enchant as it enters (CR 303.4g): Astelli
 # Reclaimer, cast for its warp cost (X = 3), returns Rancor (mana value 1) from the graveyard, and Rancor enchants Astelli Reclaimer, the
 # only creature there is, which becomes a 7/4 with trample.
+# LED discards at priority first; Reclaimer drawn on turn 3 is paid with Plains and Sol Ring.
 
 [Bot1 Deck]
 Lion's Eye Diamond
-Astelli Reclaimer
+Plains
 Rancor
 Door of Destinies
 Mountain
 Lightning Bolt
 Sol Ring
+Astelli Reclaimer
 Mountain x13
 
 [Bot2 Deck]
@@ -17,18 +19,24 @@ Island x20
 
 [Actions]
 Bot1.Hand.Lion's Eye Diamond.Cast
-Bot1.Hand.Astelli Reclaimer.Cast(Ability: Warp)
+Bot1.Hand.Plains.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: White)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Astelli Reclaimer.Cast(Ability: Warp)
 ! Bot1.Target(Door of Destinies)
 Bot1.Target(Rancor)
 Bot1.Pass
-[T1 Bot1.Main2]
+[T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Astelli Reclaimer; Rancor
+Bot1.Battlefield = Plains; Sol Ring; Astelli Reclaimer; Rancor
 Bot1.Battlefield.Rancor.AttachedTo = Astelli Reclaimer
 Bot1.Battlefield.Astelli Reclaimer.Power = 7
-Bot1.Graveyard = Lion's Eye Diamond; Sol Ring; Lightning Bolt; Mountain; Door of Destinies
+Bot1.Graveyard = Lion's Eye Diamond; Lightning Bolt; Mountain; Door of Destinies
 Bot1.Hand.Count = 0
 Exile.Count = 0
 Bot1.Battlefield.Astelli Reclaimer.Keywords = Flying; Trample

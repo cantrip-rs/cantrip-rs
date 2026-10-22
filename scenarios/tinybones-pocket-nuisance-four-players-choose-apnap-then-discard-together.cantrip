@@ -1,0 +1,44 @@
+# Opponents choose in APNAP order and all selected cards move together (CR 101.4, 701.9).
+# Hand cards remain in hand while later opponents choose. Three discarding players make three triggers, each hitting all three.
+
+[Bot1 Deck]
+Black Lotus
+Tinybones, Pocket Nuisance
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Bot3 Deck]
+Forest x35
+
+[Bot4 Deck]
+Mountain x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+? Bot2.Graveyard.Count = 0
+? Bot2.Hand.Count = 7
+Bot3.Choose(Forest)
+? Bot2.Graveyard.Count = 0
+? Bot3.Graveyard.Count = 0
+Bot4.Choose(Mountain)
+Bot1.Triggers(Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance)
+? Bot2.Graveyard.Count = 1
+? Bot3.Graveyard.Count = 1
+? Bot4.Graveyard.Count = 1
+? Stack.Count = 3
+[Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17
+Bot3.Life = 17
+Bot4.Life = 17
+Bot1.Graveyard = Black Lotus
+Bot1.Hand.Count = 6
+Stack.Count = 0

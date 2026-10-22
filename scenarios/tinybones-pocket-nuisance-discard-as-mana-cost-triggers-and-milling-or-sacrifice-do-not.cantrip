@@ -1,0 +1,35 @@
+# Lion's Eye Diamond's discarded hand is a discard cost, so triggers once even without a stack-using effect (CR 701.9).
+# Mill two is not a discard, nor is the Lotus/Diamond sacrifice (CR 701.17, 701.21). Only ETB and hand discard ping.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Sapphire
+Tinybones, Pocket Nuisance
+Thought Scour
+Lion's Eye Diamond
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+[Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+? Stack.Count = 1
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot1.Hand.Count = 0
+Bot1.Graveyard.Count = 7
+Stack.Count = 0

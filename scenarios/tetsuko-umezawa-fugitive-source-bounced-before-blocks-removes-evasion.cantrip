@@ -1,0 +1,43 @@
+# A static rule exists only while its source is on the battlefield (CR 611.3b).
+# Tetsuko returns to hand after Elf attacks but before blocks; the former evasive 1/1 can now be blocked.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Emerald
+Tetsuko Umezawa, Fugitive
+Llanowar Elves
+Unsummon
+Island x30
+
+[Bot2 Deck]
+Black Lotus
+Guerrilla Gorilla
+Forest x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tetsuko Umezawa, Fugitive.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Llanowar Elves > Bot2)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Unsummon.Cast(Tetsuko Umezawa, Fugitive)
+Bot2.Block(Guerrilla Gorilla > Llanowar Elves)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Llanowar Elves; Unsummon
+Bot1.Hand = Island; Island; Tetsuko Umezawa, Fugitive
+Bot2.Battlefield.Guerrilla Gorilla.Damage = 1
+Stack.Count = 0

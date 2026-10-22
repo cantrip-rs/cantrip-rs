@@ -1,0 +1,61 @@
+# "Any target" includes a planeswalker and a battle (CR 115.4, 120.3c/h), not only creatures or players.
+# Ajani gains a third loyalty before Tether deals 2; Ephemerate creates a new Tether whose second discard deals 2 to a Siege.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Ephemerate
+Mox Pearl
+Mountain x30
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Invasion of Gobakhan
+Ajani Resolute
+Plains x30
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Invasion of Gobakhan.Cast
+Bot2.Choose()
+Bot2.Hand.Ajani Resolute.Cast
+Bot2.Battlefield.Ajani Resolute.Activate(Ability: You gain 1 life)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Choose(Mountain)
+Bot1.Target(Ajani Resolute)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ajani Resolute.Counters.Loyalty = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ephemerate.Cast(Tether Technician)
+Bot1.Choose(Mountain)
+Bot1.Target(Invasion of Gobakhan)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Ajani Resolute.Counters.Loyalty = 1
+Bot2.Battlefield.Invasion of Gobakhan.Counters.Defense = 1
+Bot2.Life = 21
+Bot1.Graveyard = Mountain; Mountain; Black Lotus
+Bot1.Battlefield.Tether Technician.Power = 4
+Bot1.Battlefield.Tether Technician.Toughness = 5
+Exile = Ephemerate
+Stack.Count = 0

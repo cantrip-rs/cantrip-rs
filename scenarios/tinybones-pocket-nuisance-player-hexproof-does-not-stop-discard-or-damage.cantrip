@@ -1,0 +1,35 @@
+# Neither ability targets (CR 115.1d); player hexproof stops neither the discard nor the damage.
+# Crystal Barricade is already on the battlefield when Tinybones enters. Its controller discards; the creature takes no damage.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Tinybones, Pocket Nuisance
+Swamp x30
+
+[Bot2 Deck]
+Plains
+Black Lotus
+Crystal Barricade
+Island x30
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Crystal Barricade.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot2.Graveyard = Island; Black Lotus
+Bot2.Battlefield.Crystal Barricade.Damage = 0
+Stack.Count = 0

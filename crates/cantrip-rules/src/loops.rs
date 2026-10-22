@@ -343,6 +343,7 @@ impl Hash for Name<'_> {
             o.entered_with = None;
             o.prepared_from = None;
             o.exiled = None;
+            if let Some(phased) = &mut o.marks.phased { phased.last_known = 0; }
             let known = s.last_known(id).map(|k| LastKnown { id: ObjectId::NONE, ..*k });
             (o, known).hash(h);
         };
@@ -475,6 +476,7 @@ fn write_position<H: Hasher>(s: &GameState, canon: &Canon, h: &mut H, hashed: bo
                 o.prepared_from.map(|id| canon.id(id)),
                 o.exiled.map(|e| (canon.id(e.by), e.from, e.until_leaves, e.encoded)),
                 stamp,
+                s.phased_last_known(id).map(|last| LastKnown { id: ObjectId::NONE, ..*last }),
             )
                 .hash(h);
             o.timestamp = 0;
@@ -483,6 +485,7 @@ fn write_position<H: Hasher>(s: &GameState, canon: &Canon, h: &mut H, hashed: bo
             o.entered_with = None;
             o.prepared_from = None;
             o.exiled = None;
+            if let Some(phased) = &mut o.marks.phased { phased.last_known = 0; }
             if hashed {
                 row(id, &o).hash(h);
             } else {
@@ -583,6 +586,23 @@ mod tests {
 
     fn cx(game: &mut Game) -> Cx<'_> {
         Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None }
+    }
+
+    #[test]
+    fn phased_source_snapshot_contents_not_arena_index_decide_loop_identity() {
+        let position = |s: &GameState, canon: &Canon| (fingerprint(s, canon), words(s, canon));
+        let mut game = game();
+        let source = game.state.battlefield()[0];
+        crate::phasing::phase_out(&mut cx(&mut game), &[source], None, false);
+        let first = position(&game.state, &Canon::new(&game.state));
+        // An equivalent row at another arena index must not make an otherwise identical position different.
+        let row = *game.state.phased_last_known(source).unwrap();
+        let same = game.state.last_known_push(row);
+        game.state.update_obj(source, |o| o.marks.phased.as_mut().unwrap().last_known = same);
+        assert_eq!(position(&game.state, &Canon::new(&game.state)), first);
+        let changed = game.state.last_known_push(LastKnown { keywords: row.keywords.with(Keyword::Lifelink), ..row });
+        game.state.update_obj(source, |o| o.marks.phased.as_mut().unwrap().last_known = changed);
+        assert_ne!(position(&game.state, &Canon::new(&game.state)), first, "different source information was ignored");
     }
 
     /// The permanent leaves and comes back: a new object (CR 400.7), at a later timestamp, and its ability triggers again,

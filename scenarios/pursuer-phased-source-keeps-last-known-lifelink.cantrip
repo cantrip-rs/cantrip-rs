@@ -1,0 +1,59 @@
+# Independent review A1: Shadowspear and Pursuer phase out before its untargeted block ping resolves. Source LKI
+# retains granted lifelink (CR 113.7a, 608.2h, 702.15c, 702.26g); Bot1 gains exactly one, Bot2 takes exactly one.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Pearl
+Sol Ring
+Shadowspear
+Tetsuko Umezawa, Pursuer
+Mountain x30
+[Bot2 Deck]
+Forest
+Mox Jet
+Black Lotus
+Llanowar Elves
+Valley Floodcaller
+Oubliette
+Swamp
+Swamp x30
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Shadowspear.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Valley Floodcaller.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Shadowspear.Activate(Tetsuko Umezawa, Pursuer; Ability: Equip)
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Block(Llanowar Elves > Tetsuko Umezawa, Pursuer)
+? Stack.Count = 1
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Oubliette.Cast
+Bot2.Target(Tetsuko Umezawa, Pursuer)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.PhasedOut.Count = 2
+Stack.Count = 0

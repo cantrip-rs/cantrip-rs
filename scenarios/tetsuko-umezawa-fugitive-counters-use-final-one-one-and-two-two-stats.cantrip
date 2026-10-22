@@ -1,0 +1,50 @@
+# Layer-7 counters count toward Tetsuko's threshold (CR 613.4c): Ballista with one counter evades, with two does not.
+# The same reach blocker is refused for the 1/1 and legally blocks the 2/2, which trades in combat.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Tetsuko Umezawa, Fugitive
+Walking Ballista x2
+Sol Ring
+Island x30
+
+[Bot2 Deck]
+Black Lotus
+Guerrilla Gorilla
+Forest x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tetsuko Umezawa, Fugitive.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 2)
+[T5 Bot1.Main1]
+Bot1.Attack(Walking Ballista#1 > Bot2; Walking Ballista#2 > Bot2)
+! Bot2.Block(Guerrilla Gorilla > Walking Ballista#1)
+Bot2.Block(Guerrilla Gorilla > Walking Ballista#2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Walking Ballista.Power = 1
+Bot1.Battlefield.Walking Ballista.Toughness = 1
+Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Walking Ballista; Black Lotus
+Bot2.Graveyard = Guerrilla Gorilla; Black Lotus
+Stack.Count = 0

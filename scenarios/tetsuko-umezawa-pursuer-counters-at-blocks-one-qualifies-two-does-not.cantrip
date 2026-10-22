@@ -1,0 +1,54 @@
+# Final layer-7 counters determine blocker characteristics (CR 613.4c, 509.3f).
+# 1/1 Ballista triggers when blocking another attacker; 2/2 Ballista blocks Pursuer without triggering.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Tetsuko Umezawa, Pursuer
+Guerrilla Gorilla
+Mountain x30
+
+[Bot2 Deck]
+Island
+Black Lotus
+Sol Ring
+Walking Ballista x2
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Sol Ring.Cast
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island#1.Activate
+Bot2.Battlefield.Island#2.Activate
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Walking Ballista.Cast(X: 2)
+[T5 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2; Guerrilla Gorilla > Bot2)
+Bot2.Block(Walking Ballista#1 > Guerrilla Gorilla; Walking Ballista#2 > Tetsuko Umezawa, Pursuer)
+? Stack.Count = 1
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Guerrilla Gorilla.Damage = 1
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Damage = 0
+Bot2.Graveyard = Walking Ballista; Walking Ballista; Black Lotus
+Stack.Count = 0

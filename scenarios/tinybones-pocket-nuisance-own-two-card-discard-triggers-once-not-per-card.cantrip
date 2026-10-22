@@ -1,0 +1,33 @@
+# Any player includes the controller; simultaneous discards by one player trigger once, not per card (CR 603.2c).
+# Faithless Looting discards two cards together. ETB ping 1 plus exactly one loot ping 1 leaves the opponent at 18.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Tinybones, Pocket Nuisance
+Faithless Looting
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+[Bot1.Main2]
+? Bot2.Life = 19
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Swamp; Swamp)
+? Stack.Count = 1
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot1.Graveyard = Faithless Looting; Swamp; Swamp; Black Lotus
+Bot2.Graveyard = Island
+Stack.Count = 0

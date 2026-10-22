@@ -1,0 +1,62 @@
+# Copying an ability preserves its subject and source (CR 707.10b); ability loss never removes abilities already on stack.
+# Return the Favor copies the ping, then Turn to Frog removes Pursuer's abilities (CR 113.7a). Both pings still resolve.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Tetsuko Umezawa, Pursuer
+Return the Favor
+Mountain x30
+
+[Bot2 Deck]
+Forest
+Island
+Mox Sapphire
+Llanowar Elves
+Turn to Frog
+Forest x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Block(Llanowar Elves > Tetsuko Umezawa, Pursuer)
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Return the Favor.Cast
+Bot1.Modes(Copy target)
+Bot1.Target(Stack.Tetsuko Umezawa, Pursuer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 2
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Turn to Frog.Cast(Tetsuko Umezawa, Pursuer)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Power = 2
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Toughness = 2
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Keywords = (absent)
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Damage = 1
+Bot2.Graveyard = Llanowar Elves; Turn to Frog
+Stack.Count = 0

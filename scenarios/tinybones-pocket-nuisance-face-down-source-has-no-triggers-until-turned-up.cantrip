@@ -1,0 +1,56 @@
+# Cloaked Tinybones has no printed abilities (CR 708.2a), and turning it face up is not entering (CR 708.8).
+# An opposing two-card discard before the turn-up does no damage. Turn-up has no ETB; later two-card discard pings once.
+
+[Bot1 Deck]
+Swamp
+Mox Sapphire
+Mox Jet
+Sol Ring
+Cryptic Coat
+Chain of Smog x2
+Tinybones, Pocket Nuisance
+Island x30
+
+[Bot2 Deck]
+Forest x35
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Cryptic Coat.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Chain of Smog.Cast(Bot2)
+Bot2.Choose(Forest; Forest)
+Bot2.Decline
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.#1.Activate
+? Stack.Count = 0
+? Bot2.Graveyard.Count = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Chain of Smog.Cast(Bot2)
+Bot2.Choose(Forest; Forest)
+Bot2.Decline
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot1.Battlefield.Tinybones, Pocket Nuisance.Power = 3
+Bot1.Battlefield.Tinybones, Pocket Nuisance.Toughness = 1
+Bot1.Battlefield.Cryptic Coat.AttachedTo = Tinybones, Pocket Nuisance
+Bot2.Graveyard.Count = 4
+Stack.Count = 0

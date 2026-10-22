@@ -112,6 +112,9 @@ abilities: &[
   (an activation restriction, or a trigger's intervening "if"), `.modal(..)`, `.anywhere()`, and the
   others in `ability.rs`. Whether a trigger looks back in time (CR 603.10) is never written: the rules decide it from
   the event and the ability's own words (`CardTable::looks_back`). A loyalty ability is already sorcery speed (CR 606.3).
+  `.only_as_an_instant()` requires
+  priority even for a mana ability (CR 304.5, 602.5e): it cannot be activated during payment, though its mana floated
+  beforehand remains spendable.
 - **Shared effects with an argument** are called in place: `triggered(THIS_ENTERS, |g, item| effects::draw(g, item, 1), ..)`.
 
 The rest of a card is written the same way, one constructor each, the rare parts as methods:

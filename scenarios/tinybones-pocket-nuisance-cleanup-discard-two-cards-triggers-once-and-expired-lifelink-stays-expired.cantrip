@@ -1,0 +1,59 @@
+# Cleanup discard is discard (CR 514.1); two simultaneous discards by its controller trigger once (CR 603.2c).
+# Temporary lifelink ends before the trigger resolves during cleanup (CR 514.2-3), so that ping gains no life.
+
+[Bot1 Deck]
+Swamp
+Mox Sapphire
+Mox Jet
+Sol Ring
+Black Lotus
+Tinybones, Pocket Nuisance
+Ancestral Recall
+Scales of Shale
+Ancestral Recall
+Ancestral Recall
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Scales of Shale.Cast(Tinybones, Pocket Nuisance)
+[T5 Bot1.End]
+? Bot1.Hand.Count = 9
+? Bot1.Battlefield.Tinybones, Pocket Nuisance.Keywords = Indestructible; Lifelink
+[T5 Bot1.Cleanup]
+Bot1.Discard(Swamp; Swamp)
+? Stack.Count = 1
+? Bot1.Battlefield.Tinybones, Pocket Nuisance.Keywords = (absent)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot1.Hand.Count = 7
+Bot1.Battlefield.Tinybones, Pocket Nuisance.Power = 2
+Stack.Count = 0

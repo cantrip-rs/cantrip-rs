@@ -1,0 +1,45 @@
+# Official ruling 2018-04-27 / CR 704.5f: lowering a blocked creature's toughness below 1 kills it, not unblocks it.
+# Last Gasp kills Gorilla after a legal block; neither player nor surviving blocker takes combat damage.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Black Lotus
+Tetsuko Umezawa, Fugitive
+Guerrilla Gorilla
+Last Gasp
+Island x30
+
+[Bot2 Deck]
+Black Lotus
+Guerrilla Gorilla
+Forest x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tetsuko Umezawa, Fugitive.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Guerrilla Gorilla.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Guerrilla Gorilla > Bot2)
+Bot2.Block(Guerrilla Gorilla > Guerrilla Gorilla)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Last Gasp.Cast(Bot1.Battlefield.Guerrilla Gorilla)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Guerrilla Gorilla; Last Gasp; Black Lotus
+Bot2.Battlefield.Guerrilla Gorilla.Damage = 0
+Stack.Count = 0

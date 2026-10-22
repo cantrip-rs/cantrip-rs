@@ -1,14 +1,16 @@
 # A planeswalker card is a nonland, noncreature permanent card: Astelli Reclaimer, cast for its warp cost (X = 3), returns Liliana of the
 # Veil (mana value 3, exactly the boundary) from the graveyard to the battlefield under Bot1's control with her starting loyalty.
+# LED discards at priority first; Reclaimer drawn on turn 3 is paid with Plains and Sol Ring, not LED during payment.
 
 [Bot1 Deck]
 Lion's Eye Diamond
-Astelli Reclaimer
+Plains
 Liliana of the Veil
 Door of Destinies
 Mountain
 Lightning Bolt
 Sol Ring
+Astelli Reclaimer
 Mountain x13
 
 [Bot2 Deck]
@@ -16,16 +18,22 @@ Island x20
 
 [Actions]
 Bot1.Hand.Lion's Eye Diamond.Cast
-Bot1.Hand.Astelli Reclaimer.Cast(Ability: Warp)
+Bot1.Hand.Plains.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: White)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Astelli Reclaimer.Cast(Ability: Warp)
 ! Bot1.Target(Door of Destinies)
 Bot1.Target(Liliana of the Veil)
 Bot1.Pass
-[T1 Bot1.Main2]
+[T3 Bot1.Main2]
 
 [Expect]
-Bot1.Battlefield = Astelli Reclaimer; Liliana of the Veil
-Bot1.Graveyard = Lion's Eye Diamond; Sol Ring; Lightning Bolt; Mountain; Door of Destinies
+Bot1.Battlefield = Plains; Sol Ring; Astelli Reclaimer; Liliana of the Veil
+Bot1.Graveyard = Lion's Eye Diamond; Lightning Bolt; Mountain; Door of Destinies
 Bot1.Hand.Count = 0
 Exile.Count = 0
 Bot1.Battlefield.Liliana of the Veil.Counters.Loyalty = 3

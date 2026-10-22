@@ -1,0 +1,8 @@
+{
+  "name": "Tetsuko Umezawa, Fugitive",
+  "manaCost": "{1}{U}",
+  "type": "Legendary Creature — Human Rogue",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Creatures you control with power or toughness 1 or less can't be blocked."
+}

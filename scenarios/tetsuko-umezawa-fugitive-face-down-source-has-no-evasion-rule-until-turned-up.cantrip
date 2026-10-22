@@ -1,0 +1,64 @@
+# A cloaked Tetsuko has no printed abilities (CR 708.2a); turning it face up restores its static rule (CR 708.8).
+# Coat's own evasion affects only its host. Elf is blocked before the turn-up; a later Elf evades beside a blockable 2/2.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Cryptic Coat
+Mox Emerald
+Llanowar Elves
+Guerrilla Gorilla
+Tetsuko Umezawa, Fugitive
+Forest
+Llanowar Elves
+Island x30
+
+[Bot2 Deck]
+Black Lotus
+Guerrilla Gorilla
+Forest x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Cryptic Coat.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Attack(#1 > Bot2; Llanowar Elves > Bot2)
+Bot2.Block(Guerrilla Gorilla > Llanowar Elves)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+[T7 Bot1.Main1]
+Bot1.Attack(Llanowar Elves > Bot2; Guerrilla Gorilla > Bot2)
+! Bot2.Block(Guerrilla Gorilla > Llanowar Elves)
+Bot2.Block(Guerrilla Gorilla > Guerrilla Gorilla)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Tetsuko Umezawa, Fugitive.Power = 2
+Bot1.Battlefield.Tetsuko Umezawa, Fugitive.Toughness = 3
+Bot1.Battlefield.Cryptic Coat.AttachedTo = Tetsuko Umezawa, Fugitive
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Graveyard = Guerrilla Gorilla; Llanowar Elves; Black Lotus
+Bot2.Graveyard = Guerrilla Gorilla; Black Lotus
+Stack.Count = 0

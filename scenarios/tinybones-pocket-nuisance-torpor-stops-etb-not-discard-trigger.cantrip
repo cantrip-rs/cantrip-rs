@@ -1,0 +1,48 @@
+# Torpor Orb stops entering creatures causing triggers (CR 603.2, 603.6a), but does not stop discards causing triggers.
+# Tinybones enters with no discard or ping. Chain of Smog later discards two and creates one ping.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Sol Ring
+Torpor Orb
+Black Lotus
+Tinybones, Pocket Nuisance
+Chain of Smog
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Torpor Orb.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[Bot1.Main2]
+? Bot2.Hand.Count = 7
+? Bot2.Graveyard.Count = 0
+? Bot2.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Chain of Smog.Cast(Bot2)
+Bot2.Choose(Island; Island)
+Bot2.Decline
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot2.Graveyard.Count = 2
+Bot1.Battlefield.Tinybones, Pocket Nuisance.Power = 2
+Stack.Count = 0

@@ -16,10 +16,23 @@ pub fn sorcery_timing(cx: &Cx, player: PlayerId) -> bool {
     s.turn.active == player && s.turn.step().is_main() && s.stack.is_empty()
 }
 
+/// CR 304.5, 602.5e, 605.3a: a mana ability may be used while paying unless it explicitly requires priority.
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum ManaWindow {
+    Priority,
+    Payment,
+}
+
+impl ManaWindow {
+    fn allows(self, def: &ActivatedDef) -> bool {
+        !def.priority_only || self == Self::Priority
+    }
+}
+
 /// Everything `player` may do now beyond passing.
 pub fn priority_options(cx: &Cx, player: PlayerId) -> Vec<ActionOption> {
     let mut options = Vec::new();
-    mana_ability_options(cx, player, &mut options);
+    mana_ability_options(cx, player, ManaWindow::Priority, &mut options);
     // Split second (CR 702.61a-b): with such a spell on the stack, mana abilities and special actions are all anyone may do
     // (`activated_options` offers only the special actions then).
     activated_options(cx, player, &std::cell::OnceCell::new(), &mut options);
@@ -615,7 +628,7 @@ fn pays_permanents(cx: &Cx, cost: &Cost, p: &PermanentCost, asker: &Asker, id: O
 /// could tap.
 fn tappable_for_mana(cx: &Cx, player: PlayerId) -> Vec<ObjectId> {
     let mut options = Vec::new();
-    mana_ability_options_as(cx, player, &mut options, Judged::Nested);
+    mana_ability_options_as(cx, player, ManaWindow::Payment, &mut options, Judged::Nested);
     let mut out = Vec::new();
     for o in &options {
         let Some(source) = o.source else { continue };
@@ -859,13 +872,13 @@ fn pay_permanents(cx: &mut Cx, cost: &Cost, chosen: &[ObjectId], ability: Option
     }
 }
 
-pub fn mana_ability_options(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOption>) {
-    mana_ability_options_as(cx, player, options, Judged::Activation);
+fn mana_ability_options(cx: &Cx, player: PlayerId, window: ManaWindow, options: &mut Vec<ActionOption>) {
+    mana_ability_options_as(cx, player, window, options, Judged::Activation);
 }
 
 /// The mana abilities `player` could activate now, their costs judged as `judged` says (`Judged::Nested` for the
 /// question `tappable_for_mana` asks).
-fn mana_ability_options_as(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOption>, judged: Judged) {
+fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, options: &mut Vec<ActionOption>, judged: Judged) {
     let forbidders = static_rules::activation_forbidders(cx);
     for &id in cx.s().battlefield() {
         if cx.s().obj(id).controller != player {
@@ -876,6 +889,7 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOp
         for (index, ability) in chars.abilities().enumerate() {
             let Some(def) = activated(cx, ability) else { continue };
             if !def.is_mana_ability()
+                || !window.allows(def)
                 || def.from != ZoneKind::Battlefield
                 || limit_reached(cx, id, &chars, index, def)
                 || !can_pay_other_as(cx, id, player, &def.cost, judged)
@@ -893,7 +907,7 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOp
             // paid by the other sources, its own {T} not among them (CR 605.3a, 602.2b, 609.4b) - unless it is judged
             // for what mana abilities could tap (`Judged::Nested`), where asking what the player can pay would ask it again.
             if def.cost.mana.x == 0 && def.cost.mana.mana_value() > 0 && judged != Judged::Nested {
-                let a = available_without(cx, player, def.cost.tap.then_some(id));
+                let a = available_without(cx, player, def.cost.tap.then_some(id), ManaWindow::Payment);
                 let mut cost = def.cost.mana;
                 if static_rules::spend_any_color_for(cx, player, id, true) {
                     cost = cost.paid_with_any_color();
@@ -957,6 +971,7 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOp
     for (n, effect) in cx.s().effects.iter().filter(|e| matches!(e.kind, EffectKind::PlayerManaAbility(_)) && e.controller == player).enumerate() {
         let EffectKind::PlayerManaAbility(ability) = effect.kind else { continue };
         if let Some(def) = activated(cx, ability)
+            && window.allows(def)
             && can_pay_other_as(cx, effect.source, player, &def.cost, judged)
         {
             options.push(ActionOption::on(ActionKind::ActivateAbility, effect.source, PLAYER_MANA_ABILITY + n as u8));
@@ -968,6 +983,7 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOp
         for (index, ability) in def.abilities.iter().enumerate() {
             let AbilityDef::Activated(a) = ability else { continue };
             if !a.is_mana_ability()
+                || !window.allows(a)
                 || a.from != ZoneKind::Hand
                 || !can_pay_other_as(cx, id, player, &a.cost, judged)
                 || static_rules::activation_barred(cx, &forbidders, id, a)
@@ -1968,20 +1984,21 @@ fn add_available(list: &mut Vec<(ManaRestriction, [u32; 6], u32)>, restriction: 
     list[at].2 = list[at].2.saturating_add(flex);
 }
 
+/// Mana that can pay a cost after its announcement (CR 601.2g, 605.3a): priority-only sources must be floated first.
 pub fn available(cx: &Cx, player: PlayerId) -> Available {
-    available_without(cx, player, None)
+    available_without(cx, player, None, ManaWindow::Payment)
 }
 
 /// What `player` has to pay with, `skip` apart: a permanent whose own {T} is in the cost being paid cannot also be
 /// tapped for mana to pay it (CR 602.2b, 605.3b).
-fn available_without(cx: &Cx, player: PlayerId, skip: Option<ObjectId>) -> Available {
-    available_as(cx, player, skip, false)
+fn available_without(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaWindow) -> Available {
+    available_as(cx, player, skip, window, false)
 }
 
 /// `available_without`. `defer`: each source's own abilities are kept until those that could tap it are known
 /// (`Repeat::Tap`); without it they are counted as they are found, and finding such an ability starts over with it - so a
 /// board with none pays nothing for them.
-fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, defer: bool) -> Available {
+fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaWindow, defer: bool) -> Available {
     let mut fixed = cx.s().player(player).pool.0;
     let mut restricted: Vec<(ManaRestriction, [u32; 6], u32)> = Vec::new();
     for (restriction, pool) in cx.s().restricted_of(player) {
@@ -2000,6 +2017,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, defer: bool) 
     for effect in cx.s().effects.iter().filter(|e| matches!(e.kind, EffectKind::PlayerManaAbility(_)) && e.controller == player) {
         let EffectKind::PlayerManaAbility(ability) = effect.kind else { continue };
         if let Some(def) = activated(cx, ability)
+            && window.allows(def)
             && def.cost.life > 0
         {
             let times = payable_life(cx, player).max(0) as u32 / def.cost.life as u32;
@@ -2033,6 +2051,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, defer: bool) 
         for (index, ability) in chars.abilities().enumerate() {
             let Some(def) = activated(cx, ability) else { continue };
             if !def.is_mana_ability()
+                || !window.allows(def)
                 || def.from != ZoneKind::Battlefield
                 || limit_reached(cx, id, &chars, index, def)
                 || !can_pay_activation(cx, id, player, &def.cost)
@@ -2092,7 +2111,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, defer: bool) 
             alternative.tapped = def.cost.tap;
             if let Some(repeat) = Repeat::of(&def.cost, def.colors_from_sacrifice) {
                 if !defer && matches!(repeat, Repeat::Tap(..)) {
-                    return available_as(cx, player, skip, true);
+                    return available_as(cx, player, skip, window, true);
                 }
                 repeatable.push((alternative, id, repeat));
                 continue;
@@ -3207,7 +3226,7 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             let own = (judged
                 && def.cost.tap
                 && (has_mana_source(cx, id, player) || available.get_or_init(|| self::available(cx, player)).spent.contains(&id)))
-            .then(|| available_without(cx, player, Some(id)));
+            .then(|| available_without(cx, player, Some(id), ManaWindow::Payment));
             let a = judged.then(|| own.as_ref().unwrap_or_else(|| available.get_or_init(|| self::available(cx, player))));
             // A special action is no ability, so mana limited to activating abilities can't pay for it (CR 116.2, 106.6).
             let payment = if def.special_action { ManaPayment::Other } else { ManaPayment::Ability { source: chars.types, subtypes: chars.subtypes } };
@@ -4550,7 +4569,7 @@ fn way_covered(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &C
         }
         way.tap_to_reduce
             && reducer_candidates(cx, player).into_iter().any(|creature| {
-                let without = available_without(cx, player, Some(creature));
+                let without = available_without(cx, player, Some(creature), ManaWindow::Payment);
                 let mut reduced = cost;
                 reduced.generic = reduced.generic.saturating_sub(reduction_of(cx, creature));
                 covers_total(cx, &without, player, card, def, at_least(reduced, least), way.exile_from_graveyard, any_type)
@@ -4605,6 +4624,7 @@ fn has_mana_source(cx: &Cx, id: ObjectId, player: PlayerId) -> bool {
     chars.abilities().enumerate().any(|(index, ability)| {
         activated(cx, ability).is_some_and(|def| {
             def.is_mana_ability()
+                && ManaWindow::Payment.allows(def)
                 && !limit_reached(cx, id, &chars, index, def)
                 && can_pay_activation(cx, id, player, &def.cost)
                 && !static_rules::activation_barred(cx, &forbidders, id, def)
@@ -7388,7 +7408,7 @@ fn take_mana(cx: &mut Cx, player: PlayerId, source: ObjectId, purpose: Paying, s
 /// so that none of it may pay this cost marked as paying nothing (CR 106.6).
 fn mana_options_while_paying(cx: &Cx, player: PlayerId, source: ObjectId, purpose: Paying) -> Vec<ActionOption> {
     let mut options = Vec::new();
-    mana_ability_options(cx, player, &mut options);
+    mana_ability_options(cx, player, ManaWindow::Payment, &mut options);
     if options.iter().any(|o| o.restriction.is_some()) {
         let payment = payment_for(cx, player, source, purpose);
         for option in &mut options {
@@ -8045,6 +8065,10 @@ fn resolution_rest_payable(cx: &Cx, payer: PlayerId, source: ObjectId, cost: &Co
 fn is_live(cx: &Cx, id: ObjectId) -> bool {
     live(cx.s(), id)
 }
+
+#[cfg(test)]
+#[path = "priority_only_tests.rs"]
+mod priority_only_tests;
 
 #[cfg(test)]
 mod tests {

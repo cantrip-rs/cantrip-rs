@@ -1,0 +1,25 @@
+# Priority-only LED can be activated before casting; its discard makes a flashback spell available (CR 304.5, 702.34).
+# It resolves as a mana ability, not on the stack, and its already-floated red mana pays Faithless Looting's flashback cost.
+
+[Bot1 Deck]
+Lion's Eye Diamond
+Faithless Looting
+Mountain x25
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+? Stack.Count = 0
+? Bot1.Mana = {R}{R}{R}
+Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)
+Bot1.Choose(Mountain; Mountain)
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Graveyard.Count = 8
+Exile = Faithless Looting
+Stack.Count = 0

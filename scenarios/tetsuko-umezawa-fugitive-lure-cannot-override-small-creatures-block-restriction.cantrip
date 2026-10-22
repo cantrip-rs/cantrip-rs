@@ -1,0 +1,52 @@
+# A block requirement cannot override a restriction (CR 101.2, 509.1b-c).
+# Lure on an evasive 1/1 requires no illegal blocks; the same blocker may block its ordinary 2/2 companion.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Tetsuko Umezawa, Fugitive
+Llanowar Elves
+Lure
+Guerrilla Gorilla
+Island x30
+
+[Bot2 Deck]
+Black Lotus
+Guerrilla Gorilla
+Forest x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tetsuko Umezawa, Fugitive.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Lure.Cast(Llanowar Elves)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Llanowar Elves > Bot2; Guerrilla Gorilla > Bot2)
+! Bot2.Block(Guerrilla Gorilla > Llanowar Elves)
+Bot2.Block(Guerrilla Gorilla > Guerrilla Gorilla)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Lure.AttachedTo = Llanowar Elves
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Graveyard = Guerrilla Gorilla; Black Lotus
+Bot2.Graveyard = Guerrilla Gorilla; Black Lotus
+Stack.Count = 0

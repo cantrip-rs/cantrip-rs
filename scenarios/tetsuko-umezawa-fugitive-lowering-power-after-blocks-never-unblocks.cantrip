@@ -1,0 +1,45 @@
+# Official ruling 2018-04-27 / CR 509.1b: lowering an already-blocked creature's power to <=1 never unblocks it.
+# Icy Reception changes Gorilla to -3/2 after blocks; it takes lethal damage and deals zero, not player damage.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Tetsuko Umezawa, Fugitive
+Guerrilla Gorilla
+Icy Reception
+Island x30
+
+[Bot2 Deck]
+Black Lotus
+Guerrilla Gorilla
+Forest x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tetsuko Umezawa, Fugitive.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Guerrilla Gorilla.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Guerrilla Gorilla > Bot2)
+Bot2.Block(Guerrilla Gorilla > Guerrilla Gorilla)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Icy Reception.Cast
+Bot1.Modes(Target creature gets)
+Bot1.Target(Bot1.Battlefield.Guerrilla Gorilla)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Guerrilla Gorilla; Icy Reception; Black Lotus
+Bot2.Battlefield.Guerrilla Gorilla.Damage = 0
+Stack.Count = 0

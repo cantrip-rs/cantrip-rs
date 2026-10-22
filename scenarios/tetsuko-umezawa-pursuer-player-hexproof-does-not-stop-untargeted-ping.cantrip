@@ -1,0 +1,36 @@
+# The blocker-controller damage does not target (CR 115.1d), so player hexproof cannot stop it (CR 702.11c).
+# Crystal Barricade's 0/4 body blocks; double strike kills it while its hexproof controller loses 1.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Tetsuko Umezawa, Pursuer
+Mountain x30
+
+[Bot2 Deck]
+Plains
+Black Lotus
+Crystal Barricade
+Plains x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Crystal Barricade.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Block(Crystal Barricade > Tetsuko Umezawa, Pursuer)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Crystal Barricade; Black Lotus
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Damage = 0
+Stack.Count = 0

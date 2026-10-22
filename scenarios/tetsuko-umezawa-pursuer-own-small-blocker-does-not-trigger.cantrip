@@ -1,0 +1,41 @@
+# "An opponent controls" excludes Pursuer's controller's blockers (CR 102.2).
+# Bot1's 1/1 legally blocks a 2/2 on Bot2's turn; no ping. Opposing 1/1 blockers in other scenarios are positive controls.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Emerald
+Tetsuko Umezawa, Pursuer
+Llanowar Elves
+Mountain x30
+
+[Bot2 Deck]
+Black Lotus
+Guerrilla Gorilla
+Forest x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Guerrilla Gorilla > Bot1)
+Bot1.Block(Llanowar Elves > Guerrilla Gorilla)
+? Stack.Count = 0
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Llanowar Elves; Black Lotus
+Bot2.Battlefield.Guerrilla Gorilla.Damage = 1
+Stack.Count = 0

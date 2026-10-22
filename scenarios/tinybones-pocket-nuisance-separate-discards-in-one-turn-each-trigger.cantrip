@@ -1,0 +1,39 @@
+# "One or more" batches simultaneous cards, not a whole turn (CR 603.2c).
+# Two separately resolving Smogs each discard two cards and each ping once, after the initial ETB ping.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Tinybones, Pocket Nuisance
+Chain of Smog x2
+Black Lotus
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Chain of Smog.Cast(Bot2)
+Bot2.Choose(Island; Island)
+Bot2.Decline
+[Bot1.Main2]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Chain of Smog.Cast(Bot2)
+Bot2.Choose(Island; Island)
+Bot2.Decline
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard.Count = 5
+Bot1.Graveyard = Chain of Smog; Black Lotus; Chain of Smog; Black Lotus
+Stack.Count = 0

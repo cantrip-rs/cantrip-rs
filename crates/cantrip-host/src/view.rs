@@ -1118,7 +1118,7 @@ impl<'a> Projector<'a> {
             name: def.name.to_string(),
             mana_cost: cost_text(def),
             mana_value: Query::mana_value(game, id) as i32,
-            oracle_text: crate::text::changed_text(def.text, def.name, Query::words(game, id)),
+            oracle_text: crate::text::changed_text(def.text, def.name, if phased_out { current_words(s, id) } else { Query::words(game, id) }),
             supertypes: supertypes_view(c.supertypes),
             card_types: types_view(c.types),
             subtypes: subtypes_view(c.subtypes),

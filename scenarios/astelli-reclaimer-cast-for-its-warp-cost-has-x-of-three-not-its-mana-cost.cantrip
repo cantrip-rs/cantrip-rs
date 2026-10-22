@@ -1,16 +1,17 @@
-# Astelli Reclaimer's X is the mana actually spent: cast for its warp cost {2}{W}, paid with Lion's Eye Diamond's three white
-# mana, X is 3 (its ruling), not 5. Basalt Monolith (mana value 3) is exactly the boundary and is returned; the Door of Destinies
-# (mana value 4) cannot be targeted, and nor can a Mountain (a land card) or a Lightning Bolt (not a permanent card). Sol Ring and the
-# Diamond itself, in the graveyard too, are legal. At the beginning of the next end step the warped Astelli Reclaimer is exiled.
+# Reclaimer is drawn after LED discards at turn-1 priority. Its warp cost {2}{W} is paid with Plains and Sol Ring:
+# X is 3 (its ruling), not 5. Basalt Monolith (mana value 3) is exactly the boundary and is returned; the Door of Destinies
+# (mana value 4) cannot be targeted, and nor can a Mountain (a land card) or a Lightning Bolt (not a permanent card).
+# The Diamond itself, in the graveyard too, is legal. At the beginning of the next end step the warped Astelli Reclaimer is exiled.
 
 [Bot1 Deck]
 Lion's Eye Diamond
-Astelli Reclaimer
+Plains
 Basalt Monolith
 Door of Destinies
 Mountain
 Lightning Bolt
 Sol Ring
+Astelli Reclaimer
 Mountain x13
 
 [Bot2 Deck]
@@ -18,21 +19,27 @@ Island x20
 
 [Actions]
 Bot1.Hand.Lion's Eye Diamond.Cast
-Bot1.Hand.Astelli Reclaimer.Cast(Ability: Warp)
+Bot1.Hand.Plains.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Plains.Activate
 Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: White)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Astelli Reclaimer.Cast(Ability: Warp)
 ! Bot1.Target(Door of Destinies)
 ! Bot1.Target(Mountain)
 ! Bot1.Target(Lightning Bolt)
 Bot1.Target(Basalt Monolith)
 Bot1.Pass
-[T1 Bot1.Main2]
-? Bot1.Battlefield = Astelli Reclaimer; Basalt Monolith
-? Bot1.Graveyard.Count = 5
-[T2 Bot2.Upkeep]
+[T3 Bot1.Main2]
+? Bot1.Battlefield = Plains; Sol Ring; Astelli Reclaimer; Basalt Monolith
+? Bot1.Graveyard.Count = 4
+[T4 Bot2.Upkeep]
 ? Exile = Astelli Reclaimer
 
 [Expect]
-Bot1.Battlefield = Basalt Monolith
+Bot1.Battlefield = Plains; Sol Ring; Basalt Monolith
 Exile = Astelli Reclaimer
 Bot1.Hand.Count = 0
-Bot1.Graveyard = Lion's Eye Diamond; Sol Ring; Lightning Bolt; Mountain; Door of Destinies
+Bot1.Graveyard = Lion's Eye Diamond; Lightning Bolt; Mountain; Door of Destinies

@@ -1,0 +1,47 @@
+# Clone copies the triggered ability, prowess and double strike (CR 707.2). Different controllers permit both legends.
+# Bot1's Elf blocks Bot2's copied Pursuer; only the copy pings Bot1. Original does not ping for its own blocker.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Emerald
+Tetsuko Umezawa, Pursuer
+Llanowar Elves
+Mountain x30
+
+[Bot2 Deck]
+Island
+Black Lotus
+Clone
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Clone.Cast
+Bot2.Accept
+Bot2.Target(Tetsuko Umezawa, Pursuer)
+[T4 Bot2.Main1]
+Bot2.Attack(Tetsuko Umezawa, Pursuer > Bot1)
+Bot1.Block(Llanowar Elves > Tetsuko Umezawa, Pursuer)
+? Stack.Count = 1
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Bot1.Graveyard = Llanowar Elves; Black Lotus
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Power = 2
+Bot2.Battlefield.Tetsuko Umezawa, Pursuer.Keywords = DoubleStrike
+Stack.Count = 0

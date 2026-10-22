@@ -1,0 +1,44 @@
+# A damage replacement doubles the ability's damage (CR 614.1a), proving it uses damage rather than lose-life.
+# Opponent's Furnace doubles the ping to 2 and first-strike damage to the blocker; blocked Pursuer does not hit the player.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Tetsuko Umezawa, Pursuer
+Mountain x30
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Mox Emerald
+Furnace of Rath
+Llanowar Elves
+Mountain x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Furnace of Rath.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Block(Llanowar Elves > Tetsuko Umezawa, Pursuer)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Damage = 0
+Bot2.Graveyard = Llanowar Elves; Black Lotus
+Stack.Count = 0

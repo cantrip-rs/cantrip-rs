@@ -1,0 +1,44 @@
+# Targets are chosen after discard, with a response window before damage (CR 603.12, 117.3b).
+# Ephemerate replaces the targeted Ornithopter with a same-named new object (CR 400.7, 608.2b): it receives no damage.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Mountain x30
+
+[Bot2 Deck]
+Ornithopter
+Ephemerate
+Mox Pearl
+Island x30
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Choose(Mountain)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Ephemerate.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Damage = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Graveyard = Mountain; Black Lotus
+Exile = Ephemerate
+Bot2.Life = 20
+Stack.Count = 0

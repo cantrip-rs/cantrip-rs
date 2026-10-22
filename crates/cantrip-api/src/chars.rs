@@ -56,10 +56,15 @@ pub struct Chars {
 /// sacrificed to its own ability searches for the land types its text named, and the delayed ability of a High Tide whose
 /// "Island" was changed to "Swamp" watches Swamps once High Tide is in the graveyard.
 pub fn words(state: &GameState, id: ObjectId) -> Words {
-    let obj = state.obj(id);
-    if let Some(last) = state.last_known(id) {
+    if let Some(last) = state.last_known(id).or_else(|| state.phased_last_known(id)) {
         return last.words;
     }
+    current_words(state, id)
+}
+
+/// Current words for projected characteristics, separate from a phased-out source's expected-zone information.
+pub fn current_words(state: &GameState, id: ObjectId) -> Words {
+    let obj = state.obj(id);
     let mut words = if obj.face_down_values().is_some() { Words::NONE } else { obj.copy.as_ref().map_or(Words::NONE, |c| c.words) };
     for e in &state.effects {
         if let EffectKind::ChangeText { from, to } = e.kind
@@ -72,9 +77,10 @@ pub fn words(state: &GameState, id: ObjectId) -> Words {
 }
 
 impl Chars {
-    /// These characteristics with what `last` kept of an object (CR 400.7, 608.2h): its last-known information, or a
-    /// spell as it became cast (CR 601.2i). The rest - its card, whether it is a spell now - is this object's.
+    /// The complete characteristics `last` kept (CR 400.7, 608.2h): expected-zone information, including a spell as it
+    /// became cast (601.2i) and a permanent just before phasing out (702.26b).
     pub fn as_known(mut self, last: &LastKnown) -> Chars {
+        self.card = last.card;
         self.name = last.name;
         self.name_set = last.name_set;
         self.supertypes = last.supertypes;
@@ -85,6 +91,15 @@ impl Chars {
         self.power = last.power;
         self.toughness = last.toughness;
         self.keywords = last.keywords;
+        self.protection = last.protection;
+        self.protection_colorless = last.protection_colorless;
+        self.protection_players = last.protection_players;
+        self.protection_types = last.protection_types;
+        self.spell = last.spell;
+        self.protection_colored_spells = last.protection_colored_spells;
+        self.protection_everything = last.protection_everything;
+        self.hexproof_from = last.hexproof_from;
+        self.must_attack = last.must_attack;
         self.abilities = last.abilities;
         self
     }

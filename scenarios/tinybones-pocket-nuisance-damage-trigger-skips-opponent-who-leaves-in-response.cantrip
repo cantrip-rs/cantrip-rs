@@ -1,0 +1,39 @@
+# A resolving ability's "each opponent" skips players who have left since it triggered (CR 800.4a).
+# Both opponents discard and create two pings. Bot2 then dies to Bolt; neither ping hits Bot2, while Bot3 takes both.
+
+[Life]
+Bot2: 3
+
+[Bot1 Deck]
+Swamp
+Mox Ruby
+Black Lotus
+Tinybones, Pocket Nuisance
+Lightning Bolt
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Bot3 Deck]
+Forest x35
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+Bot3.Choose(Forest)
+Bot1.Triggers(Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Status = Lost
+Bot3.Life = 18
+Bot3.Graveyard.Count = 1
+Stack.Count = 0

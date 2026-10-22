@@ -1,0 +1,41 @@
+# Ferocidon's untargeted trigger survives its subject/controller departing (CR 113.7a, 608.2h), but damages no departed player.
+# The identical callback must not retest creature/opponent status; Bolt kills Bot2 before their Elf's pending ping.
+
+[Life]
+Bot2: 3
+[Bot1 Deck]
+Mountain
+Black Lotus
+Rampaging Ferocidon
+Lightning Bolt
+Mountain x30
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x30
+
+[Bot3 Deck]
+Island x35
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Rampaging Ferocidon.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Status = Lost
+Bot2.Life = 0
+Bot3.Life = 20
+Stack.Count = 0

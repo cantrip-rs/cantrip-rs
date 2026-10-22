@@ -1,0 +1,38 @@
+# Chandra permits casting the exiled card during her ability's resolution (CR 608.2g), not with priority.
+# LED is refused during Sol Ring's payment; Mox Ruby pays. LED at the next priority remains a mana ability.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Chandra, Torch of Defiance
+Lion's Eye Diamond
+Island x2
+Sol Ring
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Chandra, Torch of Defiance.Cast
+Bot1.Battlefield.Chandra, Torch of Defiance.Activate(Ability: Exile the top)
+Bot1.Accept
+! Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Ruby; Chandra, Torch of Defiance; Sol Ring
+Bot1.Battlefield.Chandra, Torch of Defiance.Counters.Loyalty = 5
+Bot1.Hand.Count = 0
+Bot1.Mana = {R}{R}{R}
+Bot2.Life = 20
+Exile.Count = 0
+Stack.Count = 0

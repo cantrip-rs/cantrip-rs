@@ -1,0 +1,66 @@
+# Power OR toughness <=1 qualifies (CR 509.3f): Fugitive's 1/3 and Shieldbreaker's 2/1 each trigger, Gorilla 2/2 does not.
+# Shieldbreaker blocks another attacker, not Pursuer. Multiple qualifying blockers each trigger separately.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Tetsuko Umezawa, Pursuer
+Mox Emerald
+Mox Sapphire
+Guerrilla Gorilla x2
+Mountain x30
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Tetsuko Umezawa, Fugitive
+Embereth Shieldbreaker
+Guerrilla Gorilla
+Forest x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Tetsuko Umezawa, Fugitive.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Embereth Shieldbreaker.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2; Guerrilla Gorilla#1 > Bot2; Guerrilla Gorilla#2 > Bot2)
+Bot2.Block(Tetsuko Umezawa, Fugitive > Tetsuko Umezawa, Pursuer; Embereth Shieldbreaker > Guerrilla Gorilla#1; Guerrilla Gorilla > Guerrilla Gorilla#2)
+Bot1.Triggers(Tetsuko Umezawa, Pursuer; Tetsuko Umezawa, Pursuer)
+? Stack.Count = 2
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Damage = 1
+Bot1.Graveyard = Guerrilla Gorilla; Guerrilla Gorilla; Black Lotus
+Bot2.Graveyard = Guerrilla Gorilla; Embereth Shieldbreaker; Tetsuko Umezawa, Fugitive
+Stack.Count = 0

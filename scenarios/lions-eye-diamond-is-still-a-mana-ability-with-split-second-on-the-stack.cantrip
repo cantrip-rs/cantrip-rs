@@ -1,0 +1,34 @@
+# Split second bars spells/nonmana activations but not mana abilities (CR 702.61a-b, 605.1a).
+# "Only as an instant" needs priority, not permission to cast an instant (CR 304.5). LED resolves at once above Grip.
+
+[Bot1 Deck]
+Mountain
+Sol Ring
+Lion's Eye Diamond
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Krosan Grip
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lion's Eye Diamond.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Krosan Grip.Cast(Sol Ring)
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+? Stack = Krosan Grip
+? Bot1.Mana = {R}{R}{R}
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Mountain
+Bot1.Hand.Count = 0
+Bot1.Graveyard.Count = 6
+Bot2.Graveyard = Krosan Grip; Black Lotus
+Stack.Count = 0

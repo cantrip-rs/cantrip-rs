@@ -1,0 +1,39 @@
+# Unactivated LED cannot pay a cost after announcement (CR 304.5, 602.5e); affordability must not count it.
+# With ordinary sources spent, LED alone cannot advertise Bolt or Mind Stone's draw ability; both work after untapping.
+
+[Bot1 Deck]
+Mountain
+Lion's Eye Diamond
+Sol Ring
+Mind Stone
+Lightning Bolt
+Island x2
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Mind Stone.Cast
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Hand.Lightning Bolt.Cast(Bot2)
+! Bot1.Battlefield.Mind Stone.Activate(Ability: Draw a card)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield = Mountain; Sol Ring
+Bot1.Hand.Count = 0
+Bot1.Mana = {U}{U}{U}{C}
+Stack.Count = 0

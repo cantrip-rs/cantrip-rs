@@ -456,6 +456,11 @@ impl AbilityDef {
         AbilityDef::Activated(ActivatedDef { timing: Timing::Sorcery, ..activated(self, "only an activated ability has a timing") })
     }
 
+    /// "Activate only as an instant" (CR 304.5, 602.5e): only with priority, including a mana ability.
+    pub const fn only_as_an_instant(self) -> AbilityDef {
+        AbilityDef::Activated(ActivatedDef { priority_only: true, ..activated(self, "only an activated ability requires priority") })
+    }
+
     /// When it may be activated, beyond sorcery speed: `Timing::OwnTurn` and the like.
     pub const fn timing(self, timing: Timing) -> AbilityDef {
         AbilityDef::Activated(ActivatedDef { timing, ..activated(self, "only an activated ability has a timing") })
@@ -1000,5 +1005,13 @@ mod tests {
         assert!(d.any_color && d.adds_any == 1 && d.colors.has(Color::Red) && d.colors.has(Color::White) && !d.colors.has(Color::Blue));
         let AbilityDef::Activated(d) = ability(loyalty(-2), |_, _| Ok(()), "-2: Nothing.") else { panic!() };
         assert!(d.timing == Timing::Sorcery && !d.is_mana_ability());
+    }
+
+    #[test]
+    fn requiring_priority_does_not_turn_a_mana_ability_into_a_stack_ability() {
+        let AbilityDef::Activated(d) = mana_ability(TAP, add(Mana::G), "{T}: Add {G}. Activate only as an instant.").only_as_an_instant() else { panic!() };
+        assert!(d.priority_only && d.is_mana_ability() && d.timing == Timing::Instant);
+        let AbilityDef::Activated(d) = ability(TAP, |_, _| Ok(()), "{T}: Nothing. Activate only as an instant.").only_as_an_instant() else { panic!() };
+        assert!(d.priority_only && !d.is_mana_ability());
     }
 }

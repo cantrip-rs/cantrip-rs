@@ -1,0 +1,42 @@
+# The controller is a legal "any target" (CR 115.4). Healing Salve's prevention applies to noncombat damage (CR 615.6).
+# Discard remains spent despite all 2 damage being prevented; the recorded prevention proves the reflexive ability resolved.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Mox Pearl
+Healing Salve
+Mountain x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Choose(Mountain)
+Bot1.Target(Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot1)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Healing Salve; Mountain; Black Lotus
+Prevented = 2 Tether Technician > Bot1 by Healing Salve
+Stack.Count = 0

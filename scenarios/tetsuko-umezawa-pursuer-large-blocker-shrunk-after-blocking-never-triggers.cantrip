@@ -1,0 +1,45 @@
+# Characteristics changing to qualify after block declaration do not trigger (CR 509.3f).
+# Gorilla 2/2 blocks with no trigger; opponent's Icy Reception makes it -3/2 later, still no ping.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Tetsuko Umezawa, Pursuer
+Mountain x30
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Guerrilla Gorilla
+Icy Reception
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Block(Guerrilla Gorilla > Tetsuko Umezawa, Pursuer)
+? Stack.Count = 0
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Icy Reception.Cast
+Bot2.Modes(Target creature gets)
+Bot2.Target(Guerrilla Gorilla)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Damage = 0
+Bot2.Graveyard = Guerrilla Gorilla; Icy Reception; Black Lotus
+Stack.Count = 0

@@ -1,0 +1,64 @@
+# Independent review A1: Tinybones and Shadowspear phase out before its one-per-discarding-player trigger deals
+# damage. Absence uses its last phased-in granted lifelink (CR 608.2h, 702.15c, 702.26b,d,g), not current static givers.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Mox Pearl
+Sol Ring
+Shadowspear
+Tinybones, Pocket Nuisance
+Chain of Smog
+Swamp x30
+[Bot2 Deck]
+Forest
+Mox Jet
+Black Lotus
+Llanowar Elves
+Valley Floodcaller
+Oubliette
+Swamp
+Swamp x30
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Swamp)
+[Bot1.Main2]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Shadowspear.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Valley Floodcaller.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Shadowspear.Activate(Tinybones, Pocket Nuisance; Ability: Equip)
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T7 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Chain of Smog.Cast(Bot2)
+Bot2.Choose(Swamp; Swamp)
+Bot2.Decline
+? Stack.Count = 1
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Oubliette.Cast
+Bot2.Target(Tinybones, Pocket Nuisance)
+[T7 Bot1.Main2]
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 18
+Bot1.PhasedOut.Count = 2
+Stack.Count = 0

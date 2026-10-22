@@ -160,7 +160,8 @@ pub trait Query {
         }
     }
 
-    /// An object's characteristics after every continuous effect (CR 613).
+    /// An object's rules information after every continuous effect (CR 613). A phased-out source is read as it last
+    /// existed phased in (CR 608.2h, 702.15c); projected current characteristics are separate from source information.
     fn chars(&self, id: ObjectId) -> Chars;
 
     /// Token characteristics at creation, including copy exceptions (CR 614.12, 707.2). Used by token-creation
@@ -219,8 +220,9 @@ pub trait Query {
         self.obj(id).zone.is(ZoneKind::Battlefield)
     }
 
+    /// Current controller in the expected public zone, or the source's last controller while absent (CR 608.2h).
     fn controller(&self, id: ObjectId) -> PlayerId {
-        self.obj(id).controller
+        self.state().last_known(id).or_else(|| self.state().phased_last_known(id)).map_or(self.obj(id).controller, |last| last.controller)
     }
 
     /// An object's mana cost (CR 202.1) as its characteristics give it: the card's or the one it copies, none for a copy

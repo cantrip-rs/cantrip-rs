@@ -58,6 +58,29 @@ fn a_wrong_expectation_fails() {
     assert!(failure.message.contains("Bot2.Graveyard"), "{}", failure.message);
 }
 
+/// A refused activation checks the actual payment menu, not a later priority or a separate affordability estimate.
+#[test]
+fn an_offered_mana_ability_fails_a_refusal_in_each_payment_context() {
+    for (name, ordinary, question) in [
+        ("lions-eye-diamond-requires-priority-while-sol-ring-pays-for-a-spell", "Mountain", "PayCosts"),
+        ("lions-eye-diamond-cannot-pay-activated-ability-cost-but-sol-ring-can", "Sol Ring", "PayCosts"),
+        ("lions-eye-diamond-cannot-pay-a-mana-abilitys-cost-but-sol-ring-can", "Sol Ring", "PayCosts"),
+        ("lions-eye-diamond-cannot-pay-a-special-actions-cost-but-sol-ring-can", "Sol Ring", "PayCosts"),
+        ("lions-eye-diamond-cannot-pay-for-a-spell-cast-during-resolution", "Mox Ruby", "PayCosts"),
+        ("lions-eye-diamond-cannot-activate-without-priority-while-paying-to-attack", "Sol Ring", "PayCosts"),
+        ("lions-eye-diamond-cannot-pay-unless-cost-but-sol-ring-can", "Sol Ring", "UnlessPays"),
+        ("lions-eye-diamond-cannot-pay-ward-but-sol-ring-can", "Sol Ring", "UnlessPays"),
+    ] {
+        let text = std::fs::read_to_string(scripts().join(format!("{name}.cantrip"))).unwrap();
+        let refused = text.lines().find(|line| line.starts_with("! Bot1.Battlefield.Lion's Eye Diamond.Activate")).unwrap();
+        let mutated = text.replace(refused, &format!("! Bot1.Battlefield.{ordinary}.Activate"));
+        let script = GameScript::parse(&mutated, "offered-payment-refusal").unwrap();
+        let failure = run(&script).err().expect("an offered payment activation must fail its refusal");
+        assert!(failure.message.contains("must not be offered, but it is"), "{}", failure.report);
+        assert!(failure.report.contains(&format!("Outstanding: Bot1 asked {question}")), "{}", failure.report);
+    }
+}
+
 /// Plays a scenario through `Scripted` with every seat driven, each answering exactly what the script means: the way a
 /// table plays it with browsers in the seats. Returns the final dump, or the failure.
 fn driven(script: GameScript) -> Result<String, String> {

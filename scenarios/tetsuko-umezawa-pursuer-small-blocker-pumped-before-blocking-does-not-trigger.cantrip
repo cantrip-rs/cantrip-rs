@@ -1,0 +1,40 @@
+# The same 1/1 that triggers unpumped is 4/4 at declaration after Giant Growth, so does not qualify (CR 509.3f).
+# Printed statistics are not used. Double strike trades with the 4/4, with no player ping.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Tetsuko Umezawa, Pursuer
+Mountain x30
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Giant Growth
+Forest x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Hand.Giant Growth.Cast(Llanowar Elves)
+Bot2.Block(Llanowar Elves > Tetsuko Umezawa, Pursuer)
+? Stack.Count = 0
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Tetsuko Umezawa, Pursuer; Black Lotus
+Bot2.Graveyard = Llanowar Elves; Giant Growth
+Stack.Count = 0

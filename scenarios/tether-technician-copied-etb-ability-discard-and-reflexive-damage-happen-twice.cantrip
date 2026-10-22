@@ -1,0 +1,46 @@
+# Copying the untargeted ETB ability copies its optional discard instruction (CR 707.10).
+# Each resolution discards one card and creates its own reflexive ability (CR 603.12); both deal 2 from the same source.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Return the Favor
+Mountain
+Black Lotus
+Mountain x25
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Return the Favor.Cast
+Bot1.Modes(Copy target)
+Bot1.Target(Stack.Tether Technician)
+Bot1.Choose(Mountain)
+Bot1.Target(Bot2)
+Bot1.Choose(Mountain)
+Bot1.Target(Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard = Mountain; Mountain; Return the Favor; Black Lotus; Black Lotus
+Bot1.Battlefield.Tether Technician.Damage = 0
+Stack.Count = 0

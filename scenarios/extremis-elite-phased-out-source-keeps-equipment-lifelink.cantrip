@@ -1,0 +1,71 @@
+# Basilisk Collar grants lifelink before Extremis activates. Oubliette phases both out before its power-up resolves.
+# No counters can be added (CR 702.26b), but source LKI retains Collar's lifelink and the ability still deals damage
+# (CR 113.7a, 608.2h, 702.15c, 702.26g). This existing-card composition executes review A1 in worker B's base.
+
+[Bot1 Deck]
+Mountain
+Sol Ring
+Mox Ruby
+Black Lotus
+Extremis Elite
+Basilisk Collar
+Mountain
+Mountain x30
+
+[Bot2 Deck]
+Forest
+Mox Jet
+Black Lotus
+Valley Floodcaller
+Oubliette
+Swamp
+Swamp
+Swamp x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Valley Floodcaller.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Extremis Elite.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Basilisk Collar.Activate(Extremis Elite; Ability: Equip)
+[T3 Bot1.Main2]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Extremis Elite.Activate(Bot2)
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Oubliette.Cast
+Bot2.Target(Extremis Elite)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.PhasedOut.Extremis Elite.Counters.PlusOnePlusOne = (absent)
+Bot1.PhasedOut.Count = 2
+Stack.Count = 0

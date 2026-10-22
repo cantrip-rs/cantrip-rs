@@ -1,0 +1,50 @@
+# A token copy copies Tether's ETB and reach (CR 707.2, 707.9).
+# Kiki-Jiki creates a second Tether; its independent discard and reflexive damage add exactly 2 more damage.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Kiki-Jiki, Mirror Breaker
+Mountain x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Choose(Mountain)
+Bot1.Target(Bot2)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Hand.Kiki-Jiki, Mirror Breaker.Cast
+Bot1.Battlefield.Kiki-Jiki, Mirror Breaker.Activate(Tether Technician)
+Bot1.Choose(Mountain)
+Bot1.Target(Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Tether Technician#2.Token = true
+Bot1.Battlefield.Tether Technician#2.Keywords = Haste; Reach
+Bot1.Battlefield.Tether Technician#2.Power = 4
+Bot1.Battlefield.Tether Technician#2.Toughness = 5
+Bot1.Graveyard = Mountain; Mountain; Black Lotus
+Stack.Count = 0

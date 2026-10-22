@@ -1,0 +1,35 @@
+# "A player" includes an opponent. Chain of Smog makes that player discard two together, giving one trigger (CR 603.2c).
+# The optional copy is declined. ETB ping plus one Smog ping, not three damage in total.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Tinybones, Pocket Nuisance
+Chain of Smog
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+[Bot1.Main2]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Chain of Smog.Cast(Bot2)
+Bot2.Choose(Island; Island)
+Bot2.Decline
+? Stack.Count = 1
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot2.Graveyard.Count = 3
+Bot1.Graveyard = Chain of Smog; Black Lotus
+Stack.Count = 0

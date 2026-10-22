@@ -54,6 +54,9 @@ pub fn phase_out(cx: &mut Cx, permanents: &[ObjectId], until_leaves: Option<Obje
     let indirect = attached_to_any(cx.s(), cx.s().battlefield(), &direct, |_| true);
     direct.retain(|id| !indirect.contains(id));
     let all: Vec<(ObjectId, bool)> = direct.iter().map(|&id| (id, false)).chain(indirect.iter().map(|&id| (id, true))).collect();
+    // CR 608.2h, 702.26b,d,g: every source's information is captured against the same phased-in board, attachments
+    // and effects included, before combat removal or a duration ending changes that board.
+    let snapshots: Vec<_> = all.iter().map(|&(id, indirect)| (id, indirect, crate::ops::last_known_of(cx, id))).collect();
     let leaving = |id: ObjectId| all.iter().any(|&(a, _)| a == id);
     if cx.s().attackers.iter().any(|a| leaving(a.id)) {
         let attackers = cx.s().attackers.iter().copied().filter(|a| !leaving(a.id)).collect();
@@ -75,12 +78,13 @@ pub fn phase_out(cx: &mut Cx, permanents: &[ObjectId], until_leaves: Option<Obje
             cx.state_changed();
         }
     }
-    for &(id, indirect) in &all {
+    for (id, indirect, snapshot) in snapshots {
         let controller = cx.s().obj(id).controller;
+        let last_known = cx.st().last_known_push(snapshot);
         let phased = if indirect {
-            Phased { under: controller, indirect, until_leaves: None, tapped_as_it_returns: false }
+            Phased { last_known, under: controller, indirect, until_leaves: None, tapped_as_it_returns: false }
         } else {
-            Phased { under: controller, indirect, until_leaves, tapped_as_it_returns }
+            Phased { last_known, under: controller, indirect, until_leaves, tapped_as_it_returns }
         };
         cx.st().zone_remove(Zone::BATTLEFIELD, id);
         cx.st().zone_push(Zone::PHASED_OUT, id);
@@ -403,5 +407,102 @@ mod tests {
         untap_step(&mut cx, PlayerId(0));
         assert!(cx.s().battlefield().contains(&aviator) && cx.s().obj(aviator).prepared);
         assert_eq!(copies(&cx), 1);
+    }
+
+    fn creature(_: &dyn LayerQuery, _: ObjectId, _: ObjectId, c: &Chars) -> bool { c.is(CardType::Creature) }
+    fn lifelink(_: &dyn LayerQuery, _: ObjectId, c: &mut Chars) { c.keywords = c.keywords.with(Keyword::Lifelink); }
+    static LORD: CardDef = CardDef {
+        name: "Phasing Source Test Lord", types: TypeSet::of(&[CardType::Creature]), power: Some(2), toughness: Some(2),
+        statics: &[static_ability(Layer::Ability, creature, lifelink, "Creatures have lifelink.")], ..CardDef::BLANK
+    };
+
+    #[test]
+    fn simultaneous_phase_out_keeps_granted_source_information_not_projected_values() {
+        let table = Box::leak(Box::new(CardTable::new([&BEAR, &LORD])));
+        let mut game = Game::new(table, &crate::Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
+        let put = |g: &mut Game, def| {
+            let id = g.state.push_obj(Obj::new(table.id_of(def), PlayerId(0), Zone::BATTLEFIELD));
+            g.state.zone_push(Zone::BATTLEFIELD, id); g.state.see_statics(); id
+        };
+        // Lord goes first to prove snapshots are not taken after earlier permanents already phased out.
+        let lord = put(&mut game, &LORD);
+        let bear = put(&mut game, &BEAR);
+        let mut context = cx(&mut game);
+        crate::counters::put(&mut context, bear, CounterKind::PlusOne, 2, PlayerId(0), crate::counters::How::Effect);
+        phase_out(&mut context, &[lord, bear], None, false);
+        assert!(Query::chars(&context, bear).has(Keyword::Lifelink));
+        assert!(!crate::layers::chars(context.cards(), context.s(), &context.g.log, bear).has(Keyword::Lifelink), "projected values were permanently frozen");
+        assert_eq!(Query::chars(&context, bear).power, Some(4));
+        assert_eq!(crate::ops::damage(&mut context, bear, Target::Player(PlayerId(1)), 2, false), 2);
+        assert_eq!(context.s().player(PlayerId(0)).life, 22);
+        phase_in(&mut context, &[lord, bear]);
+        assert!(context.s().phased_last_known(bear).is_none());
+        assert!(Query::chars(&context, bear).has(Keyword::Lifelink));
+        assert_eq!(context.s().obj(bear).counters(CounterKind::PlusOne), 2);
+    }
+
+    #[test]
+    fn phase_in_recomputes_expired_effects_and_second_phase_out_refreshes_snapshot() {
+        let (mut game, bear, _, _) = game();
+        let mut context = cx(&mut game);
+        cantrip_api::Game::gain_control(&mut context, bear, bear, PlayerId(1), Duration::EndOfTurn);
+        cantrip_api::Game::add_effect(&mut context, bear, bear, EffectKind::AddKeywords(Keywords::of(&[Keyword::Lifelink])), Duration::EndOfTurn);
+        cantrip_api::Game::add_effect(&mut context, bear, bear, EffectKind::ChangeText { from: Word::Subtype(Subtype::Forest), to: Word::Subtype(Subtype::Island) }, Duration::EndOfTurn);
+        phase_out(&mut context, &[bear], None, false);
+        let first = context.s().obj(bear).marks.phased.unwrap().last_known;
+        context.st().effects_retain(|e| e.duration != Duration::EndOfTurn);
+        assert_eq!(Query::controller(&context, bear), PlayerId(1));
+        assert!(Query::chars(&context, bear).has(Keyword::Lifelink));
+        assert_eq!(Query::words(&context, bear).subtype(Subtype::Forest), Subtype::Island);
+        assert_eq!(crate::ops::damage(&mut context, bear, Target::Player(PlayerId(0)), 1, false), 1);
+        assert_eq!(context.s().player(PlayerId(1)).life, 21, "expired control failed to use phased-in controller snapshot");
+        phase_in(&mut context, &[bear]);
+        assert_eq!(Query::controller(&context, bear), PlayerId(0));
+        assert!(!Query::chars(&context, bear).has(Keyword::Lifelink));
+        assert_eq!(Query::words(&context, bear).subtype(Subtype::Forest), Subtype::Forest);
+        phase_out(&mut context, &[bear], None, false);
+        assert_ne!(context.s().obj(bear).marks.phased.unwrap().last_known, first);
+        assert!(!Query::chars(&context, bear).has(Keyword::Lifelink), "second snapshot reused first phase-out");
+    }
+
+    #[test]
+    fn ability_loss_before_phase_out_is_in_snapshot_and_protection_checks_use_its_quality() {
+        let (mut game, bear, _, _) = game();
+        game.state.update_turn(|t| t.number = 1);
+        let warden = game.state.push_obj(Obj::new(game.cards.id_of(&BEAR), PlayerId(1), Zone::BATTLEFIELD));
+        game.state.zone_push(Zone::BATTLEFIELD, warden);
+        let mut context = cx(&mut game);
+        cantrip_api::Game::add_effect(&mut context, bear, bear, EffectKind::AddKeywords(Keywords::of(&[Keyword::Lifelink])), Duration::EndOfTurn);
+        cantrip_api::Game::add_effect(&mut context, bear, bear, EffectKind::LoseAllAbilities, Duration::EndOfTurn);
+        cantrip_api::Game::add_effect(&mut context, bear, bear, EffectKind::SetColors(ColorSet::of(Color::Red)), Duration::EndOfTurn);
+        cantrip_api::Game::add_effect(&mut context, bear, warden, EffectKind::Protection(ColorSet::of(Color::Red)), Duration::Indefinite);
+        phase_out(&mut context, &[bear], None, false);
+        context.st().effects_retain(|e| e.duration != Duration::EndOfTurn);
+        assert!(!Query::chars(&context, bear).has(Keyword::Lifelink));
+        assert_eq!(Query::chars(&context, bear).colors, ColorSet::of(Color::Red));
+        assert!(crate::layers::chars(context.cards(), context.s(), &context.g.log, warden).protection.has(Color::Red));
+        assert_eq!(crate::ops::protection_prevents(&context, bear, Target::Object(warden), false), Some(warden));
+        assert!(!crate::layers::can_target(context.cards(), context.s(), &context.g.log, &Asker { source: bear, controller: PlayerId(0) }, Target::Object(warden)));
+        assert_eq!(crate::ops::damage(&mut context, bear, Target::Object(warden), 1, false), 0);
+        assert_eq!(context.s().obj(warden).damage, 0);
+        phase_in(&mut context, &[bear]);
+        assert_eq!(Query::chars(&context, bear).colors, ColorSet::NONE);
+    }
+
+    #[test]
+    fn phasing_snapshot_and_queries_round_trip_through_undo_redo() {
+        let (mut game, bear, _, _) = game();
+        let mut context = cx(&mut game);
+        cantrip_api::Game::add_effect(&mut context, bear, bear, EffectKind::AddKeywords(Keywords::of(&[Keyword::Lifelink])), Duration::EndOfTurn);
+        let before = context.s().clone_with_journal();
+        let mark = context.s().mark();
+        phase_out(&mut context, &[bear], None, false);
+        let after = context.s().clone_with_journal();
+        let (undos, redos) = context.st().step_back(mark);
+        assert!(context.s() == &before);
+        assert!(context.s().phased_last_known(bear).is_none());
+        context.st().step_forward(undos, redos);
+        assert!(context.s() == &after);
+        assert!(Query::chars(&context, bear).has(Keyword::Lifelink));
     }
 }

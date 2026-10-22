@@ -1,0 +1,28 @@
+# "Activate only as an instant" requires priority, despite LED being a mana ability (CR 304.5, 602.5e, 605.3a).
+# LED cannot be used while Sol Ring is being cast. An ordinary Mountain pays there; LED's later priority activation is legal.
+
+[Bot1 Deck]
+Lion's Eye Diamond
+Mountain
+Sol Ring
+Island x4
+Island x10
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Sol Ring.Cast
+! Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+
+[Expect]
+Bot2.Life = 20
+Bot1.Hand.Count = 0
+Bot1.Graveyard.Count = 5
+Bot1.Battlefield = Mountain; Sol Ring
+Bot1.Mana = {R}{R}{R}
+Stack.Count = 0

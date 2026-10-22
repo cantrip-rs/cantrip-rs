@@ -1,0 +1,11 @@
+{
+  "name": "Tetsuko Umezawa, Pursuer",
+  "manaCost": "{3}{R}",
+  "type": "Legendary Creature — Human Mercenary",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Double strike\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nWhenever a creature an opponent controls with power or toughness 1 or less blocks, Tetsuko Umezawa deals 1 damage to that creature's controller.",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

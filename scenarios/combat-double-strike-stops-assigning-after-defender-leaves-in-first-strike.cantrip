@@ -1,0 +1,44 @@
+# Pursuer with Shadowspear deals three in the first damage step, killing Bot2. CR 800.4e forbids the second assignment.
+# Actual first-strike damage still grants lifelink: Bot1 gains three, not six. No block/ping or spell/prowess changes the total.
+
+[Life]
+Bot2: 3
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Pearl
+Sol Ring
+Shadowspear
+Tetsuko Umezawa, Pursuer
+Mountain x30
+
+[Bot2 Deck]
+Island x35
+
+[Bot3 Deck]
+Island x35
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Shadowspear.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Shadowspear.Activate(Tetsuko Umezawa, Pursuer; Ability: Equip)
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+[T4 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Status = Lost
+Bot2.Life = 0
+Bot3.Life = 20
+Stack.Count = 0

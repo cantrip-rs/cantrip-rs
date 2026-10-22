@@ -602,21 +602,6 @@ impl<'s> Run<'s> {
                 continue;
             }
 
-            // `! Bot1.Battlefield.Llanowar Elves.Activate` right after an `Attack` line: while the declaration's cost to attack is
-            // paid (CR 508.1i), that mana ability is not offered - the creature was tapped by attacking (CR 508.1f).
-            if let Some(ScriptStep::Refused { action, line, text }) = self.current()
-                && matches!(action.verb, ScriptVerb::Activate)
-                && request.player == player_of(action.bot)
-                && let RequestKind::PayCosts { options, attackers, .. } = &request.kind
-                && !attackers.is_empty()
-            {
-                if !self.offered(action, options, true)?.is_empty() {
-                    return fail(format!("line {line} says {text} must not be offered while paying to attack, but it is"));
-                }
-                self.next();
-                continue;
-            }
-
             // `! Bot1.Undo`: at the player's next priority or payment, there is no mana ability to take back.
             if let Some(ScriptStep::Refused { action, line, text }) = self.current()
                 && matches!(action.verb, ScriptVerb::Undo)
@@ -632,9 +617,10 @@ impl<'s> Run<'s> {
 
             if let Some(ScriptStep::Refused { action, line, text }) = self.current()
                 && request.player == player_of(action.bot)
-                && answers(action.verb, &request.kind)
+                && (answers(action.verb, &request.kind)
+                    || action.verb == ScriptVerb::Activate && matches!(request.kind, RequestKind::PayCosts { .. } | RequestKind::UnlessPays { .. }))
             {
-                if let RequestKind::Priority { options } = &request.kind {
+                if let RequestKind::Priority { options } | RequestKind::PayCosts { options, .. } | RequestKind::UnlessPays { options, .. } = &request.kind {
                     let mut offered = self.offered(action, options, true)?;
                     // A refusal that names targets (`! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Emrakul)`) refuses only
                     // the option that could be announced with them, and proves nothing when no such object exists.

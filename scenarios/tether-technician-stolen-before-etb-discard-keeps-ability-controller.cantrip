@@ -1,0 +1,59 @@
+# CR 113.7a/603.7e: Tether's fixed ETB controller discards and controls the reflexive even if another player gains Tether.
+# Valley Floodcaller lets Mind Control resolve in response to ETB. The thief neither discards nor chooses the damage target.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Mountain x30
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Black Lotus x2
+Valley Floodcaller
+Mind Control
+Island x30
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Valley Floodcaller.Cast
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Mind Control.Cast(Tether Technician)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Tether Technician.Power = 4
+Bot1.Choose(Mountain)
+Bot1.Target(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot1.Graveyard = Mountain; Black Lotus
+Bot2.Battlefield.Tether Technician.Power = 4
+Bot2.Battlefield.Mind Control.AttachedTo = Tether Technician
+Stack.Count = 0

@@ -776,6 +776,16 @@ nothing where nothing targets an opponent's things. The scenario dump lists a pl
 
 ### Life: gaining it, and damage that can't be prevented
 
+Damage originally proposed to a player who has left the game does not happen (CR 102.1, 120.1, 800.4a).
+`ops::deal_damage_with` rejects that recipient before replacement/prevention; shield ordering leaves them out.
+An invalid redirection is different: the redirection effect does nothing, leaving the immediately prior proposal
+for other effects (CR 614.9). `replace::valid_redirection` checks changed recipients before offering/applying an effect;
+absent/non-damageable permanents or departed players cannot be its origin/destination. No side effect or once-only
+resource is consumed by an invalid redirection. Earlier replacement effects retain their one opportunity (CR 614.5).
+A live player at zero life still receives simultaneous damage before state-based actions. Life changes,
+including lifelink from a departed source-controller's independent ability, likewise affect only players still in the
+game. The original simultaneous batch and each source's live damage totals are preserved.
+
 Every gain and loss of life goes through `ops::change_life` (CR 119.3): an effect's, a cost's (CR 119.4), damage (CR
 120.3a), lifelink (CR 702.15b), and a life total set to a number (`Game::set_life_total`, CR 119.5: the player gains or loses
 the difference). A gain does not happen while the player can't gain life (CR 119.7, `static_rules::cant_gain_life`): a
@@ -1490,6 +1500,16 @@ if you control a Wizard").
 
 ### Restricted mana
 
+An ability's explicit "Activate only as an instant" is `ActivatedDef::priority_only`, written with
+`.only_as_an_instant()` (CR 304.5, 602.5e). It does not change mana-ability classification (CR 605.1a): the ability
+still resolves immediately at priority. `actions::ManaWindow` separates priority inventory from every payment
+inventory, including nested mana-ability costs, casting during resolution, attack taxes, special actions and unless/ward
+payments. Cost estimates count only sources available during payment, so a priority-only source must be activated
+before announcing the cost; mana already in the pool still pays normally. Restrictions are read from actual current abilities, so copied and granted abilities
+keep their restriction, while an ordinary ability of the same permanent is unaffected. Lion's Eye Diamond and Rhystic
+Cave print this restriction. The 128-game benchmark measured 9.71 us per decision before and 9.09 after in back-to-back
+runs of the two builds (2026-10-21; shared-machine load, no speed claim); the earlier loaded runs were 28.32 and 9.01.
+
 Mana a restriction limits (CR 106.6) is kept in the pool apart from ordinary mana, one `ManaPool` per restriction present
 (`GameState::restricted_mana`, a list of player, restriction and pool beside the players, so that a player stays plain
 `Copy` data; written through its own undo entry, only when it changes, and empty in nearly every position). A
@@ -1729,6 +1749,14 @@ card). "Bands with other" (CR 702.22b) is not built: no card in content has it.
 
 ### The regular combat damage step
 
+Combat assignments themselves leave out a departed player (CR 800.4e), not merely the later damage operation.
+`turn::combat_defender_present` and `combat_assignments` exclude that defender from an unblocked or blocker-free
+trample assignment and from a trample division's options; remaining creatures still receive assignments normally.
+An absent attacked planeswalker/battle receives none (CR 506.4c, 510.1b); a battle still present keeps its departed
+protector through combat (CR 704.5x). Both damage steps use the same procedure.
+The departed-recipient/assignment checks measured 11.05 us per decision before and 9.94 after on 128 games
+(2026-10-21; shared-machine load, no speed claim), with earlier loaded runs of 16.90 and 13.83.
+
 CR 510.4: the regular combat damage step after a first-strike step is for the attackers and blockers that had neither first
 strike nor double strike as the first-strike step began, and those that have double strike now. `Attacker::first_strike` and
 `Block::first_strike` record which had one of them as that step began; a creature that loses first strike after dealing
@@ -1882,6 +1910,12 @@ engine does not have yet is skipped; one that can run must pass.
 
 ## Correctness
 
+- **Phased-out source information (CR 113.7a, 608.2h, 702.15c, 702.26b,d,g).** Before any permanent in a simultaneous
+  phase-out changes status, its complete characteristics, controller and text words are captured in the existing
+  LKI arena. The phasing status links that row, not the object's zone-change identity. Rules queries and damage source
+  quality/controller checks use it while the source is absent; projected characteristics and layer queries remain
+  current. Phasing in clears the status/link and recomputes current effects; each later phase-out takes a fresh snapshot.
+  The game-log tree journals the link/row and loop canonicalization hashes its contents, not its arena index.
 - **The scenarios are the reference.** A card is done when it is exact and its scenarios pass; a scenario that is
   wrong by the rules is fixed, with the rule.
 - **`CANTRIP_VERIFY=1`** runs the engine's own consistency checks while it plays; `tools\test.cmd` sets it.

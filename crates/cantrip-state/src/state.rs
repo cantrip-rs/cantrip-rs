@@ -1111,6 +1111,14 @@ impl GameState {
         self.objects[id.index()].last_known.map(|row| &self.last_known[row as usize])
     }
 
+    /// Expected-zone information for a source currently phased out (CR 608.2h, 702.26b). Its projected current
+    /// characteristics are computed separately; phase-in clears this link and a later phase-out captures a new one.
+    pub fn phased_last_known(&self, id: ObjectId) -> Option<&LastKnown> {
+        let obj = self.obj(id);
+        if obj.became.is_some() || !obj.zone.is(ZoneKind::PhasedOut) { return None; }
+        obj.marks.phased.map(|p| &self.last_known[p.last_known as usize])
+    }
+
     pub fn set_attackers(&mut self, attackers: Vec<Attacker>) {
         let old = std::mem::replace(&mut self.attackers, attackers);
         self.log(Undo::AttackersSet(old));

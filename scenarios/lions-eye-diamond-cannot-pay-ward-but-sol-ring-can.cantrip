@@ -1,0 +1,43 @@
+# Ward resolution is not priority (CR 702.21a, 304.5, 602.5e). LED is barred, Sol Ring remains usable.
+# A later LED priority activation is legal and never becomes a spell/ability on the stack.
+
+[Bot1 Deck]
+Mountain
+Sol Ring
+Lion's Eye Diamond
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Black Lotus
+Mountain
+Colorstorm Stallion
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mountain.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Colorstorm Stallion.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Colorstorm Stallion)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.PayCost
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Colorstorm Stallion; Black Lotus
+Bot1.Hand.Count = 0
+Bot2.Life = 20
+Stack.Count = 0

@@ -1,0 +1,46 @@
+# Pursuer watches any opponent's small blocker, including one blocking an attack by a different opponent (CR 509.3a/f).
+# In a three-player game Bot2 attacks Bot3, who blocks with a 1/1; only Bot3 takes Pursuer's 1 damage.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Tetsuko Umezawa, Pursuer
+Mountain x30
+
+[Bot2 Deck]
+Black Lotus
+Guerrilla Gorilla
+Forest x30
+
+[Bot3 Deck]
+Forest
+Llanowar Elves
+Forest x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Forest.Play
+Bot3.Battlefield.Forest.Activate
+Bot3.Hand.Llanowar Elves.Cast
+[T5 Bot2.Main1]
+Bot2.Attack(Guerrilla Gorilla > Bot3)
+Bot3.Block(Llanowar Elves > Guerrilla Gorilla)
+? Stack.Count = 1
+[T5 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot3.Life = 19
+Bot3.Graveyard = Llanowar Elves
+Bot2.Battlefield.Guerrilla Gorilla.Damage = 1
+Stack.Count = 0

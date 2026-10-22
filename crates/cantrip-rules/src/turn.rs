@@ -1004,51 +1004,7 @@ fn combat_damage(cx: &mut Cx) -> R<()> {
         }
     }
 
-    let mut assignments: Vec<(ObjectId, Target, u16)> = Vec::new();
-    for attacker in &attackers {
-        if chosen.iter().any(|s| s.0 == attacker.id) {
-            for &(source, to, amount) in chosen.iter().filter(|s| s.0 == attacker.id) {
-                let target = match to {
-                    Some(creature) => Target::Object(creature),
-                    None => attacker.target,
-                };
-                assignments.push((source, target, amount));
-            }
-            continue;
-        }
-        let power = crate::static_rules::combat_damage_of(cx, attacker.id);
-        if !attacker.blocked {
-            assignments.push((attacker.id, attacker.target, power));
-            continue;
-        }
-        match blockers_of(cx, attacker.id).as_slice() {
-            // CR 510.1c: a blocked attacker whose blockers are all gone assigns no combat damage - unless it has trample,
-            // which then assigns all of it to the player or planeswalker it attacks (CR 702.19d).
-            [] => {
-                if cx.chars(attacker.id).has(Keyword::Trample) {
-                    assignments.push((attacker.id, attacker.target, power));
-                }
-            }
-            // CR 510.1c: blocked by exactly one creature, all of it to that creature.
-            &[only] => assignments.push((attacker.id, Target::Object(only), power)),
-            // Two or more: divided above, unless it assigns no combat damage at all (CR 510.1a: 0 power).
-            _ => {}
-        }
-    }
-    for &blocker in &blockers {
-        if chosen.iter().any(|s| s.0 == blocker) {
-            for &(source, to, amount) in chosen.iter().filter(|s| s.0 == blocker) {
-                if let Some(creature) = to {
-                    assignments.push((source, Target::Object(creature), amount));
-                }
-            }
-            continue;
-        }
-        // CR 510.1d: blocking exactly one creature, all of it to that creature; blocking none still in combat, none.
-        if let &[only] = blocked_by(cx, blocker).as_slice() {
-            assignments.push((blocker, Target::Object(only), crate::static_rules::combat_damage_of(cx, blocker)));
-        }
-    }
+    let assignments = combat_assignments(cx, &attackers, &blockers, &chosen);
     // CR 510.2: all of it is dealt at once, and announced at once (CR 603.2c). A prevention shield two or more sources would
     // deal damage to prevents whose damage its player or controller chooses (CR 615.7).
     let mut batch = ops::DamageBatch::default();
@@ -1064,6 +1020,59 @@ fn combat_damage(cx: &mut Cx) -> R<()> {
     Ok(())
 }
 
+/// CR 510.1/800.4e: assignments are legal before damage or its replacements are attempted.
+fn combat_assignments(cx: &Cx, attackers: &[Attacker], blockers: &[ObjectId], chosen: &[(ObjectId, Option<ObjectId>, u16)]) -> Vec<(ObjectId, Target, u16)> {
+    let mut assignments = Vec::new();
+    for attacker in attackers {
+        if chosen.iter().any(|s| s.0 == attacker.id) {
+            for &(source, to, amount) in chosen.iter().filter(|s| s.0 == attacker.id) {
+                let target = match to {
+                    Some(creature) => Target::Object(creature),
+                    None if combat_defender_present(cx, attacker.target) => attacker.target,
+                    None => continue,
+                };
+                assignments.push((source, target, amount));
+            }
+            continue;
+        }
+        let power = crate::static_rules::combat_damage_of(cx, attacker.id);
+        if !attacker.blocked {
+            if combat_defender_present(cx, attacker.target) {
+                assignments.push((attacker.id, attacker.target, power));
+            }
+            continue;
+        }
+        match blockers_of(cx, attacker.id).as_slice() {
+            // CR 510.1c: a blocked attacker whose blockers are all gone assigns no combat damage - unless it has trample,
+            // which then assigns all of it to the player or planeswalker it attacks (CR 702.19d).
+            [] => {
+                if cx.chars(attacker.id).has(Keyword::Trample) && combat_defender_present(cx, attacker.target) {
+                    assignments.push((attacker.id, attacker.target, power));
+                }
+            }
+            // CR 510.1c: blocked by exactly one creature, all of it to that creature.
+            &[only] => assignments.push((attacker.id, Target::Object(only), power)),
+            // Two or more: divided above, unless it assigns no combat damage at all (CR 510.1a: 0 power).
+            _ => {}
+        }
+    }
+    for &blocker in blockers {
+        if chosen.iter().any(|s| s.0 == blocker) {
+            for &(source, to, amount) in chosen.iter().filter(|s| s.0 == blocker) {
+                if let Some(creature) = to {
+                    assignments.push((source, Target::Object(creature), amount));
+                }
+            }
+            continue;
+        }
+        // CR 510.1d: blocking exactly one creature, all of it to that creature; blocking none still in combat, none.
+        if let &[only] = blocked_by(cx, blocker).as_slice() {
+            assignments.push((blocker, Target::Object(only), crate::static_rules::combat_damage_of(cx, blocker)));
+        }
+    }
+    assignments
+}
+
 /// The creatures still blocking `attacker` (CR 509.1h, 506.4): its blockers that have not left combat.
 fn blockers_of(cx: &Cx, attacker: ObjectId) -> Vec<ObjectId> {
     cx.s().blocks.iter().filter(|b| b.attacker == attacker && live(cx.s(), b.blocker)).map(|b| b.blocker).collect()
@@ -1072,6 +1081,19 @@ fn blockers_of(cx: &Cx, attacker: ObjectId) -> Vec<ObjectId> {
 /// The creatures `blocker` is still blocking (CR 509.1g, 506.4): those of its blocks whose attacker has not left combat.
 fn blocked_by(cx: &Cx, blocker: ObjectId) -> Vec<ObjectId> {
     cx.s().blocks.iter().filter(|b| b.blocker == blocker && live(cx.s(), b.attacker)).map(|b| b.attacker).collect()
+}
+
+/// CR 800.4e, 506.4c, 510.1b: damage is not assigned to a departed player or an absent attacked permanent.
+/// A battle still being attacked keeps its departed protector until combat ends (CR 704.5x).
+fn combat_defender_present(cx: &Cx, target: Target) -> bool {
+    match target {
+        Target::Player(p) => cx.s().in_game(p),
+        Target::Object(id) if live(cx.s(), id) && cx.s().obj(id).zone.is(ZoneKind::Battlefield) => {
+            let chars = cx.chars(id);
+            chars.is(CardType::Planeswalker) || chars.is(CardType::Battle)
+        }
+        _ => false,
+    }
 }
 
 /// Lethal damage for each of `creatures` from `source` (CR 702.19b, 120.4a): its toughness less the damage marked on it, or
@@ -1126,7 +1148,7 @@ fn attacker_division(cx: &Cx, attacker: &Attacker) -> Option<DamageDivision> {
         return None;
     }
     let banding = blockers.iter().any(|&b| cx.chars(b).has(Keyword::Banding));
-    let trample = cx.chars(attacker.id).has(Keyword::Trample) && !banding;
+    let trample = cx.chars(attacker.id).has(Keyword::Trample) && !banding && combat_defender_present(cx, attacker.target);
     let lethal = lethal_for(cx, attacker.id, &blockers);
     if blockers.len() == 1 && (!trample || power <= lethal[0]) {
         return None;
@@ -1169,6 +1191,10 @@ fn blocker_division(cx: &Cx, blocker: ObjectId) -> Option<DamageDivision> {
         suggested_to_defender: 0,
     })
 }
+
+#[cfg(test)]
+#[path = "departed_combat_tests.rs"]
+mod departed_combat_tests;
 
 /// Cleanup (CR 514): discard to hand size, then damage wears off and "until end of turn" effects end.
 pub(crate) fn cleanup(cx: &mut Cx) -> R<()> {

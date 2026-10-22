@@ -1,5 +1,5 @@
-# X is the amount of mana spent to cast Astelli Reclaimer: five here ({3}{W}{W}, paid with a Plains, Mox Pearl and Lion's Eye
-# Diamond's three white mana, which also puts the rest of the hand and the Diamond itself into the graveyard). Memory Jar,
+# X is the mana spent to cast Reclaimer: five here ({3}{W}{W}), paid with Plains, Mox Pearl, Sol Ring and a second Plains.
+# LED discards the targets at priority on turn 1; Reclaimer is drawn afterward, so no illegal payment-time LED is used. Memory Jar,
 # mana value 5, is exactly the boundary and may be returned. Obelisk of Urd (mana value 6) cannot be targeted, and nor can
 # the Ornithopter (an artifact, but a creature: "noncreature"). The Jar enters the battlefield under Bot1's control.
 
@@ -7,10 +7,11 @@
 Plains
 Mox Pearl
 Lion's Eye Diamond
-Astelli Reclaimer
+Sol Ring
 Memory Jar
 Obelisk of Urd
 Ornithopter
+Astelli Reclaimer
 Plains x13
 
 [Bot2 Deck]
@@ -20,17 +21,24 @@ Island x20
 Bot1.Hand.Plains.Play
 Bot1.Hand.Mox Pearl.Cast
 Bot1.Hand.Lion's Eye Diamond.Cast
-Bot1.Hand.Astelli Reclaimer.Cast
 Bot1.Battlefield.Plains.Activate
-Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
 Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: White)
+[T3 Bot1.Main1]
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Astelli Reclaimer.Cast
 ! Bot1.Target(Obelisk of Urd)
 ! Bot1.Target(Ornithopter)
 Bot1.Target(Memory Jar)
 Bot1.Pass
 
 [Expect]
-Bot1.Battlefield = Plains; Mox Pearl; Astelli Reclaimer; Memory Jar
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Sol Ring; Astelli Reclaimer; Memory Jar
 Bot1.Graveyard = Lion's Eye Diamond; Ornithopter; Obelisk of Urd
 Bot1.Hand.Count = 0
 Exile.Count = 0

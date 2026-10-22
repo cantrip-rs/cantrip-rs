@@ -1,0 +1,59 @@
+# Tether's reflexive ability uses normal targeting legality (CR 702.11b, 702.18a, 702.16b).
+# Opponent's hexproof Caryatid, shrouded Ornithopter and protected Nemesis are refused; unprotected opponent is legal.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Mountain x30
+
+[Bot2 Deck]
+Black Lotus x2
+Sylvan Caryatid
+Ornithopter
+Lightning Greaves
+True-Name Nemesis
+Island
+Island x25
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Sylvan Caryatid.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Lightning Greaves.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Lightning Greaves.Activate(Ornithopter)
+Bot2.Hand.True-Name Nemesis.Cast
+Bot2.ChoosePlayer(Bot1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Choose(Mountain)
+! Bot1.Target(Sol Ring#1)
+! Bot1.Target(Sylvan Caryatid)
+! Bot1.Target(Ornithopter)
+! Bot1.Target(True-Name Nemesis)
+Bot1.Target(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Sylvan Caryatid.Damage = 0
+Bot2.Battlefield.Ornithopter.Damage = 0
+Bot2.Battlefield.True-Name Nemesis.Damage = 0
+Bot1.Graveyard = Mountain; Black Lotus
+Stack.Count = 0

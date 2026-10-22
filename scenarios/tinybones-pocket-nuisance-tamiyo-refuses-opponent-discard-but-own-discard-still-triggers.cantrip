@@ -1,0 +1,49 @@
+# Tamiyo forbids opponents' spells and abilities causing discard (CR 101.2); a nonempty protected hand is not asked.
+# Her controller's own Faithless Looting still discards two, triggering Tinybones once. The prior ETB causes no damage.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Tinybones, Pocket Nuisance
+Swamp x30
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Tamiyo, Collector of Tales
+Mox Ruby
+Faithless Looting
+Island x30
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Tamiyo, Collector of Tales.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot2.Choose
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Graveyard = Black Lotus
+? Bot2.Life = 20
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Choose(Island; Island)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot2.Graveyard = Faithless Looting; Island; Island; Black Lotus
+Stack.Count = 0

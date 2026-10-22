@@ -1,0 +1,41 @@
+# A player who left is excluded from "each opponent" and APNAP choices (CR 800.4a).
+# Bolt kills Bot2 after the ETB triggers but before discards. Only Bot3 discards, creating one ping to the survivor.
+
+[Life]
+Bot2: 3
+
+[Bot1 Deck]
+Swamp
+Mox Ruby
+Black Lotus
+Tinybones, Pocket Nuisance
+Lightning Bolt
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Bot3 Deck]
+Forest x35
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot3.Choose(Forest)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Status = Lost
+Bot2.LostTo = Life
+Bot3.Life = 19
+Bot3.Graveyard.Count = 1
+Stack.Count = 0

@@ -1,0 +1,34 @@
+# A mana ability's own {1} payment is not priority (CR 602.2b, 605.3a, 304.5, 602.5e).
+# Sol Ring can pay Chromatic Star; LED cannot until priority returns, after Star's draw has resolved.
+
+[Bot1 Deck]
+Mountain
+Sol Ring
+Lion's Eye Diamond
+Chromatic Star
+Mountain x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Chromatic Star.Cast
+Bot1.Battlefield.Sol Ring.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Chromatic Star.Activate(Color: Blue)
+! Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Blue)
+
+[Expect]
+Bot1.Battlefield = Mountain; Sol Ring
+Bot1.Hand.Count = 0
+Bot1.Graveyard.Count = 7
+Bot1.Mana = {U}{U}{U}{U}{C}
+Stack.Count = 0

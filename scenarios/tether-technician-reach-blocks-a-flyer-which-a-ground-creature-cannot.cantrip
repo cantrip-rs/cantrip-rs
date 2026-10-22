@@ -1,0 +1,48 @@
+# Reach permits blocking a flying attacker (CR 702.17b). Llanowar Elves is the paired ground-creature refusal.
+# Tether's 4 damage kills Mesa Pegasus, while its 5 toughness survives the flyer's 1 damage.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Llanowar Elves
+Forest
+Mountain x25
+
+[Bot2 Deck]
+Black Lotus
+Mesa Pegasus
+Plains x30
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Mesa Pegasus.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Mesa Pegasus > Bot1)
+! Bot1.Block(Llanowar Elves > Mesa Pegasus)
+Bot1.Block(Tether Technician > Mesa Pegasus)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Tether Technician.Damage = 1
+Bot1.Battlefield.Tether Technician.Keywords = Reach
+Bot1.Battlefield.Llanowar Elves.Damage = 0
+Bot2.Graveyard = Mesa Pegasus; Black Lotus
+Stack.Count = 0

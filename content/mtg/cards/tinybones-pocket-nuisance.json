@@ -1,0 +1,8 @@
+{
+  "name": "Tinybones, Pocket Nuisance",
+  "manaCost": "{2}{B}",
+  "type": "Legendary Creature — Skeleton Rogue",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When Tinybones enters, each opponent discards a card.\nWhenever a player discards one or more cards, Tinybones deals 1 damage to each opponent."
+}

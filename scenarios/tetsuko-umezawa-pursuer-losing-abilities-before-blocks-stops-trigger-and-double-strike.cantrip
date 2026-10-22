@@ -1,0 +1,44 @@
+# Turn to Frog removes both triggered abilities and double strike (CR 613.1f).
+# A 1/1 still legally blocks, but generates no ping; the now-1/1 Pursuer and Elf trade in one combat damage step.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Tetsuko Umezawa, Pursuer
+Mountain x30
+
+[Bot2 Deck]
+Forest
+Mox Sapphire
+Island
+Llanowar Elves
+Turn to Frog
+Forest x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Turn to Frog.Cast(Tetsuko Umezawa, Pursuer)
+Bot2.Block(Llanowar Elves > Tetsuko Umezawa, Pursuer)
+? Stack.Count = 0
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Tetsuko Umezawa, Pursuer; Black Lotus
+Bot2.Graveyard = Llanowar Elves; Turn to Frog
+Stack.Count = 0

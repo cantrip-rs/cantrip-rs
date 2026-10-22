@@ -1,0 +1,32 @@
+# Blinking creates a new object (CR 400.7) with a new ETB; the old object's damage trigger is independent (113.7a).
+# Ephemerate answers the first ping. New Tinybones causes a second discard/ping; old ping still resolves for two total damage.
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Tinybones, Pocket Nuisance
+Ephemerate
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ephemerate.Cast(Tinybones, Pocket Nuisance)
+Bot2.Choose(Island)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot2.Graveyard.Count = 2
+Bot1.Battlefield.Tinybones, Pocket Nuisance.SummoningSick = true
+Exile = Ephemerate
+Stack.Count = 0

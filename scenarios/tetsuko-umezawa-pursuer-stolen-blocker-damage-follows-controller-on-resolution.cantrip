@@ -1,0 +1,49 @@
+# "That creature's controller" is read on resolution (CR 608.2h); the trigger does not recheck opponent control.
+# Old Man steals the 1/1 after it blocks. Pursuer pings Bot1, not its former controller, even though the block is removed.
+
+[Bot1 Deck]
+Mountain
+Mox Sapphire
+Mox Pearl
+Black Lotus
+Tetsuko Umezawa, Pursuer
+Old Man of the Sea
+Island
+Mountain x30
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Old Man of the Sea.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Block(Llanowar Elves > Tetsuko Umezawa, Pursuer)
+? Stack.Count = 1
+Bot1.Battlefield.Old Man of the Sea.Activate(Llanowar Elves)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Old Man of the Sea.Tapped = true
+Stack.Count = 0

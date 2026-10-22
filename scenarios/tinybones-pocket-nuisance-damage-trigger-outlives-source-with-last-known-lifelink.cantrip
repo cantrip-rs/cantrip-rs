@@ -1,0 +1,48 @@
+# The pending damage trigger resolves after source departure and uses last-known lifelink (CR 113.7a, 608.2h, 702.15).
+# Give lifelink after the discard triggered, then bounce Tinybones before that trigger resolves; damage still gains one life.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Sol Ring
+Black Lotus
+Tinybones, Pocket Nuisance
+Scales of Shale
+Swamp x30
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Unsummon
+Island x30
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sol Ring.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+? Stack.Count = 1
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Scales of Shale.Cast(Tinybones, Pocket Nuisance)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Unsummon.Cast(Tinybones, Pocket Nuisance)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Scales of Shale; Black Lotus
+Bot2.Graveyard = Unsummon; Island
+Stack.Count = 0

@@ -1,0 +1,41 @@
+# Clone copies both abilities (CR 707.2). Different controllers permit both legends; both see either player's discard.
+# Original ETB pings Bot2 once. Clone's ETB makes Bot1 discard; both watch and each damages its own opponent.
+
+[Bot1 Deck]
+Black Lotus
+Tinybones, Pocket Nuisance
+Swamp x30
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Clone
+Island x30
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Clone.Cast
+Bot2.Accept
+Bot1.Choose(Swamp)
+? Stack.Count = 2
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 18
+Bot1.Battlefield.Tinybones, Pocket Nuisance.Power = 2
+Bot2.Battlefield.Tinybones, Pocket Nuisance.Power = 2
+Bot1.Graveyard = Swamp; Black Lotus
+Bot2.Graveyard = Black Lotus; Island
+Stack.Count = 0

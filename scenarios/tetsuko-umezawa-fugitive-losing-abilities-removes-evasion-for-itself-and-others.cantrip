@@ -1,0 +1,48 @@
+# Turn to Frog removes Tetsuko's static block rule in layer 6 (CR 613.1f).
+# Both its 1/1 body and another 1/1 can now be blocked; normal enabled refusals are the paired controls.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Emerald
+Tetsuko Umezawa, Fugitive
+Llanowar Elves
+Turn to Frog
+Island x30
+
+[Bot2 Deck]
+Black Lotus
+Forest
+Guerrilla Gorilla x2
+Forest x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tetsuko Umezawa, Fugitive.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Guerrilla Gorilla.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Turn to Frog.Cast(Tetsuko Umezawa, Fugitive)
+Bot1.Attack(Tetsuko Umezawa, Fugitive > Bot2; Llanowar Elves > Bot2)
+Bot2.Block(Guerrilla Gorilla#1 > Tetsuko Umezawa, Fugitive; Guerrilla Gorilla#2 > Llanowar Elves)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Llanowar Elves; Tetsuko Umezawa, Fugitive; Turn to Frog
+Bot2.Battlefield.Guerrilla Gorilla#1.Damage = 1
+Bot2.Battlefield.Guerrilla Gorilla#2.Damage = 1
+Stack.Count = 0

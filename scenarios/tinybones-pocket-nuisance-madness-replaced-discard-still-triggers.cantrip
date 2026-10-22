@@ -1,0 +1,27 @@
+# Madness replaces a discard's destination with exile but remains a discard (CR 702.35a).
+# Opponent discards Rootwalla to the ETB, casts it for {0}, and still takes Tinybones' 1 damage.
+
+[Bot1 Deck]
+Black Lotus
+Tinybones, Pocket Nuisance
+Swamp x30
+
+[Bot2 Deck]
+Basking Rootwalla
+Forest x30
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Basking Rootwalla)
+Bot2.Accept
+[Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Basking Rootwalla.Power = 1
+Bot2.Graveyard.Count = 0
+Exile.Count = 0
+Stack.Count = 0

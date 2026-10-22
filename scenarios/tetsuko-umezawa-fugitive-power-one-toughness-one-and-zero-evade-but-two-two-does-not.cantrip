@@ -1,0 +1,59 @@
+# Power OR toughness <=1 is inclusive (CR 509.1b): Tetsuko 1/3, Shieldbreaker 2/1, Ornithopter 0/2 evade.
+# A reach blocker could block the flyer without Tetsuko; its legal block of the 2/2 Gorilla is the paired control.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Tetsuko Umezawa, Fugitive
+Embereth Shieldbreaker
+Guerrilla Gorilla
+Ornithopter
+Island x30
+
+[Bot2 Deck]
+Forest
+Guerrilla Gorilla
+Forest x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tetsuko Umezawa, Fugitive.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Embereth Shieldbreaker.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+Bot1.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Hand.Guerrilla Gorilla.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Fugitive > Bot2; Embereth Shieldbreaker > Bot2; Ornithopter > Bot2; Guerrilla Gorilla > Bot2)
+! Bot2.Block(Guerrilla Gorilla > Tetsuko Umezawa, Fugitive)
+! Bot2.Block(Guerrilla Gorilla > Embereth Shieldbreaker)
+! Bot2.Block(Guerrilla Gorilla > Ornithopter)
+Bot2.Block(Guerrilla Gorilla > Guerrilla Gorilla)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Guerrilla Gorilla
+Bot2.Graveyard = Guerrilla Gorilla
+Bot1.Battlefield.Tetsuko Umezawa, Fugitive.Power = 1
+Bot1.Battlefield.Tetsuko Umezawa, Fugitive.Toughness = 3
+Bot1.Battlefield.Embereth Shieldbreaker.Toughness = 1
+Bot1.Battlefield.Ornithopter.Power = 0
+Stack.Count = 0

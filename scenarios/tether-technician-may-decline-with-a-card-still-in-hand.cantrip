@@ -1,0 +1,35 @@
+# "You may discard" permits choosing nothing despite a nonempty hand (CR 608.2d).
+# No discard means no reflexive target question or damage (CR 603.12), paired with the accepting scenarios.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Mountain x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Choose()
+! Bot1.Target
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Mountain; Mountain
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield.Tether Technician.Damage = 0
+Bot1.Life = 20
+Bot2.Life = 20
+Stack.Count = 0

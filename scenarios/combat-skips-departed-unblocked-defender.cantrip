@@ -1,0 +1,45 @@
+# CR 800.4e: even an unblocked attacker assigns nothing to a defender who leaves before damage.
+# Shadowspear's lifelink distinguishes no assignment from damage dealt without changing the departed player's life.
+
+[Life]
+Bot2: 3
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Pearl
+Sol Ring
+Shadowspear
+Guerrilla Gorilla
+Lightning Bolt
+Mountain x30
+
+[Bot2 Deck]
+Island x35
+
+[Bot3 Deck]
+Island x35
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Guerrilla Gorilla.Cast
+Bot1.Hand.Shadowspear.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Shadowspear.Activate(Guerrilla Gorilla; Ability: Equip)
+Bot1.Attack(Guerrilla Gorilla > Bot2)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T4 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Status = Lost
+Bot2.Life = 0
+Bot3.Life = 20
+Stack.Count = 0

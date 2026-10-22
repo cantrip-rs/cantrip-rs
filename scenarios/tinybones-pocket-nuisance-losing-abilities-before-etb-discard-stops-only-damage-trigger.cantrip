@@ -1,0 +1,38 @@
+# Losing abilities leaves an ETB already on the stack, but removes the discard watcher before the discard (CR 113.7a, 613.1f).
+# Opponent Frogs Tinybones before the ETB resolves; opponent discards exactly one, without generating any damage ability.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Tinybones, Pocket Nuisance
+Swamp x30
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Turn to Frog
+Island x30
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Turn to Frog.Cast(Tinybones, Pocket Nuisance)
+Bot2.Choose(Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Island; Turn to Frog
+Bot1.Battlefield.Tinybones, Pocket Nuisance.Power = 1
+Bot1.Battlefield.Tinybones, Pocket Nuisance.Toughness = 1
+Stack.Count = 0

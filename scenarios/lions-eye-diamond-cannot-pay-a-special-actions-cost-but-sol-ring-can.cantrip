@@ -1,0 +1,30 @@
+# Foretelling costs {2} during one's turn, but its mana-payment question grants no priority (CR 116.2h, 702.143a).
+# Sol Ring pays the special action; LED is refused there and activated legally at the following priority.
+
+[Bot1 Deck]
+Mountain
+Sol Ring
+Lion's Eye Diamond
+Delayed Blast Fireball
+Mountain x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Delayed Blast Fireball.Foretell
+! Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Red)
+
+[Expect]
+Bot1.Battlefield = Mountain; Sol Ring
+Bot1.Hand.Count = 0
+Bot1.Graveyard.Count = 4
+Exile.FaceDown = Delayed Blast Fireball
+Bot1.Mana = {R}{R}{R}
+Stack.Count = 0

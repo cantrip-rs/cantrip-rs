@@ -1,0 +1,23 @@
+# The triggered ability functions on the battlefield, never while Tinybones is a discarded card (CR 113.6).
+# It is discarded by Lion's Eye Diamond from hand before ever entering; neither its own discard nor the others cause pings.
+
+[Bot1 Deck]
+Tinybones, Pocket Nuisance
+Lion's Eye Diamond
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Lion's Eye Diamond.Cast
+Bot1.Battlefield.Lion's Eye Diamond.Activate(Color: Black)
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Hand.Count = 0
+Bot1.Battlefield.Count = 0
+Bot1.Graveyard.Count = 7
+Stack.Count = 0

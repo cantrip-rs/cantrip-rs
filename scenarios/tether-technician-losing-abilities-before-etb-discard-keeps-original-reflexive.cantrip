@@ -1,0 +1,53 @@
+# CR 113.7a, 603.12: removing Tether's abilities before its ETB resolves neither cancels that ability nor its reflexive.
+# Turn to Frog resolves first; Bot1 still discards and controls the damage ability. Cleanup restores Tether's printed stats.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Mountain x30
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Turn to Frog
+Island x30
+
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Turn to Frog.Cast(Tether Technician)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Tether Technician.Keywords = (absent)
+Bot1.Choose(Mountain)
+Bot1.Target(Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Tether Technician.Power = 1
+? Bot2.Life = 18
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot1.Graveyard = Mountain; Black Lotus
+Bot1.Battlefield.Tether Technician.Power = 4
+Bot1.Battlefield.Tether Technician.Keywords = Reach
+Stack.Count = 0

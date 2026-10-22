@@ -1,0 +1,52 @@
+# Wheel discards all hands at once (CR 701.9, 101.4). Each of three discarding players triggers once (CR 603.2c).
+# Initial ETB discards by two opponents give two pings each; Wheel gives three more, despite multiple cards per hand.
+
+[Bot1 Deck]
+Swamp
+Mox Ruby
+Sol Ring
+Black Lotus
+Tinybones, Pocket Nuisance
+Wheel of Fortune
+Swamp x30
+
+[Bot2 Deck]
+Island x35
+
+[Bot3 Deck]
+Forest x35
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tinybones, Pocket Nuisance.Cast
+Bot2.Choose(Island)
+Bot3.Choose(Forest)
+Bot1.Triggers(Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance)
+[Bot1.Main2]
+? Bot2.Life = 18
+? Bot3.Life = 18
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Triggers(Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance; Tinybones, Pocket Nuisance)
+? Stack.Count = 3
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 15
+Bot3.Life = 15
+Bot1.Hand.Count = 7
+Bot2.Hand.Count = 7
+Bot3.Hand.Count = 7
+Bot1.Graveyard = Wheel of Fortune; Swamp; Swamp; Black Lotus
+Bot2.Graveyard.Count = 7
+Bot3.Graveyard.Count = 7
+Stack.Count = 0

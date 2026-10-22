@@ -1,0 +1,51 @@
+# CR 707.10, 603.12, 603.7e: an opponent's copy of Tether's ETB asks that opponent to discard and controls its own reflexive.
+# Both abilities retain the original Tether as damage source; each controller discards their own card and targets the other.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring x2
+Mox Ruby
+Tether Technician
+Mountain x30
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Return the Favor
+Mountain
+Island x30
+[Actions]
+[Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tether Technician.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Return the Favor.Cast
+Bot2.Modes(Copy target)
+Bot2.Target(Stack.Tether Technician)
+Bot2.Choose(Island)
+Bot2.Target(Bot1)
+Bot1.Choose(Mountain)
+Bot1.Target(Bot2)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Graveyard = Mountain; Black Lotus
+Bot2.Graveyard = Island; Return the Favor
+Stack.Count = 0

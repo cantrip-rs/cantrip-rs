@@ -1,0 +1,64 @@
+# A face-down 2/2 has neither its printed 1 power nor its printed ability (CR 708.2a); after turning up, 1/3 qualifies.
+# Remove Cryptic Coat before combat. Its cloaked Fugitive blocks Pursuer once without a ping, then turns up after blocks.
+# Neither late P/T change triggers Pursuer nor late evasion unblocks it (CR 509.3f, 509.1h).
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Sapphire
+Tetsuko Umezawa, Pursuer
+Icy Reception
+Island
+Mountain x30
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Cryptic Coat
+Island x4
+Tetsuko Umezawa, Fugitive
+Island x30
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Tetsuko Umezawa, Pursuer.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Cryptic Coat.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Cryptic Coat.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Attack(Tetsuko Umezawa, Pursuer > Bot2)
+Bot2.Block(#1 > Tetsuko Umezawa, Pursuer)
+? Stack.Count = 0
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.#1.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Icy Reception.Cast
+Bot1.Modes(Target creature gets)
+Bot1.Target(Tetsuko Umezawa, Pursuer)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Power = -2
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Toughness = 5
+Bot1.Battlefield.Tetsuko Umezawa, Pursuer.Damage = 1
+Bot2.Battlefield.Tetsuko Umezawa, Fugitive.Power = 1
+Bot2.Battlefield.Tetsuko Umezawa, Fugitive.Damage = 0
+Stack.Count = 0
