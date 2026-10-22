@@ -271,7 +271,7 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
         ActionKind::ActivateAbility => {
             let ability = game.chars(src).abilities().nth(o.index as usize).map(|a| game.cards.ability(a));
             if let Some(AbilityDef::Activated(d)) = ability {
-                m.life_cost = i32::from(d.cost.life);
+                m.life_cost = i32::try_from(d.cost.life).unwrap_or(i32::MAX);
                 // A cost that returns tapped permanents, chosen once the mana is paid (CR 602.2b, 601.2g-h: Urban Retreat).
                 m.tapped_after_mana = !d.is_mana_ability() && d.cost.permanents.is_some_and(|p| p.tapped);
                 // A special action whose cost a static ability changes (CR 116.2k, 118.7: "plotting cards from your hand costs
@@ -689,7 +689,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
             remaining_hybrid: remaining_hybrid(remaining),
             options: options_messages(game, handles, options),
             verb: question.verb.into(),
-            life: i32::from(*life),
+            life: i32::try_from(*life).unwrap_or(i32::MAX),
             life_short: !*life_payable,
             amount: i32::from(question.amount),
             question: question.ask.into(),

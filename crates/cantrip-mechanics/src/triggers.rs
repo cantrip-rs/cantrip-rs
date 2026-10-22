@@ -441,7 +441,7 @@ fn ward_pay_life(g: &mut dyn Game, item: &StackItem, life: u16) -> Result<(), Su
     let Target::Object(by) = item.subject else { return Ok(()) };
     let payer = PlayerId(item.data[0] as u8);
     let paid = g.state().player(payer).life >= i32::from(life)
-        && g.may_pay(payer, item.object, by, Cost { life, ..Cost::NONE }, &crate::COUNTERED_UNLESS_PAID)?;
+        && g.may_pay(payer, item.object, by, Cost { life: u32::from(life), ..Cost::NONE }, &crate::COUNTERED_UNLESS_PAID)?;
     if !paid {
         g.counter_item(by, item.data[1] as usize);
     }

@@ -1,0 +1,42 @@
+# Niv-Mizzet, Ghost Counsel: the "you may pay" is declined, so Bot1 keeps the 3 life gained (23) and draws nothing: the
+# "if you do" is what paying does, not the gaining.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Swamp
+Niv-Mizzet, Ghost Counsel
+Healing Salve
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Niv-Mizzet, Ghost Counsel.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Decline
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Life = 23
+Bot1.Hand.Count = 1
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Niv-Mizzet, Ghost Counsel; Swamp
+Bot2.Life = 20

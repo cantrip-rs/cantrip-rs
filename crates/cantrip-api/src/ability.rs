@@ -220,7 +220,7 @@ pub const fn loyalty_minus_x() -> Cost {
 
 /// "Pay N life" (CR 119.4).
 pub const fn life(n: u8) -> Cost {
-    Cost { life: n as u16, ..Cost::NONE }
+    Cost { life: n as u32, ..Cost::NONE }
 }
 
 /// A cost of this mana alone, worked out as the effect runs: Override's {1} per artifact, Flash's creature's mana cost

@@ -822,7 +822,7 @@ ruling). The shared effects are in `cantrip_mechanics::replacements`. A cost's p
 not on what a replacement makes of the loss. A cost paid as an effect resolves - "you may pay {W}{B} and 2 life. When you
 do", "counter it unless its controller pays {3}", a shockland's "you may pay 2 life" (CR 118.12, 608.2d) - is one payment,
 `Game::may_pay` (`actions::may_pay`, asked as `RequestKind::UnlessPays` with its `life` and the card's `Question`): the
-payer is not asked without the life (`actions::can_pay_life`), may activate mana abilities while there is mana to pay (CR
+life amounts in `Cost` and `RequestKind::UnlessPays` are `u32`, preserving variable payments above 65,535 (Niv-Mizzet, Ghost Counsel). Affordability compares the full cost to the signed player total before payment; an amount above that total is refused, without narrowing. The payer is not asked without the life (`actions::can_pay_life`), may activate mana abilities while there is mana to pay (CR
 605.3a), and may pay once the pool covers the mana and the life total still covers the life, so a mana ability that costs
 life (Mana Confluence) can leave only declining. A cost with other parts - "sacrifice a creature", "discard a card",
 "return a tapped creature you control", energy, counters - is paid the same way: paying is offered only while every part

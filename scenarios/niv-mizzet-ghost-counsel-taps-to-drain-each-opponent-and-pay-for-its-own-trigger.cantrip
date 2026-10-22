@@ -1,0 +1,43 @@
+# Niv-Mizzet, Ghost Counsel: "{T}: Each opponent loses 1 life and you gain 1 life." In a game of three both opponents
+# lose it (19 each); the 1 life Bot1 gains triggers the first ability for 1, paid (21 to 20) to draw 1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Swamp
+Niv-Mizzet, Ghost Counsel
+Healing Salve
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Niv-Mizzet, Ghost Counsel.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Niv-Mizzet, Ghost Counsel.Activate
+Bot1.Accept
+[T4 Bot1.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 20
+Bot1.Hand.Count = 4
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Niv-Mizzet, Ghost Counsel; Swamp
+Bot2.Life = 19
+Bot3.Life = 19

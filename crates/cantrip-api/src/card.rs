@@ -510,7 +510,7 @@ pub struct Cost {
     pub loyalty: Option<i8>,
     /// Pay this much life (CR 119.4): payable only with at least that much, and not at all while the payer can't lose life
     /// (CR 119.8).
-    pub life: u16,
+    pub life: u32,
     /// Pay energy counters (CR 107.14, 118.3): Primal Prayers, Amped Raptor.
     pub energy: u8,
     /// Remove this many counters of this kind from the source (CR 602.1, 118.3).
@@ -757,7 +757,7 @@ impl Cost {
         if n == 0 {
             c.mana = ManaCost::ZERO;
         }
-        c.life = self.life.saturating_mul(u16::from(n));
+        c.life = self.life.saturating_mul(u32::from(n));
         c.energy = self.energy.saturating_mul(n);
         c.exile_from_graveyard = self.exile_from_graveyard.saturating_mul(n);
         c.blight = self.blight.saturating_mul(n);

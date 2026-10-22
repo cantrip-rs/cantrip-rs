@@ -682,7 +682,7 @@ fn pay_discards(cx: &mut Cx, chosen: &[ObjectId]) {
 /// Whether `player` can still pay this much energy (CR 107.14) and life (CR 119.4) once the mana of the cost is paid: the
 /// mana abilities activated while paying it (CR 601.2g) may have spent energy or life the rest of the cost needs.
 fn rest_payable(cx: &Cx, player: PlayerId, energy: u32, life: u32) -> bool {
-    u32::from(cx.s().player(player).energy()) >= energy && (life == 0 || payable_life(cx, player) >= life.min(i32::MAX as u32) as i32)
+    u32::from(cx.s().player(player).energy()) >= energy && can_pay_life(cx, player, life)
 }
 
 /// Pays the life and counters parts of a cost.
@@ -691,7 +691,7 @@ fn pay_life_and_counters(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: 
         ops::change_energy(cx, player, -i32::from(cost.energy), player);
     }
     if cost.life > 0 {
-        ops::change_life(cx, player, -(cost.life as i32));
+        ops::change_life(cx, player, -i32::try_from(cost.life).expect("payable life fits i32"));
     }
     if let Some((kind, n)) = cost.remove_counters {
         counters::remove(cx, source, kind, n as i16);
@@ -1159,7 +1159,7 @@ fn added_life_payable(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, 
         return true;
     }
     let (_, added) = change_total(cx, &a.changers, player, Costed::Spell(card), ManaCost::ZERO, face_of(cx, card, def), targets);
-    added == 0 || payable_life(cx, player) >= added as i32 + def.additional_cost.map_or(0, |c| c.life as i32)
+    added == 0 || i64::from(payable_life(cx, player)) >= i64::from(added) + i64::from(def.additional_cost.map_or(0, |c| c.life))
 }
 
 /// The face `def` is of the card `card`, where it is one of its faces rather than the card itself (an Adventure, an Omen, a
@@ -2002,7 +2002,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, defer: bool) 
         if let Some(def) = activated(cx, ability)
             && def.cost.life > 0
         {
-            let times = payable_life(cx, player).max(0) as u32 / def.cost.life as u32;
+            let times = payable_life(cx, player).max(0) as u32 / def.cost.life;
             for m in 0..6 {
                 fixed[m] = fixed[m].saturating_add(def.adds.0[m].saturating_mul(times));
             }
@@ -3220,7 +3220,7 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                 // Its Phyrexian symbols paid with life where the life total allows, beside the life the cost pays
                 // (CR 107.4f, 601.2b by way of 602.2b, 116.2b), as the activation announces them (`announce_life`).
                 let judge = |cost: ManaCost| {
-                    let cost = phyrexian_with_life(cx, player, cost, u32::from(def.cost.life));
+                    let cost = phyrexian_with_life(cx, player, cost, def.cost.life);
                     a.covers_for(&if any_color { cost.paid_with_any_color() } else { cost }, &payment)
                 };
                 if def.special_action {
@@ -4510,7 +4510,7 @@ pub fn life_for_cast(q: &dyn Query, cards: &CardTable, player: PlayerId, option:
 /// "Pay life equal to its mana value rather than pay its mana cost" (CR 118.9, 119.4): the life, as a cost, for a card or the
 /// face of it cast, its X counted as 0 (CR 107.3). Bolas's Citadel's rule and Inside Information's permission pay it.
 fn life_for_mana_value(def: &CardDef) -> Cost {
-    Cost { life: u16::try_from(def.cost.mana_value()).unwrap_or(u16::MAX), ..Cost::NONE }
+    Cost { life: def.cost.mana_value(), ..Cost::NONE }
 }
 
 /// The most an emerge cost could come down by right now (CR 702.119a): the mana values of the richest permanents it could
@@ -5099,7 +5099,7 @@ fn cast(
     // The {X} a granted way's cost has: the card's, where the cost is or includes its mana cost; none where it is cast
     // without paying its mana cost (CR 107.3b).
     let granted_x = granted.map(|_| cost.mana.x);
-    cost.life = cost.life.saturating_add(u16::from(life));
+    cost.life = cost.life.saturating_add(u32::from(life));
     cost.mana.generic = cost.mana.generic.saturating_add(more);
 
     // CR 601.2a: the card moves to the stack first. Casting a prepare spell's copy unprepares its permanent
@@ -5387,9 +5387,9 @@ fn cast(
     let (added_life, least);
     (cost.mana, added_life, least) = apply_cost_changes_before_least(cx, player, Costed::Spell(spell), cost.mana, &targets, &split);
     if added_life > 0 {
-        cost.life = (u32::from(cost.life) + added_life).min(u32::from(u16::MAX)) as u16;
-        let owed = cost.life as i32 + extra.life as i32 + life as i32 + x_life as i32;
-        if payable_life(cx, player) < owed {
+        cost.life = cost.life.saturating_add(added_life);
+        let owed = u64::from(cost.life) + u64::from(extra.life) + u64::from(life) + u64::from(x_life);
+        if i64::from(payable_life(cx, player)) < owed as i64 {
             return Err(Stop::Cancel);
         }
     }
@@ -5436,7 +5436,7 @@ fn cast(
     if let Some(creature) = reducer {
         ops::tap(cx, creature);
     }
-    let life_owed = cost.life as u32 + extra.life as u32 + life as u32 + x_life as u32;
+    let life_owed = cost.life.saturating_add(extra.life).saturating_add(u32::from(life)).saturating_add(u32::from(x_life));
     // CR 601.2f-h: what besides mana may pay for it, its own convoke, delve and improvise and what a permanent gives the spell.
     let with = pay_with(cx, &pay_with_grantors(cx), player, spell, def, None);
     let helpers = Helpers {
@@ -5531,7 +5531,7 @@ fn cast(
     pay_life_and_counters(cx, player, spell, &extra);
     pay_exert_and_tappers(cx, spell, &extra, &extra_tappers);
     // CR 119.4: the life paid for Phyrexian symbols and for X, with the rest of the cost.
-    if life as u16 + x_life > 0 {
+    if u32::from(life) + u32::from(x_life) > 0 {
         ops::change_life(cx, player, -(life as i32 + x_life as i32));
     }
     let targets = &targets[..];
@@ -6580,7 +6580,7 @@ fn activate(
         (at_least(cost, least), life)
     };
     let life = life as u32 + added_life;
-    if added_life > 0 && payable_life(cx, player) < life as i32 + def.cost.life as i32 {
+    if added_life > 0 && i64::from(payable_life(cx, player)) < i64::from(life) + i64::from(def.cost.life) {
         return Err(Stop::Cancel);
     }
 
@@ -6643,7 +6643,7 @@ fn activate(
     }
     let beheld = choose_behold(cx, player, source, &def.cost)?;
     // The energy and life, judged again after the mana abilities (CR 601.2g-h by way of 602.2b).
-    if !rest_payable(cx, player, def.cost.energy as u32, life as u32 + def.cost.life as u32) {
+    if !rest_payable(cx, player, def.cost.energy as u32, life.saturating_add(def.cost.life)) {
         return Err(Stop::Cancel);
     }
     if life > 0 {
@@ -7762,9 +7762,9 @@ pub(crate) fn pay_mana_used(cx: &mut Cx, player: PlayerId, source: ObjectId, mut
 
 /// Whether `player` could pay `life` life now (CR 119.4): any amount of 0 (CR 119.4b), otherwise only with a life total
 /// at least that high, and not while they can't lose life or their life total can't change (CR 119.8).
-pub fn can_pay_life(cx: &Cx, player: PlayerId, life: u16) -> bool {
+pub fn can_pay_life(cx: &Cx, player: PlayerId, life: u32) -> bool {
     // CR 119.4b: 0 life can always be paid.
-    life == 0 || payable_life(cx, player) >= i32::from(life)
+    life == 0 || i64::from(payable_life(cx, player)) >= i64::from(life)
 }
 
 /// The most life `player` may pay (CR 119.4): their life total, or none at all while they can't lose life (CR 119.8: "a cost
@@ -7828,7 +7828,7 @@ fn pay_during_resolution(
         return Ok(None);
     }
     // "Pay X life" (CR 119.4) is paid with the X chosen; without an {X} to choose it, X is 0.
-    let life_of = |x: Option<u16>| if cost.pay_x_life { cost.life.saturating_add(x.unwrap_or(0)) } else { cost.life };
+    let life_of = |x: Option<u16>| if cost.pay_x_life { cost.life.saturating_add(u32::from(x.unwrap_or(0))) } else { cost.life };
     if !can_pay_life(cx, payer, life_of(x)) {
         return Ok(None);
     }
@@ -7920,7 +7920,7 @@ fn pay_during_resolution(
 /// Chooses what the parts of a resolution's cost other than mana and life take, then pays the whole (CR 118.3, 601.2h):
 /// the mana from the pool, the life, and each other part as an activated ability's cost pays it (`activate`). `x` is the
 /// X paid, for a "sacrifice X" part.
-fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Cost, total: ManaCost, life: u16, x: u16) -> R<()> {
+fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Cost, total: ManaCost, life: u32, x: u16) -> R<()> {
     let chosen = choose_permanents(cx, payer, source, cost)?;
     let discards = choose_discards(cx, payer, source, cost)?;
     let exiles = choose_exiles(cx, payer, source, cost)?;
@@ -7935,7 +7935,7 @@ fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Co
         pay_mana(cx, payer, source, total)?;
     }
     if life > 0 {
-        ops::change_life(cx, payer, -i32::from(life));
+        ops::change_life(cx, payer, -i32::try_from(life).expect("payable life fits i32"));
     }
     // {T} first, so a permanent the cost also moves was tapped as it left (CR 118.3), as `activate` pays it.
     if cost.tap {

@@ -107,14 +107,24 @@ fn loyalty_cost(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), S
     may_pay_with(g, item, Cost { loyalty: Some(-1), ..Cost::NONE })
 }
 
+fn high_life_cost(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    may_pay_with(g, item, Cost { life: 65_536, ..Cost::NONE })
+}
+
+fn impossible_life_cost(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    may_pay_with(g, item, Cost { life: i32::MAX as u32 + 1, ..Cost::NONE })
+}
+
 static OFFER: CardDef = CardDef { name: "Cost Test Offer", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], sacrifice_one), ..CardDef::BLANK };
 static RECALL: CardDef = CardDef { name: "Cost Test Recall", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], return_tapped), ..CardDef::BLANK };
 static TITHE: CardDef = CardDef { name: "Cost Test Tithe", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], discard_and_energy), ..CardDef::BLANK };
 static VOW: CardDef = CardDef { name: "Cost Test Vow", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], loyalty_cost), ..CardDef::BLANK };
+static HIGH_LIFE: CardDef = CardDef { name: "Cost Test High Life", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], high_life_cost), ..CardDef::BLANK };
+static IMPOSSIBLE_LIFE: CardDef = CardDef { name: "Cost Test Impossible Life", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], impossible_life_cost), ..CardDef::BLANK };
 
 /// Your precombat main phase with priority, nothing anywhere.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER, &HIGH_LIFE, &IMPOSSIBLE_LIFE])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -294,6 +304,39 @@ fn pays(r: &Request) -> Option<ActionOption> {
         RequestKind::UnlessPays { options, .. } => options.iter().find(|o| o.kind == ActionKind::PayCost).cloned(),
         _ => None,
     }
+}
+
+#[test]
+fn resolution_life_payment_above_u16_is_exact() {
+    let mut g = game();
+    g.state.update_player(YOU, |p| p.life = 65_535);
+    let spell = put(&mut g, &HIGH_LIFE, Zone::hand(YOU));
+    let r = next(&mut g);
+    let cast = option_of(&g, &r, spell).expect("the spell is offered");
+    answer(&mut g, &r, Answer::Act(Action::of(&cast)));
+    let r = resolve_all(&mut g);
+    assert!(matches!(r.kind, RequestKind::Priority { .. }), "65,535 life cannot pay 65,536");
+    assert_eq!(g.state.player(YOU).life, 65_535);
+
+    let mut g = game();
+    g.state.update_player(YOU, |p| p.life = i32::MAX);
+    let spell = put(&mut g, &IMPOSSIBLE_LIFE, Zone::hand(YOU));
+    let r = next(&mut g);
+    let cast = option_of(&g, &r, spell).expect("the spell is offered");
+    answer(&mut g, &r, Answer::Act(Action::of(&cast)));
+    let r = resolve_all(&mut g);
+    assert!(matches!(r.kind, RequestKind::Priority { .. }), "a life cost above i32::MAX cannot be paid");
+    assert_eq!(g.state.player(YOU).life, i32::MAX);
+
+    let mut g = game();
+    g.state.update_player(YOU, |p| p.life = 65_536);
+    let spell = put(&mut g, &HIGH_LIFE, Zone::hand(YOU));
+    let r = cast_to_payment(&mut g, spell);
+    assert!(matches!(r.kind, RequestKind::UnlessPays { life: 65_536, .. }));
+    let pay = pays(&r).expect("65,536 life pays the full cost");
+    answer(&mut g, &r, Answer::Act(Action::of(&pay)));
+    next(&mut g);
+    assert_eq!(g.state.player(YOU).life, 5, "full cost paid before the effect gains five life");
 }
 
 #[test]

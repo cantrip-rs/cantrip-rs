@@ -1,0 +1,44 @@
+# Niv-Mizzet, Ghost Counsel: "Whenever you gain life, you may pay that much life. If you do, draw that many cards."
+# Healing Salve has Bot1 gain 3, so "that much" is 3: Bot1 pays 3 life (23 to 20) and draws 3. Niv-Mizzet has flying.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Swamp
+Niv-Mizzet, Ghost Counsel
+Healing Salve
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Niv-Mizzet, Ghost Counsel.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Life = 20
+Bot1.Hand.Count = 4
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Niv-Mizzet, Ghost Counsel; Swamp
+Bot1.Battlefield.Niv-Mizzet, Ghost Counsel.Keywords = Flying
+Bot1.Graveyard.Count = 2
+Bot2.Life = 20
