@@ -1,0 +1,55 @@
+# "... spells you control": Bot2's Lightning Bolt is Bot2's, so it has no split second and Bot1 may respond to it with
+# its own instant, Opt - which does have split second, so Bot2's own Counterspell may not be cast at it (the refusal).
+# Both resolve, last out first: Opt scries and draws, then the Bolt deals 3.
+
+[Bot1 Deck]
+Island
+Island
+Mox Sapphire
+Samut, Tyrant of Naktamun
+Opt
+Island x15
+
+[Bot2 Deck]
+Island
+Island
+Mountain
+Lightning Bolt
+Counterspell
+Island x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Samut, Tyrant of Naktamun.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+! Bot2.Hand.Counterspell.Cast(Stack.Opt)
+Bot2.Pass
+Bot1.Arrange(Island |)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Samut, Tyrant of Naktamun.Toughness = 1
+Bot1.Graveyard = Opt
+Bot2.Graveyard = Lightning Bolt
+Bot2.Hand.Count = 6

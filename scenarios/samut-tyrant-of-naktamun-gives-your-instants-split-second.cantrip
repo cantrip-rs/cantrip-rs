@@ -1,0 +1,58 @@
+# Samut, Tyrant of Naktamun: "Instant and sorcery spells you control have split second" (CR 702.61a-b, 613.1f). On turn
+# three Bot1 casts Opt; while it is on the stack Bot2 may not cast Lightning Bolt at Bot1 (the refusal), but mana
+# abilities are still allowed (CR 702.61b: Mountain's {T}). Once Opt has resolved a creature spell gets no split second,
+# so the same Lightning Bolt may be cast in response to Ornithopter (the positive control).
+
+[Bot1 Deck]
+Island
+Island
+Mox Sapphire
+Samut, Tyrant of Naktamun
+Opt
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Samut, Tyrant of Naktamun.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Opt.Cast
+? Stack.Count = 1
+Bot1.Pass
+! Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange(Island |)
+? Stack.Count = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Samut, Tyrant of Naktamun.Power = 2
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Graveyard = Opt
+Bot2.Graveyard = Lightning Bolt

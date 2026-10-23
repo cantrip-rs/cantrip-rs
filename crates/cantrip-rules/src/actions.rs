@@ -35,16 +35,17 @@ pub fn priority_options(cx: &Cx, player: PlayerId) -> Vec<ActionOption> {
     options
 }
 
-/// Whether a spell with split second is on the stack (CR 702.61a): read from the printed cards of what is on the stack,
-/// which is nothing at all for nearly every priority pass.
+/// Whether a spell with split second is on the stack (CR 702.61a): asked of each spell's characteristics, which is nothing
+/// at all for nearly every priority pass.
 fn split_second(cx: &Cx) -> bool {
     cx.s().stack.iter().any(|i| i.kind == StackKind::Spell && has_split_second(cx, i.object))
 }
 
-/// Whether the spell `spell` has split second, by its printed card or the card it copies.
+/// Whether the spell `spell` has split second, by its characteristics (CR 702.61a, 613.1f): its printed card's, or the
+/// one it copies, or one a static ability grants it - Samut, Tyrant of Naktamun's "Instant and sorcery spells you control
+/// have split second" applies in layer 6.
 fn has_split_second(cx: &Cx, spell: ObjectId) -> bool {
-    let obj = cx.s().obj(spell);
-    cx.card(obj.copied_card().unwrap_or(obj.card)).keywords.has(Keyword::SplitSecond)
+    cx.chars(spell).keywords.has(Keyword::SplitSecond)
 }
 
 fn activated(cx: &Cx, ability: AbilityRef) -> Option<&'static ActivatedDef> {

@@ -1,0 +1,46 @@
+# Split second stops more than casting (CR 702.61a): while Bot1's Opt is on the stack, Bot2 may still activate a mana
+# ability (CR 702.61b, Mox Ruby's {T}) but may not activate Fanatical Firebrand's "{T}, Sacrifice this creature: It deals
+# 1 damage to any target" (the refusal). No damage is dealt and the Firebrand stays on the battlefield.
+
+[Bot1 Deck]
+Island
+Island
+Mox Sapphire
+Samut, Tyrant of Naktamun
+Opt
+Island x15
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Fanatical Firebrand
+Island x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Fanatical Firebrand.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Samut, Tyrant of Naktamun.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Opt.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Battlefield.Fanatical Firebrand.Activate(Bot1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Samut, Tyrant of Naktamun.Toughness = 1
+Bot2.Battlefield.Fanatical Firebrand.Power = 1

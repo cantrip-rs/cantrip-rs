@@ -1,0 +1,41 @@
+# The keyword is granted to sorcery spells too (CR 702.61a): Preordain is cast in Bot1's main phase, and while it is on
+# the stack Bot2 cannot cast its instant (the refusal), even though it has the mana. The scry 2 and the draw still happen.
+
+[Bot1 Deck]
+Island
+Island
+Mox Sapphire
+Samut, Tyrant of Naktamun
+Preordain
+Island x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Samut, Tyrant of Naktamun.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Preordain.Cast
+Bot1.Pass
+! Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Arrange(Island; Island |)
+
+[Expect]
+Bot1.Life = 20
+Bot1.Hand.Count = 4
+Bot1.Graveyard = Preordain

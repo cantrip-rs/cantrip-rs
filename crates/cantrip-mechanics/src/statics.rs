@@ -110,6 +110,12 @@ pub fn have_hexproof(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = chars.keywords.with(Keyword::Hexproof);
 }
 
+/// "[These] have split second" (CR 702.61a, layer 6): `StaticDef::apply` for a static ability that grants it, with
+/// `your_spells_of_types` as its `affects`. Samut, Tyrant of Naktamun prints it.
+pub fn have_split_second(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.keywords = chars.keywords.with(Keyword::SplitSecond);
+}
+
 /// "... has deathtouch" (CR 702.2, layer 6) as a static ability's `StaticDef::apply`. Bow of Nylea's attacking creatures and
 /// The Swarmweaver's delirium Insects and Spiders print it.
 pub fn have_deathtouch(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
