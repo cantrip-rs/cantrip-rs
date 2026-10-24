@@ -1,0 +1,41 @@
+# "Tap two untapped artifacts you control" needs two that are untapped and Bot1's own (CR 118.3). Bot1 has exactly one
+# untapped artifact, Mox Jet; Mox Ruby and Mox Emerald were tapped to cast the Tethermage, and the Tethermage itself is a
+# creature, not an artifact. Bot2's Mox Pearl is untapped but not Bot1's. So the ability is not offered at all and no
+# counters are put on it: three artifacts of Bot1's count only if "untapped" is ignored, two untapped ones only if
+# "you control" is.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Mox Ruby
+Mox Emerald
+Tenured Tethermage
+Forest
+Forest
+Forest x9
+
+[Bot2 Deck]
+Mox Pearl
+Opt x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tenured Tethermage.Cast
+Bot1.Pass
+Bot1.Choose()
+! Bot1.Battlefield.Tenured Tethermage.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot2.Battlefield.Mox Pearl.Tapped = false
+Bot1.Battlefield.Mox Jet.Tapped = false

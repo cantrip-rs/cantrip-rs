@@ -1,5 +1,5 @@
 # Tenured Tethermage: "When this creature enters, you may sacrifice a land. If you do, create two tapped Heartwood
-# tokens." Bot1 sacrifices its only land for two Heartwood tokens (CR 111.10x), created together (CR 101.4) and tapped
+# tokens." Bot1 sacrifices its only land for two Heartwood tokens (CR 111.10x), created together and tapped
 # as the card says, and on the next turn one untaps and taps for red with its mana ability (CR 605.1a).
 
 [Bot1 Deck]
