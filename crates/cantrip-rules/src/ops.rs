@@ -3700,34 +3700,47 @@ fn attacked_as_now(cx: &Cx, id: ObjectId, was: TypeSet) -> Option<TypeSet> {
     stays.then_some(now)
 }
 
-/// A planeswalker or battle being attacked that has stopped being what it is attacked as is removed from combat (CR 506.4,
-/// 506.4e) the moment it does, for good: the creatures attacking it attack nothing from then on (CR 506.4c), though it
-/// become one again before combat damage. One that stays has what it is now attacked as recorded (`attacked_as_now`).
-/// Asked wherever characteristics may have changed - at every event and every effect begun (`settle_lasting_and_control`),
-/// and at every change with no event (`Cx::state_changed`). It takes the permanent out of no block: a blocking creature
-/// that is also a planeswalker being attacked and stops being a planeswalker is still blocking (CR 506.4d). Free while no
-/// creature attacks a permanent.
-pub(crate) fn settle_attacked(cx: &mut Cx) {
+/// Combat as the card types the layers give its permanents now say (CR 506.4), settled the moment they change, for good:
+/// - an attacking or blocking creature that has stopped being a creature is removed from combat - it stops attacking or
+///   blocking (and the blocks it was in end), though it become a creature again before combat damage;
+/// - a planeswalker or battle being attacked that has stopped being what it is attacked as is removed from combat (CR
+///   506.4e): the creatures attacking it attack nothing from then on (CR 506.4c), though it become one again. One that
+///   stays has what it is now attacked as recorded (`attacked_as_now`).
+///
+/// The two are apart (CR 506.4d): a blocking creature that is also a planeswalker being attacked and stops being a
+/// creature is still attacked, and one that stops being a planeswalker is still blocking. Asked wherever characteristics
+/// may have changed - at every event and every effect begun (`settle_lasting_and_control`), and at every change with no
+/// event (`Cx::state_changed`). Free while nothing attacks.
+pub(crate) fn settle_combat(cx: &mut Cx) {
     let s = cx.s();
-    if !s.attackers.iter().any(|a| matches!(a.target, Target::Object(_))) {
+    if s.attackers.is_empty() {
         return;
     }
+    let creature = |id: ObjectId| cx.chars(id).is(CardType::Creature);
     let mut changed = false;
-    let attackers: Vec<Attacker> = s
-        .attackers
-        .iter()
-        .map(|&a| {
-            let Target::Object(id) = a.target else { return a };
-            let next = match attacked_as_now(cx, id, a.attacked_as) {
+    let mut attackers: Vec<Attacker> = Vec::with_capacity(s.attackers.len());
+    for &a in &s.attackers {
+        if !creature(a.id) {
+            changed = true;
+            continue;
+        }
+        let next = match a.target {
+            Target::Object(id) => match attacked_as_now(cx, id, a.attacked_as) {
                 Some(now) => Attacker { attacked_as: now, ..a },
                 None => Attacker { target: Target::None, attacked_as: TypeSet::NONE, ..a },
-            };
-            changed |= next != a;
-            next
-        })
-        .collect();
+            },
+            _ => a,
+        };
+        changed |= next != a;
+        attackers.push(next);
+    }
+    let kept = |b: &&Block| attackers.iter().any(|a| a.id == b.attacker) && creature(b.blocker);
+    let blocks: Option<Vec<Block>> = (s.blocks.iter().filter(kept).count() != s.blocks.len()).then(|| s.blocks.iter().filter(kept).copied().collect());
     if changed {
         cx.st().set_attackers(attackers);
+    }
+    if let Some(blocks) = blocks {
+        cx.st().set_blocks(blocks);
     }
 }
 
@@ -3759,7 +3772,7 @@ pub fn settle_lasting_and_control(cx: &mut Cx) -> bool {
             break;
         }
     }
-    settle_attacked(cx);
+    settle_combat(cx);
     changed
 }
 

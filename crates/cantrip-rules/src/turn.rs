@@ -1313,7 +1313,7 @@ fn blocked_by(cx: &Cx, blocker: ObjectId) -> Vec<ObjectId> {
 
 /// Whether combat damage can be assigned to what an attacker attacks (CR 510.1b, 702.19b): a player still in the game
 /// (CR 800.4e), or a planeswalker or battle - which the combat state names only while it is being attacked (removed from
-/// combat, it is cleared, `ops::remove_from_combat`, `ops::settle_attacked`); a battle still being attacked keeps a
+/// combat, it is cleared, `ops::remove_from_combat`, `ops::settle_combat`); a battle still being attacked keeps a
 /// protector who has left the game until combat ends (CR 704.5x). Nothing, for an attacker attacking nothing (CR 506.4c).
 /// A permanent named is still checked to be on the battlefield as a planeswalker or battle, so that a removal some path
 /// failed to record deals no damage to a permanent that is not being attacked.

@@ -2326,14 +2326,14 @@ pub struct Attacker {
     /// The player, planeswalker or battle it attacks; `Target::None` once that planeswalker or battle has been removed from
     /// combat (CR 506.4, 506.4c): it is still an attacking creature, attacking nothing, and may be blocked, but unblocked it
     /// assigns no combat damage (CR 510.1b). Cleared as the removal happens (`ops::remove_from_combat`,
-    /// `ops::settle_attacked`), so a permanent named here is one still being attacked.
+    /// `ops::settle_combat`), so a permanent named here is one still being attacked.
     pub target: Target,
     /// Its defending player (CR 508.5): the player it attacks, or the controller of the planeswalker or the protector of the
     /// battle it attacks - fixed while it attacks it, as a change of either removes that permanent from combat (CR 506.4) -
     /// and still that player once the planeswalker or battle has been removed (`target` `Target::None`).
     pub defending: PlayerId,
     /// What the planeswalker or battle it attacks is being attacked as (CR 506.4, 506.4e): of its card types, planeswalker,
-    /// battle or both - what it was as it was attacked, kept up to date while it stays attacked (`ops::settle_attacked`), so
+    /// battle or both - what it was as it was attacked, kept up to date while it stays attacked (`ops::settle_combat`), so
     /// a change from both to one is told from a change from one to the other. None for a player, or once it attacks nothing.
     pub attacked_as: TypeSet,
     pub blocked: bool,

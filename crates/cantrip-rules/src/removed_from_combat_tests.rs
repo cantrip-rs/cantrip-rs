@@ -1,8 +1,9 @@
 //! CR 506.4, 506.4c, 506.4e: a planeswalker or battle being attacked is removed from combat the moment its controller or
 //! protector changes or it stops being one, for good - the creatures attacking it go on attacking nothing, and assign no
-//! combat damage, though it be one again (or theirs again) before combat damage. Over test cards, through the engine's own
-//! operations: a control-changing effect, the state-based action that gives a battle a new protector, type-changing
-//! effects.
+//! combat damage, though it be one again (or theirs again) before combat damage. CR 506.4, 506.4d: so is an attacking or
+//! blocking creature that stops being a creature. Over test cards, through the engine's own operations: a
+//! control-changing effect, the state-based action that gives a battle a new protector, type-changing effects, the source
+//! of an animating effect leaving.
 
 use super::*;
 use crate::Game as RulesGame;
@@ -31,6 +32,20 @@ static BOTH: CardDef = CardDef {
 /// The same, a Siege: protected by an opponent of its controller (CR 310.9a).
 static BOTH_SIEGE: CardDef = CardDef { name: "Removed combat walker siege probe", subtypes: SubtypeSet::of(&[Subtype::Siege]), ..BOTH };
 
+static ARTIFACT: CardDef = CardDef { name: "Removed combat artifact probe", types: TypeSet::of(&[CardType::Artifact]), ..CardDef::BLANK };
+/// What animates an artifact "for as long as" it is on the battlefield: Ensoul Artifact, March of the Machines.
+static ANIMATOR: CardDef = CardDef { name: "Removed combat animator probe", types: TypeSet::of(&[CardType::Enchantment]), ..CardDef::BLANK };
+static LIFELINKER: CardDef = CardDef { name: "Removed combat lifelink probe", keywords: Keywords::of(&[Keyword::Lifelink]), ..ATTACKER };
+/// A planeswalker that is a creature too (Gideon, Kaito during his controller's turn).
+static WALKER_CREATURE: CardDef = CardDef {
+    name: "Removed combat walker creature probe",
+    types: TypeSet::of(&[CardType::Planeswalker, CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    loyalty: Some(10),
+    ..CardDef::BLANK
+};
+
 /// The attacker as the combat state has it, attacking `target` as `attacked_as` with `defending` its defending player.
 fn attacking(id: ObjectId, target: Target, defending: PlayerId, attacked_as: TypeSet) -> Attacker {
     Attacker::new(id, target, defending, attacked_as)
@@ -39,7 +54,7 @@ fn attacking(id: ObjectId, target: Target, defending: PlayerId, attacked_as: Typ
 /// A game of `players` in YOU's declare blockers step: YOU's creature attacks `def`, a permanent `controller` controls and
 /// `protector` protects, whose defending player is `defending`.
 fn game(players: usize, def: &'static CardDef, controller: PlayerId, protector: Option<PlayerId>, defending: PlayerId) -> (RulesGame, ObjectId, ObjectId) {
-    let cards = Box::leak(Box::new(CardTable::new([&ATTACKER, &WALKER, &BATTLE, &BOTH, &BOTH_SIEGE])));
+    let cards = Box::leak(Box::new(CardTable::new([&ATTACKER, &WALKER, &BATTLE, &BOTH, &BOTH_SIEGE, &ARTIFACT, &ANIMATOR, &LIFELINKER, &WALKER_CREATURE])));
     let mut game = RulesGame::new(cards, &crate::Setup { decks: vec![Vec::new(); players], ..Default::default() });
     // Nobody loses to the state-based actions for the opening draw from an empty library.
     for p in 0..players {
@@ -253,4 +268,77 @@ fn a_permanent_named_by_the_combat_state_that_is_no_longer_attackable_is_dealt_n
     });
     let mut cx = cx(&mut game);
     assert_eq!(damage_to(&mut cx, walker), 0);
+}
+
+/// `artifact` animated into a 3/3 artifact creature by an effect of `animator` that lasts while it is on the battlefield.
+fn animate(game: &mut RulesGame, animator: ObjectId, artifact: ObjectId) {
+    let mut cx = cx(game);
+    for kind in [EffectKind::AddTypes(TypeSet::of(&[CardType::Creature])), EffectKind::SetPt(3, 3)] {
+        cantrip_api::Game::add_effect(&mut cx, animator, artifact, kind, Duration::WhileSourceOnBattlefield);
+    }
+}
+
+/// YOU's artifact, animated (Ensoul Artifact, March of the Machines), attacks; the enchantment animating it leaves before
+/// combat damage, so it is no longer a creature: it is removed from combat (CR 506.4), no longer an attacking creature.
+#[test]
+fn an_attacking_creature_that_stops_being_a_creature_is_removed_from_combat() {
+    let (mut game, _, _) = game(2, &WALKER, THEM, None, THEM);
+    let artifact = put(&mut game, &ARTIFACT, YOU);
+    let aura = put(&mut game, &ANIMATOR, YOU);
+    animate(&mut game, aura, artifact);
+    game.state.set_attackers(vec![attacking(artifact, Target::Player(THEM), THEM, TypeSet::NONE)]);
+    let mut cx = cx(&mut game);
+    assert!(cx.chars(artifact).is(CardType::Creature));
+    crate::ops::move_to(&mut cx, aura, Zone::graveyard(YOU));
+    assert!(!cx.chars(artifact).is(CardType::Creature));
+    assert!(cx.s().attackers.iter().all(|a| a.id != artifact), "no longer an attacking creature");
+}
+
+/// THEM's animated artifact blocks YOU's lifelink creature; the enchantment animating it leaves, so it stops blocking (CR
+/// 506.4), though an effect makes it a creature again before combat damage. The attacker stays blocked, by nothing: it
+/// assigns no combat damage (CR 510.1c), and its controller gains no life.
+#[test]
+fn a_blocking_creature_that_stops_being_a_creature_and_becomes_one_again_blocks_no_more() {
+    let (mut game, _, _) = game(2, &WALKER, THEM, None, THEM);
+    let attacker = put(&mut game, &LIFELINKER, YOU);
+    let artifact = put(&mut game, &ARTIFACT, THEM);
+    let aura = put(&mut game, &ANIMATOR, THEM);
+    animate(&mut game, aura, artifact);
+    game.state.set_attackers(vec![Attacker { blocked: true, ..attacking(attacker, Target::Player(THEM), THEM, TypeSet::NONE) }]);
+    game.state.set_blocks(vec![Block { blocker: artifact, attacker, first_strike: false }]);
+    let mut cx = cx(&mut game);
+    crate::ops::move_to(&mut cx, aura, Zone::graveyard(THEM));
+    effect(&mut cx, artifact, EffectKind::AddTypes(TypeSet::of(&[CardType::Creature])));
+    effect(&mut cx, artifact, EffectKind::SetPt(1, 1));
+    assert!(cx.chars(artifact).is(CardType::Creature), "a creature again");
+    assert!(cx.s().blocks.is_empty(), "it blocks no more");
+    assert!(cx.s().attackers[0].blocked, "the attacker is still blocked");
+    cx.st().update_turn(|t| t.set_step(Step::CombatDamage));
+    combat_damage(&mut cx).unwrap();
+    assert_eq!(cx.s().obj(artifact).damage, 0);
+    assert_eq!(cx.s().player(YOU).life, 20, "no lifelink: no combat damage was dealt");
+}
+
+/// CR 506.4d: a planeswalker creature that blocks and is being attacked stops being a creature: it blocks no more, but is
+/// still a planeswalker being attacked, and is dealt the combat damage of the creature attacking it; the creature it
+/// blocked, blocked by nothing, deals none.
+#[test]
+fn a_blocking_planeswalker_creature_that_stops_being_a_creature_is_still_attacked() {
+    let (mut game, _, _) = game(2, &WALKER, THEM, None, THEM);
+    let first = put(&mut game, &ATTACKER, YOU);
+    let blocked = put(&mut game, &LIFELINKER, YOU);
+    let gideon = put(&mut game, &WALKER_CREATURE, THEM);
+    game.state.set_attackers(vec![
+        attacking(first, Target::Object(gideon), THEM, TypeSet::of(&[CardType::Planeswalker])),
+        Attacker { blocked: true, ..attacking(blocked, Target::Player(THEM), THEM, TypeSet::NONE) },
+    ]);
+    game.state.set_blocks(vec![Block { blocker: gideon, attacker: blocked, first_strike: false }]);
+    let mut cx = cx(&mut game);
+    cantrip_api::Game::add_counters(&mut cx, gideon, CounterKind::Loyalty, 10);
+    effect(&mut cx, gideon, EffectKind::SetTypes(TypeSet::of(&[CardType::Planeswalker])));
+    assert!(cx.s().blocks.is_empty(), "it blocks no more");
+    assert_eq!(cx.s().attackers.len(), 2);
+    assert_eq!(cx.s().attackers[0].target, Target::Object(gideon), "still a planeswalker being attacked");
+    assert_eq!(damage_to(&mut cx, gideon), 3);
+    assert_eq!(cx.s().player(YOU).life, 20, "the blocked lifelink creature dealt nothing");
 }

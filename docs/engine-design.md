@@ -2071,14 +2071,18 @@ assign no combat damage (CR 506.4c, 510.1b): the damage step asks nothing of the
 planeswalker again, or its first controller's again, by then is still not attacked. `ops::remove_from_combat` is the
 one place combat forgets a permanent - leaving the battlefield, phasing out, regenerating while attacking or blocking,
 a change of controller (`ops::write_controller`, CR 613.1b) or of a battle's protector (the state-based action of CR
-704.5x-y); `ops::settle_attacked` removes one that has stopped being what it is attacked as, by its card types as the layers have
+704.5x-y); `ops::settle_combat` removes one that has stopped being what it is attacked as, by its card types as the layers have
 them. `Attacker::attacked_as` records that - planeswalker, battle or both, as it was attacked, kept up to date while it
 stays attacked (one that becomes both is attacked as both) - because CR 506.4e is about a permanent that is both as it
 changes: one that was both stays while it is either (a planeswalker no longer a battle only while its protector controls
 it), while one that was only a planeswalker and becomes only a battle, or the reverse, is removed (CR 506.4). It is asked
 wherever control is settled - every event, every effect begun, the end of an instruction,
 the state-based actions (`settle_lasting_and_control`) - and at every change with no event (`Cx::state_changed`), free
-while nothing attacks a permanent. Type loss takes no creature out of a block (CR 506.4d). A battle still being attacked
+while nothing attacks. The same check removes an attacking or blocking creature that has stopped being a creature (CR
+506.4: an artifact Ensoul Artifact or March of the Machines animated, once the enchantment leaves), for good, though it
+be a creature again before damage; its blocks end with it, and a creature it blocked stays blocked. The two are apart
+(CR 506.4d): a planeswalker creature that blocks and is attacked keeps being attacked once it is no longer a creature,
+and keeps blocking once it is no longer a planeswalker. A battle still being attacked
 keeps its departed protector through combat (CR 704.5x).
 The departed-recipient and assignment checks measured 13.86 us per decision before and 14.05 after on 128 games, in
 back-to-back runs of the two builds (2026-10-24; shared-machine load, no speed claim).

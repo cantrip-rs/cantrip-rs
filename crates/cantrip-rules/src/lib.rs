@@ -1150,10 +1150,11 @@ impl<'a> Cx<'a> {
     /// are asked now (CR 603.8), or, inside an instruction the card performs as several calls (`Game::one_instruction`), once
     /// it is done - an exchange of control is not judged with one permanent given and the other not yet taken.
     pub(crate) fn state_changed(&mut self) {
-        // A planeswalker or battle being attacked that is no longer one leaves combat as it stops being one (CR 506.4), not
-        // when an event next settles the game; inside an instruction, once it is done (`ops::as_one_instruction`).
+        // An attacking or blocking creature that is no longer a creature, and a planeswalker or battle being attacked that is
+        // no longer one, leave combat as they stop being one (CR 506.4), not when an event next settles the game; inside an
+        // instruction, once it is done (`ops::as_one_instruction`).
         if self.s().settle_held.get() == 0 {
-            ops::settle_attacked(self);
+            ops::settle_combat(self);
         }
         let check = &mut self.g.check;
         if check.depth == 0 {
