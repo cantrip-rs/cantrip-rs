@@ -14,8 +14,10 @@ name = "cantrip-native-host"
 path = "src/bin/host.rs"
 
 [dependencies]
+cantrip-ai.workspace = true
 cantrip-engine.workspace = true
 cantrip-oracle.workspace = true
+cantrip-obs.workspace = true
 cantrip-script.workspace = true
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

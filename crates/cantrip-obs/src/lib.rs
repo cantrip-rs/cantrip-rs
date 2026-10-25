@@ -10,6 +10,8 @@
 //! One module per concept: `observation` is the data. The encoding a network reads, and answers factored over
 //! canonical indices, will be modules beside it.
 
+pub mod encode;
+pub mod factor;
 mod observation;
 
 pub use observation::*;
@@ -29,7 +31,7 @@ pub fn from_bytes(bytes: &[u8]) -> Option<Observation> {
 mod tests {
     use super::*;
 
-    fn sample() -> Observation {
+    pub(crate) fn sample() -> Observation {
         let bear = CharsObs {
             types: 1 << 1,
             supertypes: 0,
@@ -74,7 +76,7 @@ mod tests {
                 ObjectObs::Ability { position: 0, source: Ref::Object(2), name: "Grizzly Bears".into(), kind: 2, controller: 1, targets: vec![Ref::Object(0), Ref::Player(0)], x: 0 },
             ],
             events: vec![EventObs { turn: 3, kind: 2, player: Some(1), objects: vec![Ref::Object(2), Ref::None], from: Some(Place { zone: ZoneObs::Hand, player: 1 }), to: Some(Place { zone: ZoneObs::Battlefield, player: 0 }), amount: 0 }],
-            request: Some(RequestObs { player: 0, kind: "DeclareBlockers".into(), candidates: vec![2] }),
+            request: Some(RequestObs { player: 0, kind: "DeclareBlockers".into(), candidates: vec![2], ask: Some(Ask { may_cancel: false, source: Ref::None, kind: AskKind::DeclareBlockers { eligible: vec![Ref::Object(2)], attackers: vec![Ref::Object(3)], allowed: vec![(Ref::Object(2), Ref::Object(3))], required: vec![], most: 0, min_blockers: vec![2], max_blockers: vec![255] } }) }),
             decklist: vec![Count { name: "Forest".into(), count: 17 }],
             pools: vec![vec![], vec![Count { name: "Shock".into(), count: 3 }]],
             seen: vec![vec![], vec![Count { name: "Grizzly Bears".into(), count: 1 }]],

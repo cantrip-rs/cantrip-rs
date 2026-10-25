@@ -1,5 +1,5 @@
-# The AMD environment: PyTorch on ROCm (torch.cuda is HIP there) and the phase-0 spike. Not yet built (no AMD GPU on
-# the machine it was written on). Needs a ROCm-capable GPU and the amdgpu driver on the host:
+# The AMD environment: PyTorch on ROCm (torch.cuda is HIP there) and the phase-0 spike. Needs a ROCm-capable GPU and
+# the amdgpu driver on the host:
 #
 #   docker build -f ai/Dockerfile.rocm -t cantrip-ai-rocm ai
 #   docker run --rm --device /dev/kfd --device /dev/dri --group-add video --security-opt seccomp=unconfined cantrip-ai-rocm
@@ -9,12 +9,19 @@
 # the ort-MIGraphX target is taken up.
 FROM rocm/pytorch:latest
 
-RUN pip install --no-cache-dir uv && uv pip install --system --no-cache "onnx>=1.16" "onnxruntime>=1.18" "numpy>=1.26"
+RUN pip install --no-cache-dir uv && uv pip install --system --no-cache "onnx>=1.16" "onnxruntime>=1.18" "numpy>=1.26" "zstandard>=0.22"
 
 RUN useradd --create-home --uid 1001 cantrip
 USER cantrip
 WORKDIR /home/cantrip/ai
 COPY --chown=cantrip . .
+ENV PYTHONPATH=/home/cantrip/ai
 
+# This image is the train/export half. The whole generation driver also needs cargo and dotnet for its build,
+# self-play, parity and gate stages, so run that on the host (docs/ai-training.md). To train in here, mount the
+# repository:
+#   docker run --rm -it --device /dev/kfd --device /dev/dri --group-add video \
+#       --security-opt seccomp=unconfined -v "$PWD:/work" -w /work -e PYTHONPATH=/home/cantrip/ai \
+#       cantrip-ai-rocm python -m cantrip_ai.train --data /work/ai-data/gen2/selfplay --out /work/ai-data/models/try --device cuda
 WORKDIR /home/cantrip/ai/spike
 CMD ["sh", "-c", "python export.py && python bench_torch.py"]

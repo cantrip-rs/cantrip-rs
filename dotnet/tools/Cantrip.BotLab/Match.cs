@@ -34,6 +34,12 @@ public sealed record MatchResult(int Winner, int Starter, int Turns, string Fail
 
     /// <summary>The names of the cards each seat held at some point in the game, seat 1 first. Only when asked for.</summary>
     public IReadOnlyList<IReadOnlySet<string>> Held { get; init; } = [];
+
+    /// <summary>
+    /// Each answer of each seat, seat 1 first: how long it took in all and how much of that was the native host's
+    /// (the game's own work, which runs inside the send). Only for a game played on a <see cref="Lane"/>.
+    /// </summary>
+    public IReadOnlyList<IReadOnlyList<(double Act, double Host)>> Times { get; init; } = [];
 }
 
 /// <summary>
@@ -42,7 +48,7 @@ public sealed record MatchResult(int Winner, int Starter, int Turns, string Fail
 /// <see cref="IAutoPlayer"/> it is given, which is the difference: this is for setting one way of playing against
 /// another, and for collecting the positions a seat was in along the way.
 /// </summary>
-public static class Match
+internal static class Match
 {
     private const int AnswerLimit = 200_000;
 
@@ -84,14 +90,14 @@ public static class Match
     /// <param name="story">Whether to keep the game's log, for reading what a seat did.</param>
     /// <param name="limit">Answers the game may take before it is called stuck, or zero for the usual generous number.</param>
     /// <param name="hands">Whether to record which cards each seat held, for saying which of them a seat wins with.</param>
-    /// <param name="record">A log the engine keeps every answer in, to replay the game without the session (<see cref="Bench"/>).</param>
+    /// <param name="lane">The worker's own native host and AI host, for a game with a neural seat; else the shared host.</param>
     public static MatchResult Play(
         string contentRoot, IReadOnlyList<DeckList> decks, Cantrip.Decks.DeckFormat format, ulong seed, IReadOnlyList<IAutoPlayer> players, bool sample, bool story = false, int limit = 0,
-        bool hands = false)
+        bool hands = false, Lane? lane = null)
     {
         try
         {
-            return Game(contentRoot, decks, format, seed, players, sample, story, limit > 0 ? limit : AnswerLimit, hands);
+            return Game(contentRoot, decks, format, seed, players, sample, story, limit > 0 ? limit : AnswerLimit, hands, lane);
         }
         catch (Exception error)
         {
@@ -100,9 +106,14 @@ public static class Match
     }
 
     private static MatchResult Game(
-        string contentRoot, IReadOnlyList<DeckList> decks, Cantrip.Decks.DeckFormat format, ulong seed, IReadOnlyList<IAutoPlayer> players, bool sample, bool story, int limit, bool hands)
+        string contentRoot, IReadOnlyList<DeckList> decks, Cantrip.Decks.DeckFormat format, ulong seed, IReadOnlyList<IAutoPlayer> players, bool sample, bool story, int limit, bool hands, Lane? lane)
     {
-        using HostedGame hosted = HostAndPlay.StartTable(RulesHostFactory.Native, decks, format, seed, [.. decks.Select((_, seat) => $"Bot {seat + 1}")]);
+        foreach (NeuralPlay neural in players.OfType<NeuralPlay>())
+        {
+            neural.Lane = lane;
+        }
+
+        using HostedGame hosted = HostAndPlay.StartTable(lane?.Rules ?? RulesHostFactory.Native, decks, format, seed, [.. decks.Select((_, seat) => $"Bot {seat + 1}")]);
 
         List<(GameClient Client, IAutoPlayer Bot)> seats = [];
         foreach (int seat in hosted.Seats)
@@ -123,7 +134,6 @@ public static class Match
 
         var clock = System.Diagnostics.Stopwatch.StartNew();
         TimeSpan? cpuAtStart = ThreadTime();
-        TimeSpan Spent() => ThreadTime() is { } now && cpuAtStart is { } then ? now - then : clock.Elapsed;
 
         // The slowest single answer, and what it answered: what a game called stuck was doing when it was.
         double slowestAnswer = 0;
@@ -132,6 +142,13 @@ public static class Match
         double[] slowest = new double[seats.Count];
         double[] thinking = new double[seats.Count];
         int[] answered = new int[seats.Count];
+        List<(double Act, double Host)>[] times = [.. seats.Select(_ => new List<(double Act, double Host)>())];
+        // Where the system does not say (Linux), the clock less a neural seat's own part of its answers (not the native
+        // host's): that is worked out in the AI host's process, which this thread's processor time never counts, and a
+        // searching seat spends minutes of it in a long game.
+        bool[] elsewhere = [.. seats.Select(seat => seat.Bot is NeuralPlay)];
+        TimeSpan Spent() => ThreadTime() is { } now && cpuAtStart is { } then ? now - then
+            : clock.Elapsed - TimeSpan.FromMilliseconds(times.Where((_, i) => elsewhere[i]).SelectMany(t => t).Sum(t => t.Act - t.Host));
         var watch = new System.Diagnostics.Stopwatch();
         HashSet<string>[] held = [.. seats.Select(_ => new HashSet<string>(StringComparer.Ordinal))];
 
@@ -230,6 +247,7 @@ public static class Match
                 string answering = client.Prompt?.Prompt is { } prompt
                     ? $"seat {client.Seat} {prompt.GetType().Name.Replace("PromptMessage", string.Empty, StringComparison.Ordinal)} on turn {client.View?.Turn} {client.View?.Step}"
                     : string.Empty;
+                double hostBefore = lane?.Tee.HostMs ?? 0;
                 watch.Restart();
                 bool acted;
                 try
@@ -256,6 +274,11 @@ public static class Match
                 }
 
                 answered[at]++;
+                if (lane is not null)
+                {
+                    times[at].Add((took, lane.Tee.HostMs - hostBefore));
+                }
+
                 thinking[at] += took;
                 slowest[at] = Math.Max(slowest[at], took);
 
@@ -308,6 +331,7 @@ public static class Match
             Answers = answered,
             Thinking = thinking,
             Held = held,
+            Times = times,
         };
     }
 

@@ -1,0 +1,30 @@
+[package]
+name = "cantrip-ai-host"
+description = "The AI player as a process beside the table: it mirrors a hosted game and answers a seat's requests with a network (docs/ai-host.md)."
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+license.workspace = true
+
+[lib]
+name = "cantrip_ai_host"
+
+[[bin]]
+name = "cantrip-ai-host"
+path = "src/main.rs"
+
+[[bin]]
+name = "cantrip-selfplay"
+path = "src/bin/selfplay.rs"
+
+[dependencies]
+cantrip-ai.workspace = true
+cantrip-engine.workspace = true
+cantrip-host.workspace = true
+cantrip-obs.workspace = true
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[features]
+# onnxruntime on the CPU, the faster backend (`cantrip_ai::eval::OrtEvaluator`); tract otherwise.
+ort = ["cantrip-ai/ort"]

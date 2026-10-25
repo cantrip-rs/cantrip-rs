@@ -1,16 +1,22 @@
-# The NVIDIA environment: PyTorch on CUDA, onnxruntime-gpu, and the phase-0 spike. Not yet built (no GPU on the
-# machine it was written on). Needs the NVIDIA driver and the container toolkit (CDI) on the host:
+# The NVIDIA environment: PyTorch on CUDA, onnxruntime-gpu, and the phase-0 spike. Needs the NVIDIA driver and the
+# container toolkit (CDI) on the host:
 #
 #   docker build -f ai/Dockerfile.cuda -t cantrip-ai-cuda ai
 #   docker run --rm --device nvidia.com/gpu=all cantrip-ai-cuda      (CDI; or --gpus all)
 FROM pytorch/pytorch:2.5.1-cuda12.4-cudnn9-runtime
 
-RUN pip install --no-cache-dir uv && uv pip install --system --no-cache "onnx>=1.16" "onnxruntime-gpu>=1.20" "numpy>=1.26"
+RUN pip install --no-cache-dir uv && uv pip install --system --no-cache "onnx>=1.16" "onnxruntime-gpu>=1.20" "numpy>=1.26" "zstandard>=0.22"
 
 RUN useradd --create-home --uid 1000 cantrip
 USER cantrip
 WORKDIR /home/cantrip/ai
 COPY --chown=cantrip . .
+ENV PYTHONPATH=/home/cantrip/ai
 
+# This image is the train/export half. The whole generation driver also needs cargo and dotnet for its build,
+# self-play, parity and gate stages, so run that on the host (docs/ai-training.md). To train in here, mount the
+# repository:
+#   docker run --rm -it --device nvidia.com/gpu=all -v "$PWD:/work" -w /work -e PYTHONPATH=/home/cantrip/ai \
+#       cantrip-ai-cuda python -m cantrip_ai.train --data /work/ai-data/gen2/selfplay --out /work/ai-data/models/try --device cuda
 WORKDIR /home/cantrip/ai/spike
 CMD ["sh", "-c", "python export.py && python bench_torch.py"]

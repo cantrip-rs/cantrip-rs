@@ -4,6 +4,7 @@
 
 use std::collections::VecDeque;
 
+use cantrip_ai::pay::{PayPlan, Spend};
 use cantrip_engine::undo::Undo;
 use cantrip_engine::*;
 
@@ -41,21 +42,16 @@ fn fail<T>(message: impl Into<String>) -> R<T> {
     Err(Fail(message.into()))
 }
 
-/// A cast or activation in progress, from the line that began it: what `Spend:` still has to say.
+/// A cast or activation in progress, from the line that began it: what `Spend:` still has to say, and the rest of how
+/// the line pays (`cantrip_ai::PayPlan`).
 struct Casting {
     player: PlayerId,
-    /// The X or kicker count the line asked for (`X:`, `Kicked:`).
-    x: Option<u16>,
-    spend: VecDeque<Spend>,
-    /// The creatures a `Convoke:` taps, in the order the payment asks (CR 702.51a), and how many cards `Delve:` exiles
-    /// from the graveyard, the first offered each time (CR 702.66a).
-    convoke: VecDeque<String>,
-    delve: u32,
+    plan: PayPlan,
 }
 
 impl Casting {
     fn new(player: PlayerId, x: Option<u16>, spend: VecDeque<Spend>) -> Casting {
-        Casting { player, x, spend, convoke: VecDeque::new(), delve: 0 }
+        Casting { player, plan: PayPlan::new(x, spend) }
     }
 }
 
@@ -389,10 +385,6 @@ fn kind_name(kind: &RequestKind) -> &'static str {
         RequestKind::ChooseSubtype { .. } => "ChooseSubtype",
         RequestKind::ChooseDividedTargets { .. } => "ChooseDividedTargets",
     }
-}
-
-fn pays(owed: &ManaCost, mana: Mana) -> bool {
-    owed.generic > 0 || owed.symbols[mana as usize] > 0 || owed.hybrid.iter().flatten().any(|(a, b)| *a == mana || *b == mana)
 }
 
 impl<'s> Run<'s> {
@@ -986,8 +978,8 @@ impl<'s> Run<'s> {
                 self.colors = colors_of(step)?;
                 let x = x_of(step)?;
                 let mut casting = Casting::new(request.player, x, spend_of(step)?);
-                casting.convoke = names_of(step, "Convoke");
-                casting.delve = match step.named("Delve") {
+                casting.plan.convoke = names_of(step, "Convoke");
+                casting.plan.delve = match step.named("Delve") {
                     None => 0,
                     Some(text) => match text.trim().parse::<u32>() {
                         Ok(n) => n,
@@ -1012,7 +1004,7 @@ impl<'s> Run<'s> {
             (_, Some(ActionKind::ActivateAbility)) => {
                 if self.casting.is_some() {
                     let more = spend_of(step)?;
-                    self.casting.as_mut().unwrap().spend.extend(more);
+                    self.casting.as_mut().unwrap().plan.spend.extend(more);
                 }
             }
             _ => {}
@@ -1020,63 +1012,15 @@ impl<'s> Run<'s> {
         Ok(())
     }
 
-    /// Paying from the pool without being told (`AutoPay`): `Spend:` first, then any pool mana that pays what is owed.
+    /// Paying from the pool without being told (`AutoPay`): `Spend:` first, then any pool mana that pays what is owed
+    /// (`cantrip_ai::pay::auto_pay`).
     fn auto_pay(&mut self, request: &Request) -> R<Option<Answer>> {
-        let RequestKind::PayCosts { remaining, options, announcing, x, most, least, .. } = &request.kind else { return Ok(None) };
-        if *announcing {
-            // X, or how many times it is kicked, announced as the line said, as a page announces it; a line that says none
-            // announces the value the question starts at, as a page does: the least it may be (an X that can't be 0 is 1), or
-            // the X a reduction already announced pays for (`ExileFromHandForLess`).
-            let want = self.casting.as_ref().and_then(|c| c.x).map_or(*x, u32::from);
-            return Ok((*least..=*most).contains(&want).then_some(Answer::Announce(want)));
-        }
-        // Convoke taps the creatures it names, one per question, and Delve exiles that many cards from the graveyard, the
-        // first offered each time: what pays the cost instead of mana (CR 601.2h).
-        if let Some(casting) = self.casting.as_mut() {
-            if !casting.convoke.is_empty() && options.iter().any(|o| o.kind == ActionKind::TapToPay) {
-                let wanted = casting.convoke.pop_front().unwrap();
-                let tap = options.iter().find(|o| {
-                    o.kind == ActionKind::TapToPay && o.source.is_some_and(|s| self.game.known_name(s).eq_ignore_ascii_case(&wanted))
-                });
-                return match tap {
-                    Some(o) => Ok(Some(Answer::Act(Action::of(o)))),
-                    None => fail(format!(
-                        "Convoke: names {wanted}, but the creatures offered are {:?}",
-                        options.iter().filter(|o| o.kind == ActionKind::TapToPay).filter_map(|o| o.source).map(|s| self.game.known_name(s)).collect::<Vec<_>>()
-                    )),
-                };
-            }
-            if casting.delve > 0
-                && let Some(o) = options.iter().find(|o| o.kind == ActionKind::ExileToPay)
-            {
-                casting.delve -= 1;
-                return Ok(Some(Answer::Act(Action::of(o))));
-            }
-        }
-        let assign: Vec<&ActionOption> = options.iter().filter(|o| o.kind == ActionKind::AssignMana).collect();
-        if let Some(casting) = self.casting.as_mut()
-            && !assign.is_empty()
-            && let Some(wanted) = casting.spend.pop_front()
-        {
-            let game = &self.game;
-            let from = |o: &ActionOption| o.source.map(|s| game.known_name(s).to_string());
-            return match assign.iter().find(|o| (o.mana, o.restriction) == (Some(wanted.0), wanted.1) && from(o).map(|n| n.to_ascii_lowercase()) == wanted.2.as_ref().map(|n| n.to_ascii_lowercase())) {
-                Some(o) => Ok(Some(Answer::Act(Action::of(o)))),
-                None => fail(format!(
-                    "Spend: names {wanted:?}, but the pool mana offered is {:?}",
-                    assign.iter().map(|o| (o.mana, from(o))).collect::<Vec<_>>()
-                )),
-            };
-        }
-        if !remaining.is_zero()
-            && let Some(o) = assign.iter().find(|o| o.mana.is_some_and(|m| pays(remaining, m)))
-        {
-            return Ok(Some(Answer::Act(Action::of(o))));
-        }
-        if let Some(o) = options.iter().find(|o| o.kind == ActionKind::ConfirmCasting) {
-            return Ok(Some(Answer::Act(Action::of(o))));
-        }
-        Ok(None)
+        let mut none = PayPlan::default();
+        let plan = match self.casting.as_mut() {
+            Some(casting) => &mut casting.plan,
+            None => &mut none,
+        };
+        cantrip_ai::pay::auto_pay(&self.game, request, plan).map_err(Fail)
     }
 
     fn default(&mut self, request: &Request) -> R<Answer> {
@@ -2566,10 +2510,6 @@ fn colors_of(step: &ActionStep) -> R<Option<Vec<Color>>> {
     }
     Ok(Some(out))
 }
-
-/// Pool mana a `Spend:` line names: its kind, its restriction (CR 106.6), and the name of the source that produced it, for
-/// mana a rule tells apart by its source (CR 106.3).
-type Spend = (Mana, Option<ManaRestriction>, Option<String>);
 
 /// `Spend:` names pool mana by its symbol, and for mana that carries a restriction its name after it: `R`, `R GainsHaste`;
 /// mana told apart by its source names the source after `from`: `W from Barracks of the Thousand`. A restriction's name

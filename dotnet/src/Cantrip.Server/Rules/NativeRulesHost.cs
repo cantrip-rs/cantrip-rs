@@ -79,7 +79,9 @@ public sealed class NativeRulesHost : IRulesHost
         }
 
         var host = new NativeRulesHost(transport, seats, history ?? []);
-        var named = seats.Select(seat => new { seat.Name, seat.Deck, seat.Sideboard, seat.Companion }).ToList();
+        List<object> named = [.. seats.Select(seat => seat.DeckName is { } deckName
+            ? (object)new { seat.Name, seat.Deck, seat.Sideboard, seat.Companion, DeckName = deckName }
+            : new { seat.Name, seat.Deck, seat.Sideboard, seat.Companion })];
         NewGameReply dealt = host.Send<NewGameReply>(options.Scenario is { } scenario
             ? new
             {

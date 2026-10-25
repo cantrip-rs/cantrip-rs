@@ -5,6 +5,7 @@ using System.Globalization;
 using Cantrip.Client;
 using Cantrip.Client.Tactics;
 using Cantrip.Server;
+using Cantrip.Server.Rules;
 
 namespace Cantrip.BotLab;
 
@@ -46,6 +47,9 @@ public static class Program
             Console.Error.WriteLine(error.Message);
             return 2;
         }
+        EachShuffle = args.Contains("--each-shuffle");
+        Mirrors = args.Contains("--mirrors");
+        Neural = NeuralOptions.From(root, args);
 
         // --versus DIR: the --a seat always plays a deck of --decks and the --b seat one of these, each pair of games
         // the next of each: how one kind of deck is played against another, with the pilot of one side changed.
@@ -88,6 +92,25 @@ public static class Program
     /// <summary>The decks the --b seat plays against the --a seat's, for <c>--versus</c>; empty for mirrors.</summary>
     private static List<DeckList> Versus { get; set; } = [];
 
+    /// <summary>
+    /// <c>--each-shuffle</c>: every game its own shuffle, rather than each pair of games (seats swapped) one. Two seats
+    /// that play alike, the tactical bot against itself, play the same game twice from one shuffle, so a recorded
+    /// self-duel (<c>--ai-record</c>) takes this on its own: the data would otherwise be every game twice.
+    /// </summary>
+    private static bool EachShuffle { get; set; }
+
+    /// <summary><c>--mirrors</c>: with two decks, half the games the matchup and a quarter each deck's mirror.</summary>
+    private static bool Mirrors { get; set; }
+
+    /// <summary>How a <c>neural</c> seat is played: the model, its backend, its deadline (<see cref="NeuralOptions"/>).</summary>
+    private static NeuralOptions Neural { get; set; } = null!;
+
+    /// <summary>Every answer the neural seats of a run made, with what it cost.</summary>
+    private static ConcurrentBag<NeuralAnswer> NeuralAnswers { get; } = [];
+
+    /// <summary>The shuffle game number <paramref name="game"/> of a run is dealt from.</summary>
+    internal static ulong Shuffle(ulong seed, int game) => seed + (ulong)(EachShuffle ? game : game / 2);
+
     /// <summary>Games played at once: one per core unless <c>--parallel</c> says fewer.</summary>
     private static int Parallelism { get; set; } = Math.Clamp(Environment.ProcessorCount, 1, 32);
 
@@ -113,9 +136,37 @@ public static class Program
         // --cards N: which cards each seat won with, the N it did worst and best by.
         int cards = Number(args, "--cards", 0);
 
+        // --ai-record DIR: the host records every game that ends as AI training shards (docs/ai-player-plan.md, "Data").
+        bool recording = Record(root, args, a, b);
+        if (recording && a == b)
+        {
+            EachShuffle = true;
+        }
+
+        if (recording)
+        {
+            NativeHostProcess.SharedArguments = [.. NativeHostProcess.SharedArguments, "--ai-record-seeds", $"{seed}..{Shuffle(seed, games - 1) + 1}"];
+            Console.WriteLine(EachShuffle ? "Every game its own shuffle." : "Each pair of games one shuffle.");
+        }
+
         var clock = Stopwatch.StartNew();
-        Tally tally = Play(root, decks, games, seed, Maker(root, a), Maker(root, b), sample: false, out _, hands: cards > 0);
+        // --sprt: stop once the sequential test has its verdict, --games the most it may take (docs/ai-player-plan.md, "Serving and measuring").
+        bool sprt = args.Contains("--sprt");
+        Tally tally = Play(root, decks, games, seed, Maker(root, a), Maker(root, b, b: true), sample: false, out _, hands: cards > 0, sprt: sprt);
         tally.Write(a, b, clock.Elapsed);
+        if (sprt)
+        {
+            Console.WriteLine(tally.SprtLine(a, b));
+        }
+
+        tally.WriteSplits(a, b, NeuralAnswers);
+
+        if (recording)
+        {
+            // The host writes out the games still being recorded once its input ends: wait for it.
+            NativeHostProcess.CloseShared(TimeSpan.FromMinutes(10));
+            Console.WriteLine($"Recorded into {Text(args, "--ai-record", string.Empty)} in {clock.Elapsed:hh\\:mm\\:ss}.");
+        }
 
         if (cards > 0)
         {
@@ -123,6 +174,49 @@ public static class Program
         }
 
         return tally.Failures.IsEmpty ? 0 : 1;
+    }
+
+    /// <summary>
+    /// <c>--ai-record DIR</c> (with <c>--ai-record-mode full|decklist|hidden</c>, <c>--ai-record-threads N</c>,
+    /// <c>--ai-record-games N</c>, <c>--ai-record-mb N</c>): starts the shared host recording the games that end as
+    /// training shards, its header naming the seats that played and the shuffles. False when not asked for.
+    /// </summary>
+    private static bool Record(string root, string[] args, string a, string b)
+    {
+        string directory = Text(args, "--ai-record", string.Empty);
+        if (directory.Length == 0)
+        {
+            return false;
+        }
+
+        string model = Path.Combine(root, "dotnet", "src", "Cantrip.Client", "Tactics", "tactical-model.txt");
+        string Producer(string seat) => seat == "tactical" && File.Exists(model) ? $"tactical:{Fnv1a(File.ReadAllBytes(model)):x16}" : seat;
+        string producer = a == b ? Producer(a) : $"{Producer(a)} v {Producer(b)}";
+
+        List<string> host = ["--ai-record", Path.GetFullPath(directory), "--ai-record-mode", Text(args, "--ai-record-mode", "full"),
+            "--ai-record-producer", producer];
+        foreach (string option in (string[])["--ai-record-threads", "--ai-record-games", "--ai-record-mb"])
+        {
+            if (Text(args, option, string.Empty) is { Length: > 0 } value)
+            {
+                host.AddRange([option, value]);
+            }
+        }
+
+        NativeHostProcess.SharedArguments = host;
+        Console.WriteLine($"Recording games into {Path.GetFullPath(directory)} ({Text(args, "--ai-record-mode", "full")} information), as {producer}.");
+        return true;
+    }
+
+    private static ulong Fnv1a(byte[] bytes)
+    {
+        ulong hash = 0xcbf29ce484222325;
+        foreach (byte b in bytes)
+        {
+            hash = (hash ^ b) * 0x100000001b3;
+        }
+
+        return hash;
     }
 
     // --- tune ----------------------------------------------------------------------------------------------------------
@@ -306,7 +400,7 @@ public static class Program
 
         do
         {
-            ulong shuffle = game >= 0 ? seed + (ulong)(game / 2) : seed;
+            ulong shuffle = game >= 0 ? Shuffle(seed, game) : seed;
             (List<DeckList> seated, List<IAutoPlayer> players) = game >= 0
                 ? Seating(decks, game, Maker(root, a), Maker(root, b))
                 : ([decks[0], decks[^1]], [Maker(root, a)(0, 1), Maker(root, b)(0, 2)]);
@@ -326,9 +420,11 @@ public static class Program
                 Console.WriteLine($"Game {game}: seat 1 is {(game % 2 == 1 ? b : a)} with {seated[0].Name}, seat 2 is {(game % 2 == 1 ? a : b)} with {seated[1].Name}.");
             }
 
+            // A neural seat plays at a table with an AI host beside it, as in a duel.
+            Lane? lane = players.Any(p => p is NeuralPlay) ? new Lane(root, Neural.Arguments, Neural.Echo) : null;
             Task<MatchResult> playing = Task.Run(() => Match.Play(
                 Path.Combine(root, "content"), seated, Format, shuffle, players,
-                sample: false, story: true, limit: Number(args, "--limit", 0)));
+                sample: false, story: true, limit: Number(args, "--limit", 0), lane: lane));
 
             if (patience > 0 && !playing.Wait(TimeSpan.FromSeconds(patience)))
             {
@@ -349,6 +445,7 @@ public static class Program
 
             result = playing.GetAwaiter().GetResult();
             narration?.Dispose();
+            lane?.Dispose();
         }
         while (lost && result.Winner == 1 && ++tries < 500 && ++seed > 0);
 
@@ -472,6 +569,24 @@ public static class Program
         public double SlowestB;
         public object Gate { get; } = new();
 
+        /// <summary>A's wins and games by the seat it sat in, seat 1 first.</summary>
+        public int[] WinsBySeat { get; } = new int[2];
+
+        public int[] GamesBySeat { get; } = new int[2];
+
+        /// <summary>A's wins and games on the play (it took the first turn) and on the draw.</summary>
+        public int[] WinsByTurn { get; } = new int[2];
+
+        public int[] GamesByTurn { get; } = new int[2];
+
+        /// <summary>A's wins and decided games by its deck against B's.</summary>
+        public SortedDictionary<string, int[]> ByPair { get; } = new(StringComparer.Ordinal);
+
+        /// <summary>Each answer of A's and of B's: its whole time and the native host's part, for a game on a lane.</summary>
+        public List<(double Act, double Host)> TimesA { get; } = [];
+
+        public List<(double Act, double Host)> TimesB { get; } = [];
+
         /// <summary>
         /// Per card, how the seats whose deck had it did: games won and lost holding it at some point, and won and lost
         /// never having held it, first for A and then for B.
@@ -481,6 +596,41 @@ public static class Program
         public ConcurrentBag<string> Failures { get; } = [];
 
         public int Finished => WinsA + WinsB + Draws;
+
+        /// <summary>
+        /// The sequential probability ratio test's log-likelihood ratio of A's games so far, H1 (A wins 55%) against H0
+        /// (50%), a draw half a win and half a loss: each game adds <c>x ln(p1/p0) + (1-x) ln((1-p1)/(1-p0))</c> for its
+        /// score x. With alpha = beta = 0.05 it accepts H1 at ln(19) and H0 at -ln(19) (Wald).
+        /// </summary>
+        public double Llr
+        {
+            get
+            {
+                double wins = WinsA + (Draws / 2.0);
+                double losses = WinsB + (Draws / 2.0);
+                return (wins * Math.Log(SprtH1 / SprtH0)) + (losses * Math.Log((1 - SprtH1) / (1 - SprtH0)));
+            }
+        }
+
+        public const double SprtH0 = 0.5;
+        public const double SprtH1 = 0.55;
+
+        /// <summary>Wald's bound for alpha = beta = 0.05: ln((1 - beta) / alpha) = ln 19.</summary>
+        public static readonly double SprtBound = Math.Log(19);
+
+        /// <summary>The SPRT's verdict so far: +1 H1 (A is the better by 55%), -1 H0 (it is not), 0 not yet.</summary>
+        public int Verdict => Llr >= SprtBound ? 1 : Llr <= -SprtBound ? -1 : 0;
+
+        /// <summary>The games that had finished when the SPRT first reached a verdict, and the LLR then; zero before.</summary>
+        public int StoppedAt;
+
+        public double StoppedLlr;
+
+        public string SprtLine(string a, string b) =>
+            $"SPRT (H0 {SprtH0:P0}, H1 {SprtH1:P0}, alpha = beta = 0.05, bounds +/-{SprtBound:N3}): LLR {Llr:N3} after {Finished} games; " +
+            (StoppedAt > 0
+                ? $"{(StoppedLlr > 0 ? $"H1 accepted, {a} is the better" : $"H0 accepted, {a} is not the better by 55%")} at game {StoppedAt} (LLR {StoppedLlr:N3}; games already in play finished after)."
+                : Verdict != 0 ? $"{(Verdict > 0 ? "H1" : "H0")} by the end." : "no verdict within the games played.");
 
         /// <summary>
         /// Whether A won by more than luck would give it: its share of the decided games is above a half by more than
@@ -504,6 +654,92 @@ public static class Program
             // The normal approximation's 95% interval: enough to say whether a difference is one.
             double margin = decided == 0 ? 0 : 1.96 * Math.Sqrt(share * (1 - share) / decided);
             return $"{WinsA} to {WinsB}{(Draws > 0 ? $", {Draws} drawn" : string.Empty)} ({share:P1} +/- {margin:P1})";
+        }
+
+        /// <summary>A share of games with its 95% interval, the normal approximation.</summary>
+        public static string Share(int won, int of)
+        {
+            double share = of == 0 ? 0 : won / (double)of;
+            double margin = of == 0 ? 0 : 1.96 * Math.Sqrt(share * (1 - share) / of);
+            return $"{won} of {of} ({share:P1} +/- {margin:P1})";
+        }
+
+        /// <summary>A's results by seat, by turn order and by decks; and, for games on a lane, what an answer cost each.</summary>
+        public void WriteSplits(string a, string b, IReadOnlyCollection<NeuralAnswer> neural)
+        {
+            Console.WriteLine();
+            Console.WriteLine($"{a} in seat 1: {Share(WinsBySeat[0], GamesBySeat[0])}; in seat 2: {Share(WinsBySeat[1], GamesBySeat[1])}.");
+            Console.WriteLine($"{a} on the play: {Share(WinsByTurn[0], GamesByTurn[0])}; on the draw: {Share(WinsByTurn[1], GamesByTurn[1])}.");
+            foreach ((string pair, int[] counts) in ByPair)
+            {
+                Console.WriteLine($"  {pair}: {Share(counts[0], counts[1])}");
+            }
+
+            if (TimesA.Count == 0)
+            {
+                return;
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("An answer's time (ms), p50 / p95 / max: the whole of it, the native host's part (the game's own work), the seat's own part (the rest).");
+            void Seat(string name, List<(double Act, double Host)> times) => Console.WriteLine(
+                $"  {name,-10} {times.Count,8} answers   whole {Spread(times.Select(t => t.Act))}   host {Spread(times.Select(t => t.Host))}   seat {Spread(times.Select(t => t.Act - t.Host))}");
+            Seat(a, TimesA);
+            Seat(b, TimesB);
+
+            foreach (IGrouping<string, NeuralAnswer> group in neural.GroupBy(n => n.Seat).OrderBy(g => g.Key, StringComparer.Ordinal))
+            {
+                WriteNeural(group.Key, [.. group]);
+            }
+        }
+
+        /// <summary>What one neural seat's answers cost, and for a searching seat what its searches were.</summary>
+        private static void WriteNeural(string seat, IReadOnlyCollection<NeuralAnswer> neural)
+        {
+            {
+                Console.WriteLine();
+                Console.WriteLine($"{seat}: the network's {neural.Count} answers (ms), p50 / p95 / max:");
+                Console.WriteLine($"  asked to answered, on the seat's clock   {Spread(neural.Select(n => n.Decide))}");
+                Console.WriteLine($"  in the AI host                           {Spread(neural.Select(n => n.Total))}");
+                Console.WriteLine($"    encoding                               {Spread(neural.Select(n => n.Encode))}");
+                Console.WriteLine($"    the network                            {Spread(neural.Select(n => n.Evaluate))}");
+                Console.WriteLine($"    the rest (mirror, factoring, mapping)  {Spread(neural.Select(n => n.Total - n.Encode - n.Evaluate))}");
+                Console.WriteLine($"  the process round trip (pipe, JSON, the mirror catching up)  {Spread(neural.Select(n => n.Decide - n.Total))}");
+                Console.WriteLine($"  steps an answer {Spread(neural.Select(n => (double)n.Steps), "N1")}, evaluations an answer {Spread(neural.Select(n => (double)n.Evaluations), "N1")}");
+                double evaluating = neural.Sum(n => n.Evaluate) / 1000;
+                long evaluations = neural.Sum(n => (long)n.Evaluations);
+                Console.WriteLine(
+                    $"  {evaluations} evaluations, {evaluations / Math.Max(evaluating, 1e-9):N0} a second of the network's time; " +
+                    $"{neural.Count(n => n.Fallback)} fallbacks, {neural.Count(n => n.Late)} late, {neural.Count(n => n.Error.Length > 0)} with an error" +
+                    (neural.FirstOrDefault(n => n.Error.Length > 0) is { } first ? $" (first: {first.Error})" : string.Empty));
+
+                List<NeuralAnswer> searched = [.. neural.Where(n => n.Searched && !n.Shortcut)];
+                if (searched.Count > 0)
+                {
+                    double seconds = searched.Sum(n => n.Total) / 1000;
+                    Console.WriteLine(
+                        $"  searched {searched.Count} of {neural.Count} answers ({neural.Count(n => n.Shortcut)} passed by the priority shortcut, " +
+                        $"the rest forced or a payment): " +
+                        $"simulations {Spread(searched.Select(n => (double)n.Simulations), "N0")}, nodes {Spread(searched.Select(n => (double)n.Nodes), "N0")}, " +
+                        $"pruned {Spread(searched.Select(n => (double)n.Pruned), "N0")}, tree KB {Spread(searched.Select(n => n.TreeBytes / 1024.0), "N0")}");
+                    Console.WriteLine(
+                        $"  {searched.Count / Math.Max(seconds, 1e-9):N1} searched decisions a second of a seat's time, " +
+                        $"{searched.Sum(n => (long)n.Evaluations) / Math.Max(seconds, 1e-9):N0} evaluations a second; " +
+                        $"{neural.Count / Math.Max(neural.Sum(n => n.Total) / 1000, 1e-9):N1} decisions a second in all");
+                }
+            }
+        }
+
+        private static string Spread(IEnumerable<double> values, string format = "N3")
+        {
+            double[] sorted = [.. values.Order()];
+            if (sorted.Length == 0)
+            {
+                return "-";
+            }
+
+            double At(double q) => sorted[Math.Min(sorted.Length - 1, (int)Math.Floor(q * sorted.Length))];
+            return $"{At(0.5).ToString(format, CultureInfo.InvariantCulture)} / {At(0.95).ToString(format, CultureInfo.InvariantCulture)} / {sorted[^1].ToString(format, CultureInfo.InvariantCulture)}";
         }
 
         public void Write(string a, string b, TimeSpan elapsed)
@@ -607,21 +843,53 @@ public static class Program
         Func<int, int, IAutoPlayer> b,
         bool sample,
         out List<Sample> samples,
-        bool hands = false)
+        bool hands = false,
+        bool sprt = false)
     {
         var tally = new Tally();
         var collected = new ConcurrentBag<Sample>();
         string content = Path.Combine(root, "content");
         int done = 0;
 
-        Parallel.For(0, games, new ParallelOptions { MaxDegreeOfParallelism = Parallelism }, game =>
+        // A neural seat plays at a table with an AI host beside it: each worker its own pair of hosts, reused game
+        // after game, and every seat's answer timed against the native host's part of it.
+        bool neural = a(0, 1) is NeuralPlay || b(0, 2) is NeuralPlay;
+        var lanes = new ConcurrentBag<Lane>();
+        var made = new ConcurrentBag<Lane>();
+        NeuralAnswers.Clear();
+
+        Parallel.For(0, games, new ParallelOptions { MaxDegreeOfParallelism = Parallelism }, (game, loop) =>
         {
+            // Once the SPRT has its verdict no new game starts; those in play finish and are counted.
+            if (sprt && loop.ShouldExitCurrentIteration)
+            {
+                return;
+            }
+
             // A sits in seat 1 on even games and seat 2 on odd ones, each pair dealt from the same shuffle; the decks
             // swap every second pair, so each way of playing has each deck in each seat.
             bool swapped = game % 2 == 1;
             (List<DeckList> seated, List<IAutoPlayer> players) = Seating(decks, game, a, b);
 
-            MatchResult result = Match.Play(content, seated, Format, seed + (ulong)(game / 2), players, sample, hands: hands);
+            Lane? lane = null;
+            if (neural && !lanes.TryTake(out lane))
+            {
+                lane = new Lane(root, Neural.Arguments, Neural.Echo);
+                made.Add(lane);
+            }
+
+            MatchResult result;
+            try
+            {
+                result = Match.Play(content, seated, Format, Shuffle(seed, game), players, sample, hands: hands, lane: lane);
+            }
+            finally
+            {
+                if (lane is not null)
+                {
+                    lanes.Add(lane);
+                }
+            }
 
             if (!result.Finished)
             {
@@ -656,6 +924,30 @@ public static class Program
             {
                 int seatA = seatOfA - 1;
                 int seatB = 1 - seatA;
+                if (result.Winner != 0)
+                {
+                    bool won = result.Winner == seatOfA;
+                    int turn = result.Starter == seatOfA ? 0 : 1;
+                    tally.GamesBySeat[seatA]++;
+                    tally.WinsBySeat[seatA] += won ? 1 : 0;
+                    tally.GamesByTurn[turn]++;
+                    tally.WinsByTurn[turn] += won ? 1 : 0;
+                    string pair = $"{seated[seatA].Name} vs {seated[seatB].Name}";
+                    if (!tally.ByPair.TryGetValue(pair, out int[]? counts))
+                    {
+                        tally.ByPair[pair] = counts = new int[2];
+                    }
+
+                    counts[0] += won ? 1 : 0;
+                    counts[1]++;
+                }
+
+                if (result.Times.Count == 2)
+                {
+                    tally.TimesA.AddRange(result.Times[seatA]);
+                    tally.TimesB.AddRange(result.Times[seatB]);
+                }
+
                 tally.AnswersA += result.Answers[seatA];
                 tally.AnswersB += result.Answers[seatB];
                 tally.ThinkingA += result.Thinking[seatA];
@@ -683,6 +975,24 @@ public static class Program
                 }
             }
 
+            if (sprt)
+            {
+                lock (tally.Gate)
+                {
+                    if (tally.StoppedAt == 0 && tally.Verdict != 0)
+                    {
+                        tally.StoppedAt = tally.Finished;
+                        tally.StoppedLlr = tally.Llr;
+                        Console.WriteLine($"SPRT verdict after {tally.Finished} games: LLR {tally.Llr:N3} ({tally.WinsA} to {tally.WinsB}, {tally.Draws} drawn).");
+                        loop.Stop();
+                    }
+                    else if (tally.Finished % 20 == 0)
+                    {
+                        Console.WriteLine($"  {tally.Finished} games: {tally.WinsA} to {tally.WinsB}, {tally.Draws} drawn, LLR {tally.Llr:N3}");
+                    }
+                }
+            }
+
             if (Interlocked.Increment(ref done) % 100 == 0 && !Console.IsOutputRedirected)
             {
                 Console.Write($"\r{done} of {games}...    ");
@@ -692,6 +1002,16 @@ public static class Program
         if (!Console.IsOutputRedirected)
         {
             Console.Write($"\r{new string(' ', 32)}\r");
+        }
+
+        foreach (Lane lane in made)
+        {
+            if (lane.Ai.Divergence is { } divergence)
+            {
+                tally.Failures.Add($"an AI host's mirror left its game: {divergence}");
+            }
+
+            lane.Dispose();
         }
 
         samples = [.. collected];
@@ -717,7 +1037,9 @@ public static class Program
 
         // More than two decks is a pool of mirrors: each pair of games takes the next deck for both seats, so what
         // differs between the seats is only how they are played, over as many kinds of deck as the pool holds.
+        // Two decks with --mirrors: each four pairs of games the matchup both ways round, then each deck's mirror.
         List<DeckList> seated = decks.Count > 2 ? [decks[game / 2 % decks.Count], decks[game / 2 % decks.Count]]
+            : Mirrors && decks.Count == 2 && game / 2 % 4 >= 2 ? [decks[game / 2 % 4 - 2], decks[game / 2 % 4 - 2]]
             : decksSwapped ? [decks[1], decks[0]]
             : [decks[0], decks[^1]];
 
@@ -730,7 +1052,7 @@ public static class Program
     /// frozen build of an earlier tactical seat (<c>champion</c>, <c>referee</c>, <c>champion:NAME</c>; see
     /// <see cref="Champion"/>). Each call of what it returns is one seat of one game.
     /// </summary>
-    internal static Func<int, int, IAutoPlayer> Maker(string root, string name)
+    internal static Func<int, int, IAutoPlayer> Maker(string root, string name, bool b = false)
     {
         switch (name)
         {
@@ -738,6 +1060,9 @@ public static class Program
                 return (game, seat) => new RandomPlay(Draws(game, seat, 0));
             case "auto":
                 return (_, _) => new AutoPlayer();
+            case var _ when NeuralSeat.Parse(name) is { } neural:
+                (string seatModel, string seatName) = Neural.For(neural.Name, b);
+                return (_, _) => new NeuralPlay(seatModel, neural.Mode, Neural.Deadline, NeuralAnswers, neural with { Name = seatName });
             default:
                 // A frozen build of an earlier seat: champion, referee, champion:NAME.
                 if (Champion.Named(root, name) is { } champion)
@@ -812,7 +1137,8 @@ public static class Program
             named.Add("rw-aggro");
         }
 
-        return [.. named.Take(2).Select(deck =>
+        // More than two named is a pool, each a mirror, as --decks makes.
+        return [.. named.Take(named.Count > 2 ? named.Count : 2).Select(deck =>
         {
             string path = DeckList.Find(decksRoot, deck);
             return DeckList.Parse(deck, File.ReadAllText(path), path);
@@ -864,10 +1190,12 @@ public static class Program
         cantrip-botlab: sets one way of playing a seat against another, and fits the tactical seat's model.
 
           duel    plays two seats against each other and says which won more
-            --a NAME --b NAME   random, auto, tactical, prior, or a path to a model file (default: tactical, random);
+            --a NAME --b NAME   random, auto, tactical, prior, neural (neural:full, neural:decklist, neural:hidden), or a
+                                path to a model file (default: tactical, random);
                                 NAME+weight=value sets a weight of it: tactical+policy.holdcounter=0;
                                 champion, referee or champion:NAME is a frozen build of an earlier tactical seat
-            --deck NAME         once for a mirror, twice for a matchup (default: rw-aggro)
+            --deck NAME         once for a mirror, twice for a matchup, more for a pool of mirrors (default: rw-aggro);
+                                --mirrors with two: half the games the matchup, a quarter each deck's mirror
             --format KEY        the format the decks are played in: a constructed format's key, or limited
                                 with --min-deck N (default: freeform, no deck-construction restriction)
             --decks DIR         every decklist in a folder, each played as a mirror (more than once: the folders together);
@@ -877,14 +1205,30 @@ public static class Program
                                 two games (so --a X --b tactical, against --a tactical --b tactical, is X's play of one kind of deck)
             --games N           how many (default 400)
             --seed N            the first shuffle (default: a new one each run)
+            --each-shuffle      every game its own shuffle, not each pair of games (on by itself for a recorded self-duel)
             --cards N           which cards a seat won with: the N it did worst and best by, holding one against not
                                 (--least N: only cards held, and not held, in that many games; default 60)
+            --ai-record DIR     the native host records every game that ends as AI training shards there
+                                (docs/ai-player-plan.md, "Data"); --ai-record-mode full|decklist|hidden (default full),
+                                --ai-record-threads N, --ai-record-games N and --ai-record-mb N are passed on to it
+            --sprt              stop once the sequential test says: H0 A wins 50%, H1 55%, alpha = beta = 0.05, a draw
+                                half a game each way; --games is then the most it may take
+            a neural seat       from cantrip-ai-host beside each worker's own native host (docs/ai-host.md):
+                                neural[:full|:decklist|:hidden][@N|@Nms] - the mode (Full by default), and a search of N
+                                simulations or N ms an answer (none: the network alone), so --a neural@64 --b neural is
+                                search against the same network alone; --model DIR (default ../ai-data/models/gen0),
+                                --model-b DIR (the b seat's neural seats play this model instead: a generation's gate),
+                                --ai-backend ort|tract (default: the build's), --ai-deadline MS (default none),
+                                --ai-echo (check every mirrored reply whole); a searching seat's --ai-worlds N,
+                                --ai-batch N, --ai-cpuct X, --ai-prior-temperature X, --ai-prune true|false,
+                                --ai-prune-bad X, --ai-prune-margin X, --ai-prune-after N,
+                                --ai-prune-after-replies N (default: the host's)
 
           watch   plays one game and tells it turn by turn, as seat 1 saw it
             --a NAME --b NAME   as for duel (default: tactical against itself)
             --deck NAME --seed N
             --lost              the first game from that shuffle on that seat 1 loses
-            --game N            game N of a duel again: give the duel's --seed, --a, --b and decks with it
+            --game N            game N of a duel again: give the duel's --seed, --a, --b, decks and --each-shuffle with it
             --limit N           call the game stuck after N answers; --tail N tells only its last N lines
             --narrate FILE      the --a seat (a tactical one) writes there each decision it made and what it weighed
 

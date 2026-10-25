@@ -8,6 +8,7 @@ pub mod visibility;
 
 pub use cantrip_api::*;
 pub use cantrip_rules::{Game, Rejected, Setup, activation_costs, eligible_companions, revealed_companion, ApplyContract, apply_contract_check, alternative_cast_total, cast_costs, cast_face_of, cast_total, exile_cast_texts, granted_cast_cost, life_for_cast, chars, check_answer, attack_targets, describe, distribution_problem, first_choices, selection_verdict, live, name_problem, summoning_sick, granted_cast_total, special_action_costs, sacrifices_for_reduction, replaced_mana_yields, options_with_mana_to_spare, payment_mana_options_with_mana_to_spare};
+pub use cantrip_rules::tree;
 
 /// The simplest legal distribution of looked-at cards (the C# `CardDistribution.Greedy`): each destination's
 /// minimum first, in order, then each takes what it accepts up to its maximum, cards in the order looked at.

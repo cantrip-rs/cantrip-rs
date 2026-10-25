@@ -1,0 +1,114 @@
+{
+ "schema": 1,
+ "encoder_hash": "6fed5023a1c55ffc",
+ "text_hash": "787620e6729aea28",
+ "commit": "b29861551363fc3db53d5ffe4d41bd2f44449245-dirty",
+ "data": {
+  "header": {
+   "format": 1,
+   "schema": 1,
+   "encoder_hash": "6fed5023a1c55ffc",
+   "text_hash": "787620e6729aea28",
+   "commit": "b29861551363fc3db53d5ffe4d41bd2f44449245-dirty",
+   "producer": "tactical:025b030cdd3a22ba",
+   "mode": "full"
+  },
+  "games": 1,
+  "samples": 234,
+  "train": 234,
+  "held_out": 0,
+  "evaluated": 0
+ },
+ "buckets": {
+  "32": "model-t32.onnx",
+  "64": "model-t64.onnx",
+  "128": "model-t128.onnx"
+ },
+ "inputs": [
+  "kind",
+  "card",
+  "cats",
+  "ptrs",
+  "nums",
+  "legal"
+ ],
+ "outputs": [
+  "value",
+  "policy",
+  "aux",
+  "belief"
+ ],
+ "opset": 17,
+ "ops": [
+  "Add",
+  "Clip",
+  "Concat",
+  "Constant",
+  "Div",
+  "Erf",
+  "Gather",
+  "Gemm",
+  "LayerNormalization",
+  "MatMul",
+  "Mul",
+  "ReduceSum",
+  "Reshape",
+  "Softmax",
+  "Split",
+  "Squeeze",
+  "Sub",
+  "Tanh",
+  "Transpose",
+  "Unsqueeze",
+  "Where"
+ ],
+ "torch": "2.11.0",
+ "parameters": 10421,
+ "config": {
+  "width": 16,
+  "layers": 1,
+  "heads": 2,
+  "ffn": 32
+ },
+ "trained": {
+  "step": 40,
+  "args": {
+   "data": [
+    "../ai-data/gen0/matchup"
+   ],
+   "out": "tiny-train",
+   "epochs": 1.0,
+   "steps": 40,
+   "hours": null,
+   "max_games": 1,
+   "batch": 256,
+   "lr": 0.003,
+   "weight_decay": 0.01,
+   "warmup": 5,
+   "held_out": 0.02,
+   "eval_samples": 400,
+   "references": 64,
+   "eval_every": 2000,
+   "trivial": 0.25,
+   "width": 16,
+   "layers": 1,
+   "heads": 2,
+   "ffn": 32,
+   "threads": 2,
+   "workers": 0,
+   "seed": 0
+  }
+ },
+ "metrics": {},
+ "card_table_folded": true,
+ "belief_trained": false,
+ "reference": {
+  "positions": 48,
+  "ort_python": {
+   "value": 1.1920928955078125e-07,
+   "aux": 1.9073486328125e-06,
+   "policy": 2.384185791015625e-07,
+   "same_argmax": 1.0
+  }
+ }
+}

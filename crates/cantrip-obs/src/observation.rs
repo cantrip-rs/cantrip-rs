@@ -3,7 +3,7 @@
 use serde::{Deserialize, Serialize};
 
 /// Bumped whenever the shape or the meaning of an observation changes: a model is trained on one version.
-pub const SCHEMA_VERSION: u32 = 1;
+pub const SCHEMA_VERSION: u32 = 2;
 
 /// How much of the hidden game the seat is told.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -190,4 +190,169 @@ pub struct RequestObs {
     pub kind: String,
     /// The objects it names, by canonical index: for the seat asked; empty for anyone else.
     pub candidates: Vec<u32>,
+    /// Everything the question allows, in canonical terms, for the seat asked; `None` for anyone else. What the
+    /// factoring (`crate::factor`) reads.
+    pub ask: Option<Ask>,
+}
+
+/// The question asked of the seat, with every constraint an answer must meet, by canonical index. Lists the engine
+/// orders are sorted canonically (by `Ref`, or by the whole entry), so that nothing of the engine's numbering shows;
+/// a list whose order the rules give (the cards looked at, top first) keeps it.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Ask {
+    /// The spell or ability being announced may be given up (CR 733.1): `Cancel` is an answer.
+    pub may_cancel: bool,
+    /// The object the question is about (the spell paid for, the ability resolving); `Ref::None` where it has none.
+    pub source: Ref,
+    pub kind: AskKind,
+}
+
+/// A mana cost: generic, W U B R G C symbols, hybrid pairs (as mana numbers), Phyrexian W U B R G, X symbols.
+#[derive(Clone, Debug, Default, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+pub struct CostObs {
+    pub generic: u8,
+    pub symbols: [u8; 6],
+    pub hybrid: Vec<(u8, u8)>,
+    pub phyrexian: [u8; 5],
+    pub x: u8,
+}
+
+/// The kinds of action an option is, as the engine numbers them (`ActionKind`).
+pub mod action {
+    pub const PLAY_LAND: u8 = 0;
+    pub const CAST_SPELL: u8 = 1;
+    pub const ACTIVATE_ABILITY: u8 = 2;
+    pub const CANCEL_CASTING: u8 = 3;
+    pub const PAY_COST: u8 = 4;
+    pub const DECLINE_COST: u8 = 5;
+    pub const ASSIGN_MANA: u8 = 6;
+    pub const CONFIRM_CASTING: u8 = 7;
+    pub const INCREASE_X: u8 = 8;
+    pub const DECREASE_X: u8 = 9;
+    pub const TAP_TO_PAY: u8 = 10;
+    pub const EXILE_TO_PAY: u8 = 11;
+}
+
+/// One option of a priority, payment or "unless" question: an action prototype the answer fills in.
+#[derive(Clone, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+pub struct OptionObs {
+    /// `action::*`.
+    pub kind: u8,
+    pub source: Ref,
+    /// Which way of casting, which ability of the source.
+    pub index: u8,
+    pub targets_required: u8,
+    pub targets_optional: bool,
+    /// Who may be chosen for its targets, every slot together, sorted.
+    pub target_candidates: Vec<Ref>,
+    /// The colors of "one mana of any color" to choose from (bit c for color c, W U B R G).
+    pub color_choices: u8,
+    pub names_nothing: bool,
+    /// Mana W U B R G C as 0..5: the pool mana an `AssignMana` spends; colorless an ability may name.
+    pub mana: Option<u8>,
+    /// The mana's restriction (CR 106.6), by the engine's name for it.
+    pub restriction: Option<String>,
+    pub pays_nothing: bool,
+    /// The permission a cast or land play is made by (`ActionOption::granted_by`) and the alternative cost another object
+    /// gives (`paid_by`): the grant's object and the index of its ability. They tell apart options that are otherwise the
+    /// same (a free equip beside the paid one), so an answer maps back to the engine's option; the encoder does not read
+    /// them yet (docs/known-issues.md, KI-141).
+    #[serde(default)]
+    pub granted_by: Option<(Ref, u8)>,
+    #[serde(default)]
+    pub paid_by: Option<(Ref, u8)>,
+}
+
+/// "Total mana value N or less" over a list: each entry's value, index for index, and N.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TotalObs {
+    pub values: Vec<u16>,
+    pub most: u16,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct CounterPoolObs {
+    pub object: Ref,
+    pub kind: u16,
+    pub count: u16,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DivisionObs {
+    /// The creature whose combat damage it is.
+    pub source: Ref,
+    pub banding: bool,
+    pub damage: u16,
+    /// The creatures it may be dealt to, sorted, and what is lethal to each, index for index.
+    pub creatures: Vec<Ref>,
+    pub lethal: Vec<u16>,
+    /// Trample (or as though not blocked): what is left once each creature has its lethal may go to `defender`.
+    pub may_assign_to_defender: bool,
+    pub defender: Ref,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub struct DestinationObs {
+    /// 0 library top, 1 library bottom, 2 graveyard, 3 hand, 4 exile, 5 battlefield face down.
+    pub kind: u8,
+    pub min: u8,
+    /// `u8::MAX` for "the rest".
+    pub max: u8,
+    /// Whether it may take each card, index for index with the cards.
+    pub eligible: Vec<bool>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub enum AskKind {
+    /// Act or pass; options sorted canonically.
+    Priority { options: Vec<OptionObs> },
+    /// Paying what is owed, or announcing X (`announcing`): `x` so far, `x_most` the most X the seat could pay as far as
+    /// it can tell (the loyalty a "−X" may remove; 1 for a kicker without "any number of times").
+    PayCosts { total: CostObs, remaining: CostObs, options: Vec<OptionObs>, announcing: bool, x: u16, x_most: u16, loyalty: bool, attackers: Vec<Ref>, life: u32 },
+    /// "Unless pays" / "may pay" as it resolves: pay the whole cost or decline. `x` the X chosen so far where the payer
+    /// chooses it.
+    UnlessPays { subject: Ref, total: CostObs, remaining: CostObs, life: u8, life_payable: bool, verb: String, options: Vec<OptionObs>, x: Option<u16>, x_most: u16 },
+    /// `count` (or up to) of `eligible` among `cards`. `purpose` the engine's name for why; `total` index for index with
+    /// `eligible`.
+    ChooseCards { purpose: String, cards: Vec<Ref>, eligible: Vec<Ref>, count: u8, up_to: bool, total: Option<TotalObs> },
+    /// `least` to `count` of `candidates` (sorted), `total` index for index with them.
+    ChooseTarget { purpose: String, candidates: Vec<Ref>, optional: bool, least: u8, count: u8, any_number: bool, slot_player: Option<u8>, total: Option<TotalObs> },
+    /// Modes by index: `labels` says what each is.
+    ChooseModes { labels: Vec<String>, eligible: Vec<u8>, count: u8, at_most: u8, affordable: Vec<u8>, additional_cost: bool, repeat: bool },
+    /// `count` colors of `choices` (bits W U B R G); `purpose` the engine's `ColorUse` number.
+    ChooseColors { choices: u8, count: u8, purpose: u8 },
+    /// A card name: from names supplied by the caller. `looked_at` the cards just seen; `kind` 0 any, 1 nonland, 2 land.
+    ChooseName { looked_at: Vec<Ref>, suggestion: Option<String>, kind: u8 },
+    /// One of these subtypes (the engine's numbers), sorted.
+    ChooseSubtype { choices: Vec<u16>, purpose: u8 },
+    May { purpose: String, verb: String },
+    ChoosePlayer { candidates: Vec<u8>, verb: String, amount: u16 },
+    /// Any of `cards` whose powers (index for index) add up to `minimum`.
+    TapForPower { purpose: String, cards: Vec<Ref>, powers: Vec<i16>, minimum: u8 },
+    CollectEvidence { cards: Vec<Ref>, values: Vec<u8>, minimum: u8 },
+    Craft { cards: Vec<Ref>, minimum: u8, maximum: u8 },
+    /// `total` counters from among the pools (sorted).
+    RemoveCounters { pools: Vec<CounterPoolObs>, total: u8 },
+    /// A total divided among up to `max_targets` (0: any number) of `candidates`, each at least 1.
+    ChooseDividedTargets { candidates: Vec<Ref>, total: u16, max_targets: u8, optional: bool },
+    /// Each of `eligible` attacks one of `defenders` or stays home; each of `requirements` must attack if able.
+    /// `costs` what an attack costs (attacker, defender, mana value of the cost); `can_pay` the most the seat can pay.
+    DeclareAttackers { eligible: Vec<Ref>, defenders: Vec<Ref>, requirements: Vec<Ref>, costs: Vec<(Ref, Ref, u16)>, can_pay: u16 },
+    /// One division per creature with a choice, sorted by source.
+    AssignCombatDamage { divisions: Vec<DivisionObs> },
+    /// Each of `eligible` blocks one attacker of `allowed` or none. `required` the blocks effects require if able, of
+    /// which a declaration obeys `most`; `min_blockers`/`max_blockers` each attacker's, index for index with `attackers`.
+    DeclareBlockers { eligible: Vec<Ref>, attackers: Vec<Ref>, allowed: Vec<(Ref, Ref)>, required: Vec<(Ref, Ref)>, most: u8, min_blockers: Vec<u8>, max_blockers: Vec<u8> },
+    DiscardToHandSize { count: u8, hand: Vec<Ref> },
+    Mulligan { mulligans: u8 },
+    ChooseStartingPlayer { candidates: Vec<u8> },
+    /// The triggers to order, sorted canonically (by source, then which of its card's abilities, `abilities` index for
+    /// index): the answer lists them first on the stack first.
+    OrderTriggers { sources: Vec<Ref>, abilities: Vec<u8> },
+    /// The cards looked at, top first, each to one destination; or a shuffle where allowed.
+    DistributeCards { cards: Vec<Ref>, destinations: Vec<DestinationObs>, may_shuffle: bool },
+    /// `library` (sorted), `eligible` (sorted); `destination` the engine's `SearchDestination` number.
+    SearchLibrary { library: Vec<Ref>, eligible: Vec<Ref>, count: u8, optional: bool, destination: u8 },
+    /// Which replacement effect applies first: `sources` sorted (with their hints), the event's facts.
+    ChooseReplacement { subject: Ref, life: Option<i32>, sources: Vec<Ref>, hints: Vec<String>, damage: Option<(Ref, Ref, u16)>, turn: bool, counters: Vec<(u16, i16)>, draw: bool },
 }

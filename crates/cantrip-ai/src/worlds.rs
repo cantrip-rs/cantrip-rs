@@ -39,6 +39,47 @@ impl Prior {
     pub fn is_empty(&self) -> bool {
         self.lists.is_empty()
     }
+
+    /// Every main deck in the decklists (`.txt`, "N Name" lines up to a "Sideboard" line) under `dir`, each weighted
+    /// 1; a list naming a card this build does not have is left out.
+    pub fn from_decks(dir: &std::path::Path) -> Result<Prior, String> {
+        let mut paths = Vec::new();
+        let mut dirs = vec![dir.to_path_buf()];
+        while let Some(dir) = dirs.pop() {
+            for entry in std::fs::read_dir(&dir).map_err(|e| format!("{}: {e}", dir.display()))?.filter_map(Result::ok) {
+                let path = entry.path();
+                if path.is_dir() {
+                    dirs.push(path);
+                } else if path.extension().is_some_and(|x| x == "txt") {
+                    paths.push(path);
+                }
+            }
+        }
+        paths.sort();
+        let mut prior = Prior::new();
+        for path in paths {
+            let text = std::fs::read_to_string(&path).map_err(|e| format!("{}: {e}", path.display()))?;
+            let mut ids = Vec::new();
+            let mut known = true;
+            for line in text.lines().map(str::trim).take_while(|l| !l.eq_ignore_ascii_case("sideboard")) {
+                if let Some((n, name)) = line.split_once(' ')
+                    && let Ok(n) = n.parse::<usize>()
+                {
+                    match card(name.trim()) {
+                        Some(id) => ids.extend(std::iter::repeat_n(id, n)),
+                        None => known = false,
+                    }
+                }
+            }
+            if known {
+                prior.add(cards(), ids, 1.0);
+            }
+        }
+        if prior.is_empty() {
+            return Err(format!("no decklist under {}", dir.display()));
+        }
+        Ok(prior)
+    }
 }
 
 /// Where a card began the game: its owner's library, or outside the game (a sideboard).

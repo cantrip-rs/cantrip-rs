@@ -1,9 +1,21 @@
 //! The sidecar `Cantrip.Server` runs: any number of games, one JSON object per line on stdin, one reply per request on
 //! stdout, in order; stderr is the log. The protocol is written up in docs/host-protocol.md, every payload
 //! `protocol.rs`'s JSON, and `NativeRulesHost` (C#) drives this binary.
+//!
+//! With `--ai-record DIR` the host also records every game that ends as training samples for the AI player
+//! (`cantrip_ai::record`), into zstd shards in DIR (`cantrip_ai::shard`), on worker threads: see `Recorder`.
 
 use std::collections::HashMap;
 use std::io::{self, BufRead, Write};
+use std::path::PathBuf;
+use std::sync::mpsc::{Receiver, SyncSender, sync_channel};
+use std::sync::{Arc, Mutex};
+use std::thread::JoinHandle;
+
+use cantrip_ai::record::{Dealt, Ending, Failures, record, table};
+use cantrip_ai::shard::{Header, ShardWriter, mode_name, parse_mode};
+use cantrip_engine::Game;
+use cantrip_obs::InfoMode;
 
 use cantrip_host::protocol::{AnswerPayload, AttackMessage, BlockMessage, ViewHandle};
 use cantrip_host::session::{Deal, Rejection, Session};
@@ -145,11 +157,16 @@ struct SeatSpec {
     /// game if the deck fulfils its condition (CR 103.2b). The server has refused a deck whose companion it doesn't.
     #[serde(rename = "Companion", default)]
     companion: Option<String>,
+    /// The deck's name, where the table has one: the recorder's archetype label.
+    #[serde(rename = "DeckName", default)]
+    deck_name: Option<String>,
 }
 
 struct Host {
     games: HashMap<u32, Session>,
     next_game: u32,
+    /// Set by `--ai-record`; `None` costs the game loop nothing.
+    recorder: Option<Recorder>,
 }
 
 fn rejected(r: Rejection) -> Value {
@@ -164,6 +181,12 @@ impl Host {
     fn handle(&mut self, request: Request) -> Value {
         match request {
             Request::NewGame { seats, seed, shuffle, first_player, chooser, basic_lands_outside, minimum_deck_size, scenario } => {
+                let dealt = self.recorder.as_ref().map(|_| Dealt {
+                    seed: if scenario.is_some() { 0 } else { seed },
+                    names: seats.iter().map(|s| s.name.clone()).collect(),
+                    decks: seats.iter().map(|s| s.deck_name.clone().unwrap_or_default()).collect(),
+                    auto_start: scenario.is_none() && first_player.is_some() && chooser.is_none(),
+                });
                 let made = match scenario {
                     Some(spec) => Session::scenario(&spec.text, &spec.name, seats.into_iter().map(|s| s.name).collect(), &spec.driven),
                     None if minimum_deck_size.is_none() => {
@@ -190,17 +213,28 @@ impl Host {
                         self.next_game += 1;
                         let decklists = session.decklists();
                         self.games.insert(id, session);
+                        if let (Some(recorder), Some(dealt)) = (self.recorder.as_mut(), dealt) {
+                            recorder.dealt.insert(id, dealt);
+                        }
                         ok(json!({ "GameId": id, "Decklists": decklists }))
                     }
                     Err(r) => rejected(r),
                 }
             }
             Request::Start { game_id } => self.with(game_id, |g| Ok(g.step())),
-            Request::Answer { game_id, request_id, seat, answer } => self.with(game_id, |g| g.answer(request_id, seat, &answer)),
+            Request::Answer { game_id, request_id, seat, answer } => {
+                let reply = self.with(game_id, |g| g.answer(request_id, seat, &answer));
+                self.ended(game_id);
+                reply
+            }
             Request::Check { game_id, request_id, seat, selected } => self.with(game_id, |g| g.check(request_id, seat, &selected)),
             Request::CheckBlocks { game_id, request_id, seat, blocks } => self.with(game_id, |g| g.check_blocks(request_id, seat, &blocks)),
             Request::CheckAttacks { game_id, request_id, seat, attacks } => self.with(game_id, |g| g.check_attacks(request_id, seat, &attacks)),
-            Request::Concede { game_id, seat } => self.with(game_id, |g| g.concede(seat)),
+            Request::Concede { game_id, seat } => {
+                let reply = self.with(game_id, |g| g.concede(seat));
+                self.ended(game_id);
+                reply
+            }
             Request::View { game_id, seat } => self.with(game_id, |g| g.view(seat).map(|v| json!({ "View": v }))),
             Request::Oracle { name } => {
                 let card = cantrip_engine_card(&name);
@@ -211,9 +245,28 @@ impl Host {
                 Err(r) => rejected(r),
             },
             Request::Close { game_id } => {
-                self.games.remove(&game_id);
+                if let Some(session) = self.games.remove(&game_id)
+                    && let Some(recorder) = self.recorder.as_mut()
+                    && let Some(dealt) = recorder.dealt.remove(&game_id)
+                {
+                    // Closed before it ended: the table's cap. Its samples are recorded with every result 0.
+                    let game = session.game();
+                    recorder.send(game.clone(), dealt, Ending::of(game, true));
+                }
                 ok(json!({}))
             }
+        }
+    }
+
+    /// A recorded game that has just ended is handed to the recorder, once.
+    fn ended(&mut self, game_id: u32) {
+        let Some(recorder) = self.recorder.as_mut() else { return };
+        if let Some(session) = self.games.get(&game_id)
+            && session.is_over()
+            && let Some(dealt) = recorder.dealt.remove(&game_id)
+        {
+            let game = session.game();
+            recorder.send(game.clone(), dealt, Ending::of(game, false));
         }
     }
 
@@ -236,16 +289,195 @@ fn cantrip_engine_card(name: &str) -> Option<cantrip_host::protocol::ObjectView>
 /// Card code recurses (resolution inside a settle inside a priority), so the host loop runs on a thread with room.
 const STACK_SIZE: usize = 256 << 20;
 
+/// `--ai-record DIR` and its options.
+struct RecordConfig {
+    dir: PathBuf,
+    mode: InfoMode,
+    producer: String,
+    seeds: String,
+    /// Games a shard (0: no limit), and about how many megabytes compressed.
+    shard_games: usize,
+    shard_mb: u64,
+    threads: usize,
+}
+
+const USAGE: &str = "usage: cantrip-native-host [--ai-record DIR [--ai-record-mode full|decklist|hidden] [--ai-record-producer NAME] \
+[--ai-record-seeds TEXT] [--ai-record-games N] [--ai-record-mb N] [--ai-record-threads N]]";
+
+fn config(args: &[String]) -> Result<Option<RecordConfig>, String> {
+    let mut dir = None;
+    let mut mode = InfoMode::Full;
+    let mut producer = "unknown".to_string();
+    let mut seeds = String::new();
+    let (mut shard_games, mut shard_mb, mut threads) = (0usize, 64u64, 2usize);
+    let mut i = 0;
+    while i < args.len() {
+        let value = args.get(i + 1).cloned().ok_or(format!("{} needs a value", args[i]))?;
+        let number = |v: &str| v.parse::<u64>().map_err(|_| format!("{} takes a number, not {v}", args[i]));
+        match args[i].as_str() {
+            "--ai-record" => dir = Some(PathBuf::from(value)),
+            "--ai-record-mode" => mode = parse_mode(&value).ok_or(format!("no information mode {value}"))?,
+            "--ai-record-producer" => producer = value,
+            "--ai-record-seeds" => seeds = value,
+            "--ai-record-games" => shard_games = number(&value)? as usize,
+            "--ai-record-mb" => shard_mb = number(&value)?,
+            "--ai-record-threads" => threads = (number(&value)? as usize).max(1),
+            other => return Err(format!("unknown argument {other}")),
+        }
+        i += 2;
+    }
+    Ok(dir.map(|dir| RecordConfig { dir, mode, producer, seeds, shard_games, shard_mb, threads }))
+}
+
 fn main() {
-    let worker = std::thread::Builder::new().name("cantrip-native-host".into()).stack_size(STACK_SIZE).spawn(serve).expect("the host thread starts");
+    let args: Vec<String> = std::env::args().skip(1).collect();
+    let config = match config(&args) {
+        Ok(c) => c,
+        Err(e) => {
+            eprintln!("cantrip-native-host: {e}\n{USAGE}");
+            std::process::exit(2);
+        }
+    };
+    let worker = std::thread::Builder::new()
+        .name("cantrip-native-host".into())
+        .stack_size(STACK_SIZE)
+        .spawn(move || serve(config))
+        .expect("the host thread starts");
     if worker.join().is_err() {
         std::process::exit(1);
     }
 }
 
-fn serve() {
+/// A finished game to record: a copy of it, how it was dealt and how it ended.
+type Job = (Game, Dealt, Ending);
+
+/// What a recorder worker did.
+#[derive(Default)]
+struct Totals {
+    games: u64,
+    samples: u64,
+    bytes: u64,
+    shards: usize,
+    failures: Failures,
+}
+
+/// Records ended games on worker threads, each writing shards of its own, so the table never waits on the walk or the
+/// compression. Shards are closed (and so readable) when the host's stdin ends; a game not yet ended then is dropped.
+struct Recorder {
+    send: Option<SyncSender<Job>>,
+    workers: Vec<JoinHandle<Totals>>,
+    /// The games being recorded, by game id, until they end.
+    dealt: HashMap<u32, Dealt>,
+    config: RecordConfig,
+    started: std::time::Instant,
+}
+
+impl Recorder {
+    fn new(config: RecordConfig) -> io::Result<Recorder> {
+        std::fs::create_dir_all(&config.dir)?;
+        let header = Header::new(table(), &config.producer, &config.seeds, config.mode);
+        let (send, receive) = sync_channel::<Job>(config.threads * 4);
+        let receive = Arc::new(Mutex::new(receive));
+        let mut workers = Vec::new();
+        for i in 0..config.threads {
+            let mut writer = ShardWriter::new(&config.dir, &format!("cantrip-w{i}"), header.clone(), config.shard_mb << 20, config.shard_games)?;
+            let receive = Arc::clone(&receive);
+            let mode = config.mode;
+            let worker = std::thread::Builder::new()
+                .name(format!("cantrip-recorder-{i}"))
+                .stack_size(STACK_SIZE)
+                .spawn(move || work(&receive, &mut writer, mode))
+                .expect("a recorder thread starts");
+            workers.push(worker);
+        }
+        Ok(Recorder { send: Some(send), workers, dealt: HashMap::new(), config, started: std::time::Instant::now() })
+    }
+
+    fn send(&mut self, game: Game, dealt: Dealt, ending: Ending) {
+        if let Some(send) = &self.send {
+            let _ = send.send((game, dealt, ending));
+        }
+    }
+
+    /// Records what is queued, closes the shards and reports, on stderr (which may be gone by now) and in DIR.
+    fn finish(mut self) {
+        drop(self.send.take());
+        let mut all = Totals::default();
+        for worker in self.workers.drain(..) {
+            match worker.join() {
+                Ok(t) => {
+                    all.games += t.games;
+                    all.samples += t.samples;
+                    all.bytes += t.bytes;
+                    all.shards += t.shards;
+                    for (k, n) in t.failures {
+                        *all.failures.entry(k).or_default() += n;
+                    }
+                }
+                Err(_) => *all.failures.entry("recorder/worker panicked".into()).or_default() += 1,
+            }
+        }
+        let report = json!({
+            "Dir": self.config.dir.display().to_string(),
+            "Mode": mode_name(self.config.mode),
+            "Producer": self.config.producer,
+            "Games": all.games,
+            "Samples": all.samples,
+            "Bytes": all.bytes,
+            "Shards": all.shards,
+            "Unfinished": self.dealt.len(),
+            "Seconds": self.started.elapsed().as_secs_f64(),
+            "Failures": all.failures,
+        });
+        let mut err = io::stderr();
+        let _ = writeln!(err, "cantrip-native-host: recorded {} games, {} samples, {} bytes in {} shards; {} unfinished dropped", all.games, all.samples, all.bytes, all.shards, self.dealt.len());
+        for (k, n) in &all.failures {
+            let _ = writeln!(err, "cantrip-native-host: not recorded: {n} x {k}");
+        }
+        let millis = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_or(0, |d| d.as_millis());
+        let path = self.config.dir.join(format!("report-{}-{millis}.json", std::process::id()));
+        let _ = std::fs::write(path, serde_json::to_string_pretty(&report).unwrap_or_default());
+    }
+}
+
+fn work(receive: &Mutex<Receiver<Job>>, writer: &mut ShardWriter, mode: InfoMode) -> Totals {
+    let mut totals = Totals::default();
+    loop {
+        let job = receive.lock().map(|r| r.recv());
+        let Ok(Ok((game, dealt, ending))) = job else { break };
+        let made = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| record(game, &dealt, &ending, mode, table())));
+        match made {
+            Ok((game, failures)) => {
+                for (k, n) in failures {
+                    *totals.failures.entry(k).or_default() += n;
+                }
+                if writer.write(&game).is_err() {
+                    *totals.failures.entry("recorder/shard write failed".into()).or_default() += 1;
+                }
+            }
+            Err(_) => *totals.failures.entry("recorder/game walk panicked".into()).or_default() += 1,
+        }
+    }
+    if writer.close().is_err() {
+        *totals.failures.entry("recorder/shard close failed".into()).or_default() += 1;
+    }
+    totals.games = writer.games;
+    totals.samples = writer.samples;
+    totals.bytes = writer.bytes;
+    totals.shards = writer.written.len();
+    totals
+}
+
+fn serve(config: Option<RecordConfig>) {
     eprintln!("cantrip-native-host: {} cards loaded", cantrip_engine::cards().cards.len());
-    let mut host = Host { games: HashMap::new(), next_game: 1 };
+    let recorder = config.map(|c| {
+        let dir = c.dir.display().to_string();
+        let mode = mode_name(c.mode);
+        let r = Recorder::new(c).unwrap_or_else(|e| panic!("cannot record into {dir}: {e}"));
+        eprintln!("cantrip-native-host: recording {mode} observations into {dir}");
+        r
+    });
+    let mut host = Host { games: HashMap::new(), next_game: 1, recorder };
     let stdin = io::stdin();
     let stdout = io::stdout();
     let mut out = stdout.lock();
@@ -265,5 +497,8 @@ fn serve() {
         if writeln!(out, "{text}").and_then(|_| out.flush()).is_err() {
             break;
         }
+    }
+    if let Some(recorder) = host.recorder.take() {
+        recorder.finish();
     }
 }

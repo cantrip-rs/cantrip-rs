@@ -77,6 +77,26 @@ public sealed class NativeHostProcess : IHostTransport, IDisposable
     public static Action<string>? SharedLog { get; set; }
 
     /// <summary>
+    /// The command-line arguments <see cref="Shared"/> is started with (the host's <c>--ai-record DIR</c>, say: what
+    /// the bot lab records training games with). Read when the shared sidecar starts, so set before the first game.
+    /// </summary>
+    public static IReadOnlyList<string> SharedArguments { get; set; } = [];
+
+    /// <summary>
+    /// Stops <see cref="Shared"/>, if it runs, by closing its input and waiting up to <paramref name="wait"/> for it to
+    /// exit: a host recording games writes out the last of them once its input ends, which can take longer than the
+    /// usual grace.
+    /// </summary>
+    public static void CloseShared(TimeSpan wait)
+    {
+        lock (SharedGate)
+        {
+            _shared?.Close(wait);
+            _shared = null;
+        }
+    }
+
+    /// <summary>
     /// The one sidecar this server runs, started on first use and kept for the process's life: every table of every
     /// event deals its games through it.
     /// </summary>
@@ -88,7 +108,7 @@ public sealed class NativeHostProcess : IHostTransport, IDisposable
             {
                 if (_shared is null || _shared._disposed || _shared._process.HasExited)
                 {
-                    _shared = Start(log: SharedLog);
+                    _shared = Start(log: SharedLog, arguments: SharedArguments);
                 }
 
                 return _shared;
@@ -98,9 +118,10 @@ public sealed class NativeHostProcess : IHostTransport, IDisposable
 
     /// <summary>
     /// Starts the sidecar: at <paramref name="path"/>, or wherever <see cref="Locate"/> finds it. Its log lines go to
-    /// <paramref name="log"/>, or to standard error prefixed with the binary's name.
+    /// <paramref name="log"/>, or to standard error prefixed with the binary's name; <paramref name="arguments"/> are
+    /// its command line.
     /// </summary>
-    public static NativeHostProcess Start(string? path = null, Action<string>? log = null)
+    public static NativeHostProcess Start(string? path = null, Action<string>? log = null, IReadOnlyList<string>? arguments = null)
     {
         string binary = path ?? Locate();
         var info = new ProcessStartInfo(binary)
@@ -118,6 +139,11 @@ public sealed class NativeHostProcess : IHostTransport, IDisposable
             // (its card export) however the server was started.
             WorkingDirectory = RepositoryRoot() ?? System.IO.Path.GetDirectoryName(System.IO.Path.GetFullPath(binary)) ?? string.Empty,
         };
+
+        foreach (string argument in arguments ?? [])
+        {
+            info.ArgumentList.Add(argument);
+        }
 
         Process process = Process.Start(info)
             ?? throw new InvalidOperationException($"{binary} could not be started.");
@@ -221,7 +247,9 @@ public sealed class NativeHostProcess : IHostTransport, IDisposable
         _trace.Flush();
     }
 
-    public void Dispose()
+    public void Dispose() => Close(TimeSpan.FromSeconds(2));
+
+    private void Close(TimeSpan wait)
     {
         lock (_gate)
         {
@@ -237,7 +265,7 @@ public sealed class NativeHostProcess : IHostTransport, IDisposable
                 // Closing its input is how the host is told there is nothing more; a host that does not take the hint
                 // is stopped.
                 _input.Dispose();
-                if (!_process.WaitForExit(2000))
+                if (!_process.WaitForExit(wait))
                 {
                     _process.Kill(entireProcessTree: true);
                 }

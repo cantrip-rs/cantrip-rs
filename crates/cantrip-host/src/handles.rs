@@ -27,6 +27,11 @@ impl HandleSpace {
         HandleSpace { next: 1, by_object: HashMap::new(), by_handle: HashMap::new() }
     }
 
+    /// The handle the next object seen is given: two spaces that minted alike have the same.
+    pub fn minted(&self) -> u32 {
+        self.next
+    }
+
     /// The viewer's handle for `object`, minted now if they had none.
     pub fn handle(&mut self, object: ObjectId) -> ViewHandle {
         if let Some(&h) = self.by_object.get(&object) {

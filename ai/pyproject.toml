@@ -9,6 +9,7 @@ dependencies = [
     "onnx>=1.16",
     "onnxruntime>=1.18",
     "numpy>=1.26",
+    "zstandard>=0.22",
 ]
 
 [tool.uv]

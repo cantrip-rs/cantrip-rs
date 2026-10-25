@@ -24,6 +24,8 @@ use cantrip_ai::{Knowledge, Prior, determinize, observe_indexed};
 use cantrip_bench::Random;
 use cantrip_engine::visibility::{knows_face, looks_into, observable, request_objects};
 use cantrip_engine::*;
+use cantrip_obs::encode;
+use cantrip_obs::factor::Machine;
 use cantrip_obs::{InfoMode, ObjectObs, Observation};
 use cantrip_script::GameScript;
 
@@ -568,6 +570,11 @@ fn pair(case: &Case, answers: &[(PlayerId, Answer)], seat: PlayerId, mode: InfoM
             if cantrip_obs::to_bytes(oa) != cantrip_obs::to_bytes(ob) {
                 panic!("{}", leak(&format!("{}{}", case.name, if rotate { " (rotated)" } else { "" }), seat, mode, step, oa, ob));
             }
+            // And so do their encodings, at the request's first step: what the network reads cannot tell them apart.
+            let step_of = |o: &Observation| o.request.as_ref().and_then(|r| r.ask.as_ref()).and_then(|ask| Machine::new(ask, &[]).step().cloned()).unwrap_or_default();
+            let hashed = |name: &str| 1 + (encode::fnv1a64(name.as_bytes()) % 4096) as u32;
+            let (ea, eb) = (encode::encode(oa, &step_of(oa), &[], &[], &hashed), encode::encode(ob, &step_of(ob), &[], &[], &hashed));
+            assert!(encode::to_compact(&ea) == encode::to_compact(&eb), "{}: seat {} {mode:?} step {step}: equal observations encode differently", case.name, seat.0);
             // A world now and then, and now and then one played on: every pair is dealt at least one.
             // A and B may differ in which of the seat's unseen objects an event named (the opponent discarded the card
             // it just drew in A, one it had kept in B): no world resamples that (docs/known-issues.md), so none is

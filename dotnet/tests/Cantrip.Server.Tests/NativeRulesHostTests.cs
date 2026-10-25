@@ -42,6 +42,18 @@ public sealed class NativeRulesHostTests
     }
 
     [Fact]
+    public void A_seats_deck_name_is_told_to_the_host_when_it_has_one()
+    {
+        var host = new ScriptedHost();
+        RulesSeat[] seats = [new("Alice", ["Island"]) { DeckName = "ub-reanimator" }, new("Bob", ["Swamp"])];
+        NativeRulesHost.NewGame(host, seats, 5, new RulesGameOptions { MinimumDeckSize = 60 });
+
+        Assert.Equal(
+            """{"Cmd":"NewGame","Seats":[{"Name":"Alice","Deck":["Island"],"Sideboard":[],"Companion":null,"DeckName":"ub-reanimator"},{"Name":"Bob","Deck":["Swamp"],"Sideboard":[],"Companion":null}],"Seed":5,"Shuffle":true,"FirstPlayer":null,"Chooser":null,"BasicLandsOutside":[],"MinimumDeckSize":60}""",
+            Assert.Single(host.Requests));
+    }
+
+    [Fact]
     public void A_refused_deal_is_a_rejection_with_the_hosts_code()
     {
         var host = new ScriptedHost { RefuseDeal = ("InvalidSetup", "No such card: Wish.") };

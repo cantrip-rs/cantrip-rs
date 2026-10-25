@@ -93,6 +93,7 @@ pub fn observe_indexed(game: &Game, knowledge: &Knowledge, seat: PlayerId, mode:
             } else {
                 Vec::new()
             },
+            ask: (r.player == seat).then(|| crate::ask::ask_of(game, r, &refs).0),
         }),
         decklist: counts(view.roots(seat).map(|id| view.card_name(id))),
         pools: s.seats().map(|p| if p != seat && mode == InfoMode::Decklist { view.pool(p) } else { Vec::new() }).collect(),
@@ -380,7 +381,7 @@ impl View<'_> {
     }
 }
 
-fn target_ref(target: Target, refs: &HashMap<ObjectId, u32>) -> Ref {
+pub(crate) fn target_ref(target: Target, refs: &HashMap<ObjectId, u32>) -> Ref {
     let index = |id: ObjectId| refs.get(&id).map_or(Ref::None, |&i| Ref::Object(i));
     match target {
         Target::None => Ref::None,
@@ -407,7 +408,7 @@ fn place_of(zone: Zone) -> Place {
 }
 
 /// A request's kind by name: its variant.
-fn kind_name(kind: &RequestKind) -> String {
+pub(crate) fn kind_name(kind: &RequestKind) -> String {
     let debug = format!("{kind:?}");
     let end = debug.find(['{', '(', ' ']).unwrap_or(debug.len());
     debug[..end].to_string()

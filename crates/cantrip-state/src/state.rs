@@ -121,8 +121,20 @@ pub struct GameState {
 }
 
 /// The layers' cache (`GameState::layer_pass`): passes the rules crate made, each for its own position and history.
-#[derive(Clone, Default)]
+#[derive(Default)]
 pub struct LayerCache(pub std::cell::RefCell<Vec<std::rc::Rc<dyn std::any::Any>>>);
+
+impl Clone for LayerCache {
+    /// A copy starts with no pass: a pass is derived work for one position and history, and sharing it would share
+    /// `Rc`s between games that may end up on different threads (a recorded game is walked on a worker).
+    fn clone(&self) -> LayerCache {
+        LayerCache::default()
+    }
+}
+
+// SAFETY: every pass is owned by this cache alone (a clone shares none), so moving the cache to another thread moves
+// the only references to its `Rc`s. The rules never take a pass out of a game that is then moved while they hold it.
+unsafe impl Send for LayerCache {}
 
 impl std::fmt::Debug for LayerCache {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

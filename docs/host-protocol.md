@@ -180,6 +180,36 @@ are the server's (`GameSession.OfferDraw`, `AnswerDraw`, over the C# protocol's 
 `DrawOfferMessage`, version 201). Offering passes the offerer's priority, which the host is sent as any `PassAnswer`; once
 every other player still in the game has accepted, the session ends the game as a draw from outside the host, as a match
 clock running out does (`GameSession.Forfeit`), and nothing more is asked of it.
+**Recording for the AI player.** `cantrip-native-host --ai-record DIR` writes every game that ends - won, drawn,
+conceded, or closed before its end (a cap: every outcome 0) - into zstd training shards in `DIR`
+(`crates/cantrip-ai/src/shard.rs`; `docs/ai-player-plan.md`, "Data"), each decision as the answering seat observed it
+and the option it chose, decomposed into the policy's steps. A game still unfinished when the host's input ends is
+dropped and counted. Recording is done by worker threads off the request path, and changes no reply
+(`crates/cantrip-host/tests/ai_record.rs`); once stdin closes the host finishes the queue, closes its shards, and writes
+`DIR/report-<pid>-<ms>.json` (games, samples, bytes, shards, unfinished games, and the answers that made no sample by
+request kind and why) before exiting. The flags:
+
+| Flag | Default | |
+| --- | --- | --- |
+| `--ai-record DIR` | off | where shards go, `cantrip-w<i>-...shard.zst` (a `.part` until closed) |
+| `--ai-record-mode full\|decklist\|hidden` | `full` | the information each observation holds; the shard header names it, and the card index its rows are of (`cards`, the engine's own card names) |
+| `--ai-record-producer TEXT` | `unknown` | what played the games (the bot lab writes `tactical:<model hash>`) |
+| `--ai-record-seeds TEXT` | empty | the seeds the games were dealt from, as the caller describes them |
+| `--ai-record-threads N` | 2 | recording workers, each with its own shard |
+| `--ai-record-games N` | 0 (no limit) | games a shard holds before the next is started |
+| `--ai-record-mb N` | 64 | compressed megabytes a shard holds before the next is started |
+
+A shard recorded here labels each step with the option chosen: its visit field is a one-hot. Self-play shards come
+from `cantrip-selfplay` instead (`docs/ai-host.md`, "Self-play"), not from this host. They have the same layout, with
+the search's root visit distribution in the visit field and each searched decision's root value in the game's meta
+(`root_values`, empty here).
+
+The C# side starts the shared host with `NativeHostProcess.SharedArguments` and stops it with
+`NativeHostProcess.CloseShared(wait)`, which the bot lab's `duel --ai-record DIR` uses.
+
+**Playing as the AI.** The AI player answers from a process of its own, `cantrip-ai-host`. It holds a mirror of each
+game the table hosts and is sent every command the table is sent. It speaks this protocol plus `AiStart` /
+`AiResult`: `docs/ai-host.md`.
 
 The cards a host knows are the ones the native engine has ported (`docs/adding-cards.md`); a deck naming any other
 is refused at the deal. The decks under `decks/demo` and `decks/spike` are kept to ported cards, and

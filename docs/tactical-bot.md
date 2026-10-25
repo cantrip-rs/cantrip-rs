@@ -95,6 +95,18 @@ work. Six hundred games of it against itself with the every-card test deck all e
 Read games, not only tallies: `bot-duel.cmd watch` tells one turn by turn with the board at each turn, and
 `watch --lost` finds a game the bot lost, which is where its mistakes are.
 
+Its games are also the AI player's first training data: `bot-duel.cmd --a tactical --b tactical --ai-record DIR` has
+the native host record every decision of every game that ends as training shards (`docs/ai-player-plan.md`, "Data";
+the flags are in `docs/host-protocol.md`), headed `tactical:<hash of tactical-model.txt>`. The bot is deterministic,
+so against itself it would play each shuffle's pair of games (seats swapped) the same way twice; a recorded self-duel
+deals every game its own shuffle instead (`--each-shuffle`, which any duel can ask for).
+
+The bot is also the AI player's yardstick. A `neural` seat (`neural:decklist` and `neural:hidden` also exist) plays
+the network alone, with no search. It answers from `cantrip-ai-host` beside each worker's native host
+(`docs/ai-host.md`). An example run is `tools/bot-duel.sh --a neural --b tactical --deck rw-aggro --deck ub-reanimator
+--games 160`. On top of the usual tally, the duel splits each answer's time: the host's part and the seat's part for
+both seats, and the network's encode, evaluate and round trip. Phase 2's gate result is in `docs/ai-player-plan.md`.
+
 ## Measuring a change to it
 
 Against the random bot every version of the pilot wins about nine games in ten on drafted decks, so that tally

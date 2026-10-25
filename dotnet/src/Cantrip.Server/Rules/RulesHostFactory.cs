@@ -16,6 +16,12 @@ public sealed record RulesSeat(string Name, IReadOnlyList<string> Deck, IReadOnl
     public RulesSeat(string name, IReadOnlyList<string> deck) : this(name, deck, [])
     {
     }
+
+    /// <summary>
+    /// The decklist's name, where the table has one (<see cref="DeckList.Name"/>): told to the host only so that a
+    /// recording host (<c>--ai-record</c>) can label the seat's archetype. Null sends nothing.
+    /// </summary>
+    public string? DeckName { get; init; }
 }
 
 /// <summary>Starting conditions beyond the seed (CR 103).</summary>

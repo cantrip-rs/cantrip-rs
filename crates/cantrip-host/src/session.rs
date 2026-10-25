@@ -393,6 +393,34 @@ impl Session {
         self.game.is_over()
     }
 
+    /// The game being played, as it stands: what the AI recorder copies once it ends.
+    pub fn game(&self) -> &Game {
+        &self.game
+    }
+
+    /// The question outstanding, unless the game is over: what an AI seat beside the table is asked (`cantrip-ai-host`).
+    pub fn pending_request(&self) -> Option<Request> {
+        self.pending()
+    }
+
+    /// `answer` to `request` as its seat's client would send it, in that seat's handles as they stand, which it leaves
+    /// as they are; and whether it named an object the seat holds no handle for (which a table would refuse), since the
+    /// handles are minted in step with the table's only by what the table does.
+    pub fn payload(&self, answer: &Answer, request: &Request) -> (AnswerPayload, bool) {
+        let space = &self.handles[request.player.index()];
+        let mut scratch = space.clone();
+        let payload = payload_of(answer, request, &mut scratch, &self.game);
+        (payload, scratch.minted() != space.minted())
+    }
+
+    /// The prompt's simplest legal answer to the question outstanding (`PromptPayload::default_answer`), in the seat's
+    /// handles, which it leaves as they are: what an AI seat falls back to.
+    pub fn default_payload(&self) -> Option<AnswerPayload> {
+        let request = self.pending()?;
+        let mut scratch = self.handles[request.player.index()].clone();
+        prompt(&self.game, &request, &mut scratch).ok().map(|(p, _)| p.default_answer())
+    }
+
     /// The log up to where it can no longer be cut back.
     fn publishable(&self) -> usize {
         publishable(&self.game)

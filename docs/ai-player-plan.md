@@ -247,11 +247,33 @@ TensorRT-style compilers see static shapes:
 | event | recent public events, typed, pointing at canonical object indices |
 | option | each candidate of the current (sub-)step, with pointers to the objects it names |
 
-Objects past the cap are pooled per zone. The **cap-hit rate is logged** in self-play: if it is common, the cap moves.
+This is `cantrip_obs::encode` (its schema version and every width, list and vocabulary are in `ai/encoding.json`,
+which a fast test keeps equal to the code; `encoder_hash` is its FNV-1a). Every token has the same shape: a kind
+(pad, game, player, card, hidden, pool card, event, option, pooled), a card row (u16; 0 is the unknown card), 9
+categoricals (zone 10, owner 9, controller 9, step 13, ask kind 27, event kind 66, from-zone 10, option token kind
+29, action 13), 4 pointers to other tokens (255 for none), 96 numbers (powers-of-two scales, rounded through f16)
+and a legal bit; dense, a 64-token position is 13.6 kB, and the compact form (the nonzero numbers only) is about
+1.4 kB. Tokens come in a fixed order: the game, the players, the objects in canonical order (a library's top 3 kept,
+the rest of it and the sideboards pooled into one token per zone and player), the decklist's pool cards, the latest
+8 events, the latest 16 tokens already chosen at this request (pointing at what they named, never legal), then the
+options of the current step. Full mode makes every object visible and marks those the seat could not have seen.
 
-The card-text table is built by `ai-embed` in the container from `content/*/cards/*.json`. It ships with a hash of
-the card set. A card without a row plays with the unknown-card row, and a fast test (`test.cmd`) reports how many
-cards lack one, so the table is rebuilt when cards are added but play never breaks before then.
+Past 128 tokens, places are pooled whole (sideboard, library, exile, graveyard, command, phased out, hand,
+battlefield, stack), never an object an option or the ask names unless nothing else fits, and pooling a later place
+made needless is given back; then pool cards go, then options. Any of those is a **cap hit**, logged in self-play:
+if it is common, the cap moves. Events are dropped first and are no cap hit. Over the scenario corpus 9 positions in
+32211 hit the cap; 93% are bucket 64.
+
+A card's token carries its row of the **card index** (`cantrip_ai::CardIndex`): the engine's own card names, sorted,
+row 0 the unknown card, and a hash of the names. Nothing about it is checked in: the runtime makes it from
+`cantrip_engine::cards()`, so every card the engine has has a row, and each shard's header names the index its rows
+are of (`cards`). The **card-text table** a row starts from is the network's, never the repository's
+(`ai/cantrip_ai/embed.py`): 64 dimensions of TF-IDF over each name's text in `content/*/cards/*.json` (the card's own
+name replaced), reduced by SVD. A fresh network fits the basis to its shards' names; the checkpoint keeps the names and
+the basis, and a fine-tuned network keeps its rows and projects each new card into the same basis, so a row it trained
+on never moves. Export bakes the table into the graphs and writes the names as the model's `cards.json`; the evaluator
+maps the runtime's rows onto them by name. A checkpoint or shard from before (whose index was a checked-in table) takes
+its names from the nearest `cards.json` above it, and its basis is fitted again from them.
 
 ### Body and heads
 
@@ -264,9 +286,28 @@ cards lack one, so the table is rebuilt when cards are added but play never brea
   up, removal up, trick up, lethal next turn). The labels are the true hidden state, which training has; the input is
   only the observation.
 
+As built (`ai/cantrip_ai/model.py`): every input of a token is summed into the width: the card row through the frozen
+64-dimension text table and a learned projection, a learned embedding per categorical and for the kind, and the 96
+numbers through a linear layer; then the tokens the 4 pointers name, gathered by a one-hot matmul and projected,
+are added. Then 4 pre-norm layers, width 144, 4 heads, FFN 576, attention masked to the real tokens: **1.24 M
+parameters**. The value is tanh of a small MLP over the game token and the mean of the real tokens; the auxiliary
+head, over the same, is the life swing (scaled by 10) and the probability of being dead next turn; the policy is a
+linear score of each token, -1e9 where the step's option is not legal; the belief is a per-token logit of the card
+being in an opponent's hand. There is no
+archetype head yet (no shard carries the label), and the belief loss is off in Full mode, where the hands are in
+the input. An exported model narrower than the table (the tiny test model) has the projection folded into a
+per-row table.
+
 ### Information modes in training
 
-Following Suphx properly:
+**Full information first** (decided in Phase 2). Generation 0 and the first trained generations see `InfoMode::Full`
+observations: both hands, and the library order as the engine knows it. The recorder records Full observations, and the
+trainer and the gate run in Full mode. The Full model then bootstraps the Decklist and Hidden models, by distillation
+or as their initialisation. The mode is in every shard's header (`mode`) and every game's meta (`modes`), so Decklist
+and Hidden data is recorded later by the same code (`--ai-record-mode`). Encoding and factoring work in every mode
+from the start; their tests run all three.
+
+Following Suphx properly, once the other modes are trained:
 
 - **Oracle dropout.** Full-mode features (the hidden contents) are fed during early training and annealed away by
   dropout, so the network learns to play without them.
@@ -303,6 +344,39 @@ masked and the step backtracks. In the browser (no validator), a rejected answer
 the network's next choice, then to the tactical bot. A fast test sends every factoring's answers through the
 validator, for every request kind the scenario corpus raises.
 
+How it is built (`cantrip_obs::factor`, `cantrip_ai::answer`):
+
+- **The ask.** A seat's own request carries an `Ask` in its observation (`RequestObs::ask`): the request's candidates
+  and constraints in canonical terms, its lists sorted (options, triggers, replacements, subtypes, counter pools), with
+  the permutations back to the engine's kept outside the observation (`cantrip_ai::ask::Perms`).
+- **Tokens.** A `Machine` for the ask offers one `Step` at a time: tokens `{kind, a, b, n}` (a `Tok`, two canonical
+  references and a small number) and a mask of the legal ones. `Done` is a token wherever stopping is allowed;
+  `Cancel` is offered on the first step where the request may be cancelled. Every machine finishes within
+  `factor::bound(ask)` steps, asserted on each choice. The finished machine holds a `FactoredAnswer`.
+- **X buckets.** X (and a kicker count, or an "unless pays" X) is chosen among `X_BUCKETS` = 0 to 10, 12, 15, 20, 30,
+  and X as it is now; a bucket over `x_most` is masked. `x_most` is an estimate: the pool (restricted mana included)
+  and, per untapped permanent, the most one of its mana abilities adds, less the cost's colored symbols, divided by the
+  number of {X}; life for an X paid in life; loyalty for a loyalty X. It counts no cost reduction, so an X a reduction
+  makes affordable may be masked. The engine answer moves X a step at a time (`IncreaseX`, `DecreaseX`) to the bucket
+  and then confirms.
+- **Payment** is no policy step: `AutoPay`, and paying an "unless pays" cost, are made by `cantrip_ai::pay` (the
+  payment heuristic, moved from `cantrip-script`), one engine answer at a time.
+- **The decomposition rule** (`decompose`, the inverse): a list the answer orders (cards, targets, modes, colors,
+  trigger order, placements) is chosen in the answer's own order, placements destination by destination; a declaration
+  per object (attackers, blockers, damage shares, divided amounts, counters removed) is walked in canonical object
+  order, an amount a unit at a time; X is the highest legal bucket at or under the X wanted; a payment is `AutoPay`;
+  then `Done` wherever the machine still asks.
+- **Masks and the validator.** The masks carry every local constraint. What only the whole answer shows is left to
+  `check_answer` (`Rejection::global`): menace and "can't be blocked except by N", the block requirements' maximum
+  (CR 509.1c), a creature that must attack a certain player, goad, bands, a name that is no card or not of the kind
+  asked for, a total power or mana value short of its minimum, and more wanted than there is to choose. Any other
+  refusal is a fault of the factoring.
+- **The test** (`cantrip-ai/tests/factoring.rs`): at every request a scenario answers, the answer is put in canonical
+  terms, decomposed, replayed through the machine, mapped back and validated; then three seeded random walks per
+  request must be accepted or refused only globally. The fast test takes every 50th scenario; `-- --ignored` takes the
+  corpus (7404 scenarios, 6 s): every request kind raised, every round trip good, no walk refused locally, and the only
+  global refusals are blocks (2.2% of blocker walks).
+
 ## Search
 
 ### Moves not branched on
@@ -310,6 +384,23 @@ validator, for every request kind the scenario corpus raises.
 - A request with one legal answer is answered without a node.
 - A priority where the policy gives everything but pass under 1% is passed after the first visit says so.
 - Mana abilities are paid, never moved.
+
+### Branch trimming
+
+Edges are cut by value, after a batch's backups (`search.rs`). The value is the edge's mean for the seat choosing
+at that node, so every node trims moves bad for itself, and an opponent's good reply is never cut.
+
+- **Immediately:** an edge at or below `prune_bad` (default -0.80) when a visited sibling is better.
+- **After a look:** an edge still `prune_margin` (0.20) below the best visited sibling, once it has been descended
+  `prune_after` (2) times and at least `prune_after_replies` (1) opponent decision below it has been expanded.
+- **Never:** the best edge at a node (so every node keeps an option), an unvisited edge, an edge whose child has not
+  been materialized, and an edge with pending virtual loss.
+- `Child::Dead` still means the engine refused an answer; a pruned edge is not a refusal.
+- Pruning is per world and deterministic. Root visits and the root value leave pruned edges out, so the answer and the
+  recorded visit target cannot choose one.
+
+`Prune`, `PruneBad`, `PruneMargin`, `PruneAfter` and `PruneAfterReplies` are `Config` fields and `AiStart` settings;
+`Searched` reports `pruned`, `pruned_immediate` and `pruned_shallow`.
 
 ### PUCT in worlds (PIMC)
 
@@ -329,10 +420,11 @@ from the other's knowledge. It is kept only if it wins the duel.
 
 Also noted:
 
-- The tree never prunes (`tree.rs`); a fork is thrown away after each decision, so its memory is bounded per
-  decision. That memory is measured.
+- The game tree (`tree.rs`) never prunes; the search's own edges are cut by the trimming above. A fork is thrown
+  away after each decision, so its memory is bounded per decision. That memory is measured.
 - Request ids are part of a child's key, so transpositions are not merged. That is acceptable for now.
-- Leaves are batched across worlds and across games with virtual loss.
+- Leaves are batched across worlds with virtual loss (`Config::batch`). Across games they are not yet: BotLab runs one
+  AI host a game lane, each with its own evaluator, so a batch never holds two games' leaves (Phase 3, under Phases).
 
 ### Budgets and fallbacks
 
@@ -352,16 +444,26 @@ pub trait Evaluator: Send + Sync {
 }
 ```
 
-| Backend | Where | Status |
-| --- | --- | --- |
-| `RemoteEvaluator` → the container's PyTorch server | NVIDIA (CUDA), AMD (ROCm) | the GPU path for self-play and server seats on both vendors |
-| `OrtEvaluator` CPU | any machine | the default in-process path |
-| `OrtEvaluator` CUDA | NVIDIA | optional speed-up |
-| `OrtEvaluator` MIGraphX | AMD, Linux | optional, unverified until it is built and run on AMD |
-| `TractEvaluator` | pure Rust, CPU | tests; parity reference |
-| onnxruntime-web WASM / WebGPU | the browser | WASM tested; WebGPU where the browser has it |
+| Backend | Where | Role | Status (Phase 2) |
+| --- | --- | --- | --- |
+| `RemoteEvaluator` → the container's PyTorch server | NVIDIA (CUDA), AMD (ROCm) | the GPU path for self-play and server seats on both vendors | not built (Phase 3) |
+| `OrtEvaluator` CPU | any machine | the default in-process path once a server seat needs speed | **built** (`cantrip_ai::eval`, `--features ort`, off in the workspace's default build because `ort` downloads its binaries); parity passes |
+| `OrtEvaluator` CUDA | NVIDIA | optional speed-up | not built; **CUDA parity cannot run on the development machine** (no NVIDIA device) |
+| `OrtEvaluator` MIGraphX | AMD, Linux | optional, unverified until it is built and run on AMD | not built |
+| `TractEvaluator` | pure Rust, CPU | tests; parity reference; the workspace's default | **built** (`cantrip_ai::eval`, tract-onnx 0.23); parity passes |
+| onnxruntime-web WASM / WebGPU | the browser | WASM tested; WebGPU where the browser has it | spike only (Phase 0) |
 
-**Parity is a test.** `ai-parity` runs a fixed set of encoded positions (a few thousand, from scenario replays)
+A model directory (`ai/cantrip_ai/export.py`) holds `model-t32.onnx`, `model-t64.onnx` and `model-t128.onnx` (batch
+free, opset 17), `cards.json` (the card each table row is), `manifest.json` and `reference/`. `Model::load` refuses
+a schema or encoder-hash mismatch; a card index hash that differs maps the runtime's rows to the model's by name, a
+card the model never saw becoming the unknown card. `FeatureBatch::new` pads a batch of `Encoded` positions to the
+largest bucket in it; `Outputs` holds the value, each position's option logits (illegal ones -1e9) and the two
+auxiliary targets.
+
+**Parity is a test.** As built, it is `cantrip-ai`'s `tests/eval.rs`: the fast tests run the tiny checked-in model's
+48 references (scenario positions) through tract, and `model_parity` (ignored; `CANTRIP_MODEL` names the directory,
+`--features ort` adds onnxruntime) runs a real model's 512 held-out references; `export.py` runs them through
+onnxruntime in Python when it writes them. As planned, `ai-parity` runs a fixed set of encoded positions (a few thousand, from scenario replays)
 through every available backend and PyTorch. It checks that values agree within 1e-3 and that the top choice is the
 same on 99.5%+. The CPU backends run in every check. The GPU half runs on whatever vendor the machine has. The AMD
 half (ROCm training and the inference server, and MIGraphX if built) runs on AMD hardware, borrowed or a rented
@@ -372,6 +474,9 @@ export script pins the exporter (TorchScript-based, not dynamo, unless phase 0 s
 checks the graph against an operator allow-list.
 
 ## Training
+
+The runbook - setting up on CUDA, ROCm or the CPU, generation 0 and the generation loop - is
+[ai-training.md](ai-training.md).
 
 ### Data
 
@@ -384,7 +489,11 @@ commit, the model and backend that produced it, and the seeds. Each sample holds
 - the auxiliary targets and the true hidden state;
 - both seats' modes.
 
-Size: about 2-4 KB a sample compressed was estimated; the spike's tensors are 8.5-34 KB raw (Phase 0 results).
+Size, measured on generation 0's shards (`cantrip_ai::shard`, the compact form of `cantrip_obs::encode`): about
+**58 bytes a sample** compressed, at 350-475 samples a game, so about 24 KB a game. The 2-4 KB estimated was for dense
+features; a sample stores card rows and bucketed numbers, and a game's positions differ little from one to the next.
+A shard's layout and the flags that write one are in `docs/host-protocol.md` ("Recording for the AI player");
+`ai/shards.py` reads them (`--check` checks each step's chosen option is legal).
 Shards are kept for the last eight generations, and older ones are deleted unless pinned.
 
 **Reproducibility.** The engine is deterministic and self-play's seeds are recorded. Batched asynchronous inference
@@ -397,19 +506,22 @@ A model's manifest names:
 
 - the observation schema version;
 - the encoder hash;
-- the card-text table hash;
+- the card index hash (the model's own names are its `cards.json`);
 - the engine commit it was trained against.
 
-The loader refuses a mismatch of schema or encoder. A newer card set is accepted, with unknown-card rows for the new
-cards.
+The loader refuses a mismatch of schema or encoder. A newer card set is accepted, with unknown-card rows for the cards
+the model was not trained with; the next generation gives them rows (above, "Inputs").
 
 ### Bootstrap, then expert iteration
 
 1. **Imitation of the tactical bot.** BotLab's games already run on the native host
    (`dotnet/tools/Cantrip.BotLab/Match.cs:105`). A host flag (`--ai-record DIR`) writes each decision's observation
    and the tactical bot's answer, decomposed into the plan's sub-steps (`cantrip-obs` turns an assembled answer into
-   its steps). At about thirty games a second, data is plentiful; it is shaped like the tactical bot's play, which is
-   what generation 0 is for.
+   its steps). Tactical against tactical through the native host plays about two games a second on sixteen cores
+   (the tactical bot's 20 ms or so an answer is the cost, not the engine or the recorder, which adds about 4%), so
+   about 7 k games and 2.5 M samples an hour; it is shaped like the tactical bot's play, which is what generation 0
+   is for. The tactical bot is deterministic, so a recorded self-duel deals every game its own shuffle
+   (`--each-shuffle`): a pair of games from one shuffle, seats swapped, would be one game twice.
 2. **Short problems from scenarios.** Forced positions ("win this turn", "this combat", "this stack fight"),
    reached by a scenario's own script and never by a seed, labelled by a large-budget search and trained on as a
    curriculum. This is the most data per GPU-second available.
@@ -460,7 +572,15 @@ The browser runs the same model on WASM, an estimated 20-100 ms an evaluation, n
   - full against decklist against hidden.
 
   The **mode gap** (what full information is worth to the same network and search) is reported every generation.
-- **Champions.** A frozen model and its manifest are kept under `.cantrip-lab`.
+- **SPRT** (`cantrip-botlab duel --sprt`). The sequential test is H0: a 50% win rate for seat A, H1: 55%, with α = β =
+  0.05. The log-likelihood ratio is `W·ln(p1/p0) + L·ln((1-p1)/(1-p0))`, a draw counting half a win and half a loss.
+  H1 is accepted at `ln 19 = +2.944` and H0 at `-2.944`. Once the ratio crosses a bound, no new games start, and the
+  games already being played finish and are counted. The report gives the game and ratio at the verdict, and the ratio
+  over every finished game. `--games` is the cap. A run that reaches it without a verdict reports the ratio it ended
+  on.
+- **Champions.** A frozen model and its manifest are kept under `ai-data/champions/<generation>/` (beside the
+  repository; `CHAMPION.json` says how it won), `champions/current` names the one in force, and
+  `champions/history.json` records every gate, accepted or not (Phase 4).
 
 ## Phases
 
@@ -548,7 +668,7 @@ size is mostly the event history, copied whole.
 u8), 256 B of masks and up to 512 B of visit distribution, about **34 KB**; T32 about 8.5 KB. That is 10× the 2-4 KB
 estimated. The real encoding stores card ids into the text table rather than dense features and can store f16 and
 u8, which is where the estimate has to come from; random spike features say nothing about zstd, so the compressed size
-is measured on phase 2's shards.
+is measured on phase 2's shards: about 58 bytes a sample (under Data).
 
 **Throughput, revised.** On this CPU at T128, 256 evaluations a decision is about 6 decisions a second (20 at T32);
 at 662 decisions a game that is about 800 games a day (2.6 k at T32), below the 2-15 k a day planned from a GPU. The
@@ -581,19 +701,302 @@ parity and gate runs.
   validator test; shards with headers.
 - The tactical-bot recorder; generation 0 by imitation.
 - `cantrip-ai-host` with network-only answers; the `neural` BotLab seat.
+- Done: the factoring for every request kind (`cantrip_obs::factor`; under Answers), the ask in each seat's own
+  request, the mapping back to the engine's answer with the validator's check (`cantrip_ai::answer`), and `auto_pay`
+  moved to `cantrip_ai::pay`. Its test runs the whole scenario corpus (ignored; a 1-in-50 sample in the fast tests).
+- Done: `encode` (`cantrip_obs::encode`; under Inputs) with buckets, pooling, the compact form and the vocabulary in
+  `ai/encoding.json`; the card index (`cantrip_ai::CardIndex`, the engine's own cards). Its tests encode a sample of the
+  corpus in every mode (the whole of it ignored), keep goldens (`CANTRIP_GOLDEN=1` rewrites them), and the redaction
+  test checks that observations the seat cannot tell apart encode the same.
+- Done: the recorder (`cantrip_ai::record`, shards in `cantrip_ai::shard`), the host's `--ai-record` flags
+  (`docs/host-protocol.md`), the bot lab's `duel --ai-record DIR`, and `ai/shards.py`, which reads the shards. The
+  recorder's test covers the whole scenario corpus (ignored; a sample runs in the fast tests). In the whole corpus, 58
+  answers make no sample: a creature type the encoder's cap cut (`docs/known-issues.md`, KI-78).
+  Generation 0, in Full mode, has 12000 distinct games of tactical against tactical: rw-aggro against ub-reanimator,
+  and each deck's mirror. That is 4.95 M samples and 287 MB, about 58 bytes a sample, played in 2 h on 16 cores with no
+  failed answer. It lives outside the repository, in `ai-data/gen0/` beside it, with a README.
+- Done: the network (`ai/cantrip_ai/`: `model`, `dataset`, `train`, `export`; under Body and heads), the
+  `Evaluator` trait with `TractEvaluator` (the default) and `OrtEvaluator` (`--features ort`, off by default), the
+  manifest check, and network-only answers (`cantrip_ai::net::answer`: the factoring walked step by step with the
+  policy's best or a sampled legal option, a refused walk's deepest open choice banned and retried 8 times, then
+  first-legal walks; payment by `pay`). The fast tests (`crates/cantrip-ai/tests/eval.rs`) run a 10 k-parameter model
+  checked in under `tests/data/tiny` (856 kB with its references): tract within 1e-3 of PyTorch, the Rust decoder
+  against the Python one, a mismatched schema or encoder hash refused, a newer card set mapped by name, and
+  network-only answers to a 1-in-60 sample of the corpus's requests all accepted by the validator. Over the whole
+  corpus (ignored), 567,851 requests are answered with none refused and no fallback.
+  Generation 0 (`ai-data/models/gen0/`, with a README): width 144, 4 layers, 1.24 M parameters, one epoch of the
+  Full-mode gen0 data (3.80 M samples seen, a quarter of the single-option ones kept) in 2 h 22 min on 10 CPU threads,
+  about 445 samples a second. Held out by game, it takes the tactical bot's option on **96.3%** of the steps with a
+  choice, where the first legal option is the bot's on 73.5%; value MSE 0.486 (0.556 at step 2000), its sign right
+  on 82%. Parity over its 512 references: tract and ort CPU within 4e-5 of PyTorch, the same argmax on all of them.
+  **CUDA parity has not run**: the development machine has no NVIDIA device.
+- Done: `cantrip-ai-host` (`crates/cantrip-ai-host`, `docs/ai-host.md`). It is a mirror of the table that the
+  native host's commands are teed to, and it answers a seat by the network alone when asked (`AiStart`, `AiResult`).
+  Also done: the `neural` BotLab seat (`dotnet/tools/Cantrip.BotLab/Neural.cs`) and `tools/bot-duel.sh`. Bugs that
+  playing found and fixed:
+  - tapping chose its sources greedily, and could not read a land whose ability fixes its yield (Plateau);
+    `pay::tap` now matches symbols to sources;
+  - a cast whose payment or cost the seat cancelled was chosen again forever. `net::Payment` now filters a cancelled
+    cast or activation out of the AI's choices while the board before it stands (`cancel::board_hash`), so it is
+    not re-offered after the undo; a new board offers it again (KI-79, now fixed generally, not by a per-card cap);
+  - an empty card name read back as a nameless token's card (`crates/cantrip-host/src/answer.rs`).
+- **Gate result** (2026-10-19). Generation 0, network only, Full mode, ort CPU, `Choice::Best`, against the tactical
+  bot. 400 games, seats swapped every other game, `--parallel 14`; every game finished. Generation 0 won **184 of
+  400, 46.0% ± 4.9%** (95% CI 41.1-50.9%), so **the 40% bar is met**.
+
+  | Decks | Neural won | Win rate |
+  | --- | --- | --- |
+  | rw-aggro against ub-reanimator, 160 games | 79 | 49.4% ± 7.7% |
+  | (neural playing rw-aggro) | 67 of 80 | 83.8% |
+  | (neural playing ub-reanimator) | 12 of 80 | 15.0% |
+  | rw-aggro mirror | 35 of 80 | 43.8% ± 10.9% |
+  | ub-reanimator mirror | 42 of 80 | 52.5% ± 10.9% |
+  | the four demo mirrors, which gen0 never saw | 28 of 80 | 35.0% ± 10.5% |
+  | (1-black-red) | 12 of 20 | |
+  | (2-white-blue) | 6 of 20 | |
+  | (3-green-red) | 3 of 20 | |
+  | (4-red-black) | 7 of 20 | |
+
+  - On gen0's own decks it won 156 of 320 (48.8% ± 5.5%).
+  - In seat 1, 95 of 200 (47.5%); in seat 2, 89 of 200 (44.5%).
+  - On the play, 104 of 200 (52.0%); on the draw, 80 of 200 (40.0%).
+  - An answer, p50 / p95 / max, in the rw-aggro against ub-reanimator duel:
+
+    | | Neural (29070 answers) | Tactical (29154 answers) |
+    | --- | --- | --- |
+    | Whole | 9.8 / 19.9 / 99.5 ms | 4.1 / 11.6 / 74.1 ms |
+    | Native host's part | 2.7 / 7.6 / 22.6 ms | 2.6 / 7.5 / 21.2 ms |
+    | Seat's own part | 6.7 / 14.6 / 94.2 ms | 1.1 / 5.9 / 73.5 ms |
+
+    The neural seat's own part breaks down as:
+    - encoding, 0.08 / 0.10 / 4.1 ms;
+    - the network, 3.0 / 6.2 / 87 ms;
+    - the rest of the AI host, 0.8 / 2.2 / 7.1 ms;
+    - the process round trip, 1.0 / 5.0 / 19 ms.
+  - Steps and evaluations an answer: 1 / 1 / 14. That is 294 evaluations a second at batch 1 inside a 14-game run.
+  - The other runs were within about 10% of these timings.
+  - Fallbacks: 8, 21, 10 and 305 (the demo decks, mostly the cancel guard). Late answers: none. Errors: none.
+- **Parity on CPU passes for gen0** (512 references, `model_parity`):
+  - tract: within 2.8e-5 of PyTorch, the same argmax on all, 318 positions a second at batch 1;
+  - ort: within 3.8e-5, the same argmax on all, 875 positions a second at batch 1 and 1709 at batch 64.
+- **CUDA parity is pending.** It needs an NVIDIA device: `hardware.nvidia` with nvidia-container-toolkit and
+  `docker build -f ai/Dockerfile.cuda`, or native `ort` CUDA with CUDA 12 and cuDNN 9.
+- **Status:** the Phase 2 gate is met on CPU, and CUDA parity is outstanding.
 - **Gate:**
-  - generation 0, network only, scores 40%+ against the tactical bot on its decks (95% CI reported);
-  - parity on CPU and CUDA.
+  - generation 0, network only, scores 40%+ against the tactical bot on its decks (95% CI reported): met, 46.0% ±
+    4.9% (above);
+  - parity on CPU and CUDA (CPU passes; CUDA not run).
 
 **Phase 3: search (3 weeks).**
 - PUCT, PIMC worlds, batched evaluation through the inference server, deadlines and fallbacks, game-length caps.
 - **Gate:** under SPRT, search over generation 0 beats network-only generation 0, and beats the tactical bot.
+- Done: the search, `cantrip_ai::search` (under Search, and the module's own text):
+  - PUCT over the factoring's sub-steps: a node is one choosing sub-step, and its edges are the legal options;
+  - the network's softmaxed legal logits as priors (`prior_temperature`), and its value at the leaves, backed up
+    from each node's acting seat's side;
+  - leaves batched (`batch`, 8) with a virtual loss on each edge on the way down, across worlds too;
+  - `W` worlds through `determinize` in Decklist and Hidden modes, root visits summed by the option's token, and one
+    fork in Full mode;
+  - forks reseeded, so a line never knows the real game's coming shuffles, and the same position, seed and budget
+    give the same answer;
+  - requests with no choice, and a payment run after its first answer, are answered in the line without a node;
+  - a line ends at a game's end, or is a draw (value 0) `turn_cap` (40) turns past the root or after `MAX_FORCED`
+    requests with no choice.
+- Done: the priority shortcut. When every option but passing has a prior under `shortcut` (0.01), passing is the
+  node's only edge. At the root, the seat passes once the root is expanded.
+- Done: branch trimming. An edge at or below `prune_bad` (-0.80) is cut when a visited sibling is better, and one
+  still `prune_margin` (0.20) below the best is cut after `prune_after` (2) descents and `prune_after_replies` (1)
+  opponent decision. The best edge is never cut.
+- Done: budgets and fallbacks. The budget is a simulation count or a deadline, checked before each batch. The answer
+  is walked in the real game's factoring, taking the most visited option or a sample. A sub-step the search never
+  reached is the network's. A refused answer, a search with no simulation in time, and a forced request go to the
+  network alone (`net::answer_by`). A Hidden-mode search with no `Prior` is an error, which the host turns into
+  `InvalidSetup`.
+- Done: tree memory is measured, not estimated. `cantrip_ai::alloc` is a counting allocator that `cantrip-ai-host`
+  installs, and `TreeBytes` is the search thread's peak live bytes above where the search began.
+- Done: the AI host. `AiStart` takes `Simulations`/`SearchMs`, `Worlds`, `SearchSeed`, `CPuct`, `PriorTemperature`
+  and `Batch`, and `--prior DIR` gives the decks a Hidden-mode world is dealt from. `AiResult.Search` carries the
+  stats (`docs/ai-host.md`).
+- Done: BotLab. The `neural[:mode][@N|@Nms]` seat searches, and neural against neural is a duel. `--ai-worlds`,
+  `--ai-batch`, `--ai-cpuct` and `--ai-prior-temperature` are passed through. `--sprt` is the sequential test (under
+  Measuring), and `--mirrors` with two decks plays half the games as the matchup and a quarter as each deck's mirror.
+- Done: on Linux, BotLab's three-minute limit a game no longer counts a neural seat's own part of its answers. On
+  Windows the limit was already the thread's processor time, which the AI host's process is not part of.
+- Tests: `crates/cantrip-ai/tests/search.rs` has 8 tests, each on a forced position:
+  - a win in one found with nothing from the network (the tiny model);
+  - a lost position valued as lost from the seat's side, and a value backed up from each seat's side;
+  - a budget of simulations spent exactly, and a deadline read from the clock it is given;
+  - the same position, seed and budget give the same answer;
+  - two games a seat cannot tell apart are searched alike (Hidden mode, worlds from a `Prior`);
+  - searched answers over a sample of the scenario corpus (one file in 90) are taken by the engine.
+
+  In `crates/cantrip-ai-host/tests/ai_host.rs`, a searched answer carries its stats and the table takes it.
+- **Not built: batching across games.** BotLab runs one AI host a lane (`--workers 1 --threads 1`), and each has its
+  own evaluator. Inside a 16-lane run, batch 8 gives no more evaluations a second than batch 1 (about 190-290 a second
+  a lane at full load, against 870 a second for a lone batch-1 run). The CPU is saturated by sixteen batch-1
+  evaluators, so a shared queue would buy nothing here. On a GPU it is the whole point: one evaluator taking every
+  lane's leaves at batch 64-512. That is the `RemoteEvaluator`, and it comes with the GPU.
+- **Throughput** (2026-10-19). Generation 0, Full mode, ort CPU, 16 games in parallel on 16 cores, against the
+  tactical bot, 32 games each, rw-aggro against ub-reanimator (shuffles from 3001). A searched decision is one that ran
+  the budget; the rest were forced, a payment, or passed by the shortcut.
+
+  | Budget | Searched decisions a second, a seat | Evaluations a second, a seat | Decisions a second in all, a seat | Answer p95 | Tree, p50 / p95 / max |
+  | --- | --- | --- | --- | --- | --- |
+  | network only (Phase 2) | | 294 | about 100 | 20 ms | |
+  | 16 simulations | about 12 (from 187 evaluations a second) | 187 | 51.2 | 94 ms | 0.25 / 1.9 / 5.2 MB |
+  | 64 simulations | 3.3 | 208 | 16.7 | 345 ms | 3.8 / 5.7 / 11.9 MB |
+  | 256 simulations | 0.8 | 192 | 4.3 | 1.4 s | 12.4 / 17.7 / 75.9 MB |
+
+  - The 16-simulation run predates splitting out the shortcut, so its count of searched answers includes the shortcut
+    passes. Its rate is the evaluations a second divided by 16.
+  - About 60% of the answers the search sees are passes the shortcut takes, so a game at 256 simulations is about 3.6 s
+    a lane on the clock: a 1,000-game duel is about an hour on 16 lanes. **256 simulations is the gate's budget.**
+  - In the gate duels, a tree at 256 simulations was 12.3-12.6 MB at p50 and 17-28 MB at p95. The largest was 200 MB,
+    in the demo decks: a long line's game log, which the search's forks grow and throw away each decision.
+- **Gate result** (2026-10-19). Generation 0 at 256 simulations, Full mode, one world, `c_puct` 1.5, prior
+  temperature 1, batch 8, ort CPU, `--parallel 16`, under SPRT (H0 50%, H1 55%, α = β = 0.05). The decks were
+  rw-aggro against ub-reanimator with `--mirrors`: half the games the matchup both ways round, a quarter each deck's
+  mirror. Seats were swapped every other game, with fresh shuffles. No tuning round was needed.
+
+  | Duel | Verdict | Result over every finished game |
+  | --- | --- | --- |
+  | search against network only (shuffles from 562714740) | **H1 at game 65** (LLR 2.984) | 60 of 80, **75.0% ± 9.5%** (LLR 3.611) |
+  | (the matchup) | | 27 of 36, 75.0% |
+  | (the mirrors) | | 33 of 44, 75.0% |
+  | search against the tactical bot (shuffles from 7161008) | **H1 at game 172** (LLR 2.948) | 115 of 187, **61.5% ± 7.0%** (LLR 3.375) |
+  | (search playing rw-aggro against ub-reanimator) | | 39 of 46, 84.8% |
+  | (search playing ub-reanimator against rw-aggro) | | 15 of 47, 31.9% |
+  | (rw-aggro mirror) | | 28 of 52, 53.8% ± 13.5% |
+  | (ub-reanimator mirror) | | 33 of 42, 78.6% ± 12.4% |
+  | the four demo mirrors against the tactical bot, 160 games, no SPRT (shuffles from 846855268) | | 76 of 160, 47.5% ± 7.7% (Phase 2's network alone: 35.0% ± 10.5%) |
+  | (1-black-red / 2-white-blue / 3-green-red / 4-red-black) | | 26 / 13 / 8 / 29 of 40 |
+
+  - Against the tactical bot on gen0's own decks, the network alone scored 48.8% ± 5.5% in Phase 2; search scores
+    61.5% ± 7.0%.
+  - Against the tactical bot, search won 69.9% on the play and 53.2% on the draw. In seat 1 it won 58.8%, in seat 2
+    64.4%.
+  - In the duel against the tactical bot, two rw-aggro mirrors (games 1108 and 1404, shuffles 7161562 and 7161710)
+    hit the three-minute limit on the clock: about 700 answers of which a third took search time. They were not
+    counted. Counted as losses, the result is 115 of 189 (60.8%), with LLR 3.16, still past the bound. The fix to the
+    limit (above) came after that run; the demo duel ran with it, and every game finished.
+  - Fallbacks (the KI-79 cancel guard): 42 against the network, 90 against the tactical bot and 539 on the demo decks.
+    The network-only seat had 6 in the same duel. There were no late answers and no errors.
+- **Status:** the Phase 3 gate is met in Full mode on CPU. Decklist and Hidden searches work and are tested; they have
+  not been measured in a duel.
 
 **Phase 4: expert iteration (3-6 weeks, mostly machine time).**
 - The self-play loop with mixed modes and oracle dropout, the scenario curriculum, SPRT gating, champions, shard
   retention.
 - **Gate:** five accepted generations, and the hidden-mode seat scores 60%+ against the tactical bot on its decks,
   significant under SPRT.
+- **Step A: the loop, in Full mode** (the user's decision: every seat Full; the mode stays a parameter).
+- Done: self-play, `cantrip-selfplay` (`cantrip_ai_host::selfplay`; `docs/ai-host.md`, "Self-play"):
+  - both seats search with one model at a fixed simulation count, never a deadline;
+  - a seat's first 20 searched decisions are sampled from the root's visits at temperature 1, the rest most visited;
+  - games past 60 turns or 6,000 answers are capped (every outcome 0) and counted;
+  - the producer `selfplay:<model hash>@<simulations>` goes in the shard header;
+  - `--resume` reads the closed shards already in the output and skips the games whose seeds they hold, so an
+    interrupted run plays only the rest of its schedule; `--shard-games` (100) bounds what an open shard can lose.
+  
+  It runs in process (a lane is a thread, an evaluator and a shard writer) rather than as BotLab neural against
+  neural with `--ai-record`. That is less code: the search's `RootStep`s go straight to the recorder
+  (`record::record_searched`), and are never carried over the AI host's JSON to the native host, which records from
+  its own tree. It also has no mirror, no process round trips and no C# per game, so the 16 lanes are all search.
+- Done: visit targets. A sub-step the search visited is labelled with its root visits over the step's legal options,
+  normalised to sum to 1. Any other sub-step is labelled with the option chosen, as Phase 2's one-hot. Each searched
+  decision's root value goes in the game's meta (`root_values`). `cantrip_ai.dataset` reads both. `train.py`'s policy
+  loss is cross-entropy against the visit distribution, so a one-hot is the old loss. `--value-mix X` blends the root
+  value into the value target (0 by default: the outcome alone). `top1_visits` reports agreement with the most
+  visited option.
+- Done: training on a window. `--data DIR:WEIGHT` takes several directories. A weight below 1 keeps that fraction of
+  the directory's games, chosen by a hash of the seed. A weight above 1 deals each sample that many times an epoch. `--init CHECKPOINT` fine-tunes from the previous model. `--resume` continues from
+  `OUT/checkpoint.pt` with its optimizer, step and epoch; a checkpoint is written every 200 steps and at each
+  evaluation, atomically. Export, manifest and parity are Phase 2's.
+- Done: shard retention, `python -m cantrip_ai.retention --root ai-data --keep 8`. For each generation older than the
+  last eight, it deletes everything but the README, `generation.json` and the marker files, and the generation's
+  model, then marks it `RETIRED`. gen0 is always kept. A `PINNED` file or `--pin genN` keeps any other. `champions/`
+  is never touched.
+- Done: the gate. The candidate plays the champion, both searching at the self-play budget (BotLab `--model-b`),
+  under SPRT (H0 50%, H1 55%, α = β = 0.05), with seats swapped, `--mirrors` on rw-aggro and ub-reanimator, and at
+  most 1,200 games. An accepted generation is copied to `champions/genN` with `CHAMPION.json`, and
+  `champions/current` moves to it. Every gate goes into `champions/history.json`.
+- Done: the driver, `python -m cantrip_ai.generation --root ai-data --generation N` (run from `ai/`). Its stages are
+  build, self-play, train, export, parity, gate, promote and retire. Each logs to `genN/logs/<stage>.log`. After each
+  stage, its times and numbers go into `genN/generation.json` and `genN/README.md`. A stage already done is skipped
+  (build runs every time, so a resumed run never uses a stale binary), so a rerun resumes. Inside a stage, self-play
+  keeps its closed shards (and a `.part` that reads whole) and reads the game seeds back from them, so only the games
+  they do not hold are played;
+  training continues from `models/genN/train/checkpoint.pt`, with its optimizer, step and epoch.
+  - The window is the generation's own self-play at weight 1, the earlier self-play generations still held at 0.5,
+    and gen0's imitation data at 0.2.
+  - Training is a step count: `--train-hours 0.65` at the measured 445 samples a second, batch 256, so 4,067 steps
+    (planned as 1.5 hours, 9,386 steps; generation 1 overfit its value at that, below). lr is 2e-4 with 200 warmup
+    steps, seeded by the generation. `--value-mix 0.5`: a searched position's value target is half the outcome, half
+    the root value.
+  - Shuffles: self-play is dealt from `N·10⁷`, and the gate from `N·10⁷ + 5·10⁶`.
+  - `--dry-run` prints every command. `--tiny` runs a whole generation at toy scale.
+  - `--retrain REASON` runs a rejected generation again from its training, with the self-play kept. The earlier
+    attempt's stages go under `attempts` in `generation.json` and get a row in the README. Its logs and training
+    metrics go to `logs/attemptK/`, and its model is deleted.
+- Tests:
+  - `crates/cantrip-ai-host/tests/selfplay.rs`: the visits sum to 1 over legal options, and the shards and report
+    read back;
+  - `ai/tests/test_dataset.py`: the dataset reads visit targets and root values;
+  - `ai/tests/test_retention.py`: retention on a temporary directory of 12 generations;
+  - `ai/tests/test_generation.py`: the window's weights, the gate's parsing, a dry run that writes nothing, and
+    `--retrain` setting a rejected attempt aside;
+  - a `--tiny` generation run once end to end (self-play, train, export, parity, gate, README).
+- **Throughput** (2026-10-19, Full mode). gen0, ort CPU, 16 lanes, 96 games over the three pairings.
+
+  | Budget | Games an hour | Samples an hour | Searched decisions a second (all lanes) | Evaluations a second | Visit-labelled samples | Caps, fallbacks |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | 64 simulations (shuffles from 5000) | 1,780 | 716 k | 38.6 | 2,510 | 19% | 0, 0 |
+  | 128 simulations (shuffles from 6000) | 824 | 340 k | 18.2 | 2,274 | 20% | 0, 0 |
+
+  - Most samples are sub-steps no search reached: forced requests, payments, and the priority shortcut's passes.
+  - A game takes 30 s a lane at 64 simulations and 64 s at 128. Runs this short are stretched by their last few
+    games.
+- **The budget: 64 simulations.** One generation, at 4,800 games:
+
+  | Stage | Planned | Generation 1, measured |
+  | --- | --- | --- |
+  | self-play: 4,800 games, about 1.9 M samples | about 2.7 h at 1,780 an hour | 3.0 h at 1,590 an hour (36 s a game a lane; the 96-game run's rate did not hold) |
+  | training: 1.5 h × 3,600 × 445 samples a second / 256 = 9,386 steps, 2.4 M samples seen | 1.5 h | attempt 1: 1.3 h (540 samples a second); attempt 2, 4,000 steps: 0.6 h |
+  | gate: at most 1,200 games | at most 0.8 h; about 0.4 h at the expected SPRT length | attempt 1: 0.7 h for the whole 1,200 (no verdict); attempt 2: 0.25 h, 453 games |
+  | build, export, parity | about 0.1 h | 0.1 h |
+  | **in all** | **about 4.5-5 h** | **5.1 h for attempt 1; 4.0 h with the 4,000-step training** |
+
+  - The window is 1.9 M samples of self-play plus 0.2 × 4.95 M of gen0, so about 2.9 M an epoch, and (as planned) 0.8 of an epoch
+    is trained.
+  - At 128 simulations the same time makes less than half the data, and the gate takes twice as long. The visit
+    targets would be sharper, but generation 1 has more to learn from volume than from sharpness.
+- **Generation 1** (Full mode throughout; `ai-data/gen1/README.md`). Self-play by gen0 at @64: 4,800 games, 1.97 M
+  samples, 385 k with visit targets, 0 capped or dropped, first player 52%. The visits mostly agree with the network
+  (held-out top1 of the visits 0.972 before training), so the policy has little to learn from them in one step.
+  - Attempt 1, the planned settings (9,386 steps, outcome-only value): held out policy CE 0.187 → 0.180 and top1 of the
+    visits 0.972 → 0.974, but the value MSE was best at step 4,000 (0.487) and ended at 0.516 while its training loss
+    kept falling (0.47 → 0.39). The value overfits the self-play games, whose positions are correlated within a game.
+    Gate: 629 to 571, 52.4% ± 2.8% over all 1,200 games, LLR −0.21: no verdict, rejected.
+  - Attempt 2 (`--retrain`, the same self-play): 4,000 steps and `--value-mix 0.5` (searched positions' value
+    target half the outcome, half the root value). Held out: policy CE 0.181, top1 0.955, top1 of the visits 0.975,
+    value MSE 0.490, value sign 0.820. Gate: 252 to 201, **55.6% ± 4.6%**, H1 accepted at game 438 (LLR 3.02).
+    gen1 is the champion. These are now the driver's defaults (`--train-hours 0.65`, `--value-mix 0.5`).
+- **Generation 2** (Full mode; `ai-data/gen2/README.md`), the driver's defaults with no tuning. Self-play by gen1 at
+  @64: 4,800 games in 2.9 h (1,660 an hour, 37.7 searched decisions a second, 2,455 evaluations a second), 1.97 M
+  samples, 425 k with visit targets, 0 capped, dropped or fallbacks, first player 52.4%, mean 14.4 turns. Training:
+  4,067 steps from gen1 on gen2 ×1, gen1 ×0.5 and gen0 ×0.2 (3.9 M samples in the window), 0.59 h. Held out (a new
+  set, with gen2's games in it, so not comparable with generation 1's): policy CE 0.221 → 0.218, top1 of the visits
+  0.974 → 0.977, value MSE 0.534 → 0.527, from step 2,000 to the end. Gate against gen1: 280 to 225, **55.4% ±
+  4.3%**, H1 accepted at game 490 (LLR 2.96), 0.3 h. gen2 is the champion; the generation took 3.8 h.
+- **Short problems from scenarios wait.** The machine time is cheap: about 4 s a decision at 1,024 simulations, so
+  the corpus is under an hour on 16 lanes. What they would teach is not.
+  - The 7,405 scenarios are rules tests. Their positions are scripted to exercise a ruling, not chosen as decisions
+    with a best answer, and almost all of their cards are outside the two decks the slice trains on.
+  - Their games end when the script does, so the only value label would be the search's own root value, gen0's
+    opinion.
+  - The curriculum needs authored problems on the slice's decks ("win this turn", "this combat"), each with its
+    answer. A `# Problem` scenario with its goal and a corpus of those is the next step, after the loop shows it
+    improves on self-play alone.
 
 **Phase 5: hidden information and the browser (3 weeks).**
 - The belief head reweighting worlds; ISMCTS, kept if it wins.
@@ -613,7 +1016,7 @@ parity and gate runs.
   - `determinize` keeps known cards, zone counts and legality;
   - the fork-and-prompt scenario;
   - the factoring through the validator for every request kind;
-  - the card-text table's missing count;
+  - every card the engine has has a row of the card index;
   - a tiny checked-in ONNX model run through tract, so search and evaluation are tested without a GPU or a native
     library.
 - **Scenarios** for AI decisions use a **pinned tiny model** checked in for that purpose, never the current
