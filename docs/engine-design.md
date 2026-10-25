@@ -2083,7 +2083,11 @@ while nothing attacks. The same check removes an attacking or blocking creature 
 be a creature again before damage; its blocks end with it, and a creature it blocked stays blocked. The two are apart
 (CR 506.4d): a planeswalker creature that blocks and is attacked keeps being attacked once it is no longer a creature,
 and keeps blocking once it is no longer a planeswalker. A battle still being attacked
-keeps its departed protector through combat (CR 704.5x).
+keeps its departed protector through combat (CR 704.5x). A card asks a creature's defending player of the creature, never of what it attacks
+(`Query::defending_player(attacker)`, CR 508.5): its `Attacker::defending` while it attacks, else the one recorded on
+its last `Event::Attacks` - so a planeswalker that has changed controller since does not make its new controller, or
+the attacking player, the defending player (Annihilator, Generous Plunderer, Greatsword of Tyr, Outland Liberator,
+Robber of the Rich). `defending_player_of(state, target)` is only the core's, as a creature begins attacking.
 The departed-recipient and assignment checks measured 13.86 us per decision before and 14.05 after on 128 games, in
 back-to-back runs of the two builds (2026-10-24; shared-machine load, no speed claim).
 

@@ -52,8 +52,9 @@ pub enum Event {
     AbilityActivated { source: ObjectId, ability: AbilityRef, player: PlayerId, by: Grant },
     /// A creature was declared as an attacker (CR 508.1). `known` is the last-known row (`GameState::last_known`) that keeps
     /// its characteristics as it was declared, which "you attacked with a Rogue" asks of it once it has changed, left or
-    /// changed controllers (`history::Attacked::chars`).
-    Attacks { attacker: ObjectId, defender: Target, known: u32 },
+    /// changed controllers (`history::Attacked::chars`). `defending` is its defending player as it attacked (CR 508.5,
+    /// `Attacker::defending`), which stays its defending player though what it attacks change controller or leave combat.
+    Attacks { attacker: ObjectId, defender: Target, known: u32, defending: PlayerId },
     /// An optional cost to attack (CR 508.1g) was paid as `attacker` was declared an attacker (CR 508.1j): the cost of the
     /// `instance`th of the attacker's abilities that are `ability` (counted from 0 in the order it has them; two of one card's
     /// enlist are two instances, CR 702.154d), which is `option`. `tapped` is the creature the cost tapped - for enlist the

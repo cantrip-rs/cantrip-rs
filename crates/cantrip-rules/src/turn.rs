@@ -744,7 +744,7 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
     for a in &attackers {
         let known = ops::last_known_from(cx, a.id, &cx.chars(a.id));
         let known = cx.st().last_known_push(known);
-        events.push(Event::Attacks { attacker: a.id, defender: a.target, known });
+        events.push(Event::Attacks { attacker: a.id, defender: a.target, known, defending: a.defending });
     }
     // The optional costs paid (CR 508.1g, 508.1j): what their linked "when you do" abilities trigger on (CR 607.2h), in the
     // same batch, so they go on the stack with the attack triggers, before blockers are declared.

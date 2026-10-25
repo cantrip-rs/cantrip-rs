@@ -342,3 +342,26 @@ fn a_blocking_planeswalker_creature_that_stops_being_a_creature_is_still_attacke
     assert_eq!(damage_to(&mut cx, gideon), 3);
     assert_eq!(cx.s().player(YOU).life, 20, "the blocked lifelink creature dealt nothing");
 }
+
+/// The defending player of `attacker`, which attacked `_walker`, as a card's ability asks it (Annihilator, Generous
+/// Plunderer, Greatsword of Tyr: `Query::defending_player`).
+fn defending_of(cx: &Cx, attacker: ObjectId, _walker: ObjectId) -> Option<PlayerId> {
+    cantrip_api::Query::defending_player(cx, attacker)
+}
+
+/// YOU's creature attacks THEM's planeswalker; with its attack trigger on the stack, YOU gain control of the planeswalker
+/// (Leyline of Anticipation and Mass Manipulation, both Pioneer). Its defending player is still THEM (CR 508.5; CR 506.2:
+/// the nonactive player, never the attacking player), so Generous Plunderer's damage, Annihilator's sacrifice, and
+/// Greatsword of Tyr's "creature defending player controls" are about THEM - and still once the creature has left combat.
+#[test]
+fn the_defending_player_is_the_one_attacked_though_the_planeswalker_changes_controller() {
+    let (mut game, attacker, walker) = game(2, &WALKER, THEM, None, THEM);
+    let mut cx = cx(&mut game);
+    cx.emit(Event::Attacks { attacker, defender: Target::Object(walker), known: 0, defending: THEM });
+    assert_eq!(defending_of(&cx, attacker, walker), Some(THEM));
+    effect(&mut cx, walker, EffectKind::Control(YOU));
+    assert_eq!(cx.s().obj(walker).controller, YOU);
+    assert_eq!(defending_of(&cx, attacker, walker), Some(THEM), "the defending player it had as it attacked");
+    crate::ops::move_to(&mut cx, attacker, Zone::graveyard(YOU));
+    assert_eq!(defending_of(&cx, attacker, walker), Some(THEM), "and once it has left combat (CR 508.5)");
+}

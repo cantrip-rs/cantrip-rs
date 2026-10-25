@@ -6,15 +6,11 @@ use cantrip_oracle as oracle;
 
 /// "Target creature defending player controls": the ability refers to the attacking creature and a defending player, so
 /// that is the player the creature attacked, or the controller of the planeswalker or the protector of the battle it
-/// attacked - still so once it has left combat (CR 508.5). The creature is the trigger's subject; what it attacked is
-/// in the history.
+/// attacked as it attacked - still so once that planeswalker has changed controller, or the creature has left combat
+/// (CR 508.5, `Query::defending_player`). The creature is the trigger's subject.
 fn creature_defending_player_controls(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     let Target::Object(attacker) = q.event_subject() else { return false };
-    let defender = q.history().all().iter().rev().find_map(|r| match r.event {
-        Event::Attacks { attacker: a, defender, .. } if a == attacker => Some(defender),
-        _ => None,
-    });
-    let Some(defending) = defender.and_then(|d| q.defending_player(d)) else { return false };
+    let Some(defending) = q.defending_player(attacker) else { return false };
     (targets::CREATURE.filter)(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) == defending)
 }
 

@@ -8,8 +8,10 @@ use cantrip_oracle as oracle;
 /// controller of the planeswalker or the protector of the battle it attacks - still so once that planeswalker or battle
 /// has been removed from combat (`Attacker::defending`).
 fn defending_players_artifact_or_enchantment(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    let Some(attack) = q.state().attackers.iter().find(|a| a.id == asker.source) else { return false };
-    let defending = attack.defending;
+    if !q.state().attackers.iter().any(|a| a.id == asker.source) {
+        return false;
+    }
+    let Some(defending) = q.defending_player(asker.source) else { return false };
     (targets::ARTIFACT_OR_ENCHANTMENT.filter)(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) == defending)
 }
 

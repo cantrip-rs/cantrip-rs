@@ -30,7 +30,8 @@ fn gift(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// It deals damage to defending player equal to the number of artifacts they control.
 fn raid(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(defending) = g.defending_player(item.subject) else { return Ok(()) };
+    // Its defending player (CR 508.5), whoever controls the planeswalker it attacked now.
+    let Some(defending) = g.defending_player(item.object) else { return Ok(()) };
     let artifacts = g.permanents_of(defending).into_iter().filter(|&id| g.chars(id).is(CardType::Artifact)).count();
     if artifacts > 0 {
         g.damage(item.object, Target::Player(defending), artifacts as u16);

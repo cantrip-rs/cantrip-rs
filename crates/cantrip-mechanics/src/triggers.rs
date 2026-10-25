@@ -394,7 +394,8 @@ fn annihilate<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
 /// permanents. Ulamog, the Defiler's "annihilator X, where X is the number of +1/+1 counters on it" calls it, with its
 /// own `triggered(ANNIHILATOR, ..)`.
 pub fn annihilate_n(g: &mut dyn Game, item: &StackItem, n: u8) -> Result<(), Suspend> {
-    let Some(defending) = g.defending_player(item.subject) else { return Ok(()) };
+    // The defending player of the creature with annihilator (CR 508.5), whatever has become of what it attacked.
+    let Some(defending) = g.defending_player(item.object) else { return Ok(()) };
     crate::sacrifice_chosen(g, defending, item.object, n, |_| true).map(drop)
 }
 

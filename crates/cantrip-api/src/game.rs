@@ -27,8 +27,10 @@ pub fn is_live(q: &dyn Query, id: ObjectId) -> bool {
     obj.became.is_none() && !obj.zone.is(ZoneKind::Gone)
 }
 
-/// The defending player of an attack at `attack` (CR 508.5, 310.9d): the player attacked, the controller of the
-/// planeswalker attacked, or the protector of the battle attacked. None for anything else.
+/// The defending player of an attack at `attack` being made now (CR 508.5, 310.9d): the player attacked, the controller
+/// of the planeswalker attacked, or the protector of the battle attacked. None for anything else. Only the core asks it,
+/// as a creature begins attacking (`Attacker::defending`); afterwards a creature's defending player is the one it had
+/// then (`Query::defending_player`), whoever controls that planeswalker now.
 pub fn defending_player_of(state: &GameState, attack: Target) -> Option<PlayerId> {
     match attack {
         Target::Player(p) => Some(p),
@@ -138,9 +140,19 @@ pub fn mana_value_of(card: &dyn Fn(CardId) -> &'static CardDef, state: &GameStat
 pub trait Query {
     fn state(&self) -> &GameState;
 
-    /// "Defending player" of an attack at `attack` - an event's or an attacker's defender (CR 508.5, 310.9d).
-    fn defending_player(&self, attack: Target) -> Option<PlayerId> {
-        defending_player_of(self.state(), attack)
+    /// The "defending player" of `attacker`, an attacking creature or one that attacked (CR 508.5, 310.9d): the player it
+    /// attacks, or the controller of the planeswalker or the protector of the battle it attacks, as it began attacking
+    /// (`Attacker::defending`) - so still once that planeswalker or battle has changed controller or protector, or been
+    /// removed from combat (CR 506.4c) - and, once it is no longer attacking, the one it had when it attacked last
+    /// (`Event::Attacks::defending`). None for a creature that has not attacked.
+    fn defending_player(&self, attacker: ObjectId) -> Option<PlayerId> {
+        if let Some(a) = self.state().attackers.iter().find(|a| a.id == attacker) {
+            return Some(a.defending);
+        }
+        self.history().all().iter().rev().find_map(|r| match r.event {
+            crate::Event::Attacks { attacker: a, defending, .. } if a == attacker => Some(defending),
+            _ => None,
+        })
     }
 
     fn card(&self, id: CardId) -> &'static CardDef;
