@@ -1783,7 +1783,21 @@ impl PromptPayload {
             PromptPayload::SearchLibraryPromptMessage(p) => AnswerPayload::CardsChosenAnswer(CardsChosenAnswer {
                 cards: if p.verdict.complete { Vec::new() } else { p.verdict.addable.iter().take(p.count.max(0) as usize).copied().collect() },
             }),
-            PromptPayload::PayCostsPromptMessage(_) => {
+            // Giving up on the spell. A question that offers no giving up - the player assisting with another's spell
+            // (CR 702.132a), whose spell it is not - closes their window, announces nothing more, or pays with the first
+            // pool mana offered: what they announced they must pay.
+            PromptPayload::PayCostsPromptMessage(p) => {
+                let offered = |kind: ActionKindView| p.options.iter().find(|o| o.kind == kind);
+                if offered(ActionKindView::CancelCasting).is_none() {
+                    if let Some(o) = offered(ActionKindView::ConfirmCasting) {
+                        return AnswerPayload::TakeActionAnswer(TakeActionAnswer::take(o));
+                    }
+                    if let Some(o) = offered(ActionKindView::AssignMana) {
+                        let mut answer = TakeActionAnswer::take(o);
+                        answer.mana = o.produces.first().copied();
+                        return AnswerPayload::TakeActionAnswer(answer);
+                    }
+                }
                 AnswerPayload::TakeActionAnswer(TakeActionAnswer::new(ActionKindView::CancelCasting, ViewHandle::NONE))
             }
             PromptPayload::ChooseCardsPromptMessage(p) => AnswerPayload::CardsChosenAnswer(CardsChosenAnswer {
@@ -2227,6 +2241,27 @@ mod tests {
             AnswerPayload::TargetsChosenAnswer(t) => assert_eq!(t.targets, vec![TargetMessage::player(2)]),
             other => panic!("{other:?}"),
         }
+    }
+
+    /// A payment that can be given up defaults to giving it up; the assisting player's (CR 702.132a), which can't, to closing
+    /// their window or announcing nothing more, and to paying with the pool mana offered - never to an option not offered.
+    #[test]
+    fn a_payment_with_no_cancel_defaults_to_what_it_offers() {
+        let pay = |options: Vec<ActionOptionMessage>| {
+            let prompt = PromptPayload::PayCostsPromptMessage(PayCostsPrompt { player: 1, options, ..Default::default() });
+            match prompt.default_answer() {
+                AnswerPayload::TakeActionAnswer(a) => (a.kind, a.mana),
+                other => panic!("{other:?}"),
+            }
+        };
+        let cancel = ActionOptionMessage::new(ActionKindView::CancelCasting, ViewHandle::NONE);
+        let confirm = ActionOptionMessage::new(ActionKindView::ConfirmCasting, ViewHandle::NONE);
+        let mut green = ActionOptionMessage::new(ActionKindView::AssignMana, ViewHandle::NONE);
+        green.produces = vec![ManaTypeView::Green];
+        assert_eq!(pay(vec![confirm.clone(), cancel.clone()]), (ActionKindView::CancelCasting, None));
+        assert_eq!(pay(vec![green.clone(), cancel]), (ActionKindView::CancelCasting, None));
+        assert_eq!(pay(vec![confirm]), (ActionKindView::ConfirmCasting, None));
+        assert_eq!(pay(vec![green]), (ActionKindView::AssignMana, Some(ManaTypeView::Green)));
     }
 
     /// Crew 1 with a -4/1 and a 2/1 (CR 107.1b: a negative power takes from the total): the default answer takes only the

@@ -838,7 +838,8 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 attackers: handles_of(handles, attackers),
                 life: (*life).min(i32::MAX as u32) as i32,
                 assist_step: assist_step_view(*assist).into(),
-                assisted: assisted_mana(game, *source, request.player),
+                // Only a payment with assist has another player's mana in it: no other reads the log.
+                assisted: if *assist == AssistStep::None { 0 } else { assisted_mana(game, *source, request.player) },
                 ..Default::default()
             })
         }
