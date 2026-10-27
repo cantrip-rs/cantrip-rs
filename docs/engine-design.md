@@ -2061,6 +2061,9 @@ spell); then the caster pays the rest (`CasterPays`) - with no mana ability offe
 `ManaSpent` records, what its restrictions do to the spell). The offer counts on the most any other player could pay of
 the generic mana (`assist_could_pay`), so a cast its caster could not pay alone is offered.
 
+Prototype, surge, freerunning (with the damage event's source row) and assist together measured 7.40, 7.47, 7.49 us per
+decision against 7.42, 7.52, 7.44 us before, three alternating rounds of 128 games (2026-10-27): no change the noise shows.
+
 ### Spells in an inset frame: Adventures and Omens
 
 An adventurer card (CR 715) and an omen card (CR 720) print a second set of characteristics in an inset frame:
