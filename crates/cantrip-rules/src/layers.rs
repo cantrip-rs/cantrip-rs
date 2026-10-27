@@ -2353,9 +2353,12 @@ fn contract_scene(cards: &CardTable, card: CardId, target: CardId, scene: usize)
             put(cards.find(name), Zone::BATTLEFIELD, None);
         }
         put(cards.find("Colossus Hammer"), Zone::BATTLEFIELD, Some(source));
+        // A creature card with an activated ability, whatever the object is: what an ability that reads the graveyards' cards
+        // (Necrotic Ooze's "all activated abilities of all creature cards in all graveyards") has to find there.
+        let graveyard_card = cards.find("Llanowar Elves").unwrap_or(target);
         for p in [PlayerId(0), PlayerId(1)] {
             for _ in 0..8 {
-                put(Some(target), Zone::graveyard(p), None);
+                put(Some(graveyard_card), Zone::graveyard(p), None);
             }
             for _ in 0..3 {
                 put(Some(target), Zone::hand(p), None);
