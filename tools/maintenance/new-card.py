@@ -296,7 +296,7 @@ def _face(face, names, index, core):
                 keywords.append(f"Toxic {toxic.group(1)}")
     if keywords:
         out["keywords"] = keywords
-    for flag in ("convoke", "delve", "improvise"):
+    for flag in ("convoke", "delve", "improvise", "assist"):
         if flag in words:
             out[flag] = True
     return out
