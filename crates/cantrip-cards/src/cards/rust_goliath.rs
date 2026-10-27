@@ -1,0 +1,6 @@
+use cantrip_api::*;
+use cantrip_oracle as oracle;
+
+// Characteristics only: prototype is the core's, read from the card's JSON (`"prototype"`), and the rest of its text is core
+// keywords (Reach and Trample), so nothing is left to write.
+pub static CARD: CardDef = CardDef { ..oracle::RUST_GOLIATH };

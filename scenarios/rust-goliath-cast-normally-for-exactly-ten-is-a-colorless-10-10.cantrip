@@ -1,0 +1,54 @@
+# Rust Goliath cast without prototyping (CR 718.3, 718.4): its mana cost is {10}. On turn 1 nine mana (two Moxen, Mana Crypt, Mana
+# Vault, Ancient Tomb; the third Mox paid for the Vault) offers neither the normal cast nor the prototype ({3}{G}{G}); on turn 3
+# the Mox has untapped and the tenth mana offers the normal cast, and paying it taps everything and leaves the pool empty. It
+# is a colorless 10/10 with mana value 10, reach and trample, not prototyped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mana Crypt
+Mana Vault
+Ancient Tomb
+Rust Goliath
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mana Vault.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot1.Hand.Ancient Tomb.Play
+! Bot1.Hand.Rust Goliath.Cast(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Rust Goliath.Cast
+? Stack.Rust Goliath.ManaValue = 10
+? Stack.Rust Goliath.Prototyped = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Battlefield.Mana Vault.Activate
+Bot1.Battlefield.Ancient Tomb.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Rust Goliath.Power = 10
+Bot1.Battlefield.Rust Goliath.Toughness = 10
+Bot1.Battlefield.Rust Goliath.ManaValue = 10
+Bot1.Battlefield.Rust Goliath.Colors = (absent)
+Bot1.Battlefield.Rust Goliath.Prototyped = (absent)
+Bot1.Battlefield.Rust Goliath.Keywords = Reach; Trample

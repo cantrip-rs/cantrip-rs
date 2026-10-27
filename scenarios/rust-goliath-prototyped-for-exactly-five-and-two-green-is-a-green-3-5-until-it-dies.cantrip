@@ -1,0 +1,73 @@
+# Rust Goliath prototyped (CR 702.160a, 718.3b): Prototype {3}{G}{G} costs exactly five mana - with four sources (both green
+# ones among them) the prototyped cast is not offered, with a fifth it is, and paying it taps all five and leaves the pool
+# empty. The spell has mana value 5 and is prototyped; the permanent is a green 3/5 with mana value 5, reach and trample. It
+# survives a Lightning Bolt (a 3/5 does, a 3/3 would not), and a second one the same turn kills it, so in the graveyard it is its
+# normal self again, a colorless 10/10 card (CR 718.4).
+
+[Bot1 Deck]
+Mox Emerald
+Gleemox
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Rust Goliath
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Hand.Rust Goliath.Cast(Ability: Prototype; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Rust Goliath.Cast(Ability: Prototype)
+? Stack.Rust Goliath.ManaValue = 5
+? Stack.Rust Goliath.Prototyped = true
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Rust Goliath.Power = 3
+? Bot1.Battlefield.Rust Goliath.Toughness = 5
+? Bot1.Battlefield.Rust Goliath.Colors = Green
+? Bot1.Battlefield.Rust Goliath.ManaValue = 5
+? Bot1.Battlefield.Rust Goliath.Prototyped = true
+? Bot1.Battlefield.Rust Goliath.Keywords = Reach; Trample
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Rust Goliath)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rust Goliath.Power = 3
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Rust Goliath)
+Bot1.Pass
+Bot2.Pass
+[Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Rust Goliath = (absent)
+Bot1.Graveyard = Rust Goliath
+Bot1.Graveyard.Rust Goliath.Power = 10
+Bot1.Graveyard.Rust Goliath.Toughness = 10
+Bot1.Graveyard.Rust Goliath.Colors =

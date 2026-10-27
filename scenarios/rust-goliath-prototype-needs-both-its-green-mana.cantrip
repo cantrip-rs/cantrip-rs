@@ -1,0 +1,44 @@
+# Rust Goliath's Prototype {3}{G}{G} (CR 702.160a, 107.4): with five sources of which only one makes green the prototyped cast
+# is not offered; once a second green source (Gleemox) arrives it is, and the permanent is green.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Gleemox
+Rust Goliath
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+! Bot1.Hand.Rust Goliath.Cast(Ability: Prototype; Mana: short)
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Rust Goliath.Cast(Ability: Prototype)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Rust Goliath.Colors = Green
+Bot1.Battlefield.Mox Ruby.Tapped = false

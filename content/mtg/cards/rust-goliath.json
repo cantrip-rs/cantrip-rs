@@ -1,0 +1,17 @@
+{
+  "name": "Rust Goliath",
+  "manaCost": "{10}",
+  "type": "Artifact Creature — Construct",
+  "power": 10,
+  "toughness": 10,
+  "oracleText": "Prototype {3}{G}{G} — 3/5 (You may cast this spell with different mana cost, color, and size. It keeps its abilities and types.)\nReach, trample",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ],
+  "prototype": {
+    "manaCost": "{3}{G}{G}",
+    "power": 3,
+    "toughness": 5
+  }
+}
