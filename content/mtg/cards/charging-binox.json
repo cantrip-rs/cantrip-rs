@@ -1,0 +1,12 @@
+{
+  "name": "Charging Binox",
+  "manaCost": "{7}{G}",
+  "type": "Creature — Beast",
+  "power": 7,
+  "toughness": 5,
+  "oracleText": "Assist (Another player can pay up to {7} of this spell's cost.)\nTrample",
+  "keywords": [
+    "Trample"
+  ],
+  "assist": true
+}

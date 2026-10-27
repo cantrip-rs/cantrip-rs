@@ -1,0 +1,62 @@
+# Charging Binox: "Assist" (CR 702.132a), {7}{G}. On turn 5 Bot1 has two Islands and four Moxen (six mana, none green) and
+# Bot2 two Forests that could pay {2} of the generic mana: eight in all, but the {G} is Bot1's to pay even though Bot2 has
+# green (the ruling), so the cast is refused. Once Bot1 plays a Forest, Bot2 pays {1} with one Forest and Bot1 the other
+# {6}{G}: the Forest, the Islands and the Moxen, its pool empty.
+
+[Bot1 Deck]
+Island
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Island
+Charging Binox
+Forest
+Island x15
+
+[Bot2 Deck]
+Forest
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T5 Bot1.Main1]
+! Bot1.Hand.Charging Binox.Cast(Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Hand.Charging Binox.Cast
+Bot1.Accept
+Bot2.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forest.Activate
+Bot2.PayCost(X: 1)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Charging Binox.Power = 7
+Bot2.Battlefield.Forest#1.Tapped = true
+Bot2.Battlefield.Forest#2.Tapped = false

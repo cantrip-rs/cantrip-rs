@@ -1,0 +1,48 @@
+# Charging Binox: "Assist" (CR 702.132a), {7}{G}. On turn 5 Bot1 has three Forests and Black Lotus (six mana, green
+# and generic); Bot2 has two Forests and chooses to pay {2} of the generic mana. Bot2's two Forests are really tapped, Bot1
+# pays the other {5}{G} from its six sources... exactly {6}, and its pool is empty. The Binox is a 7/5 trampler.
+
+[Bot1 Deck]
+Black Lotus
+Forest
+Forest
+Forest
+Charging Binox
+Forest x16
+
+[Bot2 Deck]
+Forest
+Forest
+Forest x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Charging Binox.Cast
+Bot1.Accept
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Forest.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot2.PayCost(X: 2)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Charging Binox.Power = 7
+Bot1.Battlefield.Charging Binox.Toughness = 5
+Bot1.Battlefield.Charging Binox.Keywords = Trample
+Bot2.Battlefield.Forest#1.Tapped = true
+Bot2.Battlefield.Forest#2.Tapped = true
