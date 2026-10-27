@@ -246,6 +246,21 @@ fn freerunning_is_refused_without_an_assassin_creatures_combat_damage() {
     }
 }
 
+/// CR 702.173a: "a player was dealt combat damage" - an Assassin creature's combat damage to a creature is not.
+#[test]
+fn freerunning_is_refused_after_an_assassins_combat_damage_to_a_creature() {
+    let mut g = game();
+    let card = put(&mut g, &AMBUSHER, YOU, Zone::hand(YOU));
+    let source = put(&mut g, &ASSASSIN, YOU, Zone::BATTLEFIELD);
+    let blocker = put(&mut g, &ROGUE, THEM, Zone::BATTLEFIELD);
+    ops::damage(&mut cx(&mut g), source, Target::Object(blocker), 1, true);
+    reoffer(&mut g);
+    add(&mut g, Mana::B, 5);
+    assert!(way_cast(&mut g, card).is_none(), "combat damage to a creature");
+    hit(&mut g, source, true);
+    assert!(way_cast(&mut g, card).is_some(), "and then to a player");
+}
+
 /// The ruling: what the creature was as it dealt the damage counts - one that had stopped being an Assassin before it dealt
 /// it does not, and a Rogue that becomes an Assassin afterwards does not.
 #[test]
