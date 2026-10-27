@@ -1,0 +1,8 @@
+{
+  "name": "Woolly Loxodon",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Elephant Warrior",
+  "power": 6,
+  "toughness": 7,
+  "oracleText": "Morph {5}{G} (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)"
+}
