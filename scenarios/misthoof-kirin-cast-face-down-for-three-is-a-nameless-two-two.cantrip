@@ -1,0 +1,39 @@
+# Misthoof Kirin (Megamorph {1}{W}): cast face down for exactly {3} (CR 702.37a, 702.37b, 708.2) it is a nameless 2/2 creature with none of its printed keywords or its name (CR 708.2a). With two sources the face-down cast is not offered (the refusal is judged again with mana to spare); the third Mox makes it exactly affordable and the pool is empty right after.
+
+[Bot1 Deck]
+Misthoof Kirin
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island x10
+
+[Bot2 Deck]
+Island
+Island
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+! Bot1.Hand.Misthoof Kirin.Cast(Ability: Megamorph; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Misthoof Kirin.Cast(Ability: Megamorph)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Stack..FaceDown = true
+? Stack..FaceDownName = Misthoof Kirin
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Misthoof Kirin = (absent)
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Misthoof Kirin
+Bot1.Battlefield..Power = 2
+Bot1.Battlefield..Toughness = 2
+Bot1.Battlefield..Keywords = (absent)
+Bot1.Battlefield..Damage = 0
