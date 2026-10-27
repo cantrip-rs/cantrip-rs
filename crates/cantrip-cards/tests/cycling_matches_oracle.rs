@@ -15,13 +15,24 @@ fn is_cycling_line(line: &str) -> bool {
     words.ends_with("cycling") && words.split(' ').count() <= 2
 }
 
+/// The keywords of one line of Oracle text, its reminder text left out: "Swampcycling {2}, mountaincycling {2}" (Igneous
+/// Pouncer) is two typecycling abilities on one line, each its own (CR 702.29e). A comma inside a cost ("Cycling\u{2014}Pay
+/// 2 life, ...") is never one between keywords, since a cost in braces holds no comma and a cost after a dash ends the line.
+fn keyword_parts(line: &str) -> Vec<String> {
+    let bare = match line.find(" (") {
+        Some(at) if line.ends_with(')') => &line[..at],
+        _ => line,
+    };
+    if bare.contains('\u{2014}') { vec![bare.to_string()] } else { bare.split(", ").map(str::to_string).collect() }
+}
+
 #[test]
 fn cycling_abilities_are_declared_exactly_where_the_oracle_text_says_them() {
     let table = CardTable::new(cantrip_cards::all());
     let mut wrong = Vec::new();
     let mut said = 0;
     for card in table.cards.iter() {
-        let lines = card.text.lines().filter(|l| is_cycling_line(l)).count();
+        let lines = card.text.lines().flat_map(keyword_parts).filter(|p| is_cycling_line(p)).count();
         said += lines;
         let mut flagged = 0;
         for ability in card.abilities {
@@ -57,4 +68,12 @@ fn each_cycling_line_is_read_as_one() {
     ] {
         assert_eq!(is_cycling_line(line), cycling, "{line}");
     }
+}
+
+#[test]
+fn two_typecyclings_on_one_line_are_two_cycling_keywords() {
+    let parts = keyword_parts("Swampcycling {2}, mountaincycling {2} ({2}, Discard this card: Search your library for a Swamp or Mountain card, reveal it, put it into your hand, then shuffle.)");
+    assert_eq!(parts, ["Swampcycling {2}", "mountaincycling {2}"]);
+    assert!(parts.iter().all(|p| is_cycling_line(p)));
+    assert_eq!(keyword_parts("Cycling {2} ({2}, Discard this card: Draw a card.)").len(), 1);
 }
