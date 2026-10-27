@@ -1,0 +1,64 @@
+# Bolrac-Clan Basher (Disguise {3}{R}{R}): cast face down (a Black Lotus pays the {3}), it is turned face up for exactly {3}{R}{R} (CR 702.168d, 116.2b) as a special action: the pool is empty right after, so no more than {3}{R}{R} was taken. Sources are laid so that the cost minus one mana, and the full count with a colored pip unmet, are each refused (the refusal is judged again with mana to spare), and the Moxen that pay are the generic filler plus one of each colored pip. Face up it is Bolrac-Clan Basher again, 3/2 with DoubleStrike, Trample.
+
+[Bot1 Deck]
+Bolrac-Clan Basher
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Jet
+Mox Ruby
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Bolrac-Clan Basher.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+! Bot1.Battlefield.Bolrac-Clan Basher.Activate(Ability: disguise cost)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Bolrac-Clan Basher.Power = 3
+Bot1.Battlefield.Bolrac-Clan Basher.Toughness = 2
+Bot1.Battlefield.Bolrac-Clan Basher.Keywords = Disguise; DoubleStrike; Trample
+Bot1.Battlefield.Bolrac-Clan Basher.Counters.PlusOnePlusOne = (absent)
