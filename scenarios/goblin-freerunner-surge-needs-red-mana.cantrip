@@ -1,0 +1,37 @@
+# Goblin Freerunner: "Surge {1}{R}". Bot1 casts Mox Jet and Mox Sapphire on turn 1 (spells enough for surge, and two mana)
+# but neither makes red: the {R} cannot be paid, so surge is refused. Mox Ruby makes it castable, paid with Ruby and Jet
+# (Sapphire stays untapped), the pool empty. It is a 3/2 with menace.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Goblin Freerunner
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Goblin Freerunner.Cast(Ability: Surge; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Goblin Freerunner.Cast(Ability: Surge)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Goblin Freerunner.Power = 3
+Bot1.Battlefield.Goblin Freerunner.Keywords = Menace
+Bot1.Battlefield.Mox Sapphire.Tapped = false

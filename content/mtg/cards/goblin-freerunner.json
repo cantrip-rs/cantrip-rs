@@ -1,0 +1,11 @@
+{
+  "name": "Goblin Freerunner",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Goblin Warrior Ally",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Surge {1}{R} (You may cast this spell for its surge cost if you or a teammate has cast another spell this turn.)\nMenace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ]
+}

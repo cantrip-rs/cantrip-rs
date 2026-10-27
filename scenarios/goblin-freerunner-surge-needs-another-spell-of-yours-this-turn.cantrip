@@ -1,0 +1,68 @@
+# Goblin Freerunner: "Surge {1}{R}" (CR 702.117a). Bot1 casts Dwarven Trader on turn 3, leaving one Mountain: one mana short
+# of {1}{R}. On turn 5 Bot2 casts Brainstorm in Bot1's upkeep, and Bot1 has three Mountains and cast Trader last turn, but no
+# spell of its own this turn: surge is refused. After Bot1 casts a second Trader it is allowed, paid with exactly two
+# Mountains. On turn 7 the normal {3}{R} cast with four Mountains still works, with no other spell cast that turn.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Dwarven Trader
+Goblin Freerunner
+Dwarven Trader
+Goblin Freerunner
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Island
+Island
+Brainstorm
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Dwarven Trader.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Goblin Freerunner.Cast(Ability: Surge; Mana: short)
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Upkeep]
+Bot2.Hand.Brainstorm.Cast
+Bot2.Battlefield.Island.Activate
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+! Bot1.Hand.Goblin Freerunner.Cast(Ability: Surge)
+Bot1.Hand.Dwarven Trader.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Goblin Freerunner.Cast(Ability: Surge)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Goblin Freerunner.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Goblin Freerunner#1.Power = 3
+Bot1.Battlefield.Goblin Freerunner#1.Toughness = 2
+Bot1.Battlefield.Goblin Freerunner#1.Keywords = Menace
+Bot1.Battlefield.Goblin Freerunner#2.Keywords = Menace
+Bot1.Battlefield.Dwarven Trader#1.Power = 1
+Bot1.Battlefield.Mountain#1.Tapped = true
