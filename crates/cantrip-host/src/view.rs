@@ -361,6 +361,8 @@ pub fn printed(def: &CardDef) -> ObjectView {
         other_face: def.back.map(|back| Box::new(printed(back))),
         halves: def.split.map_or_else(Vec::new, |(left, right)| vec![printed(left), printed(right)]),
         inset_spell: inset_spell(def),
+        prototype: def.prototype.map_or_else(String::new, |p| p.text.to_string()),
+        prototyped: def.prototyped,
         ..Default::default()
     }
 }
@@ -1230,9 +1232,13 @@ impl<'a> Projector<'a> {
             class_level: if on_battlefield { i32::from(obj.class_level) } else { 0 },
             // A token whose text was changed as it was made has copiable values of its own, and the name the changed text
             // gives it, and is no copy (CR 612.4, 111.4).
+            // A prototyped spell or permanent has its own card's prototyped face as its copiable values (CR 718.2a, 718.3b),
+            // and is no copy of anything.
             is_copy: obj.copiable().is_some_and(|c| {
                 let name = if !c.words.is_printed() && c.name == game.cards.get(c.card).token_name_under(c.words) { None } else { c.name };
-                Copiable { words: Words::NONE, name, ..c } != Copiable::of(obj.card)
+                let own_prototype = prototyped_face(game.cards.get(obj.card)).is_some_and(|f| std::ptr::eq(f, game.cards.get(c.card)));
+                let values = Copiable { words: Words::NONE, name, ..c };
+                values != Copiable::of(obj.card) && !(own_prototype && values == Copiable::of(c.card))
             }) || obj.card_copy,
             // A copy's exception may state its loyalty (CR 707.9b: "has starting loyalty X").
             starting_counter: if on_battlefield { None } else { obj.copiable().and_then(|c| c.stated_loyalty()).or(def.loyalty).map(i32::from) },
@@ -1242,6 +1248,9 @@ impl<'a> Projector<'a> {
             halves: def.split.map_or_else(Vec::new, |(left, right)| vec![printed(left), printed(right)]),
             // Cast as its Adventure or Omen, it is that face alone (CR 715.3b, 720.3b), whose definition has no inset.
             inset_spell: inset_spell(def),
+            // The prototype line is part of the card, and of its prototyped face (CR 718.2a).
+            prototype: def.prototype.map_or_else(String::new, |p| p.text.to_string()),
+            prototyped: def.prototyped,
             ..Default::default()
         };
 

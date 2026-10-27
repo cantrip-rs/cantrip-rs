@@ -186,7 +186,10 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
     match o.kind {
         ActionKind::CastSpell => {
             // Cast as its Adventure or its Omen (CR 715.3, 720.3), it is that spell: its name, and its own mana cost.
-            let inset = def.inset_face(o.index);
+            // Cast prototyped (CR 718.3b), it is its prototyped face: the card with the prototype's mana cost.
+            let prototyped = if o.index == WAY_PROTOTYPE { prototyped_face(def) } else { None };
+            m.cast_prototyped = prototyped.is_some();
+            let inset = def.inset_face(o.index).or(prototyped);
             // A cast another object makes possible names the face it casts (a Room's door, an Adventure): its name and its cost.
             // So does a cast for an alternative cost another object gives (CR 118.9: Dracogenesis), of a face it casts.
             let granted_face = (o.granted_by.is_some() || o.paid_by.is_some())

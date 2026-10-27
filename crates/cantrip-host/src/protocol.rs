@@ -555,6 +555,14 @@ pub struct ObjectView {
     /// For an adventurer or omen card, the Adventure or Omen printed in its inset frame (CR 715.2, 720.2), as printed: the
     /// spell it may be cast as. None on the stack for the spell cast as that face, which is the face itself.
     pub inset_spell: Option<Box<ObjectView>>,
+    /// For a prototype card, its inset frame's keyword line as printed, "Prototype {2}{R} — 3/2" (CR 718.1): part of the
+    /// card in every zone, though it has those values only while prototyped (CR 718.4). Empty for any other card.
+    #[serde(default)]
+    pub prototype: String,
+    /// A prototyped spell or permanent, or a copy of one (CR 718.3b-d): its mana cost, power, toughness and colors are the
+    /// prototype's (`mana_cost`, `power`, `toughness`, `colors` say them), everything else the card's.
+    #[serde(default)]
+    pub prototyped: bool,
     /// A permanent with the solved designation (CR 719.3b): a Case whose "To solve" ability has made it solved.
     pub solved: bool,
     /// A suspected permanent (CR 701.60b): it has menace and "This creature can't block" while it is.
@@ -749,6 +757,10 @@ pub struct ActionOptionMessage {
     /// on the stack (CR 708.5).
     #[serde(default)]
     pub cast_face_down: bool,
+    /// For a cast: it casts the card prototyped (CR 702.160a, 718.3), as its prototype's mana cost (`cost_text`), power and
+    /// toughness; `description` is the keyword line ("Prototype {2}{R} — 3/2").
+    #[serde(default)]
+    pub cast_prototyped: bool,
 }
 
 impl ActionOptionMessage {
@@ -787,6 +799,7 @@ impl ActionOptionMessage {
             tapped_after_mana: false,
             pays_nothing: false,
             cast_face_down: false,
+            cast_prototyped: false,
         }
     }
 }
