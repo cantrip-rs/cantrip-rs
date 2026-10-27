@@ -1,0 +1,39 @@
+# Monastery Flock's morph {U} (CR 702.37e, 107.4): Black Lotus pays the {3} to cast it face down. On turn 1 Bot1 has 1 source
+# that could pay its 1 mana but it is not blue, so turning it face up is not offered; once the blue source arrives it is,
+# paid by exactly 1 source, the pool ends empty, and it is Monastery Flock face up.
+
+[Bot1 Deck]
+Black Lotus
+Monastery Flock
+Swamp
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Monastery Flock.Cast(Ability: Morph)
+? Stack..FaceDown = true
+? Stack..FaceDownName = Monastery Flock
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Battlefield.Monastery Flock.Activate(Ability: morph cost)
+? Bot1.Mana = 
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Monastery Flock.Power = 0

@@ -1,0 +1,49 @@
+# Monastery Flock's ruling (2014-09-20): an attacking face-down Monastery Flock turned face up keeps attacking though it now
+# has defender - defender only stops it being declared as an attacker (CR 702.3b), and turning face up changes only its
+# characteristics, never its combat status (CR 708.8, 506.4a) - and turned up before blockers are declared it has flying, so a
+# creature without flying or reach can't block it (CR 702.9b). On turn 3 the face-down 2/2 and Kobolds of Kher Keep attack;
+# in the declare attackers step Mox Sapphire pays the {U} to turn it up. Bot2's Memnite may block the Kobolds (which
+# die), not the Flock.
+
+[Bot1 Deck]
+Black Lotus
+Monastery Flock
+Mox Sapphire
+Kobolds of Kher Keep
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Monastery Flock.Cast(Ability: Morph)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Kobolds of Kher Keep.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(#1 > Bot2; Kobolds of Kher Keep > Bot2)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+? Combat.Attackers = Kobolds of Kher Keep > Bot2; Monastery Flock > Bot2
+? Bot1.Battlefield.Monastery Flock.Keywords = Defender; Flying; Morph
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Memnite > Monastery Flock)
+Bot2.Block(Memnite > Kobolds of Kher Keep)
+? Combat.Attackers = Kobolds of Kher Keep > Bot2; Monastery Flock > Bot2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Kobolds of Kher Keep; Black Lotus
+Bot1.Battlefield.Monastery Flock.Tapped = true
