@@ -65,13 +65,89 @@ static CUTTHROAT: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// "Morph {X}{G}": a 2/2 for {1}{G}.
+static SWELLER: CardDef = CardDef {
+    name: "Morph Test Sweller",
+    cost: mana("{1}{G}"),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    text: "Morph {X}{G}",
+    ways: &[face_down_way(WayKind::Morph, Cost::mana(mana("{X}{G}")), "Morph {X}{G}")],
+    ..CardDef::BLANK
+};
+
+/// "You may cast Bird spells as though they had flash" (Rattlechains' kind of permission, CR 601.3, 702.8a).
+fn bird_you_cast(q: &dyn Query, asker: &Asker, spell: ObjectId, caster: PlayerId) -> bool {
+    caster == asker.controller && q.chars(spell).has_subtype(Subtype::Bird)
+}
+static BIRD_FLASH: CardDef = CardDef {
+    name: "Morph Test Bird Flash",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    flash_rules: &[bird_you_cast],
+    ..CardDef::BLANK
+};
+
+/// "You may cast creature spells as though they had flash" (Leyline of Anticipation's kind, CR 601.3, 702.8a).
+fn creature_you_cast(q: &dyn Query, asker: &Asker, spell: ObjectId, caster: PlayerId) -> bool {
+    caster == asker.controller && q.chars(spell).is(CardType::Creature)
+}
+static CREATURE_FLASH: CardDef = CardDef {
+    name: "Morph Test Creature Flash",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    flash_rules: &[creature_you_cast],
+    ..CardDef::BLANK
+};
+
+/// "You may cast colorless nonland spells from the top of your library" (Mystic Forge's, CR 601.3).
+fn colorless(q: &dyn Query, _: &Asker, card: ObjectId) -> bool {
+    q.chars(card).colors.is_empty()
+}
+static COLORLESS_FROM_TOP: CardDef = CardDef {
+    name: "Morph Test Colorless From Top",
+    types: TypeSet::of(&[CardType::Artifact]),
+    play_rules: &[PlayRule::LibraryTopSpells(colorless)],
+    ..CardDef::BLANK
+};
+
+/// "You may cast white spells from the top of your library".
+fn white(q: &dyn Query, _: &Asker, card: ObjectId) -> bool {
+    q.chars(card).colors.has(Color::White)
+}
+static WHITE_FROM_TOP: CardDef = CardDef {
+    name: "Morph Test White From Top",
+    types: TypeSet::of(&[CardType::Artifact]),
+    play_rules: &[PlayRule::LibraryTopSpells(white)],
+    ..CardDef::BLANK
+};
+
+/// "White spells can't be cast."
+fn no_white(q: &dyn Query, _: &Asker, _: PlayerId, spell: ObjectId) -> bool {
+    !q.chars(spell).colors.has(Color::White)
+}
+static NO_WHITE: CardDef = CardDef { name: "Morph Test No White", types: TypeSet::of(&[CardType::Enchantment]), spell_rules: &[no_white], ..CardDef::BLANK };
+
+/// "Colorless spells can't be cast."
+fn no_colorless(q: &dyn Query, _: &Asker, _: PlayerId, spell: ObjectId) -> bool {
+    !q.chars(spell).colors.is_empty()
+}
+static NO_COLORLESS: CardDef =
+    CardDef { name: "Morph Test No Colorless", types: TypeSet::of(&[CardType::Enchantment]), spell_rules: &[no_colorless], ..CardDef::BLANK };
+
+fn nothing(_: &mut dyn cantrip_api::Game, _: &StackItem) -> Result<(), Suspend> {
+    Ok(())
+}
+
+/// A sorcery whose resolution stands in for an effect that lets you cast a card (CR 608.2g).
+static CASTER: CardDef = CardDef { name: "Morph Test Caster", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], nothing), ..CardDef::BLANK };
+
 fn cx(game: &mut Game) -> Cx<'_> {
     Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
 }
 
 /// Your main phase with priority and an empty stack.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SKYWARDEN, &GROWER, &MASK, &CUTTHROAT])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SKYWARDEN, &GROWER, &MASK, &CUTTHROAT, &SWELLER, &BIRD_FLASH, &CREATURE_FLASH, &COLORLESS_FROM_TOP, &WHITE_FROM_TOP, &NO_WHITE, &NO_COLORLESS, &CASTER])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -390,4 +466,131 @@ fn a_morph_cost_of_life_is_paid_in_life() {
     take(&mut g, &option);
     assert!(!g.state.obj(permanent).face_down);
     assert_eq!(g.state.player(YOU).life, 15);
+}
+
+/// CR 702.37e-f, 107.3a: an X in a morph cost is announced as the special action is taken, paid as that much generic mana,
+/// and kept on the permanent for its other abilities to read.
+#[test]
+fn an_x_in_a_morph_cost_is_announced_paid_and_kept() {
+    let mut g = game();
+    let card = put(&mut g, &SWELLER, Zone::hand(YOU));
+    add(&mut g, Mana::C, 3);
+    let spell = cast_face_down(&mut g, card);
+    resolve_all(&mut g);
+    let permanent = g.state.obj(spell).became.expect("it resolved");
+    add(&mut g, Mana::G, 1);
+    add(&mut g, Mana::C, 3);
+    let option = turn_up_option(&mut g, permanent, TurnUp::Morph).expect("turning it face up is offered");
+    let r = next(&mut g);
+    g.answer(r.id, r.player, Answer::Act(Action::of(&option))).expect("a legal answer");
+    let mut announced = false;
+    loop {
+        let r = next(&mut g);
+        let RequestKind::PayCosts { options, announcing, .. } = &r.kind else { break };
+        if *announcing {
+            g.answer(r.id, r.player, Answer::Announce(2)).expect("X = 2 is legal");
+            announced = true;
+            continue;
+        }
+        let pay = options.iter().find(|o| matches!(o.kind, ActionKind::ConfirmCasting | ActionKind::AssignMana)).expect("the pool pays").clone();
+        g.answer(r.id, r.player, Answer::Act(Action::of(&pay))).expect("a legal answer");
+    }
+    assert!(announced, "X is announced");
+    assert!(!g.state.obj(permanent).face_down);
+    assert_eq!(g.state.player(YOU).pool.total(), 1, "X = 2 paid {{2}}{{G}} of the four");
+    assert_eq!(g.state.obj(permanent).x, 2, "the X chosen is kept (CR 702.37f)");
+}
+
+/// CR 708.9: a face-down permanent - cast face down or manifested - that leaves the battlefield is revealed by its owner as
+/// it moves, and arrives face up.
+#[test]
+fn a_face_down_permanent_that_leaves_the_battlefield_is_revealed() {
+    for manifest in [false, true] {
+        let mut g = game();
+        let permanent = if manifest {
+            let card = put(&mut g, &SKYWARDEN, Zone::library(YOU));
+            cantrip_api::Game::put_onto_battlefield_face_down(&mut cx(&mut g), card, YOU, FaceDown::Manifested, false)
+                .expect("nothing is asked")
+                .expect("it enters face down")
+        } else {
+            let card = put(&mut g, &SKYWARDEN, Zone::hand(YOU));
+            add(&mut g, Mana::C, 3);
+            let spell = cast_face_down(&mut g, card);
+            resolve_all(&mut g);
+            g.state.obj(spell).became.expect("it resolved")
+        };
+        crate::ops::move_to(&mut cx(&mut g), permanent, Zone::graveyard(YOU));
+        let gone = g.state.obj(permanent).became.expect("it left the battlefield");
+        assert!(!g.state.obj(gone).face_down, "manifested: {manifest}");
+        assert!(!crate::hidden_from(&g.state, THEM, gone));
+        assert!(g.log.iter().any(|r| matches!(r.event, Event::Revealed { player, card } if player == YOU && card == gone)), "manifested: {manifest}");
+    }
+}
+
+/// CR 702.37c, 708.4, 307.1: cast face down it is a creature spell with no text, cast when a sorcery could be: not with
+/// another spell on the stack. A permission to cast spells as though they had flash is judged on the face-down spell
+/// (CR 601.3e): one for Bird spells, which the card is, gives it none - the card's own cast still has it - and one for
+/// creature spells does.
+#[test]
+fn a_face_down_cast_has_the_speed_of_the_face_down_spell() {
+    // (permission, the face-down cast offered with a spell on the stack, the card's own cast offered then)
+    for (permission, face_down, own) in [(None, false, false), (Some(&BIRD_FLASH), false, true), (Some(&CREATURE_FLASH), true, true)] {
+        let mut g = game();
+        if let Some(p) = permission {
+            put(&mut g, p, Zone::BATTLEFIELD);
+        }
+        let first = put(&mut g, &SKYWARDEN, Zone::hand(YOU));
+        let second = put(&mut g, &SKYWARDEN, Zone::hand(YOU));
+        add(&mut g, Mana::C, 3);
+        cast_face_down(&mut g, first);
+        add(&mut g, Mana::C, 4);
+        add(&mut g, Mana::W, 1);
+        let offered = options(&mut g);
+        let cast = |index: u8| offered.iter().any(|o| o.kind == ActionKind::CastSpell && o.source == Some(second) && o.index == index);
+        assert_eq!(cast(1), face_down, "face down, {:?}", permission.map(|p| p.name));
+        assert_eq!(cast(0), own, "its own cast, {:?}", permission.map(|p| p.name));
+    }
+}
+
+/// CR 601.3e, 702.37c, 708.4: a permission to cast spells of some kind is judged on the face-down spell a morph casts: Mystic
+/// Forge's "colorless nonland spells from the top of your library" lets the white card on top be cast face down, a
+/// colorless 2/2, and not for its mana cost; one for white spells the other way about.
+#[test]
+fn a_permission_is_judged_on_the_face_down_spell() {
+    // (permission, the face-down cast offered, the card's own cast offered)
+    for (permission, face_down, own) in [(&COLORLESS_FROM_TOP, true, false), (&WHITE_FROM_TOP, false, true)] {
+        let mut g = game();
+        put(&mut g, permission, Zone::BATTLEFIELD);
+        let card = g.state.push_obj(Obj::new(g.cards.id_of(&SKYWARDEN), YOU, Zone::library(YOU)));
+        g.state.zone_insert(Zone::library(YOU), 0, card);
+        add(&mut g, Mana::W, 1);
+        add(&mut g, Mana::C, 4);
+        let offered = options(&mut g);
+        let cast = |index: u8| offered.iter().any(|o| o.kind == ActionKind::CastSpell && o.source == Some(card) && o.index == index);
+        assert_eq!(cast(1), face_down, "face down, under {}", permission.name);
+        assert_eq!(cast(0), own, "for its mana cost, under {}", permission.name);
+    }
+}
+
+/// CR 101.2, 601.3e, 708.4: a ban on casting spells is judged on the spell each way would cast, as an effect resolving lets
+/// you cast the card (CR 608.2g): "white spells can't be cast" leaves the white card its face-down cast, a colorless spell,
+/// and "colorless spells can't be cast" its own; both leave it none.
+#[test]
+fn a_ban_judges_the_face_down_spell_apart_during_resolution() {
+    for (bans, castable) in [(&[&NO_WHITE][..], true), (&[&NO_COLORLESS][..], true), (&[&NO_WHITE, &NO_COLORLESS][..], false)] {
+        let mut g = game();
+        for &ban in bans {
+            put(&mut g, ban, Zone::BATTLEFIELD);
+        }
+        let card = put(&mut g, &SKYWARDEN, Zone::hand(YOU));
+        let caster = put(&mut g, &CASTER, Zone::STACK);
+        let ability = AbilityRef { card: g.cards.id_of(&CASTER), index: 0 };
+        g.state.stack_push(crate::actions::stack_item(StackKind::Spell, caster, ability, YOU, &[]));
+        let serial = g.state.stack.last().expect("the caster").serial;
+        g.state.frame_push(Frame::new(FrameKind::Resolve { serial }));
+        let frame = g.state.agenda.len() - 1;
+        let mut resolving = Cx { frame, ..cx(&mut g) };
+        let ways = crate::actions::cast_ways_during_resolution(&mut resolving, card, YOU);
+        assert_eq!(!ways.is_empty(), castable, "{:?}", bans.iter().map(|b| b.name).collect::<Vec<_>>());
+    }
 }
