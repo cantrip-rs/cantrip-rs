@@ -1,0 +1,60 @@
+# Rockshard Elemental's morph {4}{R}{R} (CR 702.37a, 702.37e): Black Lotus pays the {3} to cast it face down, and the pool is
+# empty right after; it is a nameless 2/2 with no abilities (CR 708.2). Turned face up on turn 3 (a special action, CR 116.2b)
+# with exactly the 6 mana its morph cost asks, tapped from 6 sources, the pool ends empty; with one source fewer (5) the
+# action is not offered. Face up it is Rockshard Elemental, a 4/3 with DoubleStrike.
+
+[Bot1 Deck]
+Black Lotus
+Rockshard Elemental
+Mountain
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Pearl
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Rockshard Elemental.Cast(Ability: Morph)
+? Stack..FaceDown = true
+? Stack..FaceDownName = Rockshard Elemental
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Battlefield.Rockshard Elemental.Activate(Ability: morph cost)
+? Bot1.Mana = 
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Rockshard Elemental.Power = 4
+Bot1.Battlefield.Rockshard Elemental.Toughness = 3
+Bot1.Battlefield.Rockshard Elemental.Keywords = DoubleStrike; Morph
