@@ -1,0 +1,53 @@
+# Whip-Spine Drake ruling (2021-03-19), CR 509.1h (stays blocked), 702.37e. The face-down 2/2 attacks and Walking Corpse (no flying) blocks it. Turned
+# face up for {2}{W} after the block, the Drake has flying, but it stays blocked: the Corpse still deals its damage to it (2, the
+# 3/3 Drake survives) and no damage reaches Bot2, while the Drake kills the Corpse.
+
+[Bot1 Deck]
+Black Lotus
+Whip-Spine Drake
+Plains
+Mox Pearl
+Mox Jet
+Swamp x2
+Swamp x10
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Walking Corpse
+Swamp x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Whip-Spine Drake.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Walking Corpse.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(#1 > Bot2)
+Bot2.Block(Walking Corpse > #1)
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Walking Corpse = (absent)
+Bot1.Battlefield.Whip-Spine Drake.Keywords = Flying; Morph
+Bot1.Battlefield.Whip-Spine Drake.Damage = 2
+Bot1.Battlefield.Whip-Spine Drake.Tapped = true

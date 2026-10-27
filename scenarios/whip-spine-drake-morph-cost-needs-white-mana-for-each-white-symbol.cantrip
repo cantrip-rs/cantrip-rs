@@ -1,0 +1,53 @@
+# CR 702.37a, 702.37c, 702.37e, 708.2. Whip-Spine Drake is cast face down for exactly {3} (Black Lotus's three mana, the pool empty right after): a nameless 2/2 with no
+# keywords. It is then turned face up only with the colored mana its morph cost {2}{W} names: 3 sources, none of them white.
+# The refusal is judged with the color short and the last (white) source still in hand; with it, 3 of the 4 sources pay exactly and the pool is empty.
+# Face up it is the card: 3/3 with flying.
+
+[Bot1 Deck]
+Black Lotus
+Whip-Spine Drake
+Swamp
+Mox Sapphire
+Mox Pearl
+Swamp
+Swamp
+Mountain
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Whip-Spine Drake.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+? Stack..FaceDownName = Whip-Spine Drake
+? Stack..ManaValue = 0
+[T1 Bot1.Main2]
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Whip-Spine Drake
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Whip-Spine Drake.Activate(Ability: morph cost)
+? Bot1.Mana = 
+? Bot1.Battlefield.Whip-Spine Drake.FaceDown = (absent)
+
+[Expect]
+Bot1.Battlefield.Whip-Spine Drake.Power = 3
+Bot1.Battlefield.Whip-Spine Drake.Toughness = 3
+Bot1.Battlefield.Whip-Spine Drake.Keywords = Flying; Morph
+Stack.Count = 0

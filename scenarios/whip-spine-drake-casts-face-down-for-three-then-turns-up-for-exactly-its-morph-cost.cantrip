@@ -1,0 +1,52 @@
+# CR 702.37a, 702.37c, 702.37e, 708.2. Whip-Spine Drake is cast face down for exactly {3} (Black Lotus's three mana, the pool empty right after): a nameless 2/2 with no
+# keywords. It is then turned face up for exactly its morph cost {2}{W}: with one source fewer (2) the special action is not offered, with all 3 it is, and tapping those 3 leaves the pool empty.
+# Sources are lands and Moxen, all but the last in play when the refusal is judged; the last is then added and each is tapped.
+# Face up it is the card: 3/3 with flying.
+
+[Bot1 Deck]
+Black Lotus
+Whip-Spine Drake
+Plains
+Mox Jet
+Swamp
+Swamp
+Swamp
+Island
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Whip-Spine Drake.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+? Stack..FaceDownName = Whip-Spine Drake
+? Stack..ManaValue = 0
+[T1 Bot1.Main2]
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Whip-Spine Drake
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Whip-Spine Drake.Activate(Ability: morph cost)
+? Bot1.Mana = 
+? Bot1.Battlefield.Whip-Spine Drake.FaceDown = (absent)
+
+[Expect]
+Bot1.Battlefield.Whip-Spine Drake.Power = 3
+Bot1.Battlefield.Whip-Spine Drake.Toughness = 3
+Bot1.Battlefield.Whip-Spine Drake.Keywords = Flying; Morph
+Stack.Count = 0
