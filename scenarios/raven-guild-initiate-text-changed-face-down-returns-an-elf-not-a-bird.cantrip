@@ -1,0 +1,52 @@
+# CR 612.2, 702.37e (the words of its morph cost are read through text-changing effects, as Putrid Raptor's ruling says of
+# its own). Artificial Evolution turns the face-down Initiate's "Bird" into "Elf": turning it up then may not return Bot1's
+# Aven Envoy (a Bird) and returns Bot1's Llanowar Elves instead.
+
+[Bot1 Deck]
+Black Lotus
+Raven Guild Initiate
+Forest
+Llanowar Elves
+Mox Sapphire
+Island
+Aven Envoy
+Artificial Evolution
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Raven Guild Initiate.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Aven Envoy.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Bot1.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Bird)
+Bot1.Modes(Elf)
+? Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Choose(Aven Envoy)
+Bot1.Choose(Llanowar Elves)
+
+[Expect]
+Bot1.Hand.Llanowar Elves.Power = 1
+Bot1.Battlefield.Llanowar Elves = (absent)
+Bot1.Battlefield.Aven Envoy.Power = 0
+Bot1.Battlefield.Raven Guild Initiate.FaceDown = (absent)

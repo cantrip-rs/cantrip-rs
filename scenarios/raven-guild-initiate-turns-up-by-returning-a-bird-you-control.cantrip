@@ -1,0 +1,59 @@
+# CR 702.37a, 702.37e, 118.3, 708.2 (a face-down creature has no subtypes). Raven Guild Initiate is cast face down for exactly
+# {3} (Black Lotus's three mana, the pool empty right after): a nameless 2/2, which is not a Bird itself. "Morph-Return a Bird you
+# control to its owner's hand": on turn 3 only Bot2's Aven Envoy is a Bird, so the turn-up is refused; once Bot1 has its own Aven
+# Envoy, turning up returns that one to Bot1's hand and Bot2's stays. The Initiate is then the card, a 1/4 with morph.
+
+[Bot1 Deck]
+Black Lotus
+Raven Guild Initiate
+Island
+Island
+Aven Envoy
+Island x3
+Island x10
+
+[Bot2 Deck]
+Island
+Aven Envoy
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Raven Guild Initiate.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+? Stack..FaceDownName = Raven Guild Initiate
+? Stack..ManaValue = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Raven Guild Initiate
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Aven Envoy.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Aven Envoy.Power = 0
+! Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Hand.Island.Play
+Bot1.Hand.Aven Envoy.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Battlefield.Raven Guild Initiate.Activate(Ability: morph cost)
+
+[Expect]
+Bot1.Hand.Aven Envoy.Colors = Blue
+Bot1.Battlefield.Aven Envoy = (absent)
+Bot2.Battlefield.Aven Envoy.Power = 0
+Bot1.Battlefield.Raven Guild Initiate.Power = 1
+Bot1.Battlefield.Raven Guild Initiate.Toughness = 4
+Bot1.Battlefield.Raven Guild Initiate.Keywords = Morph
+Bot1.Battlefield.Raven Guild Initiate.FaceDown = (absent)
