@@ -2,7 +2,8 @@
 
     python tools/maintenance/new-card.py "Mind Stone" [--no-write]
 
-Writes the card's content JSON from Scryfall when content/ has none (a single face, a double-faced card, an adventure;
+Writes the card's content JSON from Scryfall when content/ has none (a single face, a double-faced card, an adventure, a
+prototype card;
 any other layout is written by hand), then prints the card's content JSON, the scenarios that use it and, for each of its abilities, the implemented cards that
 already do it (ability-index.py), and writes
 crates/cantrip-cards/src/cards/<card_name>.rs over the card's generated constant if the
@@ -317,6 +318,14 @@ def draft_content(name, index):
         if layout == "modal_dfc" and "Land" in faces[1]["type_line"].split(" — ")[0].split():
             card["backFacePlayableAsLand"] = True  # CR 712.12: a modal double-faced card may be played as its back face
         card["backFace"] = _face(faces[1], names, index, core)
+    elif layout == "prototype" and len(faces) == 1:
+        # A prototype card (CR 718): its inset frame's mana cost, power and toughness are printed only in its keyword line,
+        # "Prototype {2}{R} — 3/2", which crates/cantrip-oracle/build.rs checks the block against.
+        card = _face(faces[0], names, index, core)
+        line = re.search(r"^Prototype ((?:\{[^}]+\})+) — (-?\d+)/(-?\d+)", faces[0]["oracle_text"], re.M)
+        if not line:
+            sys.exit(f"{found['name']}: a prototype card whose Oracle text has no \"Prototype {{cost}} — P/T\" line")
+        card["prototype"] = {"manaCost": line.group(1), "power": int(line.group(2)), "toughness": int(line.group(3))}
     elif layout == "adventure" and len(faces) == 2:
         # Scryfall lays an Omen card (CR 720) out as an adventure: its second face's subtype says which it is.
         kind = "omen" if "Omen" in faces[1]["type_line"].split(" — ")[-1].split() else "adventure"
