@@ -1,0 +1,56 @@
+# CR 702.37a, 702.37c, 702.37e, 708.2. War Behemoth is cast face down for exactly {3} (Black Lotus's three mana, the pool empty right after): a nameless 2/2 with no
+# keywords. It is then turned face up for exactly its morph cost {4}{W}: with one source fewer (4) the special action is not offered, with all 5 it is, and tapping those 5 leaves the pool empty.
+# Sources are lands and Moxen, all but the last in play when the refusal is judged; the last is then added and each is tapped.
+# Face up it is the card: 3/6 and no keywords.
+
+[Bot1 Deck]
+Black Lotus
+War Behemoth
+Plains
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Swamp
+Mountain
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.War Behemoth.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+? Stack..FaceDownName = War Behemoth
+? Stack..ManaValue = 0
+[T1 Bot1.Main2]
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = War Behemoth
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.War Behemoth.Activate(Ability: morph cost)
+? Bot1.Mana = 
+? Bot1.Battlefield.War Behemoth.FaceDown = (absent)
+
+[Expect]
+Bot1.Battlefield.War Behemoth.Power = 3
+Bot1.Battlefield.War Behemoth.Toughness = 6
+Bot1.Battlefield.War Behemoth.Keywords = Morph
+Stack.Count = 0
