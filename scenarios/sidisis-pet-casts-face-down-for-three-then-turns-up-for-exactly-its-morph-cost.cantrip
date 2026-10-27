@@ -1,0 +1,49 @@
+# CR 702.37a, 702.37c, 702.37e, 708.2. Sidisi's Pet is cast face down for exactly {3} (Black Lotus's three mana, the pool empty right after): a nameless 2/2 with no
+# keywords. It is then turned face up for exactly its morph cost {1}{B}: with one source fewer (1) the special action is not offered, with all 2 it is, and tapping those 2 leaves the pool empty.
+# Sources are lands and Moxen, all but the last in play when the refusal is judged; the last is then added and each is tapped.
+# Face up it is the card: 1/4 with lifelink.
+
+[Bot1 Deck]
+Black Lotus
+Sidisi's Pet
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Plains
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Sidisi's Pet.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+? Stack..FaceDownName = Sidisi's Pet
+? Stack..ManaValue = 0
+[T1 Bot1.Main2]
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Sidisi's Pet
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Sidisi's Pet.Activate(Ability: morph cost)
+? Bot1.Mana = 
+? Bot1.Battlefield.Sidisi's Pet.FaceDown = (absent)
+
+[Expect]
+Bot1.Battlefield.Sidisi's Pet.Power = 1
+Bot1.Battlefield.Sidisi's Pet.Toughness = 4
+Bot1.Battlefield.Sidisi's Pet.Keywords = Lifelink; Morph
+Stack.Count = 0
