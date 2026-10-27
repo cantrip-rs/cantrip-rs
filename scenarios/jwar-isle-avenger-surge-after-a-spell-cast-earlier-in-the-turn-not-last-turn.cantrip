@@ -1,0 +1,41 @@
+# Jwar Isle Avenger: "Surge {2}{U}" (CR 702.117a). Bot1 casts Mox Jet on turn 1 and plays an Island on turn 3, so with the
+# Island, a second Island and the Mox it has {2}{U} and cast a spell last turn - but none this turn, so surge is refused.
+# Casting Mox Ruby (a spell, for no mana) allows it, paid exactly with Island, Island and Jet; the pool is empty.
+
+[Bot1 Deck]
+Island
+Mox Jet
+Island
+Mox Ruby
+Jwar Isle Avenger
+Island x3
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Hand.Jwar Isle Avenger.Cast(Ability: Surge)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Jwar Isle Avenger.Cast(Ability: Surge)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Jwar Isle Avenger.Power = 3
+Bot1.Battlefield.Jwar Isle Avenger.Toughness = 3
+Bot1.Battlefield.Jwar Isle Avenger.Keywords = Flying
+Bot1.Battlefield.Mox Ruby.Tapped = false

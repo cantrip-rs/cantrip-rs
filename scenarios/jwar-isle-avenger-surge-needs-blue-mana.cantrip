@@ -1,0 +1,40 @@
+# Jwar Isle Avenger: "Surge {2}{U}". Bot1 casts three Moxen (none makes blue) on turn 1 - spells enough for surge, and
+# three mana - but the {U} cannot be paid: refused. Mox Sapphire makes it castable, paid with Sapphire and two others.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Jwar Isle Avenger
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Jwar Isle Avenger.Cast(Ability: Surge; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Jwar Isle Avenger.Cast(Ability: Surge)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Jwar Isle Avenger.Keywords = Flying
+Bot1.Battlefield.Mox Pearl.Tapped = false

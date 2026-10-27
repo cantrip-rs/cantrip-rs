@@ -1,0 +1,11 @@
+{
+  "name": "Jwar Isle Avenger",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Sphinx",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Surge {2}{U} (You may cast this spell for its surge cost if you or a teammate has cast another spell this turn.)\nFlying",
+  "keywords": [
+    "Flying"
+  ]
+}
