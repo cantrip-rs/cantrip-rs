@@ -1,0 +1,11 @@
+{
+  "name": "Titanic Bulvox",
+  "manaCost": "{6}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 7,
+  "toughness": 4,
+  "oracleText": "Trample\nMorph {4}{G}{G}{G} (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)",
+  "keywords": [
+    "Trample"
+  ]
+}
