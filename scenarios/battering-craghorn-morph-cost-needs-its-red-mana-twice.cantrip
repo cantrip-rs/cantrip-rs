@@ -1,0 +1,47 @@
+# Battering Craghorn's morph {1}{R}{R} (CR 702.37e, 107.4): Black Lotus pays the {3} to cast it face down. On turn 3 Bot1 has
+# 3 sources that could pay its 3 mana but only 1 red among them (it needs 2), so turning it face up is not offered; once the
+# red source arrives it is, paid by exactly 3 sources, the pool ends empty, and it is Battering Craghorn face up.
+
+[Bot1 Deck]
+Black Lotus
+Battering Craghorn
+Island
+Mountain
+Mox Ruby
+Mox Sapphire
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Battering Craghorn.Cast(Ability: Morph)
+? Stack..FaceDown = true
+? Stack..FaceDownName = Battering Craghorn
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Battlefield.Battering Craghorn.Activate(Ability: morph cost)
+? Bot1.Mana = 
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Battering Craghorn.Power = 3
