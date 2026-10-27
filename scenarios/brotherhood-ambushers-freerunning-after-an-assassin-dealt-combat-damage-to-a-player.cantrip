@@ -1,0 +1,58 @@
+# Brotherhood Ambushers: "Freerunning {3}{B}" (CR 702.173a). Bot1's Hired Poisoner (an Assassin, cast with Black Lotus on turn 1)
+# attacks Bot2 on turn 3 and deals combat damage. After combat four Moxen that make no black mana pay {3} but not the {B}:
+# freerunning is refused; with Mox Jet it is allowed and paid exactly with Jet and three Moxen, the pool empty.
+
+[Bot1 Deck]
+Black Lotus
+Hired Poisoner
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Mox Jet
+Brotherhood Ambushers
+Swamp x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hired Poisoner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Hired Poisoner > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Brotherhood Ambushers.Cast(Ability: Freerunning; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Brotherhood Ambushers.Cast(Ability: Freerunning)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Brotherhood Ambushers.Power = 6
+Bot1.Battlefield.Mox Emerald.Tapped = false

@@ -1,0 +1,49 @@
+# Brotherhood Ambushers: "Freerunning {3}{B}" (CR 702.173a) needs combat damage. Bot2's Razorkin Needlehead (an Assassin) deals
+# 1 damage to Bot1 for each of the three cards Bot1 draws with Brainstorm in Bot2's turn 4 upkeep: damage dealt by an
+# Assassin Bot2 controls, but not combat damage (Bot1 is at 16: one more for its turn 3 draw). Bot2 has four Moxen's mana, so only the condition refuses it.
+
+[Bot1 Deck]
+Island
+Brainstorm
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Razorkin Needlehead
+Mox Jet
+Mox Sapphire
+Brotherhood Ambushers
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Razorkin Needlehead.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Upkeep]
+Bot1.Hand.Brainstorm.Cast
+Bot1.Battlefield.Island.Activate
+[T4 Bot2.Main1]
+? Bot1.Life = 16
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Hand.Brotherhood Ambushers.Cast(Ability: Freerunning)
+
+[Expect]
+Bot1.Life = 16

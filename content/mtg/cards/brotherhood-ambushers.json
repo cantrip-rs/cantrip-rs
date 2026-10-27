@@ -1,0 +1,8 @@
+{
+  "name": "Brotherhood Ambushers",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Human Assassin",
+  "power": 6,
+  "toughness": 3,
+  "oracleText": "Freerunning {3}{B} (You may cast this spell for its freerunning cost if you dealt combat damage to a player this turn with an Assassin or commander.)"
+}

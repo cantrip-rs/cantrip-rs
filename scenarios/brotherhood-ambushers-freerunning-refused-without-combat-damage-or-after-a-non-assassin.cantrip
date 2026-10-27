@@ -1,0 +1,54 @@
+# Brotherhood Ambushers: "Freerunning {3}{B}" (CR 702.173a). Bot1 has four Moxen and a Swamp on turn 3 and has cast a spell
+# that turn, mana enough for either cost. Before any combat damage freerunning is refused; after Muck Rats (not an Assassin) deals combat damage to Bot2
+# it is still refused; so the card is cast for its normal {4}{B}, paid with all five sources.
+
+[Bot1 Deck]
+Swamp
+Muck Rats
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Brotherhood Ambushers
+Swamp x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Muck Rats.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Brotherhood Ambushers.Cast(Ability: Freerunning)
+Bot1.Attack(Muck Rats > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+! Bot1.Hand.Brotherhood Ambushers.Cast(Ability: Freerunning)
+Bot1.Hand.Brotherhood Ambushers.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Brotherhood Ambushers.Power = 6
+Bot1.Battlefield.Brotherhood Ambushers.Toughness = 3
