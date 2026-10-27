@@ -261,7 +261,7 @@ fn can_turn_face_up(q: &dyn Query, asker: &Asker) -> bool {
 /// which the rules read off the permanent (`actions::special_action`). A megamorph cost is a morph cost; turned up for it, the
 /// permanent gets a +1/+1 counter as it is turned face up (CR 702.37b, 708.11).
 fn turn_face_up_for_morph(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let megamorph = g.turn_up_way(g.obj(item.object), TurnUp::Morph).is_some_and(|w| w.kind == WayKind::Megamorph);
+    let megamorph = g.turn_up_way(item.object, TurnUp::Morph).is_some_and(|w| w.kind == WayKind::Megamorph);
     g.turn_face_up_as(item.object, item.controller, megamorph);
     Ok(())
 }
@@ -275,14 +275,12 @@ fn turn_face_up_for_disguise(g: &mut dyn Game, item: &StackItem) -> Result<(), S
 /// Whether the face-down permanent would have a morph ability if it were face up (CR 702.37e: "if the permanent wouldn't have
 /// a morph cost if it were face up, it can't be turned face up this way").
 fn has_morph(q: &dyn Query, asker: &Asker) -> bool {
-    let obj = q.obj(asker.source);
-    obj.face_down && q.turn_up_way(obj, TurnUp::Morph).is_some()
+    q.obj(asker.source).face_down && q.turn_up_way(asker.source, TurnUp::Morph).is_some()
 }
 
 /// Whether the face-down permanent would have a disguise ability if it were face up (CR 702.168d).
 fn has_disguise(q: &dyn Query, asker: &Asker) -> bool {
-    let obj = q.obj(asker.source);
-    obj.face_down && q.turn_up_way(obj, TurnUp::Disguise).is_some()
+    q.obj(asker.source).face_down && q.turn_up_way(asker.source, TurnUp::Disguise).is_some()
 }
 
 /// The index of "turn this permanent face up" by its mana cost among the abilities of the manifested and cloaked values

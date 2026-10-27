@@ -141,13 +141,35 @@ fn nothing(_: &mut dyn cantrip_api::Game, _: &StackItem) -> Result<(), Suspend> 
 /// A sorcery whose resolution stands in for an effect that lets you cast a card (CR 608.2g).
 static CASTER: CardDef = CardDef { name: "Morph Test Caster", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], nothing), ..CardDef::BLANK };
 
+/// A vanilla 2/2 creature card for {1}: no morph.
+static BEAR: CardDef = CardDef {
+    name: "Morph Test Bear",
+    cost: generic(1),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    ..CardDef::BLANK
+};
+
+fn creature(_: &dyn LayerQuery, _: ObjectId, _: ObjectId, c: &Chars) -> bool {
+    c.is(CardType::Creature)
+}
+
+/// "All creatures lose all abilities" (Humility's, Dress Down's).
+static HUMBLER: CardDef = CardDef {
+    name: "Morph Test Humbler",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    statics: &[loses_all_abilities(creature, "")],
+    ..CardDef::BLANK
+};
+
 fn cx(game: &mut Game) -> Cx<'_> {
     Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
 }
 
 /// Your main phase with priority and an empty stack.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SKYWARDEN, &GROWER, &MASK, &CUTTHROAT, &SWELLER, &BIRD_FLASH, &CREATURE_FLASH, &COLORLESS_FROM_TOP, &WHITE_FROM_TOP, &NO_WHITE, &NO_COLORLESS, &CASTER])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &SKYWARDEN, &GROWER, &MASK, &CUTTHROAT, &SWELLER, &BIRD_FLASH, &CREATURE_FLASH, &COLORLESS_FROM_TOP, &WHITE_FROM_TOP, &NO_WHITE, &NO_COLORLESS, &CASTER, &BEAR, &HUMBLER])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -620,4 +642,112 @@ fn a_ban_judges_the_face_down_spell_apart_during_resolution() {
         let ways = crate::actions::cast_ways_during_resolution(&mut resolving, card, YOU);
         assert_eq!(!ways.is_empty(), castable, "{:?}", bans.iter().map(|b| b.name).collect::<Vec<_>>());
     }
+}
+
+/// `def` manifested from your library (CR 701.40a).
+fn manifest(g: &mut Game, def: &'static CardDef) -> ObjectId {
+    let card = put(g, def, Zone::library(YOU));
+    cantrip_api::Game::put_onto_battlefield_face_down(&mut cx(g), card, YOU, FaceDown::Manifested, false)
+        .expect("nothing is asked")
+        .expect("it enters face down")
+}
+
+/// "It loses all abilities" (Turn to Frog's, Kenrith's Transformation's) from a resolved effect on `id`, which still applies
+/// once it is turned face up (CR 708.8).
+fn loses_all_abilities_now(g: &mut Game, id: ObjectId) {
+    let timestamp = g.state.timestamp();
+    g.state.effect_push(ContinuousEffect { source: id, controller: THEM, timestamp, affected: id, kind: EffectKind::LoseAllAbilities, duration: Duration::EndOfTurn });
+    reoffer(g);
+}
+
+/// The Humbler on the battlefield: all creatures lose all abilities.
+fn humble(g: &mut Game) {
+    let humbler = put(g, &HUMBLER, Zone::BATTLEFIELD);
+    g.state.update_obj(humbler, |o| o.controller = THEM);
+    g.state.see_statics();
+    reoffer(g);
+}
+
+/// CR 702.37e, 708.8: a face-down permanent that would have no morph cost face up - an effect has it lose all its abilities,
+/// which would still apply to it face up - can't be turned face up for its morph cost (Whisperwood Elemental's ruling:
+/// "unlike a face-down creature that was cast using the morph ability"); without the effect it can.
+#[test]
+fn a_morph_that_would_lose_its_abilities_face_up_is_not_turned_up_for_its_morph_cost() {
+    for (lose, by_static) in [(false, false), (true, false), (true, true)] {
+        let mut g = game();
+        let card = put(&mut g, &SKYWARDEN, Zone::hand(YOU));
+        add(&mut g, Mana::C, 3);
+        let spell = cast_face_down(&mut g, card);
+        resolve_all(&mut g);
+        let permanent = g.state.obj(spell).became.expect("it resolved");
+        add(&mut g, Mana::W, 4);
+        match (lose, by_static) {
+            (true, false) => loses_all_abilities_now(&mut g, permanent),
+            (true, true) => humble(&mut g),
+            _ => {}
+        }
+        assert_eq!(turn_up_option(&mut g, permanent, TurnUp::Morph).is_some(), !lose, "loses all abilities: {lose}, by a static ability: {by_static}");
+        // It is still a face-down 2/2 that turning up would make the card it is, with flying taken as well.
+        assert_eq!(g.chars_if_face_up(permanent).has(Keyword::Flying), !lose);
+        assert_eq!(g.chars_if_face_up(permanent).name, "Morph Test Skywarden");
+        assert_eq!(g.chars(permanent).name, "");
+    }
+}
+
+/// CR 702.168d, 708.8: as morph's, for disguise.
+#[test]
+fn a_disguised_permanent_that_would_lose_its_abilities_face_up_is_not_turned_up_for_its_disguise_cost() {
+    for lose in [false, true] {
+        let mut g = game();
+        let card = put(&mut g, &MASK, Zone::hand(YOU));
+        add(&mut g, Mana::C, 3);
+        let spell = cast_face_down(&mut g, card);
+        resolve_all(&mut g);
+        let permanent = g.state.obj(spell).became.expect("it resolved");
+        add(&mut g, Mana::U, 4);
+        if lose {
+            humble(&mut g);
+        }
+        assert_eq!(turn_up_option(&mut g, permanent, TurnUp::Disguise).is_some(), !lose, "loses all abilities: {lose}");
+    }
+}
+
+/// CR 701.40b, 116.2b: a manifested creature card is turned face up for its mana cost by a special action the rules give it,
+/// no ability of its card, so it may be after it loses its abilities (Whisperwood Elemental's ruling); its morph cost it may
+/// not (CR 701.40c, 702.37e).
+#[test]
+fn a_manifested_card_that_lost_its_abilities_is_turned_up_for_its_mana_cost_but_not_its_morph_cost() {
+    for by_static in [false, true] {
+        let mut g = game();
+        let manifested = manifest(&mut g, &SKYWARDEN);
+        add(&mut g, Mana::W, 5);
+        if by_static {
+            humble(&mut g);
+        } else {
+            loses_all_abilities_now(&mut g, manifested);
+        }
+        assert!(turn_up_option(&mut g, manifested, TurnUp::Morph).is_none(), "by a static ability: {by_static}");
+        let option = turn_up_option(&mut g, manifested, TurnUp::ManaCost).expect("its mana cost is still offered");
+        take(&mut g, &option);
+        assert!(!g.state.obj(manifested).face_down);
+        assert!(!g.chars(manifested).has(Keyword::Flying), "the effect still applies face up (CR 708.8)");
+    }
+}
+
+/// CR 708.10, 702.37e: a face-down permanent that is a copy of a card with morph would be that card face up, so it is
+/// turned face up for that card's morph cost; one whose card has morph but that is a copy of a card without would have none
+/// face up, and is not.
+#[test]
+fn a_face_down_copy_is_turned_up_for_the_morph_cost_of_what_it_copies() {
+    let mut g = game();
+    let bear = manifest(&mut g, &BEAR);
+    let skywarden = g.cards.id_of(&SKYWARDEN);
+    g.state.update_obj(bear, |o| o.copy = Some(Copiable::of(skywarden)));
+    let morph = manifest(&mut g, &SKYWARDEN);
+    let plain = g.cards.id_of(&BEAR);
+    g.state.update_obj(morph, |o| o.copy = Some(Copiable::of(plain)));
+    add(&mut g, Mana::W, 5);
+    assert_eq!(g.chars(bear).name, "", "still a face-down 2/2 (CR 708.10)");
+    assert!(turn_up_option(&mut g, bear, TurnUp::Morph).is_some());
+    assert!(turn_up_option(&mut g, morph, TurnUp::Morph).is_none());
 }

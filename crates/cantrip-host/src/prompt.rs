@@ -139,7 +139,7 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
         && let Some(by) = game.chars(s).abilities().nth(o.index as usize).and_then(|a| game.cards.turn_up(a))
     {
         m.kind = ActionKindView::TurnFaceUp;
-        turn_up_way = game.turn_up_way(game.state.obj(s), by);
+        turn_up_way = game.turn_up_way(s, by);
     }
     // A Room's locked door is unlocked by paying its mana cost (CR 709.5e): its own kind, saying which door and what it costs.
     if o.kind == ActionKind::ActivateAbility

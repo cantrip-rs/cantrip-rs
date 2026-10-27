@@ -929,7 +929,7 @@ impl<'a> Projector<'a> {
     fn ability_changes(&self, view: &mut ObjectView, id: ObjectId, c: &Chars, copy: Option<Copiable>) {
         let cards = self.game.cards;
         let def = cards.get(c.card);
-        let base = Keywords(def.keywords.0 | copy.map_or(0, |copy| copy.extra_keywords.0));
+        let base = Keywords(def.printed_keywords().0 | copy.map_or(0, |copy| copy.extra_keywords.0));
         if c.keywords != base {
             for (keyword, words) in KEYWORD_WORDS {
                 if c.keywords.has(keyword) && !base.has(keyword) {

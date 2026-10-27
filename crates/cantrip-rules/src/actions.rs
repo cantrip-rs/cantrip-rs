@@ -8821,7 +8821,7 @@ fn special_action_printed_cost(cx: &Cx, source: ObjectId, ability: AbilityRef, d
 /// The morph or disguise cost a face-down permanent would have if it were face up (CR 702.37e, 702.168d), which turning it
 /// face up `by` that keyword's special action costs: nothing where it would have none (the action is then not offered).
 fn turn_up_cost(cx: &Cx, source: ObjectId, by: TurnUp) -> Cost {
-    cx.turn_up_way(cx.s().obj(source), by).map_or(Cost::NONE, |w| w.turn_up)
+    cx.turn_up_way(source, by).map_or(Cost::NONE, |w| w.turn_up)
 }
 
 /// The whole printed cost of a special action (CR 116.2): its mana (`special_action_printed_cost`), and for turning a

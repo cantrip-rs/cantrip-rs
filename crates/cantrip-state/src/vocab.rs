@@ -944,6 +944,14 @@ pub enum Keyword {
     /// permanent - "equipped creature can't be sacrificed", "it can't be sacrificed this turn" - it is
     /// `CardDef::sacrifice_bans` or `EffectKind::CantBeSacrificed`; the core reads all three (`Game::can_sacrifice`).
     CantBeSacrificed = 42,
+    /// Morph (CR 702.37a), megamorph's included (CR 702.37b): a static ability that functions in every zone. A card has it by
+    /// the morph or megamorph way it prints (`WayKind::Morph`, `Megamorph`), which also holds its cost; as a keyword it goes
+    /// through the layers as any ability does, so "loses all abilities" takes it, and a face-down permanent whose
+    /// characteristics would not have it if it were face up can't be turned face up for its morph cost (CR 702.37e, 708.8).
+    Morph = 43,
+    /// Disguise (CR 702.168a), as morph: a card has it by its disguise way, and a face-down permanent that would not have it
+    /// face up can't be turned face up for its disguise cost (CR 702.168d).
+    Disguise = 44,
 }
 
 impl Keyword {

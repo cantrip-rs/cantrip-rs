@@ -463,8 +463,14 @@ only the candidates the host's verdict on those picked says may be added.
   `visibility::knows_face`); a face-down spell or permanent that goes to any other zone arrives face up and is `Revealed`
   (708.9). Turning a face-down permanent up by its morph or disguise cost is a special action every set of face-down values
   carries (`intrinsic::TURN_UP_MORPH_TEXT`, `TURN_UP_DISGUISE_TEXT`; `MORPHED` and `DISGUISED` have no mana-cost one), offered
-  where the permanent would have that keyword face up (`Query::turn_up_way`: its card's, or its copy effects', 708.10) - cast
-  face down, manifested or cloaked (701.40c-d, 701.58c-d). Its cost is the way's `turn_up`, a whole `Cost` paid as an
+  where the permanent would have that keyword face up (`Query::turn_up_way`) - cast face down, manifested or cloaked
+  (701.40c-d, 701.58c-d). Morph and disguise are keywords a card has by its way (`CardDef::printed_keywords`,
+  `Keyword::Morph`, `Keyword::Disguise`), so they go through layer 6 as any ability does; "would have it face up" is the
+  layers' answer for the permanent judged with its normal copiable values (its card's, or its copy effects', 708.10) under
+  every effect that applies to it now (708.8): `Query::chars_if_face_up` names it on `GameState::judged_face_up`, which keeps
+  that pass apart. "Loses all abilities" (Humility, Turn to Frog) thus leaves no morph action, while a manifested or cloaked
+  creature card is still turned up for its mana cost - a rules action, no ability of its card (Whisperwood Elemental's
+  ruling). Its cost is the way's `turn_up`, a whole `Cost` paid as an
   activation's is (`special_action_whole_cost`: "Morph—Pay 5 life", a discard, a return), X announced and kept on the
   permanent (702.37f); megamorph's +1/+1 counter is put by `ops::turn_face_up_as` before `TurnedFaceUp` is recorded
   (702.37b, 708.11), only for that action.

@@ -3382,6 +3382,23 @@ macro_rules! token {
 static RENAMED_TOKENS: std::sync::Mutex<Vec<&'static str>> = std::sync::Mutex::new(Vec::new());
 
 impl CardDef {
+    /// The keywords the card prints: those it lists, and morph or disguise where it prints a way of that keyword (CR 702.37a,
+    /// 702.168a; `WayKind::Morph`, `Megamorph`, `Disguise`), which the way holds the cost of. What the layers start an object
+    /// of this card from (CR 613.1f takes them as it takes any ability).
+    pub fn printed_keywords(&self) -> Keywords {
+        let mut keywords = self.keywords;
+        for way in self.ways {
+            if way.kind.morph() {
+                keywords = Keywords(keywords.0 | Keywords::of(&[Keyword::Morph]).0);
+            } else if way.kind == WayKind::Disguise {
+                keywords = Keywords(keywords.0 | Keywords::of(&[Keyword::Disguise]).0);
+            }
+        }
+        keywords
+    }
+}
+
+impl CardDef {
     /// The name a token of this definition has when the text that creates it has `words` (CR 111.4, 612.2a): a token the
     /// text doesn't name is named for the subtypes the text names now ("Phyrexian Elf Token" once Artificial Evolution
     /// changed Hydra to Elf); `None` when that is its own name, or when the text names it (a name is no subtype, CR 612.2).

@@ -257,6 +257,7 @@ pub fn judged_face_up(state: &GameState, card: ObjectId) -> JudgedFaceUp<'_> {
     JudgedFaceUp { state, was }
 }
 
+
 impl Drop for JudgedFaceUp<'_> {
     fn drop(&mut self) {
         if let Some(was) = self.was {
@@ -525,10 +526,12 @@ fn object<'a>(cards: &CardTable, state: &'a GameState, id: ObjectId) -> Object<'
     // The copiable values (CR 707.2): a copy effect's (layer 1a) under a face-down permanent's face-down values (layer 1b,
     // CR 613.2b), or the face of the card that is up (CR 711.2).
     // The face-down values are a card's own printed values (no exceptions), so a face-down permanent starts from that card
-    // as an object with no copy effect does.
-    let copy: Option<&Copiable> = if obj.marks.face_down_as.is_some() || judged_as.is_some() { None } else { obj.copy.as_ref() };
+    // as an object with no copy effect does. A face-down permanent judged as it would be face up (`Query::chars_if_face_up`) has
+    // its normal copiable values, under the effects that apply to it (CR 708.8).
+    let face_down_as = obj.marks.face_down_as.filter(|_| state.judged_face_up.get() != Some(id));
+    let copy: Option<&Copiable> = if face_down_as.is_some() || judged_as.is_some() { None } else { obj.copy.as_ref() };
     // A double-faced token's own copy values (CR 707.8a) are its card's faces, the one up, under its exceptions.
-    let card = match (judged_as, obj.marks.face_down_as, copy) {
+    let card = match (judged_as, face_down_as, copy) {
         (Some(face), _, _) => face,
         (None, Some(values), _) => values,
         (None, None, Some(c)) if !obj.own_faces(c) => c.card,
@@ -783,7 +786,7 @@ fn through(cx: &Ctx, o: &ObjCtx, li: usize, snap: &mut Snap, watch: bool) {
     // CR 702.147a, 116.2b, 709.5e: what the rules give an object for what layer 6 left it.
     if LAYERS[li] == Layer::Ability {
         intrinsic_keyword_abilities(cx.cards, &mut snap.chars);
-        if o.obj.face_down && !o.obj.face_down_card() {
+        if o.obj.face_down && !o.obj.face_down_card() && cx.state.judged_face_up.get() != Some(o.id) {
             turn_face_up_actions(cx.cards, o.obj, &mut snap.chars);
         }
         if o.room {
@@ -1144,9 +1147,9 @@ fn initial(cards: &CardTable, card: CardId, copy: Option<&Copiable>) -> Chars {
         } else {
             SubtypeSet::NONE
         };
-        (TypeSet(spell.0 | extra_types.0), spell_types.union(extra_subtypes), Keywords(def.keywords.0 & !Keywords::of(&[Keyword::Changeling]).0))
+        (TypeSet(spell.0 | extra_types.0), spell_types.union(extra_subtypes), Keywords(def.printed_keywords().0 & !Keywords::of(&[Keyword::Changeling]).0))
     } else {
-        (TypeSet(def.types.0 | extra_types.0), words.subtypes(def.subtypes).union(extra_subtypes), def.keywords)
+        (TypeSet(def.types.0 | extra_types.0), words.subtypes(def.subtypes).union(extra_subtypes), def.printed_keywords())
     };
     let mut abilities = [None; MAX_ABILITIES];
     let mut n = 0;

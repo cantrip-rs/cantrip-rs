@@ -265,13 +265,34 @@ pub trait Query {
         mana_value_of(&|card| self.card(card), self.state(), id, &self.chars(id))
     }
 
+    /// The characteristics a face-down permanent would have if it were face up (CR 702.37e, 702.168d: "if the permanent wouldn't
+    /// have a morph cost if it were face up"): its normal copiable values - its card's, or the copy effects' on it (CR 708.8,
+    /// 708.10) - with every effect that applies to it now, which still apply once it is turned up (CR 708.8), worked out by the
+    /// layers as for any object: "loses all abilities" (Humility, Dress Down, Turn to Frog) takes its morph, an effect that
+    /// grants an ability gives it. Judged by naming it on `GameState::judged_face_up` for the length of the question, which
+    /// keeps the layers' pass for it apart; any other object's are its characteristics.
+    fn chars_if_face_up(&self, id: ObjectId) -> Chars {
+        let state = self.state();
+        let obj = state.obj(id);
+        if obj.face_down_values().is_none() || !matches!(obj.zone.kind(), ZoneKind::Battlefield | ZoneKind::PhasedOut) {
+            return self.chars(id);
+        }
+        let was = state.judged_face_up.replace(Some(id));
+        let chars = self.chars(id);
+        state.judged_face_up.set(was);
+        chars
+    }
+
     /// The morph (megamorph's included) or disguise way a face-down permanent would have if it were face up, `by` naming which
-    /// (CR 702.37e, 702.168d: "show all players what the permanent's morph cost would be if it were face up"): of its copiable
-    /// values once its face-down status is gone - the card's own, or the copy effects' on it (CR 708.8, 708.10) - and no
-    /// other. Its `turn_up` is the cost.
-    fn turn_up_way(&self, obj: &Obj, by: TurnUp) -> Option<&'static WayDef> {
+    /// (CR 702.37e, 702.168d: "show all players what the permanent's morph cost would be if it were face up"), its `turn_up`
+    /// the cost: the way of its normal copiable values - the card's own, or the copy effects' on it (CR 708.8, 708.10) - where
+    /// it would have that keyword face up (`chars_if_face_up`: an effect that took its abilities leaves it none).
+    fn turn_up_way(&self, id: ObjectId, by: TurnUp) -> Option<&'static WayDef> {
+        let obj = self.obj(id);
         let face_up = obj.copy.as_ref().filter(|c| !obj.own_faces(c)).map_or(obj.card, |c| c.card);
-        self.card(face_up).ways.iter().find(|w| by.is(w.kind))
+        let way = self.card(face_up).ways.iter().find(|w| by.is(w.kind))?;
+        let keyword = if by == TurnUp::Disguise { Keyword::Disguise } else { Keyword::Morph };
+        self.chars_if_face_up(id).has(keyword).then_some(way)
     }
 
     /// An object's copiable values (CR 707.2): what a copy of it copies, the exceptions of its own copy effect
