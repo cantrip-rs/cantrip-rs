@@ -1,0 +1,40 @@
+# CR 702.37a, 702.37e, 118.3, 119.4. Zombie Cutthroat is cast face down for exactly {3} (Black Lotus's three mana, the pool empty right
+# after): a colorless nameless 2/2. "Morph-Pay 5 life": turned face up with no mana at all, paying 5 life (20 to 15); it is then
+# the card, a 3/4 with morph, and cannot be turned up again.
+
+[Bot1 Deck]
+Black Lotus
+Zombie Cutthroat
+Swamp x5
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Zombie Cutthroat.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+? Stack..FaceDownName = Zombie Cutthroat
+? Stack..ManaValue = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Zombie Cutthroat
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Battlefield.Zombie Cutthroat.Activate(Ability: morph cost)
+
+[Expect]
+Bot1.Life = 15
+Bot1.Mana = 
+Bot1.Battlefield.Zombie Cutthroat.Power = 3
+Bot1.Battlefield.Zombie Cutthroat.Toughness = 4
+Bot1.Battlefield.Zombie Cutthroat.Keywords = Morph
+Bot1.Battlefield.Zombie Cutthroat.FaceDown = (absent)
+Bot1.Battlefield.Swamp.Tapped = false

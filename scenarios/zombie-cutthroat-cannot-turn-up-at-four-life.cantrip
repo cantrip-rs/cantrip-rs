@@ -1,0 +1,37 @@
+# CR 119.4, 702.37e. At 4 life Zombie Cutthroat's "Morph-Pay 5 life" cannot be paid, so the face-down 2/2 cannot be turned up (the
+# runner also tries the refusal with all the mana in the world, which is no help); it stays a face-down creature at 4 life.
+# Its positive control is zombie-cutthroat-turns-up-by-paying-five-life.
+
+[Life]
+Bot1: 4
+
+[Bot1 Deck]
+Black Lotus
+Zombie Cutthroat
+Swamp x5
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Zombie Cutthroat.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+? Stack..FaceDownName = Zombie Cutthroat
+? Stack..ManaValue = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Zombie Cutthroat
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+! Bot1.Battlefield.#1.Activate(Ability: morph cost)
+
+[Expect]
+Bot1.Life = 4
+Bot1.Battlefield..FaceDown = true
