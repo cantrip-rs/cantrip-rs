@@ -1,0 +1,39 @@
+# Branchsnap Lorian's morph {G} (CR 702.37e, 107.4): Black Lotus pays the {3} to cast it face down. On turn 1 Bot1 has 1
+# source that could pay its 1 mana but it is not green, so turning it face up is not offered; once the green source
+# arrives it is, paid by exactly 1 source, the pool ends empty, and it is Branchsnap Lorian face up.
+
+[Bot1 Deck]
+Black Lotus
+Branchsnap Lorian
+Island
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Branchsnap Lorian.Cast(Ability: Morph)
+? Stack..FaceDown = true
+? Stack..FaceDownName = Branchsnap Lorian
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Battlefield.Branchsnap Lorian.Activate(Ability: morph cost)
+? Bot1.Mana = 
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Branchsnap Lorian.Power = 4
