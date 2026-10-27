@@ -4803,7 +4803,10 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             {
                 continue;
             }
-            if !can_pay_activation(cx, id, player, &def.cost, activating(def), by) {
+            // A special action's whole cost: turning a face-down permanent up for a morph cost that is not mana alone
+            // ("Morph—Pay 5 life") is offered only where that could be paid (CR 702.37e, 118.3).
+            let whole = if def.special_action { special_action_whole_cost(cx, id, ability, def) } else { def.cost };
+            if !can_pay_activation(cx, id, player, &whole, activating(def), by) {
                 continue;
             }
             // An X that can't be 0 counting targets there are none of ("X target ...", CR 107.3a, 601.2c): nothing may be
@@ -4835,7 +4838,7 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                 // Its Phyrexian symbols paid with life where the life total allows, beside the life the cost pays
                 // (CR 107.4f, 601.2b by way of 602.2b, 116.2b), as the activation announces them (`announce_life`).
                 let judge = |cost: ManaCost| {
-                    let cost = phyrexian_with_life(cx, player, cost, def.cost.life, activating(def));
+                    let cost = phyrexian_with_life(cx, player, cost, whole.life, activating(def));
                     a.covers_for(&if any_color { cost.paid_with_any_color() } else { cost }, &payment)
                 };
                 if def.special_action {
@@ -5463,8 +5466,12 @@ fn own_speed(def: &CardDef) -> bool {
 }
 
 /// The face of the card `whole` a cast by the way `way` casts (CR 709.3, 715.3, 720.3, 712.8a, 702.103b): an inset face (an
-/// Adventure, an Omen), a back face, a bestowed Aura, one half of a split card, or the card itself.
+/// Adventure, an Omen), a back face, a bestowed Aura, one half of a split card, the face-down values a morph or disguise
+/// casts it as (CR 702.37c, 702.168b, 708.4), or the card itself.
 fn cast_face(whole: &'static CardDef, way: u8) -> &'static CardDef {
+    if let Some(values) = face_down_values_of(whole, way) {
+        return values;
+    }
     let back = if way == WAY_BACK_FACE || way == WAY_TRANSFORMED { whole.back } else { None };
     let bestow = if way == WAY_BESTOW { whole.bestow } else { None };
     let half = match (way, whole.split) {
@@ -5473,6 +5480,18 @@ fn cast_face(whole: &'static CardDef, way: u8) -> &'static CardDef {
         _ => None,
     };
     whole.inset_face(way).or(back).or(bestow).or(half).unwrap_or(whole)
+}
+
+/// The face-down values the card `whole` cast by its own way `way` is cast as, where that way casts it face down (CR 702.37c,
+/// 702.168b, 708.4): a 2/2 creature with no text, no name, no subtypes and no mana cost for morph and megamorph
+/// (`intrinsic::MORPHED`), with ward {2} for disguise (`intrinsic::DISGUISED`).
+fn face_down_values_of(whole: &'static CardDef, way: u8) -> Option<&'static CardDef> {
+    let w = whole.ways.get((way as usize).checked_sub(1)?)?;
+    match w.kind {
+        WayKind::Morph | WayKind::Megamorph => Some(&cantrip_api::intrinsic::MORPHED),
+        WayKind::Disguise => Some(&cantrip_api::intrinsic::DISGUISED),
+        _ => None,
+    }
 }
 
 /// Any query, as a spell judged before it is cast reads the game (`AsFace`): the card has the characteristics of `face`.
@@ -5801,9 +5820,24 @@ impl<'a> Offer<'a> {
             if !open(way) {
                 continue;
             }
+            // Cast face down by morph or disguise (CR 702.37c, 702.168b, 708.4), it is the face-down spell and nothing else: what
+            // a permission allows (CR 601.3e), its speed - a 2/2 creature spell with no text, so with no flash of its own, or
+            // one a permission judged on that spell gives it (CR 307.5) - its additional costs (none) and how its mana may
+            // be paid are that spell's.
+            let face = face_down_values_of(def, (n + 1) as u8).unwrap_or(def);
+            let face_down = !std::ptr::eq(face, def);
+            if face_down && !matches!(route.allows, Allows::Any) && !route.allows.face(&AsFace { cx, spell: card, face: cx.card_id(face) }, card, player) {
+                continue;
+            }
             // Sneak and the like may be used whenever an instant could be cast, whatever the card is (CR 702.190a), unless
             // the permission says when (CR 601.3).
-            let on_instants = if way.instant_speed { !route.terms.sorcery_speed } else { instant() };
+            let on_instants = if way.instant_speed {
+                !route.terms.sorcery_speed
+            } else if face_down {
+                self.speed(card).face(face) && !route.terms.sorcery_speed
+            } else {
+                instant()
+            };
             if on_instants != self.instants || (way.instant_speed && route.terms.sorcery_speed) {
                 continue;
             }
@@ -5811,16 +5845,16 @@ impl<'a> Offer<'a> {
                 continue;
             }
             // An additional cost is owed with every way of casting it (CR 118.8, 601.2f).
-            if !can_pay_other(cx, card, player, &way.cost) || !extra_payable(cx, card, player, def) || !can_pay_other(cx, card, player, &route.additional) {
+            if !can_pay_other(cx, card, player, &way.cost) || !extra_payable(cx, card, player, face) || !can_pay_other(cx, card, player, &route.additional) {
                 continue;
             }
             let mut cost = way.cost.and(route.additional);
             cost.mana.generic = cost.mana.generic.saturating_add(route.terms.more);
-            if !way_covered(cx, self.available(), player, card, def, &cost, route.terms.any_type) {
+            if !way_covered(cx, self.available(), player, card, face, &cost, route.terms.any_type) {
                 continue;
             }
             let mut option = ActionOption { granted_by: route.by, ..ActionOption::on(ActionKind::CastSpell, card, (n + 1) as u8) };
-            if offer_spell(cx, &asker, def, &mut option) {
+            if offer_spell(cx, &asker, face, &mut option) {
                 options.push(option);
             }
         }
@@ -5875,8 +5909,10 @@ impl<'a> Offer<'a> {
             let instant = if route.terms.sorcery_speed { Some(false) } else { speed.of_judged(def, way, face) };
             self.offer_costs(card, face, way, route, instant, || speed.ask(way, face), options);
         }
-        if whole_allowed && !route.imposes() && route.kind != RouteKind::Prepared {
-            self.offer_ways(card, def, route, ways, options);
+        // A way that casts the card face down is allowed by what the permission allows of the face-down spell (CR 601.3e,
+        // 708.4), judged as it is offered; every other way by what it allows of the card.
+        if !route.imposes() && route.kind != RouteKind::Prepared {
+            self.offer_ways(card, def, route, |way| (whole_allowed || way.kind.face_down()) && ways(way), options);
         }
     }
 
@@ -6915,6 +6951,12 @@ fn cast(
         && whole.cast_as_though_flash
         && std::ptr::eq(def, whole)
         && !(cx.s().turn.active == player && matches!(cx.s().turn.step(), Step::PrecombatMain | Step::PostcombatMain) && cx.s().stack.is_empty());
+    // Cast by morph or disguise (CR 702.37c, 702.168b), it is turned face down before it is put on the stack (CR 708.4): the
+    // face-down values it is cast as (`cast_face`) are its copiable values (CR 708.2), and the spell is face down as it arrives
+    // (`ops::move_together`), its controller alone able to look at it (CR 708.5).
+    if def.face_down {
+        cx.st().update_obj(card, |o| o.copy = Some(Copiable::of(face)));
+    }
     let spell = ops::move_to_for(cx, card, Zone::STACK, ZoneReason::Cast);
     cx.st().update_obj(spell, |o| {
         o.controller = player;
@@ -7481,11 +7523,27 @@ pub fn cast_ways_during_resolution(cx: &mut Cx, card: ObjectId, player: PlayerId
     let mut kept = Vec::with_capacity(ways.len());
     for way in ways {
         let face = cast_face_id(cx, card, way.way);
-        if (forbidders.is_empty() || !forbidden_as_cast(cx, &forbidders, card, face, player)) && targets_as_cast(cx, card, way.way, player) {
+        let allowed = (forbidders.is_empty() || !forbidden_as_cast(cx, &forbidders, card, face, player)) && targets_as_cast(cx, card, way.way, player);
+        // The card cast face down by one of its own ways is the face-down spell (CR 708.4), judged as that: a ban the card
+        // itself falls under may leave it (Void Winnower's even mana value, a face-down spell's 0, the other way about).
+        if allowed || (way.way == 0 && !face_down_ways_allowed(cx, card, player, &forbidders).is_empty()) {
             kept.push(way);
         }
     }
     kept
+}
+
+/// The card's own ways that cast it face down (morph, megamorph, disguise: CR 702.37c, 702.168b) that no static ability among
+/// `forbidders` forbids `player` to cast it by, judged on the face-down spell it would be (CR 601.3, 708.4, `ops::as_cast`).
+fn face_down_ways_allowed(cx: &mut Cx, card: ObjectId, player: PlayerId, forbidders: &[(ObjectId, PlayerId, &'static CardDef)]) -> Vec<u8> {
+    let whole = cx.card(cx.s().obj(card).card);
+    let mut allowed = Vec::new();
+    for n in 1..=whole.ways.len() as u8 {
+        if face_down_values_of(whole, n).is_some() && (forbidders.is_empty() || !forbidden_as_cast(cx, forbidders, card, cast_face_id(cx, card, n), player)) {
+            allowed.push(n);
+        }
+    }
+    allowed
 }
 
 /// Whether `card` cast by `player` its way `way` could announce its modes and targets as the spell it would be on the stack
@@ -7646,8 +7704,17 @@ pub fn cast_during_resolution(cx: &mut Cx, card: ObjectId, terms: CastTerms) -> 
     let face = cast_face(whole, way);
     let mut alternative: Option<Cost> = None;
     if pays_mana_cost && !terms.flashback {
+        // The card itself and the face-down spell its morph or disguise would cast are judged apart (CR 601.3, 708.4): a ban
+        // on the one need not be on the other.
+        let (whole_forbidden, face_down_allowed) = if way == 0 && whole.ways.iter().any(|w| w.kind.face_down()) {
+            let forbidders = static_rules::spell_forbidders(cx);
+            let whole_forbidden = (!forbidders.is_empty() && forbidden_as_cast(cx, &forbidders, card, None, player)) || !targets_as_cast(cx, card, 0, player);
+            (whole_forbidden, face_down_ways_allowed(cx, card, player, &forbidders))
+        } else {
+            (false, Vec::new())
+        };
         // What the alternative costs read of the spell is the spell it would be on the stack (`SpellsAsCast`).
-        let all = spell_alternatives_of(cx.cards(), cx.s(), &cx.g.log);
+        let all = if whole_forbidden { Vec::new() } else { spell_alternatives_of(cx.cards(), cx.s(), &cx.g.log) };
         let spell = if all.is_empty() { None } else { chars_as_cast_now(cx, card, cast_face_id(cx, card, way), player) };
         // A card exiled face down is judged as the spell it would be (CR 406.3a-b); the question below is asked of the
         // card, and `cast` turns it face up.
@@ -7660,10 +7727,12 @@ pub fn cast_during_resolution(cx: &mut Cx, card: ObjectId, terms: CastTerms) -> 
                     .ways
                     .iter()
                     .enumerate()
-                    .filter(|&(_, w)| {
+                    .filter(|&(n, w)| {
                         let open = (w.from == ZoneKind::Hand && (!w.only_from || obj.zone == Zone::hand(player)))
                             || (w.from == obj.zone.kind() && obj.zone.player == player);
-                        open && w.condition.is_none_or(|c| c(&*cx, &asker))
+                        let allowed = if w.kind.face_down() { face_down_allowed.contains(&((n + 1) as u8)) } else { !whole_forbidden };
+                        open && allowed
+                            && w.condition.is_none_or(|c| c(&*cx, &asker))
                             && can_pay_other(cx, card, player, &w.cost)
                             && !x_only_zero(face.x_cant_be_zero, face.cost.x, w.cost.mana.x)
                     })
@@ -7682,7 +7751,7 @@ pub fn cast_during_resolution(cx: &mut Cx, card: ObjectId, terms: CastTerms) -> 
         };
         // The choices: the mana cost's own, where the face has one, then the card's ways, then each alternative cost.
         let mut choices: Vec<(Label, u8, Option<Given<SpellAlternative>>)> = Vec::new();
-        if face.has_cost {
+        if face.has_cost && !whole_forbidden {
             choices.push((Label::ManaCost, way, None));
         }
         let printed = cx.cards().current(cx.s().obj(card));
@@ -8728,8 +8797,11 @@ fn special_action_cost(cx: &Cx, player: PlayerId, source: ObjectId, ability: Abi
 
 fn special_action_printed_cost(cx: &Cx, source: ObjectId, ability: AbilityRef, def: &ActivatedDef) -> ManaCost {
     let card = cx.s().obj(source).card;
-    if cx.cards().turns_face_up(ability) {
-        return ManaCost { x: 0, ..cx.card(card).cost };
+    match cx.cards().turn_up(ability) {
+        Some(TurnUp::ManaCost) => return ManaCost { x: 0, ..cx.card(card).cost },
+        // The mana of its morph or disguise cost, X and all (CR 702.37f, 702.168e): the rest is `special_action_whole_cost`'s.
+        Some(by) => return turn_up_cost(cx, source, by).mana,
+        None => {}
     }
     if ability.card == cx.cards().intrinsic {
         // The Room the permanent is, which a copy of one is too (CR 709.5, 707.2).
@@ -8744,6 +8816,23 @@ fn special_action_printed_cost(cx: &Cx, source: ObjectId, ability: AbilityRef, d
         }
     }
     def.cost.mana
+}
+
+/// The morph or disguise cost a face-down permanent would have if it were face up (CR 702.37e, 702.168d), which turning it
+/// face up `by` that keyword's special action costs: nothing where it would have none (the action is then not offered).
+fn turn_up_cost(cx: &Cx, source: ObjectId, by: TurnUp) -> Cost {
+    cx.turn_up_way(cx.s().obj(source), by).map_or(Cost::NONE, |w| w.turn_up)
+}
+
+/// The whole printed cost of a special action (CR 116.2): its mana (`special_action_printed_cost`), and for turning a
+/// face-down permanent up by morph or disguise whatever else that cost asks - "Morph—Pay 5 life", "Morph—Discard a Zombie
+/// card", "Morph—Return a Bird you control to its owner's hand" (CR 702.37e, 702.168d, 118.3). Paid as a cost is
+/// (`special_action`), and judged as one before it is offered (`activated_options`).
+fn special_action_whole_cost(cx: &Cx, source: ObjectId, ability: AbilityRef, def: &ActivatedDef) -> Cost {
+    match cx.cards().turn_up(ability) {
+        Some(by @ (TurnUp::Morph | TurnUp::Disguise)) => turn_up_cost(cx, source, by),
+        _ => def.cost,
+    }
 }
 
 /// What the special action `index` of `source` (numbered as its options are) costs `player` now, where a cost change makes
@@ -8775,6 +8864,18 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     // Its cost changes applied as the payer announces and splits them (CR 601.2b, 118.7e), as a cast's are.
     let costed = Costed::SpecialAction(source, ability);
     let mut printed = special_action_printed_cost(cx, source, ability, def);
+    // What else its cost asks (a morph cost's life, discards, permanents: CR 702.37e, 118.3), paid with the mana as an
+    // activation's are (CR 601.2g-h by way of 602.2b); its mana is `printed`.
+    let whole = Cost { mana: ManaCost::ZERO, ..special_action_whole_cost(cx, source, ability, def) };
+    // An X in a morph or disguise cost is chosen as the special action is taken (CR 702.37f, 702.168e, 107.3a): announced
+    // first, and kept on the permanent for its other abilities to read.
+    let mut x = None;
+    if printed.x > 0 {
+        let n = announce(cx, player, source, printed, printed.x, 0, 1000)?;
+        printed.generic = printed.generic.saturating_add((u32::from(n) * u32::from(printed.x)).min(255) as u8);
+        printed.x = 0;
+        x = Some(n);
+    }
     // How each {2/C} and each Phyrexian symbol is paid is announced first, as for a cast or an activation (CR 601.2b, 107.4f,
     // 116.2b: a face-down Phyrexian Metamorph turned face up for {3}{U/P} may pay the {U/P} with 2 life).
     announce_twobrids(cx, player, source, &mut printed, false)?;
@@ -8784,15 +8885,55 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     let split = announce_reduction(cx, player, source, costed, &printed, &[])?;
     let (mana, _, least) = change_parts_split(cx, &cost_change_sources(cx), player, costed, printed, None, &[], &split);
     let mana = at_least(mana, least);
+    // The rest of the cost is chosen with it (CR 601.2h by way of 602.2b): permanents (tapped ones once the mana is paid),
+    // cards to discard or exile.
+    let late = permanents_after_mana(&whole);
+    let mut chosen = if late { Vec::new() } else { choose_permanents(cx, player, source, &whole, None, None)? };
+    let discards = choose_discards(cx, player, source, &whole, None)?;
+    let exiles = choose_exiles(cx, player, source, &whole)?;
+    let tappers = choose_tappers(cx, player, source, &whole)?;
+    let counter = choose_counter_kind(cx, player, source, &whole)?;
     if mana != ManaCost::ZERO {
         pay_mana(cx, player, source, mana)?;
     }
-    // The life, judged again once the mana is paid (CR 601.2g-h, 119.4): a mana ability may have spent it.
-    if !rest_payable(cx, player, 0, life, None) {
+    if late {
+        chosen = choose_permanents(cx, player, source, &whole, None, None)?;
+    }
+    if whole.blight > 0 && blight_candidates(cx, player).is_empty() {
+        return Err(Stop::Cancel);
+    }
+    let blighted = choose_blight(cx, player, source, &whole)?;
+    let removed = choose_counters_among(cx, player, source, &whole)?;
+    if whole.behold.is_some_and(|(n, _, _)| behold_candidates(cx, None, player, &whole, source, None).len() < n as usize) {
+        return Err(Stop::Cancel);
+    }
+    let beheld = choose_behold(cx, player, source, &whole)?;
+    // The energy and life, judged again once the mana is paid (CR 601.2g-h, 119.4): a mana ability may have spent it.
+    if !rest_payable(cx, player, u32::from(whole.energy), life + whole.life, None) || whole.sacrifice_self && !may_sacrifice_for(cx, player, source, None) {
         return Err(Stop::Cancel);
     }
     if life > 0 {
         ops::change_life(cx, player, -life_paid(life));
+    }
+    if whole.tap {
+        ops::tap(cx, source);
+    }
+    pay_blight(cx, player, &whole, blighted);
+    pay_counters_among(cx, &removed);
+    pay_permanents(cx, player, &whole, &chosen, None);
+    pay_behold(cx, player, &beheld);
+    pay_discards(cx, &discards);
+    pay_exiles(cx, &exiles);
+    pay_life_and_counters(cx, player, source, &whole);
+    if let Some(kind) = counter {
+        counters::remove(cx, source, kind, 1);
+    }
+    pay_exert_and_tappers(cx, source, &whole, &tappers);
+    if whole.sacrifice_self {
+        ops::sacrifice(cx, player, &[source]);
+    }
+    if let Some(n) = x {
+        cx.st().update_obj(source, |o| o.x = n);
     }
     let mut item = stack_item(StackKind::Activated, source, ability, player, &[]);
     // How the source acquired the ability (CR 607.5): what its effect is linked by.

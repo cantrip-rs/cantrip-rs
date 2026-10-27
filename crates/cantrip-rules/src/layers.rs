@@ -784,7 +784,7 @@ fn through(cx: &Ctx, o: &ObjCtx, li: usize, snap: &mut Snap, watch: bool) {
     if LAYERS[li] == Layer::Ability {
         intrinsic_keyword_abilities(cx.cards, &mut snap.chars);
         if o.obj.face_down && !o.obj.face_down_card() {
-            turn_face_up_action(cx.cards, o.obj, &mut snap.chars);
+            turn_face_up_actions(cx.cards, o.obj, &mut snap.chars);
         }
         if o.room {
             unlock_actions(cx.cards, o.obj.marks.doors, &mut snap.chars);
@@ -977,18 +977,20 @@ fn intrinsic_keyword_abilities(cards: &CardTable, chars: &mut Chars) {
     }
 }
 
-/// Turning a face-down permanent face up is a special action the rules give it (CR 116.2b, 701.40b, 701.58b), not an
-/// ability it has, so an effect that takes its abilities ("creatures lose all abilities": Humility, Dress Down) does not
-/// take it (Whisperwood Elemental's ruling). Its face-down values carry it as `intrinsic::TURN_FACE_UP`, which layer 6
-/// may have removed: it is given back once layer 6 is done.
-fn turn_face_up_action(cards: &CardTable, obj: &Obj, chars: &mut Chars) {
+/// Turning a face-down permanent face up is a special action the rules give it (CR 116.2b, 701.40b, 701.58b, 702.37e,
+/// 702.168d), not an ability it has, so an effect that takes its abilities ("creatures lose all abilities": Humility, Dress
+/// Down) does not take it (Whisperwood Elemental's ruling). Its face-down values carry each one it may be turned up by
+/// (`CardTable::turn_up`), which layer 6 may have removed: they are given back once layer 6 is done.
+fn turn_face_up_actions(cards: &CardTable, obj: &Obj, chars: &mut Chars) {
     let Some(values) = obj.marks.face_down_as else { return };
-    let action = AbilityRef { card: values, index: cantrip_api::intrinsic::TURN_FACE_UP };
-    if !cards.turns_face_up(action) || chars.abilities.contains(&Some(action)) {
-        return;
-    }
-    if let Some(slot) = chars.abilities.iter().position(|a| a.is_none()) {
-        chars.abilities[slot] = Some(action);
+    for index in 0..cards.get(values).abilities.len() as u8 {
+        let action = AbilityRef { card: values, index };
+        if !cards.turns_face_up(action) || chars.abilities.contains(&Some(action)) {
+            continue;
+        }
+        if let Some(slot) = chars.abilities.iter().position(|a| a.is_none()) {
+            chars.abilities[slot] = Some(action);
+        }
     }
 }
 
@@ -1262,7 +1264,7 @@ fn doors(cards: &CardTable, card: CardId, unlocked: u8, copy: Option<&Copiable>,
 /// Unlocking a Room's locked door is a special action the rules give its controller (CR 709.5e, 116.2m), not an ability
 /// the permanent has, so an effect that takes its abilities (Humility over an Opalescence-animated Room) does not take
 /// it. It is carried as `intrinsic::UNLOCK_LEFT`/`UNLOCK_RIGHT`, one per door still locked, given once layer 6 is done,
-/// as turning a face-down permanent face up is (`turn_face_up_action`).
+/// as turning a face-down permanent face up is (`turn_face_up_actions`).
 fn unlock_actions(cards: &CardTable, unlocked: u8, chars: &mut Chars) {
     for (door, index) in [(DOOR_LEFT, cantrip_api::intrinsic::UNLOCK_LEFT), (DOOR_RIGHT, cantrip_api::intrinsic::UNLOCK_RIGHT)] {
         let action = AbilityRef { card: cards.intrinsic, index };

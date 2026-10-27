@@ -450,9 +450,24 @@ only the candidates the host's verdict on those picked says may be added.
   2/2 and the copy once turned face up (708.10); every reader of what an object is goes through `Obj::copiable` or
   `CardTable::current`. The core recognises them as data,
   `CardDef::face_down`, never by comparing card ids, and the special action that turns either face up is each one's ability
-  `intrinsic::TURN_FACE_UP` (`CardTable::turns_face_up`), paid with its card's mana cost (701.40b, 701.58b). Ward {N}
+  `intrinsic::TURN_FACE_UP` (`CardTable::turns_face_up`, `CardTable::turn_up`), paid with its card's mana cost (701.40b, 701.58b). Ward {N}
   (`intrinsic::ward`) is defined with them, since a cloaked permanent has it by the rules; cards reach it as
   `cantrip_mechanics::triggers::ward`, and cloak itself as `cantrip_mechanics::cloak`.
+- **Morph, megamorph and disguise cast a card face down (702.37c, 702.168b, 708.4)**: a card's way of `WayKind::Morph`,
+  `Megamorph` or `Disguise` (`cantrip_api::face_down_way`, made by the keyword modules `cantrip_mechanics::morph`,
+  `megamorph`, `disguise`) costs {3} and casts the face `intrinsic::MORPHED` or `intrinsic::DISGUISED` (`actions::cast_face`),
+  so everything that judges a spell before it is cast - permissions (601.3e), its speed, bans, cost changes, its additional
+  costs (none) - judges that 2/2 with no text. `cast` gives the card those values as its copy before the move, and the move to
+  the stack makes the spell face down with them as `Marks::face_down_as`, as one onto the battlefield does (708.3); resolving,
+  it enters face down the same way (`resolve`). Its controller alone may look at it (708.5: `hidden_from`,
+  `visibility::knows_face`); a face-down spell or permanent that goes to any other zone arrives face up and is `Revealed`
+  (708.9). Turning a face-down permanent up by its morph or disguise cost is a special action every set of face-down values
+  carries (`intrinsic::TURN_UP_MORPH_TEXT`, `TURN_UP_DISGUISE_TEXT`; `MORPHED` and `DISGUISED` have no mana-cost one), offered
+  where the permanent would have that keyword face up (`Query::turn_up_way`: its card's, or its copy effects', 708.10) - cast
+  face down, manifested or cloaked (701.40c-d, 701.58c-d). Its cost is the way's `turn_up`, a whole `Cost` paid as an
+  activation's is (`special_action_whole_cost`: "Morph—Pay 5 life", a discard, a return), X announced and kept on the
+  permanent (702.37f); megamorph's +1/+1 counter is put by `ops::turn_face_up_as` before `TurnedFaceUp` is recorded
+  (702.37b, 708.11), only for that action.
 - **A card exiled face down has no characteristics (406.3a)**: `layers::chars` gives a face-down card outside the
   battlefield and the stack (`Obj::face_down_card`) those of `intrinsic::NO_CHARACTERISTICS` - no name, no mana value, no
   types, no abilities - for every reader, so nothing that counts or matches cards in exile sees what it is, and its abilities

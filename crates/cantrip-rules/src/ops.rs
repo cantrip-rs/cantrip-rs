@@ -394,7 +394,11 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
         // CR 708.3: an object turned face down before it entered is a face-down permanent as it arrives; its card's own
         // values are what it is turned face up as (CR 708.2a).
         // It has the face-down values in layer 1b (CR 613.2b), over no copy effect yet.
-        if entering && !from.is(ZoneKind::Battlefield) && let Some(c) = old.copy.filter(|c| cx.card(c.card).face_down) {
+        // CR 708.4: so is a card turned face down before it is put on the stack, cast by morph or disguise (CR 702.37c,
+        // 702.168b): a face-down spell. A face-down spell that resolves becomes a face-down permanent with the same values
+        // (CR 702.37c, 702.168b), as the resolution turned it (`resolve`); one that goes anywhere else arrives face up
+        // (CR 708.9), a new object (CR 400.7).
+        if (entering || to.is(ZoneKind::Stack)) && !from.is(ZoneKind::Battlefield) && let Some(c) = old.copy.filter(|c| cx.card(c.card).face_down) {
             new.copy = None;
             new.face_down = true;
             new.marks.face_down_as = Some(c.card);
@@ -514,6 +518,15 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
             remove_from_combat(cx, &[m.id]);
         }
         events.push(Event::ZoneChange { old: m.id, new: new_id, from, to, reason });
+        // CR 708.9: a face-down permanent or spell that moves to any other zone is revealed to all players by its owner as
+        // it moves - where it arrives face up, as a card going anywhere but exile face down does.
+        if old.face_down
+            && matches!(from.kind(), ZoneKind::Battlefield | ZoneKind::PhasedOut | ZoneKind::Stack)
+            && !entering
+            && !cx.s().obj(new_id).face_down
+        {
+            events.push(Event::Revealed { player: old.owner, card: new_id });
+        }
         // CR 303.4f, 301.5e: it entered attached to something, so it became attached to it.
         if entering && let Some(attached) = entered_attached(cx, new_id) {
             events.push(attached);
@@ -811,6 +824,13 @@ pub fn put_all_onto_battlefield_face_down(cx: &mut Cx, ids: &[ObjectId], control
 /// `player` turns a face-down permanent face up (CR 701.40b, 708.2): it is the card it is, the same object (CR 708.8).
 /// `player` is the one who took the special action, or the controller of the effect that turns it up.
 pub fn turn_face_up(cx: &mut Cx, id: ObjectId, player: PlayerId) {
+    turn_face_up_as(cx, id, player, false);
+}
+
+/// `turn_face_up`, with a +1/+1 counter put on the permanent as it is turned face up where `megamorph` - its megamorph cost was
+/// paid to turn it up (CR 702.37b) - applied while it is turned face up, not afterward (CR 708.11): what triggers on its being
+/// turned face up sees the counter on it.
+pub fn turn_face_up_as(cx: &mut Cx, id: ObjectId, player: PlayerId, megamorph: bool) {
     if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) || !cx.s().obj(id).face_down {
         return;
     }
@@ -829,6 +849,11 @@ pub fn turn_face_up(cx: &mut Cx, id: ObjectId, player: PlayerId) {
         o.marks.face_down_as = None;
     });
     note_statics(cx, id);
+    // Put by its own megamorph ability, the permanent's controller's (CR 122.6a), as it is turned face up.
+    if megamorph {
+        let controller = cx.s().obj(id).controller;
+        counters::put(cx, id, CounterKind::PlusOne, 1, controller, counters::How::Effect);
+    }
     cx.emit(Event::TurnedFaceUp { permanent: id, player });
 }
 

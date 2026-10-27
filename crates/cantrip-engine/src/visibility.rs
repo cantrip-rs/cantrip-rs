@@ -112,8 +112,8 @@ pub fn observable(game: &Game, viewer: PlayerId, extra: &HashSet<ObjectId>) -> H
     visible
 }
 
-/// Whether `viewer` may see what a face-down object really is (CR 708.5, 406.3): its controller on the battlefield,
-/// those who saw it go there anywhere else - and the player controlling any of them (CR 723.4). True of an object that is
+/// Whether `viewer` may see what a face-down object really is (CR 708.5, 406.3): its controller on the battlefield or on
+/// the stack (a face-down spell, CR 708.4), those who saw it go there anywhere else - and the player controlling any of them (CR 723.4). True of an object that is
 /// face up.
 pub fn knows_face(state: &GameState, viewer: PlayerId, id: ObjectId) -> bool {
     knows_face_as(state, id, |p| state.sees_as(viewer, p))
@@ -125,7 +125,7 @@ pub fn knows_face_as(state: &GameState, id: ObjectId, sees_as: impl Fn(PlayerId)
     if !obj.face_down {
         return true;
     }
-    if obj.zone.is(ZoneKind::Battlefield) || obj.zone.is(ZoneKind::PhasedOut) {
+    if obj.zone.is(ZoneKind::Battlefield) || obj.zone.is(ZoneKind::PhasedOut) || obj.zone.is(ZoneKind::Stack) {
         sees_as(obj.controller)
     } else {
         state.seats().any(|p| obj.seen_by & (1 << p.0) != 0 && sees_as(p))

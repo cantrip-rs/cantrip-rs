@@ -180,8 +180,9 @@ impl View<'_> {
         let o = s.obj(id);
         let on_battlefield = o.zone.is(ZoneKind::Battlefield) || o.zone.is(ZoneKind::PhasedOut);
         let looks = self.full || knows_face(s, self.seat, id);
-        // Face down off the battlefield it has no characteristics at all (CR 406.3, 708.2a).
-        let chars = if o.face_down && !on_battlefield {
+        // Face down off the battlefield and the stack it has no characteristics at all (CR 406.3); a face-down permanent or
+        // spell has its face-down values (CR 708.2a, 708.4).
+        let chars = if o.face_down && !on_battlefield && !o.zone.is(ZoneKind::Stack) {
             CharsObs { types: 0, supertypes: 0, colors: 0, subtypes: Vec::new(), power: None, toughness: None, keywords: 0, mana_value: 0 }
         } else {
             let c = game.chars(id);

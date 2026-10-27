@@ -247,40 +247,87 @@ fn turn_face_up(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// Whether the face-down permanent is a creature card with a mana cost that can be paid to turn it face up.
+/// Whether the face-down permanent is a manifested or cloaked creature card with a mana cost that can be paid to turn it face
+/// up (CR 701.40b, 701.58b).
 fn can_turn_face_up(q: &dyn Query, asker: &Asker) -> bool {
     let obj = q.obj(asker.source);
     let def = q.card(obj.card);
     obj.face_down && def.types.has(CardType::Creature) && def.has_cost
 }
 
-/// The index of "turn this permanent face up" among the abilities of every face-down definition (`CardDef::face_down`).
+/// "Turn it face up for its morph cost" (CR 702.37e, 116.2b): the special action any face-down permanent its controller would
+/// have a morph ability on if it were face up may be turned up by - cast face down by morph, or manifested, cloaked or turned
+/// face down otherwise (CR 701.40c, 701.58c). The cost is the morph cost it would have face up (`Query::turn_up_way`),
+/// which the rules read off the permanent (`actions::special_action`). A megamorph cost is a morph cost; turned up for it, the
+/// permanent gets a +1/+1 counter as it is turned face up (CR 702.37b, 708.11).
+fn turn_face_up_for_morph(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let megamorph = g.turn_up_way(g.obj(item.object), TurnUp::Morph).is_some_and(|w| w.kind == WayKind::Megamorph);
+    g.turn_face_up_as(item.object, item.controller, megamorph);
+    Ok(())
+}
+
+/// "Turn it face up for its disguise cost" (CR 702.168d, 116.2b), as morph's (CR 701.40d, 701.58d).
+fn turn_face_up_for_disguise(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.turn_face_up_as(item.object, item.controller, false);
+    Ok(())
+}
+
+/// Whether the face-down permanent would have a morph ability if it were face up (CR 702.37e: "if the permanent wouldn't have
+/// a morph cost if it were face up, it can't be turned face up this way").
+fn has_morph(q: &dyn Query, asker: &Asker) -> bool {
+    let obj = q.obj(asker.source);
+    obj.face_down && q.turn_up_way(obj, TurnUp::Morph).is_some()
+}
+
+/// Whether the face-down permanent would have a disguise ability if it were face up (CR 702.168d).
+fn has_disguise(q: &dyn Query, asker: &Asker) -> bool {
+    let obj = q.obj(asker.source);
+    obj.face_down && q.turn_up_way(obj, TurnUp::Disguise).is_some()
+}
+
+/// The index of "turn this permanent face up" by its mana cost among the abilities of the manifested and cloaked values
+/// (`FACE_DOWN`, `CLOAKED`).
 pub const TURN_FACE_UP: u8 = 0;
 
-/// The text of the special action to turn a face-down permanent face up, by which `CardTable::turns_face_up` knows it: a
-/// set of face-down values without it (a permanent an effect turned face down, CR 708.2a) offers no such action.
+/// The text of the special action to turn a manifested or cloaked permanent face up for its mana cost, by which
+/// `CardTable::turn_up` knows it.
 pub const TURN_UP_TEXT: &str = "Turn this permanent face up by paying its mana cost.";
+
+/// The text of the special action to turn a face-down permanent face up for its morph cost (CR 702.37e).
+pub const TURN_UP_MORPH_TEXT: &str = "Turn this permanent face up by paying its morph cost.";
+
+/// The text of the special action to turn a face-down permanent face up for its disguise cost (CR 702.168d).
+pub const TURN_UP_DISGUISE_TEXT: &str = "Turn this permanent face up by paying its disguise cost.";
 
 const TURN_UP: AbilityDef = ability(Cost::NONE, turn_face_up, TURN_UP_TEXT)
     .condition(can_turn_face_up)
     .special_action();
 
-/// What a manifested face-down permanent is (CR 701.40a, 708.2a): a 2/2 creature with no name, no mana cost, no color, no
-/// subtypes and no abilities but the one to turn it face up. A face-down permanent has this as its copiable values (CR
-/// 707.2).
+const TURN_UP_MORPH: AbilityDef = ability(Cost::NONE, turn_face_up_for_morph, TURN_UP_MORPH_TEXT)
+    .condition(has_morph)
+    .special_action();
+
+const TURN_UP_DISGUISE: AbilityDef = ability(Cost::NONE, turn_face_up_for_disguise, TURN_UP_DISGUISE_TEXT)
+    .condition(has_disguise)
+    .special_action();
+
+/// What a manifested face-down permanent is (CR 701.40a, 708.2a): a 2/2 creature with no name, no mana cost, no color and no
+/// subtypes. A face-down permanent has this as its copiable values (CR 707.2). It has no abilities: the special actions the
+/// rules give it to turn it face up are listed here (CR 116.2b; for its mana cost, CR 701.40b, and for its morph or disguise
+/// cost, CR 701.40c-d), and the layers give them back where an effect took its abilities (`layers::turn_face_up_actions`).
 pub static FACE_DOWN: CardDef = CardDef {
     name: "",
     has_cost: false,
     types: TypeSet::of(&[CardType::Creature]),
     power: Some(2),
     toughness: Some(2),
-    abilities: &[TURN_UP],
+    abilities: &[TURN_UP, TURN_UP_MORPH, TURN_UP_DISGUISE],
     face_down: true,
     ..CardDef::BLANK
 };
 
 /// What a cloaked permanent is (CR 701.58a): a 2/2 creature with ward {2}, no name, no mana cost, no color and no
-/// subtypes, turned face up as a manifested one is (CR 701.58b).
+/// subtypes, turned face up as a manifested one is (CR 701.58b-d).
 pub static CLOAKED: CardDef = CardDef {
     name: "",
     has_cost: false,
@@ -288,7 +335,36 @@ pub static CLOAKED: CardDef = CardDef {
     power: Some(2),
     toughness: Some(2),
     text: "Ward {2}",
-    abilities: &[TURN_UP, ward::<2>("Ward {2}")],
+    abilities: &[TURN_UP, TURN_UP_MORPH, TURN_UP_DISGUISE, ward::<2>("Ward {2}")],
+    face_down: true,
+    ..CardDef::BLANK
+};
+
+/// What a card cast face down by morph is (CR 702.37a, 702.37c, 708.2): a 2/2 creature with no text, no name, no subtypes
+/// and no mana cost, as a spell and as the permanent it becomes. Turned face up for its morph cost, or its disguise cost
+/// (CR 702.37e, 702.168d), never for its mana cost: it was not manifested.
+pub static MORPHED: CardDef = CardDef {
+    name: "",
+    has_cost: false,
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    abilities: &[TURN_UP_MORPH, TURN_UP_DISGUISE],
+    face_down: true,
+    ..CardDef::BLANK
+};
+
+/// What a card cast face down by disguise is (CR 702.168a-b): a 2/2 creature with ward {2}, no name, no subtypes and no mana
+/// cost, as a spell and as the permanent it becomes; turned face up for its disguise cost, or its morph cost (CR 702.168d,
+/// 702.37e).
+pub static DISGUISED: CardDef = CardDef {
+    name: "",
+    has_cost: false,
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    text: "Ward {2}",
+    abilities: &[TURN_UP_MORPH, TURN_UP_DISGUISE, ward::<2>("Ward {2}")],
     face_down: true,
     ..CardDef::BLANK
 };

@@ -40,6 +40,8 @@ mod cast_permission_tests;
 #[cfg(test)]
 mod cloak_tests;
 #[cfg(test)]
+mod morph_tests;
+#[cfg(test)]
 mod control_at_once_tests;
 #[cfg(test)]
 mod return_at_once_tests;
@@ -1777,6 +1779,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::turn_face_up(self, permanent, player);
     }
 
+    fn turn_face_up_as(&mut self, permanent: ObjectId, player: PlayerId, megamorph: bool) {
+        ops::turn_face_up_as(self, permanent, player, megamorph);
+    }
+
     fn phase_out(&mut self, permanents: &[ObjectId]) {
         self.instruction(|cx| phasing::phase_out(cx, permanents, None, false), |_| true);
     }
@@ -2425,7 +2431,8 @@ fn hidden_from(state: &GameState, player: PlayerId, id: ObjectId) -> bool {
     match obj.zone.kind() {
         ZoneKind::Library => true,
         ZoneKind::Hand | ZoneKind::Sideboard => obj.zone.player != player,
-        ZoneKind::Battlefield | ZoneKind::PhasedOut => obj.face_down && obj.controller != player,
+        // A face-down permanent or spell: its controller may look at it (CR 708.5).
+        ZoneKind::Battlefield | ZoneKind::PhasedOut | ZoneKind::Stack => obj.face_down && obj.controller != player,
         _ => obj.face_down && obj.seen_by & (1 << player.0) == 0,
     }
 }

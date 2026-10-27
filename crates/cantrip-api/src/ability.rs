@@ -1006,7 +1006,18 @@ impl GrantedReplacementDef {
 
 /// An alternative way to cast the card (CR 118.9): for `cost`, from the zone `from`.
 pub const fn way(cost: Cost, from: ZoneKind, text: &'static str) -> WayDef {
-    WayDef { text, cost, from, only_from: false, exile_after: false, condition: None, instant_speed: false, enters_attacking: false, kind: WayKind::Other }
+    WayDef { text, cost, from, only_from: false, exile_after: false, condition: None, instant_speed: false, enters_attacking: false, kind: WayKind::Other, turn_up: Cost::NONE }
+}
+
+/// What casting a card face down costs by morph, megamorph or disguise: {3} rather than its mana cost (CR 702.37a, 702.168a).
+pub const FACE_DOWN_CAST_COST: ManaCost = generic(3);
+
+/// A way that casts the card face down (CR 702.37c, 702.168b, 708.4): `kind` is morph, megamorph or disguise, cast for {3}
+/// rather than its mana cost (CR 118.9) from any zone it could be cast from (CR 702.37c, 702.168b: the way names no zone), and
+/// turned face up for `turn_up` (CR 702.37e, 702.168d). Made by the keyword's module (`cantrip_mechanics::morph`,
+/// `megamorph`, `disguise`).
+pub const fn face_down_way(kind: WayKind, turn_up: Cost, text: &'static str) -> WayDef {
+    WayDef { kind, turn_up, ..way(Cost::mana(FACE_DOWN_CAST_COST), ZoneKind::Hand, text) }
 }
 
 impl WayDef {

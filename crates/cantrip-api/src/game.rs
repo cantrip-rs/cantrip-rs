@@ -4,7 +4,7 @@
 
 use cantrip_state::*;
 
-use crate::card::{CounterTo, EntersAs, FaceDown, LibraryPlace};
+use crate::card::{CounterTo, EntersAs, FaceDown, LibraryPlace, TurnUp, WayDef};
 use crate::card::{AbilityDef, ActivatedDef, Asker, CardDef, CauseKind};
 use crate::chars::Chars;
 use crate::history::{History, Record};
@@ -263,6 +263,15 @@ pub trait Query {
     /// (CR 202.3b, 712.8c, 712.8e: a transformed permanent, a spell cast transformed); a copy of that face has 0.
     fn mana_value(&self, id: ObjectId) -> u32 {
         mana_value_of(&|card| self.card(card), self.state(), id, &self.chars(id))
+    }
+
+    /// The morph (megamorph's included) or disguise way a face-down permanent would have if it were face up, `by` naming which
+    /// (CR 702.37e, 702.168d: "show all players what the permanent's morph cost would be if it were face up"): of its copiable
+    /// values once its face-down status is gone - the card's own, or the copy effects' on it (CR 708.8, 708.10) - and no
+    /// other. Its `turn_up` is the cost.
+    fn turn_up_way(&self, obj: &Obj, by: TurnUp) -> Option<&'static WayDef> {
+        let face_up = obj.copy.as_ref().filter(|c| !obj.own_faces(c)).map_or(obj.card, |c| c.card);
+        self.card(face_up).ways.iter().find(|w| by.is(w.kind))
     }
 
     /// An object's copiable values (CR 707.2): what a copy of it copies, the exceptions of its own copy effect
@@ -911,6 +920,10 @@ pub trait Game: Query {
     /// `player` turns a face-down permanent face up (CR 701.40b, 708.2, 708.8): the player taking the special action, or
     /// the controller of the effect that turns it up. Recorded as `Event::TurnedFaceUp`. Nothing if it is not one.
     fn turn_face_up(&mut self, permanent: ObjectId, player: PlayerId);
+    /// `turn_face_up` by the special action of morph or disguise (CR 702.37e, 702.168d), with a +1/+1 counter put on it as it
+    /// is turned face up where `megamorph` (its megamorph cost was paid to turn it up, CR 702.37b, 708.11): the rules' own
+    /// (`intrinsic`), never a card's.
+    fn turn_face_up_as(&mut self, permanent: ObjectId, player: PlayerId, megamorph: bool);
     /// "[These permanents] phase out" (CR 702.26b), all at once: each one still on the battlefield, and indirectly what is
     /// attached to it (CR 702.26g). They phase in during the untap step of the player who controlled them (CR 502.1).
     fn phase_out(&mut self, permanents: &[ObjectId]);

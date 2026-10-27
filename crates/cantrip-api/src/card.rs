@@ -1600,6 +1600,27 @@ pub enum WayKind {
     WebSlinging,
     /// Escape (CR 702.138a), the card's own or one a permanent gives it (`GrantedWay::kind`): "escaped" asks it (CR 702.138b).
     Escape,
+    /// Morph (CR 702.37a): cast as a 2/2 face-down creature spell for {3} (`intrinsic::MORPHED`), and turned face up for its
+    /// morph cost (`WayDef::turn_up`) as a special action (CR 702.37e).
+    Morph,
+    /// Megamorph (CR 702.37b): a morph whose permanent gets a +1/+1 counter as it is turned face up for its megamorph cost.
+    /// A megamorph cost is a morph cost.
+    Megamorph,
+    /// Disguise (CR 702.168a): cast as a 2/2 face-down creature spell with ward {2} for {3} (`intrinsic::DISGUISED`), and
+    /// turned face up for its disguise cost (`WayDef::turn_up`) as a special action (CR 702.168d).
+    Disguise,
+}
+
+impl WayKind {
+    /// A way that casts the card face down (CR 702.37c, 702.168b, 708.4): morph, megamorph and disguise.
+    pub const fn face_down(self) -> bool {
+        matches!(self, WayKind::Morph | WayKind::Megamorph | WayKind::Disguise)
+    }
+
+    /// Its keyword is morph, megamorph's included (CR 702.37b: "a megamorph cost is a morph cost").
+    pub const fn morph(self) -> bool {
+        matches!(self, WayKind::Morph | WayKind::Megamorph)
+    }
 }
 
 /// An alternative way to cast a card (CR 118.9): flashback (CR 702.34) from the graveyard, Fireblast's sacrifice.
@@ -1626,6 +1647,9 @@ pub struct WayDef {
     pub enters_attacking: bool,
     /// Which keyword's way this is.
     pub kind: WayKind,
+    /// The cost a face-down permanent of this card is turned face up for, as a special action, where its way casts it face
+    /// down: the morph, megamorph or disguise cost (CR 702.37e, 702.168d). `Cost::NONE` for every other way.
+    pub turn_up: Cost,
 }
 
 #[derive(Clone, Copy)]
@@ -3562,12 +3586,36 @@ pub enum FaceDown {
     Cloaked,
 }
 
+/// What a face-down permanent is turned face up for by a special action (CR 116.2b): its card's mana cost, if it is a
+/// manifested or cloaked creature card (CR 701.40b, 701.58b); its morph cost (CR 702.37e, megamorph's included, CR 702.37b);
+/// or its disguise cost (CR 702.168d).
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum TurnUp {
+    ManaCost,
+    Morph,
+    Disguise,
+}
+
+impl TurnUp {
+    /// Whether a way of `kind` is the keyword whose cost this turns a permanent up for: morph's or megamorph's for `Morph`,
+    /// disguise's for `Disguise`. No way is a mana cost's.
+    pub const fn is(self, kind: WayKind) -> bool {
+        match self {
+            TurnUp::ManaCost => false,
+            TurnUp::Morph => kind.morph(),
+            TurnUp::Disguise => matches!(kind, WayKind::Disguise),
+        }
+    }
+}
+
 impl CardTable {
     pub fn new(cards: impl IntoIterator<Item = &'static CardDef>) -> CardTable {
         let mut cards: Vec<&'static CardDef> = cards.into_iter().collect();
         cards.push(&crate::intrinsic::INTRINSIC);
         cards.push(&crate::intrinsic::FACE_DOWN);
         cards.push(&crate::intrinsic::CLOAKED);
+        cards.push(&crate::intrinsic::MORPHED);
+        cards.push(&crate::intrinsic::DISGUISED);
         cards.push(&crate::intrinsic::NO_CHARACTERISTICS);
         // A back face is registered with its front (the first of a name wins, as for every card).
         let backs: Vec<&'static CardDef> = cards.iter().filter_map(|c| c.back).collect();
@@ -3843,13 +3891,25 @@ impl CardTable {
         }
     }
 
-    /// Whether `ability` is a face-down permanent's own "turn this permanent face up" (CR 701.40b, 701.58b): a special
-    /// action that costs its card's mana cost.
+    /// Whether `ability` is one of a face-down permanent's special actions that turn it face up (CR 116.2b): for its card's
+    /// mana cost (CR 701.40b, 701.58b), its morph cost (CR 702.37e) or its disguise cost (CR 702.168d).
     pub fn turns_face_up(&self, ability: AbilityRef) -> bool {
+        self.turn_up(ability).is_some()
+    }
+
+    /// Which special action turning a face-down permanent face up `ability` is (CR 116.2b), if it is one: known by its text
+    /// among the abilities of a set of face-down values (`CardDef::face_down`).
+    pub fn turn_up(&self, ability: AbilityRef) -> Option<TurnUp> {
         let def = self.get(ability.card);
-        def.face_down
-            && ability.index == crate::intrinsic::TURN_FACE_UP
-            && def.abilities.get(ability.index as usize).is_some_and(|a| a.text() == crate::intrinsic::TURN_UP_TEXT)
+        if !def.face_down {
+            return None;
+        }
+        match def.abilities.get(ability.index as usize)?.text() {
+            crate::intrinsic::TURN_UP_TEXT => Some(TurnUp::ManaCost),
+            crate::intrinsic::TURN_UP_MORPH_TEXT => Some(TurnUp::Morph),
+            crate::intrinsic::TURN_UP_DISGUISE_TEXT => Some(TurnUp::Disguise),
+            _ => None,
+        }
     }
 
     /// The definition an object currently has: a face-down permanent's face-down values, a copy's, else the face showing
