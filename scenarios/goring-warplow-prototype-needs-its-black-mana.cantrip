@@ -1,0 +1,32 @@
+# Goring Warplow's Prototype {1}{B} (CR 702.160a, 107.4): with two sources that make no black (white, blue) the prototyped
+# cast is not offered; once the black source arrives it is, and the permanent is black.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Goring Warplow
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+! Bot1.Hand.Goring Warplow.Cast(Ability: Prototype; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Goring Warplow.Cast(Ability: Prototype)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Goring Warplow.Colors = Black
+Bot1.Battlefield.Mox Sapphire.Tapped = false

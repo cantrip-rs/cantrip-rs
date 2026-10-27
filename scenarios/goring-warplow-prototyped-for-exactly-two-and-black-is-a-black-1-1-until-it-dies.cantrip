@@ -1,0 +1,50 @@
+# Goring Warplow prototyped (CR 702.160a, 718.3b): Prototype {1}{B} costs exactly two mana - with the black source alone the
+# prototyped cast is not offered, with a second it is, and paying it taps both and leaves the pool empty. The spell has mana
+# value 2 and is prototyped; the permanent is a black 1/1 with mana value 2 and deathtouch. It dies to Lightning Bolt, which
+# a 5/4 would survive, and in the graveyard it is its normal self again, a colorless 5/4 card (CR 718.4).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Goring Warplow
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Hand.Goring Warplow.Cast(Ability: Prototype; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Goring Warplow.Cast(Ability: Prototype)
+? Stack.Goring Warplow.ManaValue = 2
+? Stack.Goring Warplow.Prototyped = true
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Goring Warplow.Power = 1
+? Bot1.Battlefield.Goring Warplow.Toughness = 1
+? Bot1.Battlefield.Goring Warplow.Colors = Black
+? Bot1.Battlefield.Goring Warplow.ManaValue = 2
+? Bot1.Battlefield.Goring Warplow.Prototyped = true
+? Bot1.Battlefield.Goring Warplow.Keywords = Deathtouch
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goring Warplow)
+Bot1.Pass
+Bot2.Pass
+[Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Goring Warplow = (absent)
+Bot1.Graveyard = Goring Warplow
+Bot1.Graveyard.Goring Warplow.Power = 5
+Bot1.Graveyard.Goring Warplow.Toughness = 4
+Bot1.Graveyard.Goring Warplow.Colors =

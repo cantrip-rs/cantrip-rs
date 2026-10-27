@@ -1,0 +1,48 @@
+# Goring Warplow cast without prototyping (CR 718.3, 718.4): its mana cost is {6}. Five mana from sources with no black offers
+# neither the normal cast nor the prototype ({1}{B}); a sixth mana offers the normal cast, and paying it taps all six mana and
+# leaves the pool empty. It is a colorless 5/4 with mana value 6 and deathtouch, not prototyped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mana Crypt
+Mox Emerald
+Goring Warplow
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+! Bot1.Hand.Goring Warplow.Cast(Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Goring Warplow.Cast
+? Stack.Goring Warplow.ManaValue = 6
+? Stack.Goring Warplow.Prototyped = (absent)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Goring Warplow.Power = 5
+Bot1.Battlefield.Goring Warplow.Toughness = 4
+Bot1.Battlefield.Goring Warplow.ManaValue = 6
+Bot1.Battlefield.Goring Warplow.Colors = (absent)
+Bot1.Battlefield.Goring Warplow.Prototyped = (absent)
+Bot1.Battlefield.Goring Warplow.Keywords = Deathtouch
