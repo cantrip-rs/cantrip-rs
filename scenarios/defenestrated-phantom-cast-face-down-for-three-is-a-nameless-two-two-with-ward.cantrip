@@ -1,0 +1,47 @@
+# Defenestrated Phantom (Disguise {4}{W}): cast face down for exactly {3} (CR 702.168a, 708.2) it is a nameless 2/2 creature with ward {2} with none of its printed keywords or its name (CR 708.2a). With two sources the face-down cast is not offered (the refusal is judged again with mana to spare); the third Mox makes it exactly affordable and the pool is empty right after.
+
+[Bot1 Deck]
+Defenestrated Phantom
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island x10
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+! Bot1.Hand.Defenestrated Phantom.Cast(Ability: Disguise; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Defenestrated Phantom.Cast(Ability: Disguise)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Stack..FaceDown = true
+? Stack..FaceDownName = Defenestrated Phantom
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(#1)
+Bot2.Pass
+Bot2.Decline
+? Bot2.Graveyard = Lightning Bolt
+
+[Expect]
+Bot1.Battlefield.Defenestrated Phantom = (absent)
+Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield..FaceDownName = Defenestrated Phantom
+Bot1.Battlefield..Power = 2
+Bot1.Battlefield..Toughness = 2
+Bot1.Battlefield..Keywords = (absent)
+Bot1.Battlefield..Damage = 0
+Bot2.Graveyard = Lightning Bolt

@@ -1,0 +1,64 @@
+# Defenestrated Phantom (Disguise {4}{W}): cast face down (a Black Lotus pays the {3}), it is turned face up for exactly {4}{W} (CR 702.168d, 116.2b) as a special action: the pool is empty right after, so no more than {4}{W} was taken. Sources are laid so that the cost minus one mana, and the full count with a colored pip unmet, are each refused (the refusal is judged again with mana to spare), and the Moxen that pay are the generic filler plus one of each colored pip. Face up it is Defenestrated Phantom again, 4/3 with Flying.
+
+[Bot1 Deck]
+Defenestrated Phantom
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Pearl
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Defenestrated Phantom.Cast(Ability: Disguise)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: disguise cost; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost)
+! Bot1.Battlefield.Defenestrated Phantom.Activate(Ability: disguise cost)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Defenestrated Phantom.Power = 4
+Bot1.Battlefield.Defenestrated Phantom.Toughness = 3
+Bot1.Battlefield.Defenestrated Phantom.Keywords = Disguise; Flying
+Bot1.Battlefield.Defenestrated Phantom.Counters.PlusOnePlusOne = (absent)
