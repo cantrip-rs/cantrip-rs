@@ -468,6 +468,33 @@ fn a_morph_cost_of_life_is_paid_in_life() {
     assert_eq!(g.state.player(YOU).life, 15);
 }
 
+/// CR 707.2, 707.10, 708.2: a copy of a face-down spell (Double Major's) copies the face-down values and not the face-down
+/// status: a face-up nameless 2/2 spell every player sees as that, which becomes a face-up nameless 2/2 token that can't be
+/// turned face up (the Clone example of CR 707.2) - never a copy of the card behind it.
+#[test]
+fn a_copy_of_a_face_down_spell_is_a_face_up_nameless_two_two() {
+    let mut g = game();
+    let card = put(&mut g, &SKYWARDEN, Zone::hand(YOU));
+    add(&mut g, Mana::C, 3);
+    let spell = cast_face_down(&mut g, card);
+    let copy = crate::ops::copy_spell(&mut cx(&mut g), spell, THEM, false).expect("nothing is asked").expect("it is copied");
+    assert!(!g.state.obj(copy).face_down);
+    assert!(!crate::hidden_from(&g.state, YOU, copy) && !crate::hidden_from(&g.state, THEM, copy));
+    let c = g.chars(copy);
+    assert_eq!((c.name, c.power, c.toughness), ("", Some(2), Some(2)));
+    reoffer(&mut g);
+    resolve_all(&mut g);
+    let theirs: Vec<ObjectId> = g.state.zone(Zone::BATTLEFIELD).iter().copied().filter(|&id| g.state.obj(id).controller == THEM).collect();
+    let [token] = theirs[..] else { panic!("one token: {theirs:?}") };
+    assert!(g.state.obj(token).token && !g.state.obj(token).face_down);
+    let c = g.chars(token);
+    assert_eq!((c.name, c.power, c.toughness), ("", Some(2), Some(2)));
+    assert_eq!(c.keywords, Keywords::NONE);
+    // It is face up: no morph cost turns it up (CR 707.2's Clone).
+    g.state.update_turn(|t| t.priority = THEM);
+    assert!(!priority_options(&mut cx(&mut g), THEM).iter().any(|o| o.source == Some(token) && o.kind == ActionKind::ActivateAbility));
+}
+
 /// CR 702.37e-f, 107.3a: an X in a morph cost is announced as the special action is taken, paid as that much generic mana,
 /// and kept on the permanent for its other abilities to read.
 #[test]

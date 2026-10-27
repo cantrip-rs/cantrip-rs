@@ -2212,6 +2212,13 @@ pub fn copy_spell_as(cx: &mut Cx, spell: ObjectId, copier: PlayerId, new_targets
     (obj.card_copy, obj.prepared_from, obj.prepared, obj.became) = (true, None, false, None);
     // A new object, with no counters (CR 707.2: counters are not copied).
     obj.clear_counters();
+    // A copy of a face-down spell (cast by morph or disguise, CR 708.4) copies its copiable values, the face-down values
+    // (CR 707.2, 708.2), and not its face-down status: a face-up spell that is that nameless 2/2, with no card behind it
+    // to look at or turn face up (CR 707.10; the Clone example of CR 707.2), and the token it becomes is the same.
+    if let Some(face_down) = original.face_down_values() {
+        (obj.card, obj.copy, obj.face_down) = (face_down, None, false);
+        obj.marks.face_down_as = None;
+    }
     if let Some(values) = values {
         obj.copy = Some(values);
     }
