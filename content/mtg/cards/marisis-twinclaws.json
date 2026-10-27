@@ -1,0 +1,11 @@
+{
+  "name": "Marisi's Twinclaws",
+  "manaCost": "{2}{R/W}{G}",
+  "type": "Creature — Cat Warrior",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Double strike",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

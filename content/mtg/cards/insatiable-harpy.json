@@ -1,0 +1,12 @@
+{
+  "name": "Insatiable Harpy",
+  "manaCost": "{2}{B}{B}",
+  "type": "Creature — Harpy",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, lifelink",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}

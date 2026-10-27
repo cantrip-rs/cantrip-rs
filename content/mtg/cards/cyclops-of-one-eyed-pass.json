@@ -1,0 +1,8 @@
+{
+  "name": "Cyclops of One-Eyed Pass",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Cyclops",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": ""
+}

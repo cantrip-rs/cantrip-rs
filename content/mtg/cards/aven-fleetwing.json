@@ -1,0 +1,12 @@
+{
+  "name": "Aven Fleetwing",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Bird Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nHexproof (This creature can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Flying",
+    "Hexproof"
+  ]
+}

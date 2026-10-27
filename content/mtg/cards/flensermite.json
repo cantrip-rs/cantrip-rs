@@ -1,0 +1,12 @@
+{
+  "name": "Flensermite",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Phyrexian Gremlin",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Infect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)\nLifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Infect",
+    "Lifelink"
+  ]
+}

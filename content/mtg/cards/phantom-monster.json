@@ -1,0 +1,11 @@
+{
+  "name": "Phantom Monster",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Illusion",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

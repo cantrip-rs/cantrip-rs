@@ -1,0 +1,12 @@
+{
+  "name": "Bitterbow Sharpshooters",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Jackal Archer",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach, vigilance",
+  "keywords": [
+    "Reach",
+    "Vigilance"
+  ]
+}

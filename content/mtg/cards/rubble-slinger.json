@@ -1,0 +1,11 @@
+{
+  "name": "Rubble Slinger",
+  "manaCost": "{2}{R/G}",
+  "type": "Creature — Human Warrior",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Reach",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Stone",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Wall",
+  "power": 0,
+  "toughness": 8,
+  "oracleText": "Defender (This creature can't attack.)",
+  "keywords": [
+    "Defender"
+  ]
+}

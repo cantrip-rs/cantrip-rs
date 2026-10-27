@@ -1,0 +1,12 @@
+{
+  "name": "Cerodon Yearling",
+  "manaCost": "{R}{W}",
+  "type": "Creature — Beast",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance, haste",
+  "keywords": [
+    "Vigilance",
+    "Haste"
+  ]
+}

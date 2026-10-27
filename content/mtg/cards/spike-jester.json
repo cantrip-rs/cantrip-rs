@@ -1,0 +1,11 @@
+{
+  "name": "Spike Jester",
+  "manaCost": "{B}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

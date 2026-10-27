@@ -1,0 +1,8 @@
+{
+  "name": "Great Hart",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Elk",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": ""
+}

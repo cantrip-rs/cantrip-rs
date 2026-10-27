@@ -1,0 +1,11 @@
+{
+  "name": "Hired Poisoner",
+  "manaCost": "{B}",
+  "type": "Creature — Human Assassin",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

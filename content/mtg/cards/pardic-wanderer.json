@@ -1,0 +1,11 @@
+{
+  "name": "Pardic Wanderer",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Golem",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

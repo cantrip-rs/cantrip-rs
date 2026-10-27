@@ -1,0 +1,11 @@
+{
+  "name": "Havoc Devils",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Devil",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)",
+  "keywords": [
+    "Trample"
+  ]
+}

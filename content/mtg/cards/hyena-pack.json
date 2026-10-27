@@ -1,0 +1,8 @@
+{
+  "name": "Hyena Pack",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Hyena",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": ""
+}

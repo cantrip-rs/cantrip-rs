@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Hero",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

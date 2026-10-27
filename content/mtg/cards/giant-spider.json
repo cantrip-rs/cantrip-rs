@@ -1,0 +1,11 @@
+{
+  "name": "Giant Spider",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Spider",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

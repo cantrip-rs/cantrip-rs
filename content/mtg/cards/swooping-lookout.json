@@ -1,0 +1,12 @@
+{
+  "name": "Swooping Lookout",
+  "manaCost": "{W}",
+  "type": "Artifact Creature — Phyrexian Construct",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying, vigilance",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

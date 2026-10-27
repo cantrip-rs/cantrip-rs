@@ -1,0 +1,8 @@
+{
+  "name": "Golden Bear",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Bear",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": ""
+}

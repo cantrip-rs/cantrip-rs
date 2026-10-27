@@ -1,0 +1,12 @@
+{
+  "name": "Midnight Assassin",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Vampire Assassin",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying\nDeathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "keywords": [
+    "Flying",
+    "Deathtouch"
+  ]
+}

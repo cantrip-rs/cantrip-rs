@@ -1,0 +1,11 @@
+{
+  "name": "Ogre Berserker",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Ogre Berserker",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

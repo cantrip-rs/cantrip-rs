@@ -1,0 +1,11 @@
+{
+  "name": "Pitiless Gorgon",
+  "manaCost": "{1}{B/G}{B/G}",
+  "type": "Creature — Gorgon",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Deathtouch",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

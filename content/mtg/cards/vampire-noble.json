@@ -1,0 +1,8 @@
+{
+  "name": "Vampire Noble",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Vampire Noble",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

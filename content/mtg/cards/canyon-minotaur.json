@@ -1,0 +1,8 @@
+{
+  "name": "Canyon Minotaur",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Minotaur Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

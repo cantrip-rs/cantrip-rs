@@ -1,0 +1,8 @@
+{
+  "name": "Water Elemental",
+  "manaCost": "{3}{U}{U}",
+  "type": "Creature — Elemental",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": ""
+}

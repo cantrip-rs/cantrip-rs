@@ -1,0 +1,12 @@
+{
+  "name": "Courier Hawk",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying, vigilance",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

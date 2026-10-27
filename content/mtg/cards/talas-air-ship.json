@@ -1,0 +1,11 @@
+{
+  "name": "Talas Air Ship",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Human Pirate",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

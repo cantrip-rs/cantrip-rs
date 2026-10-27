@@ -1,0 +1,11 @@
+{
+  "name": "Noxious Groodion",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Beast",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Deathtouch",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

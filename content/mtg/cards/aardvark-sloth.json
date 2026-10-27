@@ -1,0 +1,11 @@
+{
+  "name": "Aardvark Sloth",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Sloth Beast",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Lifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Lifelink"
+  ]
+}

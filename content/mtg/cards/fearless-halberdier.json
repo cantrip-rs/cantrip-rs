@@ -1,0 +1,8 @@
+{
+  "name": "Fearless Halberdier",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

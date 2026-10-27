@@ -1,0 +1,12 @@
+{
+  "name": "Hawkeater Moth",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Insect",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying\nShroud (This creature can't be the target of spells or abilities.)",
+  "keywords": [
+    "Flying",
+    "Shroud"
+  ]
+}

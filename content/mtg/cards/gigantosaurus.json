@@ -1,0 +1,8 @@
+{
+  "name": "Gigantosaurus",
+  "manaCost": "{G}{G}{G}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 10,
+  "toughness": 10,
+  "oracleText": ""
+}

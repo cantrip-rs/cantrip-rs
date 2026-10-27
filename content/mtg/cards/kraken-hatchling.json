@@ -1,0 +1,8 @@
+{
+  "name": "Kraken Hatchling",
+  "manaCost": "{U}",
+  "type": "Creature — Kraken",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": ""
+}

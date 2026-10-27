@@ -1,0 +1,11 @@
+{
+  "name": "Eldrazi Devastator",
+  "manaCost": "{8}",
+  "type": "Creature — Eldrazi",
+  "power": 8,
+  "toughness": 9,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Volcanic Dragon",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Dragon",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying, haste",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}

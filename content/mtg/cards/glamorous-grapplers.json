@@ -1,0 +1,11 @@
+{
+  "name": "Glamorous Grapplers",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Human Performer Villain",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ]
+}

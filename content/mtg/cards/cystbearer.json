@@ -1,0 +1,11 @@
+{
+  "name": "Cystbearer",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Phyrexian Beast",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Infect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)",
+  "keywords": [
+    "Infect"
+  ]
+}

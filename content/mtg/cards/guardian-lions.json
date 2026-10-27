@@ -1,0 +1,11 @@
+{
+  "name": "Guardian Lions",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Cat",
+  "power": 1,
+  "toughness": 6,
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

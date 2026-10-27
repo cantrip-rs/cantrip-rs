@@ -1,0 +1,11 @@
+{
+  "name": "Pyromantic Pilgrim",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Wizard",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)",
+  "keywords": [
+    "Haste"
+  ]
+}

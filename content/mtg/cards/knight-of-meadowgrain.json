@@ -1,0 +1,12 @@
+{
+  "name": "Knight of Meadowgrain",
+  "manaCost": "{W}{W}",
+  "type": "Creature — Kithkin Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike\nLifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "FirstStrike",
+    "Lifelink"
+  ]
+}

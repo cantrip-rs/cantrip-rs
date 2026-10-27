@@ -1,0 +1,11 @@
+{
+  "name": "Nimble Birdsticker",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

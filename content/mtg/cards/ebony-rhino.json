@@ -1,0 +1,11 @@
+{
+  "name": "Ebony Rhino",
+  "manaCost": "{7}",
+  "type": "Artifact Creature — Rhino",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

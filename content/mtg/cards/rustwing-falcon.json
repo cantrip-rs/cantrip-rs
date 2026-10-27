@@ -1,0 +1,11 @@
+{
+  "name": "Rustwing Falcon",
+  "manaCost": "{W}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

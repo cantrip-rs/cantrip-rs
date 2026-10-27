@@ -1,0 +1,8 @@
+{
+  "name": "Memnite",
+  "manaCost": "{0}",
+  "type": "Artifact Creature — Construct",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": ""
+}

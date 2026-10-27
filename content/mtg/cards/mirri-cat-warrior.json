@@ -1,0 +1,13 @@
+{
+  "name": "Mirri, Cat Warrior",
+  "manaCost": "{1}{G}{G}",
+  "type": "Legendary Creature — Cat Warrior",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "First strike, forestwalk, vigilance (This creature deals combat damage before creatures without first strike, it can't be blocked as long as defending player controls a Forest, and attacking doesn't cause this creature to tap.)",
+  "keywords": [
+    "FirstStrike",
+    "Forestwalk",
+    "Vigilance"
+  ]
+}

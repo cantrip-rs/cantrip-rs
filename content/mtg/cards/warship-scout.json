@@ -1,0 +1,8 @@
+{
+  "name": "Warship Scout",
+  "manaCost": "{R}",
+  "type": "Creature — Human Scout",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

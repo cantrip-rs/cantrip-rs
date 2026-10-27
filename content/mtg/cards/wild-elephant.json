@@ -1,0 +1,11 @@
+{
+  "name": "Wild Elephant",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elephant",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Naga Eternal",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Zombie Snake",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

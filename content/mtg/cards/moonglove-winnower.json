@@ -1,0 +1,11 @@
+{
+  "name": "Moonglove Winnower",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Elf Rogue",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Terrian, World Tyrant",
+  "manaCost": "{2}{G}{G}{G}",
+  "type": "Legendary Creature — Dinosaur Ooze",
+  "power": 9,
+  "toughness": 7,
+  "oracleText": ""
+}

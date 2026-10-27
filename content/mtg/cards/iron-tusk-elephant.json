@@ -1,0 +1,11 @@
+{
+  "name": "Iron Tusk Elephant",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Elephant",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

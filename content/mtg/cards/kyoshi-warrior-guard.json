@@ -1,0 +1,8 @@
+{
+  "name": "Kyoshi Warrior Guard",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Warrior Ally",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": ""
+}

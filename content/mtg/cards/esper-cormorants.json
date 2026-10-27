@@ -1,0 +1,11 @@
+{
+  "name": "Esper Cormorants",
+  "manaCost": "{2}{W}{U}",
+  "type": "Artifact Creature — Bird",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

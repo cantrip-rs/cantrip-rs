@@ -1,0 +1,8 @@
+{
+  "name": "Streetbreaker Wurm",
+  "manaCost": "{3}{R}{G}",
+  "type": "Creature — Wurm",
+  "power": 6,
+  "toughness": 4,
+  "oracleText": ""
+}

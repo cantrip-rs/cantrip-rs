@@ -1,0 +1,12 @@
+{
+  "name": "Soulbound Guardians",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Kor Spirit",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Defender, flying",
+  "keywords": [
+    "Defender",
+    "Flying"
+  ]
+}

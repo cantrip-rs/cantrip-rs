@@ -1,0 +1,8 @@
+{
+  "name": "Shatterskull Giant",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Giant Warrior",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": ""
+}

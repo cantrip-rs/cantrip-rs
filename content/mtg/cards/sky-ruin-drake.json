@@ -1,0 +1,11 @@
+{
+  "name": "Sky Ruin Drake",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Drake",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

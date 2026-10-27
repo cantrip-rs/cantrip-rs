@@ -1,0 +1,11 @@
+{
+  "name": "Sokka, Wolf Cove's Protector",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Human Warrior Ally",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

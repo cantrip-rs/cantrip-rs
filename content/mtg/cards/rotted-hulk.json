@@ -1,0 +1,8 @@
+{
+  "name": "Rotted Hulk",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Elemental",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": ""
+}

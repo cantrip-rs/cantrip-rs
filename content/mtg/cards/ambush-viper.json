@@ -1,0 +1,12 @@
+{
+  "name": "Ambush Viper",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Snake",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flash\nDeathtouch",
+  "keywords": [
+    "Flash",
+    "Deathtouch"
+  ]
+}

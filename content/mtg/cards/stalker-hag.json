@@ -1,0 +1,12 @@
+{
+  "name": "Stalker Hag",
+  "manaCost": "{B/G}{B/G}{B/G}",
+  "type": "Creature — Hag",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Swampwalk, forestwalk (This creature can't be blocked as long as defending player controls a Swamp or a Forest.)",
+  "keywords": [
+    "Swampwalk",
+    "Forestwalk"
+  ]
+}

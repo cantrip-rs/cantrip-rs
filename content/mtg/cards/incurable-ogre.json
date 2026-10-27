@@ -1,0 +1,8 @@
+{
+  "name": "Incurable Ogre",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Ogre Mutant",
+  "power": 5,
+  "toughness": 1,
+  "oracleText": ""
+}

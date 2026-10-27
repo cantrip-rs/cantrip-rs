@@ -1,0 +1,11 @@
+{
+  "name": "Pouncing Cheetah",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Cat",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flash",
+  "keywords": [
+    "Flash"
+  ]
+}

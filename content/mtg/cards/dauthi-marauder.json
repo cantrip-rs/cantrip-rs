@@ -1,0 +1,11 @@
+{
+  "name": "Dauthi Marauder",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Dauthi Minion",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Shadow (This creature can block or be blocked by only creatures with shadow.)",
+  "keywords": [
+    "Shadow"
+  ]
+}

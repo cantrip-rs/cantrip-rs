@@ -1,0 +1,8 @@
+{
+  "name": "Valiant Guard",
+  "manaCost": "{W}",
+  "type": "Creature — Human Soldier",
+  "power": 0,
+  "toughness": 3,
+  "oracleText": ""
+}

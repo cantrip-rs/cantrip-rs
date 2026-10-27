@@ -1,0 +1,8 @@
+{
+  "name": "Plated Seastrider",
+  "manaCost": "{U}{U}",
+  "type": "Creature — Beast",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": ""
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Willow Faerie",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Faerie",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Jhessian Lookout",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Scout",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

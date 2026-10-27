@@ -1,0 +1,8 @@
+{
+  "name": "Headless Horseman",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Zombie Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

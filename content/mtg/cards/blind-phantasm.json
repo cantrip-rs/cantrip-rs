@@ -1,0 +1,8 @@
+{
+  "name": "Blind Phantasm",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Illusion",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": ""
+}

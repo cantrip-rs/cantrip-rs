@@ -1,0 +1,12 @@
+{
+  "name": "The Whizzer, Classic Speedster",
+  "manaCost": "{3}{R}",
+  "type": "Legendary Creature — Human Hero",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "First strike, haste",
+  "keywords": [
+    "FirstStrike",
+    "Haste"
+  ]
+}

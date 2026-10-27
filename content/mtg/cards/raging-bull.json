@@ -1,0 +1,8 @@
+{
+  "name": "Raging Bull",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Ox",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

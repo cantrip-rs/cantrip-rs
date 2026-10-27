@@ -1,0 +1,8 @@
+{
+  "name": "Headwater Sentries",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Merfolk Warrior",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": ""
+}

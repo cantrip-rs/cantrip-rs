@@ -1,0 +1,11 @@
+{
+  "name": "Yotian Soldier",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Soldier",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Highland Giant",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Giant",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": ""
+}

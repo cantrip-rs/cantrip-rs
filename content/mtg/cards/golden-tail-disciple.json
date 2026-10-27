@@ -1,0 +1,11 @@
+{
+  "name": "Golden-Tail Disciple",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment Creature — Fox Monk",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Lifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Lifelink"
+  ]
+}

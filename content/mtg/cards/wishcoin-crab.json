@@ -1,0 +1,8 @@
+{
+  "name": "Wishcoin Crab",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Crab",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": ""
+}

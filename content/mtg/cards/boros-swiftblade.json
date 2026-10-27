@@ -1,0 +1,11 @@
+{
+  "name": "Boros Swiftblade",
+  "manaCost": "{R}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Double strike",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

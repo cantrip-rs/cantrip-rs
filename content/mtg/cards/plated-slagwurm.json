@@ -1,0 +1,11 @@
+{
+  "name": "Plated Slagwurm",
+  "manaCost": "{4}{G}{G}{G}",
+  "type": "Creature — Wurm",
+  "power": 8,
+  "toughness": 8,
+  "oracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Hexproof"
+  ]
+}

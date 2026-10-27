@@ -1,0 +1,12 @@
+{
+  "name": "Moldering Karok",
+  "manaCost": "{2}{B}{G}",
+  "type": "Creature — Zombie Crocodile",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample, lifelink",
+  "keywords": [
+    "Trample",
+    "Lifelink"
+  ]
+}

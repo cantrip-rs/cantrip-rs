@@ -1,0 +1,8 @@
+{
+  "name": "Keepers of the Faith",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Human Cleric",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": ""
+}

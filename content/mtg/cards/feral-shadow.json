@@ -1,0 +1,11 @@
+{
+  "name": "Feral Shadow",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Nightstalker",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

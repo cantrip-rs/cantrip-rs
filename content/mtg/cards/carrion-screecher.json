@@ -1,0 +1,11 @@
+{
+  "name": "Carrion Screecher",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Zombie Bird",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

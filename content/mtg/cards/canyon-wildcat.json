@@ -1,0 +1,11 @@
+{
+  "name": "Canyon Wildcat",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Cat",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Mountainwalk (This creature can't be blocked as long as defending player controls a Mountain.)",
+  "keywords": [
+    "Mountainwalk"
+  ]
+}

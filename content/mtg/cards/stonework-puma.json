@@ -1,0 +1,8 @@
+{
+  "name": "Stonework Puma",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Cat Ally",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

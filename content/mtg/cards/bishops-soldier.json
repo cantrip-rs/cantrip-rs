@@ -1,0 +1,11 @@
+{
+  "name": "Bishop's Soldier",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Vampire Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Lifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Lifelink"
+  ]
+}

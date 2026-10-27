@@ -1,0 +1,8 @@
+{
+  "name": "Balduvian Bears",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Bear",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

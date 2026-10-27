@@ -1,0 +1,12 @@
+{
+  "name": "Silver Erne",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Bird",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, trample",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}

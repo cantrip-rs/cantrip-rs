@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Piker",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

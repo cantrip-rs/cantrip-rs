@@ -1,0 +1,11 @@
+{
+  "name": "Makindi Griffin",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Griffin",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

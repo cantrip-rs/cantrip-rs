@@ -1,0 +1,12 @@
+{
+  "name": "Hobgoblin Dragoon",
+  "manaCost": "{2}{R/W}",
+  "type": "Creature — Goblin Knight",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying, first strike",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

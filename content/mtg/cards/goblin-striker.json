@@ -1,0 +1,12 @@
+{
+  "name": "Goblin Striker",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Berserker",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "First strike, haste",
+  "keywords": [
+    "FirstStrike",
+    "Haste"
+  ]
+}

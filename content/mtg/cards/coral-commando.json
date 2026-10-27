@@ -1,0 +1,8 @@
+{
+  "name": "Coral Commando",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Merfolk Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

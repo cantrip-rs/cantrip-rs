@@ -1,0 +1,11 @@
+{
+  "name": "Hillcomber Giant",
+  "manaCost": "{2}{W}{W}",
+  "type": "Creature — Giant Scout",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Mountainwalk (This creature can't be blocked as long as defending player controls a Mountain.)",
+  "keywords": [
+    "Mountainwalk"
+  ]
+}

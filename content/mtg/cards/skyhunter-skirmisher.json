@@ -1,0 +1,12 @@
+{
+  "name": "Skyhunter Skirmisher",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Cat Knight",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying, double strike",
+  "keywords": [
+    "Flying",
+    "DoubleStrike"
+  ]
+}

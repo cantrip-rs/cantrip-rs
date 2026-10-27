@@ -1,0 +1,12 @@
+{
+  "name": "Avian Changeling",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Shapeshifter",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Changeling (This card is every creature type.)\nFlying",
+  "keywords": [
+    "Changeling",
+    "Flying"
+  ]
+}

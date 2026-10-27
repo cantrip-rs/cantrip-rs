@@ -1,0 +1,12 @@
+{
+  "name": "Tidehollow Strix",
+  "manaCost": "{U}{B}",
+  "type": "Artifact Creature — Bird",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nDeathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "keywords": [
+    "Flying",
+    "Deathtouch"
+  ]
+}

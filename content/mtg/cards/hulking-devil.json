@@ -1,0 +1,8 @@
+{
+  "name": "Hulking Devil",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Devil",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": ""
+}

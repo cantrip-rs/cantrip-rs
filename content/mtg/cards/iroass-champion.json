@@ -1,0 +1,11 @@
+{
+  "name": "Iroas's Champion",
+  "manaCost": "{1}{R}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Double strike (This creature deals both first-strike and regular combat damage.)",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Alaborn Grenadier",
+  "manaCost": "{W}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

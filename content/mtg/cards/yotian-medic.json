@@ -1,0 +1,11 @@
+{
+  "name": "Yotian Medic",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Cleric Soldier",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Lifelink",
+  "keywords": [
+    "Lifelink"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Aven Skirmisher",
+  "manaCost": "{W}",
+  "type": "Creature — Bird Warrior",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

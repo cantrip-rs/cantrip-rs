@@ -1,0 +1,8 @@
+{
+  "name": "Nyxborn Marauder",
+  "manaCost": "{2}{B}{B}",
+  "type": "Enchantment Creature — Minotaur",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": ""
+}

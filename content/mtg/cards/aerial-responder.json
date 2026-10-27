@@ -1,0 +1,13 @@
+{
+  "name": "Aerial Responder",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Dwarf Soldier",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying, vigilance, lifelink",
+  "keywords": [
+    "Flying",
+    "Vigilance",
+    "Lifelink"
+  ]
+}

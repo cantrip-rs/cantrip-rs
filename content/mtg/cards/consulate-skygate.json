@@ -1,0 +1,12 @@
+{
+  "name": "Consulate Skygate",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Wall",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "Defender\nReach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Defender",
+    "Reach"
+  ]
+}

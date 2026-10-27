@@ -1,0 +1,11 @@
+{
+  "name": "Wind Drake",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Drake",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

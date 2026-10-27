@@ -1,0 +1,11 @@
+{
+  "name": "Sunspire Griffin",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Griffin",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

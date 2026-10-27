@@ -1,0 +1,8 @@
+{
+  "name": "Jwari Scuttler",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Crab",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": ""
+}

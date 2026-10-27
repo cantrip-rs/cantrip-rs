@@ -1,0 +1,12 @@
+{
+  "name": "Haunted Guardian",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Construct",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Defender, first strike",
+  "keywords": [
+    "Defender",
+    "FirstStrike"
+  ]
+}

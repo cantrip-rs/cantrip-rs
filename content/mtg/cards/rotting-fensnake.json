@@ -1,0 +1,8 @@
+{
+  "name": "Rotting Fensnake",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Zombie Snake",
+  "power": 5,
+  "toughness": 1,
+  "oracleText": ""
+}

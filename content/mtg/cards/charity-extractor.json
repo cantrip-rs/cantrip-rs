@@ -1,0 +1,11 @@
+{
+  "name": "Charity Extractor",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Human Knight",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": "Lifelink",
+  "keywords": [
+    "Lifelink"
+  ]
+}

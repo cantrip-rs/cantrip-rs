@@ -1,0 +1,8 @@
+{
+  "name": "Capital Guard",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

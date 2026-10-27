@@ -1,0 +1,8 @@
+{
+  "name": "Leopard-Spotted Jiao",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Beast",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": ""
+}

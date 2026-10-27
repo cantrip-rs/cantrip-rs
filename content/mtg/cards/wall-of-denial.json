@@ -1,0 +1,13 @@
+{
+  "name": "Wall of Denial",
+  "manaCost": "{1}{W}{U}",
+  "type": "Creature — Wall",
+  "power": 0,
+  "toughness": 8,
+  "oracleText": "Defender, flying\nShroud (This creature can't be the target of spells or abilities.)",
+  "keywords": [
+    "Defender",
+    "Flying",
+    "Shroud"
+  ]
+}

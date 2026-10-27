@@ -1,0 +1,8 @@
+{
+  "name": "Ironroot Treefolk",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Treefolk",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Phyrexian Walker",
+  "manaCost": "{0}",
+  "type": "Artifact Creature — Phyrexian Construct",
+  "power": 0,
+  "toughness": 3,
+  "oracleText": ""
+}

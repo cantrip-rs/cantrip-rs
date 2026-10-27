@@ -1,0 +1,8 @@
+{
+  "name": "Gutter Skulk",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Zombie Rat",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

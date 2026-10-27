@@ -1,0 +1,8 @@
+{
+  "name": "Silverback Ape",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Ape",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": ""
+}

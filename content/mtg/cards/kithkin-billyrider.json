@@ -1,0 +1,11 @@
+{
+  "name": "Kithkin Billyrider",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Kithkin Knight",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Double strike",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

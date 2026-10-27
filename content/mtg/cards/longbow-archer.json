@@ -1,0 +1,12 @@
+{
+  "name": "Longbow Archer",
+  "manaCost": "{W}{W}",
+  "type": "Creature — Human Soldier Archer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nFirst strike",
+  "keywords": [
+    "Reach",
+    "FirstStrike"
+  ]
+}

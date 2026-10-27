@@ -1,0 +1,8 @@
+{
+  "name": "Maritime Guard",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Merfolk Soldier",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": ""
+}

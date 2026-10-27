@@ -1,0 +1,14 @@
+{
+  "name": "Galewind Moose",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Elemental Elk",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Flash\nReach, vigilance, trample",
+  "keywords": [
+    "Flash",
+    "Reach",
+    "Vigilance",
+    "Trample"
+  ]
+}

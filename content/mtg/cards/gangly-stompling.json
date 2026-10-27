@@ -1,0 +1,12 @@
+{
+  "name": "Gangly Stompling",
+  "manaCost": "{2}{R/G}",
+  "type": "Creature — Shapeshifter",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Changeling (This card is every creature type.)\nTrample",
+  "keywords": [
+    "Changeling",
+    "Trample"
+  ]
+}

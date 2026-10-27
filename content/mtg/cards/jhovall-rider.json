@@ -1,0 +1,11 @@
+{
+  "name": "Jhovall Rider",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Human Rebel",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Adult Gold Dragon",
+  "manaCost": "{3}{R}{W}",
+  "type": "Creature — Dragon",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Flying, lifelink, haste",
+  "keywords": [
+    "Flying",
+    "Lifelink",
+    "Haste"
+  ]
+}

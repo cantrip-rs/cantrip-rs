@@ -1,0 +1,11 @@
+{
+  "name": "Rip-Clan Crasher",
+  "manaCost": "{R}{G}",
+  "type": "Creature — Human Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

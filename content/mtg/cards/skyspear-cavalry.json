@@ -1,0 +1,12 @@
+{
+  "name": "Skyspear Cavalry",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nDouble strike (This creature deals both first-strike and regular combat damage.)",
+  "keywords": [
+    "Flying",
+    "DoubleStrike"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Dakmor Scorpion",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Scorpion",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

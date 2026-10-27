@@ -1,0 +1,12 @@
+{
+  "name": "Sentinel Spider",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Spider",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach, vigilance",
+  "keywords": [
+    "Reach",
+    "Vigilance"
+  ]
+}

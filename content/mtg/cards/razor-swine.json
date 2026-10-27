@@ -1,0 +1,12 @@
+{
+  "name": "Razor Swine",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Phyrexian Boar",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "First strike\nInfect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)",
+  "keywords": [
+    "FirstStrike",
+    "Infect"
+  ]
+}

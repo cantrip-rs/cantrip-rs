@@ -1,0 +1,8 @@
+{
+  "name": "Gloom Pangolin",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Nightmare Pangolin",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": ""
+}

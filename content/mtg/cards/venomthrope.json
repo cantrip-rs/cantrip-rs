@@ -1,0 +1,13 @@
+{
+  "name": "Venomthrope",
+  "manaCost": "{1}{G}{U}",
+  "type": "Creature — Tyranid",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, deathtouch, hexproof",
+  "keywords": [
+    "Flying",
+    "Deathtouch",
+    "Hexproof"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "River Kaijin",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Spirit",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": ""
+}

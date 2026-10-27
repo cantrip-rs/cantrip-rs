@@ -1,0 +1,12 @@
+{
+  "name": "Rakdos Ragemutt",
+  "manaCost": "{3}{B}{R}",
+  "type": "Creature — Elemental Dog",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Lifelink, haste",
+  "keywords": [
+    "Lifelink",
+    "Haste"
+  ]
+}

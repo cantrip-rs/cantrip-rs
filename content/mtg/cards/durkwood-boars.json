@@ -1,0 +1,8 @@
+{
+  "name": "Durkwood Boars",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Boar",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": ""
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Vampire Revenant",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Vampire Spirit",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

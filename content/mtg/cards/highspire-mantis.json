@@ -1,0 +1,12 @@
+{
+  "name": "Highspire Mantis",
+  "manaCost": "{2}{R}{W}",
+  "type": "Creature — Insect",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, trample",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}

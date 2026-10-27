@@ -1,0 +1,11 @@
+{
+  "name": "Goliath Sphinx",
+  "manaCost": "{5}{U}{U}",
+  "type": "Creature — Sphinx",
+  "power": 8,
+  "toughness": 7,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

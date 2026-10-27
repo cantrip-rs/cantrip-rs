@@ -1,0 +1,8 @@
+{
+  "name": "Sir Shandlar of Eberyn",
+  "manaCost": "{4}{G}{W}",
+  "type": "Legendary Creature — Human Knight",
+  "power": 4,
+  "toughness": 7,
+  "oracleText": ""
+}

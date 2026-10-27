@@ -1,0 +1,11 @@
+{
+  "name": "Woodland Patrol",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Scout",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

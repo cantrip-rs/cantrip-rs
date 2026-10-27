@@ -1,0 +1,8 @@
+{
+  "name": "Feral Maaka",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Cat",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

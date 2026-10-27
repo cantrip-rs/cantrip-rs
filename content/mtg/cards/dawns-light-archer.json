@@ -1,0 +1,12 @@
+{
+  "name": "Dawn's Light Archer",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Archer",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Flash\nReach",
+  "keywords": [
+    "Flash",
+    "Reach"
+  ]
+}

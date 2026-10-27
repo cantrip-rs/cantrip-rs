@@ -1,0 +1,11 @@
+{
+  "name": "Mountain Bandit",
+  "manaCost": "{R}",
+  "type": "Creature — Human Soldier Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

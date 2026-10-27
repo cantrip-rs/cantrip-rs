@@ -1,0 +1,8 @@
+{
+  "name": "Pheres-Band Centaurs",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Centaur Warrior",
+  "power": 3,
+  "toughness": 7,
+  "oracleText": ""
+}

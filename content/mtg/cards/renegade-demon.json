@@ -1,0 +1,8 @@
+{
+  "name": "Renegade Demon",
+  "manaCost": "{3}{B}{B}",
+  "type": "Creature — Demon",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": ""
+}

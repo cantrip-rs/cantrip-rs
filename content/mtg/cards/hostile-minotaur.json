@@ -1,0 +1,11 @@
+{
+  "name": "Hostile Minotaur",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Minotaur",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)",
+  "keywords": [
+    "Haste"
+  ]
+}

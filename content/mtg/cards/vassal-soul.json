@@ -1,0 +1,11 @@
+{
+  "name": "Vassal Soul",
+  "manaCost": "{1}{W/U}{W/U}",
+  "type": "Creature — Spirit",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

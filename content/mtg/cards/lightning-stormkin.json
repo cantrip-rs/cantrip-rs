@@ -1,0 +1,12 @@
+{
+  "name": "Lightning Stormkin",
+  "manaCost": "{U}{R}",
+  "type": "Creature — Elemental Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nHaste (This creature can attack and {T} as soon as it comes under your control.)",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}

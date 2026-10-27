@@ -1,0 +1,12 @@
+{
+  "name": "Archers of Qarsi",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Snake Archer",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": "Defender\nReach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Defender",
+    "Reach"
+  ]
+}

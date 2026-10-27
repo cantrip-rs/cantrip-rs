@@ -1,0 +1,11 @@
+{
+  "name": "Norwood Archers",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elf Archer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

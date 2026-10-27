@@ -1,0 +1,8 @@
+{
+  "name": "Great-Horn Krushok",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Beast",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": ""
+}

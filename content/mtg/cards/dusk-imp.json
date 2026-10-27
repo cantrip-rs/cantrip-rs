@@ -1,0 +1,11 @@
+{
+  "name": "Dusk Imp",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Imp",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

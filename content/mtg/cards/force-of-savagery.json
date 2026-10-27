@@ -1,0 +1,11 @@
+{
+  "name": "Force of Savagery",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elemental",
+  "power": 8,
+  "toughness": 0,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

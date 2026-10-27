@@ -1,0 +1,11 @@
+{
+  "name": "Quicksilver, Pietro Maximoff",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Mutant Hero",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Haste (This creature can attack and {T} as soon as he comes under your control.)",
+  "keywords": [
+    "Haste"
+  ]
+}

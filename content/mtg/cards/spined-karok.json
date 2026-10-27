@@ -1,0 +1,8 @@
+{
+  "name": "Spined Karok",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Crocodile",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": ""
+}

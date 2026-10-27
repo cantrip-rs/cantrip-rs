@@ -1,0 +1,11 @@
+{
+  "name": "Moon Heron",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Spirit Bird",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

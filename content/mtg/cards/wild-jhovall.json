@@ -1,0 +1,8 @@
+{
+  "name": "Wild Jhovall",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Cat",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Needlepeak Spider",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Spider",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Reach",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Enormous Baloth",
+  "manaCost": "{6}{G}",
+  "type": "Creature — Beast",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Nyxborn Courser",
+  "manaCost": "{1}{W}{W}",
+  "type": "Enchantment Creature — Centaur Scout",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Python",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Snake",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

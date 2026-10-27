@@ -1,0 +1,11 @@
+{
+  "name": "Moaning Spirit",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Spirit",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

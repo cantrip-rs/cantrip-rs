@@ -1,0 +1,11 @@
+{
+  "name": "Zodiac Monkey",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Monkey",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)",
+  "keywords": [
+    "Forestwalk"
+  ]
+}

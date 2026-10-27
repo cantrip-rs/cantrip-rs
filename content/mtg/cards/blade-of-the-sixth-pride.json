@@ -1,0 +1,8 @@
+{
+  "name": "Blade of the Sixth Pride",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Cat Rebel",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": ""
+}

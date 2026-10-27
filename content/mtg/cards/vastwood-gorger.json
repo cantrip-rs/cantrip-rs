@@ -1,0 +1,8 @@
+{
+  "name": "Vastwood Gorger",
+  "manaCost": "{5}{G}",
+  "type": "Creature — Wurm",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": ""
+}

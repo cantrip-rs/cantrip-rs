@@ -1,0 +1,11 @@
+{
+  "name": "Ogre Sentry",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Ogre Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Defender",
+  "keywords": [
+    "Defender"
+  ]
+}

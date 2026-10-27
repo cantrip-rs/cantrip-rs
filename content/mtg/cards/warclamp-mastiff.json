@@ -1,0 +1,11 @@
+{
+  "name": "Warclamp Mastiff",
+  "manaCost": "{W}",
+  "type": "Creature — Dog",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "First strike (This creature deals combat damage before creatures without first strike.)",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

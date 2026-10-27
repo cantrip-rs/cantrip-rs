@@ -1,0 +1,11 @@
+{
+  "name": "Wildwood Patrol",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Centaur Scout",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)",
+  "keywords": [
+    "Trample"
+  ]
+}

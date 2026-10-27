@@ -1,0 +1,8 @@
+{
+  "name": "Sanctuary Cat",
+  "manaCost": "{W}",
+  "type": "Creature — Cat",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": ""
+}

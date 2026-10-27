@@ -1,0 +1,11 @@
+{
+  "name": "Pincher Beetles",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Insect",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Shroud (This creature can't be the target of spells or abilities.)",
+  "keywords": [
+    "Shroud"
+  ]
+}

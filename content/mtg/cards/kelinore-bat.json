@@ -1,0 +1,11 @@
+{
+  "name": "Kelinore Bat",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Bat",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

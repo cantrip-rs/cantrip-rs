@@ -1,0 +1,8 @@
+{
+  "name": "Hollowhenge Beast",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": ""
+}

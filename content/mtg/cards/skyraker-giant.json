@@ -1,0 +1,11 @@
+{
+  "name": "Skyraker Giant",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Giant",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

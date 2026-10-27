@@ -1,0 +1,11 @@
+{
+  "name": "Hornet Cobra",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Snake",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "First strike",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

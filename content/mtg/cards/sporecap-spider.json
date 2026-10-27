@@ -1,0 +1,11 @@
+{
+  "name": "Sporecap Spider",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Spider",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": "Reach",
+  "keywords": [
+    "Reach"
+  ]
+}

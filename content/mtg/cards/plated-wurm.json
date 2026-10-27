@@ -1,0 +1,8 @@
+{
+  "name": "Plated Wurm",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Wurm",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": ""
+}

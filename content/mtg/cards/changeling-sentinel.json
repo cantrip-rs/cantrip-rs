@@ -1,0 +1,12 @@
+{
+  "name": "Changeling Sentinel",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Shapeshifter",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Changeling (This card is every creature type.)\nVigilance",
+  "keywords": [
+    "Changeling",
+    "Vigilance"
+  ]
+}

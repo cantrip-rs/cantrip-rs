@@ -1,0 +1,12 @@
+{
+  "name": "Sungrace Pegasus",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Pegasus",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying\nLifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}

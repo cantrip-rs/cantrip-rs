@@ -1,0 +1,8 @@
+{
+  "name": "Lady Orca",
+  "manaCost": "{5}{B}{R}",
+  "type": "Legendary Creature — Demon",
+  "power": 7,
+  "toughness": 4,
+  "oracleText": ""
+}

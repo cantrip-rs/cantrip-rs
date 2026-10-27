@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Torches",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Wall",
+  "power": 4,
+  "toughness": 1,
+  "oracleText": "Defender (This creature can't attack.)",
+  "keywords": [
+    "Defender"
+  ]
+}

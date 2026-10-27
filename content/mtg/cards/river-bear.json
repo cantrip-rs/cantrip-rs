@@ -1,0 +1,11 @@
+{
+  "name": "River Bear",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Bear",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Islandwalk (This creature can't be blocked as long as defending player controls an Island.)",
+  "keywords": [
+    "Islandwalk"
+  ]
+}

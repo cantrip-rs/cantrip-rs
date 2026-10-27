@@ -1,0 +1,8 @@
+{
+  "name": "Murasa Brute",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Troll Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

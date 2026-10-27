@@ -1,0 +1,11 @@
+{
+  "name": "Rhox War Monk",
+  "manaCost": "{G}{W}{U}",
+  "type": "Creature — Rhino Monk",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Lifelink",
+  "keywords": [
+    "Lifelink"
+  ]
+}

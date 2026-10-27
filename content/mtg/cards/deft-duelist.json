@@ -1,0 +1,12 @@
+{
+  "name": "Deft Duelist",
+  "manaCost": "{W}{U}",
+  "type": "Creature — Human Rogue",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "First strike\nShroud (This creature can't be the target of spells or abilities.)",
+  "keywords": [
+    "FirstStrike",
+    "Shroud"
+  ]
+}

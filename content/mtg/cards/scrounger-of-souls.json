@@ -1,0 +1,11 @@
+{
+  "name": "Scrounger of Souls",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Horror",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Lifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Lifelink"
+  ]
+}

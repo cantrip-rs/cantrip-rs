@@ -1,0 +1,11 @@
+{
+  "name": "Royal Falcon",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

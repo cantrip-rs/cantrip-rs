@@ -1,0 +1,11 @@
+{
+  "name": "Bog Smugglers",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Human Mercenary",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)",
+  "keywords": [
+    "Swampwalk"
+  ]
+}

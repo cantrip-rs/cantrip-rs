@@ -1,0 +1,11 @@
+{
+  "name": "Fencing Ace",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Double strike (This creature deals both first-strike and regular combat damage.)",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

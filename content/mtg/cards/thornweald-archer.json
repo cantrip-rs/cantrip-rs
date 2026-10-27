@@ -1,0 +1,12 @@
+{
+  "name": "Thornweald Archer",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Archer",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nDeathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "keywords": [
+    "Reach",
+    "Deathtouch"
+  ]
+}

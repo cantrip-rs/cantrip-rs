@@ -1,0 +1,11 @@
+{
+  "name": "Glacial Wall",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Wall",
+  "power": 0,
+  "toughness": 7,
+  "oracleText": "Defender (This creature can't attack.)",
+  "keywords": [
+    "Defender"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Horned Turtle",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Turtle",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": ""
+}

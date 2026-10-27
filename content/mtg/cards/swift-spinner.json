@@ -1,0 +1,12 @@
+{
+  "name": "Swift Spinner",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Spider",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nReach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Flash",
+    "Reach"
+  ]
+}

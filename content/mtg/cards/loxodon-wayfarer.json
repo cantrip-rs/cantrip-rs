@@ -1,0 +1,8 @@
+{
+  "name": "Loxodon Wayfarer",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Elephant Monk",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": ""
+}

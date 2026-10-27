@@ -1,0 +1,11 @@
+{
+  "name": "Gnottvold Recluse",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Spider",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Reach",
+  "keywords": [
+    "Reach"
+  ]
+}

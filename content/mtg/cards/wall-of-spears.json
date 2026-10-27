@@ -1,0 +1,12 @@
+{
+  "name": "Wall of Spears",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Wall",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Defender (This creature can't attack.)\nFirst strike",
+  "keywords": [
+    "Defender",
+    "FirstStrike"
+  ]
+}

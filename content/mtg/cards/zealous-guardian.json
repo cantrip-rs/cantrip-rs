@@ -1,0 +1,11 @@
+{
+  "name": "Zealous Guardian",
+  "manaCost": "{W/U}",
+  "type": "Creature — Kithkin Soldier",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flash",
+  "keywords": [
+    "Flash"
+  ]
+}

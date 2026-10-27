@@ -1,0 +1,12 @@
+{
+  "name": "Cloaked Siren",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Siren",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nFlying",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

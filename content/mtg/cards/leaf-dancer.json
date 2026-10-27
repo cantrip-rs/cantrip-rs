@@ -1,0 +1,11 @@
+{
+  "name": "Leaf Dancer",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Centaur",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)",
+  "keywords": [
+    "Forestwalk"
+  ]
+}

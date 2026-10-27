@@ -1,0 +1,12 @@
+{
+  "name": "Gerrard's Irregulars",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Human Soldier",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Trample, haste",
+  "keywords": [
+    "Trample",
+    "Haste"
+  ]
+}

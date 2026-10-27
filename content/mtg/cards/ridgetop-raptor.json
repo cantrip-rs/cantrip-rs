@@ -1,0 +1,11 @@
+{
+  "name": "Ridgetop Raptor",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Dinosaur Beast",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Double strike (This creature deals both first-strike and regular combat damage.)",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

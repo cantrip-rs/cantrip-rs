@@ -1,0 +1,12 @@
+{
+  "name": "Relic Sloth",
+  "manaCost": "{3}{R}{W}",
+  "type": "Creature — Sloth Beast",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Vigilance\nMenace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Vigilance",
+    "Menace"
+  ]
+}

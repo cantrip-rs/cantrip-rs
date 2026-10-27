@@ -1,0 +1,8 @@
+{
+  "name": "Stone Golem",
+  "manaCost": "{5}",
+  "type": "Artifact Creature — Golem",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": ""
+}

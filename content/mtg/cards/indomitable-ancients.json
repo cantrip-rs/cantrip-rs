@@ -1,0 +1,8 @@
+{
+  "name": "Indomitable Ancients",
+  "manaCost": "{2}{W}{W}",
+  "type": "Creature — Treefolk Warrior",
+  "power": 2,
+  "toughness": 10,
+  "oracleText": ""
+}

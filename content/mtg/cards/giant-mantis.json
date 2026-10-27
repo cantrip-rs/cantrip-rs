@@ -1,0 +1,11 @@
+{
+  "name": "Giant Mantis",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Insect",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

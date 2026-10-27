@@ -1,0 +1,8 @@
+{
+  "name": "Dutiful Servants",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": ""
+}

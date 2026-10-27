@@ -1,0 +1,11 @@
+{
+  "name": "Scryb Sprites",
+  "manaCost": "{G}",
+  "type": "Creature — Faerie",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

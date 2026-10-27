@@ -1,0 +1,13 @@
+{
+  "name": "Fleetfoot Dancer",
+  "manaCost": "{1}{R}{G}{W}",
+  "type": "Creature — Elf Druid",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample, lifelink, haste",
+  "keywords": [
+    "Trample",
+    "Lifelink",
+    "Haste"
+  ]
+}

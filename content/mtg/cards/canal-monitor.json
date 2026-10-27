@@ -1,0 +1,8 @@
+{
+  "name": "Canal Monitor",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Lizard",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": ""
+}

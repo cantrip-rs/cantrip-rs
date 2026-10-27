@@ -1,0 +1,11 @@
+{
+  "name": "Dancing Scimitar",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Spirit",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)",
+  "keywords": [
+    "Flying"
+  ]
+}

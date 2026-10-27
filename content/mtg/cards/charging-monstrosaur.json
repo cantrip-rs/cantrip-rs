@@ -1,0 +1,12 @@
+{
+  "name": "Charging Monstrosaur",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Dinosaur",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Trample, haste",
+  "keywords": [
+    "Trample",
+    "Haste"
+  ]
+}

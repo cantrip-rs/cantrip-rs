@@ -1,0 +1,8 @@
+{
+  "name": "Eager Cadet",
+  "manaCost": "{W}",
+  "type": "Creature — Human Soldier",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": ""
+}

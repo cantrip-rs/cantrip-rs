@@ -1,0 +1,11 @@
+{
+  "name": "Ghirapur Osprey",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Bird",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

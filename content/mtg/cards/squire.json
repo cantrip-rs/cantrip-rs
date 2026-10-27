@@ -1,0 +1,8 @@
+{
+  "name": "Squire",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": ""
+}

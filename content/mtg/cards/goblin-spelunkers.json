@@ -1,0 +1,11 @@
+{
+  "name": "Goblin Spelunkers",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Mountainwalk (This creature can't be blocked as long as defending player controls a Mountain.)",
+  "keywords": [
+    "Mountainwalk"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Goblin Sky Raider",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)",
+  "keywords": [
+    "Flying"
+  ]
+}

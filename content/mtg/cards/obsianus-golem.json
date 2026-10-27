@@ -1,0 +1,8 @@
+{
+  "name": "Obsianus Golem",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Golem",
+  "power": 4,
+  "toughness": 6,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Elite Vanguard",
+  "manaCost": "{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

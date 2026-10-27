@@ -1,0 +1,8 @@
+{
+  "name": "Barktooth Warbeard",
+  "manaCost": "{4}{B}{R}{R}",
+  "type": "Legendary Creature — Human Warrior",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": ""
+}

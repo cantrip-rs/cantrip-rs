@@ -1,0 +1,11 @@
+{
+  "name": "Raiding Nightstalker",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Nightstalker",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)",
+  "keywords": [
+    "Swampwalk"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Mist",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Wall",
+  "power": 0,
+  "toughness": 5,
+  "oracleText": "Defender",
+  "keywords": [
+    "Defender"
+  ]
+}

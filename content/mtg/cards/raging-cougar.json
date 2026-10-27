@@ -1,0 +1,11 @@
+{
+  "name": "Raging Cougar",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Cat",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

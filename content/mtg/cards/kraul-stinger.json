@@ -1,0 +1,11 @@
+{
+  "name": "Kraul Stinger",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Insect Assassin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Deathtouch",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

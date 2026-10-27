@@ -1,0 +1,12 @@
+{
+  "name": "Tangle Spider",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Spider",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nReach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Flash",
+    "Reach"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Universal Automaton",
+  "manaCost": "{1}",
+  "type": "Artifact Creature — Shapeshifter",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Changeling (This card is every creature type.)",
+  "keywords": [
+    "Changeling"
+  ]
+}

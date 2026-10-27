@@ -1,0 +1,11 @@
+{
+  "name": "Wild Ox",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Ox",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)",
+  "keywords": [
+    "Swampwalk"
+  ]
+}

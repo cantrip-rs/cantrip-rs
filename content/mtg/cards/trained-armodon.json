@@ -1,0 +1,8 @@
+{
+  "name": "Trained Armodon",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Elephant",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

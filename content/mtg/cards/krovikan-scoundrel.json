@@ -1,0 +1,8 @@
+{
+  "name": "Krovikan Scoundrel",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Rogue",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

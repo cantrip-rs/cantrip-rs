@@ -1,0 +1,12 @@
+{
+  "name": "Crazed Skirge",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Phyrexian Imp",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, haste",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}

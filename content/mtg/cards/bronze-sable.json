@@ -1,0 +1,8 @@
+{
+  "name": "Bronze Sable",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Sable",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

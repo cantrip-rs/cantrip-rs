@@ -1,0 +1,11 @@
+{
+  "name": "Crimson Kobolds",
+  "manaCost": "{0}",
+  "colorIndicator": [
+    "Red"
+  ],
+  "type": "Creature — Kobold",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": ""
+}

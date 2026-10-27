@@ -1,0 +1,13 @@
+{
+  "name": "Lightning Angel",
+  "manaCost": "{1}{U}{R}{W}",
+  "type": "Creature — Angel",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying, vigilance, haste",
+  "keywords": [
+    "Flying",
+    "Vigilance",
+    "Haste"
+  ]
+}

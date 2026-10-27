@@ -1,0 +1,11 @@
+{
+  "name": "Dwarven Grunt",
+  "manaCost": "{R}",
+  "type": "Creature — Dwarf",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Mountainwalk (This creature can't be blocked as long as defending player controls a Mountain.)",
+  "keywords": [
+    "Mountainwalk"
+  ]
+}

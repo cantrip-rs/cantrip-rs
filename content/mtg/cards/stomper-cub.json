@@ -1,0 +1,11 @@
+{
+  "name": "Stomper Cub",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

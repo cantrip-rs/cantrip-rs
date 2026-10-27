@@ -1,0 +1,8 @@
+{
+  "name": "Tusked Colossodon",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": ""
+}

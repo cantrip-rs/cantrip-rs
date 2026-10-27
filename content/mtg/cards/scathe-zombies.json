@@ -1,0 +1,8 @@
+{
+  "name": "Scathe Zombies",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

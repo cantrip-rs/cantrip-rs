@@ -1,0 +1,8 @@
+{
+  "name": "Summit Prowler",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Yeti",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": ""
+}

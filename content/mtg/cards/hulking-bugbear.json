@@ -1,0 +1,11 @@
+{
+  "name": "Hulking Bugbear",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Goblin",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

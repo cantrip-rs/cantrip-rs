@@ -1,0 +1,11 @@
+{
+  "name": "Jhovall Queen",
+  "manaCost": "{4}{W}{W}",
+  "type": "Creature — Cat Rebel",
+  "power": 4,
+  "toughness": 7,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

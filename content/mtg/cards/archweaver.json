@@ -1,0 +1,12 @@
+{
+  "name": "Archweaver",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Spider",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Reach, trample",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}

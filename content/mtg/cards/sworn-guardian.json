@@ -1,0 +1,8 @@
+{
+  "name": "Sworn Guardian",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Merfolk Warrior",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": ""
+}

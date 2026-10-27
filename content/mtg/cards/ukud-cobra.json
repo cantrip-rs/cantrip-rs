@@ -1,0 +1,11 @@
+{
+  "name": "Ukud Cobra",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Snake",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

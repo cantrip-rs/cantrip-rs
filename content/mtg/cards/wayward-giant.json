@@ -1,0 +1,11 @@
+{
+  "name": "Wayward Giant",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Giant",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Menace",
+  "keywords": [
+    "Menace"
+  ]
+}

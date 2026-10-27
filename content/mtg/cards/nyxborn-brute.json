@@ -1,0 +1,8 @@
+{
+  "name": "Nyxborn Brute",
+  "manaCost": "{3}{R}{R}",
+  "type": "Enchantment Creature — Cyclops",
+  "power": 7,
+  "toughness": 3,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Coral Merfolk",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Merfolk",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Trained Orgg",
+  "manaCost": "{6}{R}",
+  "type": "Creature — Orgg",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": ""
+}

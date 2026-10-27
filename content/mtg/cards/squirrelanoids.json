@@ -1,0 +1,11 @@
+{
+  "name": "Squirrelanoids",
+  "manaCost": "{B}",
+  "type": "Creature — Squirrel Mutant",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

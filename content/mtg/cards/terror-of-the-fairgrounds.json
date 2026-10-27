@@ -1,0 +1,8 @@
+{
+  "name": "Terror of the Fairgrounds",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Gremlin",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": ""
+}

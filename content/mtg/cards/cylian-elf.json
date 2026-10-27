@@ -1,0 +1,8 @@
+{
+  "name": "Cylian Elf",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Scout",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

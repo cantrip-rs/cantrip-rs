@@ -1,0 +1,8 @@
+{
+  "name": "Ancient Brontodon",
+  "manaCost": "{6}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 9,
+  "toughness": 9,
+  "oracleText": ""
+}

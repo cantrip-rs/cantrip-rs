@@ -1,0 +1,11 @@
+{
+  "name": "Goliath Beetle",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Insect",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

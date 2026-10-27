@@ -1,0 +1,12 @@
+{
+  "name": "Segovian Angel",
+  "manaCost": "{W}",
+  "type": "Creature — Angel",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying, vigilance",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

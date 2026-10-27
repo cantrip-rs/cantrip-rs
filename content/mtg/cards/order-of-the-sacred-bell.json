@@ -1,0 +1,8 @@
+{
+  "name": "Order of the Sacred Bell",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Human Monk",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Colossapede",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Insect",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Ancient Carp",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Fish",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": ""
+}

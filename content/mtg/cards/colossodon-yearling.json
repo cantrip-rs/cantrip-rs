@@ -1,0 +1,8 @@
+{
+  "name": "Colossodon Yearling",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Beast",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": ""
+}

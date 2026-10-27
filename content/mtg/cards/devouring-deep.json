@@ -1,0 +1,11 @@
+{
+  "name": "Devouring Deep",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Fish",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Islandwalk (This creature can't be blocked as long as defending player controls an Island.)",
+  "keywords": [
+    "Islandwalk"
+  ]
+}

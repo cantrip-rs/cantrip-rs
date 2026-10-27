@@ -1,0 +1,11 @@
+{
+  "name": "Updraft Elemental",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Elemental",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

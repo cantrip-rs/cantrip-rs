@@ -1,0 +1,8 @@
+{
+  "name": "Nettle Swine",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Boar",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": ""
+}

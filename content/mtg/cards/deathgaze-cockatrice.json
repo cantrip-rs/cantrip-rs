@@ -1,0 +1,12 @@
+{
+  "name": "Deathgaze Cockatrice",
+  "manaCost": "{2}{B}{B}",
+  "type": "Creature — Cockatrice",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nDeathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "keywords": [
+    "Flying",
+    "Deathtouch"
+  ]
+}

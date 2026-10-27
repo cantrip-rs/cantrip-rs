@@ -1,0 +1,11 @@
+{
+  "name": "Rootwater Commando",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Merfolk",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Islandwalk (This creature can't be blocked as long as defending player controls an Island.)",
+  "keywords": [
+    "Islandwalk"
+  ]
+}

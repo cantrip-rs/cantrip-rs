@@ -1,0 +1,11 @@
+{
+  "name": "The Terror of Serpent's Pass",
+  "manaCost": "{5}{U}{U}",
+  "type": "Legendary Creature — Serpent",
+  "power": 8,
+  "toughness": 8,
+  "oracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Hexproof"
+  ]
+}

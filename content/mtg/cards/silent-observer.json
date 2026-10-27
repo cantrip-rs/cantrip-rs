@@ -1,0 +1,11 @@
+{
+  "name": "Silent Observer",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Spirit",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

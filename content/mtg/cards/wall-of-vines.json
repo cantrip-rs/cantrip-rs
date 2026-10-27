@@ -1,0 +1,12 @@
+{
+  "name": "Wall of Vines",
+  "manaCost": "{G}",
+  "type": "Creature — Plant Wall",
+  "power": 0,
+  "toughness": 3,
+  "oracleText": "Defender (This creature can't attack.)\nReach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Defender",
+    "Reach"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Mischievous Sneakling",
+  "manaCost": "{1}{U/B}",
+  "type": "Creature — Shapeshifter",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Changeling (This card is every creature type.)\nFlash",
+  "keywords": [
+    "Changeling",
+    "Flash"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Sentinels of Glen Elendra",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Faerie Soldier",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flash\nFlying",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

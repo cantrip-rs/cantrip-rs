@@ -1,0 +1,11 @@
+{
+  "name": "Snapping Drake",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Drake",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Thraben Valiant",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

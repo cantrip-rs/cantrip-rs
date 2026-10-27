@@ -1,0 +1,8 @@
+{
+  "name": "Shu Elite Infantry",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

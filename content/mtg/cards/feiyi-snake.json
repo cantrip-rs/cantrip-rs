@@ -1,0 +1,11 @@
+{
+  "name": "Feiyi Snake",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Snake",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

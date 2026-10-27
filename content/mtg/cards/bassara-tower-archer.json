@@ -1,0 +1,12 @@
+{
+  "name": "Bassara Tower Archer",
+  "manaCost": "{G}{G}",
+  "type": "Creature — Human Archer",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Reach, hexproof",
+  "keywords": [
+    "Reach",
+    "Hexproof"
+  ]
+}

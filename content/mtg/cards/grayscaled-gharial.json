@@ -1,0 +1,11 @@
+{
+  "name": "Grayscaled Gharial",
+  "manaCost": "{U}",
+  "type": "Creature — Crocodile",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Islandwalk (This creature can't be blocked as long as defending player controls an Island.)",
+  "keywords": [
+    "Islandwalk"
+  ]
+}

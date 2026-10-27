@@ -1,0 +1,11 @@
+{
+  "name": "Goblin Deathraiders",
+  "manaCost": "{B}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

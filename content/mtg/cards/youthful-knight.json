@@ -1,0 +1,11 @@
+{
+  "name": "Youthful Knight",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "First strike",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

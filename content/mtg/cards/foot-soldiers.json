@@ -1,0 +1,8 @@
+{
+  "name": "Foot Soldiers",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": ""
+}

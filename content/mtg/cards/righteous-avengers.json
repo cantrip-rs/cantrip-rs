@@ -1,0 +1,11 @@
+{
+  "name": "Righteous Avengers",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Plainswalk (This creature can't be blocked as long as defending player controls a Plains.)",
+  "keywords": [
+    "Plainswalk"
+  ]
+}

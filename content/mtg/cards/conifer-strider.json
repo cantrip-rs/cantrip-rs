@@ -1,0 +1,11 @@
+{
+  "name": "Conifer Strider",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elemental",
+  "power": 5,
+  "toughness": 1,
+  "oracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Hexproof"
+  ]
+}

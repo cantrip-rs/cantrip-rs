@@ -1,0 +1,8 @@
+{
+  "name": "Rotting Mastodon",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Zombie Elephant",
+  "power": 2,
+  "toughness": 8,
+  "oracleText": ""
+}

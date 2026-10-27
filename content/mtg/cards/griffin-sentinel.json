@@ -1,0 +1,12 @@
+{
+  "name": "Griffin Sentinel",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Griffin",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying\nVigilance (Attacking doesn't cause this creature to tap.)",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

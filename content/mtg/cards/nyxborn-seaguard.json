@@ -1,0 +1,8 @@
+{
+  "name": "Nyxborn Seaguard",
+  "manaCost": "{2}{U}{U}",
+  "type": "Enchantment Creature — Merfolk Soldier",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": ""
+}

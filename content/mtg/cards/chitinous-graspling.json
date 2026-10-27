@@ -1,0 +1,12 @@
+{
+  "name": "Chitinous Graspling",
+  "manaCost": "{3}{G/U}",
+  "type": "Creature — Shapeshifter",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Changeling (This card is every creature type.)\nReach",
+  "keywords": [
+    "Changeling",
+    "Reach"
+  ]
+}

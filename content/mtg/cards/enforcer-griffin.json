@@ -1,0 +1,11 @@
+{
+  "name": "Enforcer Griffin",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Griffin",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

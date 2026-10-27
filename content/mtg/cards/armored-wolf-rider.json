@@ -1,0 +1,8 @@
+{
+  "name": "Armored Wolf-Rider",
+  "manaCost": "{3}{G}{W}",
+  "type": "Creature — Elf Knight",
+  "power": 4,
+  "toughness": 6,
+  "oracleText": ""
+}

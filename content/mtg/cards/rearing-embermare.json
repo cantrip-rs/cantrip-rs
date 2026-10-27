@@ -1,0 +1,12 @@
+{
+  "name": "Rearing Embermare",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Horse Beast",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Reach, haste",
+  "keywords": [
+    "Reach",
+    "Haste"
+  ]
+}

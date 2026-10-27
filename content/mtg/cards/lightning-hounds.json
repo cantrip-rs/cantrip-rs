@@ -1,0 +1,11 @@
+{
+  "name": "Lightning Hounds",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Dog",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "First strike",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

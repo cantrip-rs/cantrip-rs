@@ -1,0 +1,11 @@
+{
+  "name": "Deer-Dog",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Elk Dog",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "First strike (This creature deals combat damage before creatures without first strike.)",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

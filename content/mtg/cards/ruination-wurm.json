@@ -1,0 +1,8 @@
+{
+  "name": "Ruination Wurm",
+  "manaCost": "{4}{R}{G}",
+  "type": "Creature — Wurm",
+  "power": 7,
+  "toughness": 6,
+  "oracleText": ""
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Shatterskull Recruit",
+  "manaCost": "{3}{R}{R}",
+  "type": "Creature — Giant Warrior Ally",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ]
+}

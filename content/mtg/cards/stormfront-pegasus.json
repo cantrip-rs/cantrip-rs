@@ -1,0 +1,11 @@
+{
+  "name": "Stormfront Pegasus",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Pegasus",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

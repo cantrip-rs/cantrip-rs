@@ -1,0 +1,11 @@
+{
+  "name": "Boggart Brute",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Darksteel Myr",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Myr",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "Indestructible (Damage and effects that say \"destroy\" don't destroy this creature. If its toughness is 0 or less, it still dies.)",
+  "keywords": [
+    "Indestructible"
+  ]
+}

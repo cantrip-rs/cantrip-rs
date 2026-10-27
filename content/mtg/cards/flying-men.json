@@ -1,0 +1,11 @@
+{
+  "name": "Flying Men",
+  "manaCost": "{U}",
+  "type": "Creature — Human",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

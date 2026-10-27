@@ -1,0 +1,8 @@
+{
+  "name": "Swab Goblin",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Pirate",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

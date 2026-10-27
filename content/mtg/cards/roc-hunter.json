@@ -1,0 +1,11 @@
+{
+  "name": "Roc Hunter",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Soldier",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Reach",
+  "keywords": [
+    "Reach"
+  ]
+}

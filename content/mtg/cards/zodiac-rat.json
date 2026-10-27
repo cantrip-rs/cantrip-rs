@@ -1,0 +1,11 @@
+{
+  "name": "Zodiac Rat",
+  "manaCost": "{B}",
+  "type": "Creature — Rat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)",
+  "keywords": [
+    "Swampwalk"
+  ]
+}

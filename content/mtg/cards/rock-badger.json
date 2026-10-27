@@ -1,0 +1,11 @@
+{
+  "name": "Rock Badger",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Badger Beast",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Mountainwalk (This creature can't be blocked as long as defending player controls a Mountain.)",
+  "keywords": [
+    "Mountainwalk"
+  ]
+}

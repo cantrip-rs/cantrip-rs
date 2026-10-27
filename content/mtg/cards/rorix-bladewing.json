@@ -1,0 +1,12 @@
+{
+  "name": "Rorix Bladewing",
+  "manaCost": "{3}{R}{R}{R}",
+  "type": "Legendary Creature — Dragon",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "Flying, haste",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}

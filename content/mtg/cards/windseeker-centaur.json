@@ -1,0 +1,11 @@
+{
+  "name": "Windseeker Centaur",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Centaur",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

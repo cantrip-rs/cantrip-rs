@@ -1,0 +1,11 @@
+{
+  "name": "Needleshot Gourna",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 3,
+  "toughness": 6,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Zetalpa, Primal Dawn",
+  "manaCost": "{6}{W}{W}",
+  "type": "Legendary Creature — Elder Dinosaur",
+  "power": 4,
+  "toughness": 8,
+  "oracleText": "Flying, double strike, vigilance, trample, indestructible",
+  "keywords": [
+    "Flying",
+    "DoubleStrike",
+    "Vigilance",
+    "Trample",
+    "Indestructible"
+  ]
+}

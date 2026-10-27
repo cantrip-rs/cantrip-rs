@@ -1,0 +1,12 @@
+{
+  "name": "Diving Griffin",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Griffin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, vigilance",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

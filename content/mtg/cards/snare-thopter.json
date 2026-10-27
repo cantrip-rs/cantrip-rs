@@ -1,0 +1,12 @@
+{
+  "name": "Snare Thopter",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Thopter",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying, haste",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}

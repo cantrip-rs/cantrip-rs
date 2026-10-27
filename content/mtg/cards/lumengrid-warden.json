@@ -1,0 +1,8 @@
+{
+  "name": "Lumengrid Warden",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": ""
+}

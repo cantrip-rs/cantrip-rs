@@ -1,0 +1,8 @@
+{
+  "name": "Dreg Reaver",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Zombie Beast",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Fresh Volunteers",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Rebel",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

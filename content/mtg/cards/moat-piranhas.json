@@ -1,0 +1,11 @@
+{
+  "name": "Moat Piranhas",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Fish",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Defender (This creature can't attack.)",
+  "keywords": [
+    "Defender"
+  ]
+}

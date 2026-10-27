@@ -1,0 +1,12 @@
+{
+  "name": "Banehound",
+  "manaCost": "{B}",
+  "type": "Creature — Nightmare Dog",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Lifelink, haste",
+  "keywords": [
+    "Lifelink",
+    "Haste"
+  ]
+}

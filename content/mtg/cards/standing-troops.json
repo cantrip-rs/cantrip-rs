@@ -1,0 +1,11 @@
+{
+  "name": "Standing Troops",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

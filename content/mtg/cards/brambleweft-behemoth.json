@@ -1,0 +1,11 @@
+{
+  "name": "Brambleweft Behemoth",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Elemental",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)",
+  "keywords": [
+    "Trample"
+  ]
+}

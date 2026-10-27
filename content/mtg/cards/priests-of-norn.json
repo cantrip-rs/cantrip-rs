@@ -1,0 +1,12 @@
+{
+  "name": "Priests of Norn",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Phyrexian Cleric",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Vigilance\nInfect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)",
+  "keywords": [
+    "Vigilance",
+    "Infect"
+  ]
+}

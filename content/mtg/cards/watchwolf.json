@@ -1,0 +1,8 @@
+{
+  "name": "Watchwolf",
+  "manaCost": "{G}{W}",
+  "type": "Creature — Wolf",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

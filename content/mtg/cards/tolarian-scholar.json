@@ -1,0 +1,8 @@
+{
+  "name": "Tolarian Scholar",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": ""
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Blackcleave Goblin",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Phyrexian Goblin Zombie",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Haste\nInfect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)",
+  "keywords": [
+    "Haste",
+    "Infect"
+  ]
+}

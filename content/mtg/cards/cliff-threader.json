@@ -1,0 +1,11 @@
+{
+  "name": "Cliff Threader",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Kor Scout",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Mountainwalk (This creature can't be blocked as long as defending player controls a Mountain.)",
+  "keywords": [
+    "Mountainwalk"
+  ]
+}

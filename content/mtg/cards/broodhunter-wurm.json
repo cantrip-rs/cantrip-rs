@@ -1,0 +1,8 @@
+{
+  "name": "Broodhunter Wurm",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Wurm",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": ""
+}

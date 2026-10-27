@@ -1,0 +1,11 @@
+{
+  "name": "Steel Wall",
+  "manaCost": "{1}",
+  "type": "Artifact Creature — Wall",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "Defender (This creature can't attack.)",
+  "keywords": [
+    "Defender"
+  ]
+}

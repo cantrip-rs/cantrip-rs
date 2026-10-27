@@ -1,0 +1,11 @@
+{
+  "name": "Silverbeak Griffin",
+  "manaCost": "{W}{W}",
+  "type": "Creature — Griffin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)",
+  "keywords": [
+    "Flying"
+  ]
+}

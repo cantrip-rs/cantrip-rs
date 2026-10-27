@@ -1,0 +1,8 @@
+{
+  "name": "Fire Elemental",
+  "manaCost": "{3}{R}{R}",
+  "type": "Creature — Elemental",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": ""
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Monster Mashup",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Werewolf Fish Zombie Vampire",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nMenace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Reach",
+    "Menace"
+  ]
+}

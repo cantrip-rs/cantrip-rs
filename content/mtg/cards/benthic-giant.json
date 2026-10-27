@@ -1,0 +1,11 @@
+{
+  "name": "Benthic Giant",
+  "manaCost": "{5}{U}",
+  "type": "Creature — Giant",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Hexproof"
+  ]
+}

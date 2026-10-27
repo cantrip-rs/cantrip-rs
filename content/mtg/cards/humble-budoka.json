@@ -1,0 +1,11 @@
+{
+  "name": "Humble Budoka",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Human Monk",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Shroud (This creature can't be the target of spells or abilities.)",
+  "keywords": [
+    "Shroud"
+  ]
+}

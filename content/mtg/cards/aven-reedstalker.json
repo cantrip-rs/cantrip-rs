@@ -1,0 +1,12 @@
+{
+  "name": "Aven Reedstalker",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Bird Warrior",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flash\nFlying",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

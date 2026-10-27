@@ -1,0 +1,11 @@
+{
+  "name": "Wilt-Leaf Cavaliers",
+  "manaCost": "{G/W}{G/W}{G/W}",
+  "type": "Creature — Elf Knight",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Field Creeper",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Scarecrow",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

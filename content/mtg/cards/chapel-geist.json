@@ -1,0 +1,11 @@
+{
+  "name": "Chapel Geist",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Spirit",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

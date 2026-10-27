@@ -1,0 +1,11 @@
+{
+  "name": "Zodiac Dog",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Dog",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Mountainwalk (This creature can't be blocked as long as defending player controls a Mountain.)",
+  "keywords": [
+    "Mountainwalk"
+  ]
+}

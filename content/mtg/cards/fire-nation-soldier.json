@@ -1,0 +1,11 @@
+{
+  "name": "Fire Nation Soldier",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Soldier",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)",
+  "keywords": [
+    "Haste"
+  ]
+}

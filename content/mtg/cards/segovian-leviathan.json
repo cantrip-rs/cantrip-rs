@@ -1,0 +1,11 @@
+{
+  "name": "Segovian Leviathan",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Leviathan",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Islandwalk (This creature can't be blocked as long as defending player controls an Island.)",
+  "keywords": [
+    "Islandwalk"
+  ]
+}

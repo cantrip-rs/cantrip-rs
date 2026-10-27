@@ -1,0 +1,11 @@
+{
+  "name": "Mountain Goat",
+  "manaCost": "{R}",
+  "type": "Creature — Goat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Mountainwalk (This creature can't be blocked as long as defending player controls a Mountain.)",
+  "keywords": [
+    "Mountainwalk"
+  ]
+}

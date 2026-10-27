@@ -1,0 +1,11 @@
+{
+  "name": "Trained Caracal",
+  "manaCost": "{W}",
+  "type": "Creature — Cat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Lifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Lifelink"
+  ]
+}

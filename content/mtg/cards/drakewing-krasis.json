@@ -1,0 +1,12 @@
+{
+  "name": "Drakewing Krasis",
+  "manaCost": "{1}{G}{U}",
+  "type": "Creature — Lizard Drake",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flying, trample",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}

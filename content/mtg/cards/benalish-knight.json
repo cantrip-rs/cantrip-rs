@@ -1,0 +1,12 @@
+{
+  "name": "Benalish Knight",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nFirst strike (This creature deals combat damage before creatures without first strike.)",
+  "keywords": [
+    "Flash",
+    "FirstStrike"
+  ]
+}

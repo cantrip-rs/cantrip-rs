@@ -1,0 +1,11 @@
+{
+  "name": "Monoist Sentry",
+  "manaCost": "{B}",
+  "type": "Artifact Creature — Robot",
+  "power": 4,
+  "toughness": 1,
+  "oracleText": "Defender",
+  "keywords": [
+    "Defender"
+  ]
+}

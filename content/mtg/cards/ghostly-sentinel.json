@@ -1,0 +1,12 @@
+{
+  "name": "Ghostly Sentinel",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Kor Spirit",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, vigilance",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

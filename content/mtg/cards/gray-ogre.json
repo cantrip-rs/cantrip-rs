@@ -1,0 +1,8 @@
+{
+  "name": "Gray Ogre",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Ogre",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

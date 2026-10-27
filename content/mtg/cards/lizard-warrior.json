@@ -1,0 +1,8 @@
+{
+  "name": "Lizard Warrior",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Lizard Warrior",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": ""
+}

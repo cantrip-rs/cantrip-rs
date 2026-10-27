@@ -1,0 +1,12 @@
+{
+  "name": "Raging Kavu",
+  "manaCost": "{1}{R}{G}",
+  "type": "Creature — Kavu",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flash\nHaste",
+  "keywords": [
+    "Flash",
+    "Haste"
+  ]
+}

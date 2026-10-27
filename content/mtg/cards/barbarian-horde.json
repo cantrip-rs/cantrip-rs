@@ -1,0 +1,8 @@
+{
+  "name": "Barbarian Horde",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Barbarian Soldier",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

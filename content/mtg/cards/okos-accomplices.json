@@ -1,0 +1,11 @@
+{
+  "name": "Oko's Accomplices",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Faerie",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

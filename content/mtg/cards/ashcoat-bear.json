@@ -1,0 +1,11 @@
+{
+  "name": "Ashcoat Bear",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Bear",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)",
+  "keywords": [
+    "Flash"
+  ]
+}

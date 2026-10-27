@@ -1,0 +1,11 @@
+{
+  "name": "Pharika's Chosen",
+  "manaCost": "{B}",
+  "type": "Creature — Snake",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

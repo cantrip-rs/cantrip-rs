@@ -1,0 +1,12 @@
+{
+  "name": "Wall of Swords",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Wall",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Defender (This creature can't attack.)\nFlying",
+  "keywords": [
+    "Defender",
+    "Flying"
+  ]
+}

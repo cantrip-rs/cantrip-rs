@@ -1,0 +1,11 @@
+{
+  "name": "Border Patrol",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Human Nomad",
+  "power": 1,
+  "toughness": 6,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

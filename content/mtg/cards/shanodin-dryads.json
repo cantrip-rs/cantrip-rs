@@ -1,0 +1,11 @@
+{
+  "name": "Shanodin Dryads",
+  "manaCost": "{G}",
+  "type": "Creature — Nymph Dryad",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)",
+  "keywords": [
+    "Forestwalk"
+  ]
+}

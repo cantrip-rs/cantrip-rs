@@ -1,0 +1,11 @@
+{
+  "name": "Twinscroll Shaman",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Dwarf Shaman",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Double strike",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Magnigoth Sentry",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Treefolk",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

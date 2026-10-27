@@ -1,0 +1,11 @@
+{
+  "name": "Renegade Troops",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Human Soldier",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

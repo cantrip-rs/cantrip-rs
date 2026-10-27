@@ -1,0 +1,12 @@
+{
+  "name": "Wrecking Crew",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Human Warrior",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nTrample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}

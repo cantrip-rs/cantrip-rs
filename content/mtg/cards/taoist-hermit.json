@@ -1,0 +1,11 @@
+{
+  "name": "Taoist Hermit",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Mystic",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Hexproof"
+  ]
+}

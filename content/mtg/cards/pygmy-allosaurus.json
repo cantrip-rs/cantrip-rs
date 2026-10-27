@@ -1,0 +1,11 @@
+{
+  "name": "Pygmy Allosaurus",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)",
+  "keywords": [
+    "Swampwalk"
+  ]
+}

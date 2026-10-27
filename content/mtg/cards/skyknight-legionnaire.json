@@ -1,0 +1,12 @@
+{
+  "name": "Skyknight Legionnaire",
+  "manaCost": "{1}{R}{W}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, haste",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}

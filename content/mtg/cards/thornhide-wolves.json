@@ -1,0 +1,8 @@
+{
+  "name": "Thornhide Wolves",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Wolf",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": ""
+}

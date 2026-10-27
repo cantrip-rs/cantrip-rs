@@ -1,0 +1,12 @@
+{
+  "name": "Assault Zeppelid",
+  "manaCost": "{2}{G}{U}",
+  "type": "Creature — Beast",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, trample",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}

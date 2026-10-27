@@ -1,0 +1,14 @@
+{
+  "name": "Sunblade Angel",
+  "manaCost": "{5}{W}",
+  "type": "Creature — Angel",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, first strike, vigilance, lifelink",
+  "keywords": [
+    "Flying",
+    "FirstStrike",
+    "Vigilance",
+    "Lifelink"
+  ]
+}

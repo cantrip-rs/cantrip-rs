@@ -1,0 +1,8 @@
+{
+  "name": "Loxodon Convert",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Phyrexian Elephant Soldier",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": ""
+}

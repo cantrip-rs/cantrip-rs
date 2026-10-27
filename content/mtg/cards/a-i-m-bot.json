@@ -1,0 +1,11 @@
+{
+  "name": "A.I.M. Bot",
+  "manaCost": "{2}{U}",
+  "type": "Artifact Creature — Robot Villain",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)",
+  "keywords": [
+    "Flying"
+  ]
+}

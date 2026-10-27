@@ -1,0 +1,11 @@
+{
+  "name": "Gaea's Skyfolk",
+  "manaCost": "{G}{U}",
+  "type": "Creature — Elf Merfolk",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

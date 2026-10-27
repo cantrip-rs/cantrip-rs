@@ -1,0 +1,11 @@
+{
+  "name": "Stormcloud Spirit",
+  "manaCost": "{3}{U}{U}",
+  "type": "Creature — Spirit",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)",
+  "keywords": [
+    "Flying"
+  ]
+}

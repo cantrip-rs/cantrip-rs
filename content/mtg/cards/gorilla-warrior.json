@@ -1,0 +1,8 @@
+{
+  "name": "Gorilla Warrior",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Ape Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

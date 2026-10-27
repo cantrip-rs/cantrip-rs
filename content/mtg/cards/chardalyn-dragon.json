@@ -1,0 +1,11 @@
+{
+  "name": "Chardalyn Dragon",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Dragon",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

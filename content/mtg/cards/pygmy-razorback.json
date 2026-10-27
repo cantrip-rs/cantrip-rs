@@ -1,0 +1,11 @@
+{
+  "name": "Pygmy Razorback",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Boar",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

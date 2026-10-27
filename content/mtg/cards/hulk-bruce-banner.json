@@ -1,0 +1,11 @@
+{
+  "name": "Hulk, Bruce Banner",
+  "manaCost": "{3}{R}{R}",
+  "type": "Legendary Creature — Gamma Berserker Hero",
+  "power": 7,
+  "toughness": 4,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player he's attacking.)",
+  "keywords": [
+    "Trample"
+  ]
+}

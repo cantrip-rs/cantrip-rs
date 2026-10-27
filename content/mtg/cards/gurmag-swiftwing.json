@@ -1,0 +1,13 @@
+{
+  "name": "Gurmag Swiftwing",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Bat",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying, first strike, haste",
+  "keywords": [
+    "Flying",
+    "FirstStrike",
+    "Haste"
+  ]
+}

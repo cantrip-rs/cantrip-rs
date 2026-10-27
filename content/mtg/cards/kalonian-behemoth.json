@@ -1,0 +1,11 @@
+{
+  "name": "Kalonian Behemoth",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 9,
+  "toughness": 9,
+  "oracleText": "Shroud (This creature can't be the target of spells or abilities.)",
+  "keywords": [
+    "Shroud"
+  ]
+}

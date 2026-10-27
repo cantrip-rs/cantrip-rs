@@ -1,0 +1,8 @@
+{
+  "name": "Independent Troops",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

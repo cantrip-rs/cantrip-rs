@@ -1,0 +1,13 @@
+{
+  "name": "Plumeveil",
+  "manaCost": "{W/U}{W/U}{W/U}",
+  "type": "Creature — Elemental",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flash\nDefender, flying",
+  "keywords": [
+    "Flash",
+    "Defender",
+    "Flying"
+  ]
+}

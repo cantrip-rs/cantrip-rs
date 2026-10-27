@@ -1,0 +1,11 @@
+{
+  "name": "Aven Sentry",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Bird Soldier",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Wasp Lancer",
+  "manaCost": "{U/B}{U/B}{U/B}",
+  "type": "Creature — Faerie Soldier",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

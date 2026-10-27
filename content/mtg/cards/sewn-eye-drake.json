@@ -1,0 +1,12 @@
+{
+  "name": "Sewn-Eye Drake",
+  "manaCost": "{2}{U/R}{B}",
+  "type": "Creature — Zombie Drake",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flying, haste",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}

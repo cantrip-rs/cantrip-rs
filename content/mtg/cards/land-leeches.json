@@ -1,0 +1,11 @@
+{
+  "name": "Land Leeches",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Leech",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

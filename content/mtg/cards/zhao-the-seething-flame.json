@@ -1,0 +1,11 @@
+{
+  "name": "Zhao, the Seething Flame",
+  "manaCost": "{4}{R}",
+  "type": "Legendary Creature — Human Soldier",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ]
+}

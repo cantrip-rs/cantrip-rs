@@ -1,0 +1,12 @@
+{
+  "name": "Stormrider Spirit",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Spirit",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flash\nFlying",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

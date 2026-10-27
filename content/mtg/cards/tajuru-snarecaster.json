@@ -1,0 +1,11 @@
+{
+  "name": "Tajuru Snarecaster",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Rogue",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Reach",
+  "keywords": [
+    "Reach"
+  ]
+}

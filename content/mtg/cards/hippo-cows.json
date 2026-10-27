@@ -1,0 +1,11 @@
+{
+  "name": "Hippo-Cows",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Hippo Ox",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player it's attacking.)",
+  "keywords": [
+    "Trample"
+  ]
+}

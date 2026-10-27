@@ -1,0 +1,8 @@
+{
+  "name": "Isamaru, Hound of Konda",
+  "manaCost": "{W}",
+  "type": "Legendary Creature — Dog",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

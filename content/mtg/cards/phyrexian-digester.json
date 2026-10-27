@@ -1,0 +1,11 @@
+{
+  "name": "Phyrexian Digester",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Phyrexian Construct",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Infect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)",
+  "keywords": [
+    "Infect"
+  ]
+}

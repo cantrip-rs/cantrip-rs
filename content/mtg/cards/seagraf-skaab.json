@@ -1,0 +1,8 @@
+{
+  "name": "Seagraf Skaab",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Zombie",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": ""
+}

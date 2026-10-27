@@ -1,0 +1,12 @@
+{
+  "name": "Living Tempest",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flash\nFlying",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

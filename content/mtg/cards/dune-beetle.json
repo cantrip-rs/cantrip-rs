@@ -1,0 +1,8 @@
+{
+  "name": "Dune Beetle",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Insect",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": ""
+}

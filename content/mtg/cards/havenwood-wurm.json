@@ -1,0 +1,12 @@
+{
+  "name": "Havenwood Wurm",
+  "manaCost": "{6}{G}",
+  "type": "Creature — Wurm",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nTrample",
+  "keywords": [
+    "Flash",
+    "Trample"
+  ]
+}

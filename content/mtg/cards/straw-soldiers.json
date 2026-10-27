@@ -1,0 +1,8 @@
+{
+  "name": "Straw Soldiers",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Scarecrow Soldier",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": ""
+}

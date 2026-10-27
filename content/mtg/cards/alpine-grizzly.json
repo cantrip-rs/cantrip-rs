@@ -1,0 +1,8 @@
+{
+  "name": "Alpine Grizzly",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Bear",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": ""
+}

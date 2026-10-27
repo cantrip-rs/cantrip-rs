@@ -1,0 +1,12 @@
+{
+  "name": "Soul of the Rapids",
+  "manaCost": "{3}{U}{U}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying\nHexproof (This creature can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Flying",
+    "Hexproof"
+  ]
+}

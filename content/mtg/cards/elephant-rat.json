@@ -1,0 +1,11 @@
+{
+  "name": "Elephant-Rat",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Elephant Rat",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ]
+}

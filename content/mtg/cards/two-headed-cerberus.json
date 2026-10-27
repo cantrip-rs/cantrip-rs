@@ -1,0 +1,11 @@
+{
+  "name": "Two-Headed Cerberus",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Dog",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Double strike (This creature deals both first-strike and regular combat damage.)",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Bull Cerodon",
+  "manaCost": "{4}{R}{W}",
+  "type": "Creature — Beast",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Vigilance, haste",
+  "keywords": [
+    "Vigilance",
+    "Haste"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Gilded Sentinel",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Golem",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

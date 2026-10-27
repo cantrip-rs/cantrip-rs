@@ -1,0 +1,11 @@
+{
+  "name": "Carnivorous Plant",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Plant Wall",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Defender",
+  "keywords": [
+    "Defender"
+  ]
+}

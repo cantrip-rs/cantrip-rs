@@ -1,0 +1,11 @@
+{
+  "name": "Risen Sanctuary",
+  "manaCost": "{5}{G}{W}",
+  "type": "Creature — Elemental",
+  "power": 8,
+  "toughness": 8,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

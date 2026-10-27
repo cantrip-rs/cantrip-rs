@@ -1,0 +1,8 @@
+{
+  "name": "Yoked Ox",
+  "manaCost": "{W}",
+  "type": "Creature — Ox",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": ""
+}

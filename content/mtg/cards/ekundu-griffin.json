@@ -1,0 +1,12 @@
+{
+  "name": "Ekundu Griffin",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Griffin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, first strike",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

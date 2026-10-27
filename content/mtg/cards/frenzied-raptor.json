@@ -1,0 +1,8 @@
+{
+  "name": "Frenzied Raptor",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Dinosaur",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": ""
+}

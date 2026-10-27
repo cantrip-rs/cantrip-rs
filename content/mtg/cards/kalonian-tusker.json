@@ -1,0 +1,8 @@
+{
+  "name": "Kalonian Tusker",
+  "manaCost": "{G}{G}",
+  "type": "Creature — Beast",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

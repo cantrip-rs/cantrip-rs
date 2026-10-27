@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Heat",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Wall",
+  "power": 2,
+  "toughness": 6,
+  "oracleText": "Defender (This creature can't attack.)",
+  "keywords": [
+    "Defender"
+  ]
+}

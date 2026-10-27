@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Ice",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Wall",
+  "power": 0,
+  "toughness": 7,
+  "oracleText": "Defender (This creature can't attack.)",
+  "keywords": [
+    "Defender"
+  ]
+}

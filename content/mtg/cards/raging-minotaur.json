@@ -1,0 +1,11 @@
+{
+  "name": "Raging Minotaur",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Minotaur Berserker",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

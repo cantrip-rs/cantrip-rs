@@ -1,0 +1,11 @@
+{
+  "name": "Tormented Angel",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Angel",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

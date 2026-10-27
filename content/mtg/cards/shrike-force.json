@@ -1,0 +1,13 @@
+{
+  "name": "Shrike Force",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Bird Knight",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying, double strike, vigilance",
+  "keywords": [
+    "Flying",
+    "DoubleStrike",
+    "Vigilance"
+  ]
+}

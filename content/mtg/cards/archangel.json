@@ -1,0 +1,12 @@
+{
+  "name": "Archangel",
+  "manaCost": "{5}{W}{W}",
+  "type": "Creature — Angel",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying, vigilance",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

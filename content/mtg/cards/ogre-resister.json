@@ -1,0 +1,8 @@
+{
+  "name": "Ogre Resister",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Ogre",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": ""
+}

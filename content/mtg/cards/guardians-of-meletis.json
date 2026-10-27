@@ -1,0 +1,11 @@
+{
+  "name": "Guardians of Meletis",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Golem",
+  "power": 0,
+  "toughness": 6,
+  "oracleText": "Defender (This creature can't attack.)",
+  "keywords": [
+    "Defender"
+  ]
+}

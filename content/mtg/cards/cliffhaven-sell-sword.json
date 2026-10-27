@@ -1,0 +1,8 @@
+{
+  "name": "Cliffhaven Sell-Sword",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Kor Warrior",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": ""
+}

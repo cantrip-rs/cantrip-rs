@@ -1,0 +1,11 @@
+{
+  "name": "Serra Zealot",
+  "manaCost": "{W}",
+  "type": "Creature — Human Soldier",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "First strike",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

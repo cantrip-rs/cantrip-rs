@@ -1,0 +1,12 @@
+{
+  "name": "Ascended Lawmage",
+  "manaCost": "{2}{W}{U}",
+  "type": "Creature — Vedalken Wizard",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying\nHexproof (This creature can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Flying",
+    "Hexproof"
+  ]
+}

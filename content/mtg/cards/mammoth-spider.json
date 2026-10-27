@@ -1,0 +1,11 @@
+{
+  "name": "Mammoth Spider",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Spider",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

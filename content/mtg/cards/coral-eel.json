@@ -1,0 +1,8 @@
+{
+  "name": "Coral Eel",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Fish",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

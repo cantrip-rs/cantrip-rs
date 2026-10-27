@@ -1,0 +1,11 @@
+{
+  "name": "Underdark Basilisk",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Basilisk",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Deathtouch",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

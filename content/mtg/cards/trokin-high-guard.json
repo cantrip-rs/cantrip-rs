@@ -1,0 +1,8 @@
+{
+  "name": "Trokin High Guard",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Knight",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

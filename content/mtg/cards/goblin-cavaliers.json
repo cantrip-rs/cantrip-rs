@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Cavaliers",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

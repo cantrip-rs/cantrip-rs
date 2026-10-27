@@ -1,0 +1,8 @@
+{
+  "name": "Nether Horror",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Horror",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": ""
+}

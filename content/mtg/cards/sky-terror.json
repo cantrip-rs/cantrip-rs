@@ -1,0 +1,12 @@
+{
+  "name": "Sky Terror",
+  "manaCost": "{R}{W}",
+  "type": "Creature — Dinosaur",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, menace",
+  "keywords": [
+    "Flying",
+    "Menace"
+  ]
+}

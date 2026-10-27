@@ -1,0 +1,8 @@
+{
+  "name": "Fomori Nomad",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Nomad Giant",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": ""
+}

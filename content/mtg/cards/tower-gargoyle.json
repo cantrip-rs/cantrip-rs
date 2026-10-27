@@ -1,0 +1,11 @@
+{
+  "name": "Tower Gargoyle",
+  "manaCost": "{1}{W}{U}{B}",
+  "type": "Artifact Creature — Gargoyle",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

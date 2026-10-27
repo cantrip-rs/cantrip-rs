@@ -1,0 +1,11 @@
+{
+  "name": "Greenwood Sentinel",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Scout",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

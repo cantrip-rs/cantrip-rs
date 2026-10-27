@@ -1,0 +1,11 @@
+{
+  "name": "Battle Hurda",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Giant",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "First strike",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

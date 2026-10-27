@@ -1,0 +1,12 @@
+{
+  "name": "Resistance Skywarden",
+  "manaCost": "{3}{R}{R}",
+  "type": "Creature — Ogre Rebel",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nMenace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Reach",
+    "Menace"
+  ]
+}

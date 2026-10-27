@@ -1,0 +1,13 @@
+{
+  "name": "Shepherd of the Lost",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Angel",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, first strike, vigilance",
+  "keywords": [
+    "Flying",
+    "FirstStrike",
+    "Vigilance"
+  ]
+}

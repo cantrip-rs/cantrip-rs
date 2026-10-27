@@ -1,0 +1,11 @@
+{
+  "name": "Rubbleback Rhino",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Rhino",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Hexproof"
+  ]
+}

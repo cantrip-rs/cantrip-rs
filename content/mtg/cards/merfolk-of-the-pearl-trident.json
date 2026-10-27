@@ -1,0 +1,8 @@
+{
+  "name": "Merfolk of the Pearl Trident",
+  "manaCost": "{U}",
+  "type": "Creature — Merfolk",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": ""
+}

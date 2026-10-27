@@ -1,0 +1,12 @@
+{
+  "name": "Vexing Gull",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Bird",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash\nFlying",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

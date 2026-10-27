@@ -1,0 +1,12 @@
+{
+  "name": "Wind Strider",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Merfolk Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nFlying",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

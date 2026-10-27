@@ -1,0 +1,12 @@
+{
+  "name": "Battlefield Raptor",
+  "manaCost": "{W}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying, first strike",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

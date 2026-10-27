@@ -1,0 +1,11 @@
+{
+  "name": "Primal Huntbeast",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Beast",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Hexproof"
+  ]
+}

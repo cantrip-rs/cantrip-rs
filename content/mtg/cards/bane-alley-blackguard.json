@@ -1,0 +1,8 @@
+{
+  "name": "Bane Alley Blackguard",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Rogue",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": ""
+}

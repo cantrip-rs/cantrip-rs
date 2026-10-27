@@ -1,0 +1,8 @@
+{
+  "name": "Cobblebrute",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Elemental",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": ""
+}

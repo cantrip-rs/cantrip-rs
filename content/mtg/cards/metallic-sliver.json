@@ -1,0 +1,8 @@
+{
+  "name": "Metallic Sliver",
+  "manaCost": "{1}",
+  "type": "Artifact Creature — Sliver",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": ""
+}

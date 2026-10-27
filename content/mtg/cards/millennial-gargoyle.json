@@ -1,0 +1,11 @@
+{
+  "name": "Millennial Gargoyle",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Gargoyle",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

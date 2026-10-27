@@ -1,0 +1,11 @@
+{
+  "name": "Raging Goblin",
+  "manaCost": "{R}",
+  "type": "Creature — Goblin Berserker",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)",
+  "keywords": [
+    "Haste"
+  ]
+}

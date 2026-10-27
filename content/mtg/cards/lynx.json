@@ -1,0 +1,11 @@
+{
+  "name": "Lynx",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Cat",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)",
+  "keywords": [
+    "Forestwalk"
+  ]
+}

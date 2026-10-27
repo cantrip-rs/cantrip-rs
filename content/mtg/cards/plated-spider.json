@@ -1,0 +1,11 @@
+{
+  "name": "Plated Spider",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Spider",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Warriors of Wakanda",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Human Warrior",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player it's attacking.)",
+  "keywords": [
+    "Trample"
+  ]
+}

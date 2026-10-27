@@ -1,0 +1,8 @@
+{
+  "name": "Vizzerdrix",
+  "manaCost": "{6}{U}",
+  "type": "Creature — Rabbit Beast",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": ""
+}

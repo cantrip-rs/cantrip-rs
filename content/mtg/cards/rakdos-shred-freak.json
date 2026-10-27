@@ -1,0 +1,11 @@
+{
+  "name": "Rakdos Shred-Freak",
+  "manaCost": "{B/R}{B/R}",
+  "type": "Creature — Human Berserker",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

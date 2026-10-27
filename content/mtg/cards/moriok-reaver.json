@@ -1,0 +1,8 @@
+{
+  "name": "Moriok Reaver",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Human Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

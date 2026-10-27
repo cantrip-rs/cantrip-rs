@@ -1,0 +1,11 @@
+{
+  "name": "Raging Redcap",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Knight",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Double strike (This creature deals both first-strike and regular combat damage.)",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

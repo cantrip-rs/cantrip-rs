@@ -1,0 +1,11 @@
+{
+  "name": "Air Elemental",
+  "manaCost": "{3}{U}{U}",
+  "type": "Creature — Elemental",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

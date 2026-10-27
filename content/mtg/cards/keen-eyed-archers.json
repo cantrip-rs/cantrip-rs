@@ -1,0 +1,11 @@
+{
+  "name": "Keen-Eyed Archers",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Elf Archer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

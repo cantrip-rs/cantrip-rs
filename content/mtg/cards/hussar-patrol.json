@@ -1,0 +1,12 @@
+{
+  "name": "Hussar Patrol",
+  "manaCost": "{2}{W}{U}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Flash (You may cast this spell any time you could cast an instant.)\nVigilance",
+  "keywords": [
+    "Flash",
+    "Vigilance"
+  ]
+}

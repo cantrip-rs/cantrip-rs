@@ -1,0 +1,12 @@
+{
+  "name": "Hover Barrier",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Illusion Wall",
+  "power": 0,
+  "toughness": 6,
+  "oracleText": "Defender, flying",
+  "keywords": [
+    "Defender",
+    "Flying"
+  ]
+}

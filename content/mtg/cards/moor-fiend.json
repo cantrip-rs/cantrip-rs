@@ -1,0 +1,11 @@
+{
+  "name": "Moor Fiend",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Horror",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)",
+  "keywords": [
+    "Swampwalk"
+  ]
+}

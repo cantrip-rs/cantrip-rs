@@ -1,0 +1,13 @@
+{
+  "name": "Large Bear",
+  "manaCost": "{3}{B/G}{B/G}",
+  "type": "Creature — Bear",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Reach, trample, haste",
+  "keywords": [
+    "Reach",
+    "Trample",
+    "Haste"
+  ]
+}

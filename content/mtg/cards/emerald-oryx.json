@@ -1,0 +1,11 @@
+{
+  "name": "Emerald Oryx",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Antelope",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)",
+  "keywords": [
+    "Forestwalk"
+  ]
+}

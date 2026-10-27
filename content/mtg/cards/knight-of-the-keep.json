@@ -1,0 +1,8 @@
+{
+  "name": "Knight of the Keep",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Knight",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

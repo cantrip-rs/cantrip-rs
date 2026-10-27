@@ -1,0 +1,11 @@
+{
+  "name": "Halberdier",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Barbarian",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "First strike",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

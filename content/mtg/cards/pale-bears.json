@@ -1,0 +1,11 @@
+{
+  "name": "Pale Bears",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Bear",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Islandwalk (This creature can't be blocked as long as defending player controls an Island.)",
+  "keywords": [
+    "Islandwalk"
+  ]
+}

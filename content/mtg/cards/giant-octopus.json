@@ -1,0 +1,8 @@
+{
+  "name": "Giant Octopus",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Octopus",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

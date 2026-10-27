@@ -1,0 +1,11 @@
+{
+  "name": "Tenement Crasher",
+  "manaCost": "{5}{R}",
+  "type": "Creature — Beast",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

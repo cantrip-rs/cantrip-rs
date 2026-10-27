@@ -1,0 +1,11 @@
+{
+  "name": "Cursed Minotaur",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Zombie Minotaur",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ]
+}

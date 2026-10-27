@@ -1,0 +1,12 @@
+{
+  "name": "Angel of Retribution",
+  "manaCost": "{6}{W}",
+  "type": "Creature — Angel",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying, first strike",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

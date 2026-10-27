@@ -1,0 +1,11 @@
+{
+  "name": "Argothian Swine",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Boar",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

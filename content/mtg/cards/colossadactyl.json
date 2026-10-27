@@ -1,0 +1,12 @@
+{
+  "name": "Colossadactyl",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Reach, trample",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}

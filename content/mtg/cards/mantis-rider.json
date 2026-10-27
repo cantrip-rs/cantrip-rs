@@ -1,0 +1,13 @@
+{
+  "name": "Mantis Rider",
+  "manaCost": "{U}{R}{W}",
+  "type": "Creature — Human Monk",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, vigilance, haste",
+  "keywords": [
+    "Flying",
+    "Vigilance",
+    "Haste"
+  ]
+}

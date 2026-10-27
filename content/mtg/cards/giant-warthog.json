@@ -1,0 +1,11 @@
+{
+  "name": "Giant Warthog",
+  "manaCost": "{5}{G}",
+  "type": "Creature — Boar Beast",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

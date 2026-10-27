@@ -1,0 +1,12 @@
+{
+  "name": "Ambush Party",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Human Rogue",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "First strike, haste",
+  "keywords": [
+    "FirstStrike",
+    "Haste"
+  ]
+}

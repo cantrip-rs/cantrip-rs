@@ -1,0 +1,11 @@
+{
+  "name": "Zephyr Sprite",
+  "manaCost": "{U}",
+  "type": "Creature — Faerie",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

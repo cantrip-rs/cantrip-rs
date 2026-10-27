@@ -1,0 +1,11 @@
+{
+  "name": "Viashino Spearhunter",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Lizard Warrior",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "First strike (This creature deals combat damage before creatures without first strike.)",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Viashino Runner",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Lizard",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Turtle-Seals",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Turtle Seal",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

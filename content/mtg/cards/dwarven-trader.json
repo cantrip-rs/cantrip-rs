@@ -1,0 +1,8 @@
+{
+  "name": "Dwarven Trader",
+  "manaCost": "{R}",
+  "type": "Creature — Dwarf",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": ""
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Stampeding Rhino",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Rhino",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)",
+  "keywords": [
+    "Trample"
+  ]
+}

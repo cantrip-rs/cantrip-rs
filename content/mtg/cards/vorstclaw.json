@@ -1,0 +1,8 @@
+{
+  "name": "Vorstclaw",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Elemental Horror",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": ""
+}

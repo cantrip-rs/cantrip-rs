@@ -1,0 +1,8 @@
+{
+  "name": "The Lady of the Mountain",
+  "manaCost": "{4}{R}{G}",
+  "type": "Legendary Creature — Giant",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": ""
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Heartwood Treefolk",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Treefolk",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)",
+  "keywords": [
+    "Forestwalk"
+  ]
+}

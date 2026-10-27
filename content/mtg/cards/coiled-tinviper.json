@@ -1,0 +1,11 @@
+{
+  "name": "Coiled Tinviper",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Snake",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "First strike",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Elvish Lookout",
+  "manaCost": "{G}",
+  "type": "Creature — Elf",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Shroud (This creature can't be the target of spells or abilities.)",
+  "keywords": [
+    "Shroud"
+  ]
+}

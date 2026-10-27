@@ -1,0 +1,11 @@
+{
+  "name": "Aven Envoy",
+  "manaCost": "{U}",
+  "type": "Creature — Bird Soldier",
+  "power": 0,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Mist Leopard",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Cat",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Shroud (This creature can't be the target of spells or abilities.)",
+  "keywords": [
+    "Shroud"
+  ]
+}

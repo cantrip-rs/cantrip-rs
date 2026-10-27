@@ -1,0 +1,12 @@
+{
+  "name": "Seraph of the Suns",
+  "manaCost": "{5}{W}{W}",
+  "type": "Creature — Angel",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nIndestructible (Damage and effects that say \"destroy\" don't destroy this creature. If its toughness is 0 or less, it still dies.)",
+  "keywords": [
+    "Flying",
+    "Indestructible"
+  ]
+}

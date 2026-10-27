@@ -1,0 +1,11 @@
+{
+  "name": "Makindi Aeronaut",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Kor Scout Ally",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

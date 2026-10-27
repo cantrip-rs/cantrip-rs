@@ -1,0 +1,11 @@
+{
+  "name": "Ramirez DePietro",
+  "manaCost": "{3}{U}{B}{B}",
+  "type": "Legendary Creature — Human Pirate",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "First strike",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

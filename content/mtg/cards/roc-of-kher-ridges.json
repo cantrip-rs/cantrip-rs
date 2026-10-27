@@ -1,0 +1,11 @@
+{
+  "name": "Roc of Kher Ridges",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Bird",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

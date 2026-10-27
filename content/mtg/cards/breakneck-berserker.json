@@ -1,0 +1,11 @@
+{
+  "name": "Breakneck Berserker",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Dwarf Berserker",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

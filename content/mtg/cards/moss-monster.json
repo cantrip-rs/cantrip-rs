@@ -1,0 +1,8 @@
+{
+  "name": "Moss Monster",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 6,
+  "oracleText": ""
+}

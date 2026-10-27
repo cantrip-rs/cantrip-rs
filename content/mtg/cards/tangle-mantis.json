@@ -1,0 +1,11 @@
+{
+  "name": "Tangle Mantis",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Insect",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

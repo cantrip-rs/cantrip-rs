@@ -1,0 +1,8 @@
+{
+  "name": "Venser's Sliver",
+  "manaCost": "{5}",
+  "type": "Artifact Creature — Sliver",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Minotaur Aggressor",
+  "manaCost": "{6}{R}",
+  "type": "Creature — Minotaur Berserker",
+  "power": 6,
+  "toughness": 2,
+  "oracleText": "First strike, haste",
+  "keywords": [
+    "FirstStrike",
+    "Haste"
+  ]
+}

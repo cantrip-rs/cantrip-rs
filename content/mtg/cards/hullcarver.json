@@ -1,0 +1,11 @@
+{
+  "name": "Hullcarver",
+  "manaCost": "{B}",
+  "type": "Artifact Creature — Robot Assassin",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

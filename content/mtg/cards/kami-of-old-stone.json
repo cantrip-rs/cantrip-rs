@@ -1,0 +1,8 @@
+{
+  "name": "Kami of Old Stone",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Spirit",
+  "power": 1,
+  "toughness": 7,
+  "oracleText": ""
+}

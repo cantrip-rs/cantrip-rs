@@ -1,0 +1,8 @@
+{
+  "name": "Looming Altisaur",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Dinosaur",
+  "power": 1,
+  "toughness": 7,
+  "oracleText": ""
+}

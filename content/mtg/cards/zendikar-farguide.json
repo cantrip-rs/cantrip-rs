@@ -1,0 +1,11 @@
+{
+  "name": "Zendikar Farguide",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)",
+  "keywords": [
+    "Forestwalk"
+  ]
+}

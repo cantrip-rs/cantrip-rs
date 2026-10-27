@@ -1,0 +1,8 @@
+{
+  "name": "Fugitive Wizard",
+  "manaCost": "{U}",
+  "type": "Creature — Human Wizard",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": ""
+}

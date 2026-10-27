@@ -1,0 +1,8 @@
+{
+  "name": "Shorecomber Crab",
+  "manaCost": "{U}",
+  "type": "Creature — Crab",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": ""
+}

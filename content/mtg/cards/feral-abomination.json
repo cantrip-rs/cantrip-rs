@@ -1,0 +1,11 @@
+{
+  "name": "Feral Abomination",
+  "manaCost": "{5}{B}",
+  "type": "Creature — Thrull",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

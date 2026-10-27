@@ -1,0 +1,8 @@
+{
+  "name": "Witch's Familiar",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Frog",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": ""
+}

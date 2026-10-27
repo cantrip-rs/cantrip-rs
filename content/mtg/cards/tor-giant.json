@@ -1,0 +1,8 @@
+{
+  "name": "Tor Giant",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Giant",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Barbary Apes",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Ape",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

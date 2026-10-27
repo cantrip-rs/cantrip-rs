@@ -1,0 +1,8 @@
+{
+  "name": "Fortress Crab",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Crab",
+  "power": 1,
+  "toughness": 6,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Trained Jackal",
+  "manaCost": "{G}",
+  "type": "Creature — Jackal",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": ""
+}

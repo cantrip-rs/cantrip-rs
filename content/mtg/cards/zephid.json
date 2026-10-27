@@ -1,0 +1,12 @@
+{
+  "name": "Zephid",
+  "manaCost": "{4}{U}{U}",
+  "type": "Creature — Illusion",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nShroud (This creature can't be the target of spells or abilities.)",
+  "keywords": [
+    "Flying",
+    "Shroud"
+  ]
+}

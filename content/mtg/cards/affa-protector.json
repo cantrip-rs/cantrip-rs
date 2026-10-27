@@ -1,0 +1,11 @@
+{
+  "name": "Affa Protector",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Soldier Ally",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

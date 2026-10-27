@@ -1,0 +1,8 @@
+{
+  "name": "Woolly Thoctar",
+  "manaCost": "{R}{G}{W}",
+  "type": "Creature — Beast",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": ""
+}

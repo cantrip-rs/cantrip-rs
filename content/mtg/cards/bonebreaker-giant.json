@@ -1,0 +1,8 @@
+{
+  "name": "Bonebreaker Giant",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Giant",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": ""
+}

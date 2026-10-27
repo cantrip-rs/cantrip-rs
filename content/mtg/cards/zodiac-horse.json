@@ -1,0 +1,11 @@
+{
+  "name": "Zodiac Horse",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Horse",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Islandwalk (This creature can't be blocked as long as defending player controls an Island.)",
+  "keywords": [
+    "Islandwalk"
+  ]
+}

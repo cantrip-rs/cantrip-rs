@@ -1,0 +1,8 @@
+{
+  "name": "Rhox Brute",
+  "manaCost": "{2}{R}{G}",
+  "type": "Creature — Rhino Warrior",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": ""
+}

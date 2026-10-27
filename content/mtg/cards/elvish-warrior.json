@@ -1,0 +1,8 @@
+{
+  "name": "Elvish Warrior",
+  "manaCost": "{G}{G}",
+  "type": "Creature — Elf Warrior",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": ""
+}

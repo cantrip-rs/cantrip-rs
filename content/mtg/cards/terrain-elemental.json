@@ -1,0 +1,8 @@
+{
+  "name": "Terrain Elemental",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

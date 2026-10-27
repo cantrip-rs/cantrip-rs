@@ -1,0 +1,8 @@
+{
+  "name": "Jasmine Boreal",
+  "manaCost": "{3}{G}{W}",
+  "type": "Legendary Creature — Human",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": ""
+}

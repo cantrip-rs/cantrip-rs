@@ -1,0 +1,8 @@
+{
+  "name": "Siege Mastodon",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Elephant",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": ""
+}

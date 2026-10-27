@@ -1,0 +1,12 @@
+{
+  "name": "Tajuru Pathwarden",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Elf Warrior Ally",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)\nTrample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)",
+  "keywords": [
+    "Vigilance",
+    "Trample"
+  ]
+}

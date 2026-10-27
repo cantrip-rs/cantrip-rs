@@ -1,0 +1,11 @@
+{
+  "name": "Talas Scout",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Pirate Scout",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

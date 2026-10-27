@@ -1,0 +1,12 @@
+{
+  "name": "Gifted Aetherborn",
+  "manaCost": "{B}{B}",
+  "type": "Creature — Aetherborn Vampire",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Deathtouch, lifelink",
+  "keywords": [
+    "Deathtouch",
+    "Lifelink"
+  ]
+}

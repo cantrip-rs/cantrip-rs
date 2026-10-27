@@ -1,0 +1,8 @@
+{
+  "name": "Sundial, Dawn Tyrant",
+  "manaCost": "{1}{W}",
+  "type": "Legendary Artifact Creature — Construct",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

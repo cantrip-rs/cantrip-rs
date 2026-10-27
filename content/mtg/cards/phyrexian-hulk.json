@@ -1,0 +1,8 @@
+{
+  "name": "Phyrexian Hulk",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Phyrexian Golem",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": ""
+}

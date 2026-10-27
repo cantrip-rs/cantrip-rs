@@ -1,0 +1,11 @@
+{
+  "name": "Brazen Scourge",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Gremlin",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)",
+  "keywords": [
+    "Haste"
+  ]
+}

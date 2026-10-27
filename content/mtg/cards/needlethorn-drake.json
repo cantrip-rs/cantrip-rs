@@ -1,0 +1,12 @@
+{
+  "name": "Needlethorn Drake",
+  "manaCost": "{G}{U}",
+  "type": "Creature — Drake",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying, deathtouch",
+  "keywords": [
+    "Flying",
+    "Deathtouch"
+  ]
+}

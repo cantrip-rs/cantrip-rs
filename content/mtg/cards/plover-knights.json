@@ -1,0 +1,12 @@
+{
+  "name": "Plover Knights",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Kithkin Knight",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, first strike",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

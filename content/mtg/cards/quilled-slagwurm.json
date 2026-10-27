@@ -1,0 +1,8 @@
+{
+  "name": "Quilled Slagwurm",
+  "manaCost": "{4}{G}{G}{G}",
+  "type": "Creature — Phyrexian Wurm",
+  "power": 8,
+  "toughness": 8,
+  "oracleText": ""
+}

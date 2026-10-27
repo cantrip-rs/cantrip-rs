@@ -1,0 +1,11 @@
+{
+  "name": "Scarlet Witch, Wanda Maximoff",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Mutant Warlock Hero",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ]
+}

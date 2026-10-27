@@ -1,0 +1,8 @@
+{
+  "name": "Amphin Cutthroat",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Salamander Rogue",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": ""
+}

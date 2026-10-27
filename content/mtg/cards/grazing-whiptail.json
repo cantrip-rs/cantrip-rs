@@ -1,0 +1,11 @@
+{
+  "name": "Grazing Whiptail",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Reach",
+  "keywords": [
+    "Reach"
+  ]
+}

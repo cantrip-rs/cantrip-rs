@@ -1,0 +1,11 @@
+{
+  "name": "Geist of the Moors",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Spirit",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

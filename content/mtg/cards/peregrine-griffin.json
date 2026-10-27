@@ -1,0 +1,12 @@
+{
+  "name": "Peregrine Griffin",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Griffin",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Flying\nFirst strike (This creature deals combat damage before creatures without first strike.)",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

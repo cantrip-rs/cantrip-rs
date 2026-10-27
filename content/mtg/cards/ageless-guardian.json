@@ -1,0 +1,8 @@
+{
+  "name": "Ageless Guardian",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Spirit Soldier",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": ""
+}

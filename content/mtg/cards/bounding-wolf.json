@@ -1,0 +1,12 @@
+{
+  "name": "Bounding Wolf",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Wolf",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flash\nReach",
+  "keywords": [
+    "Flash",
+    "Reach"
+  ]
+}

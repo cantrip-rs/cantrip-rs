@@ -1,0 +1,12 @@
+{
+  "name": "Dawnstrike Paladin",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)\nLifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Vigilance",
+    "Lifelink"
+  ]
+}

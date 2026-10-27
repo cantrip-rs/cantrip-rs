@@ -1,0 +1,8 @@
+{
+  "name": "Giant Cockroach",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Insect",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": ""
+}

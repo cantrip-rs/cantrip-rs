@@ -1,0 +1,11 @@
+{
+  "name": "Glissa's Courier",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Phyrexian Horror",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Mountainwalk (This creature can't be blocked as long as defending player controls a Mountain.)",
+  "keywords": [
+    "Mountainwalk"
+  ]
+}

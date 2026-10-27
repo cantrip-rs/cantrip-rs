@@ -1,0 +1,11 @@
+{
+  "name": "Koth's Courier",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Human Rogue",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)",
+  "keywords": [
+    "Forestwalk"
+  ]
+}

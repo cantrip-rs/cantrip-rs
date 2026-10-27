@@ -1,0 +1,8 @@
+{
+  "name": "Tyrox, Saurid Tyrant",
+  "manaCost": "{1}{R}",
+  "type": "Legendary Creature — Dinosaur Warrior",
+  "power": 4,
+  "toughness": 1,
+  "oracleText": ""
+}

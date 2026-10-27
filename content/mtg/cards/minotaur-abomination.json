@@ -1,0 +1,8 @@
+{
+  "name": "Minotaur Abomination",
+  "manaCost": "{4}{B}{B}",
+  "type": "Creature — Zombie Minotaur",
+  "power": 4,
+  "toughness": 6,
+  "oracleText": ""
+}

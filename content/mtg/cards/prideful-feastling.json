@@ -1,0 +1,12 @@
+{
+  "name": "Prideful Feastling",
+  "manaCost": "{2}{W/B}",
+  "type": "Creature — Shapeshifter",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Changeling (This card is every creature type.)\nLifelink",
+  "keywords": [
+    "Changeling",
+    "Lifelink"
+  ]
+}

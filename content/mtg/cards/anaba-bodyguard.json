@@ -1,0 +1,11 @@
+{
+  "name": "Anaba Bodyguard",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Minotaur",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "First strike (This creature deals combat damage before creatures without first strike.)",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

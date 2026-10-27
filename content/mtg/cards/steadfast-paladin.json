@@ -1,0 +1,11 @@
+{
+  "name": "Steadfast Paladin",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Dwarf Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Lifelink",
+  "keywords": [
+    "Lifelink"
+  ]
+}

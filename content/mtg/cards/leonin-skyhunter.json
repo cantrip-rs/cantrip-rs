@@ -1,0 +1,11 @@
+{
+  "name": "Leonin Skyhunter",
+  "manaCost": "{W}{W}",
+  "type": "Creature — Cat Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

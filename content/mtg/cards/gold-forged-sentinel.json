@@ -1,0 +1,11 @@
+{
+  "name": "Gold-Forged Sentinel",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Chimera",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

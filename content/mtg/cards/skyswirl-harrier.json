@@ -1,0 +1,11 @@
+{
+  "name": "Skyswirl Harrier",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Bird",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

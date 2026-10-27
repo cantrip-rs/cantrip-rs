@@ -1,0 +1,8 @@
+{
+  "name": "Leatherback Baloth",
+  "manaCost": "{G}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": ""
+}

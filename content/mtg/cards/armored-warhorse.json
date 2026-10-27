@@ -1,0 +1,8 @@
+{
+  "name": "Armored Warhorse",
+  "manaCost": "{W}{W}",
+  "type": "Creature — Horse",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": ""
+}

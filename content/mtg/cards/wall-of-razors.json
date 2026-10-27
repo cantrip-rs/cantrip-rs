@@ -1,0 +1,12 @@
+{
+  "name": "Wall of Razors",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Wall",
+  "power": 4,
+  "toughness": 1,
+  "oracleText": "Defender (This creature can't attack.)\nFirst strike",
+  "keywords": [
+    "Defender",
+    "FirstStrike"
+  ]
+}

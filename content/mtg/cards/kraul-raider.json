@@ -1,0 +1,11 @@
+{
+  "name": "Kraul Raider",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Insect Warrior",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ]
+}

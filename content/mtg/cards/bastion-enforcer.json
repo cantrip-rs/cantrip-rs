@@ -1,0 +1,8 @@
+{
+  "name": "Bastion Enforcer",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Dwarf Soldier",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

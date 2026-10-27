@@ -1,0 +1,8 @@
+{
+  "name": "Mass of Ghouls",
+  "manaCost": "{3}{B}{B}",
+  "type": "Creature — Zombie Warrior",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": ""
+}

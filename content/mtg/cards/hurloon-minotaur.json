@@ -1,0 +1,8 @@
+{
+  "name": "Hurloon Minotaur",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Minotaur",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": ""
+}

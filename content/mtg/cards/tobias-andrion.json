@@ -1,0 +1,8 @@
+{
+  "name": "Tobias Andrion",
+  "manaCost": "{3}{W}{U}",
+  "type": "Legendary Creature — Human Advisor",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": ""
+}

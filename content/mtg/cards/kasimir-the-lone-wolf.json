@@ -1,0 +1,8 @@
+{
+  "name": "Kasimir the Lone Wolf",
+  "manaCost": "{4}{W}{U}",
+  "type": "Legendary Creature — Human Warrior",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": ""
+}

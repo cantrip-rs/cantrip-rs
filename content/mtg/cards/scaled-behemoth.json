@@ -1,0 +1,11 @@
+{
+  "name": "Scaled Behemoth",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Crocodile",
+  "power": 6,
+  "toughness": 7,
+  "oracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Hexproof"
+  ]
+}

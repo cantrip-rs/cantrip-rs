@@ -1,0 +1,8 @@
+{
+  "name": "Imperial Outrider",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Knight",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": ""
+}

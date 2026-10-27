@@ -1,0 +1,11 @@
+{
+  "name": "Zodiac Rooster",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Bird",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Plainswalk (This creature can't be blocked as long as defending player controls a Plains.)",
+  "keywords": [
+    "Plainswalk"
+  ]
+}

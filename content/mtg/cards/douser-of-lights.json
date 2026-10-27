@@ -1,0 +1,8 @@
+{
+  "name": "Douser of Lights",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Horror",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": ""
+}

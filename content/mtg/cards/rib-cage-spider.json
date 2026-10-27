@@ -1,0 +1,11 @@
+{
+  "name": "Rib Cage Spider",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Spider",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Wandering Ones",
+  "manaCost": "{U}",
+  "type": "Creature — Spirit",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": ""
+}

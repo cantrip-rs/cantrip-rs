@@ -1,0 +1,11 @@
+{
+  "name": "Murmuring Phantasm",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Spirit",
+  "power": 0,
+  "toughness": 5,
+  "oracleText": "Defender",
+  "keywords": [
+    "Defender"
+  ]
+}

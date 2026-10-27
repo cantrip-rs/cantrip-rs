@@ -1,0 +1,8 @@
+{
+  "name": "Grizzled Leotau",
+  "manaCost": "{G}{W}",
+  "type": "Creature — Cat",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": ""
+}

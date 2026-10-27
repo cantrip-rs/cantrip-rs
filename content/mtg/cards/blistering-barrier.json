@@ -1,0 +1,11 @@
+{
+  "name": "Blistering Barrier",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Wall",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": "Defender (This creature can't attack.)",
+  "keywords": [
+    "Defender"
+  ]
+}

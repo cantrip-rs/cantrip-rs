@@ -1,0 +1,12 @@
+{
+  "name": "Dragon's Eye Sentry",
+  "manaCost": "{W}",
+  "type": "Creature — Human Monk",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Defender, first strike",
+  "keywords": [
+    "Defender",
+    "FirstStrike"
+  ]
+}

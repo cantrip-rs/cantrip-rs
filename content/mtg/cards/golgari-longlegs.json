@@ -1,0 +1,8 @@
+{
+  "name": "Golgari Longlegs",
+  "manaCost": "{3}{B/G}{B/G}",
+  "type": "Creature — Insect",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": ""
+}

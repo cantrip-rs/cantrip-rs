@@ -1,0 +1,8 @@
+{
+  "name": "Devoted Hero",
+  "manaCost": "{W}",
+  "type": "Creature — Elf Soldier",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Feral Krushok",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Beast",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": ""
+}

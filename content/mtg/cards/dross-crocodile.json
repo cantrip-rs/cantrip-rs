@@ -1,0 +1,8 @@
+{
+  "name": "Dross Crocodile",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Zombie Crocodile",
+  "power": 5,
+  "toughness": 1,
+  "oracleText": ""
+}

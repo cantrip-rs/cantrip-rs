@@ -1,0 +1,8 @@
+{
+  "name": "Wild Ceratok",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Rhino",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Regathan Firecat",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Elemental Cat",
+  "power": 4,
+  "toughness": 1,
+  "oracleText": ""
+}

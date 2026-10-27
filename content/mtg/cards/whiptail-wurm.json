@@ -1,0 +1,8 @@
+{
+  "name": "Whiptail Wurm",
+  "manaCost": "{6}{G}",
+  "type": "Creature — Wurm",
+  "power": 8,
+  "toughness": 5,
+  "oracleText": ""
+}

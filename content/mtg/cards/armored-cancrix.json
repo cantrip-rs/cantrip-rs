@@ -1,0 +1,8 @@
+{
+  "name": "Armored Cancrix",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Crab",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": ""
+}

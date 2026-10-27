@@ -1,0 +1,11 @@
+{
+  "name": "Wild Colos",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goat Beast",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

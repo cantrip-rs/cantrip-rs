@@ -1,0 +1,11 @@
+{
+  "name": "Greater Basilisk",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Basilisk",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Wu Infantry",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

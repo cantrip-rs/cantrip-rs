@@ -1,0 +1,12 @@
+{
+  "name": "Alabaster Kirin",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Kirin",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying, vigilance",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

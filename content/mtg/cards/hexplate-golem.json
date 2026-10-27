@@ -1,0 +1,8 @@
+{
+  "name": "Hexplate Golem",
+  "manaCost": "{7}",
+  "type": "Artifact Creature — Golem",
+  "power": 5,
+  "toughness": 7,
+  "oracleText": ""
+}

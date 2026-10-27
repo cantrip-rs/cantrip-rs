@@ -1,0 +1,8 @@
+{
+  "name": "Tasseled Dromedary",
+  "manaCost": "{W}",
+  "type": "Creature — Camel",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": ""
+}

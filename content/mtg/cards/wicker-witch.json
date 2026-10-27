@@ -1,0 +1,8 @@
+{
+  "name": "Wicker Witch",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Scarecrow",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": ""
+}

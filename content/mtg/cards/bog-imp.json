@@ -1,0 +1,11 @@
+{
+  "name": "Bog Imp",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Imp",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)",
+  "keywords": [
+    "Flying"
+  ]
+}

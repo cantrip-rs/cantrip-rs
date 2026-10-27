@@ -1,0 +1,11 @@
+{
+  "name": "Jukai Messenger",
+  "manaCost": "{G}",
+  "type": "Creature — Human Monk",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)",
+  "keywords": [
+    "Forestwalk"
+  ]
+}

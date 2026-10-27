@@ -1,0 +1,11 @@
+{
+  "name": "Fang of Shigeki",
+  "manaCost": "{G}",
+  "type": "Enchantment Creature — Snake Ninja",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

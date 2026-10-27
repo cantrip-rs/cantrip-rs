@@ -1,0 +1,12 @@
+{
+  "name": "Oakgnarl Warrior",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Treefolk Warrior",
+  "power": 5,
+  "toughness": 7,
+  "oracleText": "Vigilance, trample",
+  "keywords": [
+    "Vigilance",
+    "Trample"
+  ]
+}

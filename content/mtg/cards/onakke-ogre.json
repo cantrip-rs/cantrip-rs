@@ -1,0 +1,8 @@
+{
+  "name": "Onakke Ogre",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Ogre Warrior",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": ""
+}

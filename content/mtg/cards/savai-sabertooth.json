@@ -1,0 +1,8 @@
+{
+  "name": "Savai Sabertooth",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Cat",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": ""
+}

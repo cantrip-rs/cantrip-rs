@@ -1,0 +1,12 @@
+{
+  "name": "Skyhunter Prowler",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Cat Knight",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying, vigilance (This creature can't be blocked except by creatures with flying or reach, and attacking doesn't cause this creature to tap.)",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

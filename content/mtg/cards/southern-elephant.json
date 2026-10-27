@@ -1,0 +1,8 @@
+{
+  "name": "Southern Elephant",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elephant",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": ""
+}

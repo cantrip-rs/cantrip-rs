@@ -1,0 +1,11 @@
+{
+  "name": "Vernadi Shieldmate",
+  "manaCost": "{1}{G/W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

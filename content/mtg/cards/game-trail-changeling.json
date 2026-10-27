@@ -1,0 +1,12 @@
+{
+  "name": "Game-Trail Changeling",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Shapeshifter",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Changeling (This card is every creature type.)\nTrample",
+  "keywords": [
+    "Changeling",
+    "Trample"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Elfhame Wurm",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Wurm",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Vigilance, trample",
+  "keywords": [
+    "Vigilance",
+    "Trample"
+  ]
+}

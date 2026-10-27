@@ -1,0 +1,11 @@
+{
+  "name": "Typhoid Rats",
+  "manaCost": "{B}",
+  "type": "Creature — Rat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

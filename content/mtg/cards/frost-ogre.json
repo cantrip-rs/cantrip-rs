@@ -1,0 +1,8 @@
+{
+  "name": "Frost Ogre",
+  "manaCost": "{3}{R}{R}",
+  "type": "Creature — Ogre Warrior",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": ""
+}

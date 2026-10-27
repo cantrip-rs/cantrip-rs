@@ -1,0 +1,11 @@
+{
+  "name": "Venerable Lammasu",
+  "manaCost": "{6}{W}",
+  "type": "Creature — Lammasu",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

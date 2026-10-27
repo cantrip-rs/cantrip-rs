@@ -1,0 +1,8 @@
+{
+  "name": "Orazca Frillback",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": ""
+}

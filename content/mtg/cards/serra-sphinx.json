@@ -1,0 +1,12 @@
+{
+  "name": "Serra Sphinx",
+  "manaCost": "{3}{U}{U}",
+  "type": "Creature — Sphinx",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying, vigilance",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

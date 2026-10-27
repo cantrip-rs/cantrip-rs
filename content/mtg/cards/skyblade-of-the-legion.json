@@ -1,0 +1,11 @@
+{
+  "name": "Skyblade of the Legion",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Vampire Soldier",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

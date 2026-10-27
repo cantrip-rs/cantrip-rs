@@ -1,0 +1,8 @@
+{
+  "name": "Triton Shorethief",
+  "manaCost": "{U}",
+  "type": "Creature — Merfolk Rogue",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": ""
+}

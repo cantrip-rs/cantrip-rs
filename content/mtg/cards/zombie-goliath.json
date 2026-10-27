@@ -1,0 +1,8 @@
+{
+  "name": "Zombie Goliath",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Zombie Giant",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": ""
+}

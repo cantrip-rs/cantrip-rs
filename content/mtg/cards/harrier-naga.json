@@ -1,0 +1,8 @@
+{
+  "name": "Harrier Naga",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Snake Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

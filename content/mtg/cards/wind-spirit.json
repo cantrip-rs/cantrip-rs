@@ -1,0 +1,12 @@
+{
+  "name": "Wind Spirit",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Elemental Spirit",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying\nMenace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Flying",
+    "Menace"
+  ]
+}

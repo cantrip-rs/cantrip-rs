@@ -1,0 +1,8 @@
+{
+  "name": "Yargle and Multani",
+  "manaCost": "{3}{B}{B}{G}",
+  "type": "Legendary Creature — Frog Spirit Elemental",
+  "power": 18,
+  "toughness": 6,
+  "oracleText": ""
+}

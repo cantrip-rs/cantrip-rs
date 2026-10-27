@@ -1,0 +1,11 @@
+{
+  "name": "Satyr Rambler",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Satyr",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

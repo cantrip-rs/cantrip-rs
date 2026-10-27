@@ -1,0 +1,8 @@
+{
+  "name": "Staunch Shieldmate",
+  "manaCost": "{W}",
+  "type": "Creature — Dwarf Soldier",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": ""
+}

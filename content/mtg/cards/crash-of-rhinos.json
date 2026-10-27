@@ -1,0 +1,11 @@
+{
+  "name": "Crash of Rhinos",
+  "manaCost": "{6}{G}{G}",
+  "type": "Creature — Rhino",
+  "power": 8,
+  "toughness": 4,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

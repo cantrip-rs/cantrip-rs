@@ -1,0 +1,12 @@
+{
+  "name": "Voiceless Spirit",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Spirit",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying, first strike",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Venomous Changeling",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Shapeshifter",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Changeling (This card is every creature type.)\nDeathtouch",
+  "keywords": [
+    "Changeling",
+    "Deathtouch"
+  ]
+}

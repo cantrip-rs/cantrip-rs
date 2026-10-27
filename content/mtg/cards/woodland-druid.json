@@ -1,0 +1,8 @@
+{
+  "name": "Woodland Druid",
+  "manaCost": "{G}",
+  "type": "Creature — Human Druid",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": ""
+}

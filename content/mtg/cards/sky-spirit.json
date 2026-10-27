@@ -1,0 +1,12 @@
+{
+  "name": "Sky Spirit",
+  "manaCost": "{1}{W}{U}",
+  "type": "Creature — Spirit",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, first strike",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

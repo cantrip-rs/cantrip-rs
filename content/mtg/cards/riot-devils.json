@@ -1,0 +1,8 @@
+{
+  "name": "Riot Devils",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Devil",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": ""
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Warthog",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Boar",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)",
+  "keywords": [
+    "Swampwalk"
+  ]
+}

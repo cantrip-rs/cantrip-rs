@@ -1,0 +1,11 @@
+{
+  "name": "Sea Eagle",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

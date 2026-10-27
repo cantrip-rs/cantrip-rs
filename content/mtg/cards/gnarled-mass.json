@@ -1,0 +1,8 @@
+{
+  "name": "Gnarled Mass",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Spirit",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

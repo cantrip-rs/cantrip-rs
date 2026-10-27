@@ -1,0 +1,11 @@
+{
+  "name": "Alabaster Host Sanctifier",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Phyrexian Cleric",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Lifelink",
+  "keywords": [
+    "Lifelink"
+  ]
+}

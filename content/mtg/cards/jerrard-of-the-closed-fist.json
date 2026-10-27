@@ -1,0 +1,8 @@
+{
+  "name": "Jerrard of the Closed Fist",
+  "manaCost": "{3}{R}{G}{G}",
+  "type": "Legendary Creature — Human Knight",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": ""
+}

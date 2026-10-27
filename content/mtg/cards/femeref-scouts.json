@@ -1,0 +1,8 @@
+{
+  "name": "Femeref Scouts",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Scout",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": ""
+}

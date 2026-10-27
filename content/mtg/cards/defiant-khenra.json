@@ -1,0 +1,8 @@
+{
+  "name": "Defiant Khenra",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Jackal Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

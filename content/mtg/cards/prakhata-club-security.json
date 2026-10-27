@@ -1,0 +1,8 @@
+{
+  "name": "Prakhata Club Security",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Aetherborn Warrior",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": ""
+}

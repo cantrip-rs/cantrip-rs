@@ -1,0 +1,12 @@
+{
+  "name": "Razorfoot Griffin",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Griffin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)\nFirst strike (This creature deals combat damage before creatures without first strike.)",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

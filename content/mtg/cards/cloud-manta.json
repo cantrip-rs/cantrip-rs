@@ -1,0 +1,11 @@
+{
+  "name": "Cloud Manta",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Fish",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

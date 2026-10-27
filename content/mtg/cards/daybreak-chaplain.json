@@ -1,0 +1,11 @@
+{
+  "name": "Daybreak Chaplain",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Cleric",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Lifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Lifelink"
+  ]
+}

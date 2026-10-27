@@ -1,0 +1,11 @@
+{
+  "name": "Talon Trooper",
+  "manaCost": "{1}{W}{U}",
+  "type": "Creature — Bird Scout",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Wetland Sambar",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Elk",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

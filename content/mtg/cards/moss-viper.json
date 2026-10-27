@@ -1,0 +1,11 @@
+{
+  "name": "Moss Viper",
+  "manaCost": "{G}",
+  "type": "Creature — Snake",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

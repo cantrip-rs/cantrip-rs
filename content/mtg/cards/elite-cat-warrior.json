@@ -1,0 +1,11 @@
+{
+  "name": "Elite Cat Warrior",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Cat Warrior",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Forestwalk (This creature can't be blocked as long as defending player controls a Forest.)",
+  "keywords": [
+    "Forestwalk"
+  ]
+}

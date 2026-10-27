@@ -1,0 +1,11 @@
+{
+  "name": "Fangren Hunter",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

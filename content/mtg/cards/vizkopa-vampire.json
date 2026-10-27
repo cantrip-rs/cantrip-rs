@@ -1,0 +1,11 @@
+{
+  "name": "Vizkopa Vampire",
+  "manaCost": "{2}{W/B}",
+  "type": "Creature — Vampire",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Lifelink",
+  "keywords": [
+    "Lifelink"
+  ]
+}

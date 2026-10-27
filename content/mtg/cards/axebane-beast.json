@@ -1,0 +1,8 @@
+{
+  "name": "Axebane Beast",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Beast",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": ""
+}

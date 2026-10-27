@@ -1,0 +1,8 @@
+{
+  "name": "Norwood Ranger",
+  "manaCost": "{G}",
+  "type": "Creature — Elf Scout Ranger",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": ""
+}

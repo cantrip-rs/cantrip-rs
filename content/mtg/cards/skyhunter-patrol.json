@@ -1,0 +1,12 @@
+{
+  "name": "Skyhunter Patrol",
+  "manaCost": "{2}{W}{W}",
+  "type": "Creature — Cat Knight",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying, first strike (This creature can't be blocked except by creatures with flying or reach, and it deals combat damage before creatures without first strike.)",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

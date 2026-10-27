@@ -1,0 +1,8 @@
+{
+  "name": "Swordwise Centaur",
+  "manaCost": "{G}{G}",
+  "type": "Creature — Centaur Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

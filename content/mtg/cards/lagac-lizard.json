@@ -1,0 +1,8 @@
+{
+  "name": "Lagac Lizard",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Lizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": ""
+}

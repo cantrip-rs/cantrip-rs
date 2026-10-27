@@ -1,0 +1,12 @@
+{
+  "name": "Anvilwrought Raptor",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Bird",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nFirst strike (This creature deals combat damage before creatures without first strike.)",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Ancient Spider",
+  "manaCost": "{2}{G}{W}",
+  "type": "Creature — Spider",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nFirst strike",
+  "keywords": [
+    "Reach",
+    "FirstStrike"
+  ]
+}

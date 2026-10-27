@@ -1,0 +1,11 @@
+{
+  "name": "Arachnoid",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Spider",
+  "power": 2,
+  "toughness": 6,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

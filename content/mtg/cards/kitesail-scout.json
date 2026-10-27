@@ -1,0 +1,11 @@
+{
+  "name": "Kitesail Scout",
+  "manaCost": "{W}",
+  "type": "Creature — Kor Scout",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

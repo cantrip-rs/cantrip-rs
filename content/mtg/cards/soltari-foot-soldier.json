@@ -1,0 +1,11 @@
+{
+  "name": "Soltari Foot Soldier",
+  "manaCost": "{W}",
+  "type": "Creature — Soltari Soldier",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Shadow (This creature can block or be blocked by only creatures with shadow.)",
+  "keywords": [
+    "Shadow"
+  ]
+}

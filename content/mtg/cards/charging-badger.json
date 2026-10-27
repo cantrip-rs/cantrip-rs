@@ -1,0 +1,11 @@
+{
+  "name": "Charging Badger",
+  "manaCost": "{G}",
+  "type": "Creature — Badger",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ]
+}

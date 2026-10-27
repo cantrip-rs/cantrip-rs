@@ -1,0 +1,11 @@
+{
+  "name": "Alaborn Musketeer",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Reach (This creature can block creatures with flying.)",
+  "keywords": [
+    "Reach"
+  ]
+}

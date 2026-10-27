@@ -1,0 +1,11 @@
+{
+  "name": "Nest Robber",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Dinosaur",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Haste",
+  "keywords": [
+    "Haste"
+  ]
+}

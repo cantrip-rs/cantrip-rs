@@ -1,0 +1,8 @@
+{
+  "name": "Silent Artisan",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Giant",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": ""
+}

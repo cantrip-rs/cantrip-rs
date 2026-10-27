@@ -1,0 +1,8 @@
+{
+  "name": "Quakestrider Ceratops",
+  "manaCost": "{3}{G}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 12,
+  "toughness": 8,
+  "oracleText": ""
+}

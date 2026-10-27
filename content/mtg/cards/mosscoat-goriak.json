@@ -1,0 +1,11 @@
+{
+  "name": "Mosscoat Goriak",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Beast",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

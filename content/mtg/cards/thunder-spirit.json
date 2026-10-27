@@ -1,0 +1,12 @@
+{
+  "name": "Thunder Spirit",
+  "manaCost": "{1}{W}{W}",
+  "type": "Creature — Elemental Spirit",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, first strike",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Nimbus of the Isles",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)",
+  "keywords": [
+    "Flying"
+  ]
+}

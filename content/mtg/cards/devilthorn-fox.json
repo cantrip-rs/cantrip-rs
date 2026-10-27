@@ -1,0 +1,8 @@
+{
+  "name": "Devilthorn Fox",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Fox",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": ""
+}

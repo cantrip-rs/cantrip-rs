@@ -1,0 +1,12 @@
+{
+  "name": "Nightguard Patrol",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "First strike, vigilance",
+  "keywords": [
+    "FirstStrike",
+    "Vigilance"
+  ]
+}

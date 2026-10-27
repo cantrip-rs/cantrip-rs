@@ -1,0 +1,8 @@
+{
+  "name": "Balduvian Barbarians",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Human Barbarian",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

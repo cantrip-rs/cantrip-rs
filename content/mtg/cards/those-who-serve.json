@@ -1,0 +1,8 @@
+{
+  "name": "Those Who Serve",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": ""
+}

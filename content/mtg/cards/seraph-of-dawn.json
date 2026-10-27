@@ -1,0 +1,12 @@
+{
+  "name": "Seraph of Dawn",
+  "manaCost": "{2}{W}{W}",
+  "type": "Creature — Angel",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Flying, lifelink",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Thraben Purebloods",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Dog",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": ""
+}

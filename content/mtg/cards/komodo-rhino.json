@@ -1,0 +1,11 @@
+{
+  "name": "Komodo Rhino",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Lizard Rhino",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player it's attacking.)",
+  "keywords": [
+    "Trample"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Brimstone Dragon",
+  "manaCost": "{6}{R}{R}",
+  "type": "Creature — Dragon",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Flying, haste",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}

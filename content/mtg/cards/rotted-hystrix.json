@@ -1,0 +1,8 @@
+{
+  "name": "Rotted Hystrix",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Phyrexian Beast",
+  "power": 3,
+  "toughness": 6,
+  "oracleText": ""
+}

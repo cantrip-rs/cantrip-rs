@@ -1,0 +1,12 @@
+{
+  "name": "Wall of Air",
+  "manaCost": "{1}{U}{U}",
+  "type": "Creature — Wall",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": "Defender, flying (This creature can't attack, and it can block creatures with flying.)",
+  "keywords": [
+    "Defender",
+    "Flying"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Lazotep Behemoth",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Zombie Hippo",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": ""
+}

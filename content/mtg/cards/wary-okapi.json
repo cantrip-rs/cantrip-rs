@@ -1,0 +1,11 @@
+{
+  "name": "Wary Okapi",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Antelope",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Vigilance",
+  "keywords": [
+    "Vigilance"
+  ]
+}

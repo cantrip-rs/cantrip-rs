@@ -1,0 +1,8 @@
+{
+  "name": "Jibbirik Omnivore",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Beast",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": ""
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Skeletal Snake",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Snake Skeleton",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

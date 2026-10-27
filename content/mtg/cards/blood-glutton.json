@@ -1,0 +1,11 @@
+{
+  "name": "Blood Glutton",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Vampire",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Lifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Lifelink"
+  ]
+}

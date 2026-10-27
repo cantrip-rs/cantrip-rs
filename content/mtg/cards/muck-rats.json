@@ -1,0 +1,8 @@
+{
+  "name": "Muck Rats",
+  "manaCost": "{B}",
+  "type": "Creature — Rat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": ""
+}

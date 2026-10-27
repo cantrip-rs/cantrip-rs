@@ -1,0 +1,8 @@
+{
+  "name": "Elvish Ranger",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Ranger",
+  "power": 4,
+  "toughness": 1,
+  "oracleText": ""
+}

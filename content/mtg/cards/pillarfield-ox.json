@@ -1,0 +1,8 @@
+{
+  "name": "Pillarfield Ox",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Ox",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": ""
+}

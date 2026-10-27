@@ -1,0 +1,11 @@
+{
+  "name": "Tajuru Blightblade",
+  "manaCost": "{G}",
+  "type": "Creature — Elf Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

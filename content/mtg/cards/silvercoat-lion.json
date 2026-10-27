@@ -1,0 +1,8 @@
+{
+  "name": "Silvercoat Lion",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Cat",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

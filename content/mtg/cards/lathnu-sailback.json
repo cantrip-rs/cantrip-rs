@@ -1,0 +1,8 @@
+{
+  "name": "Lathnu Sailback",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Lizard",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": ""
+}

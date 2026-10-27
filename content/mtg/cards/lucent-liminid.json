@@ -1,0 +1,11 @@
+{
+  "name": "Lucent Liminid",
+  "manaCost": "{3}{W}{W}",
+  "type": "Enchantment Creature — Elemental",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

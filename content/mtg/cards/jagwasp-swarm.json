@@ -1,0 +1,11 @@
+{
+  "name": "Jagwasp Swarm",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Insect",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ]
+}

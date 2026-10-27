@@ -1,0 +1,8 @@
+{
+  "name": "Curio Vendor",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Vedalken",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Daggerback Basilisk",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Basilisk",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Deathtouch (Any amount of damage this deals to a creature is enough to destroy it.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

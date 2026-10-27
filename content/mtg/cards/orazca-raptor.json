@@ -1,0 +1,8 @@
+{
+  "name": "Orazca Raptor",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Dinosaur",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": ""
+}

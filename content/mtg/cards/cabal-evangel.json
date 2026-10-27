@@ -1,0 +1,8 @@
+{
+  "name": "Cabal Evangel",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Cleric",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": ""
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Tine Shrike",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Phyrexian Bird",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nInfect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)",
+  "keywords": [
+    "Flying",
+    "Infect"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Catacomb Slug",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Slug",
+  "power": 2,
+  "toughness": 6,
+  "oracleText": ""
+}

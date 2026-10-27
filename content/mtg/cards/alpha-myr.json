@@ -1,0 +1,8 @@
+{
+  "name": "Alpha Myr",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Myr",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": ""
+}
