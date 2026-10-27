@@ -179,6 +179,12 @@ impl StateDump {
             let same = stack.iter().filter(|n| *n == name).count();
             let label = if same == 1 { name.clone() } else { format!("{name}#{}", stack[..=at].iter().filter(|n| *n == name).count()) };
             d.set(format!("Stack.{label}.ManaValue"), game.mana_value(item.object));
+            // A spell cast face down (CR 708.4) has no name, as a face-down permanent has none: the card it is (the dump sees
+            // everything).
+            if s.obj(item.object).face_down {
+                d.set(format!("Stack.{label}.FaceDown"), true);
+                d.set(format!("Stack.{label}.FaceDownName"), game.cards.get(s.obj(item.object).card).name);
+            }
             if s.obj(item.object).x > 0 {
                 d.set(format!("Stack.{label}.X"), s.obj(item.object).x);
             }
@@ -835,7 +841,7 @@ fn writable(key: &str) -> bool {
         return true;
     }
     if let Some(rest) = key.strip_prefix("Stack.") {
-        return rest.ends_with(".ManaValue") || rest.ends_with(".X");
+        return rest.ends_with(".ManaValue") || rest.ends_with(".X") || rest.ends_with(".FaceDown") || rest.ends_with(".FaceDownName");
     }
     let Some(rest) = key.strip_prefix("Bot").and_then(|r| r.split_once('.')).filter(|(n, _)| n.parse::<u8>().is_ok()).map(|(_, r)| r) else {
         return false;

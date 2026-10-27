@@ -287,6 +287,15 @@ A face-down permanent (CR 708.2a) has no name: `Bot1.Battlefield.#1.Activate` tu
 special action, paid like a spell's cost with the mana abilities that follow), and `#2` the second; its dump keys are
 `Bot1.Battlefield.#1.FaceDown` and `.FaceDownName` (what it really is), or with a lone one `Bot1.Battlefield..FaceDown`.
 
+Morph, megamorph and disguise (CR 702.37, 702.168): a card is cast face down for {3} by naming its way,
+`Bot1.Hand.Hidden Dragonslayer.Cast(Ability: Megamorph)` (`Ability: Morph`, `Ability: Disguise`: the way's keyword line,
+"Megamorph {2}{W}", contains it), paid like any cast. A face-down permanent is turned face up for its morph (megamorph's
+included) or disguise cost with `Bot1.Battlefield.#1.Activate(Ability: morph cost)` or `Activate(Ability: disguise cost)` - the
+special actions read "Turn this permanent face up by paying its morph cost." and "... its disguise cost."; a manifested or
+cloaked one with morph has both that and `Activate(Ability: mana cost)` (CR 701.40c, 701.58c), so name which. A cost that is
+not mana ("Morph—Discard a Zombie card", "Return a Bird you control to its owner's hand") is answered by the lines that
+follow, as an activated ability's cost is. Refused as any action is: `! Bot1.Battlefield.#1.Activate(Ability: morph cost)`.
+
 ## Refusals
 
 A line starting with `!` says what the game must **not** offer, which no ordinary line can prove — a line never offered
@@ -476,7 +485,9 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
   attacking band (CR 702.22c) as `Benalish Hero > Bot2 (band 1)`, bands numbered in the order announced; a block as
   `Blocker > Attacker`, one for each member of a band a creature blocks (CR 702.22h)
 - `Stack.<Name>.ManaValue` for each spell on the stack (CR 202.3e: its X counted as announced) and `Stack.<Name>.X`, the X it
-  was cast with, absent where there was none; named and numbered as `Stack` lists them, top first
+  was cast with, absent where there was none; named and numbered as `Stack` lists them, top first. A spell cast face down
+  (morph, disguise: CR 708.4) has no name, so it is listed as an empty name and keyed `Stack..ManaValue` (`Stack.#2.ManaValue`
+  with two nameless spells, top first), with `Stack..FaceDown` (`true`) and `Stack..FaceDownName` (the card it is)
 - `Delayed` (with `.Count`): the delayed triggered abilities still waiting (CR 603.7), each named for the object it came from:
   one used up or ended with its turn is gone from it
 - `Combat.AttackCost` (`{2}`), `.Remaining` and `.Attackers` (with `.Count`), while a declaration's cost to attack is being
