@@ -1,0 +1,68 @@
+# Stormcrag Elemental (Megamorph {4}{R}{R}): cast face down (a Black Lotus pays the {3}), it is turned face up for exactly {4}{R}{R} (CR 702.37e, 116.2b) as a special action: the pool is empty right after, so no more than {4}{R}{R} was taken. Sources are laid so that the cost minus one mana, and the full count with a colored pip unmet, are each refused (the refusal is judged again with mana to spare), and the Moxen that pay are the generic filler plus one of each colored pip. Face up it is Stormcrag Elemental again, 5/5 with Trample, plus a +1/+1 counter from its megamorph cost (CR 702.37b).
+
+[Bot1 Deck]
+Stormcrag Elemental
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Jet
+Mox Ruby
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Stormcrag Elemental.Cast(Ability: Megamorph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..Power = 2
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Battlefield.Stormcrag Elemental.Activate(Ability: morph cost)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Stormcrag Elemental.Power = 6
+Bot1.Battlefield.Stormcrag Elemental.Toughness = 6
+Bot1.Battlefield.Stormcrag Elemental.Keywords = Morph; Trample
+Bot1.Battlefield.Stormcrag Elemental.Counters.PlusOnePlusOne = 1
