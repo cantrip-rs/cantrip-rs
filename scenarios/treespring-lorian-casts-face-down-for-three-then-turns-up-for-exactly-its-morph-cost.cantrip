@@ -1,0 +1,58 @@
+# CR 702.37a, 702.37c, 702.37e, 708.2. Treespring Lorian is cast face down for exactly {3} (Black Lotus's three mana, the pool empty right after): a nameless 2/2 with no
+# keywords. It is then turned face up for exactly its morph cost {5}{G}: with one source fewer (5) the special action is not offered, with all 6 it is, and tapping those 6 leaves the pool empty.
+# Sources are lands and Moxen, all but the last in play when the refusal is judged; the last is then added and each is tapped.
+# Face up it is the card: 5/4 and no keywords.
+
+[Bot1 Deck]
+Black Lotus
+Treespring Lorian
+Forest
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Plains
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Treespring Lorian.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+? Stack..FaceDownName = Treespring Lorian
+? Stack..ManaValue = 0
+[T1 Bot1.Main2]
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Treespring Lorian
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Treespring Lorian.Activate(Ability: morph cost)
+? Bot1.Mana = 
+? Bot1.Battlefield.Treespring Lorian.FaceDown = (absent)
+
+[Expect]
+Bot1.Battlefield.Treespring Lorian.Power = 5
+Bot1.Battlefield.Treespring Lorian.Toughness = 4
+Bot1.Battlefield.Treespring Lorian.Keywords = Morph
+Stack.Count = 0
