@@ -1,0 +1,11 @@
+{
+  "name": "Ainok Tracker",
+  "manaCost": "{5}{R}",
+  "type": "Creature — Dog Scout",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "First strike\nMorph {4}{R} (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)",
+  "keywords": [
+    "FirstStrike"
+  ]
+}
