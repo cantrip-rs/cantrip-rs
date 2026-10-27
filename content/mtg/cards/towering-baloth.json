@@ -1,0 +1,8 @@
+{
+  "name": "Towering Baloth",
+  "manaCost": "{6}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 7,
+  "toughness": 6,
+  "oracleText": "Morph {6}{G} (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)"
+}
