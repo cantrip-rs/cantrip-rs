@@ -2602,10 +2602,12 @@ pub struct PayWith {
     pub convoke: bool,
     pub delve: bool,
     pub improvise: bool,
+    /// Assist (CR 702.132a): another player its caster chooses may pay any amount of the generic mana of its total cost.
+    pub assist: bool,
 }
 
 impl PayWith {
-    pub const NONE: PayWith = PayWith { convoke: false, delve: false, improvise: false };
+    pub const NONE: PayWith = PayWith { convoke: false, delve: false, improvise: false, assist: false };
 
     pub const fn any(self) -> bool {
         self.convoke || self.delve || self.improvise

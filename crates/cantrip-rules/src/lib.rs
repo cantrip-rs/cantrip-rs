@@ -44,6 +44,8 @@ mod morph_tests;
 #[cfg(test)]
 mod prototype_tests;
 #[cfg(test)]
+mod assist_tests;
+#[cfg(test)]
 mod surge_freerunning_tests;
 #[cfg(test)]
 mod control_at_once_tests;

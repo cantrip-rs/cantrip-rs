@@ -2048,6 +2048,19 @@ creatures. Venerated Loxodon, Zephyr Singer, Knight-Errant of Eos, Ancient Imper
 to Dust print it; `cantrip-rules/src/convoked_tests.rs` proves it over test cards. The benchmark (`cantrip-bench --games 128`,
 "engine answering", 2026-10-24) measured 14.70, 14.82, 14.86 us before and 15.29, 14.32, 14.29 us after: within the noise.
 
+### Assist
+
+A spell with assist (CR 702.132a, `PayWith::assist`, content `"assist": true`) whose total cost, once locked in (CR 601.2f),
+has generic mana is paid in the rule's order (`actions::assist`): its caster may choose another player in the game
+(`Purpose::Assist`, then `ChoosePlayer` with more than one); that player has a window to activate mana abilities, then the
+caster has one (`PayCosts` with `AssistStep::HelperActivates` / `CasterActivates`, `ConfirmCasting` closing it, asked only
+while the player has one to activate); then the chosen player announces how much of the generic mana they pay, no more than
+it and than their pool could pay (`HelperAnnounces`), and pays it from their pool (`HelperPays`, no cancelling another's
+spell); then the caster pays the rest (`CasterPays`) - with no mana ability offered to either once paying has begun
+(`Helpers::abilities_closed`, CR 601.2g). The assisting player's mana is mana spent to cast it (`Obj::spent`, its
+`ManaSpent` records, what its restrictions do to the spell). The offer counts on the most any other player could pay of
+the generic mana (`assist_could_pay`), so a cast its caster could not pay alone is offered.
+
 ### Spells in an inset frame: Adventures and Omens
 
 An adventurer card (CR 715) and an omen card (CR 720) print a second set of characteristics in an inset frame:

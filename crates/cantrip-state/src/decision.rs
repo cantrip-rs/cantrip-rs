@@ -154,6 +154,28 @@ pub enum ActionKind {
 /// object: the nth effect that gave them one, added to this. Its `source` is the card that gave it, wherever it is now.
 pub const PLAYER_MANA_ABILITY: u8 = 200;
 
+/// The steps of paying for a spell with assist (CR 702.132a) a `PayCosts` question can be: the player the caster chose
+/// activates mana abilities (`ConfirmCasting` when done), then the caster does, then the chosen player announces how much of
+/// the generic mana they pay (`most` at most) and pays it from their pool alone; then the caster pays the rest from theirs,
+/// no mana ability offered (CR 601.2g: they had their chance).
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]
+pub enum AssistStep {
+    #[default]
+    None,
+    HelperActivates,
+    CasterActivates,
+    HelperAnnounces,
+    HelperPays,
+    CasterPays,
+}
+
+impl AssistStep {
+    /// A window for activating mana abilities, which `ConfirmCasting` closes, nothing being paid in it.
+    pub fn activating(self) -> bool {
+        matches!(self, AssistStep::HelperActivates | AssistStep::CasterActivates)
+    }
+}
+
 pub const PAY_DELVE: u8 = 0;
 pub const PAY_IMPROVISE: u8 = 1;
 pub const PAY_CONVOKE: u8 = 2;
@@ -358,9 +380,12 @@ pub enum RequestKind {
         /// once the mana is. Zero while X is announced, and for anything but a spell.
         life: u32,
         /// While announcing an X that is not paid in mana: what X governs, as the cost words it ("the least power of the
-        /// creature you sacrifice", casualty X, CR 702.153a), for the player to read where "mana for X" would be false.
+        /// While announcing an X that is not paid in mana: what X governs, in words ("the least power of the creature you
+        /// sacrifice", casualty X, CR 702.153a), for the player to read where "mana for X" would be false.
         /// Empty for an X that is mana's, life's or a count of loyalty counters, and while paying.
         governs: &'static str,
+        /// Where this question stands in paying for a spell with assist (CR 702.132a), `AssistStep::None` for any other.
+        assist: AssistStep,
     },
     /// A cost paid as a spell or ability resolves (CR 118.12, 608.2d): "[a player] may pay [cost]. If they do, ...", and
     /// "... unless [a player] pays [cost]" (CR 118.12a). One payment of the whole cost, `total` mana and `life` life:
@@ -1363,6 +1388,8 @@ pub enum Purpose {
     Encode,
     /// Whether to promise a gift (CR 702.174a), and which gift it is.
     PromiseGift(Gift),
+    /// Whether to choose another player to help pay for the spell with assist (CR 702.132a).
+    Assist,
     /// "You may reveal this card from your hand as you draw it" (CR 702.94a): miracle, with the card's one miracle ability.
     /// None for a card with more than one, which is then asked which it is revealed with (`Label::Miracle`).
     RevealForMiracle(Option<MiracleOf>),

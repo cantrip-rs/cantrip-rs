@@ -488,6 +488,7 @@ fn purpose_view(purpose: Purpose, opening: bool) -> CardChoicePurposeView {
         | Purpose::RevealForMiracle(_)
         | Purpose::CastForMiracleCost(_)
         | Purpose::PromiseGift(_)
+        | Purpose::Assist
         | Purpose::CastTransformedFree
         | Purpose::CastForMadness
         | Purpose::CastFoundOrHand
@@ -771,7 +772,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
         RequestKind::Priority { options } => {
             PromptPayload::PriorityPromptMessage(PriorityPrompt { player, options: options_messages(game, handles, options) })
         }
-        RequestKind::PayCosts { source, total, remaining, options, announcing, x, most, least, loyalty, attackers, life, governs } => {
+        RequestKind::PayCosts { source, total, remaining, options, announcing, x, most, least, loyalty, attackers, life, governs, .. } => {
             let def = game.cards.get(game.state.obj(*source).card);
             let kicker = def.kicker;
             let spends_no_mana = game.chars(*source).has(Keyword::CantSpendManaToCast);

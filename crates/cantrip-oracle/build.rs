@@ -449,12 +449,14 @@ fn face_fields(card: &Card, is_back: bool, source: &str, known: &HashSet<String>
     }
     // Convoke, delve and improvise (CR 702.51, 702.66, 702.126): what else may pay the total cost.
     let flag = |k: &str| card.get(k) == Some(&Value::Bool(true));
-    if flag("convoke") || flag("delve") || flag("improvise") {
+    // And assist (CR 702.132a): another player may pay some of its generic mana.
+    if flag("convoke") || flag("delve") || flag("improvise") || flag("assist") {
         fields.push(format!(
-            "    pay_with: PayWith {{ convoke: {}, delve: {}, improvise: {} }},",
+            "    pay_with: PayWith {{ convoke: {}, delve: {}, improvise: {}, assist: {} }},",
             flag("convoke"),
             flag("delve"),
-            flag("improvise")
+            flag("improvise"),
+            flag("assist")
         ));
     }
     if flag("aftermath") {

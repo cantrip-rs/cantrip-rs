@@ -6414,6 +6414,8 @@ fn covers_total(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &
     let with = pay_with(cx, &a.grantors, player, card, def, face_of(cx, card, def));
     let any_color = !any_type && casts_with_any_color(cx, a, player, card, def);
     let as_paid = |cost: ManaCost| if any_type { cost.paid_with_any_type() } else if any_color { cost.paid_with_any_color() } else { cost };
+    // Assist (CR 702.132a): another player may pay generic mana of it - as much as the one who could pay the most.
+    let cost = if with.assist && !no_mana && cost.generic > 0 { ManaCost { generic: cost.generic - assist_could_pay(cx, player, card, def, cost.generic), ..cost } } else { cost };
     if !with.any() && !no_mana {
         return a.covers_for(&as_paid(cost), &spell_kind(cx, a, card, def));
     }
@@ -6440,6 +6442,20 @@ fn covers_total(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, def: &
     cost = convoked(&cost, &creatures);
     cost.generic = cost.generic.saturating_sub(generic.min(255) as u8);
     if no_mana { cost.is_zero() } else { a.covers_for(&as_paid(cost), &spell_kind(cx, a, card, def)) }
+}
+
+/// The most of `generic` generic mana of the spell `def` (the card `card`) any player in the game other than `caster` could
+/// pay for it with assist (CR 702.132a): with their pool and their mana abilities, as the advice counts them.
+fn assist_could_pay(cx: &Cx, caster: PlayerId, card: ObjectId, def: &CardDef, generic: u8) -> u8 {
+    let mut most = 0;
+    for p in cx.s().turn_order_from(caster).filter(|&p| p != caster && cx.s().in_game(p)) {
+        let a = available(cx, p);
+        let kind = spell_kind(cx, &a, card, def);
+        if let Some(n) = (most + 1..=generic).rev().find(|&n| a.covers_for(&ManaCost { generic: n, ..ManaCost::ZERO }, &kind)) {
+            most = n;
+        }
+    }
+    most
 }
 
 /// The text an option is matched by and a menu row shows: an alternative cost's, a granted way's or an ability's. A cast a
@@ -7340,18 +7356,34 @@ fn cast(
     let life_owed = cost.life + extra.life + life + u32::from(x_life);
     // CR 601.2f-h: what besides mana may pay for it, its own convoke, delve and improvise and what a permanent gives the spell.
     let with = pay_with(cx, &pay_with_grantors(cx), player, spell, def, None);
+    let no_mana = def.keywords.has(Keyword::CantSpendManaToCast);
+    // CR 702.132a: with assist, another player the caster chooses may pay generic mana of the total cost before they do.
+    let assisted = if with.assist && !no_mana && cost.mana.generic > 0 { assist(cx, player, spell, cost.mana)? } else { None };
+    let mut owed = cost.mana;
+    if let Some(a) = &assisted {
+        owed.generic -= a.generic;
+    }
     let helpers = Helpers {
         with,
         waterbend,
         creatures: false,
-        no_mana: def.keywords.has(Keyword::CantSpendManaToCast),
+        no_mana,
         purpose: Paying::Casting,
         reserved: &exiles,
         attackers: &[],
         life: life_owed,
         any_type,
+        abilities_closed: assisted.is_some(),
+        assist: if assisted.is_some() { AssistStep::CasterPays } else { AssistStep::None },
     };
-    let (spent, restrictions) = pay_mana_used(cx, player, spell, cost.mana, &helpers)?;
+    let (mut spent, mut restrictions) = pay_mana_used(cx, player, spell, owed, &helpers)?;
+    // The mana the assisting player spent was spent to cast it too (CR 601.2h, 106.6).
+    if let Some(a) = assisted {
+        for m in Mana::ALL {
+            spent.0[m as usize] += a.paid.0[m as usize];
+        }
+        restrictions |= a.restrictions;
+    }
     // CR 106.6: a creature spell paid for with mana that gives it haste has haste once it resolves; a spell paid for with
     // mana that makes it uncounterable can't be countered.
     if restrictions & MANA_GIVES_HASTE != 0 && cx.chars(spell).is(CardType::Creature) {
@@ -7508,6 +7540,137 @@ fn cast(
     ops::became_targets(cx, targets.iter().copied(), spell, player);
     ops::commit_crime(cx, player, spell, targets);
     Ok(())
+}
+
+/// What the player who assisted with a spell's cost paid (CR 702.132a): how much of its generic mana, the mana, and what that
+/// mana does to the spell (`ManaRestriction::effects`).
+struct Assisted {
+    generic: u8,
+    paid: ManaPool,
+    restrictions: u8,
+}
+
+/// Assist (CR 702.132a), before any mana ability is activated while casting `spell`, whose total cost `total` has generic
+/// mana: its caster may choose another player in the game; that player has a chance to activate mana abilities, then the
+/// caster has theirs; then, before the caster begins to pay, the chosen player may pay any amount of the generic mana, from
+/// their own pool (the mana abilities are over for both, CR 601.2g). None where the caster chooses no one. Only the generic
+/// mana: colored mana is the caster's to pay whatever the helper's mana is (the ruling), and a cost change already in
+/// `total` changes how much that is (the ruling).
+fn assist(cx: &mut Cx, caster: PlayerId, spell: ObjectId, total: ManaCost) -> R<Option<Assisted>> {
+    let others: Vec<PlayerId> = cx.s().turn_order_from(caster).filter(|&p| p != caster && cx.s().in_game(p)).collect();
+    if others.is_empty() {
+        return Ok(None);
+    }
+    if !matches!(cx.ask_core(caster, RequestKind::May { source: spell, purpose: Purpose::Assist }, true)?, Answer::Yes) {
+        return Ok(None);
+    }
+    let helper = if others.len() == 1 {
+        others[0]
+    } else {
+        let ask = RequestKind::ChoosePlayer { source: spell, candidates: others, verb: "Assist", amount: 0, subject: None };
+        match cx.ask_core(caster, ask, true)? {
+            Answer::Player(p) => p,
+            _ => return Err(Stop::Cancel),
+        }
+    };
+    let generic = ManaCost { generic: total.generic, ..ManaCost::ZERO };
+    assist_window(cx, helper, spell, generic, AssistStep::HelperActivates)?;
+    assist_window(cx, caster, spell, total, AssistStep::CasterActivates)?;
+    // Any amount of the generic mana, as much as their pool could pay of it (any mana, restricted mana that may pay for this
+    // spell, CR 106.6): announced, then paid from the pool.
+    let most = u32::from(total.generic).min(spendable(cx, helper, spell, Paying::Casting).total());
+    let mut n: u32 = 0;
+    if most > 0 {
+        loop {
+            let mut options = Vec::new();
+            if n < most {
+                options.push(ActionOption::simple(ActionKind::IncreaseX));
+            }
+            if n > 0 {
+                options.push(ActionOption::simple(ActionKind::DecreaseX));
+            }
+            options.push(ActionOption::simple(ActionKind::ConfirmCasting));
+            let ask = RequestKind::PayCosts {
+                source: spell,
+                total: generic,
+                remaining: generic,
+                options,
+                announcing: true,
+                x: n,
+                most,
+                least: 0,
+                loyalty: false,
+                attackers: Vec::new(),
+                life: 0,
+                governs: "",
+                assist: AssistStep::HelperAnnounces,
+            };
+            match cx.ask_core(helper, ask, false)? {
+                Answer::Announce(value) if value <= most => {
+                    n = value;
+                    break;
+                }
+                Answer::Act(a) => match a.kind {
+                    ActionKind::IncreaseX if n < most => n += 1,
+                    ActionKind::DecreaseX if n > 0 => n -= 1,
+                    ActionKind::ConfirmCasting => break,
+                    _ => return Err(Stop::Cancel),
+                },
+                _ => return Err(Stop::Cancel),
+            }
+        }
+    }
+    // `most` is at most the generic mana, a u8.
+    let generic_paid = n as u8;
+    if generic_paid == 0 {
+        return Ok(Some(Assisted { generic: 0, paid: ManaPool::default(), restrictions: 0 }));
+    }
+    let helpers = Helpers { purpose: Paying::Casting, abilities_closed: true, assist: AssistStep::HelperPays, ..Helpers::NONE };
+    let (paid, restrictions) = pay_mana_used(cx, helper, spell, ManaCost { generic: generic_paid, ..ManaCost::ZERO }, &helpers)?;
+    Ok(Some(Assisted { generic: generic_paid, paid, restrictions }))
+}
+
+/// A player's chance to activate mana abilities while a spell with assist is cast (CR 702.132a), ended by `ConfirmCasting`:
+/// asked only while they have one to activate. `owed` is what the question shows: the generic mana for the player chosen to
+/// help, the whole total for the caster.
+fn assist_window(cx: &mut Cx, player: PlayerId, spell: ObjectId, owed: ManaCost, step: AssistStep) -> R<()> {
+    loop {
+        let mut options = mana_options_while_paying(cx, player, spell, Paying::Casting);
+        if options.is_empty() {
+            return Ok(());
+        }
+        options.push(ActionOption::simple(ActionKind::ConfirmCasting));
+        let caster = step == AssistStep::CasterActivates;
+        if caster {
+            options.push(ActionOption::simple(ActionKind::CancelCasting));
+        }
+        let ask = RequestKind::PayCosts {
+            source: spell,
+            total: owed,
+            remaining: owed,
+            options,
+            announcing: false,
+            x: 0,
+            most: 0,
+            least: 0,
+            loyalty: false,
+            attackers: Vec::new(),
+            life: 0,
+            governs: "",
+            assist: step,
+        };
+        match cx.ask_core(player, ask, caster)? {
+            Answer::Act(action) => match action.kind {
+                ActionKind::ActivateAbility => {
+                    let from = action.source.expect("source");
+                    activate_mana(cx, player, from, action.index, action.color, action.mana == Some(Mana::C), &action.targets)?;
+                }
+                ActionKind::ConfirmCasting => return Ok(()),
+                _ => return Err(Stop::Cancel),
+            },
+            _ => return Err(Stop::Cancel),
+        }
+    }
 }
 
 /// Whether `player` could cast `card` now as the resolving effect has them (CR 608.2g): it is not a land and every target
@@ -8524,7 +8687,7 @@ fn announce_x(cx: &mut Cx, player: PlayerId, spell: ObjectId, base: ManaCost, ki
         }
         options.push(ActionOption::simple(ActionKind::ConfirmCasting));
         options.push(ActionOption::simple(ActionKind::CancelCasting));
-        let ask = RequestKind::PayCosts { source: spell, total, remaining: total, options, announcing: true, x: n, most, least, loyalty, attackers: Vec::new(), life: 0, governs };
+        let ask = RequestKind::PayCosts { source: spell, total, remaining: total, options, announcing: true, x: n, most, least, loyalty, attackers: Vec::new(), life: 0, governs, assist: AssistStep::None };
         match cx.ask_core(player, ask, true)? {
             // The whole value at once, which the request's `least` and `most` bound (`validate::check`).
             Answer::Announce(value) if (least..=most).contains(&value) => return Ok(value),
@@ -9840,11 +10003,16 @@ pub(crate) struct Helpers<'a> {
     pub life: u32,
     /// "Mana of any type can be spent to cast that spell" (CR 609.4b): any mana pays any of its symbols.
     pub any_type: bool,
+    /// The time for activating mana abilities is over (CR 601.2g): the payment of a spell with assist, whose players each had
+    /// a window of their own before anything was paid (CR 702.132a).
+    pub abilities_closed: bool,
+    /// Which step of a payment with assist this is (CR 702.132a), for the question to say.
+    pub assist: AssistStep,
 }
 
 impl Helpers<'static> {
     pub const NONE: Helpers<'static> =
-        Helpers { with: PayWith::NONE, waterbend: 0, creatures: false, no_mana: false, purpose: Paying::Other, reserved: &[], attackers: &[], life: 0, any_type: false };
+        Helpers { with: PayWith::NONE, waterbend: 0, creatures: false, no_mana: false, purpose: Paying::Other, reserved: &[], attackers: &[], life: 0, any_type: false, abilities_closed: false, assist: AssistStep::None };
 }
 
 /// What a mana payment is for, as far as restricted mana is concerned (CR 106.6): see `payment_for`.
@@ -10102,7 +10270,7 @@ pub(crate) fn pay_mana_used(cx: &mut Cx, player: PlayerId, source: ObjectId, mut
             spend_pool(cx, &mut paid, &mut used, &mut taken, spent);
             break;
         }
-        let paying = !convoking.is_empty() || generic_paid > 0;
+        let paying = !convoking.is_empty() || generic_paid > 0 || helpers.abilities_closed;
         let mut options = if paying { Vec::new() } else { mana_options_while_paying(cx, player, source, helpers.purpose) };
         if matches!(decided, Ways::One(_)) {
             // The pool's one way of paying, which the player may take or pay some other way instead.
@@ -10112,7 +10280,9 @@ pub(crate) fn pay_mana_used(cx: &mut Cx, player: PlayerId, source: ObjectId, mut
             options.extend(assign_options(&cx.s().player(player).pool, &restricted, &told_mana, &due));
         }
         options.extend(candidates);
-        options.push(ActionOption::simple(ActionKind::CancelCasting));
+        if helpers.assist != AssistStep::HelperPays {
+            options.push(ActionOption::simple(ActionKind::CancelCasting));
+        }
         let shown = if helpers.any() {
             let mut t = total;
             t.generic = t.generic.saturating_sub(generic_paid);
@@ -10120,8 +10290,9 @@ pub(crate) fn pay_mana_used(cx: &mut Cx, player: PlayerId, source: ObjectId, mut
         } else {
             total
         };
-        let ask = RequestKind::PayCosts { source, total: shown, remaining: due, options, announcing: false, x: 0, most: 0, least: 0, loyalty: false, attackers: helpers.attackers.to_vec(), life: helpers.life + u32::from(life), governs: "" };
-        let answer = cx.ask_core(player, ask, true)?;
+        let ask = RequestKind::PayCosts { source, total: shown, remaining: due, options, announcing: false, x: 0, most: 0, least: 0, loyalty: false, attackers: helpers.attackers.to_vec(), life: helpers.life + u32::from(life), governs: "", assist: helpers.assist };
+        // The player assisting pays for a spell that is not theirs to take back (CR 702.132a).
+        let answer = cx.ask_core(player, ask, helpers.assist != AssistStep::HelperPays)?;
         match answer {
             Answer::Act(action) => match action.kind {
                 ActionKind::ActivateAbility => {
