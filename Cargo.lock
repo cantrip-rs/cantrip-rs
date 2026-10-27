@@ -192,6 +192,7 @@ name = "cantrip-rules"
 version = "0.1.0"
 dependencies = [
  "cantrip-api",
+ "cantrip-mechanics",
  "cantrip-state",
 ]
 

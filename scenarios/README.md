@@ -296,6 +296,11 @@ cloaked one with morph has both that and `Activate(Ability: mana cost)` (CR 701.
 not mana ("Morph—Discard a Zombie card", "Return a Bird you control to its owner's hand") is answered by the lines that
 follow, as an activated ability's cost is. Refused as any action is: `! Bot1.Battlefield.#1.Activate(Ability: morph cost)`.
 
+Surge and freerunning (CR 702.117a, 702.173a) are alternative costs of the card's own, cast by their keyword line:
+`Bot1.Hand.Goblin Freerunner.Cast(Ability: Surge)`, `Bot1.Hand.Brotherhood Ambushers.Cast(Ability: Freerunning)`, offered
+only while the condition holds (another spell Bot1 cast this turn; combat damage an Assassin creature Bot1 controlled dealt a
+player this turn, as it was then), so `! Bot1.Hand.Goblin Freerunner.Cast(Ability: Surge)` shows it refused before.
+
 Prototype (CR 702.160, 718): `Bot1.Hand.Blitz Automaton.Cast(Ability: Prototype)` casts it prototyped (the option reads its
 keyword line, "Prototype {2}{R} — 3/2"), paid like any cast; with an alternative cost another permanent gives, the option
 reads "Prototype {2}{R} — 3/2: Without paying its mana cost". `Stack.Blitz Automaton.Prototyped` and

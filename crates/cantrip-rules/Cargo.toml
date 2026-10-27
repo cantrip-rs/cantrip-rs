@@ -9,3 +9,6 @@ license.workspace = true
 [dependencies]
 cantrip-state.workspace = true
 cantrip-api.workspace = true
+
+[dev-dependencies]
+cantrip-mechanics.workspace = true
