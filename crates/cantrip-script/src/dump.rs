@@ -190,6 +190,11 @@ impl StateDump {
             if s.obj(item.object).x > 0 {
                 d.set(format!("Stack.{label}.X"), s.obj(item.object).x);
             }
+            // Cast prototyped, or a copy of a spell that was (CR 718.3b-c): its mana cost, power and toughness are the
+            // prototype's.
+            if game.cards.get(game.chars(item.object).card).prototyped {
+                d.set(format!("Stack.{label}.Prototyped"), true);
+            }
         }
 
         // The delayed triggered abilities waiting for their moment (CR 603.7), each named for the object it came from.
@@ -526,6 +531,10 @@ impl StateDump {
                     if obj.token {
                         d.set(format!("{key}.Token"), true);
                     }
+                    // A prototyped permanent, or a copy of one (CR 718.3b-d).
+                    if game.cards.get(c.card).prototyped {
+                        d.set(format!("{key}.Prototyped"), true);
+                    }
                     // Back face up (CR 701.27g), whatever a copy effect makes it look like (CR 707.2).
                     if obj.transformed {
                         d.set(format!("{key}.Transformed"), true);
@@ -800,7 +809,7 @@ const PLAYER_KEYS: &[&str] = &[
 
 /// The keys the dump writes of a permanent, after `BotN.Battlefield.<name>.` (or `.PhasedOut.`), beside `Counters.<Kind>`.
 const PERMANENT_KEYS: &[&str] = &[
-    "Tapped", "Toxic", "FaceDown", "FaceDownName", "Token", "Transformed", "ManaValue", "X", "Doors", "Prepared", "AttachedTo", "Monstrous",
+    "Tapped", "Toxic", "FaceDown", "FaceDownName", "Token", "Prototyped", "Transformed", "ManaValue", "X", "Doors", "Prepared", "AttachedTo", "Monstrous",
     "Solved", "Suspected", "Saddled", "Exerted", "GoadedBy", "MustAttack", "CantBeBlocked", "BlockRestriction", "ChosenPlayer", "ChosenOption", "ChosenObject",
     "ChosenModes", "ChosenName", "ClassLevel", "Types", "Supertypes", "Subtypes", "Colors", "Keywords", "HexproofFrom",
     "ProtectionFrom", "Power", "Toughness", "Damage", "SummoningSick", "ChosenColor", "ChosenSubtype",
@@ -843,7 +852,7 @@ fn writable(key: &str) -> bool {
         return true;
     }
     if let Some(rest) = key.strip_prefix("Stack.") {
-        return rest.ends_with(".ManaValue") || rest.ends_with(".X") || rest.ends_with(".FaceDown") || rest.ends_with(".FaceDownName");
+        return rest.ends_with(".ManaValue") || rest.ends_with(".X") || rest.ends_with(".FaceDown") || rest.ends_with(".FaceDownName") || rest.ends_with(".Prototyped");
     }
     let Some(rest) = key.strip_prefix("Bot").and_then(|r| r.split_once('.')).filter(|(n, _)| n.parse::<u8>().is_ok()).map(|(_, r)| r) else {
         return false;

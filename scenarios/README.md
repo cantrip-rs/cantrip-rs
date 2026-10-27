@@ -296,6 +296,12 @@ cloaked one with morph has both that and `Activate(Ability: mana cost)` (CR 701.
 not mana ("Morph—Discard a Zombie card", "Return a Bird you control to its owner's hand") is answered by the lines that
 follow, as an activated ability's cost is. Refused as any action is: `! Bot1.Battlefield.#1.Activate(Ability: morph cost)`.
 
+Prototype (CR 702.160, 718): `Bot1.Hand.Blitz Automaton.Cast(Ability: Prototype)` casts it prototyped (the option reads its
+keyword line, "Prototype {2}{R} — 3/2"), paid like any cast; with an alternative cost another permanent gives, the option
+reads "Prototype {2}{R} — 3/2: Without paying its mana cost". `Stack.Blitz Automaton.Prototyped` and
+`Bot1.Battlefield.Blitz Automaton.Prototyped` are `true` for a prototyped spell or permanent, or a copy of one (absent
+otherwise); its `.Power`, `.Toughness`, `.Colors` and `.ManaValue` are the prototype's there, the card's anywhere else.
+
 ## Refusals
 
 A line starting with `!` says what the game must **not** offer, which no ordinary line can prove — a line never offered
