@@ -301,6 +301,14 @@ Surge and freerunning (CR 702.117a, 702.173a) are alternative costs of the card'
 only while the condition holds (another spell Bot1 cast this turn; combat damage an Assassin creature Bot1 controlled dealt a
 player this turn, as it was then), so `! Bot1.Hand.Goblin Freerunner.Cast(Ability: Surge)` shows it refused before.
 
+Assist (CR 702.132a): after the `Cast` line (and its cost's choices), `Bot1.Accept` chooses another player to help pay
+(unsaid, Bot1 chooses no one), and with more than two players `Bot1.ChoosePlayer(Bot3)` says whom. That player's mana
+abilities come first: `Bot2.Battlefield.Forest.Activate` lines; then the caster's, `Bot1.Battlefield.Forest.Activate` -
+the last chance the caster has (CR 601.2g: once paying begins no mana ability is offered, so tap everything the rest needs
+here, or float it before casting); then `Bot2.PayCost(X: 2)` is how much of the generic mana Bot2 pays (at most the generic
+mana and what their pool holds; `Spend:` as on any cast), unsaid 0; then Bot1 pays the rest from the pool. A window with no
+line for it is closed.
+
 Prototype (CR 702.160, 718): `Bot1.Hand.Blitz Automaton.Cast(Ability: Prototype)` casts it prototyped (the option reads its
 keyword line, "Prototype {2}{R} — 3/2"), paid like any cast; with an alternative cost another permanent gives, the option
 reads "Prototype {2}{R} — 3/2: Without paying its mana cost". `Stack.Blitz Automaton.Prototyped` and

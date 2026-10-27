@@ -82,6 +82,9 @@ struct Run<'s> {
     cursor: usize,
     since: u32,
     casting: Option<Casting>,
+    /// The payment of the player assisting with another's spell (CR 702.132a), from the `PayCost(X: n)` line that announced
+    /// how much they pay: what its `Spend:` says.
+    assisting: Option<Casting>,
     trace: Vec<String>,
     handed_over: bool,
     /// The colors an activation line named (`Colors: Red, Red, Green`) for the "any combination" question its mana
@@ -241,6 +244,7 @@ impl<'s> Run<'s> {
             cursor: 0,
             since: 1,
             casting: None,
+            assisting: None,
             trace: Vec::new(),
             handed_over: false,
             colors: None,
@@ -924,6 +928,7 @@ impl<'s> Run<'s> {
         if !paying {
             if matches!(request.kind, RequestKind::Priority { .. }) {
                 self.casting = None;
+                self.assisting = None;
             }
         } else {
             // A mana ability the line under the cursor activates is activated while paying (CR 601.2g), before the pool
@@ -998,6 +1003,11 @@ impl<'s> Run<'s> {
             (RequestKind::ChooseCards { purpose: Purpose::CastFree, .. }, None) if step.named("X").or_else(|| step.named("Kicked")).is_some() => {
                 self.casting = Some(Casting::new(request.player, x_of(step)?, spend_of(step)?));
             }
+            // `Bot2.PayCost(X: 2; Spend: G)`: the player assisting with a spell pays that much of its generic mana (CR
+            // 702.132a), with that pool mana.
+            (RequestKind::PayCosts { assist: AssistStep::HelperAnnounces, .. }, None) => {
+                self.assisting = Some(Casting::new(request.player, None, spend_of(step)?));
+            }
             (RequestKind::UnlessPays { .. }, Some(ActionKind::PayCost)) => {
                 self.casting = Some(Casting::new(request.player, None, spend_of(step)?));
             }
@@ -1026,6 +1036,25 @@ impl<'s> Run<'s> {
     fn default(&mut self, request: &Request) -> R<Answer> {
         Ok(match &request.kind {
             RequestKind::Priority { .. } => Answer::Pass,
+            // Paying for a spell with assist (CR 702.132a), where no line says more: a window for mana abilities is closed,
+            // the player assisting pays nothing, and what they announced is paid from their pool as their line's `Spend:` says.
+            RequestKind::PayCosts { assist, .. } if assist.activating() => {
+                let done = match &request.kind {
+                    RequestKind::PayCosts { options, .. } => options.iter().find(|o| o.kind == ActionKind::ConfirmCasting).cloned(),
+                    _ => None,
+                };
+                Answer::Act(Action::of(&done.expect("a window for mana abilities can be closed")))
+            }
+            RequestKind::PayCosts { assist: AssistStep::HelperAnnounces, .. } => Answer::Announce(0),
+            RequestKind::PayCosts { assist: AssistStep::HelperPays, source, remaining, .. } => {
+                let mut plan = self.assisting.take().filter(|a| a.player == request.player).map_or_else(PayPlan::default, |a| a.plan);
+                let answer = cantrip_engine::pay::auto_pay(&self.game, request, &mut plan).map_err(Fail)?;
+                self.assisting = Some(Casting { player: request.player, plan });
+                return match answer {
+                    Some(answer) => Ok(answer),
+                    None => fail(format!("{} is assisting with {} with {remaining} still owed, and their pool does not pay it", bot(request.player), self.game.known_name(*source))),
+                };
+            }
             RequestKind::PayCosts { source, remaining, .. } => {
                 if self.casting.is_none() {
                     self.casting = Some(Casting::new(request.player, None, VecDeque::new()));
@@ -1177,6 +1206,14 @@ impl<'s> Run<'s> {
                 None => None,
             },
             (V::Pass, RequestKind::Priority { .. }) => Some(Answer::Pass),
+            // How much of a spell's generic mana the player assisting with it pays (CR 702.132a): `PayCost(X: 2)`.
+            (V::PayCost, RequestKind::PayCosts { announcing: true, assist: AssistStep::HelperAnnounces, most, .. }) => {
+                let n = u32::from(x_of(step)?.unwrap_or(0));
+                if n > *most {
+                    return fail(format!("line {}: {} may pay at most {most} of the generic mana", step.line, bot(request.player)));
+                }
+                Some(Answer::Announce(n))
+            }
             (V::PayCost, RequestKind::UnlessPays { options, .. }) => {
                 options.iter().find(|o| o.kind == ActionKind::PayCost).map(|o| Answer::Act(Action::of(o)))
             }
