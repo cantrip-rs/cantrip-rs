@@ -242,7 +242,9 @@ pub fn token_chars(cards: &CardTable, card: CardId, copy: Option<Copiable>) -> C
 /// for every other purpose. Nothing for any other object.
 ///
 /// The layers' pass is kept apart while a card is judged (`PassKey::judged`); the static-ability sources (`static_sources`)
-/// are not keyed on it: a face-down card in exile is never one, judged or not.
+/// are not keyed on it: a face-down card in exile is never one, judged or not. A face-down permanent judged as it would be
+/// face up (`Query::chars_if_face_up`) is not one either - its face-up static abilities are not applied to that judgement,
+/// which no printed card with morph or disguise reaches (none has a static ability that takes its own abilities).
 ///
 /// It does not ask whether the player may look at the card (`seen_by`): every permission that lets a face-down card be played
 /// today comes from the effect that exiled it and let its player look. A permission to cast "spells with certain qualities
@@ -256,7 +258,6 @@ pub fn judged_face_up(state: &GameState, card: ObjectId) -> JudgedFaceUp<'_> {
     let was = state.obj(card).face_down_card().then(|| state.judged_face_up.replace(Some(card)));
     JudgedFaceUp { state, was }
 }
-
 
 impl Drop for JudgedFaceUp<'_> {
     fn drop(&mut self) {
