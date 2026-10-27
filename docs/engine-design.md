@@ -484,6 +484,10 @@ only the candidates the host's verdict on those picked says may be added.
   values (`Obj::copy`) and so does the permanent it becomes (`resolve`, as a bestowed spell does), so a copy of either is
   prototyped (718.2a, 718.3c-d); anywhere else, and once it leaves the stack or the battlefield, it is a new object with its
   normal characteristics (718.4, 400.7). `cantrip_mechanics::prototype::prototyped` asks whether an object is.
+- **A damage event names its source as it dealt the damage**: `Event::Damage::known`, a last-known row pushed as it is
+  dealt (`ops::dealer_known`, from the characteristics the damage was judged by), read through `History::damage_dealt` and
+  `DamageDealt::chars`, so "a creature that, at the time it dealt that damage, was an Assassin creature ... under your
+  control" (freerunning, 702.173a) asks what it was then. It made `Event` 28 bytes rather than 24.
 - **A card exiled face down has no characteristics (406.3a)**: `layers::chars` gives a face-down card outside the
   battlefield and the stack (`Obj::face_down_card`) those of `intrinsic::NO_CHARACTERISTICS` - no name, no mana value, no
   types, no abilities - for every reader, so nothing that counts or matches cards in exile sees what it is, and its abilities

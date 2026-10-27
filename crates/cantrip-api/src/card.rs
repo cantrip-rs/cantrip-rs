@@ -1609,6 +1609,10 @@ pub enum WayKind {
     /// Disguise (CR 702.168a): cast as a 2/2 face-down creature spell with ward {2} for {3} (`intrinsic::DISGUISED`), and
     /// turned face up for its disguise cost (`WayDef::turn_up`) as a special action (CR 702.168d).
     Disguise,
+    /// Surge (CR 702.117a): "cast for its surge cost" asks it.
+    Surge,
+    /// Freerunning (CR 702.173a): "cast for its freerunning cost" asks it.
+    Freerunning,
 }
 
 impl WayKind {

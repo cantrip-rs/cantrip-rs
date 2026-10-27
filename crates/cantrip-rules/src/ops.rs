@@ -3027,6 +3027,13 @@ impl DamageBatch {
     }
 }
 
+/// The last-known row of `source` as it deals damage (`Event::Damage::known`): its characteristics then, `chars`, which the
+/// damage was judged by, and its controller.
+fn dealer_known(cx: &mut Cx, source: ObjectId, chars: &Chars) -> u32 {
+    let row = last_known_from(cx, source, chars);
+    cx.st().last_known_push(row)
+}
+
 /// Damage as `damage` deals it, as one assignment of a simultaneous event, `batch`. The life its lifelink sources gain is gained by
 /// `DamageBatch::finish` once every assignment has been dealt, and so are the counters it is dealt as.
 pub fn deal_damage_with(
@@ -3083,7 +3090,7 @@ pub fn deal_damage_with(
                 counters::put_on_player(cx, p, counters::PlayerCounts { poison, ..Default::default() }, by);
             }
             lifelink(cx, source, &source_chars, amount, batch);
-            Some(Event::Damage { source, target, amount, kind: DamageKind::new(combat, source_chars.colors), controller: cx.controller(source), recipient_excess: 0 })
+            Some(Event::Damage { source, target, amount, kind: DamageKind::new(combat, source_chars.colors), controller: cx.controller(source), recipient_excess: 0, known: dealer_known(cx, source, &source_chars) })
         }
         Target::Object(id) => {
             if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) {
@@ -3141,7 +3148,7 @@ pub fn deal_damage_with(
                 counters::remove(cx, id, CounterKind::Loyalty, amount.min(i16::MAX as u16) as i16);
             }
             lifelink(cx, source, &source_chars, amount, batch);
-            Some(Event::Damage { source, target, amount, kind: DamageKind::new(combat, source_chars.colors), controller: cx.controller(source), recipient_excess: 0 })
+            Some(Event::Damage { source, target, amount, kind: DamageKind::new(combat, source_chars.colors), controller: cx.controller(source), recipient_excess: 0, known: dealer_known(cx, source, &source_chars) })
         }
     }
 }

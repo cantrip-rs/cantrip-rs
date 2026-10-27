@@ -59,7 +59,7 @@ fn waiting(game: &Game) -> Vec<(u8, PlayerId)> {
 }
 
 fn combat_damage(source: ObjectId, victim: PlayerId) -> Event {
-    Event::Damage { source, target: Target::Player(victim), amount: 2, kind: DamageKind::new(true, ColorSet::default()), controller: A, recipient_excess: 0 }
+    Event::Damage { source, target: Target::Player(victim), amount: 2, kind: DamageKind::new(true, ColorSet::default()), controller: A, recipient_excess: 0, known: u32::MAX }
 }
 
 /// Each of the inherent abilities, with and without the Hush: without, it triggers; with, it doesn't, and the object of the

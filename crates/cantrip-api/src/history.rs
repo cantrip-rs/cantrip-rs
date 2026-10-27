@@ -103,6 +103,32 @@ impl Attacked {
     }
 }
 
+/// Damage a source dealt (CR 120.3), as `History::damage_dealt` gives it: its `Event::Damage`, and the last-known row that
+/// keeps the source as it was when it dealt it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub struct DamageDealt {
+    pub source: ObjectId,
+    pub target: Target,
+    pub amount: u16,
+    pub combat: bool,
+    /// Its controller as it dealt the damage (CR 120.3, 609.7).
+    pub controller: PlayerId,
+    pub known: u32,
+}
+
+impl DamageDealt {
+    /// The source's characteristics as it dealt the damage: "a creature that, at the time it dealt that damage, was an
+    /// Assassin creature" (freerunning, CR 702.173a) asks what it was then, whatever it has become, wherever it has gone and
+    /// whoever controls it since (the ruling). The rest - its card - is this object's.
+    pub fn chars(&self, q: &dyn crate::Query) -> crate::Chars {
+        let c = q.chars(self.source);
+        match q.state().last_known.get(self.known as usize).filter(|row| row.id == self.source) {
+            Some(row) => c.as_known(row),
+            None => c,
+        }
+    }
+}
+
 /// What made an event happen.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
 pub enum Cause {
@@ -455,6 +481,16 @@ impl<'a> History<'a> {
     pub fn attacked_with(&self, player: PlayerId) -> impl Iterator<Item = Attacked> + 'a {
         self.this_turn().iter().filter_map(move |r| match r.event {
             Event::Attacks { attacker, known, .. } if r.active == player => Some(Attacked { attacker, known }),
+            _ => None,
+        })
+    }
+
+    /// The damage dealt this turn, in order, each source's to each recipient (CR 120.3).
+    pub fn damage_dealt(&self) -> impl Iterator<Item = DamageDealt> + 'a {
+        self.this_turn().iter().filter_map(|r| match r.event {
+            Event::Damage { source, target, amount, kind, controller, known, .. } => {
+                Some(DamageDealt { source, target, amount, combat: kind.is_combat(), controller, known })
+            }
             _ => None,
         })
     }

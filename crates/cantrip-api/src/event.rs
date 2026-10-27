@@ -63,6 +63,10 @@ pub enum Event {
         /// Repeated on each source's record for that recipient: never sum it across those records or attribute it to
         /// that source alone. A trigger about the recipient uses the batch's other records for its source restrictions.
         recipient_excess: u32,
+        /// The last-known row that keeps the source as it was when it dealt the damage (`history::DamageDealt::chars`):
+        /// "a creature that, at the time it dealt that damage, was an Assassin creature" (freerunning, CR 702.173a) asks
+        /// what it was then, whatever it has become or wherever it has gone since.
+        known: u32,
     },
     /// Damage that would have been dealt was prevented (CR 615.6, 615.13): `amount` of what `source` would have dealt to
     /// `target`, by the prevention effect of `by` - the permanent whose static ability it is, the source of a resolved
@@ -587,9 +591,11 @@ mod tests {
 
     /// The history holds an `Event` for everything since the game began, so its size is every record's: the mana in one
     /// is a `ManaTally` (a `u8` a kind), never a pool's `u32` counts, and a cast's mana value is in its last-known row
-    /// (`Cast::value`).
+    /// (`Cast::value`). 28 since a damage event names the last-known row of its source as it dealt it (`Event::Damage::known`,
+    /// freerunning's "at the time it dealt that damage", CR 702.173a): the four bytes of a row's index, which no reshuffle of
+    /// the damage event's other fields could find room for.
     #[test]
     fn an_event_stays_small() {
-        assert!(std::mem::size_of::<Event>() <= 24, "Event is {} bytes", std::mem::size_of::<Event>());
+        assert!(std::mem::size_of::<Event>() <= 28, "Event is {} bytes", std::mem::size_of::<Event>());
     }
 }
