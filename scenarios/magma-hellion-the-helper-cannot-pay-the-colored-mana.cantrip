@@ -1,0 +1,58 @@
+# Magma Hellion: "Assist", {6}{R}. On turn 5 Bot1 has two Islands and three Moxen (five mana, none red) and Bot2 two Mountains that
+# could pay {2} of the generic mana: seven in all, but the {R} is Bot1's to pay even if Bot2 has red (the ruling), so the
+# cast is refused. Once Bot1 plays a Mountain, Bot2 pays {1} with one Mountain and Bot1 the other {6}: the Mountain, the
+# Islands and the Moxen, its pool empty.
+
+[Bot1 Deck]
+Island
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Island
+Magma Hellion
+Mountain
+Island x16
+
+[Bot2 Deck]
+Mountain
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+! Bot1.Hand.Magma Hellion.Cast(Mana: short)
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Magma Hellion.Cast
+Bot1.Accept
+Bot2.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot2.PayCost(X: 1)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Magma Hellion.Power = 5
+Bot1.Battlefield.Magma Hellion.Keywords = Haste; Trample
+Bot2.Battlefield.Mountain#1.Tapped = true
+Bot2.Battlefield.Mountain#2.Tapped = false

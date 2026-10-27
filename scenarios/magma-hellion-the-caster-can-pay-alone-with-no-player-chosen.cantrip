@@ -1,0 +1,35 @@
+# Magma Hellion: "Assist" (CR 702.132a), {6}{R}. Bot1 casts two Black Lotuses and plays a Mountain on turn 1: seven mana, enough to
+# cast the Hellion alone. Asked to choose another player to help, Bot1 chooses no one (no Accept line) and pays all of {6}{R}.
+# The Hellion is a 5/4 with haste and trample.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mountain
+Magma Hellion
+Mountain x16
+
+[Bot2 Deck]
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Magma Hellion.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Magma Hellion.Power = 5
+Bot1.Battlefield.Magma Hellion.Toughness = 4
+Bot1.Battlefield.Magma Hellion.Keywords = Haste; Trample

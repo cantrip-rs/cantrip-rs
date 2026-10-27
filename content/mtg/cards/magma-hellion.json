@@ -1,0 +1,13 @@
+{
+  "name": "Magma Hellion",
+  "manaCost": "{6}{R}",
+  "type": "Creature — Hellion",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Assist (Another player can pay up to {6} of this spell's cost.)\nTrample, haste",
+  "keywords": [
+    "Trample",
+    "Haste"
+  ],
+  "assist": true
+}
