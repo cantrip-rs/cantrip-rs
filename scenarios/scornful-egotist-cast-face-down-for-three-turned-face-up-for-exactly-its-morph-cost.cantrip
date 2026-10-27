@@ -1,0 +1,39 @@
+# Scornful Egotist's morph {U} (CR 702.37a, 702.37e): Black Lotus pays the {3} to cast it face down, and the pool is empty
+# right after; it is a nameless 2/2 with no abilities (CR 708.2). Turned face up on turn 1 (a special action, CR 116.2b) with
+# exactly the 1 mana its morph cost asks, tapped from 1 source, the pool ends empty. Face up it is Scornful Egotist, a 1/1
+# with its morph ability only.
+
+[Bot1 Deck]
+Black Lotus
+Scornful Egotist
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Scornful Egotist.Cast(Ability: Morph)
+? Stack..FaceDown = true
+? Stack..FaceDownName = Scornful Egotist
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Battlefield.Scornful Egotist.Activate(Ability: morph cost)
+? Bot1.Mana = 
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Scornful Egotist.Power = 1
+Bot1.Battlefield.Scornful Egotist.Toughness = 1
+Bot1.Battlefield.Scornful Egotist.Keywords = Morph
