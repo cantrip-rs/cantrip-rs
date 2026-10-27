@@ -1,0 +1,11 @@
+{
+  "name": "Waveskimmer Aven",
+  "manaCost": "{2}{G}{W}{U}",
+  "type": "Creature — Bird Soldier",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Flying\nExalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Flying"
+  ]
+}

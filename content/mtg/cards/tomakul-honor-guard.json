@@ -1,0 +1,8 @@
+{
+  "name": "Tomakul Honor Guard",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Human Soldier",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Ward {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)"
+}

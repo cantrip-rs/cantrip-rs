@@ -1,0 +1,11 @@
+{
+  "name": "Reconstructed Thopter",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Thopter",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nUnearth {2} ({2}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)",
+  "keywords": [
+    "Flying"
+  ]
+}

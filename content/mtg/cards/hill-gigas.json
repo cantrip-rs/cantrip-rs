@@ -1,0 +1,12 @@
+{
+  "name": "Hill Gigas",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Giant",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Trample, haste\nMountaincycling {2} ({2}, Discard this card: Search your library for a Mountain card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Trample",
+    "Haste"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Ringwarden Owl",
+  "manaCost": "{3}{U}{U}",
+  "type": "Creature — Bird",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Flying"
+  ]
+}

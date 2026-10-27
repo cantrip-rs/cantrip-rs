@@ -1,0 +1,11 @@
+{
+  "name": "Horizon Drake",
+  "manaCost": "{1}{U}{U}",
+  "type": "Creature — Drake",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flying, protection from lands",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Valley Rannet",
+  "manaCost": "{4}{R}{G}",
+  "type": "Creature — Beast",
+  "power": 6,
+  "toughness": 3,
+  "oracleText": "Mountaincycling {2}, forestcycling {2} ({2}, Discard this card: Search your library for a Mountain or Forest card, reveal it, put it into your hand, then shuffle.)"
+}

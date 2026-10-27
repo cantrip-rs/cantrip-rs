@@ -1,0 +1,11 @@
+{
+  "name": "Granitic Titan",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Elemental",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Menace\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Menace"
+  ]
+}

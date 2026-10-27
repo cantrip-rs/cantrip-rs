@@ -1,0 +1,12 @@
+{
+  "name": "Autochthon Wurm",
+  "manaCost": "{10}{G}{G}{G}{W}{W}",
+  "type": "Creature — Wurm",
+  "power": 9,
+  "toughness": 14,
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nTrample",
+  "keywords": [
+    "Trample"
+  ],
+  "convoke": true
+}

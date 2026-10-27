@@ -1,0 +1,11 @@
+{
+  "name": "Goblin Champion",
+  "manaCost": "{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "Haste\nExalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Haste"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Harvesttide Infiltrator",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Werewolf",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Trample\nDaybound (If a player casts no spells during their own turn, it becomes night next turn.)",
+  "keywords": [
+    "Trample",
+    "Daybound"
+  ],
+  "backFace": {
+    "name": "Harvesttide Assailant",
+    "colorIndicator": [
+      "Red"
+    ],
+    "type": "Creature — Werewolf",
+    "power": 4,
+    "toughness": 4,
+    "oracleText": "Trample\nNightbound (If a player casts at least two spells during their own turn, it becomes day next turn.)",
+    "keywords": [
+      "Trample",
+      "Nightbound"
+    ]
+  }
+}

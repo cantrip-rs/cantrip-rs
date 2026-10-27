@@ -1,0 +1,11 @@
+{
+  "name": "Rampaging Hippo",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Hippo",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Trample\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Trample"
+  ]
+}

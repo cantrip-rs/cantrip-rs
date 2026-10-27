@@ -1,0 +1,11 @@
+{
+  "name": "Daggermaw Megalodon",
+  "manaCost": "{4}{U}{U}",
+  "type": "Creature — Shark",
+  "power": 5,
+  "toughness": 7,
+  "oracleText": "Vigilance\nIslandcycling {2} ({2}, Discard this card: Search your library for an Island card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Wind-Kin Raiders",
+  "manaCost": "{4}{U}{U}",
+  "type": "Creature — Human Artificer",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Improvise (Your artifacts can help cast this spell. Each artifact you tap after you're done activating mana abilities pays for {1}.)\nFlying",
+  "keywords": [
+    "Flying"
+  ],
+  "improvise": true
+}

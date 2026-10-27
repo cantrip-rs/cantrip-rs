@@ -1,0 +1,12 @@
+{
+  "name": "Macetail Hystrodon",
+  "manaCost": "{6}{R}",
+  "type": "Creature — Beast",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "First strike, haste\nCycling {3} ({3}, Discard this card: Draw a card.)",
+  "keywords": [
+    "FirstStrike",
+    "Haste"
+  ]
+}

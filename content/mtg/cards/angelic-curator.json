@@ -1,0 +1,11 @@
+{
+  "name": "Angelic Curator",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Angel Spirit",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying, protection from artifacts",
+  "keywords": [
+    "Flying"
+  ]
+}

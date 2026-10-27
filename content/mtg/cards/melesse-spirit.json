@@ -1,0 +1,11 @@
+{
+  "name": "Melesse Spirit",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Angel Spirit",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, protection from black",
+  "keywords": [
+    "Flying"
+  ]
+}

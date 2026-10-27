@@ -1,0 +1,8 @@
+{
+  "name": "Etherium Abomination",
+  "manaCost": "{3}{U}{B}",
+  "type": "Artifact Creature — Horror",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Unearth {1}{U}{B} ({1}{U}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)"
+}

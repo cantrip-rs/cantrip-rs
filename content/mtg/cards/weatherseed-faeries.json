@@ -1,0 +1,11 @@
+{
+  "name": "Weatherseed Faeries",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Faerie",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying, protection from red",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Silver Knight",
+  "manaCost": "{W}{W}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike, protection from red",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

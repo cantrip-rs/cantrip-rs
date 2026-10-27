@@ -1,0 +1,11 @@
+{
+  "name": "Azorius First-Wing",
+  "manaCost": "{W}{U}",
+  "type": "Creature — Griffin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, protection from enchantments",
+  "keywords": [
+    "Flying"
+  ]
+}

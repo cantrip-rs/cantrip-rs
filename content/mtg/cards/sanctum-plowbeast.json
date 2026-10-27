@@ -1,0 +1,11 @@
+{
+  "name": "Sanctum Plowbeast",
+  "manaCost": "{4}{W}{U}",
+  "type": "Artifact Creature — Beast",
+  "power": 3,
+  "toughness": 6,
+  "oracleText": "Defender\nPlainscycling {2}, islandcycling {2} ({2}, Discard this card: Search your library for a Plains or Island card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Defender"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Screamreach Brawler",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Orc Berserker",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Dash {1}{R} (You may cast this spell for its dash cost. If you do, it gains haste, and it's returned from the battlefield to its owner's hand at the beginning of the next end step.)"
+}

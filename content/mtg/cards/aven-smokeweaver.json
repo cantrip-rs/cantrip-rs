@@ -1,0 +1,11 @@
+{
+  "name": "Aven Smokeweaver",
+  "manaCost": "{2}{U}{U}",
+  "type": "Creature — Bird Soldier",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying, protection from red",
+  "keywords": [
+    "Flying"
+  ]
+}

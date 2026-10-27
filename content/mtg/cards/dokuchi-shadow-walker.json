@@ -1,0 +1,8 @@
+{
+  "name": "Dokuchi Shadow-Walker",
+  "manaCost": "{4}{B}{B}",
+  "type": "Creature — Ogre Ninja",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Ninjutsu {3}{B} ({3}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)"
+}

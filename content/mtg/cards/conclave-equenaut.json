@@ -1,0 +1,12 @@
+{
+  "name": "Conclave Equenaut",
+  "manaCost": "{4}{W}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nFlying",
+  "keywords": [
+    "Flying"
+  ],
+  "convoke": true
+}

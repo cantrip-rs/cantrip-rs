@@ -1,0 +1,12 @@
+{
+  "name": "Siege Wurm",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Wurm",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nTrample",
+  "keywords": [
+    "Trample"
+  ],
+  "convoke": true
+}

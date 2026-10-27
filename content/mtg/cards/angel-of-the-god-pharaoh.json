@@ -1,0 +1,11 @@
+{
+  "name": "Angel of the God-Pharaoh",
+  "manaCost": "{4}{W}{W}",
+  "type": "Creature — Angel",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Flying"
+  ]
+}

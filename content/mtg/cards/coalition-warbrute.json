@@ -1,0 +1,11 @@
+{
+  "name": "Coalition Warbrute",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Minotaur Berserker",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Enlist (As this creature attacks, you may tap a nonattacking creature you control without summoning sickness. When you do, add its power to this creature's until end of turn.)\nTrample",
+  "keywords": [
+    "Trample"
+  ]
+}

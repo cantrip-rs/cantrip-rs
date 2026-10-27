@@ -1,0 +1,9 @@
+{
+  "name": "Will-Forged Golem",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Golem",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)",
+  "convoke": true
+}

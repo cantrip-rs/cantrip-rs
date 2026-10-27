@@ -1,0 +1,11 @@
+{
+  "name": "Red Tiger Mechan",
+  "manaCost": "{3}{R}",
+  "type": "Artifact Creature — Robot Cat",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste\nWarp {1}{R} (You may cast this card from your hand for its warp cost. Exile this creature at the beginning of the next end step, then you may cast it from exile on a later turn.)",
+  "keywords": [
+    "Haste"
+  ]
+}

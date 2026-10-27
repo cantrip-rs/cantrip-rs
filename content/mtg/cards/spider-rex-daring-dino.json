@@ -1,0 +1,12 @@
+{
+  "name": "Spider-Rex, Daring Dino",
+  "manaCost": "{4}{G}{G}",
+  "type": "Legendary Creature — Spider Dinosaur Hero",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Reach, trample\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}

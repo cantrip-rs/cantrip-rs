@@ -1,0 +1,12 @@
+{
+  "name": "Abomination, World Ravager",
+  "manaCost": "{7}{R}",
+  "type": "Legendary Creature — Gamma Berserker Villain",
+  "power": 10,
+  "toughness": 10,
+  "oracleText": "Menace, trample\nMayhem {4}{R} (You may cast this card from your graveyard for {4}{R} if you discarded it this turn. Timing rules still apply.)",
+  "keywords": [
+    "Menace",
+    "Trample"
+  ]
+}

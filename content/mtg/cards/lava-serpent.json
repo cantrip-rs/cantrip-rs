@@ -1,0 +1,11 @@
+{
+  "name": "Lava Serpent",
+  "manaCost": "{5}{R}",
+  "type": "Creature — Elemental Serpent",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Haste\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Haste"
+  ]
+}

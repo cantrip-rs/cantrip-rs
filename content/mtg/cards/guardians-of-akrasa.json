@@ -1,0 +1,11 @@
+{
+  "name": "Guardians of Akrasa",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "Defender (This creature can't attack.)\nExalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Defender"
+  ]
+}

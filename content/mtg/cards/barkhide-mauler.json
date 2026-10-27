@@ -1,0 +1,8 @@
+{
+  "name": "Barkhide Mauler",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Beast",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Cycling {2} ({2}, Discard this card: Draw a card.)"
+}

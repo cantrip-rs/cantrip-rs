@@ -1,0 +1,11 @@
+{
+  "name": "Kree Sentinel",
+  "manaCost": "{4}{R}",
+  "type": "Artifact Creature — Kree Robot Villain",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Reach\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Reach"
+  ]
+}

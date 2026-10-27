@@ -1,0 +1,8 @@
+{
+  "name": "Umara Entangler",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Merfolk Rogue Ally",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)"
+}

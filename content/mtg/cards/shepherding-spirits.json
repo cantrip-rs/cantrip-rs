@@ -1,0 +1,11 @@
+{
+  "name": "Shepherding Spirits",
+  "manaCost": "{4}{W}{W}",
+  "type": "Creature — Spirit",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Flying\nPlainscycling {2} ({2}, Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Flying"
+  ]
+}

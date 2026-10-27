@@ -1,0 +1,11 @@
+{
+  "name": "Shardless Outlander",
+  "manaCost": "{7}",
+  "type": "Artifact Creature — Construct Scout",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Trample"
+  ]
+}

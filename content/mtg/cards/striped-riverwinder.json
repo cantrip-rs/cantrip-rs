@@ -1,0 +1,11 @@
+{
+  "name": "Striped Riverwinder",
+  "manaCost": "{6}{U}",
+  "type": "Creature — Serpent",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)\nCycling {U} ({U}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Hexproof"
+  ]
+}

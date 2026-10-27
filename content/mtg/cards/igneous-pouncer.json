@@ -1,0 +1,11 @@
+{
+  "name": "Igneous Pouncer",
+  "manaCost": "{4}{B}{R}",
+  "type": "Creature — Elemental",
+  "power": 5,
+  "toughness": 1,
+  "oracleText": "Haste\nSwampcycling {2}, mountaincycling {2} ({2}, Discard this card: Search your library for a Swamp or Mountain card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Haste"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Blade-Blizzard Kitsune",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Fox Ninja",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Ninjutsu {3}{W} ({3}{W}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)\nDouble strike",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

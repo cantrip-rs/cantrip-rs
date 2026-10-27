@@ -1,0 +1,26 @@
+{
+  "name": "Fearful Villager",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Werewolf",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nDaybound (If a player casts no spells during their own turn, it becomes night next turn.)",
+  "keywords": [
+    "Menace",
+    "Daybound"
+  ],
+  "backFace": {
+    "name": "Fearsome Werewolf",
+    "colorIndicator": [
+      "Red"
+    ],
+    "type": "Creature — Werewolf",
+    "power": 4,
+    "toughness": 3,
+    "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nNightbound (If a player casts at least two spells during their own turn, it becomes day next turn.)",
+    "keywords": [
+      "Menace",
+      "Nightbound"
+    ]
+  }
+}

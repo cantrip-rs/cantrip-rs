@@ -1,0 +1,11 @@
+{
+  "name": "Sea Sprite",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Faerie",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying, protection from red",
+  "keywords": [
+    "Flying"
+  ]
+}

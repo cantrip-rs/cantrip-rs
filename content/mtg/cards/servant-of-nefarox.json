@@ -1,0 +1,8 @@
+{
+  "name": "Servant of Nefarox",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Human Cleric",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Exalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)"
+}

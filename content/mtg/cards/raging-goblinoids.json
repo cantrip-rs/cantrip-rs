@@ -1,0 +1,11 @@
+{
+  "name": "Raging Goblinoids",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Goblin Berserker Villain",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Haste\nMayhem {2}{R} (You may cast this card from your graveyard for {2}{R} if you discarded it this turn. Timing rules still apply.)",
+  "keywords": [
+    "Haste"
+  ]
+}

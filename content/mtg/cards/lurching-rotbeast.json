@@ -1,0 +1,8 @@
+{
+  "name": "Lurching Rotbeast",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Zombie Beast",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Cycling {B} ({B}, Discard this card: Draw a card.)"
+}

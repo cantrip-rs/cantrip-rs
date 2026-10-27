@@ -1,0 +1,13 @@
+{
+  "name": "Vengeful Reaper",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Angel Cleric",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying, deathtouch, haste\nForetell {1}{B} (During your turn, you may pay {2} and exile this card from your hand face down. Cast it on a later turn for its foretell cost.)",
+  "keywords": [
+    "Flying",
+    "Deathtouch",
+    "Haste"
+  ]
+}

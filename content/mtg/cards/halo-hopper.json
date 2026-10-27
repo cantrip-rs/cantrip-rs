@@ -1,0 +1,9 @@
+{
+  "name": "Halo Hopper",
+  "manaCost": "{3}",
+  "type": "Artifact Creature — Frog",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)",
+  "convoke": true
+}

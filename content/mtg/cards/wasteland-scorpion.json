@@ -1,0 +1,11 @@
+{
+  "name": "Wasteland Scorpion",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Scorpion",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Deathtouch\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

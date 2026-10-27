@@ -1,0 +1,11 @@
+{
+  "name": "Bloodbraid Elf",
+  "manaCost": "{2}{R}{G}",
+  "type": "Creature — Elf Berserker",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Haste (This creature can attack and {T} as soon as it comes under your control.)\nCascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)",
+  "keywords": [
+    "Haste"
+  ]
+}

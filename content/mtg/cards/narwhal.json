@@ -1,0 +1,11 @@
+{
+  "name": "Narwhal",
+  "manaCost": "{2}{U}{U}",
+  "type": "Creature — Whale",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike, protection from red",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Jeskai Student",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Monk",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)"
+}

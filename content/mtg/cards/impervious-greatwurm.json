@@ -1,0 +1,12 @@
+{
+  "name": "Impervious Greatwurm",
+  "manaCost": "{7}{G}{G}{G}",
+  "type": "Creature — Wurm",
+  "power": 16,
+  "toughness": 16,
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nIndestructible",
+  "keywords": [
+    "Indestructible"
+  ],
+  "convoke": true
+}

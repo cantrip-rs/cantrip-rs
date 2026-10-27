@@ -1,0 +1,11 @@
+{
+  "name": "Moaning Wall",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Zombie Wall",
+  "power": 0,
+  "toughness": 5,
+  "oracleText": "Defender\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Defender"
+  ]
+}

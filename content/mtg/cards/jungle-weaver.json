@@ -1,0 +1,11 @@
+{
+  "name": "Jungle Weaver",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Spider",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Sandbar Merfolk",
+  "manaCost": "{U}",
+  "type": "Creature — Merfolk",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Cycling {2} ({2}, Discard this card: Draw a card.)"
+}

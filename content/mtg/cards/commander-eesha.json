@@ -1,0 +1,11 @@
+{
+  "name": "Commander Eesha",
+  "manaCost": "{2}{W}{W}",
+  "type": "Legendary Creature — Bird Soldier",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Flying, protection from creatures",
+  "keywords": [
+    "Flying"
+  ]
+}

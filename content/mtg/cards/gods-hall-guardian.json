@@ -1,0 +1,11 @@
+{
+  "name": "Gods' Hall Guardian",
+  "manaCost": "{5}{W}",
+  "type": "Creature — Cat",
+  "power": 3,
+  "toughness": 6,
+  "oracleText": "Vigilance\nForetell {3}{W} (During your turn, you may pay {2} and exile this card from your hand face down. Cast it on a later turn for its foretell cost.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

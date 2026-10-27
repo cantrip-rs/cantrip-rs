@@ -1,0 +1,11 @@
+{
+  "name": "Apprentice Sharpshooter",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Archer",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Reach\nTraining (Whenever this creature attacks with another creature with greater power, put a +1/+1 counter on this creature.)",
+  "keywords": [
+    "Reach"
+  ]
+}

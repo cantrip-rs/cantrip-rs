@@ -1,0 +1,24 @@
+{
+  "name": "Tavern Ruffian",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Warrior Werewolf",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Daybound (If a player casts no spells during their own turn, it becomes night next turn.)",
+  "keywords": [
+    "Daybound"
+  ],
+  "backFace": {
+    "name": "Tavern Smasher",
+    "colorIndicator": [
+      "Red"
+    ],
+    "type": "Creature — Werewolf",
+    "power": 6,
+    "toughness": 5,
+    "oracleText": "Nightbound (If a player casts at least two spells during their own turn, it becomes day next turn.)",
+    "keywords": [
+      "Nightbound"
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Apex Devastator",
+  "manaCost": "{8}{G}{G}",
+  "type": "Creature — Chimera Hydra",
+  "power": 10,
+  "toughness": 10,
+  "oracleText": "Cascade, cascade, cascade, cascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order. Multiple instances of cascade each trigger separately.)"
+}

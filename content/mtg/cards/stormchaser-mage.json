@@ -1,0 +1,12 @@
+{
+  "name": "Stormchaser Mage",
+  "manaCost": "{U}{R}",
+  "type": "Creature — Human Wizard",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying, haste\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}

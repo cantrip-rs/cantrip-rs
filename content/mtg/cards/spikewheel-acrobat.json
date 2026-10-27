@@ -1,0 +1,8 @@
+{
+  "name": "Spikewheel Acrobat",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Rogue",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": "Spectacle {2}{R} (You may cast this spell for its spectacle cost rather than its mana cost if an opponent lost life this turn.)"
+}

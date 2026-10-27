@@ -1,0 +1,11 @@
+{
+  "name": "Abbey Gargoyles",
+  "manaCost": "{2}{W}{W}{W}",
+  "type": "Creature — Gargoyle",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying, protection from red",
+  "keywords": [
+    "Flying"
+  ]
+}

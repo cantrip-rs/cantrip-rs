@@ -1,0 +1,11 @@
+{
+  "name": "Waterfall Aerialist",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Djinn Wizard",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flying\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)",
+  "keywords": [
+    "Flying"
+  ]
+}

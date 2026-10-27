@@ -1,0 +1,11 @@
+{
+  "name": "Whirlwind Adept",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Djinn Monk",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Hexproof (This creature can't be the target of spells or abilities your opponents control.)\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Hexproof"
+  ]
+}

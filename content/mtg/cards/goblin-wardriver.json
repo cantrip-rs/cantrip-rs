@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Wardriver",
+  "manaCost": "{R}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)"
+}

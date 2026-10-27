@@ -1,0 +1,11 @@
+{
+  "name": "Bedhead Beastie",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Beast",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nMountaincycling {2} ({2}, Discard this card: Search your library for a Mountain card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Menace"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Primoc Escapee",
+  "manaCost": "{6}{U}",
+  "type": "Creature — Bird Beast",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Flying"
+  ]
+}

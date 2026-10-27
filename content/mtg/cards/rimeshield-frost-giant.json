@@ -1,0 +1,8 @@
+{
+  "name": "Rimeshield Frost Giant",
+  "manaCost": "{3}{U}{U}",
+  "type": "Creature — Giant Warrior",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Ward {3} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {3}.)"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Vestige of Emrakul",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Eldrazi Drone",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Devoid (This card has no color.)\nTrample",
+  "keywords": [
+    "Trample"
+  ]
+}

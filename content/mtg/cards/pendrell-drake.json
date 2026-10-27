@@ -1,0 +1,11 @@
+{
+  "name": "Pendrell Drake",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Drake",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Flying"
+  ]
+}

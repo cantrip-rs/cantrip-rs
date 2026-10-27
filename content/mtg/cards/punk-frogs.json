@@ -1,0 +1,8 @@
+{
+  "name": "Punk Frogs",
+  "manaCost": "{3}{G/U}{G/U}",
+  "type": "Creature — Frog Mutant Rebel",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Ward {3} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {3}.)"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Yoked Plowbeast",
+  "manaCost": "{5}{W}{W}",
+  "type": "Creature — Beast",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Cycling {2} ({2}, Discard this card: Draw a card.)"
+}

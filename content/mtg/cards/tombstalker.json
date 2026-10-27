@@ -1,0 +1,12 @@
+{
+  "name": "Tombstalker",
+  "manaCost": "{6}{B}{B}",
+  "type": "Creature — Demon",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying\nDelve (Each card you exile from your graveyard while casting this spell pays for {1}.)",
+  "keywords": [
+    "Flying"
+  ],
+  "delve": true
+}

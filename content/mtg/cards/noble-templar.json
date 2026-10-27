@@ -1,0 +1,11 @@
+{
+  "name": "Noble Templar",
+  "manaCost": "{5}{W}",
+  "type": "Creature — Human Cleric Soldier",
+  "power": 3,
+  "toughness": 6,
+  "oracleText": "Vigilance\nPlainscycling {2} ({2}, Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

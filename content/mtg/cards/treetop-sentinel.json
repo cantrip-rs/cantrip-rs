@@ -1,0 +1,11 @@
+{
+  "name": "Treetop Sentinel",
+  "manaCost": "{2}{U}{U}",
+  "type": "Creature — Bird Soldier",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying, protection from green",
+  "keywords": [
+    "Flying"
+  ]
+}

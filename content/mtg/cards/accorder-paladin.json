@@ -1,0 +1,8 @@
+{
+  "name": "Accorder Paladin",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Knight",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)"
+}

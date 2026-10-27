@@ -1,0 +1,8 @@
+{
+  "name": "Outrider of Jhess",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Exalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)"
+}

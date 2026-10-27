@@ -1,0 +1,12 @@
+{
+  "name": "Winged Shepherd",
+  "manaCost": "{5}{W}",
+  "type": "Creature — Angel",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, vigilance\nCycling {W} ({W}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

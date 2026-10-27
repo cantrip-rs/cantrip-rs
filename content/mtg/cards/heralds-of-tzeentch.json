@@ -1,0 +1,11 @@
+{
+  "name": "Heralds of Tzeentch",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Demon",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nCascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)",
+  "keywords": [
+    "Flying"
+  ]
+}

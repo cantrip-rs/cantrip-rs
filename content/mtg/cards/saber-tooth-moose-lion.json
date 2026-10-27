@@ -1,0 +1,11 @@
+{
+  "name": "Saber-Tooth Moose-Lion",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Elk Cat",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Reach\nForestcycling {2} ({2}, Discard this card: Search your library for a Forest card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Reach"
+  ]
+}

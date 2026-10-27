@@ -1,0 +1,12 @@
+{
+  "name": "Zephyrim",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Squad {2} (As an additional cost to cast this spell, you may pay {2} any number of times. When this creature enters, create that many tokens that are copies of it.)\nFlying, vigilance\nMiracle {1}{W} (You may cast this card for its miracle cost when you draw it if it's the first card you drew this turn.)",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

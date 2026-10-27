@@ -1,0 +1,11 @@
+{
+  "name": "Furnace Host Charger",
+  "manaCost": "{5}{R}",
+  "type": "Creature — Phyrexian Giant",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Haste\nMountaincycling {2} ({2}, Discard this card: Search your library for a Mountain card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Haste"
+  ]
+}

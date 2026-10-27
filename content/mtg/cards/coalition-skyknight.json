@@ -1,0 +1,11 @@
+{
+  "name": "Coalition Skyknight",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nEnlist (As this creature attacks, you may tap a nonattacking creature you control without summoning sickness. When you do, add its power to this creature's until end of turn.)",
+  "keywords": [
+    "Flying"
+  ]
+}

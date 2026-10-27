@@ -1,0 +1,11 @@
+{
+  "name": "Shimmerscale Drake",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Drake",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Flying"
+  ]
+}

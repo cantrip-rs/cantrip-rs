@@ -1,0 +1,11 @@
+{
+  "name": "Voice of Law",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Angel",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, protection from red",
+  "keywords": [
+    "Flying"
+  ]
+}

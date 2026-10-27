@@ -1,0 +1,8 @@
+{
+  "name": "Loxodon Partisan",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Elephant Soldier",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Battle cry (Whenever this creature attacks, each other attacking creature gets +1/+0 until end of turn.)"
+}

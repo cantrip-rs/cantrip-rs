@@ -1,0 +1,8 @@
+{
+  "name": "Wirewood Guardian",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Elf Mutant",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Forestcycling {2} ({2}, Discard this card: Search your library for a Forest card, reveal it, put it into your hand, then shuffle.)"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Cerulean Wyvern",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Drake",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, protection from green",
+  "keywords": [
+    "Flying"
+  ]
+}

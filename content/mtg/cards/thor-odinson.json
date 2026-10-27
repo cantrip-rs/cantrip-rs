@@ -1,0 +1,12 @@
+{
+  "name": "Thor Odinson",
+  "manaCost": "{3}{R}{W}",
+  "type": "Legendary Creature — God Warrior Hero",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying, vigilance, prowess, prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn twice.)",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

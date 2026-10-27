@@ -1,0 +1,11 @@
+{
+  "name": "Dragon Bell Monk",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Monk",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

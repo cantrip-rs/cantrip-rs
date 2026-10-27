@@ -1,0 +1,11 @@
+{
+  "name": "Wings of the Guard",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\nMelee (Whenever this creature attacks, it gets +1/+1 until end of turn for each opponent you attacked this combat.)",
+  "keywords": [
+    "Flying"
+  ]
+}

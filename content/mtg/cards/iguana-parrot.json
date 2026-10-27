@@ -1,0 +1,12 @@
+{
+  "name": "Iguana Parrot",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Lizard Bird Pirate",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, vigilance\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

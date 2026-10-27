@@ -1,0 +1,8 @@
+{
+  "name": "Ninja of the New Moon",
+  "manaCost": "{3}{B}{B}",
+  "type": "Creature — Spirit Ninja",
+  "power": 6,
+  "toughness": 3,
+  "oracleText": "Ninjutsu {3}{B} ({3}{B}, Return an unblocked attacker you control to hand: Put this card onto the battlefield from your hand tapped and attacking.)"
+}

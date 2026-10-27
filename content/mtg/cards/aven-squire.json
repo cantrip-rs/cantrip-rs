@@ -1,0 +1,11 @@
+{
+  "name": "Aven Squire",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Bird Soldier",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\nExalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Sultai Scavenger",
+  "manaCost": "{5}{B}",
+  "type": "Creature — Bird Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Delve (Each card you exile from your graveyard while casting this spell pays for {1}.)\nFlying",
+  "keywords": [
+    "Flying"
+  ],
+  "delve": true
+}

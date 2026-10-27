@@ -1,0 +1,11 @@
+{
+  "name": "Boarding Party",
+  "manaCost": "{5}{R}",
+  "type": "Creature — Human Pirate",
+  "power": 6,
+  "toughness": 3,
+  "oracleText": "Haste\nCascade (When you cast this spell, exile cards from the top of your library until you exile a nonland card that costs less. You may cast it without paying its mana cost. Put the exiled cards on the bottom in a random order.)",
+  "keywords": [
+    "Haste"
+  ]
+}

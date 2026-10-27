@@ -1,0 +1,11 @@
+{
+  "name": "Thermal Glider",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Rebel",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying, protection from red",
+  "keywords": [
+    "Flying"
+  ]
+}

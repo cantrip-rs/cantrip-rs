@@ -1,0 +1,12 @@
+{
+  "name": "Kree Commandos",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Kree Soldier Villain",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying, vigilance\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

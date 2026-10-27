@@ -1,0 +1,11 @@
+{
+  "name": "Savage Land Dinosaur",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 7,
+  "toughness": 6,
+  "oracleText": "Trample\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Trample"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Viscera Dragger",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Zombie Ogre Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Cycling {2} ({2}, Discard this card: Draw a card.)\nUnearth {1}{B} ({1}{B}: Return this card from your graveyard to the battlefield. It gains haste. Exile it at the beginning of the next end step or if it would leave the battlefield. Unearth only as a sorcery.)"
+}

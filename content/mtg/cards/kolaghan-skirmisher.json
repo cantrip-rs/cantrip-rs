@@ -1,0 +1,8 @@
+{
+  "name": "Kolaghan Skirmisher",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Dash {2}{B} (You may cast this spell for its dash cost. If you do, it gains haste, and it's returned from the battlefield to its owner's hand at the beginning of the next end step.)"
+}

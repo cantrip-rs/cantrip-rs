@@ -1,0 +1,11 @@
+{
+  "name": "Voice of Grace",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Angel",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, protection from black",
+  "keywords": [
+    "Flying"
+  ]
+}

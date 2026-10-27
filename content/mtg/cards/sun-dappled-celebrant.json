@@ -1,0 +1,12 @@
+{
+  "name": "Sun-Dappled Celebrant",
+  "manaCost": "{4}{W}{W}",
+  "type": "Creature — Treefolk Cleric",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nVigilance",
+  "keywords": [
+    "Vigilance"
+  ],
+  "convoke": true
+}

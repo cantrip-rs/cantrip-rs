@@ -1,0 +1,11 @@
+{
+  "name": "Slavering Branchsnapper",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Lizard",
+  "power": 7,
+  "toughness": 6,
+  "oracleText": "Trample\nForestcycling {2} ({2}, Discard this card: Search your library for a Forest card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Trample"
+  ]
+}

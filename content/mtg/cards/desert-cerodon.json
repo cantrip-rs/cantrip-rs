@@ -1,0 +1,8 @@
+{
+  "name": "Desert Cerodon",
+  "manaCost": "{5}{R}",
+  "type": "Creature — Beast",
+  "power": 6,
+  "toughness": 4,
+  "oracleText": "Cycling {R} ({R}, Discard this card: Draw a card.)"
+}

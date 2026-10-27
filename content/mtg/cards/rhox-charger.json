@@ -1,0 +1,11 @@
+{
+  "name": "Rhox Charger",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Rhino Soldier",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample\nExalted (Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Trample"
+  ]
+}

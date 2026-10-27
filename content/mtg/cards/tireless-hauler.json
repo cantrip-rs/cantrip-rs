@@ -1,0 +1,26 @@
+{
+  "name": "Tireless Hauler",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Human Werewolf",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Vigilance\nDaybound (If a player casts no spells during their own turn, it becomes night next turn.)",
+  "keywords": [
+    "Vigilance",
+    "Daybound"
+  ],
+  "backFace": {
+    "name": "Dire-Strain Brawler",
+    "colorIndicator": [
+      "Green"
+    ],
+    "type": "Creature — Werewolf",
+    "power": 6,
+    "toughness": 6,
+    "oracleText": "Vigilance\nNightbound (If a player casts at least two spells during their own turn, it becomes day next turn.)",
+    "keywords": [
+      "Vigilance",
+      "Nightbound"
+    ]
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Gurmag Angler",
+  "manaCost": "{6}{B}",
+  "type": "Creature — Zombie Fish",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Delve (Each card you exile from your graveyard while casting this spell pays for {1}.)",
+  "delve": true
+}

@@ -1,0 +1,11 @@
+{
+  "name": "Niblis of Dusk",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Spirit",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nProwess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)",
+  "keywords": [
+    "Flying"
+  ]
+}

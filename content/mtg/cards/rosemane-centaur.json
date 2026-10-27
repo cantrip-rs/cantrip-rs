@@ -1,0 +1,12 @@
+{
+  "name": "Rosemane Centaur",
+  "manaCost": "{3}{G}{W}",
+  "type": "Creature — Centaur Soldier",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nVigilance",
+  "keywords": [
+    "Vigilance"
+  ],
+  "convoke": true
+}

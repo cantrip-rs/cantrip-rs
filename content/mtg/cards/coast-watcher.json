@@ -1,0 +1,11 @@
+{
+  "name": "Coast Watcher",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Bird Soldier",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying, protection from green",
+  "keywords": [
+    "Flying"
+  ]
+}

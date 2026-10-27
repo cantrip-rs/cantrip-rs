@@ -1,0 +1,11 @@
+{
+  "name": "Hazerider Drake",
+  "manaCost": "{2}{W}{U}",
+  "type": "Creature — Drake",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying, protection from red",
+  "keywords": [
+    "Flying"
+  ]
+}

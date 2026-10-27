@@ -1,0 +1,12 @@
+{
+  "name": "Shimmering Barrier",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Wall",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Defender (This creature can't attack.)\nFirst strike\nCycling {2} ({2}, Discard this card: Draw a card.)",
+  "keywords": [
+    "Defender",
+    "FirstStrike"
+  ]
+}

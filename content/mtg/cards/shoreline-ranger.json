@@ -1,0 +1,11 @@
+{
+  "name": "Shoreline Ranger",
+  "manaCost": "{5}{U}",
+  "type": "Creature — Bird Soldier Ranger",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nIslandcycling {2} ({2}, Discard this card: Search your library for an Island card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Flying"
+  ]
+}

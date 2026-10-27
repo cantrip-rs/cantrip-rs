@@ -1,0 +1,11 @@
+{
+  "name": "Benalish Faithbonder",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Cleric",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Vigilance\nEnlist (As this creature attacks, you may tap a nonattacking creature you control without summoning sickness. When you do, add its power to this creature's until end of turn.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

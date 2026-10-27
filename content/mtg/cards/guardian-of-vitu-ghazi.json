@@ -1,0 +1,12 @@
+{
+  "name": "Guardian of Vitu-Ghazi",
+  "manaCost": "{6}{G}{W}",
+  "type": "Creature — Elemental",
+  "power": 4,
+  "toughness": 7,
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nVigilance",
+  "keywords": [
+    "Vigilance"
+  ],
+  "convoke": true
+}
