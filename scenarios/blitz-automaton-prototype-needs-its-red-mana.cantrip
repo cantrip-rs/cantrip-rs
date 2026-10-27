@@ -1,0 +1,36 @@
+# Blitz Automaton's Prototype {2}{R} (CR 702.160a, 107.4): with three sources that make no red (white, black, blue) the
+# prototyped cast is not offered; once a red source arrives it is, and the permanent is red.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Blitz Automaton
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+! Bot1.Hand.Blitz Automaton.Cast(Ability: Prototype; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Blitz Automaton.Cast(Ability: Prototype)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Blitz Automaton.Colors = Red
+Bot1.Battlefield.Mox Sapphire.Tapped = false

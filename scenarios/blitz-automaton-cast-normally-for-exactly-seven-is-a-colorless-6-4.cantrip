@@ -1,0 +1,53 @@
+# Blitz Automaton cast without prototyping (CR 718.3, 718.4): its mana cost is {7} and no less - with six mana from sources that
+# have no red, neither the normal cast nor the prototype ({2}{R}) is offered; the seventh mana (a red source) offers it, and
+# paying it taps all seven mana, leaving the pool empty. On the stack and on the battlefield it is a colorless 6/4 with mana
+# value 7 and haste, and not prototyped (the ruling: it keeps the normal characteristics).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mana Crypt
+Mox Ruby
+Blitz Automaton
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+! Bot1.Hand.Blitz Automaton.Cast(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Blitz Automaton.Cast
+? Stack.Blitz Automaton.ManaValue = 7
+? Stack.Blitz Automaton.Prototyped = (absent)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Blitz Automaton.Power = 6
+Bot1.Battlefield.Blitz Automaton.Toughness = 4
+Bot1.Battlefield.Blitz Automaton.ManaValue = 7
+Bot1.Battlefield.Blitz Automaton.Colors = (absent)
+Bot1.Battlefield.Blitz Automaton.Prototyped = (absent)
+Bot1.Battlefield.Blitz Automaton.Keywords = Haste
