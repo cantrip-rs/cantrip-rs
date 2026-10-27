@@ -38,13 +38,26 @@ static OMNISCIENT: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// "You may cast permanent spells with mana value 3 or less from your graveyard": a permission (CR 601.3), the spell judged
+/// as the face being cast (CR 718.3a).
+fn cheap_permanent(q: &dyn Query, asker: &Asker, card: ObjectId, player: PlayerId) -> Option<Cost> {
+    let c = q.chars(card);
+    (player == asker.controller && !c.is(CardType::Instant) && !c.is(CardType::Sorcery) && q.mana_value(card) <= 3).then(|| Cost::mana(q.card(c.card).cost))
+}
+static RECURSION: CardDef = CardDef {
+    name: "Prototype Test Recursion",
+    types: TypeSet::of(&[CardType::Enchantment]),
+    granted_ways: &[GrantedWay { text: "Cast a cheap permanent from your graveyard.", cost: cheap_permanent, permission: true, ..GrantedWay::CAST }],
+    ..CardDef::BLANK
+};
+
 fn cx(game: &mut Game) -> Cx<'_> {
     Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
 }
 
 /// Your main phase with priority and an empty stack.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &AUTOMATON, &OMNISCIENT])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &AUTOMATON, &OMNISCIENT, &RECURSION])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -250,5 +263,38 @@ fn an_alternative_cost_applies_to_a_prototyped_cast() {
     let option = cast_option(&mut g, card, WAY_PROTOTYPE, true).expect("prototyped, for nothing");
     take(&mut g, &option);
     let spell = g.state.stack.last().expect("the spell").object;
+    assert_prototyped(&g, spell);
+}
+
+/// The ruling: cast prototyped by an alternative cost, it is still a prototyped spell, and the permanent it becomes is
+/// prototyped too (CR 718.3b).
+#[test]
+fn a_prototyped_spell_cast_for_an_alternative_cost_becomes_a_prototyped_permanent() {
+    let mut g = game();
+    put(&mut g, &OMNISCIENT, Zone::BATTLEFIELD);
+    let card = put(&mut g, &AUTOMATON, Zone::hand(YOU));
+    let option = cast_option(&mut g, card, WAY_PROTOTYPE, true).expect("prototyped, for nothing");
+    take(&mut g, &option);
+    let spell = g.state.stack.last().expect("the spell").object;
+    resolve_all(&mut g);
+    let permanent = g.state.obj(spell).became.expect("it resolved");
+    assert!(g.state.obj(permanent).zone.is(ZoneKind::Battlefield));
+    assert_prototyped(&g, permanent);
+}
+
+/// The ruling: prototype works from any zone the card could be cast from, and the cast is judged as the prototyped face
+/// (CR 718.3a): a permission for permanent spells with mana value 3 or less casts it prototyped from the graveyard, for
+/// {2}{R}, and not as its normal mana value 7 self.
+#[test]
+fn a_permission_judged_on_the_prototyped_face_casts_it_from_the_graveyard() {
+    let mut g = game();
+    put(&mut g, &RECURSION, Zone::BATTLEFIELD);
+    let card = put(&mut g, &AUTOMATON, Zone::graveyard(YOU));
+    add(&mut g, Mana::R, 3);
+    add(&mut g, Mana::C, 4);
+    let ways: Vec<u8> = options(&mut g).into_iter().filter(|o| o.kind == ActionKind::CastSpell && o.source == Some(card)).map(|o| o.index).collect();
+    assert_eq!(ways, vec![WAY_PROTOTYPE], "only the prototyped face has mana value 3 or less");
+    let spell = cast(&mut g, card, WAY_PROTOTYPE);
+    assert_eq!(g.state.player(YOU).pool.total(), 4, "it cost {{2}}{{R}}");
     assert_prototyped(&g, spell);
 }
