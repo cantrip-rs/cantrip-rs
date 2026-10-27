@@ -1,0 +1,57 @@
+# CR 702.37a, 702.37c, 702.37e, 708.2. Spitting Gourna is cast face down for exactly {3} (Black Lotus's three mana, the pool empty right after): a nameless 2/2 with no
+# keywords. It is then turned face up only with the colored mana its morph cost {4}{G} names: 5 sources, none of them green.
+# The refusal is judged with the color short and the last (green) source still in hand; with it, 5 of the 6 sources pay exactly and the pool is empty.
+# Face up it is the card: 3/4 with reach.
+
+[Bot1 Deck]
+Black Lotus
+Spitting Gourna
+Mountain
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Plains
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Spitting Gourna.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+? Stack..FaceDownName = Spitting Gourna
+? Stack..ManaValue = 0
+[T1 Bot1.Main2]
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Spitting Gourna
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Spitting Gourna.Activate(Ability: morph cost)
+? Bot1.Mana = 
+? Bot1.Battlefield.Spitting Gourna.FaceDown = (absent)
+
+[Expect]
+Bot1.Battlefield.Spitting Gourna.Power = 3
+Bot1.Battlefield.Spitting Gourna.Toughness = 4
+Bot1.Battlefield.Spitting Gourna.Keywords = Morph; Reach
+Stack.Count = 0
