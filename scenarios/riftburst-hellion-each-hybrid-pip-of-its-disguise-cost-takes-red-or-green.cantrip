@@ -1,0 +1,73 @@
+# Riftburst Hellion (Disguise {4}{R/G}{R/G}): each hybrid symbol of the disguise cost is paid with either red or green mana (CR 107.4e, 702.168d). One face-down Hellion is turned face up with {4} from Mox Jets and two red, the other with {4} and two green; the pool is empty right after each. No green is in the pool when red pays and no red when green pays, so a cost with a plain {R} or {G} in place of either hybrid symbol is refused one of the two times.
+
+[Bot1 Deck]
+Riftburst Hellion
+Riftburst Hellion
+Mox Jet x4
+Mox Ruby
+Mox Ruby
+Mox Emerald
+Mox Emerald
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Riftburst Hellion.Cast(Ability: Disguise)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: R, R)
+! Bot1.Battlefield.Riftburst Hellion.Activate(Ability: disguise cost)
+? Bot1.Mana =
+? Bot1.Battlefield.Riftburst Hellion.Power = 6
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Riftburst Hellion.Cast(Ability: Disguise)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+[T7 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.#1.Activate(Ability: disguise cost; Spend: G, G)
+! Bot1.Battlefield.Riftburst Hellion#2.Activate(Ability: disguise cost)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Riftburst Hellion#1.Power = 6
+Bot1.Battlefield.Riftburst Hellion#2.Power = 6
+Bot1.Battlefield.Riftburst Hellion#2.Toughness = 7
