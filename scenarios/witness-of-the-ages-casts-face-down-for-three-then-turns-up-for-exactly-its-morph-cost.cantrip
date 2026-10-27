@@ -1,0 +1,56 @@
+# CR 702.37a, 702.37c, 702.37e, 708.2. Witness of the Ages is cast face down for exactly {3} (Black Lotus's three mana, the pool empty right after): a nameless 2/2 with no
+# keywords. It is then turned face up for exactly its morph cost {5}, all generic: with one source fewer (4) the special action is not offered, with all 5 it is, and tapping those 5 leaves the pool empty.
+# Every source makes only colorless mana (Blasted Landscapes and Sol Ring), so a colored symbol in the cost could not be paid; the third Landscape is played on turn 5.
+# Face up it is the card: 4/4 and no keywords.
+
+[Bot1 Deck]
+Black Lotus
+Witness of the Ages
+Blasted Landscape
+Sol Ring
+Blasted Landscape
+Blasted Landscape
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Blasted Landscape.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Blasted Landscape.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Witness of the Ages.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+? Stack..FaceDownName = Witness of the Ages
+? Stack..ManaValue = 0
+[T1 Bot1.Main2]
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Witness of the Ages
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Blasted Landscape.Play
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Blasted Landscape.Play
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Blasted Landscape#1.Activate
+Bot1.Battlefield.Blasted Landscape#2.Activate
+Bot1.Battlefield.Blasted Landscape#3.Activate
+! Bot1.Battlefield.Witness of the Ages.Activate(Ability: morph cost)
+? Bot1.Mana = 
+? Bot1.Battlefield.Witness of the Ages.FaceDown = (absent)
+
+[Expect]
+Bot1.Battlefield.Witness of the Ages.Power = 4
+Bot1.Battlefield.Witness of the Ages.Toughness = 4
+Bot1.Battlefield.Witness of the Ages.Keywords = Morph
+Stack.Count = 0
