@@ -1179,6 +1179,15 @@ pub struct PayCostsPrompt {
     /// While announcing an X that is not paid in mana: what X governs, in words ("the least power of the creature you
     /// sacrifice", casualty X, CR 702.153a), for a caption where "mana for X" would be false. Empty for any other.
     pub x_governs: String,
+    /// Paying for a spell with assist (CR 702.132a), the step this question is: "HelperActivates" (the player the caster
+    /// chose activates mana abilities; `ConfirmCasting` is "done"), "CasterActivates" (the same, for the caster), "HelperAnnounces"
+    /// (the chosen player announces how much of the generic mana they pay, `most_announced` at most), "HelperPays" (they pay
+    /// it from their pool), "CasterPays" (the caster pays the rest, no mana ability offered). Empty for any other payment.
+    #[serde(default)]
+    pub assist_step: String,
+    /// The mana other players have paid towards this spell's cost as it is cast: the assisting player's (CR 702.132a).
+    #[serde(default)]
+    pub assisted: i32,
 }
 
 #[derive(Clone, Debug, Default, Serialize, Deserialize)]

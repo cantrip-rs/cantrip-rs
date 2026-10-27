@@ -520,6 +520,33 @@ fn beheld_quality(game: &Game, source: ObjectId) -> &'static str {
     costs_of(game, source).iter().find_map(|c| c.behold.map(|(_, _, quality)| quality)).unwrap_or("")
 }
 
+/// Where a payment with assist stands (CR 702.132a), as the prompt names it: empty for any other payment.
+fn assist_step_view(step: AssistStep) -> &'static str {
+    match step {
+        AssistStep::None => "",
+        AssistStep::HelperActivates => "HelperActivates",
+        AssistStep::CasterActivates => "CasterActivates",
+        AssistStep::HelperAnnounces => "HelperAnnounces",
+        AssistStep::HelperPays => "HelperPays",
+        AssistStep::CasterPays => "CasterPays",
+    }
+}
+
+/// How much mana players other than `player` have spent on the spell `spell` as it is cast: what the player who assisted
+/// with it paid (CR 702.132a), for the caster's payment to show.
+fn assisted_mana(game: &Game, spell: ObjectId, player: PlayerId) -> i32 {
+    let paid: u32 = game
+        .log
+        .iter()
+        .rev()
+        .filter_map(|r| match r.event {
+            Event::ManaSpent { player: p, on, cast: true, mana, .. } if on == spell && p != player => Some(mana.total()),
+            _ => None,
+        })
+        .sum();
+    i32::try_from(paid).unwrap_or(i32::MAX)
+}
+
 /// The verb of a "you may" and its amount (`CastDuringResolution` with an amount of 1 is a cast without paying).
 fn may_verb(purpose: Purpose) -> (String, i32) {
     let verb = match purpose {
@@ -772,7 +799,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
         RequestKind::Priority { options } => {
             PromptPayload::PriorityPromptMessage(PriorityPrompt { player, options: options_messages(game, handles, options) })
         }
-        RequestKind::PayCosts { source, total, remaining, options, announcing, x, most, least, loyalty, attackers, life, governs, .. } => {
+        RequestKind::PayCosts { source, total, remaining, options, announcing, x, most, least, loyalty, attackers, life, governs, assist } => {
             let def = game.cards.get(game.state.obj(*source).card);
             let kicker = def.kicker;
             let spends_no_mana = game.chars(*source).has(Keyword::CantSpendManaToCast);
@@ -810,6 +837,8 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 spends_no_mana,
                 attackers: handles_of(handles, attackers),
                 life: (*life).min(i32::MAX as u32) as i32,
+                assist_step: assist_step_view(*assist).into(),
+                assisted: assisted_mana(game, *source, request.player),
                 ..Default::default()
             })
         }
