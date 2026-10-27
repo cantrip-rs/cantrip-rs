@@ -1,0 +1,34 @@
+# Brightblade Stoat, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Lifelink (CR 702.15b): Bot1 gains as much life as it deals.
+
+[Bot1 Deck]
+Black Lotus
+Brightblade Stoat
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Brightblade Stoat.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Brightblade Stoat.Power = 2
+? Bot1.Battlefield.Brightblade Stoat.Toughness = 2
+? Bot1.Battlefield.Brightblade Stoat.Keywords = FirstStrike; Lifelink
+? Bot1.Battlefield.Brightblade Stoat.Colors = White
+? Bot1.Battlefield.Brightblade Stoat.Types = Creature
+? Bot1.Battlefield.Brightblade Stoat.Subtypes = Soldier; Weasel
+? Bot1.Battlefield.Brightblade Stoat.Supertypes = (absent)
+? Bot1.Battlefield.Brightblade Stoat.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Brightblade Stoat > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Battlefield.Brightblade Stoat.Tapped = true

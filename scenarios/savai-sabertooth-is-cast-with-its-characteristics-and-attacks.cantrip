@@ -1,0 +1,32 @@
+# Savai Sabertooth, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Savai Sabertooth
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Savai Sabertooth.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Savai Sabertooth.Power = 3
+? Bot1.Battlefield.Savai Sabertooth.Toughness = 1
+? Bot1.Battlefield.Savai Sabertooth.Keywords = (absent)
+? Bot1.Battlefield.Savai Sabertooth.Colors = White
+? Bot1.Battlefield.Savai Sabertooth.Types = Creature
+? Bot1.Battlefield.Savai Sabertooth.Subtypes = Cat
+? Bot1.Battlefield.Savai Sabertooth.Supertypes = (absent)
+? Bot1.Battlefield.Savai Sabertooth.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Savai Sabertooth > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Savai Sabertooth.Tapped = true

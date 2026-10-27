@@ -1,0 +1,39 @@
+# Lotus Path Djinn, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Prowess (CR 702.108a): the Mox Pearl cast first gives it +1/+1 until end of turn.
+
+[Bot1 Deck]
+Black Lotus x2
+Lotus Path Djinn
+Plains x4
+Mox Pearl
+Plains x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Lotus Path Djinn.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Lotus Path Djinn.Power = 2
+? Bot1.Battlefield.Lotus Path Djinn.Toughness = 3
+? Bot1.Battlefield.Lotus Path Djinn.Keywords = Flying
+? Bot1.Battlefield.Lotus Path Djinn.Colors = Blue
+? Bot1.Battlefield.Lotus Path Djinn.Types = Creature
+? Bot1.Battlefield.Lotus Path Djinn.Subtypes = Djinn; Monk
+? Bot1.Battlefield.Lotus Path Djinn.Supertypes = (absent)
+? Bot1.Battlefield.Lotus Path Djinn.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Attack(Lotus Path Djinn > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Lotus Path Djinn.Tapped = true

@@ -1,0 +1,34 @@
+# Tobias Andrion, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Tobias Andrion
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Tobias Andrion.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Tobias Andrion.Power = 4
+? Bot1.Battlefield.Tobias Andrion.Toughness = 4
+? Bot1.Battlefield.Tobias Andrion.Keywords = (absent)
+? Bot1.Battlefield.Tobias Andrion.Colors = Blue; White
+? Bot1.Battlefield.Tobias Andrion.Types = Creature
+? Bot1.Battlefield.Tobias Andrion.Subtypes = Advisor; Human
+? Bot1.Battlefield.Tobias Andrion.Supertypes = Legendary
+? Bot1.Battlefield.Tobias Andrion.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Tobias Andrion > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Tobias Andrion.Tapped = true

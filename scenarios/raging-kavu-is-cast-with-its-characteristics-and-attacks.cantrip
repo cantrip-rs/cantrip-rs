@@ -1,0 +1,36 @@
+# Raging Kavu, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Flash (CR 702.8a): it is cast in Bot2's main phase, with Bot2 the active player.
+
+[Bot1 Deck]
+Black Lotus x2
+Raging Kavu
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raging Kavu.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Raging Kavu.Power = 3
+? Bot1.Battlefield.Raging Kavu.Toughness = 1
+? Bot1.Battlefield.Raging Kavu.Keywords = Flash; Haste
+? Bot1.Battlefield.Raging Kavu.Colors = Green; Red
+? Bot1.Battlefield.Raging Kavu.Types = Creature
+? Bot1.Battlefield.Raging Kavu.Subtypes = Kavu
+? Bot1.Battlefield.Raging Kavu.Supertypes = (absent)
+? Bot1.Battlefield.Raging Kavu.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Raging Kavu > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Raging Kavu.Tapped = true

@@ -1,0 +1,42 @@
+# Jeskai Brushmaster, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Double strike (CR 702.4b): it deals combat damage twice.
+# Prowess (CR 702.108a): the Mox Pearl cast first gives it +1/+1 until end of turn.
+
+[Bot1 Deck]
+Black Lotus x3
+Jeskai Brushmaster
+Plains x3
+Mox Pearl
+Plains x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#3.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Jeskai Brushmaster.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Jeskai Brushmaster.Power = 2
+? Bot1.Battlefield.Jeskai Brushmaster.Toughness = 4
+? Bot1.Battlefield.Jeskai Brushmaster.Keywords = DoubleStrike
+? Bot1.Battlefield.Jeskai Brushmaster.Colors = Blue; Red; White
+? Bot1.Battlefield.Jeskai Brushmaster.Types = Creature
+? Bot1.Battlefield.Jeskai Brushmaster.Subtypes = Monk; Orc
+? Bot1.Battlefield.Jeskai Brushmaster.Supertypes = (absent)
+? Bot1.Battlefield.Jeskai Brushmaster.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Attack(Jeskai Brushmaster > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Jeskai Brushmaster.Tapped = true

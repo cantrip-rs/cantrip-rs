@@ -1,0 +1,32 @@
+# Dauthi Marauder, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Dauthi Marauder
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Dauthi Marauder.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Dauthi Marauder.Power = 3
+? Bot1.Battlefield.Dauthi Marauder.Toughness = 1
+? Bot1.Battlefield.Dauthi Marauder.Keywords = Shadow
+? Bot1.Battlefield.Dauthi Marauder.Colors = Black
+? Bot1.Battlefield.Dauthi Marauder.Types = Creature
+? Bot1.Battlefield.Dauthi Marauder.Subtypes = Dauthi; Minion
+? Bot1.Battlefield.Dauthi Marauder.Supertypes = (absent)
+? Bot1.Battlefield.Dauthi Marauder.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Dauthi Marauder > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Dauthi Marauder.Tapped = true

@@ -1,0 +1,22 @@
+# Marauding Brinefang's islandcycling {2} (CR 702.29e): paying it and discarding the card from the hand finds the Island in the
+# library and puts it into the hand.
+
+[Bot1 Deck]
+Black Lotus
+Marauding Brinefang
+Plains x5
+Island
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Marauding Brinefang.Activate(Ability: Islandcycling)
+Bot1.Search(Island)
+
+[Expect]
+Bot1.Graveyard.Marauding Brinefang.Colors = Blue
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Island

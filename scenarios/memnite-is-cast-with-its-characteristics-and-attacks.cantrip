@@ -1,0 +1,29 @@
+# Memnite, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Memnite
+Plains x23
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+? Bot1.Battlefield.Memnite.Colors = (absent)
+? Bot1.Battlefield.Memnite.Types = Artifact; Creature
+? Bot1.Battlefield.Memnite.Subtypes = Construct
+? Bot1.Battlefield.Memnite.Supertypes = (absent)
+? Bot1.Battlefield.Memnite.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Memnite.Tapped = true

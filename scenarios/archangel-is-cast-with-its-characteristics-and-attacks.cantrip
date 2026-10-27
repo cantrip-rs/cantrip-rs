@@ -1,0 +1,37 @@
+# Archangel, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Black Lotus x3
+Archangel
+Plains x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#3.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Archangel.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Archangel.Power = 5
+? Bot1.Battlefield.Archangel.Toughness = 5
+? Bot1.Battlefield.Archangel.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Archangel.Colors = White
+? Bot1.Battlefield.Archangel.Types = Creature
+? Bot1.Battlefield.Archangel.Subtypes = Angel
+? Bot1.Battlefield.Archangel.Supertypes = (absent)
+? Bot1.Battlefield.Archangel.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Archangel > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Archangel.Tapped = false

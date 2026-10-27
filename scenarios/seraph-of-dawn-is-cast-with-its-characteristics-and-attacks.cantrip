@@ -1,0 +1,36 @@
+# Seraph of Dawn, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Lifelink (CR 702.15b): Bot1 gains as much life as it deals.
+
+[Bot1 Deck]
+Black Lotus x2
+Seraph of Dawn
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Seraph of Dawn.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Seraph of Dawn.Power = 2
+? Bot1.Battlefield.Seraph of Dawn.Toughness = 4
+? Bot1.Battlefield.Seraph of Dawn.Keywords = Flying; Lifelink
+? Bot1.Battlefield.Seraph of Dawn.Colors = White
+? Bot1.Battlefield.Seraph of Dawn.Types = Creature
+? Bot1.Battlefield.Seraph of Dawn.Subtypes = Angel
+? Bot1.Battlefield.Seraph of Dawn.Supertypes = (absent)
+? Bot1.Battlefield.Seraph of Dawn.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Seraph of Dawn > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Battlefield.Seraph of Dawn.Tapped = true

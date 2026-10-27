@@ -1,0 +1,34 @@
+# Voice of Reason, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Voice of Reason
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Voice of Reason.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Voice of Reason.Power = 2
+? Bot1.Battlefield.Voice of Reason.Toughness = 2
+? Bot1.Battlefield.Voice of Reason.Keywords = Flying
+? Bot1.Battlefield.Voice of Reason.Colors = White
+? Bot1.Battlefield.Voice of Reason.Types = Creature
+? Bot1.Battlefield.Voice of Reason.Subtypes = Angel
+? Bot1.Battlefield.Voice of Reason.Supertypes = (absent)
+? Bot1.Battlefield.Voice of Reason.ProtectionFrom = Blue
+[T3 Bot1.Main1]
+Bot1.Attack(Voice of Reason > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Voice of Reason.Tapped = true

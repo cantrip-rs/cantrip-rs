@@ -1,0 +1,38 @@
+# Iguana Parrot, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+# Prowess (CR 702.108a): the Mox Pearl cast first gives it +1/+1 until end of turn.
+
+[Bot1 Deck]
+Black Lotus
+Iguana Parrot
+Plains x5
+Mox Pearl
+Plains x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Iguana Parrot.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Iguana Parrot.Power = 2
+? Bot1.Battlefield.Iguana Parrot.Toughness = 2
+? Bot1.Battlefield.Iguana Parrot.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Iguana Parrot.Colors = Blue
+? Bot1.Battlefield.Iguana Parrot.Types = Creature
+? Bot1.Battlefield.Iguana Parrot.Subtypes = Bird; Lizard; Pirate
+? Bot1.Battlefield.Iguana Parrot.Supertypes = (absent)
+? Bot1.Battlefield.Iguana Parrot.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Attack(Iguana Parrot > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Iguana Parrot.Tapped = false

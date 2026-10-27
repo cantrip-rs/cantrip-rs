@@ -1,0 +1,32 @@
+# Leaf Dancer, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Leaf Dancer
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Leaf Dancer.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Leaf Dancer.Power = 2
+? Bot1.Battlefield.Leaf Dancer.Toughness = 2
+? Bot1.Battlefield.Leaf Dancer.Keywords = Forestwalk
+? Bot1.Battlefield.Leaf Dancer.Colors = Green
+? Bot1.Battlefield.Leaf Dancer.Types = Creature
+? Bot1.Battlefield.Leaf Dancer.Subtypes = Centaur
+? Bot1.Battlefield.Leaf Dancer.Supertypes = (absent)
+? Bot1.Battlefield.Leaf Dancer.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Leaf Dancer > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Leaf Dancer.Tapped = true

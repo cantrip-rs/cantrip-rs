@@ -1,0 +1,32 @@
+# Woodland Druid, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Woodland Druid
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Woodland Druid.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Woodland Druid.Power = 1
+? Bot1.Battlefield.Woodland Druid.Toughness = 2
+? Bot1.Battlefield.Woodland Druid.Keywords = (absent)
+? Bot1.Battlefield.Woodland Druid.Colors = Green
+? Bot1.Battlefield.Woodland Druid.Types = Creature
+? Bot1.Battlefield.Woodland Druid.Subtypes = Druid; Human
+? Bot1.Battlefield.Woodland Druid.Supertypes = (absent)
+? Bot1.Battlefield.Woodland Druid.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Woodland Druid > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Woodland Druid.Tapped = true

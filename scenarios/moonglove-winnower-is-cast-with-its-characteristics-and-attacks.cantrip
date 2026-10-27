@@ -1,0 +1,34 @@
+# Moonglove Winnower, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Moonglove Winnower
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Moonglove Winnower.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Moonglove Winnower.Power = 2
+? Bot1.Battlefield.Moonglove Winnower.Toughness = 3
+? Bot1.Battlefield.Moonglove Winnower.Keywords = Deathtouch
+? Bot1.Battlefield.Moonglove Winnower.Colors = Black
+? Bot1.Battlefield.Moonglove Winnower.Types = Creature
+? Bot1.Battlefield.Moonglove Winnower.Subtypes = Elf; Rogue
+? Bot1.Battlefield.Moonglove Winnower.Supertypes = (absent)
+? Bot1.Battlefield.Moonglove Winnower.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Moonglove Winnower > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Moonglove Winnower.Tapped = true

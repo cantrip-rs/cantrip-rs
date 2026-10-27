@@ -1,0 +1,32 @@
+# Goblin Bully, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Goblin Bully
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Bully.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Goblin Bully.Power = 2
+? Bot1.Battlefield.Goblin Bully.Toughness = 1
+? Bot1.Battlefield.Goblin Bully.Keywords = (absent)
+? Bot1.Battlefield.Goblin Bully.Colors = Red
+? Bot1.Battlefield.Goblin Bully.Types = Creature
+? Bot1.Battlefield.Goblin Bully.Subtypes = Goblin
+? Bot1.Battlefield.Goblin Bully.Supertypes = (absent)
+? Bot1.Battlefield.Goblin Bully.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Goblin Bully > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Goblin Bully.Tapped = true

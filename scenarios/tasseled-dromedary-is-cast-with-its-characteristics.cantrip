@@ -1,0 +1,28 @@
+# Tasseled Dromedary, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Tasseled Dromedary
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Tasseled Dromedary.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Tasseled Dromedary.Power = 0
+? Bot1.Battlefield.Tasseled Dromedary.Toughness = 4
+? Bot1.Battlefield.Tasseled Dromedary.Keywords = (absent)
+? Bot1.Battlefield.Tasseled Dromedary.Colors = White
+? Bot1.Battlefield.Tasseled Dromedary.Types = Creature
+? Bot1.Battlefield.Tasseled Dromedary.Subtypes = Camel
+? Bot1.Battlefield.Tasseled Dromedary.Supertypes = (absent)
+? Bot1.Battlefield.Tasseled Dromedary.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

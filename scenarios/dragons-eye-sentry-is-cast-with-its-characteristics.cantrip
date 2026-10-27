@@ -1,0 +1,29 @@
+# Dragon's Eye Sentry, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Defender (CR 702.3b): it doesn't attack.
+
+[Bot1 Deck]
+Black Lotus
+Dragon's Eye Sentry
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Dragon's Eye Sentry.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Dragon's Eye Sentry.Power = 1
+? Bot1.Battlefield.Dragon's Eye Sentry.Toughness = 3
+? Bot1.Battlefield.Dragon's Eye Sentry.Keywords = Defender; FirstStrike
+? Bot1.Battlefield.Dragon's Eye Sentry.Colors = White
+? Bot1.Battlefield.Dragon's Eye Sentry.Types = Creature
+? Bot1.Battlefield.Dragon's Eye Sentry.Subtypes = Human; Monk
+? Bot1.Battlefield.Dragon's Eye Sentry.Supertypes = (absent)
+? Bot1.Battlefield.Dragon's Eye Sentry.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

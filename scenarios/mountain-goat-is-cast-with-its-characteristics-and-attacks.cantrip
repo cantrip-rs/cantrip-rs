@@ -1,0 +1,32 @@
+# Mountain Goat, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Mountain Goat
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mountain Goat.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Mountain Goat.Power = 1
+? Bot1.Battlefield.Mountain Goat.Toughness = 1
+? Bot1.Battlefield.Mountain Goat.Keywords = Mountainwalk
+? Bot1.Battlefield.Mountain Goat.Colors = Red
+? Bot1.Battlefield.Mountain Goat.Types = Creature
+? Bot1.Battlefield.Mountain Goat.Subtypes = Goat
+? Bot1.Battlefield.Mountain Goat.Supertypes = (absent)
+? Bot1.Battlefield.Mountain Goat.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Mountain Goat > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Mountain Goat.Tapped = true

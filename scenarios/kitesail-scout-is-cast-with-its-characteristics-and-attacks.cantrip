@@ -1,0 +1,32 @@
+# Kitesail Scout, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Kitesail Scout
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Kitesail Scout.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Kitesail Scout.Power = 1
+? Bot1.Battlefield.Kitesail Scout.Toughness = 1
+? Bot1.Battlefield.Kitesail Scout.Keywords = Flying
+? Bot1.Battlefield.Kitesail Scout.Colors = White
+? Bot1.Battlefield.Kitesail Scout.Types = Creature
+? Bot1.Battlefield.Kitesail Scout.Subtypes = Kor; Scout
+? Bot1.Battlefield.Kitesail Scout.Supertypes = (absent)
+? Bot1.Battlefield.Kitesail Scout.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Kitesail Scout > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Kitesail Scout.Tapped = true

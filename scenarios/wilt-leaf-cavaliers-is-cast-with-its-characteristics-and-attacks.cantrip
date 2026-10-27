@@ -1,0 +1,33 @@
+# Wilt-Leaf Cavaliers, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Black Lotus
+Wilt-Leaf Cavaliers
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wilt-Leaf Cavaliers.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Wilt-Leaf Cavaliers.Power = 3
+? Bot1.Battlefield.Wilt-Leaf Cavaliers.Toughness = 4
+? Bot1.Battlefield.Wilt-Leaf Cavaliers.Keywords = Vigilance
+? Bot1.Battlefield.Wilt-Leaf Cavaliers.Colors = Green; White
+? Bot1.Battlefield.Wilt-Leaf Cavaliers.Types = Creature
+? Bot1.Battlefield.Wilt-Leaf Cavaliers.Subtypes = Elf; Knight
+? Bot1.Battlefield.Wilt-Leaf Cavaliers.Supertypes = (absent)
+? Bot1.Battlefield.Wilt-Leaf Cavaliers.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Wilt-Leaf Cavaliers > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Wilt-Leaf Cavaliers.Tapped = false

@@ -1,0 +1,37 @@
+# Darksteel Sentinel, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Flash (CR 702.8a): it is cast in Bot2's main phase, with Bot2 the active player.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Black Lotus x2
+Darksteel Sentinel
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Darksteel Sentinel.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Darksteel Sentinel.Power = 3
+? Bot1.Battlefield.Darksteel Sentinel.Toughness = 3
+? Bot1.Battlefield.Darksteel Sentinel.Keywords = Flash; Indestructible; Vigilance
+? Bot1.Battlefield.Darksteel Sentinel.Colors = (absent)
+? Bot1.Battlefield.Darksteel Sentinel.Types = Artifact; Creature
+? Bot1.Battlefield.Darksteel Sentinel.Subtypes = Golem
+? Bot1.Battlefield.Darksteel Sentinel.Supertypes = (absent)
+? Bot1.Battlefield.Darksteel Sentinel.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Darksteel Sentinel > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Darksteel Sentinel.Tapped = false

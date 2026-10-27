@@ -1,0 +1,32 @@
+# Wildwood Patrol, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Wildwood Patrol
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wildwood Patrol.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Wildwood Patrol.Power = 4
+? Bot1.Battlefield.Wildwood Patrol.Toughness = 2
+? Bot1.Battlefield.Wildwood Patrol.Keywords = Trample
+? Bot1.Battlefield.Wildwood Patrol.Colors = Green
+? Bot1.Battlefield.Wildwood Patrol.Types = Creature
+? Bot1.Battlefield.Wildwood Patrol.Subtypes = Centaur; Scout
+? Bot1.Battlefield.Wildwood Patrol.Supertypes = (absent)
+? Bot1.Battlefield.Wildwood Patrol.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Wildwood Patrol > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Wildwood Patrol.Tapped = true

@@ -1,0 +1,32 @@
+# Bog Smugglers, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Bog Smugglers
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Bog Smugglers.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Bog Smugglers.Power = 2
+? Bot1.Battlefield.Bog Smugglers.Toughness = 2
+? Bot1.Battlefield.Bog Smugglers.Keywords = Swampwalk
+? Bot1.Battlefield.Bog Smugglers.Colors = Black
+? Bot1.Battlefield.Bog Smugglers.Types = Creature
+? Bot1.Battlefield.Bog Smugglers.Subtypes = Human; Mercenary
+? Bot1.Battlefield.Bog Smugglers.Supertypes = (absent)
+? Bot1.Battlefield.Bog Smugglers.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Bog Smugglers > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Bog Smugglers.Tapped = true

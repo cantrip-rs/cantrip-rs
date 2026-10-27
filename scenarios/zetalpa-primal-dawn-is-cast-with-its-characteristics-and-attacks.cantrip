@@ -1,0 +1,38 @@
+# Zetalpa, Primal Dawn, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+# Double strike (CR 702.4b): it deals combat damage twice.
+
+[Bot1 Deck]
+Black Lotus x3
+Zetalpa, Primal Dawn
+Plains x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#3.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Zetalpa, Primal Dawn.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Zetalpa, Primal Dawn.Power = 4
+? Bot1.Battlefield.Zetalpa, Primal Dawn.Toughness = 8
+? Bot1.Battlefield.Zetalpa, Primal Dawn.Keywords = DoubleStrike; Flying; Indestructible; Trample; Vigilance
+? Bot1.Battlefield.Zetalpa, Primal Dawn.Colors = White
+? Bot1.Battlefield.Zetalpa, Primal Dawn.Types = Creature
+? Bot1.Battlefield.Zetalpa, Primal Dawn.Subtypes = Dinosaur; Elder
+? Bot1.Battlefield.Zetalpa, Primal Dawn.Supertypes = Legendary
+? Bot1.Battlefield.Zetalpa, Primal Dawn.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Zetalpa, Primal Dawn > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
+Bot1.Battlefield.Zetalpa, Primal Dawn.Tapped = false

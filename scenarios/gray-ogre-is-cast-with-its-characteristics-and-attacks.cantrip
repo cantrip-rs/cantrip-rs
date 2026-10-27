@@ -1,0 +1,32 @@
+# Gray Ogre, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Gray Ogre
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gray Ogre.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Gray Ogre.Power = 2
+? Bot1.Battlefield.Gray Ogre.Toughness = 2
+? Bot1.Battlefield.Gray Ogre.Keywords = (absent)
+? Bot1.Battlefield.Gray Ogre.Colors = Red
+? Bot1.Battlefield.Gray Ogre.Types = Creature
+? Bot1.Battlefield.Gray Ogre.Subtypes = Ogre
+? Bot1.Battlefield.Gray Ogre.Supertypes = (absent)
+? Bot1.Battlefield.Gray Ogre.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Gray Ogre > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Gray Ogre.Tapped = true

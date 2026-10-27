@@ -1,0 +1,32 @@
+# Weatherseed Faeries, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Weatherseed Faeries
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Weatherseed Faeries.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Weatherseed Faeries.Power = 2
+? Bot1.Battlefield.Weatherseed Faeries.Toughness = 1
+? Bot1.Battlefield.Weatherseed Faeries.Keywords = Flying
+? Bot1.Battlefield.Weatherseed Faeries.Colors = Blue
+? Bot1.Battlefield.Weatherseed Faeries.Types = Creature
+? Bot1.Battlefield.Weatherseed Faeries.Subtypes = Faerie
+? Bot1.Battlefield.Weatherseed Faeries.Supertypes = (absent)
+? Bot1.Battlefield.Weatherseed Faeries.ProtectionFrom = Red
+[T3 Bot1.Main1]
+Bot1.Attack(Weatherseed Faeries > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Weatherseed Faeries.Tapped = true

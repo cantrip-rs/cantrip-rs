@@ -1,0 +1,33 @@
+# Twinscroll Shaman, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Double strike (CR 702.4b): it deals combat damage twice.
+
+[Bot1 Deck]
+Black Lotus
+Twinscroll Shaman
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Twinscroll Shaman.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Twinscroll Shaman.Power = 1
+? Bot1.Battlefield.Twinscroll Shaman.Toughness = 2
+? Bot1.Battlefield.Twinscroll Shaman.Keywords = DoubleStrike
+? Bot1.Battlefield.Twinscroll Shaman.Colors = Red
+? Bot1.Battlefield.Twinscroll Shaman.Types = Creature
+? Bot1.Battlefield.Twinscroll Shaman.Subtypes = Dwarf; Shaman
+? Bot1.Battlefield.Twinscroll Shaman.Supertypes = (absent)
+? Bot1.Battlefield.Twinscroll Shaman.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Twinscroll Shaman > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Twinscroll Shaman.Tapped = true

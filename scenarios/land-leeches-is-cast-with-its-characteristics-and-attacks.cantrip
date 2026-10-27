@@ -1,0 +1,32 @@
+# Land Leeches, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Land Leeches
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Land Leeches.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Land Leeches.Power = 2
+? Bot1.Battlefield.Land Leeches.Toughness = 2
+? Bot1.Battlefield.Land Leeches.Keywords = FirstStrike
+? Bot1.Battlefield.Land Leeches.Colors = Green
+? Bot1.Battlefield.Land Leeches.Types = Creature
+? Bot1.Battlefield.Land Leeches.Subtypes = Leech
+? Bot1.Battlefield.Land Leeches.Supertypes = (absent)
+? Bot1.Battlefield.Land Leeches.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Land Leeches > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Land Leeches.Tapped = true

@@ -1,0 +1,34 @@
+# Viashino Warrior, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Viashino Warrior
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Viashino Warrior.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Viashino Warrior.Power = 4
+? Bot1.Battlefield.Viashino Warrior.Toughness = 2
+? Bot1.Battlefield.Viashino Warrior.Keywords = (absent)
+? Bot1.Battlefield.Viashino Warrior.Colors = Red
+? Bot1.Battlefield.Viashino Warrior.Types = Creature
+? Bot1.Battlefield.Viashino Warrior.Subtypes = Lizard; Warrior
+? Bot1.Battlefield.Viashino Warrior.Supertypes = (absent)
+? Bot1.Battlefield.Viashino Warrior.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Viashino Warrior > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Viashino Warrior.Tapped = true

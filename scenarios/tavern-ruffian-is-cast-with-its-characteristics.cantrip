@@ -1,0 +1,41 @@
+# Tavern Ruffian, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection).
+# Daybound: it became day as it entered (CR 702.145d); Bot2 cast no spells on their turn, so it becomes night in
+# Bot1's next untap step (CR 731.2a), and as it does the permanent transforms to its nightbound face (CR 702.145b).
+
+[Bot1 Deck]
+Black Lotus x2
+Tavern Ruffian
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Tavern Ruffian.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Tavern Ruffian.Power = 2
+? Bot1.Battlefield.Tavern Ruffian.Toughness = 5
+? Bot1.Battlefield.Tavern Ruffian.Keywords = Daybound
+? Bot1.Battlefield.Tavern Ruffian.Colors = Red
+? Bot1.Battlefield.Tavern Ruffian.Types = Creature
+? Bot1.Battlefield.Tavern Ruffian.Subtypes = Human; Warrior; Werewolf
+? Bot1.Battlefield.Tavern Ruffian.Supertypes = (absent)
+? Bot1.Battlefield.Tavern Ruffian.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Tavern Smasher.Power = 6
+Bot1.Battlefield.Tavern Smasher.Toughness = 5
+Bot1.Battlefield.Tavern Smasher.Keywords = Nightbound
+Bot1.Battlefield.Tavern Smasher.Colors = Red
+Bot1.Battlefield.Tavern Smasher.Types = Creature
+Bot1.Battlefield.Tavern Smasher.Subtypes = Werewolf
+Bot1.Battlefield.Tavern Smasher.Supertypes = (absent)
+Bot1.Battlefield.Tavern Smasher.ProtectionFrom = (absent)
+Bot1.Battlefield.Tavern Smasher.Transformed = true

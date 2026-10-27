@@ -1,0 +1,34 @@
+# Great Hart, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Great Hart
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Great Hart.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Great Hart.Power = 2
+? Bot1.Battlefield.Great Hart.Toughness = 4
+? Bot1.Battlefield.Great Hart.Keywords = (absent)
+? Bot1.Battlefield.Great Hart.Colors = White
+? Bot1.Battlefield.Great Hart.Types = Creature
+? Bot1.Battlefield.Great Hart.Subtypes = Elk
+? Bot1.Battlefield.Great Hart.Supertypes = (absent)
+? Bot1.Battlefield.Great Hart.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Great Hart > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Great Hart.Tapped = true

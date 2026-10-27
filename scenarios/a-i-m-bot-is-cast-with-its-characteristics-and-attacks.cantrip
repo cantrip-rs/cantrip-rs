@@ -1,0 +1,32 @@
+# A.I.M. Bot, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+A.I.M. Bot
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.A.I.M. Bot.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.A.I.M. Bot.Power = 2
+? Bot1.Battlefield.A.I.M. Bot.Toughness = 3
+? Bot1.Battlefield.A.I.M. Bot.Keywords = Flying
+? Bot1.Battlefield.A.I.M. Bot.Colors = Blue
+? Bot1.Battlefield.A.I.M. Bot.Types = Artifact; Creature
+? Bot1.Battlefield.A.I.M. Bot.Subtypes = Robot; Villain
+? Bot1.Battlefield.A.I.M. Bot.Supertypes = (absent)
+? Bot1.Battlefield.A.I.M. Bot.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(A.I.M. Bot > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.A.I.M. Bot.Tapped = true

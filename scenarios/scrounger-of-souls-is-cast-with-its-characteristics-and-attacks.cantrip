@@ -1,0 +1,36 @@
+# Scrounger of Souls, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Lifelink (CR 702.15b): Bot1 gains as much life as it deals.
+
+[Bot1 Deck]
+Black Lotus x2
+Scrounger of Souls
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Scrounger of Souls.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Scrounger of Souls.Power = 3
+? Bot1.Battlefield.Scrounger of Souls.Toughness = 4
+? Bot1.Battlefield.Scrounger of Souls.Keywords = Lifelink
+? Bot1.Battlefield.Scrounger of Souls.Colors = Black
+? Bot1.Battlefield.Scrounger of Souls.Types = Creature
+? Bot1.Battlefield.Scrounger of Souls.Subtypes = Horror
+? Bot1.Battlefield.Scrounger of Souls.Supertypes = (absent)
+? Bot1.Battlefield.Scrounger of Souls.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Scrounger of Souls > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 23
+Bot1.Battlefield.Scrounger of Souls.Tapped = true

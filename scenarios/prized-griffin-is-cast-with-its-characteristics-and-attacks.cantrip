@@ -1,0 +1,34 @@
+# Prized Griffin, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Prized Griffin
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Prized Griffin.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Prized Griffin.Power = 3
+? Bot1.Battlefield.Prized Griffin.Toughness = 4
+? Bot1.Battlefield.Prized Griffin.Keywords = Flying
+? Bot1.Battlefield.Prized Griffin.Colors = White
+? Bot1.Battlefield.Prized Griffin.Types = Creature
+? Bot1.Battlefield.Prized Griffin.Subtypes = Griffin
+? Bot1.Battlefield.Prized Griffin.Supertypes = (absent)
+? Bot1.Battlefield.Prized Griffin.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Prized Griffin > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Prized Griffin.Tapped = true

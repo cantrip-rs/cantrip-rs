@@ -1,0 +1,34 @@
+# Twins of Maurer Estate, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Twins of Maurer Estate
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Twins of Maurer Estate.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Twins of Maurer Estate.Power = 3
+? Bot1.Battlefield.Twins of Maurer Estate.Toughness = 5
+? Bot1.Battlefield.Twins of Maurer Estate.Keywords = (absent)
+? Bot1.Battlefield.Twins of Maurer Estate.Colors = Black
+? Bot1.Battlefield.Twins of Maurer Estate.Types = Creature
+? Bot1.Battlefield.Twins of Maurer Estate.Subtypes = Vampire
+? Bot1.Battlefield.Twins of Maurer Estate.Supertypes = (absent)
+? Bot1.Battlefield.Twins of Maurer Estate.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Twins of Maurer Estate > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Twins of Maurer Estate.Tapped = true

@@ -1,0 +1,33 @@
+# Stormchaser Mage, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Haste (CR 702.10b): it attacks the turn it comes under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus x2
+Stormchaser Mage
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Stormchaser Mage.Cast
+Bot1.Pass
+Bot1.Attack(Stormchaser Mage > Bot2)
+[T2 Bot2.End]
+? Bot1.Battlefield.Stormchaser Mage.Power = 1
+? Bot1.Battlefield.Stormchaser Mage.Toughness = 3
+? Bot1.Battlefield.Stormchaser Mage.Keywords = Flying; Haste
+? Bot1.Battlefield.Stormchaser Mage.Colors = Blue; Red
+? Bot1.Battlefield.Stormchaser Mage.Types = Creature
+? Bot1.Battlefield.Stormchaser Mage.Subtypes = Human; Wizard
+? Bot1.Battlefield.Stormchaser Mage.Supertypes = (absent)
+? Bot1.Battlefield.Stormchaser Mage.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Stormchaser Mage.Tapped = true

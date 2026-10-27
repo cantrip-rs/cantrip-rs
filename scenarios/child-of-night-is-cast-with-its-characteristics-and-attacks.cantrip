@@ -1,0 +1,34 @@
+# Child of Night, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Lifelink (CR 702.15b): Bot1 gains as much life as it deals.
+
+[Bot1 Deck]
+Black Lotus
+Child of Night
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Child of Night.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Child of Night.Power = 2
+? Bot1.Battlefield.Child of Night.Toughness = 1
+? Bot1.Battlefield.Child of Night.Keywords = Lifelink
+? Bot1.Battlefield.Child of Night.Colors = Black
+? Bot1.Battlefield.Child of Night.Types = Creature
+? Bot1.Battlefield.Child of Night.Subtypes = Vampire
+? Bot1.Battlefield.Child of Night.Supertypes = (absent)
+? Bot1.Battlefield.Child of Night.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Child of Night > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Battlefield.Child of Night.Tapped = true

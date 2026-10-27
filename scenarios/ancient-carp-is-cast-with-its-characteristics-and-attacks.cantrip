@@ -1,0 +1,34 @@
+# Ancient Carp, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Ancient Carp
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ancient Carp.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Ancient Carp.Power = 2
+? Bot1.Battlefield.Ancient Carp.Toughness = 5
+? Bot1.Battlefield.Ancient Carp.Keywords = (absent)
+? Bot1.Battlefield.Ancient Carp.Colors = Blue
+? Bot1.Battlefield.Ancient Carp.Types = Creature
+? Bot1.Battlefield.Ancient Carp.Subtypes = Fish
+? Bot1.Battlefield.Ancient Carp.Supertypes = (absent)
+? Bot1.Battlefield.Ancient Carp.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Ancient Carp > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Ancient Carp.Tapped = true

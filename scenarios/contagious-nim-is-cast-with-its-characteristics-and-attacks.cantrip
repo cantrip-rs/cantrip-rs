@@ -1,0 +1,34 @@
+# Contagious Nim, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Infect (CR 702.90b): its damage to a player is poison counters, not life loss.
+
+[Bot1 Deck]
+Black Lotus
+Contagious Nim
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Contagious Nim.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Contagious Nim.Power = 2
+? Bot1.Battlefield.Contagious Nim.Toughness = 2
+? Bot1.Battlefield.Contagious Nim.Keywords = Infect
+? Bot1.Battlefield.Contagious Nim.Colors = Black
+? Bot1.Battlefield.Contagious Nim.Types = Creature
+? Bot1.Battlefield.Contagious Nim.Subtypes = Phyrexian; Zombie
+? Bot1.Battlefield.Contagious Nim.Supertypes = (absent)
+? Bot1.Battlefield.Contagious Nim.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Contagious Nim > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Poison = 2
+Bot1.Battlefield.Contagious Nim.Tapped = true

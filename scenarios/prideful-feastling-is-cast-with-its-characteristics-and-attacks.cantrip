@@ -1,0 +1,34 @@
+# Prideful Feastling, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Lifelink (CR 702.15b): Bot1 gains as much life as it deals.
+
+[Bot1 Deck]
+Black Lotus
+Prideful Feastling
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Prideful Feastling.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Prideful Feastling.Power = 2
+? Bot1.Battlefield.Prideful Feastling.Toughness = 3
+? Bot1.Battlefield.Prideful Feastling.Keywords = Changeling; Lifelink
+? Bot1.Battlefield.Prideful Feastling.Colors = Black; White
+? Bot1.Battlefield.Prideful Feastling.Types = Creature
+? Bot1.Battlefield.Prideful Feastling.Subtypes = (every creature type)
+? Bot1.Battlefield.Prideful Feastling.Supertypes = (absent)
+? Bot1.Battlefield.Prideful Feastling.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Prideful Feastling > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Battlefield.Prideful Feastling.Tapped = true

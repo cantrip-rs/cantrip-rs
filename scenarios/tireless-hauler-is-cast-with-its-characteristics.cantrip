@@ -1,0 +1,41 @@
+# Tireless Hauler, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection).
+# Daybound: it became day as it entered (CR 702.145d); Bot2 cast no spells on their turn, so it becomes night in
+# Bot1's next untap step (CR 731.2a), and as it does the permanent transforms to its nightbound face (CR 702.145b).
+
+[Bot1 Deck]
+Black Lotus x2
+Tireless Hauler
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Tireless Hauler.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Tireless Hauler.Power = 4
+? Bot1.Battlefield.Tireless Hauler.Toughness = 5
+? Bot1.Battlefield.Tireless Hauler.Keywords = Daybound; Vigilance
+? Bot1.Battlefield.Tireless Hauler.Colors = Green
+? Bot1.Battlefield.Tireless Hauler.Types = Creature
+? Bot1.Battlefield.Tireless Hauler.Subtypes = Human; Werewolf
+? Bot1.Battlefield.Tireless Hauler.Supertypes = (absent)
+? Bot1.Battlefield.Tireless Hauler.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Dire-Strain Brawler.Power = 6
+Bot1.Battlefield.Dire-Strain Brawler.Toughness = 6
+Bot1.Battlefield.Dire-Strain Brawler.Keywords = Nightbound; Vigilance
+Bot1.Battlefield.Dire-Strain Brawler.Colors = Green
+Bot1.Battlefield.Dire-Strain Brawler.Types = Creature
+Bot1.Battlefield.Dire-Strain Brawler.Subtypes = Werewolf
+Bot1.Battlefield.Dire-Strain Brawler.Supertypes = (absent)
+Bot1.Battlefield.Dire-Strain Brawler.ProtectionFrom = (absent)
+Bot1.Battlefield.Dire-Strain Brawler.Transformed = true

@@ -1,0 +1,33 @@
+# Hovermyr, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Black Lotus
+Hovermyr
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hovermyr.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Hovermyr.Power = 1
+? Bot1.Battlefield.Hovermyr.Toughness = 2
+? Bot1.Battlefield.Hovermyr.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Hovermyr.Colors = (absent)
+? Bot1.Battlefield.Hovermyr.Types = Artifact; Creature
+? Bot1.Battlefield.Hovermyr.Subtypes = Myr
+? Bot1.Battlefield.Hovermyr.Supertypes = (absent)
+? Bot1.Battlefield.Hovermyr.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Hovermyr > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Hovermyr.Tapped = false

@@ -1,0 +1,34 @@
+# Commander Eesha, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Commander Eesha
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Commander Eesha.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Commander Eesha.Power = 2
+? Bot1.Battlefield.Commander Eesha.Toughness = 4
+? Bot1.Battlefield.Commander Eesha.Keywords = Flying
+? Bot1.Battlefield.Commander Eesha.Colors = White
+? Bot1.Battlefield.Commander Eesha.Types = Creature
+? Bot1.Battlefield.Commander Eesha.Subtypes = Bird; Soldier
+? Bot1.Battlefield.Commander Eesha.Supertypes = Legendary
+? Bot1.Battlefield.Commander Eesha.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Commander Eesha > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Commander Eesha.Tapped = true

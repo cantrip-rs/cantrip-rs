@@ -1,0 +1,34 @@
+# Sabertooth Wyvern, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Sabertooth Wyvern
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sabertooth Wyvern.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Sabertooth Wyvern.Power = 3
+? Bot1.Battlefield.Sabertooth Wyvern.Toughness = 2
+? Bot1.Battlefield.Sabertooth Wyvern.Keywords = FirstStrike; Flying
+? Bot1.Battlefield.Sabertooth Wyvern.Colors = Red
+? Bot1.Battlefield.Sabertooth Wyvern.Types = Creature
+? Bot1.Battlefield.Sabertooth Wyvern.Subtypes = Drake
+? Bot1.Battlefield.Sabertooth Wyvern.Supertypes = (absent)
+? Bot1.Battlefield.Sabertooth Wyvern.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Sabertooth Wyvern > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Sabertooth Wyvern.Tapped = true

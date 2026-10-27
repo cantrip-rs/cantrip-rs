@@ -1,0 +1,37 @@
+# Dawnstrike Paladin, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Lifelink (CR 702.15b): Bot1 gains as much life as it deals.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Black Lotus x2
+Dawnstrike Paladin
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Dawnstrike Paladin.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Dawnstrike Paladin.Power = 2
+? Bot1.Battlefield.Dawnstrike Paladin.Toughness = 4
+? Bot1.Battlefield.Dawnstrike Paladin.Keywords = Lifelink; Vigilance
+? Bot1.Battlefield.Dawnstrike Paladin.Colors = White
+? Bot1.Battlefield.Dawnstrike Paladin.Types = Creature
+? Bot1.Battlefield.Dawnstrike Paladin.Subtypes = Human; Knight
+? Bot1.Battlefield.Dawnstrike Paladin.Supertypes = (absent)
+? Bot1.Battlefield.Dawnstrike Paladin.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Dawnstrike Paladin > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Battlefield.Dawnstrike Paladin.Tapped = false

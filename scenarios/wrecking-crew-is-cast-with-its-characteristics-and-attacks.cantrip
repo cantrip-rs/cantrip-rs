@@ -1,0 +1,34 @@
+# Wrecking Crew, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Wrecking Crew
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wrecking Crew.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Wrecking Crew.Power = 4
+? Bot1.Battlefield.Wrecking Crew.Toughness = 5
+? Bot1.Battlefield.Wrecking Crew.Keywords = Reach; Trample
+? Bot1.Battlefield.Wrecking Crew.Colors = Red
+? Bot1.Battlefield.Wrecking Crew.Types = Creature
+? Bot1.Battlefield.Wrecking Crew.Subtypes = Human; Warrior
+? Bot1.Battlefield.Wrecking Crew.Supertypes = (absent)
+? Bot1.Battlefield.Wrecking Crew.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Wrecking Crew > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Wrecking Crew.Tapped = true

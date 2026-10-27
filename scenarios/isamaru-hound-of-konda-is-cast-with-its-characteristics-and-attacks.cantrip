@@ -1,0 +1,32 @@
+# Isamaru, Hound of Konda, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Isamaru, Hound of Konda
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Isamaru, Hound of Konda.Power = 2
+? Bot1.Battlefield.Isamaru, Hound of Konda.Toughness = 2
+? Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = (absent)
+? Bot1.Battlefield.Isamaru, Hound of Konda.Colors = White
+? Bot1.Battlefield.Isamaru, Hound of Konda.Types = Creature
+? Bot1.Battlefield.Isamaru, Hound of Konda.Subtypes = Dog
+? Bot1.Battlefield.Isamaru, Hound of Konda.Supertypes = Legendary
+? Bot1.Battlefield.Isamaru, Hound of Konda.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Isamaru, Hound of Konda > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Isamaru, Hound of Konda.Tapped = true

@@ -1,0 +1,32 @@
+# Horizon Drake, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Horizon Drake
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Horizon Drake.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Horizon Drake.Power = 3
+? Bot1.Battlefield.Horizon Drake.Toughness = 1
+? Bot1.Battlefield.Horizon Drake.Keywords = Flying
+? Bot1.Battlefield.Horizon Drake.Colors = Blue
+? Bot1.Battlefield.Horizon Drake.Types = Creature
+? Bot1.Battlefield.Horizon Drake.Subtypes = Drake
+? Bot1.Battlefield.Horizon Drake.Supertypes = (absent)
+? Bot1.Battlefield.Horizon Drake.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Horizon Drake > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Horizon Drake.Tapped = true

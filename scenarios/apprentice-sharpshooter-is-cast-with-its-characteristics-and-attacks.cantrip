@@ -1,0 +1,32 @@
+# Apprentice Sharpshooter, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Apprentice Sharpshooter
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Apprentice Sharpshooter.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Apprentice Sharpshooter.Power = 1
+? Bot1.Battlefield.Apprentice Sharpshooter.Toughness = 4
+? Bot1.Battlefield.Apprentice Sharpshooter.Keywords = Reach
+? Bot1.Battlefield.Apprentice Sharpshooter.Colors = Green
+? Bot1.Battlefield.Apprentice Sharpshooter.Types = Creature
+? Bot1.Battlefield.Apprentice Sharpshooter.Subtypes = Archer; Human
+? Bot1.Battlefield.Apprentice Sharpshooter.Supertypes = (absent)
+? Bot1.Battlefield.Apprentice Sharpshooter.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Apprentice Sharpshooter > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Apprentice Sharpshooter.Tapped = true

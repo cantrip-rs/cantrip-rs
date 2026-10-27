@@ -1,0 +1,36 @@
+# Flensermite, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Infect (CR 702.90b): its damage to a player is poison counters, not life loss.
+# Lifelink (CR 702.15b): Bot1 gains as much life as it deals.
+
+[Bot1 Deck]
+Black Lotus
+Flensermite
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Flensermite.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Flensermite.Power = 1
+? Bot1.Battlefield.Flensermite.Toughness = 1
+? Bot1.Battlefield.Flensermite.Keywords = Infect; Lifelink
+? Bot1.Battlefield.Flensermite.Colors = Black
+? Bot1.Battlefield.Flensermite.Types = Creature
+? Bot1.Battlefield.Flensermite.Subtypes = Gremlin; Phyrexian
+? Bot1.Battlefield.Flensermite.Supertypes = (absent)
+? Bot1.Battlefield.Flensermite.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Flensermite > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Poison = 1
+Bot1.Life = 21
+Bot1.Battlefield.Flensermite.Tapped = true

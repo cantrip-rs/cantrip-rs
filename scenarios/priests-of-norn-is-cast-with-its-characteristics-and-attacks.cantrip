@@ -1,0 +1,35 @@
+# Priests of Norn, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Infect (CR 702.90b): its damage to a player is poison counters, not life loss.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Black Lotus
+Priests of Norn
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Priests of Norn.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Priests of Norn.Power = 1
+? Bot1.Battlefield.Priests of Norn.Toughness = 4
+? Bot1.Battlefield.Priests of Norn.Keywords = Infect; Vigilance
+? Bot1.Battlefield.Priests of Norn.Colors = White
+? Bot1.Battlefield.Priests of Norn.Types = Creature
+? Bot1.Battlefield.Priests of Norn.Subtypes = Cleric; Phyrexian
+? Bot1.Battlefield.Priests of Norn.Supertypes = (absent)
+? Bot1.Battlefield.Priests of Norn.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Priests of Norn > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Poison = 1
+Bot1.Battlefield.Priests of Norn.Tapped = false

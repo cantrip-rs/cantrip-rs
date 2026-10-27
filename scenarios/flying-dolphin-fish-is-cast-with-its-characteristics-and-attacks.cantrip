@@ -1,0 +1,32 @@
+# Flying Dolphin-Fish, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Flying Dolphin-Fish
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Flying Dolphin-Fish.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Flying Dolphin-Fish.Power = 1
+? Bot1.Battlefield.Flying Dolphin-Fish.Toughness = 3
+? Bot1.Battlefield.Flying Dolphin-Fish.Keywords = Flying
+? Bot1.Battlefield.Flying Dolphin-Fish.Colors = Blue
+? Bot1.Battlefield.Flying Dolphin-Fish.Types = Creature
+? Bot1.Battlefield.Flying Dolphin-Fish.Subtypes = Fish; Whale
+? Bot1.Battlefield.Flying Dolphin-Fish.Supertypes = (absent)
+? Bot1.Battlefield.Flying Dolphin-Fish.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Flying Dolphin-Fish > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Flying Dolphin-Fish.Tapped = true

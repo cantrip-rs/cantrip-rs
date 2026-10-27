@@ -1,0 +1,22 @@
+# Wirewood Guardian's forestcycling {2} (CR 702.29e): paying it and discarding the card from the hand finds the Forest in the
+# library and puts it into the hand.
+
+[Bot1 Deck]
+Black Lotus
+Wirewood Guardian
+Plains x5
+Forest
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wirewood Guardian.Activate(Ability: Forestcycling)
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Graveyard.Wirewood Guardian.Colors = Green
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Forest

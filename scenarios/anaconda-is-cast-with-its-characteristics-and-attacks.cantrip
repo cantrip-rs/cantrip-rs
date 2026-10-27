@@ -1,0 +1,34 @@
+# Anaconda, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Anaconda
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Anaconda.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Anaconda.Power = 3
+? Bot1.Battlefield.Anaconda.Toughness = 3
+? Bot1.Battlefield.Anaconda.Keywords = Swampwalk
+? Bot1.Battlefield.Anaconda.Colors = Green
+? Bot1.Battlefield.Anaconda.Types = Creature
+? Bot1.Battlefield.Anaconda.Subtypes = Snake
+? Bot1.Battlefield.Anaconda.Supertypes = (absent)
+? Bot1.Battlefield.Anaconda.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Anaconda > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Anaconda.Tapped = true

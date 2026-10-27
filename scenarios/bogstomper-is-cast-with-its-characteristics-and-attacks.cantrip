@@ -1,0 +1,34 @@
+# Bogstomper, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Bogstomper
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Bogstomper.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Bogstomper.Power = 6
+? Bot1.Battlefield.Bogstomper.Toughness = 5
+? Bot1.Battlefield.Bogstomper.Keywords = (absent)
+? Bot1.Battlefield.Bogstomper.Colors = Black
+? Bot1.Battlefield.Bogstomper.Types = Creature
+? Bot1.Battlefield.Bogstomper.Subtypes = Beast
+? Bot1.Battlefield.Bogstomper.Supertypes = (absent)
+? Bot1.Battlefield.Bogstomper.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Bogstomper > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Bogstomper.Tapped = true

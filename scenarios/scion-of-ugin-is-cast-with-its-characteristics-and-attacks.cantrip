@@ -1,0 +1,34 @@
+# Scion of Ugin, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Scion of Ugin
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Scion of Ugin.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Scion of Ugin.Power = 4
+? Bot1.Battlefield.Scion of Ugin.Toughness = 4
+? Bot1.Battlefield.Scion of Ugin.Keywords = Flying
+? Bot1.Battlefield.Scion of Ugin.Colors = (absent)
+? Bot1.Battlefield.Scion of Ugin.Types = Creature
+? Bot1.Battlefield.Scion of Ugin.Subtypes = Dragon; Spirit
+? Bot1.Battlefield.Scion of Ugin.Supertypes = (absent)
+? Bot1.Battlefield.Scion of Ugin.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Scion of Ugin > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Scion of Ugin.Tapped = true

@@ -1,0 +1,39 @@
+# Shady Traveler, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection).
+# Daybound: it became day as it entered (CR 702.145d); Bot2 cast no spells on their turn, so it becomes night in
+# Bot1's next untap step (CR 731.2a), and as it does the permanent transforms to its nightbound face (CR 702.145b).
+
+[Bot1 Deck]
+Black Lotus
+Shady Traveler
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Shady Traveler.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Shady Traveler.Power = 2
+? Bot1.Battlefield.Shady Traveler.Toughness = 3
+? Bot1.Battlefield.Shady Traveler.Keywords = Daybound; Menace
+? Bot1.Battlefield.Shady Traveler.Colors = Black
+? Bot1.Battlefield.Shady Traveler.Types = Creature
+? Bot1.Battlefield.Shady Traveler.Subtypes = Human; Werewolf
+? Bot1.Battlefield.Shady Traveler.Supertypes = (absent)
+? Bot1.Battlefield.Shady Traveler.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Stalking Predator.Power = 4
+Bot1.Battlefield.Stalking Predator.Toughness = 4
+Bot1.Battlefield.Stalking Predator.Keywords = Menace; Nightbound
+Bot1.Battlefield.Stalking Predator.Colors = Black
+Bot1.Battlefield.Stalking Predator.Types = Creature
+Bot1.Battlefield.Stalking Predator.Subtypes = Werewolf
+Bot1.Battlefield.Stalking Predator.Supertypes = (absent)
+Bot1.Battlefield.Stalking Predator.ProtectionFrom = (absent)
+Bot1.Battlefield.Stalking Predator.Transformed = true

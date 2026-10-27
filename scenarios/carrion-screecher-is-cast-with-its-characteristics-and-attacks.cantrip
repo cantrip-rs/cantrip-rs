@@ -1,0 +1,34 @@
+# Carrion Screecher, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Carrion Screecher
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Carrion Screecher.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Carrion Screecher.Power = 3
+? Bot1.Battlefield.Carrion Screecher.Toughness = 1
+? Bot1.Battlefield.Carrion Screecher.Keywords = Flying
+? Bot1.Battlefield.Carrion Screecher.Colors = Black
+? Bot1.Battlefield.Carrion Screecher.Types = Creature
+? Bot1.Battlefield.Carrion Screecher.Subtypes = Bird; Zombie
+? Bot1.Battlefield.Carrion Screecher.Supertypes = (absent)
+? Bot1.Battlefield.Carrion Screecher.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Carrion Screecher > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Carrion Screecher.Tapped = true

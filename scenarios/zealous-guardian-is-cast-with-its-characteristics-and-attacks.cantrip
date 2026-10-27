@@ -1,0 +1,34 @@
+# Zealous Guardian, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Flash (CR 702.8a): it is cast in Bot2's main phase, with Bot2 the active player.
+
+[Bot1 Deck]
+Black Lotus
+Zealous Guardian
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Zealous Guardian.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Zealous Guardian.Power = 1
+? Bot1.Battlefield.Zealous Guardian.Toughness = 1
+? Bot1.Battlefield.Zealous Guardian.Keywords = Flash
+? Bot1.Battlefield.Zealous Guardian.Colors = Blue; White
+? Bot1.Battlefield.Zealous Guardian.Types = Creature
+? Bot1.Battlefield.Zealous Guardian.Subtypes = Kithkin; Soldier
+? Bot1.Battlefield.Zealous Guardian.Supertypes = (absent)
+? Bot1.Battlefield.Zealous Guardian.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Zealous Guardian > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Zealous Guardian.Tapped = true

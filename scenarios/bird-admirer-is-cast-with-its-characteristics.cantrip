@@ -1,0 +1,39 @@
+# Bird Admirer, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection).
+# Daybound: it became day as it entered (CR 702.145d); Bot2 cast no spells on their turn, so it becomes night in
+# Bot1's next untap step (CR 731.2a), and as it does the permanent transforms to its nightbound face (CR 702.145b).
+
+[Bot1 Deck]
+Black Lotus
+Bird Admirer
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Bird Admirer.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Bird Admirer.Power = 1
+? Bot1.Battlefield.Bird Admirer.Toughness = 4
+? Bot1.Battlefield.Bird Admirer.Keywords = Daybound; Reach
+? Bot1.Battlefield.Bird Admirer.Colors = Green
+? Bot1.Battlefield.Bird Admirer.Types = Creature
+? Bot1.Battlefield.Bird Admirer.Subtypes = Archer; Human; Werewolf
+? Bot1.Battlefield.Bird Admirer.Supertypes = (absent)
+? Bot1.Battlefield.Bird Admirer.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Wing Shredder.Power = 3
+Bot1.Battlefield.Wing Shredder.Toughness = 5
+Bot1.Battlefield.Wing Shredder.Keywords = Nightbound; Reach
+Bot1.Battlefield.Wing Shredder.Colors = Green
+Bot1.Battlefield.Wing Shredder.Types = Creature
+Bot1.Battlefield.Wing Shredder.Subtypes = Werewolf
+Bot1.Battlefield.Wing Shredder.Supertypes = (absent)
+Bot1.Battlefield.Wing Shredder.ProtectionFrom = (absent)
+Bot1.Battlefield.Wing Shredder.Transformed = true

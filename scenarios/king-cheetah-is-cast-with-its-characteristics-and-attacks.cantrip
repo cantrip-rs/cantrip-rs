@@ -1,0 +1,36 @@
+# King Cheetah, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Flash (CR 702.8a): it is cast in Bot2's main phase, with Bot2 the active player.
+
+[Bot1 Deck]
+Black Lotus x2
+King Cheetah
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.King Cheetah.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.King Cheetah.Power = 3
+? Bot1.Battlefield.King Cheetah.Toughness = 2
+? Bot1.Battlefield.King Cheetah.Keywords = Flash
+? Bot1.Battlefield.King Cheetah.Colors = Green
+? Bot1.Battlefield.King Cheetah.Types = Creature
+? Bot1.Battlefield.King Cheetah.Subtypes = Cat
+? Bot1.Battlefield.King Cheetah.Supertypes = (absent)
+? Bot1.Battlefield.King Cheetah.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(King Cheetah > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.King Cheetah.Tapped = true

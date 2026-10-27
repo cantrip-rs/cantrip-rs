@@ -1,0 +1,22 @@
+# Igneous Pouncer's swampcycling {2} (CR 702.29e): paying it and discarding the card from the hand finds the Swamp in the library
+# and puts it into the hand.
+
+[Bot1 Deck]
+Black Lotus
+Igneous Pouncer
+Plains x5
+Swamp
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Igneous Pouncer.Activate(Ability: Swampcycling)
+Bot1.Search(Swamp)
+
+[Expect]
+Bot1.Graveyard.Igneous Pouncer.Colors = Black; Red
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Swamp

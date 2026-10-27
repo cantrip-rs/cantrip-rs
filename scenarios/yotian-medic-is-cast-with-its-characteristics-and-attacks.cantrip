@@ -1,0 +1,34 @@
+# Yotian Medic, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Lifelink (CR 702.15b): Bot1 gains as much life as it deals.
+
+[Bot1 Deck]
+Black Lotus
+Yotian Medic
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Yotian Medic.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Yotian Medic.Power = 1
+? Bot1.Battlefield.Yotian Medic.Toughness = 4
+? Bot1.Battlefield.Yotian Medic.Keywords = Lifelink
+? Bot1.Battlefield.Yotian Medic.Colors = White
+? Bot1.Battlefield.Yotian Medic.Types = Creature
+? Bot1.Battlefield.Yotian Medic.Subtypes = Cleric; Human; Soldier
+? Bot1.Battlefield.Yotian Medic.Supertypes = (absent)
+? Bot1.Battlefield.Yotian Medic.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Yotian Medic > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 21
+Bot1.Battlefield.Yotian Medic.Tapped = true

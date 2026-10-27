@@ -1,0 +1,36 @@
+# Merfolk of the Depths, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Flash (CR 702.8a): it is cast in Bot2's main phase, with Bot2 the active player.
+
+[Bot1 Deck]
+Black Lotus x2
+Merfolk of the Depths
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Merfolk of the Depths.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Merfolk of the Depths.Power = 4
+? Bot1.Battlefield.Merfolk of the Depths.Toughness = 2
+? Bot1.Battlefield.Merfolk of the Depths.Keywords = Flash
+? Bot1.Battlefield.Merfolk of the Depths.Colors = Blue; Green
+? Bot1.Battlefield.Merfolk of the Depths.Types = Creature
+? Bot1.Battlefield.Merfolk of the Depths.Subtypes = Merfolk; Soldier
+? Bot1.Battlefield.Merfolk of the Depths.Supertypes = (absent)
+? Bot1.Battlefield.Merfolk of the Depths.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Merfolk of the Depths > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Merfolk of the Depths.Tapped = true

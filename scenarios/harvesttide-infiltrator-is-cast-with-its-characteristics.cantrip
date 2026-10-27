@@ -1,0 +1,39 @@
+# Harvesttide Infiltrator, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection).
+# Daybound: it became day as it entered (CR 702.145d); Bot2 cast no spells on their turn, so it becomes night in
+# Bot1's next untap step (CR 731.2a), and as it does the permanent transforms to its nightbound face (CR 702.145b).
+
+[Bot1 Deck]
+Black Lotus
+Harvesttide Infiltrator
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harvesttide Infiltrator.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Harvesttide Infiltrator.Power = 3
+? Bot1.Battlefield.Harvesttide Infiltrator.Toughness = 2
+? Bot1.Battlefield.Harvesttide Infiltrator.Keywords = Daybound; Trample
+? Bot1.Battlefield.Harvesttide Infiltrator.Colors = Red
+? Bot1.Battlefield.Harvesttide Infiltrator.Types = Creature
+? Bot1.Battlefield.Harvesttide Infiltrator.Subtypes = Human; Werewolf
+? Bot1.Battlefield.Harvesttide Infiltrator.Supertypes = (absent)
+? Bot1.Battlefield.Harvesttide Infiltrator.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Harvesttide Assailant.Power = 4
+Bot1.Battlefield.Harvesttide Assailant.Toughness = 4
+Bot1.Battlefield.Harvesttide Assailant.Keywords = Nightbound; Trample
+Bot1.Battlefield.Harvesttide Assailant.Colors = Red
+Bot1.Battlefield.Harvesttide Assailant.Types = Creature
+Bot1.Battlefield.Harvesttide Assailant.Subtypes = Werewolf
+Bot1.Battlefield.Harvesttide Assailant.Supertypes = (absent)
+Bot1.Battlefield.Harvesttide Assailant.ProtectionFrom = (absent)
+Bot1.Battlefield.Harvesttide Assailant.Transformed = true

@@ -1,0 +1,32 @@
+# Pale Bears, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Pale Bears
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Pale Bears.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Pale Bears.Power = 2
+? Bot1.Battlefield.Pale Bears.Toughness = 2
+? Bot1.Battlefield.Pale Bears.Keywords = Islandwalk
+? Bot1.Battlefield.Pale Bears.Colors = Green
+? Bot1.Battlefield.Pale Bears.Types = Creature
+? Bot1.Battlefield.Pale Bears.Subtypes = Bear
+? Bot1.Battlefield.Pale Bears.Supertypes = (absent)
+? Bot1.Battlefield.Pale Bears.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Pale Bears > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Pale Bears.Tapped = true

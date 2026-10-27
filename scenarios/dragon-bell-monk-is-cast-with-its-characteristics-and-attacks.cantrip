@@ -1,0 +1,38 @@
+# Dragon Bell Monk, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+# Prowess (CR 702.108a): the Mox Pearl cast first gives it +1/+1 until end of turn.
+
+[Bot1 Deck]
+Black Lotus
+Dragon Bell Monk
+Plains x5
+Mox Pearl
+Plains x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Dragon Bell Monk.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Dragon Bell Monk.Power = 2
+? Bot1.Battlefield.Dragon Bell Monk.Toughness = 2
+? Bot1.Battlefield.Dragon Bell Monk.Keywords = Vigilance
+? Bot1.Battlefield.Dragon Bell Monk.Colors = White
+? Bot1.Battlefield.Dragon Bell Monk.Types = Creature
+? Bot1.Battlefield.Dragon Bell Monk.Subtypes = Human; Monk
+? Bot1.Battlefield.Dragon Bell Monk.Supertypes = (absent)
+? Bot1.Battlefield.Dragon Bell Monk.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Attack(Dragon Bell Monk > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Dragon Bell Monk.Tapped = false

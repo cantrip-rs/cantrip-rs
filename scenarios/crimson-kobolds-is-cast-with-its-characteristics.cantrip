@@ -1,0 +1,25 @@
+# Crimson Kobolds, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Crimson Kobolds
+Plains x23
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Crimson Kobolds.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Crimson Kobolds.Power = 0
+? Bot1.Battlefield.Crimson Kobolds.Toughness = 1
+? Bot1.Battlefield.Crimson Kobolds.Keywords = (absent)
+? Bot1.Battlefield.Crimson Kobolds.Colors = Red
+? Bot1.Battlefield.Crimson Kobolds.Types = Creature
+? Bot1.Battlefield.Crimson Kobolds.Subtypes = Kobold
+? Bot1.Battlefield.Crimson Kobolds.Supertypes = (absent)
+? Bot1.Battlefield.Crimson Kobolds.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

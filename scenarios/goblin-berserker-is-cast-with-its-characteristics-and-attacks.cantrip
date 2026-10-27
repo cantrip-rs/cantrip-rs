@@ -1,0 +1,33 @@
+# Goblin Berserker, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Haste (CR 702.10b): it attacks the turn it comes under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus x2
+Goblin Berserker
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Berserker.Cast
+Bot1.Pass
+Bot1.Attack(Goblin Berserker > Bot2)
+[T2 Bot2.End]
+? Bot1.Battlefield.Goblin Berserker.Power = 2
+? Bot1.Battlefield.Goblin Berserker.Toughness = 2
+? Bot1.Battlefield.Goblin Berserker.Keywords = FirstStrike; Haste
+? Bot1.Battlefield.Goblin Berserker.Colors = Red
+? Bot1.Battlefield.Goblin Berserker.Types = Creature
+? Bot1.Battlefield.Goblin Berserker.Subtypes = Berserker; Goblin
+? Bot1.Battlefield.Goblin Berserker.Supertypes = (absent)
+? Bot1.Battlefield.Goblin Berserker.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Goblin Berserker.Tapped = true

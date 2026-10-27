@@ -1,0 +1,34 @@
+# Bog Tatters, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Bog Tatters
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Bog Tatters.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Bog Tatters.Power = 4
+? Bot1.Battlefield.Bog Tatters.Toughness = 2
+? Bot1.Battlefield.Bog Tatters.Keywords = Swampwalk
+? Bot1.Battlefield.Bog Tatters.Colors = Black
+? Bot1.Battlefield.Bog Tatters.Types = Creature
+? Bot1.Battlefield.Bog Tatters.Subtypes = Wraith
+? Bot1.Battlefield.Bog Tatters.Supertypes = (absent)
+? Bot1.Battlefield.Bog Tatters.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Bog Tatters > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Bog Tatters.Tapped = true

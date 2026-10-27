@@ -1,0 +1,34 @@
+# Ripscale Predator, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Ripscale Predator
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Ripscale Predator.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Ripscale Predator.Power = 6
+? Bot1.Battlefield.Ripscale Predator.Toughness = 5
+? Bot1.Battlefield.Ripscale Predator.Keywords = Menace
+? Bot1.Battlefield.Ripscale Predator.Colors = Red
+? Bot1.Battlefield.Ripscale Predator.Types = Creature
+? Bot1.Battlefield.Ripscale Predator.Subtypes = Dinosaur
+? Bot1.Battlefield.Ripscale Predator.Supertypes = (absent)
+? Bot1.Battlefield.Ripscale Predator.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Ripscale Predator > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Ripscale Predator.Tapped = true

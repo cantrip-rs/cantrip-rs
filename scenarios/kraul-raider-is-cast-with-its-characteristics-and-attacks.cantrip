@@ -1,0 +1,32 @@
+# Kraul Raider, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Kraul Raider
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Kraul Raider.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Kraul Raider.Power = 2
+? Bot1.Battlefield.Kraul Raider.Toughness = 3
+? Bot1.Battlefield.Kraul Raider.Keywords = Menace
+? Bot1.Battlefield.Kraul Raider.Colors = Black
+? Bot1.Battlefield.Kraul Raider.Types = Creature
+? Bot1.Battlefield.Kraul Raider.Subtypes = Insect; Warrior
+? Bot1.Battlefield.Kraul Raider.Supertypes = (absent)
+? Bot1.Battlefield.Kraul Raider.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Kraul Raider > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Kraul Raider.Tapped = true

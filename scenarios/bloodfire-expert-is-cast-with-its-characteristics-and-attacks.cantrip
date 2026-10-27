@@ -1,0 +1,37 @@
+# Bloodfire Expert, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Prowess (CR 702.108a): the Mox Pearl cast first gives it +1/+1 until end of turn.
+
+[Bot1 Deck]
+Black Lotus
+Bloodfire Expert
+Plains x5
+Mox Pearl
+Plains x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Bloodfire Expert.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Bloodfire Expert.Power = 3
+? Bot1.Battlefield.Bloodfire Expert.Toughness = 1
+? Bot1.Battlefield.Bloodfire Expert.Keywords = (absent)
+? Bot1.Battlefield.Bloodfire Expert.Colors = Red
+? Bot1.Battlefield.Bloodfire Expert.Types = Creature
+? Bot1.Battlefield.Bloodfire Expert.Subtypes = Efreet; Monk
+? Bot1.Battlefield.Bloodfire Expert.Supertypes = (absent)
+? Bot1.Battlefield.Bloodfire Expert.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Attack(Bloodfire Expert > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Bloodfire Expert.Tapped = true

@@ -1,0 +1,34 @@
+# Lumengrid Gargoyle, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Lumengrid Gargoyle
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Lumengrid Gargoyle.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Lumengrid Gargoyle.Power = 4
+? Bot1.Battlefield.Lumengrid Gargoyle.Toughness = 4
+? Bot1.Battlefield.Lumengrid Gargoyle.Keywords = Flying
+? Bot1.Battlefield.Lumengrid Gargoyle.Colors = (absent)
+? Bot1.Battlefield.Lumengrid Gargoyle.Types = Artifact; Creature
+? Bot1.Battlefield.Lumengrid Gargoyle.Subtypes = Gargoyle
+? Bot1.Battlefield.Lumengrid Gargoyle.Supertypes = (absent)
+? Bot1.Battlefield.Lumengrid Gargoyle.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Lumengrid Gargoyle > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Lumengrid Gargoyle.Tapped = true

@@ -1,0 +1,37 @@
+# Mistral Singer, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Prowess (CR 702.108a): the Mox Pearl cast first gives it +1/+1 until end of turn.
+
+[Bot1 Deck]
+Black Lotus
+Mistral Singer
+Plains x5
+Mox Pearl
+Plains x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mistral Singer.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Mistral Singer.Power = 2
+? Bot1.Battlefield.Mistral Singer.Toughness = 2
+? Bot1.Battlefield.Mistral Singer.Keywords = Flying
+? Bot1.Battlefield.Mistral Singer.Colors = Blue
+? Bot1.Battlefield.Mistral Singer.Types = Creature
+? Bot1.Battlefield.Mistral Singer.Subtypes = Siren
+? Bot1.Battlefield.Mistral Singer.Supertypes = (absent)
+? Bot1.Battlefield.Mistral Singer.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Attack(Mistral Singer > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Mistral Singer.Tapped = true

@@ -1,0 +1,31 @@
+# Pyromantic Pilgrim, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Haste (CR 702.10b): it attacks the turn it comes under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus
+Pyromantic Pilgrim
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Pyromantic Pilgrim.Cast
+Bot1.Pass
+Bot1.Attack(Pyromantic Pilgrim > Bot2)
+[T2 Bot2.End]
+? Bot1.Battlefield.Pyromantic Pilgrim.Power = 3
+? Bot1.Battlefield.Pyromantic Pilgrim.Toughness = 1
+? Bot1.Battlefield.Pyromantic Pilgrim.Keywords = Haste
+? Bot1.Battlefield.Pyromantic Pilgrim.Colors = Red
+? Bot1.Battlefield.Pyromantic Pilgrim.Types = Creature
+? Bot1.Battlefield.Pyromantic Pilgrim.Subtypes = Human; Wizard
+? Bot1.Battlefield.Pyromantic Pilgrim.Supertypes = (absent)
+? Bot1.Battlefield.Pyromantic Pilgrim.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Pyromantic Pilgrim.Tapped = true

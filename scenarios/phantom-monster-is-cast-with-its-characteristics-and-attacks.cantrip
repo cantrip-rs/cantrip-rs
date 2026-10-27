@@ -1,0 +1,34 @@
+# Phantom Monster, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Phantom Monster
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Phantom Monster.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Phantom Monster.Power = 3
+? Bot1.Battlefield.Phantom Monster.Toughness = 3
+? Bot1.Battlefield.Phantom Monster.Keywords = Flying
+? Bot1.Battlefield.Phantom Monster.Colors = Blue
+? Bot1.Battlefield.Phantom Monster.Types = Creature
+? Bot1.Battlefield.Phantom Monster.Subtypes = Illusion
+? Bot1.Battlefield.Phantom Monster.Supertypes = (absent)
+? Bot1.Battlefield.Phantom Monster.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Phantom Monster > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Phantom Monster.Tapped = true

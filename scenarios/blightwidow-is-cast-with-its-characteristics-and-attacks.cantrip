@@ -1,0 +1,36 @@
+# Blightwidow, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Infect (CR 702.90b): its damage to a player is poison counters, not life loss.
+
+[Bot1 Deck]
+Black Lotus x2
+Blightwidow
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Blightwidow.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Blightwidow.Power = 2
+? Bot1.Battlefield.Blightwidow.Toughness = 4
+? Bot1.Battlefield.Blightwidow.Keywords = Infect; Reach
+? Bot1.Battlefield.Blightwidow.Colors = Green
+? Bot1.Battlefield.Blightwidow.Types = Creature
+? Bot1.Battlefield.Blightwidow.Subtypes = Phyrexian; Spider
+? Bot1.Battlefield.Blightwidow.Supertypes = (absent)
+? Bot1.Battlefield.Blightwidow.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Blightwidow > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Poison = 2
+Bot1.Battlefield.Blightwidow.Tapped = true

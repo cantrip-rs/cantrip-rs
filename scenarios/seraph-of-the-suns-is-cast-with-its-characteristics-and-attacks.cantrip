@@ -1,0 +1,36 @@
+# Seraph of the Suns, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x3
+Seraph of the Suns
+Plains x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#3.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Seraph of the Suns.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Seraph of the Suns.Power = 4
+? Bot1.Battlefield.Seraph of the Suns.Toughness = 4
+? Bot1.Battlefield.Seraph of the Suns.Keywords = Flying; Indestructible
+? Bot1.Battlefield.Seraph of the Suns.Colors = White
+? Bot1.Battlefield.Seraph of the Suns.Types = Creature
+? Bot1.Battlefield.Seraph of the Suns.Subtypes = Angel
+? Bot1.Battlefield.Seraph of the Suns.Supertypes = (absent)
+? Bot1.Battlefield.Seraph of the Suns.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Seraph of the Suns > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Seraph of the Suns.Tapped = true

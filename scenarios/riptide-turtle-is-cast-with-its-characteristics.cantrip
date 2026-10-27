@@ -1,0 +1,31 @@
+# Riptide Turtle, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Flash (CR 702.8a): it is cast in Bot2's main phase, with Bot2 the active player.
+# Defender (CR 702.3b): it doesn't attack.
+
+[Bot1 Deck]
+Black Lotus
+Riptide Turtle
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Riptide Turtle.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Riptide Turtle.Power = 0
+? Bot1.Battlefield.Riptide Turtle.Toughness = 5
+? Bot1.Battlefield.Riptide Turtle.Keywords = Defender; Flash
+? Bot1.Battlefield.Riptide Turtle.Colors = Blue
+? Bot1.Battlefield.Riptide Turtle.Types = Creature
+? Bot1.Battlefield.Riptide Turtle.Subtypes = Turtle
+? Bot1.Battlefield.Riptide Turtle.Supertypes = (absent)
+? Bot1.Battlefield.Riptide Turtle.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

@@ -1,0 +1,35 @@
+# Tempest Drake, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Black Lotus x2
+Tempest Drake
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Tempest Drake.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Tempest Drake.Power = 2
+? Bot1.Battlefield.Tempest Drake.Toughness = 2
+? Bot1.Battlefield.Tempest Drake.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Tempest Drake.Colors = Blue; White
+? Bot1.Battlefield.Tempest Drake.Types = Creature
+? Bot1.Battlefield.Tempest Drake.Subtypes = Drake
+? Bot1.Battlefield.Tempest Drake.Supertypes = (absent)
+? Bot1.Battlefield.Tempest Drake.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Tempest Drake > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Tempest Drake.Tapped = false

@@ -1,0 +1,34 @@
+# Zodiac Tiger, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Zodiac Tiger
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Zodiac Tiger.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Zodiac Tiger.Power = 3
+? Bot1.Battlefield.Zodiac Tiger.Toughness = 4
+? Bot1.Battlefield.Zodiac Tiger.Keywords = Forestwalk
+? Bot1.Battlefield.Zodiac Tiger.Colors = Green
+? Bot1.Battlefield.Zodiac Tiger.Types = Creature
+? Bot1.Battlefield.Zodiac Tiger.Subtypes = Cat
+? Bot1.Battlefield.Zodiac Tiger.Supertypes = (absent)
+? Bot1.Battlefield.Zodiac Tiger.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Zodiac Tiger > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Zodiac Tiger.Tapped = true

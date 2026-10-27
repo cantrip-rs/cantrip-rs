@@ -1,0 +1,32 @@
+# Proven Combatant, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Proven Combatant
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Proven Combatant.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Proven Combatant.Power = 1
+? Bot1.Battlefield.Proven Combatant.Toughness = 1
+? Bot1.Battlefield.Proven Combatant.Keywords = (absent)
+? Bot1.Battlefield.Proven Combatant.Colors = Blue
+? Bot1.Battlefield.Proven Combatant.Types = Creature
+? Bot1.Battlefield.Proven Combatant.Subtypes = Human; Warrior
+? Bot1.Battlefield.Proven Combatant.Supertypes = (absent)
+? Bot1.Battlefield.Proven Combatant.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Proven Combatant > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Proven Combatant.Tapped = true

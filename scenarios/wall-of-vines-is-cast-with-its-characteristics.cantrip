@@ -1,0 +1,29 @@
+# Wall of Vines, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Defender (CR 702.3b): it doesn't attack.
+
+[Bot1 Deck]
+Black Lotus
+Wall of Vines
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wall of Vines.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Wall of Vines.Power = 0
+? Bot1.Battlefield.Wall of Vines.Toughness = 3
+? Bot1.Battlefield.Wall of Vines.Keywords = Defender; Reach
+? Bot1.Battlefield.Wall of Vines.Colors = Green
+? Bot1.Battlefield.Wall of Vines.Types = Creature
+? Bot1.Battlefield.Wall of Vines.Subtypes = Plant; Wall
+? Bot1.Battlefield.Wall of Vines.Supertypes = (absent)
+? Bot1.Battlefield.Wall of Vines.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

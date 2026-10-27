@@ -1,0 +1,33 @@
+# Raging Goblinoids, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Haste (CR 702.10b): it attacks the turn it comes under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus x2
+Raging Goblinoids
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raging Goblinoids.Cast
+Bot1.Pass
+Bot1.Attack(Raging Goblinoids > Bot2)
+[T2 Bot2.End]
+? Bot1.Battlefield.Raging Goblinoids.Power = 5
+? Bot1.Battlefield.Raging Goblinoids.Toughness = 4
+? Bot1.Battlefield.Raging Goblinoids.Keywords = Haste
+? Bot1.Battlefield.Raging Goblinoids.Colors = Red
+? Bot1.Battlefield.Raging Goblinoids.Types = Creature
+? Bot1.Battlefield.Raging Goblinoids.Subtypes = Berserker; Goblin; Villain
+? Bot1.Battlefield.Raging Goblinoids.Supertypes = (absent)
+? Bot1.Battlefield.Raging Goblinoids.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Raging Goblinoids.Tapped = true

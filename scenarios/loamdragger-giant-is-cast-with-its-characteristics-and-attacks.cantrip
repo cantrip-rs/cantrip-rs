@@ -1,0 +1,36 @@
+# Loamdragger Giant, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x3
+Loamdragger Giant
+Plains x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#3.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Loamdragger Giant.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Loamdragger Giant.Power = 7
+? Bot1.Battlefield.Loamdragger Giant.Toughness = 6
+? Bot1.Battlefield.Loamdragger Giant.Keywords = (absent)
+? Bot1.Battlefield.Loamdragger Giant.Colors = Green; Red
+? Bot1.Battlefield.Loamdragger Giant.Types = Creature
+? Bot1.Battlefield.Loamdragger Giant.Subtypes = Giant; Warrior
+? Bot1.Battlefield.Loamdragger Giant.Supertypes = (absent)
+? Bot1.Battlefield.Loamdragger Giant.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Loamdragger Giant > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Loamdragger Giant.Tapped = true

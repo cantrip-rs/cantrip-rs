@@ -1,0 +1,34 @@
+# Rock Badger, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Rock Badger
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Rock Badger.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Rock Badger.Power = 3
+? Bot1.Battlefield.Rock Badger.Toughness = 3
+? Bot1.Battlefield.Rock Badger.Keywords = Mountainwalk
+? Bot1.Battlefield.Rock Badger.Colors = Red
+? Bot1.Battlefield.Rock Badger.Types = Creature
+? Bot1.Battlefield.Rock Badger.Subtypes = Badger; Beast
+? Bot1.Battlefield.Rock Badger.Supertypes = (absent)
+? Bot1.Battlefield.Rock Badger.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Rock Badger > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Rock Badger.Tapped = true

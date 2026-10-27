@@ -1,0 +1,32 @@
+# Field Creeper, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Field Creeper
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Field Creeper.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Field Creeper.Power = 2
+? Bot1.Battlefield.Field Creeper.Toughness = 1
+? Bot1.Battlefield.Field Creeper.Keywords = (absent)
+? Bot1.Battlefield.Field Creeper.Colors = (absent)
+? Bot1.Battlefield.Field Creeper.Types = Artifact; Creature
+? Bot1.Battlefield.Field Creeper.Subtypes = Scarecrow
+? Bot1.Battlefield.Field Creeper.Supertypes = (absent)
+? Bot1.Battlefield.Field Creeper.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Field Creeper > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Field Creeper.Tapped = true

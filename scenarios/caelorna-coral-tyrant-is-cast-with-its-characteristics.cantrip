@@ -1,0 +1,28 @@
+# Caelorna, Coral Tyrant, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Caelorna, Coral Tyrant
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Caelorna, Coral Tyrant.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Caelorna, Coral Tyrant.Power = 0
+? Bot1.Battlefield.Caelorna, Coral Tyrant.Toughness = 8
+? Bot1.Battlefield.Caelorna, Coral Tyrant.Keywords = (absent)
+? Bot1.Battlefield.Caelorna, Coral Tyrant.Colors = Blue
+? Bot1.Battlefield.Caelorna, Coral Tyrant.Types = Creature
+? Bot1.Battlefield.Caelorna, Coral Tyrant.Subtypes = Octopus
+? Bot1.Battlefield.Caelorna, Coral Tyrant.Supertypes = Legendary
+? Bot1.Battlefield.Caelorna, Coral Tyrant.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

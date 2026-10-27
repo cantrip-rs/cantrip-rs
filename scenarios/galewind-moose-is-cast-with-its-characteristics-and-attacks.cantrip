@@ -1,0 +1,37 @@
+# Galewind Moose, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Flash (CR 702.8a): it is cast in Bot2's main phase, with Bot2 the active player.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Black Lotus x2
+Galewind Moose
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Galewind Moose.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Galewind Moose.Power = 6
+? Bot1.Battlefield.Galewind Moose.Toughness = 6
+? Bot1.Battlefield.Galewind Moose.Keywords = Flash; Reach; Trample; Vigilance
+? Bot1.Battlefield.Galewind Moose.Colors = Green
+? Bot1.Battlefield.Galewind Moose.Types = Creature
+? Bot1.Battlefield.Galewind Moose.Subtypes = Elemental; Elk
+? Bot1.Battlefield.Galewind Moose.Supertypes = (absent)
+? Bot1.Battlefield.Galewind Moose.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Galewind Moose > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Galewind Moose.Tapped = false

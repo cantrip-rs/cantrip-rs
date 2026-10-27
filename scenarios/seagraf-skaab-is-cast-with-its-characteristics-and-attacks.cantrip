@@ -1,0 +1,32 @@
+# Seagraf Skaab, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Seagraf Skaab
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Seagraf Skaab.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Seagraf Skaab.Power = 1
+? Bot1.Battlefield.Seagraf Skaab.Toughness = 3
+? Bot1.Battlefield.Seagraf Skaab.Keywords = (absent)
+? Bot1.Battlefield.Seagraf Skaab.Colors = Blue
+? Bot1.Battlefield.Seagraf Skaab.Types = Creature
+? Bot1.Battlefield.Seagraf Skaab.Subtypes = Zombie
+? Bot1.Battlefield.Seagraf Skaab.Supertypes = (absent)
+? Bot1.Battlefield.Seagraf Skaab.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Seagraf Skaab > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Seagraf Skaab.Tapped = true

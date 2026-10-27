@@ -1,0 +1,35 @@
+# Brimstone Dragon, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Haste (CR 702.10b): it attacks the turn it comes under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus x3
+Brimstone Dragon
+Plains x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#3.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Brimstone Dragon.Cast
+Bot1.Pass
+Bot1.Attack(Brimstone Dragon > Bot2)
+[T2 Bot2.End]
+? Bot1.Battlefield.Brimstone Dragon.Power = 6
+? Bot1.Battlefield.Brimstone Dragon.Toughness = 6
+? Bot1.Battlefield.Brimstone Dragon.Keywords = Flying; Haste
+? Bot1.Battlefield.Brimstone Dragon.Colors = Red
+? Bot1.Battlefield.Brimstone Dragon.Types = Creature
+? Bot1.Battlefield.Brimstone Dragon.Subtypes = Dragon
+? Bot1.Battlefield.Brimstone Dragon.Supertypes = (absent)
+? Bot1.Battlefield.Brimstone Dragon.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Brimstone Dragon.Tapped = true

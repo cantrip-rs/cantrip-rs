@@ -1,0 +1,34 @@
+# Havoc Devils, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Havoc Devils
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Havoc Devils.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Havoc Devils.Power = 4
+? Bot1.Battlefield.Havoc Devils.Toughness = 3
+? Bot1.Battlefield.Havoc Devils.Keywords = Trample
+? Bot1.Battlefield.Havoc Devils.Colors = Red
+? Bot1.Battlefield.Havoc Devils.Types = Creature
+? Bot1.Battlefield.Havoc Devils.Subtypes = Devil
+? Bot1.Battlefield.Havoc Devils.Supertypes = (absent)
+? Bot1.Battlefield.Havoc Devils.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Havoc Devils > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Havoc Devils.Tapped = true

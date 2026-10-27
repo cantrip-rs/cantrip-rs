@@ -1,0 +1,34 @@
+# Wishcoin Crab, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Wishcoin Crab
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Wishcoin Crab.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Wishcoin Crab.Power = 2
+? Bot1.Battlefield.Wishcoin Crab.Toughness = 5
+? Bot1.Battlefield.Wishcoin Crab.Keywords = (absent)
+? Bot1.Battlefield.Wishcoin Crab.Colors = Blue
+? Bot1.Battlefield.Wishcoin Crab.Types = Creature
+? Bot1.Battlefield.Wishcoin Crab.Subtypes = Crab
+? Bot1.Battlefield.Wishcoin Crab.Supertypes = (absent)
+? Bot1.Battlefield.Wishcoin Crab.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Wishcoin Crab > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Wishcoin Crab.Tapped = true

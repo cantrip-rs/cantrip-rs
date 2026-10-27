@@ -1,0 +1,34 @@
+# Rotted Hystrix, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Rotted Hystrix
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Rotted Hystrix.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Rotted Hystrix.Power = 3
+? Bot1.Battlefield.Rotted Hystrix.Toughness = 6
+? Bot1.Battlefield.Rotted Hystrix.Keywords = (absent)
+? Bot1.Battlefield.Rotted Hystrix.Colors = Green
+? Bot1.Battlefield.Rotted Hystrix.Types = Creature
+? Bot1.Battlefield.Rotted Hystrix.Subtypes = Beast; Phyrexian
+? Bot1.Battlefield.Rotted Hystrix.Supertypes = (absent)
+? Bot1.Battlefield.Rotted Hystrix.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Rotted Hystrix > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Rotted Hystrix.Tapped = true

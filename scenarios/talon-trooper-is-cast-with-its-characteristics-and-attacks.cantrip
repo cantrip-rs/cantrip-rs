@@ -1,0 +1,34 @@
+# Talon Trooper, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Talon Trooper
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Talon Trooper.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Talon Trooper.Power = 2
+? Bot1.Battlefield.Talon Trooper.Toughness = 3
+? Bot1.Battlefield.Talon Trooper.Keywords = Flying
+? Bot1.Battlefield.Talon Trooper.Colors = Blue; White
+? Bot1.Battlefield.Talon Trooper.Types = Creature
+? Bot1.Battlefield.Talon Trooper.Subtypes = Bird; Scout
+? Bot1.Battlefield.Talon Trooper.Supertypes = (absent)
+? Bot1.Battlefield.Talon Trooper.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Talon Trooper > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Talon Trooper.Tapped = true

@@ -1,0 +1,32 @@
+# Impostor of the Sixth Pride, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Impostor of the Sixth Pride
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Impostor of the Sixth Pride.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Impostor of the Sixth Pride.Power = 3
+? Bot1.Battlefield.Impostor of the Sixth Pride.Toughness = 1
+? Bot1.Battlefield.Impostor of the Sixth Pride.Keywords = Changeling
+? Bot1.Battlefield.Impostor of the Sixth Pride.Colors = White
+? Bot1.Battlefield.Impostor of the Sixth Pride.Types = Creature
+? Bot1.Battlefield.Impostor of the Sixth Pride.Subtypes = (every creature type)
+? Bot1.Battlefield.Impostor of the Sixth Pride.Supertypes = (absent)
+? Bot1.Battlefield.Impostor of the Sixth Pride.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Impostor of the Sixth Pride > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Impostor of the Sixth Pride.Tapped = true

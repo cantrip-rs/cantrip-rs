@@ -1,0 +1,34 @@
+# Nether Horror, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Nether Horror
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Nether Horror.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Nether Horror.Power = 4
+? Bot1.Battlefield.Nether Horror.Toughness = 2
+? Bot1.Battlefield.Nether Horror.Keywords = (absent)
+? Bot1.Battlefield.Nether Horror.Colors = Black
+? Bot1.Battlefield.Nether Horror.Types = Creature
+? Bot1.Battlefield.Nether Horror.Subtypes = Horror
+? Bot1.Battlefield.Nether Horror.Supertypes = (absent)
+? Bot1.Battlefield.Nether Horror.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Nether Horror > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Nether Horror.Tapped = true

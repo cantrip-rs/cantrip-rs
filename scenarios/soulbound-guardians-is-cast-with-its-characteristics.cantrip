@@ -1,0 +1,31 @@
+# Soulbound Guardians, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Defender (CR 702.3b): it doesn't attack.
+
+[Bot1 Deck]
+Black Lotus x2
+Soulbound Guardians
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Soulbound Guardians.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Soulbound Guardians.Power = 4
+? Bot1.Battlefield.Soulbound Guardians.Toughness = 5
+? Bot1.Battlefield.Soulbound Guardians.Keywords = Defender; Flying
+? Bot1.Battlefield.Soulbound Guardians.Colors = White
+? Bot1.Battlefield.Soulbound Guardians.Types = Creature
+? Bot1.Battlefield.Soulbound Guardians.Subtypes = Kor; Spirit
+? Bot1.Battlefield.Soulbound Guardians.Supertypes = (absent)
+? Bot1.Battlefield.Soulbound Guardians.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

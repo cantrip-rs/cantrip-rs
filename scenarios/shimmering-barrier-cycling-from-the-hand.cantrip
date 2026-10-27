@@ -1,0 +1,20 @@
+# Shimmering Barrier's cycling {2} (CR 702.29a): paying it and discarding the card from the hand draws a card, the Mox Jet on top.
+
+[Bot1 Deck]
+Black Lotus
+Shimmering Barrier
+Plains x5
+Mox Jet
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Shimmering Barrier.Activate
+
+[Expect]
+Bot1.Graveyard.Shimmering Barrier.Colors = White
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Mox Jet

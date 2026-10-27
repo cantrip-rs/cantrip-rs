@@ -1,0 +1,32 @@
+# Sabretooth Tiger, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Sabretooth Tiger
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sabretooth Tiger.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Sabretooth Tiger.Power = 2
+? Bot1.Battlefield.Sabretooth Tiger.Toughness = 1
+? Bot1.Battlefield.Sabretooth Tiger.Keywords = FirstStrike
+? Bot1.Battlefield.Sabretooth Tiger.Colors = Red
+? Bot1.Battlefield.Sabretooth Tiger.Types = Creature
+? Bot1.Battlefield.Sabretooth Tiger.Subtypes = Cat
+? Bot1.Battlefield.Sabretooth Tiger.Supertypes = (absent)
+? Bot1.Battlefield.Sabretooth Tiger.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Sabretooth Tiger > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Sabretooth Tiger.Tapped = true

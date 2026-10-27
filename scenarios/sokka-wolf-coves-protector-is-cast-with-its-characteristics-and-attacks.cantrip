@@ -1,0 +1,33 @@
+# Sokka, Wolf Cove's Protector, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Black Lotus
+Sokka, Wolf Cove's Protector
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Sokka, Wolf Cove's Protector.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Sokka, Wolf Cove's Protector.Power = 3
+? Bot1.Battlefield.Sokka, Wolf Cove's Protector.Toughness = 3
+? Bot1.Battlefield.Sokka, Wolf Cove's Protector.Keywords = Vigilance
+? Bot1.Battlefield.Sokka, Wolf Cove's Protector.Colors = White
+? Bot1.Battlefield.Sokka, Wolf Cove's Protector.Types = Creature
+? Bot1.Battlefield.Sokka, Wolf Cove's Protector.Subtypes = Ally; Human; Warrior
+? Bot1.Battlefield.Sokka, Wolf Cove's Protector.Supertypes = Legendary
+? Bot1.Battlefield.Sokka, Wolf Cove's Protector.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Sokka, Wolf Cove's Protector > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Sokka, Wolf Cove's Protector.Tapped = false

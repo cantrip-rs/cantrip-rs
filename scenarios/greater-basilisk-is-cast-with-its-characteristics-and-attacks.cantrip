@@ -1,0 +1,34 @@
+# Greater Basilisk, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Greater Basilisk
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Greater Basilisk.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Greater Basilisk.Power = 3
+? Bot1.Battlefield.Greater Basilisk.Toughness = 5
+? Bot1.Battlefield.Greater Basilisk.Keywords = Deathtouch
+? Bot1.Battlefield.Greater Basilisk.Colors = Green
+? Bot1.Battlefield.Greater Basilisk.Types = Creature
+? Bot1.Battlefield.Greater Basilisk.Subtypes = Basilisk
+? Bot1.Battlefield.Greater Basilisk.Supertypes = (absent)
+? Bot1.Battlefield.Greater Basilisk.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Greater Basilisk > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Greater Basilisk.Tapped = true

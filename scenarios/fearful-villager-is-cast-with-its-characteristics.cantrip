@@ -1,0 +1,39 @@
+# Fearful Villager, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection).
+# Daybound: it became day as it entered (CR 702.145d); Bot2 cast no spells on their turn, so it becomes night in
+# Bot1's next untap step (CR 731.2a), and as it does the permanent transforms to its nightbound face (CR 702.145b).
+
+[Bot1 Deck]
+Black Lotus
+Fearful Villager
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Fearful Villager.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Fearful Villager.Power = 2
+? Bot1.Battlefield.Fearful Villager.Toughness = 3
+? Bot1.Battlefield.Fearful Villager.Keywords = Daybound; Menace
+? Bot1.Battlefield.Fearful Villager.Colors = Red
+? Bot1.Battlefield.Fearful Villager.Types = Creature
+? Bot1.Battlefield.Fearful Villager.Subtypes = Human; Werewolf
+? Bot1.Battlefield.Fearful Villager.Supertypes = (absent)
+? Bot1.Battlefield.Fearful Villager.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Fearsome Werewolf.Power = 4
+Bot1.Battlefield.Fearsome Werewolf.Toughness = 3
+Bot1.Battlefield.Fearsome Werewolf.Keywords = Menace; Nightbound
+Bot1.Battlefield.Fearsome Werewolf.Colors = Red
+Bot1.Battlefield.Fearsome Werewolf.Types = Creature
+Bot1.Battlefield.Fearsome Werewolf.Subtypes = Werewolf
+Bot1.Battlefield.Fearsome Werewolf.Supertypes = (absent)
+Bot1.Battlefield.Fearsome Werewolf.ProtectionFrom = (absent)
+Bot1.Battlefield.Fearsome Werewolf.Transformed = true

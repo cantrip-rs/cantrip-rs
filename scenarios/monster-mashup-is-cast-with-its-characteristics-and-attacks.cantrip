@@ -1,0 +1,34 @@
+# Monster Mashup, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Monster Mashup
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Monster Mashup.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Monster Mashup.Power = 4
+? Bot1.Battlefield.Monster Mashup.Toughness = 3
+? Bot1.Battlefield.Monster Mashup.Keywords = Menace; Reach
+? Bot1.Battlefield.Monster Mashup.Colors = Red
+? Bot1.Battlefield.Monster Mashup.Types = Creature
+? Bot1.Battlefield.Monster Mashup.Subtypes = Fish; Vampire; Werewolf; Zombie
+? Bot1.Battlefield.Monster Mashup.Supertypes = (absent)
+? Bot1.Battlefield.Monster Mashup.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Monster Mashup > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Monster Mashup.Tapped = true

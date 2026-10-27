@@ -1,0 +1,22 @@
+# Timeless Dragon's plainscycling {2} (CR 702.29e): paying it and discarding the card from the hand finds the Plains in the
+# library and puts it into the hand.
+
+[Bot1 Deck]
+Black Lotus
+Timeless Dragon
+Island x5
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Timeless Dragon.Activate(Ability: Plainscycling)
+Bot1.Search(Plains)
+
+[Expect]
+Bot1.Graveyard.Timeless Dragon.Colors = White
+Bot1.Hand = Island; Island; Island; Island; Island; Plains

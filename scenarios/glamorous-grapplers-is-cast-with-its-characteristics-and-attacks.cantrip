@@ -1,0 +1,34 @@
+# Glamorous Grapplers, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Glamorous Grapplers
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Glamorous Grapplers.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Glamorous Grapplers.Power = 3
+? Bot1.Battlefield.Glamorous Grapplers.Toughness = 3
+? Bot1.Battlefield.Glamorous Grapplers.Keywords = Menace
+? Bot1.Battlefield.Glamorous Grapplers.Colors = Black
+? Bot1.Battlefield.Glamorous Grapplers.Types = Creature
+? Bot1.Battlefield.Glamorous Grapplers.Subtypes = Human; Performer; Villain
+? Bot1.Battlefield.Glamorous Grapplers.Supertypes = (absent)
+? Bot1.Battlefield.Glamorous Grapplers.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Glamorous Grapplers > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Glamorous Grapplers.Tapped = true

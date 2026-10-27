@@ -1,0 +1,33 @@
+# Eagle of the Watch, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Black Lotus
+Eagle of the Watch
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Eagle of the Watch.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Eagle of the Watch.Power = 2
+? Bot1.Battlefield.Eagle of the Watch.Toughness = 1
+? Bot1.Battlefield.Eagle of the Watch.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Eagle of the Watch.Colors = White
+? Bot1.Battlefield.Eagle of the Watch.Types = Creature
+? Bot1.Battlefield.Eagle of the Watch.Subtypes = Bird
+? Bot1.Battlefield.Eagle of the Watch.Supertypes = (absent)
+? Bot1.Battlefield.Eagle of the Watch.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Eagle of the Watch > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Eagle of the Watch.Tapped = false

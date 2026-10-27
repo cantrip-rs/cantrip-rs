@@ -1,0 +1,32 @@
+# Sworn Guardian, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Sworn Guardian
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sworn Guardian.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Sworn Guardian.Power = 1
+? Bot1.Battlefield.Sworn Guardian.Toughness = 3
+? Bot1.Battlefield.Sworn Guardian.Keywords = (absent)
+? Bot1.Battlefield.Sworn Guardian.Colors = Blue
+? Bot1.Battlefield.Sworn Guardian.Types = Creature
+? Bot1.Battlefield.Sworn Guardian.Subtypes = Merfolk; Warrior
+? Bot1.Battlefield.Sworn Guardian.Supertypes = (absent)
+? Bot1.Battlefield.Sworn Guardian.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Sworn Guardian > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Sworn Guardian.Tapped = true

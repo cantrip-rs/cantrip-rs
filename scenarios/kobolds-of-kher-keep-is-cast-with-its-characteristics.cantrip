@@ -1,0 +1,25 @@
+# Kobolds of Kher Keep, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Kobolds of Kher Keep
+Plains x23
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Kobolds of Kher Keep.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Kobolds of Kher Keep.Power = 0
+? Bot1.Battlefield.Kobolds of Kher Keep.Toughness = 1
+? Bot1.Battlefield.Kobolds of Kher Keep.Keywords = (absent)
+? Bot1.Battlefield.Kobolds of Kher Keep.Colors = Red
+? Bot1.Battlefield.Kobolds of Kher Keep.Types = Creature
+? Bot1.Battlefield.Kobolds of Kher Keep.Subtypes = Kobold
+? Bot1.Battlefield.Kobolds of Kher Keep.Supertypes = (absent)
+? Bot1.Battlefield.Kobolds of Kher Keep.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

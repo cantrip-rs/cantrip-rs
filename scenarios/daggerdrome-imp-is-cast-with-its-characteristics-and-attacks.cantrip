@@ -1,0 +1,34 @@
+# Daggerdrome Imp, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Lifelink (CR 702.15b): Bot1 gains as much life as it deals.
+
+[Bot1 Deck]
+Black Lotus
+Daggerdrome Imp
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Daggerdrome Imp.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Daggerdrome Imp.Power = 1
+? Bot1.Battlefield.Daggerdrome Imp.Toughness = 1
+? Bot1.Battlefield.Daggerdrome Imp.Keywords = Flying; Lifelink
+? Bot1.Battlefield.Daggerdrome Imp.Colors = Black
+? Bot1.Battlefield.Daggerdrome Imp.Types = Creature
+? Bot1.Battlefield.Daggerdrome Imp.Subtypes = Imp
+? Bot1.Battlefield.Daggerdrome Imp.Supertypes = (absent)
+? Bot1.Battlefield.Daggerdrome Imp.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Daggerdrome Imp > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 21
+Bot1.Battlefield.Daggerdrome Imp.Tapped = true

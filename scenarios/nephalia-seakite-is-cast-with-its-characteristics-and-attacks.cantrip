@@ -1,0 +1,36 @@
+# Nephalia Seakite, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Flash (CR 702.8a): it is cast in Bot2's main phase, with Bot2 the active player.
+
+[Bot1 Deck]
+Black Lotus x2
+Nephalia Seakite
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Nephalia Seakite.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Nephalia Seakite.Power = 2
+? Bot1.Battlefield.Nephalia Seakite.Toughness = 3
+? Bot1.Battlefield.Nephalia Seakite.Keywords = Flash; Flying
+? Bot1.Battlefield.Nephalia Seakite.Colors = Blue
+? Bot1.Battlefield.Nephalia Seakite.Types = Creature
+? Bot1.Battlefield.Nephalia Seakite.Subtypes = Bird
+? Bot1.Battlefield.Nephalia Seakite.Supertypes = (absent)
+? Bot1.Battlefield.Nephalia Seakite.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Nephalia Seakite > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Nephalia Seakite.Tapped = true

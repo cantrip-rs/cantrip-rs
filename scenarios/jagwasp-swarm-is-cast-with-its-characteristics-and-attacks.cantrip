@@ -1,0 +1,34 @@
+# Jagwasp Swarm, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Jagwasp Swarm
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Jagwasp Swarm.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Jagwasp Swarm.Power = 3
+? Bot1.Battlefield.Jagwasp Swarm.Toughness = 2
+? Bot1.Battlefield.Jagwasp Swarm.Keywords = Flying
+? Bot1.Battlefield.Jagwasp Swarm.Colors = Black
+? Bot1.Battlefield.Jagwasp Swarm.Types = Creature
+? Bot1.Battlefield.Jagwasp Swarm.Subtypes = Insect
+? Bot1.Battlefield.Jagwasp Swarm.Supertypes = (absent)
+? Bot1.Battlefield.Jagwasp Swarm.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Jagwasp Swarm > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Jagwasp Swarm.Tapped = true

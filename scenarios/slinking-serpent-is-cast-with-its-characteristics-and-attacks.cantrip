@@ -1,0 +1,34 @@
+# Slinking Serpent, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Slinking Serpent
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Slinking Serpent.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Slinking Serpent.Power = 2
+? Bot1.Battlefield.Slinking Serpent.Toughness = 3
+? Bot1.Battlefield.Slinking Serpent.Keywords = Forestwalk
+? Bot1.Battlefield.Slinking Serpent.Colors = Black; Blue
+? Bot1.Battlefield.Slinking Serpent.Types = Creature
+? Bot1.Battlefield.Slinking Serpent.Subtypes = Serpent
+? Bot1.Battlefield.Slinking Serpent.Supertypes = (absent)
+? Bot1.Battlefield.Slinking Serpent.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Slinking Serpent > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Slinking Serpent.Tapped = true

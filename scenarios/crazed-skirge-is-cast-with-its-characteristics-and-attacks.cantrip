@@ -1,0 +1,33 @@
+# Crazed Skirge, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Haste (CR 702.10b): it attacks the turn it comes under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus x2
+Crazed Skirge
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Crazed Skirge.Cast
+Bot1.Pass
+Bot1.Attack(Crazed Skirge > Bot2)
+[T2 Bot2.End]
+? Bot1.Battlefield.Crazed Skirge.Power = 2
+? Bot1.Battlefield.Crazed Skirge.Toughness = 2
+? Bot1.Battlefield.Crazed Skirge.Keywords = Flying; Haste
+? Bot1.Battlefield.Crazed Skirge.Colors = Black
+? Bot1.Battlefield.Crazed Skirge.Types = Creature
+? Bot1.Battlefield.Crazed Skirge.Subtypes = Imp; Phyrexian
+? Bot1.Battlefield.Crazed Skirge.Supertypes = (absent)
+? Bot1.Battlefield.Crazed Skirge.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Crazed Skirge.Tapped = true

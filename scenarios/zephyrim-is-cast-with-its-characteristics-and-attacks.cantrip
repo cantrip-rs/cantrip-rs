@@ -1,0 +1,35 @@
+# Zephyrim, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Black Lotus x2
+Zephyrim
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Zephyrim.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Zephyrim.Power = 3
+? Bot1.Battlefield.Zephyrim.Toughness = 3
+? Bot1.Battlefield.Zephyrim.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Zephyrim.Colors = White
+? Bot1.Battlefield.Zephyrim.Types = Creature
+? Bot1.Battlefield.Zephyrim.Subtypes = Human; Warrior
+? Bot1.Battlefield.Zephyrim.Supertypes = (absent)
+? Bot1.Battlefield.Zephyrim.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Zephyrim > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Zephyrim.Tapped = false

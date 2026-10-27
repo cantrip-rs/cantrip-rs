@@ -1,0 +1,22 @@
+# Kree Sentinel's basic landcycling {2} (CR 702.29e): paying it and discarding the card from the hand finds the Forest in the
+# library and puts it into the hand.
+
+[Bot1 Deck]
+Black Lotus
+Kree Sentinel
+Plains x5
+Forest
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Kree Sentinel.Activate(Ability: Basic landcycling)
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Graveyard.Kree Sentinel.Colors = Red
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Forest

@@ -1,0 +1,36 @@
+# Cloaked Siren, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Flash (CR 702.8a): it is cast in Bot2's main phase, with Bot2 the active player.
+
+[Bot1 Deck]
+Black Lotus x2
+Cloaked Siren
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Cloaked Siren.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Cloaked Siren.Power = 3
+? Bot1.Battlefield.Cloaked Siren.Toughness = 2
+? Bot1.Battlefield.Cloaked Siren.Keywords = Flash; Flying
+? Bot1.Battlefield.Cloaked Siren.Colors = Blue
+? Bot1.Battlefield.Cloaked Siren.Types = Creature
+? Bot1.Battlefield.Cloaked Siren.Subtypes = Siren
+? Bot1.Battlefield.Cloaked Siren.Supertypes = (absent)
+? Bot1.Battlefield.Cloaked Siren.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Cloaked Siren > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Cloaked Siren.Tapped = true

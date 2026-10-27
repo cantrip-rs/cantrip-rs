@@ -1,0 +1,36 @@
+# Insatiable Harpy, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Lifelink (CR 702.15b): Bot1 gains as much life as it deals.
+
+[Bot1 Deck]
+Black Lotus x2
+Insatiable Harpy
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Insatiable Harpy.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Insatiable Harpy.Power = 2
+? Bot1.Battlefield.Insatiable Harpy.Toughness = 2
+? Bot1.Battlefield.Insatiable Harpy.Keywords = Flying; Lifelink
+? Bot1.Battlefield.Insatiable Harpy.Colors = Black
+? Bot1.Battlefield.Insatiable Harpy.Types = Creature
+? Bot1.Battlefield.Insatiable Harpy.Subtypes = Harpy
+? Bot1.Battlefield.Insatiable Harpy.Supertypes = (absent)
+? Bot1.Battlefield.Insatiable Harpy.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Insatiable Harpy > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Battlefield.Insatiable Harpy.Tapped = true

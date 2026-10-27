@@ -1,0 +1,32 @@
+# Cursed Minotaur, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Cursed Minotaur
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cursed Minotaur.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Cursed Minotaur.Power = 3
+? Bot1.Battlefield.Cursed Minotaur.Toughness = 2
+? Bot1.Battlefield.Cursed Minotaur.Keywords = Menace
+? Bot1.Battlefield.Cursed Minotaur.Colors = Black
+? Bot1.Battlefield.Cursed Minotaur.Types = Creature
+? Bot1.Battlefield.Cursed Minotaur.Subtypes = Minotaur; Zombie
+? Bot1.Battlefield.Cursed Minotaur.Supertypes = (absent)
+? Bot1.Battlefield.Cursed Minotaur.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Cursed Minotaur > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Cursed Minotaur.Tapped = true

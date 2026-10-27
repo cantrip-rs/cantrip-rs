@@ -1,0 +1,29 @@
+# Fortified Rampart, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Defender (CR 702.3b): it doesn't attack.
+
+[Bot1 Deck]
+Black Lotus
+Fortified Rampart
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Fortified Rampart.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Fortified Rampart.Power = 0
+? Bot1.Battlefield.Fortified Rampart.Toughness = 6
+? Bot1.Battlefield.Fortified Rampart.Keywords = Defender
+? Bot1.Battlefield.Fortified Rampart.Colors = White
+? Bot1.Battlefield.Fortified Rampart.Types = Creature
+? Bot1.Battlefield.Fortified Rampart.Subtypes = Wall
+? Bot1.Battlefield.Fortified Rampart.Supertypes = (absent)
+? Bot1.Battlefield.Fortified Rampart.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

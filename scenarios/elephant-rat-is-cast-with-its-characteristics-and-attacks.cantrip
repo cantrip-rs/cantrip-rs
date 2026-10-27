@@ -1,0 +1,32 @@
+# Elephant-Rat, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Elephant-Rat
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Elephant-Rat.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Elephant-Rat.Power = 1
+? Bot1.Battlefield.Elephant-Rat.Toughness = 3
+? Bot1.Battlefield.Elephant-Rat.Keywords = Menace
+? Bot1.Battlefield.Elephant-Rat.Colors = Black
+? Bot1.Battlefield.Elephant-Rat.Types = Creature
+? Bot1.Battlefield.Elephant-Rat.Subtypes = Elephant; Rat
+? Bot1.Battlefield.Elephant-Rat.Supertypes = (absent)
+? Bot1.Battlefield.Elephant-Rat.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Elephant-Rat > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Elephant-Rat.Tapped = true

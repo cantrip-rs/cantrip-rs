@@ -1,0 +1,29 @@
+# Guardians of Meletis, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Defender (CR 702.3b): it doesn't attack.
+
+[Bot1 Deck]
+Black Lotus
+Guardians of Meletis
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Guardians of Meletis.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Guardians of Meletis.Power = 0
+? Bot1.Battlefield.Guardians of Meletis.Toughness = 6
+? Bot1.Battlefield.Guardians of Meletis.Keywords = Defender
+? Bot1.Battlefield.Guardians of Meletis.Colors = (absent)
+? Bot1.Battlefield.Guardians of Meletis.Types = Artifact; Creature
+? Bot1.Battlefield.Guardians of Meletis.Subtypes = Golem
+? Bot1.Battlefield.Guardians of Meletis.Supertypes = (absent)
+? Bot1.Battlefield.Guardians of Meletis.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

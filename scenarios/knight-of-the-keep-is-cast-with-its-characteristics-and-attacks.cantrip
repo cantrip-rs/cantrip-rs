@@ -1,0 +1,32 @@
+# Knight of the Keep, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Knight of the Keep
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Knight of the Keep.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Knight of the Keep.Power = 3
+? Bot1.Battlefield.Knight of the Keep.Toughness = 2
+? Bot1.Battlefield.Knight of the Keep.Keywords = (absent)
+? Bot1.Battlefield.Knight of the Keep.Colors = White
+? Bot1.Battlefield.Knight of the Keep.Types = Creature
+? Bot1.Battlefield.Knight of the Keep.Subtypes = Human; Knight
+? Bot1.Battlefield.Knight of the Keep.Supertypes = (absent)
+? Bot1.Battlefield.Knight of the Keep.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Knight of the Keep > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Knight of the Keep.Tapped = true

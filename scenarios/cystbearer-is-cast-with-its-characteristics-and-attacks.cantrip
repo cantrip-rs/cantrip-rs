@@ -1,0 +1,34 @@
+# Cystbearer, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Infect (CR 702.90b): its damage to a player is poison counters, not life loss.
+
+[Bot1 Deck]
+Black Lotus
+Cystbearer
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Cystbearer.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Cystbearer.Power = 2
+? Bot1.Battlefield.Cystbearer.Toughness = 3
+? Bot1.Battlefield.Cystbearer.Keywords = Infect
+? Bot1.Battlefield.Cystbearer.Colors = Green
+? Bot1.Battlefield.Cystbearer.Types = Creature
+? Bot1.Battlefield.Cystbearer.Subtypes = Beast; Phyrexian
+? Bot1.Battlefield.Cystbearer.Supertypes = (absent)
+? Bot1.Battlefield.Cystbearer.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Cystbearer > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Poison = 2
+Bot1.Battlefield.Cystbearer.Tapped = true

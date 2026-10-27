@@ -1,0 +1,22 @@
+# Force of Savagery, a 8/0 french vanilla creature: cast with Black Lotus mana, it is put into
+# Bot1's graveyard as a state-based action as soon as it enters, its toughness 0 (CR 704.5f).
+
+[Bot1 Deck]
+Black Lotus
+Force of Savagery
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Force of Savagery.Cast
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Force of Savagery = (absent)
+Bot1.Graveyard.Force of Savagery.Power = 8
+Bot1.Graveyard.Force of Savagery.Toughness = 0

@@ -1,0 +1,28 @@
+# Aegis Turtle, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Aegis Turtle
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Aegis Turtle.Power = 0
+? Bot1.Battlefield.Aegis Turtle.Toughness = 5
+? Bot1.Battlefield.Aegis Turtle.Keywords = (absent)
+? Bot1.Battlefield.Aegis Turtle.Colors = Blue
+? Bot1.Battlefield.Aegis Turtle.Types = Creature
+? Bot1.Battlefield.Aegis Turtle.Subtypes = Turtle
+? Bot1.Battlefield.Aegis Turtle.Supertypes = (absent)
+? Bot1.Battlefield.Aegis Turtle.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

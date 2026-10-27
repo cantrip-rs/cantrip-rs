@@ -1,0 +1,36 @@
+# Sivitri Scarzam, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x3
+Sivitri Scarzam
+Plains x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#3.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sivitri Scarzam.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Sivitri Scarzam.Power = 6
+? Bot1.Battlefield.Sivitri Scarzam.Toughness = 4
+? Bot1.Battlefield.Sivitri Scarzam.Keywords = (absent)
+? Bot1.Battlefield.Sivitri Scarzam.Colors = Black; Blue
+? Bot1.Battlefield.Sivitri Scarzam.Types = Creature
+? Bot1.Battlefield.Sivitri Scarzam.Subtypes = Human
+? Bot1.Battlefield.Sivitri Scarzam.Supertypes = Legendary
+? Bot1.Battlefield.Sivitri Scarzam.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Sivitri Scarzam > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Sivitri Scarzam.Tapped = true

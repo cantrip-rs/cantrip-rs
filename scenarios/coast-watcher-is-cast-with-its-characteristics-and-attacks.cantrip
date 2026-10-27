@@ -1,0 +1,32 @@
+# Coast Watcher, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Coast Watcher
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Coast Watcher.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Coast Watcher.Power = 1
+? Bot1.Battlefield.Coast Watcher.Toughness = 1
+? Bot1.Battlefield.Coast Watcher.Keywords = Flying
+? Bot1.Battlefield.Coast Watcher.Colors = Blue
+? Bot1.Battlefield.Coast Watcher.Types = Creature
+? Bot1.Battlefield.Coast Watcher.Subtypes = Bird; Soldier
+? Bot1.Battlefield.Coast Watcher.Supertypes = (absent)
+? Bot1.Battlefield.Coast Watcher.ProtectionFrom = Green
+[T3 Bot1.Main1]
+Bot1.Attack(Coast Watcher > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Coast Watcher.Tapped = true

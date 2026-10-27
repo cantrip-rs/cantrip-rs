@@ -1,0 +1,32 @@
+# Moriok Reaver, a vanilla (no rules text) creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Moriok Reaver
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Moriok Reaver.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Moriok Reaver.Power = 3
+? Bot1.Battlefield.Moriok Reaver.Toughness = 2
+? Bot1.Battlefield.Moriok Reaver.Keywords = (absent)
+? Bot1.Battlefield.Moriok Reaver.Colors = Black
+? Bot1.Battlefield.Moriok Reaver.Types = Creature
+? Bot1.Battlefield.Moriok Reaver.Subtypes = Human; Warrior
+? Bot1.Battlefield.Moriok Reaver.Supertypes = (absent)
+? Bot1.Battlefield.Moriok Reaver.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Moriok Reaver > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Moriok Reaver.Tapped = true

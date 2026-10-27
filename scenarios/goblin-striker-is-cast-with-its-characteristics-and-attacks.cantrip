@@ -1,0 +1,31 @@
+# Goblin Striker, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Haste (CR 702.10b): it attacks the turn it comes under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus
+Goblin Striker
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Striker.Cast
+Bot1.Pass
+Bot1.Attack(Goblin Striker > Bot2)
+[T2 Bot2.End]
+? Bot1.Battlefield.Goblin Striker.Power = 1
+? Bot1.Battlefield.Goblin Striker.Toughness = 1
+? Bot1.Battlefield.Goblin Striker.Keywords = FirstStrike; Haste
+? Bot1.Battlefield.Goblin Striker.Colors = Red
+? Bot1.Battlefield.Goblin Striker.Types = Creature
+? Bot1.Battlefield.Goblin Striker.Subtypes = Berserker; Goblin
+? Bot1.Battlefield.Goblin Striker.Supertypes = (absent)
+? Bot1.Battlefield.Goblin Striker.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Goblin Striker.Tapped = true

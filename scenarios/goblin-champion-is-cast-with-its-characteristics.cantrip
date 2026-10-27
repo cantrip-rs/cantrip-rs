@@ -1,0 +1,28 @@
+# Goblin Champion, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Goblin Champion
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Champion.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Goblin Champion.Power = 0
+? Bot1.Battlefield.Goblin Champion.Toughness = 1
+? Bot1.Battlefield.Goblin Champion.Keywords = Haste
+? Bot1.Battlefield.Goblin Champion.Colors = Red
+? Bot1.Battlefield.Goblin Champion.Types = Creature
+? Bot1.Battlefield.Goblin Champion.Subtypes = Goblin; Warrior
+? Bot1.Battlefield.Goblin Champion.Supertypes = (absent)
+? Bot1.Battlefield.Goblin Champion.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20

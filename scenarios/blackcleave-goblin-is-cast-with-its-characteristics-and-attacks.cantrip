@@ -1,0 +1,35 @@
+# Blackcleave Goblin, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Haste (CR 702.10b): it attacks the turn it comes under Bot1's control.
+# Infect (CR 702.90b): its damage to a player is poison counters, not life loss.
+
+[Bot1 Deck]
+Black Lotus x2
+Blackcleave Goblin
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Blackcleave Goblin.Cast
+Bot1.Pass
+Bot1.Attack(Blackcleave Goblin > Bot2)
+[T2 Bot2.End]
+? Bot1.Battlefield.Blackcleave Goblin.Power = 2
+? Bot1.Battlefield.Blackcleave Goblin.Toughness = 1
+? Bot1.Battlefield.Blackcleave Goblin.Keywords = Haste; Infect
+? Bot1.Battlefield.Blackcleave Goblin.Colors = Black
+? Bot1.Battlefield.Blackcleave Goblin.Types = Creature
+? Bot1.Battlefield.Blackcleave Goblin.Subtypes = Goblin; Phyrexian; Zombie
+? Bot1.Battlefield.Blackcleave Goblin.Supertypes = (absent)
+? Bot1.Battlefield.Blackcleave Goblin.ProtectionFrom = (absent)
+
+[Expect]
+Bot2.Life = 20
+Bot2.Poison = 2
+Bot1.Battlefield.Blackcleave Goblin.Tapped = true
