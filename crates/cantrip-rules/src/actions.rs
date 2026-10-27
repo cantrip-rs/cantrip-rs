@@ -2472,7 +2472,7 @@ fn added_life_payable(cx: &Cx, a: &Available, player: PlayerId, card: ObjectId, 
 /// back face, a bestowed Aura, a half): what the cost changes judge it as (CR 715.4, 720.3a, 709.3, 712.8a).
 fn face_of(cx: &Cx, card: ObjectId, def: &CardDef) -> Option<CardId> {
     let whole = cx.card(cx.s().obj(card).card);
-    let faces = [whole.adventure, whole.omen, whole.back, whole.bestow, whole.split.map(|s| s.0), whole.split.map(|s| s.1)];
+    let faces = [whole.adventure, whole.omen, whole.back, whole.bestow, whole.split.map(|s| s.0), whole.split.map(|s| s.1), cantrip_api::prototyped_face(whole)];
     faces.into_iter().flatten().find(|&f| std::ptr::eq(f, def)).map(|f| cx.card_id(f))
 }
 
@@ -5272,9 +5272,10 @@ fn cast_limit(cx: &Cx) -> Option<u8> {
         .min()
 }
 
-/// The faces a card may be cast as (CR 709.3, 715.3, 720.3, 712.8a), each with the way number a cast of it has: a split
-/// card's two halves (the card itself is never cast), otherwise the card and its Adventure or Omen and its back face, if it
-/// has them.
+/// The faces a card may be cast as (CR 709.3, 715.3, 720.3, 712.8a, 718.3), each with the way number a cast of it has: a split
+/// card's two halves (the card itself is never cast), otherwise the card and its Adventure or Omen, its back face and its
+/// prototyped face, if it has them. Prototype functions wherever the card could be cast from (the ruling), the face it
+/// casts judged alone (CR 718.3a).
 fn faces_to_cast(def: &'static CardDef) -> impl Iterator<Item = (u8, &'static CardDef)> {
     let (split, whole) = (def.split, def.split.is_none());
     [
@@ -5284,6 +5285,7 @@ fn faces_to_cast(def: &'static CardDef) -> impl Iterator<Item = (u8, &'static Ca
         def.adventure.filter(|_| whole).map(|a| (WAY_ADVENTURE, a)),
         def.omen.filter(|_| whole).map(|o| (WAY_OMEN, o)),
         def.back.filter(|b| whole && b.has_cost).map(|b| (WAY_BACK_FACE, b)),
+        cantrip_api::prototyped_face(def).filter(|_| whole).map(|f| (WAY_PROTOTYPE, f)),
     ]
     .into_iter()
     .flatten()
@@ -5467,7 +5469,7 @@ fn own_speed(def: &CardDef) -> bool {
 
 /// The face of the card `whole` a cast by the way `way` casts (CR 709.3, 715.3, 720.3, 712.8a, 702.103b): an inset face (an
 /// Adventure, an Omen), a back face, a bestowed Aura, one half of a split card, the face-down values a morph or disguise
-/// casts it as (CR 702.37c, 702.168b, 708.4), or the card itself.
+/// casts it as (CR 702.37c, 702.168b, 708.4), the prototyped face (CR 718.3b), or the card itself.
 fn cast_face(whole: &'static CardDef, way: u8) -> &'static CardDef {
     if let Some(values) = face_down_values_of(whole, way) {
         return values;
@@ -5479,7 +5481,8 @@ fn cast_face(whole: &'static CardDef, way: u8) -> &'static CardDef {
         (WAY_SPLIT_RIGHT, Some((_, right))) => Some(right),
         _ => None,
     };
-    whole.inset_face(way).or(back).or(bestow).or(half).unwrap_or(whole)
+    let prototyped = if way == WAY_PROTOTYPE { cantrip_api::prototyped_face(whole) } else { None };
+    whole.inset_face(way).or(back).or(bestow).or(half).or(prototyped).unwrap_or(whole)
 }
 
 /// The face-down values the card `whole` cast by its own way `way` is cast as, where that way casts it face down (CR 702.37c,
@@ -6511,15 +6514,18 @@ fn permission_named(state: &GameState, source: ObjectId, g: Grant) -> bool {
 fn describe_cast(cards: &CardTable, state: &GameState, log: &[Record], option: &ActionOption, source: ObjectId) -> std::borrow::Cow<'static, str> {
     let whole = cards.get(state.obj(source).card);
     let face = cast_face(whole, option.index);
+    // A face other than the card itself is named by its name, the prototyped face, which has the card's, by its keyword
+    // line (CR 718.3): "Prototype {2}{R} — 3/2".
+    let face_label = if option.index == WAY_PROTOTYPE { whole.prototype.map_or(face.name, |p| p.text) } else { face.name };
     // A text about a face other than the card itself names the face: "Stomp: Without paying its mana cost".
-    let of_face = |text: &str| if std::ptr::eq(face, whole) { text.to_string() } else { format!("{}: {text}", face.name) };
+    let of_face = |text: &str| if std::ptr::eq(face, whole) { text.to_string() } else { format!("{face_label}: {text}") };
     // A way a permanent gives names the face it casts wherever the card could be cast as more than one: "Unholy Annex: Once
     // during each of your turns, ...".
     let of_way = |text: &'static str| -> std::borrow::Cow<'static, str> {
-        if std::ptr::eq(face, whole) && whole.inset_faces().next().is_none() && !whole.back.is_some_and(|b| b.has_cost) {
+        if std::ptr::eq(face, whole) && whole.inset_faces().next().is_none() && !whole.back.is_some_and(|b| b.has_cost) && whole.prototype.is_none() {
             text.into()
         } else {
-            format!("{}: {text}", face.name).into()
+            format!("{face_label}: {text}").into()
         }
     };
     let reader = crate::resolve::Reader { cards, state, events: log };
@@ -6535,7 +6541,7 @@ fn describe_cast(cards: &CardTable, state: &GameState, log: &[Record], option: &
         };
     }
     let printed = describe_way(cards, state, log, option, source);
-    let face_cost = option.index == 0 || matches!(option.index, WAY_ADVENTURE | WAY_OMEN | WAY_SPLIT_LEFT | WAY_SPLIT_RIGHT | WAY_BACK_FACE);
+    let face_cost = option.index == 0 || matches!(option.index, WAY_ADVENTURE | WAY_OMEN | WAY_SPLIT_LEFT | WAY_SPLIT_RIGHT | WAY_BACK_FACE | WAY_PROTOTYPE);
     match (through, option.granted_by) {
         (None, _) | (_, None) => printed.into(),
         // A way a permanent gives (CR 118.9): its words, after the face it casts where the card has more than one.
@@ -6547,7 +6553,7 @@ fn describe_cast(cards: &CardTable, state: &GameState, log: &[Record], option: &
                 let life = life_for_mana_value(face).life;
                 return match option.index {
                     0 => format!("Cast by paying {life} life instead").into(),
-                    _ => format!("{}: cast by paying {life} life instead", face.name).into(),
+                    _ => format!("{face_label}: cast by paying {life} life instead").into(),
                 };
             }
             if option.index == 0 && (route.terms.instead.is_some() || route.terms.flashback) {
@@ -6595,6 +6601,7 @@ fn describe_way(cards: &CardTable, state: &GameState, log: &[Record], option: &A
         }
         _ if option.index == WAY_BACK_FACE => cards.get(state.obj(source).card).back.map_or("", |b| b.name),
         ActionKind::CastSpell if option.index == WAY_BESTOW => "Bestow",
+        ActionKind::CastSpell if option.index == WAY_PROTOTYPE => cards.get(state.obj(source).card).prototype.map_or("", |p| p.text),
         ActionKind::CastSpell if option.index == WAY_SPLIT_LEFT => cards.get(state.obj(source).card).split.map_or("", |h| h.0.name),
         ActionKind::CastSpell if option.index == WAY_SPLIT_RIGHT => cards.get(state.obj(source).card).split.map_or("", |h| h.1.name),
         ActionKind::CastSpell if option.index == WAY_OVERLOAD => "Overload",
@@ -6893,6 +6900,8 @@ fn cast(
     let back = if way == WAY_BACK_FACE || way == WAY_TRANSFORMED { whole.back } else { None };
     // Cast bestowed (CR 702.103b), it is an Aura spell and nothing else on the stack.
     let bestow = if way == WAY_BESTOW { whole.bestow } else { None };
+    // Cast prototyped (CR 718.3b), it has only its alternative mana cost, power and toughness, and their color, on the stack.
+    let prototyped = if way == WAY_PROTOTYPE { cantrip_api::prototyped_face(whole) } else { None };
     // Cast as one half of a split card (CR 709.3), it is that half and nothing else on the stack.
     let half = match (way, whole.split) {
         (WAY_SPLIT_LEFT, Some((left, _))) => Some(left),
@@ -6918,7 +6927,8 @@ fn cast(
             }
         }
         (0, _) => Cost::mana(def.cost),
-        (WAY_ADVENTURE | WAY_OMEN | WAY_BACK_FACE | WAY_SPLIT_LEFT | WAY_SPLIT_RIGHT, _) => Cost::mana(def.cost),
+        // Casting it prototyped is no alternative cost (the ruling): its mana cost is the prototyped face's (CR 718.3b).
+        (WAY_ADVENTURE | WAY_OMEN | WAY_BACK_FACE | WAY_SPLIT_LEFT | WAY_SPLIT_RIGHT | WAY_PROTOTYPE, _) => Cost::mana(def.cost),
         // Both halves' mana costs (CR 702.102c), which the whole card's combined cost is (CR 709.4b).
         (WAY_FUSED, _) => Cost::mana(def.cost),
         // Bestow is an alternative cost (CR 702.103a, 118.9): the Aura keeps the card's mana cost.
@@ -6979,7 +6989,7 @@ fn cast(
     if !cx.s().permissions.is_empty() {
         cx.st().permissions_retain(|p| p.card != card);
     }
-    if inset.is_some() || back.is_some() || bestow.is_some() || half.is_some() {
+    if inset.is_some() || back.is_some() || bestow.is_some() || half.is_some() || prototyped.is_some() {
         cx.st().update_obj(spell, |o| {
             o.copy = Some(Copiable::of(face))
         });

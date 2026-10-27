@@ -325,7 +325,7 @@ fn is_plain(card: &Card) -> bool {
     if card.get("part") == Some(&Value::Bool(true)) {
         return true;
     }
-    if ["backFace", "adventure", "omen", "prepare", "halves", "split"].iter().any(|k| card.contains_key(*k)) {
+    if ["backFace", "adventure", "omen", "prepare", "halves", "split", "prototype"].iter().any(|k| card.contains_key(*k)) {
         return false;
     }
     without_reminder(&str_of(card, "oracleText")).split('\n').filter(|l| !l.trim().is_empty()).all(|line| {
@@ -459,6 +459,23 @@ fn face_fields(card: &Card, is_back: bool, source: &str, known: &HashSet<String>
     }
     if flag("aftermath") {
         fields.push("    aftermath: true,".into());
+    }
+    // Prototype (CR 702.160a, 718.1): the inset frame's mana cost, power and toughness, `"prototype": {"manaCost": "{2}{R}",
+    // "power": 3, "toughness": 2}`. Its keyword line must be the Oracle text's, so the two can't disagree.
+    if let Some(prototype) = card.get("prototype") {
+        let p = prototype.as_object().unwrap_or_else(|| panic!("{source}: prototype is an object: {{\"manaCost\", \"power\", \"toughness\"}}"));
+        let mana = p.get("manaCost").and_then(Value::as_str).unwrap_or_else(|| panic!("{source}: prototype has a manaCost"));
+        let stat = |key: &str| match p.get(key) {
+            Some(Value::Number(n)) if n.is_i64() => n.as_i64().unwrap(),
+            _ => panic!("{source}: prototype's {key} is a number"),
+        };
+        let (power, toughness) = (stat("power"), stat("toughness"));
+        let line = format!("Prototype {mana} \u{2014} {power}/{toughness}");
+        let printed = without_reminder(&str_of(card, "oracleText"));
+        if !printed.lines().any(|l| l.trim() == line) {
+            panic!("{source}: {name}'s Oracle text has no line \"{line}\" for its prototype block (CR 718.1)");
+        }
+        fields.push(format!("    prototype: Some(Prototype {{ cost: {}, power: {power}, toughness: {toughness}, text: {} }}),", cost(mana)?, rust_str(&line)));
     }
     if !is_back {
         if let Some(back) = card.get("backFace").and_then(Value::as_object) {

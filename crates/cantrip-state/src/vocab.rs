@@ -73,6 +73,10 @@ pub const DOOR_RIGHT: u8 = 2;
 /// How a card is cast transformed (CR 712.11a): a Siege's "cast it transformed", as a way number.
 pub const WAY_TRANSFORMED: u8 = 252;
 
+/// How a prototype card is cast prototyped (CR 702.160a, 718.3), as a way number: as its prototyped face, for that face's mana
+/// cost or an alternative cost (the ruling: casting it prototyped is no alternative cost).
+pub const WAY_PROTOTYPE: u8 = 248;
+
 /// What made an action possible beyond the rules every player has (CR 601.3, 305.1, 118.9, 113.6): the object, and
 /// which of its abilities. A permanent's static ability (Lurrus of the Dream-Den's way from the graveyard, Bolas's Citadel's
 /// and Mystic Forge's rules for the top of the library, Primal Prayers' alternative cost), the spell or ability whose effect

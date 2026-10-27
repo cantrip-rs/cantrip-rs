@@ -2782,6 +2782,14 @@ pub struct CardDef {
     /// The bestow cost (CR 702.103a), with `bestow`: an alternative cost (CR 118.9), paid rather than the mana cost, so the
     /// bestowed spell's mana value is still its mana cost's (CR 202.3).
     pub bestow_cost: ManaCost,
+    /// Prototype (CR 702.160a, 718): the second set of mana cost, power and toughness its inset frame prints, which it has
+    /// on the stack and on the battlefield when cast prototyped (CR 718.2-718.3), and in no other case (CR 718.4). From the
+    /// content key `prototype`; the core makes the prototyped face (`prototyped_face`) and casts it by `WAY_PROTOTYPE`.
+    pub prototype: Option<Prototype>,
+    /// It is a prototype card's prototyped face (`prototyped_face`, CR 718.3b): what a prototyped spell and the permanent it
+    /// becomes are, and a copy of either (CR 718.3c-d). Its `prototype` is its card's: the existence of the alternative
+    /// characteristics is part of the copiable values (CR 718.2a).
+    pub prototyped: bool,
     /// Rebound (CR 702.88a): cast from its caster's hand and resolving, it is exiled instead of put into the
     /// graveyard, and its controller may cast it from exile at the beginning of their next upkeep (`REBOUND_ABILITY`).
     pub rebound: bool,
@@ -3109,6 +3117,8 @@ impl CardDef {
         omen: None,
         bestow: None,
         bestow_cost: ManaCost::ZERO,
+        prototype: None,
+        prototyped: false,
         rebound: false,
         paradigm: None,
         play_rules: &[],
@@ -3625,6 +3635,48 @@ impl TurnUp {
     }
 }
 
+/// A prototype card's alternative characteristics (CR 718.1-718.2): the mana cost, power and toughness in its inset frame,
+/// and the keyword line as printed ("Prototype {2}{R} \u{2014} 3/2"), which names the cast.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Prototype {
+    pub cost: ManaCost,
+    pub power: i16,
+    pub toughness: i16,
+    pub text: &'static str,
+}
+
+/// The prototyped face of `whole`, a prototype card (CR 718.3b, 718.5): the card itself - its name, types, abilities, every
+/// rule it prints - with only its alternative mana cost, power and toughness, and the colors that mana cost gives (CR
+/// 105.2; with a color indicator's as well, as "also" in CR 718.3b reads). None for a card without prototype.
+///
+/// Made from the card, never written beside it, so it can't differ from it in anything else (CR 718.5): one definition for
+/// each prototype card for the life of the process, which every card table registers with its card. A prototyped spell and
+/// the permanent it becomes have it as their copiable values (`Obj::copy`, CR 718.2a), so a copy of either copies it (CR
+/// 718.3c-d), and an object that leaves the stack or the battlefield is a new object without it (CR 718.4, 400.7).
+pub fn prototyped_face(whole: &'static CardDef) -> Option<&'static CardDef> {
+    use std::sync::{Mutex, OnceLock};
+    static FACES: OnceLock<Mutex<Vec<(usize, &'static CardDef)>>> = OnceLock::new();
+    let prototype = whole.prototype.filter(|_| !whole.prototyped)?;
+    let key = whole as *const CardDef as usize;
+    let faces = FACES.get_or_init(|| Mutex::new(Vec::new()));
+    let mut faces = faces.lock().unwrap_or_else(|e| e.into_inner());
+    if let Some(&(_, face)) = faces.iter().find(|(k, _)| *k == key) {
+        return Some(face);
+    }
+    let colors = whole.colors.map(|indicator| ColorSet(indicator.0 | prototype.cost.colors().0));
+    let face: &'static CardDef = Box::leak(Box::new(CardDef {
+        cost: prototype.cost,
+        has_cost: true,
+        colors,
+        power: Some(prototype.power),
+        toughness: Some(prototype.toughness),
+        prototyped: true,
+        ..*whole
+    }));
+    faces.push((key, face));
+    Some(face)
+}
+
 impl CardTable {
     pub fn new(cards: impl IntoIterator<Item = &'static CardDef>) -> CardTable {
         let mut cards: Vec<&'static CardDef> = cards.into_iter().collect();
@@ -3637,6 +3689,9 @@ impl CardTable {
         // A back face is registered with its front (the first of a name wins, as for every card).
         let backs: Vec<&'static CardDef> = cards.iter().filter_map(|c| c.back).collect();
         cards.extend(backs);
+        // A prototype card's prototyped face (CR 718.3b), after its card so that a lookup by name finds the card.
+        let prototyped: Vec<&'static CardDef> = cards.iter().filter_map(|&c| prototyped_face(c)).collect();
+        cards.extend(prototyped);
         // Stable, and the first of a name kept: a card's own file comes before its characteristics-only definition.
         cards.sort_by(|a, b| a.name.cmp(b.name));
         // Only the same definition twice is merged: two tokens of one name (a Germ, a Golem) are two definitions,

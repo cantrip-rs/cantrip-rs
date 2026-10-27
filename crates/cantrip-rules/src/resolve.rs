@@ -497,8 +497,10 @@ pub fn resolve(cx: &mut Cx) -> R<Flow> {
                     controller: item.controller,
                     tapped: attacking,
                     counters: [0; CounterKind::COUNT],
-                    // A bestowed spell is the Aura it was cast as, until it ceases to be bestowed (CR 702.103b).
-                    copy: if item.way == WAY_BESTOW { cx.s().obj(item.object).copy } else { None },
+                    // A bestowed spell is the Aura it was cast as, until it ceases to be bestowed (CR 702.103b); a prototyped
+                    // spell becomes a permanent with the same prototyped characteristics (CR 718.3b), which are its copiable
+                    // values (CR 718.2a) until it leaves the battlefield (CR 718.4).
+                    copy: if item.way == WAY_BESTOW || item.way == WAY_PROTOTYPE { cx.s().obj(item.object).copy } else { None },
                     prepared: false,
                     chosen_color: None,
                     chosen_subtype: None,

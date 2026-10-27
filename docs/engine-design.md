@@ -474,6 +474,16 @@ only the candidates the host's verdict on those picked says may be added.
   activation's is (`special_action_whole_cost`: "Morph—Pay 5 life", a discard, a return), X announced and kept on the
   permanent (702.37f); megamorph's +1/+1 counter is put by `ops::turn_face_up_as` before `TurnedFaceUp` is recorded
   (702.37b, 708.11), only for that action.
+- **A prototype card cast prototyped (702.160a, 718)** is cast as its prototyped face (`WAY_PROTOTYPE`): the card with only
+  the inset frame's mana cost, power and toughness, and the color that mana cost gives (718.3b). The values are the card's
+  content (`"prototype": {"manaCost", "power", "toughness"}`, `CardDef::prototype`); the face is made from the card by
+  `cantrip_api::prototyped_face` (one leaked definition per card for the process, `CardDef::prototyped` set), never written
+  beside it, so it has every rule the card prints (718.5), and every card table registers it after its card. It is one of
+  `faces_to_cast`, so it is offered wherever the card could be cast and judged as that face (718.3a), for its own mana cost or
+  any alternative cost (the ruling: casting it prototyped is no alternative cost). The spell keeps the face as its copiable
+  values (`Obj::copy`) and so does the permanent it becomes (`resolve`, as a bestowed spell does), so a copy of either is
+  prototyped (718.2a, 718.3c-d); anywhere else, and once it leaves the stack or the battlefield, it is a new object with its
+  normal characteristics (718.4, 400.7). `cantrip_mechanics::prototype::prototyped` asks whether an object is.
 - **A card exiled face down has no characteristics (406.3a)**: `layers::chars` gives a face-down card outside the
   battlefield and the stack (`Obj::face_down_card`) those of `intrinsic::NO_CHARACTERISTICS` - no name, no mana value, no
   types, no abilities - for every reader, so nothing that counts or matches cards in exile sees what it is, and its abilities
