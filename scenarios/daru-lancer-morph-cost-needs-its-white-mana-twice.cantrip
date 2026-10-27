@@ -1,0 +1,51 @@
+# Daru Lancer's morph {2}{W}{W} (CR 702.37e, 107.4): Black Lotus pays the {3} to cast it face down. On turn 3 Bot1 has 4
+# sources that could pay its 4 mana but only 1 white among them (it needs 2), so turning it face up is not offered; once the
+# white source arrives it is, paid by exactly 4 sources, the pool ends empty, and it is Daru Lancer face up.
+
+[Bot1 Deck]
+Black Lotus
+Daru Lancer
+Island
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Daru Lancer.Cast(Ability: Morph)
+? Stack..FaceDown = true
+? Stack..FaceDownName = Daru Lancer
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Battlefield.Daru Lancer.Activate(Ability: morph cost)
+? Bot1.Mana = 
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Daru Lancer.Power = 3

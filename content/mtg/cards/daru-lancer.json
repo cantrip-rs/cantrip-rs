@@ -1,0 +1,11 @@
+{
+  "name": "Daru Lancer",
+  "manaCost": "{4}{W}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "First strike\nMorph {2}{W}{W} (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

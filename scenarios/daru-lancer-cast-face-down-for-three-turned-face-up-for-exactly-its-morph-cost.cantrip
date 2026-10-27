@@ -1,0 +1,51 @@
+# Daru Lancer's morph {2}{W}{W} (CR 702.37a, 702.37e): Black Lotus pays the {3} to cast it face down, and the pool is empty
+# right after; it is a nameless 2/2 with no abilities (CR 708.2). Turned face up on turn 1 (a special action, CR 116.2b) with
+# exactly the 4 mana its morph cost asks, tapped from 4 sources, the pool ends empty; with one source fewer (3) the action is
+# not offered. Face up it is Daru Lancer, a 3/4 with FirstStrike.
+
+[Bot1 Deck]
+Black Lotus
+Daru Lancer
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x13
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Daru Lancer.Cast(Ability: Morph)
+? Stack..FaceDown = true
+? Stack..FaceDownName = Daru Lancer
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+! Bot1.Battlefield.#1.Activate(Ability: morph cost; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Battlefield.Daru Lancer.Activate(Ability: morph cost)
+? Bot1.Mana = 
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Daru Lancer.Power = 3
+Bot1.Battlefield.Daru Lancer.Toughness = 4
+Bot1.Battlefield.Daru Lancer.Keywords = FirstStrike; Morph
