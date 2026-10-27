@@ -1,0 +1,46 @@
+# CR 702.37a, 702.37e, 118.3, 701.9a. Putrid Raptor is cast face down for exactly {3} (Black Lotus's three mana, the pool empty right
+# after): a nameless 2/2. "Morph-Discard a Zombie card": with only Islands in hand the turn-up is refused; on turn 3 Bot1 draws
+# a Zombie (Walking Corpse) and may turn it up, discarding the Corpse (an Island in hand is not a Zombie card and stays). It is then
+# the card, a 4/4 with morph, and cannot be turned up again without another Zombie card.
+
+[Bot1 Deck]
+Black Lotus
+Putrid Raptor
+Swamp
+Island x4
+Walking Corpse
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Putrid Raptor.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+? Bot1.Mana = 
+? Stack..FaceDown = true
+? Stack..FaceDownName = Putrid Raptor
+? Stack..ManaValue = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield..FaceDown = true
+? Bot1.Battlefield..FaceDownName = Putrid Raptor
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = (absent)
+! Bot1.Battlefield.#1.Activate(Ability: morph cost)
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+Bot1.Choose(Walking Corpse)
+! Bot1.Battlefield.Putrid Raptor.Activate(Ability: morph cost)
+
+[Expect]
+Bot1.Graveyard = Walking Corpse; Black Lotus
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Putrid Raptor.Power = 4
+Bot1.Battlefield.Putrid Raptor.Toughness = 4
+Bot1.Battlefield.Putrid Raptor.Keywords = Morph
+Bot1.Battlefield.Putrid Raptor.FaceDown = (absent)

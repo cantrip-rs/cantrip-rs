@@ -1,0 +1,43 @@
+# CR 612.2, 708.8, 702.37e; Putrid Raptor's ruling: a text-changing effect that changes creature types may be used on it while
+# it is face down, and it changes the kind of card its morph cost discards. Artificial Evolution turns the face-down Raptor's
+# Zombie into Goblin: turning it up then refuses Walking Corpse (a Zombie) and discards Raging Goblin, and the Raptor is a Goblin
+# Dinosaur Beast once face up (the effect still applies, CR 708.8).
+
+[Bot1 Deck]
+Black Lotus
+Putrid Raptor
+Swamp
+Island
+Walking Corpse
+Raging Goblin
+Artificial Evolution
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Putrid Raptor.Cast(Ability: Morph)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Artificial Evolution.Cast(Bot1.Battlefield.#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Zombie)
+Bot1.Modes(Goblin)
+? Bot1.Battlefield..FaceDown = true
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+! Bot1.Choose(Walking Corpse)
+Bot1.Choose(Raging Goblin)
+
+[Expect]
+Bot1.Graveyard = Raging Goblin; Artificial Evolution; Black Lotus
+Bot1.Hand.Walking Corpse.Power = 2
+Bot1.Battlefield.Putrid Raptor.Subtypes = Beast; Dinosaur; Goblin
+Bot1.Battlefield.Putrid Raptor.FaceDown = (absent)
