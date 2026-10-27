@@ -79,6 +79,7 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-140](#ki-140-every-pending-effect-tooltip-says-it-ends-with-the-turn-if-no-spell-is-cast) | Every pending-effect tooltip says it ends with the turn if no spell is cast | Pri-2 | Open |
 | [KI-141](#ki-141-a-creature-type-chosen-past-the-encoders-128-tokens-makes-no-training-sample) | A creature type chosen past the encoder's 128 tokens makes no training sample | Pri-3 | Open |
 | [KI-142](#ki-142-the-ai-encoder-cannot-tell-apart-options-that-differ-only-by-their-grant-or-a-companion-from-exiling-to-pay) | The AI encoder cannot tell apart options that differ only by their grant, or a companion from exiling to pay | Pri-3 | Open |
+| [KI-143](#ki-143-a-scenario-check-right-after-an-activation-can-read-the-pool-before-its-payment-finishes) | A scenario check right after an activation can read the pool before its payment finishes | Pri-2 | Open |
 
 ## Issues
 
@@ -583,3 +584,16 @@ and the search plays each out. A fix adds the grants and the companion to the en
 
 **Scenarios.** `kili-the-resourceful-the-first-equip-each-turn-is-free-with-an-enduring-story` (the factoring's round
 trip, `crates/cantrip-ai/tests/factoring.rs`).
+
+### KI-143: A scenario check right after an activation can read the pool before its payment finishes
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-2 | Open | harness (`crates/cantrip-script`) | 2026-10-27, review of the morph and disguise cards |
+
+**Notes.** A `? Bot1.Mana =` line placed right after an `Activate(..)` line whose cost the pool could pay in more than
+one way (`Spend: R, G` for a hybrid cost) runs at the payment's pending `AssignMana` question, before the default answers
+finish paying, so it reads the whole pool (`{B}{B}{B}{B}{R}{G}`) rather than what is left. The scenarios of Riftburst
+Hellion put a refusal line between the activation and the check, which lands at the next priority after the payment.
+A fix either finishes the pending payment before a `?` check runs or refuses a check made mid-payment, so a check can't
+silently read a state no player would see.
