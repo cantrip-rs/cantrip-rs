@@ -14,7 +14,6 @@
 //! - `known_by` and `ZoneView::known`: the AI's `Knowledge` (cantrip-ai) folds who has been shown which hidden card
 //!   from the history, but the host does not use it yet, so only a reveal of this step crosses (as an object).
 //! - `SpellTargetView::text` is empty and `still_legal` always true.
-//! - Morph and disguise (CR 702.37, 702.168) are not in the engine yet; manifested and cloaked permanents are.
 //! - `PlayerSummaryView::counters`: not filled.
 
 use std::collections::HashSet;
@@ -1387,11 +1386,12 @@ impl<'a> Projector<'a> {
         }
 
         if obj.face_down {
-            // Face down (CR 708.2a, 406.3): what it is face down goes to every seat, a nameless 2/2 on the battlefield and no
-            // characteristics at all in exile; what it really is only to a seat that may look at it, its controller
-            // for a permanent (CR 708.5) and those who saw it go there for a card (CR 406.3).
+            // Face down (CR 708.2a, 406.3): what it is face down goes to every seat, a nameless 2/2 on the battlefield and on
+            // the stack (a spell cast face down by morph or disguise, CR 708.4) and no characteristics at all in exile; what it
+            // really is only to a seat that may look at it, its controller for a permanent or a spell (CR 708.5) and those who
+            // saw it go there for a card (CR 406.3).
             let looks = knows_face(s, self.viewer, id);
-            if !on_battlefield {
+            if !on_battlefield && !zone.is(ZoneKind::Stack) {
                 view.name = String::new();
                 view.mana_cost = String::new();
                 view.mana_value = 0;

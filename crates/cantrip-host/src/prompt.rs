@@ -131,12 +131,15 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
     let source = o.source.map(|s| handles.handle(s)).unwrap_or(ViewHandle::NONE);
     let mut m = ActionOptionMessage::new(action_kind_view(o.kind), source);
     m.ability_index = i32::from(o.index);
-    // A face-down permanent's own ability that turns it face up (CR 701.40b, 701.58b).
+    // A face-down permanent's special action that turns it face up (CR 116.2b): for its mana cost (CR 701.40b, 701.58b), or
+    // for the morph or disguise cost it would have face up (CR 702.37e, 702.168d), that way's keyword line naming the cost.
+    let mut turn_up_way = None;
     if o.kind == ActionKind::ActivateAbility
         && let Some(s) = o.source
-        && game.chars(s).abilities().nth(o.index as usize).is_some_and(|a| game.cards.turns_face_up(a))
+        && let Some(by) = game.chars(s).abilities().nth(o.index as usize).and_then(|a| game.cards.turn_up(a))
     {
         m.kind = ActionKindView::TurnFaceUp;
+        turn_up_way = game.turn_up_way(game.state.obj(s), by);
     }
     // A Room's locked door is unlocked by paying its mana cost (CR 709.5e): its own kind, saying which door and what it costs.
     if o.kind == ActionKind::ActivateAbility
@@ -159,6 +162,11 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
     m.description = describe(game.cards, &game.state, &game.log, o).to_string();
     if m.kind == ActionKindView::UnlockDoor {
         m.description = format!("Unlock {} {}", m.spell_name, m.cost_text);
+    }
+    if let Some(way) = turn_up_way {
+        m.description = format!("Turn face up: {}", way.text);
+        m.cost_text = cost_text_of(&way.turn_up, "");
+        m.has_x = way.turn_up.mana.x > 0;
     }
     if let Some(mana) = o.mana {
         m.produces = vec![mana_view(mana)];
@@ -233,6 +241,12 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
                 def.ways.get(o.index as usize - 1).map_or(def.cost, |w| w.cost.mana)
             };
             m.has_x = cost.x > 0;
+            // Cast face down by morph or disguise (CR 702.37c, 702.168b): for {3}, as a 2/2 face-down creature spell its row
+            // says it is, beside the way's keyword line in `description`.
+            if o.index > 0 && def.ways.get(o.index as usize - 1).is_some_and(|w| w.kind.face_down()) && granted.is_none() && alternative.is_none() {
+                m.cast_face_down = true;
+                m.cost_text = cost.to_string();
+            }
             // A way whose cost returns tapped permanents, chosen once the mana is paid (web-slinging, CR 702.188a, 601.2g-h).
             let way = match granted {
                 Some((way, _)) => Some(way),
@@ -273,7 +287,7 @@ fn option_message(game: &Game, handles: &mut HandleSpace, o: &ActionOption) -> A
         ActionKind::ActivateAbility => {
             let ability = game.chars(src).abilities().nth(o.index as usize).map(|a| game.cards.ability(a));
             if let Some(AbilityDef::Activated(d)) = ability {
-                m.life_cost = i32::try_from(d.cost.life).unwrap_or(i32::MAX);
+                m.life_cost = i32::try_from(turn_up_way.map_or(d.cost.life, |w| w.turn_up.life)).unwrap_or(i32::MAX);
                 // A cost that returns tapped permanents, chosen once the mana is paid (CR 602.2b, 601.2g-h: Urban Retreat).
                 m.tapped_after_mana = !d.is_mana_ability() && d.cost.permanents.is_some_and(|p| p.tapped);
                 // A special action whose cost a static ability changes (CR 116.2k, 118.7: "plotting cards from your hand costs

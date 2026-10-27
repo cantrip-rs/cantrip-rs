@@ -744,6 +744,11 @@ pub struct ActionOptionMessage {
     /// web-slinging's "return a tapped creature you control", Urban Retreat's), so one tapped for mana while paying may be
     /// one of them, and a payment that leaves too few tapped is taken back.
     pub tapped_after_mana: bool,
+    /// For a cast: it casts the card face down, by morph or disguise (CR 702.37c, 702.168b), as a 2/2 face-down creature
+    /// spell for {3} (`cost_text`); `description` is the keyword line ("Morph {4}{W}"). Its controller alone sees what it is
+    /// on the stack (CR 708.5).
+    #[serde(default)]
+    pub cast_face_down: bool,
 }
 
 impl ActionOptionMessage {
@@ -781,6 +786,7 @@ impl ActionOptionMessage {
             without_paying_mana_cost: false,
             tapped_after_mana: false,
             pays_nothing: false,
+            cast_face_down: false,
         }
     }
 }

@@ -416,8 +416,12 @@ impl Teller<'_> {
                 let existing = self.handles.existing(*old);
                 self.mentioned.insert(*old);
                 self.mentioned.insert(*new);
+                // A card turned face down as it moves (cast by morph or disguise, CR 708.4; manifested or cloaked from a hand,
+                // CR 701.40a, 701.58a) is a new object no seat that may not look at it can tell from the others it could
+                // have been (CR 708.5, 708.6): a handle it held for the card is not carried over.
+                let hidden = !knows_face(&self.game.state, self.viewer, *new);
                 let object = if to_seen || self.extra.contains(new) {
-                    if existing.is_none() {
+                    if existing.is_none() || hidden {
                         self.handles.handle(*new)
                     } else {
                         self.handles.rebind(*old, *new);
