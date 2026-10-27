@@ -1,0 +1,49 @@
+# Crude Rampart's ruling (2004-10-04): if it attacks face down and is turned face up during combat, that does not remove it
+# from combat - defender only stops it being declared as an attacker (CR 702.3b), and turning face up changes only its
+# characteristics, never its combat status (CR 708.8, 506.4). On turn 3 the face-down 2/2 attacks; in the declare attackers
+# step five Moxes pay the {4}{W} to turn it up, and the 4/5 with defender stays attacking and deals 4.
+
+[Bot1 Deck]
+Black Lotus
+Crude Rampart
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Crude Rampart.Cast(Ability: Morph)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(#1 > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+? Combat.Attackers = Crude Rampart > Bot2
+? Bot1.Battlefield.Crude Rampart.Keywords = Defender; Morph
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
