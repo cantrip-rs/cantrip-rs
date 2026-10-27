@@ -1,0 +1,64 @@
+# Sagu Mauler face down has no abilities (CR 708.2), so no hexproof: Bot2's Lightning Bolt may target the nameless 2/2. In
+# response Bot1 turns it face up for {3}{G}{U} (a special action, CR 702.37e, 116.2b); the Bolt still targets the same
+# permanent (CR 708.8), but it now has hexproof (CR 702.11b), so the target is illegal on resolution and the Bolt does
+# nothing (CR 608.2b) - the 6/6 is undamaged. Face up, Bot2's second Bolt can't target it at all.
+
+[Bot1 Deck]
+Black Lotus
+Sagu Mauler
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sagu Mauler.Cast(Ability: Morph)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.#1)
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.#1.Activate(Ability: morph cost)
+? Bot1.Battlefield.Sagu Mauler.Keywords = Hexproof; Morph; Trample
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Lightning Bolt
+? Bot1.Battlefield.Sagu Mauler.Damage = 0
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sagu Mauler)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Sagu Mauler.Damage = 0
+Bot1.Battlefield.Sagu Mauler.Power = 6

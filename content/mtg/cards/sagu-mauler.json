@@ -1,0 +1,12 @@
+{
+  "name": "Sagu Mauler",
+  "manaCost": "{4}{G}{U}",
+  "type": "Creature — Beast",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Trample, hexproof\nMorph {3}{G}{U} (You may cast this card face down as a 2/2 creature for {3}. Turn it face up any time for its morph cost.)",
+  "keywords": [
+    "Trample",
+    "Hexproof"
+  ]
+}
