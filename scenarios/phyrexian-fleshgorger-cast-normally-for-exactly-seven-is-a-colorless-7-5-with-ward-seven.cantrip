@@ -1,0 +1,65 @@
+# Phyrexian Fleshgorger cast without prototyping (CR 718.3, 718.4): its mana cost is {7}. Six mana from sources with no black offers
+# neither the normal cast nor the prototype ({1}{B}{B}); a black seventh offers the normal cast, and paying it taps all seven
+# mana and leaves the pool empty. It is a colorless 7/5 with mana value 7, menace and lifelink, not prototyped. Its "Ward -
+# Pay life equal to this creature's power" (CR 702.21a) reads that 7: Bot2's Unsummon on it resolves once Bot2 pays 7 life.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mana Crypt
+Mox Jet
+Phyrexian Fleshgorger
+Island x20
+
+[Bot2 Deck]
+Island
+Unsummon
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+! Bot1.Hand.Phyrexian Fleshgorger.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Phyrexian Fleshgorger.Cast
+? Stack.Phyrexian Fleshgorger.ManaValue = 7
+? Stack.Phyrexian Fleshgorger.Prototyped = (absent)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Phyrexian Fleshgorger.Power = 7
+? Bot1.Battlefield.Phyrexian Fleshgorger.Toughness = 5
+? Bot1.Battlefield.Phyrexian Fleshgorger.ManaValue = 7
+? Bot1.Battlefield.Phyrexian Fleshgorger.Colors = (absent)
+? Bot1.Battlefield.Phyrexian Fleshgorger.Prototyped = (absent)
+? Bot1.Battlefield.Phyrexian Fleshgorger.Keywords = Lifelink; Menace
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Unsummon.Cast(Bot1.Battlefield.Phyrexian Fleshgorger)
+Bot2.Accept
+Bot1.Pass
+Bot2.Pass
+[Bot2.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Phyrexian Fleshgorger = (absent)
+Bot1.Hand.Phyrexian Fleshgorger.Power = 7

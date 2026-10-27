@@ -1,0 +1,40 @@
+# The prototyped Phyrexian Fleshgorger's ward (CR 702.21a): Bot2 does not pay the 3 life (its power as prototyped), so
+# Unsummon is countered, Bot2 keeps its 20 life and the 3/3 stays on the battlefield, still prototyped.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Phyrexian Fleshgorger
+Island x20
+
+[Bot2 Deck]
+Island
+Unsummon
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Phyrexian Fleshgorger.Cast(Ability: Prototype)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Unsummon.Cast(Bot1.Battlefield.Phyrexian Fleshgorger)
+Bot1.Pass
+Bot2.Pass
+[Bot2.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Unsummon
+Bot1.Battlefield.Phyrexian Fleshgorger.Prototyped = true
+Bot1.Battlefield.Phyrexian Fleshgorger.Power = 3

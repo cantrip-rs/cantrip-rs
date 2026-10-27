@@ -1,0 +1,38 @@
+# Phyrexian Fleshgorger's Prototype {1}{B}{B} (CR 702.160a, 107.4): with four sources of which only one makes black the
+# prototyped cast is not offered; once a second black source arrives it is, and the permanent is black.
+
+[Bot1 Deck]
+Swamp
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Phyrexian Fleshgorger
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+! Bot1.Hand.Phyrexian Fleshgorger.Cast(Ability: Prototype; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Phyrexian Fleshgorger.Cast(Ability: Prototype)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Phyrexian Fleshgorger.Colors = Black
+Bot1.Battlefield.Mox Sapphire.Tapped = false

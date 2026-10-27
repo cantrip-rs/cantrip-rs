@@ -1,0 +1,55 @@
+# Phyrexian Fleshgorger prototyped (CR 702.160a, 718.3b): Prototype {1}{B}{B} costs exactly three mana - with Swamp and Mox
+# Jet (both black) the prototyped cast is not offered, with a third source it is, and paying it taps all three and leaves the
+# pool empty. The spell has mana value 3 and is prototyped; the permanent is a black 3/3 with mana value 3, menace and
+# lifelink. Its ward reads its prototyped power (CR 702.21a, 718.3b): Bot2 pays 3 life, not 7, to let Unsummon resolve, and the
+# card in Bot1's hand is its normal self again, a colorless 7/5 (CR 718.4).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Phyrexian Fleshgorger
+Island x20
+
+[Bot2 Deck]
+Island
+Unsummon
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Hand.Phyrexian Fleshgorger.Cast(Ability: Prototype; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Phyrexian Fleshgorger.Cast(Ability: Prototype)
+? Stack.Phyrexian Fleshgorger.ManaValue = 3
+? Stack.Phyrexian Fleshgorger.Prototyped = true
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Phyrexian Fleshgorger.Power = 3
+? Bot1.Battlefield.Phyrexian Fleshgorger.Toughness = 3
+? Bot1.Battlefield.Phyrexian Fleshgorger.Colors = Black
+? Bot1.Battlefield.Phyrexian Fleshgorger.ManaValue = 3
+? Bot1.Battlefield.Phyrexian Fleshgorger.Prototyped = true
+? Bot1.Battlefield.Phyrexian Fleshgorger.Keywords = Lifelink; Menace
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Unsummon.Cast(Bot1.Battlefield.Phyrexian Fleshgorger)
+Bot2.Accept
+Bot1.Pass
+Bot2.Pass
+[Bot2.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Phyrexian Fleshgorger = (absent)
+Bot1.Hand.Phyrexian Fleshgorger.Power = 7
+Bot1.Hand.Phyrexian Fleshgorger.Toughness = 5
+Bot1.Hand.Phyrexian Fleshgorger.Colors =
