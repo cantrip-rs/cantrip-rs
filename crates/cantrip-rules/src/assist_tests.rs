@@ -244,3 +244,58 @@ fn the_caster_pays_with_no_mana_ability_once_paying_begins() {
     assert!(!options.iter().any(|o| o.source == Some(yours)), "no mana ability once paying has begun");
     assert!(options.iter().any(|o| o.kind == ActionKind::CancelCasting));
 }
+
+/// CR 702.132a: "another player" - the offer counts on what a player other than the caster could pay, never the caster's own
+/// mana a second time: {G}{4} of yours and nothing of theirs is one short of {5}{G}.
+#[test]
+fn the_offer_never_counts_the_casters_own_mana_as_help() {
+    let mut g = game();
+    let card = put(&mut g, &BINOX, YOU, Zone::hand(YOU));
+    add(&mut g, YOU, Mana::G, 1);
+    add(&mut g, YOU, Mana::C, 4);
+    assert!(cast_option(&mut g, card).is_none());
+}
+
+/// CR 106.6: the assisting player's mana is spent on the spell, so what that mana does to the spell it is spent on, it does:
+/// mana that gives a creature spell haste (Arena of Glory's) gives the assisted creature spell haste.
+#[test]
+fn what_the_assisting_players_mana_does_to_a_spell_it_does_to_this_one() {
+    let mut g = game();
+    let card = put(&mut g, &BINOX, YOU, Zone::hand(YOU));
+    add(&mut g, YOU, Mana::G, 1);
+    add(&mut g, YOU, Mana::C, 4);
+    let source = g.state.zone(Zone::library(THEM))[0];
+    g.state.add_mana(THEM, Mana::R, 1, source, Some(ManaRestriction::GainsHaste), false);
+    let option = cast_option(&mut g, card).expect("the cast");
+    answer(&mut g, Answer::Act(Action::of(&option)));
+    answer(&mut g, Answer::Yes);
+    answer(&mut g, Answer::Announce(1));
+    pay_rest(&mut g);
+    let spell = g.state.stack.last().expect("the spell").object;
+    assert_eq!(g.state.player(THEM).pool.total(), 0, "their {{R}} paid {{1}}");
+    assert!(g.state.obj(spell).marks.gains_haste, "the mana they spent gives it haste");
+}
+
+/// CR 702.132a: the assisting player pays what they announced; the spell is not theirs to take back while they pay it.
+#[test]
+fn the_assisting_player_cannot_take_back_the_spell_while_paying() {
+    let mut g = game();
+    let card = put(&mut g, &BINOX, YOU, Zone::hand(YOU));
+    add(&mut g, YOU, Mana::G, 1);
+    add(&mut g, YOU, Mana::C, 4);
+    add(&mut g, THEM, Mana::R, 1);
+    add(&mut g, THEM, Mana::U, 1);
+    let option = cast_option(&mut g, card).expect("the cast");
+    answer(&mut g, Answer::Act(Action::of(&option)));
+    answer(&mut g, Answer::Yes);
+    answer(&mut g, Answer::Announce(1));
+    // Which of their two mana pays the {1} is theirs to choose: a question, with no way to cancel.
+    let r = next(&mut g);
+    assert_eq!(r.player, THEM);
+    let RequestKind::PayCosts { options, assist: AssistStep::HelperPays, .. } = &r.kind else { panic!("{:?}", r.kind) };
+    assert!(!options.iter().any(|o| o.kind == ActionKind::CancelCasting), "no CancelCasting offered");
+    assert!(g.answer(r.id, r.player, Answer::Cancel).is_err(), "and none taken");
+    pay_rest(&mut g);
+    assert_eq!(g.state.player(THEM).pool.total(), 1);
+    assert!(g.state.stack.last().is_some_and(|i| g.state.obj(i.object).controller == YOU));
+}
