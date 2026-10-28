@@ -52,6 +52,8 @@ mod surge_freerunning_tests;
 #[cfg(test)]
 mod control_at_once_tests;
 #[cfg(test)]
+mod can_gain_life_tests;
+#[cfg(test)]
 mod return_at_once_tests;
 #[cfg(test)]
 mod linked_text_tests;
@@ -2159,6 +2161,10 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn gain_life(&mut self, player: PlayerId, amount: i32) {
         ops::change_life(self, player, amount);
+    }
+
+    fn can_gain_life(&self, player: PlayerId) -> bool {
+        !static_rules::cant_gain_life(self, self.cards(), player) && !ops::life_total_cant_change(self.s(), player)
     }
 
     fn lose_life(&mut self, player: PlayerId, amount: i32) {

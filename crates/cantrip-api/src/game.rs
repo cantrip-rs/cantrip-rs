@@ -975,6 +975,9 @@ pub trait Game: Query {
     /// `player` gains life (CR 119.3): none, if an effect or a static ability says they can't (CR 119.7,
     /// `EffectKind::CantGainLife`, `CardDef::cant_gain_life`).
     fn gain_life(&mut self, player: PlayerId, amount: i32);
+    /// Whether `player` could gain life now (CR 119.7): not while an effect says they can't gain life, nor while their life
+    /// total can't change. "A cost that involves having that player gain life can't be paid" while it is false.
+    fn can_gain_life(&self, player: PlayerId) -> bool;
     fn lose_life(&mut self, player: PlayerId, amount: i32);
     /// "`player`'s life total becomes `total`" (CR 119.5): they gain or lose the difference, so a player who can't gain life
     /// keeps a total lower than `total` (CR 119.7).
