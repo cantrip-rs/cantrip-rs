@@ -1,0 +1,42 @@
+# Quicksilver, Brash Blur: "If Quicksilver is in your opening hand, you may begin the game with him on the battlefield" (CR 103.6a).
+# Bot1 accepts. He did not enter this turn (he was there before the game began), so his power-up {4}{R} is not reduced
+# (CR 702.193a): Sol Ring and Black Lotus pay exactly {4}{R}, and the pool is empty. It puts a +1/+1 counter and a double
+# strike counter on him, 2/2 double strike with haste: he attacks on turn 1 and Bot2 takes 2 + 2 (16).
+
+[Bot1 Deck]
+Quicksilver, Brash Blur
+Mox Jet
+Sol Ring
+Black Lotus
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Accept
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Quicksilver, Brash Blur.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Quicksilver, Brash Blur.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Quicksilver, Brash Blur.Counters.DoubleStrike = 1
+? Bot1.Battlefield.Quicksilver, Brash Blur.Keywords = DoubleStrike; Haste
+Bot1.Attack(Quicksilver, Brash Blur > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Quicksilver, Brash Blur.Power = 2

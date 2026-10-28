@@ -1,0 +1,11 @@
+{
+  "name": "Quicksilver, Brash Blur",
+  "manaCost": "{R}",
+  "type": "Legendary Creature — Mutant Hero",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "If Quicksilver, Brash Blur is in your opening hand, you may begin the game with him on the battlefield.\nHaste\nPower-up — {4}{R}: Put a +1/+1 counter and a double strike counter on Quicksilver. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "keywords": [
+    "Haste"
+  ]
+}

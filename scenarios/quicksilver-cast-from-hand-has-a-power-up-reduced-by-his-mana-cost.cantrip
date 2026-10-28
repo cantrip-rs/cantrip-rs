@@ -1,0 +1,39 @@
+# Quicksilver, Brash Blur: Bot1 declines to begin with him on the battlefield and casts him for {R} on turn 1. He entered this turn, so
+# his power-up costs {4}{R} less his mana cost {R}: {4} (CR 702.193a-b, 118.7). Sol Ring and Black Lotus make five mana, {R}
+# for him and {4} for the power-up, leaving the pool empty.
+
+[Bot1 Deck]
+Quicksilver, Brash Blur
+Mox Jet
+Sol Ring
+Black Lotus
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Decline
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Quicksilver, Brash Blur.Cast
+Bot1.Pass
+Bot1.Battlefield.Quicksilver, Brash Blur.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Quicksilver, Brash Blur.Activate
+
+[Expect]
+Bot1.Battlefield.Quicksilver, Brash Blur.Counters.DoubleStrike = 1
+Bot1.Battlefield.Quicksilver, Brash Blur.Power = 2
