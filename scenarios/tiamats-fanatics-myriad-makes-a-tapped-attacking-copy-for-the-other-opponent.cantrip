@@ -1,0 +1,56 @@
+# Myriad (CR 702.116a): Tiamat's Fanatics (4/3) attacks Bot2 in a three-player game. For Bot3, the other opponent, Bot1 may create a token copy
+# tapped and attacking: it does, so Bot3 takes the copy's power as Bot2 takes the original's, and the token is exiled at end of
+# combat. The card's other keywords (Haste) are on it. Black Lotus and the Moxen pay for it with exactly its cost.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Tiamat's Fanatics
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tiamat's Fanatics.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Mana =
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Tiamat's Fanatics > Bot2)
+Bot1.Target(Bot3)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Combat.Attackers = Tiamat's Fanatics > Bot2; Tiamat's Fanatics > Bot3
+? Bot1.Battlefield.Tiamat's Fanatics#2.Tapped = true
+? Bot1.Battlefield.Tiamat's Fanatics#2.Token = true
+[T1 Bot1.Main2]
+? Bot2.Life = 16
+? Bot3.Life = 16
+? Delayed.Count = 0
+
+[Expect]
+Bot1.Battlefield.Tiamat's Fanatics.Keywords = Haste
+Bot1.Battlefield.Tiamat's Fanatics#2 = (absent)
+Exile.Count = 0
