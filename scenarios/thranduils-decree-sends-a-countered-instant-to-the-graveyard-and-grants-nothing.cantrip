@@ -1,0 +1,52 @@
+# Thranduil's Decree: only "a permanent spell" countered this way is exiled. Bot2's Lightning Bolt, an instant, is countered into Bot2's graveyard as usual and
+# Bot1 gets no permission to cast it (nothing in exile).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Thranduil's Decree
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Thranduil's Decree.Cast(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Graveyard.Lightning Bolt.Cast
+
+[Expect]
+Exile.Count = 0
+Bot2.Graveyard = Lightning Bolt
+Bot1.Life = 20
+Bot1.Graveyard = Thranduil's Decree

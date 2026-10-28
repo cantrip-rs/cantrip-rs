@@ -1,0 +1,84 @@
+# Thranduil's Decree: a permanent spell is judged as it is on the stack. Bot2 casts Bilbo Baggins as its Adventure, Take a Glance (a sorcery on the stack, CR 715.3):
+# countered, it is not a permanent spell, so the card goes to Bot2's graveyard, not exile (and is not the Adventure's exile either: it never resolved). Then a
+# Prowling Serpopard, a permanent spell that can't be countered, is cast: the Decree does not counter it, so it is not exiled and Bot2 keeps it as it resolves.
+# (Bot1 casts the Decree twice, a second one in hand.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Thranduil's Decree
+Thranduil's Decree
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Bilbo Baggins, Burglar
+Prowling Serpopard
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Bilbo Baggins, Burglar.Cast(Ability: Adventure)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Thranduil's Decree.Cast(Take a Glance)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+? Bot2.Graveyard = Bilbo Baggins, Burglar
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Battlefield.Mox Emerald#3.Activate
+Bot2.Hand.Prowling Serpopard.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Thranduil's Decree.Cast(Prowling Serpopard)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield.Prowling Serpopard.Power = 4
+Bot1.Graveyard = Thranduil's Decree; Thranduil's Decree

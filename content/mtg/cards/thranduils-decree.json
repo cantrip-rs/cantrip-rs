@@ -1,0 +1,6 @@
+{
+  "name": "Thranduil's Decree",
+  "manaCost": "{4}{U}{U}",
+  "type": "Instant",
+  "oracleText": "Counter target spell. If a permanent spell is countered this way, exile it instead of putting it into its owner's graveyard. You may cast that card without paying its mana cost for as long as it remains exiled."
+}

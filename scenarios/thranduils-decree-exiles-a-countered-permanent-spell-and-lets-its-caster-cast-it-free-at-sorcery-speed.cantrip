@@ -1,0 +1,69 @@
+# Thranduil's Decree: "Counter target spell. If a permanent spell is countered this way, exile it instead of putting it into its owner's graveyard. You may cast that
+# card without paying its mana cost for as long as it remains exiled." Bot1 counters Bot2's Balduvian Bears for {4}{U}{U}, the pool empty after: the Bears
+# is exiled, not put into Bot2's graveyard. Casting it needs its usual timing (the ruling): refused during Bot2's turn, and on turn 3 Bot1 casts it from exile for
+# nothing (the pool is empty after) and controls it.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Thranduil's Decree
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Emerald
+Balduvian Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Balduvian Bears.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Thranduil's Decree.Cast(Balduvian Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+? Exile = Balduvian Bears
+? Bot2.Graveyard.Count = 0
+! Bot1.Exile.Balduvian Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Exile.Balduvian Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Balduvian Bears.Power = 2
+Bot1.Graveyard = Thranduil's Decree
