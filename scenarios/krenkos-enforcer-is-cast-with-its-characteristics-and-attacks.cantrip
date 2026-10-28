@@ -1,0 +1,32 @@
+# Krenko's Enforcer, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Krenko's Enforcer
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Krenko's Enforcer.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Krenko's Enforcer.Power = 2
+? Bot1.Battlefield.Krenko's Enforcer.Toughness = 2
+? Bot1.Battlefield.Krenko's Enforcer.Keywords = Intimidate
+? Bot1.Battlefield.Krenko's Enforcer.Colors = Red
+? Bot1.Battlefield.Krenko's Enforcer.Types = Creature
+? Bot1.Battlefield.Krenko's Enforcer.Subtypes = Goblin; Warrior
+? Bot1.Battlefield.Krenko's Enforcer.Supertypes = (absent)
+? Bot1.Battlefield.Krenko's Enforcer.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Krenko's Enforcer > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Krenko's Enforcer.Tapped = true
