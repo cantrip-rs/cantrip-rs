@@ -661,6 +661,15 @@ pub fn may_draw(g: &mut dyn Game, player: PlayerId, source: ObjectId, n: u32, qu
     Ok(true)
 }
 
+const MAY_DRAW_A_CARD: Question = Question::new("Draw", "draw a card?", "", "Draw", "Don't draw");
+
+/// "You may draw a card" (CR 121.3, 608.2d): asked of the ability's controller, not offered a player who can't draw a card
+/// (`may_draw`). Leovold, Emissary of Trest and Mister Fantastic, Reed Richards print it.
+pub fn may_draw_a_card(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    may_draw(g, item.controller, item.object, 1, &MAY_DRAW_A_CARD)?;
+    Ok(())
+}
+
 const MAY_LOOT: Question = Question::new("Draw", "draw a card?", "If you do, discard a card", "Draw and discard", "Don't draw");
 
 /// "You may draw a card. If you do, discard a card" (CR 121.3, 608.2c): the choice is not offered a player who can't draw
