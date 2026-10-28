@@ -1,0 +1,45 @@
+# Flanking (CR 702.25a) triggers only when the blocking creature lacks flanking: Bot1's Benalish Cavalry is blocked by Bot2's own Benalish
+# Cavalry, which has flanking, so nothing triggers and the two 2/2s trade evenly - both in their graveyards. Compare
+# benalish-cavalry-flanking-shrinks-a-blocker-without-flanking, where a flankless blocker is shrunk and the Cavalry survives.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Benalish Cavalry
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Benalish Cavalry
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Benalish Cavalry.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Benalish Cavalry.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Benalish Cavalry > Bot2)
+Bot2.Block(Benalish Cavalry > Benalish Cavalry)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Benalish Cavalry
+Bot2.Graveyard = Benalish Cavalry
+Bot2.Life = 20
