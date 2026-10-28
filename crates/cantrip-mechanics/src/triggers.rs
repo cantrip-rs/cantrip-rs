@@ -112,6 +112,20 @@ pub fn token_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Opt
     }
 }
 
+/// "Whenever one or more cards leave your graveyard" (CR 603.2c, 603.10a): a card of the source's controller's graveyard going
+/// to any other zone. A token is in no graveyard long enough to leave one (CR 111.7, 704.5d), and the core records no departure
+/// for it. The cards that left together are the subjects of the matching events, so the batch triggers it once (with
+/// `once_per_batch`). Hardened Academic and Owlin Historian print it.
+pub fn cards_leave_your_graveyard(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, from, .. } if *from == Zone::graveyard(me.controller) => Fired::about(Target::Object(*old)),
+        _ => None,
+    }
+}
+
+/// "Whenever one or more cards leave your graveyard": see `cards_leave_your_graveyard`.
+pub const CARDS_LEAVE_YOUR_GRAVEYARD: Trigger = when_asked(EventMask::ZONE_CHANGE, cards_leave_your_graveyard);
+
 /// "Whenever [a permanent] you control leaves the battlefield during your turn" (CR 603.6c, 603.10a), looked back on: the
 /// permanent that left, under the source's controller's control as it last was on the battlefield, to whichever zone it went,
 /// while it is that controller's turn. The caller narrows it (another permanent, a type). Suki, Courageous Rescuer and
