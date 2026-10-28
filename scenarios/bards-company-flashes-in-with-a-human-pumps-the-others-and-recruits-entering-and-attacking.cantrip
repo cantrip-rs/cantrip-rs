@@ -1,0 +1,72 @@
+# Bard's Company: "You may cast this spell as though it had flash if you control a Human", "Other creatures you control get +1/+1" and
+# "Whenever this creature enters or attacks, recruit." Bot1 controls an Eager Cadet (a Human) and flashes the Company in during
+# Bot2's turn-2 upkeep. It enters, Bot1 recruits (draws the Ornithopter, discards it: a Human Soldier token), the Cadet and the token
+# are 2/2s, the Company itself a 2/3, and Bot2's Ornithopter is not pumped. On turn 3 the Company attacks and recruits again:
+# Bot1 draws the second Ornithopter and discards a Plains, so no second token.
+
+[Bot1 Deck]
+Plains
+Eager Cadet
+Bard's Company
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Plains
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bard's Company.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Eager Cadet.Power = 2
+? Bot1.Battlefield.Human Soldier Token.Power = 2
+? Bot1.Battlefield.Human Soldier Token.Toughness = 2
+? Bot1.Battlefield.Bard's Company.Power = 2
+? Bot1.Battlefield.Bard's Company.Toughness = 3
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main1]
+Bot1.Attack(Bard's Company > Bot2; Eager Cadet > Bot2; Human Soldier Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Plains; Ornithopter
+Bot1.Battlefield.Human Soldier Token.Token = true
+Bot1.Battlefield.Count = 8
+Bot2.Life = 14
