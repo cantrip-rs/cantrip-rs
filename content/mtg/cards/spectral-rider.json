@@ -1,0 +1,11 @@
+{
+  "name": "Spectral Rider",
+  "manaCost": "{W}{W}",
+  "type": "Creature — Spirit Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Intimidate (This creature can't be blocked except by artifact creatures and/or creatures that share a color with it.)",
+  "keywords": [
+    "Intimidate"
+  ]
+}

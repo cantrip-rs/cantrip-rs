@@ -1,0 +1,51 @@
+# Intimidate (CR 702.13b): Spectral Rider, a white creature, attacking cannot be blocked by Bot2's Flying Men, a blue
+# nonartifact creature that shares no color with it (refusal). It can by Suntail Hawk (white), by Memnite (a colorless
+# artifact creature) and by Harvest Gwyllion, a white and black creature that shares one of its colors (the positive
+# controls: all three block, so each may). The Rider, 2/2, takes 1 + 1 + 2 damage and dies; Bot2 takes none.
+# Bot1 casts the Rider on turn 1 (Black Lotus); Bot2 casts its blockers on turn 2 (Black Lotus and Mox Jet for the Gwyllion,
+# Mox Pearl for the Hawk, Mox Sapphire for Flying Men, Memnite for free).
+
+[Bot1 Deck]
+Black Lotus
+Spectral Rider
+Plains x22
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Suntail Hawk
+Memnite
+Harvest Gwyllion
+Flying Men
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Spectral Rider.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Suntail Hawk.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Flying Men.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Harvest Gwyllion.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Spectral Rider > Bot2)
+! Bot2.Block(Flying Men > Spectral Rider)
+Bot2.Block(Suntail Hawk > Spectral Rider; Memnite > Spectral Rider; Harvest Gwyllion > Spectral Rider)
+? Combat.Blocks.Count = 3
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Spectral Rider; Black Lotus
