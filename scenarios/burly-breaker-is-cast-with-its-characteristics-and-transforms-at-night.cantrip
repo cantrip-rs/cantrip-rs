@@ -1,0 +1,45 @@
+# Burly Breaker (6/5, ward {1}, daybound), cast with Black Lotus and two Mox Emeralds, its characteristics as printed. It became
+# day as it entered (CR 702.145d); Bot2 casts no spell on their turn 2, so it becomes night as Bot1's turn 3 untap step begins
+# (CR 731.2a) and the Breaker transforms to Dire-Strain Demolisher (CR 702.145b), 8/7 nightbound with ward {3}, green by its
+# color indicator.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Burly Breaker
+Forest x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Burly Breaker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Burly Breaker.Power = 6
+? Bot1.Battlefield.Burly Breaker.Toughness = 5
+? Bot1.Battlefield.Burly Breaker.Keywords = Daybound
+? Bot1.Battlefield.Burly Breaker.Colors = Green
+? Bot1.Battlefield.Burly Breaker.Types = Creature
+? Bot1.Battlefield.Burly Breaker.Subtypes = Human; Werewolf
+? Bot1.Battlefield.Burly Breaker.Supertypes = (absent)
+? Bot1.Battlefield.Burly Breaker.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Dire-Strain Demolisher.Power = 8
+Bot1.Battlefield.Dire-Strain Demolisher.Toughness = 7
+Bot1.Battlefield.Dire-Strain Demolisher.Keywords = Nightbound
+Bot1.Battlefield.Dire-Strain Demolisher.Colors = Green
+Bot1.Battlefield.Dire-Strain Demolisher.Types = Creature
+Bot1.Battlefield.Dire-Strain Demolisher.Subtypes = Werewolf
+Bot1.Battlefield.Dire-Strain Demolisher.Supertypes = (absent)
+Bot1.Battlefield.Dire-Strain Demolisher.ProtectionFrom = (absent)
+Bot1.Battlefield.Dire-Strain Demolisher.Transformed = true

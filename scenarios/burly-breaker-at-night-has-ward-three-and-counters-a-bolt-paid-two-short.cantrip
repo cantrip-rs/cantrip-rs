@@ -1,0 +1,47 @@
+# Burly Breaker as night begins (Bot2 cast no spell in turn 2) is Dire-Strain Demolisher, ward {3}. In turn 4 Bot2 has three mana
+# (two Mountains and a Mox Ruby) for a Lightning Bolt: after the Bolt's {R} only two are left for the ward trigger's {3}, which
+# it cannot pay, so the Bolt is countered and the Demolisher takes no damage (the exact payment: the next scenario).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Burly Breaker
+Forest x21
+
+[Bot2 Deck]
+Mountain
+Mountain
+Mox Ruby
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Burly Breaker.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Dire-Strain Demolisher)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 4
+Stack.Count = 0
+Bot1.Battlefield.Dire-Strain Demolisher.Damage = 0
+Bot2.Graveyard = Lightning Bolt
