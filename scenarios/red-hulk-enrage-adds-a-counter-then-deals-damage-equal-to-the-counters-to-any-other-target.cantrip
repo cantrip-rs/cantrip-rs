@@ -1,0 +1,70 @@
+# Red Hulk: "Enrage - Whenever Red Hulk is dealt damage, put a +1/+1 counter on him. When you do, he deals damage equal to the number
+# of +1/+1 counters on him to any other target." Turn 2: Bot2's Lightning Bolt hits him for 3: one counter (7/8), and he deals 1 to
+# Bot2 (19) - he is not a legal target of his own ability (the refusal). Turn 4: a second Bolt: two counters (8/9), and he deals 2
+# (17). The counters are counted as the reflexive ability resolves.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Red Hulk
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Red Hulk.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Red Hulk)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Red Hulk)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Battlefield.Red Hulk.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Red Hulk.Power = 7
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Red Hulk)
+Bot2.Pass
+Bot1.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Red Hulk.Counters.PlusOnePlusOne = 2
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Red Hulk.Toughness = 9

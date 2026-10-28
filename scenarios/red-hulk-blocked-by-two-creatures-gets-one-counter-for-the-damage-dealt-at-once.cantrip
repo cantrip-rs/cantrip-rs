@@ -1,0 +1,55 @@
+# Red Hulk: damage dealt to him by several sources at once (two blocking Memnites, 1 each) is dealt at once and Enrage triggers once
+# (the Enrage ruling): one +1/+1 counter, not two (7/8), and the reflexive ability deals 1 damage. Both Memnites die to his 6 damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Red Hulk
+Island x14
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Red Hulk.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Red Hulk > Bot2)
+Bot2.Block(Memnite#1 > Red Hulk; Memnite#2 > Red Hulk)
+Bot1.Target(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Red Hulk.Counters.PlusOnePlusOne = 1
+Bot2.Graveyard.Count = 2

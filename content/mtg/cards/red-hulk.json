@@ -1,0 +1,12 @@
+{
+  "name": "Red Hulk",
+  "manaCost": "{4}{R}{R}",
+  "type": "Legendary Creature — Gamma Berserker Villain",
+  "power": 6,
+  "toughness": 7,
+  "oracleText": "Reach, trample\nEnrage — Whenever Red Hulk is dealt damage, put a +1/+1 counter on him. When you do, he deals damage equal to the number of +1/+1 counters on him to any other target.",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}
