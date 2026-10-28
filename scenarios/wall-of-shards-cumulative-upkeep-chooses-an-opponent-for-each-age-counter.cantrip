@@ -1,0 +1,49 @@
+# Wall of Shards: "Cumulative upkeep--An opponent gains 1 life." With two opponents Bot1 chooses which gains the life, separately
+# for each age counter (its ruling: "a different opponent for each age counter, or the same opponent multiple times"). At Bot1's
+# turn 4 upkeep Bot3 gains 1 life; at turn 7 the two counters cost one life each, to Bot2 and to Bot3. Bot2 ends at 21, Bot3 at 22.
+
+[Bot1 Deck]
+Wall of Shards
+Mox Pearl
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wall of Shards.Cast
+Bot1.Pass
+[T4 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Accept
+Bot1.ChoosePlayer(Bot3)
+Bot1.Pass
+? Bot3.Life = 21
+? Bot2.Life = 20
+[T7 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Accept
+Bot1.ChoosePlayer(Bot2)
+Bot1.ChoosePlayer(Bot3)
+Bot1.Pass
+? Bot1.Battlefield.Wall of Shards.Counters.Age = 2
+
+[Expect]
+Bot2.Life = 21
+Bot3.Life = 22
