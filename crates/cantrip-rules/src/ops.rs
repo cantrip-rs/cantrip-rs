@@ -3716,10 +3716,15 @@ fn note_statics(cx: &mut Cx, id: ObjectId) {
     }
 }
 
-/// Untaps a permanent (CR 701.26b). A permanent with a stun counter on it that would become untapped has a stun
-/// counter removed from it instead (CR 122.1d): one counter for each untap, whatever their number.
+/// Untaps a permanent (CR 701.26b). A permanent that can't become untapped (`CardDef::cant_become_untapped`) stays tapped,
+/// and a stun counter on it stays too: nothing would untap it for the counter to replace (CR 101.2, 122.1d). A permanent
+/// with a stun counter on it that would become untapped has a stun counter removed from it instead (CR 122.1d): one counter
+/// for each untap, whatever their number.
 pub fn untap(cx: &mut Cx, id: ObjectId) {
     if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) || !cx.s().obj(id).tapped {
+        return;
+    }
+    if crate::static_rules::cant_become_untapped(cx, cx.cards(), id) {
         return;
     }
     if cx.s().obj(id).counters(CounterKind::Stun) > 0 {
