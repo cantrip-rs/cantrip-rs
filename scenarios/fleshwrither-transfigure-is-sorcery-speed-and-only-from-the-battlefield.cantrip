@@ -1,0 +1,55 @@
+# Transfigure is activated "only as a sorcery" (CR 702.71a, 602.5d), and it is an ability of a permanent: Fleshwrither's {1}{B}{B}
+# is paid for with three Moxen that stay untapped (two Mox Jets and a Mox Ruby for the generic), and is not offered while
+# Fleshwrither is a card in the hand, nor on Bot2's turn, nor on Bot1's own while a spell (a Memnite) is on the stack. Once the
+# Memnite has resolved, in Bot1's main phase with the stack empty, the same activation is offered and finds the Hero of
+# Bladehold, the one creature card of the library with mana value 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Ruby
+Fleshwrither
+Memnite
+Plains
+Hero of Bladehold
+Plains x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+! Bot1.Hand.Fleshwrither.Activate(Ability: Transfigure)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fleshwrither.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+! Bot1.Battlefield.Fleshwrither.Activate(Ability: Transfigure)
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+! Bot1.Battlefield.Fleshwrither.Activate(Ability: Transfigure)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Fleshwrither.Activate(Ability: Transfigure)
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot1.Search(Hero of Bladehold)
+
+[Expect]
+Bot1.Graveyard = Fleshwrither; Black Lotus
+Bot1.Battlefield.Hero of Bladehold.Tapped = false

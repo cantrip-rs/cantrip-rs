@@ -1,0 +1,65 @@
+# Fleshwrither (a 3/3 black Horror, mana value 4), cast with Black Lotus and a Mox Jet. Its transfigure {1}{B}{B} (CR 702.71a) is
+# paid exactly with Blasted Landscape's {C} for the generic and two Mox Jets for the black pips, and the pool ends empty; with a
+# Mox Ruby in place of the second Mox Jet the ability is not offered (a colored pip needs black). Paying sacrifices Fleshwrither,
+# and it searches for a creature card with the same mana value as it had (4): of a noncreature card with mana value 4 (Wrath of
+# God), creatures with mana values 3 and 5 and two creatures with mana value 4 (Hero of Bladehold, Axebane Ferox) only one
+# of them may be found (a search for "a creature card"), and it is put onto the battlefield, untapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Blasted Landscape
+Fleshwrither
+Mox Ruby
+Wrath of God
+Mirran Crusader
+Baneslayer Angel
+Hero of Bladehold
+Axebane Ferox
+Plains x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fleshwrither.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fleshwrither.Power = 3
+? Bot1.Battlefield.Fleshwrither.Toughness = 3
+? Bot1.Battlefield.Fleshwrither.Colors = Black
+? Bot1.Battlefield.Fleshwrither.Types = Creature
+? Bot1.Battlefield.Fleshwrither.Subtypes = Horror
+? Bot1.Battlefield.Fleshwrither.ManaValue = 4
+Bot1.Hand.Blasted Landscape.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+! Bot1.Battlefield.Fleshwrither.Activate(Ability: Transfigure; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Fleshwrither.Activate(Ability: Transfigure)
+Bot1.Battlefield.Blasted Landscape.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Search(Wrath of God)
+! Bot1.Search(Mirran Crusader)
+! Bot1.Search(Baneslayer Angel)
+! Bot1.Search(Hero of Bladehold; Axebane Ferox)
+Bot1.Search(Hero of Bladehold)
+
+[Expect]
+Bot1.Graveyard = Fleshwrither; Black Lotus
+Bot1.Battlefield = Blasted Landscape; Hero of Bladehold; Mox Jet; Mox Jet; Mox Jet; Mox Ruby
+Bot1.Battlefield.Hero of Bladehold.Tapped = false

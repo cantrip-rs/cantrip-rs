@@ -1,0 +1,50 @@
+# Transfigure searches for "a creature card with the same mana value" (CR 702.71a), qualities, so the search may find nothing
+# (CR 701.23b) and here must: the library holds a noncreature card with mana value 4 (Wrath of God) and creature cards with mana
+# values 3 and 5, none of which may be chosen. Fleshwrither is still sacrificed as a cost and nothing enters the battlefield.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Ruby
+Fleshwrither
+Plains
+Wrath of God
+Mirran Crusader
+Baneslayer Angel
+Plains x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fleshwrither.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Fleshwrither.Activate(Ability: Transfigure)
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+! Bot1.Search(Wrath of God)
+! Bot1.Search(Mirran Crusader)
+! Bot1.Search(Baneslayer Angel)
+Bot1.Search()
+
+[Expect]
+Bot1.Graveyard = Fleshwrither; Black Lotus
+Bot1.Battlefield = Mox Jet; Mox Jet; Mox Jet; Mox Ruby
+Bot1.Hand = Plains
