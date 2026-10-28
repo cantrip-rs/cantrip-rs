@@ -1,0 +1,48 @@
+# Namor's trigger needs a noncreature spell with one or more blue mana symbols. On turn 1, after Namor ({1}{U}{U}, Black
+# Lotus), Bot1 casts Mox Pearl (noncreature, no blue symbol): no token. Opt ({U}, one blue symbol) makes one Merfolk token;
+# Namor's power is then 2. On turn 3 Atlantean Cavalry ({2}{U}, a creature spell with a blue symbol) makes none, but is a
+# Merfolk itself: Namor's power is 3 (CR 604.3).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Namor the Sub-Mariner
+Mox Pearl
+Opt
+Atlantean Cavalry
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Namor the Sub-Mariner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Island; Mox Pearl; Namor the Sub-Mariner
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Arrange(Island |)
+? Bot1.Battlefield.Merfolk Token.Power = 1
+? Bot1.Battlefield.Namor the Sub-Mariner.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Atlantean Cavalry.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Namor the Sub-Mariner.Power = 3
+Bot1.Battlefield.Atlantean Cavalry.Power = 3
