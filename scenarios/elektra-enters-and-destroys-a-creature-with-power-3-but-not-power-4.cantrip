@@ -1,0 +1,70 @@
+# "When Elektra enters, destroy target creature an opponent controls with power 3 or less" (CR 603.6a, 701.8): Bot2's Centaur Courser
+# (power 3, exactly the limit) is destroyed. Giant Cockroach (power 4, one past it) is no legal target and neither is Bot1's own
+# Savannah Lions, so the Courser is the only choice and the trigger takes it without a question. Cast normally for {2}{B}{B}.
+
+[Bot1 Deck]
+Swamp
+Swamp
+Mox Jet
+Mox Pearl
+Elektra, Daughter of the Hand
+Savannah Lions
+Mox Ruby
+Swamp x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Black Lotus
+Centaur Courser
+Giant Cockroach
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Giant Cockroach.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elektra, Daughter of the Hand.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Centaur Courser; Black Lotus
+Bot2.Battlefield.Giant Cockroach.Tapped = false
+Bot1.Battlefield.Elektra, Daughter of the Hand.Tapped = false

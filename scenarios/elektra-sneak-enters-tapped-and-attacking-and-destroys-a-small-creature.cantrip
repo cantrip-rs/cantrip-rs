@@ -1,0 +1,63 @@
+# Sneak {1}{B}{B} (CR 702.190a-b): Bot1's Savannah Lions attack on turn 3 and are unblocked; in the declare blockers step Elektra is
+# cast for exactly {1}{B}{B}, returning the Lions to hand. She enters tapped and attacking Bot2 and, entering, destroys Bot2's Centaur
+# Courser (power 3, at the limit). Elektra deals 3 combat damage, unblocked: Bot2 at 17.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Savannah Lions
+Elektra, Daughter of the Hand
+Swamp
+Island
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Centaur Courser
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Attack(Savannah Lions > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Elektra, Daughter of the Hand.Cast(Ability: Sneak)
+Bot1.Choose(Savannah Lions)
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Centaur Courser
+Bot1.Hand = Island; Savannah Lions; Swamp
+Bot1.Battlefield.Elektra, Daughter of the Hand.Tapped = true
