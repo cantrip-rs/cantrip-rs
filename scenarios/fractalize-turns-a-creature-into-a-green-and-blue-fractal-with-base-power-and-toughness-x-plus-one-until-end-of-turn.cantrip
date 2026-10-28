@@ -1,0 +1,49 @@
+# Fractalize: until end of turn, target creature becomes a green and blue Fractal with base power and toughness each X + 1
+# (CR 613.4b), losing its other colors and creature types (CR 205.1a, 105.3). Bot2's red Goblin Welder (a Goblin),
+# targeted with X of 2, is a 3/3 Fractal, blue and green (it was 1/1); at the next
+# end of turn it is a red 1/1 Goblin Artificer again.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Fractalize
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Goblin Welder
+Island
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Goblin Welder.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fractalize.Cast(Bot2.Battlefield.Goblin Welder; X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Goblin Welder.Power = 3
+? Bot2.Battlefield.Goblin Welder.Toughness = 3
+? Bot2.Battlefield.Goblin Welder.Subtypes = Fractal
+? Bot2.Battlefield.Goblin Welder.Colors = Blue; Green
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Goblin Welder.Power = 1
+? Bot2.Battlefield.Goblin Welder.Subtypes = Artificer; Goblin
+? Bot2.Battlefield.Goblin Welder.Colors = Red
+
+[Expect]
+Turn = 4
