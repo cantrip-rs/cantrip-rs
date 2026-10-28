@@ -1,0 +1,73 @@
+# Worlds Within Worlds: "Exile all creatures. Each player may put any number of creature cards from their hand onto the
+# battlefield. Then put all cards exiled this way into their owners' hands. Exile Worlds Within Worlds." Bot1's Grizzly Bears
+# and Bot2's Savannah Lions are exiled; Bot1 puts Hill Giant and Bot2 puts Serra Angel onto the battlefield (they entered after
+# the exile, so they stay); the Bears and the Lions then go to their owners' hands, and the spell itself ends in exile, not
+# the graveyard. Forest and Island, Mox Emerald, Mox Sapphire and Black Lotus (blue, three) pay {5}{G}{U}.
+
+[Bot1 Deck]
+Forest
+Island
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Grizzly Bears
+Worlds Within Worlds
+Hill Giant
+Forest x12
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Serra Angel
+Island
+Swamp
+Mountain
+Forest
+Plains x13
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Worlds Within Worlds.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Hill Giant)
+Bot2.Choose(Serra Angel)
+[T3 Bot1.Main2]
+? Bot1.Battlefield = Forest; Hill Giant; Island; Mox Emerald; Mox Sapphire
+? Bot2.Battlefield = Plains; Serra Angel
+
+[Expect]
+Bot1.Hand = Grizzly Bears
+Bot1.Battlefield = Forest; Hill Giant; Island; Mox Emerald; Mox Sapphire
+Exile = Worlds Within Worlds
+Bot1.Graveyard = Black Lotus
+Bot2.Battlefield = Plains; Serra Angel
+Bot2.Hand = Forest; Island; Mountain; Plains; Savannah Lions; Swamp
+Bot2.Graveyard.Count = 0
