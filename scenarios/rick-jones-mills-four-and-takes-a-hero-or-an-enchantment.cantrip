@@ -1,0 +1,73 @@
+# Rick Jones, Destined Sidekick: "{3}, {T}: Mill four cards. You may put a Hero or enchantment card from among those cards into your hand."
+# Turn 3: Forest, Grizzly Bears, Rancor and Agent of Atlas (a Hero) are milled; Bot1 takes the Hero. Turn 5: Forest, Rancor, Forest, Forest
+# are milled; Bot1 takes the enchantment. Turn 7: four cards that are neither a Hero nor an enchantment (a Grizzly Bears and Forests) are
+# milled and nobody is asked. {3} is paid exactly (the pool is empty right after each).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Rick Jones, Destined Sidekick
+Forest
+Forest
+Forest
+Forest
+Grizzly Bears
+Rancor
+Agent of Atlas
+Forest
+Forest
+Rancor
+Forest
+Forest
+Forest
+Grizzly Bears
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rick Jones, Destined Sidekick.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Rick Jones, Destined Sidekick.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Grizzly Bears)
+Bot1.Choose(Agent of Atlas)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Rick Jones, Destined Sidekick.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Rancor)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Rick Jones, Destined Sidekick.Activate
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Count = 10
