@@ -1,0 +1,49 @@
+# Sluiceway Scorpion's scavenge {1}{B}{G} (CR 702.97a): discarded to Faithless Looting (paid with a Mox Ruby), the 2 power card is exiled from the
+# graveyard as the cost of an ability paid exactly - the pool is empty right after - with sources worth the generic mana
+# in mana of no color the cost names and the colored mana it names. It puts a number of +1/+1 counters equal to its power,
+# 2, on the target Memnite (1/1, so now 3/3). The card is in exile, not the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Sluiceway Scorpion
+Memnite
+Blasted Landscape
+Mox Jet
+Mox Emerald
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Sluiceway Scorpion; Island)
+Bot1.Hand.Blasted Landscape.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Blasted Landscape.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Sluiceway Scorpion.Activate(Ability: Scavenge; Bot1.Battlefield.Memnite)
+? Stack.Count = 1
+? Bot1.Mana = 
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Sluiceway Scorpion
+Bot1.Graveyard = Faithless Looting; Island
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
