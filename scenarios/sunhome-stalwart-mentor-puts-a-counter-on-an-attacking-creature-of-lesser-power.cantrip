@@ -1,0 +1,41 @@
+# Mentor (CR 702.134a): Sunhome Stalwart (2 power) attacks with Metallic Sliver (1/1), so its mentor ability targets the Sliver, whose power
+# is less, and puts a +1/+1 counter on it before damage: the Sliver deals 2. Black Lotus, the Moxen and Mox Jet pay for both.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Sunhome Stalwart
+Metallic Sliver
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Sunhome Stalwart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Metallic Sliver.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Sunhome Stalwart > Bot2; Metallic Sliver > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Metallic Sliver.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Metallic Sliver.Power = 2
+Bot1.Battlefield.Metallic Sliver.Toughness = 2
+Bot1.Battlefield.Sunhome Stalwart.Counters.PlusOnePlusOne = (absent)
+Bot2.Life = 16
+Bot1.Battlefield.Sunhome Stalwart.Keywords = FirstStrike
