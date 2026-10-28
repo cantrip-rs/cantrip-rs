@@ -1,0 +1,30 @@
+# Divergent Equation with X = 0 ({U} in all): "up to X" targets is none, so nothing returns - the Lightning Bolt in the graveyard
+# stays - and the spell still exiles itself as its last instruction (CR 608.2c).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Lightning Bolt
+Divergent Equation
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Divergent Equation.Cast(X: 0)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Lightning Bolt
+Exile = Divergent Equation

@@ -1,0 +1,6 @@
+{
+  "name": "Divergent Equation",
+  "manaCost": "{X}{X}{U}",
+  "type": "Instant",
+  "oracleText": "Return up to X target instant and/or sorcery cards from your graveyard to your hand.\nExile Divergent Equation."
+}

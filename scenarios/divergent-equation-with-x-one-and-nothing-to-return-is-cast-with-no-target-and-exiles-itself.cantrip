@@ -1,0 +1,29 @@
+# Divergent Equation ({X}{X}{U}) says "up to X target instant and/or sorcery cards" (CR 601.2c, 115.1), so with X = 1 it can be
+# cast with no target at all when the graveyard holds no instant or sorcery card to choose. It returns nothing and still
+# exiles itself as its last instruction (CR 608.2c).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Divergent Equation
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Divergent Equation.Cast(X: 1)
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Count = 0
+Exile = Divergent Equation
