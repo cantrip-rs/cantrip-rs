@@ -1,0 +1,53 @@
+# Wall of Shards {1}{W}, a snow 1/8 with defender and flying, "Cumulative upkeep--An opponent gains 1 life." (CR 702.24a). Cast on
+# turn 1 (Mox Pearl and Mox Jet), at Bot1's turn 3 upkeep it gets an age counter and Bot2 gains 1 life (20 to 21); at turn 5 the
+# cost is the 1 life for each of two age counters, 2 life (21 to 23); at turn 7 Bot1 declines and sacrifices it, and Bot2 gains
+# nothing (23). Bot1's own life is never touched.
+
+[Bot1 Deck]
+Wall of Shards
+Mox Pearl
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wall of Shards.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+? Bot2.Life = 21
+? Bot1.Battlefield.Wall of Shards.Counters.Age = 1
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+? Bot2.Life = 23
+? Bot1.Battlefield.Wall of Shards.Counters.Age = 2
+? Bot1.Battlefield.Wall of Shards.Power = 1
+? Bot1.Battlefield.Wall of Shards.Toughness = 8
+? Bot1.Battlefield.Wall of Shards.Keywords = Defender; Flying
+? Bot1.Battlefield.Wall of Shards.Colors = White
+[T7 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot2.Life = 23
+Bot1.Life = 20
+Bot1.Graveyard = Wall of Shards

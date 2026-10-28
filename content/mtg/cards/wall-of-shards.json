@@ -1,0 +1,12 @@
+{
+  "name": "Wall of Shards",
+  "manaCost": "{1}{W}",
+  "type": "Snow Creature — Wall",
+  "power": 1,
+  "toughness": 8,
+  "oracleText": "Defender, flying\nCumulative upkeep—An opponent gains 1 life. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)",
+  "keywords": [
+    "Defender",
+    "Flying"
+  ]
+}

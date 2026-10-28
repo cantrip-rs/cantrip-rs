@@ -1,0 +1,45 @@
+# Wall of Shards: "Cumulative upkeep--An opponent gains 1 life." Bot2's Sunspine Lynx says players can't gain life (CR 119.7), and
+# "a cost that involves having that player gain life can't be paid": at Bot1's turn 3 upkeep paying is not offered, and the Wall is
+# sacrificed. Bot2's life is still 20.
+
+[Bot1 Deck]
+Wall of Shards
+Mox Pearl
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Sunspine Lynx
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wall of Shards.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Sunspine Lynx.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Wall of Shards
