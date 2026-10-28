@@ -1,0 +1,32 @@
+# Old Thrush: the search is a "may": Bot1 declines it, still gains the 2 life (22), and the library is neither searched nor shuffled, so
+# turn 3's draw is the next Plains in order and the Island stays where it was (CR 701.23, 701.24).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Old Thrush
+Plains x4
+Plains
+Island
+Plains x8
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Old Thrush.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains
+Bot1.Life = 22
+Bot1.Library.Count = 9

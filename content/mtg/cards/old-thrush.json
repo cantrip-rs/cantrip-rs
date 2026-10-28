@@ -1,0 +1,11 @@
+{
+  "name": "Old Thrush",
+  "manaCost": "{2}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this creature enters, you gain 2 life. You may search your library for a basic land card, reveal it, then shuffle and put that card on top.",
+  "keywords": [
+    "Flying"
+  ]
+}

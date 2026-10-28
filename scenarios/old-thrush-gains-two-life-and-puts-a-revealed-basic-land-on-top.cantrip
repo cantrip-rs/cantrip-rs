@@ -1,0 +1,43 @@
+# Old Thrush: "Flying. When this creature enters, you gain 2 life. You may search your library for a basic land card, reveal it, then
+# shuffle and put that card on top." Bot1 gains 2 (20 -> 22), accepts, and may find only a basic land card (the Tropical Island and
+# Lightning Bolt are refused): the Island is revealed and ends on top, so Bot1 draws it in turn 3's draw step (CR 119.3, 701.23, 701.20).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Old Thrush
+Plains x4
+Plains
+Lightning Bolt
+Island
+Tropical Island
+Plains x6
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Old Thrush.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Accept
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Lightning Bolt)
+Bot1.Search(Island)
+? Bot1.Revealed = Island
+? Bot1.Life = 22
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Island
+Bot1.Life = 22
+Bot1.Battlefield.Old Thrush.Power = 1
+Bot1.Battlefield.Old Thrush.Toughness = 2
+Bot1.Battlefield.Old Thrush.Keywords = Flying
