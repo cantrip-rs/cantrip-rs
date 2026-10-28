@@ -1,4 +1,5 @@
 use cantrip_api::*;
+use cantrip_mechanics::attach;
 use cantrip_mechanics::library::{Find, search_to_hand};
 use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_oracle as oracle;
@@ -14,18 +15,13 @@ fn search(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "As long as Cloud is equipped" (CR 301.5a): an Equipment is attached to it.
-fn equipped(q: &dyn Query, cloud: ObjectId) -> bool {
-    q.state().battlefield().iter().any(|&id| q.attached_to(id) == Some(cloud) && is_equipment(q, id))
-}
-
 /// "As long as Cloud is equipped, if a triggered ability of Cloud or an Equipment attached to it triggers, that ability
 /// triggers an additional time." (CR 603.2d): a triggered ability of a permanent as it is when the ability triggers, so
 /// no matter who controls the Equipment (the text says no "you control"), the Equipment must be attached to Cloud now, and Cloud equipped now. An ability Cloud is granted (an Equipment's
 /// "has ..." text) is Cloud's own; an Equipment attached to another creature is not covered.
 fn triggers_again(q: &dyn Query, asker: &Asker, _: &Event, triggering: &Triggering) -> bool {
     triggering.permanent
-        && equipped(q, asker.source)
+        && attach::is_equipped(q, asker.source)
         && (triggering.source == asker.source || (q.attached_to(triggering.source) == Some(asker.source) && is_equipment(q, triggering.source)))
 }
 

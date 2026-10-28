@@ -100,6 +100,18 @@ pub fn equipment_controlled(q: &dyn Query, player: PlayerId) -> Vec<ObjectId> {
     q.permanents_of(player).into_iter().filter(|&id| q.chars(id).has_subtype(Subtype::Equipment)).collect()
 }
 
+/// The Equipment attached to `creature` (CR 301.5a, 301.5c), through the layers, whoever controls them: those permanents on the
+/// battlefield that are Equipment and attached to it. Whiplash counts them; Cloud, Midgar Mercenary asks whether there are any.
+pub fn equipment_attached_to(q: &dyn Query, creature: ObjectId) -> Vec<ObjectId> {
+    q.state().battlefield().iter().copied().filter(|&id| q.attached_to(id) == Some(creature) && q.chars(id).has_subtype(Subtype::Equipment)).collect()
+}
+
+/// "Equipped" (CR 301.5a): an Equipment is attached to `creature`. Whiplash, Swordsman, Sharp Scoundrel and Cloud, Midgar Mercenary
+/// ask it.
+pub fn is_equipped(q: &dyn Query, creature: ObjectId) -> bool {
+    q.state().battlefield().iter().any(|&id| q.attached_to(id) == Some(creature) && q.chars(id).has_subtype(Subtype::Equipment))
+}
+
 /// A static ability's `affects` for "equipped creature" and "enchanted creature" (CR 301.5, 303.4): exactly the
 /// permanent the source is attached to.
 pub fn attached_object(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
