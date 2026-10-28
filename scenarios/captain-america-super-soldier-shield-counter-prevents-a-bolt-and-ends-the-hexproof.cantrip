@@ -1,0 +1,63 @@
+# Captain America, Super-Soldier enters with a shield counter (CR 122.1c): while it is on him, Bot1 and Bot1's other Heroes have
+# hexproof (Lightning Bolt can't target Bot1 or Black Widow, but can target Captain America himself, who is not "other"). The
+# first Bolt at him is prevented and the counter is removed - no damage is marked - so the hexproof ends with it, and the second
+# Bolt, at Bot1 this time, is allowed (Bot1 goes to 17: the first Bolt's 3 was prevented).
+
+[Bot1 Deck]
+Captain America, Super-Soldier
+Black Widow, Natasha Romanoff
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt x4
+Mountain
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Captain America, Super-Soldier.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Black Widow, Natasha Romanoff.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mountain.Play
+? Bot1.Battlefield.Captain America, Super-Soldier.Counters.Shield = 1
+! Bot2.Hand.Lightning Bolt.Cast(Bot1)
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Black Widow, Natasha Romanoff)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Captain America, Super-Soldier)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Captain America, Super-Soldier.Counters.Shield = (absent)
+? Bot1.Battlefield.Captain America, Super-Soldier.Damage = 0
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Captain America, Super-Soldier; Black Widow, Natasha Romanoff; Mox Pearl; Mox Sapphire; Mox Jet; Mox Ruby; Plains
+Bot1.Life = 17

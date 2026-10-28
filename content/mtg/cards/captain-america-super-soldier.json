@@ -1,0 +1,11 @@
+{
+  "name": "Captain America, Super-Soldier",
+  "manaCost": "{1}{W}{W}",
+  "type": "Legendary Creature — Human Soldier Hero",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "First strike\nCaptain America enters with a shield counter on him. (If he would be dealt damage or destroyed, remove a shield counter from him instead.)\nAs long as Captain America has a shield counter on him, you and other Heroes you control have hexproof.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

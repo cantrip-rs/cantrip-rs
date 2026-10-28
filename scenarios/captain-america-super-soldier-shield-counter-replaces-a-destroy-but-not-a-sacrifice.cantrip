@@ -1,0 +1,53 @@
+# A shield counter (CR 122.1c) replaces a destruction "as the result of an effect": Go for the Throat destroying Captain America,
+# Super-Soldier instead removes the counter (the rulings: it is not a regeneration, and he is not tapped), and he stays. It does
+# not stop a sacrifice: Innocent Blood (each player sacrifices a creature) takes him on turn 4. The destroy came first and left
+# him on the battlefield, untapped, with his counter gone and nothing in Bot1's graveyard.
+
+[Bot1 Deck]
+Captain America, Super-Soldier
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Jet
+Go for the Throat
+Innocent Blood
+Swamp
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Captain America, Super-Soldier.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Go for the Throat.Cast(Bot1.Battlefield.Captain America, Super-Soldier)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Captain America, Super-Soldier.Counters.Shield = (absent)
+? Bot1.Battlefield.Captain America, Super-Soldier.Tapped = false
+? Bot1.Graveyard.Count = 0
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Innocent Blood.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Captain America, Super-Soldier
+Bot2.Graveyard = Innocent Blood; Go for the Throat

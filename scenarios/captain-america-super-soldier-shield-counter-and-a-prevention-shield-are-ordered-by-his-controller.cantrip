@@ -1,0 +1,62 @@
+# A shield counter's prevention (CR 122.1c) is ordered with other prevention effects of the same damage by the player it is dealt to
+# (CR 616.1, 615.7). Bot1's Captain America, Super-Soldier (shield counter) has a Healing Salve shield, "prevent the next 3 damage that
+# would be dealt to any target this turn". Bot2's first Lightning Bolt (3 damage) meets both: Bot1 has the Salve apply first, which
+# prevents all 3 and so leaves nothing for the counter, which stays. The second Bolt meets the counter alone: prevented, and the counter
+# is removed.
+
+[Bot1 Deck]
+Captain America, Super-Soldier
+Healing Salve
+Mox Pearl
+Mox Jet
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Captain America, Super-Soldier.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1.Battlefield.Captain America, Super-Soldier)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Captain America, Super-Soldier)
+Bot2.Pass
+Bot1.Pass
+Bot1.Replace(Healing Salve)
+? Bot1.Battlefield.Captain America, Super-Soldier.Counters.Shield = 1
+? Bot1.Battlefield.Captain America, Super-Soldier.Damage = 0
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Captain America, Super-Soldier)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Captain America, Super-Soldier.Counters.Shield = (absent)
+? Bot1.Battlefield.Captain America, Super-Soldier.Damage = 0
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Captain America, Super-Soldier.Damage = 0

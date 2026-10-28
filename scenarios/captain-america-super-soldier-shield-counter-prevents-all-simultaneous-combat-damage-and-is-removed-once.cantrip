@@ -1,0 +1,61 @@
+# One shield counter (CR 122.1c) on Captain America, Super-Soldier; two Dune Beetles (1/4) block him and deal their combat damage
+# at the same time (CR 510.2), one damage event (CR 120.4). The counter prevents all of it and a single counter is removed, so he
+# ends unmarked: were each Beetle's damage met separately, the second would be dealt and mark 1. His first strike deals 3 first,
+# which does not kill a 4-toughness blocker, so both are alive to deal damage in the regular step.
+
+[Bot1 Deck]
+Captain America, Super-Soldier
+Mox Pearl
+Mox Jet
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Dune Beetle
+Dune Beetle
+Swamp
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Captain America, Super-Soldier.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dune Beetle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Dune Beetle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Captain America, Super-Soldier > Bot2)
+Bot2.Block(Dune Beetle#1 > Captain America, Super-Soldier; Dune Beetle#2 > Captain America, Super-Soldier)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Captain America, Super-Soldier.Counters.Shield = (absent)
+? Bot1.Battlefield.Captain America, Super-Soldier.Damage = 0
+
+[Expect]
+Bot1.Battlefield.Captain America, Super-Soldier.Counters.Shield = (absent)
+Bot1.Battlefield.Captain America, Super-Soldier.Damage = 0
+Bot2.Battlefield.Dune Beetle#1.Damage = 3

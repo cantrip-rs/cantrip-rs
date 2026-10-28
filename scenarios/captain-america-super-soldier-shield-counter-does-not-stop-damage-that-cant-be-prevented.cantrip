@@ -1,0 +1,42 @@
+# Bonecrusher Giant's Stomp ("Damage can't be prevented this turn. Stomp deals 2 damage to any target") at Captain America,
+# Super-Soldier (3/2) with his shield counter: unpreventable damage is still dealt and the counter is still removed (CR 122.1c,
+# 615.12, the rulings), so the 2 damage kills him (toughness 2) - there is no Bolt-style survival here. The counter is gone with him.
+
+[Bot1 Deck]
+Captain America, Super-Soldier
+Mox Pearl
+Mox Jet
+Plains
+Plains x20
+
+[Bot2 Deck]
+Bonecrusher Giant
+Mox Ruby
+Mountain
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Captain America, Super-Soldier.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Bonecrusher Giant.Cast(Ability: Stomp; Bot1.Battlefield.Captain America, Super-Soldier)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Captain America, Super-Soldier
+Bot1.Battlefield.Captain America, Super-Soldier = (absent)

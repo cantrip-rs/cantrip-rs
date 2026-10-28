@@ -1,0 +1,58 @@
+# A shield counter's replacement of a destruction (CR 122.1c) is ordered with other replacement effects of the same event by the
+# affected permanent's controller (CR 616.1). Bot2's Rest in Peace says a card that would be put into a graveyard is exiled instead;
+# Bot2's Go for the Throat destroys Bot1's Captain America, Super-Soldier, which has a shield counter. Bot1 has the shield counter
+# apply first: the destruction never happens, the counter is removed, and Captain America stays on the battlefield - not exiled, since
+# nothing is going to a graveyard any more (only the resolved Go for the Throat is, by Rest in Peace).
+
+[Bot1 Deck]
+Captain America, Super-Soldier
+Mox Pearl
+Mox Jet
+Plains
+Plains x20
+
+[Bot2 Deck]
+Rest in Peace
+Go for the Throat
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Captain America, Super-Soldier.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Rest in Peace.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Go for the Throat.Cast(Bot1.Battlefield.Captain America, Super-Soldier)
+Bot2.Pass
+Bot1.Pass
+Bot1.Replace(Captain America, Super-Soldier)
+
+[Expect]
+Bot1.Battlefield = Captain America, Super-Soldier; Mox Jet; Mox Pearl; Plains
+Bot1.Battlefield.Captain America, Super-Soldier.Counters.Shield = (absent)
+Exile = Go for the Throat
