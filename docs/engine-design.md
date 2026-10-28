@@ -2131,7 +2131,9 @@ blocked if able", obeyed once however many block it). Lure's "all creatures able
 `CardDef::block_requirements` entry (`BlockRequirement`), asked of each block the restrictions allow with the permanent as its
 source (`static_rules::block_requirements`, only while a permanent with one is on the battlefield with its abilities); "target
 creature blocks this turn if able" is a resolved effect, `EffectKind::MustBlock` (an effect, not an ability: a creature that
-loses its abilities still must), one requirement per effect of a creature that may block something. A creature that is
+loses its abilities still must), one requirement per effect of a creature that may block something; provoke's "blocks this creature
+this combat if able" is `EffectKind::MustBlockAttacker(attacker)` with `Duration::EndOfCombat`, one requirement naming the blocker and
+that attacker, made only while the restrictions allow that block. A creature that is
 tapped, can't block or may block no attacker is required nothing. Costs to block (CR 509.1d) are data in the question
 (`BlockRequirements::costs`, one `BlockCost` per block that costs something; no effect makes one yet) and the verdict carries a
 declaration's total; `most` counts free blocks only, since no requirement is obeyed by paying (CR 509.1c). Paying would reuse
