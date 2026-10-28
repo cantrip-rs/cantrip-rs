@@ -1,0 +1,58 @@
+# Hulkling, Burgeoning Bruiser: the intervening "if" is checked as the ability resolves too (CR 603.4), with the entering creature as it
+# last existed if it is gone. Bot1 responds with Giant Growth on Hulkling (5/6): the Courser (3/3) is no longer greater, so the ability does nothing.
+# Bot1's Centaur Courser (3/3) enters beside Hulkling (2/3): the ability triggers (greater power).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Hulkling, Burgeoning Bruiser
+Centaur Courser
+Giant Growth
+Forest x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hulkling, Burgeoning Bruiser.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Hulkling, Burgeoning Bruiser)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Power = 5
+Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Toughness = 6

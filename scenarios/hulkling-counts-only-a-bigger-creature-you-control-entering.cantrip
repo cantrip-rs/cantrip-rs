@@ -1,0 +1,107 @@
+# Hulkling, Burgeoning Bruiser: "Whenever another creature you control enters, if it has greater power or toughness than Hulkling, put a
+# +1/+1 counter on Hulkling." Hulkling is a 2/3. A Grizzly Bears (2/2: neither greater) gives nothing; a Sylvan Caryatid (0/3: equal
+# toughness, lesser power) gives nothing; a Centaur Courser (3/3: greater power only) gives a counter (3/4); a second Courser (3/3: equal
+# power, lesser toughness) gives none; a Wall of Ice (0/7: greater toughness only) gives another (4/5). Bot2's Centaur Courser (not
+# Bot1's creature) gives none either.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Hulkling, Burgeoning Bruiser
+Grizzly Bears
+Sylvan Caryatid
+Centaur Courser
+Centaur Courser
+Wall of Ice
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Centaur Courser
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hulkling, Burgeoning Bruiser.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+? Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sylvan Caryatid.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Power = 2
+? Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Toughness = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Power = 3
+? Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Toughness = 4
+[T7 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Power = 3
+? Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Toughness = 4
+[T9 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wall of Ice.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T9 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Power = 4
+Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Toughness = 5
+Bot1.Battlefield.Hulkling, Burgeoning Bruiser.Keywords = Vigilance
