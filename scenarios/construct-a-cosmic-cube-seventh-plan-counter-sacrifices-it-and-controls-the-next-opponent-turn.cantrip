@@ -1,0 +1,97 @@
+# Construct a Cosmic Cube: whenever you draw your second card each turn, create a 2/1 black Villain token with menace and put a plan
+# counter on it (CR 120.3, 122.1); when the seventh plan counter is put on it, sacrifice it, and when you do, you control target
+# opponent during their next turn (CR 701.21a, 603.12, 723.1). Bot1 draws its second card in each of its turns 1, 3, 5, 7, 9, 11 and
+# 13 with Consider (turn 1 has no draw step, so both draws are Considers), making a token each: after the sixth (turn 11) the Cube
+# is still there and nobody controls Bot2; the seventh (turn 13) sacrifices it, and on turn 14 Bot2 is controlled by Bot1.
+
+[Bot1 Deck]
+Island
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Construct a Cosmic Cube
+Consider
+Consider x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Construct a Cosmic Cube.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Consider.Cast
+Bot1.Pass
+Bot1.Arrange(Consider)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Consider)
+
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Consider)
+
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Consider)
+
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Consider)
+
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Consider)
+
+[T11 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Consider)
+
+[T12 Bot2.Main1]
+? Bot1.Battlefield.Construct a Cosmic Cube.Counters.Plan = 6
+? Bot2.NextTurnControlledBy = (absent)
+
+[T13 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Consider)
+
+[T14 Bot2.Main1]
+? Bot2.ControlledBy = Bot1
+
+[Expect]
+Bot1.Graveyard.Count = 9
+Bot1.Battlefield.Count = 12

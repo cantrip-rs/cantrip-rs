@@ -1,0 +1,6 @@
+{
+  "name": "Construct a Cosmic Cube",
+  "manaCost": "{2}{B}",
+  "type": "Enchantment — Plan",
+  "oracleText": "Whenever you draw your second card each turn, create a 2/1 black Villain creature token with menace and put a plan counter on this enchantment.\nWhen the seventh plan counter is put on this enchantment, sacrifice it. When you do, you control target opponent during their next turn. (You see all cards that player could see and make all decisions for them.)"
+}
