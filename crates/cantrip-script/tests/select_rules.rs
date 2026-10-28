@@ -38,6 +38,16 @@ static BEAR: CardDef = CardDef {
     toughness: Some(2),
     ..CardDef::BLANK
 };
+/// An artifact creature and an artifact: with the Bear (a creature) and the Wastes (a land), what "that share a card type" is tried on.
+static GOLEM: CardDef = CardDef {
+    name: "Probe Golem",
+    types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
+    cost: ManaCost { generic: 2, ..ManaCost::ZERO },
+    power: Some(1),
+    toughness: Some(1),
+    ..CardDef::BLANK
+};
+static ROCK: CardDef = CardDef { name: "Probe Rock", types: TypeSet::of(&[CardType::Artifact]), cost: ManaCost { generic: 1, ..ManaCost::ZERO }, ..CardDef::BLANK };
 static WASTES: CardDef = CardDef {
     name: "Probe Wastes",
     has_cost: false,
@@ -49,7 +59,7 @@ static FILLER: CardDef = CardDef { name: "Filler", has_cost: false, types: TypeS
 
 fn table() -> &'static CardTable {
     static TABLE: OnceLock<CardTable> = OnceLock::new();
-    TABLE.get_or_init(|| CardTable::new([&SEEKER, &FIRE, &ICE, &FIRE_ICE, &BEAR, &WASTES, &FILLER]))
+    TABLE.get_or_init(|| CardTable::new([&SEEKER, &FIRE, &ICE, &FIRE_ICE, &BEAR, &GOLEM, &ROCK, &WASTES, &FILLER]))
 }
 
 fn card(name: &str) -> CardId {
@@ -167,6 +177,35 @@ fn different_mana_values_keep_the_cards_apart() {
     let after_fire = verdict(&game, &rule, &[fire]).1;
     assert!(after_fire.contains(&"Probe Bear") && !after_fire.contains(&"Probe Ice"));
     assert_eq!(rule.words(&|n| n.to_string()), vec!["with different mana values".to_string()]);
+}
+
+/// "That share a card type" (CR 205.2a): a creature and an artifact creature share the creature type, the artifact creature and an
+/// artifact the artifact type, the creature and the artifact none, and a land shares none of them; once the artifact creature is chosen
+/// either may follow, once the creature is the artifact may not; three do not share one though each pair does (Bear and Rock with the Golem
+/// between them); and the most it allows of the four is two.
+#[test]
+fn sharing_a_card_type_needs_one_type_on_every_card() {
+    use cantrip_api::select::first_targets;
+    let game = game(&["Probe Bear", "Probe Golem", "Probe Rock", "Probe Wastes"]);
+    let (bear, golem, rock) = (of(&game, "Probe Bear"), of(&game, "Probe Golem"), of(&game, "Probe Rock"));
+    let rule = select::cards(select::up_to(3)).with(select::SHARE_A_CARD_TYPE);
+    assert!(verdict(&game, &rule, &[]).0 && verdict(&game, &rule, &[bear]).0, "none and one share a type");
+    assert!(verdict(&game, &rule, &[bear, golem]).0 && verdict(&game, &rule, &[golem, rock]).0);
+    assert!(!verdict(&game, &rule, &[bear, rock]).0, "a creature and an artifact");
+    assert!(!verdict(&game, &rule, &[bear, golem, rock]).0, "each pair shares a type, the three do not");
+    let addable = |selected: &[ObjectId]| {
+        let mut names = verdict(&game, &rule, selected).1;
+        names.sort();
+        names
+    };
+    assert_eq!(addable(&[]), vec!["Probe Bear", "Probe Golem", "Probe Rock", "Probe Wastes"]);
+    assert_eq!(addable(&[golem]), vec!["Probe Bear", "Probe Rock"]);
+    assert_eq!(addable(&[bear]), vec!["Probe Golem"]);
+    assert_eq!(addable(&[rock]), vec!["Probe Golem"]);
+    let cards: Vec<Target> = ["Probe Bear", "Probe Golem", "Probe Rock", "Probe Wastes"].iter().map(|n| Target::Object(of(&game, n))).collect();
+    let most = |rule: &Part| (0..=cards.len()).rev().find(|&n| first_targets(&game, Some(rule), YOU, ObjectId::NONE, &cards, n).is_some());
+    assert_eq!(most(&select::SHARE_A_CARD_TYPE), Some(2));
+    assert_eq!(select::cards(select::up_to(2)).with(select::SHARE_A_CARD_TYPE).words(&|n| n.to_string()), vec!["that share a card type".to_string()]);
 }
 
 /// How many cards a set rule allows together at most (`cantrip_api::select::first_targets`, a set rule's `LargestFn`): with

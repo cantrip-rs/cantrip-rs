@@ -16,7 +16,7 @@
 //! - **Qualities of each card:** [`BASIC_LAND`], [`LAND`], [`CREATURE`], [`ARTIFACT`], [`NONLAND`], [`mana_value_at_most`],
 //!   [`named`].
 //! - **Rules of the cards together:** [`DIFFERENT_NAMES`] (CR 201.2b), [`DIFFERENT_MANA_VALUES`] (CR 202.3),
-//!   [`total_mana_value_at_most`] (CR 202.3).
+//!   [`total_mana_value_at_most`] (CR 202.3), [`SHARE_A_CARD_TYPE`] (CR 205.2a).
 //! - **Targets together:** a rule of the cards together is a set rule (`set_part`, with a `LargestFn` that finds a largest
 //!   set it allows), and judges a target slot's targets together too (`TargetSpec::together`, CR 601.2c): "any number of
 //!   target creature cards with total mana value X or less" is `.together(select::total_mana_value_at_most(TargetSpec::COUNTED))`,
@@ -257,6 +257,28 @@ fn different_mana_values(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
 /// slot's filter's) print it of targets.
 pub const DIFFERENT_MANA_VALUES: Part =
     set_part(&(different_mana_values as SelectFn), &(largest_different_mana_values as LargestFn), 0, "with different mana values");
+
+fn share_a_card_type(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
+    let all_have = |t: CardType| choice.selected.iter().all(|&c| q.chars(c).is(t));
+    let complete = choice.selected.is_empty() || CardType::ALL.into_iter().any(all_have);
+    let addable = Bits::of(choice.candidates.len(), |i| {
+        let candidate = q.chars(choice.candidates[i]);
+        choice.selected.is_empty() || CardType::ALL.into_iter().any(|t| all_have(t) && candidate.is(t))
+    });
+    Verdict { complete, addable }
+}
+
+/// "That share a card type" (CR 205.2a, 205.2): some one card type is a type of every object chosen, each read as it is where
+/// it is. A single object shares a type with itself, and any of the objects of a set that does share one share it too.
+/// Burglar's Plot's "two target nonland permanents that share a card type" and Shifting Loyalties' "two target permanents
+/// that share a card type" print it of targets.
+pub const SHARE_A_CARD_TYPE: Part = set_part(&(share_a_card_type as SelectFn), &(largest_sharing_a_card_type as LargestFn), 0, "that share a card type");
+
+/// A largest set that shares a card type: the candidates of the card type the most of them have.
+fn largest_sharing_a_card_type(q: &dyn Query, choice: &Choice, _: u32) -> Vec<ObjectId> {
+    let with = |t: CardType| choice.candidates.iter().copied().filter(|&c| q.chars(c).is(t)).collect::<Vec<_>>();
+    CardType::ALL.into_iter().map(with).max_by_key(Vec::len).unwrap_or_default()
+}
 
 /// A largest set with different mana values: the first card of each mana value.
 fn largest_different_mana_values(q: &dyn Query, choice: &Choice, _: u32) -> Vec<ObjectId> {
