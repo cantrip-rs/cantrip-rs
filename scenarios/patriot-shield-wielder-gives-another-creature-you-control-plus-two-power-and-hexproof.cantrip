@@ -1,0 +1,65 @@
+# Patriot, Shield Wielder: "{2}, {T}: Another target creature you control gets +2/+0 and gains hexproof until end of turn." On turn 3
+# it targets Bot1's Ornithopter - not itself (the refusal), not Bot2's Ornithopter (the refusal) - paying exactly {2} (the pool is
+# empty after the activation). The Ornithopter is a 2/2 with hexproof until the end of turn, so Bot2's Lightning Bolt can't target it
+# then, and on turn 4 it is a 0/2 again and the Bolt can.
+
+[Bot1 Deck]
+Patriot, Shield Wielder
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Patriot, Shield Wielder.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Patriot, Shield Wielder.Activate(Patriot, Shield Wielder)
+! Bot1.Battlefield.Patriot, Shield Wielder.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Patriot, Shield Wielder.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Hexproof
+? Bot1.Battlefield.Patriot, Shield Wielder.Tapped = true
+[T3 Bot1.Main2]
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Graveyard = Ornithopter
