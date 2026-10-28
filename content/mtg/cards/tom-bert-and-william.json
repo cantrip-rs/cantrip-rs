@@ -1,0 +1,8 @@
+{
+  "name": "Tom, Bert, and William",
+  "manaCost": "{3}{B}{G}",
+  "type": "Legendary Creature — Troll",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "{1}, Sacrifice another creature: Draw cards equal to the sacrificed creature's power, then discard a card.\nWhen Tom, Bert, and William die, if they were a creature, return them to the battlefield. They're an artifact. (They're no longer a creature.)"
+}
