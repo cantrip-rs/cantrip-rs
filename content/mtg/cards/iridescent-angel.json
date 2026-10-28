@@ -1,0 +1,11 @@
+{
+  "name": "Iridescent Angel",
+  "manaCost": "{5}{W}{U}",
+  "type": "Creature — Angel",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying, protection from each color",
+  "keywords": [
+    "Flying"
+  ]
+}
