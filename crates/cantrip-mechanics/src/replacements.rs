@@ -261,6 +261,23 @@ pub fn opponent_would_draw_except_first_in_draw_step(q: &dyn Query, asker: &Aske
         if q.state().opponents(asker.controller).any(|o| o == d.player) && !crate::history::first_draw_in_own_draw_step(q, d.player))
 }
 
+/// "If you would draw a card except the first one you draw in each of your draw steps" (CR 121.6, 614.1a): each draw on its own,
+/// judged as it is about to be made, so the turn's first card drawn in the draw step is left alone, and the one after it is not.
+fn you_would_draw_except_first_in_draw_step(q: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {
+    you_would_draw_a_card(q, asker, proposal) && !crate::history::first_draw_in_own_draw_step(q, asker.controller)
+}
+
+/// "... draw two cards instead": two draws, each meeting the replacement effects that have not yet had their opportunity at the
+/// draw this replaced (CR 614.5), so two such effects make four.
+fn draw_two(g: &mut dyn Game, asker: &Asker, _: &Proposal, _: &Proposal) {
+    g.draw(asker.controller, 2);
+}
+
+/// "If you would draw a card except the first one you draw in each of your draw steps, draw two cards instead." Alhammarret's
+/// Archive and Bard, King of Dale print it (and Teferi's Ageless Insight).
+pub const DRAW_TWO_INSTEAD_EXCEPT_THE_FIRST_IN_YOUR_DRAW_STEP: ReplacementDef =
+    replacement(ReplacementKind::Draw, you_would_draw_except_first_in_draw_step, instead_of_drawing, "draws two cards instead").then(draw_two);
+
 /// "You win the game instead": unless a player can't win or an opponent can't lose (Platinum Angel), when it does nothing
 /// and the draw is still replaced, so nobody loses for it either (CR 104.2b, Laboratory Maniac's ruling).
 fn win_instead(g: &mut dyn Game, asker: &Asker, _: &Proposal, _: &Proposal) {
