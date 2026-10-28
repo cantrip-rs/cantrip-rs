@@ -1,0 +1,59 @@
+# Echo, Perceptive Prodigy: "{1}, {T}: Copy target activated or triggered ability you control from a creature source." Cast on
+# turn 1 for {2}{U} (Black Lotus). On turn 3 Bot1 casts A.I.M. Scientists with four Moxen, and with its enters trigger ("it
+# connives") on the stack taps Echo and the fifth Mox for {1}: the copy resolves first and connives (draw a Lightning Bolt,
+# discard it), then the original connives (draw the second, discard it): two counters, a 5/5. The pool is empty after.
+
+[Bot1 Deck]
+Black Lotus
+Echo, Perceptive Prodigy
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+A.I.M. Scientists
+Lightning Bolt
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Echo, Perceptive Prodigy.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.A.I.M. Scientists.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Echo, Perceptive Prodigy.Activate(Stack.A.I.M. Scientists)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Lightning Bolt)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.A.I.M. Scientists.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.A.I.M. Scientists.Power = 5
+Bot1.Battlefield.Echo, Perceptive Prodigy.Tapped = true
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus

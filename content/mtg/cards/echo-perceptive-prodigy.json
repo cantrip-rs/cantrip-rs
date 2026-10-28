@@ -1,0 +1,11 @@
+{
+  "name": "Echo, Perceptive Prodigy",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Creature — Human Hero",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Vigilance\n{1}, {T}: Copy target activated or triggered ability you control from a creature source. You may choose new targets for the copy. (Mana abilities can't be targeted.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}
