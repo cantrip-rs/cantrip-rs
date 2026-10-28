@@ -379,3 +379,22 @@ fn control_for_as_long_as_its_source_remains_ends_as_the_source_phases_out() {
     crate::ops::settle_control(&mut cx);
     assert_eq!(cx.s().obj(bear).controller, THEM);
 }
+
+/// A permanent coming under a player's control is a record in the history (CR 613.1b, 702.30a): once as the Aura gives it
+/// to you, once as it goes back to its owner; a permanent whose controller stays the same leaves none.
+#[test]
+fn a_change_of_control_is_recorded_each_time_it_happens() {
+    let (mut game, table) = game();
+    let bear = put(&mut game, table, &BEAR, THEM);
+    let mind = put(&mut game, table, &MIND, YOU);
+    game.state.update_obj(mind, |o| o.attached_to = Some(bear));
+    let mut cx = cx(&mut game);
+    let changes = |cx: &Cx| -> Vec<PlayerId> {
+        cx.g.log.iter().filter_map(|r| match r.event { Event::ControlChanged { permanent, controller } if permanent == bear => Some(controller), _ => None }).collect()
+    };
+    crate::ops::settle_control(&mut cx);
+    crate::ops::settle_control(&mut cx);
+    assert_eq!(changes(&cx), vec![YOU], "settling again changes nothing and records nothing");
+    crate::ops::move_to(&mut cx, mind, Zone::graveyard(YOU));
+    assert_eq!(changes(&cx), vec![YOU, THEM]);
+}

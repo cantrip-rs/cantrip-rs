@@ -3814,6 +3814,8 @@ fn write_controller(cx: &mut Cx, id: ObjectId, controller: PlayerId, by_effect: 
         }
     });
     if controller != obj.controller {
+        // It came under this player's control (CR 613.1b): what an echo ability asks of the history (CR 702.30a).
+        cx.record(Event::ControlChanged { permanent: id, controller });
         // A permanent whose controller changes is removed from combat (CR 506.4): an attacking or blocking creature, and a
         // planeswalker or battle being attacked, whose attackers then attack nothing (CR 506.4c).
         remove_from_combat(cx, &[id]);
