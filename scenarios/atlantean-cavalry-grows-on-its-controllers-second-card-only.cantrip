@@ -1,0 +1,43 @@
+# Atlantean Cavalry: "Whenever you draw your second card each turn, put a +1/+1 counter on this creature" (CR 120.3, 603.2).
+# Cast with Black Lotus's {U}{U}{U} on turn 1. Bot2's own second card on turn 2 (Opt) gives it nothing. On turn 3 the draw
+# step's card is Bot1's first (no counter), and Opt's is the second: one counter, a 4/3.
+
+[Bot1 Deck]
+Black Lotus
+Atlantean Cavalry
+Island
+Opt
+Island x3
+Plains x14
+
+[Bot2 Deck]
+Island
+Opt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Atlantean Cavalry.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Opt.Cast
+Bot2.Arrange(Island |)
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Atlantean Cavalry.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Atlantean Cavalry.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Arrange(Plains |)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Atlantean Cavalry.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Atlantean Cavalry.Power = 4
+Bot1.Battlefield.Atlantean Cavalry.Toughness = 3
