@@ -1,0 +1,80 @@
+# Goblin-town: "This land enters tapped", "{T}: Add {B} or {R}" and "{2}{B}{R}, {T}, Sacrifice this land: Put two +1/+1
+# counters on target Goblin or Orc you control. Activate only as a sorcery." An Orc. The land is tapped the turn it enters and untaps next
+# turn; it taps for either color and no other (Undo takes each tap back); the ability is refused outside a main phase and at an
+# Ornithopter or the opponent's Orcish Lumberjack, and puts exactly two counters on Bot1's Orcish Lumberjack (the {T} and the sacrifice are costs,
+# paid exactly with four Moxen) (CR 602.5d, 122.1).
+
+[Bot1 Deck]
+Goblin-town
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Orcish Lumberjack
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Orcish Lumberjack
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Goblin-town.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Orcish Lumberjack.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Goblin-town.Tapped = true
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Orcish Lumberjack.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Goblin-town.Tapped = false
+! Bot1.Battlefield.Goblin-town.Activate(Color: Blue)
+Bot1.Battlefield.Goblin-town.Activate(Color: Black)
+? Bot1.Mana = {B}
+Bot1.Undo
+Bot1.Battlefield.Goblin-town.Activate(Color: Red)
+? Bot1.Mana = {R}
+Bot1.Undo
+! Bot1.Battlefield.Goblin-town.Activate(Ability: Put two)
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+! Bot1.Battlefield.Goblin-town.Activate(Ability: Put two; Ornithopter)
+! Bot1.Battlefield.Goblin-town.Activate(Ability: Put two; Bot2.Battlefield.Orcish Lumberjack)
+! Bot1.Battlefield.Goblin-town.Activate(Ability: Put two; Bot2)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Goblin-town.Activate(Ability: Put two; Orcish Lumberjack)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Orcish Lumberjack.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Orcish Lumberjack.Counters.PlusOnePlusOne = (absent)
+Bot1.Graveyard = Goblin-town
+Bot1.Battlefield.Orcish Lumberjack.Power = 3
+Bot1.Battlefield.Orcish Lumberjack.Toughness = 3
