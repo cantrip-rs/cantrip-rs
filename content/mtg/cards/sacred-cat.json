@@ -1,0 +1,11 @@
+{
+  "name": "Sacred Cat",
+  "manaCost": "{W}",
+  "type": "Creature — Cat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Lifelink\nEmbalm {W} ({W}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a white Zombie Cat with no mana cost. Embalm only as a sorcery.)",
+  "keywords": [
+    "Lifelink"
+  ]
+}

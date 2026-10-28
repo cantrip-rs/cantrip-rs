@@ -1,0 +1,53 @@
+# Sacred Cat's embalm {W} (CR 702.128a). Bot1 discards both Cats to Faithless Looting. A Cat in hand has no embalm to
+# activate even with {W} floating. Paid with exactly that {W} (the pool is empty right after), the Cat in the graveyard is
+# exiled and a token copy of it is made: white, a Cat Zombie with no mana cost (mana value 0), still a 1/1 with lifelink.
+# With every mana source tapped the second Cat's embalm is not offered (the cost is {W}); on Bot2's turn 2 it is not offered
+# even with {W} floating (sorcery speed), and on Bot1's own turn 3 it is, which makes the second token.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Sacred Cat
+Sacred Cat
+Mox Pearl
+Mox Pearl
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Sacred Cat.Activate(Ability: Embalm)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Sacred Cat; Sacred Cat)
+Bot1.Graveyard.Sacred Cat.Activate(Ability: Embalm)
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Graveyard.Sacred Cat.Activate(Ability: Embalm; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Pearl#2.Activate
+! Bot1.Graveyard.Sacred Cat.Activate(Ability: Embalm)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Graveyard.Sacred Cat.Activate(Ability: Embalm)
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Sacred Cat; Sacred Cat
+Bot1.Graveyard = Faithless Looting
+Bot1.Battlefield.Sacred Cat#1.Colors = White
+Bot1.Battlefield.Sacred Cat#1.Subtypes = Cat; Zombie
+Bot1.Battlefield.Sacred Cat#1.ManaValue = 0
+Bot1.Battlefield.Sacred Cat#1.Power = 1
+Bot1.Battlefield.Sacred Cat#1.Keywords = Lifelink
