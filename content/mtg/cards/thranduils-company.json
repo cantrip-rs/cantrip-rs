@@ -1,0 +1,8 @@
+{
+  "name": "Thranduil's Company",
+  "manaCost": "{2}{G}{U}",
+  "type": "Creature — Elf Soldier",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "As long as you control another Elf, you may play an additional land on each of your turns.\nLandfall — Whenever a land you control enters, put two +1/+1 counters on target creature you control. It gains vigilance until end of turn."
+}
