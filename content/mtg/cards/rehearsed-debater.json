@@ -1,0 +1,11 @@
+{
+  "name": "Rehearsed Debater",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Djinn Bard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Vigilance\nRepartee — Whenever you cast an instant or sorcery spell that targets a creature, this creature gets +1/+1 until end of turn.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

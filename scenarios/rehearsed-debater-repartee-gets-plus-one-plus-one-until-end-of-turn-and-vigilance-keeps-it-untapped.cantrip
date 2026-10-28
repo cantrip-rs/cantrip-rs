@@ -1,0 +1,43 @@
+# Rehearsed Debater: a Lightning Bolt at Bot2's Ornithopter gives it +1/+1 until end of turn (4/4), so it attacks for 4 and, with
+# vigilance, stays untapped; the next turn it is a 3/3 again.
+
+[Bot1 Deck]
+Plains x3
+Mountain
+Rehearsed Debater
+Lightning Bolt
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Rehearsed Debater.Cast
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+[T7 Bot1.BeginCombat]
+? Bot1.Battlefield.Rehearsed Debater.Power = 4
+? Bot1.Battlefield.Rehearsed Debater.Toughness = 4
+Bot1.Attack(Rehearsed Debater > Bot2)
+[T7 Bot1.Main2]
+? Bot1.Battlefield.Rehearsed Debater.Tapped = false
+[T9 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Rehearsed Debater.Power = 3
+Bot1.Battlefield.Rehearsed Debater.Toughness = 3
