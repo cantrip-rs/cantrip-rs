@@ -564,6 +564,34 @@ pub const fn ward_life_equal_to_power(text: &'static str) -> AbilityDef {
         .ward()
 }
 
+/// What ward's collect evidence cost asks the player whose spell or ability targeted (CR 118.12a, 701.59a).
+const WARD_COLLECT_EVIDENCE: Question = Question::new(
+    "Countered",
+    "collect evidence, or {subject} is countered?",
+    "Ward: exile cards from your graveyard with enough total mana value, or it is countered",
+    "Collect evidence",
+    "Let it be countered",
+)
+.no_default();
+
+fn ward_collect_evidence_effect<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Target::Object(by) = item.subject else { return Ok(()) };
+    let payer = PlayerId(item.data[0] as u8);
+    // The payer chooses the cards as they pay (CR 701.59a); one with too few cards to reach N can't choose to (CR 701.59b),
+    // is not asked, and the spell or ability is countered.
+    if !g.may_pay(payer, item.object, by, Cost { collect_evidence: N, ..Cost::NONE }, &WARD_COLLECT_EVIDENCE)? {
+        g.counter_item(by, item.data[1] as usize);
+    }
+    Ok(())
+}
+
+/// Ward--Collect evidence N (CR 702.21a, 701.59a): "Whenever this becomes the target of a spell or ability an opponent
+/// controls, counter it unless that player collects evidence N" - exiles cards with total mana value N or greater from their
+/// graveyard. Axebane Ferox prints it with 4.
+pub const fn ward_collect_evidence<const N: u8>(text: &'static str) -> AbilityDef {
+    triggered(when(EventMask::BECAME_TARGET, ward_matches), ward_collect_evidence_effect::<N>, text).ward()
+}
+
 fn ward_discard_effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Target::Object(by) = item.subject else { return Ok(()) };
     let payer = PlayerId(item.data[0] as u8);
