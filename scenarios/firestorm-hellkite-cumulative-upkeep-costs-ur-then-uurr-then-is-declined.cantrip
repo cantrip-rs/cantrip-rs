@@ -1,0 +1,73 @@
+# Firestorm Hellkite {4}{U}{R}, 6/6 flying and trample, "Cumulative upkeep {U}{R}" (CR 702.24a). Cast on turn 1 (Black Lotus's
+# {U}{U}{U}, Mox Sapphire's {U}, Mox Ruby's {R} and an Island's {U}), at Bot1's turn 3 upkeep it gets an age counter and the cost
+# is {U}{R} once: Mox Sapphire, Mox Ruby and the Island are tapped, {U}{R} is paid and one {U} is left. At turn 5 it gets a second
+# age counter and the cost is {U}{U}{R}{R}, each symbol twice: with Mox Sapphire, the Island and Mox Ruby tapped (one {R}
+# short) paying is not offered; with the Mountain played on turn 3 it is, the pool empty. At turn 7 the cost would be three of each;
+# Bot1 declines and sacrifices it.
+
+[Bot1 Deck]
+Firestorm Hellkite
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Island
+Mountain
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Firestorm Hellkite.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Firestorm Hellkite.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mountain.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Firestorm Hellkite.Counters.Age = 2
+? Bot1.Battlefield.Firestorm Hellkite.Power = 6
+? Bot1.Battlefield.Firestorm Hellkite.Toughness = 6
+? Bot1.Battlefield.Firestorm Hellkite.Keywords = Flying; Trample
+? Bot1.Battlefield.Firestorm Hellkite.Colors = Blue; Red
+[T7 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard = Firestorm Hellkite; Black Lotus
+Bot1.Battlefield.Firestorm Hellkite = (absent)

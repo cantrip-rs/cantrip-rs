@@ -1,0 +1,12 @@
+{
+  "name": "Firestorm Hellkite",
+  "manaCost": "{4}{U}{R}",
+  "type": "Creature — Dragon",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Flying, trample\nCumulative upkeep {U}{R} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}
