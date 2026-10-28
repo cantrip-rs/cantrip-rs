@@ -1,0 +1,42 @@
+# Fractalize makes the target a Fractal and loses its other creature types, not its card types (CR 205.1a): Bot2's
+# Ornithopter, a colorless Artifact Creature - Thopter, targeted with X of 0, is a 1/1 green and blue Fractal that is still an
+# artifact creature, and is the Thopter it was again at end of turn.
+
+[Bot1 Deck]
+Mox Sapphire
+Fractalize
+Island
+Island
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fractalize.Cast(Bot2.Battlefield.Ornithopter; X: 0)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot2.Battlefield.Ornithopter.Toughness = 1
+? Bot2.Battlefield.Ornithopter.Subtypes = Fractal
+? Bot2.Battlefield.Ornithopter.Colors = Blue; Green
+? Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Subtypes = Thopter
+? Bot2.Battlefield.Ornithopter.Colors = (absent)
+
+[Expect]
+Turn = 4
