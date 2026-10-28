@@ -1,0 +1,67 @@
+# Velvetwing Butterflies // Gaze in Wonder: the Adventure "Tap one or two target creatures" (CR 701.26a, 115.1d) taps exactly the
+# two Ornithopters Bot1 chooses, not a third (a third target is refused), costs {1}{W} (two Moxen, pool empty right after), and
+# exiles the card as it resolves (CR 715.4); the 2/2 flier is then cast from exile for {2}{W} (CR 715.5).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Velvetwing Butterflies
+Plains
+Plains
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Velvetwing Butterflies.Cast(Ability: Adventure)
+! Bot1.Target(Bot2.Battlefield.Ornithopter#1; Bot2.Battlefield.Ornithopter#2; Bot2.Battlefield.Ornithopter#3)
+Bot1.Target(Bot2.Battlefield.Ornithopter#1; Bot2.Battlefield.Ornithopter#2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter#1.Tapped = true
+? Bot2.Battlefield.Ornithopter#2.Tapped = true
+? Bot2.Battlefield.Ornithopter#3.Tapped = false
+? Exile = Velvetwing Butterflies
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Exile.Velvetwing Butterflies.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Velvetwing Butterflies.Keywords = Flying
+Bot1.Battlefield.Velvetwing Butterflies.Power = 2
+Bot1.Battlefield.Velvetwing Butterflies.Toughness = 2
