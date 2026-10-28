@@ -1,0 +1,64 @@
+# Cruel Alliance cast without teamwork: "Exile target creature with mana value 3 or less" (CR 115.1, 202.3). Bot2's Centaur Courser
+# (mana value 3, exactly at the limit) is exiled; Bot1's own Giant Cockroach (mana value 4, one past it) is refused. No life is
+# gained without teamwork. Paid for exactly {2}{B}.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Giant Cockroach
+Cruel Alliance
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Centaur Courser
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Cockroach.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cruel Alliance.Cast
+Bot1.Modes(Cast without teamwork)
+! Bot1.Target(Bot1.Battlefield.Giant Cockroach)
+Bot1.Target(Bot2.Battlefield.Centaur Courser)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Centaur Courser
+Bot1.Life = 20
+Bot1.Battlefield.Giant Cockroach.Tapped = false
+Bot1.Graveyard = Cruel Alliance
