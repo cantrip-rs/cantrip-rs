@@ -1895,6 +1895,14 @@ impl cantrip_api::Game for Cx<'_> {
         ops::create_token_copies(self, values, controller, count).map_err(|_| Suspend)
     }
 
+    fn create_token_copies_tapped(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool) -> Result<Vec<ObjectId>, Suspend> {
+        ops::create_token_copies_tapped(self, values, controller, count, tapped).map_err(|_| Suspend)
+    }
+
+    fn enter_attacking(&mut self, entered: &[ObjectId], defender: Target) {
+        ops::attack_with_tokens(self, entered, defender);
+    }
+
     fn put_onto_battlefield_transformed(&mut self, object: ObjectId, controller: PlayerId, tapped: bool) -> Result<ObjectId, Suspend> {
         ops::put_onto_battlefield_as(self, object, controller, tapped, true, ZoneReason::Other, &[]).map_err(|_| Suspend)
     }

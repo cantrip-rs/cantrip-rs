@@ -1744,6 +1744,12 @@ pub fn create_token_copies(cx: &mut Cx, values: Copiable, controller: PlayerId, 
     create_tokens_as(cx, values.card, controller, count, false, Some(values), &[])
 }
 
+/// `create_token_copies`, tapped as they enter when `tapped` (CR 110.5b, 614.1c): myriad's "token copy that's tapped and
+/// attacking" (CR 702.116a) is created tapped, not tapped afterwards.
+pub fn create_token_copies_tapped(cx: &mut Cx, values: Copiable, controller: PlayerId, count: u32, tapped: bool) -> R<Vec<ObjectId>> {
+    create_tokens_as(cx, values.card, controller, count, tapped, Some(values), &[])
+}
+
 /// An object that ceases to exist where it is, in no zone it can be in (CR 111.7, 111.8, 707.10a, 704.5d, 800.4a), as it
 /// last existed there (CR 608.2h).
 pub fn cease_to_exist(cx: &mut Cx, zone: Zone, id: ObjectId) {
