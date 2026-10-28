@@ -1,0 +1,43 @@
+# The Kingpin of Crime's life payment (CR 119.4): at 1 life Bot1 can't pay 2 life, so the attack trigger asks nothing
+# (`! Bot1.Accept`), and Bot1 stays at 1 while the Kingpin deals its power, 1.
+
+[Life]
+Bot1: 1
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+The Kingpin of Crime
+Swamp x30
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Kingpin of Crime.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Kingpin of Crime > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 1
+Bot2.Life = 19

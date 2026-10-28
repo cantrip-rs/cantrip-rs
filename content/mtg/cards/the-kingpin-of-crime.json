@@ -1,0 +1,8 @@
+{
+  "name": "The Kingpin of Crime",
+  "manaCost": "{1}{W}{B}",
+  "type": "Legendary Creature — Human Villain",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": "Extort (Whenever you cast a spell, you may pay {W/B}. If you do, each opponent loses 1 life and you gain that much life.)\nWhenever you attack, you may pay 2 life. If you do, until end of turn, creatures you control with toughness greater than their power assign combat damage equal to their toughness rather than their power."
+}

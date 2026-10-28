@@ -1,0 +1,37 @@
+# The Kingpin of Crime's life payment (CR 119.4): a player may pay life only if their life total is at least that much.
+# At 2 life Bot1 can pay 2 and goes to 0, losing the game (CR 704.5a) before combat damage.
+
+[Life]
+Bot1: 2
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+The Kingpin of Crime
+Swamp x30
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Kingpin of Crime.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Kingpin of Crime > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Result = Bot2 won
+Bot1.Life = 0
