@@ -1,0 +1,47 @@
+# The Great Goblin: "Whenever you put one or more counters on a Goblin, Orc, or Army you control, The Great Goblin deals 2 damage to
+# target opponent." Bot1 puts a counter with a Duskwatch Hunter on its Orcish Lumberjack, an Orc that is neither a Goblin nor an
+# Army: each of the three types is enough on its own, so the ability triggers and the Great Goblin deals 2 damage to Bot2, once.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+The Great Goblin
+Duskwatch Hunter
+Orcish Lumberjack
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Great Goblin.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Orcish Lumberjack.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Duskwatch Hunter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Orcish Lumberjack)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Orcish Lumberjack.Counters.PlusOnePlusOne = 1

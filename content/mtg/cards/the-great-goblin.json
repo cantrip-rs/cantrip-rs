@@ -1,0 +1,8 @@
+{
+  "name": "The Great Goblin",
+  "manaCost": "{1}{B/R}{B/R}",
+  "type": "Legendary Creature — Goblin Noble",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Whenever you put one or more counters on a Goblin, Orc, or Army you control, The Great Goblin deals 2 damage to target opponent.\nWhenever another Goblin, Orc, or Army you control dies, exile the top card of your library. You may play it until the end of your next turn."
+}
