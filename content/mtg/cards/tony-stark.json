@@ -1,0 +1,20 @@
+{
+  "name": "Tony Stark",
+  "manaCost": "{1}{U}",
+  "type": "Legendary Creature — Human Artificer Hero",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{1}, {T}: Look at the top four cards of your library. You may reveal an artifact card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.\n{4}{U}{R}: Transform Tony Stark. Activate only as a sorcery.",
+  "backFace": {
+    "name": "The Invincible Iron Man",
+    "manaCost": "{4}{U}{R}",
+    "type": "Legendary Artifact Creature — Human Hero",
+    "power": 5,
+    "toughness": 5,
+    "oracleText": "Flying, haste\nAt the beginning of combat on your turn, you may put an artifact card from your hand onto the battlefield. If it's an Equipment, attach it to The Invincible Iron Man.",
+    "keywords": [
+      "Flying",
+      "Haste"
+    ]
+  }
+}
