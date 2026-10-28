@@ -1,0 +1,79 @@
+# Mister Hyde, Monster Within: "At the beginning of your upkeep, choose one - Put a +1/+1 counter on Mister Hyde; or remove a counter from a
+# creature you control. If you do, draw a card." Turn 3 upkeep: the counter on Hyde (3/3); Bot1 then casts Grizzly Bears and gives them a
+# counter with Go Nuts!. Turn 5: Bot1 removes the counter from the Bears (not Hyde's) and draws a card. Turn 7: the counter of Hyde comes
+# off (2/2 again) and it draws. Turn 9: no creature has a counter, so nothing comes off and no card is drawn (its library is one card
+# shorter only for the turn's draw).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mister Hyde, Monster Within
+Grizzly Bears
+Go Nuts!
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mister Hyde, Monster Within.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Mister Hyde, Monster Within.Power = 3
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Go Nuts!.Cast
+Bot1.Modes(Cast without teamwork)
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+Bot1.RemoveCounters(Grizzly Bears: 1)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+? Bot1.Battlefield.Mister Hyde, Monster Within.Power = 3
+? Bot1.Library.Count = 12
+[T7 Bot1.Upkeep]
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+Bot1.RemoveCounters(Mister Hyde, Monster Within: 1)
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Mister Hyde, Monster Within.Power = 2
+? Bot1.Library.Count = 10
+[T9 Bot1.Upkeep]
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+
+[Expect]
+Bot1.Library.Count = 9
+Bot1.Battlefield.Mister Hyde, Monster Within.Power = 2

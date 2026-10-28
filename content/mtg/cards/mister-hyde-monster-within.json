@@ -1,0 +1,8 @@
+{
+  "name": "Mister Hyde, Monster Within",
+  "manaCost": "{2}{G}",
+  "type": "Legendary Creature — Human Villain",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "At the beginning of your upkeep, choose one —\n• Put a +1/+1 counter on Mister Hyde.\n• Remove a counter from a creature you control. If you do, draw a card."
+}
