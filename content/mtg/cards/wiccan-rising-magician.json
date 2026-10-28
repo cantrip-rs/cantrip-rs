@@ -1,0 +1,11 @@
+{
+  "name": "Wiccan, Rising Magician",
+  "manaCost": "{4}{U}",
+  "type": "Legendary Creature — Mutant Warlock Hero",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nWhenever you cast a noncreature spell, exile another target nonland, nontoken permanent. Return that card to the battlefield under its owner's control at the beginning of the next end step.",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,71 @@
+# Wiccan, Rising Magician: "Whenever you cast a noncreature spell, exile another target nonland, nontoken permanent. Return
+# that card to the battlefield under its owner's control at the beginning of the next end step." Cast on turn 1 for {4}{U}
+# paid exactly (Island and four Moxen). On turn 3 Bot1's Ornithopter, a creature spell, triggers nothing. Opt, a noncreature
+# spell, does: Wiccan itself, a land (Bot1's Island) and a token (Bot2's Soldier) are not legal targets (the refusals), Bot2's
+# S.H.I.E.L.D. Deployment Drone is, and is exiled. At the end step it returns under Bot2's control as a new object (CR 400.7)
+# and its enters trigger makes a second Soldier.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Wiccan, Rising Magician
+Opt
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Black Lotus
+S.H.I.E.L.D. Deployment Drone
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wiccan, Rising Magician.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.S.H.I.E.L.D. Deployment Drone.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Target
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+! Bot1.Target(Bot1.Battlefield.Wiccan, Rising Magician)
+! Bot1.Target(Bot2.Battlefield.Soldier Token)
+! Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.S.H.I.E.L.D. Deployment Drone)
+Bot1.Pass
+Bot2.Pass
+? Exile = S.H.I.E.L.D. Deployment Drone
+? Bot2.Battlefield = Soldier Token
+Bot1.Arrange(Island |)
+[T4 Bot2.Main1]
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield.Count = 3
+Bot2.Battlefield.Soldier Token#1.Power = 1
+Bot2.Battlefield.Soldier Token#2.Power = 1
+Bot2.Battlefield.S.H.I.E.L.D. Deployment Drone.Power = 2
