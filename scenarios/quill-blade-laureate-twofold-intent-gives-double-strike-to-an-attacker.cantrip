@@ -1,0 +1,40 @@
+# Quill-Blade Laureate // Twofold Intent (CR 722). The Laureate (a 1/1 double striker) enters prepared on turn one alongside
+# an Ornithopter. On turn three Twofold Intent - "Target creature gets +1/+0 and gains double strike until end of turn" -
+# makes the 0/2 flying Ornithopter a 1/2 double striker, which hits Bot2 twice: 2 damage.
+
+[Bot1 Deck]
+Quill-Blade Laureate
+Mox Pearl x2
+Ornithopter
+Island x3
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Quill-Blade Laureate.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Exile.Twofold Intent.Cast(Ornithopter)
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = DoubleStrike; Flying
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Quill-Blade Laureate.Prepared = (absent)
+Bot1.Battlefield.Quill-Blade Laureate.Keywords = DoubleStrike

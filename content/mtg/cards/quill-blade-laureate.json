@@ -1,0 +1,17 @@
+{
+  "name": "Quill-Blade Laureate",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Cleric",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Double strike\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "keywords": [
+    "DoubleStrike"
+  ],
+  "prepare": {
+    "name": "Twofold Intent",
+    "manaCost": "{1}{W}",
+    "type": "Sorcery",
+    "oracleText": "Target creature gets +1/+0 and gains double strike until end of turn."
+  }
+}

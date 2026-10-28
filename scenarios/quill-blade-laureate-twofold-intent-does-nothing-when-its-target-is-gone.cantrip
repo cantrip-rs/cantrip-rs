@@ -1,0 +1,35 @@
+# Quill-Blade Laureate // Twofold Intent: the only target gone (CR 608.2b), nothing happens. Bot2 kills its own Ornithopter
+# in response, and the Laureate stays a 1/1.
+
+[Bot1 Deck]
+Quill-Blade Laureate
+Mox Pearl x2
+Island x4
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Quill-Blade Laureate.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Exile.Twofold Intent.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Battlefield.Quill-Blade Laureate.Power = 1
