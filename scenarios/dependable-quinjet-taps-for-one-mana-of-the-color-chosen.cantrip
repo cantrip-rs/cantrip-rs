@@ -1,0 +1,34 @@
+# Dependable Quinjet: "{T}: Add one mana of any color" (CR 605.1a) adds exactly the one color chosen, and taps it. The Quinjet
+# is no creature (it is not crewed), so summoning sickness does not stop its {T} (CR 302.6) the turn it was cast: it adds {U}
+# and a Mox Sapphire's {U} joins it in the pool.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Dependable Quinjet
+Counterspell
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dependable Quinjet.Cast
+Bot1.Battlefield.Dependable Quinjet.Activate(Ability: Add one mana; Color: Blue)
+? Bot1.Mana = {U}
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana = {U}{U}
+
+[Expect]
+Bot1.Mana = {U}{U}
+Bot1.Battlefield.Dependable Quinjet.Tapped = true

@@ -1,0 +1,47 @@
+# Dependable Quinjet ({3}, Crew 4, flying 3/3). Crew 4 needs total power 4 or more (CR 702.122a): two Grizzly Bears (2 + 2)
+# crew it, tapping both, and the crewed Quinjet attacks in the air for 3. (A Vehicle that is not a creature has no summoning
+# sickness to speak of once it has been under its controller's control since the turn began, CR 302.6.)
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Dependable Quinjet
+Grizzly Bears
+Forest
+Grizzly Bears
+Mox Pearl
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dependable Quinjet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Dependable Quinjet.Activate(Ability: Crew 4)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Dependable Quinjet > Bot2)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Dependable Quinjet.Types = Artifact; Creature
+Bot1.Battlefield.Grizzly Bears#1.Tapped = true
+Bot1.Battlefield.Grizzly Bears#2.Tapped = true

@@ -1,0 +1,11 @@
+{
+  "name": "Dependable Quinjet",
+  "manaCost": "{3}",
+  "type": "Artifact — Vehicle",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\n{T}: Add one mana of any color.\nCrew 4 (Tap any number of creatures you control with total power 4 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "keywords": [
+    "Flying"
+  ]
+}
