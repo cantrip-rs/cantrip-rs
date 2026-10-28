@@ -1,0 +1,6 @@
+{
+  "name": "Multiversal Incursion",
+  "manaCost": "{5}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "For each nontoken creature you control, create a token that's a copy of that creature, except it isn't legendary."
+}
