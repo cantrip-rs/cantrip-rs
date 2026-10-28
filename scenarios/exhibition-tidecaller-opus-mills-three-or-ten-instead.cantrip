@@ -1,0 +1,48 @@
+# Exhibition Tidecaller (0/2): "Opus - Whenever you cast an instant or sorcery spell, target player mills three cards. If five or more
+# mana was spent to cast that spell, that player mills ten cards instead." On turn 1 a one-mana Lightning Bolt makes Bot2 mill
+# three. On turn 3 a Fireball with X = 4 (five mana spent in all, CR 601.2h) makes Bot2 mill ten *instead* of three (CR 614.1a):
+# thirteen cards milled in all, not sixteen, and the one Bot2 discarded to hand size on turn 2: fourteen in the graveyard.
+
+[Bot1 Deck]
+Exhibition Tidecaller
+Mox Sapphire
+Mox Ruby
+Lightning Bolt
+Black Lotus
+Fireball
+Island
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Exhibition Tidecaller.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot2.Graveyard.Count = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fireball.Cast(X: 4)
+Bot1.Target(Bot2)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard.Count = 14
+Bot2.Life = 13
