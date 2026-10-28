@@ -76,6 +76,17 @@ pub fn pump_creatures_you_control(g: &mut dyn Game, item: &StackItem, power: i16
     creatures
 }
 
+/// "Creatures you control get +`power`/+`toughness` and gain [a keyword] until end of turn" (CR 611.2, 611.2c): the creatures
+/// `item`'s controller controls as it resolves, and no creature that enters later. Silk, Web Weaver (+2/+2) and The Super Hero
+/// Civil War (+1/+1) print it with vigilance.
+pub fn pump_creatures_you_control_and_gain(g: &mut dyn Game, item: &StackItem, power: i16, toughness: i16, keyword: Keyword) {
+    instruction(g, |g| {
+        for id in pump_creatures_you_control(g, item, power, toughness) {
+            gain_until_end_of_turn(g, item.object, id, keyword);
+        }
+    });
+}
+
 /// "Other creatures you control get +`power`/+`toughness` until end of turn" (CR 611.2, 611.2c): the creatures `item`'s
 /// controller controls as it resolves but its source, and no creature that enters later. The creatures, for what the rest
 /// of the sentence does to them ("and gain trample"). Restless Prairie and Summon: Esper Maduin print it.
