@@ -1,0 +1,8 @@
+{
+  "name": "Cantankerous Keepers",
+  "manaCost": "{5}{G}",
+  "type": "Creature — Elf Soldier",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Affinity for Elves (This spell costs {1} less to cast for each Elf you control.)\nWhen this creature enters, mill four cards, then put all Elf cards from among them into your hand."
+}

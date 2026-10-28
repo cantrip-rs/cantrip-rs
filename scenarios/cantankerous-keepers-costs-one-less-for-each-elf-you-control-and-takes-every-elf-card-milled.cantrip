@@ -1,0 +1,55 @@
+# Cantankerous Keepers, {5}{G}: "Affinity for Elves. When this creature enters, mill four cards, then put all Elf cards from among
+# them into your hand." Bot1 controls two Elves (Llanowar Elves, Elvish Mystic), so it costs {3}{G}: paid exactly from a floating {G}
+# and three Moxen (the pool empty after, CR 702.41a: the colored mana is still paid). The top four cards are Elvish Warrior, Grizzly
+# Bears, Llanowar Elves and a Forest: both Elf cards go to the hand (all of them), the other two stay in the graveyard (with the sacrificed Lotus); the fifth,
+# an Elvish Archers, is not milled (exactly four).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Llanowar Elves
+Elvish Mystic
+Cantankerous Keepers
+Elvish Warrior
+Grizzly Bears
+Llanowar Elves
+Forest
+Elvish Archers
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {G}
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cantankerous Keepers.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Elvish Warrior; Llanowar Elves
+Bot1.Graveyard = Forest; Grizzly Bears; Black Lotus
+Bot1.Library.Count = 11

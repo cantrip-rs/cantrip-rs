@@ -1,0 +1,61 @@
+# Cantankerous Keepers: Affinity counts Elves "you control". Bot2 controls a Llanowar Elves and Bot1 none, so five Moxen cannot pay
+# for it (refused), though they could if the opponent's Elf counted ({4}{G}). Black Lotus makes the full {5}{G}, paid exactly. The
+# top four cards (after the turn 3 draw of the Grizzly Bears), a Forest, an Ornithopter, a Lightning Bolt and a Forest, hold no Elf card: nothing goes to the hand
+# ("all" of none), all four to the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Cantankerous Keepers
+Grizzly Bears
+Forest
+Ornithopter
+Lightning Bolt
+Forest x10
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Cantankerous Keepers.Cast(Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cantankerous Keepers.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Grizzly Bears
+Bot1.Graveyard = Forest; Lightning Bolt; Ornithopter; Forest; Black Lotus
