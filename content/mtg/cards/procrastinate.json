@@ -1,0 +1,6 @@
+{
+  "name": "Procrastinate",
+  "manaCost": "{X}{U}",
+  "type": "Sorcery",
+  "oracleText": "Tap target creature. Put twice X stun counters on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}
