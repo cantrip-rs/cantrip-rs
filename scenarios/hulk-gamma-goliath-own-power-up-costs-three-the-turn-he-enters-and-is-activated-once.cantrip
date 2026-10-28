@@ -1,0 +1,42 @@
+# Hulk, Gamma Goliath. "Power-up — {6}{R}{G}: Put five +1/+1 counters on Hulk." The turn he enters, his mana cost {3}{R}{G}
+# takes off {3}{R}{G} (CR 702.193b), leaving {3}: Hulk's own power-up is not "of other creatures", so Hulk's static adds no
+# reduction (the ability costs {3}, not nothing). Black Lotus's three blue mana pay it, and Hulk is an 11/10 with reach and
+# trample. Activated once: refused again with Mox Jet's mana to pay for it.
+
+[Bot1 Deck]
+Hulk, Gamma Goliath
+Mox Ruby
+Mox Emerald
+Black Lotus
+Black Lotus
+Mox Jet
+Island
+Island x10
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hulk, Gamma Goliath.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Hulk, Gamma Goliath.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hulk, Gamma Goliath.Power = 11
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Hulk, Gamma Goliath.Activate
+
+[Expect]
+Bot1.Battlefield.Hulk, Gamma Goliath.Toughness = 10
+Bot1.Battlefield.Hulk, Gamma Goliath.Keywords = Reach; Trample
