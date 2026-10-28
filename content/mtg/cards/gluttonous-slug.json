@@ -1,0 +1,11 @@
+{
+  "name": "Gluttonous Slug",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Slug Horror",
+  "power": 0,
+  "toughness": 3,
+  "oracleText": "Menace\nEvolve (Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)",
+  "keywords": [
+    "Menace"
+  ]
+}
