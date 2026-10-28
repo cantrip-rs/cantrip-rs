@@ -1,0 +1,12 @@
+{
+  "name": "Boggart Ram-Gang",
+  "manaCost": "{R/G}{R/G}{R/G}",
+  "type": "Creature — Goblin Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste\nWither (This deals damage to creatures in the form of -1/-1 counters.)",
+  "keywords": [
+    "Haste",
+    "Wither"
+  ]
+}
