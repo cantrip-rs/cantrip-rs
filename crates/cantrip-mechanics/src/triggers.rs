@@ -386,6 +386,22 @@ pub fn you_attack(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     }
 }
 
+/// "Whenever you attack with creatures with total power `N` or greater" (CR 508.1m, 603.2): the controller declared attackers
+/// whose powers, as they stood when the declaration was made, add up to `N` or more (signed, CR 107.1b). The declaration is
+/// the event: the creatures attacking now are those it declared (none put onto the battlefield attacking, CR 508.4), and no
+/// attack trigger has resolved to change a power, so power gained later does not count. Desert Were-Worm (12) and Ugin's
+/// Mastery (6) print it.
+pub fn you_attack_with_total_power_at_least<const N: i32>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::AttackersDeclared { player, .. }
+            if *player == me.controller && q.state().attackers.iter().map(|a| q.chars(a.id).power.map_or(0, i32::from)).sum::<i32>() >= N =>
+        {
+            Fired::PLAIN
+        }
+        _ => None,
+    }
+}
+
 fn annihilate<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     annihilate_n(g, item, N)
 }
