@@ -1,0 +1,48 @@
+# Face Yourself copies a face-down creature's copiable values (CR 707.2, 708.2): Bot2's face-down Llanowar Elves, a 4/4
+# with deathtouch and lifelink under Dissection Tools, is copied as a 2/2 creature with no name, abilities or mana cost
+# (the Equipment's bonus is not copied; the copy shows no face-down name), with haste, and it is sacrificed at the end step.
+[Bot1 Deck]
+Black Lotus x3
+Face Yourself
+Mountain x3
+Mountain x10
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Dissection Tools
+Forest x4
+Llanowar Elves
+Lightning Bolt
+Forest x10
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Dissection Tools.Cast
+Bot2.Pass
+Bot2.Arrange(Llanowar Elves | Lightning Bolt)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+? Bot2.Battlefield..Power = 4
+Bot1.Hand.Face Yourself.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 1
+? Bot1.Battlefield..Power = 2
+? Bot1.Battlefield..Toughness = 2
+? Bot1.Battlefield..Keywords = Haste
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Count = 0
+Bot2.Battlefield..FaceDownName = Llanowar Elves

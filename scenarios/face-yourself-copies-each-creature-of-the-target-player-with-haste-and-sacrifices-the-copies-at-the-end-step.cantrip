@@ -1,0 +1,48 @@
+# Face Yourself targets Bot2, who controls Llanowar Elves and Grizzly Bears: Bot1 gets a token copy of each (and none of
+# its own Mons's Goblin Raiders), both with haste (they attack the turn they are made: Bot2 takes 1 + 2) and neither
+# copying anything but its creature. At the beginning of the end step Bot1 controls no planeswalker, so each copy is
+# sacrificed (CR 603.4, 701.21a); Bot2's creatures and Bot1's own stay.
+[Bot1 Deck]
+Black Lotus x4
+Mons's Goblin Raiders
+Face Yourself
+Mountain
+Mountain x10
+[Bot2 Deck]
+Black Lotus
+Llanowar Elves
+Grizzly Bears
+Forest x4
+Forest x10
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mons's Goblin Raiders.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Face Yourself.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Llanowar Elves; Grizzly Bears; Mons's Goblin Raiders
+? Bot1.Battlefield.Grizzly Bears.Keywords = Haste
+Bot1.Attack(Llanowar Elves; Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield = Mons's Goblin Raiders
+Bot2.Battlefield = Llanowar Elves; Grizzly Bears

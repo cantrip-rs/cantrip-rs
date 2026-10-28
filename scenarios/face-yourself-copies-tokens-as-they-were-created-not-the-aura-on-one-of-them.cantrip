@@ -1,0 +1,46 @@
+# Face Yourself copies the original characteristics of a token (the ruling): Bot2's three 1/1 Rabbit tokens, one of
+# them enchanted with Rancor (a 3/1 with trample). Bot1's three copies are 1/1 Rabbits without the Aura's bonus and
+# without trample, each with haste: attacking, they deal 3, not 5 (the enchanted token's copy is a 1/1).
+[Bot1 Deck]
+Black Lotus x3
+Face Yourself
+Mountain x3
+Mountain x10
+[Bot2 Deck]
+Black Lotus x2
+Hop to It
+Rancor
+Forest x4
+Forest x10
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Hand.Hop to It.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Rancor.Cast(Rabbit Token#1)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Face Yourself.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 3
+? Bot1.Battlefield.Rabbit Token#1.Power = 1
+Bot1.Attack(Rabbit Token#1; Rabbit Token#2; Rabbit Token#3 > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Count = 0
+Bot2.Battlefield = Rabbit Token; Rabbit Token; Rabbit Token; Rancor

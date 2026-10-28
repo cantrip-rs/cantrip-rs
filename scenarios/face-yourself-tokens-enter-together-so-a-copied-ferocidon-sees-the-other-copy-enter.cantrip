@@ -1,0 +1,48 @@
+# The tokens Face Yourself creates enter at the same time and see each other enter (the ruling; CR 101.4, 603.2c). Bot2
+# cast Grizzly Bears and then Rampaging Ferocidon ("Whenever another creature enters, this creature deals 1 damage to
+# that creature's controller"), so the Bears copy is made before the Ferocidon copy, the order a one-at-a-time loop would
+# use, in which the new Ferocidon would never see the new Bears enter. Bot1's life: Bot2's Ferocidon sees both tokens enter
+# (2 damage) and Bot1's Ferocidon token sees the Bears token enter (1 more): 17.
+[Bot1 Deck]
+Black Lotus x3
+Face Yourself
+Mountain x3
+Mountain x10
+[Bot2 Deck]
+Black Lotus x2
+Grizzly Bears
+Rampaging Ferocidon
+Forest x4
+Forest x10
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Rampaging Ferocidon.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Face Yourself.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 2
+? Bot1.Life = 17
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Count = 0

@@ -1,0 +1,50 @@
+# Face Yourself may target its own controller: Bot1 copies its own Savannah Lions while controlling Ajani Resolute, so at
+# the beginning of the end step the intervening "if you don't control a planeswalker" is false (CR 603.4) and the copy
+# stays. The sacrifice ability is part of the copy for good (CR 707.9b): on T4 Bot2's Grizzly Bears and Llanowar Elves
+# attack and kill Ajani (2 + 1 damage against 2 loyalty), and at that turn's end step, with no planeswalker, the copy is
+# sacrificed while the original Lions stays.
+[Bot1 Deck]
+Black Lotus x4
+Ajani Resolute
+Savannah Lions
+Face Yourself
+Plains x10
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Llanowar Elves
+Forest x4
+Forest x10
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Ajani Resolute.Cast
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Face Yourself.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions#2.Keywords = Haste
+[T3 Bot1.End]
+[T4 Bot2.Main1]
+? Bot1.Battlefield = Ajani Resolute; Savannah Lions; Savannah Lions
+Bot2.Attack(Grizzly Bears > Bot1.Battlefield.Ajani Resolute; Llanowar Elves > Bot1.Battlefield.Ajani Resolute)
+[T4 Bot2.Main2]
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield = Savannah Lions
+Bot1.Graveyard = Ajani Resolute; Face Yourself; Black Lotus; Black Lotus; Black Lotus; Black Lotus
