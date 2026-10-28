@@ -1,0 +1,38 @@
+# Arc Reactor ({5}, improvise): Bot1 casts it with the {B} of a Mox Jet and the {1} each of four tapped Ornithopters
+# (CR 702.126a), so the pool is empty right after the cast. It enters tapped (CR 614.1d) and cannot make mana that turn;
+# on turn 3 "{T}: Add {C}{C}{C}" adds exactly three colorless mana and taps it, and a second activation is refused
+# (CR 605.3b, 106.4).
+
+[Bot1 Deck]
+Mox Jet
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Arc Reactor
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Arc Reactor.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter, Ornithopter)
+[Bot1.Main2]
+? Bot1.Mana =
+? Bot1.Battlefield.Arc Reactor.Tapped = true
+! Bot1.Battlefield.Arc Reactor.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Arc Reactor.Activate
+? Bot1.Mana = {C}{C}{C}
+! Bot1.Battlefield.Arc Reactor.Activate
+
+[Expect]
+Bot1.Mana = {C}{C}{C}
+Bot1.Battlefield.Arc Reactor.Tapped = true
