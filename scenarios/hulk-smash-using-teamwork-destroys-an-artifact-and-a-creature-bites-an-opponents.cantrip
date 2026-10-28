@@ -1,0 +1,88 @@
+# HULK SMASH!: "Teamwork 4 ... Choose one. If this spell was cast using teamwork, choose both instead." Bot1 pays teamwork by tapping its
+# Giant Cockroach (power 4, exactly the total needed) and so chooses both modes, each with its own targets. "Noncreature artifact"
+# refuses Bot2's Memnite (an artifact creature) and takes its Mox Sapphire; "creature you control" takes Bot1's Centaur Courser (3/3)
+# and refuses Bot2's Blackguard, and "creature an opponent controls" takes Bot2's Bane Alley Blackguard (1/3) and refuses Bot1's Courser. The Courser deals damage equal to
+# its power, 3 (a lone Courser, power 3, can't pay teamwork 4: the refusal), to the other, which dies; the Courser itself takes none (one-sided, not a fight).
+
+[Bot1 Deck]
+Hulk Smash!
+Giant Cockroach
+Centaur Courser
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Bane Alley Blackguard
+Memnite
+Island x3
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Giant Cockroach.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Bane Alley Blackguard.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.HULK SMASH!.Cast
+Bot1.Modes(Teamwork 4)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Mox Sapphire)
+! Bot1.Target(Bot2.Battlefield.Bane Alley Blackguard)
+Bot1.Target(Bot1.Battlefield.Centaur Courser)
+! Bot1.Target(Bot1.Battlefield.Centaur Courser)
+Bot1.Target(Bot2.Battlefield.Bane Alley Blackguard)
+! Bot1.Choose(Centaur Courser)
+! Bot1.Choose(Centaur Courser)
+Bot1.Choose(Giant Cockroach)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Memnite; Mox Jet; Mox Pearl
+Bot2.Graveyard = Bane Alley Blackguard; Mox Sapphire
+Bot1.Battlefield.Giant Cockroach.Tapped = true
+Bot1.Battlefield.Centaur Courser.Damage = 0

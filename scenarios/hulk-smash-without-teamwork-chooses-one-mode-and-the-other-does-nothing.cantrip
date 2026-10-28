@@ -1,0 +1,68 @@
+# HULK SMASH!: "Choose one." Cast without teamwork on turn 3, Bot1 chooses only the second mode: its Centaur Courser deals 3 damage
+# (its power) to Bot2's Centaur Courser (3 toughness, exactly lethal), which dies, while the first mode does not happen - Bot2's
+# noncreature artifacts (three Moxen) all stay.
+
+[Bot1 Deck]
+HULK SMASH!
+Centaur Courser
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Centaur Courser
+Island x3
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.HULK SMASH!.Cast
+Bot1.Modes(Cast without teamwork)
+! Bot1.Modes(Destroy target noncreature artifact; Target creature you control deals)
+Bot1.Modes(Target creature you control deals)
+! Bot1.Target(Bot2.Battlefield.Centaur Courser)
+Bot1.Target(Bot1.Battlefield.Centaur Courser)
+! Bot1.Target(Bot1.Battlefield.Centaur Courser)
+Bot1.Target(Bot2.Battlefield.Centaur Courser)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Emerald; Mox Pearl; Mox Sapphire
+Bot2.Graveyard = Centaur Courser
+Bot1.Battlefield.Centaur Courser.Damage = 0

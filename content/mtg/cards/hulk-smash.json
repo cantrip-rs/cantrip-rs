@@ -1,0 +1,6 @@
+{
+  "name": "HULK SMASH!",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "Teamwork 4 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 4 or more.)\nChoose one. If this spell was cast using teamwork, choose both instead.\n• Destroy target noncreature artifact.\n• Target creature you control deals damage equal to its power to target creature an opponent controls."
+}
