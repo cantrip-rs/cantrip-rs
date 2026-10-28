@@ -2,12 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::triggers::THIS_ATTACKS;
 use cantrip_oracle as oracle;
 
-/// "...while you control a creature with power 4 or greater": asked as the attack is declared, as part of the trigger event,
-/// and never again as the ability resolves (this is no intervening "if", CR 603.4; the card's ruling).
-fn ferocious(q: &dyn Query, asker: &Asker) -> bool {
-    cantrip_mechanics::ferocious::you_control(q, asker.controller)
-}
-
 /// "This creature gets +2/+2 until end of turn" (CR 611.2): a continuous effect, which does nothing if the creature has left
 /// the battlefield by now.
 fn pump_self(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -21,6 +15,6 @@ pub static CARD: CardDef = CardDef {
         pump_self,
         "Ferocious \u{2014} Whenever this creature attacks while you control a creature with power 4 or greater, this creature gets +2/+2 until end of turn.",
     )
-    .only_if(ferocious)],
+    .only_if(cantrip_mechanics::ferocious::you_control_asked)],
     ..oracle::NIGHTHOWL_PURSUER
 };
