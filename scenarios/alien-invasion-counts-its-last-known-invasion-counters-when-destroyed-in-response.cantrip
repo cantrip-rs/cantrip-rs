@@ -1,0 +1,62 @@
+# Alien Invasion: its trigger on turn 3 is on the stack with one invasion counter on the enchantment when Bot2 destroys it with
+# Disenchant. The ability still resolves with the enchantment's last-known counters (CR 608.2h): a 2/2 Alien, no counter put on the gone
+# enchantment (the Alien Invasion is in the graveyard).
+
+[Bot1 Deck]
+Alien Invasion
+Mox Ruby
+Gleemox
+Mox Emerald
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Alien Invasion.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Alien Token > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Alien Invasion)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Attackers]
+Bot1.Attack(Alien Token#1 > Bot2; Alien Token#2 > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Alien Token#2.Power = 2
+Bot1.Graveyard = Alien Invasion

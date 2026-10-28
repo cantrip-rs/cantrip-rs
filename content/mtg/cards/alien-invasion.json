@@ -1,0 +1,6 @@
+{
+  "name": "Alien Invasion",
+  "manaCost": "{1}{R}{R}{G}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of combat on your turn, create a 1/1 red Alien creature token with haste and \"This token attacks each combat if able.\" Put a +1/+1 counter on it for each invasion counter on this enchantment, then put an invasion counter on this enchantment."
+}
