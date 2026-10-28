@@ -1,0 +1,37 @@
+# Goblin Patrol: "Echo {R}" (CR 702.30a). Cast on turn 1, it came under Bot1's control since the beginning of their last upkeep
+# (the turn 1 upkeep began before it was cast), so at the beginning of Bot1's next upkeep (turn 3) the echo ability triggers and
+# Bot1 is asked to pay {R}. Bot1 taps both Mox Rubies while asked and pays: the pool shows exactly one {R} left, so the cost
+# is {R} and no more, and Goblin Patrol stays. At the upkeep after that (turn 5) it did not come under Bot1's control since
+# their last upkeep, so nothing triggers and nothing is asked.
+
+[Bot1 Deck]
+Goblin Patrol
+Mox Ruby
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Goblin Patrol.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.PayCost
+? Bot1.Mana = {R}
+[T5 Bot1.Upkeep]
+? Stack.Count = 0
+? Bot1.Battlefield.Goblin Patrol.Tapped = false
+
+[Expect]
+Bot1.Battlefield = Goblin Patrol; Mox Ruby; Mox Ruby

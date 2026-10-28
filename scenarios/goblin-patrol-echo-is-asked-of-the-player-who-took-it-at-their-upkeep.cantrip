@@ -1,0 +1,50 @@
+# Goblin Patrol: "Echo {R}" is "at the beginning of YOUR upkeep, if this came under YOUR control since the beginning of YOUR
+# last upkeep" (CR 702.30a). Bot2's Mind Control takes Bot1's Goblin Patrol on turn 2. At Bot1's upkeep on turn 3 nothing
+# triggers: it is not under Bot1's control. At Bot2's upkeep on turn 4 it came under Bot2's control since their last upkeep
+# (turn 2, before the Aura was cast), so Bot2 is asked and declines: Goblin Patrol is sacrificed, into its owner Bot1's
+# graveyard, and Mind Control, with nothing to enchant, into Bot2's.
+
+[Bot1 Deck]
+Goblin Patrol
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mind Control
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Patrol.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Mind Control.Cast(Bot1.Battlefield.Goblin Patrol)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Goblin Patrol.Tapped = false
+[T3 Bot1.Upkeep]
+? Stack.Count = 0
+[T4 Bot2.Upkeep]
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+
+[Expect]
+Bot1.Graveyard = Goblin Patrol
+Bot2.Graveyard = Mind Control; Black Lotus
+Bot2.Battlefield = Mox Sapphire; Mox Sapphire
