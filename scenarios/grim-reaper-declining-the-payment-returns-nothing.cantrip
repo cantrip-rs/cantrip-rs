@@ -1,0 +1,45 @@
+# "You may pay {3}{B}. When you do ...": declining is a free choice (CR 118.12), so no reflexive ability triggers and nothing
+# returns, though there is a creature card (Savannah Lions) in the graveyard to return. Only the Reaper's 3 damage is dealt.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Grim Reaper, Lethal Legionnaire
+Faithless Looting
+Savannah Lions
+Savannah Lions
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grim Reaper, Lethal Legionnaire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Savannah Lions; Savannah Lions)
+Bot1.Attack(Grim Reaper, Lethal Legionnaire > Bot2)
+Bot1.Decline
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Faithless Looting; Savannah Lions; Savannah Lions
+Bot1.Battlefield.Count = 5

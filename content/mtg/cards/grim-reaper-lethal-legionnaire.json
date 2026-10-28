@@ -1,0 +1,8 @@
+{
+  "name": "Grim Reaper, Lethal Legionnaire",
+  "manaCost": "{3}{B}",
+  "type": "Legendary Creature — Human Villain",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Whenever Grim Reaper attacks, you may pay {3}{B}. When you do, return target creature card from your graveyard to the battlefield tapped and attacking with a finality counter on it. (If a creature with a finality counter on it would die, exile it instead.)"
+}

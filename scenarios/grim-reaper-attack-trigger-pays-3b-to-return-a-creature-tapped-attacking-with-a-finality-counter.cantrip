@@ -1,0 +1,68 @@
+# Grim Reaper, Lethal Legionnaire: "Whenever Grim Reaper attacks, you may pay {3}{B}. When you do, return target creature card from
+# your graveyard to the battlefield tapped and attacking with a finality counter on it" (CR 603.12, 508.4, 122.6). Faithless Looting
+# leaves Giant Cockroach and Savannah Lions in the graveyard; on turn 3 Bot1 pays exactly {3}{B}, returns the Cockroach, which
+# attacks with the Reaper (7 damage in all, Bot2 at 13), then Bot2's Lightning Bolt kills it: with the finality counter it is
+# exiled instead of dying (CR 122.1h), and the Lions stay in the graveyard.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Grim Reaper, Lethal Legionnaire
+Faithless Looting
+Island
+Giant Cockroach
+Savannah Lions
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Grim Reaper, Lethal Legionnaire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Giant Cockroach; Savannah Lions)
+Bot1.Attack(Grim Reaper, Lethal Legionnaire > Bot2)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Target(Bot1.Graveyard.Giant Cockroach)
+[T3 Bot1.Main2]
+? Bot2.Life = 13
+? Bot1.Battlefield.Giant Cockroach.Counters.Finality = 1
+? Bot1.Battlefield.Giant Cockroach.Tapped = true
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Giant Cockroach)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile = Giant Cockroach
+Bot1.Graveyard = Faithless Looting; Savannah Lions
