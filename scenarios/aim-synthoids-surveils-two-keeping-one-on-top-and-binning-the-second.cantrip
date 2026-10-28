@@ -1,0 +1,31 @@
+# A.I.M. Synthoids: "When this creature enters, surveil 2" (CR 701.25a): the top TWO cards are looked at, so the second one
+# (Counterspell) can go to the graveyard while the first (Lightning Bolt) stays on top; a surveil 1 could not reach it. The
+# {2} cost is paid exactly by the two {U} left from a Black Lotus after a Sol Ring is cast, so the pool is empty.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring
+A.I.M. Synthoids
+Island x4
+Lightning Bolt
+Counterspell
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.A.I.M. Synthoids.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | Counterspell)
+
+[Expect]
+Bot1.Graveyard = Counterspell; Black Lotus
+Bot1.Library = Lightning Bolt; Island
+Bot1.Battlefield.A.I.M. Synthoids.Power = 1
+Bot1.Battlefield.A.I.M. Synthoids.Toughness = 3

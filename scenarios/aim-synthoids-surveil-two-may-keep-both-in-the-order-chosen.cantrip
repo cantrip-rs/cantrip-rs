@@ -1,0 +1,27 @@
+# A.I.M. Synthoids: surveil 2 puts "any number of them" into the graveyard, including none, and the rest back on top in any
+# order (CR 701.25a): Bot1 keeps both and puts Counterspell above Lightning Bolt, the reverse of the order they were in.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring
+A.I.M. Synthoids
+Island x4
+Lightning Bolt
+Counterspell
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.A.I.M. Synthoids.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Counterspell; Lightning Bolt | )
+
+[Expect]
+Bot1.Graveyard = Black Lotus
+Bot1.Library = Counterspell; Lightning Bolt; Island
