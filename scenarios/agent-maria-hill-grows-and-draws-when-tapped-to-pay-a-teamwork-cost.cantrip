@@ -1,0 +1,87 @@
+# Agent Maria Hill: "Whenever Agent Maria Hill becomes tapped to pay a teamwork cost, put a +1/+1 counter on her and draw a card." On
+# turn 4 Bot2 attacks with two Ageless Guardians. Bot1 casts one Helicarrier Strike (Teamwork 2) tapping Maria (power 2): she gets a
+# counter and Bot1 draws (its hand stays at 2: one card cast, one drawn). Bot1 casts the other tapping Cabal Evangel (power 2)
+# instead: no trigger, no second counter, no second draw (its hand is 1 after casting it).
+
+[Bot1 Deck]
+Agent Maria Hill
+Helicarrier Strike
+Helicarrier Strike
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Cabal Evangel
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Ageless Guardian
+Ageless Guardian
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Agent Maria Hill.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Cabal Evangel.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ageless Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Ageless Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Attack(Ageless Guardian#1 > Bot1; Ageless Guardian#2 > Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Hand.Count = 2
+Bot1.Hand.Helicarrier Strike.Cast
+Bot1.Modes(Teamwork 2)
+Bot1.Target(Bot2.Battlefield.Ageless Guardian#1)
+Bot1.Choose(Agent Maria Hill)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Agent Maria Hill.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Agent Maria Hill.Tapped = true
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Helicarrier Strike.Cast
+Bot1.Modes(Teamwork 2)
+Bot1.Choose(Cabal Evangel)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Agent Maria Hill.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Cabal Evangel.Tapped = true
+Bot1.Hand.Count = 1
+Bot2.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Plains
