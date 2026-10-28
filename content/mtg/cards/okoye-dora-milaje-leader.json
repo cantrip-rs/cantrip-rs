@@ -1,0 +1,8 @@
+{
+  "name": "Okoye, Dora Milaje Leader",
+  "manaCost": "{3}{W}",
+  "type": "Legendary Creature — Human Warrior Hero",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When Okoye enters, create two 1/1 white Soldier creature tokens.\nAttacking creature tokens you control have first strike."
+}
