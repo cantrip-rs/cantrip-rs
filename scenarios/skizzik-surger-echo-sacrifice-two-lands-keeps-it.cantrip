@@ -1,0 +1,51 @@
+# Skizzik Surger {4}{R}{R}, 6/4 haste, "Echo--Sacrifice two lands." (CR 702.30a). Cast on turn 3 (Black Lotus {R}{R}{R}, one of
+# which casts Sol Ring, Mox Ruby, Mox Pearl and Sol Ring), it attacks at once (haste) for 6. At Bot1's turn 5 upkeep the echo
+# asks for two lands: Bot1 pays by sacrificing the Mountain and the Forest, keeping Skizzik Surger.
+
+[Bot1 Deck]
+Mountain
+Forest
+Black Lotus
+Mox Ruby
+Mox Pearl
+Sol Ring
+Skizzik Surger
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Skizzik Surger.Cast
+Bot1.Pass
+Bot1.Attack(Skizzik Surger > Bot2)
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Choose(Mountain; Forest)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Skizzik Surger.Power = 6
+Bot1.Battlefield.Skizzik Surger.Toughness = 4
+Bot1.Battlefield.Skizzik Surger.Keywords = Haste
+Bot1.Battlefield.Skizzik Surger.Colors = Red
+Bot1.Graveyard = Forest; Mountain; Black Lotus
