@@ -1,0 +1,66 @@
+# Winter Soldier, Icy Assassin: "{3}{W}{B}: Return this card from your graveyard to the battlefield with a finality counter
+# on him. Then you may attach an Equipment you control to him." Bot2 Bolts him on turn 2. On turn 3 Bot1 pays {3}{W}{B}, he
+# returns with a finality counter and Bot1 attaches the Skullclamp (he is 5/1). Bolted again on turn 4, he is exiled
+# instead of dying (CR 122.1h), so Skullclamp (which draws when its creature dies) draws nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Skullclamp
+Winter Soldier, Icy Assassin
+Mox Emerald
+Mox Sapphire
+Forest x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Forest x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Skullclamp.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Winter Soldier, Icy Assassin.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Winter Soldier, Icy Assassin)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard.Count = 1
+[T3 Bot1.Main1]
+Bot1.Graveyard.Winter Soldier, Icy Assassin.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Skullclamp)
+? Bot1.Battlefield.Winter Soldier, Icy Assassin.Counters.Finality = 1
+? Bot1.Battlefield.Winter Soldier, Icy Assassin.Power = 5
+? Bot1.Battlefield.Winter Soldier, Icy Assassin.Toughness = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Winter Soldier, Icy Assassin)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Hand.Count = 1
+Bot1.Exile.Winter Soldier, Icy Assassin.Power = 2

@@ -1,0 +1,46 @@
+# Winter Soldier, Icy Assassin gets +2/+0 for each Equipment attached to him (CR 301.5a): 2/2 alone, 4/2 once Skullclamp
+# (+1/-1) is equipped: 5/1, and back to 2/2 when Skullclamp moves to Ornithopter and he has none attached.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Winter Soldier, Icy Assassin
+Skullclamp
+Ornithopter
+Forest x14
+
+[Bot2 Deck]
+Forest x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Winter Soldier, Icy Assassin.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Skullclamp.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Battlefield.Winter Soldier, Icy Assassin.Power = 2
+Bot1.Battlefield.Skullclamp.Activate(Bot1.Battlefield.Winter Soldier, Icy Assassin; Ability: Equip)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Winter Soldier, Icy Assassin.Power = 5
+? Bot1.Battlefield.Winter Soldier, Icy Assassin.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Skullclamp.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Winter Soldier, Icy Assassin.Power = 2
+Bot1.Battlefield.Winter Soldier, Icy Assassin.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 1
