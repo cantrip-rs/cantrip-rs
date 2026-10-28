@@ -618,6 +618,15 @@ pub fn untap_self(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
+/// "Tap [N] target [permanents]" (CR 701.26a, 608.2b): each target that is still legal as the ability resolves. Divining
+/// Duelist (as a mode), Quake, Agent of S.H.I.E.L.D. and Raft Security Officer print it.
+pub fn tap_targets(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    for permanent in crate::targets::legal_objects(g, item) {
+        g.tap(permanent);
+    }
+    Ok(())
+}
+
 /// "Untap [N] target [permanents]" (CR 701.26, 608.2b): each target that is still legal as the ability resolves. Argothian
 /// Elder, Candelabra of Tawnos and Garruk, Curse Breaker (for lands), Formidable Speaker, Kiora, Behemoth Beckoner, Voltaic Key, Manifold Key, Earthcraft, Hapatra, the Desert Frost and Deceiver Exarch and Divining Duelist (as a mode) print it.
 pub fn untap_targets(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

@@ -4,16 +4,8 @@ use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_mechanics::effects;
 use cantrip_oracle as oracle;
 
-/// Mode 0: tap target creature (CR 701.26a).
-fn tap(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        g.tap(creature);
-    }
-    Ok(())
-}
-
 static MODAL: ModalDef = modes(&[
-    mode(tap, "Tap target creature.").targets(&[targets::CREATURE]),
+    mode(effects::tap_targets, "Tap target creature.").targets(&[targets::CREATURE]),
     mode(effects::untap_targets, "Untap target creature.").targets(&[targets::CREATURE]),
     mode(|g, item| cantrip_mechanics::effects::loot(g, item), "Draw a card, then discard a card."),
 ]);
