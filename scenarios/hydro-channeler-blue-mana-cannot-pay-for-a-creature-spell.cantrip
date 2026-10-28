@@ -1,0 +1,43 @@
+# Hydro-Channeler's {U} is "only to cast an instant or sorcery spell". On turn 3 Bot1 spends every Mox on Quick Study first, so
+# no unrestricted mana is left, then taps Hydro-Channeler: the pool is just {U} (InstantOrSorcerySpells), and Elusive Otter ({U}),
+# a creature spell, is refused (Mana: short).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Hydro-Channeler
+Mox Jet
+Quick Study
+Elusive Otter
+Plains
+Plains
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hydro-Channeler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Quick Study.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Hydro-Channeler.Activate(Ability: {T}: Add {U})
+? Bot1.Mana = {U} (InstantOrSorcerySpells)
+! Bot1.Hand.Elusive Otter.Cast(Mana: short)
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Hydro-Channeler.Tapped = true
+Bot1.Graveyard = Quick Study
