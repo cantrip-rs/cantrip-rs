@@ -1,0 +1,50 @@
+# Abomination, Terrifying Titan: on a later turn the power-up costs the whole {5}{R/G}{R/G} (CR 702.193b reduces only
+# the turn he enters). With no creature an opponent controls the target is "up to one" and chosen none: the counter goes on
+# and he fights nothing. Power-up is once only (CR 702.193a): the second activation is refused.
+
+[Bot1 Deck]
+Forest
+Sol Ring
+Mox Ruby
+Mox Jet
+Mox Emerald
+Abomination, Terrifying Titan
+Forest
+Forest x10
+
+[Bot2 Deck]
+Forest x14
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Abomination, Terrifying Titan.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Abomination, Terrifying Titan.Activate()
+Bot1.Pass
+! Bot1.Battlefield.Abomination, Terrifying Titan.Activate()
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Abomination, Terrifying Titan.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Abomination, Terrifying Titan.Power = 5
+Bot1.Battlefield.Abomination, Terrifying Titan.Damage = 0
