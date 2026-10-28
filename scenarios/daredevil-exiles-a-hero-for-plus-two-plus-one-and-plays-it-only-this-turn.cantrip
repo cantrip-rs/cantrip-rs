@@ -1,0 +1,53 @@
+# Daredevil, Man Without Fear. Haste, vigilance. Whenever Bot1 attacks it may exile the top card of its library; a Hero card
+# makes Daredevil +2/+1 until end of turn, and the card may be played this turn. Turn 1: the Hero Agent Maria Hill is exiled,
+# Daredevil is a 5/5 and Bot2 takes 5; the Hero is not cast (every Mox is tapped for Daredevil... Pearl is) and on turn 3 it is
+# no longer playable. Turn 3: Lightning Bolt is exiled, no Hero, so Daredevil stays a 3/4 (Bot2 takes 3), and the Bolt is cast
+# from exile that turn at Bot2 (3 more).
+
+[Bot1 Deck]
+Daredevil, Man Without Fear
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Island
+Island
+Agent Maria Hill
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Daredevil, Man Without Fear.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Daredevil, Man Without Fear > Bot2)
+Bot1.Accept
+? Bot1.Exile.Agent Maria Hill.Power = 2
+? Bot1.Battlefield.Daredevil, Man Without Fear.Power = 5
+? Bot1.Battlefield.Daredevil, Man Without Fear.Toughness = 5
+[T3 Bot1.Main1]
+! Bot1.Exile.Agent Maria Hill.Cast
+? Bot2.Life = 15
+Bot1.Attack(Daredevil, Man Without Fear > Bot2)
+Bot1.Accept
+? Bot1.Battlefield.Daredevil, Man Without Fear.Power = 3
+? Bot1.Battlefield.Daredevil, Man Without Fear.Toughness = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+[T5 Bot1.Main1]
+? Bot2.Life = 9
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
