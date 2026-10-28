@@ -1,0 +1,62 @@
+# Kang the Conqueror: "During that turn, power-up abilities can't be activated" is the extra turn his ability made and no
+# other. Kang powers up on turn 1 (the turn he enters, {3}{U}), and turn 2 is his extra turn. Bot1 casts Time Walk in it:
+# turn 3 is Time Walk's extra turn, not Kang's, so Ultron Drone, cast in it, has its power-up activated for the {3} it
+# costs the turn it enters (CR 702.193b).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Sol Ring
+Mana Crypt
+Kang the Conqueror
+Time Walk
+Island
+Ultron Drone
+Island x10
+
+[Bot2 Deck]
+Swamp x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Kang the Conqueror.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Kang the Conqueror.Activate
+Bot1.Pass
+[T2 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Time Walk.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? ActivePlayer = Bot1
+? Turn = 3
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ultron Drone.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Ultron Drone.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ultron Drone.Counters.PlusOnePlusOne = 2
+? Turn = 3
+
+[Expect]
+Turn = 3
+ActivePlayer = Bot1
+Bot1.Battlefield.Ultron Drone.Counters.PlusOnePlusOne = 2
+Bot1.Graveyard = Time Walk; Black Lotus

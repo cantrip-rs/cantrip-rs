@@ -1,0 +1,63 @@
+# Kang the Conqueror: "Power-up — {5}{U}{U}{U}: Put a +1/+1 counter on Kang. Take an extra turn after this one. During that
+# turn, power-up abilities can't be activated." Kang enters on turn 1, so his power-up costs his mana cost less: {3}{U}
+# (CR 702.193b), paid with Mox Sapphire's {U}, Sol Ring's {C}{C} and the {C} left of Mana Crypt. He gets his counter and
+# Bot1 takes turn 2. There Bot1 casts Ultron Drone, whose power-up would cost only {3} the turn it enters, and is refused
+# it: power-up abilities can't be activated (CR 602.5) in the extra turn. Bot2 has turn 3. On turn 4 the same ability is
+# activated, at its full {6}, so the restriction ended with the extra turn.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Sol Ring
+Mana Crypt
+Kang the Conqueror
+Ultron Drone
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Swamp x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Kang the Conqueror.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Kang the Conqueror.Activate
+Bot1.Pass
+[T2 Bot1.Main1]
+? ActivePlayer = Bot1
+? Bot1.Battlefield.Kang the Conqueror.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Island.Play
+Bot1.Hand.Ultron Drone.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+! Bot1.Battlefield.Ultron Drone.Activate
+[T3 Bot2.Main1]
+[T4 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Ultron Drone.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ultron Drone.Counters.PlusOnePlusOne = 2
+
+[Expect]
+Turn = 4
+Bot1.Battlefield.Kang the Conqueror.Power = 5

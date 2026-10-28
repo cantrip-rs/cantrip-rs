@@ -1,0 +1,73 @@
+# Kang the Conqueror: "power-up abilities can't be activated" is every player's, not only the one who took the turn. Bot2
+# casts Kang on turn 2 with Black Lotus and Mana Crypt, and powers him up for the {3}{U} he costs the turn he enters, paid
+# with Mox Sapphire, Sol Ring and the {C} Mana Crypt had left; turn 3 is Bot2's extra turn. Bot1's Ultron Drone, on the
+# battlefield since turn 1, has {6} untapped to pay for its power-up (Sol Ring, Mox Sapphire and Black Lotus), and is
+# refused it in that turn (CR 602.5). On turn 4 it is activated for the same {6}.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Sol Ring
+Mana Crypt
+Ultron Drone
+Black Lotus
+Island
+Island x10
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Sol Ring
+Mana Crypt
+Kang the Conqueror
+Mox Jet
+Island x10
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ultron Drone.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mana Crypt.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Sol Ring.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mana Crypt.Activate
+Bot2.Hand.Kang the Conqueror.Cast
+Bot2.Pass
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Kang the Conqueror.Activate
+Bot2.Pass
+[T3 Bot2.Main1]
+? ActivePlayer = Bot2
+? Bot2.Battlefield.Kang the Conqueror.Counters.PlusOnePlusOne = 1
+! Bot1.Battlefield.Ultron Drone.Activate
+[T4 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Ultron Drone.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ultron Drone.Counters.PlusOnePlusOne = 2
+
+[Expect]
+Turn = 4
+ActivePlayer = Bot1

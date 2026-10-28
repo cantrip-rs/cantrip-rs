@@ -1,0 +1,85 @@
+# Kang the Conqueror: "During that turn, power-up abilities can't be activated." The extra turn is the whole turn, its
+# cleanup step too: a trigger there (CR 514.3a) gives players priority in the same turn (CR 500.1), so the restriction
+# still holds. Bot1 saves a card each turn until it holds eight on turn 17, casts Kang with the mana it has built (his
+# power-up costs {3}{U} the turn he enters) and takes turn 18. Bot1 draws to eight cards, discards one to hand size at
+# cleanup and Currency Converter triggers. With that trigger on the stack Bot2, who has Ultron Drone and the six mana for
+# its {6} power-up, is refused it (CR 602.5).
+
+[Bot1 Deck]
+Island
+Sol Ring
+Mox Sapphire
+Mana Crypt
+Currency Converter
+Island
+Island
+Island
+Island
+Kang the Conqueror
+Island x15
+
+[Bot2 Deck]
+Forest
+Sol Ring
+Mana Crypt
+Ultron Drone
+Forest
+Forest
+Forest
+Forest x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Currency Converter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Hand.Mana Crypt.Cast
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Battlefield.Mana Crypt.Activate
+Bot2.Hand.Ultron Drone.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T17 Bot1.Main1]
+? Bot1.Hand.Count = 8
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Kang the Conqueror.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Kang the Conqueror.Activate
+Bot1.Pass
+[T18 Bot1.Main1]
+? Bot1.Hand.Count = 8
+Bot1.Discard(Island)
+? Step = Cleanup
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Battlefield.Mana Crypt.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Forest.Activate
+! Bot2.Battlefield.Ultron Drone.Activate
+[T19 Bot2.Main1]
+
+[Expect]
+Turn = 19
+Bot1.Battlefield.Kang the Conqueror.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ultron Drone.Counters.PlusOnePlusOne = (absent)
