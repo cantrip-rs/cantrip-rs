@@ -1,0 +1,8 @@
+{
+  "name": "Killmonger, Scourge of Wakanda",
+  "manaCost": "{2}{B}{G}",
+  "type": "Legendary Creature — Human Mercenary Villain",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When Killmonger enters, you may sacrifice another creature. When you do, destroy target nonland permanent an opponent controls.\nAs long as there are two or more creature cards in your graveyard, Killmonger gets +2/+1."
+}

@@ -1,0 +1,55 @@
+# Killmonger, Scourge of Wakanda: "another creature". Turn 3 with no other creature Bot1 is not offered Killmonger himself: no
+# sacrifice is made and no reflexive ability targets Bot2's Agents of HYDRA. Nobody is asked, and a graveyard with no creature cards
+# leaves him 3/3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Killmonger, Scourge of Wakanda
+Forest x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Sapphire
+Agents of HYDRA
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Agents of HYDRA.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Killmonger, Scourge of Wakanda.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Agents of HYDRA; Mox Jet; Mox Sapphire
+Bot1.Graveyard =
+Bot1.Battlefield.Killmonger, Scourge of Wakanda.Power = 3
+Bot1.Battlefield.Killmonger, Scourge of Wakanda.Toughness = 3
