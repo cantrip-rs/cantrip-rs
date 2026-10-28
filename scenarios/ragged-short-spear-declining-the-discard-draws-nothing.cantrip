@@ -1,0 +1,36 @@
+# Ragged Short Spear: the discard is optional ("you may discard a card"): Bot1 declines (an empty choice), so no card is
+# discarded and, with nothing discarded, "If you do" draws nothing (CR 701.9, 608.2c). The hand is still the one cast from.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Ragged Short Spear
+Island
+Plains
+Swamp
+Forest
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ragged Short Spear.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Plains; Swamp; Forest
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Ragged Short Spear

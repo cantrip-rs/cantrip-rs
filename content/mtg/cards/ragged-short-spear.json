@@ -1,0 +1,6 @@
+{
+  "name": "Ragged Short Spear",
+  "manaCost": "{1}{R}",
+  "type": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, you may discard a card. If you do, draw two cards.\nEquipped creature gets +2/+0.\nEquip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)"
+}

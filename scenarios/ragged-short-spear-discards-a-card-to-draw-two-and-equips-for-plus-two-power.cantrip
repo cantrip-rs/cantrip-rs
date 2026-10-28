@@ -1,0 +1,53 @@
+# Ragged Short Spear: "When this Equipment enters, you may discard a card. If you do, draw two cards." (CR 701.9, 121.1) -
+# Bot1 discards a Mountain and draws two. "Equipped creature gets +2/+0" and "Equip {3}": the pool, filled with exactly three
+# mana, is empty right after attaching it to an Ornithopter, which becomes a 2/2 (toughness unchanged).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Ornithopter
+Ragged Short Spear
+Mountain
+Island
+Plains
+Swamp
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ragged Short Spear.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mountain)
+? Bot1.Graveyard = Mountain
+? Bot1.Hand = Island; Plains; Swamp
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Ragged Short Spear.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ragged Short Spear.AttachedTo = Ornithopter
+Bot1.Graveyard = Black Lotus; Mountain
+Bot1.Hand = Island; Plains; Swamp
