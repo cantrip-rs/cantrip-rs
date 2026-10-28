@@ -82,6 +82,11 @@ fn another_creature_or_artifact(q: &dyn Query, choice: &Choice, _: u32) -> Verdi
     Verdict::each(choice, |id| id != choice.source && (q.chars(id).is(CardType::Creature) || q.chars(id).is(CardType::Artifact)))
 }
 
+fn forest(q: &dyn Query, choice: &Choice, word: u32) -> Verdict {
+    let wanted = crate::lands::word(q, choice.source, u16::try_from(word).unwrap_or(u16::MAX));
+    Verdict::each(choice, |card| q.chars(card).has_subtype(wanted))
+}
+
 fn mana_value(q: &dyn Query, choice: &Choice, most: u32) -> Verdict {
     Verdict::each(choice, |card| q.mana_value(card) <= most)
 }
@@ -97,6 +102,11 @@ pub const BASIC_LAND: Part = part(&(basic_land as SelectFn), 0, "");
 
 /// "A land card". Crop Rotation, Expedition Map, Golos, Tireless Pilgrim and Vibrance search for it.
 pub const LAND: Part = part(&(land as SelectFn), 0, "");
+
+/// "A Forest card" (CR 205.3i, 305.6): a land card with the subtype Forest, basic or not (a Stomping Ground is one), the type read
+/// through the words of the text of the card that asks (CR 612.2) and a card as it is where it is. Nature's Lore, Three Visits and
+/// Wood Elves search for it.
+pub const FOREST: Part = part(&(forest as SelectFn), crate::lands::sub(Subtype::Forest) as u32, "");
 
 /// "A creature card". Survival of the Fittest, Worldly Tutor and Formidable Speaker search for it.
 pub const CREATURE: Part = part(&(creature as SelectFn), 0, "");
@@ -335,6 +345,14 @@ pub const fn cards(count: Count) -> Selection {
 pub const fn basic_land_cards(count: Count) -> Selection {
     Selection::of(count, &[BASIC_LAND]).called("basic land")
 }
+
+/// `count` Forest cards: Wood Elves's one (`FOREST_CARD`), which may be left unfound (CR 701.23b).
+pub const fn forest_cards(count: Count) -> Selection {
+    Selection::of(count, &[FOREST]).called("Forest")
+}
+
+/// "A Forest card", which may be left unfound (CR 701.23b): Nature's Lore, Three Visits and Wood Elves search for it.
+pub const FOREST_CARD: Selection = forest_cards(up_to(1));
 
 /// `count` land cards: Crop Rotation's and Expedition Map's one (`LAND_CARD`), and Hexhaven Invigorator's "up to that many
 /// land cards".
