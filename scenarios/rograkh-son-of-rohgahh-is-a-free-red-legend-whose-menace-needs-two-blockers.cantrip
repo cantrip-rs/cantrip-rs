@@ -1,0 +1,61 @@
+# Rograkh, Son of Rohgahh: a {0} legendary 0/1 Kobold Warrior with a red color indicator (CR 204), cast for no mana, with first
+# strike, menace and trample as printed. Its partner (CR 702.124) only lets it be one of two commanders at deck building and
+# changes nothing in play. Menace (CR 702.111b): attacking, it can't be blocked by Bot2's one Grizzly Bears, but two of them
+# may block it together (the control).
+
+[Bot1 Deck]
+Rograkh, Son of Rohgahh
+Plains x23
+
+[Bot2 Deck]
+Mox Emerald
+Mox Emerald
+Mox Jet
+Mox Jet
+Grizzly Bears
+Grizzly Bears
+Island
+Island x18
+
+[Actions]
+Bot1.Hand.Rograkh, Son of Rohgahh.Cast
+Bot1.Pass
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Rograkh, Son of Rohgahh.Power = 0
+? Bot1.Battlefield.Rograkh, Son of Rohgahh.Toughness = 1
+? Bot1.Battlefield.Rograkh, Son of Rohgahh.Keywords = FirstStrike; Menace; Trample
+? Bot1.Battlefield.Rograkh, Son of Rohgahh.Colors = Red
+? Bot1.Battlefield.Rograkh, Son of Rohgahh.Types = Creature
+? Bot1.Battlefield.Rograkh, Son of Rohgahh.Subtypes = Kobold; Warrior
+? Bot1.Battlefield.Rograkh, Son of Rohgahh.Supertypes = Legendary
+? Bot1.Battlefield.Rograkh, Son of Rohgahh.ManaValue = 0
+[T3 Bot1.Main1]
+Bot1.Attack(Rograkh, Son of Rohgahh > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Grizzly Bears > Rograkh, Son of Rohgahh)
+Bot2.Block(Grizzly Bears > Rograkh, Son of Rohgahh; Grizzly Bears#2 > Rograkh, Son of Rohgahh)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Rograkh, Son of Rohgahh
+Bot2.Life = 20

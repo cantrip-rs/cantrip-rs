@@ -1,0 +1,16 @@
+{
+  "name": "Rograkh, Son of Rohgahh",
+  "manaCost": "{0}",
+  "colorIndicator": [
+    "Red"
+  ],
+  "type": "Legendary Creature — Kobold Warrior",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "First strike, menace, trample\nPartner (You can have two commanders if both have partner.)",
+  "keywords": [
+    "FirstStrike",
+    "Menace",
+    "Trample"
+  ]
+}
