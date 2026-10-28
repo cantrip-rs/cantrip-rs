@@ -1032,7 +1032,8 @@ pub fn dragon_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Op
 
 /// "Whenever another [subtype] you control enters" (CR 603.6a), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): a permanent
 /// other than this one, under your control as it entered, that is that creature type (a token too), the type read through
-/// the words of the source's text (CR 612). Thalia's Lieutenant (Humans) and Youthful Valkyrie (Angels) print it.
+/// the words of the source's text (CR 612); the trigger is about that permanent (`StackItem::subject`). Thalia's Lieutenant (Humans),
+/// Youthful Valkyrie (Angels), Crossbones, Yellowjacket and Baron Strucker (Villains) print it.
 pub fn another_of_subtype_you_control_enters<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::ZoneChange { new, to, .. }
@@ -1041,7 +1042,7 @@ pub fn another_of_subtype_you_control_enters<const SUBTYPE: u16>(q: &dyn Query, 
                 && q.controller(*new) == me.controller
                 && q.chars(*new).has_subtype(crate::lands::word(q, me.source, SUBTYPE)) =>
         {
-            Fired::PLAIN
+            Fired::about(Target::Object(*new))
         }
         _ => None,
     }
