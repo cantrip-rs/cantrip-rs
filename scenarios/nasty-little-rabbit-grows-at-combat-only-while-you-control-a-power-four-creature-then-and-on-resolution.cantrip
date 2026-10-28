@@ -1,0 +1,72 @@
+# Nasty Little Rabbit, a 1/2: "Ferocious - At the beginning of combat on your turn, if you control a creature with power 4 or
+# greater, put a +1/+1 counter on this creature." An intervening "if" (CR 603.4): checked as combat begins and again on resolution.
+# Turn 1: Bot1 controls only a Hill Giant (power 3, just short) and the Rabbit itself: no counter. Turn 3: an Alpine Grizzly (power
+# 4 exactly) was cast, so one counter (a 2/3). Turn 5: Bot2 answers the trigger with a Lightning Bolt on the Alpine Grizzly, so
+# the condition fails as the ability tries to resolve and there is no second counter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Nasty Little Rabbit
+Hill Giant
+Alpine Grizzly
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Nasty Little Rabbit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+? Stack.Count = 0
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Nasty Little Rabbit.Counters.PlusOnePlusOne = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nasty Little Rabbit.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Nasty Little Rabbit.Power = 2
+? Bot1.Battlefield.Nasty Little Rabbit.Toughness = 3
+[T5 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Alpine Grizzly)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Alpine Grizzly = (absent)
+Bot1.Battlefield.Nasty Little Rabbit.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Nasty Little Rabbit.Power = 2

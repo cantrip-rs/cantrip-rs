@@ -1,0 +1,8 @@
+{
+  "name": "Nasty Little Rabbit",
+  "manaCost": "{G}",
+  "type": "Creature — Rabbit",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Ferocious — At the beginning of combat on your turn, if you control a creature with power 4 or greater, put a +1/+1 counter on this creature."
+}
