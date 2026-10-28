@@ -1,0 +1,34 @@
+# Lu Meng, Wu General, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus x2
+Lu Meng, Wu General
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Lu Meng, Wu General.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Lu Meng, Wu General.Power = 4
+? Bot1.Battlefield.Lu Meng, Wu General.Toughness = 4
+? Bot1.Battlefield.Lu Meng, Wu General.Keywords = Horsemanship
+? Bot1.Battlefield.Lu Meng, Wu General.Colors = Blue
+? Bot1.Battlefield.Lu Meng, Wu General.Types = Creature
+? Bot1.Battlefield.Lu Meng, Wu General.Subtypes = Human; Soldier
+? Bot1.Battlefield.Lu Meng, Wu General.Supertypes = Legendary
+? Bot1.Battlefield.Lu Meng, Wu General.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Lu Meng, Wu General > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Lu Meng, Wu General.Tapped = true
