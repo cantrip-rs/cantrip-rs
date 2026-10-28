@@ -1,0 +1,35 @@
+# Rendclaw Trow's persist (CR 702.79a) looks at whether it "had no -1/-1 counters on it" as it died (CR 603.10a, 700.4):
+# Bot2's Sickle Ripper (wither, 2/1) attacks and Bot1's Trow, a 2/2 with no counter, blocks it. The Ripper deals its 2 damage
+# to the Trow as two -1/-1 counters (CR 702.80a), so the Trow, a 0/0, dies with counters on it and does not persist; the
+# Trow's own wither kills the Ripper (two counters on a 2/1) too.
+# Bot1 casts the Trow on turn 1 (Black Lotus); Bot2 casts the Ripper on turn 2 (Black Lotus) and attacks with it on turn 4.
+
+[Bot1 Deck]
+Black Lotus
+Rendclaw Trow
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Sickle Ripper
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Rendclaw Trow.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Sickle Ripper.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Sickle Ripper > Bot1)
+Bot1.Block(Rendclaw Trow > Sickle Ripper)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Rendclaw Trow = (absent)
+Bot1.Graveyard = Rendclaw Trow; Black Lotus
+Bot2.Graveyard = Sickle Ripper; Black Lotus

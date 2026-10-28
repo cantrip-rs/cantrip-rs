@@ -1,0 +1,48 @@
+# Rendclaw Trow's persist (CR 702.79a): killed by Bot2's Lightning Bolt with no -1/-1 counter on it, it returns to the
+# battlefield under its owner's control with a -1/-1 counter, a 1/1 (the counter is checked). Killed by a second Bolt, now
+# with a -1/-1 counter on it, it does not return: it stays in the graveyard.
+# Bot1 casts the Trow on turn 1 (Black Lotus); Bot2 plays Mountain and Mox Ruby on turn 2 and casts both Bolts.
+
+[Bot1 Deck]
+Black Lotus
+Rendclaw Trow
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Rendclaw Trow.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Rendclaw Trow)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rendclaw Trow.Counters.MinusOneMinusOne = 1
+? Bot1.Battlefield.Rendclaw Trow.Power = 1
+? Bot1.Battlefield.Rendclaw Trow.Toughness = 1
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Rendclaw Trow)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Rendclaw Trow = (absent)
+Bot1.Graveyard = Rendclaw Trow; Black Lotus
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt
