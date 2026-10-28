@@ -26,13 +26,6 @@ fn counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Each opponent loses 2 life and you gain 2 life."
-fn drain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.each_opponent_loses_life(item.controller, 2);
-    g.gain_life(item.controller, 2);
-    Ok(())
-}
-
 /// "Draw a card."
 fn draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.draw(item.controller, 1);
@@ -41,7 +34,7 @@ fn draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 static RIDDLE: ModalDef = modes(&[
     mode(counter, "Put a +1/+1 counter on Gollum."),
-    mode(drain, "Each opponent loses 2 life and you gain 2 life."),
+    mode(cantrip_mechanics::effects::each_opponent_loses_life_you_gain_life::<2>, "Each opponent loses 2 life and you gain 2 life."),
     mode(draw, "Draw a card."),
 ])
     .allowed(history::mode_not_chosen_before);
