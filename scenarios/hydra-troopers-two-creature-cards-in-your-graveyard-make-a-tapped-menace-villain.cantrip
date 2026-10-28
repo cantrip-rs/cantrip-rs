@@ -1,0 +1,56 @@
+# HYDRA Troopers with fewer than two creature cards in your graveyard mills two (CR 701.17a): the first mills Savannah Lions
+# and Savannah Lions, which are exactly two creature cards, so the second makes a tapped 2/1 black Villain token with menace
+# (and mills nothing).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Swamp
+HYDRA Troopers
+HYDRA Troopers
+Savannah Lions
+Savannah Lions
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.HYDRA Troopers.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.HYDRA Troopers.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Savannah Lions; Savannah Lions
+Bot1.Library.Count = 12
+Bot1.Battlefield.Villain Token.Tapped = true
+Bot1.Battlefield.Villain Token.Power = 2
+Bot1.Battlefield.Villain Token.Toughness = 1
+Bot1.Battlefield.Villain Token.Keywords = Menace
+Bot1.Battlefield.Villain Token.Colors = Black
+Bot1.Battlefield.HYDRA Troopers#1.Tapped = false
