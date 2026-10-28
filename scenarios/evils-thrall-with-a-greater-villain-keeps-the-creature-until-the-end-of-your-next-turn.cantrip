@@ -1,0 +1,61 @@
+# Evil's Thrall: "Gain control of target creature until end of turn. If you control a Villain with greater mana value than that
+# creature, gain control of that creature until the end of your next turn instead. Untap that creature. It gains haste until end of
+# turn." Bot1 controls Extremis Elite, a Villain with mana value 2. Turn 3: Bot2's Memnite (mana value 0) is stolen, untapped, with
+# haste, and attacks for 1 (19). It stays Bot1's through Bot2's turn 4 and Bot1's turn 5, and goes back to Bot2 only when turn 5 ends.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Extremis Elite
+Evil's Thrall
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Extremis Elite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Evil's Thrall.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Haste
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Tapped = true
+? Bot2.Battlefield.Count = 0
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot2.Battlefield.Count = 0
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Count = 1
+Bot1.Battlefield.Count = 6
