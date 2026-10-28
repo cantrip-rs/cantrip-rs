@@ -1,0 +1,11 @@
+{
+  "name": "Wildslayer Elves",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elf Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Wither (This deals damage to creatures in the form of -1/-1 counters.)",
+  "keywords": [
+    "Wither"
+  ]
+}
