@@ -1,0 +1,52 @@
+# Escape exiles five *other* cards from the graveyard (CR 702.138a). Faithless Looting (Black Lotus) discards the Hatchling and a
+# Plains, so on turn 7 the graveyard holds the Hatchling and only four others (Lotus, Lightning Bolt, Looting, the Plains). Bot1
+# has a land to exile and seven mana, {U} among it, enough for {4}{G}{U}, and the escape is still refused. The positive control,
+# with five others, is lunar-hatchling-escapes-exiling-a-land-and-five-other-cards.
+
+[Bot1 Deck]
+Black Lotus
+Lightning Bolt
+Plains
+Faithless Looting
+Lunar Hatchling
+Plains
+Mox Emerald
+Mox Ruby
+Mana Crypt
+Forest
+Forest
+Mox Sapphire
+Island x11
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Lunar Hatchling; Plains#1)
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Graveyard.Count = 5
+! Bot1.Graveyard.Lunar Hatchling.Cast(Ability: Escape)
+
+[Expect]
+Bot1.Graveyard.Count = 5
+Exile.Count = 0

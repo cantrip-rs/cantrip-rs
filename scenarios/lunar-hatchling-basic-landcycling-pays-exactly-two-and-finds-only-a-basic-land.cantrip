@@ -1,0 +1,33 @@
+# Lunar Hatchling's basic landcycling {2} (CR 702.29e): paying it and discarding the card from the hand finds a basic land
+# card in the library and puts it into the hand. The cost {2} is paid exactly with Mana Crypt's {C}{C}, so it holds no
+# colored pip, and the pool ends empty; with only Blasted Landscape's {C} the ability is not offered. Tropical Island, a
+# land with basic land types but not the basic supertype, may not be found (CR 205.4c).
+
+[Bot1 Deck]
+Blasted Landscape
+Mana Crypt
+Lunar Hatchling
+Plains x4
+Tropical Island
+Forest
+Plains x11
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Blasted Landscape.Play
+! Bot1.Hand.Lunar Hatchling.Activate(Ability: Basic landcycling; Mana: short)
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Lunar Hatchling.Activate(Ability: Basic landcycling)
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Search(Tropical Island)
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Graveyard.Lunar Hatchling.Colors = Blue; Green
+Bot1.Hand = Forest; Plains; Plains; Plains; Plains
+Bot1.Library.Count = 12

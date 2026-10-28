@@ -1,0 +1,46 @@
+# Lunar Hatchling (6/6 flying, trample), cast with Black Lotus, two Mox Emeralds and Mox Sapphire, its characteristics as
+# printed. Attacking in turn 3 it is blocked by Bot2's Ornithopter, which has flying and can block it: the Hatchling assigns
+# the Ornithopter lethal damage, 2, and tramples the other 4 over to Bot2 (CR 702.19b); 20 - 4 = 16.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Lunar Hatchling
+Forest x18
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lunar Hatchling.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lunar Hatchling.Power = 6
+? Bot1.Battlefield.Lunar Hatchling.Toughness = 6
+? Bot1.Battlefield.Lunar Hatchling.Keywords = Flying; Trample
+? Bot1.Battlefield.Lunar Hatchling.Colors = Blue; Green
+? Bot1.Battlefield.Lunar Hatchling.Types = Creature
+? Bot1.Battlefield.Lunar Hatchling.Subtypes = Alien; Beast
+? Bot1.Battlefield.Lunar Hatchling.Supertypes = (absent)
+? Bot1.Battlefield.Lunar Hatchling.ProtectionFrom = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Lunar Hatchling > Bot2)
+Bot2.Block(Ornithopter > Lunar Hatchling)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Ornithopter

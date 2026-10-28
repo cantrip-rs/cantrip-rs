@@ -1,0 +1,69 @@
+# Lunar Hatchling's escape {4}{G}{U}, exile a land you control, exile five other cards from your graveyard (CR 702.138a).
+# Black Lotus pays two Lightning Bolts and Faithless Looting, which discards the Hatchling and a Plains: the graveyard then holds
+# the Hatchling and exactly five others (Lotus, both Bolts, Looting, the Plains). On turn 7 Bot1's six mana without any blue
+# ({G}{G}{G}{R}{C}{C}: two Forests, Mox Emerald, Mox Ruby, Mana Crypt) can't pay {U}: the escape is refused. With Mox Sapphire's
+# {U} added it is cast, paying six of the seven mana (one is left over), exiling a tapped Forest, which must be a land
+# (Mox Emerald is refused), and the five others. The 6/6 flier is then on the battlefield and six cards are in exile.
+
+[Bot1 Deck]
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Faithless Looting
+Lunar Hatchling
+Plains
+Mox Emerald
+Mox Ruby
+Mana Crypt
+Forest
+Forest
+Mox Sapphire
+Island x11
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Lunar Hatchling; Plains)
+? Bot1.Graveyard.Count = 6
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+! Bot1.Graveyard.Lunar Hatchling.Cast(Ability: Escape)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Graveyard.Lunar Hatchling.Cast(Ability: Escape; Spend: C, C, R, G, G, U)
+! Bot1.Choose(Mox Emerald)
+Bot1.Choose(Forest#2)
+Bot1.Choose(Black Lotus; Lightning Bolt#1; Lightning Bolt#2; Plains; Faithless Looting)
+Bot1.Pass
+? Bot1.Mana = {G}
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Ruby; Mana Crypt; Mox Sapphire; Forest; Lunar Hatchling
+Bot1.Battlefield.Lunar Hatchling.Power = 6
+Bot1.Battlefield.Lunar Hatchling.Toughness = 6
+Bot1.Battlefield.Lunar Hatchling.Keywords = Flying; Trample
+Bot1.Graveyard.Count = 0
+Exile.Count = 6
+Bot2.Life = 14

@@ -1,0 +1,12 @@
+{
+  "name": "Lunar Hatchling",
+  "manaCost": "{4}{G}{U}",
+  "type": "Creature — Alien Beast",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Flying, trample\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)\nEscape—{4}{G}{U}, Exile a land you control, Exile five other cards from your graveyard. (You may cast this card from your graveyard for its escape cost.)",
+  "keywords": [
+    "Flying",
+    "Trample"
+  ]
+}
