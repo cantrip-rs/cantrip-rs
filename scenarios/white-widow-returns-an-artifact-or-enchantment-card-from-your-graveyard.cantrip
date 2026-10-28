@@ -1,0 +1,79 @@
+# White Widow, Free Agent: "When White Widow enters, choose one - ... Return target artifact or enchantment card from your graveyard to
+# your hand." Bot2's two Lightning Bolts kill both of Bot1's Ornithopters (artifact creature cards) on turn 2, and Bot1's own Bolt
+# kills Bot2's Ornithopter on turn 3, so by turn 5 the graveyards hold: Bot1's two Ornithopters and Lightning Bolt (an instant), Bot2's Bolts and
+# Ornithopter. White Widow's second mode offers only Bot1's Ornithopters: not Bot1's Bolt (not an artifact or enchantment) and not
+# Bot2's Ornithopter (not in Bot1's graveyard) - the refusals - and returns the chosen one to hand; the other stays.
+
+[Bot1 Deck]
+White Widow, Free Agent
+Lightning Bolt
+Ornithopter
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.White Widow, Free Agent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Return target artifact)
+! Bot1.Target(Bot1.Graveyard.Lightning Bolt)
+! Bot1.Target(Bot2.Graveyard.Ornithopter)
+Bot1.Target(Bot1.Graveyard.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Ornithopter
+Bot1.Graveyard = Lightning Bolt; Ornithopter
