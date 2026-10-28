@@ -1,0 +1,63 @@
+# Echo, Perceptive Prodigy copies a creature's targeted enters trigger and "may choose new targets for the copy" (CR 707.10c):
+# Giant-Sized Flying Ant's "tap target nonland permanent" is aimed at Bot2's Mox Pearl; Echo's copy is aimed at Bot2's Mox
+# Jet instead, so both are tapped. Echo ({1}, tapping itself) is paid by the fifth Mox, the Ant by four.
+
+[Bot1 Deck]
+Black Lotus
+Echo, Perceptive Prodigy
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Giant-Sized Flying Ant
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Echo, Perceptive Prodigy.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant-Sized Flying Ant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot1.Battlefield.Echo, Perceptive Prodigy.Activate(Stack.Giant-Sized Flying Ant)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Mox Pearl.Tapped = true
+Bot2.Battlefield.Mox Jet.Tapped = true
+Stack.Count = 0

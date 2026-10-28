@@ -1,0 +1,55 @@
+# Echo, Perceptive Prodigy's target is an ability "you control from a creature source". Bot1's Aether Spellbomb is an artifact,
+# not a creature, so with its "{1}, Sacrifice: Draw a card" on the stack Echo has no legal target (a refusal: judged again with mana to
+# spare, Echo is still not offered). In Bot2's turn Bot2's A.I.M. Scientists is a creature, but its enters trigger is Bot2's, not
+# Bot1's: the refusal again. The positive control, a creature's own ability, is the other scenarios.
+
+[Bot1 Deck]
+Black Lotus
+Echo, Perceptive Prodigy
+Aether Spellbomb
+Mox Sapphire
+Island x3
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+A.I.M. Scientists
+Mox Sapphire
+Island x4
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Echo, Perceptive Prodigy.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.A.I.M. Scientists.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot1.Battlefield.Echo, Perceptive Prodigy.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Aether Spellbomb.Activate(Ability: Draw)
+! Bot1.Battlefield.Echo, Perceptive Prodigy.Activate
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Echo, Perceptive Prodigy.Tapped = false
