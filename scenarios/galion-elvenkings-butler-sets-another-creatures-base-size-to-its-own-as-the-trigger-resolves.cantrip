@@ -1,0 +1,68 @@
+# Galion, Elvenking's Butler, a 4/4: "Whenever Galion attacks, choose up to one other target creature you control. Its base power and
+# toughness become equal to Galion's power and toughness until end of turn." On turn 3 Galion attacks and the trigger targets the
+# Ornithopter (Galion himself and the opponent's Ornithopter are refused): a 4/4 until end of turn (base set, CR 613.4b). Giant
+# Growth then makes Galion 7/7 but not the Ornithopter (the values were fixed as the ability resolved, the ruling), and it is a
+# 0/2 again on turn 4. On turn 5 Galion attacks again and no target is chosen ("up to one"): the Ornithopter stays 0/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Galion, Elvenking's Butler
+Ornithopter
+Giant Growth
+Plains
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Galion, Elvenking's Butler.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Galion, Elvenking's Butler > Bot2)
+! Bot1.Target(Galion, Elvenking's Butler)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 4
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Galion, Elvenking's Butler)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Galion, Elvenking's Butler.Power = 7
+? Bot1.Battlefield.Ornithopter.Power = 4
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Galion, Elvenking's Butler > Bot2)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Galion, Elvenking's Butler.Power = 4

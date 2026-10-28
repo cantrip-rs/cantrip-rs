@@ -1,0 +1,50 @@
+# Galion, Elvenking's Butler, a 4/4: when it attacks, the trigger targets the Ornithopter and Bot2 exiles Galion with Swords to
+# Plowshares in response. The ability still resolves and the Ornithopter's base power and toughness become Galion's as he last
+# existed on the battlefield, 4/4 (CR 608.2h).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Galion, Elvenking's Butler
+Ornithopter
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Galion, Elvenking's Butler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Galion, Elvenking's Butler > Bot2)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Galion, Elvenking's Butler)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Galion, Elvenking's Butler = (absent)
+Bot1.Battlefield.Ornithopter.Power = 4
+Bot1.Battlefield.Ornithopter.Toughness = 4

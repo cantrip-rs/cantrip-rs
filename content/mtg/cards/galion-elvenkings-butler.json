@@ -1,0 +1,8 @@
+{
+  "name": "Galion, Elvenking's Butler",
+  "manaCost": "{2}{G}{G}",
+  "type": "Legendary Creature — Elf Advisor",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Whenever Galion attacks, choose up to one other target creature you control. Its base power and toughness become equal to Galion's power and toughness until end of turn."
+}
