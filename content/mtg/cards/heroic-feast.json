@@ -1,0 +1,6 @@
+{
+  "name": "Heroic Feast",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\nWhenever you gain life, choose up to that many target creatures you control. Put a +1/+1 counter on each of them."
+}
