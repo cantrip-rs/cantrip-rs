@@ -1,0 +1,11 @@
+{
+  "name": "Namor the Sub-Mariner",
+  "manaCost": "{1}{U}{U}",
+  "type": "Legendary Creature — Mutant Merfolk Villain",
+  "power": "*",
+  "toughness": 4,
+  "oracleText": "Flying\nNamor's power is equal to the number of Merfolk you control.\nWhenever you cast a noncreature spell with one or more blue mana symbols in its mana cost, create that many 1/1 blue Merfolk creature tokens.",
+  "keywords": [
+    "Flying"
+  ]
+}

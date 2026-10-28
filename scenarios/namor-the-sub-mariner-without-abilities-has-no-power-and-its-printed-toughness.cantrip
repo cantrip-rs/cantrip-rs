@@ -1,0 +1,50 @@
+# Namor's power comes from a characteristic-defining ability (CR 604.3); without it, a "*" power is 0 (CR 208.3) and the
+# toughness is the printed 4. Bot1 casts Frozen in Ice ({2}{U}, one blue symbol: one Merfolk token) on its own Namor on
+# turn 3, paid exactly by Mox Sapphire, Mox Jet and Mox Pearl: Namor loses every ability, so he is a 0/4 though Bot1 controls
+# two Merfolk (and he no longer makes tokens).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Black Lotus
+Namor the Sub-Mariner
+Frozen in Ice
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Namor the Sub-Mariner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Namor the Sub-Mariner.Power = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Frozen in Ice.Cast(Bot1.Battlefield.Namor the Sub-Mariner)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Namor the Sub-Mariner.Power = 0
+Bot1.Battlefield.Namor the Sub-Mariner.Toughness = 4
+Bot1.Battlefield.Merfolk Token.Power = 1
+Bot1.Battlefield.Merfolk Token.Toughness = 1

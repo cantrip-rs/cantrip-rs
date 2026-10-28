@@ -1,0 +1,52 @@
+# Namor the Sub-Mariner: "Whenever you cast a noncreature spell with one or more blue mana symbols in its mana cost, create
+# that many 1/1 blue Merfolk creature tokens." Namor is cast on turn 1 for {1}{U}{U} (Black Lotus's {U}{U}{U}). In Bot2's turn
+# 2 Bot1 counters Bot2's Ornithopter with Get Out ({U}{U}, paid exactly by an Island and Mox Sapphire): two blue symbols, two
+# Merfolk tokens, and Namor's power, the number of Merfolk Bot1 controls, is 3 (CR 604.3).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Namor the Sub-Mariner
+Get Out
+Island x2
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island x13
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Namor the Sub-Mariner.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Namor the Sub-Mariner.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Get Out.Cast
+Bot1.Modes(1)
+Bot1.Target(Stack.Ornithopter)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Merfolk Token#1.Power = 1
+Bot1.Battlefield.Merfolk Token#1.Toughness = 1
+Bot1.Battlefield.Merfolk Token#2.Colors = Blue
+Bot1.Battlefield.Merfolk Token#2.Subtypes = Merfolk
+Bot1.Battlefield.Namor the Sub-Mariner.Power = 3
+Bot1.Battlefield.Namor the Sub-Mariner.Toughness = 4
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield.Count = 0
