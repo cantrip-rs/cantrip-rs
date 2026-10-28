@@ -1,0 +1,8 @@
+{
+  "name": "The Masters of Evil",
+  "manaCost": "{5}{B}",
+  "type": "Legendary Creature — Human Villain",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Other Villains you control get +2/+1.\n{1}{B}, Discard this card: Search your library for a Plan card, reveal it, put it into your hand, then shuffle."
+}

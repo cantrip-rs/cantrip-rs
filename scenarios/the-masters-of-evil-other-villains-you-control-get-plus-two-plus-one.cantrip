@@ -1,0 +1,65 @@
+# The Masters of Evil: "Other Villains you control get +2/+1" (CR 613.4c). Bot1's Agents of HYDRA (a 1/1 Villain) becomes a 3/2,
+# the Masters themselves stay 5/6 ("other"), and Bot2's Agents of HYDRA, a Villain the opponent controls, stays 1/1.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Agents of HYDRA
+The Masters of Evil
+Swamp x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Agents of HYDRA
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Agents of HYDRA.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Agents of HYDRA.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Masters of Evil.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Agents of HYDRA.Power = 3
+Bot1.Battlefield.Agents of HYDRA.Toughness = 2
+Bot1.Battlefield.The Masters of Evil.Power = 5
+Bot1.Battlefield.The Masters of Evil.Toughness = 6
+Bot2.Battlefield.Agents of HYDRA.Power = 1
+Bot2.Battlefield.Agents of HYDRA.Toughness = 1

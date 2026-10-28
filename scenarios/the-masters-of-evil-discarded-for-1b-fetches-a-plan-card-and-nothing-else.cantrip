@@ -1,0 +1,39 @@
+# "{1}{B}, Discard this card: Search your library for a Plan card, reveal it, put it into your hand, then shuffle" (CR 701.23,
+# 113.6): from the hand, paid for exactly {1}{B}. The library holds Military Intelligence, an enchantment that is no Plan, which
+# may not be found, and two Plans, Doom Reigns Supreme and Claim the Kingdom: one may be found, not both. The one found is
+# revealed.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+The Masters of Evil
+Swamp
+Swamp
+Swamp
+Swamp
+Military Intelligence
+Doom Reigns Supreme
+Claim the Kingdom
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Masters of Evil.Activate(Ability: Discard this card)
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Search(Military Intelligence)
+! Bot1.Search(Doom Reigns Supreme; Claim the Kingdom)
+Bot1.Search(Doom Reigns Supreme)
+
+[Expect]
+Bot1.Graveyard = The Masters of Evil
+Bot1.Hand.Count = 5
+Bot1.Revealed = Doom Reigns Supreme
