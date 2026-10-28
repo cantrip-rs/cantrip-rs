@@ -1,0 +1,8 @@
+{
+  "name": "Benalish Cavalry",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flanking (Whenever a creature without flanking blocks this creature, the blocking creature gets -1/-1 until end of turn.)"
+}
