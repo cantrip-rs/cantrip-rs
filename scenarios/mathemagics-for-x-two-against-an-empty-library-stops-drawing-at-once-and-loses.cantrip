@@ -1,0 +1,33 @@
+# Mathemagics for X of 2 draws 4 cards: against a library already empty the first draw is the one that cannot be made, and
+# the three after it would only repeat it, so the instruction ends there. Bot2 has the seven cards of its hand and nothing
+# else; it loses (CR 121.4, 704.5b) with its hand as it was.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mathemagics
+Island
+Island x14
+
+[Bot2 Deck]
+Island x7
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mathemagics.Cast(Bot2; X: 2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Result = Bot1 won
+Bot2.Hand.Count = 7
+Bot2.Library.Count = 0

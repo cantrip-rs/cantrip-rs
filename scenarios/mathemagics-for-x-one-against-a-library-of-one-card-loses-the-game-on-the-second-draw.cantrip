@@ -1,0 +1,28 @@
+# Mathemagics for X of 1 targeting Bot2, whose library has one card: it draws that card, the second draw is from an empty
+# library, and Bot2 loses the next time state-based actions are checked (CR 121.4, 704.5b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mathemagics
+Island
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x8
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mathemagics.Cast(Bot2; X: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Result = Bot1 won
+Bot2.Hand.Count = 8

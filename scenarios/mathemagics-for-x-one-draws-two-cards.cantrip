@@ -1,0 +1,28 @@
+# Mathemagics with X of 1 draws 2 cards and costs {1}{1}{U}{U}: Bot1 pays the four mana with a Black Lotus (three blue) and a
+# Mox Sapphire on turn 1. It has 7 - 3 = 4 cards in hand, and then 2 more.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mathemagics
+Island
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mathemagics.Cast(Bot1; X: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 6
+Bot1.Library.Count = 11
