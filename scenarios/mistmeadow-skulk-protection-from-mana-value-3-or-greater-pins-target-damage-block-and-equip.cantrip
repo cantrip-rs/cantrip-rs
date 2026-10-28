@@ -1,0 +1,101 @@
+# Mistmeadow Skulk, "protection from mana value 3 or greater" (CR 702.16, 202.3): protection from a quality of the source's mana value,
+# with the limit at exactly 3. On turn 2 Bot2 cannot target it with Dismember (mana value 3), though Lightning Strike (mana value
+# 2) can, and does on turn 8 (the control, which kills it). On turn 3 the Skulk attacks and the Mirran Crusader (mana value 3)
+# may not block it, though the Ornithopter (mana value 0) may (the control). On turn 6 the Crusader (double strike 2/2) attacks and
+# the Skulk (1/1) blocks it: all of its damage is prevented, in both damage steps (it would have died), while the Skulk's
+# lifelink damage is dealt (Bot1 22). On turn 7 Bot1's Loxodon Warhammer (mana value 3) can't be equipped to it, while the
+# Basilisk Collar (mana value 1) can (the control).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mistmeadow Skulk
+Black Lotus
+Loxodon Warhammer
+Basilisk Collar
+Plains x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mirran Crusader
+Ornithopter
+Dismember
+Lightning Strike
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mistmeadow Skulk.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Mirran Crusader.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Hand.Dismember.Cast(Bot1.Battlefield.Mistmeadow Skulk)
+[T3 Bot1.Main1]
+Bot1.Attack(Mistmeadow Skulk > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Mirran Crusader > Mistmeadow Skulk)
+Bot2.Block(Ornithopter > Mistmeadow Skulk)
+[T6 Bot2.Main1]
+Bot2.Attack(Mirran Crusader > Bot1)
+[T6 Bot2.DeclareBlockers]
+Bot1.Block(Mistmeadow Skulk > Mirran Crusader)
+[T6 Bot2.Main2]
+? Bot1.Battlefield.Mistmeadow Skulk.Damage = 0
+? Bot2.Battlefield.Mirran Crusader.Damage = 1
+? Bot1.Life = 22
+[T7 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Loxodon Warhammer.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Loxodon Warhammer.Activate(Mistmeadow Skulk; Ability: Equip)
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Basilisk Collar.Activate(Mistmeadow Skulk; Ability: Equip)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Basilisk Collar.AttachedTo = Mistmeadow Skulk
+? Bot1.Battlefield.Loxodon Warhammer.AttachedTo = (absent)
+[T8 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Strike.Cast(Bot1.Battlefield.Mistmeadow Skulk)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Mistmeadow Skulk; Black Lotus
+Bot2.Graveyard = Lightning Strike; Black Lotus
