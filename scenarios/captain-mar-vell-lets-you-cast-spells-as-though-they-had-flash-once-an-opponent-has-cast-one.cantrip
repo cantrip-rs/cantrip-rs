@@ -1,0 +1,65 @@
+# Captain Mar-Vell, Space-Born: "As long as an opponent has cast a spell this turn, you may cast spells as though they had flash."
+# Bot1's Ornithopters (creature spells, so sorcery speed) are refused during Bot2's upkeep on turn 2, before Bot2 has cast anything
+# that turn. Bot2 then casts a Mox, which resolves, and in Bot2's second main phase Bot1 casts an Ornithopter (the permission lasts
+# once it has resolved, for the rest of the turn). On turn 4 the second Ornithopter is refused in Bot2's upkeep again (a new turn),
+# and cast in response to Bot2's next Mox, while it is on the stack.
+
+[Bot1 Deck]
+Captain Mar-Vell, Space-Born
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ornithopter
+Ornithopter
+Plains x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Captain Mar-Vell, Space-Born.Cast
+Bot1.Pass
+[T2 Bot2.Upkeep]
+! Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Captain Mar-Vell, Space-Born; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter
+[T4 Bot2.Upkeep]
+! Bot1.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Captain Mar-Vell, Space-Born; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Ornithopter

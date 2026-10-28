@@ -1,0 +1,12 @@
+{
+  "name": "Captain Mar-Vell, Space-Born",
+  "manaCost": "{4}{W}",
+  "type": "Legendary Creature — Kree Soldier Hero",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying, vigilance\nCosmic Awareness — As long as an opponent has cast a spell this turn, you may cast spells as though they had flash.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}
