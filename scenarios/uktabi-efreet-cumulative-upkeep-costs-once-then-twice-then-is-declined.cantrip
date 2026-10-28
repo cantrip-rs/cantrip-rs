@@ -1,0 +1,62 @@
+# Uktabi Efreet {2}{G}{G}, "Cumulative upkeep {G}" (CR 702.24a). Cast on turn 1 (Black Lotus's {G}{G}{G}, Mox Emerald's {G}),
+# at Bot1's turn 3 upkeep it gets its first age counter and the cost is {G} once: Mox Emerald and a Forest are tapped and one {G} is paid,
+# leaving one in the pool. At turn 5 it gets a second and the cost is {G}{G}, two mana: with one source tapped paying is not
+# offered; with the Forest tapped too it is paid, the pool empty, and the second Forest (played on turn 3) untouched. At
+# turn 7 the cost would be three mana; Bot1 declines, and sacrifices it.
+
+[Bot1 Deck]
+Uktabi Efreet
+Black Lotus
+Mox Emerald
+Forest
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Uktabi Efreet.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = {G}
+? Bot1.Battlefield.Uktabi Efreet.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Forest#1.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = 
+? Bot1.Battlefield.Uktabi Efreet.Counters.Age = 2
+? Bot1.Battlefield.Uktabi Efreet.Power = 5
+? Bot1.Battlefield.Uktabi Efreet.Toughness = 4
+? Bot1.Battlefield.Uktabi Efreet.Colors = Green
+[T7 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard = Uktabi Efreet; Black Lotus
+Bot1.Battlefield.Uktabi Efreet = (absent)
