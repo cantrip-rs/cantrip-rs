@@ -1869,6 +1869,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::put_onto_battlefield(self, &all, ZoneReason::Other).map_err(|_| Suspend)
     }
 
+    fn counters_banned(&self, object: ObjectId, controller: PlayerId, kind: CounterKind) -> bool {
+        static_rules::counters_banned(self, self.cards(), object, controller, kind)
+    }
+
     fn put_onto_battlefield_with_counters(&mut self, object: ObjectId, controller: PlayerId, tapped: bool, counters: &[(CounterKind, i16)]) -> Result<ObjectId, Suspend> {
         ops::put_onto_battlefield_with(self, &[(object, controller, tapped)], ZoneReason::Other, counters)
             .map(|v| v.first().copied().unwrap_or(object))

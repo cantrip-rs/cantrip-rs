@@ -630,6 +630,11 @@ pub trait Game: Query {
     /// `put_onto_battlefield`, the object entering with these counters as well (CR 122.6, 614.1c): persist's and undying's
     /// "return it with a counter on it". They are part of how it enters, so a replacement of counters applies (CR 614.1).
     fn put_onto_battlefield_with_counters(&mut self, object: ObjectId, controller: PlayerId, tapped: bool, counters: &[(CounterKind, i16)]) -> Result<ObjectId, Suspend>;
+    /// Whether a counter of `kind` can't be put on `object`, controlled by `controller`, right now (CR 122.6, 101.2): a static
+    /// ability on the battlefield says so (Solemnity's "counters can't be put on creatures", Melira's -1/-1 counters). Asked
+    /// of a permanent entering as its own replacement is applied, it is judged as it would exist on the battlefield
+    /// (CR 614.12), which is how riot learns that the +1/+1 counter it chose can't be put on it (its ruling).
+    fn counters_banned(&self, object: ObjectId, controller: PlayerId, kind: CounterKind) -> bool;
     /// Puts an object onto the battlefield tapped and attacking `defender` (CR 508.4, 702.49a): attacking, but never
     /// declared as an attacker, so nothing that watches attackers being declared sees it. Outside combat it is just
     /// tapped. Returns the new object.
