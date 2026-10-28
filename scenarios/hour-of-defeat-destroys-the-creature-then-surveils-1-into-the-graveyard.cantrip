@@ -1,0 +1,50 @@
+# Hour of Defeat (CR 701.8, 701.25): destroy target creature, then surveil 1, the top card put into the graveyard. Paid for
+# exactly {3}{B}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Hour of Defeat
+Swamp x2
+Lightning Bolt
+Swamp x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Sapphire
+Swamp
+Dune Beetle
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Dune Beetle.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hour of Defeat.Cast(Bot2.Battlefield.Dune Beetle)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(| Lightning Bolt)
+
+[Expect]
+Bot2.Graveyard = Dune Beetle
+Bot2.Battlefield = Mox Jet; Swamp
+Bot1.Graveyard = Hour of Defeat; Lightning Bolt

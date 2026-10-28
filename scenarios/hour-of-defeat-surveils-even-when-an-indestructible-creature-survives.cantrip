@@ -1,0 +1,54 @@
+# Hour of Defeat's destroy does nothing to an indestructible creature (CR 702.12b), but the spell still resolves, so it still
+# surveils 1 (CR 608.2c): the top card is kept this time.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Hour of Defeat
+Swamp x2
+Lightning Bolt
+Swamp x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Darksteel Myr
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Darksteel Myr.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hour of Defeat.Cast(Bot2.Battlefield.Darksteel Myr)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Lightning Bolt)
+
+[Expect]
+Bot2.Battlefield = Mox Jet; Mox Sapphire; Mox Ruby; Darksteel Myr
+Bot1.Graveyard = Hour of Defeat
+Bot1.Library.Count = 11

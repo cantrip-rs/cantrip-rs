@@ -1,0 +1,6 @@
+{
+  "name": "Hour of Defeat",
+  "manaCost": "{3}{B}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature. Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)"
+}
