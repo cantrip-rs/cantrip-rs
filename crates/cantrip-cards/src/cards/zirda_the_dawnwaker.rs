@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{companion, targets};
+use cantrip_mechanics::{companion, effects, targets};
 use cantrip_oracle as oracle;
 
 /// "Abilities you activate that aren't mana abilities cost {2} less to activate. This effect can't reduce the mana in
@@ -8,14 +8,6 @@ use cantrip_oracle as oracle;
 /// action is no ability (CR 116.1): `Costed::Ability` alone.
 fn two_less(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
     if matches!(costed, Costed::Ability(..)) && player == q.controller(source) { CostDelta::less_to_one(2) } else { CostDelta::NONE }
-}
-
-/// {1}, {T}: Target creature can't block this turn.
-fn cant_block(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        g.add_effect(item.object, creature, EffectKind::CantBlock, Duration::EndOfTurn);
-    }
-    Ok(())
 }
 
 /// "Companion - Each permanent card in your starting deck has an activated ability" (CR 702.139a, 602.1): a mana ability is
@@ -28,7 +20,7 @@ fn permanents_with_activated_abilities(q: &dyn Query, deck: &StartingDeck) -> bo
 
 pub static CARD: CardDef = CardDef {
     companion: Some(permanents_with_activated_abilities),
-    abilities: &[ability(cost("{1}, {T}"), cant_block, "{1}, {T}: Target creature can't block this turn.")
+    abilities: &[ability(cost("{1}, {T}"), effects::first_target_cant_block_this_turn, "{1}, {T}: Target creature can't block this turn.")
         .targets(&[targets::CREATURE])],
     cost_changes: &[two_less],
     ..oracle::ZIRDA_THE_DAWNWAKER

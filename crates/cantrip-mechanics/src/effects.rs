@@ -232,6 +232,16 @@ pub fn destroy_all_creatures_no_regen(g: &mut dyn Game, _: &StackItem) -> Result
     Ok(())
 }
 
+/// "Target creature can't block this turn" (CR 509.1b, 611.2a): the resolving object's first target, if it is still legal (CR
+/// 608.2b), can't block until end of turn - an effect on the creature, not an ability it gains. Zirda, the Dawnwaker, Aragorn,
+/// King of Gondor (up to one target) and Hawkeye, Master Marksman print it.
+pub fn first_target_cant_block_this_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        g.add_effect(item.object, creature, EffectKind::CantBlock, Duration::EndOfTurn);
+    }
+    Ok(())
+}
+
 /// "Draw N cards" (CR 121.1). Chromatic Star and Mind Stone print "draw a card"; Coveted Jewel and Bankrupt in Blood draw
 /// three.
 pub fn draw(g: &mut dyn Game, item: &StackItem, n: u32) -> Result<(), Suspend> {
