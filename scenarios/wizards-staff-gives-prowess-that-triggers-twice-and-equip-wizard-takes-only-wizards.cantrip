@@ -1,0 +1,70 @@
+# Wizard's Staff: "Equipped creature has prowess. If a triggered ability of equipped creature triggers, that ability triggers an additional time. Equip Wizard {1}.
+# Equip {3}." Bot1 casts the Staff and Jace, Vryn's Prodigy (a Human Wizard, 0/2) and the Ornithopter on turn 1. On turn 3 Equip Wizard {1} refuses the
+# Ornithopter (not a Wizard) and takes Jace, the pool empty after. Mox Ruby, a noncreature spell, triggers the granted prowess twice (the Staff's second
+# ability): two triggers on the stack, and Jace is a 2/4 (+2/+2). Then Equip {3} moves the Staff to the Ornithopter, which is not a Wizard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Wizard's Staff
+Jace, Vryn's Prodigy
+Ornithopter
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wizard's Staff.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jace, Vryn's Prodigy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Wizard's Staff.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip Wizard)
+Bot1.Battlefield.Wizard's Staff.Activate(Bot1.Battlefield.Jace, Vryn's Prodigy; Ability: Equip Wizard)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jace, Vryn's Prodigy.Power = 0
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Triggers(Prowess; Prowess)
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jace, Vryn's Prodigy.Power = 2
+? Bot1.Battlefield.Jace, Vryn's Prodigy.Toughness = 4
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Wizard's Staff.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip {3})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Wizard's Staff.AttachedTo = Ornithopter

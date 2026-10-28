@@ -1,0 +1,61 @@
+# Wizard's Staff: "If a triggered ability of equipped creature triggers, that ability triggers an additional time." A leaves-the-battlefield ability looks back
+# (CR 603.10a): Doomed Traveler, equipped with the Staff on turn 3, is killed by Bot2's Lightning Bolt on turn 4, and "When this creature dies, create a 1/1
+# white Spirit creature token with flying" triggers twice though the Traveler is no longer equipped: two Spirits, not one.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Wizard's Staff
+Doomed Traveler
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wizard's Staff.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Doomed Traveler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Wizard's Staff.Activate(Bot1.Battlefield.Doomed Traveler; Ability: Equip {3})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Doomed Traveler)
+Bot2.Pass
+Bot1.Pass
+Bot1.Triggers(When this creature dies; When this creature dies)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Spirit Token#1.Keywords = Flying
+Bot1.Battlefield.Spirit Token#2.Keywords = Flying
+Bot1.Graveyard = Doomed Traveler

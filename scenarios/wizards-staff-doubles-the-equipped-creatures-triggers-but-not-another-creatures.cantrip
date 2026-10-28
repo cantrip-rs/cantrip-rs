@@ -1,0 +1,73 @@
+# Wizard's Staff: "If a triggered ability of equipped creature triggers, that ability triggers an additional time." Bot1 equips it ({3}, paid with Black Lotus, the pool
+# empty after) to Bilbo, Luckwearer on turn 3. Bilbo is unblockable and connects: his "draw a card, then discard a card" triggers twice, so two cards are
+# drawn and two discarded. Bot1's unequipped Ravenhill Flock, "whenever you draw a card, put a +1/+1 counter", is not doubled: two draws, two counters (not four).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Black Lotus
+Wizard's Staff
+Bilbo, Luckwearer
+Ravenhill Flock
+Plains
+Swamp
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wizard's Staff.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bilbo, Luckwearer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ravenhill Flock.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Wizard's Staff.Activate(Bot1.Battlefield.Bilbo, Luckwearer; Ability: Equip {3})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bilbo, Luckwearer > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Triggers(Whenever Bilbo deals combat damage; Whenever Bilbo deals combat damage)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Graveyard = Swamp; Plains; Black Lotus
+Bot1.Battlefield.Ravenhill Flock.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Wizard's Staff.AttachedTo = Bilbo, Luckwearer
