@@ -1,0 +1,11 @@
+{
+  "name": "The Thing, Ben Grimm",
+  "manaCost": "{5}{G}",
+  "type": "Legendary Creature — Human Hero",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Trample\nWhenever one or more Heroes you control deal damage to a player, put two +1/+1 counters on The Thing.",
+  "keywords": [
+    "Trample"
+  ]
+}

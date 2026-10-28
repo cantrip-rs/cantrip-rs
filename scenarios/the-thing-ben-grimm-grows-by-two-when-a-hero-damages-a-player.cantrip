@@ -1,0 +1,87 @@
+# The Thing, Ben Grimm: "Trample. Whenever one or more Heroes you control deal damage to a player, put two +1/+1 counters on The Thing."
+# The Thing (a Hero, 7/7) attacks on turn 3 and deals 7 to Bot2 (20 to 13): he gets two counters (9/9), not more. On turn 4 Bot2's Agent
+# of Atlas (a Hero, but not one Bot1 controls) hits Bot1 for 2: nothing. On turn 5 only Bot1's Grizzly Bears (not a Hero) attack and deal 2
+# (13 to 11): nothing. On turn 7 Bot1's Reptil, Dinomorpher (a Hero) deals just 1 (11 to 10): two more counters (11/11).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+The Thing, Ben Grimm
+Grizzly Bears
+Reptil, Dinomorpher
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Agent of Atlas
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Thing, Ben Grimm.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Agent of Atlas.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Attack(The Thing, Ben Grimm > Bot2)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 13
+? Bot1.Battlefield.The Thing, Ben Grimm.Power = 9
+[T4 Bot2.Main1]
+Bot2.Attack(Agent of Atlas > Bot1)
+[T5 Bot1.Main1]
+? Bot1.Life = 18
+? Bot1.Battlefield.The Thing, Ben Grimm.Power = 9
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Reptil, Dinomorpher.Cast
+Bot1.Pass
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Pass
+[T5 Bot1.Main2]
+? Bot2.Life = 11
+? Bot1.Battlefield.The Thing, Ben Grimm.Power = 9
+[T7 Bot1.Main1]
+Bot1.Attack(Reptil, Dinomorpher > Bot2)
+Bot1.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 10
+Bot1.Battlefield.The Thing, Ben Grimm.Power = 11
+Bot1.Battlefield.The Thing, Ben Grimm.Toughness = 11
+Bot1.Battlefield.The Thing, Ben Grimm.Keywords = Trample
