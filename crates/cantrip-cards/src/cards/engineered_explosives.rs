@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::mana;
+use cantrip_mechanics::sunburst;
 use cantrip_oracle as oracle;
 
 /// Destroy each nonland permanent with mana value equal to the number of charge counters on this artifact, together.
@@ -18,7 +18,7 @@ fn destroy_matching(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 pub static CARD: CardDef = CardDef {
-    enters: Some(mana::sunburst),
+    enters: Some(sunburst::enters),
     abilities: &[ability(cost("{2}").and(SACRIFICE_THIS), destroy_matching, "{2}, Sacrifice Engineered Explosives: Destroy each nonland permanent with mana value equal to the number of charge counters on Engineered Explosives.")],
     ..oracle::ENGINEERED_EXPLOSIVES
 };

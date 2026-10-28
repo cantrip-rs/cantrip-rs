@@ -120,16 +120,6 @@ pub fn enters_tapped_unless_two_or_more_other_lands(g: &mut dyn Game, entering: 
     Ok(())
 }
 
-/// Sunburst (CR 702.44a): it enters with a charge counter on it for each color of mana spent to cast it, colorless
-/// not being a color (CR 105.1). An object never cast spent none (CR 400.7). Engineered Explosives and Pentad Prism
-/// print it.
-pub fn sunburst(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    let spent = g.obj(entering.object).spent;
-    let colors = [Mana::W, Mana::U, Mana::B, Mana::R, Mana::G].iter().filter(|&&m| spent.get(m) > 0).count() as i16;
-    entering.counters[CounterKind::Charge as usize] += colors;
-    Ok(())
-}
-
 /// What a land that may be paid for with 2 life asks as it enters: "Pay 2 life" or "Enters tapped".
 pub const PAY_TWO_LIFE_OR_TAPPED: Question =
     Question::new("EnterUntapped", "pay {cost}?", "If you don't, it enters tapped", "Pay {cost}", "Enters tapped").no_default();
