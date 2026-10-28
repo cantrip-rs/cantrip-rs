@@ -1,0 +1,11 @@
+{
+  "name": "Little Bear",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Bear",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flash\nWhen this creature enters, untap another target creature you control. If that creature is a Bear, put a +1/+1 counter on it.",
+  "keywords": [
+    "Flash"
+  ]
+}

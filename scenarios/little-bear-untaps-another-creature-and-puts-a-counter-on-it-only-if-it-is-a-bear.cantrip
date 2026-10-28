@@ -1,0 +1,74 @@
+# Little Bear, a 3/2 Bear with flash: "When this creature enters, untap another target creature you control. If that creature is a
+# Bear, put a +1/+1 counter on it." On turn 3 Bot1 attacks with a Grizzly Bears (a Bear) and an Ornithopter (not one), both tapped,
+# and after combat flashes in a Little Bear for {2}{G} from a Black Lotus; the second is flashed in at the end of Bot2's turn 4, the Grizzly Bears still tapped. The first targets the Ornithopter (the
+# Little Bear itself and the opponent's Ornithopter are refused): untapped and no counter. The second targets the Grizzly Bears:
+# untapped with a +1/+1 counter, a 3/3 (CR 608.2c: the Bear check follows the untap).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Emerald
+Grizzly Bears
+Ornithopter
+Little Bear
+Little Bear
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2; Ornithopter > Bot2)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+? Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Little Bear.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Little Bear)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T4 Bot2.End]
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Little Bear.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot2.Life = 18
