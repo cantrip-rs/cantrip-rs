@@ -1087,6 +1087,22 @@ pub fn artifact_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> 
     }
 }
 
+/// "Whenever another artifact you control enters" (CR 603.6a): an artifact other than this permanent, under your control as it
+/// entered. Kappa Cannoneer and Machinesmith Automaton print it.
+pub fn another_artifact_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { new, to, .. }
+            if *new != me.source
+                && to.is(ZoneKind::Battlefield)
+                && q.controller(*new) == me.controller
+                && q.chars(*new).is(CardType::Artifact) =>
+        {
+            Fired::PLAIN
+        }
+        _ => None,
+    }
+}
+
 /// "Whenever another creature you control enters" (CR 603.6a): a creature other than this permanent, under your control
 /// as it entered. The entering creature is the trigger's subject. Aunt May and Guide of Souls print it.
 pub fn another_creature_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
@@ -1439,6 +1455,7 @@ pub const DRAGON_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE
 pub const OPPONENTS_CREATURE_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, opponents_creature_enters);
 pub const LEGENDARY_CREATURE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, legendary_creature_you_control_enters);
 pub const ARTIFACT_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, artifact_you_control_enters);
+pub const ANOTHER_ARTIFACT_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, another_artifact_you_control_enters);
 pub const ANOTHER_CREATURE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_enters);
 pub const CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, creature_dies);
 
