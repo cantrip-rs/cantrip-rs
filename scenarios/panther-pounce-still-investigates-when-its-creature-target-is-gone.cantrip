@@ -1,0 +1,46 @@
+# Panther Pounce: "Target player investigates. Target creature gets +1/+0 and gains flying until end of turn. Untap it." With two
+# targets, the spell is countered on resolution only if all its targets are illegal (CR 608.2b): Bot1 casts it on turn 3 at Bot2 and at
+# its own Ornithopter, and Bot2 kills the Ornithopter in response with Lightning Bolt. The player target is still legal, so Bot2
+# still investigates - a Clue under Bot2's control - and the creature's part does nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Panther Pounce
+Plains
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Panther Pounce.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield = Clue Token; Mox Ruby
+Bot1.Battlefield = Mox Pearl
+Bot1.Graveyard = Panther Pounce; Ornithopter

@@ -1,0 +1,45 @@
+# Panther Pounce with the targets the other way round: Bot1 as the player to investigate (Bot1 gets the Clue, Bot2 none) and Bot2's
+# Ageless Guardian (a 1/4 with no abilities) as the creature, which gets +1/+0 and gains flying until end of turn - a 2/4 flier - and
+# is a 1/4 with no flying again when the turn ends.
+
+[Bot1 Deck]
+Mox Pearl
+Panther Pounce
+Plains x20
+
+[Bot2 Deck]
+Ageless Guardian
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ageless Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Panther Pounce.Cast
+Bot1.Target(Bot1)
+Bot1.Target(Bot2.Battlefield.Ageless Guardian)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Pearl; Clue Token
+? Bot2.Battlefield.Ageless Guardian.Power = 2
+? Bot2.Battlefield.Ageless Guardian.Toughness = 4
+? Bot2.Battlefield.Ageless Guardian.Keywords = Flying
+[T4 Bot2.Upkeep]
+? Bot2.Battlefield.Ageless Guardian.Power = 1
+? Bot2.Battlefield.Ageless Guardian.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Clue Token

@@ -1,0 +1,46 @@
+# Panther Pounce: "Target player investigates. Target creature gets +1/+0 and gains flying until end of turn. Untap it." The two
+# targets are independent: Bot1 casts it during its own attack at Bot2 as the player - the Clue is created under Bot2's control, not
+# Bot1's - and at its attacking, tapped Ornithopter (0/2) as the creature, which becomes untapped, 1/2 with flying (it was a flier
+# already, so check the power) and still attacking: it deals 1 combat damage (Bot2 goes to 19).
+
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Panther Pounce
+Plains
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+? Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Panther Pounce.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Clue Token
+? Bot1.Battlefield = Mox Pearl; Ornithopter
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield = Clue Token
+Bot1.Battlefield = Mox Pearl; Ornithopter

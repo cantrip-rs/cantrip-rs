@@ -1,0 +1,56 @@
+# Panther Pounce: "Target player investigates. Target creature gets +1/+0 and gains flying until end of turn. Untap it." With two
+# targets, the spell is countered on resolution only if all its targets are illegal (CR 608.2b). Bot1 attacks with its Ornithopter on
+# turn 3 and casts Pounce at Bot2 and at that Ornithopter; Bot2 answers with Teferi's Protection, gaining protection from everything
+# (it can't be targeted by Pounce any more). The player target is illegal, so no Clue is made - Bot2's battlefield is empty: its
+# Moxen phased out - but the creature target is legal, and the Ornithopter is untapped and 1/2, still attacking.
+
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Panther Pounce
+Plains
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Teferi's Protection
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Panther Pounce.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Teferi's Protection.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield =
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot1.Battlefield.Ornithopter.Power = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
