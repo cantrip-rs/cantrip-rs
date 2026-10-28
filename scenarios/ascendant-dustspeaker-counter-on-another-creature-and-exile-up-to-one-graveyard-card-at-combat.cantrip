@@ -1,0 +1,51 @@
+# Ascendant Dustspeaker: when it enters its +1/+1 counter goes on another creature Bot1 controls (never on itself); at the beginning of
+# combat on Bot1's turn it exiles up to one target card from a graveyard -- here a Mountain Bot2 discarded -- and one turn later
+# Bot1 chooses no target at all.
+
+[Bot1 Deck]
+Plains x3
+Ornithopter x2
+Plains
+Ascendant Dustspeaker
+Plains x2
+Plains x12
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ascendant Dustspeaker.Cast
+! Bot1.Target(Ascendant Dustspeaker)
+Bot1.Target(Bot1.Battlefield.Ornithopter#2)
+[T9 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ascendant Dustspeaker.Counters.PlusOnePlusOne = (absent)
+? Exile.Count = 0
+[T11 Bot1.Main1]
+Bot1.Target(Bot2.Graveyard.Mountain)
+[T11 Bot1.Main2]
+? Exile = Mountain
+[T13 Bot1.Main1]
+Bot1.Target()
+[T13 Bot1.Main2]
+
+[Expect]
+Exile = Mountain
+Bot1.Battlefield.Ascendant Dustspeaker.Keywords = Flying
