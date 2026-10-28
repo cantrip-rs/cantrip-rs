@@ -137,6 +137,23 @@ pub fn attacking_or_blocking_creature_filter(q: &dyn Query, _: &Asker, t: Target
 }
 pub const ATTACKING_OR_BLOCKING_CREATURE: TargetSpec = target(attacking_or_blocking_creature_filter);
 pub const CREATURE_YOU_CONTROL: TargetSpec = target(creature_you_control_filter);
+
+/// "A creature is attacking alone if it's attacking but no other creatures are" (CR 506.5): attacking now, whether declared as an
+/// attacker or put onto the battlefield attacking, and the only attacking creature.
+pub fn attacking_alone(q: &dyn Query, id: ObjectId) -> bool {
+    q.is_attacking(id) && q.state().attackers.len() == 1
+}
+fn creature_attacking_alone_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_filter(q, asker, t) && matches!(t, Target::Object(id) if attacking_alone(q, id))
+}
+/// "Target creature that's attacking alone" (CR 115.1, 506.5): judged as it is chosen and again as the ability resolves. Viper,
+/// Cruel Conspirator prints it.
+pub const CREATURE_ATTACKING_ALONE: TargetSpec = target(creature_attacking_alone_filter);
+fn creature_you_control_attacking_alone_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_attacking_alone_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) == asker.controller)
+}
+/// "Target creature you control that's attacking alone" (CR 115.1, 506.5). Crowd of True Believers prints it.
+pub const CREATURE_YOU_CONTROL_ATTACKING_ALONE: TargetSpec = target(creature_you_control_attacking_alone_filter);
 /// "Another target creature you control", "other target creature you control" (CR 115.1, 109.5): a creature on the battlefield
 /// under your control other than the source. Dour Port Mage, Giver of Runes, Oliphaunt, Flock Impostor and the reconfigure
 /// ability print it; a slot of up to one is `up_to_one(other_creature_you_control_filter)`.
