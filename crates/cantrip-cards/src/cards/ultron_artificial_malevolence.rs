@@ -38,19 +38,18 @@ fn copy(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     }
     let values = g.copiable_values(artifact);
     let tokens = g.create_token_copies_of(values, item.controller, 1)?;
-    for token in tokens {
-        if !is_live(g, token) || g.chars(token).is(CardType::Creature) {
-            continue;
-        }
-        g.one_instruction(&mut |g| {
+    g.one_instruction(&mut |g| {
+        for &token in &tokens {
+            if !is_live(g, token) || g.chars(token).is(CardType::Creature) {
+                continue;
+            }
             g.add_effect(item.object, token, EffectKind::AddTypes(TypeSet::of(&[CardType::Creature])), Duration::Indefinite);
             g.add_effect(item.object, token, EffectKind::AddSubtype(Subtype::Robot), Duration::Indefinite);
             g.add_effect(item.object, token, EffectKind::AddSubtype(Subtype::Villain), Duration::Indefinite);
             g.add_effect(item.object, token, EffectKind::SetPt(2, 2), Duration::Indefinite);
-            Ok(())
-        })?;
-    }
-    Ok(())
+        }
+        Ok(())
+    })
 }
 
 pub static CARD: CardDef = CardDef {
