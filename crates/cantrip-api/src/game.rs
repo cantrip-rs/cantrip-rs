@@ -5,7 +5,7 @@
 use cantrip_state::*;
 
 use crate::card::{CounterTo, EntersAs, FaceDown, LibraryPlace, TurnUp, WayDef};
-use crate::card::{AbilityDef, ActivatedDef, Asker, CardDef, CauseKind, TriggeredDef};
+use crate::card::{AbilityDef, ActivatedDef, Asker, CardDef, CauseKind, PlayerCounter, TriggeredDef};
 use crate::chars::Chars;
 use crate::history::{History, Record};
 use crate::DamageResult;
@@ -610,6 +610,10 @@ pub trait Game: Query {
     /// offered when it is impossible), offers a sacrifice as one option among others, or as a cost to pay "unless", asks it
     /// (CR 118.3).
     fn can_sacrifice(&self, player: PlayerId, permanent: ObjectId) -> bool;
+    /// Whether `player` could get `kind` counters now (CR 122.1, 101.2): no static ability says they can't (Melira,
+    /// Sylvok Outcast's "you can't get poison counters"). A cost of getting counters (ward) is paid only when this holds
+    /// (CR 118.3).
+    fn can_get_counters(&self, player: PlayerId, kind: PlayerCounter) -> bool;
     /// Returns objects to their owners' hands at once (CR 400.3, 101.4): from the battlefield, a graveyard, exile or
     /// anywhere else, whoever controls them. A token that leaves the battlefield ceases to exist (CR 111.7, 704.5d). Something
     /// that is no longer the object it was is not returned (CR 400.7). The new objects, in order.

@@ -1597,6 +1597,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::sacrificeable(self, player, permanent)
     }
 
+    fn can_get_counters(&self, player: PlayerId, kind: PlayerCounter) -> bool {
+        !static_rules::player_counters_banned(self, self.cards(), player, kind)
+    }
+
     fn stage(&self) -> u16 {
         self.g.state.agenda[self.frame].stage
     }
