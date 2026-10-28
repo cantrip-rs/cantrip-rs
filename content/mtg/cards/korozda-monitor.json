@@ -1,0 +1,11 @@
+{
+  "name": "Korozda Monitor",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Lizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample\nScavenge {5}{G}{G} ({5}{G}{G}, Exile this card from your graveyard: Put a number of +1/+1 counters equal to this card's power on target creature. Scavenge only as a sorcery.)",
+  "keywords": [
+    "Trample"
+  ]
+}
