@@ -13,7 +13,7 @@ use cantrip_api::*;
 /// one included - is no target.
 fn attacking_creature_with_lesser_power(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     attacking_creature_filter(q, asker, t)
-        && matches!(t, Target::Object(id) if q.chars(id).power.unwrap_or(0) < power_or_last_known(q, asker.source))
+        && matches!(t, Target::Object(id) if q.chars(id).power.is_some_and(|p| p < power_or_last_known(q, asker.source)))
 }
 
 fn put_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
