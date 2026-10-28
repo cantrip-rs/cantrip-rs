@@ -1,0 +1,8 @@
+{
+  "name": "Colleen Wing, Street Samurai",
+  "manaCost": "{1}{W}",
+  "type": "Legendary Creature — Human Samurai Hero",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever you cast a spell that targets a creature you control, put a +1/+1 counter on Colleen Wing. Scry 1. (Look at the top card of your library. You may put that card on the bottom.)"
+}

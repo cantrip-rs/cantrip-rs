@@ -1,0 +1,69 @@
+# Colleen Wing, Street Samurai: "Whenever you cast a spell that targets a creature you control, put a +1/+1 counter on Colleen Wing.
+# Scry 1." Turn 3: Snakeskin Veil at Bot1's own Ornithopter triggers it - a counter on Colleen and a scry (the Plains on top goes to
+# the bottom) - and so does not a Lightning Bolt cast the same turn at Bot2's Ornithopter (the counter stays one). Turn 5: a Bolt at
+# Bot1's own Ornithopter does, one more counter and a scry.
+
+[Bot1 Deck]
+Colleen Wing, Street Samurai
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Snakeskin Veil
+Mountain
+Lightning Bolt
+Plains
+Lightning Bolt
+Plains
+Black Lotus
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Colleen Wing, Street Samurai.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Snakeskin Veil.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Plains)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Colleen Wing, Street Samurai.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot1.Library = Lightning Bolt; Plains; Black Lotus; Plains
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Colleen Wing, Street Samurai.Counters.PlusOnePlusOne = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains | )
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+? Bot1.Library = Plains; Black Lotus; Plains
+
+[Expect]
+Bot1.Battlefield.Colleen Wing, Street Samurai.Counters.PlusOnePlusOne = 2
