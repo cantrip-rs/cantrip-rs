@@ -1,0 +1,62 @@
+# Moonstone, Harsh Mistress: "you may exile that card from your graveyard" - a card that is no longer in the graveyard when the
+# trigger resolves is not the card any more (CR 400.7), so nothing is offered for it. Faithless Looting discards a Lightning Bolt
+# and a Forest, two triggers go on the stack, and Bot2 answers with a Ghost Vacuum that exiles the Forest from the graveyard.
+# Bot1's single Accept goes to the one prompt that is made, for the Bolt; if a prompt were made for the Forest as well it would take
+# that Accept. The Bolt is then cast from exile with the Ruby on turn 5, its permission lasting through that turn; the Forest stays in
+# exile as the Vacuum's.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Moonstone, Harsh Mistress
+Faithless Looting
+Swamp
+Lightning Bolt
+Forest
+Swamp x10
+
+[Bot2 Deck]
+Island
+Ghost Vacuum
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Moonstone, Harsh Mistress.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Ghost Vacuum.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Lightning Bolt; Forest)
+Bot2.Battlefield.Ghost Vacuum.Activate(Bot1.Graveyard.Forest)
+Bot1.Accept
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+
+[Expect]
+Exile = Forest
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Faithless Looting

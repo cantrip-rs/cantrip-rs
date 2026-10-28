@@ -1,0 +1,55 @@
+# Moonstone, Harsh Mistress: "Whenever you discard a card, you may exile that card from your graveyard. If you do, until the end of
+# your next turn, you may play that card." Faithless Looting draws a Lightning Bolt and a Forest and discards both; each discard is
+# a trigger and both are accepted. On Bot1's next turn the exiled Forest is played as the land drop (it is a play, not only a cast)
+# and the exiled Bolt is cast.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Moonstone, Harsh Mistress
+Faithless Looting
+Lightning Bolt
+Forest
+Swamp x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Moonstone, Harsh Mistress.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Lightning Bolt; Forest)
+Bot1.Accept
+Bot1.Accept
+[T3 Bot1.Main1]
+? Exile = Forest; Lightning Bolt
+? Bot1.Graveyard = Faithless Looting
+Bot1.Exile.Forest.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Faithless Looting
+Bot1.Battlefield.Forest.ManaValue = 0

@@ -1,0 +1,11 @@
+{
+  "name": "Moonstone, Harsh Mistress",
+  "manaCost": "{3}{B}",
+  "type": "Legendary Creature — Human Doctor Villain",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Flying\nWhenever you discard a card, you may exile that card from your graveyard. If you do, until the end of your next turn, you may play that card.",
+  "keywords": [
+    "Flying"
+  ]
+}
