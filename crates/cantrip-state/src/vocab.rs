@@ -975,6 +975,10 @@ pub enum Keyword {
     /// Wither (CR 702.80): damage it deals to a creature isn't marked on that creature but is dealt as that many -1/-1
     /// counters (CR 702.80a, 120.3d), whatever zone it deals the damage from (CR 702.80c).
     Wither = 51,
+    /// Phasing (CR 702.26): a static ability that modifies the untap step - during its controller's untap step it phases out
+    /// if it is phased in, and the permanents that phased out under that player's control phase in (CR 702.26a). The core
+    /// plays it (`phasing::untap_step`). Breezekeeper, Merfolk Raiders, Sandbar Crocodile, Teferi's Drake, Tolarian Drake.
+    Phasing = 56,
 }
 
 impl Keyword {

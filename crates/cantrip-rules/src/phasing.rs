@@ -157,17 +157,19 @@ fn phase_in(cx: &mut Cx, permanents: &[ObjectId]) {
     }
 }
 
-/// The untap step's first turn-based action (CR 502.1, 703.4a): every permanent that phased out directly under the active
-/// player's control phases in, but not one phased out "until" an event (CR 610.4a). One that phased out under a player who
-/// has since left the game phases in during the next untap step after that player's next turn would have begun (CR
-/// 702.26n): the untap step of the first player still in the game after them in turn order, unless the turn just ended
-/// was their own (they left during it, and their next turn is a round away). (Permanents with the phasing keyword would
-/// phase out at the same time; no card here has it.)
+/// The untap step's first turn-based action (CR 502.1, 702.26a, 703.4a): "before the active player untaps permanents, all
+/// phased-in permanents with phasing that player controls phase out. Simultaneously, all phased-out permanents that had
+/// phased out under that player's control phase in." The permanents that phase out are those that were phased in, with
+/// phasing, as the step began, so one that phases in now does not phase out again. Every permanent that phased out directly
+/// under the active player's control phases in, but not one phased out "until" an event (CR 610.4a). One that phased out
+/// under a player who has since left the game phases in during the next untap step after that player's next turn would
+/// have begun (CR 702.26n): the untap step of the first player still in the game after them in turn order, unless the
+/// turn just ended was their own (they left during it, and their next turn is a round away).
 pub fn untap_step(cx: &mut Cx, active: PlayerId) {
+    let on_battlefield: Vec<ObjectId> = cx.s().battlefield().to_vec();
+    let phasing: Vec<ObjectId> =
+        on_battlefield.into_iter().filter(|&id| cx.s().obj(id).controller == active && cx.chars(id).has(Keyword::Phasing)).collect();
     let s = cx.s();
-    if s.zone(Zone::PHASED_OUT).is_empty() {
-        return;
-    }
     let would_have_begun = |left: PlayerId| {
         !s.in_game(left)
             && s.turn_order_from(s.next_player(left)).next() == Some(active)
@@ -182,6 +184,7 @@ pub fn untap_step(cx: &mut Cx, active: PlayerId) {
         })
         .collect();
     phase_in(cx, &due);
+    phase_out(cx, &phasing, None, false);
 }
 
 /// CR 610.4: a permanent phased out "until [a permanent] leaves the battlefield" phases in, as a one-shot effect that
@@ -238,6 +241,40 @@ mod tests {
 
     fn cx(game: &mut Game) -> Cx<'_> {
         Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
+    }
+
+    static PHASER: CardDef = CardDef { name: "Phasing Test Phaser", keywords: Keywords::of(&[Keyword::Phasing]), ..BEAR };
+
+    /// CR 702.26a: a phased-in permanent with phasing phases out in its controller's untap step, phases in in the next, and
+    /// does not phase out again as it phases in; another player's untap step does nothing to it. Its Aura goes with it
+    /// (CR 702.26g).
+    #[test]
+    fn a_permanent_with_phasing_phases_out_and_in_in_its_controllers_untap_steps_only() {
+        let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&PHASER, &AURA])));
+        let mut game = Game::new(table, &crate::Setup { decks: vec![Vec::new(), Vec::new()], ..Default::default() });
+        let mut put = |def: &'static CardDef, p: u8| {
+            let id = game.state.push_obj(Obj::new(table.id_of(def), PlayerId(p), Zone::BATTLEFIELD));
+            game.state.zone_push(Zone::BATTLEFIELD, id);
+            id
+        };
+        let phaser = put(&PHASER, 0);
+        let aura = put(&AURA, 1);
+        game.state.update_obj(aura, |o| o.attached_to = Some(phaser));
+        let mut cx = cx(&mut game);
+        untap_step(&mut cx, PlayerId(1));
+        assert_eq!(cx.s().battlefield(), &[phaser, aura]);
+        untap_step(&mut cx, PlayerId(0));
+        assert!(cx.s().battlefield().is_empty());
+        assert_eq!(cx.s().zone(Zone::PHASED_OUT), &[phaser, aura]);
+        assert_eq!(cx.s().obj(aura).marks.phased.map(|p| p.indirect), Some(true));
+        untap_step(&mut cx, PlayerId(1));
+        assert_eq!(cx.s().zone(Zone::PHASED_OUT), &[phaser, aura]);
+        untap_step(&mut cx, PlayerId(0));
+        assert_eq!(cx.s().battlefield(), &[phaser, aura]);
+        assert!(cx.s().zone(Zone::PHASED_OUT).is_empty());
+        assert_eq!(cx.s().obj(aura).attached_to, Some(phaser));
+        untap_step(&mut cx, PlayerId(0));
+        assert_eq!(cx.s().zone(Zone::PHASED_OUT), &[phaser, aura]);
     }
 
     #[test]

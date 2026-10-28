@@ -13,9 +13,10 @@ use std::path::{Path, PathBuf};
 
 /// The Oracle words of the core keywords a card can have and still need no file of its own (the same list as
 /// `cantrip-oracle/build.rs`'s `is_plain`).
-const KEYWORD_WORDS: [&str; 17] = [
+const KEYWORD_WORDS: [&str; 33] = [
     "flying", "haste", "vigilance", "trample", "first strike", "double strike", "deathtouch", "lifelink", "reach", "defender",
-    "flash", "hexproof", "indestructible", "menace", "infect", "shadow", "shroud",
+    "flash", "hexproof", "indestructible", "menace", "infect", "shadow", "shroud", "changeling", "decayed", "islandwalk", "plainswalk", "swampwalk", "mountainwalk", "forestwalk", "banding",
+    "horsemanship", "fear", "intimidate", "skulk", "nonbasic landwalk", "legendary landwalk", "wither", "phasing",
 ];
 
 fn root() -> PathBuf {

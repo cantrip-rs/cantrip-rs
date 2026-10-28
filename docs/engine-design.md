@@ -1179,16 +1179,18 @@ it is kept off the battlefield's list - which every rule that looks at the battl
 "leaves" or "enters" trigger, counters, damage, status, attachments and the effects on it kept, a token still in existence
 (704.5d leaves it alone), and its characteristics worked out as on the battlefield for what it shows. `phasing.rs` is the
 whole of it: `phase_out` (attachments phase out indirectly, recursively, and everything is removed from combat, 506.4;
-"until" a permanent that has already left phases nothing out, 610.4b), the untap step's first turn-based action (502.1:
-what phased out directly under the active player phases in, with what phased out indirectly with it, before anything
-untaps; not one phased out "until", 610.4a), and `phase_in_returning`, the one-shot effect that phases a permanent in once
+"until" a permanent that has already left phases nothing out, 610.4b), the untap step's first turn-based action (502.1, 702.26a:
+what phased out directly under the active player phases in, with what phased out indirectly with it, and, simultaneously,
+every phased-in permanent with phasing (`Keyword::Phasing`, read from its characteristics now) the active player controls
+phases out, before anything untaps; one that phases in does not phase out again, and not one phased out "until", 610.4a), and `phase_in_returning`, the one-shot effect that phases a permanent in once
 the permanent it waited for has left (610.4), carried out with the returns of exiled cards the moment it leaves (below). An
 attachment that phased out directly phases in unattached if what it was attached to is gone (702.26i), for the state-based
 actions. "Until [this] leaves the battlefield" goes on while its source is phased out (`phasing::still_on_battlefield`:
 Banishing Light's ruling), "for as long as" durations end (702.26f: `WhileSourceOnBattlefield` asks the battlefield), and a
 resolved effect never includes a phased-out permanent (702.26e, `add_effect`). Cleanup removes damage from phased-out
 permanents too (514.2). Events: `PhasedOut`, `PhasedIn` (recorded; nothing triggers on them). The phasing keyword itself
-(702.26a's phasing out in the untap step) has no card here. Teferi's Protection (`Game::phase_out`) and Oubliette
+(`Keyword::Phasing`, 702.26a) is the core's: Breezekeeper, Merfolk Raiders, Sandbar Crocodile, Teferi's Drake and Tolarian
+Drake print it. Teferi's Protection (`Game::phase_out`) and Oubliette
 (`Game::phase_out_until_leaves`) use it; the host shows a phased-out permanent with the battlefield, marked
 `ObjectView::phased_out`, and the script dump lists them as `BotN.PhasedOut`.
 
