@@ -1,0 +1,55 @@
+# Troop of Ponies: the search may find nothing (CR 701.23b): the Troop is still sacrificed (a cost), no land arrives and the hand is
+# unchanged.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Troop of Ponies
+Plains
+Plains
+Plains
+Forest
+Island
+Tropical Island
+Lightning Bolt
+Opt
+Preordain
+Ponder
+Brainstorm
+Counterspell
+Duress
+Dark Ritual
+Giant Growth
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Troop of Ponies.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Troop of Ponies.Activate
+Bot1.Pass
+Bot1.Search()
+! Bot1.Choose
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Mox Jet; Mox Ruby
+Bot1.Hand = Plains; Plains; Plains
+Bot1.Graveyard = Troop of Ponies
+Bot1.Library != Forest; Island; Tropical Island; Lightning Bolt; Opt; Preordain; Ponder; Brainstorm; Counterspell; Duress; Dark Ritual; Giant Growth
