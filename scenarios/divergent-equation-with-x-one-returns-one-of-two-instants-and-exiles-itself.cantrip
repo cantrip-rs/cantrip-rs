@@ -1,0 +1,46 @@
+# Divergent Equation ({X}{X}{U}): "Return up to X target instant and/or sorcery cards from your graveyard to your hand. Exile
+# Divergent Equation." With X = 1 and two Lightning Bolts in the graveyard (beside a Black Lotus, an artifact card, which is
+# refused as a target), one Bolt returns and the other stays. The spell itself ends in exile, not in the graveyard (CR 608.2c).
+
+[Bot1 Deck]
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Divergent Equation
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Divergent Equation.Cast(X: 1)
+! Bot1.Target(Black Lotus)
+Bot1.Target(Lightning Bolt)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Lightning Bolt
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Exile = Divergent Equation
+Bot2.Life = 14
