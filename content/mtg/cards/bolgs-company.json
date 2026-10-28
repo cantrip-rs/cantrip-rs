@@ -1,0 +1,8 @@
+{
+  "name": "Bolg's Company",
+  "manaCost": "{B}{R}",
+  "type": "Creature — Goblin Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "This creature has haste as long as you control another Goblin.\n{T}, Sacrifice another Goblin: Add {B}{R}."
+}

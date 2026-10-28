@@ -1,0 +1,47 @@
+# Bolg's Company: haste needs "another Goblin" that Bot1 controls. On turn 3 Bot1 casts the Company beside an Ornithopter (no
+# Goblin); Bot2 controls a Goblin Assailant, which does not count, and the Company is not another Goblin than itself: it has no
+# haste and may not attack (refused) while the Ornithopter attacks.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Ornithopter
+Bolg's Company
+Swamp x16
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Goblin Assailant
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Goblin Assailant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bolg's Company.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bolg's Company.Keywords = (absent)
+! Bot1.Attack(Bolg's Company > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Bolg's Company.Keywords = (absent)
