@@ -82,6 +82,7 @@ pub mod mayhem;
 pub mod max_speed;
 pub mod miracle;
 pub mod melee;
+pub mod extort;
 pub mod mobilize;
 pub mod next_creature_counter;
 pub mod ninjutsu;
