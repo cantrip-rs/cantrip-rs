@@ -1,0 +1,6 @@
+{
+  "name": "Fateful Discovery",
+  "manaCost": "{3}{U}{U}",
+  "type": "Enchantment",
+  "oracleText": "Whenever an artifact you control enters, draw a card."
+}
