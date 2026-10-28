@@ -989,15 +989,14 @@ pub fn legendary_creature_you_control_enters(q: &dyn Query, me: &Asker, event: &
     }
 }
 
-/// "Whenever a Dragon you control enters" (CR 603.6a): any permanent that is a Dragon as it enters, under your control; the
-/// word is read through the words of the object whose text says it (CR 612). Sarkhan, Dragon Ascendant and Roiling
-/// Dragonstorm print it.
-pub fn dragon_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+/// "Whenever a [subtype] you control enters" (CR 603.6a), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): a permanent under your
+/// control as it entered that has that subtype, this one included if it does, the type read through the words of the source's
+/// text (CR 612). Last Light of Durin's Day, Valakut, the Molten Pinnacle and Koth, Fire of Resistance's emblem print it, for
+/// Mountains, and Sarkhan, Dragon Ascendant and Roiling Dragonstorm (`DRAGON_YOU_CONTROL_ENTERS`) for Dragons.
+pub fn of_subtype_you_control_enters<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::ZoneChange { new, to, .. }
-            if to.is(ZoneKind::Battlefield)
-                && q.controller(*new) == me.controller
-                && q.chars(*new).has_subtype(q.words(me.source).subtype(Subtype::Dragon)) =>
+            if to.is(ZoneKind::Battlefield) && q.controller(*new) == me.controller && q.chars(*new).has_subtype(crate::lands::word(q, me.source, SUBTYPE)) =>
         {
             Fired::PLAIN
         }
@@ -1407,7 +1406,8 @@ pub const END_OF_COMBAT: Trigger = when(EventMask::STEP_BEGAN, end_of_combat);
 pub const CREATURE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_enters);
 pub const CREATURE_WITH_POWER_FOUR_OR_MORE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_with_power_four_or_more_you_control_enters);
 pub const CREATURE_YOU_CONTROL_ATTACKS: Trigger = when_asked(EventMask::ATTACKS, creature_you_control_attacks);
-pub const DRAGON_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, dragon_you_control_enters);
+/// "Whenever a Dragon you control enters" (CR 603.6a). Sarkhan, Dragon Ascendant and Roiling Dragonstorm print it.
+pub const DRAGON_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, of_subtype_you_control_enters::<{ crate::lands::sub(Subtype::Dragon) }>);
 pub const OPPONENTS_CREATURE_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, opponents_creature_enters);
 pub const LEGENDARY_CREATURE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, legendary_creature_you_control_enters);
 pub const ARTIFACT_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, artifact_you_control_enters);

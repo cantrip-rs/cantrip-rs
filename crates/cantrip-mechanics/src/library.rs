@@ -22,10 +22,16 @@ pub fn searched_cards(q: &dyn Query, owner: PlayerId) -> Vec<ObjectId> {
 /// CR 101.2) is not made: nothing is asked or found and no search is recorded, and the caller's "then shuffle" still
 /// shuffles (Ashiok, Dream Render's ruling). What becomes of the cards, and the shuffle, are the caller's.
 pub fn search(g: &mut dyn Game, searcher: PlayerId, owner: PlayerId, source: ObjectId, destination: SearchDestination, rule: Selection) -> Result<Vec<ObjectId>, Suspend> {
+    search_with(g, searcher, owner, source, destination, rule, Vec::new())
+}
+
+/// `search`, the cards `also` shown with the library's and chosen from with them: a search of other zones in the same
+/// instruction (CR 701.23a), such as the searcher's own hand (`search_hand_and_or_library`).
+fn search_with(g: &mut dyn Game, searcher: PlayerId, owner: PlayerId, source: ObjectId, destination: SearchDestination, rule: Selection, also: Vec<ObjectId>) -> Result<Vec<ObjectId>, Suspend> {
     if !g.may_search(searcher, owner) {
         return Ok(Vec::new());
     }
-    let library = searched_cards(g, owner);
+    let library: Vec<ObjectId> = also.into_iter().chain(searched_cards(g, owner)).collect();
     let found = if library.is_empty() || rule.count.most() == Some(0) {
         Vec::new()
     } else {
@@ -76,6 +82,33 @@ pub fn find_to_top(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule: S
     let found = find_by(g, player, source, SearchDestination::TopOfLibrary, rule, reveal)?;
     onto_top(g, player, &found);
     Ok(found)
+}
+
+/// "Search your hand and/or library for [`rule`]" (CR 701.23, 701.23a-b): the cards found, and whether the library was
+/// searched, for the "if you search your library this way, shuffle" that follows. The player chooses first whether to search
+/// the library (`ask`, by `ask_may_search`, a search the effect can't cause being declined). If they do, the hand and the
+/// library are searched together: one selection over the cards of both that `rule` allows, so the one card of "a [quality]
+/// card" may be taken from either, having seen both (the library is searched whatever is found, and the caller shuffles it). If
+/// they don't, only the hand is searched, and nothing is asked when no card there fits. A hand is no hidden zone to its owner, so
+/// searching it asks no question of its own. The cards are left where they were found for the caller to move.
+/// Last Light of Durin's Day (a Dragon card, onto the battlefield) and Aether Searcher (a card with a noted name, cast) print it.
+pub fn search_hand_and_or_library(
+    g: &mut dyn Game,
+    player: PlayerId,
+    source: ObjectId,
+    destination: SearchDestination,
+    purpose: Purpose,
+    ask: &'static Question,
+    rule: Selection,
+) -> Result<(Vec<ObjectId>, bool), Suspend> {
+    let hand = g.state().zone(Zone::hand(player)).to_vec();
+    if ask_may_search(g, player, source, ask)? {
+        let found = search_with(g, player, player, source, destination, rule, hand)?;
+        return Ok((found, true));
+    }
+    let any = cantrip_api::select::first_answer(&*g, &rule, player, source, &hand, true).is_some_and(|taken| !taken.is_empty());
+    let found = if any { crate::choose::select(g, player, source, purpose, hand, rule)? } else { Vec::new() };
+    Ok((found, false))
 }
 
 /// The cards found put into the hand, by the instruction that reveals them when the search says "reveal it" (CR 701.20a:
