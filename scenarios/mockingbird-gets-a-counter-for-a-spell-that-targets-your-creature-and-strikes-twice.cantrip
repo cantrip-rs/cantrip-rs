@@ -1,0 +1,62 @@
+# Mockingbird, Ace Agent: double strike, and "Whenever you cast a spell that targets a creature you control, put a +1/+1 counter on
+# Mockingbird." Turn 3: Snakeskin Veil at Mockingbird herself (a counter from the Veil and one from her trigger: two counters, a
+# 4/4); then a Lightning Bolt cast at Bot2's Ornithopter, a creature Bot1 does not control, adds none (still two). She attacks as a
+# 4/4 double striker and deals 4 + 4 = 8 (Bot2 20 -> 12).
+
+[Bot1 Deck]
+Mockingbird, Ace Agent
+Snakeskin Veil
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mockingbird, Ace Agent.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Snakeskin Veil.Cast(Mockingbird, Ace Agent)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mockingbird, Ace Agent.Counters.PlusOnePlusOne = 2
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mockingbird, Ace Agent.Counters.PlusOnePlusOne = 2
+Bot1.Attack(Mockingbird, Ace Agent > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 12
+
+[Expect]
+Bot1.Battlefield.Mockingbird, Ace Agent.Keywords = DoubleStrike; Hexproof
+Bot1.Battlefield.Mockingbird, Ace Agent.Power = 4

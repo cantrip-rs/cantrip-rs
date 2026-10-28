@@ -1,0 +1,11 @@
+{
+  "name": "Mockingbird, Ace Agent",
+  "manaCost": "{3}{W}",
+  "type": "Legendary Creature — Human Spy Hero",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Double strike\nWhenever you cast a spell that targets a creature you control, put a +1/+1 counter on Mockingbird.",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}
