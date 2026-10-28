@@ -1,0 +1,49 @@
+# Matterbending Mage's "up to one other target creature" is not an opponent's only: on turn 3 Bot1 returns its own Ornithopter
+# to its hand (and so can recast it), and with no target at all (up to one) the trigger on turn 5, the second Mage, returns
+# nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Ornithopter
+Matterbending Mage
+Matterbending Mage
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Matterbending Mage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Matterbending Mage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Count: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Matterbending Mage; Matterbending Mage; Mox Pearl; Mox Ruby; Mox Sapphire
+Stack.Count = 0
