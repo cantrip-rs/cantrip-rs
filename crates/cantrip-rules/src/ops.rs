@@ -528,7 +528,7 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
         if from.is(ZoneKind::Battlefield) {
             remove_from_combat(cx, &[m.id]);
         }
-        events.push(Event::ZoneChange { old: m.id, new: new_id, from, to, reason });
+        events.push(Event::ZoneChange { old: m.id, new: new_id, from, to, reason, controller: cx.s().obj(new_id).controller });
         // CR 708.9: a face-down permanent or spell that moves to any other zone is revealed to all players by its owner as
         // it moves - where it arrives face up, as a card going anywhere but exile face down does.
         if old.face_down
@@ -2083,8 +2083,8 @@ fn create_tokens_onto(
         note_statics(cx, id);
         cx.st().zone_push(Zone::BATTLEFIELD, id);
         events.push(match spell {
-            Some(spell) => Event::ZoneChange { old: spell.object, new: id, from: Zone::STACK, to: Zone::BATTLEFIELD, reason: ZoneReason::Resolve },
-            None => Event::ZoneChange { old: id, new: id, from: Zone::GONE, to: Zone::BATTLEFIELD, reason: ZoneReason::Created },
+            Some(spell) => Event::ZoneChange { old: spell.object, new: id, from: Zone::STACK, to: Zone::BATTLEFIELD, reason: ZoneReason::Resolve, controller },
+            None => Event::ZoneChange { old: id, new: id, from: Zone::GONE, to: Zone::BATTLEFIELD, reason: ZoneReason::Created, controller },
         });
         // CR 303.4f, 301.5e: created attached to something, it became attached to it.
         events.extend(entered_attached(cx, id));
