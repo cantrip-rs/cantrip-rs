@@ -1,0 +1,11 @@
+{
+  "name": "Black Widow, Double Agent",
+  "manaCost": "{1}{W}{B}",
+  "type": "Legendary Creature — Human Hero Villain",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Deathtouch\nWhenever a creature you control attacks alone, it gains first strike and menace until end of turn. (It can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

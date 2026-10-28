@@ -1,0 +1,49 @@
+# Black Widow, Double Agent: "Whenever a creature you control attacks alone, it gains first strike and menace until end of
+# turn." Attacking together, Widow and Ornithopter get nothing (turn 3). Ornithopter attacking alone gets both, and loses them
+# at end of turn (turn 5); Widow attacking alone gets them too (turn 7), and so does a creature that is not her.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Black Widow, Double Agent
+Ornithopter
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Widow, Double Agent.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Attackers]
+Bot1.Attack(Black Widow, Double Agent > Bot2; Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Black Widow, Double Agent.Keywords = Deathtouch
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T5 Bot1.Attackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = FirstStrike; Flying; Menace
+[T5 Bot1.Main2]
+[T7 Bot1.Attackers]
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Attack(Black Widow, Double Agent > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Black Widow, Double Agent.Keywords = Deathtouch; FirstStrike; Menace
