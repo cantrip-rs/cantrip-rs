@@ -1,0 +1,26 @@
+# Hobbit Hole: "{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then
+# shuffle." Played and activated on turn 1 (a land has no summoning sickness): the Hole is sacrificed as a cost, only a basic land card
+# may be found (the Tropical Island is refused) and the Island enters tapped (CR 701.23, 701.21a, 110.5b).
+
+[Bot1 Deck]
+Hobbit Hole
+Plains x6
+Tropical Island
+Island
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Hobbit Hole.Play
+Bot1.Battlefield.Hobbit Hole.Activate
+Bot1.Pass
+! Bot1.Search(Tropical Island)
+Bot1.Search(Island)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Hobbit Hole
+Bot1.Battlefield = Island
+Bot1.Battlefield.Island.Tapped = true

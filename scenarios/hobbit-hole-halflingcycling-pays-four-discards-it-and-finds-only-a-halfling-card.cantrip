@@ -1,0 +1,43 @@
+# Hobbit Hole: "Halflingcycling {4} ({4}, Discard this card: Search your library for a Halfling card, reveal it, put it into your hand,
+# then shuffle.)" From the hand, paid with exactly {4} (four Moxen), the card is discarded as a cost and only a Halfling card may be
+# found: the Elvish Mystic is refused, Delighted Halfling is taken and revealed (CR 702.29e, 701.23, 701.20).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Hobbit Hole
+Plains
+Plains
+Elvish Mystic
+Delighted Halfling
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hobbit Hole.Activate(Ability: Halflingcycling)
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Search(Elvish Mystic)
+Bot1.Search(Delighted Halfling)
+? Bot1.Revealed = Delighted Halfling
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Hobbit Hole
+Bot1.Hand = Plains; Plains; Delighted Halfling
