@@ -1,0 +1,12 @@
+{
+  "name": "Merfolk Raiders",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Merfolk Soldier",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Islandwalk (This creature can't be blocked as long as defending player controls an Island.)\nPhasing (This phases in or out before you untap during each of your untap steps. While it's phased out, it's treated as though it doesn't exist.)",
+  "keywords": [
+    "Islandwalk",
+    "Phasing"
+  ]
+}

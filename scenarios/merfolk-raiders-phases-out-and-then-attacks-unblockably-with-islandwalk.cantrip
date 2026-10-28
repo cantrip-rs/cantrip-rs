@@ -1,0 +1,41 @@
+# Merfolk Raiders (2/3, islandwalk, phasing): cast with Black Lotus, its characteristics as printed. It phases out in Bot1's
+# turn 3 untap step (CR 702.26a) and in again in turn 5's. Attacking then, it can't be blocked while defending Bot2 controls an
+# Island (CR 702.14c): Bot2's untapped Ornithopter, which could block any other attacker, may not block it, and Bot2 takes 2.
+
+[Bot1 Deck]
+Black Lotus
+Merfolk Raiders
+Plains x22
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Merfolk Raiders.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merfolk Raiders.Power = 2
+? Bot1.Battlefield.Merfolk Raiders.Toughness = 3
+? Bot1.Battlefield.Merfolk Raiders.Keywords = Islandwalk; Phasing
+? Bot1.Battlefield.Merfolk Raiders.Colors = Blue
+? Bot1.Battlefield.Merfolk Raiders.Types = Creature
+? Bot1.Battlefield.Merfolk Raiders.Subtypes = Merfolk; Soldier
+? Bot1.Battlefield.Merfolk Raiders.Supertypes = (absent)
+? Bot1.Battlefield.Merfolk Raiders.ProtectionFrom = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.PhasedOut = Merfolk Raiders
+[T5 Bot1.Main1]
+? Bot1.PhasedOut.Count = 0
+Bot1.Attack(Merfolk Raiders > Bot2)
+! Bot2.Block(Ornithopter > Merfolk Raiders)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Merfolk Raiders.Tapped = true
