@@ -141,6 +141,7 @@ pub mod targets;
 pub mod text_change;
 pub mod tokens;
 pub mod training;
+pub mod ingest;
 pub mod provoke;
 pub mod flanking;
 pub mod dethrone;
