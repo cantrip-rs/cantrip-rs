@@ -1070,8 +1070,14 @@ pub fn exile_all_graveyards(g: &mut dyn Game) {
 /// and Vengeful Possession print it (Threaten, Traitorous Blood with trample too); one the caster already controls is
 /// untapped and given haste all the same (Act of Treason's ruling).
 pub fn gain_control_untap_haste(g: &mut dyn Game, item: &StackItem) -> Option<ObjectId> {
+    gain_control_untap_haste_for(g, item, Duration::EndOfTurn)
+}
+
+/// `gain_control_untap_haste` with the control lasting `duration`: Evil's Thrall's control lasts until the end of its controller's
+/// next turn when they control a Villain of greater mana value; the haste lasts until end of turn all the same.
+pub fn gain_control_untap_haste_for(g: &mut dyn Game, item: &StackItem, duration: Duration) -> Option<ObjectId> {
     let creature = crate::targets::object(g, item, 0)?;
-    g.gain_control(item.object, creature, item.controller, Duration::EndOfTurn);
+    g.gain_control(item.object, creature, item.controller, duration);
     // Three sentences, each judged by the state triggers before the next (CR 603.8, 608.2c).
     g.end_sentence();
     g.untap(creature);
