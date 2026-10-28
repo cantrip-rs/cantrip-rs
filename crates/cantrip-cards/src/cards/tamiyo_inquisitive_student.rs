@@ -79,7 +79,7 @@ fn minus_seven(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static EMBLEM: CardDef = CardDef {
     name: "Tamiyo, Seasoned Scholar emblem",
     has_cost: false,
-    play_rules: &[PlayRule::NoMaximumHandSize],
+    play_rules: &[PlayRule::MaximumHandSize(None)],
     text: "You have no maximum hand size.",
     ..CardDef::BLANK
 };

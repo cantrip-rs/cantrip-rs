@@ -5132,7 +5132,7 @@ fn land_rules(cx: &Cx, player: PlayerId) -> LandRules {
         PlayRule::LibraryTop | PlayRule::LibraryTopLands => {
             rules.top_lands.push(Grant { object: source, ability });
         }
-        PlayRule::LibraryTopSpells(_) | PlayRule::NoMaximumHandSize | PlayRule::LookAtLibraryTop | PlayRule::While(..) => {}
+        PlayRule::LibraryTopSpells(_) | PlayRule::MaximumHandSize(_) | PlayRule::LookAtLibraryTop | PlayRule::While(..) => {}
     });
     // "You may play an additional land this turn" (CR 305.2, 611.2c): an effect a resolved spell or ability made, added to
     // the rest - the number a player can play is the sum of everything that increases it.
@@ -5146,15 +5146,29 @@ fn land_rules(cx: &Cx, player: PlayerId) -> LandRules {
     rules
 }
 
-/// Whether a permanent `player` controls, an emblem they have (CR 114.4), or an effect a resolved spell made for the rest
-/// of the game says they have no maximum hand size (CR 402.2).
-pub fn no_maximum_hand_size(cx: &Cx, player: PlayerId) -> bool {
-    if cx.s().effects.iter().any(|e| e.kind == EffectKind::NoMaximumHandSize && e.controller == player) {
-        return true;
+/// `player`'s maximum hand size (CR 402.2), `None` when they have no maximum: seven unless an effect says otherwise - a
+/// permanent they control, an emblem they have (CR 114.4), or an effect a resolved spell made - the newest of those deciding,
+/// whichever way it reads (CR 613.11, 613.7).
+pub fn maximum_hand_size(cx: &Cx, player: PlayerId) -> Option<u32> {
+    let mut newest: Option<(u32, Option<u32>)> = None;
+    let mut says = |stamp: u32, maximum: Option<u32>| {
+        if newest.is_none_or(|(at, _)| stamp >= at) {
+            newest = Some((stamp, maximum));
+        }
+    };
+    for e in &cx.s().effects {
+        if let EffectKind::MaximumHandSize(maximum) = e.kind
+            && e.controller == player
+        {
+            says(e.timestamp, maximum);
+        }
     }
-    let mut none = false;
-    each_play_rule(cx, cx.cards(), player, true, |_, rule| none |= matches!(rule, PlayRule::NoMaximumHandSize));
-    none
+    each_play_rule(cx, cx.cards(), player, true, |source, rule| {
+        if let PlayRule::MaximumHandSize(maximum) = rule {
+            says(cx.s().obj(source).timestamp, *maximum);
+        }
+    });
+    newest.map_or(Some(7), |(_, maximum)| maximum)
 }
 
 /// Whether `player` may look at the top card of their library any time (CR 401.2): a permanent they control says so (Bolas's

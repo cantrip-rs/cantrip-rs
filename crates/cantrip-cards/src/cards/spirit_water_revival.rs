@@ -13,7 +13,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if item.kicked > 0 {
         library::shuffle_graveyard_into_library(g, you);
         g.draw(you, 7);
-        g.add_effect(item.object, item.object, EffectKind::NoMaximumHandSize, Duration::Indefinite);
+        g.add_effect(item.object, item.object, EffectKind::MaximumHandSize(None), Duration::Indefinite);
     } else {
         g.draw(you, 2);
     }

@@ -2591,8 +2591,11 @@ pub enum PlayRule {
     /// and its controller. A Case's "Solved - [static ability]" means "As long as this Case is solved, [static ability]"
     /// (CR 702.169b): `cantrip_mechanics::solved::play_rules`.
     While(Condition, &'static [PlayRule]),
-    /// "You have no maximum hand size" (CR 402.2): Proft's Eidetic Memory.
-    NoMaximumHandSize,
+    /// "Your maximum hand size is N" or "You have no maximum hand size" (`None`) (CR 402.2): The Ten Rings; Ms. Marvel, Proft's
+    /// Eidetic Memory, Roaring Furnace and Tamiyo. It sets what the default seven is: the effect with the newest timestamp
+    /// wins, whichever way it reads (CR 613.11, 613.7), an effect of a resolved spell (`EffectKind::MaximumHandSize`) in the
+    /// same order.
+    MaximumHandSize(Option<u32>),
 }
 
 /// What else may pay a spell's total cost besides mana (CR 601.2f-h): convoke (CR 702.51a), delve (CR 702.66a) and

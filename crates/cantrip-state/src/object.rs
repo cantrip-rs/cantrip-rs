@@ -1212,9 +1212,11 @@ pub enum EffectKind {
     /// the player and reach a planeswalker that does not exist yet, and only the core checks timing. The other cards that
     /// grant this (Teferi, Master of Time; The Wandering Emperor; the Teferi emblems) are statics: `CardDef.instant_activation`.
     InstantLoyalty(Option<Subtype>),
-    /// The effect's controller has no maximum hand size (CR 402.2) for as long as it lasts: Spirit Water Revival's "for the rest
-    /// of the game" (`Duration::Indefinite`). About the player, so it outlives its `affected` object, which is only the source.
-    NoMaximumHandSize,
+    /// The effect's controller has this maximum hand size, `None` for none (CR 402.2), for as long as it lasts: Spirit Water
+    /// Revival's "no maximum hand size for the rest of the game" (`Duration::Indefinite`). It is ordered by its timestamp with
+    /// the permanents' `PlayRule::MaximumHandSize` (CR 613.11). About the player, so it outlives its `affected` object, which
+    /// is only the source.
+    MaximumHandSize(Option<u32>),
     /// "You may play [N] additional land[s] this turn" (CR 305.2, 611.2c): the effect's controller may play N more lands than
     /// they otherwise could for as long as it lasts (`Duration::EndOfTurn`). Added to every other such effect and to the
     /// static abilities that do the same (`PlayRule::ExtraLandPlays`): the number of lands a player can play is the sum
@@ -1336,7 +1338,7 @@ impl EffectKind {
                 | EffectKind::PlayerProtectionFromEverything
                 | EffectKind::CastAsThoughFlash(_)
                 | EffectKind::InstantLoyalty(_)
-                | EffectKind::NoMaximumHandSize
+                | EffectKind::MaximumHandSize(_)
                 | EffectKind::ExtraLandPlays(_)
                 | EffectKind::CantGainLife(_)
                 | EffectKind::LifeTotalCantChange(_)

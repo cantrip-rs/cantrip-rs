@@ -1472,8 +1472,9 @@ pub(crate) fn cleanup(cx: &mut Cx) -> R<()> {
     // cleanup step" (CR 603.7) triggered as the step began (`settle::step_began`) and waits until after these actions (CR
     // 514.3a, `begin_step`).
     let hand = cx.s().zone(Zone::hand(active)).to_vec();
-    if hand.len() > 7 && !crate::actions::no_maximum_hand_size(cx, active) {
-        let count = count_u32(hand.len() - 7);
+    let maximum = crate::actions::maximum_hand_size(cx, active);
+    if let Some(maximum) = maximum.filter(|&m| hand.len() > m as usize) {
+        let count = count_u32(hand.len() - maximum as usize);
         if let Some(Answer::Cards(cards)) = cx.ask_rule(active, RequestKind::DiscardToHandSize { count, hand })? {
             ops::discard_together(cx, &cards);
         }

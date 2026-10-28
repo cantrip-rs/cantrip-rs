@@ -27,6 +27,6 @@ pub static CARD: CardDef = CardDef {
             .targets(&[targets::CREATURE_YOU_CONTROL])
             .condition(drawn_more_than_one),
     ],
-    play_rules: &[PlayRule::NoMaximumHandSize],
+    play_rules: &[PlayRule::MaximumHandSize(None)],
     ..oracle::PROFTS_EIDETIC_MEMORY
 };

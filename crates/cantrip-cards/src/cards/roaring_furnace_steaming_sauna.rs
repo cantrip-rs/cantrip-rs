@@ -28,7 +28,7 @@ pub static ROARING_FURNACE: CardDef = CardDef {
 /// step, draw a card."
 pub static STEAMING_SAUNA: CardDef = CardDef {
     abilities: &[triggered(YOUR_END_STEP, |g, item| effects::draw(g, item, 1), "At the beginning of your end step, draw a card.")],
-    play_rules: &[PlayRule::NoMaximumHandSize],
+    play_rules: &[PlayRule::MaximumHandSize(None)],
     ..oracle::STEAMING_SAUNA
 };
 

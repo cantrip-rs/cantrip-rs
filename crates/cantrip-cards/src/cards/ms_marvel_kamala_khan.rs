@@ -28,6 +28,6 @@ pub static CARD: CardDef = CardDef {
         "Embiggen Fist \u{2014} Whenever you cast a spell that targets a creature you control, draw a card. Until end of turn, Ms. Marvel gains \"Ms. Marvel's base power is equal to the number of cards in your hand.\"",
     )],
     delayed: &[granted_static(Layer::PtSet, base_power_is_cards_in_hand, "Ms. Marvel's base power is equal to the number of cards in your hand.")],
-    play_rules: &[PlayRule::NoMaximumHandSize],
+    play_rules: &[PlayRule::MaximumHandSize(None)],
     ..oracle::MS_MARVEL_KAMALA_KHAN
 };
