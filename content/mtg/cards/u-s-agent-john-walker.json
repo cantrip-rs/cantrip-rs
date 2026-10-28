@@ -1,0 +1,8 @@
+{
+  "name": "U.S.Agent, John Walker",
+  "manaCost": "{3}{W/B}",
+  "type": "Legendary Creature — Human Soldier Hero",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When U.S.Agent enters, create a colorless Equipment artifact token named Sturdy Shield with \"Equipped creature gets +1/+2\" and equip {2}. Attach it to U.S.Agent."
+}

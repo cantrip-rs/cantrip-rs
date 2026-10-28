@@ -1,0 +1,49 @@
+# U.S.Agent, John Walker: "When U.S.Agent enters, create a colorless Equipment artifact token named Sturdy Shield with
+# "Equipped creature gets +1/+2" and equip {2}. Attach it to U.S.Agent." He is 3/2 base, so 4/4 with the token attached.
+# On turn 3 Bot1 pays {2} to move it to Memnite (the old link is replaced, CR 301.5c): Memnite 2/3, U.S.Agent 3/2 again.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+U.S.Agent, John Walker
+Memnite
+Forest x14
+
+[Bot2 Deck]
+Forest x14
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.U.S.Agent, John Walker.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.U.S.Agent, John Walker.Power = 4
+? Bot1.Battlefield.U.S.Agent, John Walker.Toughness = 4
+? Bot1.Battlefield.Sturdy Shield.Types = Artifact
+? Bot1.Battlefield.Sturdy Shield.Subtypes = Equipment
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sturdy Shield.Activate(Bot1.Battlefield.Memnite; Ability: Equip)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.U.S.Agent, John Walker.Power = 3
+Bot1.Battlefield.U.S.Agent, John Walker.Toughness = 2
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 3
