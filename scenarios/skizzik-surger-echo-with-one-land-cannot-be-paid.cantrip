@@ -1,0 +1,42 @@
+# Skizzik Surger: "Echo--Sacrifice two lands." (CR 702.30a). Cast on turn 1 with only a Mountain on the battlefield, at the
+# turn 3 upkeep Bot1 controls one land, and two can't be sacrificed (CR 118.3): paying is not offered, and the Surger is
+# sacrificed. Its own cast is paid with Black Lotus, Mox Ruby, Mox Pearl and Sol Ring as in the paid case.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Mox Pearl
+Sol Ring
+Skizzik Surger
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Skizzik Surger.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard = Skizzik Surger; Black Lotus
+Bot1.Battlefield.Mountain.Tapped = false

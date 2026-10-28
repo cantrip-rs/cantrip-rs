@@ -1,0 +1,11 @@
+{
+  "name": "Skizzik Surger",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Elemental",
+  "power": 6,
+  "toughness": 4,
+  "oracleText": "Haste\nEcho—Sacrifice two lands. (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)",
+  "keywords": [
+    "Haste"
+  ]
+}
