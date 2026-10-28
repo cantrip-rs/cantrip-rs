@@ -1,0 +1,8 @@
+{
+  "name": "Agents of S.H.I.E.L.D.",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Spy Hero",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn."
+}

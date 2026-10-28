@@ -1,0 +1,67 @@
+# Agents of S.H.I.E.L.D.: "Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn." Turn 3: Bot1's
+# Ornithopter attacks alone and is a 1/3 (Bot2 goes to 19) - the Agents themselves, at home, get nothing. Turn 4: Bot2's Ornithopter
+# attacks alone but is not a creature Bot1 controls, so it is not pumped (a 0/2 still; Bot2's own Agents is not in play). Turn 5: both
+# of Bot1's Ornithopters attack, so neither attacks alone and neither is pumped (Bot2 stays at 19); and the Agents attack alone on
+# turn 7, getting their own +1/+1 (a 3/5, Bot2 goes to 16).
+
+[Bot1 Deck]
+Agents of S.H.I.E.L.D.
+Ornithopter
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Agents of S.H.I.E.L.D..Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 1
+? Bot1.Battlefield.Ornithopter#1.Toughness = 3
+? Bot1.Battlefield.Agents of S.H.I.E.L.D..Power = 2
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T5 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 0
+? Bot1.Battlefield.Ornithopter#2.Power = 0
+[T7 Bot1.Main1]
+Bot1.Attack(Agents of S.H.I.E.L.D. > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Agents of S.H.I.E.L.D..Power = 3
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
