@@ -1,0 +1,49 @@
+# Trickster's Stratagem: the owner chooses the bottom this time: Bot2's library is Swamp, Mountain, Forest, Ornithopter. Bot2's
+# creature is the first target and a creature of Bot1's is the optional second (the cast asks for them in order). Bot1's
+# Ornithopter connives, but Bot1 discards the Island it drew with the Lightning Bolt in hand: a land discarded means no +1/+1
+# counter (CR 701.50a).
+
+[Bot1 Deck]
+Ornithopter
+Mox Sapphire
+Black Lotus
+Trickster's Stratagem
+Island x3
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Plains
+Swamp
+Mountain
+Forest
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Trickster's Stratagem.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(On the bottom)
+Bot1.Choose(Island)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Library = Swamp; Mountain; Forest; Ornithopter
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Hand.Count = 4

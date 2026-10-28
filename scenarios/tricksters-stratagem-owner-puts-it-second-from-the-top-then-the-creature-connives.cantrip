@@ -1,0 +1,52 @@
+# Trickster's Stratagem: "The owner of target creature an opponent controls puts it into their library second from the top or
+# on the bottom. Then up to one target creature you control connives." {3}{U} is paid exactly by Black Lotus and Mox Sapphire.
+# Bot2, the owner, chooses second from the top: its library is Swamp, Ornithopter, Mountain, Forest. Then Bot1's Ornithopter
+# connives: Bot1 draws a Lightning Bolt and discards it, a nonland card, so the Ornithopter gets a +1/+1 counter (a 1/3).
+
+[Bot1 Deck]
+Ornithopter
+Mox Sapphire
+Black Lotus
+Trickster's Stratagem
+Island x3
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Plains
+Swamp
+Mountain
+Forest
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Trickster's Stratagem.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Second from the top)
+Bot1.Choose(Lightning Bolt)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Library = Swamp; Ornithopter; Mountain; Forest
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Graveyard = Trickster's Stratagem; Lightning Bolt; Black Lotus
