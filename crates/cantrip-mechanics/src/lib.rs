@@ -120,6 +120,7 @@ pub mod spectacle;
 pub mod surge;
 pub mod spent;
 pub mod suspend;
+pub mod teamwork;
 pub mod typecycling;
 pub mod unearth;
 pub mod triggers;
