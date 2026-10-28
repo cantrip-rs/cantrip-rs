@@ -1,0 +1,11 @@
+{
+  "name": "Mist Intruder",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Eldrazi Drone",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Devoid (This card has no color.)\nFlying\nIngest (Whenever this creature deals combat damage to a player, that player exiles the top card of their library.)",
+  "keywords": [
+    "Flying"
+  ]
+}
