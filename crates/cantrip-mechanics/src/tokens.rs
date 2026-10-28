@@ -807,6 +807,27 @@ pub static WHITE_FLYING_SPIRIT: CardDef = CardDef {
     ..token!(Spirit)
 };
 
+/// The 1/1 white and black Inkling creature token with flying. Emeritus of Truce, Eager Glyphmage, Informed Inkwright and
+/// Harsh Annotation make it.
+pub static INKLING: CardDef = CardDef {
+    colors: Some(ColorSet(ColorSet::of(Color::White).0 | ColorSet::of(Color::Black).0)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    keywords: Keywords::of(&[Keyword::Flying]),
+    text: "Flying",
+    ..token!(Inkling)
+};
+
+/// The 2/2 red and white Spirit creature token. Antiquities on the Loose and Group Project make it.
+pub static SPIRIT_2_2_RED_WHITE: CardDef = CardDef {
+    colors: Some(ColorSet(ColorSet::of(Color::Red).0 | ColorSet::of(Color::White).0)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    ..token!(Spirit)
+};
+
 /// "Create a Treasure token" as an effect (CR 111.10a): one Treasure under the controller of the resolving spell or ability. Bejeweled
 /// Warg, Fable of the Mirror-Breaker's Reflection, Fountainport, Magda, Brazen Outlaw, Monument to Endurance, Sanar, Unfinished
 /// Genius and Smaug the Magnificent print it.

@@ -3,22 +3,11 @@ use cantrip_mechanics::{targets, tokens};
 use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_oracle as oracle;
 
-/// The 1/1 white and black Inkling creature token with flying.
-pub static INKLING: CardDef = CardDef {
-    colors: Some(ColorSet(ColorSet::of(Color::White).0 | ColorSet::of(Color::Black).0)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(1),
-    toughness: Some(1),
-    keywords: Keywords::of(&[Keyword::Flying]),
-    text: "Flying",
-    ..token!(Inkling)
-};
-
 /// Target player creates the Inkling. Then, counting with it (CR 608.2c), if an opponent controls more creatures
 /// than you, this creature becomes prepared, if it is still this creature on the battlefield.
 fn enters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(player) = item.target(0).player() else { return Ok(()) };
-    tokens::create(g, player, &INKLING, 1)?;
+    tokens::create(g, player, &tokens::INKLING, 1)?;
     let mine = cantrip_mechanics::creatures_you_control(g, item.controller);
     let outnumbered = g.state().opponents(item.controller).collect::<Vec<_>>().into_iter().any(|o| cantrip_mechanics::creatures_you_control(g, o) > mine);
     if outnumbered {
@@ -34,4 +23,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::EMERITUS_OF_TRUCE
 };
 
-pub static EXTRA: &[&CardDef] = &[&INKLING];
+pub static EXTRA: &[&CardDef] = &[&tokens::INKLING];
