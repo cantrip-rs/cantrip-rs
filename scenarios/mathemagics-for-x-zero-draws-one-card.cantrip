@@ -1,0 +1,29 @@
+# Mathemagics draws 2^X cards: with X of 0 that is one card (CR 107.3). {X}{X}{U}{U} costs {U}{U}; Bot1 pays it on turn 1 with a
+# Mox Sapphire and a Black Lotus, naming itself, and has the four cards left of its opening hand plus the one it drew.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mathemagics
+Island
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mathemagics.Cast(Bot1; X: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 12
+Bot1.Graveyard = Mathemagics; Black Lotus

@@ -1,0 +1,6 @@
+{
+  "name": "Mathemagics",
+  "manaCost": "{X}{X}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Target player draws 2ˣ cards. (2⁰ = 1, 2¹ = 2, 2² = 4, 2³ = 8, 2⁴ = 16, 2⁵ = 32, and so on.)"
+}

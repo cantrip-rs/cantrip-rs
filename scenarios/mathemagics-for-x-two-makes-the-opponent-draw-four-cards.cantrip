@@ -1,0 +1,32 @@
+# Mathemagics with X of 2 targeting Bot2 makes it draw 4 cards (2^2) for {2}{2}{U}{U}, six mana: a Black Lotus and three Moxen
+# on turn 1. Its 7-card hand and 13-card library become 11 and 9; Bot1's hand is its opening hand less the five it played.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mathemagics
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mathemagics.Cast(Bot2; X: 2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot2.Hand.Count = 11
+Bot2.Library.Count = 9
