@@ -1,0 +1,37 @@
+# Evolve (CR 702.100a): Gluttonous Slug is a 0/3 with menace. Isamaru, Hound of Konda (2/2) has greater power only, so evolve
+# triggers and the Slug is 1/4. Black Lotus (three black) pays for the Slug's {1}{B}, Mox Pearl for Isamaru.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gluttonous Slug
+Isamaru, Hound of Konda
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Gluttonous Slug.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Gluttonous Slug.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Gluttonous Slug.Power = 1
+Bot1.Battlefield.Gluttonous Slug.Toughness = 4
+Bot1.Battlefield.Gluttonous Slug.Keywords = Menace
