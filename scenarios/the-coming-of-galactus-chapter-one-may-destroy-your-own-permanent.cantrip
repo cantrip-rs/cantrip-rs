@@ -1,0 +1,32 @@
+# The Coming of Galactus, chapter I: "target nonland permanent" is any, so Bot1's own Mox Jet is a legal target and is
+# destroyed (CR 115.1, 701.8). Bot2 has nothing to be hit and keeps its Mox Pearl.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+The Coming of Galactus
+Swamp x30
+
+[Bot2 Deck]
+Mox Pearl
+Plains x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Coming of Galactus.Cast
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; The Coming of Galactus
+Bot1.Graveyard = Mox Jet; Black Lotus

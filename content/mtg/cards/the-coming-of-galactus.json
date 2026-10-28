@@ -1,0 +1,6 @@
+{
+  "name": "The Coming of Galactus",
+  "manaCost": "{2}{B}{B}{G}",
+  "type": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI — Destroy up to one target nonland permanent.\nII, III — Each opponent loses 2 life.\nIV — Create Galactus, a legendary 16/16 black Elder Alien creature token with flying, trample, and \"Whenever Galactus attacks, destroy target land.\""
+}
