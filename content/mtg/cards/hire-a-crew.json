@@ -1,0 +1,6 @@
+{
+  "name": "Hire a Crew",
+  "manaCost": "{2}{R}",
+  "type": "Instant",
+  "oracleText": "Create a 2/1 black Villain creature token with menace, then creatures you control get +1/+0 until end of turn. (A creature with menace can't be blocked except by two or more creatures.)"
+}

@@ -1,0 +1,54 @@
+# Hire a Crew: "Create a 2/1 black Villain creature token with menace, then creatures you control get +1/+0 until end of turn."
+# On turn 3 Bot1 casts it with a Memnite beside Bot2's Memnite: the new token is a creature Bot1 controls as the pump applies, so
+# it is a 3/1 menace Villain; Bot1's Memnite is 2/1 and Bot2's stays 1/1. The pump ends at the turn's cleanup (CR 514.2): on
+# turn 4 the token is back to 2/1.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Sol Ring
+Memnite
+Hire a Crew
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island
+Memnite
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hire a Crew.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Villain Token.Power = 3
+? Bot1.Battlefield.Villain Token.Toughness = 1
+? Bot1.Battlefield.Villain Token.Keywords = Menace
+? Bot1.Battlefield.Villain Token.Colors = Black
+? Bot1.Battlefield.Villain Token.Subtypes = Villain
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot2.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Villain Token.Power = 2
+? Bot1.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot1.Graveyard = Hire a Crew
