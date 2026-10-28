@@ -1,0 +1,13 @@
+{
+  "name": "Cuboid Colony",
+  "manaCost": "{G}{U}",
+  "type": "Creature — Insect",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flash\nFlying, trample\nIncrement (Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)",
+  "keywords": [
+    "Flash",
+    "Flying",
+    "Trample"
+  ]
+}

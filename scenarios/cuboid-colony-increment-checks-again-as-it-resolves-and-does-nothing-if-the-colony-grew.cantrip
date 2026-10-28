@@ -1,0 +1,45 @@
+# Increment's intervening "if" (CR 702.191a, 603.4): checked again as the ability resolves, against the Colony's power and toughness then. Cuboid Colony (1/1) is on the
+# battlefield and Bot1 casts Capital Guard (2 mana, more than 1): increment triggers. With the trigger on the stack Bot1 casts Giant Growth ({G}, 1 mana, not more than 1/1, so no
+# trigger of its own) on the Colony; it resolves first and makes the Colony 4/4 - and when the increment ability resolves 2 mana is no longer more than its power or
+# its toughness, so it gets no counter.
+
+[Bot1 Deck]
+Forest
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Mox Jet
+Cuboid Colony
+Giant Growth
+Capital Guard
+Swamp x12
+
+[Bot2 Deck]
+Swamp x25
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Cuboid Colony.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Capital Guard.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Cuboid Colony)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cuboid Colony.Power = 4
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Cuboid Colony.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Cuboid Colony.Power = 4
+Bot1.Battlefield.Capital Guard.Power = 2
