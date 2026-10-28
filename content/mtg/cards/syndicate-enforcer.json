@@ -1,0 +1,8 @@
+{
+  "name": "Syndicate Enforcer",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Human Rogue",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Extort (Whenever you cast a spell, you may pay {W/B}. If you do, each opponent loses 1 life and you gain that much life.)"
+}
