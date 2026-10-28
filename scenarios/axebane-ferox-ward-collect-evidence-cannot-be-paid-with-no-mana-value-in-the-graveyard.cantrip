@@ -1,0 +1,57 @@
+# Axebane Ferox: "Ward-Collect evidence 4." If the player whose spell targeted it cannot exile cards with total mana value 4 or
+# greater from their graveyard, they can't choose to collect evidence at all (CR 701.59b), so the ward counters the spell and
+# nothing is asked. Bot2 holds priority and casts a Lightning Strike and a Lightning Bolt at Bot1 and then a second Bolt at the
+# Ferox, so the stack holds three spells and the ward trigger goes above them: Bot2's graveyard has only its Black Lotus (mana
+# value 0), the spells on the stack count for nothing, so the ward counters the Bolt that targeted - the top spell, not another
+# - and the Ferox (4/4) is undamaged while the other two spells resolve. Nothing is exiled.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Axebane Ferox
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Lightning Strike
+Lightning Bolt
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Axebane Ferox.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Strike.Cast(Bot1)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Axebane Ferox)
+! Bot2.Accept
+Bot2.Decline
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Axebane Ferox.Damage = 0
+? Bot2.Graveyard = Lightning Strike; Lightning Bolt; Lightning Bolt; Black Lotus
+
+[Expect]
+Bot1.Life = 14
+Exile =

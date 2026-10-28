@@ -1,0 +1,70 @@
+# Axebane Ferox: "Ward-Collect evidence 4." (CR 702.21a, 701.59a) Bot2 first fills its graveyard with two Lightning Strikes (mana
+# value 2 each) cast at Bot1, then casts two Lightning Bolts at the Ferox on turn 2. The first: Bot2 declines the ward cost, so
+# that Bolt is countered and the Ferox (4/4) is untouched, and Bot2's graveyard (two Lightning Strikes and the Bolt, total 5) is as
+# it was. The second: Bot2 accepts, and the cards it exiles must have total mana value 4 or greater - a Bolt and a Lightning Strike
+# (3) are refused, two Lightning Strikes (exactly 4) are exiled - and the Bolt is not countered: its 3 damage is marked on the Ferox.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Axebane Ferox
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mountain
+Lightning Strike
+Lightning Strike
+Lightning Bolt
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Axebane Ferox.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Strike.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Strike.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Axebane Ferox)
+Bot2.Decline
+Bot1.Pass
+? Bot1.Battlefield.Axebane Ferox.Damage = 0
+? Bot2.Graveyard = Lightning Bolt; Lightning Strike; Lightning Strike; Black Lotus
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Axebane Ferox)
+Bot2.Accept
+! Bot2.Choose(Lightning Bolt; Lightning Strike)
+! Bot2.Choose(Lightning Bolt)
+Bot2.Choose(Lightning Strike; Lightning Strike)
+Bot1.Pass
+? Bot1.Battlefield.Axebane Ferox.Damage = 3
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+Exile = Lightning Strike; Lightning Strike
+Bot1.Life = 14

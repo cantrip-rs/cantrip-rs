@@ -1,0 +1,36 @@
+# Axebane Ferox, a 4/4 green Beast with deathtouch and haste: cast with Black Lotus and a Mox Emerald (exactly {2}{G}{G}), its
+# characteristics as printed, and it attacks the turn it arrives (CR 702.10) into Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Axebane Ferox
+Forest x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Axebane Ferox.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Axebane Ferox.Power = 4
+? Bot1.Battlefield.Axebane Ferox.Toughness = 4
+? Bot1.Battlefield.Axebane Ferox.Keywords = Deathtouch; Haste
+? Bot1.Battlefield.Axebane Ferox.Colors = Green
+? Bot1.Battlefield.Axebane Ferox.Types = Creature
+? Bot1.Battlefield.Axebane Ferox.Subtypes = Beast
+? Bot1.Battlefield.Axebane Ferox.Supertypes = (absent)
+Bot1.Attack(Axebane Ferox > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Axebane Ferox.Tapped = true
