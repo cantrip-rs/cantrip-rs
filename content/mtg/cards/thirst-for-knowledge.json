@@ -1,0 +1,6 @@
+{
+  "name": "Thirst for Knowledge",
+  "manaCost": "{2}{U}",
+  "type": "Instant",
+  "oracleText": "Draw three cards. Then discard two cards unless you discard an artifact card."
+}

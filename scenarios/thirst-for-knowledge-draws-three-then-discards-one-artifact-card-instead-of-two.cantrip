@@ -1,0 +1,38 @@
+# Thirst for Knowledge: "Draw three cards. Then discard two cards unless you discard an artifact card." Bot1 draws Ornithopter,
+# Island, Island, so there is an artifact card in the hand (it was drawn, so the draw happens before the discard is chosen)
+# and the player chooses between discarding one artifact card and two cards. Taking the artifact option, an Island is not
+# eligible (refusal beside the positive choice of the drawn Ornithopter). Only the Ornithopter goes. {2}{U} is paid exactly
+# by three Moxen (the pool is empty after).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Thirst for Knowledge
+Plains x3
+Ornithopter
+Island
+Island
+Plains x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Thirst for Knowledge.Cast
+? Bot1.Mana =
+Bot1.Modes(Discard an artifact card)
+! Bot1.Choose(Island)
+Bot1.Choose(Ornithopter)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Thirst for Knowledge; Ornithopter
+Bot1.Hand = Plains; Plains; Plains; Island; Island
+Bot1.Library.Count = 10

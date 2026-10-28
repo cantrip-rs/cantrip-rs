@@ -1,0 +1,34 @@
+# Thirst for Knowledge: "discard two cards unless you discard an artifact card" is a choice (CR 608.2d), and its ruling says
+# the artifact card may be one of the two: with an Ornithopter in hand the player may still discard two cards, the
+# Ornithopter and an Island here, the other Island staying.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Thirst for Knowledge
+Plains x3
+Ornithopter
+Island
+Island
+Plains x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Thirst for Knowledge.Cast
+Bot1.Modes(Discard two cards)
+Bot1.Choose(Ornithopter; Island)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Thirst for Knowledge; Island; Ornithopter
+Bot1.Hand = Plains; Plains; Plains; Island
+Bot1.Library.Count = 10

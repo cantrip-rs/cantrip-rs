@@ -1,0 +1,36 @@
+# Thirst for Knowledge: with no artifact card in the hand after the draw (the Moxen are on the battlefield; Plains, Plains,
+# Mountain, Mountain, Island, Island remain) the choice between an artifact card and two cards isn't offered (the refusal of
+# the mode question): Bot1 discards two cards of its choice, a Mountain and a Plains here.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Thirst for Knowledge
+Plains
+Plains
+Mountain
+Mountain
+Island
+Island
+Plains x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Thirst for Knowledge.Cast
+! Bot1.Modes
+Bot1.Choose(Mountain; Plains)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Thirst for Knowledge; Plains; Mountain
+Bot1.Hand = Plains; Mountain; Island; Island
+Bot1.Library.Count = 10
