@@ -1,0 +1,12 @@
+{
+  "name": "Long-Bodied Grey Dog",
+  "manaCost": "{3}",
+  "type": "Creature — Dog",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash\nReach\nWhen this creature enters, create a tapped Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "keywords": [
+    "Flash",
+    "Reach"
+  ]
+}

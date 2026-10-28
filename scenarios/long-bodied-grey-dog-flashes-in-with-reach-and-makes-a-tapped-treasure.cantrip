@@ -1,0 +1,43 @@
+# Long-Bodied Grey Dog: "Flash, Reach. When this creature enters, create a tapped Treasure token." Cast for exactly {3} at Bot2's end
+# step (flash), it is a 2/2 Dog with reach and its Treasure token enters tapped (CR 111.10a, 110.5b); the Treasure untaps in Bot1's
+# untap step and pays for the {G} Elvish Mystic cast on turn 3 (the token is sacrificed for the mana).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Long-Bodied Grey Dog
+Elvish Mystic
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Long-Bodied Grey Dog.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Treasure Token.Tapped = true
+? Bot1.Battlefield.Long-Bodied Grey Dog.Keywords = Flash; Reach
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Treasure Token.Tapped = false
+Bot1.Battlefield.Treasure Token.Activate(Color: Green)
+Bot1.Hand.Elvish Mystic.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Mox Jet; Long-Bodied Grey Dog; Elvish Mystic
+Bot1.Battlefield.Long-Bodied Grey Dog.Power = 2
+Bot1.Battlefield.Long-Bodied Grey Dog.Toughness = 2
