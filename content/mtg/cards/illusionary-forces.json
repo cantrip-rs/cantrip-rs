@@ -1,0 +1,11 @@
+{
+  "name": "Illusionary Forces",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Illusion",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nCumulative upkeep {U} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)",
+  "keywords": [
+    "Flying"
+  ]
+}
