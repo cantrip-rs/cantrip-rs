@@ -1103,12 +1103,12 @@ pub fn creature_you_control_dies(q: &dyn Query, me: &Asker, event: &Event) -> Op
 }
 
 /// "Whenever you cast a creature spell" (CR 603.2): its controller's spells only, judged on the spell as it is on the stack
-/// (CR 601.2i), so a card that is a creature only there counts. Bontu's Monument, Glimpse of Nature, Silk, Web Weaver and
-/// Spider-Man India print it.
+/// (CR 601.2i), so a card that is a creature only there counts. The spell rides along as the trigger's subject ("that spell":
+/// Dancing from Dark to Dawn's mana value). Bontu's Monument, Glimpse of Nature, Silk, Web Weaver and Spider-Man India print it.
 pub fn creature_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::SpellCast { spell, player, .. } if *player == me.controller && q.chars(*spell).is(CardType::Creature) => {
-            Fired::PLAIN
+            Fired::about(Target::Object(*spell))
         }
         _ => None,
     }
