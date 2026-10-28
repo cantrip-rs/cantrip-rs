@@ -1,0 +1,60 @@
+# Wonder Man, Hollywood Hero: "Each power-up ability of permanents you control can be activated an additional time." Wonder Man
+# is in play from turn 1. On turn 3 Bot1 casts Quicksilver, Brash Blur, whose power-up {4}{R} costs {4} the turn he enters, and
+# activates it twice (nine mana in all with the casting: both Ancient Tombs, Sol Ring, both Mox Rubies and Mox Jet): two +1/+1
+# counters and two double strike counters make him 3/3, and a third activation is refused.
+
+[Bot1 Deck]
+Ancient Tomb
+Mox Ruby
+Mox Ruby
+Mox Jet
+Sol Ring
+Wonder Man, Hollywood Hero
+Quicksilver, Brash Blur
+Ancient Tomb
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Decline
+Bot1.Hand.Ancient Tomb.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Ancient Tomb.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Wonder Man, Hollywood Hero.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ancient Tomb.Play
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Quicksilver, Brash Blur.Cast
+Bot1.Pass
+Bot1.Battlefield.Ancient Tomb#1.Activate
+Bot1.Battlefield.Ancient Tomb#2.Activate
+Bot1.Battlefield.Quicksilver, Brash Blur.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Quicksilver, Brash Blur.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Quicksilver, Brash Blur.Activate
+
+[Expect]
+Bot1.Battlefield.Quicksilver, Brash Blur.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Quicksilver, Brash Blur.Counters.DoubleStrike = 2
+Bot1.Battlefield.Quicksilver, Brash Blur.Power = 3

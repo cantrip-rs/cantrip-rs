@@ -1,0 +1,50 @@
+# Wonder Man, Hollywood Hero: "Each power-up ability of permanents you control can be activated an additional time. Power-up -
+# {5}{R}{R}: Put two +1/+1 counters on Wonder Man." The turn he enters his power-up costs {5}{R}{R} less his mana cost {3}{R}{R}: {2}.
+# It is activated twice for {2} each (Ancient Tomb, two Mox Rubies, Sol Ring and Black Lotus make exactly the 9 mana for him and the two
+# activations), putting four +1/+1 counters on him (8/8); a third activation is not offered.
+
+[Bot1 Deck]
+Ancient Tomb
+Mox Ruby
+Mox Ruby
+Mox Jet
+Sol Ring
+Black Lotus
+Wonder Man, Hollywood Hero
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ancient Tomb.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Ancient Tomb.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Wonder Man, Hollywood Hero.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Wonder Man, Hollywood Hero.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Wonder Man, Hollywood Hero.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Wonder Man, Hollywood Hero.Activate
+
+[Expect]
+Bot1.Battlefield.Wonder Man, Hollywood Hero.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Wonder Man, Hollywood Hero.Power = 8
