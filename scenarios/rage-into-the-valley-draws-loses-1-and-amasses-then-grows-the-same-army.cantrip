@@ -1,0 +1,55 @@
+# Rage into the Valley {2}{B}: "You draw a card and lose 1 life. Amass Goblins 2." (CR 701.47a). Mox Pearl's {W} and a Mana Crypt's
+# {C}{C} make three mana with no black, so the Rage is refused (the {B} pip is pinned); once Mox Jet is in play, Jet's {B} and
+# a Crypt's {C}{C} pay it exactly. With no Army a 0/0 black Goblin Army token is made and gets two +1/+1 counters; the second
+# Rage finds that Army and makes no new token (four counters, a 4/4). Each Rage draws a card and costs 1 life.
+
+[Bot1 Deck]
+Mox Pearl
+Mana Crypt
+Mox Jet
+Mana Crypt
+Mox Jet
+Rage into the Valley
+Rage into the Valley
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+! Bot1.Hand.Rage into the Valley.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt#1.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Rage into the Valley.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Bot1.Hand.Count = 2
+? Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Mana Crypt#2.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Rage into the Valley.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Goblin Army Token.Power = 4
+Bot1.Battlefield.Goblin Army Token.Toughness = 4
+Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
+Bot1.Battlefield.Goblin Army Token.Colors = Black
+Bot1.Graveyard = Rage into the Valley; Rage into the Valley
