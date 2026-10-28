@@ -1,0 +1,11 @@
+{
+  "name": "Cradle Guard",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Treefolk",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample\nEcho {1}{G}{G} (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)",
+  "keywords": [
+    "Trample"
+  ]
+}
