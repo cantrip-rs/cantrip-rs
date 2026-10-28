@@ -1,0 +1,45 @@
+# Wakandan Drone Flock: a 3/3 artifact creature with flying, and "When this creature enters, scry 2" (CR 701.22a): the top two
+# cards, Lightning Bolt and Black Lotus, are looked at; Lightning Bolt stays on top and Black Lotus goes to the bottom, below
+# everything else, so the library is Lightning Bolt, Counterspell, Mountain, Black Lotus.
+
+[Bot1 Deck]
+Wakandan Drone Flock
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Plains
+Plains
+Lightning Bolt
+Black Lotus
+Counterspell
+Mountain
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wakandan Drone Flock.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Lightning Bolt | Black Lotus)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Wakandan Drone Flock.Keywords = Flying
+Bot1.Battlefield.Wakandan Drone Flock.Power = 3
+Bot1.Battlefield.Wakandan Drone Flock.Toughness = 3
+Bot1.Battlefield.Wakandan Drone Flock.Types = Artifact; Creature
+Bot1.Library = Lightning Bolt; Counterspell; Mountain; Black Lotus
