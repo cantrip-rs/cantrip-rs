@@ -1,0 +1,43 @@
+# Riot (CR 702.136a): Bot1 casts Wrecking Beast ({5}{G}{G}, seven free mana) and chooses the +1/+1 counter, so it is a 7/7
+# with trample and no haste (the game never asks it to attack on turn 1). On turn 3 it
+# attacks for 7.
+
+[Bot1 Deck]
+Black Lotus
+Mana Crypt
+Mox Emerald
+Mox Jet
+Wrecking Beast
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wrecking Beast.Cast
+Bot1.Pass
+Bot1.Name(+1/+1 counter)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Wrecking Beast > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Wrecking Beast.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Wrecking Beast.Power = 7
+Bot1.Battlefield.Wrecking Beast.Toughness = 7
+Bot1.Battlefield.Wrecking Beast.Keywords = Trample
