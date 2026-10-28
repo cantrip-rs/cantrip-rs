@@ -1,0 +1,50 @@
+# Jessica Jones, Private Eye exiles the top X cards, where X is her power; a negative power exiles none. Turn 3: Icy Reception gives
+# her -5/-0, so her power is -3. Her ability still costs the tap and the stun counter, and it exiles nothing: the library is untouched.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Jessica Jones, Private Eye
+Icy Reception
+Mox Sapphire
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jessica Jones, Private Eye.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Icy Reception.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot1.Battlefield.Jessica Jones, Private Eye)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jessica Jones, Private Eye.Power = -3
+? Bot1.Library.Count = 12
+Bot1.Battlefield.Jessica Jones, Private Eye.Activate
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Exile.Count = 0
+Bot1.Library.Count = 12
+Bot1.Battlefield.Jessica Jones, Private Eye.Counters.Stun = 1
+Bot1.Battlefield.Jessica Jones, Private Eye.Tapped = true

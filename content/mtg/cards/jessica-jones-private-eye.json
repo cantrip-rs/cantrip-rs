@@ -1,0 +1,8 @@
+{
+  "name": "Jessica Jones, Private Eye",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Human Detective Hero",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "{T}, Put a stun counter on Jessica Jones: Exile the top X cards of your library, where X is Jessica Jones's power. You may play those cards this turn. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}

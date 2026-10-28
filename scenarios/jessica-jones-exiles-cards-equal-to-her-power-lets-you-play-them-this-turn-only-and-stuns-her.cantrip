@@ -1,0 +1,65 @@
+# Jessica Jones, Private Eye: "{T}, Put a stun counter on Jessica Jones: Exile the top X cards of your library, where X is Jessica
+# Jones's power. You may play those cards this turn." On turn 3 Hawkeye's Bow makes her a 3/3, so three cards are exiled (X is her
+# power): an Island is played from exile as the land drop, Mox Sapphire is cast from there, and the Memnite is left, which can no
+# longer be cast on turn 5 ("this turn" only). The stun counter was put on as a cost: on turn 5 her untap step removes it instead
+# of untapping her (still tapped, no counters), and she untaps on turn 7.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Jessica Jones, Private Eye
+Hawkeye's Bow
+Island
+Island
+Island
+Mox Sapphire
+Island
+Memnite
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jessica Jones, Private Eye.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hawkeye's Bow.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hawkeye's Bow.Activate(Jessica Jones, Private Eye)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Jessica Jones, Private Eye.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 3
+? Bot1.Battlefield.Jessica Jones, Private Eye.Counters.Stun = 1
+? Bot1.Battlefield.Jessica Jones, Private Eye.Tapped = true
+Bot1.Exile.Island.Play
+Bot1.Exile.Mox Sapphire.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Count = 7
+? Bot1.Battlefield.Jessica Jones, Private Eye.Tapped = true
+? Bot1.Battlefield.Jessica Jones, Private Eye.Counters.Stun = (absent)
+! Bot1.Exile.Memnite.Cast
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Jessica Jones, Private Eye.Tapped = false
+
+[Expect]
+Exile = Memnite
+Bot1.Battlefield.Mox Sapphire.Tapped = false
