@@ -1,0 +1,6 @@
+{
+  "name": "Key to the Side-Door",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "{2}, {T}: Target creature can't be blocked this turn.\n{1}, {T}, Discard a legendary card with the same name as a legendary permanent you control: Draw two cards."
+}

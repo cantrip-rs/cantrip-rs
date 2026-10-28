@@ -1,0 +1,50 @@
+# Key to the Side-Door: "{1}, {T}, Discard a legendary card with the same name as a legendary permanent you control: Draw two cards."
+# Bot1 controls Glamdring, Foe-hammer and holds a second one, Kiki-Jiki (legendary, but no permanent of that name) and an Ornithopter
+# (not legendary): only the second Glamdring may be discarded, and it is. Bot1 pays exactly {1} and draws the Bolt and the Island under
+# the Ornithopter it drew for the turn (CR 701.9c, 201.2, 205.4).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Key to the Side-Door
+Glamdring, Foe-hammer
+Glamdring, Foe-hammer
+Kiki-Jiki, Mirror Breaker
+Ornithopter
+Lightning Bolt
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Key to the Side-Door.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glamdring, Foe-hammer.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Key to the Side-Door.Activate(Ability: Discard)
+! Bot1.Choose(Kiki-Jiki, Mirror Breaker)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Glamdring, Foe-hammer)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Glamdring, Foe-hammer
+Bot1.Hand = Kiki-Jiki, Mirror Breaker; Ornithopter; Lightning Bolt; Island
+Bot1.Battlefield = Mox Pearl; Mox Jet; Mox Sapphire; Key to the Side-Door; Glamdring, Foe-hammer
+Bot1.Battlefield.Key to the Side-Door.Tapped = true
