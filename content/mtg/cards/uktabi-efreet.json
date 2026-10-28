@@ -1,0 +1,8 @@
+{
+  "name": "Uktabi Efreet",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Efreet",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Cumulative upkeep {G} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)"
+}
