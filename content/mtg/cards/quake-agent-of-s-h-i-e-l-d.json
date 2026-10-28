@@ -1,0 +1,8 @@
+{
+  "name": "Quake, Agent of S.H.I.E.L.D.",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Inhuman Spy Hero",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Seismic Takedown — Whenever you cast a noncreature spell, tap target creature or land."
+}

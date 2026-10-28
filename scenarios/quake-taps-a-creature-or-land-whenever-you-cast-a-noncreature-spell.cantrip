@@ -1,0 +1,62 @@
+# Quake, Agent of S.H.I.E.L.D.: "Seismic Takedown - Whenever you cast a noncreature spell, tap target creature or land." Casting an
+# Ornithopter (an artifact creature spell) triggers nothing (the stack holds the spell alone). Each Mox cast after it does: the
+# first taps Bot2's Island (a land), the second Bot2's Ornithopter (a creature) - and Bot2's Mox Jet, an artifact that is neither,
+# can't be chosen (the refusal). Bot2's own noncreature spell, a Mox cast on turn 2, triggers nothing for Bot1 ("you cast").
+
+[Bot1 Deck]
+Quake, Agent of S.H.I.E.L.D.
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Mox Ruby
+Mox Emerald
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Jet
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Quake, Agent of S.H.I.E.L.D..Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+? Stack.Count = 1
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+! Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Island.Tapped = true
+? Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+
+[Expect]
+Bot2.Battlefield.Island.Tapped = true
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Mox Jet.Tapped = false
