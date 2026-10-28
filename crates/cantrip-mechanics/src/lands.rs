@@ -301,6 +301,17 @@ pub const fn bounce_land(a: Mana, b: Mana, text: &'static str) -> [AbilityDef; 2
     ]
 }
 
+/// A gain land's two abilities, mana ability last: "When this land enters, you gain 1 life" (CR 603.6a) and "{T}: Add {A} or
+/// {B}." (`text` is its full text), the color named as it is activated (CR 106.5). With `enters: Some(mana::enters_tapped)`
+/// it is Andoria, Bajor, A.I.M. Labs, Asgardian Citadel, Avengers Hangar, Birnin Zana Plaza, Fisk Tower, Hell's Kitchen, Los
+/// Diablos Missile Base, Pym Technologies, Stark Industries and Subterranean Cavern.
+pub const fn gain_land(a: Color, b: Color, text: &'static str) -> [AbilityDef; 2] {
+    [
+        triggered(triggers::THIS_ENTERS, effects::gain_one_life, "When this land enters, you gain 1 life."),
+        mana_ability(TAP, add_one_of(&[a, b]), text),
+    ]
+}
+
 fn fetch_two_types<const A: u16, const B2: u16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let (a, b) = (word(g, item.object, A), word(g, item.object, B2));
     search_to_battlefield(g, item.controller, item.object, Find::ONE, false, move |q, c| {
