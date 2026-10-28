@@ -1,0 +1,60 @@
+# The Kingpin of Crime's extort (CR 702.101a): each spell Bot1 casts while it is on the battlefield triggers it. Casting
+# Mox Ruby and paying {W/B} (with the Black Lotus's black mana) drains Bot2 for 1 and gains Bot1 that much (20/20 -> 19/21);
+# declining for Mox Sapphire changes nothing; casting The Kingpin itself does not trigger it (it was not on the battlefield),
+# and Bot2's own Mox does not (it is not "you").
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+The Kingpin of Crime
+Mox Ruby
+Mox Sapphire
+Swamp x30
+
+[Bot2 Deck]
+Mox Pearl
+Plains x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Kingpin of Crime.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Bot2.Life = 20
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.PayCost
+? Bot1.Life = 21
+? Bot2.Life = 19
+? Bot1.Mana = {B}{B}
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot2.Life = 19
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 21
+Bot2.Life = 19

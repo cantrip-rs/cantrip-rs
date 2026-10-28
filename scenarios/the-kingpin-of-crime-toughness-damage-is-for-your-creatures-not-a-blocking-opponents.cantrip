@@ -1,0 +1,54 @@
+# The Kingpin of Crime: "creatures you control with toughness greater than their power" (CR 510.1a). Bot1 pays 2 life
+# attacking on turn 3; Bot2's Aegis Turtle (0/5) blocks. The Kingpin assigns 5 (its toughness) and kills the Turtle; the
+# Turtle, an opponent's creature, still deals its power, 0, so the Kingpin takes no damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+The Kingpin of Crime
+Swamp x30
+
+[Bot2 Deck]
+Mox Sapphire
+Aegis Turtle
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Kingpin of Crime.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Kingpin of Crime > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot2.Block(Aegis Turtle > The Kingpin of Crime)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot2.Graveyard = Aegis Turtle
+Bot1.Battlefield.The Kingpin of Crime.Damage = 0

@@ -1,0 +1,55 @@
+# The Kingpin of Crime, 1/5: "Whenever you attack, you may pay 2 life. If you do, until end of turn, creatures you control
+# with toughness greater than their power assign combat damage equal to their toughness" (CR 119.4, 510.1a). Attacking on
+# turn 3 and paying takes Bot1 from 20 to 18 life and Bot2 from 20 to 15 (5 damage, not 1). On turn 5 it attacks again and
+# declines: the effect ended at the end of turn 3, so it deals 1, and Bot1 keeps 18.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+The Kingpin of Crime
+Swamp x30
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Kingpin of Crime.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Kingpin of Crime > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Life = 18
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 15
+[T5 Bot1.Main1]
+Bot1.Attack(The Kingpin of Crime > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 14
