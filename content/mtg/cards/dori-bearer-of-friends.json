@@ -1,0 +1,11 @@
+{
+  "name": "Dori, Bearer of Friends",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Dwarf Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Trample\nWhen Dori enters, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")",
+  "keywords": [
+    "Trample"
+  ]
+}

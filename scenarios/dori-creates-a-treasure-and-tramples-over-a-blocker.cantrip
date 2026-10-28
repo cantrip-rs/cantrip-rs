@@ -1,0 +1,41 @@
+# Dori, Bearer of Friends: "When Dori enters, create a Treasure token" (CR 111.10a) - one Treasure for Bot1, none for the
+# opponent - and trample (CR 702.19b): blocked by Bot2's 0/2 Ornithopter, the 3/2 assigns 2 to it and the other 1 to Bot2.
+
+[Bot1 Deck]
+Black Lotus
+Dori, Bearer of Friends
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Dori, Bearer of Friends.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Dori, Bearer of Friends; Treasure Token
+? Bot2.Battlefield.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Dori, Bearer of Friends > Bot2)
+Bot2.Block(Ornithopter > Dori, Bearer of Friends)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Dori, Bearer of Friends.Keywords = Trample
+Bot1.Battlefield.Dori, Bearer of Friends.Damage = 0
+Bot1.Battlefield = Dori, Bearer of Friends; Treasure Token
