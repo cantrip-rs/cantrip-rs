@@ -1,0 +1,77 @@
+# The Super Hero Civil War, the whole Saga. I steals Bot2's Hill Giant (3/3) while Grizzly Bears (2/2) stays with Bot2. II gives the
+# creatures Bot1 controls +1/+1 and vigilance until end of turn: the stolen Giant is 4/4, the Bears are not touched, and it is over
+# the next turn. III has the Giant fight the Bears (an opposing creature, "other" than the Giant, CR 701.14a): the Bears die and the
+# Giant has 2 damage. The Saga is sacrificed after III and the Giant goes back to Bot2 (CR 611.2b, 714.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+The Super Hero Civil War
+Plains x24
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Hill Giant
+Grizzly Bears
+Plains x22
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hill Giant.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.The Super Hero Civil War.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot1.Target(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hill Giant.Power = 3
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hill Giant.Power = 4
+? Bot1.Battlefield.Hill Giant.Toughness = 4
+? Bot1.Battlefield.Hill Giant.Keywords = Vigilance
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Target(Hill Giant)
+! Bot1.Target(Hill Giant)
+Bot1.Target(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl
+Bot2.Battlefield = Hill Giant; Mox Emerald; Mox Pearl; Mox Ruby
+Bot2.Battlefield.Hill Giant.Damage = 2
+Bot2.Graveyard = Grizzly Bears; Black Lotus
+Bot1.Graveyard = The Super Hero Civil War; Black Lotus

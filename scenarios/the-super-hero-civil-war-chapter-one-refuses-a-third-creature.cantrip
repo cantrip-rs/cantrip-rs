@@ -1,0 +1,60 @@
+# The Super Hero Civil War, chapter I: "up to two target creatures". Bot2's Grizzly Bears (2), Aegis Turtle (1) and Hired Blade (3) total
+# only 6, within the limit, but three targets are more than the ability takes and are refused (CR 601.2c); two are accepted.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+The Super Hero Civil War
+Plains x24
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Grizzly Bears
+Aegis Turtle
+Hired Blade
+Plains x22
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Pass
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Pass
+Bot2.Hand.Hired Blade.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.The Super Hero Civil War.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+! Bot1.Target(Grizzly Bears; Aegis Turtle; Hired Blade)
+Bot1.Target(Grizzly Bears; Hired Blade)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Grizzly Bears; Hired Blade; Mox Jet; Mox Pearl; The Super Hero Civil War
+Bot2.Battlefield = Aegis Turtle; Mox Emerald; Mox Jet; Mox Sapphire
