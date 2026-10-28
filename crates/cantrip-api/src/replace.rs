@@ -79,6 +79,10 @@ pub struct ZoneChange {
     pub destroy: bool,
     /// A regeneration shield replaced the destruction (CR 701.19a): the permanent does not move, and is regenerated instead.
     pub regenerated: bool,
+    /// A shield counter replaced the destruction (CR 122.1c): "if this permanent would be destroyed as the result of an effect,
+    /// instead remove a shield counter from it". The permanent does not move; a shield counter is removed from it. Not a
+    /// regeneration (the rulings), and not for a permanent that is sacrificed or destroyed by a state-based action.
+    pub shielded: bool,
 }
 
 /// Counters that would be put on a permanent (CR 122.6, 614.1a): by an effect, or as it enters with them.
@@ -142,6 +146,10 @@ pub struct DamageEvent {
     /// The damage already marked on the target is healed as this is dealt: Wolverine's "all other damage already dealt
     /// to him is healed". Damage dealt at the same time as this stays.
     pub heal_marked: bool,
+    /// A shield counter of this permanent has already applied to this damage event (CR 122.1c, 120.4): all the damage dealt to it
+    /// by the simultaneous event is prevented and a single shield counter is removed. Set by the effect as it applies, and carried
+    /// by the damage event from one assignment to the next (`ops::DamageBatch`).
+    pub shielded: Option<ObjectId>,
 }
 
 /// Tokens about to be created (CR 111.1, 614.1a): `count` of one definition under one player.

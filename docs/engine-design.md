@@ -1047,6 +1047,18 @@ damage" from a static ability (CR 615.10) and prevention with an additional effe
 prevention effect on the object it shields ("Prevent the next 3 damage that would be dealt to it this turn (Healing Salve)."),
 or beside the life total of the player it shields, or of its controller for damage to anyone.
 
+### Shield counters
+
+A permanent with a shield counter has one replacement of a destruction and one prevention of damage (CR 122.1c), both the
+core's (`replace::Origin::ShieldCounter`, ordered with the other effects of the same event, CR 616.1). A destruction "as the
+result of an effect" (`ZoneReason::Destroy` and `DestroyNoRegen`; not a sacrifice, and not lethal damage or deathtouch, which are
+state-based actions, CR 704.5g-h) is replaced: `ZoneChange::shielded`, the permanent stays and `ops::move_together` removes a counter,
+no regeneration (it is not tapped and its damage stays). Damage to it is prevented, all of it, unless it can't be prevented (CR
+615.12), and a counter is removed either way. Damage dealt at once by several sources is one damage event (CR 120.4), so the counter
+applies to it once: `ops::DamageBatch::shielded` carries `DamageEvent::shielded` from one assignment to the next, and a second
+assignment to the same permanent is prevented without a second counter removed. A permanent that loses its abilities keeps it (the
+rulings), because it is a counter's, not an ability's. A card that enters with one is `effects::enters_with_a_shield_counter`.
+
 ### Damage redirected, and damage that stays
 
 A replacement effect may change whom damage is dealt to as well as how much (CR 614.1a: "all damage that would be dealt to

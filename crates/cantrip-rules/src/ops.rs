@@ -256,6 +256,7 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
     // they all move. The last-known information of each permanent leaving is taken before any of them leaves (CR 603.10a).
     let mut plans: Vec<Plan> = Vec::with_capacity(moves.len());
     let mut regenerating: Vec<ObjectId> = Vec::new();
+    let mut shielded: Vec<ObjectId> = Vec::new();
     let together = moves.iter().any(|m| m.entering.is_some()) && moves.iter().any(|m| cx.s().obj(m.id).zone.is(ZoneKind::Battlefield));
     let leaving: Vec<ObjectId> =
         if together { moves.iter().map(|m| m.id).filter(|&id| cx.s().obj(id).zone.is(ZoneKind::Battlefield)).collect() } else { Vec::new() };
@@ -306,6 +307,7 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
             rebounding: false,
             destroy: m.destroy || reason == ZoneReason::Destroy,
             regenerated: false,
+            shielded: false,
         };
         // A permanent entering is judged as it would exist on the battlefield (CR 614.12), and its own replacements are
         // ordered with the others (CR 616.1). One its own replacement sent elsewhere instead does not enter at all.
@@ -321,6 +323,12 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
         // is regenerated instead, once every move is worked out.
         if change.regenerated {
             regenerating.push(m.id);
+            continue;
+        }
+        // A shield counter replaced the destruction (CR 122.1c, 614.6): it never happens, and a shield counter is removed from the
+        // permanent instead, once every move is worked out.
+        if change.shielded {
+            shielded.push(m.id);
             continue;
         }
         let m = &m;
@@ -434,10 +442,13 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
     }
     *cx.s().leaving_together.borrow_mut() = outer_leaving;
     // The permanents regenerated instead of destroyed stay (CR 701.19a): no attachment of theirs ends for their sake.
-    if !regenerating.is_empty() {
+    if !regenerating.is_empty() || !shielded.is_empty() {
         let moving = |id: &ObjectId| plans.iter().any(|p| p.m.id == *id);
         events.retain(|e| !matches!(e, Event::Unattached { attachment, from } if !moving(attachment) && !moving(from)));
         regenerate_instead(cx, &regenerating);
+        for &id in &shielded {
+            counters::remove(cx, id, CounterKind::Shield, 1);
+        }
     }
     let mut rebounds: Vec<(ObjectId, PlayerId, CardId)> = Vec::new();
     // A card from a hand, a library or outside the game that all players can see as it is put into a hand or a library is
@@ -2025,6 +2036,7 @@ fn create_tokens_onto(
             rebounding: false,
             destroy: false,
             regenerated: false,
+            shielded: false,
         };
         let change = entry_replacements(cx, &mut entering, proposed);
         // An effect that sends it elsewhere instead (CR 614.1a): a token anywhere but the battlefield ceases to exist
@@ -2860,7 +2872,7 @@ pub fn order_for_shields(cx: &mut Cx, hits: &[(ObjectId, Target, u16)], combat: 
             if target != to || amount == 0 {
                 continue;
             }
-            if let Some((s, n)) = replace::shields(cx, &DamageEvent { source, target, amount, combat, heal_marked: false }) {
+            if let Some((s, n)) = replace::shields(cx, &DamageEvent { source, target, amount, combat, heal_marked: false, shielded: None }) {
                 if shielded.is_empty() {
                     by = s;
                 }
@@ -2926,6 +2938,9 @@ pub struct DamageBatch {
     /// The -1/-1 counters its damage is dealt to creatures as (CR 702.90c, 120.3d): put on together once all of it is dealt,
     /// and announced with it (CR 510.2, 603.2c).
     counters: Vec<counters::Placement>,
+    /// The permanents whose shield counter has applied to this event (CR 122.1c): one replacement for the simultaneous event
+    /// (CR 120.4), so a second assignment of damage to the same permanent is prevented as well, and no second counter is removed.
+    shielded: Vec<ObjectId>,
 }
 
 /// A recipient's state before this damage event, and the damage actually dealt in it. Shared with the marked-damage
@@ -3051,7 +3066,13 @@ pub fn deal_damage_with(
     // CR 614.1a, 614.6: the replacement effects may change whom the damage is dealt to ("is dealt to this creature
     // instead") as well as how much; what is left is dealt to whomever they leave it with, by the same source. Protection,
     // infect, lifelink, deathtouch, loyalty and defense are judged against that recipient.
-    let event = replace::damage(cx, DamageEvent { source, target, amount, combat, heal_marked: false });
+    let shielded = batch.shielded.iter().copied().find(|&id| target == Target::Object(id));
+    let event = replace::damage(cx, DamageEvent { source, target, amount, combat, heal_marked: false, shielded });
+    if let Some(id) = event.shielded
+        && !batch.shielded.contains(&id)
+    {
+        batch.shielded.push(id);
+    }
     let (target, amount, heal_marked) = (event.target, event.amount, event.heal_marked);
     if amount == 0 || matches!(target, Target::Player(p) if !cx.s().in_game(p)) {
         return None;

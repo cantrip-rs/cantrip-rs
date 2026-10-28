@@ -44,6 +44,8 @@ pub(crate) enum Origin {
     Finality,
     /// A regeneration shield (CR 701.19a, 614.8): of a permanent that would be destroyed (`ZoneChange::destroy`).
     Regeneration,
+    /// Shield counters' replacement of a destruction and prevention of damage (CR 122.1c): of the permanent they are on.
+    ShieldCounter,
     /// Protection's prevention of damage (CR 702.16e, 702.16j), a prevention effect ordered with the replacement effects that
     /// would change the same damage (CR 616.1): of the protected permanent, or the source of a player's protection.
     Protection,
@@ -89,6 +91,8 @@ const REBOUND_HINT: &str = "exile it with rebound, to be cast again at the next 
 const UNEARTH_HINT: &str = "exile it instead of putting it anywhere else";
 const FINALITY_HINT: &str = "exile it, as it has a finality counter";
 const REGENERATION_HINT: &str = "regenerate it instead of destroying it";
+const SHIELD_DESTROY_HINT: &str = "remove a shield counter from it instead of destroying it";
+const SHIELD_DAMAGE_HINT: &str = "prevent the damage and remove a shield counter from it";
 
 /// What protection's prevention says it does, for the player who orders it with others (CR 616.1).
 const PROTECTION_HINT: &str = "protection prevents the damage";
@@ -232,13 +236,36 @@ fn finality_applies(cx: &Cx, z: &ZoneChange) -> bool {
 fn regeneration_applies(cx: &Cx, z: &ZoneChange) -> bool {
     z.destroy
         && !z.regenerated
+        && !z.shielded
         && z.from.is(ZoneKind::Battlefield)
         && z.to.is(ZoneKind::Graveyard)
         && cx.s().effects.iter().any(|e| e.kind == EffectKind::RegenerationShield && e.affected == z.object)
 }
 
+/// CR 122.1c: "if this permanent would be destroyed as the result of an effect, instead remove a shield counter from it": a
+/// permanent with a shield counter that an effect that says "destroy" would put into its owner's graveyard (CR 701.8a-b). Not a
+/// sacrifice, and not a destruction by lethal damage or deathtouch (state-based actions, CR 704.5g-h): the rulings. Once another
+/// effect has sent it elsewhere, the event is no destruction any more (CR 614.6), and the counter does not apply.
+fn shield_destroy_applies(cx: &Cx, z: &ZoneChange) -> bool {
+    matches!(z.reason, ZoneReason::Destroy | ZoneReason::DestroyNoRegen)
+        && !z.regenerated
+        && !z.shielded
+        && z.from.is(ZoneKind::Battlefield)
+        && z.to.is(ZoneKind::Graveyard)
+        && cx.s().obj(z.object).counters(CounterKind::Shield) > 0
+}
+
+/// CR 122.1c: "if damage would be dealt to this permanent, prevent that damage and remove a shield counter from it": damage
+/// to a permanent with a shield counter, or to one whose counter has applied to this damage event already (`DamageEvent::shielded`:
+/// one replacement for the simultaneous event, CR 120.4). Unpreventable damage is still dealt and the counter still removed
+/// (the rulings).
+fn shield_damage_applies(cx: &Cx, d: &DamageEvent) -> Option<ObjectId> {
+    let Target::Object(id) = d.target else { return None };
+    (d.amount > 0 && live(cx.s(), id) && (d.shielded == Some(id) || cx.s().obj(id).counters(CounterKind::Shield) > 0)).then_some(id)
+}
+
 fn leaving_applies(cx: &Cx, z: &ZoneChange) -> bool {
-    z.from.is(ZoneKind::Battlefield) && (unearth_applies(cx, z) || finality_applies(cx, z) || regeneration_applies(cx, z))
+    z.from.is(ZoneKind::Battlefield) && (unearth_applies(cx, z) || finality_applies(cx, z) || regeneration_applies(cx, z) || shield_destroy_applies(cx, z))
 }
 
 /// The card whose replacement effects `id` has: `card_of`, but for a permanent about to enter, judged as it would exist on
@@ -350,7 +377,7 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&
     }
     // Nor is a destruction a regeneration shield has replaced (CR 614.6).
     if let Proposal::ZoneChange(z) = proposal
-        && z.regenerated
+        && (z.regenerated || z.shielded)
     {
         return Vec::new();
     }
@@ -508,6 +535,7 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&
             (unearth_applies(cx, z), Origin::Unearth),
             (finality_applies(cx, z), Origin::Finality),
             (regeneration_applies(cx, z), Origin::Regeneration),
+            (shield_destroy_applies(cx, z), Origin::ShieldCounter),
         ];
         for (applies, origin) in own {
             if applies && !applied.contains(&(z.object, 0, origin)) {
@@ -522,6 +550,14 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&
         && played_tapped_applies(cx, z)
     {
         found.push(Candidate { source: z.object, index: 0, origin: Origin::PlayedTapped });
+    }
+    // A shield counter of the permanent the damage would now be dealt to (CR 122.1c), ordered with the effects that would change
+    // it (CR 616.1): of the permanent itself, which is what the player ordering them is shown.
+    if let Proposal::Damage(d) = proposal
+        && let Some(id) = shield_damage_applies(cx, d)
+        && !applied.contains(&(id, 0, Origin::ShieldCounter))
+    {
+        found.insert(0, Candidate { source: id, index: 0, origin: Origin::ShieldCounter });
     }
     // Protection of whoever the damage would now be dealt to (CR 702.16e), ordered with the effects that would change it
     // (CR 616.1): prevented first, nothing is redirected; redirected first, it is judged again at its new recipient. It is
@@ -549,7 +585,7 @@ fn candidates(cx: &Cx, proposal: &Proposal, applied: &[Applied], entry: Option<&
 }
 
 /// What an effect says it does, for the player who orders several (CR 616.1).
-fn hint_of(cx: &Cx, c: &Candidate) -> &'static str {
+fn hint_of(cx: &Cx, proposal: &Proposal, c: &Candidate) -> &'static str {
     let card = cx.cards().get(card_of(cx, c.source));
     match c.origin {
         Origin::Printed => card.replacements[c.index as usize].hint,
@@ -563,6 +599,8 @@ fn hint_of(cx: &Cx, c: &Candidate) -> &'static str {
         Origin::Unearth => UNEARTH_HINT,
         Origin::Finality => FINALITY_HINT,
         Origin::Regeneration => REGENERATION_HINT,
+        Origin::ShieldCounter if matches!(proposal, Proposal::Damage(_)) => SHIELD_DAMAGE_HINT,
+        Origin::ShieldCounter => SHIELD_DESTROY_HINT,
         Origin::Protection => PROTECTION_HINT,
         Origin::Prevention => card.preventions[c.index as usize].hint,
         Origin::GrantedPrevention(timestamp) => match cx.s().effects.iter().find(|e| e.timestamp == timestamp).map(|e| e.kind) {
@@ -600,7 +638,7 @@ fn choose(cx: &mut Cx, proposal: &Proposal, found: &[Candidate]) -> usize {
             _ => None,
         },
         sources: found.iter().map(|c| c.source).collect(),
-        hints: found.iter().map(|c| hint_of(cx, c)).collect(),
+        hints: found.iter().map(|c| hint_of(cx, proposal, c)).collect(),
         damage: match proposal {
             Proposal::Damage(d) => Some(DamageAbout { source: d.source, to: d.target, amount: d.amount }),
             _ => None,
@@ -795,6 +833,22 @@ fn apply_to(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enterin
             Origin::Regeneration => {
                 if let Proposal::ZoneChange(z) = proposal {
                     z.regenerated = true;
+                }
+            }
+            // CR 122.1c: the destruction never happens (CR 614.6); a shield counter is removed from the permanent instead
+            // (`ops::move_together`). Or the damage to it is prevented, if it can be (CR 615.12), and a shield counter is
+            // removed from it - once for the simultaneous damage event, however many sources deal it damage (CR 120.4).
+            Origin::ShieldCounter => {
+                if let Proposal::ZoneChange(z) = proposal {
+                    z.shielded = true;
+                } else if let Proposal::Damage(d) = proposal {
+                    if damage_can_be_prevented(cx, d) {
+                        prevent(cx, d, d.amount, source);
+                    }
+                    if d.shielded != Some(source) {
+                        d.shielded = Some(source);
+                        crate::counters::remove(cx, source, CounterKind::Shield, 1);
+                    }
                 }
             }
             // CR 614.1d: it enters tapped.
@@ -996,6 +1050,11 @@ pub(crate) fn shields(cx: &Cx, d: &DamageEvent) -> Option<(ObjectId, u16)> {
     found
 }
 
+/// Whether a prevention effect may prevent this damage (CR 615.12).
+fn damage_can_be_prevented(cx: &Cx, d: &DamageEvent) -> bool {
+    crate::ops::damage_can_be_prevented(cx, d.source, d.combat)
+}
+
 /// Prevents `amount` of the damage (CR 615.1) by the effect of `by`, and records it (CR 615.6, 615.13).
 fn prevent(cx: &mut Cx, d: &mut DamageEvent, amount: u16, by: ObjectId) {
     if amount == 0 {
@@ -1130,7 +1189,7 @@ pub fn token_batch(cx: &mut Cx, tokens: &[(CardId, Option<Copiable>, PlayerId)])
 /// is dealt to, which a redirection ("is dealt to this creature instead") changes, after which the effects not yet
 /// applied are judged again against the new recipient and its controller orders them (CR 614.6, 616.1f).
 pub fn damage(cx: &mut Cx, event: DamageEvent) -> DamageEvent {
-    if !possible(cx, None) {
+    if !possible(cx, None) && shield_damage_applies(cx, &event).is_none() {
         return event;
     }
     let mut proposal = Proposal::Damage(event);
@@ -1345,6 +1404,7 @@ mod tests {
             rebounding: false,
             destroy: false,
             regenerated: false,
+            shielded: false,
         };
         let link = |p: Proposal| match p {
             Proposal::ZoneChange(z) => z.exiled_with,
