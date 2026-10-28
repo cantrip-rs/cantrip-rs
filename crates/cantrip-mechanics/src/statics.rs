@@ -197,6 +197,12 @@ pub fn have_split_second(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = chars.keywords.with(Keyword::SplitSecond);
 }
 
+/// "... has menace" (CR 702.111, layer 6) as a static ability's `StaticDef::apply`. Carnage Interpreter, Elenda, Saint of Dusk
+/// and Great Ugly-Looking Goblin's creatures with +1/+1 counters print it.
+pub fn have_menace(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.keywords = chars.keywords.with(Keyword::Menace);
+}
+
 /// "... has deathtouch" (CR 702.2, layer 6) as a static ability's `StaticDef::apply`. Bow of Nylea's attacking creatures and
 /// The Swarmweaver's delirium Insects and Spiders print it.
 pub fn have_deathtouch(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
