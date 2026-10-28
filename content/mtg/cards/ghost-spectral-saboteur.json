@@ -1,0 +1,12 @@
+{
+  "name": "Ghost, Spectral Saboteur",
+  "manaCost": "{2}{U/B}",
+  "type": "Legendary Creature — Human Rogue Villain",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash\nIntangibility — Ghost can't be blocked.",
+  "keywords": [
+    "Flash",
+    "CantBeBlocked"
+  ]
+}

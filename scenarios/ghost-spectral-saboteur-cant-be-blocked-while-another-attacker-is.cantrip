@@ -1,0 +1,39 @@
+# Ghost, Spectral Saboteur: "Intangibility — Ghost can't be blocked." Bot2's Ornithopter may not block Ghost, but it may
+# block Bot1's own Ornithopter attacking beside it, so the restriction is Ghost's alone (CR 509.1b).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Ghost, Spectral Saboteur
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ghost, Spectral Saboteur.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Attackers]
+Bot1.Attack(Ghost, Spectral Saboteur > Bot2; Ornithopter > Bot2)
+! Bot2.Block(Ornithopter > Ghost, Spectral Saboteur)
+Bot2.Block(Ornithopter > Ornithopter)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
