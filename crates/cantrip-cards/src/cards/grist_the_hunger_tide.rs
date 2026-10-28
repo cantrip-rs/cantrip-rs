@@ -68,7 +68,7 @@ fn destroy_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// -5: "Each opponent loses life equal to the number of creature cards in your graveyard", counted as it resolves.
 fn minus_five(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let player = item.controller;
-    let count = g.state().zone(Zone::graveyard(player)).iter().filter(|&&card| g.chars(card).is(CardType::Creature)).count();
+    let count = cantrip_mechanics::creature_cards_in_graveyard(g, player);
     if count > 0 {
         g.each_opponent_loses_life(player, count as i32);
     }

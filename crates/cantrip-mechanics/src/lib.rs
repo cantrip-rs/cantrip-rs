@@ -381,6 +381,13 @@ pub fn spell_mastery(q: &dyn Query, player: PlayerId) -> bool {
     q.state().zone(Zone::graveyard(player)).iter().filter(|&&c| q.chars(c).is(CardType::Instant) || q.chars(c).is(CardType::Sorcery)).count() >= 2
 }
 
+/// How many creature cards are in `player`'s graveyard (CR 404.1, 109.5): cards only, never tokens, counted as it is asked.
+/// Grist, the Hunger Tide, Kraul Harpooner and Golgari Grave Troll count them for a number; Arnim Zola, Bio-Fanatic, HYDRA
+/// Troopers and Klaw, Sonic Subjugator ask it against a limit.
+pub fn creature_cards_in_graveyard(q: &dyn Query, player: PlayerId) -> usize {
+    q.state().zone(Zone::graveyard(player)).iter().filter(|&&card| q.chars(card).is(CardType::Creature)).count()
+}
+
 /// How many card types are among the cards in `player`'s graveyard (CR 205.2a, 702.138a): each type counted once however many
 /// cards have it, a card with several types giving each of them. Delirium reads it against four; Omnivorous Flytrap's "six or
 /// more card types among cards in your graveyard" reads it again against six as its ability resolves.

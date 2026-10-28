@@ -18,7 +18,7 @@ const FIGHT: Question = Question::new("Fight", "have Kraul Harpooner fight that 
 /// (CR 608.2b). The fight is chosen at resolution, after the pump (CR 608.2c), and if Harpooner has left the battlefield
 /// neither creature fights (CR 701.14b).
 fn undergrowth(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let x = g.state().zone(Zone::graveyard(item.controller)).iter().filter(|&&card| g.chars(card).is(CardType::Creature)).count() as i16;
+    let x = cantrip_mechanics::creature_cards_in_graveyard(g, item.controller) as i16;
     pump(g, item.object, item.object, x, 0);
     g.end_sentence();
     let Some(prey) = targets::object(g, item, 0) else { return Ok(()) };

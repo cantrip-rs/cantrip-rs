@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 /// as it enters, in the graveyard of the player it enters under. It is not on the battlefield yet, so a Troll put onto the
 /// battlefield from that graveyard counts itself (its ruling).
 fn enters_with_counters(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    let creatures = g.state().zone(Zone::graveyard(entering.controller)).iter().filter(|&&c| g.chars(c).is(CardType::Creature)).count();
+    let creatures = cantrip_mechanics::creature_cards_in_graveyard(g, entering.controller);
     entering.counters[CounterKind::PlusOne as usize] += creatures.min(i16::MAX as usize) as i16;
     Ok(())
 }
