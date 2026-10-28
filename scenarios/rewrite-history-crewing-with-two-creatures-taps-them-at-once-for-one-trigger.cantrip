@@ -1,0 +1,60 @@
+# The creatures a crew cost taps are tapped at once (CR 702.122a, 601.2h, 603.2c), so Rewrite History's "whenever one or more
+# creatures you control become tapped" triggers once for the Atlantean Cavalry and the Ornithopter that crew S.H.I.E.L.D. Flying
+# Car (Crew 1 is met by either alone; the player may tap both): one card drawn, one discarded (an Island), one plan counter.
+
+[Bot1 Deck]
+Black Lotus
+Rewrite History
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Atlantean Cavalry
+Ornithopter
+S.H.I.E.L.D. Flying Car
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Atlantean Cavalry.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Rewrite History.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.S.H.I.E.L.D. Flying Car.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Battlefield.S.H.I.E.L.D. Flying Car.Activate(Ability: Crew)
+Bot1.Choose(Atlantean Cavalry; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Rewrite History.Counters.Plan = 1
+Bot1.Battlefield.Atlantean Cavalry.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.S.H.I.E.L.D. Flying Car.Types = Artifact; Creature

@@ -1,0 +1,6 @@
+{
+  "name": "Rewrite History",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment — Plan",
+  "oracleText": "Whenever one or more creatures you control become tapped, draw a card, then discard a card and put a plan counter on this enchantment.\nWhen the fourth plan counter is put on this enchantment, sacrifice it. When you do, return up to two target instant and/or sorcery cards from your graveyard to your hand."
+}
