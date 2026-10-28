@@ -1,0 +1,48 @@
+# Oketra's Attendant's cycling {2} (CR 702.29a) and embalm {3}{W}{W} (CR 702.128a): on turn 1 Bot1 cycles it with Mana Crypt's
+# {C}{C} (it is discarded and a card drawn), which puts it in the graveyard. Then it pays the embalm cost exactly with
+# Black Lotus's {W}{W}{W} and two more white mana from Mox Pearls (the pool is empty right after) and exiles the card for a
+# token copy of it: white, a Bird Soldier Zombie with no mana cost, a 3/3 with flying. The card stays in exile.
+
+[Bot1 Deck]
+Mana Crypt
+Black Lotus
+Oketra's Attendant
+Mox Pearl
+Mox Pearl
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Oketra's Attendant.Activate(Ability: Cycling)
+Bot1.Pass
+? Bot1.Graveyard = Oketra's Attendant
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+? Bot1.Hand.Count = 3
+Bot1.Graveyard.Oketra's Attendant.Activate(Ability: Embalm)
+Bot1.Pass
+? Bot1.Mana =
+
+[Expect]
+Stack.Count = 0
+Exile = Oketra's Attendant
+Bot1.Battlefield.Oketra's Attendant.Colors = White
+Bot1.Battlefield.Oketra's Attendant.Subtypes = Bird; Soldier; Zombie
+Bot1.Battlefield.Oketra's Attendant.ManaValue = 0
+Bot1.Battlefield.Oketra's Attendant.Power = 3
+Bot1.Battlefield.Oketra's Attendant.Toughness = 3
+Bot1.Battlefield.Oketra's Attendant.Keywords = Flying
