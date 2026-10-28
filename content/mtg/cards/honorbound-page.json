@@ -1,0 +1,17 @@
+{
+  "name": "Honorbound Page",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Cat Cleric",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "First strike\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "keywords": [
+    "FirstStrike"
+  ],
+  "prepare": {
+    "name": "Forum's Favor",
+    "manaCost": "{W}",
+    "type": "Sorcery",
+    "oracleText": "Target creature gets +1/+0 and gains flying until end of turn."
+  }
+}

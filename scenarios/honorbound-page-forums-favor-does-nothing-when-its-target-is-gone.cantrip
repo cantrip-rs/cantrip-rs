@@ -1,0 +1,39 @@
+# Honorbound Page // Forum's Favor: the only target gone (CR 608.2b), the spell does nothing. Bot1 aims it at Bot2's
+# Ornithopter, which Bot2 kills in response; the Page keeps its printed 3 power.
+
+[Bot1 Deck]
+Honorbound Page
+Mox Pearl x5
+Island
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Honorbound Page.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Exile.Forum's Favor.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Honorbound Page.Power = 3
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Battlefield.Honorbound Page.Keywords = FirstStrike

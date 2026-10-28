@@ -1,0 +1,38 @@
+# Honorbound Page // Forum's Favor (CR 722). The 3/3 first striker enters prepared and casts Forum's Favor on itself the
+# same turn: "Target creature gets +1/+0 and gains flying until end of turn" - 4/3 with flying and first strike - and by
+# its controller's next turn the effect is gone.
+
+[Bot1 Deck]
+Honorbound Page
+Mox Pearl x5
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Honorbound Page.Cast
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Exile.Forum's Favor.Cast(Honorbound Page)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Honorbound Page.Power = 4
+? Bot1.Battlefield.Honorbound Page.Toughness = 3
+? Bot1.Battlefield.Honorbound Page.Keywords = FirstStrike; Flying
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Honorbound Page.Power = 3
+? Bot1.Battlefield.Honorbound Page.Toughness = 3
+? Bot1.Battlefield.Honorbound Page.Keywords = FirstStrike
+
+[Expect]
+Bot1.Battlefield.Honorbound Page.Prepared = (absent)
+Exile.Count = 0
