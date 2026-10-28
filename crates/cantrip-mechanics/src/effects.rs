@@ -772,6 +772,18 @@ pub fn return_first_target_to_hand(g: &mut dyn Game, item: &StackItem) -> Result
     Ok(())
 }
 
+/// "Return up to one target [permanent] to its owner's hand. If you do, put a +1/+1 counter on this creature" (CR 400.3, 122.1): a
+/// target that became illegal is not returned (CR 608.2b); the source gets the counter only if the permanent really arrived in a
+/// hand ("if a permanent was returned this way"), and only if it is still on the battlefield. Mirkwood Nurturer and Nurturing Pixie
+/// print it.
+pub fn return_first_target_to_hand_then_plus_one_counter_on_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(permanent) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    if !g.return_to_hand(&[permanent]).is_empty() {
+        g.add_counters(item.object, CounterKind::PlusOne, 1);
+    }
+    Ok(())
+}
+
 /// "Exile target [permanent]", remembered as exiled with the ability's source (CR 607.2a), so that its linked ability
 /// ("return the exiled card") finds it; nothing if the target is no longer legal (CR 608.2b). The card stays in exile
 /// whatever happens to the source: it is not "until [this] leaves the battlefield" (CR 610.3). Oblivion Ring, Parallax
