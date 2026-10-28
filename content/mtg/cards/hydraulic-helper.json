@@ -1,0 +1,11 @@
+{
+  "name": "Hydraulic Helper",
+  "manaCost": "{1}{U}",
+  "type": "Artifact Creature — Robot",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Defender\n{T}: Add {U}. This mana can't be spent to cast a nonartifact spell.",
+  "keywords": [
+    "Defender"
+  ]
+}
