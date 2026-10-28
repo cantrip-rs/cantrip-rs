@@ -9,22 +9,13 @@ fn draw_two_discard_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     Ok(())
 }
 
-/// The 0/0 green and blue Fractal creature token.
-pub static FRACTAL: CardDef = CardDef {
-    colors: Some(ColorSet(0b10010)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(0),
-    toughness: Some(0),
-    ..token!(Fractal)
-};
-
 /// "Create X 0/0 green and blue Fractal creature tokens, then put X +1/+1 counters on each Fractal you control." The tokens are
 /// made together (CR 101.4); the sentence ends at "then" (CR 608.2c), so the counters go on every Fractal the controller has
 /// by then, the new ones and any older, read through the words of this spell's text (CR 612). With X of 0 nothing is made
 /// and no counters are put.
 fn oracles_gift(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
-    tokens::create(g, you, &FRACTAL, item.x as u32)?;
+    tokens::create(g, you, &tokens::FRACTAL, item.x as u32)?;
     g.end_sentence();
     let fractal = g.words(item.object).subtype(Subtype::Fractal);
     let fractals: Vec<ObjectId> = g.permanents_of(you).into_iter().filter(|&id| g.chars(id).has_subtype(fractal)).collect();
@@ -50,4 +41,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::JADZI_STEWARD_OF_FATE
 };
 
-pub static EXTRA: &[&CardDef] = &[&ORACLES_GIFT, &FRACTAL];
+pub static EXTRA: &[&CardDef] = &[&ORACLES_GIFT, &tokens::FRACTAL];

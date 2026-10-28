@@ -904,3 +904,12 @@ pub fn create_an_elf(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     create(g, item.controller, &ELF, 1)?;
     Ok(())
 }
+
+/// The 0/0 green and blue Fractal creature token. Oracle's Gift (Jadzi, Steward of Fate) and Fractal Anomaly make it.
+pub static FRACTAL: CardDef = CardDef {
+    colors: Some(ColorSet(ColorSet::of(Color::Green).0 | ColorSet::of(Color::Blue).0)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(0),
+    toughness: Some(0),
+    ..token!(Fractal)
+};
