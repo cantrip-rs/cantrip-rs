@@ -1,0 +1,56 @@
+# Crude Bent Blade {2}{B}: "When this Equipment enters, target opponent sacrifices a creature of their choice." A Mana Crypt's {C}{C}
+# and a Mox Pearl's {W} are three mana but no black, so the Blade is refused (the {B} pip is pinned); with Mox Jet it is paid exactly
+# with the Jet and the Crypt. Bot2 controls a Memnite and an Ornithopter and chooses to sacrifice the Ornithopter; Bot1's own
+# Memnite stays. "Equipped creature gets +2/+1": Equip {2} paid exactly with two Mox Pearls makes Bot1's Memnite a 3/2.
+
+[Bot1 Deck]
+Mana Crypt
+Mox Pearl
+Mox Pearl
+Mox Jet
+Crude Bent Blade
+Memnite
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+! Bot1.Hand.Crude Bent Blade.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Crude Bent Blade.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Ornithopter)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Crude Bent Blade.Activate(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 2
