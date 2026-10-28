@@ -532,6 +532,29 @@ pub static CITIZEN: CardDef = CardDef {
     ..token!(Citizen)
 };
 
+/// The 3/2 white Hero creature token with vigilance. Pet Avengers and Borough Backup make it.
+pub static HERO_3_2_WHITE_VIGILANCE: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::White)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(3),
+    toughness: Some(2),
+    keywords: Keywords::of(&[Keyword::Vigilance]),
+    text: "Vigilance",
+    ..token!(Hero)
+};
+
+/// The 0/4 colorless Wall creature token with defender. Doctor Spectrum, Super-Skrull, The Fantastic Four, Wall Off and
+/// Invisible Woman, Sue Storm make it.
+pub static WALL_0_4_DEFENDER: CardDef = CardDef {
+    colors: Some(ColorSet::NONE),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(0),
+    toughness: Some(4),
+    keywords: Keywords::of(&[Keyword::Defender]),
+    text: "Defender",
+    ..token!(Wall)
+};
+
 /// The 1/1 white Soldier creature token. Hero of Bladehold, Elspeth, Storm Slayer and Torsten, Founder of Benalia make
 /// it. (Third Path Iconoclast's is an artifact Soldier of the same name.)
 pub static SOLDIER: CardDef = CardDef {
