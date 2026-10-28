@@ -1,0 +1,8 @@
+{
+  "name": "Pouncing Jaguar",
+  "manaCost": "{G}",
+  "type": "Creature — Cat",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Echo {G} (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)"
+}
