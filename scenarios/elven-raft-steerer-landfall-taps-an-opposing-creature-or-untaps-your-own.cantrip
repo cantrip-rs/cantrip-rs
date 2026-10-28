@@ -1,0 +1,77 @@
+# Elven Raft-Steerer, a 3/2: "Landfall - Whenever a land you control enters, choose one - Tap target creature an opponent controls;
+# or untap target creature you control." On turn 3 Bot1 plays an Island and chooses the first mode: Bot2's Grizzly Bears is tapped, its
+# Ornithopter is not (the choice among two), and Bot1's own Raft-Steerer is refused. On turn 5 it attacks, and after combat a second Island untaps it
+# with the second mode (Bot2's Bears refused), while its Ornithopter, also a legal target, stays as it was.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Elven Raft-Steerer
+Ornithopter
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elven Raft-Steerer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Modes(Tap target creature)
+! Bot1.Target(Bot1.Battlefield.Elven Raft-Steerer)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Tapped = true
+? Bot2.Battlefield.Ornithopter.Tapped = false
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Elven Raft-Steerer > Bot2)
+Bot1.Pass
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Elven Raft-Steerer.Tapped = true
+Bot1.Hand.Island.Play
+Bot1.Modes(Untap target creature)
+! Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Target(Bot1.Battlefield.Elven Raft-Steerer)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Elven Raft-Steerer.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = false

@@ -1,0 +1,8 @@
+{
+  "name": "Elven Raft-Steerer",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Elf Pilot",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Landfall — Whenever a land you control enters, choose one —\n• Tap target creature an opponent controls.\n• Untap target creature you control."
+}
