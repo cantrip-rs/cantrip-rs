@@ -1,0 +1,67 @@
+# Getaway Barrel: "When this artifact is put into a graveyard from the battlefield, reveal the top thirteen cards of your
+# library. Put a random creature card from among them onto the battlefield. Put the rest on the bottom of your library in a
+# random order." Bot1 destroys its own Barrel with Abrade. The only creature among the top thirteen is a Memnite, the 13th
+# card; the Ornithopter just beneath it, the 14th, is not revealed. So the Memnite enters, the other twelve revealed cards go
+# to the bottom, and the Ornithopter is the new top card of the library, drawn on turn 3. Bot2's library is not touched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Getaway Barrel
+Abrade
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Plains
+Plains
+Memnite
+Ornithopter
+Island x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Getaway Barrel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Abrade.Cast
+Bot1.Modes(Destroy target artifact)
+Bot1.Target(Getaway Barrel)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Abrade; Getaway Barrel; Black Lotus
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Jet; Memnite
+Bot1.Library.Count = 18
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Hand = Island; Ornithopter
+Bot2.Library.Count = 12

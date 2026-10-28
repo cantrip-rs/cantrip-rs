@@ -1,0 +1,47 @@
+# Getaway Barrel: a library of fewer than thirteen cards shows what it has (CR 609.3). Bot1's library is five Islands - no
+# creature card among them - so nothing enters the battlefield, and the five go back to the bottom (the library still has five).
+# Bot1 destroys its own Barrel with Abrade.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Getaway Barrel
+Abrade
+Island
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Getaway Barrel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Abrade.Cast
+Bot1.Modes(Destroy target artifact)
+Bot1.Target(Getaway Barrel)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Abrade; Getaway Barrel; Black Lotus
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Jet
+Bot1.Library.Count = 5
