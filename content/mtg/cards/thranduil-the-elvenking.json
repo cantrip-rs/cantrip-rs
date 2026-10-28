@@ -1,0 +1,8 @@
+{
+  "name": "Thranduil, the Elvenking",
+  "manaCost": "{2}{B}{G}{U}",
+  "type": "Legendary Creature — Elf Noble",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Thranduil has all activated abilities of all Elf cards in your graveyard.\nWhenever another legendary Elf you control enters, draw two cards, then discard a card."
+}
