@@ -30,6 +30,12 @@ pub fn first_draw_in_own_draw_step(q: &dyn Query, player: PlayerId) -> bool {
         && !q.history().any(EventQuery::kind(EventMask::DREW).player(player).this_turn().step(Step::Draw))
 }
 
+/// Cards `player` has discarded this turn (CR 701.9), as the game is now: "for each card you've discarded this turn", a discard
+/// made as a cost or earlier in the same resolution included. Jiang Yanggu, Alone and Misty Knight, Hero for Hire print it.
+pub fn cards_discarded_this_turn(q: &dyn Query, player: PlayerId) -> u32 {
+    q.history().count(EventQuery::kind(EventMask::DISCARDED).player(player).this_turn()) as u32
+}
+
 /// Cards `player` has drawn this turn, before the draw being asked about (Faerie Mastermind's "second card", Leovold's
 /// and Narset's "more than one card each turn").
 pub fn drawn_this_turn(q: &dyn Query, player: PlayerId) -> usize {

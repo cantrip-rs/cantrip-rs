@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, triggers};
+use cantrip_mechanics::{effects, history, triggers};
 use cantrip_oracle as oracle;
 
 /// "Discard a card, then draw a card. Then put a +1/+1 counter on that creature for each card you've discarded
@@ -7,12 +7,7 @@ use cantrip_oracle as oracle;
 fn discard_draw_then_grow(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::discard_then_draw(g, item, 1)?;
     let Target::Object(attacker) = item.subject else { return Ok(()) };
-    let discarded = g
-        .history()
-        .this_turn()
-        .iter()
-        .filter(|r| matches!(r.event, Event::Discarded { player, .. } if player == item.controller))
-        .count() as i16;
+    let discarded = history::cards_discarded_this_turn(g, item.controller) as i16;
     g.add_counters(attacker, CounterKind::PlusOne, discarded);
     Ok(())
 }
