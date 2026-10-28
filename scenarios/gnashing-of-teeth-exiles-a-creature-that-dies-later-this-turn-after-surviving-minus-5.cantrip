@@ -1,0 +1,62 @@
+# Gnashing of Teeth {1}{B}{B}, first mode: "Target creature gets -5/-5 until end of turn. If that creature would die this turn, exile it
+# instead." Bot2's Fortress Crab (1/6) survives as a -4/1, and the replacement still waits: Bot1's Lightning Bolt then kills it and it
+# is exiled, not put into Bot2's graveyard (CR 614.1a, 700.4). The spell is paid exactly with two Mox Jets and a Mox Pearl.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Ruby
+Gnashing of Teeth
+Lightning Bolt
+Plains x14
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Ruby
+Mana Crypt
+Fortress Crab
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mana Crypt.Activate
+Bot2.Hand.Fortress Crab.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gnashing of Teeth.Cast
+Bot1.Modes(Target creature gets -5/-5)
+Bot1.Target(Fortress Crab)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Fortress Crab.Power = -4
+? Bot2.Battlefield.Fortress Crab.Toughness = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Fortress Crab)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Fortress Crab
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Lightning Bolt; Gnashing of Teeth
