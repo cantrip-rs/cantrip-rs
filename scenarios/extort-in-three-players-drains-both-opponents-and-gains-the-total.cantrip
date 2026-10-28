@@ -1,0 +1,40 @@
+# Extort (CR 702.101a): "each opponent loses 1 life and you gain life equal to the total life lost this way". With two opponents,
+# Bot2 and Bot3 each lose 1 and Bot1 gains 2, the total, not 1. Black Lotus (three white) pays for Syndic of Tithes with {W}
+# left, which pays for extort when Mox Ruby is cast.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Syndic of Tithes
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Syndic of Tithes.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 19
+Bot3.Life = 19
