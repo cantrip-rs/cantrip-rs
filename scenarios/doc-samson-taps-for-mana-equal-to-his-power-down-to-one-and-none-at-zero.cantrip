@@ -1,0 +1,60 @@
+# Doc Samson, Super Psychiatrist: "{T}: Add X mana of any one color, where X is Doc Samson's power." Collective Brutality's -2/-2 leaves
+# him a 1/4 on turn 3 and he taps for exactly one green mana; Last Gasp's -3/-3 on turn 5 leaves him a 0/3 and he taps for none.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Doc Samson, Super Psychiatrist
+Collective Brutality
+Last Gasp
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Doc Samson, Super Psychiatrist.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Collective Brutality.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot1.Battlefield.Doc Samson, Super Psychiatrist)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Doc Samson, Super Psychiatrist.Power = 1
+Bot1.Battlefield.Doc Samson, Super Psychiatrist.Activate(Color: Green)
+? Bot1.Mana = {G}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Last Gasp.Cast(Bot1.Battlefield.Doc Samson, Super Psychiatrist)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Doc Samson, Super Psychiatrist.Power = 0
+Bot1.Battlefield.Doc Samson, Super Psychiatrist.Activate(Color: Green)
+? Bot1.Mana =
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Doc Samson, Super Psychiatrist.Tapped = true
+Bot1.Battlefield.Doc Samson, Super Psychiatrist.Toughness = 3

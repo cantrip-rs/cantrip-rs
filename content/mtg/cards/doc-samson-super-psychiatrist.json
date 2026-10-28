@@ -1,0 +1,8 @@
+{
+  "name": "Doc Samson, Super Psychiatrist",
+  "manaCost": "{4}{G}",
+  "type": "Legendary Creature — Gamma Doctor Hero",
+  "power": 3,
+  "toughness": 6,
+  "oracleText": "If you would put one or more counters on a permanent you control, put that many plus one of each of those kinds of counters on that permanent instead.\n{T}: Add X mana of any one color, where X is Doc Samson's power."
+}

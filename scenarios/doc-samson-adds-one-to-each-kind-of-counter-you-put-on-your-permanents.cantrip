@@ -1,0 +1,76 @@
+# Doc Samson, Super Psychiatrist: "If you would put one or more counters on a permanent you control, put that many plus one of each of those
+# kinds of counters on that permanent instead. {T}: Add X mana of any one color, where X is Doc Samson's power." On turn 3 he taps for three
+# green (his power 3), which pays Go Nuts! (leaving two green): Go Nuts! puts a counter on him, and he gets two (5/8), and so taps for five
+# the next time. Abigale, Eloquent First-Year then puts a flying, a first strike and a lifelink counter on Bot2's Grizzly Bears: Bot2's
+# permanent is not one Bot1 controls, so each kind stays one counter.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Doc Samson, Super Psychiatrist
+Abigale, Eloquent First-Year
+Go Nuts!
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Forest
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Doc Samson, Super Psychiatrist.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Doc Samson, Super Psychiatrist.Activate(Color: Green)
+? Bot1.Mana = {G}{G}{G}
+Bot1.Hand.Go Nuts!.Cast
+Bot1.Modes(Cast without teamwork)
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Doc Samson, Super Psychiatrist)
+? Bot1.Mana = {G}{G}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Doc Samson, Super Psychiatrist.Power = 5
+? Bot1.Battlefield.Doc Samson, Super Psychiatrist.Toughness = 8
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Abigale, Eloquent First-Year.Cast
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Doc Samson, Super Psychiatrist.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield.Grizzly Bears.Counters.Flying = 1
+Bot2.Battlefield.Grizzly Bears.Counters.FirstStrike = 1
+Bot2.Battlefield.Grizzly Bears.Counters.Lifelink = 1
