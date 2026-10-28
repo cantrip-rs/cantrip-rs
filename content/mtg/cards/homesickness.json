@@ -1,0 +1,6 @@
+{
+  "name": "Homesickness",
+  "manaCost": "{4}{U}{U}",
+  "type": "Instant",
+  "oracleText": "Target player draws two cards. Tap up to two target creatures. Put a stun counter on each of them. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}
