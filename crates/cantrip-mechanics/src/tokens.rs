@@ -821,3 +821,23 @@ pub static DRAGON_5_5: CardDef = CardDef {
     text: "Flying",
     ..token!(Dragon)
 };
+
+/// The 2/2 green Bear creature token (CR 111.1, 111.4). Argoth, Sanctum of Nature, Ayula's Influence, Bearscape, Caller of the
+/// Claw, Dancing from Dark to Dawn, Path to the World Tree and Words of Wilding make it.
+pub static BEAR: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    ..token!(Bear)
+};
+
+/// The 1/1 green Elf creature token (CR 111.1, 111.4). Down in the Valley's Saga, Thranduil the Strategist and Thranduil,
+/// Sindarin Liege make it.
+pub static ELF: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Elf)
+};
