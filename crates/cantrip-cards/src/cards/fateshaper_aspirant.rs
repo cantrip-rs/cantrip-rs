@@ -5,12 +5,8 @@ use cantrip_oracle as oracle;
 fn legendary(q:&dyn Query, me:&Asker,t:Target)->bool {
  (targets::CARD_IN_YOUR_GRAVEYARD.filter)(q,me,t) && matches!(t,Target::Object(id) if q.chars(id).supertypes.legendary)
 }
-/// A counter remains after vigilance and indestructible wear off (CR 122, 611.2a).
-fn protect(g:&mut dyn Game,i:&StackItem)->Result<(),Suspend>{
- if let Some(id)=targets::object(g,i,0){g.add_counters(id,CounterKind::PlusOne,1);g.add_effect(i.object,id,EffectKind::AddKeywords(Keywords::of(&[Keyword::Vigilance,Keyword::Indestructible])),Duration::EndOfTurn);}Ok(())
-}
 static MODAL: ModalDef = modes(&[
  mode(effects::return_first_target_to_hand,"Return target legendary card from your graveyard to your hand.").targets(&[target(legendary)]),
- mode(protect,"Put a +1/+1 counter on target creature. It gains vigilance and indestructible until end of turn.").targets(&[targets::CREATURE]),
+ mode(effects::plus_one_counters_on_first_target_that_gains_until_end_of_turn::<1, { Keywords::of(&[Keyword::Vigilance, Keyword::Indestructible]).0 }>,"Put a +1/+1 counter on target creature. It gains vigilance and indestructible until end of turn.").targets(&[targets::CREATURE]),
 ]);
 pub static CARD:CardDef=CardDef{abilities:&[modal_triggered(triggers::THIS_ENTERS,&MODAL,"When this creature enters, choose one — Return target legendary card from your graveyard to your hand; or put a +1/+1 counter on target creature. It gains vigilance and indestructible until end of turn.")],..oracle::FATESHAPER_ASPIRANT};

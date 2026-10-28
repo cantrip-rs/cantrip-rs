@@ -982,6 +982,22 @@ pub fn becomes_subtype_until_end_of_turn(g: &mut dyn Game, source: ObjectId, tar
     g.add_effect(source, target, EffectKind::AddSubtype(subtype), Duration::EndOfTurn);
 }
 
+/// "Put `COUNTERS` +1/+1 counters on target creature. It gains [keywords] until end of turn" (CR 122.1, 611.2a, 608.2c): the first
+/// target, if it is still a legal target (CR 608.2b), gets the counters and then, as a second instruction, the keywords for the rest of
+/// the turn; `KEYWORDS` is a `Keywords` as `u64` (`Keywords::of(&[Keyword::Lifelink]).0`). With no target chosen (an "up to one")
+/// nothing happens. Bard the Bowman (lifelink), Thranduil's Company (two counters, vigilance), Tam's Resistance (vigilance) and
+/// Fateshaper Aspirant's second mode (vigilance and indestructible) print it.
+pub fn plus_one_counters_on_first_target_that_gains_until_end_of_turn<const COUNTERS: i16, const KEYWORDS: u64>(
+    g: &mut dyn Game,
+    item: &StackItem,
+) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.add_counters(creature, CounterKind::PlusOne, COUNTERS);
+    g.end_sentence();
+    g.add_effect(item.object, creature, EffectKind::AddKeywords(Keywords(KEYWORDS)), Duration::EndOfTurn);
+    Ok(())
+}
+
 /// "`target` gains [a keyword] until end of turn" (CR 611.2a): a layer 6 keyword for the rest of the turn, from the effect's
 /// source. Creeping Tar Pit, Immolation Shaman and Kappa Cannoneer print it inside a longer instruction ("can't be blocked
 /// this turn", "gains menace"); the `this_gains_*` below are the abilities that only give it.
