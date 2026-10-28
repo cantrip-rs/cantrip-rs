@@ -1,0 +1,41 @@
+# Vision Quest with X = 1: Bot1 searches the library, where the only artifact creature, Darksteel Sentinel (6), is past X, so nothing
+# can be found (CR 701.23b) and nothing enters. A library search was made all the same, so it is shuffled (its order changes).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Vision Quest
+Plains x3
+Island
+Swamp
+Forest
+Mountain
+Sol Ring
+Darksteel Sentinel
+Mox Emerald
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vision Quest.Cast(X: 1)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Accept
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Vision Quest
+Bot1.Library = Forest; Darksteel Sentinel; Mountain; Swamp; Mox Emerald; Island; Sol Ring

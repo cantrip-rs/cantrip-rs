@@ -1,0 +1,44 @@
+# Vision Quest with X = 3: the haste is for "X is 4 or greater" only. Darksteel Myr (mana value 3, 0/1) is found in the library and enters
+# untapped with three counters (3/4) and nothing but its own indestructible (CR 702.10, 122.6).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Vision Quest
+Plains x2
+Darksteel Myr
+Alpha Myr
+Plains x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Vision Quest.Cast(X: 3)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Accept
+! Bot1.Search(Darksteel Myr; Alpha Myr)
+Bot1.Search(Darksteel Myr)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Darksteel Myr.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Darksteel Myr.Power = 3
+Bot1.Battlefield.Darksteel Myr.Toughness = 4
+Bot1.Battlefield.Darksteel Myr.Keywords = Indestructible
+Bot1.Battlefield.Darksteel Myr.Tapped = false

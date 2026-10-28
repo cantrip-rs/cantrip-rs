@@ -1,0 +1,32 @@
+# Vision Quest with X = 0 costs only {U}{R}: Ornithopter (mana value 0) is found in the library and enters with no additional counters
+# (CR 107.3, 122.6) and no haste.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Vision Quest
+Plains x4
+Ornithopter
+Plains x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Vision Quest.Cast(X: 0)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Accept
+Bot1.Search(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying
