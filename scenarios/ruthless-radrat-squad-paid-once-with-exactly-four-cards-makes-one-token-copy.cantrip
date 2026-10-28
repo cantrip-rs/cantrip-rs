@@ -1,0 +1,49 @@
+# Ruthless Radrat: "Squad-Exile four cards from your graveyard." (CR 702.157a) With exactly four Dark Rituals in Bot1's graveyard
+# the cost can be paid once: all four are exiled, and fewer than four are refused (the cost takes four cards, not three). When
+# the Radrat enters, a token that is a copy of it is created; the token was never cast, so its own squad ability makes nothing
+# more. Two Radrats, one of them a token, and an empty graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Dark Ritual
+Dark Ritual
+Dark Ritual
+Dark Ritual
+Ruthless Radrat
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ruthless Radrat.Cast(Kicked: 1)
+! Bot1.Hand.Ruthless Radrat.Cast(Kicked: 2)
+! Bot1.Choose(Dark Ritual; Dark Ritual; Dark Ritual)
+Bot1.Choose(Dark Ritual; Dark Ritual; Dark Ritual; Dark Ritual)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Dark Ritual; Dark Ritual; Dark Ritual; Dark Ritual
+Bot1.Graveyard =
+Bot1.Battlefield = Mox Jet; Ruthless Radrat; Ruthless Radrat
+Bot1.Battlefield.Ruthless Radrat#1.Token = (absent)
+Bot1.Battlefield.Ruthless Radrat#2.Token = true

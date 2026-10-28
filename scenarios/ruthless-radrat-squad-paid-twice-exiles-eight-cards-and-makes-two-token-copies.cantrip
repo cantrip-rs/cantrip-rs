@@ -1,0 +1,60 @@
+# Ruthless Radrat: "Squad-Exile four cards from your graveyard." (CR 702.157a) The squad cost is paid any number of times as an
+# additional cost, here twice: eight of the nine cards in Bot1's graveyard (a Black Lotus and the eight Lightning Bolts that two
+# Satyr Wayfinders put there) are exiled, seven is not enough for two payments, and three payments would need twelve, which
+# the graveyard does not hold, so it can't be kicked three times. When the Radrat enters, two tokens that are copies of it
+# are created, at once. The cast is paid exactly with a Blasted Landscape's {C} and two Mox Jets, and the pool ends empty.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Jet
+Satyr Wayfinder
+Satyr Wayfinder
+Ruthless Radrat
+Lightning Bolt x8
+Blasted Landscape
+Forest x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Satyr Wayfinder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Satyr Wayfinder.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Blasted Landscape.Play
+Bot1.Hand.Ruthless Radrat.Cast(Kicked: 2)
+! Bot1.Hand.Ruthless Radrat.Cast(Kicked: 3)
+Bot1.Battlefield.Blasted Landscape.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+! Bot1.Choose(Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt)
+Bot1.Choose(Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield = Blasted Landscape; Mox Emerald; Mox Jet; Mox Jet; Ruthless Radrat; Ruthless Radrat; Ruthless Radrat; Satyr Wayfinder; Satyr Wayfinder
+Bot1.Battlefield.Ruthless Radrat#1.Token = (absent)
+Bot1.Battlefield.Ruthless Radrat#2.Token = true
+Bot1.Battlefield.Ruthless Radrat#3.Token = true
