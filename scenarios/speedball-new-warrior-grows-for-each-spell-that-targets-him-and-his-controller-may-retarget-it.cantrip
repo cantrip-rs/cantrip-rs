@@ -1,0 +1,76 @@
+# Speedball, New Warrior: "Whenever a player casts a spell that targets Speedball, he gets +2/+2 until end of turn. You may
+# choose new targets for that spell." Bot2's first Lightning Bolt goes at Bot1's face: no trigger. The second targets
+# Speedball: he is a 4/4 and Bot1 keeps the target (3 damage, he lives). The third targets him too: 6/6, and Bot1 sends
+# that Bolt at Bot2 instead, so he is not dealt 3 more (6 damage in all would not kill a 6/6, but 3 + 3 + 3 would kill a 4/4).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Speedball, New Warrior
+Forest x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Speedball, New Warrior.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Speedball, New Warrior.Power = 2
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Speedball, New Warrior)
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Speedball, New Warrior)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Speedball, New Warrior.Power = 4
+? Bot1.Battlefield.Speedball, New Warrior.Toughness = 4
+? Bot1.Battlefield.Speedball, New Warrior.Damage = 3
+
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Speedball, New Warrior)
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Speedball, New Warrior.Power = 6
+? Bot1.Battlefield.Speedball, New Warrior.Toughness = 6
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Speedball, New Warrior.Damage = 3
+? Bot2.Life = 17
+? Bot1.Life = 17
+
+[Expect]
+Turn = 2
