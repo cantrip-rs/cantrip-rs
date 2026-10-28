@@ -2760,6 +2760,11 @@ pub fn draw_cards(cx: &mut Cx, player: PlayerId, count: u32) {
         // Cards are drawn one at a time (CR 121.2): what a draw changed with no event (a replacement effect used up) is a
         // point of the game the state triggers see before the next.
         if n > 0 {
+            // CR 121.4: with the library empty and the attempt already made, and no effect to replace or forbid a draw,
+            // each draw left only repeats it - an instruction for 2^32 or more cards (Mathemagics) ends here.
+            if replace::draws_only_repeat_an_attempt_from_an_empty_library(cx, player) {
+                break;
+            }
             cx.judge_if_due();
         }
         draw(cx, player);

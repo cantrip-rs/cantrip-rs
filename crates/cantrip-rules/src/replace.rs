@@ -310,6 +310,15 @@ fn graveyard_replaces_draws(cx: &Cx, player: PlayerId) -> bool {
         })
 }
 
+/// Whether every draw `player` has left would only repeat the attempt from an empty library already made (CR 121.4): the
+/// library is empty and was drawn from (or no draw can happen, CR 121.2b), and nothing replaces a draw (CR 121.6).
+pub fn draws_only_repeat_an_attempt_from_an_empty_library(cx: &Cx, player: PlayerId) -> bool {
+    cx.s().zone(Zone::library(player)).is_empty()
+        && (cx.s().player(player).drew_from_empty || cantrip_api::cant_draw(cx, player, 1))
+        && !possible(cx, None)
+        && !graveyard_replaces_draws(cx, player)
+}
+
 fn subject_of(proposal: &Proposal) -> Option<ObjectId> {
     match proposal {
         Proposal::ZoneChange(z) => Some(z.object),
