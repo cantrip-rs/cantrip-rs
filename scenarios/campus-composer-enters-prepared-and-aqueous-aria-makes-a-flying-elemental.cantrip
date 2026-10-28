@@ -1,0 +1,49 @@
+# Campus Composer ({3}{U}, 3/4): "This creature enters prepared" (CR 722.3a), so a copy of its spell, Aqueous Aria, is in exile
+# (CR 722.3b). Turn 1: Bot1 pays with Black Lotus (three blue) and Mox Sapphire. Turn 3: Bot1 casts the copy from exile for {4}{U}
+# with five Moxen: "Create a 3/3 blue and red Elemental creature token with flying". The copy ceases to exist as it resolves,
+# and the Composer stops being prepared as the copy is cast (CR 722.3d).
+
+[Bot1 Deck]
+Campus Composer
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Campus Composer.Cast
+Bot1.Pass
+[T1 Bot1.Main2]
+? Exile = Aqueous Aria
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Exile.Aqueous Aria.Cast
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield.Elemental Token.Power = 3
+Bot1.Battlefield.Elemental Token.Toughness = 3
+Bot1.Battlefield.Elemental Token.Keywords = Flying
+Bot1.Battlefield.Campus Composer.Power = 3
+Bot1.Battlefield.Campus Composer.Toughness = 4

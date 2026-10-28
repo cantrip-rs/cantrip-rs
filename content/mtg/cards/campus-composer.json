@@ -1,0 +1,15 @@
+{
+  "name": "Campus Composer",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Merfolk Bard",
+  "oracleText": "Ward {2}\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": 3,
+  "toughness": 4,
+  "keywords": [],
+  "prepare": {
+    "name": "Aqueous Aria",
+    "manaCost": "{4}{U}",
+    "type": "Sorcery",
+    "oracleText": "Create a 3/3 blue and red Elemental creature token with flying."
+  }
+}

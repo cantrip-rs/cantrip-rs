@@ -1,0 +1,44 @@
+# Campus Composer's Ward {2} (CR 702.21a) costs exactly {2}: Bot2 casts Lightning Bolt at it with Mox Ruby and pays the ward
+# trigger with Mox Jet and Mox Pearl, so all three are tapped. The Bolt then resolves and deals 3 to the 3/4 Composer, which lives. Nothing is left in Bot2's pool: the ward took exactly two.
+
+[Bot1 Deck]
+Campus Composer
+Black Lotus
+Mox Sapphire
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Campus Composer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Campus Composer)
+Bot2.PayCost
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Campus Composer.Damage = 3
+Bot2.Graveyard = Lightning Bolt
+Bot2.Battlefield.Mox Ruby.Tapped = true
+Bot2.Battlefield.Mox Jet.Tapped = true
+Bot2.Battlefield.Mox Pearl.Tapped = true

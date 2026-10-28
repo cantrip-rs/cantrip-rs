@@ -1,0 +1,36 @@
+# Campus Composer's Ward {2} (CR 702.21a): Bot2 casts Lightning Bolt at it with Mox Ruby and has only one more mana, Mox Jet's,
+# to pay the ward cost of {2} with, so it cannot pay: the Bolt is countered and the Composer takes no damage.
+
+[Bot1 Deck]
+Campus Composer
+Black Lotus
+Mox Sapphire
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Campus Composer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Campus Composer)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Campus Composer.Damage = 0
+Bot2.Graveyard = Lightning Bolt
