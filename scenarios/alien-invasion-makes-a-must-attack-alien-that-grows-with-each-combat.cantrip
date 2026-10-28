@@ -1,0 +1,57 @@
+# Alien Invasion: at the beginning of combat on its controller's turn, a 1/1 red Alien with haste that must attack each combat; it gets a
+# +1/+1 counter for each invasion counter on the enchantment, and then the enchantment gets one. Turn 1: a 1/1 Alien, which has haste
+# and attacks (Bot2 to 19); declaring no attackers is refused. Turn 3: the first Alien is still 1/1, the new one 2/2 (one invasion
+# counter), and both must attack (Bot2 to 16); the enchantment now has two invasion counters.
+
+[Bot1 Deck]
+Alien Invasion
+Mox Ruby
+Gleemox
+Mox Emerald
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Alien Invasion.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Alien Token.Power = 1
+? Bot1.Battlefield.Alien Token.Keywords = Haste
+? Bot1.Battlefield.Alien Invasion.Counters.Invasion = 1
+! Bot1.Attack()
+Bot1.Attack(Alien Token > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 19
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Alien Invasion.Counters.Invasion = 2
+! Bot1.Attack()
+Bot1.Attack(Alien Token#1 > Bot2; Alien Token#2 > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Alien Token#1.Power = 1
+Bot1.Battlefield.Alien Token#2.Power = 2
+Bot1.Battlefield.Alien Token#2.Toughness = 2
+Bot1.Battlefield.Alien Token#2.Colors = Red
+Bot1.Battlefield.Alien Token#2.Subtypes = Alien
