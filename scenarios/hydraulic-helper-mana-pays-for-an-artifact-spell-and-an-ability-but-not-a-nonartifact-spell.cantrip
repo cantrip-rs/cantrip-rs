@@ -1,0 +1,38 @@
+# Hydraulic Helper: "{T}: Add {U}. This mana can't be spent to cast a nonartifact spell" (CR 106.6). Cast on turn 1 with
+# Black Lotus's {U}{U}{U} ({1}{U}). On turn 3 its {U} cannot cast Opt (a refusal, with mana to spare for Opt otherwise) but
+# casts Aether Spellbomb, an artifact spell, leaving the pool empty. On turn 5 the same mana pays for the Spellbomb's
+# "{1}, Sacrifice: Draw a card", an ability, not a spell.
+
+[Bot1 Deck]
+Black Lotus
+Hydraulic Helper
+Aether Spellbomb
+Opt
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Hydraulic Helper.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Hydraulic Helper.Activate
+! Bot1.Hand.Opt.Cast(Mana: short)
+Bot1.Hand.Aether Spellbomb.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Hydraulic Helper.Activate
+Bot1.Battlefield.Aether Spellbomb.Activate(Ability: Draw)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Aether Spellbomb; Black Lotus
+Bot1.Hand.Count = 7
+Bot1.Battlefield.Hydraulic Helper.Tapped = true
