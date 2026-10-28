@@ -1,0 +1,35 @@
+# Super Intelligence: "At the beginning of the upkeep of enchanted creature's controller, that player draws a card." Bot1
+# enchants Bot2's Ornithopter ({U} from Mox Sapphire) on turn 3, so Bot2, not Bot1, draws an extra card in their upkeep:
+# on turn 4 Bot2 has drawn twice (hand 7 - 1 cast + the draw of turn 2, + the upkeep and the draw step of turn 4 = 9), and
+# (Bot2 then discards to seven at cleanup); on turn 5 Bot1 draws only the card of the draw step (hand 7).
+
+[Bot1 Deck]
+Mox Sapphire
+Super Intelligence
+Island x5
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Super Intelligence.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Super Intelligence.AttachedTo = Ornithopter
+[T4 Bot2.Main1]
+? Bot2.Hand.Count = 9
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 7
+Bot1.Library.Count = 11
