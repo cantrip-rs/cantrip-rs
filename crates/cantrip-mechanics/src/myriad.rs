@@ -31,10 +31,8 @@ fn choose_for(g: &mut dyn Game, you: PlayerId, source: ObjectId, opponent: Playe
         slot_player: Some(opponent),
         together: None,
     };
-    Ok(match g.ask(you, ask)? {
-        Answer::Targets(t) => t.first().copied(),
-        _ => None,
-    })
+    let Answer::Targets(chosen) = g.ask(you, ask)? else { return Ok(None) };
+    Ok(chosen.first().copied())
 }
 
 /// "For each opponent other than defending player, you may create a token that's a copy of this creature that's tapped and

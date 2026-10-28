@@ -25,10 +25,8 @@ fn stats(q: &dyn Query, id: ObjectId) -> Stats {
         let c = q.chars(id);
         Stats { creature: c.is(CardType::Creature), power: c.power, toughness: c.toughness }
     } else {
-        match q.state().last_known(id) {
-            Some(k) => Stats { creature: k.types.has(CardType::Creature), power: k.power, toughness: k.toughness },
-            None => Stats { creature: false, power: None, toughness: None },
-        }
+        let none = Stats { creature: false, power: None, toughness: None };
+        q.state().last_known(id).map_or(none, |k| Stats { creature: k.types.has(CardType::Creature), power: k.power, toughness: k.toughness })
     }
 }
 
