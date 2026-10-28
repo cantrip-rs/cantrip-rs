@@ -1,0 +1,51 @@
+# Klaw, Sonic Subjugator: "target player reveals a number of cards from their hand equal to one plus the number of creature cards in
+# your graveyard. You choose one of them. That player discards that card" (CR 701.20a, 608.2d). Faithless Looting leaves one creature
+# card (Savannah Lions) in Bot1's graveyard, and the Island beside it is no creature, so on turn 3 Bot2 reveals two cards of its
+# choosing (Lightning Bolt and Counterspell, not the Islands) and Bot1 chooses Counterspell: Bot2 discards it and keeps the Bolt.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Faithless Looting
+Klaw, Sonic Subjugator
+Swamp
+Swamp
+Savannah Lions
+Island
+Swamp x20
+
+[Bot2 Deck]
+Lightning Bolt
+Counterspell
+Island x25
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Savannah Lions; Island)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Klaw, Sonic Subjugator.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Choose(Lightning Bolt; Counterspell)
+Bot1.Choose(Counterspell)
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Counterspell; Island
+Bot2.Hand.Count = 6
+Bot2.Revealed = Lightning Bolt; Counterspell

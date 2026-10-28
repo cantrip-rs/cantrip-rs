@@ -1,0 +1,43 @@
+# Klaw, Sonic Subjugator: with nothing in the target player's hand, nothing is revealed and nothing is discarded (CR 701.20a,
+# 608.2d). Bot1 casts all its cards on turn 1 and targets itself with the enter trigger: its hand is empty, so there is no
+# reveal to choose from, no discard to choose, and the game goes on.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Klaw, Sonic Subjugator
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Klaw, Sonic Subjugator.Cast
+Bot1.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Graveyard.Count = 0
+Bot2.Hand.Count = 7
+Stack.Count = 0
