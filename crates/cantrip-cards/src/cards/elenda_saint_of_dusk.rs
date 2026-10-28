@@ -19,16 +19,12 @@ fn ten_above_starting_life(q: &dyn LayerQuery, source: ObjectId, affected: Objec
     source == affected && life_above_start(q, source) >= 10
 }
 
-fn menace(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
-    chars.keywords = chars.keywords.with(Keyword::Menace);
-}
-
 pub static CARD: CardDef = CardDef {
     // "Hexproof from instants" (CR 702.11d).
     hexproof_from: HexproofFrom::card_type(CardType::Instant),
     statics: &[
         static_ability(Layer::PtModify, above_starting_life, plus_pt::<1, 1>, "As long as your life total is greater than your starting life total, Elenda gets +1/+1."),
-        static_ability(Layer::Ability, above_starting_life, menace, "As long as your life total is greater than your starting life total, Elenda has menace."),
+        static_ability(Layer::Ability, above_starting_life, cantrip_mechanics::statics::have_menace, "As long as your life total is greater than your starting life total, Elenda has menace."),
         static_ability(Layer::PtModify, ten_above_starting_life, plus_pt::<5, 5>, "Elenda gets an additional +5/+5 as long as your life total is at least 10 greater than your starting life total."),
     ],
     ..oracle::ELENDA_SAINT_OF_DUSK
