@@ -1,0 +1,37 @@
+# Deepcavern Imp: "Echo--Discard a card." (CR 702.30a). At the turn 3 upkeep Bot1 has three Islands in hand and could discard
+# one, but paying is optional: Bot1 declines, and the Imp is sacrificed. Nothing is discarded.
+
+[Bot1 Deck]
+Deepcavern Imp
+Mox Jet
+Mox Pearl
+Sol Ring
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Deepcavern Imp.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Hand.Count = 3
+
+[Expect]
+Bot1.Graveyard = Deepcavern Imp
+Bot1.Battlefield.Deepcavern Imp = (absent)
