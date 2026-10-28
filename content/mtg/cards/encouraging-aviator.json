@@ -1,0 +1,15 @@
+{
+  "name": "Encouraging Aviator",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Bird Wizard",
+  "oracleText": "Flying\nWhenever this creature attacks, it becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": 2,
+  "toughness": 3,
+  "keywords": ["Flying"],
+  "prepare": {
+    "name": "Jump",
+    "manaCost": "{U}",
+    "type": "Instant",
+    "oracleText": "Target creature gains flying until end of turn."
+  }
+}

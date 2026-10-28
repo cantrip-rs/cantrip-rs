@@ -1,0 +1,46 @@
+# Encouraging Aviator (2/3 flier): "Whenever this creature attacks, it becomes prepared" (CR 722.3a), which puts a copy of its
+# spell, Jump, in exile. Turn 3: it attacks, Bot1 casts Jump ({U}, an instant) at Memnite, which gains flying until end of turn
+# (CR 611.2a); casting it unprepares the Aviator (CR 722.3d). On turn 5 Memnite has lost the flying again (CR 514.2).
+
+[Bot1 Deck]
+Encouraging Aviator
+Memnite
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Encouraging Aviator.Cast
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Encouraging Aviator.Prepared = (absent)
+? Exile.Count = 0
+[T3 Bot1.Main1]
+Bot1.Attack(Encouraging Aviator > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Encouraging Aviator.Prepared = true
+? Exile = Jump
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Jump.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Flying
+? Bot1.Battlefield.Encouraging Aviator.Prepared = (absent)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot2.Life = 18
