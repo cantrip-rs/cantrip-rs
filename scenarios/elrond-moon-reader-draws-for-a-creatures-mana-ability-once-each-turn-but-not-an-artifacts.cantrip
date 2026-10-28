@@ -1,0 +1,62 @@
+# Elrond, Moon-Reader: "Whenever you activate an ability of a creature, draw a card. This ability triggers only once each turn." A creature's mana ability counts (the
+# ruling, CR 605.3): on turn 3 Bot1 taps Mox Sapphire (an artifact's ability: no trigger, the stack stays empty) and then Llanowar Elves, whose
+# mana ability triggers it: one card drawn once the trigger resolves (the library goes from 18 to 17). On turn 5, a new turn, tapping the Elves draws again,
+# and tapping the second Elves, also a creature, draws nothing more that turn: 16 and then still 16... the library counts show each step.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Emerald
+Mox Pearl
+Elrond, Moon-Reader
+Llanowar Elves
+Llanowar Elves
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Elrond, Moon-Reader.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 20
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 19
+Bot1.Battlefield.Mox Sapphire.Activate
+? Stack.Count = 0
+Bot1.Battlefield.Llanowar Elves.Activate
+? Stack.Count = 1
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 18
+[T5 Bot1.Main1]
+? Bot1.Library.Count = 17
+Bot1.Battlefield.Llanowar Elves#1.Activate
+Bot1.Battlefield.Llanowar Elves#2.Activate
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 16
+
+[Expect]
+Bot1.Library.Count = 16
+Bot1.Hand.Count = 4

@@ -1,0 +1,65 @@
+# Elrond, Moon-Reader: "Whenever you activate an ability of a creature, draw a card." An ability that uses the stack counts too: on turn 5 Bot1 taps Jace,
+# Vryn's Prodigy to loot, and Elrond's trigger draws one card as well, so the library falls by two (18 to 16 once both resolve). Bot2's own
+# Llanowar Elves, a creature's ability on turn 4, does not trigger Bot1's Elrond: the library stays at 19 (the ? line). Bot1's draw step already took one on turn 5.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Elrond, Moon-Reader
+Jace, Vryn's Prodigy
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elrond, Moon-Reader.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Jace, Vryn's Prodigy.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+? Stack.Count = 0
+Bot2.Pass
+? Bot1.Library.Count = 19
+[T5 Bot1.Main1]
+? Bot1.Library.Count = 18
+Bot1.Battlefield.Jace, Vryn's Prodigy.Activate
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Library.Count = 16
+Bot1.Battlefield.Jace, Vryn's Prodigy.Tapped = true

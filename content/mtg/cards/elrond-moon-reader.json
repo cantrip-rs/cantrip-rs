@@ -1,0 +1,8 @@
+{
+  "name": "Elrond, Moon-Reader",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Creature — Elf Noble",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever you activate an ability of a creature, draw a card. This ability triggers only once each turn.\n{5}{U}{U}: Exile up to two other target nonland permanents you control. Return those cards to the battlefield under their owner's control at the beginning of the next end step."
+}

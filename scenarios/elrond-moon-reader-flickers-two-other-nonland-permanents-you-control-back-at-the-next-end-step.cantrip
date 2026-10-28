@@ -1,0 +1,72 @@
+# Elrond, Moon-Reader: "{5}{U}{U}: Exile up to two other target nonland permanents you control. Return those cards to the battlefield under their
+# owner's control at the beginning of the next end step." On turn 3 Bot1 pays {5}{U}{U} with four Moxen and a Black Lotus (seven mana, the pool empty
+# after; Elrond's own first ability triggers on it and draws, resolving first); the refusals: Elrond himself, an Island, and Bot2's Mox Jet are not legal targets. Ornithopter and Mox Ruby, the latter already tapped for the
+# cost, are exiled and are back (Mox Ruby untapped, a new object) at the beginning of the end step: they are not on the battlefield before it
+# (? line) and are in Bot1's play after it.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Black Lotus
+Elrond, Moon-Reader
+Ornithopter
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elrond, Moon-Reader.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Elrond, Moon-Reader.Activate
+! Bot1.Target(Bot1.Battlefield.Elrond, Moon-Reader)
+! Bot1.Target(Bot1.Battlefield.Island)
+! Bot1.Target(Bot2.Battlefield.Mox Jet)
+! Bot1.Target(Bot1.Battlefield.Ornithopter; Bot1.Battlefield.Mox Ruby; Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot1.Battlefield.Mox Ruby)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Elrond, Moon-Reader; Island
+? Exile.Count = 2
+[T3 Bot1.Main2]
+? Exile.Count = 2
+[T4 Bot2.Upkeep]
+? Exile.Count = 0
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Elrond, Moon-Reader; Ornithopter; Island
+Bot1.Battlefield.Mox Ruby.Tapped = false
