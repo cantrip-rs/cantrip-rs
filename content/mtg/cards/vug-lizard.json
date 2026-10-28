@@ -1,0 +1,11 @@
+{
+  "name": "Vug Lizard",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Lizard",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Mountainwalk (This creature can't be blocked as long as defending player controls a Mountain.)\nEcho {1}{R}{R} (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)",
+  "keywords": [
+    "Mountainwalk"
+  ]
+}
