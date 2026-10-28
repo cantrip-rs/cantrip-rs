@@ -1,0 +1,45 @@
+# Gallowbraid: "Cumulative upkeep--Pay 1 life." (CR 702.24a, 119.4). Bot1 starts at 2 life. At the turn 3 upkeep the cost is
+# 1 life, which Bot1 pays (2 to 1). At turn 5 the second age counter makes it 2 life, more than Bot1 has: a player can't pay
+# more life than their life total (CR 119.4), so Bot1 is not asked, and Gallowbraid is sacrificed. Bot1 keeps 1 life.
+
+[Life]
+Bot1: 2
+
+[Bot1 Deck]
+Gallowbraid
+Black Lotus
+Mox Jet
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gallowbraid.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Life = 1
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 1
+Bot1.Graveyard = Gallowbraid; Black Lotus
