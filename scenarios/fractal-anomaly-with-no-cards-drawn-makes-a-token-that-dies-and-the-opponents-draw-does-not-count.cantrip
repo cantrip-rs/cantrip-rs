@@ -1,0 +1,30 @@
+# Fractal Anomaly is an instant. On turn 2, Bot2's turn, Bot2 has drawn a card in its draw step but Bot1 has drawn none, so
+# X is 0: the 0/0 Fractal token is created and put into the graveyard as a state-based action (CR 704.5f). On turn 1 the
+# player on the play draws nothing either.
+
+[Bot1 Deck]
+Mox Sapphire
+Fractal Anomaly
+Island
+Island
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fractal Anomaly.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Fractal Token = (absent)
+Bot2.Hand.Count = 8
+Bot1.Hand.Count = 5
