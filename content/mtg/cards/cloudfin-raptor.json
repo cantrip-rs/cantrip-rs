@@ -1,0 +1,11 @@
+{
+  "name": "Cloudfin Raptor",
+  "manaCost": "{U}",
+  "type": "Creature — Bird Mutant",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "Flying\nEvolve (Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)",
+  "keywords": [
+    "Flying"
+  ]
+}

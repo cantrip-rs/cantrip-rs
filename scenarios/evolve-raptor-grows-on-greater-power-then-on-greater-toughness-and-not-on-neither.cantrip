@@ -1,0 +1,62 @@
+# Evolve (CR 702.100a): "Whenever a creature you control enters, if that creature has greater power or toughness than this
+# creature, put a +1/+1 counter on this creature." Cloudfin Raptor is 0/1. Fugitive Wizard (1/1) has greater power only
+# (1 > 0, 1 = 1): the Raptor is 1/2. Aegis Turtle (0/5) has greater toughness only (0 < 1, 5 > 2): the Raptor is 2/3.
+# Merfolk of the Pearl Trident (1/1) has neither (1 < 2, 1 < 3), so evolve does not trigger: the stack is empty once it has entered. Black Lotus (three blue)
+# and Mox Sapphire (one) pay for the four one-mana creatures.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Cloudfin Raptor
+Fugitive Wizard
+Aegis Turtle
+Merfolk of the Pearl Trident
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Cloudfin Raptor.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cloudfin Raptor.Power = 0
+? Bot1.Battlefield.Cloudfin Raptor.Toughness = 1
+Bot1.Hand.Fugitive Wizard.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cloudfin Raptor.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Cloudfin Raptor.Power = 1
+? Bot1.Battlefield.Cloudfin Raptor.Toughness = 2
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cloudfin Raptor.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Cloudfin Raptor.Power = 2
+? Bot1.Battlefield.Cloudfin Raptor.Toughness = 3
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Cloudfin Raptor.Power = 2
+Bot1.Battlefield.Cloudfin Raptor.Toughness = 3
+Bot1.Battlefield.Cloudfin Raptor.Keywords = Flying
+Bot1.Battlefield.Merfolk of the Pearl Trident.Counters.PlusOnePlusOne = (absent)
