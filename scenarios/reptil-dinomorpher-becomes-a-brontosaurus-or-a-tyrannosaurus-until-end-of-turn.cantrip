@@ -1,0 +1,67 @@
+# Reptil, Dinomorpher: "Brontosaurus - {3}: Until end of turn, Reptil becomes a Dinosaur Hero with base power and toughness 3/5 and gains reach
+# and vigilance. Tyrannosaurus Rex - {6}: Until end of turn, Reptil becomes a Dinosaur Hero with base power and toughness 6/6 and gains
+# trample." Reptil (a 1/2 Human Hero) on turn 1: {3} (the pool is empty right after) makes him a 3/5 Dinosaur Hero with reach and vigilance;
+# on turn 3 {6} makes him a 6/6 Dinosaur Hero with trample alone, and on turn 4 he is a 1/2 Human Hero again.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Reptil, Dinomorpher
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Reptil, Dinomorpher.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Reptil, Dinomorpher.Activate(Ability: Tyrannosaurus Rex; Mana: short)
+Bot1.Battlefield.Reptil, Dinomorpher.Activate(Ability: Brontosaurus)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reptil, Dinomorpher.Power = 3
+? Bot1.Battlefield.Reptil, Dinomorpher.Toughness = 5
+? Bot1.Battlefield.Reptil, Dinomorpher.Keywords = Reach; Vigilance
+? Bot1.Battlefield.Reptil, Dinomorpher.Subtypes = Dinosaur; Hero
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Reptil, Dinomorpher.Activate(Ability: Tyrannosaurus Rex)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reptil, Dinomorpher.Power = 6
+? Bot1.Battlefield.Reptil, Dinomorpher.Toughness = 6
+? Bot1.Battlefield.Reptil, Dinomorpher.Keywords = Trample
+? Bot1.Battlefield.Reptil, Dinomorpher.Subtypes = Dinosaur; Hero
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Reptil, Dinomorpher.Power = 1
+Bot1.Battlefield.Reptil, Dinomorpher.Toughness = 2
+Bot1.Battlefield.Reptil, Dinomorpher.Subtypes = Hero; Human

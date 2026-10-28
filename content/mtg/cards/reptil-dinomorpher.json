@@ -1,0 +1,8 @@
+{
+  "name": "Reptil, Dinomorpher",
+  "manaCost": "{G}",
+  "type": "Legendary Creature — Human Hero",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Brontosaurus — {3}: Until end of turn, Reptil becomes a Dinosaur Hero with base power and toughness 3/5 and gains reach and vigilance.\nTyrannosaurus Rex — {6}: Until end of turn, Reptil becomes a Dinosaur Hero with base power and toughness 6/6 and gains trample."
+}
