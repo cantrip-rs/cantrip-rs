@@ -1,0 +1,51 @@
+# Sound the Trumpets: "Counter target spell. If that spell's mana value was 2 or less, recruit." Bot2's Balduvian Bears (mana value 2) is countered for
+# {1}{U}{U}, the pool empty after, and Bot1 recruits (CR 701.70a): draws an Island, discards the Mox Ruby it chooses (a nonland card) and makes a 1/1
+# white Human Soldier token. The scenario with the Centaur Courser (mana value 3) is the control, where nothing is recruited.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Sound the Trumpets
+Mox Ruby
+Island
+Plains
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Emerald
+Balduvian Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Balduvian Bears.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sound the Trumpets.Cast(Balduvian Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mox Ruby)
+
+[Expect]
+Bot2.Graveyard = Balduvian Bears
+Bot1.Graveyard = Sound the Trumpets; Mox Ruby
+Bot1.Hand = Island; Island; Plains
+Bot1.Battlefield = Mox Sapphire; Mox Sapphire; Mox Pearl; Human Soldier Token

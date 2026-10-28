@@ -1,0 +1,55 @@
+# Sound the Trumpets: "If that spell's mana value was 2 or less, recruit." Bot2's Centaur Courser has mana value 3, one past the limit: it is
+# countered and Bot1 neither draws, discards nor gets a Soldier (the library is untouched and the Mox Ruby stays in hand). The control is the scenario
+# with the mana value 2 Balduvian Bears.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Sound the Trumpets
+Mox Ruby
+Island
+Plains
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Centaur Courser
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Battlefield.Mox Emerald#3.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sound the Trumpets.Cast(Centaur Courser)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+
+[Expect]
+Bot2.Graveyard = Centaur Courser
+Bot1.Graveyard = Sound the Trumpets
+Bot1.Hand = Mox Ruby; Island; Plains
+Bot1.Battlefield = Mox Sapphire; Mox Sapphire; Mox Pearl

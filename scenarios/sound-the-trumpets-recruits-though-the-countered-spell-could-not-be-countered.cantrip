@@ -1,0 +1,50 @@
+# Sound the Trumpets: "Counter target spell. If that spell's mana value was 2 or less, recruit." Bot2's Abrupt Decay (mana value 2) can't be countered, so the counter
+# does nothing and Decay resolves, destroying Bot1's Mox Pearl; the Trumpets' second sentence does not depend on the first, so Bot1 still
+# recruits: draws an Island, discards Mox Ruby and gets a Human Soldier token.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Sound the Trumpets
+Mox Ruby
+Island
+Plains
+Island x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Emerald
+Abrupt Decay
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Abrupt Decay.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sound the Trumpets.Cast(Abrupt Decay)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mox Ruby)
+
+[Expect]
+Bot2.Graveyard = Abrupt Decay
+Bot1.Graveyard = Mox Pearl; Sound the Trumpets; Mox Ruby
+Bot1.Hand = Island; Island; Plains
+Bot1.Battlefield = Mox Sapphire; Mox Sapphire; Human Soldier Token
