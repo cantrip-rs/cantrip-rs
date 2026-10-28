@@ -608,6 +608,13 @@ pub trait Game: Query {
     /// enchants "the creature put onto the battlefield with this Aura" (Animate Dead, Necromancy). Returns the new
     /// object; nothing is attached if the Aura has left or the object did not arrive.
     fn put_onto_battlefield_with_aura(&mut self, object: ObjectId, controller: PlayerId, aura: ObjectId) -> Result<ObjectId, Suspend>;
+    /// Puts an object onto the battlefield under `controller` attached to `host` (CR 303.4f, 303.4i, 301.5e): "return this card from
+    /// your graveyard to the battlefield attached to target creature". The effect names what an Aura enchants, so its controller
+    /// chooses nothing; an Aura `host` is not a legal object for (its enchant ability, protection from it) stays where it is
+    /// (CR 303.4i), and an Equipment that could not equip it enters unattached (CR 301.5e). A card that is neither enters unattached
+    /// (CR 303.4h). The permanent, or None if it did not enter. Eagle's Rescue and Gryff's Boon return themselves so; Dragon Breath,
+    /// Dragon Fangs, Dragon Scales, Dragon Shadow and Dragon Wings return to the creature that entered.
+    fn put_onto_battlefield_attached(&mut self, object: ObjectId, controller: PlayerId, host: ObjectId) -> Result<Option<ObjectId>, Suspend>;
     /// Puts an object onto the battlefield under `controller` as the effect of `item` says it is (`EntersAs`, CR 614.12):
     /// it enters as that - an Enduring creature's card "is an enchantment" and never enters as a creature, so nothing that
     /// watches creatures enter sees it - and stays so for as long as it is that object (CR 611.2a, 400.7). As an Aura

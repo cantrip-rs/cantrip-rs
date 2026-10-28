@@ -434,6 +434,12 @@ only the candidates the host's verdict on those picked says may be added.
   untapped" in either order, so it enters tapped or untapped (Spelunking's ruling). Where no other replacement could apply
   (`replace::zone_change_possible`) its own simply apply, and nothing is judged or asked.
 
+- **An Aura or Equipment put onto the battlefield attached to a named object (303.4f, 303.4i, 301.5e)**:
+  `Game::put_onto_battlefield_attached(card, controller, host)` ("return this card from your graveyard to the battlefield attached
+  to target creature", Eagle's Rescue). The effect names the host, so `attach::choose_aura_hosts` is not used: the Aura is judged as
+  it would exist on the battlefield (`attach::aura_hosts`) and stays where it is if the host is not a legal object for it; an
+  Equipment enters attached to a creature it could equip and unattached to anything else. Only the card's own entry is made.
+
 - **An effect that says what a card is as it enters is that from the start (614.12)**: `Game::put_onto_battlefield_as`
   takes an `EntersAs` ("It's an enchantment", the Enduring cycle; "It's an Aura enchantment with enchant Forest you control
   and '...'", Old-Growth Troll), carried on `Entering::becomes`. `as_it_would_exist` judges it with those effects, and

@@ -1616,6 +1616,58 @@ pub fn put_onto_battlefield_becoming(cx: &mut Cx, id: ObjectId, controller: Play
     Ok(Some(new).filter(|&n| cx.s().obj(n).zone.is(ZoneKind::Battlefield)))
 }
 
+/// Puts one object onto the battlefield attached to `host` (`Game::put_onto_battlefield_attached`, CR 303.4f, 303.4i, 301.5e): the
+/// effect names what an Aura enchants, so nothing is chosen (the choice of `choose_aura_hosts` is for an effect that does not).
+/// Judged on the Aura as it would exist on the battlefield (CR 614.12), under `controller`: an Aura `host` is not a legal object
+/// for - by its enchant abilities, or because it has protection from the Aura - stays where it is (CR 303.4i). An Equipment
+/// enters attached only if it could equip `host`, unattached otherwise (CR 301.5e), and anything else enters unattached
+/// (CR 303.4h). The permanent, or None if it did not enter.
+pub fn put_onto_battlefield_attached(cx: &mut Cx, id: ObjectId, controller: PlayerId, host: ObjectId) -> R<Option<ObjectId>> {
+    // A card a static ability keeps from entering stays where it is (CR 101.2, 101.3); nor does an instant or sorcery card (CR
+    // 304.4, 307.4).
+    if !live(cx.s(), id) || crate::static_rules::cant_enter(cx, id) || instant_or_sorcery_entering(cx, id, false) {
+        return Ok(None);
+    }
+    let mut entering = Entering {
+        object: id,
+        controller,
+        tapped: false,
+        counters: [0; CounterKind::COUNT],
+        copy: None,
+        prepared: false,
+        chosen_color: None,
+        chosen_subtype: None,
+        chosen_player: None,
+        chosen_card: None,
+        chosen_option: None,
+        chosen_object: None,
+        attach: None,
+        attach_player: None,
+        x: 0,
+        transformed: false,
+        protector: None,
+        instead: None,
+        becomes: None,
+        own: None,
+    };
+    prepare_entry(cx, &mut entering)?;
+    if entering.transformed && instant_or_sorcery_entering(cx, id, true) {
+        return Ok(None);
+    }
+    let it = as_it_would_exist(cx, &entering).chars;
+    if it.has_subtype(Subtype::Aura) {
+        if !crate::attach::aura_hosts(cx, id, &it, controller, &[id]).contains(&Target::Object(host)) {
+            return Ok(None);
+        }
+        entering.attach = Some(host);
+    } else if it.has_subtype(Subtype::Equipment) && crate::attach::host_allows(&*cx, id, host, true) {
+        entering.attach = Some(host);
+    }
+    let moves = vec![Moving { entering: Some(entering), ..Moving::to(id, Zone::BATTLEFIELD) }];
+    let new = move_together(cx, &moves, ZoneReason::Other)[0];
+    Ok(Some(new).filter(|&n| cx.s().obj(n).zone.is(ZoneKind::Battlefield)))
+}
+
 /// Transforms a permanent (CR 701.27a): its other face is up. The same object, so nothing about it is new (CR 712.18).
 /// Only a double-faced card on the battlefield transforms; a copy of one does not (CR 701.27c).
 ///
