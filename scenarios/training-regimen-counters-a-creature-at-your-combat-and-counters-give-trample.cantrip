@@ -1,0 +1,68 @@
+# Training Regimen: "At the beginning of combat on your turn, put a +1/+1 counter on target creature you control" and "Creatures you
+# control with +1/+1 counters on them have trample." At the beginning of Bot1's turn 3 combat its Grizzly Bears take the counter (3/3,
+# and now have trample); Bot2's Grizzly Bears can't be the target (the refusal). The counter is the whole of what gives trample: at
+# the beginning of Bot1's turn 1 combat it had no creature (no target), and Bot1's second Grizzly Bears, which has no counter,
+# has none; Bot2's combat (turn 2) puts nothing anywhere since it is not Bot1's turn.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Training Regimen
+Grizzly Bears
+Grizzly Bears
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Grizzly Bears
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Training Regimen.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Pass
+! Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears#1)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears#1.Power = 3
+Bot1.Battlefield.Grizzly Bears#1.Toughness = 3
+Bot1.Battlefield.Grizzly Bears#1.Keywords = Trample
+Bot1.Battlefield.Grizzly Bears#2.Power = 2
+Bot2.Battlefield.Grizzly Bears.Power = 2

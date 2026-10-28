@@ -1,0 +1,6 @@
+{
+  "name": "Training Regimen",
+  "manaCost": "{3}{G}",
+  "type": "Enchantment",
+  "oracleText": "Creatures you control with +1/+1 counters on them have trample.\nAt the beginning of combat on your turn, put a +1/+1 counter on target creature you control."
+}
