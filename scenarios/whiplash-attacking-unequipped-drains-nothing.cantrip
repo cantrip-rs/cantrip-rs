@@ -1,0 +1,24 @@
+# "Whenever Whiplash attacks, if he's equipped" is an intervening if (CR 603.4): unequipped he attacks without the ability
+# triggering at all, so only his 2 combat damage is dealt (Bot2 18), and Bot1 gains nothing (20).
+
+[Bot1 Deck]
+Mox Jet
+Whiplash, Vengeful Engineer
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Whiplash, Vengeful Engineer.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Whiplash, Vengeful Engineer > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20

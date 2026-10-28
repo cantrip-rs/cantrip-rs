@@ -1,0 +1,46 @@
+# Whiplash enters tapped (CR 614.1d). Equipped with two Stolen Stark Techs (+1/+0 each, so a 4/2), he drains X = 2 as he attacks:
+# each opponent loses 2 and Bot1 gains 2 (CR 119.3, 608.2h), and then 4 combat damage as well: Bot2 20 - 2 - 4 = 14, Bot1 22.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Whiplash, Vengeful Engineer
+Stolen Stark Tech
+Stolen Stark Tech
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Whiplash, Vengeful Engineer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Whiplash, Vengeful Engineer.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stolen Stark Tech.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stolen Stark Tech.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Attack(Whiplash, Vengeful Engineer > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 22

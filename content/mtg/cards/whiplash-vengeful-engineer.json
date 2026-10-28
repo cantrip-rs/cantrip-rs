@@ -1,0 +1,8 @@
+{
+  "name": "Whiplash, Vengeful Engineer",
+  "manaCost": "{B}",
+  "type": "Legendary Creature — Human Artificer Villain",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whiplash enters tapped.\nWhenever Whiplash attacks, if he's equipped, each opponent loses X life and you gain X life, where X is the number of Equipment attached to him."
+}
