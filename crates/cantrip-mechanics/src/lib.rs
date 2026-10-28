@@ -79,6 +79,7 @@ pub mod mayhem;
 pub mod max_speed;
 pub mod miracle;
 pub mod melee;
+pub mod myriad;
 pub mod extort;
 pub mod evolve;
 pub mod mobilize;
