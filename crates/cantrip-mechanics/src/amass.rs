@@ -16,6 +16,20 @@ pub fn amass(
     subtype: Subtype,
     n: i16,
 ) -> Result<(), Suspend> {
+    amass_army(g, controller, source, token, subtype, n).map(|_| ())
+}
+
+/// `amass`, and the Army the player chose to receive the counters, "the amassed Army" (CR 701.47c): whether or not it received
+/// counters. `None` if there was none to choose. Goblin Plate Mail attaches itself to it; Foray of Orcs, Grishnakh, Brash Instigator
+/// and Surrounded by Orcs read its power.
+pub fn amass_army(
+    g: &mut dyn Game,
+    controller: PlayerId,
+    source: ObjectId,
+    token: &'static CardDef,
+    subtype: Subtype,
+    n: i16,
+) -> Result<Option<ObjectId>, Suspend> {
     let armies = |g: &dyn Game| -> Vec<ObjectId> {
         g.permanents_of(controller)
             .into_iter()
@@ -39,14 +53,14 @@ pub fn amass(
         // Several Armies: which gets the counters is chosen, not targeted (CR 701.47a).
         _ => match choose::cards_from_kind(g, controller, source, Purpose::PutCounters(CounterKind::PlusOne, n.clamp(0, 255) as u8), "Army", candidates.clone(), candidates, 1, false)?.first() {
             Some(&army) => army,
-            None => return Ok(()),
+            None => return Ok(None),
         },
     };
     g.add_counters(army, CounterKind::PlusOne, n);
     if !g.chars(army).has_subtype(subtype) {
         g.add_effect(source, army, EffectKind::AddSubtype(subtype), Duration::Indefinite);
     }
-    Ok(())
+    Ok(Some(army))
 }
 
 /// "Amass Goblins N" as a whole ability or spell effect: the Goblin Army token is `tokens::GOBLIN_ARMY` (CR 701.47a).
