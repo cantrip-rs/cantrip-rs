@@ -1,0 +1,11 @@
+{
+  "name": "Lady Zhurong, Warrior Queen",
+  "manaCost": "{4}{G}",
+  "type": "Legendary Creature — Human Soldier Warrior",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Horsemanship (This creature can't be blocked except by creatures with horsemanship.)",
+  "keywords": [
+    "Horsemanship"
+  ]
+}
