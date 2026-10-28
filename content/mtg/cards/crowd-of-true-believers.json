@@ -1,0 +1,8 @@
+{
+  "name": "Crowd of True Believers",
+  "manaCost": "{W}",
+  "type": "Creature — Human Citizen",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{T}: Target creature you control that's attacking alone gets +1/+0 until end of turn. You gain 1 life."
+}

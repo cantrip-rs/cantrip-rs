@@ -1,0 +1,50 @@
+# Crowd of True Believers: "{T}: Target creature you control that's attacking alone gets +1/+0 until end of turn. You gain 1 life."
+# Turn 3: both of Bot1's Ornithopters attack, so neither attacks alone and neither can be the target (the refusals). Turn 4: Bot2's
+# Ornithopter attacks alone but is not "you control", so it can't be the target either (the refusal). Turn 5: Bot1's Ornithopter
+# attacks alone and Crowd taps for it: it is a 1/2, Bot2 goes to 19 and Bot1 to 21.
+
+[Bot1 Deck]
+Mox Pearl
+Crowd of True Believers
+Ornithopter
+Ornithopter
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Crowd of True Believers.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2)
+! Bot1.Battlefield.Crowd of True Believers.Activate(Bot1.Battlefield.Ornithopter#1)
+! Bot1.Battlefield.Crowd of True Believers.Activate(Bot1.Battlefield.Ornithopter#2)
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+! Bot1.Battlefield.Crowd of True Believers.Activate(Bot2.Battlefield.Ornithopter)
+[T5 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2)
+Bot1.Battlefield.Crowd of True Believers.Activate(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 1
+? Bot1.Battlefield.Ornithopter#1.Toughness = 2
+? Bot1.Battlefield.Ornithopter#2.Power = 0
+? Bot1.Life = 21
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
