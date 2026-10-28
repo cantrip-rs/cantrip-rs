@@ -1,0 +1,56 @@
+# Multiversal Incursion makes one token copy for each nontoken creature Bot1 controls (CR 707.2): Kid Loki and an Ornithopter,
+# so two tokens, while Bot2's Ornithopter is not copied (Bot1 does not control it). {5}{U}{U} is paid exactly by Black Lotus
+# and four Moxen.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+Kid Loki
+Ornithopter
+Multiversal Incursion
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kid Loki.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Multiversal Incursion.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Kid Loki#2.Token = true
+Bot1.Battlefield.Ornithopter#2.Token = true
+Bot1.Battlefield.Ornithopter#3 = (absent)
+Bot2.Battlefield.Ornithopter#2 = (absent)
+Bot1.Battlefield.Ornithopter#2.Power = 0
