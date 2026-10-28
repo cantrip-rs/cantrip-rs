@@ -13,7 +13,7 @@
 //!   (`select::basic_land_cards(up_to(2))`).
 //! - **Counts:** [`exactly`], [`up_to`], [`ANY_NUMBER`], [`as_many_as_can`] - "a card" of a search with no quality it could
 //!   fail to find is `as_many_as_can(1)`; "a [quality] card" may be left unfound (CR 701.23b), `up_to(1)`.
-//! - **Qualities of each card:** [`BASIC_LAND`], [`LAND`], [`CREATURE`], [`ARTIFACT`], [`NONLAND`], [`mana_value_at_most`],
+//! - **Qualities of each card:** [`BASIC_LAND`], [`LAND`], [`CREATURE`], [`ARTIFACT`], [`NONLAND`], [`mana_value_at_most`], [`mana_value_exactly`],
 //!   [`named`].
 //! - **Rules of the cards together:** [`DIFFERENT_NAMES`] (CR 201.2b), [`DIFFERENT_MANA_VALUES`] (CR 202.3),
 //!   [`total_mana_value_at_most`] (CR 202.3).
@@ -86,6 +86,10 @@ fn mana_value(q: &dyn Query, choice: &Choice, most: u32) -> Verdict {
     Verdict::each(choice, |card| q.mana_value(card) <= most)
 }
 
+fn mana_value_is(q: &dyn Query, choice: &Choice, exactly: u32) -> Verdict {
+    Verdict::each(choice, |card| q.mana_value(card) == exactly)
+}
+
 fn has_name(q: &dyn Query, choice: &Choice, card: u32) -> Verdict {
     let wanted = CardId(u16::try_from(card).unwrap_or(u16::MAX));
     Verdict::each(choice, |c| crate::library::object_has_name(q, c, wanted))
@@ -118,6 +122,12 @@ pub const ANOTHER_CREATURE_OR_ARTIFACT: Part = part(&(another_creature_or_artifa
 /// `Query::announced_x` there.
 pub const fn mana_value_at_most(most: u32) -> Part {
     part(&(mana_value as SelectFn), most, "with mana value {n} or less")
+}
+
+/// "With the same mana value as" a card or permanent, `exactly` (CR 202.3), each card's read where it is (an {X} in a library is
+/// 0, CR 202.3e). Drift of Phantasms's transmute and Fleshwrither's transfigure search for it.
+pub const fn mana_value_exactly(exactly: u32) -> Part {
+    part(&(mana_value_is as SelectFn), exactly, "with mana value {n}")
 }
 
 /// "A card named [`card`]" (CR 201.2a): a card that has the name of the card `card`, one of a split card's names included.
