@@ -1,0 +1,72 @@
+# Punishing Punch: with only one creature card in the graveyard (one short of two) the Punch is not cheaper: after Faithless Looting
+# (which discards a Grizzly Bears and a Forest) Bot1 has two mana left, not enough for its {2}{G}, so it is refused; on turn 5, with
+# all three Moxen untapped, it is cast for the whole {2}{G} (the pool is empty right after) and the Courser deals 6 to the Wall of Ice.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Faithless Looting
+Punishing Punch
+Centaur Courser
+Grizzly Bears
+Forest
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Wall of Ice
+Forest
+Forest
+Forest
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Wall of Ice.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Forest)
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Faithless Looting; Forest; Grizzly Bears
+! Bot1.Hand.Punishing Punch.Cast(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Punishing Punch.Cast
+Bot1.Target(Bot1.Battlefield.Centaur Courser)
+Bot1.Target(Bot2.Battlefield.Wall of Ice)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Wall of Ice.Damage = 6

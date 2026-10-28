@@ -1,0 +1,71 @@
+# Punishing Punch: "Target creature you control deals damage equal to twice its power to target creature an opponent controls." If the
+# creature that would deal the damage is an illegal target as the spell resolves, it deals no damage (CR 608.2b). Bot2 answers the Punch
+# by killing Bot1's Reptil, Dinomorpher with Lightning Bolt, so Bot2's Grizzly Bears take no damage.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Reptil, Dinomorpher
+Punishing Punch
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Grizzly Bears
+Forest
+Mox Ruby
+Lightning Bolt
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Reptil, Dinomorpher.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Punishing Punch.Cast
+Bot1.Target(Bot1.Battlefield.Reptil, Dinomorpher)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Reptil, Dinomorpher)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Reptil, Dinomorpher
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Graveyard = Punishing Punch; Reptil, Dinomorpher

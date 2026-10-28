@@ -1,0 +1,74 @@
+# Punishing Punch: "costs {2} less to cast if there are two or more creature cards in your graveyard. Target creature you control deals
+# damage equal to twice its power to target creature an opponent controls." Faithless Looting discards two Grizzly Bears, exactly two
+# creature cards, so the Punch costs just {G} (the pool is empty right after paying one Mox Emerald). Bot1's Centaur Courser (power 3)
+# deals 6, twice its power, to Bot2's Wall of Ice (0/7): 6 damage, not 3, and the Wall survives with it. The target must be an
+# opponent's creature: Bot1's own is refused.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Faithless Looting
+Punishing Punch
+Centaur Courser
+Grizzly Bears
+Grizzly Bears
+Grizzly Bears
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Wall of Ice
+Forest
+Forest
+Forest
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Wall of Ice.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Grizzly Bears)
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Faithless Looting; Grizzly Bears; Grizzly Bears
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Punishing Punch.Cast
+Bot1.Target(Bot1.Battlefield.Centaur Courser)
+! Bot1.Target(Bot1.Battlefield.Centaur Courser)
+Bot1.Target(Bot2.Battlefield.Wall of Ice)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Wall of Ice.Damage = 6
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Centaur Courser.Damage = 0

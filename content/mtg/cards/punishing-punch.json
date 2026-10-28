@@ -1,0 +1,6 @@
+{
+  "name": "Punishing Punch",
+  "manaCost": "{2}{G}",
+  "type": "Instant",
+  "oracleText": "This spell costs {2} less to cast if there are two or more creature cards in your graveyard.\nTarget creature you control deals damage equal to twice its power to target creature an opponent controls."
+}
