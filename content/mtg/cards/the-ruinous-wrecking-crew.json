@@ -1,0 +1,8 @@
+{
+  "name": "The Ruinous Wrecking Crew",
+  "manaCost": "{X}{B}{R}",
+  "type": "Legendary Creature — Human Villain",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "The Ruinous Wrecking Crew enters with X +1/+1 counters on it.\nWhen The Ruinous Wrecking Crew enters, choose up to X —\n• Discard a card, then draw a card.\n• Target opponent loses 2 life.\n• Destroy target token.\n• Each player sacrifices a creature of their choice."
+}

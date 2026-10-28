@@ -1,0 +1,33 @@
+# The Ruinous Wrecking Crew at X = 0 costs {B}{R}, enters with no counters (CR 107.3, 122.6) and "choose up to X" is no modes at all: it asks
+# nothing and the ability is removed from the stack (CR 603.3c, 700.2b), so Bot2 loses no life.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+The Ruinous Wrecking Crew
+Plains x4
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.The Ruinous Wrecking Crew.Cast(X: 0)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+! Bot1.Modes
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield = Mox Jet; Mox Ruby; The Ruinous Wrecking Crew
+Bot1.Battlefield.The Ruinous Wrecking Crew.Power = 2
+Bot1.Battlefield.The Ruinous Wrecking Crew.Toughness = 2
+Bot1.Hand.Count = 4
+Stack.Count = 0
