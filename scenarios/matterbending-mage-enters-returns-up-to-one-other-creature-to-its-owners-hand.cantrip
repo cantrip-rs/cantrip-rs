@@ -1,0 +1,54 @@
+# Matterbending Mage: "When this creature enters, return up to one other target creature to its owner's hand." On turn 3 Bot1
+# casts it with Bot2's Grizzly Bears and its own Ornithopter in play: the Mage itself is not a legal target ("other"), and
+# two targets are refused (up to one). Bot1 returns Bot2's Bears, which goes to Bot2's hand, and Bot1's Ornithopter stays.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Ornithopter
+Matterbending Mage
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Matterbending Mage.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Matterbending Mage)
+! Bot1.Target(Bot2.Battlefield.Grizzly Bears; Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears = (absent)
+Bot2.Hand.Count = 6
+Bot1.Battlefield = Matterbending Mage; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter

@@ -1,0 +1,56 @@
+# Matterbending Mage: "Whenever you cast a spell with {X} in its mana cost, this creature can't be blocked this turn." Bot1 casts
+# the Mage on turn 1, and on turn 3 Fractalize with X=0 ({U}, a spell with {X} in its cost whatever X is) at Bot2's Grizzly Bears:
+# the Bears may not block the Mage (Bot2 takes 2). On turn 5 Bot1 casts nothing, the effect over, and the Bears do block.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Matterbending Mage
+Fractalize
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Matterbending Mage.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fractalize.Cast(Bot2.Battlefield.Grizzly Bears; X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Matterbending Mage > Bot2)
+! Bot2.Block(Grizzly Bears > Matterbending Mage)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Matterbending Mage > Bot2)
+Bot2.Block(Grizzly Bears > Matterbending Mage)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Matterbending Mage = (absent)
+Bot2.Battlefield.Grizzly Bears = (absent)
