@@ -1,0 +1,11 @@
+{
+  "name": "Lakeshore Apothecary",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Cleric",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Vigilance\nWhenever you draw your second card each turn, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

@@ -1,0 +1,56 @@
+# Lakeshore Apothecary: Vigilance, and "Whenever you draw your second card each turn, put a +1/+1 counter" (CR 603.2). It is cast on
+# turn 3 after the turn's first draw (the draw step), so it was not there for the first card (the ruling: that doesn't matter). Ancestral Recall then draws three:
+# the second of the turn triggers it once, the third and fourth don't (one counter, not three). On turn 5 the draw step's first card
+# of that turn adds nothing; it attacks with vigilance, stays untapped, and deals 2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Lakeshore Apothecary
+Ancestral Recall
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Lakeshore Apothecary.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lakeshore Apothecary.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lakeshore Apothecary.Counters.PlusOnePlusOne = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Lakeshore Apothecary.Counters.PlusOnePlusOne = 1
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Lakeshore Apothecary > Bot2)
+? Bot1.Battlefield.Lakeshore Apothecary.Tapped = false
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Lakeshore Apothecary.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Lakeshore Apothecary.Keywords = Vigilance
