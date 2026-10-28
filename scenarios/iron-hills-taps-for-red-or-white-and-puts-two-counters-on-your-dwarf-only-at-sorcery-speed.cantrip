@@ -1,0 +1,84 @@
+# Iron Hills: "This land enters tapped", "{T}: Add {R} or {W}" and "{2}{R}{W}, {T}, Sacrifice this land: Put two +1/+1
+# counters on target Dwarf you control. Activate only as a sorcery." A Dwarf. The land is tapped the turn it enters and untaps next
+# turn; it taps for either color and no other (Undo takes each tap back); the ability is refused outside a main phase and at an
+# Ornithopter or the opponent's Dwarven Provisioner, and puts exactly two counters on Bot1's Dwarven Provisioner (the {T} and the sacrifice are costs,
+# paid exactly with four Moxen) (CR 602.5d, 122.1).
+
+[Bot1 Deck]
+Iron Hills
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Dwarven Provisioner
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Dwarven Provisioner
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Iron Hills.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dwarven Provisioner.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Iron Hills.Tapped = true
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Dwarven Provisioner.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Iron Hills.Tapped = false
+! Bot1.Battlefield.Iron Hills.Activate(Color: Blue)
+Bot1.Battlefield.Iron Hills.Activate(Color: Red)
+? Bot1.Mana = {R}
+Bot1.Undo
+Bot1.Battlefield.Iron Hills.Activate(Color: White)
+? Bot1.Mana = {W}
+Bot1.Undo
+! Bot1.Battlefield.Iron Hills.Activate(Ability: Put two)
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+! Bot1.Battlefield.Iron Hills.Activate(Ability: Put two; Ornithopter)
+! Bot1.Battlefield.Iron Hills.Activate(Ability: Put two; Bot2.Battlefield.Dwarven Provisioner)
+! Bot1.Battlefield.Iron Hills.Activate(Ability: Put two; Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Iron Hills.Activate(Ability: Put two; Dwarven Provisioner)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Dwarven Provisioner.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Dwarven Provisioner.Counters.PlusOnePlusOne = (absent)
+Bot1.Graveyard = Iron Hills
+Bot1.Battlefield.Dwarven Provisioner.Power = 4
+Bot1.Battlefield.Dwarven Provisioner.Toughness = 4

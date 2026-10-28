@@ -1,0 +1,5 @@
+{
+  "name": "Iron Hills",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {R} or {W}.\n{2}{R}{W}, {T}, Sacrifice this land: Put two +1/+1 counters on target Dwarf you control. Activate only as a sorcery."
+}
