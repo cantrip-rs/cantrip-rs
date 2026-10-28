@@ -27,8 +27,7 @@ fn annex(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.draw(you, 1);
     let demon = g.words(item.object).subtype(Subtype::Demon);
     if g.permanents_of(you).into_iter().any(|id| g.chars(id).has_subtype(demon)) {
-        g.each_opponent_loses_life(you, 2);
-        g.gain_life(you, 2);
+        cantrip_mechanics::effects::each_opponent_loses_life_you_gain_life::<2>(g, item)?;
     } else {
         g.lose_life(you, 2);
     }

@@ -504,13 +504,20 @@ pub fn gain_one_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     gain_life(g, item, 1)
 }
 
-/// "Each opponent loses 1 life and you gain 1 life" (CR 119.3): every opponent still in the game loses it together, and the
-/// ability's controller gains 1. Bontus's Monument, Doom Reigns Supreme, Grave Venerations, Raven of Fell Omens, Thunder of
-/// Unity, Tithing Blade, Witherbloom Apprentice and Dream Beavers print it.
-pub fn each_opponent_loses_1_life_you_gain_1(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.each_opponent_loses_life(item.controller, 1);
-    g.gain_life(item.controller, 1);
+/// "Each opponent loses `N` life and you gain `N` life" (CR 119.3): every opponent still in the game loses it together, and the
+/// ability's controller gains `N`. Gollum, Riddle Master, Unholy Annex and Sneering Shadewriter print it of 2, and
+/// `each_opponent_loses_1_life_you_gain_1` is of 1.
+pub fn each_opponent_loses_life_you_gain_life<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.each_opponent_loses_life(item.controller, N);
+    g.gain_life(item.controller, N);
     Ok(())
+}
+
+/// "Each opponent loses 1 life and you gain 1 life" (CR 119.3): `each_opponent_loses_life_you_gain_life` of 1. Bontus's
+/// Monument, Doom Reigns Supreme, Grave Venerations, Raven of Fell Omens, Thunder of Unity, Tithing Blade, Witherbloom
+/// Apprentice and Dream Beavers print it.
+pub fn each_opponent_loses_1_life_you_gain_1(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    each_opponent_loses_life_you_gain_life::<1>(g, item)
 }
 
 /// "Each opponent loses 1 life" (CR 119.3): every opponent still in the game loses it together. Lunar Convocation, Starscape
