@@ -1,0 +1,46 @@
+# Trickster's Stratagem's second target is "up to one": Bot1 chooses none (Target()), so nothing connives and Bot1 draws and
+# discards nothing. Only Bot2's Ornithopter is put into its library (the owner chooses second from the top).
+
+[Bot1 Deck]
+Ornithopter
+Mox Sapphire
+Black Lotus
+Trickster's Stratagem
+Island x3
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Plains
+Swamp
+Mountain
+Forest
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Trickster's Stratagem.Cast
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+Bot2.Modes(Second from the top)
+! Bot1.Choose
+[Bot1.Main2]
+
+[Expect]
+Bot2.Library = Swamp; Ornithopter; Mountain; Forest
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 11
