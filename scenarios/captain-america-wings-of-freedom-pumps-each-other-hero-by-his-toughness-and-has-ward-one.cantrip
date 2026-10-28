@@ -1,0 +1,91 @@
+# Captain America, Wings of Freedom (3/1 flying, first strike, ward {1}): "Whenever Captain America attacks, each other Hero you control
+# gets +X/+X until end of turn, where X is Captain America's toughness." Turn 5: a Snakeskin Veil counter makes him a 4/2 and he
+# attacks: Bot1's Masked Meower (a Hero) becomes a 3/3, X being his toughness 2 - not his power 4 or his printed toughness 1 - while
+# Bot1's Ornithopter (not a Hero), Bot2's Masked Meower ("you control") and Captain America himself ("other") are not pumped.
+# Ward {1}: on turn 4 Bot2's Lightning Bolt at him is countered because Bot2 doesn't pay; on turn 6 it pays {1} and the Bolt kills him.
+
+[Bot1 Deck]
+Captain America, Wings of Freedom
+Masked Meower
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Snakeskin Veil
+Mox Emerald
+Plains x20
+
+[Bot2 Deck]
+Masked Meower
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Lightning Bolt
+Mountain
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Masked Meower.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Captain America, Wings of Freedom.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Masked Meower.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Captain America, Wings of Freedom)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Captain America, Wings of Freedom.Damage = 0
+? Bot2.Graveyard = Lightning Bolt
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Snakeskin Veil.Cast(Captain America, Wings of Freedom)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Captain America, Wings of Freedom > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Masked Meower.Power = 3
+? Bot1.Battlefield.Masked Meower.Toughness = 3
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Masked Meower.Power = 1
+? Bot1.Battlefield.Captain America, Wings of Freedom.Power = 4
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Captain America, Wings of Freedom)
+Bot2.Pass
+Bot1.Pass
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+? Bot2.Mana =
+
+[Expect]
+Bot1.Graveyard = Captain America, Wings of Freedom; Snakeskin Veil

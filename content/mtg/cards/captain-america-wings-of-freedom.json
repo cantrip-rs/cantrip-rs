@@ -1,0 +1,12 @@
+{
+  "name": "Captain America, Wings of Freedom",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Human Soldier Hero",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flying, first strike, ward {1}\nWhenever Captain America attacks, each other Hero you control gets +X/+X until end of turn, where X is Captain America's toughness.",
+  "keywords": [
+    "Flying",
+    "FirstStrike"
+  ]
+}
