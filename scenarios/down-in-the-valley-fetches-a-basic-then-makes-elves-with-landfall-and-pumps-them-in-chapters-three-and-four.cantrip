@@ -1,0 +1,107 @@
+# Down in the Valley, a Saga: "I - Search your library for a basic land card, reveal it, put it into your hand, then shuffle. II - This
+# Saga gains 'Landfall - Whenever a land you control enters, create a 1/1 green Elf creature token.' III, IV - Elves you control get
+# +1/+0 and gain vigilance until end of turn." Chapter I (turn 1) fetches the Forest; a Plains played the same turn makes no Elf (not
+# gained yet). After II (turn 3) the Forest makes a 1/1 green Elf, Bot2's Island none. III (turn 5) makes the Elf 2/1 with vigilance
+# until end of turn - Bot2's Llanowar Elves and Bot1's own Ornithopter get nothing - and an Elf made after it is a 1/1 (only the Elves
+# there as it resolved); it is 1/1 again on turn 6. IV (turn 7) pumps both and the Saga is sacrificed: a land then makes no more Elves.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Down in the Valley
+Ornithopter
+Plains
+Plains
+Plains
+Plains
+Forest
+Plains x10
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Down in the Valley.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Plains#2; Plains)
+Bot1.Search(Forest)
+? Bot1.Revealed = Forest
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elf Token = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elf Token.Power = 1
+? Bot1.Battlefield.Elf Token.Toughness = 1
+? Bot1.Battlefield.Elf Token.Colors = Green
+? Bot1.Battlefield.Elf Token.Subtypes = Elf
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Elf Token#2 = (absent)
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elf Token.Power = 2
+? Bot1.Battlefield.Elf Token.Toughness = 1
+? Bot1.Battlefield.Elf Token.Keywords = Vigilance
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elf Token#2.Power = 1
+? Bot1.Battlefield.Elf Token#2.Keywords = (absent)
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Elf Token#1.Power = 1
+? Bot1.Battlefield.Elf Token#1.Keywords = (absent)
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elf Token#1.Power = 2
+? Bot1.Battlefield.Elf Token#2.Power = 2
+? Bot1.Battlefield.Down in the Valley = (absent)
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Elf Token#1.Power = 2
+Bot1.Battlefield.Elf Token#2.Power = 2
+Bot1.Battlefield.Elf Token#3 = (absent)
+Bot1.Graveyard = Down in the Valley
