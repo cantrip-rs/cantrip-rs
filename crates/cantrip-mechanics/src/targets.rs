@@ -585,6 +585,19 @@ fn creature_or_planeswalker_an_opponent_controls_filter(q: &dyn Query, asker: &A
 pub const CREATURE_OR_PLANESWALKER_AN_OPPONENT_CONTROLS: TargetSpec = target(creature_or_planeswalker_an_opponent_controls_filter);
 /// "Target creature an opponent controls". Palace Jailer and Mawloc print it.
 pub const CREATURE_AN_OPPONENT_CONTROLS: TargetSpec = target(creature_an_opponent_controls_filter);
+
+fn creature_that_dealt_damage_this_turn_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_filter(q, asker, t) && matches!(t, Target::Object(id) if crate::history::dealt_damage_this_turn(q.history(), id))
+}
+/// "Target creature that dealt damage this turn" (CR 115.1, 120.2): judged as it is chosen and again as the ability resolves.
+/// Avenging Arrow and Executioner's Swing print it.
+pub const CREATURE_THAT_DEALT_DAMAGE_THIS_TURN: TargetSpec = target(creature_that_dealt_damage_this_turn_filter);
+fn creature_an_opponent_controls_that_dealt_damage_this_turn_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_that_dealt_damage_this_turn_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
+}
+/// "Target creature an opponent controls that dealt damage this turn" (CR 115.1, 120.2). Red Guardian, Super-Soldier prints it.
+pub const CREATURE_AN_OPPONENT_CONTROLS_THAT_DEALT_DAMAGE_THIS_TURN: TargetSpec =
+    target(creature_an_opponent_controls_that_dealt_damage_this_turn_filter);
 /// "Target land". Candelabra of Tawnos and Strip Mine print it.
 pub const LAND: TargetSpec = target(land_filter);
 /// "Target nonbasic land" (CR 115.1, 205.4a). Wasteland prints it.

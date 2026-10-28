@@ -4,6 +4,13 @@
 
 use cantrip_api::*;
 
+/// "A creature that dealt damage this turn" (CR 120.2): `source` dealt damage this turn, to anything, combat or not. Damage that
+/// was prevented, or whose amount was zero, was not dealt (CR 615.6). The object is the one that dealt it, so a permanent that left
+/// and came back is another (CR 400.7). Red Guardian, Super-Soldier, Avenging Arrow and Executioner's Swing print it.
+pub fn dealt_damage_this_turn(history: History<'_>, source: ObjectId) -> bool {
+    history.damage_dealt().any(|d| d.source == source && d.amount > 0)
+}
+
 /// An opponent was dealt noncombat damage this turn (CR 120.2). Grim Repriser and Whiplash Wordsmith ask this
 /// same question, from an activated ability's condition and a static ability's layers respectively.
 pub fn opponent_dealt_noncombat_damage_this_turn(history: History<'_>, state: &GameState, player: PlayerId) -> bool {
