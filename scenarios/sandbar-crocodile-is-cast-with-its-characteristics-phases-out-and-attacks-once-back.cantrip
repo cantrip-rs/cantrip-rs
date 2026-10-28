@@ -1,0 +1,41 @@
+# Sandbar Crocodile (6/5, phasing), a vanilla creature but for phasing: cast with Black Lotus and two Mox Sapphires, its
+# characteristics as printed. It phases out in Bot1's turn 3 untap step and in again in turn 5's (CR 702.26a), and then attacks for 6.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Sandbar Crocodile
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Sandbar Crocodile.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sandbar Crocodile.Power = 6
+? Bot1.Battlefield.Sandbar Crocodile.Toughness = 5
+? Bot1.Battlefield.Sandbar Crocodile.Keywords = Phasing
+? Bot1.Battlefield.Sandbar Crocodile.Colors = Blue
+? Bot1.Battlefield.Sandbar Crocodile.Types = Creature
+? Bot1.Battlefield.Sandbar Crocodile.Subtypes = Crocodile
+? Bot1.Battlefield.Sandbar Crocodile.Supertypes = (absent)
+? Bot1.Battlefield.Sandbar Crocodile.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+? Bot1.PhasedOut = Sandbar Crocodile
+[T5 Bot1.Main1]
+? Bot1.PhasedOut.Count = 0
+Bot1.Attack(Sandbar Crocodile > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Sandbar Crocodile.Tapped = true
