@@ -856,6 +856,17 @@ pub fn you_draw_your_second_card(q: &dyn Query, me: &Asker, event: &Event) -> Op
     }
 }
 
+/// "Whenever an opponent draws their second card each turn" (CR 120.3, 603.2): the draw of a card by an opponent of the
+/// source's controller when exactly one card was drawn by them earlier this turn (the history holds the draws before the one
+/// being matched), in any step: once for each opponent, since each has a second card of their own. Faerie Mastermind and
+/// Gleaming Splendor print it.
+pub fn an_opponent_draws_their_second_card(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match crate::history::second_card_drawn_this_turn(q, event) {
+        Some(player) if player != me.controller => Fired::PLAIN,
+        _ => None,
+    }
+}
+
 /// "At the beginning of your upkeep" (CR 503.1a). Dark Confidant and Court of Garenbrig print it.
 pub fn your_upkeep(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     your_step(q, me, event, Step::Upkeep)
@@ -1365,6 +1376,7 @@ pub const NONCREATURE_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST
 pub const YOU_CAST_A_SPELL_FROM_EXILE: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_a_spell_from_exile);
 pub const THIS_DIES: Trigger = when(EventMask::ZONE_CHANGE, this_dies);
 pub const THIS_LEAVES: Trigger = when(EventMask::ZONE_CHANGE, this_leaves);
+pub const AN_OPPONENT_DRAWS_THEIR_SECOND_CARD: Trigger = when_asked(EventMask::DREW, an_opponent_draws_their_second_card);
 pub const YOU_DRAW_YOUR_SECOND_CARD: Trigger = when_asked(EventMask::DREW, you_draw_your_second_card);
 pub const YOUR_UPKEEP: Trigger = when_asked(EventMask::STEP_BEGAN, your_upkeep);
 pub const YOUR_DRAW_STEP: Trigger = when_asked(EventMask::STEP_BEGAN, your_draw_step);

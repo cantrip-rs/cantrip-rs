@@ -98,6 +98,12 @@ fn creature_with_toughness_four_or_greater_filter(q: &dyn Query, asker: &Asker, 
 /// "Target creature with toughness 4 or greater" (CR 115.1) as the layers give the toughness now, so a counter or an
 /// effect moves a creature in and out of range. Valorous Stance, Surgical Precision and Destroy Evil print it.
 pub const CREATURE_WITH_TOUGHNESS_4_OR_GREATER: TargetSpec = target(creature_with_toughness_four_or_greater_filter);
+fn creature_with_power_four_or_greater_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.chars(id).power.is_some_and(|v| v >= 4))
+}
+/// "Target creature with power 4 or greater" (CR 115.1) as the layers give the power now, so a counter or an effect moves a
+/// creature in and out of range. Bring Down, Big Game Hunter, Command Decision and Stone by Sunlight print it.
+pub const CREATURE_WITH_POWER_4_OR_GREATER: TargetSpec = target(creature_with_power_four_or_greater_filter);
 /// "A creature with flying" (CR 702.9) as the layers give it now: a creature on the battlefield that has flying. Pick Your Poison
 /// sacrifices one; `CREATURE_WITH_FLYING` is the target slot. Bow of Nylea and Konstrari Charm print the target.
 pub fn has_flying_creature(q: &dyn Query, id: ObjectId) -> bool {
@@ -120,6 +126,14 @@ fn tapped_creature_an_opponent_controls_filter(q: &dyn Query, asker: &Asker, t: 
 }
 /// "Target tapped creature an opponent controls" (CR 115.1, 608.2b). Spring-Loaded Sawblades and Super Villain Lockup print it.
 pub const TAPPED_CREATURE_AN_OPPONENT_CONTROLS: TargetSpec = target(tapped_creature_an_opponent_controls_filter);
+
+/// "This spell costs {`N`} less to cast if it targets a tapped creature" (CR 601.2c, 601.2f): the target as the total cost is
+/// determined, once it is announced; generic mana only (CR 118.7a). What happens to the creature afterwards changes nothing
+/// paid. Ajani's Response and Magnificent End print it (`CardDef::own_cost_changes`).
+pub fn costs_less_if_it_targets_a_tapped_creature<const N: u8>(q: &dyn Query, _: ObjectId, _: PlayerId, _: Costed, targets: &[Target]) -> CostDelta {
+    let tapped = targets.iter().filter_map(|t| t.object()).any(|creature| q.obj(creature).tapped);
+    if tapped { CostDelta::less(N) } else { CostDelta::NONE }
+}
 fn attacking_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.is_attacking(id))
 }
