@@ -1,0 +1,25 @@
+# "When this land enters, surveil 1" (CR 701.25): Bot1 plays Surveillance Room (untapped: nothing says it enters tapped) and puts the
+# Lightning Bolt it looks at into the graveyard, so Black Lotus is now on top. "{T}: Add {C}" adds one colorless mana.
+
+[Bot1 Deck]
+Surveillance Room
+Island x6
+Lightning Bolt
+Black Lotus
+Counterspell
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Surveillance Room.Play
+Bot1.Arrange( | Lightning Bolt)
+? Bot1.Battlefield.Surveillance Room.Tapped = false
+Bot1.Battlefield.Surveillance Room.Activate(Ability: Add {C})
+? Bot1.Mana = {C}
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library = Black Lotus; Counterspell
+Bot1.Battlefield.Surveillance Room.Tapped = true
