@@ -1,0 +1,39 @@
+# Nonbasic landwalk (CR 702.14c) is about the defending player's lands: Dryad Sophisticate attacking Bot2, who controls
+# only an Island (a basic land), may be blocked by Bot2's Memnite, though Bot1 itself controls Tundra, a nonbasic land.
+# The 2/1 Dryad and the 1/1 Memnite kill each other; Bot2 takes nothing.
+# Bot1 plays Tundra and casts the Dryad on turn 1 (Moxen Emerald and Ruby); Bot2 plays
+# Island and casts Memnite on turn 2.
+
+[Bot1 Deck]
+Tundra
+Mox Emerald
+Mox Ruby
+Dryad Sophisticate
+Island x20
+
+[Bot2 Deck]
+Island
+Memnite
+Island x22
+
+[Actions]
+Bot1.Hand.Tundra.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dryad Sophisticate.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Dryad Sophisticate > Bot2)
+Bot2.Block(Memnite > Dryad Sophisticate)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Dryad Sophisticate
