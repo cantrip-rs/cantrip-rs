@@ -1162,3 +1162,9 @@ pub fn plus_one_counter_on_target(g: &mut dyn Game, item: &StackItem) -> Result<
     g.add_counters(object, CounterKind::PlusOne, 1);
     Ok(())
 }
+
+/// "[This creature] connives" (CR 701.50): the source of the ability connives, even if it has already left the battlefield. Ledger
+/// Shredder, M.O.D.O.K., Madame Masque, Norman Osborn and Red Room Recruit print it.
+pub fn this_connives(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    crate::connive(g, item.object, item.object)
+}
