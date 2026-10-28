@@ -1,0 +1,51 @@
+# Taskmaster, Mercenary Mimic may copy a creature card in a graveyard (CR 707.2): Faithless Looting puts Ornithopter into Bot1's graveyard,
+# and at Bot1's next first main phase he becomes a copy of it, a 0/2 flier with the types and subtypes he names (CR 707.9b). The card
+# stays where it is.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Taskmaster, Mercenary Mimic
+Faithless Looting
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot1.Choose(Ornithopter; Plains)
+Bot1.Hand.Taskmaster, Mercenary Mimic.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Power = 0
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Toughness = 2
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Types = Creature
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Keywords = Flying
+Bot1.Graveyard.Ornithopter.Power = 0
