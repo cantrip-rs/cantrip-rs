@@ -1,0 +1,51 @@
+# Too Evil to Stay Dead, teamwork 4 (CR 702.194a): Savannah Lions and Memnite, total power 3, cannot pay it, so it is not
+# offered. Cast without teamwork, it returns Grizzly Bears (mana value 2) that Thought Scour milled; nothing is tapped.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Savannah Lions
+Memnite
+Thought Scour
+Grizzly Bears
+Island
+Too Evil to Stay Dead
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Too Evil to Stay Dead.Cast
+! Bot1.Modes(Teamwork 4)
+Bot1.Modes(Cast without teamwork)
+Bot1.Target(Bot1.Graveyard.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Battlefield.Savannah Lions.Tapped = false
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Graveyard = Too Evil to Stay Dead; Thought Scour; Island

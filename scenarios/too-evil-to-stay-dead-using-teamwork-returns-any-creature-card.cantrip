@@ -1,0 +1,59 @@
+# Too Evil to Stay Dead cast using teamwork 4: "instead choose target creature card in your graveyard", whatever its mana value
+# (CR 702.194b). Bot1 taps its Highborn Vampire (power 4, exactly the total needed) and returns Catacomb Slug, mana value 5, which
+# it could not choose without teamwork. Paid for exactly {2}{B}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Faithless Looting
+Too Evil to Stay Dead
+Mox Sapphire
+Giant Cockroach
+Catacomb Slug
+Highborn Vampire
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Giant Cockroach; Catacomb Slug)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Highborn Vampire.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Too Evil to Stay Dead.Cast
+Bot1.Modes(Teamwork 4)
+Bot1.Target(Bot1.Graveyard.Catacomb Slug)
+Bot1.Choose(Highborn Vampire)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Highborn Vampire.Tapped = true
+Bot1.Battlefield.Catacomb Slug.Tapped = false
+Bot1.Graveyard = Too Evil to Stay Dead; Faithless Looting; Giant Cockroach

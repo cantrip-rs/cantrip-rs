@@ -1,0 +1,45 @@
+# Too Evil to Stay Dead cast without teamwork: "Choose target creature card in your graveyard with mana value 4 or less ... Return the
+# chosen card to the battlefield" (CR 115.1, 202.3). Faithless Looting leaves Giant Cockroach (mana value 4, exactly the limit) and
+# Catacomb Slug (mana value 5, one past it) in the graveyard; the Slug is refused, the Cockroach returns. Paid for exactly {2}{B}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Faithless Looting
+Too Evil to Stay Dead
+Mox Sapphire
+Giant Cockroach
+Catacomb Slug
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Giant Cockroach; Catacomb Slug)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Too Evil to Stay Dead.Cast
+Bot1.Modes(Cast without teamwork)
+! Bot1.Target(Bot1.Graveyard.Catacomb Slug)
+Bot1.Target(Bot1.Graveyard.Giant Cockroach)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Giant Cockroach.Tapped = false
+Bot1.Graveyard = Too Evil to Stay Dead; Faithless Looting; Catacomb Slug
