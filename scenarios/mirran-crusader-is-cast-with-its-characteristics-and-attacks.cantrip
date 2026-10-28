@@ -1,0 +1,36 @@
+# Mirran Crusader, a french vanilla creature: cast with Black Lotus and Moxen paying exactly its cost (the pool is empty right after), its
+# characteristics as printed (power, toughness, keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Double strike deals its 2 damage twice, so Bot2 is at 16.
+
+[Bot1 Deck]
+Black Lotus
+Mirran Crusader
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Mirran Crusader.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T2 Bot2.End]
+? Bot1.Battlefield.Mirran Crusader.Power = 2
+? Bot1.Battlefield.Mirran Crusader.Toughness = 2
+? Bot1.Battlefield.Mirran Crusader.Keywords = DoubleStrike
+? Bot1.Battlefield.Mirran Crusader.Colors = White
+? Bot1.Battlefield.Mirran Crusader.Types = Creature
+? Bot1.Battlefield.Mirran Crusader.Subtypes = Human; Knight
+? Bot1.Battlefield.Mirran Crusader.Supertypes = (absent)
+? Bot1.Battlefield.Mirran Crusader.ProtectionFrom = Black; Green
+[T3 Bot1.Main1]
+Bot1.Attack(Mirran Crusader > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Mirran Crusader.Tapped = true
