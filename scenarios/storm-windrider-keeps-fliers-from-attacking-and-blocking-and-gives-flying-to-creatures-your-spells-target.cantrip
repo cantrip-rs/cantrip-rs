@@ -1,0 +1,113 @@
+# Storm, Windrider: "Creatures with flying can't attack you or block creatures you control" (CR 508.1c, 509.1b) and "Whenever
+# you cast a spell that targets one or more creatures, those creatures gain flying until end of turn" (CR 603.2, 611.2a).
+# On turn 3 Lightning Bolt at Bot2's face targets no creature, so nothing gains flying. Healing Salve on Memnite, then Giant
+# Growth on the Grizzly Bears: each spell's own trigger gives flying to its own spell's target, the later first. Bot2 Mana Leaks the
+# Giant Growth with its trigger still on the stack: the spell is gone but the Bears are still "those creatures" and gain flying, so
+# the Bears have flying while the Memnite does not yet; the Memnite gets it from its own trigger after. Both are read on turn 4
+# to have lost it: they attack Bot1, and Bot2's Ornithopter (flying all along) is refused. Storm (flying, untapped) blocks the
+# Memnite, since the rule is only about blocking Bot1's creatures. On turn 5 Storm attacks and the Ornithopter may not block.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Storm, Windrider
+Lightning Bolt
+Giant Growth
+Healing Salve
+Plains x10
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Ornithopter
+Memnite
+Grizzly Bears
+Mox Sapphire
+Mana Leak
+Forest x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Storm, Windrider.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot2.Battlefield.Grizzly Bears.Keywords = (absent)
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Giant Growth.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Hand.Mana Leak.Cast(Stack.Giant Growth)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+? Bot2.Battlefield.Grizzly Bears.Keywords = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Keywords = Flying
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+? Bot2.Graveyard = Mana Leak
+? Bot1.Graveyard = Giant Growth; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Keywords = Flying
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Grizzly Bears.Keywords = (absent)
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+! Bot2.Attack(Ornithopter > Bot1)
+Bot2.Attack(Grizzly Bears; Memnite > Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Block(Storm, Windrider > Memnite)
+[T4 Bot2.Main2]
+? Bot1.Life = 18
+? Bot2.Graveyard = Memnite; Mana Leak
+[T5 Bot1.Main1]
+Bot1.Attack(Storm, Windrider > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot2.Block(Ornithopter > Storm, Windrider)
+[T5 Bot1.Main2]
+? Bot2.Life = 13
+
+[Expect]
+Turn = 5
