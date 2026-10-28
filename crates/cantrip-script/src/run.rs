@@ -1757,6 +1757,16 @@ impl<'s> Run<'s> {
             }
             RequestKind::ChooseModes { modes, source, .. } => {
                 let mut chosen = Vec::new();
+                // `! Bot1.Modes(Count: 0)`: choosing no mode at all, which no answer naming modes can say.
+                if let Some(wanted) = action.named("Count") {
+                    if wanted.trim() != "0" {
+                        return fail(format!("line {line}: {text}: only Count: 0 (choosing no mode) can be refused this way; name the modes otherwise"));
+                    }
+                    if check_answer(&self.game, request, &Answer::Modes(chosen)).is_ok() {
+                        return fail(format!("line {line} says {text} must not be a choice the question allows, but it is"));
+                    }
+                    return Ok(());
+                }
                 // A mode named by its text that the question does not have at all is not offered, which is what the line
                 // says (a fused cast over a mana-value limit, `! Bot1.Modes(Fuse)`) - but only a mode the source could
                 // offer somewhere (`modes_the_source_could_offer`): a name it never could is a typo, and fails.

@@ -387,7 +387,7 @@ those modes (too many for "choose one", a mode that is not eligible): the way to
 does ("choose one, or both if ..."). A mode named by text that the question does not have at all holds too: it is not offered
 (`! Bot1.Modes(Fuse)`, a fused cast over a mana-value limit) - but only when it is a mode the question's source could offer
 somewhere (its faces and halves, a fuse card's fused cast, its modes, ways, alternative costs and labels); any other text
-is a typo, and fails. Pair it with the same line where the condition holds.
+is a typo, and fails. `! Bot1.Modes(Count: 0)` refuses choosing no mode at all ("choose one or both" takes at least one). Pair it with the same line where the condition holds.
 
 A card choice, `! Bot1.Choose(Thopter)`, is checked at that player's next choice of cards (a sacrifice or discard cost, a card
 chosen from a revealed hand) and fails if the named card is among those it may take; it fails as proving nothing when no such
