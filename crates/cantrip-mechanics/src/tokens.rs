@@ -841,3 +841,10 @@ pub static ELF: CardDef = CardDef {
     toughness: Some(1),
     ..token!(Elf)
 };
+
+/// "Create a 1/1 green Elf creature token" as an ability's whole effect (CR 111.1, 701.7a): one, under its controller. Down in the
+/// Valley's Saga ability, Thranduil the Strategist and Thranduil, Sindarin Liege print it.
+pub fn create_an_elf(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &ELF, 1)?;
+    Ok(())
+}

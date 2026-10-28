@@ -18,12 +18,6 @@ fn gain_landfall(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Create a 1/1 green Elf creature token." (CR 111.1, 701.7a)
-fn make_an_elf(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &tokens::ELF, 1)?;
-    Ok(())
-}
-
 /// III, IV: "Elves you control get +1/+0 and gain vigilance until end of turn." (CR 611.2a, 611.2c): the Elves there are as it
 /// resolves, and none that enters later; "Elf" is a word of this card's text (CR 612), and a permanent is one as the layers
 /// make it (a changeling is every creature type).
@@ -46,7 +40,7 @@ pub static CARD: CardDef = CardDef {
         chapter(3, elves_get_power_and_vigilance, "III, IV \u{2014} Elves you control get +1/+0 and gain vigilance until end of turn."),
         chapter(4, elves_get_power_and_vigilance, "III, IV \u{2014} Elves you control get +1/+0 and gain vigilance until end of turn."),
     ],
-    delayed: &[triggered(LANDFALL, make_an_elf, "Landfall \u{2014} Whenever a land you control enters, create a 1/1 green Elf creature token.")],
+    delayed: &[triggered(LANDFALL, tokens::create_an_elf, "Landfall \u{2014} Whenever a land you control enters, create a 1/1 green Elf creature token.")],
     ..oracle::DOWN_IN_THE_VALLEY
 };
 
