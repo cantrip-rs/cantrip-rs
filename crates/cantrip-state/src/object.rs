@@ -1181,6 +1181,11 @@ pub enum EffectKind {
     /// the object, mana abilities (CR 605.1a) and abilities whose cost untaps it included, whoever would activate them. A
     /// resolved effect, so it outlasts its source (Braided Net).
     CantActivateAbilities,
+    /// "Power-up abilities can't be activated" (CR 602.5, 702.193) while the effect applies: every power-up ability
+    /// (`ActivatedDef::power_up`) of every permanent, whoever controls it and whoever would activate it, a permanent that arrives
+    /// later included. A rule about the game, not an object: it outlives its `affected` object, the source (CR 611.2c). With
+    /// `Duration::EndOfExtraTurn` it applies in that extra turn only.
+    CantActivatePowerUp,
     /// "Can't attack" (CR 508.1c) for as long as the effect lasts: a restriction on declaring the creature as an attacker.
     CantAttack,
     /// "It can't be sacrificed" (CR 101.2, 701.21a) for as long as the effect lasts (Slicer, Hired Muscle's "this turn"): as
@@ -1333,6 +1338,7 @@ impl EffectKind {
         matches!(
             self,
             EffectKind::PlayerHexproof
+                | EffectKind::CantActivatePowerUp
                 | EffectKind::PlayerProtectionFromEverything
                 | EffectKind::CastAsThoughFlash(_)
                 | EffectKind::InstantLoyalty(_)
@@ -1386,6 +1392,12 @@ pub enum Duration {
     /// who has left the game would have begun it and the effect ends then (CR 800.4k, 800.4m). Evil's Thrall's "gain control of
     /// that creature until the end of your next turn".
     EndOfNextTurnOf(PlayerId),
+    /// "During that turn" (CR 500.7, 611.2a): an effect made before an extra turn that is about that turn only, the one with this
+    /// id (`ExtraTurn::id`, `Turn::extra`), and about the whole of it, its cleanup step's priority included. It applies to nothing
+    /// before that turn, nor in any other extra turn or the turn it was made in, and ends as the next turn begins - or as it would
+    /// have begun, if the turn is never taken because its player has left the game (CR 800.4k-m). Kang the Conqueror's "during that
+    /// turn, power-up abilities can't be activated".
+    EndOfExtraTurn(u32),
     /// "During its controller's next turn" (CR 611.2a): the effect does something only during the first turn the affected
     /// object's controller - whoever controls it then - begins after both the turn they gained it and the turn the effect
     /// began in, `began`, which the core

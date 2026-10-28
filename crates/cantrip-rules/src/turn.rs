@@ -166,6 +166,15 @@ fn next_turn_taker(s: &mut GameState, after: PlayerId) -> PlayerId {
     let stale = |d: &cantrip_state::Delayed, s: &GameState| {
         matches!(d.when, DelayedWhen::ExtraTurnStep { turn, .. } if turn != extra && !s.extra_turns.iter().any(|t| t.id == turn))
     };
+    // So do the effects about that turn alone ("during that turn"): they last through its cleanup step, and end as the next turn
+    // begins, or as it would have begun for a player who has left (CR 500.7, 800.4m).
+    let spent = |e: &ContinuousEffect, s: &GameState| {
+        matches!(e.duration, Duration::EndOfExtraTurn(turn) if turn != extra && !s.extra_turns.iter().any(|t| t.id == turn))
+    };
+    if s.effects.iter().any(|e| spent(e, s)) {
+        let ended: Vec<_> = s.effects.iter().filter(|e| spent(e, s)).map(|e| e.duration).collect();
+        s.effects_retain(|e| !ended.contains(&e.duration));
+    }
     if s.delayed.iter().any(|d| stale(d, s)) {
         let mut at = 0;
         while at < s.delayed.len() {

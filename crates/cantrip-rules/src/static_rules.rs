@@ -461,8 +461,15 @@ pub fn activation_barred(cx: &Cx, forbidders: &[ObjectId], source: ObjectId, def
     if def.special_action {
         return false;
     }
-    // "Its activated abilities can't be activated", from a resolved effect on the object itself (CR 602.5, 611.2).
-    if cx.s().effects.iter().any(|e| e.affected == source && e.kind == EffectKind::CantActivateAbilities) {
+    // "Its activated abilities can't be activated", from a resolved effect on the object itself, and "power-up abilities can't be
+    // activated", from one on the game, in the extra turn it is about and no other (CR 602.5, 611.2).
+    let extra = cx.s().turn.extra;
+    let barred = |e: &ContinuousEffect| match e.kind {
+        EffectKind::CantActivateAbilities => e.affected == source,
+        EffectKind::CantActivatePowerUp => def.power_up && e.duration == Duration::EndOfExtraTurn(extra),
+        _ => false,
+    };
+    if cx.s().effects.iter().any(barred) {
         return true;
     }
     forbidders.iter().any(|&id| {

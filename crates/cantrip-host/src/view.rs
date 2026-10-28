@@ -707,6 +707,7 @@ impl<'a> Projector<'a> {
             let text = match e.kind {
                 EffectKind::PlayerProtectionFromEverything if e.controller == p => format!("{you} have protection from everything"),
                 EffectKind::PlayerHexproof if e.controller == p => format!("{you} have hexproof"),
+                EffectKind::CantActivatePowerUp => "Power-up abilities can't be activated".to_string(),
                 EffectKind::LifeTotalCantChange(q) if q == p => {
                     format!("{} life total can't change", if p == self.viewer { "Your" } else { "Their" })
                 }
@@ -829,6 +830,7 @@ impl<'a> Projector<'a> {
             Duration::UntilNextTurnOf(q) if q == self.viewer => " until your next turn".to_string(),
             Duration::UntilNextTurnOf(q) => format!(" until {}'s next turn", self.names.get(q.index()).cloned().unwrap_or_default()),
             Duration::DuringControllersNextTurn(_) => " during its controller's next turn".to_string(),
+            Duration::EndOfExtraTurn(_) => " during the extra turn".to_string(),
             Duration::WhileTapped => " for as long as it remains tapped".to_string(),
             Duration::WhileCounter(kind) => format!(" for as long as it has a {} counter on it", kind.name()),
             _ => String::new(),
