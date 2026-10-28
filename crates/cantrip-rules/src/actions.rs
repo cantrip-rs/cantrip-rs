@@ -7480,6 +7480,12 @@ fn cast(
     pay_discards(cx, &extra_variable_discards);
     pay_life_and_counters(cx, player, spell, &extra);
     pay_exert_and_tappers(cx, spell, &extra, &extra_tappers);
+    // CR 702.194a: the creatures tapped for the teamwork cost became tapped to pay it, which abilities of theirs trigger on.
+    if item.paid > 0 && def.optional_cost.is_some_and(|o| o.cost.tap_creatures.is_some()) {
+        for &creature in &extra_tappers {
+            cx.emit(Event::TappedForTeamwork { creature, spell });
+        }
+    }
     // CR 119.4: the life paid for Phyrexian symbols and for X, with the rest of the cost.
     if life + u32::from(x_life) > 0 {
         ops::change_life(cx, player, -life_paid(life + u32::from(x_life)));
