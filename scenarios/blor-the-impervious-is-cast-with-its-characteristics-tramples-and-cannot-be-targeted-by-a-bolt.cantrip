@@ -1,0 +1,48 @@
+# Blor the Impervious (legendary 3/3 trample, hexproof, indestructible), cast with Black Lotus and two Mox Emeralds, its
+# characteristics as printed. In turn 2 Bot2, with a Mountain untapped, may not cast Lightning Bolt at it (CR 702.11b). Attacking
+# in turn 3 it is blocked by Bot2's Ornithopter: it assigns the Ornithopter lethal damage, 2, and tramples the other 1 over
+# (CR 702.19b); 20 - 1 = 19.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Blor the Impervious
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Blor the Impervious.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blor the Impervious.Power = 3
+? Bot1.Battlefield.Blor the Impervious.Toughness = 3
+? Bot1.Battlefield.Blor the Impervious.Keywords = Hexproof; Indestructible; Trample
+? Bot1.Battlefield.Blor the Impervious.Colors = Green
+? Bot1.Battlefield.Blor the Impervious.Types = Creature
+? Bot1.Battlefield.Blor the Impervious.Subtypes = Frog; Warrior
+? Bot1.Battlefield.Blor the Impervious.Supertypes = Legendary
+? Bot1.Battlefield.Blor the Impervious.ProtectionFrom = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+! Bot2.Hand.Lightning Bolt.Cast(Blor the Impervious)
+[T3 Bot1.Main1]
+Bot1.Attack(Blor the Impervious > Bot2)
+Bot2.Block(Ornithopter > Blor the Impervious)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Ornithopter
