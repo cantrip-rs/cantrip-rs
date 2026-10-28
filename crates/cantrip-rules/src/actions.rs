@@ -8872,12 +8872,8 @@ fn activate_mana_as(
         cx.st().update_obj(source, |o| o.x = n);
     }
     note_activation(cx, source, index as usize, def);
-    // A mana ability is activated (CR 605.3) as any ability is, and the history says so. It is not emitted: the cards here
-    // that trigger on activations name loyalty abilities or abilities that aren't mana abilities; one that triggers on a
-    // mana ability's activation too ("an ability of a creature": Elrond, Moon-Reader) needs it emitted, its trigger
-    // waiting for the next time a player would receive priority (CR 603.3).
+    // How it was given, read before any cost moves the source (CR 113.7a).
     let granted = Grant::of(granted_by(cx, source, None, index as usize, ability, &std::cell::OnceCell::new()));
-    cx.record(Event::AbilityActivated { source, ability, player, by: granted });
     // {T} is paid on the permanent before any other part of the cost moves it (CR 605.3a, 601.2h, 118.3): see `activate`.
     if def.cost.tap {
         ops::tap(cx, source);
@@ -8904,6 +8900,16 @@ fn activate_mana_as(
     pay_life_and_counters(cx, player, source, &def.cost);
     if def.cost.sacrifice_self {
         ops::sacrifice(cx, player, &[source]);
+    }
+    // A mana ability is activated (CR 605.3) as any ability is, once its costs are paid (CR 602.2b, 601.2i, 605.3a), and the
+    // history says so. It is emitted too: "whenever you activate an ability of a creature" (Elrond, Moon-Reader) triggers on a
+    // mana ability's activation (its ruling), the trigger waiting for the next time a player would receive priority
+    // (CR 603.3); the abilities that mean only the ones that use the stack ask `ActivatedDef::is_mana_ability` of it themselves.
+    let activated = Event::AbilityActivated { source, ability, player, by: granted };
+    if crate::settle::activation_watched(cx) {
+        cx.emit(activated);
+    } else {
+        cx.record(activated);
     }
     let asker = Asker { source, controller: player, by, spell: false };
     // What the ability itself produces (CR 106.12a), told from every pool before and after it - its tapper's, and another's

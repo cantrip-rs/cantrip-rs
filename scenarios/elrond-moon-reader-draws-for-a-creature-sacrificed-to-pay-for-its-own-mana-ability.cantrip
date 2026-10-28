@@ -1,0 +1,51 @@
+# Elrond, Moon-Reader: "Whenever you activate an ability of a creature, draw a card." The mana ability "Sacrifice this token: Add {C}" of an Eldrazi Spawn
+# is activated once its cost is paid (CR 602.2b, 605.3a) - the token is gone from the battlefield by then - and it is still an ability of a creature as it last
+# was (CR 113.7a): on turn 5 Bot1 casts Malevolent Rumble with two Moxen (artifacts: no trigger), then sacrifices the Spawn for mana, and Elrond's trigger goes
+# on the stack and draws a card (the library goes from 14 to 13 once it resolves), the Spawn gone.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Emerald
+Mox Pearl
+Elrond, Moon-Reader
+Malevolent Rumble
+Island x21
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Elrond, Moon-Reader.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Malevolent Rumble.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island; Island; Island; Island)
+? Stack.Count = 0
+? Bot1.Battlefield.Eldrazi Spawn Token.Power = 0
+? Bot1.Library.Count = 14
+Bot1.Battlefield.Eldrazi Spawn Token.Activate
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 13
+
+[Expect]
+Bot1.Library.Count = 13
+Bot1.Battlefield.Count = 5

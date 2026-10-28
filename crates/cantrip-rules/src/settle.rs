@@ -1192,6 +1192,39 @@ impl Then {
     }
 }
 
+/// Whether anything in the game could trigger on an ability's activation (CR 603.2): a delayed ability waiting for one, a card
+/// in a hand, graveyard, exile, library or on the stack that has such a triggered ability functioning in that zone (CR 113.6;
+/// the ones `collect_batch` asks, `CardTable::activation_triggers_elsewhere`), or a permanent or emblem that could have one
+/// however it was given (`could_have`). Where none could, the activation of a mana ability - the most frequent event - is only
+/// recorded in the history, not looked at for triggers: nothing it could trigger is left out.
+pub(crate) fn activation_watched(cx: &Cx) -> bool {
+    let cards = cx.cards();
+    let s = cx.s();
+    let listens = |t: &TriggeredDef| t.listens.intersects(EventMask::ABILITY_ACTIVATED);
+    let watched = s.delayed.iter().any(|d| d.when.is_event() && matches!(cards.ability(d.ability), AbilityDef::Triggered(t) if listens(t)))
+        || s.seats().any(|p| {
+            [Zone::hand(p), Zone::graveyard(p), Zone::exile(p), Zone::library(p)]
+                .into_iter()
+                .any(|z| s.zone(z).iter().any(|&id| cards.activation_triggers_elsewhere[s.obj(id).card.0 as usize]))
+        })
+        || s.zone(Zone::STACK).iter().any(|&id| cards.activation_triggers_elsewhere[s.obj(id).card.0 as usize])
+        || {
+            let could = could_have(cx, &cards.activation_triggers, listens);
+            s.battlefield().iter().chain(s.zone(Zone::COMMAND)).any(|&id| could(id))
+        };
+    // With `CANTRIP_VERIFY`: nothing the guard left out has such an ability now - a way of giving one that the guard misses is
+    // found here, not as a trigger that silently never comes. A permanent or emblem, and a card in the zones `collect_batch`
+    // reads for abilities that function there (the stack's spells granted one are only for casting: not an activation).
+    if !watched && layers::verifying() {
+        let has = |id: ObjectId| cx.chars(id).abilities().any(|a| matches!(cards.ability(a), AbilityDef::Triggered(t) if listens(t) && t.functions.contains(s.obj(id).zone.kind())));
+        let elsewhere = s.seats().flat_map(|p| [Zone::hand(p), Zone::graveyard(p), Zone::exile(p), Zone::library(p)]).chain(std::iter::once(Zone::STACK));
+        for id in s.battlefield().iter().chain(s.zone(Zone::COMMAND)).chain(elsewhere.flat_map(|z| s.zone(z).iter())) {
+            assert!(!has(*id), "{id:?} has an ability that triggers on an activation that nothing counted as able to give it (CR 603.2)");
+        }
+    }
+    watched
+}
+
 /// Which permanents could have a triggered ability of a kind now (`kind`), `table` saying which cards could of their own
 /// (`CardTable::look_back`, `CardTable::mana_triggers`): a superset of those that have one, which the caller then looks at
 /// through the layers. Every way the layers give an object an ability counts (CR 613.1): its copiable values (layer 1: its

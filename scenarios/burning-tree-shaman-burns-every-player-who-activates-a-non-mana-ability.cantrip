@@ -3,8 +3,8 @@
 # trigger is above the 0 (Stack.Count = 2) and resolves first, Bot2 at 19 before the life gain puts him back at 20. On turn 3
 # Bot1 activates his own Figure of Destiny: the Shaman's controller is a player too (Bot1 at 19). On turn 4 Bot2 forestcycles
 # Generous Ent from his hand (an ability of a card in a hand still counts): 19. Every land and Mox tapped for mana here leaves
-# the life totals alone: the card excludes mana abilities (CR 605.1a), and the engine only records a mana ability's activation, emitting no event a
-# trigger could see.
+# the life totals alone: the card excludes mana abilities (CR 605.1a): the engine emits a mana ability's activation too (CR 605.3), and the trigger
+# asks `is_mana_ability` of it and refuses.
 
 [Bot1 Deck]
 Mountain

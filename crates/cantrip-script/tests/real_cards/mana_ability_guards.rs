@@ -1,9 +1,8 @@
-//! "Whenever [a player] activates an ability that isn't a mana ability" (CR 602.2, 605.1a, 603.2): the engine records a mana
-//! ability's activation in the history but never emits it as an event (`EventMask::of`), so no trigger is ever asked about one
-//! and the matchers' "isn't a mana ability" guards are not reached in play. They stay for the cards that trigger on mana abilities
-//! too (Elrond, Moon-Reader; Ceaseless Searblades), and are judged here directly on the event a mana ability's activation would
-//! be: Harsh Mentor's matcher (`triggers::opponent_activates_ability_of_artifact_creature_or_land`) and Burning-Tree Shaman's,
-//! each refusing an opponent's Mox Ruby's {T}: Add {R} and taking Ghost Vacuum's {T}: Exile target card.
+//! "Whenever [a player] activates an ability that isn't a mana ability" (CR 602.2, 605.1a, 603.2): a mana ability's activation is
+//! an event abilities trigger on (CR 605.3), so these matchers' "isn't a mana ability" guards are reached in play whenever a
+//! watcher is in the game (the scenarios of Harsh Mentor and Burning-Tree Shaman). Here they are judged directly on the event,
+//! whichever way it came: Harsh Mentor's matcher (`triggers::opponent_activates_ability_of_artifact_creature_or_land`) and
+//! Burning-Tree Shaman's, each refusing an opponent's Mox Ruby's {T}: Add {R} and taking Ghost Vacuum's {T}: Exile target card.
 
 use cantrip_engine::*;
 

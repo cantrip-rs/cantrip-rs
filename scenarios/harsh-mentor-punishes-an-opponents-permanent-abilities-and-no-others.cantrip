@@ -1,6 +1,6 @@
 # Harsh Mentor: "Whenever an opponent activates an ability of an artifact, creature, or land on the battlefield, if it isn't a
 # mana ability, this creature deals 2 damage to that player." Bot2 taps Moxen, Mind Stone and Llanowar Elves for mana (nothing:
-# mana abilities are excluded by the card, CR 605.1a, and their activation is only recorded, never an event triggers see),
+# mana abilities are excluded by the card, CR 605.1a: their activation is an event too (CR 605.3), and the trigger refuses it),
 # activates Ajani Resolute's 0 (a planeswalker's ability, not an artifact's, creature's or land's:
 # nothing, so Bot2 is at 21), forestcycles Generous Ent (a creature card's ability, but from a hand, not on the battlefield - the
 # ruling: nothing) and then activates Mind Stone's "{1}, {T}, Sacrifice this artifact: Draw a card". Mind Stone is in the graveyard

@@ -1255,8 +1255,8 @@ pub fn you_scry_or_surveil(q: &dyn Query, me: &Asker, event: &Event) -> Option<F
 
 /// An activation (CR 602.2) as the event a "whenever ... activate(s) an ability" trigger sees: the object whose ability
 /// it is, the player who activated it, and the ability. The object is read as it is, or as it last was if paying the cost
-/// took it away (CR 113.7a, 608.2h). Only abilities that use the stack are activations triggers see (`EventMask::of`).
-/// Ajani Unrelenting, Burning-Tree Shaman, Harsh Mentor, Immolation Shaman and Keral Keep Disciples ask it.
+/// took it away (CR 113.7a, 608.2h). A mana ability's activation is one too (CR 605.3): a trigger that means only abilities that use the stack asks `ActivatedDef::is_mana_ability`.
+/// Ajani Unrelenting, Burning-Tree Shaman, Harsh Mentor, Immolation Shaman and Keral Keep Disciples and Elrond, Moon-Reader ask it.
 pub fn activation(q: &dyn Query, event: &Event) -> Option<(ObjectId, PlayerId, &'static ActivatedDef)> {
     let Event::AbilityActivated { source, ability, player, .. } = *event else { return None };
     q.activated_ability(ability).map(|def| (source, player, def))
