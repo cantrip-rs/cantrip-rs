@@ -1,0 +1,12 @@
+{
+  "name": "Herald of Serra",
+  "manaCost": "{2}{W}{W}",
+  "type": "Creature — Angel",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying, vigilance\nEcho {2}{W}{W} (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}
