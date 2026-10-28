@@ -1,0 +1,30 @@
+# Sheltering Ancient: "Cumulative upkeep--Put a +1/+1 counter on a creature an opponent controls." If no opponent controls a
+# creature, the cost can't be paid and the Ancient is sacrificed (its ruling). Bot1 controls creatures (the Ancient itself) but Bot2
+# none, so at Bot1's turn 3 upkeep paying is not offered: Bot1 is not asked, and the Ancient goes to the graveyard.
+
+[Bot1 Deck]
+Sheltering Ancient
+Mox Emerald
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sheltering Ancient.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Sheltering Ancient

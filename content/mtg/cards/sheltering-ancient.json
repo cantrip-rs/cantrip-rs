@@ -1,0 +1,11 @@
+{
+  "name": "Sheltering Ancient",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Treefolk",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Trample\nCumulative upkeep—Put a +1/+1 counter on a creature an opponent controls. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)",
+  "keywords": [
+    "Trample"
+  ]
+}
