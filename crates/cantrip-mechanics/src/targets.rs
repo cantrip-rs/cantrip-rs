@@ -476,6 +476,14 @@ fn artifact_or_creature_you_control_filter(q: &dyn Query, asker: &Asker, t: Targ
 /// "Target artifact" (CR 115.1). Abrade and Embereth Shieldbreaker print it.
 pub const ARTIFACT: TargetSpec = target(artifact_filter);
 
+fn artifact_an_opponent_controls_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    artifact_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
+}
+
+/// "Target artifact an opponent controls" (CR 115.1). Burn, Burn, Tree and Fern, Fall of the First Civilization, Hyperion
+/// Blacksmith, Sawblade Slinger and Shrapnel Slinger print it.
+pub const ARTIFACT_AN_OPPONENT_CONTROLS: TargetSpec = target(artifact_an_opponent_controls_filter);
+
 fn enchantment_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id) if on_battlefield(q, id) && q.chars(id).is(CardType::Enchantment))
 }
