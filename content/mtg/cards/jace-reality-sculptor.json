@@ -1,0 +1,7 @@
+{
+  "name": "Jace, Reality Sculptor",
+  "manaCost": "{3}{U}{U}",
+  "type": "Legendary Planeswalker — Jace",
+  "loyalty": 5,
+  "oracleText": "+1: Empower Jace X, where X is the number of Islands you control.\n−3: Until your next turn, whenever a creature attacks you or a planeswalker you control, it gets -5/-0 until end of turn.\n0: Exile all but the bottom card of each opponent's library. Activate only if there are twenty-five or more loyalty counters among Jaces you control."
+}

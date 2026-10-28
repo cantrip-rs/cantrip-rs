@@ -1,0 +1,51 @@
+# Jace, Reality Sculptor's -3 until Bot1's next turn: each Craw Wurm (6/4) that attacks Bot1 or Bot1's Jace is weakened by
+# exactly 5 - on T4 one Wurm deals 1 to Bot1 (life 19, not 20 or 18) and the other 1 to Jace (loyalty 2 -> 1). Bot1's T5
+# turn has begun, so on T6 the effect has ended: the Wurm deals its full 6 to Bot1 (13) and the other kills Jace (CR 603.7, 611.2).
+[Bot1 Deck]
+Island
+Black Lotus
+Mox Sapphire
+Jace, Reality Sculptor
+Island x3
+Island x10
+[Bot2 Deck]
+Black Lotus x4
+Craw Wurm x2
+Forest
+Forest x10
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Jace, Reality Sculptor.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Hand.Craw Wurm.Cast
+Bot2.Hand.Craw Wurm.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Jace, Reality Sculptor.Activate(Ability: Until your next turn)
+? Bot1.Battlefield.Jace, Reality Sculptor.Counters.Loyalty = 2
+[T4 Bot2.Main1]
+Bot2.Attack(Craw Wurm#1 > Bot1; Craw Wurm#2 > Bot1.Battlefield.Jace, Reality Sculptor)
+[T4 Bot2.Main2]
+? Bot1.Life = 19
+? Bot1.Battlefield.Jace, Reality Sculptor.Counters.Loyalty = 1
+[T6 Bot2.Main1]
+Bot2.Attack(Craw Wurm#1 > Bot1; Craw Wurm#2 > Bot1.Battlefield.Jace, Reality Sculptor)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 13
+Bot1.Battlefield = Island; Mox Sapphire
+Bot1.Graveyard = Jace, Reality Sculptor; Black Lotus

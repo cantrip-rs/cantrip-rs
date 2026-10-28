@@ -1,0 +1,86 @@
+# Three players. Jace, Reality Sculptor's 0 needs twenty-five loyalty counters among Bot1's Jaces: Jace 7 and the Jace
+# token 18 (Jace's Machinations twice and two +1s that each count Bot1's one Island, though Bot2 controls an Island and Bot1 a Forest, which is no Island),
+# exactly 25, so the 0 is offered on T7 (CR 602.5). It exiles every card but the bottom one from each opponent's library, both
+# together: Bot2's four-card library keeps Plains, and Bot3's one-card library keeps its only card. Bot1's own library is untouched.
+[Bot1 Deck]
+Island
+Black Lotus
+Black Lotus
+Mox Sapphire
+Jace, Reality Sculptor
+Jace's Machinations
+Jace's Machinations
+Mox Sapphire
+Forest
+Island
+Mountain
+Mountain
+Mountain
+Island x5
+[Bot2 Deck]
+Island
+Forest x6
+Plains
+Swamp
+Mountain
+Mountain
+Swamp
+Plains
+[Bot3 Deck]
+Forest x7
+Swamp
+Mountain
+Island
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Jace, Reality Sculptor.Cast
+Bot1.Hand.Jace's Machinations.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 8
+Bot1.Battlefield.Jace, Reality Sculptor.Activate(Ability: Empower)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Battlefield.Jace, Reality Sculptor.Counters.Loyalty = 6
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 9
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot1.Main1]
+Bot1.Hand.Forest.Play
+! Bot1.Battlefield.Jace, Reality Sculptor.Activate(Ability: Exile all)
+Bot1.Hand.Jace's Machinations.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 17
+Bot1.Battlefield.Jace, Reality Sculptor.Activate(Ability: Empower)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Battlefield.Jace, Reality Sculptor.Counters.Loyalty = 7
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 18
+[T7 Bot1.Main1]
+Bot1.Battlefield.Jace, Reality Sculptor.Activate(Ability: Exile all)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[Expect]
+Bot1.Battlefield.Jace, Reality Sculptor.Counters.Loyalty = 7
+Bot2.Library = Plains
+Bot3.Library = Island
+Bot1.Library.Count = 8
+Exile = Mountain; Mountain; Swamp

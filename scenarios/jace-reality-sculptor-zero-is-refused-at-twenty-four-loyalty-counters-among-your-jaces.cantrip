@@ -1,0 +1,66 @@
+# Jace, Reality Sculptor's 0 needs twenty-five loyalty counters among Jaces Bot1 controls. Jace has 7 and the Jace token 17
+# (Jace's Machinations twice, 8 each, and two +1s that count Bot1's Islands: none on T1 and one on T3, though Bot2 controls
+# an Island too), 24 in all: one short, though Bot2's own Jace token (8) is no Jace Bot1 controls, so the 0 is not offered on T5 (CR 602.5).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Jace, Reality Sculptor
+Jace's Machinations
+Jace's Machinations
+Island
+Island x10
+[Bot2 Deck]
+Island
+Black Lotus
+Jace's Machinations
+Forest x13
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Jace, Reality Sculptor.Cast
+Bot1.Hand.Jace's Machinations.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 8
+Bot1.Battlefield.Jace, Reality Sculptor.Activate(Ability: Empower)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jace, Reality Sculptor.Counters.Loyalty = 6
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 8
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Jace's Machinations.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Jace Token.Counters.Loyalty = 8
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Jace's Machinations.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 16
+Bot1.Battlefield.Jace, Reality Sculptor.Activate(Ability: Empower)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jace, Reality Sculptor.Counters.Loyalty = 7
+? Bot1.Battlefield.Jace Token.Counters.Loyalty = 17
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Jace, Reality Sculptor.Activate(Ability: Exile all)
+[Expect]
+Bot2.Library.Count = 7
+Exile.Count = 0
