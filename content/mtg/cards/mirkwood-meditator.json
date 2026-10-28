@@ -1,0 +1,8 @@
+{
+  "name": "Mirkwood Meditator",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Elf Druid",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Landfall — Whenever a land you control enters, you may have this creature's base power and toughness become 4/2 until end of turn."
+}
