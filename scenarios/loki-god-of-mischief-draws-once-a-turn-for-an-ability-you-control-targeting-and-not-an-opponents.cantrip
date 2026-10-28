@@ -1,0 +1,78 @@
+# Loki, God of Mischief: "Whenever a player or permanent becomes the target of an ability you control, draw a card. This ability
+# triggers only once each turn." Bot2's own Aether Spellbomb ability on its own Ornithopter in turn 2 is not Bot1's: Bot1 does not
+# draw (library 12 after the turn-3 draw step). In turn 3 Bot1 activates two Spellbombs, each returning one of Bot2's Ornithopters:
+# the first draws a card (library 11), the second, in the same turn, none.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Loki, God of Mischief
+Black Lotus
+Aether Spellbomb
+Aether Spellbomb
+Island
+Island x13
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Ornithopter
+Ornithopter
+Ornithopter
+Aether Spellbomb
+Island x3
+Island x11
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Loki, God of Mischief.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aether Spellbomb.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Aether Spellbomb.Activate(Ability: Return target creature; Bot2.Battlefield.Ornithopter#1)
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 12
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Aether Spellbomb.Activate(Ability: Return target creature; Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 11
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Aether Spellbomb.Activate(Ability: Return target creature; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Library.Count = 11
+Bot2.Battlefield.Ornithopter = (absent)

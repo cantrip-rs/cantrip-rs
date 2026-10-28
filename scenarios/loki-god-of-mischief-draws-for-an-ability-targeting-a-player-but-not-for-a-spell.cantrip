@@ -1,0 +1,46 @@
+# Loki, God of Mischief: "a player or permanent becomes the target of an ability you control", not of a spell. In turn 3 Bot1's
+# Lightning Bolt at Bot2 targets a player but is a spell: no card (library 12 after the draw step, still 12). Then Mishra's
+# Bauble's ability, which targets a player, makes Loki draw (library 11).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Loki, God of Mischief
+Mishra's Bauble
+Lightning Bolt
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Loki, God of Mischief.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 12
+? Bot2.Life = 17
+Bot1.Battlefield.Mishra's Bauble.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Library.Count = 11

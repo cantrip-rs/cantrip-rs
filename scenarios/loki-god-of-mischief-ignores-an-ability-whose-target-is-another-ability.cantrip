@@ -1,0 +1,62 @@
+# Loki, God of Mischief draws when a player or a permanent becomes the target of an ability Bot1 controls. Echo, Perceptive
+# Prodigy's ability targets an ability on the stack, A.I.M. Scientists' connive trigger, which is neither: no card for Loki.
+# Library: 13 after the opening hand, 12 and 11 after the draw steps of turns 3 and 5, and 9 after the two connives (Echo's
+# copy and the original each draw a Lightning Bolt); a card drawn for Loki would leave 8.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Loki, God of Mischief
+Black Lotus
+Echo, Perceptive Prodigy
+Mox Pearl
+Mox Ruby
+Mox Emerald
+A.I.M. Scientists
+Lightning Bolt
+Lightning Bolt
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Loki, God of Mischief.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Echo, Perceptive Prodigy.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.A.I.M. Scientists.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Echo, Perceptive Prodigy.Activate(Stack.A.I.M. Scientists)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Lightning Bolt)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Library.Count = 9
+Bot1.Battlefield.A.I.M. Scientists.Counters.PlusOnePlusOne = 2
