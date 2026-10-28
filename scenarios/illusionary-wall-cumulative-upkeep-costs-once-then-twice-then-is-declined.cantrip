@@ -1,0 +1,64 @@
+# Illusionary Wall {4}{U}, "Cumulative upkeep {U}" (CR 702.24a). Cast on turn 1 (Black Lotus's {U}{U}{U}, Mox Sapphire's and a Island's {U}),
+# at Bot1's turn 3 upkeep it gets its first age counter and the cost is {U} once: Mox Sapphire and a Island are tapped and one {U} is paid,
+# leaving one in the pool. At turn 5 it gets a second and the cost is {U}{U}, two mana: with one source tapped paying is not
+# offered; with the Island tapped too it is paid, the pool empty, and the second Island (played on turn 3) untouched. At
+# turn 7 the cost would be three mana; Bot1 declines, and sacrifices it.
+
+[Bot1 Deck]
+Illusionary Wall
+Black Lotus
+Mox Sapphire
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Illusionary Wall.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Illusionary Wall.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Island#1.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = 
+? Bot1.Battlefield.Illusionary Wall.Counters.Age = 2
+? Bot1.Battlefield.Illusionary Wall.Power = 7
+? Bot1.Battlefield.Illusionary Wall.Toughness = 4
+? Bot1.Battlefield.Illusionary Wall.Keywords = Defender; FirstStrike; Flying
+? Bot1.Battlefield.Illusionary Wall.Colors = Blue
+[T7 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard = Illusionary Wall; Black Lotus
+Bot1.Battlefield.Illusionary Wall = (absent)
