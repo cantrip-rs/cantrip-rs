@@ -1,0 +1,54 @@
+# Pinecone Strike, the second mode alone: "Destroy target artifact token" takes Bot2's Treasure token and leaves Dori, which
+# is not targeted, untouched (no damage, still on the battlefield). Bot1's nontoken Mox Jet is refused as a target (CR 111.1).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Pinecone Strike
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Dori, Bearer of Friends
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Dori, Bearer of Friends.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Dori, Bearer of Friends; Treasure Token
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pinecone Strike.Cast
+Bot1.Modes(2)
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Treasure Token)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Dori, Bearer of Friends
+Bot2.Battlefield.Dori, Bearer of Friends.Damage = 0
+Exile.Count = 0
+Bot2.Graveyard = Black Lotus
+Bot1.Graveyard = Pinecone Strike
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Jet

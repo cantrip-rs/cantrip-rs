@@ -1,0 +1,56 @@
+# Pinecone Strike, "Choose one or both" (CR 700.2): both modes at once. Mode 1 deals 3 damage to Bot2's Dori (3/2) and "if that
+# creature would die this turn, exile it instead" (CR 614.1a), so it is exiled and not put into the graveyard; mode 2 destroys the
+# Treasure token Dori made (an artifact token). Bot1's own Mox Jet is an artifact but not a token, so mode 2 refuses it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Pinecone Strike
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Dori, Bearer of Friends
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Dori, Bearer of Friends.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Dori, Bearer of Friends; Treasure Token
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pinecone Strike.Cast
+! Bot1.Modes(Count: 0)
+Bot1.Modes(1; 2)
+Bot1.Target(Dori, Bearer of Friends)
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Treasure Token)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Exile = Dori, Bearer of Friends
+Bot2.Graveyard = Black Lotus
+Bot1.Graveyard = Pinecone Strike
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Jet
