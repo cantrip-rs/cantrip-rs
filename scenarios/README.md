@@ -421,7 +421,7 @@ A card choice, `! Bot1.Choose(Thopter)`, is checked at that player's next choice
 chosen from a revealed hand) and fails if the named card is among those it may take; it fails as proving nothing when no such
 card exists in the game. It shows a cost or choice leaves something out (a token as "a nontoken artifact"); pair it with the
 `Bot1.Choose(Thopter Foundry)` that takes the legal card on the next line. `! Bot1.Choose()` says choosing no card at all is an answer the question must refuse (a mandatory choice). Without parentheses it is the bare refusal below.
-Several names that are all among the cards it may take are instead one answer, which the question must refuse: `! Bot1.Choose(A; B; C)` for "up to two", or `! Bot1.Choose(A; B)` for creatures a crew or saddle cost may tap whose total power falls short (a negative power takes from it, CR 107.1b).
+Several names that are all among the cards it may take are instead one answer, which the question must refuse: `! Bot1.Choose(A; B; C)` for "up to two", or `! Bot1.Choose(A; B)` for creatures a crew, saddle or teamwork cost may tap whose total power falls short (`! Bot1.Choose(A)` for a single one) (a negative power takes from it, CR 107.1b).
 A list of names that are not all among them (for `Choose(..)` and `Search(..)` alike) is read name by name instead: it fails if any card it names may be taken or found, so a refusal of one card that may not be is written with that name alone.
 
 A removal of counters, `! Bot1.RemoveCounters(Dyadrine, Synthesis Amalgam: 2)`, is checked at that player's next question of counters to remove

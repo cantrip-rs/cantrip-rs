@@ -1884,8 +1884,11 @@ impl<'s> Run<'s> {
                 let everything: Vec<ObjectId> = (0..self.game.state.objects.len() as u32).map(ObjectId).collect();
                 // Several names that are all eligible are one answer, which the question must refuse: more cards than it takes
                 // (`! Bot1.Choose(A; B; C)` for "up to two"), as for targets; or creatures whose total power falls short
-                // (`! Bot1.Choose(A; B)` for crew, a negative power taking from it).
-                if matches!(request.kind, RequestKind::ChooseCards { .. } | RequestKind::TapForPower { .. }) && action.positional().count() > 1 {
+                // (`! Bot1.Choose(A; B)` for crew, a negative power taking from it; a lone `! Bot1.Choose(A)` too, for teamwork 2
+                // and a creature of power 1).
+                if (matches!(request.kind, RequestKind::ChooseCards { .. }) && action.positional().count() > 1)
+                    || (matches!(request.kind, RequestKind::TapForPower { .. }) && action.positional().count() > 0)
+                {
                     let mut named: Vec<ObjectId> = Vec::new();
                     for spec in action.positional() {
                         match self.objects(action, spec.trim(), eligible)?.into_iter().find(|id| !named.contains(id)) {
