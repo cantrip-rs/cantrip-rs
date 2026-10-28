@@ -1,7 +1,8 @@
 //! "Enchanted creature ... can't become untapped" (Frozen in Ice, Blossombind): `CardDef::cant_become_untapped` (CR 101.2,
 //! 701.26b), over a test card. It holds in the untap step and for an effect that untaps (`Game::untap`), leaves a stun counter
 //! where it is (nothing would untap the permanent for the counter to replace, CR 122.1d), is no ability of the creature (CR 113.1a,
-//! 613.1f), and a source that lost its abilities makes no such rule.
+//! 613.1f), and a source that lost its abilities makes no such rule. `EffectKind::CantBecomeUntapped` is the same rule as a resolved
+//! effect on one permanent (Spider-Woman, Secret Agent).
 
 use crate::turn::untap_step;
 use crate::{Cx, Game, Setup};
@@ -81,4 +82,19 @@ fn a_source_that_lost_its_abilities_bans_nothing() {
     lose_all_abilities(&mut game, frost);
     untap_step_of_yours(&mut game);
     assert!(!game.state.obj(bear).tapped);
+}
+
+#[test]
+fn a_resolved_effect_keeps_one_creature_tapped_and_its_stun_counter_in_place() {
+    let mut game = game();
+    let held = permanent(&mut game, &BEAR, true);
+    let free = permanent(&mut game, &BEAR, true);
+    let timestamp = game.state.timestamp();
+    game.state.effect_push(ContinuousEffect { source: held, controller: YOU, timestamp, affected: held, kind: EffectKind::CantBecomeUntapped, duration: Duration::Indefinite });
+    crate::counters::put(&mut cx(&mut game), held, CounterKind::Stun, 1, YOU, crate::counters::How::Effect);
+    lose_all_abilities(&mut game, held);
+    untap_step_of_yours(&mut game);
+    assert!(game.state.obj(held).tapped, "the creature untapped in the untap step");
+    assert_eq!(game.state.obj(held).counters(CounterKind::Stun), 1, "the stun counter was removed for an untap that could not happen");
+    assert!(!game.state.obj(free).tapped, "another creature stayed tapped");
 }

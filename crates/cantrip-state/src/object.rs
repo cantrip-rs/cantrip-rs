@@ -1197,6 +1197,10 @@ pub enum EffectKind {
     /// "It can't be sacrificed" (CR 101.2, 701.21a) for as long as the effect lasts (Slicer, Hired Muscle's "this turn"): as
     /// `Keyword::CantBeSacrificed`, but an effect, not an ability, so a permanent that loses its abilities is still under it.
     CantBeSacrificed,
+    /// "It can't become untapped" (CR 101.2, 701.26b) for as long as the effect lasts: it stays tapped in the untap step and
+    /// when an effect would untap it, and a stun counter on it stays (CR 122.1d). As `CardDef::cant_become_untapped`, but a
+    /// resolved effect of an ability on the permanent it names, so it is no ability of that permanent (CR 613.1f).
+    CantBecomeUntapped,
     /// The permanent is harnessed (CR 701.64): a designation it keeps as long as it stays where it is
     /// (`Duration::Indefinite`), which turns its infinity abilities on (CR 702.186).
     Harnessed,

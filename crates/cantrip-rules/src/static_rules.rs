@@ -582,11 +582,13 @@ pub fn untap_banned(q: &dyn Query, cards: &'static CardTable, id: ObjectId) -> b
     any_static(q, cards, |d| d.untap_bans, |rule, asker| rule(q, asker, id))
 }
 
-/// Whether a static ability of a permanent on the battlefield with its abilities says the permanent `id` can't become
-/// untapped (CR 101.2, 701.26b, `CardDef::cant_become_untapped`: Frozen in Ice, Blossombind). No ability of `id`'s, so it holds
+/// Whether the permanent `id` can't become untapped (CR 101.2, 701.26b): a resolved effect says so
+/// (`EffectKind::CantBecomeUntapped`: Spider-Woman, Secret Agent), or a static ability of a permanent on the battlefield with
+/// its abilities does (`CardDef::cant_become_untapped`: Frozen in Ice, Blossombind). No ability of `id`'s, so it holds
 /// whatever abilities `id` has lost (CR 613.1f). Asked only where a tapped permanent would untap.
 pub fn cant_become_untapped(q: &dyn Query, cards: &'static CardTable, id: ObjectId) -> bool {
-    any_static(q, cards, |d| d.cant_become_untapped, |rule, asker| rule(q, asker, id))
+    q.state().effects.iter().any(|e| e.affected == id && e.kind == EffectKind::CantBecomeUntapped)
+        || any_static(q, cards, |d| d.cant_become_untapped, |rule, asker| rule(q, asker, id))
 }
 
 /// Whether the permanent `id` can't be sacrificed (CR 101.2, 701.21a), for any reason and by anyone: it has "this permanent
