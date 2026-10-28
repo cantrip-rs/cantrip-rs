@@ -1,0 +1,14 @@
+{
+  "name": "Bilbo Baggins, Burglar",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Creature — Halfling Rogue",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When Bilbo Baggins enters, draw a card.",
+  "adventure": {
+    "name": "Take a Glance",
+    "manaCost": "{U}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Scry 2. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

@@ -1,0 +1,54 @@
+# Bilbo Baggins, Burglar's Adventure, Take a Glance: "Scry 2." (CR 701.22, 715). Cast for {U} on turn 1 (the pool empty after), it
+# looks at the top two cards, Plains and Swamp, and puts Plains on the bottom and Swamp on top; the library is then Swamp first and Plains
+# last. As it resolves the card goes to exile, not the graveyard, and Bilbo is cast from exile for {2}{U} on turn 3, drawing Swamp.
+# (Bot1's turn-3 draw is the Swamp; the Bilbo trigger then draws the card after it.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Bilbo Baggins, Burglar
+Island
+Island
+Island
+Plains
+Swamp
+Forest
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bilbo Baggins, Burglar.Cast(Ability: Adventure)
+? Bot1.Mana =
+? Stack = Take a Glance
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Swamp | Plains)
+[T1 Bot1.Main2]
+? Exile = Bilbo Baggins, Burglar
+? Bot1.Graveyard.Count = 0
+? Bot1.Library = Swamp; Forest; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Plains
+[T3 Bot1.Main1]
+? Bot1.Hand = Island; Island; Island; Swamp
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Exile.Bilbo Baggins, Burglar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Bilbo Baggins, Burglar
+Bot1.Hand = Island; Island; Island; Swamp; Forest

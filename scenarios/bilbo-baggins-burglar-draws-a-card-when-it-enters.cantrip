@@ -1,0 +1,39 @@
+# Bilbo Baggins, Burglar: "When Bilbo Baggins enters, draw a card." Cast for {2}{U} off three Moxen on turn 1, the pool empty
+# after the cast, it enters and its trigger draws the top card (a Plains): the hand holds the three Islands and the Plains, the library
+# one card fewer (CR 121.1, 603.6a).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Bilbo Baggins, Burglar
+Island
+Island
+Island
+Plains
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bilbo Baggins, Burglar.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Bilbo Baggins, Burglar
+Bot1.Hand = Island; Island; Island; Plains
+Bot1.Library.Count = 10
