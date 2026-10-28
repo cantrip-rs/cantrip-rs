@@ -53,7 +53,9 @@ pub enum Event {
     /// An object or player became the target of a spell or ability (CR 115.10).
     BecameTarget { target: Target, by: ObjectId, controller: PlayerId },
     /// An object moved between zones. A token's creation comes from no zone (`Zone::GONE`).
-    ZoneChange { old: ObjectId, new: ObjectId, from: Zone, to: Zone, reason: ZoneReason },
+    /// `controller` is the new object's as it arrived: whom a permanent entered under (CR 110.2), which a later change of control
+    /// does not alter ("entered the battlefield under your control this turn").
+    ZoneChange { old: ObjectId, new: ObjectId, from: Zone, to: Zone, reason: ZoneReason, controller: PlayerId },
     /// Damage was dealt. `controller` and `kind.colors()` are the source's as it dealt it (CR 120.3, 609.7): "damage red sources
     /// you controlled dealt this turn" counts a source that has since changed controller or color, or left (Temple of
     /// Power's ruling), and a spell's or an ability's source by what it was on the stack or the battlefield then.

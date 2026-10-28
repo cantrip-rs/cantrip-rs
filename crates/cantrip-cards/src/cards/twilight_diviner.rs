@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 /// the creatures to choose among. A creature qualifies if it entered from a graveyard, or came from the stack and was
 /// cast from one, which this turn's history says.
 fn from_a_graveyard(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    let Event::ZoneChange { old, new, from, to, reason } = event else { return None };
+    let Event::ZoneChange { old, new, from, to, reason, .. } = event else { return None };
     if !to.is(ZoneKind::Battlefield) || *new == source || q.controller(*new) != q.controller(source) {
         return None;
     }

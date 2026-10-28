@@ -160,7 +160,7 @@ impl Tracker {
                 self.last_turn = turn;
                 out.push(Proto::Step { turn: turn.0, step, active: turn.1 });
             }
-            Event::ZoneChange { old, new, from, to, reason } => {
+            Event::ZoneChange { old, new, from, to, reason, .. } => {
                 if to.is(ZoneKind::Gone) {
                     return;
                 }
