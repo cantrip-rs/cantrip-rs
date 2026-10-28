@@ -294,6 +294,20 @@ fn noncreature_artifact_or_enchantment_filter(q: &dyn Query, _: &Asker, t: Targe
 pub const NONCREATURE_ARTIFACT_OR_ENCHANTMENT: TargetSpec =
     target(noncreature_artifact_or_enchantment_filter);
 
+fn noncreature_artifact_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
+    match t {
+        Target::Object(id) if q.is_on_battlefield(id) => {
+            let c = q.chars(id);
+            c.is(CardType::Artifact) && !c.is(CardType::Creature)
+        }
+        _ => false,
+    }
+}
+
+/// "Target noncreature artifact" (CR 115.1): an artifact on the battlefield that is not also a creature, as the layers have it.
+/// Crush, Blinkmoth Well and HULK SMASH! print it.
+pub const NONCREATURE_ARTIFACT: TargetSpec = target(noncreature_artifact_filter);
+
 /// "... that player controls" in a slot of "for each opponent, up to one target [permanent] that player controls" (CR 601.2c, 115.1): a
 /// permanent on the battlefield controlled by the opponent whose slot (`TargetSpec::EACH_OPPONENT`) is being chosen or checked, which
 /// the core says through `Query::slot_opponent`. A slot's filter adds the kind of permanent. The Theorist, Jace Beleren's minus two and
