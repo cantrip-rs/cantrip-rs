@@ -1,0 +1,96 @@
+# Old Fat Spider Can't See Me: "I - Target creature you control gains hexproof for as long as this Saga remains on the battlefield. II - Prevent all damage that would
+# be dealt by up to one target creature for as long as this Saga remains on the battlefield. III, IV - Draw a card." (CR 611.2b, 615.) Chapter I (turn 1) gives
+# Bot1's Ornithopter hexproof: Bot2's Lightning Bolt cannot target it (the refusal). Chapter II (turn 3) stops Bot2's Grizzly Bears: on turn 4 it and
+# Llanowar Elves attack and only the Elves' 1 damage lands (19). Chapters III and IV each draw (library 20 to 15 with the three draw steps). After chapter IV the
+# Saga is sacrificed (CR 714.4) and both effects end: on turn 8 the Bears and Elves deal 3 (16) and the Bolt kills the Ornithopter.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Old Fat Spider Can't See Me
+Ornithopter
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Emerald
+Mox Jet
+Mox Ruby
+Grizzly Bears
+Llanowar Elves
+Lightning Bolt
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Old Fat Spider Can't See Me.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1; Llanowar Elves > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 19
+? Bot1.Library.Count = 19
+[T6 Bot2.Main1]
+? Bot1.Library.Count = 17
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Ornithopter; Old Fat Spider Can't See Me
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T8 Bot2.Main1]
+? Bot1.Library.Count = 15
+? Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Ornithopter
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T8 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1; Llanowar Elves > Bot1)
+[T8 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 16
+Bot1.Graveyard = Ornithopter; Old Fat Spider Can't See Me
