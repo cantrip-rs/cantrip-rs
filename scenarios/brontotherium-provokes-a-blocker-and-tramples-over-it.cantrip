@@ -1,0 +1,53 @@
+# Brontotherium (5/3 trample, {4}{G}{G} paid by Black Lotus, Mox Emerald, Mox Jet and Mox Ruby) attacks on turn 3 and provokes Bot2's untapped
+# Balduvian Bears (CR 702.39a): they must block it. The Bears (2 toughness) take lethal damage and the other 3 tramples over to Bot2
+# (CR 702.19b); the Bears deal 2 to Brontotherium.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Brontotherium
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Balduvian Bears
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Brontotherium.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Balduvian Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Brontotherium > Bot2)
+Bot1.Accept
+! Bot2.Block(Count: 0)
+Bot2.Block(Balduvian Bears > Brontotherium)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Balduvian Bears
+Bot1.Battlefield.Brontotherium.Damage = 2
+Bot1.Battlefield.Brontotherium.Keywords = Trample
