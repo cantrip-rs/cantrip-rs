@@ -1,0 +1,31 @@
+# A.I.M. Scientists' basic landcycling {2} (CR 702.29e): paying it discards the card and finds a basic land. {2} is paid
+# exactly with Mana Crypt's {C}{C}, so the pool ends empty; with only a Mox's {U} the ability is not offered. The Scientists
+# do not enter, so they do not connive.
+
+[Bot1 Deck]
+Mox Sapphire
+Mana Crypt
+A.I.M. Scientists
+Island x4
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.A.I.M. Scientists.Activate(Ability: Basic landcycling; Mana: short)
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.A.I.M. Scientists.Activate(Ability: Basic landcycling)
+Bot1.Pass
+? Bot1.Mana = {U}
+Bot1.Search(Mountain)
+
+[Expect]
+Bot1.Graveyard.A.I.M. Scientists.Colors = Blue
+Bot1.Hand = Mountain; Island; Island; Island; Island

@@ -1,0 +1,34 @@
+# A.I.M. Scientists: "When this creature enters, it connives" (CR 701.50a). Bot1 draws a Lightning Bolt and discards it, a
+# nonland card, so the Scientists get a +1/+1 counter. {3}{U} is paid exactly by Black Lotus's {U}{U}{U} and Mox Sapphire's {U}:
+# the pool is empty right after the cast, so a cost of one less or one more would show.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+A.I.M. Scientists
+Island x4
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.A.I.M. Scientists.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Choose(Lightning Bolt)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.A.I.M. Scientists.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.A.I.M. Scientists.Power = 4
+Bot1.Battlefield.A.I.M. Scientists.Toughness = 4
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Hand = Island; Island; Island; Island
