@@ -139,6 +139,21 @@ pub fn other_of_subtype_you_control<const SUBTYPE: u16>(q: &dyn LayerQuery, sour
     affected != source && your_of_subtype::<SUBTYPE>(q, source, affected, so_far)
 }
 
+/// "As long as you control another [subtype], this creature has ..." (CR 604.1, 613.1f) as `StaticDef::affects`, `SUBTYPE` a
+/// `Subtype` as `u16` (`lands::sub`): only the source itself, and only while its controller controls another permanent with
+/// that creature type, as the earlier layers made it, the type read through the words of the source's text (CR 612.2). Its own
+/// type does not count, and an opponent's permanent is not one "you control". Dain's Company (lifelink, Dwarf) and Bolg's Company
+/// (haste, Goblin) print it.
+pub fn itself_while_you_control_another<const SUBTYPE: u16>(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
+    if affected != source {
+        return false;
+    }
+    let Some(word) = subtype_word(view, source, SUBTYPE) else { return false };
+    let state = view.state();
+    let you = state.obj(source).controller;
+    state.battlefield().iter().any(|&id| id != source && state.obj(id).controller == you && view.chars(id).has_subtype(word))
+}
+
 /// "... can't be countered" (CR 101.2, layer 6) as the `StaticDef::apply` of a static ability that covers spells on the
 /// stack (declared `everywhere`). Hexing Squelcher ("Spells you control") and Frenzied Baloth ("Creature spells you
 /// control") print it.
