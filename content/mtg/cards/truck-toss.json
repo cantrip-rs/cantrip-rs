@@ -1,0 +1,6 @@
+{
+  "name": "Truck Toss",
+  "manaCost": "{2}{R}{R}",
+  "type": "Instant",
+  "oracleText": "This spell costs {2} less to cast if you control a Vehicle.\nTruck Toss deals 4 damage to any target."
+}

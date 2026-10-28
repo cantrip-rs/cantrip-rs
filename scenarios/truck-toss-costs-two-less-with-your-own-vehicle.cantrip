@@ -1,0 +1,40 @@
+# Truck Toss: "This spell costs {2} less to cast if you control a Vehicle." Bot1 casts Reckoner Bankbuster with Mox Jet and Mox
+# Pearl, then Truck Toss for {R}{R} alone (the generic {2} is gone; the colored mana is not reduced): Bot2 takes 4 and the pool
+# is empty.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Reckoner Bankbuster
+Truck Toss
+Island
+Island x12
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Truck Toss.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard = Truck Toss

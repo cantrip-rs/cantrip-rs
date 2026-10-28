@@ -1,0 +1,56 @@
+# Truck Toss: "This spell costs {2} less to cast if you control a Vehicle. Truck Toss deals 4 damage to any target."
+# Bot2 controls a Reckoner Bankbuster (a Vehicle) - not Bot1's, so on turn 3 Bot1 with three Moxen cannot cast it
+# (the refusal), draws a fourth, and with all four Moxen it casts it for its full {2}{R}{R}: the pool is empty and Bot2 takes 4.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Truck Toss
+Island
+Island
+Island
+Mox Pearl
+Island x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Reckoner Bankbuster
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Reckoner Bankbuster.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Truck Toss.Cast(Bot2; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Truck Toss.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard = Truck Toss
