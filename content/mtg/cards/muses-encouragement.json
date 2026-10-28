@@ -1,0 +1,6 @@
+{
+  "name": "Muse's Encouragement",
+  "manaCost": "{4}{U}",
+  "type": "Instant",
+  "oracleText": "Create a 3/3 blue and red Elemental creature token with flying.\nSurveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)"
+}
