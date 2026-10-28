@@ -1,0 +1,40 @@
+# Reverent Howl {2}{B}, first mode: "Target player draws two cards and loses 2 life." Three Mox Pearls make {W}{W}{W} - three mana, no
+# black - and the Howl is refused (the {B} pip is pinned); once Mox Jet is in play it is cast and paid exactly with the Jet and two
+# Pearls. Bot1 targets Bot2: it draws two cards (9 in hand) and is on 18; Bot1 itself is untouched.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Reverent Howl
+Mox Jet
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+! Bot1.Hand.Reverent Howl.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Reverent Howl.Cast
+Bot1.Modes(Target player draws two cards)
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Hand.Count = 9
+Bot2.Life = 18
+Bot1.Life = 20
+Bot1.Hand.Count = 2

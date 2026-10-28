@@ -1,0 +1,6 @@
+{
+  "name": "Reverent Howl",
+  "manaCost": "{2}{B}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Target player draws two cards and loses 2 life.\n• Target creature gets +2/+2 and gains lifelink until end of turn."
+}

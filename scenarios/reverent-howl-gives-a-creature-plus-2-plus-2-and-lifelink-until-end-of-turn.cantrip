@@ -1,0 +1,47 @@
+# Reverent Howl's second mode: "Target creature gets +2/+2 and gains lifelink until end of turn." Bot1 casts it at its own Memnite
+# before combat on turn 3: a 3/3 with lifelink, it hits Bot2 for 3 and Bot1 gains 3 (23). On turn 4 the Memnite is a 1/1 again with no
+# keywords (CR 514.2).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Pearl
+Memnite
+Reverent Howl
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Reverent Howl.Cast
+Bot1.Modes(Target creature gets +2/+2)
+Bot1.Target(Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 3
+? Bot1.Battlefield.Memnite.Keywords = Lifelink
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 23
+? Bot2.Life = 17
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Memnite.Keywords = (absent)
