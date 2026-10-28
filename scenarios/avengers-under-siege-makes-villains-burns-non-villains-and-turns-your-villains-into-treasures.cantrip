@@ -1,0 +1,85 @@
+# Avengers: Under Siege: I - two 2/1 black Villain tokens with menace. II (turn 3) - 2 damage to each non-Villain creature and each
+# opponent, all at once: Bot1's Memnite and Bot2's Memnite die and Bot2 goes to 18, while the two Villain tokens, Bot2's Agents of
+# HYDRA (a Villain) and Bot1 itself are untouched. III (turn 5) - a Treasure for each Villain Bot1 controls, the two tokens and
+# not Bot2's Agents of HYDRA; the Saga is then sacrificed (CR 714.4).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Avengers: Under Siege
+Memnite
+Forest x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Sapphire
+Agents of HYDRA
+Mox Emerald
+Norwood Ranger
+Phyrexian Walker
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Avengers: Under Siege.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Villain Token#1.Power = 2
+? Bot1.Battlefield.Villain Token#2.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Norwood Ranger.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Agents of HYDRA.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot1.Life = 20
+? Bot1.Graveyard = Memnite
+? Bot2.Graveyard = Norwood Ranger
+? Bot2.Battlefield.Phyrexian Walker.Damage = 2
+? Bot2.Battlefield.Agents of HYDRA.Power = 1
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Treasure Token; Treasure Token; Villain Token; Villain Token
+? Bot1.Battlefield.Treasure Token#1.Tapped = false
+Bot1.Graveyard = Avengers: Under Siege; Memnite
