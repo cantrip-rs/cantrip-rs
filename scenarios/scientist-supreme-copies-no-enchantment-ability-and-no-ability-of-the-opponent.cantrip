@@ -1,0 +1,59 @@
+# Scientist Supreme of A.I.M. copies an ability only "from an artifact source" that "you control" (CR 115.1): Goblin
+# Bombardment is an enchantment, so its "Sacrifice a creature" ability is no target on turn 1, and neither is Bot2's Mind
+# Stone ability on Bot2's turn 4, when Bot1 could not activate the Scientist's ability anyway (CR 602.5b).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Scientist Supreme of A.I.M.
+Goblin Bombardment
+Memnite
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mind Stone
+Swamp x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Scientist Supreme of A.I.M..Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Goblin Bombardment.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Goblin Bombardment.Activate(Bot2)
+Bot1.Choose(Memnite)
+? Stack.Count = 1
+! Bot1.Battlefield.Scientist Supreme of A.I.M..Activate(Stack.Goblin Bombardment)
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mind Stone.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mind Stone.Activate(Ability: Draw)
+Bot2.Battlefield.Mox Pearl.Activate
+? Stack.Count = 1
+! Bot1.Battlefield.Scientist Supreme of A.I.M..Activate(Stack.Mind Stone)
+? Bot1.Life = 20
