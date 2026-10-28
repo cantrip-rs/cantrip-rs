@@ -1,0 +1,30 @@
+# Splatter Thug's unleash (CR 702.98a): Bot1 casts it on turn 1 with free mana and accepts the counter, so it enters with a +1/+1
+# counter on it - a 3/3 - and can't block as long as it has it (it keeps its printed abilities).
+
+[Bot1 Deck]
+Black Lotus
+Splatter Thug
+Island
+Island
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Splatter Thug.Cast
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Splatter Thug.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Splatter Thug.Power = 3
+Bot1.Battlefield.Splatter Thug.Toughness = 3
+Bot1.Battlefield.Splatter Thug.Keywords = CantBlock; FirstStrike
