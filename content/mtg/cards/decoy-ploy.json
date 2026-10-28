@@ -1,0 +1,6 @@
+{
+  "name": "Decoy Ploy",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Choose one or both —\n• Return target Villain card from your graveyard to your hand.\n• Return target Hero card from your graveyard to your hand."
+}

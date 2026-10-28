@@ -1,0 +1,60 @@
+# Decoy Ploy, choose one or both (CR 700.2): the graveyard holds Agents of HYDRA (a Villain), Agent Phil Coulson (a Hero), Savannah
+# Lions (neither) and an Island (neither). Villain mode refuses the Coulson and the Lions, Hero mode refuses the Agents and the
+# Lions; with both modes chosen the Agents and the Coulson return to hand, the Lions and the Island stay. Paid for exactly {1}{B}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Faithless Looting
+Decoy Ploy
+Agents of HYDRA
+Agent Phil Coulson
+Swamp
+Savannah Lions
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Agents of HYDRA; Agent Phil Coulson)
+[T3 Bot1.Main1]
+Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot1.Choose(Savannah Lions; Island)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Decoy Ploy.Cast
+Bot1.Modes(1; 2)
+! Bot1.Target(Bot1.Graveyard.Agent Phil Coulson)
+! Bot1.Target(Bot1.Graveyard.Savannah Lions)
+Bot1.Target(Bot1.Graveyard.Agents of HYDRA)
+! Bot1.Target(Bot1.Graveyard.Agents of HYDRA)
+! Bot1.Target(Bot1.Graveyard.Savannah Lions)
+Bot1.Target(Bot1.Graveyard.Agent Phil Coulson)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Decoy Ploy; Island; Savannah Lions
+Bot1.Hand.Count = 3

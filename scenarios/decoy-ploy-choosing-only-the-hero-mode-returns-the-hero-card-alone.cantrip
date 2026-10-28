@@ -1,0 +1,54 @@
+# Decoy Ploy, "choose one or both" (CR 700.2): one mode is an answer. Only the Hero mode is chosen, so Agent Phil
+# Coulson returns to hand and Agents of HYDRA, a Villain card the other mode could have returned, stays in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Faithless Looting
+Decoy Ploy
+Agents of HYDRA
+Agent Phil Coulson
+Swamp
+Savannah Lions
+Island
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Agents of HYDRA; Agent Phil Coulson)
+[T3 Bot1.Main1]
+Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot1.Choose(Savannah Lions; Island)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Decoy Ploy.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot1.Graveyard.Agent Phil Coulson)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Decoy Ploy; Island; Savannah Lions; Agents of HYDRA
+Bot1.Hand.Count = 2
