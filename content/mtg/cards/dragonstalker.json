@@ -1,0 +1,11 @@
+{
+  "name": "Dragonstalker",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Bird Soldier",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying, protection from Dragons",
+  "keywords": [
+    "Flying"
+  ]
+}
