@@ -58,14 +58,20 @@ fn create_copies(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     }
     let values = g.copiable_values(me);
     let created = g.create_token_copies_tapped(values, you, plan.len() as u32, true)?;
-    // The copies among what was created, in order: a replacement may have added tokens of another kind.
-    let copies: Vec<ObjectId> = created.into_iter().filter(|&t| g.obj(t).card == values.card).collect();
-    // Each opponent's tokens are a share of them: a replacement multiplies the one it was asked for.
-    let share = (copies.len() / plan.len()).max(1);
+    // What was created is what took the place of the copies asked for (CR 614.1a): a replacement changes the one creation
+    // event's count and kind (Doubling Season makes twice as many, Draconic Visitor makes Dragons), so every token made is
+    // one of "those tokens", whatever it is, and enters tapped and attacking (the Divine Visitation ruling). They are shared
+    // out in turn order, each opponent getting an equal share and the first ones one more of any remainder.
+    let copies = created;
+    let (share, extra) = (copies.len() / plan.len(), copies.len() % plan.len());
+    let mut owners: Vec<usize> = Vec::with_capacity(copies.len());
+    for k in 0..plan.len() {
+        owners.extend(std::iter::repeat_n(k, share + usize::from(k < extra)));
+    }
     let mut attacking: Vec<(Target, Vec<ObjectId>)> = Vec::new();
     for (i, &token) in copies.iter().enumerate() {
-        let (opponent, first) = plan[(i / share).min(plan.len() - 1)];
-        let target = if i % share == 0 {
+        let (opponent, first) = plan[owners[i]];
+        let target = if i == 0 || owners[i - 1] != owners[i] {
             first
         } else {
             let candidates = player_or_their_planeswalkers(g, opponent);

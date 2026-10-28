@@ -1,0 +1,73 @@
+# Modular (CR 702.43a) targets an artifact creature, not just any creature: when Bot2's Lightning Bolt kills Arcbound Wanderer (two +1/+1 counters), Bot1's
+# ability has two legal targets - Suntouched Myr and Bot2's Alpha Myr, both artifact creatures - and Bot2's Balduvian Bears, a creature but no artifact, is
+# refused. Bot1 chooses the Suntouched Myr, which gets the Wanderer's two counters (a 3/3); the Alpha Myr stays a 2/1.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Black Lotus
+Sol Ring
+Arcbound Wanderer
+Mox Jet
+Swamp
+Suntouched Myr
+Swamp x12
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Mox Jet
+Balduvian Bears
+Alpha Myr
+Lightning Bolt
+Swamp x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Arcbound Wanderer.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Balduvian Bears.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Alpha Myr.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Arcbound Wanderer.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Arcbound Wanderer.Power = 2
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Suntouched Myr.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Suntouched Myr.Counters.PlusOnePlusOne = 1
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Arcbound Wanderer)
+! Bot1.Target(Balduvian Bears)
+Bot1.Target(Suntouched Myr)
+Bot2.Pass
+Bot1.Accept
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Arcbound Wanderer; Black Lotus
+Bot1.Battlefield.Suntouched Myr.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Suntouched Myr.Power = 3
+Bot2.Battlefield.Alpha Myr.Power = 2
