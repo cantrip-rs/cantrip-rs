@@ -1,0 +1,71 @@
+# Run Behind ({3}{U}, instant): "This spell costs {1} less to cast if it targets an attacking creature" - any attacker, a token
+# too. Bot1 has three Moxen. On turn 3 Bot2's Long Lake Nuisance is not attacking: the cost is four, refused with three
+# (Mana: short). On turn 4 Bot2 attacks with it and its Human Soldier token: Run Behind on the token costs three, paid exactly
+# (the pool empty after), and the token, a token that leaves the battlefield for a library, ceases to exist; the Nuisance hits.
+
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Run Behind
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Long Lake Nuisance
+Mox Emerald
+Island
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Long Lake Nuisance.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Mox Emerald)
+[T3 Bot1.Main1]
+! Bot1.Hand.Run Behind.Cast(Bot2.Battlefield.Long Lake Nuisance; Mana: short)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Long Lake Nuisance > Bot1; Human Soldier Token > Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Run Behind.Cast(Bot2.Battlefield.Human Soldier Token)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield.Human Soldier Token = (absent)
+Bot2.Battlefield.Long Lake Nuisance.Power = 3
+Bot2.Library.Count = 27

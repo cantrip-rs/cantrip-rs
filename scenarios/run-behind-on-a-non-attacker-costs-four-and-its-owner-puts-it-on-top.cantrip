@@ -1,0 +1,58 @@
+# Run Behind on Bot2's Long Lake Nuisance, which is not attacking (turn 3): the full {3}{U}, four, paid exactly from four Moxen.
+# Its owner Bot2 chooses to put it on top of its library (Accept), so it draws it again in turn 4.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Run Behind
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Long Lake Nuisance
+Mox Emerald
+Island
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Long Lake Nuisance.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Mox Emerald)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Run Behind.Cast(Bot2.Battlefield.Long Lake Nuisance)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+? Bot2.Library.Count = 29
+[T4 Bot2.Main1]
+? Bot2.Hand.Long Lake Nuisance.Power = 3
+
+[Expect]
+Bot1.Graveyard = Run Behind

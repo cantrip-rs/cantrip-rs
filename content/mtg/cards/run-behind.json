@@ -1,0 +1,6 @@
+{
+  "name": "Run Behind",
+  "manaCost": "{3}{U}",
+  "type": "Instant",
+  "oracleText": "This spell costs {1} less to cast if it targets an attacking creature.\nTarget creature's owner puts it on their choice of the top or bottom of their library."
+}
