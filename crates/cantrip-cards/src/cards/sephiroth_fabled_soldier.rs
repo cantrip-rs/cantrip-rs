@@ -1,7 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::effects::target_player_loses_1_life_you_gain_1;
 use cantrip_mechanics::triggers::{ANOTHER_CREATURE_DIES, CREATURE_DIES, THIS_ATTACKS, THIS_ENTERS_OR_ATTACKS};
-use cantrip_mechanics::{choose, targets, tokens};
+use cantrip_mechanics::{choose, effects, select, targets, tokens};
 use cantrip_oracle as oracle;
 
 /// The creatures other than Sephiroth that `player` controls.
@@ -13,9 +13,7 @@ fn other_creatures(g: &dyn Game, player: PlayerId, sephiroth: ObjectId) -> Vec<O
 /// up-to-one choice, nobody is asked with no other creature, and the card is drawn only for a creature actually sacrificed.
 fn sacrifice_another_to_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
-    let eligible = other_creatures(g, you, item.object);
-    let chosen = choose::cards(g, you, item.object, Purpose::Sacrifice, eligible, 1, true)?;
-    if !g.sacrifice(you, &chosen).is_empty() {
+    if !effects::may_sacrifice(g, you, item.object, select::another_creature_permanents(select::up_to(1)))?.is_empty() {
         g.draw(you, 1);
     }
     Ok(())
