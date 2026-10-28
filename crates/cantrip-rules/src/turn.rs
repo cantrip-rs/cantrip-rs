@@ -1194,7 +1194,7 @@ fn deals_now(cx: &Cx, id: ObjectId, had_first_strike: bool, first_strike_step: b
 
 /// The rules of a declaration of blockers among `allowed` (CR 509.1b-c): each attacker's fewest and most blockers; the
 /// requirements - those of static abilities (Lure's, `static_rules::block_requirements`) and of each creature an effect
-/// says blocks if able (`EffectKind::MustBlock`) that may block something; and the most of them a declaration can obey, with
+/// says blocks if able (`EffectKind::MustBlock`) that may block something, or blocks one attacker if able (`EffectKind::MustBlockAttacker`) that may block it; and the most of them a declaration can obey, with
 /// one that does (`BlockRequirements::solve`). A creature that can't block, or may block nothing, is required nothing (CR
 /// 509.1c: a requirement is obeyed only as far as the restrictions allow).
 fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)], rule_sources: &[ObjectId]) -> BlockRequirements {
@@ -1207,6 +1207,12 @@ fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)]
     for e in &cx.s().effects {
         if e.kind == EffectKind::MustBlock && allowed.iter().any(|p| p.0 == e.affected) {
             required.push(RequiredBlock { blocker: Some(e.affected), attacker: None });
+        }
+        // Provoke's "blocks this creature if able": the one block, where the restrictions allow it (CR 509.1c).
+        if let EffectKind::MustBlockAttacker(attacker) = e.kind
+            && allowed.contains(&(e.affected, attacker))
+        {
+            required.push(RequiredBlock { blocker: Some(e.affected), attacker: Some(attacker) });
         }
     }
     // A creature blocking one member of an attacking band blocks every member (CR 702.22h), so blocking any member obeys a

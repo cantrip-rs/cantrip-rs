@@ -155,6 +155,32 @@ fn allowed(request: &Request) -> &[(ObjectId, ObjectId)] {
     allowed
 }
 
+/// "Blocks this creature this combat if able" (CR 509.1c, 702.39a): one requirement naming the blocker and that attacker.
+/// Declaring no blocks, or blocking the other attacker, is refused; blocking the named attacker, with or without a second
+/// blocker, is not. With the blocker tapped, or the named attacker out of reach, nothing is required of it.
+#[test]
+fn a_creature_that_must_block_one_attacker_blocks_that_one() {
+    for case in ["untapped", "tapped", "flyer"] {
+        let named: &'static CardDef = if case == "flyer" { &FLYER } else { &BEAR };
+        let (mut g, ids) = game(&[(named, P0), (&BEAR, P0), (&BEAR, P1), (&BEAR, P1)]);
+        let (a1, a2, x, y) = (ids[0], ids[1], ids[2], ids[3]);
+        if case == "tapped" {
+            g.state.update_obj(x, |o| o.tapped = true);
+        }
+        let timestamp = g.state.timestamp();
+        g.state.effect_push(ContinuousEffect { source: a1, controller: P0, timestamp, affected: x, kind: EffectKind::MustBlockAttacker(a1), duration: Duration::EndOfCombat });
+        let ask = declare(&mut g, &[], &[a1, a2]);
+        if case == "untapped" {
+            assert_eq!(rules(&ask).required, vec![RequiredBlock { blocker: Some(x), attacker: Some(a1) }]);
+            assert!(!legal(&g, &ask, &[]) && !legal(&g, &ask, &[(x, a2)]) && !legal(&g, &ask, &[(y, a1)]));
+            assert!(legal(&g, &ask, &[(x, a1)]) && legal(&g, &ask, &[(x, a1), (y, a2)]) && legal(&g, &ask, &[(x, a1), (y, a1)]));
+        } else {
+            assert!(rules(&ask).required.is_empty(), "{case}: the creature is required to block");
+            assert!(legal(&g, &ask, &[]), "{case}: declaring no blockers is refused");
+        }
+    }
+}
+
 /// The requirement is not obeyed where the restrictions keep the creature from blocking (CR 509.1c, the rulings): tapped, by
 /// an effect that says it can't block, or with no attacker it may block (a flyer, for a creature without flying or reach).
 #[test]

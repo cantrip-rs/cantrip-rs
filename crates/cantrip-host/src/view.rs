@@ -1354,6 +1354,12 @@ impl<'a> Projector<'a> {
                         view.granted_abilities.push(AbilityTextView { text: format!("Blocks{until} if able."), spent: false });
                         continue;
                     }
+                    // A requirement to block one creature (CR 509.1c, 702.39a): "Blocks Goblin Grappler this combat if able."
+                    EffectKind::MustBlockAttacker(attacker) => {
+                        let until = self.until_text(e.duration);
+                        view.granted_abilities.push(AbilityTextView { text: format!("Blocks {}{until} if able.", game.name(attacker)), spent: false });
+                        continue;
+                    }
                     // A requirement to attack (CR 508.1d), and what: "Attacks Gideon, Battle-Forged during its controller's next
                     // turn if able."
                     EffectKind::MustAttackAt(at) => {
