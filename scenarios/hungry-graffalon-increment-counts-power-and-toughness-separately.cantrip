@@ -1,0 +1,68 @@
+# Hungry Graffalon (3/4 reach, {3}{G}) with increment (CR 702.191a), over three of Bot1's turns, each casting a spell paid with Moxen:
+#  - turn 3: Blanchwood Treefolk ({4}{G}, 5 mana) is more than the power 3 (and the toughness 4): a counter, 4/5.
+#  - turn 5: Axebane Beast ({3}{G}, 4 mana) is not more than the 4/5's power 4 or toughness 5: nothing.
+#  - turn 7: Ancient Carp ({4}{U}, 5 mana) is more than the power 4 but not the toughness 5: a counter, 5/6.
+# Bot2 is idle, and the Moxen cost nothing, so only the three creature spells matter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Hungry Graffalon
+Swamp
+Blanchwood Treefolk
+Axebane Beast
+Ancient Carp
+Swamp x12
+
+[Bot2 Deck]
+Swamp x25
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hungry Graffalon.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Blanchwood Treefolk.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hungry Graffalon.Power = 4
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Axebane Beast.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hungry Graffalon.Power = 4
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancient Carp.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Hungry Graffalon.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Hungry Graffalon.Power = 5
+Bot1.Battlefield.Hungry Graffalon.Toughness = 6
+Bot1.Battlefield.Hungry Graffalon.Keywords = Reach
