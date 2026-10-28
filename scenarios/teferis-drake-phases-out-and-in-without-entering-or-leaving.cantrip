@@ -1,0 +1,62 @@
+# Teferi's Drake has phasing (CR 702.26a): "before the active player untaps permanents, all phased-in permanents with
+# phasing that player controls phase out", and the permanents that phased out under their control phase in. Bot1 casts it
+# on turn 1 (and is not its first untap step), so it phases out in Bot1's turn 3 untap step - not Bot2's turn 2 - and
+# stays out through Bot2's turn 4, then phases in during Bot1's turn 5 untap step. Phasing is no zone change (CR 702.26d):
+# Aunt May ("whenever another creature you control enters") gains Bot1 nothing for the Drake's phasing in (22 life: 1 each for the Port-Mage and the Drake entering), and Dour
+# Port-Mage ("whenever ... leave the battlefield without dying") draws nothing for its phasing out; the Drake stays the
+# same object, 3/2 flying. The Drake is not among Bot1's battlefield while it is out (CR 702.26b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Aunt May
+Dour Port-Mage
+Teferi's Drake
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aunt May.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dour Port-Mage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Teferi's Drake.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot1.Battlefield.Teferi's Drake.Keywords = Flying; Phasing
+? Bot1.PhasedOut.Count = 0
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Teferi's Drake.Power = 3
+[T3 Bot1.Upkeep]
+? Bot1.PhasedOut = Teferi's Drake
+? Bot1.PhasedOut.Teferi's Drake.Power = 3
+? Bot1.Battlefield = Mox Pearl; Mox Sapphire; Mox Jet; Aunt May; Dour Port-Mage
+? Bot1.Hand.Count = 0
+[T4 Bot2.Main1]
+? Bot1.PhasedOut = Teferi's Drake
+[T5 Bot1.Upkeep]
+? Bot1.PhasedOut.Count = 0
+? Bot1.Battlefield = Mox Pearl; Mox Sapphire; Mox Jet; Aunt May; Dour Port-Mage; Teferi's Drake
+? Bot1.Battlefield.Teferi's Drake.Power = 3
+
+[Expect]
+Bot1.Life = 22
+Bot1.Hand.Count = 1
+Stack.Count = 0
