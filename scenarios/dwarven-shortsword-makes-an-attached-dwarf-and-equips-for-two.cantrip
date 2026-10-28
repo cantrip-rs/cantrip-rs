@@ -1,0 +1,57 @@
+# Dwarven Shortsword: when it enters, a 2/2 red Dwarf token is created and then the Equipment is attached to it (CR 701.3a),
+# so the Dwarf is 3/4 (+1/+2). Equip {2} (CR 702.6a) then moves it, at sorcery speed, to Bot1's Ornithopter, paid with exactly
+# two Moxen (the pool is empty right after): Ornithopter 1/4, the Dwarf back to 2/2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Dwarven Shortsword
+Ornithopter
+Plains
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dwarven Shortsword.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dwarf Token.Power = 3
+? Bot1.Battlefield.Dwarf Token.Toughness = 4
+? Bot1.Battlefield.Dwarf Token.Colors = Red
+? Bot1.Battlefield.Dwarven Shortsword.AttachedTo = Dwarf Token
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Dwarven Shortsword.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Dwarven Shortsword.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Dwarf Token.Power = 2
+Bot1.Battlefield.Dwarf Token.Toughness = 2
+Bot1.Battlefield.Dwarf Token.Token = true
