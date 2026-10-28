@@ -1,0 +1,42 @@
+# Duskwatch Hunter: "When this creature enters, put a +1/+1 counter on target creature." Any creature may be chosen (CR 115.1), an
+# opponent's among them: the Hunter's controller puts the counter on Bot2's Ornithopter. A Mox Ruby is no creature, so it is no
+# legal target, and the Hunter itself is left without one.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Duskwatch Hunter
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Duskwatch Hunter.Cast
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Target(Bot1.Battlefield.Mox Ruby)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Duskwatch Hunter.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Duskwatch Hunter.Power = 3
+Bot1.Battlefield.Duskwatch Hunter.Toughness = 1

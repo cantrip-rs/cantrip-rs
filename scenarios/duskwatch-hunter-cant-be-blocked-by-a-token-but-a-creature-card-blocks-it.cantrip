@@ -1,0 +1,53 @@
+# Duskwatch Hunter: "This creature can't be blocked by tokens" (CR 509.1b). Bot2's Assembly Specialist brings a Borg token. The
+# token may block Bot1's Llanowar Elves, but not the Hunter (refused); the Specialist, a card, may block the Hunter, and does. The
+# Hunter (a 4/2 with the counter it put on itself as it entered, the one creature there was to choose) kills the Specialist, and
+# the token and the Elves trade. The Elves attack too so that the token has a block to make beside the one it is refused.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Duskwatch Hunter
+Llanowar Elves
+Forest x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Assembly Specialist
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Duskwatch Hunter.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Assembly Specialist.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Duskwatch Hunter > Bot2; Llanowar Elves > Bot2)
+! Bot2.Block(Borg Token > Duskwatch Hunter)
+Bot2.Block(Assembly Specialist > Duskwatch Hunter; Borg Token > Llanowar Elves)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Duskwatch Hunter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Duskwatch Hunter.Damage = 1
+Bot2.Graveyard = Assembly Specialist
+Bot1.Graveyard = Llanowar Elves; Black Lotus
+Bot2.Battlefield = Mox Jet; Mox Pearl

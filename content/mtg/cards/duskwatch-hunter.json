@@ -1,0 +1,8 @@
+{
+  "name": "Duskwatch Hunter",
+  "manaCost": "{2}{B/G}",
+  "type": "Creature — Wolf",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "This creature can't be blocked by tokens.\nWhen this creature enters, put a +1/+1 counter on target creature."
+}
