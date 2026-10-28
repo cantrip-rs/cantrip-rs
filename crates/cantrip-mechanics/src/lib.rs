@@ -6,6 +6,7 @@ pub mod adapt;
 pub mod affinity;
 pub mod amass;
 pub mod assist;
+pub mod assimilate;
 pub mod attach;
 pub mod bargain;
 pub mod behold;

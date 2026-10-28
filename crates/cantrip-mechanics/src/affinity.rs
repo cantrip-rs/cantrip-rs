@@ -1,5 +1,6 @@
 //! Affinity (CR 702.41a): affinity for artifacts (Emry, Lurker of the Loch and Thoughtcast) and for a basic land type
-//! (Sapling Nursery's Forests) and a creature type (Scales of Shale's Lizards).
+//! (Sapling Nursery's Forests), a creature type (Scales of Shale's Lizards), creatures (Witherbloom, the Balancer) and
+//! artifact creatures (Borg Cube, Urza, Chief Artificer).
 
 use cantrip_api::*;
 
@@ -15,6 +16,15 @@ fn less_for_each_permanent(q: &dyn Query, player: PlayerId, costed: Costed, coun
 /// This spell costs {1} less to cast for each artifact you control.
 pub fn for_artifacts(q: &dyn Query, _: ObjectId, player: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
     less_for_each_permanent(q, player, costed, |id| q.chars(id).is(CardType::Artifact))
+}
+
+/// A spell costs {1} less to cast for each artifact creature you control (CR 702.41a). Borg Cube and Urza, Chief Artificer
+/// print affinity for artifact creatures.
+pub fn for_artifact_creatures(q: &dyn Query, _: ObjectId, player: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
+    less_for_each_permanent(q, player, costed, |id| {
+        let c = q.chars(id);
+        c.is(CardType::Artifact) && c.is(CardType::Creature)
+    })
 }
 
 /// "Affinity for [basic land type]es" (CR 702.41a): this spell costs {1} less to cast for each land of that type you control,
