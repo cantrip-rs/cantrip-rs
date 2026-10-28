@@ -1,0 +1,53 @@
+# Horsemanship (CR 702.31b): Wu Light Cavalry attacking cannot be blocked by Bot2's Flying Men (flying) or Grappler Spider
+# (reach), which are no help against it (the ruling: horsemanship doesn't interact with flying or reach), but can be by
+# Wei Scout, which has horsemanship (the positive control). Wei Scout deals 1 to the 1/2 Cavalry and takes its 1: it dies.
+# Bot1 casts the Cavalry on turn 1 (Black Lotus); Bot2 casts its three blockers on turn 2 off the five Moxen.
+
+[Bot1 Deck]
+Black Lotus
+Wu Light Cavalry
+Island x22
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Flying Men
+Grappler Spider
+Wei Scout
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Wu Light Cavalry.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Flying Men.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grappler Spider.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Wei Scout.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Wu Light Cavalry > Bot2)
+! Bot2.Block(Flying Men > Wu Light Cavalry)
+! Bot2.Block(Grappler Spider > Wu Light Cavalry)
+Bot2.Block(Wei Scout > Wu Light Cavalry)
+? Combat.Blocks.Count = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Wei Scout
+Bot1.Battlefield.Wu Light Cavalry.Damage = 1
+Bot1.Battlefield.Wu Light Cavalry.Tapped = true
