@@ -1,0 +1,11 @@
+{
+  "name": "Shu Cavalry",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Horsemanship (This creature can't be blocked except by creatures with horsemanship.)",
+  "keywords": [
+    "Horsemanship"
+  ]
+}
