@@ -1,0 +1,68 @@
+# Hound of Griselbrand's undying (CR 702.93a): Bot1 casts it on turn 1 with free mana. Bot2 destroys it on turn 2 with Infernal Grasp
+# (paid with a Mox Jet and a Mox Ruby): it had no +1/+1 counters, so it returns to the battlefield under its owner's control
+# with exactly one, a 2/2 with double strike plus the counter (checked while it is back). Destroyed again, now with a +1/+1 counter on it, it
+# stays in the graveyard. Bot2 pays 2 life for each Grasp.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Hound of Griselbrand
+Island
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Jet
+Mox Ruby
+Infernal Grasp
+Infernal Grasp
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hound of Griselbrand.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Infernal Grasp.Cast(Bot1.Battlefield.Hound of Griselbrand)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hound of Griselbrand.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Hound of Griselbrand.Power = 3
+? Bot1.Battlefield.Hound of Griselbrand.Toughness = 3
+? Bot1.Battlefield.Hound of Griselbrand.Keywords = DoubleStrike
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Infernal Grasp.Cast(Bot1.Battlefield.Hound of Griselbrand)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Hound of Griselbrand = (absent)
+Bot1.Graveyard.Count = 2
+Bot2.Life = 16
