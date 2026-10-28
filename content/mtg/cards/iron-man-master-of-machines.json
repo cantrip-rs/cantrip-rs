@@ -1,0 +1,12 @@
+{
+  "name": "Iron Man, Master of Machines",
+  "manaCost": "{2}{U}{R}",
+  "type": "Legendary Artifact Creature — Human Hero",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Flying, vigilance\nIron Man gets +1/+0 for each other artifact you control.\nWhenever Iron Man attacks, if an artifact entered the battlefield under your control this turn, draw a card.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

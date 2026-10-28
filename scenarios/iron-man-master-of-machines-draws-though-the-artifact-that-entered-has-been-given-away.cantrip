@@ -1,0 +1,55 @@
+# Iron Man, Master of Machines: "if an artifact entered the battlefield under your control this turn" is judged by whom the
+# artifact entered under (CR 603.4, 110.2), not by who controls it now. Turn 1 Bot1 casts four Moxen and Iron Man. Turn 3 he
+# casts Mox Emerald, then Harmless Offering gives it to Bot2: it entered under his control this turn though he no longer
+# controls it, so Iron Man draws when he attacks (hand 2, from 1 before the draw).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Iron Man, Master of Machines
+Harmless Offering
+Mox Emerald
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Iron Man, Master of Machines.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Mox Emerald
+[T3 Bot1.Attackers]
+Bot1.Attack(Iron Man, Master of Machines > Bot2)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot2.Battlefield = Mox Emerald
