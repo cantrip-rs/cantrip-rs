@@ -24,16 +24,10 @@ fn bounce(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Creatures you control get +1/+2 until end of turn": those there as it resolves (CR 611.2c).
-fn pump_team(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::pump_creatures_you_control(g, item, 1, 2);
-    Ok(())
-}
-
 static MODAL: ModalDef = modes(&[
     mode(draw_and_empower, "Draw a card. Empower Jace 2."),
     mode(bounce, "Return target spell or creature to its owner's hand.").targets(&[target(spell_or_creature)]),
-    mode(pump_team, "Creatures you control get +1/+2 until end of turn."),
+    mode(effects::creatures_you_control_get::<1, 2>, "Creatures you control get +1/+2 until end of turn."),
 ]);
 
 pub static CARD: CardDef = CardDef { spell: Some(SpellDef::MODAL), modal: Some(&MODAL), ..oracle::FATEHOLD_CHARM };

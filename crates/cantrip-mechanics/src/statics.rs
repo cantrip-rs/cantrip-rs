@@ -252,6 +252,12 @@ pub fn plus_one_plus_one_per_artifact_you_control(view: &dyn LayerQuery, source:
     chars.toughness = chars.toughness.map(|v| v + n);
 }
 
+/// "[This creature]'s power is equal to the number of creatures you control" (CR 604.3, layer 7a): a characteristic-defining
+/// ability, the creature itself among those counted if it is one. Adeline, Resplendent Cathar and Esgaroth Garrison print it.
+pub fn power_is_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    chars.power = Some(crate::lands::count_you_control(q, source, &|c| c.is(CardType::Creature)));
+}
+
 /// "... has trample" (CR 702.19, layer 6) as a static ability's `StaticDef::apply`. Ajani's Anguish, Keen-Eyed Curator, Orcrist
 /// and Rancor print it.
 pub fn have_trample(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {

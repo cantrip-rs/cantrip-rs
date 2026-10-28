@@ -69,6 +69,14 @@ pub fn pump_creatures_you_control(g: &mut dyn Game, item: &StackItem, power: i16
     creatures
 }
 
+/// "Creatures you control get +`P`/+`T` until end of turn" as a spell's or ability's whole effect: `pump_creatures_you_control`
+/// (CR 611.2, 611.2c). Assault Formation, Castle Embereth, Dwarven Provisioner, Fatehold Charm, Haze of Rage, Master of
+/// Barbs, Prudent Fateseer, Shatterwing Pegasus, Shefet Dunes, Thorin's Last Stand and Winter, Team Player print it.
+pub fn creatures_you_control_get<const P: i16, const T: i16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    pump_creatures_you_control(g, item, P, T);
+    Ok(())
+}
+
 /// "Other creatures you control get +`power`/+`toughness` until end of turn" (CR 611.2, 611.2c): the creatures `item`'s
 /// controller controls as it resolves but its source, and no creature that enters later. The creatures, for what the rest
 /// of the sentence does to them ("and gain trample"). Restless Prairie and Summon: Esper Maduin print it.

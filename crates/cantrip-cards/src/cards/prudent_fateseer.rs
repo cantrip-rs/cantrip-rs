@@ -15,17 +15,10 @@ pub static PEER_REVIEW: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
-/// "Creatures you control get +1/+0 until end of turn": the creatures its controller controls as it resolves (CR
-/// 611.2c), and no creature that enters later.
-fn pump_team(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::pump_creatures_you_control(g, item, 1, 0);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         triggers::YOU_SCRY_OR_SURVEIL,
-        pump_team,
+        effects::creatures_you_control_get::<1, 0>,
         "Whenever you scry or surveil, creatures you control get +1/+0 until end of turn. This ability triggers only once each turn.",
     )
     .triggers_each_turn(1)],

@@ -1,13 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::combat::{choose_among, create_attacking, player_or_their_planeswalkers};
-use cantrip_mechanics::{lands, tokens, triggers};
+use cantrip_mechanics::{statics, tokens, triggers};
 use cantrip_oracle as oracle;
-
-/// "Adeline's power is equal to the number of creatures you control" (CR 604.3, layer 7a): a characteristic-defining
-/// ability, itself included.
-fn power_is_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
-    chars.power = Some(lands::count_you_control(q, source, &|c| c.is(CardType::Creature)));
-}
 
 /// "For each opponent, create a 1/1 white Human creature token that's tapped and attacking that player or a planeswalker
 /// they control" (CR 508.4): its controller chooses which, asked only when the opponent controls a planeswalker.
@@ -24,7 +18,7 @@ fn human_for_each_opponent(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
 }
 
 pub static CARD: CardDef = CardDef {
-    statics: &[characteristic_defining(Layer::PtDefine, power_is_creatures_you_control, "Adeline's power is equal to the number of creatures you control.").lost_pt(0, 4)],
+    statics: &[characteristic_defining(Layer::PtDefine, statics::power_is_creatures_you_control, "Adeline's power is equal to the number of creatures you control.").lost_pt(0, 4)],
     abilities: &[triggered(triggers::YOU_ATTACK, human_for_each_opponent, "Whenever you attack, for each opponent, create a 1/1 white Human creature token that's tapped and attacking that player or a planeswalker they control.")],
     ..oracle::ADELINE_RESPLENDENT_CATHAR
 };
