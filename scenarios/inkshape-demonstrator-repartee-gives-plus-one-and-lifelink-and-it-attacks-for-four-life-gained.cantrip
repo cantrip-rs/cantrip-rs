@@ -1,0 +1,45 @@
+# Inkshape Demonstrator: a Lightning Bolt at Bot2's Ornithopter triggers Repartee, so the Demonstrator gets +1/+0 and lifelink until
+# end of turn; attacking, its 4 damage gains Bot1 4 life.
+
+[Bot1 Deck]
+Plains x4
+Mountain
+Inkshape Demonstrator
+Lightning Bolt
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Inkshape Demonstrator.Cast
+[T9 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+[T9 Bot1.BeginCombat]
+? Bot1.Battlefield.Inkshape Demonstrator.Power = 4
+? Bot1.Battlefield.Inkshape Demonstrator.Toughness = 4
+? Bot1.Battlefield.Inkshape Demonstrator.Keywords = Lifelink
+Bot1.Attack(Inkshape Demonstrator > Bot2)
+[T9 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 16
+Bot2.Battlefield = Mountain

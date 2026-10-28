@@ -1,0 +1,46 @@
+# Inkshape Demonstrator: Bot2's Lightning Bolt at it is countered by ward {2} when Bot2 declines to pay, so the Demonstrator
+# survives; and Bot2's Bolt is not Bot1's spell, so Repartee (cast "you") does not give it +1/+0.
+
+[Bot1 Deck]
+Plains x4
+Inkshape Demonstrator
+Plains x15
+
+[Bot2 Deck]
+Mountain x6
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Inkshape Demonstrator.Cast
+[T8 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Inkshape Demonstrator)
+Bot2.Battlefield.Mountain.Activate
+! Bot2.PayCost
+Bot2.Decline
+[T8 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Plains; Plains; Plains; Inkshape Demonstrator
+Bot1.Battlefield.Inkshape Demonstrator.Power = 3
+Bot1.Battlefield.Inkshape Demonstrator.Damage = 0
+Bot2.Graveyard = Lightning Bolt
