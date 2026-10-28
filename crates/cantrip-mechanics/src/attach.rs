@@ -114,6 +114,15 @@ pub fn attached_to_it(q: &dyn Query, asker: &Asker, affected: ObjectId) -> bool 
     q.obj(asker.source).attached_to == Some(affected)
 }
 
+/// "Tap enchanted creature" / "tap equipped creature" (CR 701.26a, 303.4m): the permanent the source is attached to when
+/// the ability resolves. The creature, if there is one, for what the rest of the text does to it. Frozen in Ice and
+/// Infinite Coursework print it.
+pub fn tap_attached(g: &mut dyn Game, item: &StackItem) -> Option<ObjectId> {
+    let creature = g.obj(item.object).attached_to?;
+    g.tap(creature);
+    Some(creature)
+}
+
 /// Living weapon (CR 702.92a): create a 0/0 black Phyrexian Germ creature token, then attach this Equipment to it.
 /// The Equipment attaches only if it is still on the battlefield and the token was made (CR 701.3b). Nettlecyst and
 /// Kaldra Compleat print it.

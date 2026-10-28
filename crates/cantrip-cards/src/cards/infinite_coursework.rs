@@ -1,12 +1,11 @@
 use cantrip_api::*;
-use cantrip_mechanics::{attach::{attached_object, attached_to_it}, targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{attach::{attached_object, attached_to_it, tap_attached}, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
 /// "Tap enchanted creature. It becomes unprepared." This trigger refers to the object attached when it resolves, using
 /// last known information if needed (CR 303.4m, 608.2h).
 fn tap_and_unprepare(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(creature) = g.obj(item.object).attached_to else { return Ok(()) };
-    g.tap(creature);
+    let Some(creature) = tap_attached(g, item) else { return Ok(()) };
     g.become_unprepared(creature);
     Ok(())
 }
