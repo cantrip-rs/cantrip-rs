@@ -1,0 +1,49 @@
+# Suq'Ata Lancer ({2}{R}) has haste (CR 702.10a): it attacks the turn it is cast, turn 1, when Bot2 has no creature, for 2. On turn 3
+# it attacks again and Bot2's Balduvian Bears block: flanking (CR 702.25a) makes them a 1/1 that dies to its 2 damage, and the Lancer
+# survives with 1 damage marked.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Suq'Ata Lancer
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Balduvian Bears
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suq'Ata Lancer.Cast
+[T1 Bot1.Main1]
+Bot1.Attack(Suq'Ata Lancer > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Balduvian Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Suq'Ata Lancer > Bot2)
+Bot2.Block(Balduvian Bears > Suq'Ata Lancer)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Balduvian Bears
+Bot1.Battlefield.Suq'Ata Lancer.Damage = 1
