@@ -1,0 +1,8 @@
+{
+  "name": "Nick Fury, Agent of S.H.I.E.L.D.",
+  "manaCost": "{W}",
+  "type": "Legendary Creature — Human Spy Hero",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Power-up — {W}{U}{B}{R}{G}: Put two +1/+1 counters on Nick Fury, then look at the top seven cards of your library. You may put a Hero, Equipment, or Vehicle card from among them onto the battlefield. If it's a double-faced card, you may transform it. Put the rest on the bottom of your library in a random order. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)"
+}

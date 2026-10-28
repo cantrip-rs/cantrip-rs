@@ -1,0 +1,56 @@
+# Nick Fury, Agent of S.H.I.E.L.D.: "If it's a double-faced card, you may transform it." On turn 3 (full cost, since he did not enter
+# this turn) Bot1 puts Monica Rambeau onto the battlefield and declines to transform her: she stays Monica Rambeau, a 3/3.
+
+[Bot1 Deck]
+Nick Fury, Agent of S.H.I.E.L.D.
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Plains
+Island
+Ornithopter
+Plains
+Plains
+Plains
+Plains
+Plains
+Monica Rambeau
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nick Fury, Agent of S.H.I.E.L.D..Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Nick Fury, Agent of S.H.I.E.L.D..Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Monica Rambeau)
+Bot1.Decline
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Monica Rambeau; Nick Fury, Agent of S.H.I.E.L.D.
+Bot1.Battlefield.Monica Rambeau.Transformed = (absent)
+Bot1.Battlefield.Nick Fury, Agent of S.H.I.E.L.D..Counters.PlusOnePlusOne = 2

@@ -1,0 +1,65 @@
+# Nick Fury, Agent of S.H.I.E.L.D.: "Power-up - {W}{U}{B}{R}{G}: Put two +1/+1 counters on Nick Fury, then look at the top seven cards
+# of your library. You may put a Hero, Equipment, or Vehicle card from among them onto the battlefield. If it's a double-faced card,
+# you may transform it. Put the rest on the bottom of your library in a random order." On turn 1, the turn he enters, the cost is
+# reduced by his mana cost {W}: it takes {U}{B}{R}{G} and nothing more (the pool is empty after). The top seven cards are an
+# Ornithopter (an artifact creature, not Equipment: refused), four Plains, a Gold Pan (Equipment) and, seventh, Monica Rambeau (a
+# double-faced Hero); the eighth, a Masked Meower (a Hero), is not looked at (refused). Two cards at once are refused ("up to one").
+# Bot1 puts Monica onto the battlefield untapped and transforms her into Photon; Nick Fury has two counters, a 4/3; the other six
+# cards looked at go to the bottom of the library, which holds 17 cards in all.
+
+[Bot1 Deck]
+Nick Fury, Agent of S.H.I.E.L.D.
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Plains
+Ornithopter
+Plains
+Plains
+Plains
+Plains
+Gold Pan
+Monica Rambeau
+Masked Meower
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nick Fury, Agent of S.H.I.E.L.D..Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Nick Fury, Agent of S.H.I.E.L.D..Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Masked Meower)
+! Bot1.Choose(Gold Pan; Monica Rambeau)
+Bot1.Choose(Monica Rambeau)
+Bot1.Accept
+? Bot1.Mana =
+? Bot1.Battlefield.Photon, Living Light.Tapped = false
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Photon, Living Light.Transformed = true
+Bot1.Battlefield.Nick Fury, Agent of S.H.I.E.L.D..Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Nick Fury, Agent of S.H.I.E.L.D..Power = 4
+Bot1.Library.Count = 17

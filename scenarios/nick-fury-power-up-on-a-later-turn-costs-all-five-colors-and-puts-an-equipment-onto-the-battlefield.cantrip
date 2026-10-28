@@ -1,0 +1,62 @@
+# Nick Fury, Agent of S.H.I.E.L.D.: the power-up cost is reduced by his mana cost only if he entered this turn. On turn 3 it takes the full
+# {W}{U}{B}{R}{G}: all five Moxen, nothing left in the pool. The top seven cards after Bot1's draw are an Ornithopter (an artifact
+# creature: not an Equipment, refused), five Plains and, seventh, a Gold Pan (Equipment); the eighth, Monica Rambeau (a Hero), is not
+# looked at (refused). Bot1 puts the Gold Pan onto the battlefield, which is not a double-faced card, so nobody is asked about
+# transforming, and its "When this Equipment enters, create a Treasure token" ability makes a Treasure.
+
+[Bot1 Deck]
+Nick Fury, Agent of S.H.I.E.L.D.
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Plains
+Island
+Ornithopter
+Plains
+Plains
+Plains
+Plains
+Plains
+Gold Pan
+Monica Rambeau
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nick Fury, Agent of S.H.I.E.L.D..Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Nick Fury, Agent of S.H.I.E.L.D..Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Monica Rambeau)
+Bot1.Choose(Gold Pan)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Gold Pan; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Nick Fury, Agent of S.H.I.E.L.D.; Treasure Token
+Bot1.Battlefield.Nick Fury, Agent of S.H.I.E.L.D..Counters.PlusOnePlusOne = 2
