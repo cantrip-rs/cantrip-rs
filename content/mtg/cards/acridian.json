@@ -1,0 +1,8 @@
+{
+  "name": "Acridian",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Insect",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Echo {1}{G} (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)"
+}
