@@ -47,18 +47,18 @@ pub const DISCARD_HAND: Cost = Cost { discard_hand: true, ..Cost::NONE };
 pub const REMOVE_A_COUNTER: Cost = Cost { remove_any_counter: true, ..Cost::NONE };
 
 /// "Sacrifice N [permanents]" that pass the filter (CR 701.21).
-pub const fn sacrifice(n: u8, filter: ObjectFilter) -> Cost {
+pub const fn sacrifice(n: u32, filter: ObjectFilter) -> Cost {
     Cost::sacrifice(n, filter)
 }
 
 /// "Return N [permanents] you control to their owner's hand".
-pub const fn return_to_hand(n: u8, filter: ObjectFilter) -> Cost {
+pub const fn return_to_hand(n: u32, filter: ObjectFilter) -> Cost {
     Cost::return_to_hand(n, filter)
 }
 
 /// "Return N tapped [permanents] you control to their owner's hand" (web-slinging, CR 702.188a): chosen once the mana
 /// is paid, so one tapped for mana while paying may be returned (`PermanentCost::tapped`).
-pub const fn return_tapped_to_hand(n: u8, filter: ObjectFilter) -> Cost {
+pub const fn return_tapped_to_hand(n: u32, filter: ObjectFilter) -> Cost {
     Cost::return_tapped_to_hand(n, filter)
 }
 
@@ -66,12 +66,12 @@ pub const fn return_tapped_to_hand(n: u8, filter: ObjectFilter) -> Cost {
 /// the cost is chosen (CR 601.2h, 602.2b); the exiled permanents are the ability's `Query::cost_objects` (read as they
 /// last were on the battlefield, CR 608.2h: "the exiled creature's mana value"), and are "exiled with" its source (CR
 /// 607.2a).
-pub const fn exile_permanents(n: u8, filter: ObjectFilter) -> Cost {
+pub const fn exile_permanents(n: u32, filter: ObjectFilter) -> Cost {
     Cost::exile_permanents(n, filter)
 }
 
 /// "Tap N untapped [permanents] you control" (CR 118.3): not the {T} symbol.
-pub const fn tap_untapped(n: u8, filter: ObjectFilter) -> Cost {
+pub const fn tap_untapped(n: u32, filter: ObjectFilter) -> Cost {
     Cost::tap_untapped(n, filter)
 }
 
@@ -108,7 +108,7 @@ pub const fn remove_kind_counters_among(kind: CounterKind, n: u8, filter: Object
 }
 
 /// "Put N [kind] counters on this [permanent]" as a cost (CR 118.3, 602.2b): Mazemind Tome's page counter.
-pub const fn put_counters(kind: CounterKind, n: u8) -> Cost {
+pub const fn put_counters(kind: CounterKind, n: u32) -> Cost {
     Cost { put_counters: Some((kind, n)), ..Cost::NONE }
 }
 

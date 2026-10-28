@@ -1169,7 +1169,7 @@ fn choose_permanents(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cos
         (false, PermanentAction::Exile) => "permanent",
         (false, _) => "",
     };
-    let ask = RequestKind::choose_cards(source, purpose, eligible.clone(), eligible, u32::from(p.count), false, kind);
+    let ask = RequestKind::choose_cards(source, purpose, eligible.clone(), eligible, p.count, false, kind);
     match cx.ask_core(player, ask, true)? {
         Answer::Cards(cards) => Ok(cards),
         _ => Err(Stop::Cancel),
@@ -1206,7 +1206,7 @@ fn pay_life_and_counters(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: 
     // Counters a cost puts on its source are put by the player paying it (CR 118.3, 122.6a): what replaces counters being
     // put applies.
     if let Some((kind, n)) = cost.put_counters {
-        counters::put(cx, source, kind, n as i16, player, counters::How::Cost);
+        counters::put(cx, source, kind, n as i16, player, counters::How::Cost); // a counter count is an i16 everywhere in the engine
     }
 }
 
@@ -1520,7 +1520,7 @@ fn mana_ability_options_as(cx: &Cx, player: PlayerId, window: ManaWindow, option
                     .filter(|&o| pays_permanents(cx, &def.cost, &p, &asker, o, Some(CostFor::ManaAbility)))
                     .map(Target::Object)
                     .collect();
-                option.targets_required = u32::from(p.count);
+                option.targets_required = p.count;
             }
             if def.colors_from_sacrifice {
                 // The types any land it could sacrifice could produce; the activation then names one of that land's.
@@ -10579,7 +10579,7 @@ fn pay_during_resolution(
         }
         if let (Some(n), Some(most)) = (x, times) {
             // The number of times: from 1 to `most`, and no more than the cost's shape holds that many times over.
-            if n < most && cost.mana.times(n + 1).is_some() {
+            if n < most && cost.mana.times(u32::from(n) + 1).is_some() {
                 options.push(ActionOption::simple(ActionKind::IncreaseX));
             }
             if n > 1 {
@@ -10619,7 +10619,7 @@ fn pay_during_resolution(
             ActionKind::IncreaseX | ActionKind::DecreaseX if times.is_some() => {
                 let n = x.unwrap_or(1);
                 let to = if action.kind == ActionKind::IncreaseX { n.saturating_add(1) } else { n.saturating_sub(1) };
-                if let Some(t) = cost.mana.times(to).filter(|_| to >= 1) {
+                if let Some(t) = cost.mana.times(u32::from(to)).filter(|_| to >= 1) {
                     x = Some(to);
                     times_total = t;
                 }

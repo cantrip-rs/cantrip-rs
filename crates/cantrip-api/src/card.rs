@@ -732,7 +732,7 @@ pub struct Cost {
     /// (Mazemind Tome). Payable only while nothing says counters of that kind can't be put on it (CR 101.2, 118.3:
     /// Solemnity's ruling, `CardDef::counter_bans`); they are put by the activating player, so replacement effects on
     /// counters being put apply (CR 614.1a), but not those of counters "an effect" puts (`CounterPlacement::effect`).
-    pub put_counters: Option<(CounterKind, u8)>,
+    pub put_counters: Option<(CounterKind, u32)>,
     /// Remove a counter of any kind from the source (CR 118.3): the payer names the kind when it has more than one.
     pub remove_any_counter: bool,
     /// Remove counters from among the permanents the payer controls that pass the filter (CR 118.3, 122.1), of any kinds or
@@ -929,7 +929,7 @@ pub struct CountersAmong {
 
 #[derive(Clone, Copy)]
 pub struct PermanentCost {
-    pub count: u8,
+    pub count: u32,
     pub filter: ObjectFilter,
     pub action: PermanentAction,
     /// Only tapped permanents pay ("return a tapped creature you control", web-slinging, CR 702.188a). Whether one is
@@ -1033,7 +1033,7 @@ impl Cost {
         c.remove_counters_among = self.remove_counters_among.map(|r| CountersAmong { count: r.count.saturating_mul(n), ..r }).filter(|_| n > 0);
         c.exile_from_hand = self.exile_from_hand.map(|(k, f)| (k.saturating_mul(n), f)).filter(|_| n > 0);
         c.discard = self.discard.times(n);
-        c.permanents = self.permanents.map(|p| PermanentCost { count: p.count.saturating_mul(n), ..p }).filter(|_| n > 0);
+        c.permanents = self.permanents.map(|p| PermanentCost { count: p.count * u32::from(n), ..p }).filter(|_| n > 0);
         c
     }
 
@@ -1042,17 +1042,17 @@ impl Cost {
     /// spell is kicked.
     pub fn most_times(&self) -> u32 {
         let largest = [
-            self.exile_from_graveyard,
-            self.energy,
-            self.blight,
-            self.remove_counters_among.map_or(0, |r| r.count),
-            self.exile_from_hand.map_or(0, |(k, _)| k),
+            u32::from(self.exile_from_graveyard),
+            u32::from(self.energy),
+            u32::from(self.blight),
+            self.remove_counters_among.map_or(0, |r| u32::from(r.count)),
+            self.exile_from_hand.map_or(0, |(k, _)| u32::from(k)),
             self.permanents.map_or(0, |p| p.count),
         ]
         .into_iter()
         .max()
         .unwrap_or(0);
-        if largest == 0 { 255 } else { 255 / u32::from(largest) }
+        if largest == 0 { 255 } else { 255 / largest }
     }
 
     /// This cost and another paid together: the parts of the same kind add (an additional cost's discard and an
@@ -1199,27 +1199,27 @@ impl Cost {
             materials: None,
         };
 
-    pub const fn sacrifice(count: u8, filter: ObjectFilter) -> Cost {
+    pub const fn sacrifice(count: u32, filter: ObjectFilter) -> Cost {
         Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::Sacrifice, tapped: false }), ..Cost::NONE }
     }
 
     /// Tap `count` untapped permanents you control that pass the filter, as a cost (CR 118.3).
-    pub const fn tap_untapped(count: u8, filter: ObjectFilter) -> Cost {
+    pub const fn tap_untapped(count: u32, filter: ObjectFilter) -> Cost {
         Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::Sacrifice, tapped: false }), tap_permanents: true, ..Cost::NONE }
     }
 
-    pub const fn return_to_hand(count: u8, filter: ObjectFilter) -> Cost {
+    pub const fn return_to_hand(count: u32, filter: ObjectFilter) -> Cost {
         Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::ReturnToHand, tapped: false }), ..Cost::NONE }
     }
 
     /// Return `count` tapped permanents you control that pass the filter to their owners' hands (web-slinging, CR
     /// 702.188a): chosen once the mana is paid (`PermanentCost::tapped`).
-    pub const fn return_tapped_to_hand(count: u8, filter: ObjectFilter) -> Cost {
+    pub const fn return_tapped_to_hand(count: u32, filter: ObjectFilter) -> Cost {
         Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::ReturnToHand, tapped: true }), ..Cost::NONE }
     }
 
     /// Exile `count` permanents you control that pass the filter, as a cost (CR 118.3): "Exile a creature you control".
-    pub const fn exile_permanents(count: u8, filter: ObjectFilter) -> Cost {
+    pub const fn exile_permanents(count: u32, filter: ObjectFilter) -> Cost {
         Cost { permanents: Some(PermanentCost { count, filter, action: PermanentAction::Exile, tapped: false }), ..Cost::NONE }
     }
 

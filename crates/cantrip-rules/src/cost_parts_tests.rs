@@ -117,6 +117,12 @@ fn many_twobrids(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), 
     may_pay_with(g, item, Cost::mana(ManaCost { twobrid, ..ManaCost::ZERO }))
 }
 
+/// "You may sacrifice 300 creatures. If you do, you gain 5 life." - a count past a byte, which a cumulative upkeep reaches with
+/// 300 age counters (CR 702.24a).
+fn sacrifice_three_hundred(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
+    may_pay_with(g, item, Cost::sacrifice(300, is_creature))
+}
+
 /// A loyalty cost, which no resolving spell asks for (CR 606.4): never paid.
 fn loyalty_cost(g: &mut dyn cantrip_api::Game, item: &StackItem) -> Result<(), Suspend> {
     may_pay_with(g, item, Cost { loyalty: Some(-1), ..Cost::NONE })
@@ -135,6 +141,16 @@ static RECALL: CardDef = CardDef { name: "Cost Test Recall", types: TypeSet::of(
 static TITHE: CardDef = CardDef { name: "Cost Test Tithe", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], discard_and_energy), ..CardDef::BLANK };
 static TOLL: CardDef = CardDef { name: "Cost Test Toll", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], phyrexian_cost), ..CardDef::BLANK };
 static HOARD: CardDef = CardDef { name: "Cost Test Hoard", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], many_twobrids), ..CardDef::BLANK };
+static MASS_OFFER: CardDef = CardDef { name: "Cost Test Mass Offer", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], sacrifice_three_hundred), ..CardDef::BLANK };
+/// "Put 300 -1/-1 counters on this creature: You gain 3 life." - a count past a byte (CR 702.24a, 118.3).
+static WITHERER: CardDef = CardDef {
+    name: "Cost Test Witherer",
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1000),
+    toughness: Some(1000),
+    abilities: &[ability(put_counters(CounterKind::MinusOne, 300), gain_three, "Put 300 -1/-1 counters on this creature: You gain 3 life.")],
+    ..CardDef::BLANK
+};
 static VOW: CardDef = CardDef { name: "Cost Test Vow", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], loyalty_cost), ..CardDef::BLANK };
 static HIGH_LIFE: CardDef = CardDef { name: "Cost Test High Life", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], high_life_cost), ..CardDef::BLANK };
 static IMPOSSIBLE_LIFE: CardDef = CardDef { name: "Cost Test Impossible Life", types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], impossible_life_cost), ..CardDef::BLANK };
@@ -209,7 +225,7 @@ static STOWER: CardDef = CardDef {
 
 /// Your precombat main phase with priority, nothing anywhere.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER, &LIBRARIAN, &RITE, &GRAFT, &STOWER, &TOLL, &HOARD, &HIGH_LIFE, &IMPOSSIBLE_LIFE])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &BEAR, &DORK, &SEER, &GAZER, &RETURNER, &OFFER, &RECALL, &TITHE, &VOW, &RECOILER, &LIBRARIAN, &RITE, &GRAFT, &STOWER, &TOLL, &HOARD, &HIGH_LIFE, &IMPOSSIBLE_LIFE, &MASS_OFFER, &WITHERER])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -654,4 +670,43 @@ fn more_monocolored_hybrid_symbols_than_a_choice_holds_are_asked_a_page_at_a_tim
     answer(&mut g, &r, Answer::Modes(Vec::new()));
     let r = next(&mut g);
     assert!(matches!(r.kind, RequestKind::UnlessPays { .. }), "then the payment, not {:?}", r.kind);
+}
+
+/// A cost of 300 creatures sacrificed is paid in full: not a cost nobody can pay, and not a smaller one.
+#[test]
+fn a_sacrifice_cost_past_a_byte_is_paid_in_full() {
+    let mut g = game();
+    let offer = put(&mut g, &MASS_OFFER, Zone::hand(YOU));
+    let bears: Vec<ObjectId> = (0..300).map(|_| put(&mut g, &BEAR, Zone::BATTLEFIELD)).collect();
+    let r = cast_to_payment(&mut g, offer);
+    let pay = pays(&r).expect("300 creatures pay 300 sacrificed");
+    answer(&mut g, &r, Answer::Act(Action::of(&pay)));
+    let r = next(&mut g);
+    assert!(matches!(&r.kind, RequestKind::ChooseCards { purpose: Purpose::SacrificeCost, .. }));
+    let life = g.state.player(YOU).life;
+    answer(&mut g, &r, Answer::Cards(bears));
+    next(&mut g);
+    assert_eq!(g.state.zone(Zone::graveyard(YOU)).iter().filter(|&&c| g.state.obj(c).card == g.cards.id_of(&BEAR)).count(), 300);
+    assert_eq!(g.state.player(YOU).life, life + 5);
+
+    // One creature short is not payable.
+    let mut g = game();
+    let offer = put(&mut g, &MASS_OFFER, Zone::hand(YOU));
+    for _ in 0..299 {
+        put(&mut g, &BEAR, Zone::BATTLEFIELD);
+    }
+    let r = cast_to_payment(&mut g, offer);
+    assert!(pays(&r).is_none(), "299 creatures cannot sacrifice 300");
+}
+
+/// A cost of 300 counters put on the creature is paid in full: 300 -1/-1 counters, as 300 age counters ask of Aboroth.
+#[test]
+fn a_counters_cost_past_a_byte_puts_every_counter() {
+    let mut g = game();
+    let witherer = put(&mut g, &WITHERER, Zone::BATTLEFIELD);
+    let r = next(&mut g);
+    let option = option_of(&g, &r, witherer).expect("300 counters can be put on it");
+    answer(&mut g, &r, Answer::Act(Action::of(&option)));
+    resolve_all(&mut g);
+    assert_eq!(g.state.obj(witherer).counters(CounterKind::MinusOne), 300);
 }

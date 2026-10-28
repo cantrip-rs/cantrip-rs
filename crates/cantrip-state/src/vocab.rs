@@ -406,8 +406,8 @@ impl ManaCost {
     /// The cost paid `n` times over, each symbol `n` times (CR 603.12a: "you may pay {G} up to three times" is {G}{G} paid
     /// twice). `None` when the result does not fit the cost's shape: a symbol count past a byte, or more hybrid symbols
     /// than its slots hold. Never a smaller cost than `n` payments.
-    pub fn times(&self, n: u16) -> Option<ManaCost> {
-        let mul = |k: u8| u8::try_from(u32::from(k) * u32::from(n)).ok();
+    pub fn times(&self, n: u32) -> Option<ManaCost> {
+        let mul = |k: u8| u8::try_from(u32::from(k) * n).ok();
         let mut out = ManaCost { generic: mul(self.generic)?, x: mul(self.x)?, hybrid: [None; 6], ..*self };
         for i in 0..6 {
             out.symbols[i] = mul(self.symbols[i])?;
