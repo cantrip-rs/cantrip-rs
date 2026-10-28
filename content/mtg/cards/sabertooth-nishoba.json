@@ -1,0 +1,11 @@
+{
+  "name": "Sabertooth Nishoba",
+  "manaCost": "{4}{G}{W}",
+  "type": "Creature — Cat Beast Warrior",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Trample, protection from blue and from red",
+  "keywords": [
+    "Trample"
+  ]
+}
