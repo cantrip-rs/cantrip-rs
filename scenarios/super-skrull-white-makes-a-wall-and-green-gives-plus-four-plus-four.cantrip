@@ -1,0 +1,66 @@
+# Super-Skrull's {2}{W} makes a 0/4 colorless Wall token with defender and {3}{G} gives him +4/+4 until end of turn (CR 611.2a),
+# each paid for exactly (CR 602.2). Super-Skrull costs {1}{B}{B}{B}, which takes the three black sources Bot1 has on turn 3. The Wall
+# is a 0/4 with defender; Super-Skrull is an 8/9 flier until the turn ends, then 4/5 again.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Super-Skrull
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Super-Skrull.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Super-Skrull.Activate(Ability: {2}{W})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Super-Skrull.Activate(Ability: {3}{G})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Super-Skrull.Power = 8
+Bot1.Battlefield.Super-Skrull.Toughness = 9
+Bot1.Battlefield.Super-Skrull.Keywords = Flying
+Bot1.Battlefield.Wall Token.Power = 0
+Bot1.Battlefield.Wall Token.Toughness = 4
+Bot1.Battlefield.Wall Token.Keywords = Defender

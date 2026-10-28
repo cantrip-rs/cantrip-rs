@@ -1,0 +1,66 @@
+# Super-Skrull's {4}{R} deals 4 damage to target creature (CR 120.3), paid for exactly: Bot2's Wall of Mist (0/5) takes 4 and
+# survives with 4 damage marked, one short of lethal.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Super-Skrull
+Swamp
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Ruby
+Wall of Mist
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Wall of Mist.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Super-Skrull.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Super-Skrull.Activate(Ability: {4}{R}; Bot2.Battlefield.Wall of Mist)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Wall of Mist.Damage = 4
