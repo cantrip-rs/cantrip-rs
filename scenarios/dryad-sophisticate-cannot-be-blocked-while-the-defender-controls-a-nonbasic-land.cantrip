@@ -1,0 +1,36 @@
+# Nonbasic landwalk (CR 702.14c): Dryad Sophisticate attacking Bot2, who controls Tundra (a nonbasic land), cannot be blocked
+# by Bot2's Memnite (refusal), so it deals its 2 damage to Bot2. The positive control is the next scenario, where Bot2
+# controls only a basic land and the Memnite may block.
+# Bot1 casts the Dryad on turn 1 (Moxen Emerald and Ruby); Bot2 plays Tundra and casts Memnite on turn 2.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Dryad Sophisticate
+Island x21
+
+[Bot2 Deck]
+Tundra
+Memnite
+Island x22
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dryad Sophisticate.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Tundra.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Dryad Sophisticate > Bot2)
+! Bot2.Block(Memnite > Dryad Sophisticate)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield = Memnite; Tundra
+Bot1.Battlefield.Dryad Sophisticate.Damage = 0

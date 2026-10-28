@@ -1,0 +1,11 @@
+{
+  "name": "Dryad Sophisticate",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Dryad",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Nonbasic landwalk (This creature can't be blocked as long as defending player controls a nonbasic land.)",
+  "keywords": [
+    "NonbasicLandwalk"
+  ]
+}
