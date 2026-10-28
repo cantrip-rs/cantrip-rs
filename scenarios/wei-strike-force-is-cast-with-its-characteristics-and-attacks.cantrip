@@ -1,0 +1,32 @@
+# Wei Strike Force, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Wei Strike Force
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Wei Strike Force.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Wei Strike Force.Power = 2
+? Bot1.Battlefield.Wei Strike Force.Toughness = 1
+? Bot1.Battlefield.Wei Strike Force.Keywords = Horsemanship
+? Bot1.Battlefield.Wei Strike Force.Colors = Black
+? Bot1.Battlefield.Wei Strike Force.Types = Creature
+? Bot1.Battlefield.Wei Strike Force.Subtypes = Human; Soldier
+? Bot1.Battlefield.Wei Strike Force.Supertypes = (absent)
+? Bot1.Battlefield.Wei Strike Force.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Wei Strike Force > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Wei Strike Force.Tapped = true
