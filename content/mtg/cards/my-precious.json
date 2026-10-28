@@ -1,0 +1,12 @@
+{
+  "name": "My Precious",
+  "manaCost": "{3}",
+  "type": "Legendary Artifact — Equipment",
+  "oracleText": "Equipped creature has hexproof and can't be blocked.\nEquip—{2}, Pay 2 life.",
+  "adventure": {
+    "name": "Allure of Power",
+    "manaCost": "{1}{B}",
+    "type": "Instant — Adventure",
+    "oracleText": "As an additional cost to cast this spell, sacrifice a creature.\nDraw two cards."
+  }
+}

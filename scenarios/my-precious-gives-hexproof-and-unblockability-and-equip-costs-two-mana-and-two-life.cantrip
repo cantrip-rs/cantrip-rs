@@ -1,0 +1,68 @@
+# My Precious: "Equipped creature has hexproof and can't be blocked. Equip-{2}, Pay 2 life." Bot1's Elvish Mystic is equipped on turn 3
+# for exactly two mana (Ruby, Emerald) and 2 life (20 -> 18). Then Bot2 may not Bolt it (hexproof) and its own Elvish Mystic, untapped
+# and able to block, may not block it, so the 1/1 connects for 1 (CR 702.11b, 509.1b, 702.6a, 118.8).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Elvish Mystic
+My Precious
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Elvish Mystic
+Lightning Bolt
+Island x3
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.My Precious.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.My Precious.Activate(Elvish Mystic)
+? Bot1.Mana =
+? Bot1.Life = 18
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Elvish Mystic)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Elvish Mystic > Bot2)
+! Bot2.Block(Elvish Mystic > Elvish Mystic)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 18
+Bot1.Battlefield.My Precious.AttachedTo = Elvish Mystic
+Bot1.Battlefield.Elvish Mystic.Keywords = Hexproof

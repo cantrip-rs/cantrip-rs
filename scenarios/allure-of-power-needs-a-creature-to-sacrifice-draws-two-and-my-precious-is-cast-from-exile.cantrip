@@ -1,0 +1,54 @@
+# My Precious's Adventure, Allure of Power ({1}{B}, instant): "As an additional cost to cast this spell, sacrifice a creature. Draw
+# two cards." It cannot be cast while Bot1 has no creature; with an Ornithopter and an Elvish Mystic Bot1 chooses the Mystic as the
+# cost, pays exactly {1}{B}, and draws the Bolt and the Island under it. The card is then exiled, and My Precious is cast from there
+# for {3} on turn 3 (CR 118.8, 601.2b, 715.4).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Emerald
+Ornithopter
+Elvish Mystic
+My Precious
+Island
+Lightning Bolt
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+! Bot1.Hand.My Precious.Cast(Ability: Adventure)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.My Precious.Cast(Ability: Adventure)
+Bot1.Choose(Elvish Mystic)
+? Bot1.Mana =
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Graveyard = Elvish Mystic
+? Bot1.Hand = Island; Island; Lightning Bolt
+? Exile = My Precious
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Exile.My Precious.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Emerald; Ornithopter; My Precious
+Exile.Count = 0
