@@ -1,0 +1,50 @@
+# Great Gilded Boat: "Whenever you attack, recruit" (CR 508.1, 701.70a). On turn 3 Bot1 attacks with a Zephyr Sprite alone (its power 1 can't crew 2: the refusal), the Boat
+# neither crewed nor attacking, and the Boat's trigger still goes on the stack: Bot1 draws an Island, discards the Ornithopter it drew for the turn (a nonland card)
+# and gets a 1/1 white Human Soldier token. Bot2's turn-2 draw and the like trigger nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Great Gilded Boat
+Zephyr Sprite
+Plains
+Ornithopter
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Great Gilded Boat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Great Gilded Boat.Activate(Ability: Crew)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Zephyr Sprite > Bot2)
+Bot1.Choose(Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot1.Hand = Plains; Island
+Bot1.Battlefield = Mox Sapphire; Mox Sapphire; Mox Pearl; Mox Jet; Great Gilded Boat; Zephyr Sprite; Human Soldier Token
+Bot1.Battlefield.Great Gilded Boat.Tapped = false

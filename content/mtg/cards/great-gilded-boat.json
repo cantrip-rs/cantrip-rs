@@ -1,0 +1,8 @@
+{
+  "name": "Great Gilded Boat",
+  "manaCost": "{2}{U}",
+  "type": "Artifact — Vehicle",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Whenever you attack, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)\nCrew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)"
+}

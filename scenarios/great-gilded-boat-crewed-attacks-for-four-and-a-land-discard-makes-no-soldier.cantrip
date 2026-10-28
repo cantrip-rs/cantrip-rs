@@ -1,0 +1,50 @@
+# Great Gilded Boat, crew 2: Grizzly Bears (cast on turn 3, summoning sick but able to crew, CR 702.122) is tapped to crew it and the
+# 4/4 Vehicle attacks; its attack trigger recruits, and the Plains Bot1 discards is a land, so there is no Soldier token (CR 701.70a).
+# Bot2 takes 4. Crewing is refused with the Bears too weak to pay for crew 3 (see Smuggler's Copter's crew scenarios for the keyword
+# itself); here the Boat has the printed crew 2 at exactly power 2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Great Gilded Boat
+Grizzly Bears
+Plains
+Swamp
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Great Gilded Boat.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Great Gilded Boat.Activate(Ability: Crew)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Great Gilded Boat > Bot2)
+Bot1.Choose(Plains)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard = Plains
+Bot1.Battlefield = Mox Sapphire; Mox Emerald; Mox Pearl; Great Gilded Boat; Grizzly Bears
+Bot1.Battlefield.Grizzly Bears.Tapped = true
