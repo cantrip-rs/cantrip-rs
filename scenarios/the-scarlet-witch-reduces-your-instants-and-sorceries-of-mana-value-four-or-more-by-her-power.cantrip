@@ -1,0 +1,78 @@
+# The Scarlet Witch: "Instant and sorcery spells you cast with mana value 4 or greater cost {X} less to cast, where X is The Scarlet
+# Witch's power." She is a 2/3. Turn 3: Bot1's Truck Toss (mana value 4, {2}{R}{R}) is paid with {R}{R} alone and the pool is
+# empty. Turn 4: Bot2's own Truck Toss costs its full {2}{R}{R} (her controller's spells only): all four Moxen, nothing left over.
+# Turn 5: Bot1's Hire a Crew, mana value 3, costs its full {2}{R}: three mana, nothing left over.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+The Scarlet Witch
+Truck Toss
+Hire a Crew
+Island
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Truck Toss
+Island
+Island
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Scarlet Witch.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Truck Toss.Cast(Bot2)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Truck Toss.Cast(Bot1)
+Bot2.Pass
+? Bot2.Mana =
+Bot1.Pass
+? Bot1.Life = 16
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hire a Crew.Cast
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Villain Token.Power = 3
