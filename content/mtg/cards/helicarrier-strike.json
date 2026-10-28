@@ -1,0 +1,6 @@
+{
+  "name": "Helicarrier Strike",
+  "manaCost": "{W}",
+  "type": "Instant",
+  "oracleText": "Teamwork 2 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 2 or more.)\nHelicarrier Strike deals 2 damage to target attacking or blocking creature. If this spell was cast using teamwork, it deals 4 damage to that creature instead."
+}

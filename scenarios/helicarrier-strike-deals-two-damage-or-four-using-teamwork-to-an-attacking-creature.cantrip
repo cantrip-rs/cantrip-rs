@@ -1,0 +1,88 @@
+# Helicarrier Strike: "Teamwork 2 ... deals 2 damage to target attacking or blocking creature. If this spell was cast using teamwork, it
+# deals 4 damage to that creature instead." Bot2 attacks on turn 4 with two Ageless Guardians (1/4). Cast without teamwork, the first
+# Strike deals 2 damage to one (it survives with 2 marked, and Bot1's Cabal Evangel stays untapped); cast using teamwork, tapping the
+# Evangel (power 2), the second deals 4 to the other, which dies - 4 damage instead of 2, not both. Bot2's Ornithopter, not attacking
+# or blocking, can't be targeted (the refusal), and a lone Metallic Sliver (power 1) can't pay teamwork 2 (the refusal).
+
+[Bot1 Deck]
+Helicarrier Strike
+Helicarrier Strike
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Cabal Evangel
+Metallic Sliver
+Plains
+Plains x20
+
+[Bot2 Deck]
+Ageless Guardian
+Ageless Guardian
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Cabal Evangel.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Metallic Sliver.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ageless Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Ageless Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Attack(Ageless Guardian#1 > Bot1; Ageless Guardian#2 > Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Helicarrier Strike.Cast
+Bot1.Modes(Cast without teamwork)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Ageless Guardian#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ageless Guardian#1.Damage = 2
+? Bot1.Battlefield.Cabal Evangel.Tapped = false
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Helicarrier Strike.Cast
+Bot1.Modes(Teamwork 2)
+Bot1.Target(Bot2.Battlefield.Ageless Guardian#2)
+! Bot1.Choose(Metallic Sliver)
+Bot1.Choose(Cabal Evangel)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cabal Evangel.Tapped = true
+? Bot2.Graveyard = Ageless Guardian
+
+[Expect]
+Bot2.Battlefield = Ageless Guardian; Mox Jet; Mox Pearl; Mox Sapphire; Ornithopter; Plains
+Bot2.Battlefield.Ageless Guardian.Damage = 2
