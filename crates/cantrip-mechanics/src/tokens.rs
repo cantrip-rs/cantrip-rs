@@ -590,6 +590,30 @@ pub static HUMAN: CardDef = CardDef {
     ..token!(Human)
 };
 
+/// A 2/2 red Dwarf creature token (CR 111). Fíli the Pathfinder, The Lonely Mountain, An Unexpected Party and Dwarven
+/// Shortsword create this exact token.
+pub static DWARF: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Red)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    ..token!(Dwarf)
+};
+
+/// The colorless Equipment artifact token named Axe, "Equipped creature gets +1/+0" and equip {2}: its name is "Axe"
+/// (CR 111.4), it has no mana cost or color, and its subtype is Equipment (CR 301.5). Dáin Ironfoot and Iron Hills
+/// Blacksmith create this exact token.
+pub static AXE: CardDef = CardDef {
+    name: "Axe",
+    has_cost: false,
+    types: TypeSet::of(&[CardType::Artifact]),
+    subtypes: SubtypeSet::of(&[Subtype::Equipment]),
+    abilities: &[crate::attach::equip(mana("{2}"), "Equip {2}")],
+    statics: &[static_ability(Layer::PtModify, crate::attach::attached_object, crate::statics::plus_pt::<1, 0>, "Equipped creature gets +1/+0.")],
+    text: "Equipped creature gets +1/+0.\nEquip {2}",
+    ..CardDef::BLANK
+};
+
 /// The 1/1 white Human Soldier creature token. Cosmogrand Zenith makes it, and recruit (CR 701.70a: The Queen of Dale) does.
 pub static HUMAN_SOLDIER: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),

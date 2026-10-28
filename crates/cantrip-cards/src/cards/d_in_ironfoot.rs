@@ -1,28 +1,13 @@
 use cantrip_api::*;
 use cantrip_mechanics::effects;
-use cantrip_mechanics::attach::{attached_object, equip};
-use cantrip_mechanics::statics::plus_pt;
 use cantrip_mechanics::triggers::{THIS_ATTACKS, THIS_ENTERS};
 use cantrip_mechanics::{targets, tokens};
 use cantrip_oracle as oracle;
 
-/// The colorless Equipment artifact token named Axe, "Equipped creature gets +1/+0" and equip {2}: the token's name is
-/// "Axe" (CR 111.4), it has no mana cost or color, and its subtype is Equipment (CR 301.5).
-pub static AXE: CardDef = CardDef {
-    name: "Axe",
-    has_cost: false,
-    types: TypeSet::of(&[CardType::Artifact]),
-    subtypes: SubtypeSet::of(&[Subtype::Equipment]),
-    abilities: &[equip(mana("{2}"), "Equip {2}")],
-    statics: &[static_ability(Layer::PtModify, attached_object, plus_pt::<1, 0>, "Equipped creature gets +1/+0.")],
-    text: "Equipped creature gets +1/+0.\nEquip {2}",
-    ..CardDef::BLANK
-};
-
 /// "When Dáin enters, create a colorless Equipment artifact token named Axe ... When you do, attach it to target creature you
 /// control." The reflexive ability (CR 603.12) triggers only if the token was created, and is about that token.
 fn create_axe(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let made = tokens::create(g, item.controller, &AXE, 1)?;
+    let made = tokens::create(g, item.controller, &tokens::AXE, 1)?;
     let Some(&axe) = made.first() else { return Ok(()) };
     let this = g.card_id(&CARD);
     g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::Object(axe));
@@ -67,4 +52,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::D_IN_IRONFOOT
 };
 
-pub static EXTRA: &[&CardDef] = &[&AXE];
+pub static EXTRA: &[&CardDef] = &[&tokens::AXE];

@@ -2,16 +2,7 @@ use cantrip_api::*;
 use cantrip_mechanics::{statics, storied, tokens};
 use cantrip_oracle as oracle;
 
-/// The 2/2 red Dwarf creature token it makes.
-pub static DWARF: CardDef = CardDef {
-    colors: Some(ColorSet::of(Color::Red)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(2),
-    toughness: Some(2),
-    ..token!(Dwarf)
-};
-
-pub static EXTRA: &[&CardDef] = &[&DWARF];
+pub static EXTRA: &[&CardDef] = &[&tokens::DWARF];
 
 /// "As long as you have an enduring story, creatures you control get +1/+1" (CR 702.195b, 613.4c): every creature its
 /// controller controls, itself among them, while that player has the designation.
@@ -38,7 +29,7 @@ fn fili_or_another_nontoken_dwarf_enters(q: &dyn Query, me: &Asker, event: &Even
 
 /// "Create a 2/2 red Dwarf creature token."
 fn dwarf(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &DWARF, 1)?;
+    tokens::create(g, item.controller, &tokens::DWARF, 1)?;
     Ok(())
 }
 
