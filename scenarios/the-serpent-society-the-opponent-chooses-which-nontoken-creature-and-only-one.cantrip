@@ -1,0 +1,68 @@
+# The Serpent Society's "each opponent sacrifices a nontoken creature of their choice" (CR 701.21a, 101.4): one creature,
+# not each. Bot2 controls Grizzly Bears and Hill Giant and chooses Hill Giant; the Bears stay.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+The Serpent Society
+Baleful Strix
+Mox Sapphire
+Mox Ruby
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Grizzly Bears
+Hill Giant
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Serpent Society.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Baleful Strix.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Baleful Strix)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Hill Giant)
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Graveyard = Baleful Strix; Lightning Bolt; Black Lotus
+Bot2.Battlefield = Grizzly Bears; Mox Emerald; Mox Pearl; Mox Ruby
+Bot2.Graveyard = Hill Giant; Black Lotus
