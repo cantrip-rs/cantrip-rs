@@ -1,0 +1,57 @@
+# Tigra, Feline Fury: "Flash. Trample. Whenever you gain life, put a +1/+1 counter on Tigra." Bot1 casts Tigra (a 2/1) during Bot2's upkeep
+# with flash, then Healing Salve for 3 life: one counter, not three (3/2); a second Salve for 3 more gives a second counter (4/3). Tigra
+# has trample from the start.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Tigra, Feline Fury
+Healing Salve
+Healing Salve
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tigra, Feline Fury.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tigra, Feline Fury.Power = 2
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tigra, Feline Fury.Power = 3
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 26
+Bot1.Battlefield.Tigra, Feline Fury.Power = 4
+Bot1.Battlefield.Tigra, Feline Fury.Toughness = 3
+Bot1.Battlefield.Tigra, Feline Fury.Keywords = Flash; Trample

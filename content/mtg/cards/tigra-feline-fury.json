@@ -1,0 +1,12 @@
+{
+  "name": "Tigra, Feline Fury",
+  "manaCost": "{1}{G}",
+  "type": "Legendary Creature — Cat Human Hero",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flash\nTrample\nWhenever you gain life, put a +1/+1 counter on Tigra.",
+  "keywords": [
+    "Flash",
+    "Trample"
+  ]
+}
