@@ -1,0 +1,13 @@
+{
+  "name": "Oona's Gatewarden",
+  "manaCost": "{U/B}",
+  "type": "Creature — Faerie Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Defender, flying\nWither (This deals damage to creatures in the form of -1/-1 counters.)",
+  "keywords": [
+    "Defender",
+    "Flying",
+    "Wither"
+  ]
+}
