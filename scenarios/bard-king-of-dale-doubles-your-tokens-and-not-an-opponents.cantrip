@@ -1,0 +1,59 @@
+# Bard, King of Dale: "If one or more tokens would be created under your control, twice that many of those tokens are created
+# instead." Bard is on the battlefield from turn 1. Bot2's Assembly Specialist, cast on turn 2, makes its one Borg token: tokens
+# under an opponent's control are not doubled. On turn 3 Bot1 casts its own Assembly Specialist: two Borg tokens are created, not
+# one and not three.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Bard, King of Dale
+Assembly Specialist
+Plains x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Assembly Specialist
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bard, King of Dale.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Assembly Specialist.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot2.Battlefield = Assembly Specialist; Borg Token; Mox Jet; Mox Pearl
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Assembly Specialist.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Assembly Specialist; Bard, King of Dale; Borg Token; Borg Token; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot2.Battlefield = Assembly Specialist; Borg Token; Mox Jet; Mox Pearl

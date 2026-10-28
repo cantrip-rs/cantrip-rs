@@ -1,0 +1,49 @@
+# Bard, King of Dale: "If you would draw a card except the first one you draw in each of your draw steps, draw two cards instead."
+# On turn 3 Bot1 draws one card in its draw step, untouched; Ancestral Recall's three draws are each replaced by two: Bot1 draws six
+# more (each of the two is a draw the replacement is not applied to again, CR 614.5). Bot2's own turn-2 draw is one card: Bard is
+# not Bot2's. Bard has reach and vigilance, which Bot1 sees.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Bard, King of Dale
+Ancestral Recall
+Plains
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bard, King of Dale.Cast
+? Bot1.Mana =
+Bot1.Pass
+? Bot1.Hand.Count = 2
+[T2 Bot2.Main1]
+? Bot2.Hand.Count = 8
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 8
+
+[Expect]
+Bot1.Battlefield.Bard, King of Dale.Keywords = Reach; Vigilance
+Bot1.Library.Count = 7
+Bot2.Library.Count = 12
