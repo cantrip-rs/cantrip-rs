@@ -118,26 +118,25 @@ fn graveyards_cover(g: &dyn Game, age: u32) -> bool {
     g.state().seats().map(|p| g.state().zone(Zone::graveyard(p)).len() as u32 / 2).sum::<u32>() >= age
 }
 
+/// `pay` of the cost `of`, if there is one that fits; no payment, otherwise.
+fn paid_if<T>(g: &mut dyn Game, of: Option<T>, pay: impl FnOnce(&mut dyn Game, T) -> Result<bool, Suspend>) -> Result<bool, Suspend> {
+    of.map(|of| pay(g, of)).transpose().map(|paid| paid.unwrap_or(false))
+}
+
 /// Pays `payment` for `age` age counters, if the payer chooses to and can: whether it was paid. All of it or none (CR
 /// 702.24a).
 fn pay(g: &mut dyn Game, item: &StackItem, payment: Payment, age: u32) -> Result<bool, Suspend> {
     let (payer, this) = (item.controller, item.object);
-    let count = u8::try_from(age);
+    // A multiple that doesn't fit what a cost holds - 256 age counters - is a cost nobody can pay.
+    let count = u8::try_from(age).ok();
     let may = |g: &mut dyn Game, question: &'static Question| Ok(matches!(g.ask(payer, RequestKind::May { source: this, purpose: Purpose::Ask(question) })?, Answer::Yes));
     match payment {
-        Payment::Mana(mana) => match mana.times(u16::try_from(age).unwrap_or(u16::MAX)) {
-            Some(total) => g.may_pay(payer, this, this, Cost::mana(total), &PAY),
-            None => Ok(false),
-        },
+        Payment::Mana(mana) => paid_if(g, mana.times(u16::try_from(age).unwrap_or(u16::MAX)), |g, total| g.may_pay(payer, this, this, Cost::mana(total), &PAY)),
         Payment::Life(life) => g.may_pay(payer, this, this, Cost { life: u32::from(life) * age, ..Cost::NONE }, &PAY),
-        Payment::Sacrifice(filter) => match count {
-            Ok(count) => g.may_pay(payer, this, this, Cost::sacrifice(count, filter), &SACRIFICE),
-            Err(_) => Ok(false),
-        },
-        Payment::PutMinusOneMinusOneCounterOnThis => match count {
-            Ok(count) => g.may_pay(payer, this, this, put_counters(CounterKind::MinusOne, count), &COUNTER_ON_THIS),
-            Err(_) => Ok(false),
-        },
+        Payment::Sacrifice(filter) => paid_if(g, count, |g, count| g.may_pay(payer, this, this, Cost::sacrifice(count, filter), &SACRIFICE)),
+        Payment::PutMinusOneMinusOneCounterOnThis => {
+            paid_if(g, count, |g, count| g.may_pay(payer, this, this, put_counters(CounterKind::MinusOne, count), &COUNTER_ON_THIS))
+        }
         Payment::PutPlusOnePlusOneCounterOnAnOpposingCreature => {
             if opposing_creatures(g, payer).is_empty() || !may(g, &COUNTER_ON_OPPOSING)? {
                 return Ok(false);
