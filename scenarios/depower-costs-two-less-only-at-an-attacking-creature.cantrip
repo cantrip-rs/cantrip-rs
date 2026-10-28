@@ -1,0 +1,48 @@
+# Depower: "This spell costs {2} less to cast if it targets an attacking creature" (CR 601.2f). Bot1 attacks with one of
+# its two Grizzly Bears on turn 3. With only Mox Sapphire's {U}, Bot2 cannot cast Depower at the Bear that stayed home
+# ({2}{U}), but can at the attacker for {U}: the pool is empty after, the Bear is -2/2 and deals no damage (negative power
+# deals none, CR 120.3), and Bot2 draws a card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Grizzly Bears
+Grizzly Bears
+Island x3
+Island x14
+
+[Bot2 Deck]
+Mox Sapphire
+Depower
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears#1 > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+! Bot2.Hand.Depower.Cast(Bot1.Battlefield.Grizzly Bears#2; Mana: short)
+Bot2.Hand.Depower.Cast(Bot1.Battlefield.Grizzly Bears#1)
+? Bot2.Mana =
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears#1.Power = -2
+Bot1.Battlefield.Grizzly Bears#2.Power = 2
+Bot2.Life = 20
+Bot2.Graveyard = Depower
+Bot2.Hand.Count = 7

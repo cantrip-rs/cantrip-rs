@@ -1,0 +1,39 @@
+# Depower at a creature that is not attacking costs its full {2}{U}, paid exactly by Black Lotus's {U}{U}{U}: the Grizzly
+# Bears (cast with Mox Emerald's {G} and Mox Ruby's {R}) are -2/2 until end of turn and Bot1 draws a card (CR 608.2c).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Black Lotus
+Grizzly Bears
+Depower
+Island x2
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Depower.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = -2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Hand = Island; Island; Plains
+Bot1.Graveyard = Depower; Black Lotus
