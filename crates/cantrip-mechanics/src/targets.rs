@@ -120,7 +120,7 @@ fn tapped_creature_an_opponent_controls_filter(q: &dyn Query, asker: &Asker, t: 
 }
 /// "Target tapped creature an opponent controls" (CR 115.1, 608.2b). Spring-Loaded Sawblades and Super Villain Lockup print it.
 pub const TAPPED_CREATURE_AN_OPPONENT_CONTROLS: TargetSpec = target(tapped_creature_an_opponent_controls_filter);
-fn attacking_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+pub fn attacking_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.is_attacking(id))
 }
 
