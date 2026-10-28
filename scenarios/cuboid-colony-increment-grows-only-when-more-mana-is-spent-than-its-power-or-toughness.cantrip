@@ -1,0 +1,80 @@
+# Cuboid Colony (1/1 flash, flying, trample; {G}{U}) is cast with flash at the end of Bot2's turn 2, with Bot1's Moxen untapped. Increment
+# (CR 702.191a) puts a +1/+1 counter on it when Bot1 casts a spell for more mana than its power or its toughness:
+#  - turn 3: A Good Day to Die ({B}, 1 mana) is not more than 1/1, so no trigger; it makes the Colony 3/1, and Capital Guard (2 mana) is more than
+#    its toughness 1 (though not its power 3): a counter, 4/2 until end of turn. The ability resolves before the Guard does.
+#  - turn 4: Bot2 casts a 3-mana Harrier Naga: increment is "whenever you cast", so nothing.
+#  - turn 5: Cylian Elf (2 mana) is not more than the 2/2 Colony's power or toughness: no counter, equal is not greater.
+# The Moxen cost nothing, so casting them triggers nothing either.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Cuboid Colony
+A Good Day to Die
+Capital Guard
+Cylian Elf
+Swamp x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Harrier Naga
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+[T2 Bot2.Main2]
+Bot1.Hand.Cuboid Colony.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cuboid Colony.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.A Good Day to Die.Cast(Bot1.Battlefield.Cuboid Colony)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cuboid Colony.Power = 3
+? Bot1.Battlefield.Cuboid Colony.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Capital Guard.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cuboid Colony.Power = 4
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Harrier Naga.Cast
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Cuboid Colony.Power = 2
+Bot1.Hand.Cylian Elf.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Cuboid Colony.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Cuboid Colony.Power = 2
+Bot1.Battlefield.Cuboid Colony.Toughness = 2
+Bot1.Battlefield.Cuboid Colony.Keywords = Flash; Flying; Trample
