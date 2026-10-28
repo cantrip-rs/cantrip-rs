@@ -1,0 +1,65 @@
+# Thorin's Last Stand: "Choose one - Creatures you control get +2/+1 until end of turn; or destroy target artifact or
+# enchantment. You gain 2 life." On turn 3 the first mode (paid exactly with a Black Lotus and a Mox Sapphire) makes Bot1's
+# Ornithopter 2/3 and leaves Bot2's alone (CR 611.2c). On turn 5 the second mode destroys Bot2's Ornithopter, an artifact
+# creature, refuses a Plains, and gains 2 life (20 -> 22).
+
+[Bot1 Deck]
+Plains
+Mox Sapphire
+Black Lotus
+Thorin's Last Stand
+Thorin's Last Stand
+Ornithopter
+Mox Pearl
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thorin's Last Stand.Cast
+Bot1.Modes(Creatures you control get)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Hand.Thorin's Last Stand.Cast
+Bot1.Modes(Destroy target artifact or enchantment)
+! Bot1.Target(Bot1.Battlefield.Plains#1)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Ornithopter; Island
+Bot1.Life = 22
+Bot1.Battlefield.Ornithopter.Power = 0
