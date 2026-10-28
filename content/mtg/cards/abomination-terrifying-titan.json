@@ -1,0 +1,11 @@
+{
+  "name": "Abomination, Terrifying Titan",
+  "manaCost": "{3}{R/G}",
+  "type": "Legendary Creature — Gamma Villain",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample\nPower-up — {5}{R/G}{R/G}: Put a +1/+1 counter on Abomination. He fights up to one target creature an opponent controls. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "keywords": [
+    "Trample"
+  ]
+}

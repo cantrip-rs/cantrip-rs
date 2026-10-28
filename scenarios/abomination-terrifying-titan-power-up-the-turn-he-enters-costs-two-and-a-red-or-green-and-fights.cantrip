@@ -1,0 +1,65 @@
+# Abomination, Terrifying Titan: "Power-up — {5}{R/G}{R/G}: Put a +1/+1 counter on Abomination. He fights up to one
+# target creature an opponent controls." The turn he enters, his mana cost {3}{R/G} takes {3} off the generic and one
+# hybrid symbol (CR 702.193b, 118.7), leaving {2}{R/G}: Mox Emerald's {G} and two Forests, exactly. He becomes 5/5 and
+# fights Bot2's Grizzly Bears (2/2): it dies, he is marked with 2 damage. Bot1's own Ornithopter is not a legal target.
+
+[Bot1 Deck]
+Ornithopter
+Forest
+Sol Ring
+Mox Ruby
+Mox Jet
+Mox Emerald
+Abomination, Terrifying Titan
+Forest
+Forest x10
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Grizzly Bears
+Forest x12
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Abomination, Terrifying Titan.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest#1.Activate
+! Bot1.Battlefield.Abomination, Terrifying Titan.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Abomination, Terrifying Titan.Activate(Bot2.Battlefield.Grizzly Bears)
+Bot1.Modes(1)
+Bot1.Pass
+? Bot1.Mana =
+
+[Expect]
+Turn = 3
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Abomination, Terrifying Titan.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Abomination, Terrifying Titan.Power = 5
+Bot1.Battlefield.Abomination, Terrifying Titan.Damage = 2
