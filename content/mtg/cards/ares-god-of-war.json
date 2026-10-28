@@ -1,0 +1,8 @@
+{
+  "name": "Ares, God of War",
+  "manaCost": "{1}{B}{R}",
+  "type": "Legendary Creature — God Warrior Villain",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Ares attacks each combat if able.\nWhenever an attacking creature you control dies, return that card to its owner's hand."
+}
