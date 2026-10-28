@@ -1,0 +1,43 @@
+# Mirkwood Pathmaker, a */*: its power and toughness come from a characteristic-defining ability (CR 604.3). Bot1 has a Forest (so it
+# is a 1/1) and enchants it with Enchanted River's Grasp, "Enchanted creature loses all abilities": with the ability gone its
+# power and toughness are 0 (the * has nothing to stand for), a 0/0 that state-based actions put into the graveyard (CR 704.5f),
+# and the Aura with it (CR 704.5m).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mirkwood Pathmaker
+Enchanted River's Grasp
+Forest
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mirkwood Pathmaker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mirkwood Pathmaker.Power = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Enchanted River's Grasp.Cast(Mirkwood Pathmaker)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mirkwood Pathmaker = (absent)
+Bot1.Battlefield.Enchanted River's Grasp = (absent)

@@ -1,0 +1,8 @@
+{
+  "name": "Mirkwood Pathmaker",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Ranger",
+  "power": "*",
+  "toughness": "*",
+  "oracleText": "Mirkwood Pathmaker's power and toughness are each equal to the number of lands you control."
+}

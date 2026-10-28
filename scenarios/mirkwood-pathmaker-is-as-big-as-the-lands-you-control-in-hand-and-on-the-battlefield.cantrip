@@ -1,0 +1,42 @@
+# Mirkwood Pathmaker, a */*: "Mirkwood Pathmaker's power and toughness are each equal to the number of lands you control." The
+# ability works in all zones (the ruling, CR 604.3): in Bot1's hand it is a 1/1 with one Forest played, and a 1/1 on the battlefield
+# (Black Lotus is no land). Bot2's Island adds nothing ("you control"); Bot1's second land on turn 3 makes it a 2/2 (CR 613.4a).
+
+[Bot1 Deck]
+Black Lotus
+Mirkwood Pathmaker
+Forest
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+? Bot1.Hand.Mirkwood Pathmaker.Power = 0
+Bot1.Hand.Forest.Play
+? Bot1.Hand.Mirkwood Pathmaker.Power = 1
+? Bot1.Hand.Mirkwood Pathmaker.Toughness = 1
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mirkwood Pathmaker.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mirkwood Pathmaker.Power = 1
+? Bot1.Battlefield.Mirkwood Pathmaker.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+? Bot1.Battlefield.Mirkwood Pathmaker.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+
+[Expect]
+Bot1.Battlefield.Mirkwood Pathmaker.Power = 2
+Bot1.Battlefield.Mirkwood Pathmaker.Toughness = 2
