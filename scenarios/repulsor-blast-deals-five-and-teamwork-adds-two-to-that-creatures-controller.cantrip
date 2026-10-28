@@ -1,0 +1,121 @@
+# Repulsor Blast: "Teamwork 2 ... deals 5 damage to target creature. If this spell was cast using teamwork, it also deals 2 damage to
+# that creature's controller." On turn 3 Bot1 casts it with teamwork, tapping two Memnites (power 1 each, total 2), at Bot2's Aegis
+# Turtle (0/5, so exactly 5 kills it): Bot2, its controller, loses 2 (18). On turn 5 a second one, again with teamwork, targets Bot1's
+# own Aegis Turtle: its controller is Bot1, who loses 2 (18) - the damage goes to that creature's controller, not to the opponent.
+# On turn 7 a third is cast without teamwork at Bot2's Fortress Crab (1/6, cast turn 4): it survives with exactly 5 damage, neither player loses life and the Memnites stay untapped.
+
+[Bot1 Deck]
+Repulsor Blast
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Aegis Turtle
+Memnite
+Memnite
+Repulsor Blast
+Repulsor Blast
+Mountain x20
+
+[Bot2 Deck]
+Mox Sapphire
+Aegis Turtle
+Fortress Crab
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Repulsor Blast.Cast
+Bot1.Modes(Teamwork 2)
+Bot1.Target(Bot2.Battlefield.Aegis Turtle)
+! Bot1.Choose(Memnite)
+! Bot1.Choose(Memnite)
+Bot1.Choose(Memnite; Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Aegis Turtle
+? Bot2.Life = 18
+? Bot1.Battlefield.Memnite#1.Tapped = true
+? Bot1.Battlefield.Memnite#2.Tapped = true
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Fortress Crab.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Repulsor Blast.Cast
+Bot1.Modes(Teamwork 2)
+Bot1.Target(Bot1.Battlefield.Aegis Turtle)
+Bot1.Choose(Memnite; Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Aegis Turtle = (absent)
+? Bot1.Life = 18
+? Bot2.Life = 18
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Repulsor Blast.Cast
+Bot1.Modes(Cast without teamwork)
+Bot1.Target(Bot2.Battlefield.Fortress Crab)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Fortress Crab.Damage = 5
+? Bot1.Battlefield.Memnite#1.Tapped = false
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
