@@ -1,0 +1,48 @@
+# Unleash (CR 702.98a): "can't block as long as it has a +1/+1 counter on it" counts any +1/+1 counter, not only the one
+# unleash gives (its ruling). Bot1 casts Dead Reveler and declines the counter, then puts one on it with Snakeskin Veil.
+# On turn 2 it can't block Bot2's hasty Mountain Bandit, so Bot1 takes 1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Snakeskin Veil
+Dead Reveler
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mountain Bandit
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Dead Reveler.Cast
+Bot1.Pass
+Bot1.Decline
+? Bot1.Battlefield.Dead Reveler.Keywords = (absent)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Snakeskin Veil.Cast(Bot1.Battlefield.Dead Reveler)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mountain Bandit.Cast
+Bot2.Pass
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Mountain Bandit > Bot1)
+! Bot1.Block(Dead Reveler > Mountain Bandit)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Dead Reveler.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Dead Reveler.Keywords = CantBlock

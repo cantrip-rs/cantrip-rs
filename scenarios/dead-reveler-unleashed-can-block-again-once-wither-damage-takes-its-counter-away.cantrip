@@ -1,0 +1,41 @@
+# Unleash (CR 702.98a): the restriction lasts only as long as it has a +1/+1 counter. Bot1 casts Dead Reveler and accepts
+# the counter (it can't block). On turn 3 it attacks and Bot2's Scuzzback Scrapper blocks: the Scrapper's wither damage
+# is dealt as a -1/-1 counter (CR 702.80a), which cancels the +1/+1 counter (CR 704.5q). With none left, the Reveler is a
+# 2/3 again and no longer can't block.
+
+[Bot1 Deck]
+Black Lotus
+Dead Reveler
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Scuzzback Scrapper
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Dead Reveler.Cast
+Bot1.Pass
+Bot1.Accept
+? Bot1.Battlefield.Dead Reveler.Keywords = CantBlock
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Scuzzback Scrapper.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Dead Reveler > Bot2)
+Bot2.Block(Scuzzback Scrapper > Dead Reveler)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Scuzzback Scrapper
+Bot1.Battlefield.Dead Reveler.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Dead Reveler.Counters.MinusOneMinusOne = (absent)
+Bot1.Battlefield.Dead Reveler.Power = 2
+Bot1.Battlefield.Dead Reveler.Toughness = 3
+Bot1.Battlefield.Dead Reveler.Keywords = (absent)
