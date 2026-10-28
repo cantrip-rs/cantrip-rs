@@ -1,0 +1,35 @@
+# Meager Meal's "up to one target creature" may be none: Bot1 chooses no creature (its Memnite gets no counter) and itself as the
+# player, gaining 2 life (22). It costs {B}: with only Mox Pearl in play it is not offered (the pip is pinned), and with Mox Jet it is.
+
+[Bot1 Deck]
+Gollum, Silent Slinker
+Mox Pearl
+Memnite
+Mox Jet
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+! Bot1.Hand.Gollum, Silent Slinker.Cast(Ability: Meager Meal; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gollum, Silent Slinker.Cast(Ability: Meager Meal)
+Bot1.Target()
+Bot1.Target(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Exile = Gollum, Silent Slinker

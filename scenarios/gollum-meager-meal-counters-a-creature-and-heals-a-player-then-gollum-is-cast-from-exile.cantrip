@@ -1,0 +1,51 @@
+# Meager Meal {B} (Adventure, CR 715): "Put a +1/+1 counter on up to one target creature. Target player gains 2 life." Bot1 pays it
+# exactly with Mox Jet, targeting its Memnite (a 2/2 now) and Bot2, who gains 2 life (22) - a player other than the caster. The
+# card goes to exile; on turn 3 Gollum, Silent Slinker is cast from there for {3}{B} (Mox Jet, Mox Pearl and a Mana Crypt),
+# a 4/3 with menace.
+
+[Bot1 Deck]
+Gollum, Silent Slinker
+Mox Jet
+Memnite
+Mox Pearl
+Mana Crypt
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gollum, Silent Slinker.Cast(Ability: Meager Meal)
+Bot1.Target(Memnite)
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot2.Life = 22
+? Bot1.Life = 20
+? Exile = Gollum, Silent Slinker
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Exile.Gollum, Silent Slinker.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Gollum, Silent Slinker.Power = 4
+Bot1.Battlefield.Gollum, Silent Slinker.Toughness = 3
+Bot1.Battlefield.Gollum, Silent Slinker.Keywords = Menace
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Exile.Count = 0
