@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{attach::attached_object, targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{attach::{attached_object, attached_to_it}, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
 /// "Tap enchanted creature. It becomes unprepared." This trigger refers to the object attached when it resolves, using
@@ -9,13 +9,6 @@ fn tap_and_unprepare(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     g.tap(creature);
     g.become_unprepared(creature);
     Ok(())
-}
-
-/// "Enchanted creature ... doesn't untap during its controller's untap step" (CR 502.3): a rule of the Aura's, not an
-/// ability of the creature (CR 113.1a), so the creature losing all its abilities - by this Aura's own first half, at once -
-/// leaves it in force (CR 613.1f).
-fn enchanted_creature_doesnt_untap(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
-    q.obj(asker.source).attached_to == Some(id)
 }
 
 pub static CARD: CardDef = CardDef {
@@ -28,6 +21,9 @@ pub static CARD: CardDef = CardDef {
     statics: &[
         loses_all_abilities(attached_object, "Enchanted creature loses all abilities."),
     ],
-    untap_bans: &[enchanted_creature_doesnt_untap],
+    // "Enchanted creature ... doesn't untap during its controller's untap step" (CR 502.3): a rule of the Aura's, not an
+    // ability of the creature (CR 113.1a), so the creature losing all its abilities - by this Aura's own first half, at once -
+    // leaves it in force (CR 613.1f).
+    untap_bans: &[attached_to_it],
     ..oracle::INFINITE_COURSEWORK
 };
