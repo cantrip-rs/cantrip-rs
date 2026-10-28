@@ -1668,6 +1668,9 @@ pub struct LastKnown {
     pub protection_everything: bool,
     pub hexproof_from: HexproofFrom,
     pub must_attack: u32,
+    /// It was an attacking creature (CR 506.3) as it last was on the battlefield: combat forgets a permanent that leaves it, so
+    /// "whenever an attacking creature you control dies" asks this (CR 603.10a).
+    pub attacking: bool,
     /// Its mana value as it last had it (CR 202.3; on the stack, X counted, CR 202.3e): a cast's is its mana value as it
     /// became cast (`history::Cast::value`).
     pub mana_value: u32,
