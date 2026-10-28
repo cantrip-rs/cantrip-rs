@@ -1,0 +1,42 @@
+# Stony-Voiced Goblins {1}{B} (paid exactly with Mox Jet and Mox Pearl): "When this creature enters, each opponent discards a card."
+# At a table of three both of Bot1's opponents discard one card of their choice (Bot2 its Memnite, Bot3 its Ornithopter) and
+# Bot1, who has other cards in hand, discards nothing (CR 701.9). Bot1 draws on turn 1 at a table of three (CR 103.8a): 5 cards remain.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Stony-Voiced Goblins
+Plains x4
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Bot3 Deck]
+Ornithopter
+Swamp x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stony-Voiced Goblins.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot2.Choose(Memnite)
+Bot3.Choose(Ornithopter)
+
+[Expect]
+Bot1.Battlefield.Stony-Voiced Goblins.Power = 1
+Bot1.Hand.Count = 5
+Bot2.Graveyard = Memnite
+Bot2.Hand.Count = 6
+Bot3.Graveyard = Ornithopter
+Bot3.Hand.Count = 6
+Bot1.Graveyard.Count = 0

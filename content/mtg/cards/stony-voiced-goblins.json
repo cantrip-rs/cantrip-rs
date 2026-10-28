@@ -1,0 +1,8 @@
+{
+  "name": "Stony-Voiced Goblins",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Goblin Bard",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, each opponent discards a card."
+}
