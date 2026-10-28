@@ -1,0 +1,41 @@
+# Agents of HYDRA dying (CR 700.4) leaves its controller a 2/1 black Villain token with menace (CR 111.4, 702.110); the token
+# is the card's own controller's, with exactly 2 power, 1 toughness and menace, and the Agents itself is in the graveyard.
+
+[Bot1 Deck]
+Agents of HYDRA
+Mox Jet
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Agents of HYDRA)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Agents of HYDRA
+Bot1.Battlefield = Mox Jet; Mox Pearl; Villain Token
+Bot1.Battlefield.Villain Token.Power = 2
+Bot1.Battlefield.Villain Token.Toughness = 1
+Bot1.Battlefield.Villain Token.Keywords = Menace
+Bot1.Battlefield.Villain Token.Colors = Black
+Bot1.Battlefield.Villain Token.Token = true
+Bot2.Battlefield = Mox Ruby

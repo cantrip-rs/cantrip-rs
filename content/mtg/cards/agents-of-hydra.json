@@ -1,0 +1,8 @@
+{
+  "name": "Agents of HYDRA",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Spy Villain",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature dies, create a 2/1 black Villain creature token with menace. (It can't be blocked except by two or more creatures.)"
+}
