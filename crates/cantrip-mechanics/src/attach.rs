@@ -14,6 +14,19 @@ pub fn attach_to_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     Ok(())
 }
 
+/// "Return this card from your graveyard to the battlefield attached to target [creature]" (CR 303.4i, 400.7): an Aura card put onto
+/// the battlefield under its owner's control attached to the ability's first target, which is not chosen by the Aura's controller
+/// (CR 303.4f) but must be a legal object for it to enchant, or it stays in the graveyard. It does nothing if the target is no
+/// longer legal (CR 608.2b) or the card has left the graveyard (CR 400.7). Eagle's Rescue and Gryff's Boon print it.
+pub fn return_this_to_the_battlefield_attached_to_first_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(host) = targets::object(g, item, 0)
+        && is_live(g, item.object)
+    {
+        g.put_onto_battlefield_attached(item.object, item.controller, host)?;
+    }
+    Ok(())
+}
+
 /// Equip [cost] (CR 702.6a): "[cost]: Attach this to target creature you control. Activate only as a sorcery."
 /// `text` is the ability's text, which a scenario's `Ability:` matches. Umezawa's Jitte and Lavaspur Boots print it.
 pub const fn equip(mana: ManaCost, text: &'static str) -> AbilityDef {
