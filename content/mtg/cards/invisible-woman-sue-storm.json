@@ -1,0 +1,11 @@
+{
+  "name": "Invisible Woman, Sue Storm",
+  "manaCost": "{4}{W}",
+  "type": "Legendary Creature — Human Hero",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Lifelink\nWhenever you put one or more +1/+1 counters on one or more other Heroes you control, you may create a 0/4 colorless Wall creature token with defender.",
+  "keywords": [
+    "Lifelink"
+  ]
+}

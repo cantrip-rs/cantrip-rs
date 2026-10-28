@@ -1,0 +1,127 @@
+# Invisible Woman, Sue Storm: lifelink, and "Whenever you put one or more +1/+1 counters on one or more other Heroes you control, you
+# may create a 0/4 colorless Wall creature token with defender." Counters come from Take Up the Shield, and nothing is on the stack
+# after a spell resolves when the ability has not triggered.
+#   Turn 4: Bot2's Take Up the Shield puts a counter on Bot1's Masked Meower (a Hero): Bot2 puts it, not Bot1, so no trigger.
+#   Turn 5: Bot1's puts one on that Meower and it accepts: a Wall Token, a 0/4 colorless defender.
+#   Turn 7: one on Invisible Woman herself - not "other" - no trigger.   Turn 9: one on Bot1's Ornithopter - not a Hero - no trigger.
+#   Turn 11: one on Bot2's own Masked Meower - a Hero, but not one Bot1 controls - no trigger.
+#   Turn 13: one on the Meower again: it triggers, and Bot1 declines: no second Wall.
+
+[Bot1 Deck]
+Invisible Woman, Sue Storm
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ornithopter
+Masked Meower
+Take Up the Shield
+Take Up the Shield
+Take Up the Shield
+Take Up the Shield
+Take Up the Shield
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Masked Meower
+Take Up the Shield
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Invisible Woman, Sue Storm.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Masked Meower.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Masked Meower.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Take Up the Shield.Cast(Bot1.Battlefield.Masked Meower)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Masked Meower.Counters.PlusOnePlusOne = 1
+? Stack.Count = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Take Up the Shield.Cast(Bot1.Battlefield.Masked Meower)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wall Token.Power = 0
+? Bot1.Battlefield.Wall Token.Toughness = 4
+? Bot1.Battlefield.Wall Token.Keywords = Defender
+? Bot1.Battlefield.Wall Token.Colors = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Take Up the Shield.Cast(Invisible Woman, Sue Storm)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Invisible Woman, Sue Storm.Counters.PlusOnePlusOne = 1
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Take Up the Shield.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+[T11 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Take Up the Shield.Cast(Bot2.Battlefield.Masked Meower)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Masked Meower.Counters.PlusOnePlusOne = 1
+[T13 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Take Up the Shield.Cast(Bot1.Battlefield.Masked Meower)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Invisible Woman, Sue Storm; Masked Meower; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Wall Token
+Bot1.Battlefield.Masked Meower.Counters.PlusOnePlusOne = 3

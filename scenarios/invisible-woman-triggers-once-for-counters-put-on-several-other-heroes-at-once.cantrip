@@ -1,0 +1,65 @@
+# Invisible Woman, Sue Storm: "Whenever you put one or more +1/+1 counters on one or more other Heroes you control" - one trigger for
+# counters put on several Heroes at once (CR 603.2c). On turn 5 Agent Phil Coulson taps to put a +1/+1 counter on each other Hero Bot1
+# controls: Invisible Woman herself and both Masked Meowers. The two Meowers are other Heroes, and together they trigger it once, so
+# Bot1 may create a single Wall (it accepts), not two; Invisible Woman's own counter is not "other".
+
+[Bot1 Deck]
+Invisible Woman, Sue Storm
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Masked Meower
+Agent Phil Coulson
+Masked Meower
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Invisible Woman, Sue Storm.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Agent Phil Coulson.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Masked Meower.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Masked Meower.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Agent Phil Coulson.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Agent Phil Coulson; Invisible Woman, Sue Storm; Masked Meower; Masked Meower; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Wall Token
+Bot1.Battlefield.Invisible Woman, Sue Storm.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Masked Meower#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Masked Meower#2.Counters.PlusOnePlusOne = 1
