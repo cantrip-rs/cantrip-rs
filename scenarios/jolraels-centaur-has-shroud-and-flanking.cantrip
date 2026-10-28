@@ -1,0 +1,50 @@
+# Jolrael's Centaur ({1}{G}{G}, paid by Black Lotus) has shroud (CR 702.18a): Bot2's Lightning Bolt can't be cast at it on turn 2, but can
+# be cast at Bot1 - the control for the refusal. It also has flanking (CR 702.25a): on turn 3 it attacks and Bot2's Balduvian Bears block, shrinking to
+# a 1/1 that dies to its 2 damage while the Centaur survives with 1 damage marked.
+
+[Bot1 Deck]
+Black Lotus
+Jolrael's Centaur
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Balduvian Bears
+Lightning Bolt
+Mountain
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Jolrael's Centaur.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Balduvian Bears.Cast
+Bot2.Pass
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Jolrael's Centaur)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Battlefield.Mountain.Activate
+[T3 Bot1.Main1]
+Bot1.Attack(Jolrael's Centaur > Bot2)
+Bot2.Block(Balduvian Bears > Jolrael's Centaur)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Jolrael's Centaur.Keywords = Shroud
+Bot1.Battlefield.Jolrael's Centaur.Damage = 1
+Bot2.Graveyard = Balduvian Bears; Lightning Bolt
