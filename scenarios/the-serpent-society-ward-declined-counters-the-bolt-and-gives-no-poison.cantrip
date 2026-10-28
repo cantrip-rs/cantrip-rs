@@ -1,0 +1,32 @@
+# The Serpent Society's "Ward--Get five poison counters" when its payer declines (CR 702.21a): the Lightning Bolt is
+# countered, the Society takes no damage, and Bot2 has no poison counters.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+The Serpent Society
+Island x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Serpent Society.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(The Serpent Society)
+Bot2.Decline
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.The Serpent Society.Damage = 0
+Bot2.Poison = 0
+Bot2.Graveyard = Lightning Bolt

@@ -1,0 +1,47 @@
+# Ward--Get five poison counters cannot be paid by a player who can't get poison counters (CR 118.3, 122.1, 101.2): Bot2
+# controls Melira, Sylvok Outcast ("You can't get poison counters"), so it is not asked (the refusal), the Lightning Bolt
+# is countered and Bot2 has no poison.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+The Serpent Society
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Melira, Sylvok Outcast
+Lightning Bolt
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Serpent Society.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Melira, Sylvok Outcast.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(The Serpent Society)
+! Bot2.Accept
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.The Serpent Society.Damage = 0
+Bot2.Poison = 0
+Bot2.Graveyard = Lightning Bolt

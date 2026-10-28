@@ -1,0 +1,55 @@
+# The Serpent Society only answers "another creature you control with deathtouch" (CR 603.10a): Bot2's Baleful Strix dies to
+# Bot1's Lightning Bolt, a deathtouch creature but not Bot1's, so Bot2 sacrifices nothing and keeps its Grizzly Bears.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+The Serpent Society
+Mox Ruby
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Baleful Strix
+Grizzly Bears
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Serpent Society.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Baleful Strix.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Baleful Strix)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Graveyard = Baleful Strix
+Bot2.Battlefield = Grizzly Bears; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire

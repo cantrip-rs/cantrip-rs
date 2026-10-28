@@ -1,0 +1,51 @@
+# "Whenever another creature you control with deathtouch dies": the Serpent Society itself has deathtouch, but it is not
+# "another" (CR 700.4, 603.10a). Bot1 Lightning Bolts it twice, 6 damage on a 3/4 (there is no ward against its own
+# controller), and Bot2 sacrifices nothing: its Grizzly Bears stay.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+The Serpent Society
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Serpent Society.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.The Serpent Society)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.The Serpent Society)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Graveyard = The Serpent Society; Lightning Bolt; Lightning Bolt; Black Lotus
+Bot2.Battlefield = Grizzly Bears; Mox Emerald; Mox Ruby
