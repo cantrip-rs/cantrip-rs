@@ -1,0 +1,68 @@
+# Unleash (CR 702.98a): Bot1 casts Gore-House Chainwalker and accepts the counter, and Dead Reveler and declines it. On turn 2
+# Bot2 attacks with two hasty 1/1s. The Chainwalker, a 3/2 with a +1/+1 counter, can't block either of them; the Reveler,
+# a 2/3 with no counter, can (the control). It blocks the Bandit, so only the Goblin's damage reaches Bot1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Dead Reveler
+Gore-House Chainwalker
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mountain Bandit
+Raging Goblin
+Island
+Island
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Dead Reveler.Cast
+Bot1.Pass
+Bot1.Decline
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gore-House Chainwalker.Cast
+Bot1.Pass
+Bot1.Accept
+? Bot1.Battlefield.Gore-House Chainwalker.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Dead Reveler.Counters.PlusOnePlusOne = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Mountain Bandit.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Mountain Bandit > Bot1; Raging Goblin > Bot1)
+! Bot1.Block(Gore-House Chainwalker > Mountain Bandit)
+! Bot1.Block(Gore-House Chainwalker > Raging Goblin)
+Bot1.Block(Dead Reveler > Mountain Bandit)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Graveyard = Mountain Bandit
+Bot1.Battlefield.Gore-House Chainwalker.Power = 3
+Bot1.Battlefield.Gore-House Chainwalker.Toughness = 2
+Bot1.Battlefield.Gore-House Chainwalker.Keywords = CantBlock
+Bot1.Battlefield.Dead Reveler.Power = 2
+Bot1.Battlefield.Dead Reveler.Keywords = (absent)
