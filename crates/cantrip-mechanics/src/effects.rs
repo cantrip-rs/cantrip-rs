@@ -818,6 +818,19 @@ pub fn return_this_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
     Ok(())
 }
 
+/// "Return it [that card] to its owner's hand" (CR 400.3) for the card a dies or put-into-graveyard trigger is about
+/// (`StackItem::subject`, the new object in the graveyard, CR 400.7): returned only if it is still there. Rancor and Ares,
+/// God of War print it.
+pub fn return_subject_from_graveyard_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Target::Object(card) = item.subject {
+        let o = g.obj(card);
+        if o.became.is_none() && o.zone == Zone::graveyard(o.owner) {
+            g.return_to_hand(&[card]);
+        }
+    }
+    Ok(())
+}
+
 /// "Return target spell or permanent to its owner's hand": a spell leaves the stack for its owner's hand without being
 /// countered (CR 400.3, so one that can't be countered goes too); a permanent is returned (CR 400.7: a token ceases to
 /// exist, CR 111.7). Which it is is read from the stack. Jeskai Revelation and Sink into Stupor print it.
