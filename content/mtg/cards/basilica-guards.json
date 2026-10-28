@@ -1,0 +1,11 @@
+{
+  "name": "Basilica Guards",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Defender\nExtort (Whenever you cast a spell, you may pay {W/B}. If you do, each opponent loses 1 life and you gain that much life.)",
+  "keywords": [
+    "Defender"
+  ]
+}

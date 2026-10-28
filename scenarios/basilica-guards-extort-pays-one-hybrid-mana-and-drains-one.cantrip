@@ -1,0 +1,45 @@
+# Extort (CR 702.101a): Basilica Guards ({2}{W}) is cast, then a Mox Ruby is cast: the extort ability triggers and, as it resolves,
+# Bot1 pays {W/B} (one mana of the pool) and Bot2 loses 1 life while Bot1 gains the 1 lost. Black Lotus and the Moxen pay for
+# the creature; the mana left in the pool after it pays for extort, and no more of it is spent.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Basilica Guards
+Mox Ruby
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Basilica Guards.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+? Bot1.Mana = 
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 21
+Bot1.Battlefield.Basilica Guards.Keywords = Defender
