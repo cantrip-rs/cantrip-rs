@@ -1,0 +1,8 @@
+{
+  "name": "Bothersome Noisemaker",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Bard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever you cast a noncreature spell, amass Goblins 1. (Put a +1/+1 counter on an Army you control. It's also a Goblin. If you don't control an Army, create a 0/0 black Goblin Army creature token first.)"
+}

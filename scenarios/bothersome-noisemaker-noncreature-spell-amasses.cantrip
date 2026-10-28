@@ -1,0 +1,65 @@
+# Bothersome Noisemaker: "Whenever you cast a noncreature spell, amass Goblins 1." Bot1 casts the Noisemaker, then a
+# creature spell (Ornithopter: no Army), then two artifact spells (Mox Jet makes a 0/0 Goblin Army token with one +1/+1
+# counter; Mox Sapphire puts a second counter on the same Army, CR 701.47a, so no second token) and plays a land (not a
+# cast). Bot2 then casts a noncreature spell of its own: "you cast" leaves the Army alone (CR 603.2).
+
+[Bot1 Deck]
+Bothersome Noisemaker
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Ornithopter
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bothersome Noisemaker.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Goblin Army Token = (absent)
+Bot1.Hand.Mountain.Play
+? Stack.Count = 0
+Bot1.Hand.Mox Jet.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Army Token.Power = 1
+? Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Army Token.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Bothersome Noisemaker; Mox Ruby; Mox Pearl; Mox Jet; Mox Sapphire; Ornithopter; Mountain; Goblin Army Token
+Bot1.Battlefield.Goblin Army Token.Power = 2
+Bot1.Battlefield.Goblin Army Token.Toughness = 2
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Goblin Army Token.Colors = Black
+Bot2.Battlefield = Mox Emerald
