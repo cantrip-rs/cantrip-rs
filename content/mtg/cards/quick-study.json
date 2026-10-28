@@ -1,0 +1,6 @@
+{
+  "name": "Quick Study",
+  "manaCost": "{2}{U}",
+  "type": "Instant",
+  "oracleText": "Draw two cards."
+}

@@ -1,0 +1,36 @@
+# Quick Study is an instant: Bot1 holds it through its own turn and casts it in Bot2's turn 2 main phase; the two
+# cards are Bot1's, not the active player's.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Quick Study
+Island
+Island
+Island
+Plains
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Quick Study.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 2
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 11
+Bot2.Hand.Count = 8

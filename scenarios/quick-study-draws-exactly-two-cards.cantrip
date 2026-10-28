@@ -1,0 +1,38 @@
+# Quick Study: "Draw two cards" - cast with three Moxen on turn 1, the hand goes from three cards (after the Moxen and the spell)
+# to five, Plains and Forest being the two cards that were on top, and exactly two leave the library.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Quick Study
+Island
+Island
+Island
+Plains
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Quick Study.Cast
+? Bot1.Hand.Count = 3
+? Bot1.Library.Count = 13
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+? Bot1.Library.Count = 11
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Hand = Island; Island; Island; Plains; Forest
+Bot1.Graveyard = Quick Study
