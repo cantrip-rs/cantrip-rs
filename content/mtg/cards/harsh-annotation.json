@@ -1,0 +1,6 @@
+{
+  "name": "Harsh Annotation",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature. Its controller creates a 1/1 white and black Inkling creature token with flying."
+}

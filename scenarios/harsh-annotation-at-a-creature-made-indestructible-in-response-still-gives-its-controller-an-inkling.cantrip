@@ -1,0 +1,45 @@
+# Harsh Annotation: destroying and creating the Inkling are separate instructions. Bot2 answers with Boros Charm (permanents you control
+# gain indestructible), so the Ornithopter is not destroyed (CR 702.12b), yet its controller Bot2 still creates the Inkling.
+
+[Bot1 Deck]
+Plains x2
+Harsh Annotation
+Plains x4
+Plains x14
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Pearl
+Ornithopter
+Boros Charm
+Mountain x2
+Mountain x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Harsh Annotation.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Boros Charm.Cast
+Bot2.Modes(Permanents you control gain indestructible)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield = Mountain; Mox Ruby; Mox Pearl; Ornithopter; Inkling Token
+Bot2.Graveyard = Boros Charm
+Bot1.Graveyard = Harsh Annotation

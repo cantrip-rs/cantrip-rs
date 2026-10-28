@@ -1,0 +1,31 @@
+# Harsh Annotation: Bot1 destroys Bot2's Ornithopter and Bot2, its controller, creates the 1/1 white and black Inkling with flying
+# (Bot1 gets nothing).
+
+[Bot1 Deck]
+Plains x2
+Harsh Annotation
+Plains x4
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Harsh Annotation.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield = Mountain; Inkling Token
+Bot2.Battlefield.Inkling Token.Power = 1
+Bot2.Battlefield.Inkling Token.Keywords = Flying
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield = Plains; Plains
