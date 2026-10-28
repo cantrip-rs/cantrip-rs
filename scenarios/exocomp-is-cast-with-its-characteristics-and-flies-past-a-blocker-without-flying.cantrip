@@ -1,0 +1,35 @@
+# Exocomp (3/1 artifact creature, flying), cast with Black Lotus, its characteristics as printed. Attacking in turn 3, it cannot
+# be blocked by Bot2's Memnite, which has neither flying nor reach (CR 702.9b), and deals 3.
+
+[Bot1 Deck]
+Black Lotus
+Exocomp
+Island x22
+
+[Bot2 Deck]
+Memnite
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Exocomp.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Exocomp.Power = 3
+? Bot1.Battlefield.Exocomp.Toughness = 1
+? Bot1.Battlefield.Exocomp.Keywords = Flying
+? Bot1.Battlefield.Exocomp.Colors = Blue
+? Bot1.Battlefield.Exocomp.Types = Artifact; Creature
+? Bot1.Battlefield.Exocomp.Subtypes = Construct
+? Bot1.Battlefield.Exocomp.Supertypes = (absent)
+? Bot1.Battlefield.Exocomp.ProtectionFrom = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Exocomp > Bot2)
+! Bot2.Block(Memnite > Exocomp)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
