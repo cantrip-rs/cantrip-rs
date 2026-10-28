@@ -1,0 +1,40 @@
+# Mistmeadow Skulk, a french vanilla creature: cast with Black Lotus and Moxen paying exactly its cost (the pool is empty right after), its
+# characteristics as printed (power, toughness, keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mistmeadow Skulk
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mistmeadow Skulk.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T2 Bot2.End]
+? Bot1.Battlefield.Mistmeadow Skulk.Power = 1
+? Bot1.Battlefield.Mistmeadow Skulk.Toughness = 1
+? Bot1.Battlefield.Mistmeadow Skulk.Keywords = Lifelink
+? Bot1.Battlefield.Mistmeadow Skulk.Colors = White
+? Bot1.Battlefield.Mistmeadow Skulk.Types = Creature
+? Bot1.Battlefield.Mistmeadow Skulk.Subtypes = Kithkin; Rogue
+? Bot1.Battlefield.Mistmeadow Skulk.Supertypes = (absent)
+? Bot1.Battlefield.Mistmeadow Skulk.ProtectionFromManaValue = 3
+[T3 Bot1.Main1]
+Bot1.Attack(Mistmeadow Skulk > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 21
+Bot1.Battlefield.Mistmeadow Skulk.Tapped = true

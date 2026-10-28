@@ -1,0 +1,76 @@
+# A creature that loses all abilities (CR 613.1f) loses its protections with them, from a creature type and from a mana value
+# alike. Dragonstalker has "protection from Dragons" and Mistmeadow Skulk "protection from mana value 3 or greater" on turn 1; on
+# turn 2 Bot2's Lignify (not a Dragon, mana value 2) and Eaten by Piranhas (mana value 2) enchant them, each Aura making its
+# creature lose all abilities, and neither has any protection afterwards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Dragonstalker
+Mistmeadow Skulk
+Plains x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Lignify
+Eaten by Piranhas
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dragonstalker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mistmeadow Skulk.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dragonstalker.ProtectionFromSubtypes = Dragon
+? Bot1.Battlefield.Mistmeadow Skulk.ProtectionFromManaValue = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lignify.Cast(Bot1.Battlefield.Dragonstalker)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Eaten by Piranhas.Cast(Bot1.Battlefield.Mistmeadow Skulk)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Dragonstalker.ProtectionFromSubtypes = (absent)
+? Bot1.Battlefield.Mistmeadow Skulk.ProtectionFromManaValue = (absent)
+
+[Expect]
+Bot1.Battlefield.Dragonstalker.Subtypes = Treefolk

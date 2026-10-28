@@ -1,0 +1,11 @@
+{
+  "name": "Mistmeadow Skulk",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Kithkin Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Lifelink, protection from mana value 3 or greater",
+  "keywords": [
+    "Lifelink"
+  ]
+}
