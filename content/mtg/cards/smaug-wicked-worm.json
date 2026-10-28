@@ -1,0 +1,11 @@
+{
+  "name": "Smaug, Wicked Worm",
+  "manaCost": "{3}{B}{R}",
+  "type": "Legendary Creature — Dragon",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying\nWhen Smaug enters, create X tapped Treasure tokens, where X is the number of artifacts your opponents control.\nWhenever you cast a spell, if mana from a Treasure was spent to cast it, you draw a card and lose 1 life.",
+  "keywords": [
+    "Flying"
+  ]
+}

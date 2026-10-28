@@ -1,0 +1,61 @@
+# Smaug, Wicked Worm: "Whenever you cast a spell, if mana from a Treasure was spent to cast it, you draw a card and lose 1 life."
+# Smaug's two tapped Treasures untap on turn 5. Bot1 pays the first Lightning Bolt with a Treasure's mana: it draws a card and loses
+# 1 life. The second Bolt is paid with a Mox Ruby's mana: nothing happens. Each Bolt deals 3 to Bot2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Smaug, Wicked Worm
+Lightning Bolt
+Lightning Bolt
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Smaug, Wicked Worm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Battlefield.Treasure Token#1.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Bot1.Hand.Count = 5
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Bot1.Hand.Count = 4
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 19
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 3

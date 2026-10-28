@@ -1,0 +1,30 @@
+# Smaug, Wicked Worm: X is the number of artifacts your opponents control - zero here, Bot2 having only an Island - so no Treasure
+# is created. Bot1's own Mox Jet and Mox Ruby are artifacts, and do not count.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Smaug, Wicked Worm
+Swamp x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Smaug, Wicked Worm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Smaug, Wicked Worm

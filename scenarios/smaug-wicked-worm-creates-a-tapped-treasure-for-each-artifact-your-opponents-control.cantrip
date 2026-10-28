@@ -1,0 +1,46 @@
+# Smaug, Wicked Worm: "When Smaug enters, create X tapped Treasure tokens, where X is the number of artifacts your opponents
+# control." Bot2 controls two artifacts (a Mox Pearl and a Mox Sapphire) and an Island, which is no artifact; Bot1 controls its own
+# Moxen, which do not count. Smaug on turn 3 makes exactly two Treasure tokens, tapped. It has flying.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Smaug, Wicked Worm
+Swamp x16
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Island
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Smaug, Wicked Worm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Smaug, Wicked Worm; Treasure Token; Treasure Token
+Bot1.Battlefield.Treasure Token#1.Tapped = true
+Bot1.Battlefield.Treasure Token#2.Tapped = true
+Bot1.Battlefield.Treasure Token#1.Token = true
+Bot1.Battlefield.Smaug, Wicked Worm.Keywords = Flying
+Bot2.Battlefield = Island; Mox Pearl; Mox Sapphire

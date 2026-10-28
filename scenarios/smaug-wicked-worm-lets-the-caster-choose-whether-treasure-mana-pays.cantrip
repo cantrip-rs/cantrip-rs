@@ -1,0 +1,59 @@
+# Smaug, Wicked Worm asks where the mana spent came from (CR 106.3), so the payer chooses it. On turn 5 Bot1 holds {R} from a Mox
+# Ruby and {R} from a Treasure: the first Lightning Bolt is paid with the mana no rule tells apart (the Mox's), so Smaug does not
+# trigger; the second can only be paid with the Treasure's, and does: Bot1 draws a card and loses 1 life, once.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Smaug, Wicked Worm
+Lightning Bolt
+Lightning Bolt
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Smaug, Wicked Worm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Treasure Token#1.Activate(Color: Red)
+? Bot1.Mana = {R}{R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2; Spend: R)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 19
+Bot1.Hand.Count = 4
+Bot1.Mana =
