@@ -1,0 +1,88 @@
+# Stone by Sunlight: "Choose one - Destroy target creature with power 4 or greater; or until end of turn, target creature
+# becomes an artifact in addition to its other types and gains indestructible." Bot2 controls Gore Swine (4/1, exactly power 4)
+# and Barony Vampire (3/2, one under): the first mode destroys the Swine and refuses the Vampire. The second mode on Bot1's
+# Bastion Enforcer makes it an Artifact Creature - Dwarf Soldier with indestructible until end of turn (CR 205.1b, 613.1d), and on
+# Bot2's turn it is a plain creature again (CR 514.2).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Bastion Enforcer
+Stone by Sunlight
+Stone by Sunlight
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Gore Swine
+Barony Vampire
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bastion Enforcer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Gore Swine.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Barony Vampire.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stone by Sunlight.Cast
+Bot1.Modes(Destroy target creature)
+! Bot1.Target(Bot2.Battlefield.Barony Vampire)
+Bot1.Target(Bot2.Battlefield.Gore Swine)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Gore Swine = (absent)
+? Bot2.Battlefield.Barony Vampire.Power = 3
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stone by Sunlight.Cast
+Bot1.Modes(Until end of turn)
+Bot1.Target(Bot1.Battlefield.Bastion Enforcer)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bastion Enforcer.Types = Creature; Artifact
+? Bot1.Battlefield.Bastion Enforcer.Keywords = Indestructible
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Bastion Enforcer.Types = Creature
+Bot1.Battlefield.Bastion Enforcer.Keywords = (absent)
+Bot2.Graveyard = Gore Swine; Black Lotus

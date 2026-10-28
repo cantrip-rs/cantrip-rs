@@ -1,0 +1,6 @@
+{
+  "name": "Stone by Sunlight",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Destroy target creature with power 4 or greater.\n• Until end of turn, target creature becomes an artifact in addition to its other types and gains indestructible. (Damage and effects that say \"destroy\" don't destroy it.)"
+}
