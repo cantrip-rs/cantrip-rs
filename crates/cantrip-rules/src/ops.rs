@@ -3751,9 +3751,10 @@ pub fn attack_with_tokens(cx: &mut Cx, created: &[ObjectId], defender: Target) {
 }
 
 /// Puts a card onto the battlefield tapped and attacking `defender` (CR 508.4): ninjutsu's "put this card onto the
-/// battlefield from your hand tapped and attacking". Outside combat it is only tapped.
-pub fn put_onto_battlefield_attacking(cx: &mut Cx, object: ObjectId, controller: PlayerId, defender: Target) -> R<ObjectId> {
-    let new = put_onto_battlefield(cx, &[(object, controller, true)], ZoneReason::Other)?.first().copied().unwrap_or(object);
+/// battlefield from your hand tapped and attacking". Outside combat it is only tapped. It enters with `counters` as well
+/// (CR 122.6, 614.1c): Grim Reaper's finality counter.
+pub fn put_onto_battlefield_attacking(cx: &mut Cx, object: ObjectId, controller: PlayerId, defender: Target, counters: &[(CounterKind, i16)]) -> R<ObjectId> {
+    let new = put_onto_battlefield_with(cx, &[(object, controller, true)], ZoneReason::Other, counters)?.first().copied().unwrap_or(object);
     enter_attacking(cx, &[new], defender);
     Ok(new)
 }

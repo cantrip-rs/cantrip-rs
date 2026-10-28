@@ -14,7 +14,7 @@ fn put_onto_battlefield_attacking(g: &mut dyn Game, item: &StackItem) -> Result<
     if item.subject == Target::None {
         g.put_onto_battlefield(item.object, item.controller, true)?;
     } else {
-        g.put_onto_battlefield_attacking(item.object, item.controller, item.subject)?;
+        g.put_onto_battlefield_attacking(item.object, item.controller, item.subject, &[])?;
     }
     Ok(())
 }

@@ -15,7 +15,7 @@ fn reveal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         let defender = choose_attack_target(g, you, item.object)?;
         match defender {
             Some(d) => {
-                g.put_onto_battlefield_attacking(card, you, d)?;
+                g.put_onto_battlefield_attacking(card, you, d, &[])?;
             }
             None => {
                 g.put_onto_battlefield(card, you, true)?;

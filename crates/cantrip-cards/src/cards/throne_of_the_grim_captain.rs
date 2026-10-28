@@ -62,7 +62,7 @@ fn edict_and_return_attacking(g: &mut dyn Game, item: &StackItem) -> Result<(), 
     let Some(&card) = chosen.first() else { return Ok(()) };
     // The Captain is attacking, so there is something for the card to attack: an opponent at least.
     let Some(defender) = choose_attack_target(g, you, item.object)? else { return Ok(()) };
-    g.put_onto_battlefield_attacking(card, you, defender)?;
+    g.put_onto_battlefield_attacking(card, you, defender, &[])?;
     Ok(())
 }
 

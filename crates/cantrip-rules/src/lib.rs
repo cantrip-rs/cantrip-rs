@@ -1834,8 +1834,8 @@ impl cantrip_api::Game for Cx<'_> {
             .map_err(|_| Suspend)
     }
 
-    fn put_onto_battlefield_attacking(&mut self, object: ObjectId, controller: PlayerId, defender: Target) -> Result<ObjectId, Suspend> {
-        ops::put_onto_battlefield_attacking(self, object, controller, defender).map_err(|_| Suspend)
+    fn put_onto_battlefield_attacking(&mut self, object: ObjectId, controller: PlayerId, defender: Target, counters: &[(CounterKind, i16)]) -> Result<ObjectId, Suspend> {
+        ops::put_onto_battlefield_attacking(self, object, controller, defender, counters).map_err(|_| Suspend)
     }
 
     fn put_onto_battlefield_with_aura(&mut self, object: ObjectId, controller: PlayerId, aura: ObjectId) -> Result<ObjectId, Suspend> {

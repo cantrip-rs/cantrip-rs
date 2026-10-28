@@ -632,8 +632,9 @@ pub trait Game: Query {
     fn put_onto_battlefield_with_counters(&mut self, object: ObjectId, controller: PlayerId, tapped: bool, counters: &[(CounterKind, i16)]) -> Result<ObjectId, Suspend>;
     /// Puts an object onto the battlefield tapped and attacking `defender` (CR 508.4, 702.49a): attacking, but never
     /// declared as an attacker, so nothing that watches attackers being declared sees it. Outside combat it is just
-    /// tapped. Returns the new object.
-    fn put_onto_battlefield_attacking(&mut self, object: ObjectId, controller: PlayerId, defender: Target) -> Result<ObjectId, Suspend>;
+    /// tapped. The object enters with `counters` as well (CR 122.6, 614.1c: Grim Reaper's finality counter), none for most.
+    /// Returns the new object.
+    fn put_onto_battlefield_attacking(&mut self, object: ObjectId, controller: PlayerId, defender: Target, counters: &[(CounterKind, i16)]) -> Result<ObjectId, Suspend>;
     /// Puts an object onto the battlefield and attaches an Aura already on the battlefield to it, which now
     /// enchants "the creature put onto the battlefield with this Aura" (Animate Dead, Necromancy). Returns the new
     /// object; nothing is attached if the Aura has left or the object did not arrive.
