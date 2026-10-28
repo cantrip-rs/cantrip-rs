@@ -1,0 +1,8 @@
+{
+  "name": "Taskmaster, Mercenary Mimic",
+  "manaCost": "{2}{U}{B}",
+  "type": "Legendary Creature — Human Mercenary Villain",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Photographic Reflexes — At the beginning of your first main phase, until your next turn, Taskmaster becomes a copy of up to one target creature on the battlefield or creature card in a graveyard, except his name is Taskmaster, Mercenary Mimic and he's a legendary Human Mercenary Villain creature."
+}

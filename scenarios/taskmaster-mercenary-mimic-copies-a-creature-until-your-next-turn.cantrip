@@ -1,0 +1,48 @@
+# Taskmaster, Mercenary Mimic copies Bot2's Ornithopter at the beginning of Bot1's first main phase (CR 707.2, 707.9b): a 0/2 flier named
+# for himself whose card types and subtypes are the ones he names (a legendary Human Mercenary Villain creature, with no Thopter and no
+# artifact type). The effect lasts until Bot1's next turn begins (CR 611.2b): at the next first main phase he is himself again, a 3/5.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Taskmaster, Mercenary Mimic
+Plains x2
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Taskmaster, Mercenary Mimic.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Power = 0
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Toughness = 2
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Types = Creature
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Supertypes = Legendary
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Subtypes = Human; Mercenary; Villain
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Keywords = Flying

@@ -1,0 +1,52 @@
+# The copy lasts "until your next turn" (CR 611.2b): Taskmaster, Mercenary Mimic copies Ornithopter at Bot1's second first main phase, and
+# when Bot1's next turn begins he is a 3/5 again. "Up to one target": at that phase Bot1 chooses no target and he stays himself, with the
+# subtypes and legendary supertype he printed.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Taskmaster, Mercenary Mimic
+Plains x2
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Taskmaster, Mercenary Mimic.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Power = 3
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Toughness = 5
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Types = Creature
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Supertypes = Legendary
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Subtypes = Human; Mercenary; Villain
+Bot1.Battlefield.Taskmaster, Mercenary Mimic.Keywords = (absent)
