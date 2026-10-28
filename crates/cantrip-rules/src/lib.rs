@@ -74,6 +74,8 @@ mod cost_parts_tests;
 #[cfg(test)]
 mod pay_times_tests;
 #[cfg(test)]
+mod protection_qualities_tests;
+#[cfg(test)]
 mod mode_counts_tests;
 #[cfg(test)]
 mod special_action_cost_tests;
@@ -863,6 +865,8 @@ impl Game {
                     protection_colorless: c.protection_colorless,
                     protection_players: c.protection_players,
                     protection_types: c.protection_types,
+                    protection_subtypes: c.protection_subtypes,
+                    protection_mana_value: c.protection_mana_value,
                     spell: c.spell,
                     protection_colored_spells: c.protection_colored_spells,
                     protection_everything: c.protection_everything,

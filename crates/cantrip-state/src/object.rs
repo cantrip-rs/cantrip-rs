@@ -1669,6 +1669,10 @@ pub struct LastKnown {
     pub protection_colorless: bool,
     pub protection_players: u8,
     pub protection_types: TypeSet,
+    /// Its protection from creature types as it last had it (`Chars::protection_subtypes`).
+    pub protection_subtypes: SubtypeSet,
+    /// Its protection from a mana value at least this, as it last had it (`Chars::protection_mana_value`).
+    pub protection_mana_value: Option<u32>,
     pub spell: bool,
     pub protection_colored_spells: bool,
     pub protection_everything: bool,

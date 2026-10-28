@@ -1800,6 +1800,8 @@ pub fn last_known_from(cx: &Cx, id: ObjectId, c: &Chars) -> LastKnown {
         protection_colorless: c.protection_colorless,
         protection_players: c.protection_players,
         protection_types: c.protection_types,
+        protection_subtypes: c.protection_subtypes,
+        protection_mana_value: c.protection_mana_value,
         spell: c.spell,
         protection_colored_spells: c.protection_colored_spells,
         protection_everything: c.protection_everything,
@@ -3104,7 +3106,7 @@ pub fn deal_damage_with(
             }
             let target_chars = layers::chars(cx.cards(), cx.s(), &cx.g.log, id);
             let source_controller = cx.controller(source);
-            if target_chars.protected_from_by(&source_chars, source_controller) && damage_can_be_prevented(cx, source, combat) {
+            if target_chars.protected_from_by(&source_chars, || cantrip_api::mana_value_of(&|card| cx.card(card), cx.s(), source, &source_chars), source_controller) && damage_can_be_prevented(cx, source, combat) {
                 return prevented(cx, id);
             }
             let deathtouch = source_chars.has(Keyword::Deathtouch);
@@ -3173,7 +3175,7 @@ pub(crate) fn protection_prevents(cx: &Cx, source: ObjectId, target: Target, com
             }
             let target_chars = layers::chars(cx.cards(), cx.s(), &cx.g.log, id);
             let source_chars = layers::source_chars(cx.cards(), cx.s(), &cx.g.log, source);
-            if !target_chars.protected_from_by(&source_chars, cx.controller(source)) {
+            if !target_chars.protected_from_by(&source_chars, || cantrip_api::mana_value_of(&|card| cx.card(card), cx.s(), source, &source_chars), cx.controller(source)) {
                 return None;
             }
             id

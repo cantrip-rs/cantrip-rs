@@ -328,7 +328,11 @@ only the candidates the host's verdict on those picked says may be added.
   also changes the words of printed keyword abilities that name a color or a land type: "hexproof from [color]",
   "protection from [color]" (`CardDef::protection`, White Knight) and a basic landwalk (`Keyword::Islandwalk` ...,
   702.14: Bog Wraith's swampwalk to Magical Hack's plainswalk); an ability another permanent grants reads the word through
-  its source's text instead (Lord of Atlantis's islandwalk). A text change is no copiable value (707.2), so a copy of a
+  its source's text instead (Lord of Atlantis's islandwalk). Protection (702.16) is a set of qualities on `Chars`: colors,
+  colorless, card types, creature types (`protection_subtypes`: Baneslayer Angel's Demons and Dragons), a least mana value
+  (`protection_mana_value`: Mistmeadow Skulk), players, colored spells and everything; `Chars::protected_from_by` judges a
+  source against them for targeting, damage, blocking and attaching, reading the source's mana value (a closure, worked out only
+  when the protection reads it) at each of those sites. A text change is no copiable value (707.2), so a copy of a
   changed permanent has the printed text, and a permanent that leaves and returns is a new object with it too. An
   effect that sets a name (612.8, "named Everflame, Heroes' Legacy") is `EffectKind::SetName`, in layer 3: the object
   has that name alone (`Chars::name_set`), for the legend rule and every "same name" or chosen-name question

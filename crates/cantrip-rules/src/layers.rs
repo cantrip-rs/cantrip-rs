@@ -1186,6 +1186,8 @@ fn initial(cards: &CardTable, card: CardId, copy: Option<&Copiable>) -> Chars {
         protection_colorless: false,
         protection_players: 0,
         protection_types: TypeSet::NONE,
+        protection_subtypes: SubtypeSet::NONE,
+        protection_mana_value: None,
         spell: false,
         protection_colored_spells: false,
         protection_everything: false,
@@ -2121,7 +2123,7 @@ enum Field {
     Plain(u64),
 }
 
-fn fields(c: &Chars) -> [(&'static str, Field); 19] {
+fn fields(c: &Chars) -> [(&'static str, Field); 21] {
     use std::hash::{Hash, Hasher};
     let plain = |v: &dyn Fn(&mut std::collections::hash_map::DefaultHasher)| {
         let mut h = std::collections::hash_map::DefaultHasher::new();
@@ -2139,6 +2141,8 @@ fn fields(c: &Chars) -> [(&'static str, Field); 19] {
         ("keywords", bits(c.keywords.0)),
         ("protection", bits(c.protection.0.into())),
         ("protection from types", bits(c.protection_types.0.into())),
+        ("protection from subtypes", Field::Bits(c.protection_subtypes.0.to_vec())),
+        ("protection from mana value", Field::Number(c.protection_mana_value.map(|v| i16::try_from(v).unwrap_or(i16::MAX)))),
         ("protection from players", bits(c.protection_players.into())),
         ("hexproof from", bits(c.hexproof_from.0.into())),
         ("abilities", Field::Abilities(c.abilities.iter().flatten().copied().collect())),
@@ -2279,6 +2283,8 @@ fn contract_pairs(base: Chars, ability: AbilityRef) -> Vec<(Chars, Chars)> {
     // protection
     vary(&|c| c.protection = ColorSet::of(Color::Red));
     vary(&|c| c.protection_types = TypeSet::of(&[CardType::Creature]));
+    vary(&|c| c.protection_subtypes = SubtypeSet::of(&[Subtype::Demon]));
+    vary(&|c| c.protection_mana_value = Some(3));
     vary(&|c| c.protection_players = 0b10);
     vary(&|c| c.hexproof_from = HexproofFrom(1));
     // abilities
@@ -2985,7 +2991,7 @@ pub fn can_target(cards: &CardTable, state: &GameState, log: &[Record], asker: &
                 {
                     return false;
                 }
-                if target_chars.protected_from_by(&source_chars, asker.controller) {
+                if target_chars.protected_from_by(&source_chars, || mana_value_of(&|card| cards.get(card), state, asker.source, &source_chars), asker.controller) {
                     return false;
                 }
             }
@@ -3234,6 +3240,8 @@ mod tests {
             protection_colorless: false,
             protection_players: 0,
             protection_types: TypeSet::NONE,
+            protection_subtypes: SubtypeSet::NONE,
+            protection_mana_value: None,
             spell: false,
             protection_colored_spells: false,
             protection_everything: false,

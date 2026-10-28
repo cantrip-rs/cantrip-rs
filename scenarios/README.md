@@ -586,6 +586,9 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
   abilities (CR 702.11d), printed or granted, absent when it has none
 - `BotN.Battlefield.<Name>.ProtectionFrom` (`Black; Red`, sorted), the colors of its "protection from [color]" abilities
   (CR 702.16a), printed or granted, absent when it has none
+- `BotN.Battlefield.<Name>.ProtectionFromSubtypes` (`Demon; Dragon`, sorted), the creature types it has protection from
+  (CR 702.16a), absent when it has none; `ProtectionFromManaValue`, the least mana value it has protection from ("mana value
+  3 or greater" is `3`), absent when it has none
 - `BotN.Battlefield.<Name>.Monstrous`, `true` for a monstrous permanent (CR 701.37b) and absent otherwise
 - `BotN.Battlefield.<Name>.Solved`, `true` for a solved permanent (a Case, CR 719.3b) and absent otherwise
 - `BotN.Battlefield.<Name>.Suspected`, `true` for a suspected permanent (CR 701.60b) and absent otherwise
