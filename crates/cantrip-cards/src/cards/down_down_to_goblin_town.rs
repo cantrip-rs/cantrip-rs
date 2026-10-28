@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::amass::amass;
+use cantrip_mechanics::amass::amass_goblins;
 use cantrip_mechanics::effects::target_player_loses_1_life_you_gain_1;
 use cantrip_mechanics::hand::discard_chosen_nonland_from_revealed_hand;
 use cantrip_mechanics::{targets, tokens};
@@ -15,16 +15,11 @@ fn reveal_and_discard(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     Ok(())
 }
 
-/// II - "Amass Goblins 1" (CR 701.47a).
-fn amass_goblins(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    amass(g, item.controller, item.object, &tokens::GOBLIN_ARMY, Subtype::Goblin, 1)
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         chapter(1, reveal_and_discard, "I \u{2014} Target opponent reveals their hand. You choose a nonland card from it. That player discards that card.")
             .targets(&[targets::OPPONENT]),
-        chapter(2, amass_goblins, "II \u{2014} Amass Goblins 1."),
+        chapter(2, amass_goblins::<1>, "II \u{2014} Amass Goblins 1."),
         chapter(3, target_player_loses_1_life_you_gain_1, "III, IV \u{2014} Target opponent loses 1 life and you gain 1 life.")
             .targets(&[targets::OPPONENT]),
         chapter(4, target_player_loses_1_life_you_gain_1, "III, IV \u{2014} Target opponent loses 1 life and you gain 1 life.")
