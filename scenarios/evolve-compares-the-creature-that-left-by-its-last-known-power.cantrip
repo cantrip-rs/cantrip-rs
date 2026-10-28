@@ -1,0 +1,49 @@
+# Evolve (CR 702.100a, the rulings): Cloudfin Raptor (0/1) triggers on Merfolk of the Pearl Trident (1/1). In response
+# Lightning Bolt kills the Merfolk. The ability still resolves, and compares the stats the Merfolk last had on the battlefield
+# (power 1 > 0), so the Raptor gets its counter. Black Lotus and Mox Sapphire pay for the creatures, Mox Ruby for the Bolt.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Cloudfin Raptor
+Merfolk of the Pearl Trident
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cloudfin Raptor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Merfolk of the Pearl Trident)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merfolk of the Pearl Trident = (absent)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Cloudfin Raptor.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Cloudfin Raptor.Power = 1
+Bot1.Graveyard.Count = 3
