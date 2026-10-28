@@ -1,0 +1,82 @@
+# Thunderbolts Conspiracy: whenever a Villain you control dies, return it to the battlefield under its owner's control with a
+# finality counter on it, and that creature is a Hero in addition (CR 700.4, 122.1h, 205.1b). Bot2's first Lightning Bolt kills
+# Agents of HYDRA: it comes back as a Human Spy Villain Hero with a finality counter, and its own death trigger leaves a Villain
+# token. The second Bolt kills that token, which has no card to return and ceases to exist. The third kills the Agents again, and
+# with the finality counter it is exiled instead of dying, so it neither returns nor leaves another token (CR 122.1h, 700.4).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Thunderbolts Conspiracy
+Agents of HYDRA
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thunderbolts Conspiracy.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Agents of HYDRA)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Agents of HYDRA.Counters.Finality = 1
+? Bot1.Battlefield.Agents of HYDRA.Tapped = false
+? Bot1.Battlefield.Agents of HYDRA.Subtypes = Hero; Human; Spy; Villain
+? Bot1.Battlefield.Villain Token.Token = true
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Villain Token)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Agents of HYDRA)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Exile = Agents of HYDRA
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Count = 7
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt
