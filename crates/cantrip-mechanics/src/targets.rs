@@ -2,7 +2,7 @@
 
 use cantrip_api::*;
 
-fn on_battlefield(q: &dyn Query, id: ObjectId) -> bool {
+pub(crate) fn on_battlefield(q: &dyn Query, id: ObjectId) -> bool {
     q.is_on_battlefield(id) && q.obj(id).became.is_none()
 }
 
