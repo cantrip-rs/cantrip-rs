@@ -392,6 +392,13 @@ fn nonland_permanent_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id) if on_battlefield(q, id) && !q.chars(id).is(CardType::Land))
 }
 
+/// "Target nonland, nontoken permanent" as a filter (CR 115.1, 111.1): a permanent on the battlefield that is not a land and
+/// is a card, not a token. A card that narrows it further ("another") or asks for it as "up to one" calls it. Justice, Vance
+/// Astrovik and Wiccan, Rising Magician print it.
+pub fn nonland_nontoken_permanent_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    nonland_permanent_filter(q, asker, t) && matches!(t, Target::Object(id) if !q.obj(id).token)
+}
+
 /// "Target nonland permanent you control" as a filter (CR 115.1), for a card that narrows it further or asks for it
 /// as "up to one". Displacer Kitten and Nurturing Pixie print it.
 pub fn nonland_permanent_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
