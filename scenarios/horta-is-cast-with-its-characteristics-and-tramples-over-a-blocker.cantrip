@@ -1,0 +1,46 @@
+# Horta (7/6 trample), cast with Black Lotus and three Mox Rubies, its characteristics as printed. Attacking in turn 3 it is
+# blocked by Bot2's Ornithopter: it assigns the Ornithopter lethal damage, 2, and tramples the other 5 over to Bot2
+# (CR 702.19b); 20 - 5 = 15.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Horta
+Mountain x18
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Horta.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Horta.Power = 7
+? Bot1.Battlefield.Horta.Toughness = 6
+? Bot1.Battlefield.Horta.Keywords = Trample
+? Bot1.Battlefield.Horta.Colors = Red
+? Bot1.Battlefield.Horta.Types = Creature
+? Bot1.Battlefield.Horta.Subtypes = Elemental
+? Bot1.Battlefield.Horta.Supertypes = (absent)
+? Bot1.Battlefield.Horta.ProtectionFrom = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Horta > Bot2)
+Bot2.Block(Ornithopter > Horta)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot2.Graveyard = Ornithopter
