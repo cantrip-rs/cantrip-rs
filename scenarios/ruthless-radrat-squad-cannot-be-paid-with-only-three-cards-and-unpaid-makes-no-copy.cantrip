@@ -1,0 +1,47 @@
+# Ruthless Radrat: "Squad-Exile four cards from your graveyard." (CR 702.157a) is optional, and payable only while four cards can
+# be exiled (CR 601.2b, 118.3). With three Dark Rituals in Bot1's graveyard it can't be paid even once, so the Radrat can't
+# be kicked, and cast without paying it enters alone: no token is made (CR 702.157a), nothing is exiled and the graveyard
+# is as it was. It is a 2/2 black Rat Mutant with menace, and the only Radrat on the battlefield.
+
+[Bot1 Deck]
+Mox Jet
+Dark Ritual
+Dark Ritual
+Dark Ritual
+Ruthless Radrat
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ruthless Radrat.Cast(Kicked: 0)
+! Bot1.Hand.Ruthless Radrat.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ruthless Radrat.Power = 2
+? Bot1.Battlefield.Ruthless Radrat.Toughness = 2
+? Bot1.Battlefield.Ruthless Radrat.Keywords = Menace
+? Bot1.Battlefield.Ruthless Radrat.Colors = Black
+? Bot1.Battlefield.Ruthless Radrat.Types = Creature
+? Bot1.Battlefield.Ruthless Radrat.Subtypes = Mutant; Rat
+
+[Expect]
+Bot1.Graveyard = Dark Ritual; Dark Ritual; Dark Ritual
+Bot1.Battlefield = Mox Jet; Ruthless Radrat
