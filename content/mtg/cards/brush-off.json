@@ -1,0 +1,6 @@
+{
+  "name": "Brush Off",
+  "manaCost": "{2}{U}{U}",
+  "type": "Instant",
+  "oracleText": "This spell costs {1}{U} less to cast if it targets an instant or sorcery spell.\nCounter target spell."
+}
