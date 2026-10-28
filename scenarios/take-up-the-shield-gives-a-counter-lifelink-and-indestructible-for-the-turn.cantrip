@@ -1,0 +1,60 @@
+# Take Up the Shield: "Put a +1/+1 counter on target creature. It gains lifelink and indestructible until end of turn." Cast on turn 3
+# at Bot1's Ornithopter (0/2 flying): it becomes 1/3 with the counter for good. It attacks as a lifelinker (Bot1 gains 1, Bot2 loses
+# 1) and a Lightning Bolt for lethal damage afterwards does not destroy it (indestructible); on turn 4 it is a 1/3 flyer without either
+# keyword, and its turn-5 attack gains nothing: Bot1 stays at 21 and Bot2 loses 1 more.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Take Up the Shield
+Plains
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Take Up the Shield.Cast(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Indestructible; Lifelink
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 21
+? Bot2.Life = 19
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Damage = 3
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Ornithopter.Damage = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+[T5 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 18
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1

@@ -1,0 +1,6 @@
+{
+  "name": "Take Up the Shield",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Put a +1/+1 counter on target creature. It gains lifelink and indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it.)"
+}
