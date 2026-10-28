@@ -1,0 +1,30 @@
+# Chase Inspiration on Bot1's Ornithopter (0/2); Bot2 responds with Lightning Bolt, before the +0/+3 exists. The Ornithopter
+# dies, the spell's only target is illegal and it does nothing (CR 608.2b): it goes to the graveyard without resolving.
+
+[Bot1 Deck]
+Mox Sapphire
+Chase Inspiration
+Ornithopter
+Island x17
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Chase Inspiration.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Chase Inspiration; Ornithopter
+Bot2.Graveyard = Lightning Bolt
