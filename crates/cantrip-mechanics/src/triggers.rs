@@ -1006,6 +1006,25 @@ pub fn creature_you_control_attacks(q: &dyn Query, me: &Asker, event: &Event) ->
     }
 }
 
+/// "Whenever a creature attacks you or a planeswalker you control" (CR 508.1, 603.2): each creature, separately, the ability
+/// being about it (`Fired::about`). "You" is the ability's controller (for a delayed ability, whoever created it, CR 603.7d);
+/// a planeswalker counts when that player controls it as the attack is declared. Tamiyo, Seasoned Scholar and Jace, Reality
+/// Sculptor print it.
+pub fn creature_attacks_you_or_a_planeswalker_you_control(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Attacks { attacker, defender, .. } => {
+            let you = me.controller;
+            let at_you = match defender {
+                Target::Player(p) => *p == you,
+                Target::Object(id) => q.controller(*id) == you && q.chars(*id).is(CardType::Planeswalker),
+                _ => false,
+            };
+            if at_you { Fired::about(Target::Object(*attacker)) } else { None }
+        }
+        _ => None,
+    }
+}
+
 /// "Whenever a creature an opponent controls enters" (CR 603.6a): any creature, token or not, under the control of a player
 /// other than this ability's controller as it entered. The ability is about that player (`Fired::about`), for "deals 1 damage
 /// to that player". Authority of the Consuls and Gideon the Oathless print it.
