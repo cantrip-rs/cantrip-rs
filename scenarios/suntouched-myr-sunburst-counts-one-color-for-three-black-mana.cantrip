@@ -1,0 +1,26 @@
+# Sunburst (CR 702.44a): Suntouched Myr ({3}) is paid with Black Lotus, {B}{B}{B}: three mana but one color, so one +1/+1 counter, a 1/1. Colorless mana is no color (the
+# Wanderer scenario pays with Sol Ring's {C}{C} too).
+
+[Bot1 Deck]
+Black Lotus
+Suntouched Myr
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Swamp x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Suntouched Myr.Cast
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Suntouched Myr.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Suntouched Myr.Power = 1
