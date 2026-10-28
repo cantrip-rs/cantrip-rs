@@ -11,7 +11,7 @@ pub static CARD: CardDef = CardDef {
         // "Whenever ... becomes the target of a spell or ability an opponent controls" (CR 603.2, 102.2, 102.3): the event
         // ward triggers on (CR 702.21a), once each time it becomes a target.
         triggered(
-            when(EventMask::BECAME_TARGET, intrinsic::ward_matches),
+            triggers::THIS_BECOMES_THE_TARGET_OF_AN_OPPONENTS_SPELL_OR_ABILITY,
             |g, item| effects::draw(g, item, 1),
             "Whenever Ruric Thar becomes the target of a spell or ability an opponent controls, draw a card.",
         ),

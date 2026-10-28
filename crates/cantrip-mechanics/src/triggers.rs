@@ -1350,6 +1350,10 @@ pub const THIS_ATTACKS_OR_BLOCKS: Trigger = when(EventMask(EventMask::ATTACKS.0 
 pub const THIS_DEALT_DAMAGE: Trigger = when(EventMask::DAMAGE, this_dealt_damage);
 pub const DEALS_COMBAT_DAMAGE_TO_A_CREATURE: Trigger = when(EventMask::DAMAGE, deals_combat_damage_to_a_creature);
 pub const THIS_ATTACKS: Trigger = when(EventMask::ATTACKS, this_attacks);
+/// "Whenever this [permanent] becomes the target of a spell or ability an opponent controls" (CR 603.2, 115.10): the event ward
+/// triggers on (CR 702.21a), once each time it becomes a target; its subject is what targeted it. Old Fat Spider and Ruric Thar,
+/// the Unbowed print it.
+pub const THIS_BECOMES_THE_TARGET_OF_AN_OPPONENTS_SPELL_OR_ABILITY: Trigger = when(EventMask::BECAME_TARGET, intrinsic::ward_matches);
 
 /// "Whenever a player casts their second spell each turn" (CR 601.2i, 603.2): any player's, counted from the turn's start
 /// (`Event::SpellCast::nth`), so the spells cast before the permanent arrived count too. Ledger Shredder and Hearthborn
