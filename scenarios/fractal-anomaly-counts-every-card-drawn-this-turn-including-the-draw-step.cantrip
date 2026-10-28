@@ -1,0 +1,39 @@
+# Fractal Anomaly: X is the number of cards you've drawn this turn. On turn 3 Bot1 draws one in its draw step and two more
+# with Quick Study, so the Fractal token comes with three +1/+1 counters: a 3/3 that is green and blue (CR 111.4). Black Lotus
+# and a Mox Sapphire, played on turn 1, pay for the {2}{U} and {U}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Quick Study
+Fractal Anomaly
+Island
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Quick Study.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Fractal Anomaly.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Fractal Token.Power = 3
+Bot1.Battlefield.Fractal Token.Toughness = 3
+Bot1.Battlefield.Fractal Token.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Fractal Token.Subtypes = Fractal
+Bot1.Battlefield.Fractal Token.Colors = Blue; Green
