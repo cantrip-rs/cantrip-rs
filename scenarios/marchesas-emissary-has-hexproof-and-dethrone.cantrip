@@ -1,0 +1,48 @@
+# Marchesa's Emissary ({3}{U} 2/2, hexproof) can't be targeted by Bot2's Lightning Bolt on turn 2 (CR 702.11a) - the refusal - but Bot2 may bolt
+# Bot1 itself, which is the control and leaves Bot1 at 17. On turn 3 Bot1 attacks Bot2, who has 20 life to Bot1's 17: the most, so dethrone
+# (CR 702.105a) gives a +1/+1 counter, and the 3/3 deals 3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Marchesa's Emissary
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Marchesa's Emissary.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Marchesa's Emissary)
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Battlefield.Mountain.Activate
+[T3 Bot1.Main1]
+Bot1.Attack(Marchesa's Emissary > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
+Bot1.Battlefield.Marchesa's Emissary.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Marchesa's Emissary.Keywords = Hexproof
