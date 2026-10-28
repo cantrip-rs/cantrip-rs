@@ -1,0 +1,11 @@
+{
+  "name": "Ravenhill Flock",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying\nWhenever you draw a card, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Flying"
+  ]
+}

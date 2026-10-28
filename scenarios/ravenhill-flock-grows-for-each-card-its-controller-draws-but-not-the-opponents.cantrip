@@ -1,0 +1,54 @@
+# Ravenhill Flock: Flying, and "Whenever you draw a card, put a +1/+1 counter on this creature" (CR 121.1, 603.2). Cast on turn 1
+# (the pool empty), it has no counter after Bot2's own draw on turn 2 (? line). On turn 3 Bot1's draw step draws one card (a counter) and Ancestral
+# Recall draws three more (three counters) for four in all: a 5/6.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ravenhill Flock
+Ancestral Recall
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ravenhill Flock.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Ravenhill Flock.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ravenhill Flock.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ravenhill Flock.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Ravenhill Flock.Power = 5
+Bot1.Battlefield.Ravenhill Flock.Toughness = 6
+Bot1.Battlefield.Ravenhill Flock.Keywords = Flying
