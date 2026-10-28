@@ -752,6 +752,28 @@ pub fn noncreature_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> O
     }
 }
 
+/// "Whenever you cast a spell that targets a creature you control" (CR 603.2, 601.2c): a question about the spell as it is
+/// cast, whose targets are public from the moment it was announced. One trigger for the spell however many of the creatures it
+/// targets (CR 603.2c is about events: one cast is one event). A copy is not cast (CR 707.10), so it sets nothing off; a spell
+/// that targets only a creature an opponent controls, a player, or a card elsewhere does not. Ms. Marvel, Kamala Khan, Colleen
+/// Wing, Street Samurai and Mockingbird, Ace Agent print it.
+pub fn you_cast_a_spell_that_targets_a_creature_you_control(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    if let Event::SpellCast { spell, player, .. } = event
+        && *player == me.controller
+        && let Some(item) = q.state().stack.iter().find(|i| i.kind == StackKind::Spell && i.object == *spell)
+        && q.state().targets(item).iter().filter_map(|t| t.object()).any(|id| {
+            crate::targets::permanent(q, id) && q.chars(id).is(CardType::Creature) && q.controller(id) == *player
+        })
+    {
+        Fired::PLAIN
+    } else {
+        None
+    }
+}
+
+pub const YOU_CAST_A_SPELL_THAT_TARGETS_A_CREATURE_YOU_CONTROL: Trigger =
+    when_asked(EventMask::SPELL_CAST, you_cast_a_spell_that_targets_a_creature_you_control);
+
 /// "Whenever a player casts a noncreature spell" (CR 603.2, 601.2i): any player's, the ability's controller included, read as
 /// the spell stands on the stack. The ability is about the player who cast it (`StackItem::subject`). Magebane Lizard and Mai,
 /// Scornful Striker print it.

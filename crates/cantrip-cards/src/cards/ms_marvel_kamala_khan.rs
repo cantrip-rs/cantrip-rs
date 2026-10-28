@@ -1,24 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::triggers::YOU_CAST_A_SPELL_THAT_TARGETS_A_CREATURE_YOU_CONTROL;
 use cantrip_oracle as oracle;
-
-/// "Whenever you cast a spell that targets a creature you control" (CR 603.2, 601.2c): a question about the spell as it is
-/// cast, whose targets are public from the moment it was announced. One trigger for the spell however many of the
-/// creatures it targets (CR 603.2c is about events: one cast is one event). A copy is not cast (CR 707.10), so it sets
-/// nothing off; a spell that targets only a creature an opponent controls, a player, or a card elsewhere does not.
-fn you_cast_a_spell_that_targets_your_creature(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    if let Event::SpellCast { spell, player, .. } = event
-        && *player == q.controller(source)
-        && let Some(item) = q.state().stack.iter().find(|i| i.kind == StackKind::Spell && i.object == *spell)
-        && q.state().targets(item).iter().filter_map(|t| t.object()).any(|id| {
-            targets::permanent(q, id) && q.chars(id).is(CardType::Creature) && q.controller(id) == *player
-        })
-    {
-        Fired::PLAIN
-    } else {
-        None
-    }
-}
 
 /// "Draw a card. Until end of turn, Ms. Marvel gains 'Ms. Marvel's base power is equal to the number of cards in your hand.'"
 /// (CR 611.2a, 613.1f): the static ability is given to the object that is Ms. Marvel now, and only to it; a Ms. Marvel that
@@ -41,7 +23,7 @@ fn base_power_is_cards_in_hand(q: &dyn LayerQuery, source: ObjectId, chars: &mut
 
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
-        when(EventMask::SPELL_CAST, you_cast_a_spell_that_targets_your_creature),
+        YOU_CAST_A_SPELL_THAT_TARGETS_A_CREATURE_YOU_CONTROL,
         embiggen_fist,
         "Embiggen Fist \u{2014} Whenever you cast a spell that targets a creature you control, draw a card. Until end of turn, Ms. Marvel gains \"Ms. Marvel's base power is equal to the number of cards in your hand.\"",
     )],
