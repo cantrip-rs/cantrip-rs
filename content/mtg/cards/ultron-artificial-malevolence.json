@@ -1,0 +1,8 @@
+{
+  "name": "Ultron, Artificial Malevolence",
+  "manaCost": "{3}",
+  "type": "Legendary Artifact Creature — Robot Villain",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Whenever another nontoken artifact you control enters, you may pay {2}. If you do, create a token that's a copy of it. If the token isn't a creature, it becomes a 2/2 Robot Villain creature in addition to its other types."
+}

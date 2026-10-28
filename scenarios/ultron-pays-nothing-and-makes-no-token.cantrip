@@ -1,0 +1,31 @@
+# Ultron, Artificial Malevolence: "you may pay {2}. If you do, ..." Mox Ruby enters with Ultron out, Bot1 holds Black Lotus's mana
+# but does not pay: no token is made, and Mox Ruby is still the plain artifact it was.
+
+[Bot1 Deck]
+Black Lotus
+Ultron, Artificial Malevolence
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ultron, Artificial Malevolence.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Decline
+[Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Mox Ruby.Types = Artifact

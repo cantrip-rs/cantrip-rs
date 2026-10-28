@@ -1,0 +1,37 @@
+# Ultron, Artificial Malevolence: "Whenever another nontoken artifact you control enters, you may pay {2}. If you do, create a token
+# that's a copy of it. If the token isn't a creature, it becomes a 2/2 Robot Villain creature in addition to its other types."
+# Three Moxen pay for Ultron; Mox Ruby then enters, and Black Lotus's mana pays the {2}. The token is a Mox Ruby that is also a
+# 2/2 Robot Villain creature. The token's own entering does not trigger Ultron (it is a token): there is exactly one token.
+
+[Bot1 Deck]
+Black Lotus
+Ultron, Artificial Malevolence
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ultron, Artificial Malevolence.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Red)
+Bot1.PayCost
+[Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Mox Ruby#2.Power = 2
+Bot1.Battlefield.Mox Ruby#2.Toughness = 2
+Bot1.Battlefield.Mox Ruby#2.Types = Artifact; Creature
+Bot1.Battlefield.Mox Ruby#2.Subtypes = Robot; Villain

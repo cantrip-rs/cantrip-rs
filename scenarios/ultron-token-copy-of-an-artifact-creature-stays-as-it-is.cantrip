@@ -1,0 +1,34 @@
+# Ultron, Artificial Malevolence: "If the token isn't a creature, it becomes a 2/2 Robot Villain creature". An Ornithopter (a 0/2
+# artifact creature with flying) is a creature already, so its token copy stays a 0/2 Ornithopter, with no Robot or Villain type.
+
+[Bot1 Deck]
+Black Lotus
+Ultron, Artificial Malevolence
+Ornithopter
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ultron, Artificial Malevolence.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Red)
+Bot1.PayCost
+[Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot1.Battlefield.Ornithopter#2.Toughness = 2
+Bot1.Battlefield.Ornithopter#2.Subtypes = Thopter
