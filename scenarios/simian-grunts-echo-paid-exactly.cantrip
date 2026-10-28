@@ -1,0 +1,46 @@
+# Simian Grunts {2}{G}, "Echo {2}{G}" (CR 702.30a). Cast on turn 1 (at instant speed on turn 2, flash, paid with generic from Sol Ring's colorless mana and G mana), it came under Bot1's control since the beginning of their last upkeep, so at Bot1's turn 3 upkeep the echo ability
+# triggers and asks for {2}{G}. The colorless mana, a Mox Pearl (W) and 0 of the one G sources are tapped first (as much mana as the cost, one G
+# short, a W in place of it): paying is not offered. With the last G source tapped it is paid ({2}{G} spent: the generic with colorless mana,
+# {G} with G), and the W stays in the pool. Simian Grunts stays.
+
+[Bot1 Deck]
+Simian Grunts
+Mox Pearl
+Mox Emerald
+Sol Ring
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Simian Grunts.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost(Spend: C, C, G)
+Bot1.Pass
+? Bot1.Mana = {W}
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Simian Grunts.Power = 3
+Bot1.Battlefield.Simian Grunts.Toughness = 4
+Bot1.Battlefield.Simian Grunts.Keywords = Flash
+Bot1.Battlefield.Simian Grunts.Colors = Green
