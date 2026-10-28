@@ -1,0 +1,48 @@
+# Radagast of Rhosgobel: "The first creature spell you cast each turn" need not be the first spell you cast (the ruling). On turn 3 Bot1
+# casts Beorn's Hospitality, a noncreature spell, for {1}{G} and then a Grizzly Bears, the turn's first creature spell, for only {G}:
+# the Black Lotus's three mana pay for both exactly.
+
+[Bot1 Deck]
+Gleemox
+Gleemox
+Gleemox
+Mox Jet
+Radagast of Rhosgobel
+Beorn's Hospitality
+Grizzly Bears
+Black Lotus
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Radagast of Rhosgobel.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Beorn's Hospitality.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2

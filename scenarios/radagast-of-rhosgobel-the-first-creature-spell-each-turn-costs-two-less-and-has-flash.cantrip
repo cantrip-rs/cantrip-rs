@@ -1,0 +1,56 @@
+# Radagast of Rhosgobel, a 2/5: "The first creature spell you cast each turn costs {2} less to cast and can be cast as though it had
+# flash." Turn 1: Radagast itself is the first creature spell of the turn but the ability is not yet there: full {2}{G}{G}. At the
+# end of Bot2's turn 2 Bot1 flashes in a Grizzly Bears for only {G} (generic reduced, the colored symbol not: {1}{G}), the pool empty
+# after; a Hill Giant is then refused, no flash for a second creature spell. On turn 3 the Hill Giant, the first creature spell of
+# that turn, costs {1}{R}, again paid exactly; an Alpine Grizzly cast second that turn is full price ({2}{G}: refused with one
+# mana left, which {G} would pay).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Radagast of Rhosgobel
+Grizzly Bears
+Hill Giant
+Alpine Grizzly
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Radagast of Rhosgobel.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+! Bot1.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hill Giant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Alpine Grizzly.Cast(Mana: short)
+
+[Expect]
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.Grizzly Bears.Power = 2

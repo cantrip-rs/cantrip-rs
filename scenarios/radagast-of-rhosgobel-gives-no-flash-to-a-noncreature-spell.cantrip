@@ -1,0 +1,34 @@
+# Radagast of Rhosgobel: "The first creature spell you cast each turn ... can be cast as though it had flash." A noncreature spell is
+# no creature spell, so at the end of Bot2's turn an enchantment, Beorn's Hospitality, is refused (no flash) though no creature spell has been cast.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Radagast of Rhosgobel
+Beorn's Hospitality
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Radagast of Rhosgobel.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.End]
+! Bot1.Hand.Beorn's Hospitality.Cast
+
+[Expect]
+Bot1.Battlefield.Radagast of Rhosgobel.Power = 2

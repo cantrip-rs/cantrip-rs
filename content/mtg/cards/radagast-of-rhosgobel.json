@@ -1,0 +1,8 @@
+{
+  "name": "Radagast of Rhosgobel",
+  "manaCost": "{2}{G}{G}",
+  "type": "Legendary Creature — Avatar Wizard",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "The first creature spell you cast each turn costs {2} less to cast and can be cast as though it had flash."
+}

@@ -1,0 +1,41 @@
+# Radagast of Rhosgobel: "The first creature spell you cast each turn costs {2} less." Radagast is itself the first creature spell
+# Bot1 casts on turn 1 (the ability is not yet there, the ruling), so the Grizzly Bears cast after it, though Radagast is now on the
+# battlefield, is the second and costs its full {1}{G}: paid exactly by two Gleemoxen (a discount would leave one mana floating).
+
+[Bot1 Deck]
+Gleemox
+Gleemox
+Gleemox
+Black Lotus
+Radagast of Rhosgobel
+Grizzly Bears
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Radagast of Rhosgobel.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2

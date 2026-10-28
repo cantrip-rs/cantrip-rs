@@ -1,0 +1,44 @@
+# Radagast of Rhosgobel: the ability looks at the whole turn, even before Radagast was on the battlefield (the ruling). On turn 1
+# Bot1 casts an Ornithopter (the first creature spell of the turn), then Radagast, and then a Grizzly Bears: the Bears is the third
+# creature spell and costs its full {1}{G}, paid exactly by two Gleemoxen (a discount would leave one mana floating).
+
+[Bot1 Deck]
+Gleemox
+Gleemox
+Gleemox
+Black Lotus
+Radagast of Rhosgobel
+Grizzly Bears
+Ornithopter
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Radagast of Rhosgobel.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
