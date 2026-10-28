@@ -1,0 +1,52 @@
+# Stolen Stark Tech has flash: on Bot2's turn 2, with Lightning Bolt aimed at Savannah Lions on the stack, Bot1 casts it for exactly
+# {1}{B}. Entering, it attaches to the Lions (a target chosen as the trigger goes on the stack), which gain indestructible until end
+# of turn (CR 702.12b) and, equipped, get +1/+0 (3/1): the Bolt's 3 damage is lethal damage that destroys nothing, and the Lions
+# are still there on turn 3, equipped, without the indestructible once the turn is over.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Savannah Lions
+Stolen Stark Tech
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Savannah Lions)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stolen Stark Tech.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Savannah Lions.Keywords = Indestructible
+? Bot1.Battlefield.Savannah Lions.Power = 3
+? Bot1.Battlefield.Savannah Lions.Damage = 3
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Stolen Stark Tech.AttachedTo = Savannah Lions
+Bot1.Battlefield.Savannah Lions.Power = 3
+Bot1.Battlefield.Savannah Lions.Damage = 0

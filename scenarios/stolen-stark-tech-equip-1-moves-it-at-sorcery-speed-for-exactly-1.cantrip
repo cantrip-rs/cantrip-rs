@@ -1,0 +1,53 @@
+# Equip {1} (CR 702.6a): cast on turn 1, Stolen Stark Tech attaches itself to Savannah Lions as it enters. On turn 3 the equip is
+# refused while Bot1's own Elvish Mystic is on the stack (only as a sorcery, with the mana to pay for it untapped) and, with the
+# stack empty, moves it to the Mystic for exactly {1}: the Mystic is a 2/1 and the Lions a 2/1 again.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Savannah Lions
+Stolen Stark Tech
+Elvish Mystic
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stolen Stark Tech.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+! Bot1.Battlefield.Stolen Stark Tech.Activate(Ability: Equip; Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Stolen Stark Tech.Activate(Ability: Equip; Bot1.Battlefield.Elvish Mystic)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Stolen Stark Tech.AttachedTo = Elvish Mystic
+Bot1.Battlefield.Elvish Mystic.Power = 2
+Bot1.Battlefield.Savannah Lions.Power = 2
