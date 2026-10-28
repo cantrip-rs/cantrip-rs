@@ -1,0 +1,60 @@
+# Goblin Plate Mail: "When this Equipment enters, amass Goblins 1, then attach this Equipment to the amassed Army. Equipped
+# creature gets +1/+0 and has menace. Equip {4}." On turn 1 Bot1 has no Army, so the amass makes a 0/0 Goblin Army token with one
+# counter and the Plate Mail attaches to it: a 2/1 with menace, beside a Grizzly Bears that has neither. On turn 3 Equip {4} (paid
+# with exactly four mana) moves it to the Bears, a 3/2 with menace, and the Army is a 1/1 again.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Goblin Plate Mail
+Grizzly Bears
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Plate Mail.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Goblin Plate Mail.AttachedTo = Goblin Army Token
+? Bot1.Battlefield.Goblin Army Token.Power = 2
+? Bot1.Battlefield.Goblin Army Token.Toughness = 1
+? Bot1.Battlefield.Goblin Army Token.Keywords = Menace
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Goblin Plate Mail.Activate(Ability: Equip; Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Goblin Plate Mail.AttachedTo = Grizzly Bears
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Grizzly Bears.Keywords = Menace
+Bot1.Battlefield.Goblin Army Token.Power = 1
+Bot1.Battlefield.Goblin Army Token.Keywords = (absent)
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
+Attached.Count = 2

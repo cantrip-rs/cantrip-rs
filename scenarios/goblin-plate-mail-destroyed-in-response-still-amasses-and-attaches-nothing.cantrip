@@ -1,0 +1,46 @@
+# Goblin Plate Mail: "amass Goblins 1, then attach this Equipment to the amassed Army." With the ability on the stack Bot2 destroys
+# the Plate Mail with Disenchant: the amass is still done - a 1/1 Goblin Army token - and there is nothing to attach (CR 701.3b),
+# so the Army is plain.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Goblin Plate Mail
+Swamp x17
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Plate Mail.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Goblin Plate Mail)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Goblin Plate Mail
+Bot1.Battlefield.Goblin Army Token.Power = 1
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Goblin Army Token.Keywords = (absent)
+Attached = (absent)

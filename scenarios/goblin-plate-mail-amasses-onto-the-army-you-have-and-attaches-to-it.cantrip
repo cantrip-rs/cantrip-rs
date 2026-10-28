@@ -1,0 +1,45 @@
+# Goblin Plate Mail: "amass Goblins 1, then attach this Equipment to the amassed Army." Bot1 already controls an Orc Army token (a 1/1
+# from Orcish Bowmasters), so no Goblin Army token is made (CR 701.47a): the Orc Army gets the counter and becomes a Goblin too,
+# and it is the amassed Army (CR 701.47c) the Plate Mail attaches to - a 2/2 now, 3/2 with menace.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Orcish Bowmasters
+Goblin Plate Mail
+Swamp
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Orcish Bowmasters.Cast
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot2.Pass
+? Bot1.Battlefield.Orc Army Token.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Goblin Plate Mail.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Goblin Plate Mail.AttachedTo = Orc Army Token
+Bot1.Battlefield.Orc Army Token.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Orc Army Token.Subtypes = Army; Goblin; Orc
+Bot1.Battlefield.Orc Army Token.Power = 3
+Bot1.Battlefield.Orc Army Token.Toughness = 2
+Bot1.Battlefield.Orc Army Token.Keywords = Menace
+Bot1.Battlefield.Count = 5
