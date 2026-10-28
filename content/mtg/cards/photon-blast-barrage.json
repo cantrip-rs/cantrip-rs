@@ -1,0 +1,6 @@
+{
+  "name": "Photon Blast Barrage",
+  "manaCost": "{X}{R}{R}",
+  "type": "Sorcery",
+  "oracleText": "When you cast this spell, copy it X times. You may choose new targets for the copies.\nPhoton Blast Barrage deals 1 damage to target creature."
+}

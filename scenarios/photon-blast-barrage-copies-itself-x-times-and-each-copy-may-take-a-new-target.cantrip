@@ -1,0 +1,64 @@
+# Photon Blast Barrage: "When you cast this spell, copy it X times. You may choose new targets for the copies. Photon Blast Barrage
+# deals 1 damage to target creature." Bot1 casts it with X = 2 (all four Moxen: {2}{R}{R}) at Bot2's Grizzly Bears (2/2). The
+# trigger makes two copies: the first is aimed at Bot2's Memnite (1/1), the second keeps the Bears. The Memnite dies to 1 damage and
+# the Bears take 1 from the copy and 1 from the original - exactly their toughness, so with one copy too few they would live.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Photon Blast Barrage
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Memnite
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Photon Blast Barrage.Cast(Bot2.Battlefield.Grizzly Bears; X: 2)
+Bot1.Pass
+? Bot1.Mana =
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears; Memnite
+Stack.Count = 0
+Bot1.Graveyard = Photon Blast Barrage
