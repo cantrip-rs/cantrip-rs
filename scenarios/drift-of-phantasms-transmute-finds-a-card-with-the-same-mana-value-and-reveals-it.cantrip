@@ -1,0 +1,47 @@
+# Drift of Phantasms's transmute {1}{U}{U} (CR 702.53a): paying it and discarding the card from the hand searches the library
+# for a card with the same mana value as the discarded card (3), reveals it and puts it into the hand. The cost is paid exactly
+# with Blasted Landscape's {C} for the generic and two Mox Sapphires for the blue pips, and the pool ends empty; with a Mox Jet
+# in place of the second Mox Sapphire the ability is not offered (a colored pip needs blue). Of a mana value 2, two 3s and a 5
+# in the library only one card of mana value 3 may be found (a search for "a card"), and it is revealed.
+
+[Bot1 Deck]
+Blasted Landscape
+Mox Sapphire
+Mox Jet
+Drift of Phantasms
+Mox Sapphire
+Plains
+Plains
+Silver Knight
+Mirran Crusader
+Paladin en-Vec
+Baneslayer Angel
+Plains x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Blasted Landscape.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Hand.Drift of Phantasms.Activate(Ability: Transmute; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Drift of Phantasms.Activate(Ability: Transmute)
+Bot1.Battlefield.Blasted Landscape.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Search(Silver Knight)
+! Bot1.Search(Baneslayer Angel)
+! Bot1.Search(Mirran Crusader; Paladin en-Vec)
+Bot1.Search(Mirran Crusader)
+
+[Expect]
+Bot1.Hand = Plains; Plains; Mirran Crusader
+Bot1.Graveyard = Drift of Phantasms
+Bot1.Revealed = Mirran Crusader
