@@ -1,0 +1,73 @@
+# White Tiger, Ava Ayala: "Power-up - {5}{G}: Put a +1/+1 counter on White Tiger and create The Tiger God, a legendary 4/4 green Cat God
+# creature token with 'The Tiger God can't be blocked by more than one creature.' (Activate each power-up ability only once. Reduce the
+# cost by her mana cost if she entered this turn.)" The turn she enters (turn 1) it costs {5}{G} less {1}{G}, {4}: Bot1 pays
+# it with the four Moxen left after casting her (the pool is empty right after, so it was {4} exactly) and she is a 3/3 and a
+# Tiger God (a legendary 4/4 green Cat God) is made. A second activation is refused (once only). On turn 3 the Tiger God attacks into
+# Bot2's two Ornithopters: both blocking it is refused, one may.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+White Tiger, Ava Ayala
+Forest x10
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.White Tiger, Ava Ayala.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.White Tiger, Ava Ayala.Activate(Ability: Power-up)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.White Tiger, Ava Ayala.Power = 3
+? Bot1.Battlefield.The Tiger God.Power = 4
+! Bot1.Battlefield.White Tiger, Ava Ayala.Activate(Ability: Power-up)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Tiger God > Bot2)
+! Bot2.Block(Ornithopter#1 > The Tiger God; Ornithopter#2 > The Tiger God)
+Bot2.Block(Ornithopter#1 > The Tiger God)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 8
+Bot1.Battlefield.White Tiger, Ava Ayala.Power = 3
+Bot1.Battlefield.White Tiger, Ava Ayala.Toughness = 3
+Bot1.Battlefield.The Tiger God.Power = 4
+Bot1.Battlefield.The Tiger God.Toughness = 4
+Bot1.Battlefield.The Tiger God.Subtypes = Cat; God
+Bot1.Battlefield.The Tiger God.Supertypes = Legendary
+Bot1.Battlefield.The Tiger God.Colors = Green
+Bot2.Graveyard = Ornithopter

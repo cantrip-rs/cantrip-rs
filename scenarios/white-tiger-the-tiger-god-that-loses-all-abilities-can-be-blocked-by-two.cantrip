@@ -1,0 +1,65 @@
+# White Tiger, Ava Ayala: The Tiger God's "can't be blocked by more than one creature" is an ability of the token (CR 509.1b,
+# 113.1a), so a Tiger God that loses all abilities may be blocked by any number (CR 613.1f). Bot1 powers up the turn White Tiger
+# enters ({4}), then on turn 3 turns its own Tiger God into a 1/1 Frog with Turn to Frog and attacks: Bot2's two Ornithopters both
+# block it; neither has power to deal it damage, and its 1 damage kills neither (0/2s).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+White Tiger, Ava Ayala
+Turn to Frog
+Forest x10
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.White Tiger, Ava Ayala.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.White Tiger, Ava Ayala.Activate(Ability: Power-up)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Turn to Frog.Cast(Bot1.Battlefield.The Tiger God)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Tiger God.Power = 1
+Bot1.Attack(The Tiger God > Bot2)
+Bot2.Block(Ornithopter#1 > The Tiger God; Ornithopter#2 > The Tiger God)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.The Tiger God.Power = 1

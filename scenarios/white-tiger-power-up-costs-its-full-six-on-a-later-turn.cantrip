@@ -1,0 +1,54 @@
+# White Tiger, Ava Ayala: on a later turn the power-up costs its full {5}{G}: with only five Moxen in play it is short (the refusal),
+# and with the sixth, drawn and cast, all six pay it (the pool is empty right after). One Tiger God is made, so none leaves to the
+# legend rule.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+White Tiger, Ava Ayala
+Forest
+Mox Ruby
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.White Tiger, Ava Ayala.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.White Tiger, Ava Ayala.Activate(Ability: Power-up; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.White Tiger, Ava Ayala.Activate(Ability: Power-up)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 8
+Bot1.Battlefield.White Tiger, Ava Ayala.Power = 3
+Bot1.Battlefield.The Tiger God.Power = 4
+LeftBattlefield.Count = 0
