@@ -1,0 +1,38 @@
+# Pouncing Jaguar {G}, "Echo {G}" (CR 702.30a). Cast on turn 1 (paid with no generic mana and G mana), it came under Bot1's control since the beginning of their last upkeep, so at Bot1's turn 3 upkeep the echo ability
+# triggers and asks for {G}. The colorless mana, a Mox Pearl (W) and 0 of the one G sources are tapped first (as much mana as the cost, one G
+# short, a W in place of it): paying is not offered. With the last G source tapped it is paid ({G} spent: the generic with colorless mana,
+# {G} with G), and the W stays in the pool. Pouncing Jaguar stays.
+
+[Bot1 Deck]
+Pouncing Jaguar
+Mox Pearl
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Pouncing Jaguar.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost(Spend: G)
+Bot1.Pass
+? Bot1.Mana = {W}
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Pouncing Jaguar.Power = 2
+Bot1.Battlefield.Pouncing Jaguar.Toughness = 2
+Bot1.Battlefield.Pouncing Jaguar.Colors = Green
