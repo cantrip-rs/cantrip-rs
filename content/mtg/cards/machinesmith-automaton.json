@@ -1,0 +1,11 @@
+{
+  "name": "Machinesmith Automaton",
+  "manaCost": "{2}{R}",
+  "type": "Artifact Creature — Robot Villain",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Trample\nWhenever another artifact you control enters, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Trample"
+  ]
+}

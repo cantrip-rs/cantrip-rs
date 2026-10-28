@@ -1,0 +1,40 @@
+# Machinesmith Automaton: Trample. Its 2 power assigned to a 0/1 blocker: lethal damage 1 to it, the other 1 tramples over to Bot2
+# (CR 702.19b), so Bot2 is at 19 and the blocker dies.
+
+[Bot1 Deck]
+Machinesmith Automaton
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Crimson Kobolds
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Machinesmith Automaton.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Crimson Kobolds.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Machinesmith Automaton > Bot2)
+Bot2.Block(Crimson Kobolds > Machinesmith Automaton)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Crimson Kobolds
+Bot1.Battlefield.Machinesmith Automaton.Damage = 0
