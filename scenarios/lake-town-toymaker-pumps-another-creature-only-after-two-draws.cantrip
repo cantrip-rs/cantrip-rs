@@ -1,0 +1,64 @@
+# Lake-town Toymaker: "At the beginning of combat on your turn, if you've drawn two or more cards this turn, another target
+# creature you control gets +3/+0 and gains first strike until end of turn." On turn 3 Bot1 has drawn only its draw-step card:
+# no trigger (CR 603.4), the Ornithopter stays 0/2. On turn 5 an Opt draws a second card first, so the trigger targets the
+# Ornithopter (another creature than the Toymaker; Bot2's creature is not Bot1's to target): 3/2 with first strike.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Lake-town Toymaker
+Ornithopter
+Opt
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lake-town Toymaker.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+? Stack.Count = 0
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains | )
+[T5 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 3
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 3
+Bot1.Battlefield.Lake-town Toymaker.Power = 3

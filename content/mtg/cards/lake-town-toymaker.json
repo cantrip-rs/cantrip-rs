@@ -1,0 +1,8 @@
+{
+  "name": "Lake-town Toymaker",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Artificer",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "At the beginning of combat on your turn, if you've drawn two or more cards this turn, another target creature you control gets +3/+0 and gains first strike until end of turn."
+}
