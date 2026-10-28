@@ -1,0 +1,44 @@
+# Human Torch, Johnny Storm: "Power-up - {6}{R}: Put three +1/+1 counters on Human Torch." On turn 3 he enters and his power-up costs
+# {6}{R} less his mana cost {2}{R}: {4}, paid with an Ancient Tomb and Sol Ring (Ruby and the other Tomb paid for him). He is a 5/5
+# with three counters, and the ability is not offered a second time.
+
+[Bot1 Deck]
+Ancient Tomb
+Sol Ring
+Mox Jet
+Mox Ruby
+Human Torch, Johnny Storm
+Ancient Tomb
+Island
+Ancient Tomb x10
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Ancient Tomb.Play
+Bot1.Battlefield.Ancient Tomb.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ancient Tomb.Play
+Bot1.Battlefield.Ancient Tomb#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Human Torch, Johnny Storm.Cast
+Bot1.Pass
+Bot1.Battlefield.Ancient Tomb#2.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Human Torch, Johnny Storm.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Human Torch, Johnny Storm.Activate
+
+[Expect]
+Bot1.Battlefield.Human Torch, Johnny Storm.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Human Torch, Johnny Storm.Power = 5
+Bot1.Battlefield.Human Torch, Johnny Storm.Toughness = 5

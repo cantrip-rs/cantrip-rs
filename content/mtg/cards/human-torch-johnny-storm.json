@@ -1,0 +1,11 @@
+{
+  "name": "Human Torch, Johnny Storm",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Human Hero",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nWhenever you draw a card, if you control another Hero, Human Torch deals 1 damage to target opponent.\nPower-up — {6}{R}: Put three +1/+1 counters on Human Torch. (Activate each power-up ability only once. Reduce the cost by his mana cost if he entered this turn.)",
+  "keywords": [
+    "Flying"
+  ]
+}

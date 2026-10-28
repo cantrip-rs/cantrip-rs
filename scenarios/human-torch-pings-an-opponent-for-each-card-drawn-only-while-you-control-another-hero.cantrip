@@ -1,0 +1,49 @@
+# Human Torch, Johnny Storm: "Whenever you draw a card, if you control another Hero, Human Torch deals 1 damage to target
+# opponent." Turn 1: Human Torch alone. Turn 3: Bot1's draw step finds no other Hero, so nothing happens (Bot2 at 20). Bot1 then
+# casts Misty Knight, a Hero (the intervening if holds), and Faithless Looting: two cards drawn, two triggers, 2 damage (18).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Human Torch, Johnny Storm
+Misty Knight, Hero for Hire
+Faithless Looting
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Human Torch, Johnny Storm.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot2.Life = 20
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Misty Knight, Hero for Hire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
