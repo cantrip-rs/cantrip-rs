@@ -466,6 +466,16 @@ pub fn entered_this_turn_or_you_control_a_basic_land(q: &dyn Query, asker: &Aske
         })
 }
 
+/// The land's two mana abilities: "{T}: Add {C}." and "{T}: Add {A} or {B}. Activate only if this land entered this turn or
+/// if you control a basic land." (`text` is the second's full text). Gleaming Bastion, Training Compound, Hidden Lair,
+/// Gathering Place and Dark Fortress print them.
+pub const fn basic_land_dual(a: Color, b: Color, text: &'static str) -> [AbilityDef; 2] {
+    [
+        mana_ability(TAP, add(Mana::C), "{T}: Add {C}."),
+        mana_ability(TAP, add_one_of(&[a, b]), text).condition(entered_this_turn_or_you_control_a_basic_land),
+    ]
+}
+
 /// The same search, the land put onto the battlefield tapped (Path to Exile, Erode).
 pub const FETCH_BASIC_TAPPED: Question = Question::new(
     "SearchLibrary",
