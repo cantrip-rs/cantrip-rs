@@ -1,0 +1,56 @@
+# The Sentry, Golden Guardian: "When The Sentry enters, target opponent creates The Void." The ability's only target is Bot2. In
+# response Bot2 casts Teferi's Protection and gains protection from everything, so the target is illegal as the ability resolves and
+# the ability does nothing (CR 608.2b): Bot2 creates no Void (its battlefield is empty: its Moxen phased out).
+
+[Bot1 Deck]
+The Sentry, Golden Guardian
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Plains x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Teferi's Protection
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Sentry, Golden Guardian.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Teferi's Protection.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield =
+
+[Expect]
+Bot2.Battlefield =

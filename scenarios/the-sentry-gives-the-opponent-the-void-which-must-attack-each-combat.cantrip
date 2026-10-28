@@ -1,0 +1,50 @@
+# The Sentry, Golden Guardian: "When The Sentry enters, target opponent creates The Void, a legendary 5/5 black Horror Villain creature
+# token with flying, indestructible, and 'The Void attacks each combat if able.'" Bot1 casts The Sentry (5/5 flying, vigilance,
+# indestructible) on turn 1; Bot2, the opponent, creates The Void under its control. It was under Bot2's control before Bot2's turn
+# 2 began, so it can attack, and it must: declaring no attackers is refused (the refusal), and when it attacks Bot1 takes 5 (to 15).
+
+[Bot1 Deck]
+The Sentry, Golden Guardian
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Sentry, Golden Guardian.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = The Void
+? Bot1.Battlefield.The Sentry, Golden Guardian.Keywords = Flying; Indestructible; Vigilance
+[T2 Bot2.Main1]
+! Bot2.Attack()
+Bot2.Attack(The Void > Bot1)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 15
+Bot2.Battlefield.The Void.Power = 5
+Bot2.Battlefield.The Void.Toughness = 5
+Bot2.Battlefield.The Void.Colors = Black
+Bot2.Battlefield.The Void.Subtypes = Horror; Villain
+Bot2.Battlefield.The Void.Supertypes = Legendary
+Bot2.Battlefield.The Void.Keywords = Flying; Indestructible
+Bot2.Battlefield.The Void.Token = true

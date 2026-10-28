@@ -1,0 +1,13 @@
+{
+  "name": "The Sentry, Golden Guardian",
+  "manaCost": "{3}{W}",
+  "type": "Legendary Creature — Human Hero",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying, vigilance, indestructible\nWhen The Sentry enters, target opponent creates The Void, a legendary 5/5 black Horror Villain creature token with flying, indestructible, and \"The Void attacks each combat if able.\"",
+  "keywords": [
+    "Flying",
+    "Vigilance",
+    "Indestructible"
+  ]
+}
