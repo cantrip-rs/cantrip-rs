@@ -1,0 +1,42 @@
+# Captain America's Shield gives +0/+8: Bot2's Lightning Bolt deals 3 to the equipped Ornithopter (0/10), which survives it
+# with 3 damage marked (CR 704.5g); an unequipped 0/2 would have died. Without the Shield's trigger firing (no attack), nothing
+# else happens: the Shield stays attached.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Ornithopter
+Captain America's Shield
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Captain America's Shield.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Captain America's Shield.Activate(Bot1.Battlefield.Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Damage = 3
+Bot1.Battlefield.Captain America's Shield.AttachedTo = Ornithopter
+Bot2.Graveyard = Lightning Bolt

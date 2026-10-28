@@ -1,0 +1,44 @@
+# Captain America's Shield ({2}, Equip {2}): equipped creature gets +0/+8 and has vigilance, so Bot1's Ornithopter (0/2) is a
+# 0/10 that attacks without tapping (CR 702.20b). "Whenever equipped creature attacks, tap target creature defending player
+# controls" (CR 508.5): Bot2's Ornithopter is the one legal target (the equipped one is not defending player's), so it is
+# chosen at once and tapped. The Ornithopter deals no damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Ornithopter
+Captain America's Shield
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Captain America's Shield.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Captain America's Shield.Activate(Bot1.Battlefield.Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Toughness = 10
+Bot1.Attack(Ornithopter > Bot2)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 10
+Bot2.Life = 20
