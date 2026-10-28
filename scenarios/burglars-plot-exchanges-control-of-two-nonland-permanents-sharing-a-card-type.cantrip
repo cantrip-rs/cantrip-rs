@@ -1,0 +1,71 @@
+# Bilbo, Luckwearer's Adventure, Burglar's Plot (CR 715): "Exchange control of two target nonland permanents that share a card type"
+# (CR 701.12a, 205.2a). Bot1 holds Ornithopter (an artifact creature) and five Moxen; Bot2 has Grizzly Bears and a Forest. Bot1 casts it on
+# turn 3 for {4}{U} with the five Moxen (the pool empty after). The refusals: Mox Sapphire and Grizzly Bears share no card type (an artifact and a
+# creature), Forest is a land, and one target or three (three Moxen share the artifact type) are the wrong number. Ornithopter and Grizzly Bears share the creature type: the exchange happens, Ornithopter is Bot2's and Grizzly
+# Bears Bot1's (summoning sick). The card is exiled, not in the graveyard, so Bilbo can later be cast from it.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ornithopter
+Island
+Bilbo, Luckwearer
+Island x10
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bilbo, Luckwearer.Cast(Ability: Adventure)
+! Bot1.Target(Count: 1)
+! Bot1.Target(Count: 3)
+! Bot1.Target(Bot1.Battlefield.Mox Sapphire; Bot1.Battlefield.Mox Pearl; Bot1.Battlefield.Mox Jet)
+! Bot1.Target(Bot1.Battlefield.Mox Sapphire; Bot2.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot2.Battlefield.Forest)
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Mox Emerald; Grizzly Bears
+Bot2.Battlefield = Forest; Mox Emerald; Mox Pearl; Ornithopter
+Exile = Bilbo, Luckwearer
+Bot1.Graveyard.Count = 0

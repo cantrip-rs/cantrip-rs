@@ -1,0 +1,17 @@
+{
+  "name": "Bilbo, Luckwearer",
+  "manaCost": "{1}{U}",
+  "type": "Legendary Creature — Halfling Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Bilbo can't be blocked.\nWhenever Bilbo deals combat damage to a player, draw a card, then discard a card.",
+  "keywords": [
+    "CantBeBlocked"
+  ],
+  "adventure": {
+    "name": "Burglar's Plot",
+    "manaCost": "{4}{U}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Exchange control of two target nonland permanents that share a card type. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

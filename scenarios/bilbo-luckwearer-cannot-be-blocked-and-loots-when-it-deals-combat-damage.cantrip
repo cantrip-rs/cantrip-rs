@@ -1,0 +1,57 @@
+# Bilbo, Luckwearer: "Bilbo can't be blocked" and "Whenever Bilbo deals combat damage to a player, draw a card, then discard a card."
+# Cast on turn 1 with two Moxen. On turn 3 Bot2's untapped Grizzly Bears (cast on turn 2) may not block him (the refusal, CR 509.1b) but Bot2's
+# turn-4 attacker could be blocked... here only the refusal and the damage matter: Bilbo deals 1, Bot2 is at 19, and the trigger draws the Mountain
+# and discards the Plains chosen (draw before discard: the Mountain is in hand when chosen).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Bilbo, Luckwearer
+Plains
+Swamp
+Island
+Island
+Forest
+Mountain
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bilbo, Luckwearer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bilbo, Luckwearer > Bot2)
+! Bot2.Block(Grizzly Bears > Bilbo, Luckwearer)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Hand = Swamp; Island; Island; Forest; Mountain
+Bot1.Graveyard = Plains
