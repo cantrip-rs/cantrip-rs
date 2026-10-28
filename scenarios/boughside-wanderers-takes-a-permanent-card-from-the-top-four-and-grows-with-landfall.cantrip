@@ -1,0 +1,67 @@
+# Boughside Wanderers, a 4/4: "When this creature enters, look at the top four cards of your library. You may reveal a permanent
+# card from among them and put it into your hand. Put the rest on the bottom of your library in a random order. Landfall - Whenever
+# a land you control enters, this creature gets +2/+2 until end of turn." The top four are Lightning Bolt, Giant Growth, Ornithopter
+# and Plains (fourth); the fifth, a Mountain, is not looked at (CR 701.20a: exactly four). Bot1 may not take the instant or the
+# sorcery (CR 110.4a: no permanent cards), takes the Ornithopter revealing it, and the other three go to the bottom with the Mountain
+# the new top card (more than one permanent card may not be taken). Then a Forest enters: 6/6 (+2/+2, CR 611.2); on turn 2 Bot2's land gives nothing and the pump has ended (4/4);
+# on turn 3 Bot1's land makes it 6/6 again.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Boughside Wanderers
+Forest
+Plains
+Plains
+Plains
+Lightning Bolt
+Giant Growth
+Ornithopter
+Plains
+Mountain
+Forest
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Boughside Wanderers.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Arrange(Lightning Bolt | Giant Growth; Ornithopter; Plains)
+! Bot1.Arrange(Giant Growth | Lightning Bolt; Ornithopter; Plains)
+! Bot1.Arrange(Ornithopter; Plains | Lightning Bolt; Giant Growth)
+Bot1.Arrange(Ornithopter | Lightning Bolt; Giant Growth; Plains)
+? Bot1.Revealed = Ornithopter
+? Bot1.Hand = Forest; Plains; Plains; Plains; Ornithopter
+? Bot1.Library.Count = 15
+? Bot1.Battlefield.Boughside Wanderers.Power = 4
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Boughside Wanderers.Power = 6
+? Bot1.Battlefield.Boughside Wanderers.Toughness = 6
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Boughside Wanderers.Power = 4
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Boughside Wanderers.Power = 4
+? Bot1.Battlefield.Boughside Wanderers.Toughness = 4
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Boughside Wanderers.Power = 6
+Bot1.Battlefield.Boughside Wanderers.Toughness = 6

@@ -1,0 +1,38 @@
+# Boughside Wanderers: "You may reveal a permanent card from among them" - Bot1 takes none of the top four (a Forest, a Plains, an
+# Ornithopter and a Lightning Bolt): all four go to the bottom and the hand is unchanged, nothing revealed (CR 701.20a).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Boughside Wanderers
+Forest
+Plains
+Plains
+Plains
+Forest
+Plains
+Ornithopter
+Lightning Bolt
+Mountain
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Boughside Wanderers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange( | Forest; Plains; Ornithopter; Lightning Bolt)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Forest; Plains; Plains; Plains
+Bot1.Library.Count = 15
