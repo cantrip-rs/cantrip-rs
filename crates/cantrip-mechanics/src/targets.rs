@@ -422,6 +422,14 @@ fn land_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id) if on_battlefield(q, id) && q.chars(id).is(CardType::Land))
 }
 
+/// "Target creature or land" (CR 115.1, 205.2): a permanent on the battlefield that is a creature or a land as the layers have
+/// it now (a land that is a creature too is both). Quake, Agent of S.H.I.E.L.D., Fissure, Lava Flow, Wrecking Ball, Minion of
+/// Leshrac and Civic Gardener print it.
+pub fn creature_or_land_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
+    matches!(t, Target::Object(id) if on_battlefield(q, id) && { let c = q.chars(id); c.is(CardType::Creature) || c.is(CardType::Land) })
+}
+pub const CREATURE_OR_LAND: TargetSpec = target(creature_or_land_filter);
+
 /// The filter of `NONBASIC_LAND`, for a card that narrows it further.
 pub fn nonbasic_land_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     land_filter(q, asker, t) && matches!(t, Target::Object(id) if !q.chars(id).supertypes.basic)
