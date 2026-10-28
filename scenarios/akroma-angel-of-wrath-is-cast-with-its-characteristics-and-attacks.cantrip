@@ -1,0 +1,54 @@
+# Akroma, Angel of Wrath, a french vanilla creature: cast with Black Lotus and Moxen paying exactly its cost (the pool is empty right after), its
+# characteristics as printed (power, toughness, keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Haste has it attack the turn it arrives, and vigilance keeps it untapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Akroma, Angel of Wrath
+Plains x17
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Akroma, Angel of Wrath.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Akroma, Angel of Wrath.Power = 6
+? Bot1.Battlefield.Akroma, Angel of Wrath.Toughness = 6
+? Bot1.Battlefield.Akroma, Angel of Wrath.Keywords = FirstStrike; Flying; Haste; Trample; Vigilance
+? Bot1.Battlefield.Akroma, Angel of Wrath.Colors = White
+? Bot1.Battlefield.Akroma, Angel of Wrath.Types = Creature
+? Bot1.Battlefield.Akroma, Angel of Wrath.Subtypes = Angel
+? Bot1.Battlefield.Akroma, Angel of Wrath.Supertypes = Legendary
+? Bot1.Battlefield.Akroma, Angel of Wrath.ProtectionFrom = Black; Red
+Bot1.Attack(Akroma, Angel of Wrath > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Akroma, Angel of Wrath.Tapped = false
