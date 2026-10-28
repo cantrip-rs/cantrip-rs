@@ -1,0 +1,8 @@
+{
+  "name": "Agent 13, Sharon Carter",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Human Spy Hero",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Whenever a creature you control attacks alone, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"
+}

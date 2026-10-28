@@ -1,0 +1,61 @@
+# Agent 13, Sharon Carter: "Whenever a creature you control attacks alone, investigate." Turn 3: Bot1's Ornithopter attacks alone and
+# Bot1 makes one Clue (not Agent 13 herself attacking: any creature you control). Turn 4: Bot2's Ornithopter attacks alone - not a
+# creature Bot1 controls - and Bot1 makes none. Turn 5: Bot1 attacks with both Ornithopters, which is not alone: no Clue. Turn 7:
+# Agent 13 herself attacks alone and a second Clue appears.
+
+[Bot1 Deck]
+Agent 13, Sharon Carter
+Ornithopter
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Agent 13, Sharon Carter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Agent 13, Sharon Carter; Clue Token; Mox Jet; Mox Pearl; Mox Sapphire; Ornithopter; Ornithopter
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield = Agent 13, Sharon Carter; Clue Token; Mox Jet; Mox Pearl; Mox Sapphire; Ornithopter; Ornithopter
+[T5 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Agent 13, Sharon Carter; Clue Token; Mox Jet; Mox Pearl; Mox Sapphire; Ornithopter; Ornithopter
+[T7 Bot1.Main1]
+Bot1.Attack(Agent 13, Sharon Carter > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Agent 13, Sharon Carter; Clue Token; Clue Token; Mox Jet; Mox Pearl; Mox Sapphire; Ornithopter; Ornithopter
+Bot2.Life = 17
