@@ -1,0 +1,28 @@
+# Elite Interceptor // Rejoinder: "You may tap or untap target creature" is optional, and the draw is a separate sentence
+# (CR 608.2c): choosing to do nothing leaves the creature as it was and the card is still drawn.
+
+[Bot1 Deck]
+Elite Interceptor
+Mox Pearl x3
+Island x3
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Elite Interceptor.Cast
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Exile.Rejoinder.Cast(Elite Interceptor)
+Bot1.Modes(Do nothing)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Elite Interceptor.Tapped = false
+Bot1.Hand = Island; Island; Island; Ornithopter

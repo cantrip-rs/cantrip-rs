@@ -1,0 +1,36 @@
+# Elite Interceptor // Rejoinder: with its only target illegal Rejoinder doesn't resolve (CR 608.2b), so Bot1 doesn't draw.
+# Bot2 kills its own Ornithopter in response.
+
+[Bot1 Deck]
+Elite Interceptor
+Mox Pearl x3
+Island x3
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Elite Interceptor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Exile.Rejoinder.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Hand = Island; Island; Island; Ornithopter

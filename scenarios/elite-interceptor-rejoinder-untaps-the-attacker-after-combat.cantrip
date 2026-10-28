@@ -1,0 +1,33 @@
+# Elite Interceptor // Rejoinder: "untap" is the other half of the choice. The Interceptor attacks on turn three and is
+# tapped; Rejoinder cast after combat untaps it and draws a card.
+
+[Bot1 Deck]
+Elite Interceptor
+Mox Pearl x3
+Island x3
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Elite Interceptor.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Elite Interceptor > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Elite Interceptor.Tapped = true
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Exile.Rejoinder.Cast(Elite Interceptor)
+Bot1.Modes(Untap)
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Elite Interceptor.Tapped = false
+Bot2.Life = 19
+Bot1.Hand = Island; Island; Island; Island; Ornithopter
