@@ -1,0 +1,76 @@
+# Raft Security Officer: "{2}, {T}: Tap target creature. This ability costs {1} less to activate if it targets a creature with
+# power 3 or less." Bot1 floats {W}{U}{B} before each activation and pays from the pool: on turn 3 it targets Bot2's Centaur Courser
+# (power 3, exactly at the limit) and costs {1}, leaving {W}{U}; on turn 5 it targets Bot2's Giant Cockroach (power 4, one past the
+# limit) and costs the full {2}, leaving {W}.
+
+[Bot1 Deck]
+Raft Security Officer
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Centaur Courser
+Giant Cockroach
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Raft Security Officer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Raft Security Officer.Activate(Bot2.Battlefield.Centaur Courser; Spend: B)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {W}{U}
+? Bot2.Battlefield.Centaur Courser.Tapped = true
+? Bot1.Battlefield.Raft Security Officer.Tapped = true
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Giant Cockroach.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Raft Security Officer.Activate(Bot2.Battlefield.Giant Cockroach; Spend: U, B)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {W}
+? Bot2.Battlefield.Giant Cockroach.Tapped = true
+
+[Expect]
+Bot2.Battlefield.Giant Cockroach.Tapped = true
+Bot2.Battlefield.Centaur Courser.Tapped = false
