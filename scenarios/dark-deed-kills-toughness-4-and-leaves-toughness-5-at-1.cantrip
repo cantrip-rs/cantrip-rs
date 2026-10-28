@@ -1,0 +1,62 @@
+# Dark Deed gives -4/-4 (CR 611.2a, 704.5f): a creature with toughness exactly 4 dies, one with toughness 5 survives as a -4/1
+# until end of turn. Paid for exactly {1}{B} each.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Dark Deed
+Dark Deed
+Swamp x15
+
+[Bot2 Deck]
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Swamp
+Dune Beetle
+Wall of Mist
+Island x12
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Dune Beetle.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Wall of Mist.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dark Deed.Cast(Bot2.Battlefield.Dune Beetle)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dark Deed.Cast(Bot2.Battlefield.Wall of Mist)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Dune Beetle
+Bot2.Battlefield.Wall of Mist.Power = -4
+Bot2.Battlefield.Wall of Mist.Toughness = 1
+Bot1.Graveyard = Dark Deed; Dark Deed
