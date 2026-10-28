@@ -1,0 +1,45 @@
+# Hulk, Gamma Goliath. "Power-up abilities of other creatures you control cost {3} less to activate." Turn 1 Bot1 casts Hulk
+# and Aerial Doombot. On turn 3 the Doombot's "Power-up — {5}{U}" costs {2}{U} (CR 601.2f, 118.7): the Island's {U}, Mox Ruby's
+# {R} and Mox Emerald's {G} pay it, and it becomes a 4/4.
+
+[Bot1 Deck]
+Hulk, Gamma Goliath
+Mox Ruby
+Mox Emerald
+Black Lotus
+Mox Sapphire
+Aerial Doombot
+Island
+Island x10
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hulk, Gamma Goliath.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aerial Doombot.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Aerial Doombot.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Aerial Doombot.Power = 4
+
+[Expect]
+Bot1.Battlefield.Hulk, Gamma Goliath.Power = 6
