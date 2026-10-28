@@ -1,0 +1,45 @@
+# Skulk (CR 702.118b): Furtive Homunculus, a 2/1, attacking cannot be blocked by Bot2's Wicker Witch, a 3/1 (power one
+# greater than its own: refusal), but can by Alpha Myr, a 2/1 (power equal to its own), and by Memnite, a 1/1 (the positive
+# controls: both block, so each may). The Homunculus takes 2 + 1 damage and dies; Bot2 takes none.
+# Bot1 casts it on turn 1 (Black Lotus); Bot2 casts its blockers on turn 2 (Black Lotus for the Witch, Moxen Jet and Pearl
+# for Alpha Myr, Memnite for free).
+
+[Bot1 Deck]
+Black Lotus
+Furtive Homunculus
+Island x22
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Wicker Witch
+Alpha Myr
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Furtive Homunculus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Wicker Witch.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Alpha Myr.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Furtive Homunculus > Bot2)
+! Bot2.Block(Wicker Witch > Furtive Homunculus)
+Bot2.Block(Alpha Myr > Furtive Homunculus; Memnite > Furtive Homunculus)
+? Combat.Blocks.Count = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Furtive Homunculus; Black Lotus
