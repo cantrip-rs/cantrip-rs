@@ -1,0 +1,32 @@
+# Scuzzback Scrapper, a french vanilla creature: cast with Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Scuzzback Scrapper
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Scuzzback Scrapper.Cast
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Scuzzback Scrapper.Power = 1
+? Bot1.Battlefield.Scuzzback Scrapper.Toughness = 1
+? Bot1.Battlefield.Scuzzback Scrapper.Keywords = Wither
+? Bot1.Battlefield.Scuzzback Scrapper.Colors = Green; Red
+? Bot1.Battlefield.Scuzzback Scrapper.Types = Creature
+? Bot1.Battlefield.Scuzzback Scrapper.Subtypes = Goblin; Warrior
+? Bot1.Battlefield.Scuzzback Scrapper.Supertypes = (absent)
+? Bot1.Battlefield.Scuzzback Scrapper.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Scuzzback Scrapper > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Scuzzback Scrapper.Tapped = true

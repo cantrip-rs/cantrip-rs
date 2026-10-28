@@ -1,0 +1,11 @@
+{
+  "name": "Scuzzback Scrapper",
+  "manaCost": "{R/G}",
+  "type": "Creature — Goblin Warrior",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Wither (This deals damage to creatures in the form of -1/-1 counters.)",
+  "keywords": [
+    "Wither"
+  ]
+}
