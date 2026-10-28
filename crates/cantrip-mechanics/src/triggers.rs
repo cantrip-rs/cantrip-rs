@@ -438,11 +438,39 @@ pub const fn cycling(mana: ManaCost, text: &'static str) -> AbilityDef {
         .cycling()
 }
 
-fn lone_attacker(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+/// Whether the creature declared as an attacker is the only one (CR 506.5: "a creature attacks alone if it's the only creature
+/// declared as an attacker during the declare attackers step").
+fn attacks_alone(q: &dyn Query) -> bool {
+    q.state().attackers.len() == 1
+}
+
+/// "Whenever a creature you control attacks alone" (CR 506.5, 508.1m): the only creature declared as an attacker, controlled
+/// by this ability's controller. The ability is about that attacker. Exalted, Agent 13, Sharon Carter and Agents of
+/// S.H.I.E.L.D. print it.
+pub fn creature_you_control_attacks_alone(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::Attacks { attacker, .. }
-            if q.state().attackers.len() == 1 && q.controller(*attacker) == q.controller(source) =>
-        {
+        Event::Attacks { attacker, .. } if attacks_alone(q) && q.controller(*attacker) == me.controller => {
+            Fired::about(Target::Object(*attacker))
+        }
+        _ => None,
+    }
+}
+
+/// "Whenever this creature attacks alone" (CR 506.5, 508.1m): its own attack, the only creature declared as an attacker. Luke
+/// Cage, Power Man and Bob, Reluctant HYDRA Agent print it.
+pub fn this_attacks_alone(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Attacks { attacker, .. } if *attacker == source && attacks_alone(q) => Fired::PLAIN,
+        _ => None,
+    }
+}
+
+/// "Whenever equipped creature attacks alone" (CR 506.5, 508.1m, 301.5): the creature this Equipment is attached to is the only
+/// creature declared as an attacker. The ability is about that creature ("untap it"). S.H.I.E.L.D. Spy Kit and Bilbo's Ring
+/// print it.
+pub fn equipped_creature_attacks_alone(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Attacks { attacker, .. } if attacks_alone(q) && q.attached_to(source) == Some(*attacker) => {
             Fired::about(Target::Object(*attacker))
         }
         _ => None,
@@ -463,7 +491,9 @@ pub fn creature_you_control_attacks_a_player_alone(q: &dyn Query, source: Object
     }
 }
 
-fn exalted_pump(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+/// "That creature gets +1/+1 until end of turn" (CR 611.2a): the creature the trigger is about, as it resolves. Exalted and
+/// Agents of S.H.I.E.L.D. print it.
+pub fn subject_gets_plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Target::Object(creature) = item.subject {
         crate::pump(g, item.object, creature, 1, 1);
     }
@@ -472,7 +502,7 @@ fn exalted_pump(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// Exalted (CR 702.83a): "Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn."
 /// Ignoble Hierarch and Noble Hierarch print it word for word.
-pub const EXALTED: AbilityDef = triggered(when(EventMask::ATTACKS, lone_attacker), exalted_pump, "Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.");
+pub const EXALTED: AbilityDef = triggered(CREATURE_YOU_CONTROL_ATTACKS_ALONE, subject_gets_plus_one, "Whenever a creature you control attacks alone, that creature gets +1/+1 until end of turn.");
 
 /// "When this creature enters, if its squad cost was paid": an unpaid cast, or a token copy, does not trigger at all.
 fn entered_squadded(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
@@ -1339,6 +1369,9 @@ pub const THIS_ATTACKS_OR_BLOCKS: Trigger = when(EventMask(EventMask::ATTACKS.0 
 pub const THIS_DEALT_DAMAGE: Trigger = when(EventMask::DAMAGE, this_dealt_damage);
 pub const DEALS_COMBAT_DAMAGE_TO_A_CREATURE: Trigger = when(EventMask::DAMAGE, deals_combat_damage_to_a_creature);
 pub const THIS_ATTACKS: Trigger = when(EventMask::ATTACKS, this_attacks);
+pub const THIS_ATTACKS_ALONE: Trigger = when(EventMask::ATTACKS, this_attacks_alone);
+pub const CREATURE_YOU_CONTROL_ATTACKS_ALONE: Trigger = when_asked(EventMask::ATTACKS, creature_you_control_attacks_alone);
+pub const EQUIPPED_CREATURE_ATTACKS_ALONE: Trigger = when(EventMask::ATTACKS, equipped_creature_attacks_alone);
 
 /// "Whenever a player casts their second spell each turn" (CR 601.2i, 603.2): any player's, counted from the turn's start
 /// (`Event::SpellCast::nth`), so the spells cast before the permanent arrived count too. Ledger Shredder and Hearthborn
