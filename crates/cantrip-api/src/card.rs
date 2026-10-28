@@ -122,6 +122,12 @@ pub struct EntersAs {
     /// "It's an [types]": exactly these card types (CR 205.1a), keeping the subtypes of those it still has
     /// (`EffectKind::SetTypes`). Not read with `aura`.
     pub types: Option<TypeSet>,
+    /// "(It loses all other types and subtypes.)" (CR 205.1a): every subtype of each of these card types it still has after
+    /// `types`, gone (`EffectKind::LoseSubtypesOf`). Supper for Spiders' Food artifacts are artifacts with no other artifact type.
+    pub loses_subtypes_of: &'static [CardType],
+    /// "It's a [subtype] [types]": the subtypes it gains, after the ones it loses (`EffectKind::AddSubtype`). Not read with
+    /// `aura`, whose one subtype is Aura.
+    pub subtypes: &'static [Subtype],
     /// "It's an Aura enchantment ... with enchant [quality]": an enchantment alone whose one enchantment type is Aura (CR
     /// 205.1a, 303.4), with the enchant ability its effect's card describes (`CardDef::becomes_aura_enchant`,
     /// `EffectKind::Enchant`). Not cast, it chooses what it enchants as it enters, without targeting (CR 303.4f); with
@@ -136,7 +142,7 @@ pub struct EntersAs {
 
 impl EntersAs {
     /// It enters as itself: nothing changed.
-    pub const NONE: EntersAs = EntersAs { types: None, aura: false, loses_other_abilities: false, abilities: &[] };
+    pub const NONE: EntersAs = EntersAs { types: None, loses_subtypes_of: &[], subtypes: &[], aura: false, loses_other_abilities: false, abilities: &[] };
 }
 
 /// An `EntersAs` an effect gives a permanent as it enters (`Entering::becomes`): what it is, and the card whose ability says

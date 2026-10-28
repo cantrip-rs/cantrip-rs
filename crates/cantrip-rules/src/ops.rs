@@ -907,7 +907,7 @@ pub fn return_exiled(cx: &mut Cx) -> R<bool> {
         .map(|&(id, l)| Moving::to(id, Zone::new(l.from.kind(), owner(cx, id))))
         .collect();
     // One move (CR 610.3d): the cards going back to a hand or a graveyard and the permanents entering arrive together.
-    put_onto_battlefield_along(cx, elsewhere, &to_battlefield, ZoneReason::Other, &[])?;
+    put_onto_battlefield_along(cx, elsewhere, &to_battlefield, ZoneReason::Other, &[], None)?;
     // The return is one one-shot effect, created once (CR 610.3): the duration is over whether or not the card got where
     // it went. One that could not - an Aura with nothing to enchant (CR 303.4g), a move a replacement left in exile - stays
     // there as a card exiled with that permanent and nothing more, never returned again. Cleared once the moves are done,
@@ -1388,7 +1388,7 @@ pub fn entry_counters(with: &[(CounterKind, i16)]) -> [i16; CounterKind::COUNT] 
 
 /// `put_onto_battlefield`, each entering with these counters as well (CR 122.6).
 pub fn put_onto_battlefield_with(cx: &mut Cx, objects: &[(ObjectId, PlayerId, bool)], reason: ZoneReason, with: &[(CounterKind, i16)]) -> R<Vec<ObjectId>> {
-    put_onto_battlefield_along(cx, Vec::new(), objects, reason, with)
+    put_onto_battlefield_along(cx, Vec::new(), objects, reason, with, None)
 }
 
 /// `put_onto_battlefield_with`, in one move with these others (CR 101.4): they leave or arrive at the same moment, so what
@@ -1399,12 +1399,13 @@ pub fn put_onto_battlefield_along(
     objects: &[(ObjectId, PlayerId, bool)],
     reason: ZoneReason,
     with: &[(CounterKind, i16)],
+    becomes: Option<Becomes>,
 ) -> R<Vec<ObjectId>> {
 
     // What leaves the battlefield in this move is gone as each entering permanent is judged (CR 101.4, 614.12).
     let leaving: Vec<ObjectId> = moves.iter().map(|m| m.id).filter(|&id| cx.s().obj(id).zone.is(ZoneKind::Battlefield)).collect();
     let outer_leaving = std::mem::replace(&mut *cx.s().leaving_together.borrow_mut(), leaving);
-    let prepared = prepare_entries(cx, &mut moves, objects, with);
+    let prepared = prepare_entries(cx, &mut moves, objects, with, becomes);
     *cx.s().leaving_together.borrow_mut() = outer_leaving;
     prepared?;
     crate::attach::choose_aura_hosts(cx, &mut moves)?;
@@ -1433,7 +1434,7 @@ fn instant_or_sorcery(def: &CardDef) -> bool {
 }
 
 /// Each of `objects` prepared to enter (`prepare_entry`) and added to `moves`.
-fn prepare_entries(cx: &mut Cx, moves: &mut Vec<Moving>, objects: &[(ObjectId, PlayerId, bool)], with: &[(CounterKind, i16)]) -> R<()> {
+fn prepare_entries(cx: &mut Cx, moves: &mut Vec<Moving>, objects: &[(ObjectId, PlayerId, bool)], with: &[(CounterKind, i16)], becomes: Option<Becomes>) -> R<()> {
     let bans = crate::static_rules::enter_bans(cx);
     for &(id, controller, tapped) in objects {
         // A card that has changed zones since it was chosen is a new object, not the one to put onto the battlefield
@@ -1448,7 +1449,7 @@ fn prepare_entries(cx: &mut Cx, moves: &mut Vec<Moving>, objects: &[(ObjectId, P
             continue;
         }
         let mut entering =
-            Entering { object: id, controller, tapped, counters: entry_counters(with), copy: None, prepared: false, chosen_color: None, chosen_subtype: None, chosen_player: None, chosen_card: None, chosen_option: None, chosen_object: None, attach: None, attach_player: None, x: 0 , transformed: false, protector: None, instead: None, becomes: None, own: None };
+            Entering { object: id, controller, tapped, counters: entry_counters(with), copy: None, prepared: false, chosen_color: None, chosen_subtype: None, chosen_player: None, chosen_card: None, chosen_option: None, chosen_object: None, attach: None, attach_player: None, x: 0 , transformed: false, protector: None, instead: None, becomes, own: None };
         prepare_entry(cx, &mut entering)?;
         // One its own daybound turned over as it would enter (CR 702.145b) is judged as that face (CR 304.4, 307.4).
         if entering.transformed && instant_or_sorcery_entering(cx, id, true) {
@@ -1473,7 +1474,7 @@ pub fn sacrifice_and_return(cx: &mut Cx, player: PlayerId, sacrificed: &[ObjectI
         .map(|id| Moving { reason: Some(ZoneReason::Sacrifice), ..Moving::to(id, Zone::graveyard(cx.s().obj(id).owner)) })
         .collect();
     let arriving: Vec<(ObjectId, PlayerId, bool)> = returned.iter().map(|&(id, p)| (id, p, false)).collect();
-    put_onto_battlefield_along(cx, moves, &arriving, ZoneReason::Other, &[])?;
+    put_onto_battlefield_along(cx, moves, &arriving, ZoneReason::Other, &[], None)?;
     Ok(())
 }
 
@@ -1537,8 +1538,13 @@ fn enter_as(cx: &mut Cx, id: ObjectId, b: Becomes) {
         kinds.push(EffectKind::SetTypes(TypeSet::of(&[CardType::Enchantment])));
         kinds.push(EffectKind::LoseSubtypesOf(CardType::Enchantment));
         kinds.push(EffectKind::AddSubtype(Subtype::Aura));
-    } else if let Some(types) = b.what.types {
-        kinds.push(EffectKind::SetTypes(types));
+    } else {
+        if let Some(types) = b.what.types {
+            kinds.push(EffectKind::SetTypes(types));
+        }
+        // "(They lose all other types and subtypes.)": then the subtypes it gains (CR 205.1a).
+        kinds.extend(b.what.loses_subtypes_of.iter().map(|&t| EffectKind::LoseSubtypesOf(t)));
+        kinds.extend(b.what.subtypes.iter().map(|&s| EffectKind::AddSubtype(s)));
     }
     if b.what.loses_other_abilities {
         kinds.push(EffectKind::LoseAllAbilities);
@@ -1571,49 +1577,21 @@ fn enter_as(cx: &mut Cx, id: ObjectId, b: Becomes) {
     }
 }
 
-/// Puts one object onto the battlefield as an effect says it is (`Game::put_onto_battlefield_as`, CR 614.12): its entering
-/// replacements judged on it as that (`as_it_would_exist`), as an Aura choosing what it enchants as it enters and staying
-/// where it is with nothing to enchant (CR 303.4f-g), and arriving as that. The permanent, or None if it did not enter.
+/// Puts one object onto the battlefield as an effect says it is (`Game::put_onto_battlefield_as`, CR 614.12): the batch of
+/// one. The permanent, or None if it did not enter.
 pub fn put_onto_battlefield_becoming(cx: &mut Cx, id: ObjectId, controller: PlayerId, becomes: Becomes) -> R<Option<ObjectId>> {
-    // A card a static ability keeps from entering stays where it is (CR 101.2, 101.3), judged as the card it is there, not
-    // as what the effect would make it (Grafdigger's Cage's ruling).
-    // Nor does an instant or sorcery card, whatever the effect says it is (CR 304.4, 307.4).
-    if !live(cx.s(), id) || crate::static_rules::cant_enter(cx, id) || instant_or_sorcery_entering(cx, id, false) {
-        return Ok(None);
-    }
-    let mut entering = Entering {
-        object: id,
-        controller,
-        tapped: false,
-        counters: [0; CounterKind::COUNT],
-        copy: None,
-        prepared: false,
-        chosen_color: None,
-        chosen_subtype: None,
-        chosen_player: None,
-        chosen_card: None,
-        chosen_option: None,
-        chosen_object: None,
-        attach: None,
-        attach_player: None,
-        x: 0,
-        transformed: false,
-        protector: None,
-        instead: None,
-        becomes: Some(becomes),
-        own: None,
-    };
-    prepare_entry(cx, &mut entering)?;
-    if entering.transformed && instant_or_sorcery_entering(cx, id, true) {
-        return Ok(None);
-    }
-    let mut moves = vec![Moving { entering: Some(entering), ..Moving::to(id, Zone::BATTLEFIELD) }];
-    crate::attach::choose_aura_hosts(cx, &mut moves)?;
-    if moves.is_empty() {
-        return Ok(None);
-    }
-    let new = move_together(cx, &moves, ZoneReason::Other)[0];
-    Ok(Some(new).filter(|&n| cx.s().obj(n).zone.is(ZoneKind::Battlefield)))
+    Ok(put_onto_battlefield_becoming_all(cx, &[(id, controller, false)], becomes)?.first().copied())
+}
+
+/// Puts objects onto the battlefield together as an effect says they are (`Game::put_all_onto_battlefield_becoming`, CR 110.2a,
+/// 614.12): each one's entering replacements judged on it as that (`as_it_would_exist`), as an Aura choosing what it enchants as
+/// it enters and staying where it is with nothing to enchant (CR 303.4f-g), and all arriving as that in one move. A card a
+/// static ability keeps from entering stays where it is (CR 101.2, 101.3), judged as the card it is there, not as what the
+/// effect would make it (Grafdigger's Cage's ruling); nor does an instant or sorcery card, whatever the effect says it is
+/// (CR 304.4, 307.4). The permanents that entered.
+pub fn put_onto_battlefield_becoming_all(cx: &mut Cx, objects: &[(ObjectId, PlayerId, bool)], becomes: Becomes) -> R<Vec<ObjectId>> {
+    let moved = put_onto_battlefield_along(cx, Vec::new(), objects, ZoneReason::Other, &[], Some(becomes))?;
+    Ok(moved.into_iter().filter(|&n| live(cx.s(), n) && cx.s().obj(n).zone.is(ZoneKind::Battlefield)).collect())
 }
 
 /// Transforms a permanent (CR 701.27a): its other face is up. The same object, so nothing about it is new (CR 712.18).

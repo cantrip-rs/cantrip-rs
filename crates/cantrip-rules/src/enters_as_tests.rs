@@ -131,7 +131,7 @@ static WATCHER: CardDef = CardDef {
 };
 
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &FOREST, &TROLL, &WATCHER, &SAGA_TROLL, &LESSON, &BEAR, &TWO_ENCHANTS, &CURSE])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &FOREST, &TROLL, &WATCHER, &SAGA_TROLL, &LESSON, &BEAR, &TWO_ENCHANTS, &CURSE, &EQUIPPED_BEAR])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -425,4 +425,44 @@ fn an_ability_its_card_does_not_list_is_not_given() {
     assert!(!g.state.effects.iter().any(|e| matches!(e.kind, EffectKind::AddAbility(_))));
     let chars = cx(&mut g).chars(aura);
     assert!(chars.has_subtype(Subtype::Aura));
+}
+
+/// An Equipment artifact creature: its artifact subtype goes too when it enters as a Food.
+static EQUIPPED_BEAR: CardDef = CardDef {
+    name: "Enters As Equipped Bear",
+    types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
+    subtypes: SubtypeSet::of(&[Subtype::Equipment, Subtype::Bear]),
+    power: Some(2),
+    toughness: Some(2),
+    ..CardDef::BLANK
+};
+
+/// "They are Food artifacts. (They lose all other types and subtypes.)": several cards enter together under the player given as
+/// artifacts with the one subtype Food, never as creatures - a creature watcher sees nothing - untapped.
+#[test]
+fn several_cards_enter_together_as_food_artifacts() {
+    static AS_FOOD: EntersAs = EntersAs {
+        types: Some(TypeSet::of(&[CardType::Artifact])),
+        loses_subtypes_of: &[CardType::Artifact],
+        subtypes: &[Subtype::Food],
+        ..EntersAs::NONE
+    };
+    let mut g = game();
+    put(&mut g, &WATCHER, YOU, Zone::BATTLEFIELD);
+    let source = put(&mut g, &TWO_ENCHANTS, YOU, Zone::graveyard(YOU));
+    let bear = put(&mut g, &BEAR, THEM, Zone::graveyard(THEM));
+    let equipped = put(&mut g, &EQUIPPED_BEAR, THEM, Zone::graveyard(THEM));
+    let ability = AbilityRef { card: g.cards.id_of(&TWO_ENCHANTS), index: 0 };
+    let item = crate::actions::stack_item(StackKind::Spell, source, ability, YOU, &[]);
+    let entered = cantrip_api::Game::put_all_onto_battlefield_becoming(&mut cx(&mut g), &[(bear, YOU), (equipped, YOU)], &item, &AS_FOOD)
+        .expect("nothing to ask");
+    assert_eq!(entered.len(), 2);
+    for &p in &entered {
+        let chars = cx(&mut g).chars(p);
+        assert!(chars.is(CardType::Artifact) && !chars.is(CardType::Creature));
+        assert!(chars.has_subtype(Subtype::Food) && !chars.has_subtype(Subtype::Bear) && !chars.has_subtype(Subtype::Equipment));
+        assert_eq!(g.state.obj(p).controller, YOU);
+        assert!(!g.state.obj(p).tapped);
+    }
+    assert!(g.state.triggers.is_empty(), "none of them entered as a creature");
 }

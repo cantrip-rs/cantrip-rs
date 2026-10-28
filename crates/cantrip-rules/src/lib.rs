@@ -1827,6 +1827,12 @@ impl cantrip_api::Game for Cx<'_> {
         ops::put_onto_battlefield_becoming(self, object, controller, becomes).map_err(|_| Suspend)
     }
 
+    fn put_all_onto_battlefield_becoming(&mut self, objects: &[(ObjectId, PlayerId)], item: &StackItem, what: &'static EntersAs) -> Result<Vec<ObjectId>, Suspend> {
+        let becomes = Becomes { what, card: item.ability.card };
+        let all: Vec<(ObjectId, PlayerId, bool)> = objects.iter().map(|&(id, p)| (id, p, false)).collect();
+        ops::put_onto_battlefield_becoming_all(self, &all, becomes).map_err(|_| Suspend)
+    }
+
     fn sacrifice_and_return(&mut self, player: PlayerId, sacrificed: &[ObjectId], returned: &[(ObjectId, PlayerId)]) -> Result<(), Suspend> {
         ops::sacrifice_and_return(self, player, sacrificed, returned).map_err(|_| Suspend)
     }

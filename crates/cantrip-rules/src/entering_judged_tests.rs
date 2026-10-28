@@ -174,7 +174,7 @@ fn a_permanent_leaving_in_the_same_move_is_gone_as_the_entering_one_is_judged() 
         let relic = put(&mut game, table, &RELIC, Zone::graveyard(P0), P0);
         let mut cx = cx(&mut game);
         let moves = if leaves { vec![Moving::to(animator, Zone::graveyard(P0))] } else { Vec::new() };
-        let new = ops::put_onto_battlefield_along(&mut cx, moves, &[(relic, P0, false)], ZoneReason::Other, &[(CounterKind::MinusOne, 1)])
+        let new = ops::put_onto_battlefield_along(&mut cx, moves, &[(relic, P0, false)], ZoneReason::Other, &[(CounterKind::MinusOne, 1)], None)
             .expect("nothing is asked");
         let new = *new.last().expect("the Relic entered");
         assert_eq!(cx.s().obj(new).counters(CounterKind::MinusOne), if leaves { 1 } else { 0 });
