@@ -1,0 +1,46 @@
+# Fearsome Goblin Pair: "When this creature dies, amass Goblins 4." Bot2 kills the Pair with Lightning Bolt. Bot1 controls no Army,
+# so a 0/0 black Goblin Army token is created (CR 701.47a) and gets exactly four +1/+1 counters: a 4/4. Bot1 is the one who amasses.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Fearsome Goblin Pair
+Swamp x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fearsome Goblin Pair.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fearsome Goblin Pair)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Fearsome Goblin Pair
+Bot1.Battlefield.Goblin Army Token.Power = 4
+Bot1.Battlefield.Goblin Army Token.Toughness = 4
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Goblin Army Token.Colors = Black
+Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
+Bot2.Battlefield.Count = 1

@@ -1,0 +1,55 @@
+# Fearsome Goblin Pair: "When this creature dies, amass Goblins 4." Bot1 already controls an Orc Army (a 1/1 from Orcish Bowmasters)
+# when Bot2 kills the Pair with Lightning Bolt: no new token is created (CR 701.47a); the four counters go on that Army, which
+# becomes a Goblin in addition to its other types - a 5/5 Army Goblin Orc.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Orcish Bowmasters
+Fearsome Goblin Pair
+Swamp
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Orcish Bowmasters.Cast
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot2.Pass
+? Bot1.Battlefield.Orc Army Token.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Fearsome Goblin Pair.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Fearsome Goblin Pair)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Fearsome Goblin Pair; Black Lotus
+Bot1.Battlefield.Orc Army Token.Power = 5
+Bot1.Battlefield.Orc Army Token.Toughness = 5
+Bot1.Battlefield.Orc Army Token.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Orc Army Token.Subtypes = Army; Goblin; Orc
+Bot1.Battlefield.Count = 4
