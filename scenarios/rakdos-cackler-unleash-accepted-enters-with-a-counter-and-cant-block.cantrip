@@ -1,0 +1,30 @@
+# Rakdos Cackler's unleash (CR 702.98a): Bot1 casts it on turn 1 with free mana and accepts the counter, so it enters with a +1/+1
+# counter on it - a 2/2 - and can't block as long as it has it (it keeps its printed abilities).
+
+[Bot1 Deck]
+Mox Jet
+Rakdos Cackler
+Island
+Island
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rakdos Cackler.Cast
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Rakdos Cackler.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Rakdos Cackler.Power = 2
+Bot1.Battlefield.Rakdos Cackler.Toughness = 2
+Bot1.Battlefield.Rakdos Cackler.Keywords = CantBlock
