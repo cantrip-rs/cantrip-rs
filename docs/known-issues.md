@@ -79,6 +79,7 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-140](#ki-140-every-pending-effect-tooltip-says-it-ends-with-the-turn-if-no-spell-is-cast) | Every pending-effect tooltip says it ends with the turn if no spell is cast | Pri-2 | Open |
 | [KI-141](#ki-141-a-creature-type-chosen-past-the-encoders-128-tokens-makes-no-training-sample) | A creature type chosen past the encoder's 128 tokens makes no training sample | Pri-3 | Open |
 | [KI-142](#ki-142-the-ai-encoder-cannot-tell-apart-options-that-differ-only-by-their-grant-or-a-companion-from-exiling-to-pay) | The AI encoder cannot tell apart options that differ only by their grant, or a companion from exiling to pay | Pri-3 | Open |
+| [KI-143](#ki-143-a-cumulative-upkeep-mana-cost-is-paid-for-at-most-255-of-any-one-symbol) | A cumulative upkeep mana cost is paid for at most 255 of any one symbol | Pri-3 | Won't fix: beyond practical scale |
 
 ## Issues
 
@@ -583,3 +584,20 @@ and the search plays each out. A fix adds the grants and the companion to the en
 
 **Scenarios.** `kili-the-resourceful-the-first-equip-each-turn-is-free-with-an-enduring-story` (the factoring's round
 trip, `crates/cantrip-ai/tests/factoring.rs`).
+
+### KI-143: A cumulative upkeep mana cost is paid for at most 255 of any one symbol
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-3 | Won't fix: beyond practical scale | engine | 2026-10-27, review of cumulative upkeep |
+
+**Notes.** A cumulative upkeep cost of mana (CR 702.24a) is the mana cost multiplied by the age counters (`ManaCost::times`),
+and a `ManaCost` holds each symbol in a byte, as the mana pool holds each type of mana. Age counters of 256 (Vorel of the
+Hull Clade doubling them eight times) on a creature whose cost is {1} or {G}{G} make a cost of 256 or more of one symbol,
+which a `ManaCost` cannot hold, so it is not offered and the permanent is sacrificed. Every other payment (sacrifices,
+-1/-1 counters, life, an opponent's life, cards put on the bottom) is counted in 32 bits and paid exactly. No game played by
+hand on a time limit makes 256 mana of one symbol (or of any, for the generic part) to pay one upkeep. A fix widens
+`ManaCost` and the pool's tally together.
+
+**Scenarios.** `volunteer-reserves-cumulative-upkeep-costs-one-then-two-generic`, and the unit test
+`cumulative_upkeep::tests` in `crates/cantrip-mechanics/src/cumulative_upkeep.rs`.
