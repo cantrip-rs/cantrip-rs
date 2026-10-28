@@ -1,0 +1,64 @@
+# Yellowjacket (1/2 flying): whenever another Villain you control enters, he gets +1/+0 and gains lifelink until end of turn
+# (CR 611.2a, 702.15b). Bot2's Agents of HYDRA on turn 2 does nothing to him. On turn 3 two of Bot1's Agents make him 3/2 with
+# lifelink, so attacking in the air takes 3 from Bot2 and gains Bot1 3. The Agents themselves have no lifelink.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Yellowjacket, Heartless Marauder
+Agents of HYDRA
+Agents of HYDRA
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Sapphire
+Agents of HYDRA
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Hand.Yellowjacket, Heartless Marauder.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Agents of HYDRA.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Yellowjacket, Heartless Marauder.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Attack(Yellowjacket, Heartless Marauder > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 17
+Bot1.Battlefield.Yellowjacket, Heartless Marauder.Toughness = 2
