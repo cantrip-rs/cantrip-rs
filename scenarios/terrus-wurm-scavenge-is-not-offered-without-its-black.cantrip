@@ -1,0 +1,47 @@
+# Terrus Wurm's scavenge {6}{B} (CR 702.97a) needs the colored mana it names: with as much mana as the cost, Memnite on the battlefield
+# as a target and sorcery timing, but one black short (a Mox Pearl's {W} in its place), the ability is not offered
+# (it would be with mana to spare), so the card stays in the graveyard and Memnite gets no counters.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Terrus Wurm
+Memnite
+Mana Crypt
+Mana Crypt
+Mana Crypt
+Mox Emerald
+Island
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Terrus Wurm; Island)
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt#1.Activate
+Bot1.Battlefield.Mana Crypt#2.Activate
+Bot1.Battlefield.Mana Crypt#3.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Graveyard.Terrus Wurm.Activate(Ability: Scavenge; Mana: short)
+Bot1.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Faithless Looting; Island; Terrus Wurm
+Bot1.Battlefield.Memnite.Power = 1
