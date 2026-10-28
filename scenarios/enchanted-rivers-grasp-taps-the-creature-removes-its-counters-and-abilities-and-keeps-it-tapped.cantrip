@@ -1,0 +1,64 @@
+# Enchanted River's Grasp: "When this Aura enters, tap enchanted creature and remove all counters from it. Enchanted creature loses all abilities
+# and doesn't untap during its controller's untap step." Bot2's Ravenhill Flock (a flier that grows with each draw) has drawn a +1/+1 counter on
+# turn 4 (a 2/3, the ? line). On turn 5 Bot1 casts the Aura on it: tapped, no counters, no abilities (the flying is gone, 1/2), and it stays tapped
+# through Bot2's turn-6 untap step, whose draw puts nothing on it: it has no ability to.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Enchanted River's Grasp
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Ravenhill Flock
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ravenhill Flock.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ravenhill Flock.Counters.PlusOnePlusOne = 1
+? Bot2.Battlefield.Ravenhill Flock.Power = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Enchanted River's Grasp.Cast(Bot2.Battlefield.Ravenhill Flock)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Ravenhill Flock.Tapped = true
+
+[Expect]
+Bot2.Battlefield.Ravenhill Flock.Tapped = true
+Bot2.Battlefield.Ravenhill Flock.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Ravenhill Flock.Keywords = (absent)
+Bot2.Battlefield.Ravenhill Flock.Power = 1
+Bot2.Battlefield.Ravenhill Flock.Toughness = 2
