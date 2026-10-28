@@ -1,0 +1,11 @@
+{
+  "name": "Ghor-Clan Wrecker",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Human Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Riot (This creature enters with your choice of a +1/+1 counter or haste.)\nMenace (This creature can't be blocked except by two or more creatures.)",
+  "keywords": [
+    "Menace"
+  ]
+}
