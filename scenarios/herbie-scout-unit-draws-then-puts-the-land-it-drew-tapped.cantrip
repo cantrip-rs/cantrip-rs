@@ -1,0 +1,36 @@
+# H.E.R.B.I.E. Scout Unit: "draw a card, then you may put a land card from your hand onto the battlefield tapped" (CR 608.2c:
+# in the order written). Bot1's hand holds no land; the trigger draws the Forest, which is then in the hand to be put: it
+# enters tapped, is not a land play (CR 305.2: LandsPlayed stays 0), and the Plains in Bot2's hand is not offered. The {4}
+# cost is paid exactly by the two {U} left from a Black Lotus after a Sol Ring is cast and the Sol Ring's {C}{C}.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring
+H.E.R.B.I.E. Scout Unit
+Lightning Bolt x4
+Forest x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.H.E.R.B.I.E. Scout Unit.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Lightning Bolt)
+! Bot1.Choose(Plains)
+Bot1.Choose(Forest)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = H.E.R.B.I.E. Scout Unit; Forest; Sol Ring
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.H.E.R.B.I.E. Scout Unit.Keywords = Flying
+Bot1.Hand = Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.LandsPlayed = 0
+Bot2.Hand.Count = 7

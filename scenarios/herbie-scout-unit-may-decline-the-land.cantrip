@@ -1,0 +1,27 @@
+# H.E.R.B.I.E. Scout Unit, "you may": with a land card in hand (the Forest it drew) Bot1 is asked and chooses none; the
+# Forest stays in hand and nothing but the creature and the artifacts is on the battlefield.
+
+[Bot1 Deck]
+Black Lotus
+Sol Ring
+H.E.R.B.I.E. Scout Unit
+Lightning Bolt x4
+Forest x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.H.E.R.B.I.E. Scout Unit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = H.E.R.B.I.E. Scout Unit; Sol Ring
+Bot1.Hand = Forest; Lightning Bolt; Lightning Bolt; Lightning Bolt; Lightning Bolt

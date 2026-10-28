@@ -1,0 +1,11 @@
+{
+  "name": "H.E.R.B.I.E. Scout Unit",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Robot Scout",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nWhen this creature enters, draw a card, then you may put a land card from your hand onto the battlefield tapped.",
+  "keywords": [
+    "Flying"
+  ]
+}
