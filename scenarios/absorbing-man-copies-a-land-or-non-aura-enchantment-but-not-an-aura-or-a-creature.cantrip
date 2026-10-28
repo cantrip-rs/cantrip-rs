@@ -1,0 +1,51 @@
+# Absorbing Man. Turn 3: Rancor (an Aura) and Absorbing Man himself (a creature) are no legal targets (CR 115.1, 115.4);
+# Authority of the Consuls, a non-Aura enchantment, is. Turn 5: a land is a legal target, and he becomes a land creature.
+
+[Bot1 Deck]
+Absorbing Man
+Black Lotus
+Rancor
+Authority of the Consuls
+Mox Pearl
+Mox Sapphire
+Island
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Authority of the Consuls.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Absorbing Man.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Rancor.Cast(Absorbing Man)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Target(Bot2)
+! Bot1.Target(Rancor)
+! Bot1.Target(Absorbing Man)
+Bot1.Target(Authority of the Consuls)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Absorbing Man.Types = Enchantment; Creature
+? Bot1.Battlefield.Absorbing Man.Power = 6
+[T5 Bot1.Main1]
+Bot1.Target(Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Absorbing Man.Types = Land; Creature
+? Bot1.Battlefield.Absorbing Man.Subtypes = Human; Island; Villain
+
+[Expect]
+Stack.Count = 0
