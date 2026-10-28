@@ -1,0 +1,38 @@
+# Mugato (6/6 reach, vigilance, deathtouch), cast with Black Lotus and two Mox Emeralds, its characteristics as printed.
+# Attacking in turn 3 it deals 6 to Bot2 and stays untapped (CR 702.20b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mugato
+Forest x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Mugato.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mugato.Power = 6
+? Bot1.Battlefield.Mugato.Toughness = 6
+? Bot1.Battlefield.Mugato.Keywords = Deathtouch; Reach; Vigilance
+? Bot1.Battlefield.Mugato.Colors = Green
+? Bot1.Battlefield.Mugato.Types = Creature
+? Bot1.Battlefield.Mugato.Subtypes = Ape; Beast
+? Bot1.Battlefield.Mugato.Supertypes = (absent)
+? Bot1.Battlefield.Mugato.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Mugato > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Mugato.Tapped = false
