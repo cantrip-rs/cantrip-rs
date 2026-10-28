@@ -349,7 +349,8 @@ A refused question to a player who has lost the game (`! Bot2.Accept`) holds onc
 nothing: a player who has left the game is given no priority and no choice (CR 800.4a).
 
 A refusal with `X:`, `! Bot1.Hand.Fire Covenant.Cast(X: 21)`, written right after the cast or activation that announces X,
-says X cannot be announced that high (life to pay, creatures to sacrifice): it is judged there, by the most the announcement
+says X cannot be announced that high (life to pay, creatures to sacrifice); with `Kicked:`, `! Bot1.Hand.Ruthless Radrat.Cast(Kicked: 3)`,
+that the spell cannot be kicked that many times (cards to exile for a squad cost): it is judged there, by the most the announcement
 allows, and holds if that is short of the number and fails if it reaches it. The card announcing must be the one named. Written where
 nothing is announcing, it is an ordinary refusal of the action (the `X:` is only part of the line).
 

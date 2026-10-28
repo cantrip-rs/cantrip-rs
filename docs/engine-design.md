@@ -1334,7 +1334,10 @@ cards with targets that could be spliced on), the card judged as it would then b
 that reads its X or kicker sees them), then the targets each brings, as `choose_slots` would take them
 (`some_announcement`), each slot's targets different; the payment is judged once for each different thing the cost
 changes make of them (`deltas`), at the total that announcement comes to (`Earlier`: the modes' costs, X, the kicker,
-the optional cost, the splices). So This Town Ain't Big Enough ("{3} less if it targets a permanent you control", up to
+the optional cost, the splices). A kicker's cost may be more than mana (`Kicker::extra`, `multikicker_cost`: Squad--Exile four
+cards from your graveyard, CR 702.157a): the times it is paid are announced no higher than that whole cost can be paid (and no
+higher than a byte-sized count of it holds, `Cost::most_times`), and the cost beside mana, times the kicks, joins the spell's
+additional costs, chosen and paid with them. So This Town Ain't Big Enough ("{3} less if it targets a permanent you control", up to
 two targets) is offered for {1}{U} with a permanent of its caster's to aim at. The last slot's candidates that no change
 is given (its source, what is costed) are taken as alike, and judged by how many of them are chosen, for as long as the
 changes judged read nothing that could tell them apart (`Watch`: a candidate's characteristics, an object's record, the

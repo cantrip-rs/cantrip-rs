@@ -1061,17 +1061,40 @@ impl WayDef {
 
 /// Kicker (CR 702.33a): an optional additional cost, paid once.
 pub const fn kicker(cost: ManaCost) -> Option<Kicker> {
-    Some(Kicker { cost, multi: false, waterbend: false })
+    Some(Kicker { cost, extra: None, multi: false, waterbend: false })
 }
 
 /// Multikicker (CR 702.33c): paid any number of times.
 pub const fn multikicker(cost: ManaCost) -> Option<Kicker> {
-    Some(Kicker { cost, multi: true, waterbend: false })
+    Some(Kicker { cost, extra: None, multi: true, waterbend: false })
+}
+
+/// A multikicker whose cost is more than mana (Squad--Exile four cards from your graveyard, CR 702.157a): paid any number of
+/// times, its mana and the rest once for each. The rest must be what `Cost::times` pays that many times over faithfully -
+/// exiled cards, life, energy, counters, permanents - so a cost made of a once-only part (a tap, a sacrifice or discard of this
+/// object, a variable amount) is refused where the card is built.
+pub const fn multikicker_cost(cost: Cost) -> Option<Kicker> {
+    assert!(
+        !cost.tap
+            && !cost.sacrifice_self
+            && !cost.sacrifice_granter
+            && !cost.discard_self
+            && !cost.exile_self
+            && !cost.return_self
+            && !cost.unattach_self
+            && !cost.exert
+            && !cost.discard_hand
+            && cost.collect_evidence == 0
+            && cost.variable.is_none()
+            && cost.loyalty.is_none()
+            && cost.mana.x == 0
+    );
+    Some(Kicker { cost: cost.mana, extra: Some(Cost { mana: ManaCost::ZERO, ..cost }), multi: true, waterbend: false })
 }
 
 /// "As an additional cost to cast this spell, you may waterbend {N}" (CR 701.67a-b).
 pub const fn waterbend_kicker(cost: ManaCost) -> Option<Kicker> {
-    Some(Kicker { cost, multi: false, waterbend: true })
+    Some(Kicker { cost, extra: None, multi: false, waterbend: true })
 }
 
 

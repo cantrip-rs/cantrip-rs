@@ -1037,6 +1037,24 @@ impl Cost {
         c
     }
 
+    /// The most times this cost can be paid over before a count of it, held in a byte, is full (`Cost::times`): a cost that
+    /// is paid any number of times (Squad, CR 702.157a) is announced no more often than that, and no more than the 255 times a
+    /// spell is kicked.
+    pub fn most_times(&self) -> u32 {
+        let largest = [
+            self.exile_from_graveyard,
+            self.energy,
+            self.blight,
+            self.remove_counters_among.map_or(0, |r| r.count),
+            self.exile_from_hand.map_or(0, |(k, _)| k),
+            self.permanents.map_or(0, |p| p.count),
+        ]
+        .into_iter()
+        .max()
+        .unwrap_or(0);
+        if largest == 0 { 255 } else { 255 / u32::from(largest) }
+    }
+
     /// This cost and another paid together: the parts of the same kind add (an additional cost's discard and an
     /// escalate cost's discard are discards of one choice). A card writes "{1}, {T}" as `cost("{1}").and(TAP)`.
     pub const fn and(self, other: Cost) -> Cost {
@@ -1662,6 +1680,9 @@ pub struct WayDef {
 #[derive(Clone, Copy)]
 pub struct Kicker {
     pub cost: ManaCost,
+    /// What the cost is beside mana (Squad--Exile four cards from your graveyard, CR 702.157a), paid once for each time it
+    /// is kicked, with the mana (`Cost::times`); `None` for a cost that is mana alone.
+    pub extra: Option<Cost>,
     /// Payable any number of times.
     pub multi: bool,
     /// A waterbend cost (CR 701.67a-b): as it is paid, an untapped artifact or creature may be tapped for each generic mana of
