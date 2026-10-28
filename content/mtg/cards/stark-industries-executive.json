@@ -1,0 +1,8 @@
+{
+  "name": "Stark Industries Executive",
+  "manaCost": "{R}",
+  "type": "Creature — Human Advisor",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{2}, {T}: Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}

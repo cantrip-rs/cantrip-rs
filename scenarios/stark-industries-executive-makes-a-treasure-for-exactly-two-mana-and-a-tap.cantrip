@@ -1,0 +1,39 @@
+# Stark Industries Executive: "{2}, {T}: Create a Treasure token." With only Mox Ruby's one mana on turn 3 the ability is not
+# offered; with the turn's Island too it is, paid exactly (the pool empty right after) and the Executive tapped, and a Treasure
+# token appears under Bot1's control.
+
+[Bot1 Deck]
+Stark Industries Executive
+Mox Ruby
+Island
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stark Industries Executive.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Stark Industries Executive.Activate(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Stark Industries Executive.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Stark Industries Executive.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Treasure Token.Types = Artifact
+Bot1.Battlefield.Treasure Token.Subtypes = Treasure
+Bot1.Battlefield.Stark Industries Executive.Tapped = true
+Bot1.Mana =
