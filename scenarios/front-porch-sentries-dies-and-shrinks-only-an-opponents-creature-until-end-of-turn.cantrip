@@ -1,0 +1,55 @@
+# Front Porch Sentries {1}{B} (paid exactly with Mox Jet and Mox Pearl) dies to Bot2's Lightning Bolt: "target creature an opponent
+# controls gets -1/-1 until end of turn". Bot1's own Ornithopter is not a legal target (refused), Bot2's is (and its Memnite, untouched, stays a 1/1): it is a 0/1 for the
+# rest of turn 2 and a 0/2 again on turn 3 (CR 514.2: "until end of turn" ended).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Front Porch Sentries
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Memnite
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Front Porch Sentries.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Front Porch Sentries)
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Toughness = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Memnite.Toughness = 1
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Front Porch Sentries
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Ornithopter.Toughness = 2

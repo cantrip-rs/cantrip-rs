@@ -1,0 +1,8 @@
+{
+  "name": "Front Porch Sentries",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Goblin Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature dies, target creature an opponent controls gets -1/-1 until end of turn."
+}
