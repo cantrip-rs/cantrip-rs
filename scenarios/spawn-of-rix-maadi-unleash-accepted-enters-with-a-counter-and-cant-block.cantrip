@@ -1,0 +1,36 @@
+# Spawn of Rix Maadi's unleash (CR 702.98a): Bot1 casts it on turn 1 with free mana and accepts the counter, so it enters with a +1/+1
+# counter on it - a 6/4 - and can't block as long as it has it (it keeps its printed abilities).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Spawn of Rix Maadi
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Spawn of Rix Maadi.Cast
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Spawn of Rix Maadi.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Spawn of Rix Maadi.Power = 6
+Bot1.Battlefield.Spawn of Rix Maadi.Toughness = 4
+Bot1.Battlefield.Spawn of Rix Maadi.Keywords = CantBlock
