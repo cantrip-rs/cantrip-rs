@@ -1,0 +1,55 @@
+# Tom, Bert, and William: "{1}, Sacrifice another creature: Draw cards equal to the sacrificed creature's power, then discard a card."
+# On turn 3 Bot1 gives one of its two Ornithopters (0/2) +3/+3 with Giant Growth and sacrifices it: its power as it last existed on
+# the battlefield was 3, though a card in the graveyard has power 0, so Bot1 draws exactly three cards and then discards one. Tom
+# is not among the creatures it may sacrifice (refused).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Ornithopter
+Tom, Bert, and William
+Giant Growth
+Forest
+Ornithopter
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tom, Bert, and William.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 3
+? Bot1.Hand.Count = 0
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Tom, Bert, and William.Activate
+! Bot1.Choose(Tom, Bert, and William)
+Bot1.Choose(Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp)
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Graveyard = Swamp; Ornithopter; Giant Growth; Black Lotus
+Bot1.Battlefield = Forest; Mox Emerald; Mox Jet; Ornithopter; Tom, Bert, and William

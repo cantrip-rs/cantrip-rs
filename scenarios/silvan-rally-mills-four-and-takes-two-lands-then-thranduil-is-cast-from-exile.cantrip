@@ -1,0 +1,56 @@
+# Silvan Rally (the Adventure of Thranduil, Sindarin Liege): "Mill four cards, then put up to two land cards from among them into your
+# hand." Bot1 mills a Forest, an Ornithopter, an Island and a Swamp and takes two lands, the Forest and the Island: the Ornithopter
+# and the Swamp stay in the graveyard. The card is exiled as the spell resolves (CR 715.4) and on turn 3 Bot1 casts Thranduil from
+# exile for his own mana cost.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Thranduil, Sindarin Liege
+Plains
+Plains
+Forest
+Ornithopter
+Island
+Swamp
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thranduil, Sindarin Liege.Cast(Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest; Island)
+? Bot1.Graveyard = Swamp; Ornithopter
+? Exile.Count = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Thranduil, Sindarin Liege.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Thranduil, Sindarin Liege.Power = 2
+Bot1.Hand.Count = 5
+Bot1.Hand.Forest.Colors.Count = 0
+Bot1.Hand.Island.Colors.Count = 0
+Bot1.Graveyard = Swamp; Ornithopter
+Exile.Count = 0

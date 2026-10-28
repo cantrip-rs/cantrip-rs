@@ -1,0 +1,57 @@
+# Thranduil, Sindarin Liege: "Other Elves you control get +1/+1" and "Landfall - Whenever a land you control enters, create a 1/1
+# green Elf creature token." On turn 1 Bot1 casts Thranduil (a 2/3, not pumped by himself), plays a Forest - the landfall makes an
+# Elf token, a 2/2 - and casts a Llanowar Elves with it, also a 2/2. Bot2's Llanowar Elves, an opponent's, stays a 1/1.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Thranduil, Sindarin Liege
+Forest
+Llanowar Elves
+Forest x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thranduil, Sindarin Liege.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Thranduil, Sindarin Liege.Power = 2
+Bot1.Battlefield.Thranduil, Sindarin Liege.Toughness = 3
+Bot1.Battlefield.Thranduil, Sindarin Liege.Supertypes = Legendary
+Bot1.Battlefield.Elf Token.Power = 2
+Bot1.Battlefield.Elf Token.Toughness = 2
+Bot1.Battlefield.Elf Token.Colors = Green
+Bot1.Battlefield.Llanowar Elves.Power = 2
+Bot1.Battlefield.Llanowar Elves.Toughness = 2
+Bot2.Battlefield.Llanowar Elves.Power = 1

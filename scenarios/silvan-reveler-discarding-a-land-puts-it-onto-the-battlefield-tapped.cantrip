@@ -1,0 +1,44 @@
+# Silvan Reveler: "When this creature enters, draw a card, then discard a card. If you discard a land card this way, put it from your
+# graveyard onto the battlefield tapped." Bot1 draws an Ornithopter and discards its Forest: the Forest goes to the graveyard and
+# then onto the battlefield, tapped - not as a land play (CR 305.2) - and the Ornithopter stays in hand.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Silvan Reveler
+Forest
+Swamp
+Ornithopter
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Silvan Reveler.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Choose(Forest)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Forest; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire; Silvan Reveler
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Graveyard.Count = 0
+Bot1.LandsPlayed = 0
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Hand.Count = 2

@@ -1,0 +1,58 @@
+# Tom, Bert, and William: "return them to the battlefield" names no player, so they return under the control of whoever controls the
+# ability (CR 110.2a), the player who controlled Tom as he died (CR 603.3a, 603.10a). Bot2 steals Tom with Act of Treason and then
+# destroys him with Go for the Throat: the ability is Bot2's, and he comes back as an artifact under Bot2's control, not Bot1's,
+# though Bot1 owns him.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Tom, Bert, and William
+Swamp x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Act of Treason
+Go for the Throat
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tom, Bert, and William.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Tom, Bert, and William)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Tom, Bert, and William.Power = 5
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Go for the Throat.Cast(Bot2.Battlefield.Tom, Bert, and William)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Tom, Bert, and William.Types = Artifact
+Bot1.Battlefield = Mox Emerald; Mox Jet
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard = Go for the Throat; Act of Treason; Black Lotus

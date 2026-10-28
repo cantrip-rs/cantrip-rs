@@ -1,0 +1,51 @@
+# Bolg of the North: "amass Goblins X, where X is that excess damage". Bot1 sacrifices its Grizzly Bears (power 2) and Bolg deals 2
+# to Bot2's Savannah Lions (2/1): one more than lethal, so Bot1 amasses Goblins 1 - a 1/1 Goblin Army token, not nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Emerald
+Grizzly Bears
+Bolg of the North
+Swamp x14
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bolg of the North.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Savannah Lions
+Bot1.Battlefield.Goblin Army Token.Power = 1
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 1

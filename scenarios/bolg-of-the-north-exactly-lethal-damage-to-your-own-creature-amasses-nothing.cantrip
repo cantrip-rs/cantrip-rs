@@ -1,0 +1,48 @@
+# Bolg of the North: "If excess damage was dealt this way, amass Goblins X". Bot1 sacrifices its Grizzly Bears (power 2) and the
+# only other creature there is to damage is its own Ornithopter (0/2), which may be targeted: 2 damage is exactly lethal, not more,
+# so there is no excess and Bot1 amasses nothing - no Army is created.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Emerald
+Grizzly Bears
+Ornithopter
+Bolg of the North
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bolg of the North.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Grizzly Bears; Ornithopter)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+LeftBattlefield.Count = 3
+Bot1.Graveyard = Ornithopter; Grizzly Bears; Black Lotus
+Bot1.Battlefield = Bolg of the North; Mox Emerald; Mox Jet; Mox Ruby

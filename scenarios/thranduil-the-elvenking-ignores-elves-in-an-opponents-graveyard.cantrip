@@ -1,0 +1,50 @@
+# Thranduil, the Elvenking: "all Elf cards in YOUR graveyard". Bot2 discards a Llanowar Elves to its own Faithless Looting on turn
+# 2 and Bot1 has no Elf card in its graveyard: Thranduil has no ability to tap for mana (refused). Bot1's Lotus, a non-Elf card,
+# gives nothing either.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Thranduil, the Elvenking
+Llanowar Elves
+Faithless Looting
+Mox Ruby
+Iron-Shield Elf
+Swamp x13
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Llanowar Elves
+Swamp
+Swamp x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thranduil, the Elvenking.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Llanowar Elves; Swamp)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Thranduil, the Elvenking.Activate
+
+[Expect]
+Bot2.Graveyard.Llanowar Elves.Subtypes = Druid; Elf
+Bot1.Graveyard = Black Lotus

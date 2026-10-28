@@ -1,0 +1,42 @@
+# Silvan Rally: "up to two" includes none. Bot1 mills a Forest, an Island, a Plains and a Swamp - four lands - and takes none of them:
+# all four are in the graveyard, and the hand has only what it had.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Thranduil, Sindarin Liege
+Plains
+Plains
+Forest
+Island
+Plains
+Swamp
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thranduil, Sindarin Liege.Cast(Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Graveyard.Count = 4
+? Exile.Count = 1
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Graveyard.Count = 4

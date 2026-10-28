@@ -1,0 +1,40 @@
+# Silvan Reveler: "If you discard a land card this way, put it ... onto the battlefield." Bot1 draws an Ornithopter and discards it,
+# a nonland card, with a Forest in hand: nothing is put onto the battlefield and the Ornithopter stays in the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Silvan Reveler
+Forest
+Swamp
+Ornithopter
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Silvan Reveler.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire; Silvan Reveler
+Bot1.Graveyard = Ornithopter
+Bot1.Hand.Count = 2

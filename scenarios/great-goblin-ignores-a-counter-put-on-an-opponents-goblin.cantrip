@@ -1,0 +1,55 @@
+# The Great Goblin: "Whenever you put one or more counters on a Goblin, Orc, or Army you control, The Great Goblin deals 2 damage to
+# target opponent." A Duskwatch Hunter puts its counter on Bot2's Goblin Assailant, a Goblin Bot1 does not control: nothing triggers.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+The Great Goblin
+Duskwatch Hunter
+Ornithopter
+Swamp x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Goblin Assailant
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Great Goblin.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Goblin Assailant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Duskwatch Hunter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Goblin Assailant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Goblin Assailant.Counters.PlusOnePlusOne = 1

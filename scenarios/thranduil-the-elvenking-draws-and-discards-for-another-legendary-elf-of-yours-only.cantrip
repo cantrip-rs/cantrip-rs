@@ -1,0 +1,61 @@
+# Thranduil, the Elvenking: "Whenever another legendary Elf you control enters, draw two cards, then discard a card." Bot2's own
+# Marwyn, the Clearcutter entering on turn 2 (a legendary Elf, but an opponent's) does nothing for Bot1; on turn 3 Bot1's Llanowar
+# Elves (an Elf, not legendary) does nothing either, but its Marwyn, the Clearcutter does: two cards drawn, one discarded. Thranduil
+# entering on turn 1 triggered nothing: "another".
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Thranduil, the Elvenking
+Mox Ruby
+Marwyn, the Clearcutter
+Llanowar Elves
+Swamp x13
+
+[Bot2 Deck]
+Mox Ruby
+Marwyn, the Clearcutter
+Swamp x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thranduil, the Elvenking.Cast
+Bot1.Pass
+? Bot1.Library.Count = 13
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Marwyn, the Clearcutter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 12
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 12
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Marwyn, the Clearcutter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp)
+
+[Expect]
+Bot1.Library.Count = 10
+Bot1.Graveyard = Swamp; Black Lotus
+Bot1.Hand.Count = 2

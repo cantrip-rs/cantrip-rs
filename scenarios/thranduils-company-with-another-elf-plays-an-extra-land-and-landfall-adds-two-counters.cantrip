@@ -1,0 +1,62 @@
+# Thranduil's Company: "As long as you control another Elf, you may play an additional land on each of your turns" and "Landfall -
+# Whenever a land you control enters, put two +1/+1 counters on target creature you control. It gains vigilance until end of turn."
+# Bot1 controls the Company and a Llanowar Elves, another Elf. On turn 3 it plays a Swamp, a Plains - the extra land - and not a
+# third land (refused). Each land triggers the landfall: the first puts two counters on the Elves (Bot2's Ornithopter is not a legal
+# target, refused), a 3/3 with vigilance until the end of the turn; the second two on the Company, a 5/6. Vigilance is gone on turn 4.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Sapphire
+Llanowar Elves
+Thranduil's Company
+Swamp
+Plains
+Island
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thranduil's Company.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 3
+? Bot1.Battlefield.Llanowar Elves.Toughness = 3
+? Bot1.Battlefield.Llanowar Elves.Keywords = Vigilance
+? Bot1.Battlefield.Thranduil's Company.Power = 3
+Bot1.Hand.Plains.Play
+Bot1.Target(Thranduil's Company)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+
+[Expect]
+Bot1.LandsPlayed = 2
+Bot1.Battlefield.Thranduil's Company.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Thranduil's Company.Power = 5
+Bot1.Battlefield.Thranduil's Company.Toughness = 6
+Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Llanowar Elves.Power = 3

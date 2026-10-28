@@ -1,0 +1,43 @@
+# Silvan Rally: "put up to two land cards from among them into your hand" - fewer than two is allowed. Bot1 mills an Ornithopter, a
+# Forest and two more Ornithopters: the Forest is the one land among them, and Bot1 takes it. The other three stay in the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Thranduil, Sindarin Liege
+Plains
+Plains
+Ornithopter
+Forest
+Ornithopter
+Ornithopter
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Thranduil, Sindarin Liege.Cast(Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+? Bot1.Graveyard = Ornithopter; Ornithopter; Ornithopter
+? Exile.Count = 1
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Hand.Forest.Colors.Count = 0
+Bot1.Graveyard = Ornithopter; Ornithopter; Ornithopter

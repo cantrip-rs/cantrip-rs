@@ -1,0 +1,53 @@
+# Thranduil, the Elvenking has the activated abilities of every Elf card in your graveyard, a non-mana one too: with an Iron-Shield
+# Elf there ("Discard a card: This creature gains indestructible until end of turn. Tap it.") Bot1 discards a Swamp and "this
+# creature" is Thranduil, who gains indestructible and becomes tapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Thranduil, the Elvenking
+Llanowar Elves
+Faithless Looting
+Mox Ruby
+Iron-Shield Elf
+Swamp x13
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Llanowar Elves
+Swamp
+Swamp x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thranduil, the Elvenking.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Llanowar Elves; Iron-Shield Elf)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Thranduil, the Elvenking.Activate(Ability: Discard)
+Bot1.Choose(Swamp)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Thranduil, the Elvenking.Keywords = Indestructible
+Bot1.Battlefield.Thranduil, the Elvenking.Tapped = true
+Bot1.Graveyard.Count = 5

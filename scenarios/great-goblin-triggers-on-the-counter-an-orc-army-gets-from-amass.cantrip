@@ -1,0 +1,43 @@
+# The Great Goblin: "Whenever you put one or more counters on a Goblin, Orc, or Army you control, The Great Goblin deals 2 damage to
+# target opponent." On turn 3 Bot1 casts an Orcish Bowmasters: it deals 1 damage to Bot2 and amasses Orcs 1, putting a +1/+1 counter
+# on a new Orc Army token - an Orc, and an Army - which triggers the Great Goblin for 2 more. Bot2 is at 17.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+The Great Goblin
+Orcish Bowmasters
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Great Goblin.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Orcish Bowmasters.Cast
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Orc Army Token.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Orc Army Token.Subtypes = Army; Orc

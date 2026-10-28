@@ -1,0 +1,52 @@
+# Thranduil, the Elvenking: "Thranduil has all activated abilities of all Elf cards in your graveyard." Bot1 casts Thranduil on turn 1
+# and on turn 3 discards a Llanowar Elves and an Iron-Shield Elf to Faithless Looting: Thranduil has "{T}: Add {G}" and taps for {G}.
+# Before the discard he has no such ability: the refusal at the start of the turn shows it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Thranduil, the Elvenking
+Llanowar Elves
+Faithless Looting
+Mox Ruby
+Iron-Shield Elf
+Swamp x13
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Llanowar Elves
+Swamp
+Swamp x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thranduil, the Elvenking.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Thranduil, the Elvenking.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Llanowar Elves; Iron-Shield Elf)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Thranduil, the Elvenking.Activate(Ability: Add)
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Mana = {G}
+Bot1.Battlefield.Thranduil, the Elvenking.Tapped = true
+Bot1.Graveyard.Count = 4

@@ -1,0 +1,44 @@
+# Thranduil's Company: the extra land play needs "another Elf" that Bot1 controls. Bot2 controls a Llanowar Elves, which does not count,
+# and the Company is not another Elf than itself: on turn 3 Bot1 plays its one land, a Swamp (landfall puts two counters on the
+# Company, the only creature it may target - Bot2's Elves is not legal), and may not play a second land, a Plains (refused).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Sapphire
+Thranduil's Company
+Swamp
+Plains
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thranduil's Company.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Plains.Play
+
+[Expect]
+Bot1.LandsPlayed = 1
+Bot1.Battlefield.Thranduil's Company.Counters.PlusOnePlusOne = 2
+Bot1.Hand.Plains.Colors.Count = 0

@@ -1,0 +1,62 @@
+# The Great Goblin: "Whenever another Goblin, Orc, or Army you control dies, exile the top card of your library. You may play it until
+# the end of your next turn." Bot2 kills Bot1's Goblin Assailant with Lightning Bolt on turn 2: the top card of Bot1's library, a
+# Forest, is exiled, and on turn 3 Bot1 plays it from exile as its land for the turn. On turn 4 Bot2 kills the Great Goblin itself:
+# "another" - nothing is exiled.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+The Great Goblin
+Goblin Assailant
+Swamp
+Swamp
+Forest
+Swamp x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Great Goblin.Cast
+Bot1.Pass
+Bot1.Hand.Goblin Assailant.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goblin Assailant)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Exile.Count = 1
+[T3 Bot1.Main1]
+Bot1.Exile.Forest.Play
+? Exile.Count = 0
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.The Great Goblin)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = Forest; Mox Jet; Mox Ruby
+Bot1.Graveyard = The Great Goblin; Goblin Assailant; Black Lotus

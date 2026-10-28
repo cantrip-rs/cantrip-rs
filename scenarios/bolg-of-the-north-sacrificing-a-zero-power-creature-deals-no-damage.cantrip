@@ -1,0 +1,47 @@
+# Bolg of the North: "When you do, Bolg deals damage equal to that creature's power to another target creature." Bot1 sacrifices
+# its Ornithopter (0/2) and the reflexive ability targets the only other creature, its Grizzly Bears: a power of 0 is no damage,
+# so the Bears are left with none marked, and with no excess Bot1 amasses nothing - no Army is created.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Emerald
+Grizzly Bears
+Ornithopter
+Bolg of the North
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bolg of the North.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Graveyard = Ornithopter; Black Lotus
+Bot1.Battlefield = Bolg of the North; Grizzly Bears; Mox Emerald; Mox Jet; Mox Ruby

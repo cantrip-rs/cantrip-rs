@@ -1,0 +1,78 @@
+# Bolg of the North: "When Bolg enters, you may sacrifice another creature. When you do, Bolg deals damage equal to that creature's
+# power to another target creature. If excess damage was dealt this way, amass Goblins X, where X is that excess damage." With the
+# ability on the stack Bot1 gives its Alpine Grizzly (4/2) +3/+3 with Giant Growth, then sacrifices it: its power as it last existed
+# is 7, so Bolg deals 7 to Bot2's Grizzly Bears (2/2), 5 more than lethal, and Bot1 amasses Goblins 5: a 5/5 Goblin Army token.
+# Bolg himself is no legal target (refused) while Bot2's Ornithopter and Bears are.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Ruby
+Alpine Grizzly
+Bolg of the North
+Giant Growth
+Swamp x13
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Ornithopter
+Island
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bolg of the North.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Alpine Grizzly)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Alpine Grizzly.Power = 7
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Alpine Grizzly)
+! Bot1.Target(Bolg of the North)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Alpine Grizzly; Giant Growth; Black Lotus
+Bot2.Graveyard = Grizzly Bears
+Bot2.Battlefield = Forest; Mox Emerald; Ornithopter
+Bot1.Battlefield.Goblin Army Token.Power = 5
+Bot1.Battlefield.Goblin Army Token.Toughness = 5
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
+Bot1.Battlefield.Bolg of the North.Damage = 0

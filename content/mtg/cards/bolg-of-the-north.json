@@ -1,0 +1,8 @@
+{
+  "name": "Bolg of the North",
+  "manaCost": "{3}{B}{R}",
+  "type": "Legendary Creature — Goblin Soldier",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "When Bolg enters, you may sacrifice another creature. When you do, Bolg deals damage equal to that creature's power to another target creature. If excess damage was dealt this way, amass Goblins X, where X is that excess damage. (Put X +1/+1 counters on an Army you control. It's also a Goblin. If you don't control an Army, create a 0/0 black Goblin Army creature token first.)"
+}
