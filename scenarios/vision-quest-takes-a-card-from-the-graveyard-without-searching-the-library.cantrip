@@ -1,0 +1,59 @@
+# Vision Quest with X = 2: "library and/or graveyard". Wheel of Fortune puts Bronze Sable (2), Darksteel Myr (3) and Darksteel Sentinel (6)
+# in the graveyard. Bot1 declines to search the library, so it is not shuffled (CR 701.23: no library search, no shuffle) and keeps its
+# order. The Myr and the Sentinel are past X and not on offer, so Bronze Sable (2/1), the one card that fits, comes back with two
+# counters (4/3) and no haste, as X is under 4, without being asked.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Wheel of Fortune
+Bronze Sable
+Darksteel Myr
+Darksteel Sentinel
+Vision Quest
+Mox Ruby
+Mox Pearl
+Plains x4
+Island
+Swamp
+Forest
+Mountain
+Sol Ring
+Mox Emerald
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Vision Quest.Cast(X: 2)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Bronze Sable.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Bronze Sable.Power = 4
+Bot1.Battlefield.Bronze Sable.Toughness = 3
+Bot1.Battlefield.Bronze Sable.Keywords = (absent)
+Bot1.Graveyard = Vision Quest; Wheel of Fortune; Darksteel Sentinel; Darksteel Myr; Black Lotus
+Bot1.Library = Island; Swamp; Forest; Mountain; Sol Ring; Mox Emerald

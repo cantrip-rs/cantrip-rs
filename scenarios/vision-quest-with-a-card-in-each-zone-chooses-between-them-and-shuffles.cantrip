@@ -1,0 +1,57 @@
+# Vision Quest with X = 2: Bot1 searches the library, where Alpha Myr (2) waits, and the graveyard also has Bronze Sable (2) from Wheel of
+# Fortune. Both are looked at and Bot1 takes Bronze Sable from the graveyard (2/1 with two counters, 4/3), so Alpha Myr stays; since the
+# library was searched it is shuffled, so its order is no longer the one the deck gave (CR 701.23, 122.6).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Wheel of Fortune
+Bronze Sable
+Plains x2
+Vision Quest
+Mox Ruby
+Mox Pearl
+Plains x4
+Island
+Swamp
+Forest
+Mountain
+Sol Ring
+Alpha Myr
+Mox Emerald
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Vision Quest.Cast(X: 2)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Accept
+Bot1.Search(Alpha Myr)
+Bot1.Choose(Bronze Sable)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Bronze Sable.Power = 4
+Bot1.Battlefield.Bronze Sable.Toughness = 3
+Bot1.Library = Forest; Alpha Myr; Mountain; Swamp; Mox Emerald; Island; Sol Ring

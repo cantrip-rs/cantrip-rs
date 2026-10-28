@@ -1,0 +1,48 @@
+# Vision Quest with X = 4: Bot1 searches the library for an artifact creature card with mana value 4 or less. Darksteel Sentinel (6) is
+# refused, Darksteel Myr (3) is found. It enters with four additional +1/+1 counters (a 0/1 becomes 4/5) and, as X is 4, has haste
+# until end of turn (CR 701.23, 122.6, 702.10).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Vision Quest
+Plains x2
+Darksteel Sentinel
+Darksteel Myr
+Plains x20
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Vision Quest.Cast(X: 4)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Accept
+! Bot1.Search(Darksteel Sentinel)
+Bot1.Search(Darksteel Myr)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Darksteel Myr; Mox Jet; Mox Pearl; Mox Sapphire
+Bot1.Battlefield.Darksteel Myr.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Darksteel Myr.Power = 4
+Bot1.Battlefield.Darksteel Myr.Toughness = 5
+Bot1.Battlefield.Darksteel Myr.Tapped = false
+Bot1.Battlefield.Darksteel Myr.Keywords = Haste; Indestructible
+Bot1.Graveyard = Vision Quest; Black Lotus
+Bot1.Library.Darksteel Sentinel.Power = 3
