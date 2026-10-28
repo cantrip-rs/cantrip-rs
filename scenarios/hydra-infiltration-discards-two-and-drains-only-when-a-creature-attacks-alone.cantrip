@@ -1,0 +1,55 @@
+# HYDRA Infiltration: when it enters, target opponent discards two cards (CR 701.9); whenever a creature you control attacks alone,
+# target opponent loses 1 life and you gain 1 life (CR 506.5). Turn 3 Savannah Lions attacks alone: 2 combat damage plus the drain.
+# Turn 5 both Lions attack together: only combat damage (4), no drain.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+HYDRA Infiltration
+Savannah Lions
+Savannah Lions
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.HYDRA Infiltration.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot2.Choose(Island#1; Island#2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Savannah Lions > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Attack(Savannah Lions#1 > Bot2; Savannah Lions#2 > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Life = 21
+Bot2.Graveyard = Island; Island

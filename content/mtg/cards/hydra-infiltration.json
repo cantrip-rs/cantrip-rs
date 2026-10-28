@@ -1,0 +1,6 @@
+{
+  "name": "HYDRA Infiltration",
+  "manaCost": "{3}{B}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, target opponent discards two cards.\nWhenever a creature you control attacks alone, target opponent loses 1 life and you gain 1 life."
+}
