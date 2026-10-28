@@ -716,6 +716,9 @@ impl<'a> Projector<'a> {
                 EffectKind::PlayerProtectionFromEverything if e.controller == p => format!("{you} have protection from everything"),
                 EffectKind::PlayerHexproof if e.controller == p => format!("{you} have hexproof"),
                 EffectKind::CantActivatePowerUp => "Power-up abilities can't be activated".to_string(),
+                EffectKind::CreaturesAssignDamageByToughness if e.controller == p => {
+                    format!("{} creatures with toughness greater than power assign combat damage equal to toughness", if p == self.viewer { "Your" } else { "Their" })
+                }
                 EffectKind::LifeTotalCantChange(q) if q == p => {
                     format!("{} life total can't change", if p == self.viewer { "Your" } else { "Their" })
                 }
