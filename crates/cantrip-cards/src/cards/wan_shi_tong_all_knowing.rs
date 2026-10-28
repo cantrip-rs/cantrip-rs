@@ -1,15 +1,12 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, targets, tokens, triggers::THIS_ENTERS};
+use cantrip_mechanics::{effects, targets, tokens, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
-/// Target nonland permanent's owner puts it into their library second from the top or on the bottom: their choice.
+/// "Target nonland permanent's owner puts it into their library second from the top or on the bottom": nothing if the target is
+/// no longer legal (CR 608.2b).
 fn put_into_library(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(permanent) = targets::object(g, item, 0) else { return Ok(()) };
-    let owner = g.obj(permanent).owner;
-    let card = g.obj(item.object).card;
-    let second_from_top = choose::one_of(g, owner, item.object, vec![Label::Card(card, 0), Label::Card(card, 1)])? == 0;
-    g.put_into_library(&[permanent], if second_from_top { LibraryPlace::FromTop(1) } else { LibraryPlace::Bottom });
-    Ok(())
+    effects::owner_puts_into_library_second_from_top_or_on_the_bottom(g, item, permanent)
 }
 
 /// "Whenever one or more cards are put into a library from anywhere" (CR 603.2c): cards, not tokens, and not moved within a

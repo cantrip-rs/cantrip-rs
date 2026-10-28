@@ -629,6 +629,18 @@ pub fn untap_targets(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     Ok(())
 }
 
+/// "The owner of [a permanent] puts it into their library second from the top or on the bottom" (CR 401.4, 400.3): its owner,
+/// not the ability's controller, chooses which, and it moves as it stands on the battlefield. The card lists the two options
+/// in its `labels`, "Second from the top" first and "On the bottom" second. Wan Shi Tong, All-Knowing and Trickster's
+/// Stratagem print it.
+pub fn owner_puts_into_library_second_from_top_or_on_the_bottom(g: &mut dyn Game, item: &StackItem, permanent: ObjectId) -> Result<(), Suspend> {
+    let owner = g.obj(permanent).owner;
+    let card = g.obj(item.object).card;
+    let second_from_top = crate::choose::one_of(g, owner, item.object, vec![Label::Card(card, 0), Label::Card(card, 1)])? == 0;
+    g.put_into_library(&[permanent], if second_from_top { LibraryPlace::FromTop(1) } else { LibraryPlace::Bottom });
+    Ok(())
+}
+
 /// "You may [do something]" (CR 117.3, 609.3): asks `player` whether to, for `purpose`, and says whether they did. The
 /// question is the usual `May`, so a scenario answers it with `Accept` or `Decline`. Ad Nauseam, Cori-Steel Cutter and Currency Converter ask
 /// it.
