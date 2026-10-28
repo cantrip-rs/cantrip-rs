@@ -203,6 +203,14 @@ pub fn plus_one_counter_on_each_other_of_subtype_you_control<const SUBTYPE: u16>
     Ok(())
 }
 
+/// "Put two +1/+1 counters on target [permanent]" (CR 122.1a, 608.2b), the first target still legal on resolution. The whole
+/// effect of the sacrifice ability of Elvenking's Halls, Goblin-town, Iron Hills, Lake-town and Mirkwood (`lands::sacrifice_for_two_counters`).
+pub fn two_plus_one_counters_on_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(object) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.add_counters(object, CounterKind::PlusOne, 2);
+    Ok(())
+}
+
 /// "Put a +1/+1 counter on [this permanent]" (CR 122.1), the ability's source: none once it has left the battlefield, as a
 /// new object it is another (CR 400.7). The whole effect of a trigger or ability of Essence Channeler, Ajani Resolute's
 /// Ajani's Pridemate token, Leonardo, Cutting Edge, Blood Hustler, Cryptic Trilobite, Gau, Feral Youth, Hired Claw, Ivora,

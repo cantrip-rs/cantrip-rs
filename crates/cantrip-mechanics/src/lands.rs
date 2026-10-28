@@ -257,7 +257,7 @@ pub const FETCH_BASIC_TO_TOP: Question = Question::new(
 
 /// "Search your library for a basic land card, reveal it, then shuffle and put that card on top" (CR 701.23, 701.20): the
 /// player finding one or none; the card is revealed while it is still in the library and, the library shuffled, placed on top
-/// (it never changes zones). Fountainport Bell is the only printed card with this exact recipe so far; it is kept beside its
+/// (it never changes zones). Fountainport Bell and Old Thrush print this exact recipe; it is kept beside its
 /// hand and battlefield siblings (`search_basic_land_to_hand`, `search_basic_land_to_battlefield`) so the basic-land predicate and
 /// the question wording are the shared ones, and `library::search_to_top` is shared with Enlightened Tutor and Mystical Tutor.
 pub fn search_basic_land_to_top(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<(), Suspend> {
@@ -266,7 +266,7 @@ pub fn search_basic_land_to_top(g: &mut dyn Game, player: PlayerId, source: Obje
 }
 
 /// "You may search your library for a basic land card, reveal it, then shuffle and put that card on top": asked first whether
-/// to, and declining skips the search and the shuffle (CR 701.23). Fountainport Bell's enters trigger.
+/// to, and declining skips the search and the shuffle (CR 701.23). Fountainport Bell's and Old Thrush's enters triggers.
 pub fn may_search_basic_land_to_top(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<(), Suspend> {
     if !ask_may_search(g, player, source, &FETCH_BASIC_TO_TOP)? {
         return Ok(());
@@ -344,6 +344,14 @@ pub const fn fetch_three_basic_types<const A: u16, const B2: u16, const C: u16>(
 /// text.
 pub const fn fetch_basic_land(text: &'static str) -> AbilityDef {
     ability(TAP.and(SACRIFICE_THIS).and(life(1)), fetch_basic, text)
+}
+
+/// The Hobbit cycle's second ability: "{2}{A}{B}, {T}, Sacrifice this land: Put two +1/+1 counters on target [creature type] you
+/// control. Activate only as a sorcery." (CR 602.5d, 122.1): `cost` is "{2}{A}{B}, {T}" and `target` the one target slot (the
+/// creature types the land names, read through its words, CR 612). The counters go on the target if it is still legal as the
+/// ability resolves, the sacrifice being a cost. Elvenking's Halls, Goblin-town, Iron Hills, Lake-town and Mirkwood print it.
+pub const fn sacrifice_for_two_counters(cost_text: &'static str, target: &'static [TargetSpec], text: &'static str) -> AbilityDef {
+    ability(cost(cost_text).and(SACRIFICE_THIS), effects::two_plus_one_counters_on_target, text).sorcery_speed().targets(target)
 }
 
 /// The triomes' "Cycling {3}" (CR 702.29): with `enters: Some(mana::enters_tapped)` and its three basic land types, a
