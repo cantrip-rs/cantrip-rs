@@ -878,6 +878,25 @@ pub fn damage_that_player(g: &mut dyn Game, item: &StackItem, n: u16) -> Result<
     Ok(())
 }
 
+/// "Remove all counters from `permanent`" (CR 122.1, 122.8): every kind it has, all of each. Vampire Hexmage (a target) and
+/// Enchanted River's Grasp (the enchanted creature) print it.
+pub fn remove_all_counters(g: &mut dyn Game, permanent: ObjectId) {
+    for kind in CounterKind::ALL {
+        let n = g.obj(permanent).counters(kind);
+        g.remove_counters(permanent, kind, n);
+    }
+}
+
+/// "Target creature can't be blocked this turn" (CR 509.1b, 611.2): the ability's first target, if it is still a legal target
+/// as the ability resolves (CR 608.2b). An effect on the creature, not an ability it gains (CR 113.1a). Elvenking's Harper,
+/// Manifold Key, Eardrum Rattler and Escape Tunnel print it.
+pub fn target_creature_cant_be_blocked_this_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        g.add_effect(item.object, creature, EffectKind::CantBeBlocked, Duration::EndOfTurn);
+    }
+    Ok(())
+}
+
 /// "`target` gains hexproof until end of turn" (CR 702.11b, 611.2a): a layer 6 keyword for the rest of the turn, from the
 /// effect's source. Liliana the Faultless, Octopus Form, Shore Up and Snakeskin Veil print it.
 pub fn gain_hexproof_until_end_of_turn(g: &mut dyn Game, source: ObjectId, target: ObjectId) {

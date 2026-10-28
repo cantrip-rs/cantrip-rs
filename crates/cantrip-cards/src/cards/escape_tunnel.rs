@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{effects, targets};
 use cantrip_mechanics::library::{search_to_battlefield, Find};
 use cantrip_oracle as oracle;
 
@@ -18,18 +18,10 @@ fn power_two_or_less(q: &dyn Query, _: &Asker, t: Target) -> bool {
         && q.chars(id).is(CardType::Creature) && q.chars(id).power.is_some_and(|p| p <= 2))
 }
 
-/// The creature can't be blocked this turn (CR 509.1b, 611.2).
-fn cant_be_blocked(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        g.add_effect(item.object, creature, EffectKind::CantBeBlocked, Duration::EndOfTurn);
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         ability(TAP.and(SACRIFICE_THIS), search, "{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle."),
-        ability(TAP.and(SACRIFICE_THIS), cant_be_blocked, "{T}, Sacrifice this land: Target creature with power 2 or less can't be blocked this turn.")
+        ability(TAP.and(SACRIFICE_THIS), effects::target_creature_cant_be_blocked_this_turn, "{T}, Sacrifice this land: Target creature with power 2 or less can't be blocked this turn.")
             .targets(&[target(power_two_or_less)]),
     ],
     ..oracle::ESCAPE_TUNNEL

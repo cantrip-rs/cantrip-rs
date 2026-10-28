@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{effects, targets};
 use cantrip_oracle as oracle;
 
 /// "Remove all counters from target permanent": every kind it has, all of each (CR 122.1, 122.8), from a permanent that is
@@ -7,10 +7,7 @@ use cantrip_oracle as oracle;
 /// ruling).
 fn remove_all_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(permanent) = targets::object(g, item, 0) else { return Ok(()) };
-    for kind in CounterKind::ALL {
-        let n = g.obj(permanent).counters(kind);
-        g.remove_counters(permanent, kind, n);
-    }
+    effects::remove_all_counters(g, permanent);
     Ok(())
 }
 

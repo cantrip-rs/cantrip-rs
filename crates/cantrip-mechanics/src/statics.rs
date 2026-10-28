@@ -155,6 +155,13 @@ pub fn does_not_untap(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = chars.keywords.with(Keyword::DoesNotUntap);
 }
 
+/// "Enchanted creature doesn't untap during its controller's untap step" (CR 502.3) as a `CardDef::untap_bans` entry: a rule of
+/// the Aura's (or the Equipment's), not an ability of the permanent it is attached to (CR 113.1a), so the permanent losing all
+/// its abilities leaves it in force (CR 613.1f). Infinite Coursework and Enchanted River's Grasp print it.
+pub fn attached_permanent_doesnt_untap(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
+    q.obj(asker.source).attached_to == Some(id)
+}
+
 /// "... has flying" (CR 702.9, layer 6) as a static ability's `StaticDef::apply`. Dragon's Rage Channeler's delirium and Iron
 /// Man Armor's equipped creature print it.
 pub fn have_flying(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
