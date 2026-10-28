@@ -1,0 +1,100 @@
+# Myriad (CR 702.116a) with Doubling Season (CR 614.1a) in a four-player game: Bot1 chooses for Bot3 and Bot4 what a token attacks, each
+# is doubled, and Bot1 chooses separately for the second token of each (the ruling). Bot3 has no planeswalker; Bot4's Liliana of the Veil
+# (loyalty 3) is the first token's pre-chosen target, so only Bot4's second token is asked, and attacks Bot4. Bot2 and Bot3 take
+# the Patrol's 1 and the two tokens' 2 (Bot3), Bot4 takes 1 and Liliana goes to 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Doubling Season
+Wyrm's Crossing Patrol
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Bot4 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Liliana of the Veil
+Swamp x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Doubling Season.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wyrm's Crossing Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Pass
+[T4 Bot4.Main1]
+Bot4.Hand.Swamp.Play
+Bot4.Hand.Mox Jet.Cast
+Bot4.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Hand.Mox Ruby.Cast
+Bot4.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Battlefield.Swamp.Activate
+Bot4.Battlefield.Mox Jet.Activate
+Bot4.Battlefield.Mox Ruby.Activate
+Bot4.Hand.Liliana of the Veil.Cast
+Bot4.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Wyrm's Crossing Patrol > Bot2)
+Bot1.Target(Bot3)
+Bot1.Target(Bot4.Battlefield.Liliana of the Veil)
+Bot1.Target(Bot4)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot4.Pass
+? Combat.Attackers = Wyrm's Crossing Patrol > Bot2; Wyrm's Crossing Patrol > Bot3; Wyrm's Crossing Patrol > Bot3; Wyrm's Crossing Patrol > Liliana of the Veil; Wyrm's Crossing Patrol > Bot4
+[T5 Bot1.Main2]
+? Bot4.Battlefield.Liliana of the Veil.Counters.Loyalty = 2
+? Bot2.Life = 19
+? Bot3.Life = 18
+? Bot4.Life = 19
+
+[Expect]
+Exile.Count = 0
