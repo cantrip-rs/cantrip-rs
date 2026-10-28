@@ -1,0 +1,38 @@
+# Mek'leth Berserker (4/3 menace), cast with Black Lotus and Mox Ruby, its characteristics as printed. Attacking in turn 3 it
+# can't be blocked except by two or more creatures (CR 702.111b): Bot2's lone Memnite may not block it, and Bot2 takes 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mek'leth Berserker
+Mountain x20
+
+[Bot2 Deck]
+Memnite
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mek'leth Berserker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mek'leth Berserker.Power = 4
+? Bot1.Battlefield.Mek'leth Berserker.Toughness = 3
+? Bot1.Battlefield.Mek'leth Berserker.Keywords = Menace
+? Bot1.Battlefield.Mek'leth Berserker.Colors = Red
+? Bot1.Battlefield.Mek'leth Berserker.Types = Creature
+? Bot1.Battlefield.Mek'leth Berserker.Subtypes = Berserker; Klingon
+? Bot1.Battlefield.Mek'leth Berserker.Supertypes = (absent)
+? Bot1.Battlefield.Mek'leth Berserker.ProtectionFrom = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Mek'leth Berserker > Bot2)
+! Bot2.Block(Memnite > Mek'leth Berserker)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
