@@ -1,0 +1,12 @@
+{
+  "name": "Stirring Hopesinger",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Bird Bard",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying, lifelink\nRepartee — Whenever you cast an instant or sorcery spell that targets a creature, put a +1/+1 counter on each creature you control.",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}

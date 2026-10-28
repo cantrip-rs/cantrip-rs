@@ -1,0 +1,44 @@
+# Stirring Hopesinger: a Lightning Bolt at Bot2's Ornithopter puts a +1/+1 counter on each creature Bot1 controls -- the
+# Hopesinger and Bot1's own Ornithopter -- while Bot2's other creature (a second Ornithopter) takes none.
+
+[Bot1 Deck]
+Plains x3
+Mountain
+Ornithopter
+Stirring Hopesinger
+Lightning Bolt
+Plains x14
+
+[Bot2 Deck]
+Ornithopter x2
+Mountain x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Stirring Hopesinger.Cast
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter#1)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Stirring Hopesinger.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Stirring Hopesinger.Power = 2
+Bot1.Battlefield.Stirring Hopesinger.Toughness = 4
+Bot1.Battlefield.Stirring Hopesinger.Keywords = Flying; Lifelink
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield = Mountain; Ornithopter
