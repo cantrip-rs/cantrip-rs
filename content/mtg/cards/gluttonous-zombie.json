@@ -1,0 +1,11 @@
+{
+  "name": "Gluttonous Zombie",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Zombie",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Fear (This creature can't be blocked except by artifact creatures and/or black creatures.)",
+  "keywords": [
+    "Fear"
+  ]
+}
