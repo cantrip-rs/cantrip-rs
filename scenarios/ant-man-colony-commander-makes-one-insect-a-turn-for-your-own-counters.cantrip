@@ -1,0 +1,68 @@
+# Ant-Man, Colony Commander: "Whenever you put a +1/+1 counter on a creature, create a 1/1 green Insect creature token. This ability
+# triggers only once each turn." On turn 3 Bot1's first Go Nuts! on Ant-Man makes one Insect (Ant-Man 3/3); the second the same turn
+# makes none (4/4, still one Insect). Bot2's Go Nuts! on Ant-Man on turn 4 is not "you" putting it: no Insect (5/5).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Ant-Man, Colony Commander
+Go Nuts!
+Go Nuts!
+Forest x10
+
+[Bot2 Deck]
+Forest
+Go Nuts!
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ant-Man, Colony Commander.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Go Nuts!.Cast
+Bot1.Modes(Cast without teamwork)
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Ant-Man, Colony Commander)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ant-Man, Colony Commander.Power = 3
+? Bot1.Battlefield.Insect Token.Power = 1
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Go Nuts!.Cast
+Bot1.Modes(Cast without teamwork)
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Ant-Man, Colony Commander)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ant-Man, Colony Commander.Power = 4
+? Bot1.Battlefield.Insect Token#2 = (absent)
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Go Nuts!.Cast
+Bot2.Modes(Cast without teamwork)
+Bot2.Modes(1)
+Bot2.Target(Bot1.Battlefield.Ant-Man, Colony Commander)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Ant-Man, Colony Commander.Power = 5
+Bot1.Battlefield.Insect Token#2 = (absent)

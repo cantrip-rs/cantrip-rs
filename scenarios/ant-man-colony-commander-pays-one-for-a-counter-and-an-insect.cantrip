@@ -1,0 +1,55 @@
+# Ant-Man, Colony Commander: whenever he attacks, Bot1 may pay {1}, and when it does, puts a +1/+1 counter on target creature; the counter
+# Bot1 put triggers the second ability, a 1/1 green Insect. Turn 3: Bot1 pays with Mox Jet and puts the counter on Ant-Man (3/3), and
+# gets an Insect; Bot2 takes 3 (to 17). Turn 5: Bot1 declines, so there is no counter and no Insect.
+
+[Bot1 Deck]
+Ant-Man, Colony Commander
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ant-Man, Colony Commander.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ant-Man, Colony Commander > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ant-Man, Colony Commander.Power = 3
+? Bot1.Battlefield.Insect Token.Power = 1
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+Bot1.Attack(Ant-Man, Colony Commander > Bot2)
+Bot1.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Ant-Man, Colony Commander.Power = 3
+Bot1.Battlefield.Insect Token.Colors = Green
+Bot1.Battlefield.Insect Token.Subtypes = Insect
+Bot1.Battlefield.Insect Token#2 = (absent)
+Bot1.Battlefield.Insect Token.Toughness = 1
