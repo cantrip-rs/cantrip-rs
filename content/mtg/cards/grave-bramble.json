@@ -1,0 +1,11 @@
+{
+  "name": "Grave Bramble",
+  "manaCost": "{1}{G}{G}",
+  "type": "Creature — Plant",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Defender, protection from Zombies",
+  "keywords": [
+    "Defender"
+  ]
+}

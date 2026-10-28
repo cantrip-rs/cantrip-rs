@@ -1,0 +1,64 @@
+# Grave Bramble, a 3/4 green Plant with defender, cast with Black Lotus mana (exactly {1}{G}{G}), its characteristics as printed,
+# and "protection from Zombies" (CR 702.16e): the damage that Bot2's Dregscape Zombie (a Zombie, 2/1) would deal to it in combat
+# on turn 4 is prevented, so the Bramble is undamaged while it kills the Zombie. On turn 6 a Grizzly Bears (the control, not a
+# Zombie) attacks and the Bramble blocks it: its 2 damage is dealt and marked.
+
+[Bot1 Deck]
+Black Lotus
+Grave Bramble
+Plains x22
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Dregscape Zombie
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grave Bramble.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Grave Bramble.Power = 3
+? Bot1.Battlefield.Grave Bramble.Toughness = 4
+? Bot1.Battlefield.Grave Bramble.Keywords = Defender
+? Bot1.Battlefield.Grave Bramble.Colors = Green
+? Bot1.Battlefield.Grave Bramble.Types = Creature
+? Bot1.Battlefield.Grave Bramble.Subtypes = Plant
+? Bot1.Battlefield.Grave Bramble.Supertypes = (absent)
+? Bot1.Battlefield.Grave Bramble.ProtectionFromSubtypes = Zombie
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Dregscape Zombie.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Dregscape Zombie > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Block(Grave Bramble > Dregscape Zombie)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Grave Bramble.Damage = 0
+[T6 Bot2.Main1]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T6 Bot2.DeclareBlockers]
+Bot1.Block(Grave Bramble > Grizzly Bears)
+[T6 Bot2.Main2]
+? Bot1.Battlefield.Grave Bramble.Damage = 2
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Grizzly Bears; Dregscape Zombie; Black Lotus
