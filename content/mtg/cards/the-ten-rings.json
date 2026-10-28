@@ -1,0 +1,6 @@
+{
+  "name": "The Ten Rings",
+  "manaCost": "{8}",
+  "type": "Legendary Artifact",
+  "oracleText": "Your maximum hand size is ten.\nAt the beginning of your end step, if you have fewer than ten cards in hand, draw cards equal to the difference."
+}

@@ -1,0 +1,38 @@
+# The Ten Rings ({8}): "At the beginning of your end step, if you have fewer than ten cards in hand, draw cards equal to the
+# difference" and "Your maximum hand size is ten" (CR 402.2). With an empty hand at the end step it draws ten, and the ten
+# are not discarded down to seven at cleanup (CR 514.1).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+The Ten Rings
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Blue)
+Bot1.Hand.The Ten Rings.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Hand.Count = 10
+Bot1.Battlefield.The Ten Rings.Types = Artifact

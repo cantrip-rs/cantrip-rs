@@ -1,0 +1,39 @@
+# The Ten Rings: turn 1's end step draws the hand to ten, and turn 3's draw makes eleven. At that end step there is no draw
+# (not fewer than ten), and at cleanup the player discards one card, down to ten and not to seven (CR 402.2, 514.1).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+The Ten Rings
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Blue)
+Bot1.Hand.The Ten Rings.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Discard(Island)
+
+[Expect]
+Bot1.Hand.Count = 10
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield.The Ten Rings.Types = Artifact

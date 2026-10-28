@@ -1,0 +1,46 @@
+# Proft's Eidetic Memory ("You have no maximum hand size") entered on turn 1 and The Ten Rings ("Your maximum hand size is ten") on
+# turn 3: both set the maximum hand size, so the newer, The Ten Rings, decides (CR 402.2, 613.11, 613.7). At the end step on turn 3 the
+# Rings draw the hand to ten, and on turn 5 the draw makes eleven and cleanup discards one.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Proft's Eidetic Memory
+Black Lotus
+Mox Ruby
+Mox Jet
+The Ten Rings
+Mox Emerald
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Proft's Eidetic Memory.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Blue)
+Bot1.Hand.The Ten Rings.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+Bot1.Discard(Island)
+
+[Expect]
+Bot1.Hand.Count = 10
+Bot1.Graveyard.Count = 2

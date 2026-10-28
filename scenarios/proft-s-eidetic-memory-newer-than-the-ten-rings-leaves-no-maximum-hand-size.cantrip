@@ -1,0 +1,48 @@
+# The Ten Rings ("Your maximum hand size is ten") is on the battlefield from turn 1, and Proft's Eidetic Memory ("You have no
+# maximum hand size") enters on turn 3: the newer, Proft's, decides (CR 402.2, 613.11, 613.7), so the eleven cards in hand at cleanup are
+# all kept, where the Rings alone would have the player discard one.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+The Ten Rings
+Island x10
+Proft's Eidetic Memory
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Blue)
+Bot1.Hand.The Ten Rings.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Proft's Eidetic Memory.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.End]
+Bot1.Pass
+! Bot1.Discard
+[T5 Bot1.Upkeep]
+
+[Expect]
+Bot1.Hand.Count = 11
