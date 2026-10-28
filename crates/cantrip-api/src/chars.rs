@@ -24,6 +24,12 @@ pub struct Chars {
     pub protection_players: u8,
     /// Protection from objects of these card types (CR 702.16a): "protection from creatures", "protection from instants".
     pub protection_types: TypeSet,
+    /// Protection from objects with any of these subtypes (CR 702.16a): "protection from Demons and from Dragons", a source
+    /// that is a creature of one of those types.
+    pub protection_subtypes: SubtypeSet,
+    /// Protection from objects with this mana value or more (CR 702.16a): "protection from mana value 3 or greater". With
+    /// several, the least covers the others' sources.
+    pub protection_mana_value: Option<u32>,
     /// It is a spell on the stack (CR 112.1), not a card or a permanent: what "protection from spells" is about.
     pub spell: bool,
     /// Protection from spells that are one or more colors (CR 702.16a): Emrakul, the Aeons Torn.
@@ -100,6 +106,8 @@ impl Chars {
         self.protection_colorless = last.protection_colorless;
         self.protection_players = last.protection_players;
         self.protection_types = last.protection_types;
+        self.protection_subtypes = last.protection_subtypes;
+        self.protection_mana_value = last.protection_mana_value;
         self.spell = last.spell;
         self.protection_colored_spells = last.protection_colored_spells;
         self.protection_everything = last.protection_everything;
@@ -124,24 +132,29 @@ impl Chars {
             || self.protection_colorless
             || self.protection_players != 0
             || self.protection_types != TypeSet::NONE
+            || self.protection_subtypes != SubtypeSet::NONE
+            || self.protection_mana_value.is_some()
             || self.protection_colored_spells
             || self.protection_everything
     }
 
     /// Whether its protection covers a source with these characteristics (CR 702.16a): a color it is protected
-    /// from, or colorless.
-    pub fn protected_from(&self, source: &Chars) -> bool {
+    /// from, colorless, a card type, a subtype, or a mana value. `mana_value` is the source's, worked out only when
+    /// the protection reads it.
+    pub fn protected_from(&self, source: &Chars, mana_value: impl FnOnce() -> u32) -> bool {
         self.protection_everything
             || self.protection.intersects(source.colors)
             || (self.protection_colorless && source.colors.is_empty())
             || self.protection_types.0 & source.types.0 != 0
+            || self.protection_subtypes.intersects(source.subtypes)
+            || self.protection_mana_value.is_some_and(|least| mana_value() >= least)
             || (self.protection_colored_spells && source.spell && !source.colors.is_empty())
     }
 
     /// Whether its protection covers a source with these characteristics controlled by `controller` (CR 702.16a):
     /// its colors, colorless, or the player controlling it.
-    pub fn protected_from_by(&self, source: &Chars, controller: PlayerId) -> bool {
-        self.protected_from(source) || self.protection_players & (1 << controller.0) != 0
+    pub fn protected_from_by(&self, source: &Chars, mana_value: impl FnOnce() -> u32, controller: PlayerId) -> bool {
+        self.protected_from(source, mana_value) || self.protection_players & (1 << controller.0) != 0
     }
 
     /// "Loses all abilities" (CR 613.1f): every ability it has now goes, keywords, protections and "hexproof from"
@@ -157,6 +170,8 @@ impl Chars {
         self.protection_colorless = false;
         self.protection_players = 0;
         self.protection_types = TypeSet::NONE;
+        self.protection_subtypes = SubtypeSet::NONE;
+        self.protection_mana_value = None;
         self.protection_colored_spells = false;
         self.protection_everything = false;
         self.hexproof_from = HexproofFrom::NONE;

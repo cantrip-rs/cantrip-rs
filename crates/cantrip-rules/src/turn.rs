@@ -973,7 +973,7 @@ fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[Obj
             return false;
         }
     }
-    !a.protected_from_by(&b, cx.s().obj(blocker).controller)
+    !a.protected_from_by(&b, || cantrip_api::mana_value_of(&|c| cx.card(c), cx.s(), blocker, &b), cx.s().obj(blocker).controller)
 }
 
 /// The most creatures that may block `attacker` (CR 509.1b): its own "can't be blocked by more than one creature"

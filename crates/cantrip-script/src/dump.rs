@@ -707,6 +707,16 @@ impl StateDump {
                         colors.sort();
                         d.list(&format!("{key}.ProtectionFrom"), colors, true);
                     }
+                    // Its protection from creature types (CR 702.16a), as the types' words: `Demon; Dragon`.
+                    if !c.protection_subtypes.is_empty() {
+                        let mut types: Vec<String> = c.protection_subtypes.iter().map(|s| s.name().to_string()).collect();
+                        types.sort();
+                        d.list(&format!("{key}.ProtectionFromSubtypes"), types, true);
+                    }
+                    // Its protection from a mana value, the least it covers (CR 702.16a).
+                    if let Some(least) = c.protection_mana_value {
+                        d.set(format!("{key}.ProtectionFromManaValue"), least);
+                    }
                     if c.is(CardType::Creature) {
                         d.set(format!("{key}.Power"), c.power.unwrap_or(0));
                         d.set(format!("{key}.Toughness"), c.toughness.unwrap_or(0));
@@ -844,7 +854,7 @@ const PERMANENT_KEYS: &[&str] = &[
     "Tapped", "Toxic", "FaceDown", "FaceDownName", "Token", "Transformed", "ManaValue", "X", "Doors", "Prepared", "AttachedTo", "Monstrous",
     "Solved", "Suspected", "Saddled", "Exerted", "GoadedBy", "MustAttack", "CantBeBlocked", "BlockRestriction", "ChosenPlayer", "ChosenOption", "ChosenObject",
     "ChosenModes", "ChosenName", "ClassLevel", "Types", "Supertypes", "Subtypes", "Colors", "Keywords", "HexproofFrom",
-    "ProtectionFrom", "Power", "Toughness", "Damage", "SummoningSick", "ChosenColor", "ChosenSubtype",
+    "ProtectionFrom", "ProtectionFromSubtypes", "ProtectionFromManaValue", "Power", "Toughness", "Damage", "SummoningSick", "ChosenColor", "ChosenSubtype",
 ];
 
 /// The keys the dump writes of a card in a hand, a graveyard, a library, a sideboard or exile, after `BotN.<zone>.<name>.`,

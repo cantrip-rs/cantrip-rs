@@ -17,7 +17,7 @@ pub fn host_allows(q: &dyn Query, attachment: ObjectId, host: ObjectId, attachin
     }
     let ac = q.chars(attachment);
     let hc = q.chars(host);
-    if hc.protected_from_by(&ac, q.controller(attachment)) {
+    if hc.protected_from_by(&ac, || q.mana_value(attachment), q.controller(attachment)) {
         return false;
     }
     if ac.has_subtype(Subtype::Equipment) {
@@ -85,7 +85,7 @@ pub(crate) fn aura_hosts(cx: &Cx, aura: ObjectId, aura_chars: &Chars, controller
             if id == aura || entering.contains(&id) || !enchants_allow(cx, aura_chars, &asker, target) {
                 continue;
             }
-            if cx.chars(id).protected_from_by(aura_chars, controller) {
+            if cx.chars(id).protected_from_by(aura_chars, || cantrip_api::mana_value_of(&|c| cx.card(c), cx.s(), aura, aura_chars), controller) {
                 continue;
             }
             hosts.push(target);

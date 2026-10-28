@@ -695,6 +695,11 @@ impl SubtypeSet {
         self.0.iter().all(|&w| w == 0)
     }
 
+    /// Whether the two sets share a subtype.
+    pub fn intersects(self, other: SubtypeSet) -> bool {
+        self.0.iter().zip(other.0).any(|(a, b)| a & b != 0)
+    }
+
     /// These subtypes but none of `other`'s.
     pub fn minus(self, other: SubtypeSet) -> SubtypeSet {
         let mut bits = self.0;

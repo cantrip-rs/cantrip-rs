@@ -983,6 +983,8 @@ impl<'a> Projector<'a> {
             given.protection_colorless = false;
             given.protection_players = 0;
             given.protection_types = TypeSet::NONE;
+            given.protection_subtypes = SubtypeSet::NONE;
+            given.protection_mana_value = None;
             given.protection_colored_spells = false;
             given.protection_everything = false;
             for e in self.game.state.effects.iter().filter(|e| e.affected == id) {
