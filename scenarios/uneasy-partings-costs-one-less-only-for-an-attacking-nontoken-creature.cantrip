@@ -1,0 +1,72 @@
+# Uneasy Partings ({3}{U}, instant): "This spell costs {1} less to cast if it targets an attacking nontoken creature. Target creature's owner puts it on their choice of
+# the top or bottom of their library." Bot1 has three Moxen. On turn 3 Bot2's Long Lake Nuisance is not attacking: the Partings costs {3}{U}, four, and is refused with
+# three (Mana: short). On turn 4 Bot2 attacks with the Nuisance and the Human Soldier token its recruit made: the token costs the full four (refused), the Nuisance
+# only three, paid exactly (the pool empty after). Bot2, the owner, declines to put it on top, so it goes to the bottom of its library; the token hits for 1.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Uneasy Partings
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Long Lake Nuisance
+Mox Emerald
+Island
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Long Lake Nuisance.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Mox Emerald)
+[T3 Bot1.Main1]
+! Bot1.Hand.Uneasy Partings.Cast(Bot2.Battlefield.Long Lake Nuisance; Mana: short)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Long Lake Nuisance > Bot1; Human Soldier Token > Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Uneasy Partings.Cast(Bot2.Battlefield.Human Soldier Token; Mana: short)
+Bot1.Hand.Uneasy Partings.Cast(Bot2.Battlefield.Long Lake Nuisance)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Battlefield.Long Lake Nuisance = (absent)
+Bot2.Battlefield.Human Soldier Token.Power = 1
