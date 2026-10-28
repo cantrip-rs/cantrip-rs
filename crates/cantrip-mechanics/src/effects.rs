@@ -304,6 +304,17 @@ pub fn target_player_draws(g: &mut dyn Game, item: &StackItem, slot: usize, n: u
     }
 }
 
+/// "Target player draws `CARDS` cards and loses `LIFE` life" (CR 121.1, 119.3): both happen to the player the item targeted
+/// in its first slot, if it is still a legal target (CR 608.2b), and the life is lost even when the library was empty (CR 121.4).
+/// Decorum Dissertation, Reverent Howl and Sign in Blood print it, of two cards and 2 life.
+pub fn target_player_draws_and_loses_life<const CARDS: u32, const LIFE: i32>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(player) = crate::targets::player(g, item, 0) {
+        g.draw(player, CARDS);
+        g.lose_life(player, LIFE);
+    }
+    Ok(())
+}
+
 /// "Target player draws N cards, then discards N cards" (CR 121.1, 701.9): the player the item targeted in `slot`, if the target is
 /// still legal (CR 608.2b), draws, then chooses that many cards of their hand and discards them. Dack Fayden and Prismari Command
 /// print it.
