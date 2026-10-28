@@ -1,0 +1,13 @@
+{
+  "name": "Mugato",
+  "manaCost": "{3}{G}{G}",
+  "type": "Creature — Ape Beast",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Reach, vigilance, deathtouch",
+  "keywords": [
+    "Reach",
+    "Vigilance",
+    "Deathtouch"
+  ]
+}
