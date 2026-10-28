@@ -1,0 +1,63 @@
+# Super Suit has flash (CR 702.8): Bot1 attacks with the Grizzly Bears on turn 3 and, with the attack declared, flashes it
+# in, {1}{U} paid exactly by Mox Sapphire and Mox Jet (the pool is empty). "Attach it to target creature you control. Untap
+# that creature": the Bears, still attacking, are untapped, a 3/4 with the Suit, and deal 3 combat damage to Bot2 (CR 506.4).
+# In the second main phase Equip {2}, paid exactly by Mox Emerald and Mox Ruby, moves it to an Ornithopter: a 1/4, the Bears
+# a plain 2/2 again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Grizzly Bears
+Super Suit
+Island
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Super Suit.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+? Combat.Attackers.Count = 1
+[T3 Bot1.Main2]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Super Suit.Activate(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Super Suit.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
