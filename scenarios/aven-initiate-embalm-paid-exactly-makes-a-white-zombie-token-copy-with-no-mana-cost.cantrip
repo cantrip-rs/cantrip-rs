@@ -1,0 +1,50 @@
+# Aven Initiate's embalm {6}{U} (CR 702.128a): Bot1 discards it to Faithless Looting, then pays the cost exactly with its free
+# mana (the pool is empty right after) and exiles the card from the graveyard for a token copy of it. The token is white,
+# a Bird Warrior Zombie (Zombie added to its own types) with no mana cost (mana value 0), and keeps its size, flying -
+# it is a 3/2 with flying. The card stays in exile.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Aven Initiate
+Black Lotus
+Mana Crypt
+Mox Sapphire
+Mox Pearl
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Aven Initiate; Island)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Aven Initiate.Activate(Ability: Embalm)
+Bot1.Pass
+? Bot1.Mana = 
+
+[Expect]
+Stack.Count = 0
+Exile = Aven Initiate
+Bot1.Battlefield.Aven Initiate.Colors = White
+Bot1.Battlefield.Aven Initiate.Subtypes = Bird; Warrior; Zombie
+Bot1.Battlefield.Aven Initiate.ManaValue = 0
+Bot1.Battlefield.Aven Initiate.Power = 3
+Bot1.Battlefield.Aven Initiate.Toughness = 2
+Bot1.Battlefield.Aven Initiate.Keywords = Flying
