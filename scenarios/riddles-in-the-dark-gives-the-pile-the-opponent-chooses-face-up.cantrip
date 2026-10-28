@@ -1,0 +1,45 @@
+# Riddles in the Dark: "Look at the top four cards of your library and separate them into a face-down pile and a face-up pile. An opponent chooses one of the piles. Put
+# that pile into your hand and the other into your graveyard." (CR 700.3.) The top four are Lightning Bolt, Island, Counterspell and Plains. Bot1 makes the Bolt and the
+# Island the face-down pile, the Counterspell and the Plains the face-up pile; Bot2, the opponent chosen as it resolves, takes the face-up pile for Bot1: the Counterspell
+# and the Plains go to Bot1's hand (the pool was empty after the cast), the face-down Bolt and Island to its graveyard. The scenario where the face-down pile is
+# taken is the control.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Riddles in the Dark
+Island
+Island
+Island
+Lightning Bolt
+Island
+Counterspell
+Plains
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Riddles in the Dark.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt; Island)
+Bot1.ChoosePlayer(Bot2)
+Bot2.Modes(Face-up pile)
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Counterspell; Plains
+Bot1.Graveyard = Riddles in the Dark; Island; Lightning Bolt
+Bot1.Library.Count = 10

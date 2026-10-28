@@ -1,0 +1,43 @@
+# Riddles in the Dark: "You may split the cards into one pile of four and one pile of zero" (the ruling). Bot1 puts all four cards face-up, leaving the face-down pile
+# empty, and Bot2 takes the empty face-down pile for Bot1: Bot1 gets nothing and the four cards (Lightning Bolt, Island, Counterspell, Plains) go to its graveyard. The
+# top four are the same as in the other Riddles scenarios.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Riddles in the Dark
+Island
+Island
+Island
+Lightning Bolt
+Island
+Counterspell
+Plains
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Riddles in the Dark.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot1.ChoosePlayer(Bot2)
+Bot2.Modes(Face-down pile)
+
+[Expect]
+Bot1.Hand = Island; Island; Island
+Bot1.Graveyard = Riddles in the Dark; Plains; Counterspell; Island; Lightning Bolt
+Bot1.Library.Count = 10

@@ -1,0 +1,37 @@
+# Riddles in the Dark: "Look at the top four cards of your library" with no cards in it looks at none: there is nothing to separate (CR 700.3, 609.3), no
+# opponent is chosen and no pile offered. Bot1 casts it on turn 1 from a deck of seven cards, all in its opening hand, and it resolves to the graveyard
+# with the hand as it was.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Riddles in the Dark
+Island
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Riddles in the Dark.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+! Bot1.ChoosePlayer
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island
+Bot1.Graveyard = Riddles in the Dark
+Bot1.Library.Count = 0

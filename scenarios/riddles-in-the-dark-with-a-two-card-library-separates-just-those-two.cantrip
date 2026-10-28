@@ -1,0 +1,39 @@
+# Riddles in the Dark: "Look at the top four cards" of a library of two looks at the two there are (CR 609.3). Bot1 puts the Plains face-down and the Swamp
+# face-up; Bot2 takes the face-up pile for Bot1: the Swamp goes to its hand, the Plains to its graveyard, the library is empty.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Riddles in the Dark
+Island
+Island
+Island
+Plains
+Swamp
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Riddles in the Dark.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+Bot1.ChoosePlayer(Bot2)
+Bot2.Modes(Face-up pile)
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Swamp
+Bot1.Graveyard = Riddles in the Dark; Plains
+Bot1.Library.Count = 0

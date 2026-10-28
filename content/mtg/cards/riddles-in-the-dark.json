@@ -1,0 +1,6 @@
+{
+  "name": "Riddles in the Dark",
+  "manaCost": "{2}{U}",
+  "type": "Instant",
+  "oracleText": "Look at the top four cards of your library and separate them into a face-down pile and a face-up pile. An opponent chooses one of the piles. Put that pile into your hand and the other into your graveyard."
+}
