@@ -196,6 +196,30 @@ pub fn pile(g: &mut dyn Game, chooser: PlayerId, source: ObjectId, first: Vec<Ob
     Ok(if one_of(g, chooser, source, piles)? == 1 { (second, first) } else { (first, second) })
 }
 
+/// "Look at [these] and separate them into a face-down pile and a face-up pile" (CR 700.3a): `separator` looks at the cards
+/// and chooses those of the face-down pile, the rest being the face-up pile, so either pile may be empty (CR 700.3d); the two
+/// piles come back in that order. Nothing is asked when there is nothing to separate. Riddles in the Dark, Curator of Destinies
+/// (a face-down and a face-up pile) and Fortune's Favor and Atris, Oracle of Half-Truths (an opponent separates) print it.
+pub fn separate_face_down_and_face_up(g: &mut dyn Game, separator: PlayerId, source: ObjectId, cards: Vec<ObjectId>) -> Result<(Vec<ObjectId>, Vec<ObjectId>), Suspend> {
+    let face_down = select(g, separator, source, Purpose::SeparateFaceDown, cards.clone(), crate::select::cards(crate::select::ANY_NUMBER))?;
+    let face_up = cards.into_iter().filter(|id| !face_down.contains(id)).collect();
+    Ok((face_down, face_up))
+}
+
+/// "Choose one of the piles" of a face-down pile and a face-up pile during resolution (CR 608.2d, 700.3b-d): the chooser sees
+/// what the face-up pile holds and how many cards the face-down pile does, not what they are. Returns the chosen pile first and
+/// the other second. Riddles in the Dark, Curator of Destinies, Fortune's Favor and Atris, Oracle of Half-Truths print it.
+pub fn face_down_or_face_up_pile(
+    g: &mut dyn Game,
+    chooser: PlayerId,
+    source: ObjectId,
+    face_down: Vec<ObjectId>,
+    face_up: Vec<ObjectId>,
+) -> Result<(Vec<ObjectId>, Vec<ObjectId>), Suspend> {
+    let piles = vec![Label::FaceUpPile { cards: face_up.clone() }, Label::FaceDownPile { count: face_down.len() as u16 }];
+    Ok(if one_of(g, chooser, source, piles)? == 1 { (face_down, face_up) } else { (face_up, face_down) })
+}
+
 /// The face a card is cast as (CR 709.3, 715.3, 712.8a), chosen from `ways` (`Game::cast_ways_during_resolution`, narrowed to
 /// the ones the effect allows: a mana value, a type), as the player puts it on the stack. Nothing is asked when there is one;
 /// `None` when there is none. Uldaros Theorix, Beseech the Mirror and Bilbo, Thief in the Night print a restriction on the spell.
