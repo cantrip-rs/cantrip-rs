@@ -1,0 +1,56 @@
+# The Mountain-king's Return: I - recruit; II - return target creature card with mana value 3 or less from your graveyard to the
+# battlefield; III - put a +1/+1 counter on up to one target creature; sacrificed after III (CR 714.4). On turn 1 chapter I draws
+# a Plains and discards Bastion Enforcer (mana value 3, a nonland card), so a Soldier token is made. Bot2's graveyard holds a
+# Memnite (discarded to hand size) - a legal mana value, but not Bot1's graveyard - and only Bastion Enforcer may be returned on turn 3. On turn 5 the
+# counter goes on the returned Enforcer, and the Saga is sacrificed.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+The Mountain-king's Return
+Bastion Enforcer
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x7
+Memnite
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Mountain-king's Return.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Bastion Enforcer)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Human Soldier Token.Token = true
+? Bot1.Graveyard = Bastion Enforcer
+[T2 Bot2.Main2]
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bastion Enforcer.Power = 3
+? Bot2.Graveyard = Memnite
+[T5 Bot1.Main1]
+Bot1.Target(Bot1.Battlefield.Bastion Enforcer)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Bastion Enforcer.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Bastion Enforcer.Power = 4
+Bot1.Battlefield.The Mountain-king's Return = (absent)
+Bot1.Graveyard = The Mountain-king's Return
