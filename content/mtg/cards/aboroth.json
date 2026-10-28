@@ -1,0 +1,8 @@
+{
+  "name": "Aboroth",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Elemental",
+  "power": 9,
+  "toughness": 9,
+  "oracleText": "Cumulative upkeep—Put a -1/-1 counter on this creature. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)"
+}

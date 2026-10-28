@@ -1,0 +1,59 @@
+# Aboroth {4}{G}{G}, 9/9, "Cumulative upkeep--Put a -1/-1 counter on this creature." (CR 702.24a). Cast on turn 1 (Black Lotus's
+# {G}{G}{G}, Mox Emerald, a Forest and the Gleemox, six mana), at Bot1's turn 3 upkeep it gets its first age counter and
+# Bot1 puts one -1/-1 counter on it (8/8). At turn 5 it gets a second age counter, and the cost is one -1/-1 counter for each: two
+# more, three in all (6/6). At turn 7 the cost is three more; Bot1 declines, and sacrifices it with its counters.
+
+[Bot1 Deck]
+Aboroth
+Black Lotus
+Mox Emerald
+Gleemox
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Aboroth.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Battlefield.Aboroth.Counters.Age = 1
+? Bot1.Battlefield.Aboroth.Counters.MinusOneMinusOne = 1
+? Bot1.Battlefield.Aboroth.Power = 8
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Battlefield.Aboroth.Counters.Age = 2
+? Bot1.Battlefield.Aboroth.Counters.MinusOneMinusOne = 3
+? Bot1.Battlefield.Aboroth.Power = 6
+? Bot1.Battlefield.Aboroth.Toughness = 6
+? Bot1.Battlefield.Aboroth.Colors = Green
+[T7 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard = Aboroth; Black Lotus
+Bot1.Battlefield.Aboroth = (absent)
