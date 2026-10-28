@@ -1,0 +1,49 @@
+# Phyrexian Soulgorger, an 8/8 snow artifact creature, "Cumulative upkeep--Sacrifice a creature." (CR 702.24a). At Bot1's turn 3
+# upkeep, with the Soulgorger and a Balduvian Bears, one creature is sacrificed for the one age counter: the Bears. At turn 5 the
+# second age counter makes it two creatures, and Bot1 has only the Soulgorger: a creature can't be sacrificed twice, so
+# paying is not offered and the Soulgorger is sacrificed.
+
+[Bot1 Deck]
+Phyrexian Soulgorger
+Black Lotus
+Mox Emerald
+Forest
+Balduvian Bears
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Phyrexian Soulgorger.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Balduvian Bears.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Choose(Balduvian Bears)
+Bot1.Pass
+? Bot1.Battlefield.Phyrexian Soulgorger.Counters.Age = 1
+? Bot1.Battlefield.Phyrexian Soulgorger.Power = 8
+? Bot1.Battlefield.Phyrexian Soulgorger.Toughness = 8
+? Bot1.Battlefield.Phyrexian Soulgorger.Types = Artifact; Creature
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard = Phyrexian Soulgorger; Balduvian Bears; Black Lotus
