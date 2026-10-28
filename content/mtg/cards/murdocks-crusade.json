@@ -1,0 +1,6 @@
+{
+  "name": "Murdock's Crusade",
+  "manaCost": "{1}{W}",
+  "type": "Sorcery",
+  "oracleText": "Teamwork 4 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 4 or more.)\nChoose one. If this spell was cast using teamwork, choose both instead.\n• Street Justice — Exile target creature with toughness 4 or greater.\n• Legal Justice — Exile target enchantment with mana value 4 or greater."
+}

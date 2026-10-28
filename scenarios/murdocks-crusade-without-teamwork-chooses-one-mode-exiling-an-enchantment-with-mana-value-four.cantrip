@@ -1,0 +1,83 @@
+# Murdock's Crusade: "Choose one. ... Legal Justice - Exile target enchantment with mana value 4 or greater." Cast without teamwork,
+# Bot1 chooses that one mode. Bot2 has Nyxborn Courser (an enchantment creature of mana value 3, one below the limit: refused) and
+# Nyxborn Marauder (mana value 4, exactly at it: exiled). Teamwork is not paid, so Bot1's Giant Cockroach stays untapped.
+
+[Bot1 Deck]
+Giant Cockroach
+Murdock's Crusade
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Plains
+Plains x20
+
+[Bot2 Deck]
+Nyxborn Courser
+Nyxborn Marauder
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Plains
+Swamp
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Cockroach.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Nyxborn Courser.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Nyxborn Marauder.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Murdock's Crusade.Cast
+Bot1.Modes(Cast without teamwork)
+Bot1.Modes(Legal Justice)
+! Bot1.Target(Bot2.Battlefield.Nyxborn Courser)
+Bot1.Target(Bot2.Battlefield.Nyxborn Marauder)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Exile = Nyxborn Marauder
+Bot2.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Nyxborn Courser; Plains; Swamp
+Bot1.Battlefield.Giant Cockroach.Tapped = false

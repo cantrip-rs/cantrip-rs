@@ -1,0 +1,95 @@
+# Murdock's Crusade: "Teamwork 4 ... Choose one. If this spell was cast using teamwork, choose both instead." Bot1 pays teamwork by
+# tapping its Giant Cockroach (power 4, exactly the total needed) and so chooses both modes, each with its own target. Street Justice
+# ("creature with toughness 4 or greater") takes Bot2's Nyxborn Courser (toughness 4) and refuses the Nyxborn Marauder (toughness 3, one
+# below); Legal Justice ("enchantment with mana value 4 or greater") takes the Marauder (mana value 4) and refuses the Courser (mana
+# value 3, one below). Both are exiled. A lone Centaur Courser (power 3, one short of the total) can't pay teamwork 4 (the refusal).
+
+[Bot1 Deck]
+Giant Cockroach
+Murdock's Crusade
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Centaur Courser
+Plains
+Plains x20
+
+[Bot2 Deck]
+Nyxborn Courser
+Nyxborn Marauder
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Plains
+Swamp
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Cockroach.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Nyxborn Courser.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Nyxborn Marauder.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Murdock's Crusade.Cast
+Bot1.Modes(Teamwork 4)
+! Bot1.Modes(Street Justice)
+! Bot1.Target(Bot2.Battlefield.Nyxborn Marauder)
+Bot1.Target(Bot2.Battlefield.Nyxborn Courser)
+! Bot1.Target(Bot2.Battlefield.Nyxborn Courser)
+Bot1.Target(Bot2.Battlefield.Nyxborn Marauder)
+! Bot1.Choose(Centaur Courser)
+Bot1.Choose(Giant Cockroach)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Exile = Nyxborn Courser; Nyxborn Marauder
+Bot2.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Plains; Swamp
+Bot1.Battlefield.Giant Cockroach.Tapped = true
