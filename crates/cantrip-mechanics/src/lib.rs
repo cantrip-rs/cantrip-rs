@@ -84,6 +84,8 @@ pub mod offspring;
 pub mod outlaw;
 pub mod outside;
 pub mod persist;
+pub mod undying;
+pub(crate) mod returns_with_counter;
 pub mod overload;
 pub mod paradigm;
 pub mod plot;
