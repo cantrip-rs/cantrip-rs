@@ -1,0 +1,48 @@
+# Humpback Whales has ward {2}: this time Bot2 has three mana (a Mountain and two Mox Rubies): the Lightning Bolt's {R} and exactly
+# the {2} the ward trigger asks. The Bolt resolves and three damage are marked on the 5/6 Whales (the control for the scenario in
+# which Bot2 is a mana short).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Humpback Whales
+Island x18
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Humpback Whales.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Humpback Whales)
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Humpback Whales.Damage = 3
+Bot2.Graveyard = Lightning Bolt

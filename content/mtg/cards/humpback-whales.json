@@ -1,0 +1,11 @@
+{
+  "name": "Humpback Whales",
+  "manaCost": "{4}{U}{U}",
+  "type": "Creature — Whale",
+  "power": 5,
+  "toughness": 6,
+  "oracleText": "Vigilance, ward {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

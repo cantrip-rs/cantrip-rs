@@ -1,0 +1,41 @@
+# Humpback Whales (5/6 vigilance, ward {2}), cast with Black Lotus and three Mox Sapphires, its characteristics as printed.
+# Attacking in turn 3 it deals 5 to Bot2 and stays untapped (CR 702.20b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Humpback Whales
+Island x18
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Humpback Whales.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Humpback Whales.Power = 5
+? Bot1.Battlefield.Humpback Whales.Toughness = 6
+? Bot1.Battlefield.Humpback Whales.Keywords = Vigilance
+? Bot1.Battlefield.Humpback Whales.Colors = Blue
+? Bot1.Battlefield.Humpback Whales.Types = Creature
+? Bot1.Battlefield.Humpback Whales.Subtypes = Whale
+? Bot1.Battlefield.Humpback Whales.Supertypes = (absent)
+? Bot1.Battlefield.Humpback Whales.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Humpback Whales > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Humpback Whales.Tapped = false

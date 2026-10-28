@@ -1,0 +1,46 @@
+# Humpback Whales has ward {2}: Bot2 casts Lightning Bolt at it with two mana, a Mountain and a Mox Ruby. After the Bolt's {R}
+# only {1} is left for the ward trigger's {2}, which it cannot pay, so the Bolt is countered and the Whales take no damage (the
+# exact payment: the next scenario).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Humpback Whales
+Island x18
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Humpback Whales.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Humpback Whales)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Humpback Whales.Damage = 0
+Bot2.Graveyard = Lightning Bolt
