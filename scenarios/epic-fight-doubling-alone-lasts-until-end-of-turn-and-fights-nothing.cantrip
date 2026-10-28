@@ -1,0 +1,63 @@
+# Epic Fight: "Double target creature's power and toughness until end of turn", chosen alone: it targets any creature, here Bot2's
+# Centaur Courser (3/3), which is 6/6 this turn and back to 3/3 on Bot2's next turn. Bot1's Grizzly Bears neither fights nor grows.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Grizzly Bears
+Epic Fight
+Forest
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Centaur Courser
+Forest
+Forest
+Forest
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Epic Fight.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2.Battlefield.Centaur Courser)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Centaur Courser.Power = 6
+? Bot2.Battlefield.Centaur Courser.Toughness = 6
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Centaur Courser.Power = 3
+Bot2.Battlefield.Centaur Courser.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Damage = 0
