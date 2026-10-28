@@ -1,0 +1,93 @@
+# Last Light of Durin's Day, the sixth Mountain (turn 11): Bot1 has a Smaug, the Great Calamity (a Dragon card) in hand and takes
+# it from there (declining the library search leaves the hand to choose from); it declines to search its library, so there is no search and no shuffle: the
+# Draconic Visitor stays in the library, whose order is untouched.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Last Light of Durin's Day
+Mountain
+Smaug, the Great Calamity
+Island
+Island
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain
+Draconic Visitor
+Island
+Plains
+Swamp
+Forest
+Island
+Plains
+Swamp
+Forest
+Island
+Plains
+Swamp
+Forest
+
+[Bot2 Deck]
+Mountain
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Last Light of Durin's Day.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Last Light of Durin's Day.Counters.Quest = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Last Light of Durin's Day.Counters.Quest = 2
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Last Light of Durin's Day.Counters.Quest = 5
+[T11 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Choose(Smaug, the Great Calamity)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Smaug, the Great Calamity.Tapped = false
+Bot1.Battlefield.Draconic Visitor = (absent)
+Bot1.Library.Draconic Visitor.Power = 5
+Bot1.Library = Draconic Visitor; Island; Plains; Swamp; Forest; Island; Plains; Swamp; Forest; Island; Plains; Swamp; Forest

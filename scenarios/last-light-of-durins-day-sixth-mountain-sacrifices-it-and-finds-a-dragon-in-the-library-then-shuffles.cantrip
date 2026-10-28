@@ -1,0 +1,101 @@
+# Last Light of Durin's Day: "Whenever a Mountain you control enters, put a quest counter on this enchantment. If it has six or more
+# quest counters on it, sacrifice it. If you do, search your hand and/or library for a Dragon card and put it onto the battlefield. If you
+# search your library this way, shuffle." Bot1 plays a Mountain on turns 1 and 5, 7, 9, 11, 13 and an Island on turn 3 (not a Mountain; the opponent's
+# two Mountains are not "you control" either): five by turn 11, the enchantment still there, and the sixth on turn 13 sacrifices it. Bot1 has no Dragon in hand, so
+# only the library is searched: the Draconic Visitor there enters (untapped), and the library is shuffled afterwards.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Last Light of Durin's Day
+Mountain
+Island
+Island
+Island
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain
+Island
+Draconic Visitor
+Island
+Plains
+Swamp
+Forest
+Island
+Plains
+Swamp
+Forest
+Island
+Plains
+Swamp
+Forest
+
+[Bot2 Deck]
+Mountain
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Last Light of Durin's Day.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Last Light of Durin's Day.Counters.Quest = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Last Light of Durin's Day.Counters.Quest = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Last Light of Durin's Day.Counters.Quest = 4
+[T11 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Last Light of Durin's Day.Counters.Quest = 5
+[T13 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Draconic Visitor)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Draconic Visitor.Tapped = false
+Bot1.Graveyard = Last Light of Durin's Day
+Bot1.Battlefield.Last Light of Durin's Day = (absent)
+Bot1.Library != Island; Plains; Swamp; Forest; Island; Plains; Swamp; Forest; Island; Plains; Swamp; Forest

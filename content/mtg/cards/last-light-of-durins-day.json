@@ -1,0 +1,6 @@
+{
+  "name": "Last Light of Durin's Day",
+  "manaCost": "{1}{R}",
+  "type": "Enchantment",
+  "oracleText": "Whenever a Mountain you control enters, put a quest counter on this enchantment. If it has six or more quest counters on it, sacrifice it. If you do, search your hand and/or library for a Dragon card and put it onto the battlefield. If you search your library this way, shuffle.\nMountaincycling {2} ({2}, Discard this card: Search your library for a Mountain card, reveal it, put it into your hand, then shuffle.)"
+}

@@ -1,0 +1,37 @@
+# Last Light of Durin's Day's Mountaincycling {2} (CR 702.29e): with only a Mox Ruby's {R} the ability is not offered; with a Mox
+# Pearl as well the cost {2} is paid exactly (the pool ends empty) and, discarding the card from the hand, Bot1 finds a Mountain in
+# its library and puts it into its hand. The enchantment itself never reaches the battlefield.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Last Light of Durin's Day
+Island
+Island
+Island
+Island
+Plains
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Last Light of Durin's Day.Activate(Ability: Mountaincycling; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Last Light of Durin's Day.Activate(Ability: Mountaincycling)
+Bot1.Pass
+? Bot1.Mana =
+Bot1.Search(Mountain)
+
+[Expect]
+Bot1.Graveyard = Last Light of Durin's Day
+Bot1.Hand = Island; Island; Island; Island; Mountain
