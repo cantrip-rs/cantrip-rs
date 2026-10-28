@@ -1,0 +1,78 @@
+# Beast, Erudite Aerialist: "As long as you've put one or more +1/+1 counters on Beast this turn, he has flying." Bot1's
+# Snakeskin Veil puts one on him: flying that turn, not the turn after, and only him, not a Memnite beside him. The
+# counter Bot2's Revitalizing Repast puts on him is not one Bot1 put, so he stays on the ground. "Whenever Beast deals
+# combat damage to a player, draw a card": his hit on turn 3 draws the Memnite.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Beast, Erudite Aerialist
+Snakeskin Veil
+Forest
+Snakeskin Veil
+Memnite
+Forest x10
+
+[Bot2 Deck]
+Forest
+Revitalizing Repast
+Forest x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Hand.Beast, Erudite Aerialist.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast, Erudite Aerialist.Keywords = (absent)
+Bot1.Hand.Snakeskin Veil.Cast(Bot1.Battlefield.Beast, Erudite Aerialist)
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast, Erudite Aerialist.Keywords = Flying; Hexproof
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Beast, Erudite Aerialist.Keywords = (absent)
+Bot2.Hand.Forest.Play
+Bot2.Hand.Revitalizing Repast.Cast(Bot1.Battlefield.Beast, Erudite Aerialist)
+Bot2.Battlefield.Forest.Activate
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Beast, Erudite Aerialist.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Beast, Erudite Aerialist.Keywords = Indestructible
+[T3 Bot1.Main1]
+Bot1.Hand.Snakeskin Veil.Cast(Bot1.Battlefield.Beast, Erudite Aerialist)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beast, Erudite Aerialist.Keywords = Flying; Hexproof
+Bot1.Attack(Beast, Erudite Aerialist > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Memnite
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot2.Life = 14
+Bot1.Battlefield.Beast, Erudite Aerialist.Counters.PlusOnePlusOne = 3
