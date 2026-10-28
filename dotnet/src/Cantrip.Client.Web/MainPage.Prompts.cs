@@ -447,6 +447,8 @@ public sealed partial class MainPage
             ? string.Empty
             : !kicker
             ? "  ·  tap a land or click mana in your pool to raise X"
+            : prompt.Squad
+                ? $"  ·  {Announcement.SquadRaiseHint(prompt)}"
             : prompt.Buyback
                 ? $"  ·  tap a land or click mana in your pool to buy it back for {prompt.Kicker}"
                 : prompt.X == 0
@@ -454,7 +456,7 @@ public sealed partial class MainPage
                     : $"  ·  tap a land or click mana in your pool to kick it again for {prompt.Kicker}";
 
         Prompt(
-            !kicker ? $"Choose X for {name}" : prompt.Buyback ? $"Buy back {name}?" : $"Kick {name}?",
+            Announcement.Title(prompt, name),
             owing
                 ? $"{prompt.Remaining} of {prompt.Total} still to pay  ·  tap a land or click mana in your pool{colorless}"
                 : $"{prompt.Total} paid{raise}");
@@ -667,7 +669,9 @@ public sealed partial class MainPage
             : prompt.VariableKicker
                 ? prompt.MostAffordable >= 0 ? $"enough mana for X up to {prompt.MostAffordable}" : "not enough mana to kick it"
             : kicker
-                ? prompt.Buyback
+                ? prompt.Squad
+                    ? Announcement.SquadReach(prompt)
+                : prompt.Buyback
                     ? prompt.MostAffordable > 0 ? "you have the mana to buy it back" : "not enough mana to buy it back"
                     : prompt.MostAffordable > 0
                         ? $"enough mana to kick it {Times(prompt.MostAffordable)}"
@@ -682,7 +686,7 @@ public sealed partial class MainPage
                 : "  ·  tap lands to raise X";
 
         Prompt(
-            !kicker ? $"Choose X for {name}" : prompt.Buyback ? $"Buy back {name}?" : $"Kick {name}?",
+            Announcement.Title(prompt, name),
             prompt.XPaidInLife
                 ? $"{total} and {x} life  ·  {reach}  ·  targets and paying come next"
                 : $"{total} in all  ·  {reach}{planning}  ·  targets and paying come next");
@@ -719,7 +723,9 @@ public sealed partial class MainPage
         RedrawNow();
     }
 
-    private static string Paid(PayCostsPromptMessage prompt, int x, bool kickerPaid) => prompt.VariableKicker
+    private static string Paid(PayCostsPromptMessage prompt, int x, bool kickerPaid) => prompt.Squad
+        ? Announcement.SquadPaid(x)
+        : prompt.VariableKicker
         ? kickerPaid ? $"kicked with X = {x}" : "not kicked"
         : prompt.Buyback
         ? x == 0 ? "without buyback" : "with buyback"
@@ -737,12 +743,12 @@ public sealed partial class MainPage
     private void AddXStepper(PayCostsPromptMessage prompt, int x, bool kickerPaid, Action? lower, Action? raise)
     {
         bool kicker = prompt.Kicker.Length > 0;
-        string down = !kicker ? "Lower X by one" : prompt.VariableKicker
+        string down = !kicker ? "Lower X by one" : prompt.Squad ? "Pay squad one time fewer" : prompt.VariableKicker
             ? "Lower X, or decline the kicker" : prompt.Buyback ? "Cast it without buying it back" : "Kick it one time fewer";
         string up = !kicker
             ? "Raise X by one"
             : prompt.VariableKicker ? kickerPaid ? "Raise kicker X by one" : $"Pay kicker {prompt.Kicker}"
-            : prompt.Buyback ? $"Buy it back for {prompt.Kicker}" : $"Kick it once more for {prompt.Kicker}";
+            : prompt.Squad ? Announcement.SquadRaiseHint(prompt) : prompt.Buyback ? $"Buy it back for {prompt.Kicker}" : $"Kick it once more for {prompt.Kicker}";
 
         _buttons.Children.Add(Stepper(
             8,

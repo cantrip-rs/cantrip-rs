@@ -20,6 +20,52 @@ public static class Announcement
         return Math.Clamp(value, least, Math.Max(least, prompt.MostAnnounced));
     }
 
+    /// <summary>
+    /// The question an announcement asks, truthfully for what the optional additional cost is: squad (CR 702.157a) is not a
+    /// kicker, and a buyback is not a kick.
+    /// </summary>
+    public static string Title(PayCostsPromptMessage prompt, string spell)
+    {
+        ArgumentNullException.ThrowIfNull(prompt);
+        return prompt.Kicker.Length == 0 ? $"Choose X for {spell}"
+            : prompt.Squad ? $"Pay squad for {spell}?"
+            : prompt.Buyback ? $"Buy back {spell}?"
+            : $"Kick {spell}?";
+    }
+
+    /// <summary>
+    /// What raising the squad count does, for the button that raises it: "Pay squad once more: exile four other cards from
+    /// your graveyard".
+    /// </summary>
+    public static string SquadRaiseHint(PayCostsPromptMessage prompt)
+    {
+        ArgumentNullException.ThrowIfNull(prompt);
+        return $"Pay squad {(prompt.X == 0 ? "once" : "once more")}: {prompt.Kicker}";
+    }
+
+    /// <summary>
+    /// How far squad can go, in words, from the limit the rules and the cards give it
+    /// (<see cref="PayCostsPromptMessage.MostAnnounced"/>): the cards its cost exiles, never mana.
+    /// </summary>
+    public static string SquadReach(PayCostsPromptMessage prompt)
+    {
+        ArgumentNullException.ThrowIfNull(prompt);
+        return prompt.MostAnnounced switch
+        {
+            <= 0 => "squad cannot be paid",
+            1 => $"squad can be paid once ({prompt.Kicker})",
+            var times => $"squad can be paid up to {times} times ({prompt.Kicker} each)",
+        };
+    }
+
+    /// <summary>What the announced value says of squad once chosen: "squad paid 2 times".</summary>
+    public static string SquadPaid(int value) => value switch
+    {
+        <= 0 => "squad not paid",
+        1 => "squad paid",
+        var times => $"squad paid {times} times",
+    };
+
     /// <summary>Whether the value announced is a kicker paid (CR 702.33): a kicker with {X} in it is paid for any X but none.</summary>
     public static bool KickerPaid(PayCostsPromptMessage prompt, int value)
     {

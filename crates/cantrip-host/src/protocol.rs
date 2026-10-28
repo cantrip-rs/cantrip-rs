@@ -1147,6 +1147,10 @@ pub struct PayCostsPrompt {
     pub kicker: String,
     pub multikicker: bool,
     pub buyback: bool,
+    /// Whether that optional additional cost is squad (CR 702.157a) rather than kicker: `kicker` carries its whole cost in
+    /// words (mana and the rest), and a client says "pay squad", not "kick", and does not speak of mana for a cost that has
+    /// none.
+    pub squad: bool,
     pub announces_x_or_kicks: bool,
     pub most_affordable: i32,
     pub x_paid_in_life: bool,

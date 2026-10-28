@@ -824,6 +824,8 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                     None => k.cost.to_string(),
                 }),
                 multikicker: kicker.is_some_and(|k| k.multi),
+                // Squad is the one optional cost with more than mana in it (`multikicker_cost`).
+                squad: kicker.is_some_and(|k| k.extra.is_some()),
                 kicker_paid: kicker.is_some() && *x > 0,
                 announces_x_or_kicks: *announcing,
                 // A "−X" loyalty cost reaches as far as the loyalty there is (CR 606.4, 118.3); mana is not asked.
