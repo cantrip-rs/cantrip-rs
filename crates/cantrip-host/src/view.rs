@@ -1063,35 +1063,7 @@ impl<'a> Projector<'a> {
     /// everything", "Protection from black and from red", "Protection from creatures", "Protection from <player>". None when
     /// it has none.
     fn protection_text(&self, c: &Chars) -> Option<String> {
-        if c.protection_everything {
-            return Some("Protection from everything".to_string());
-        }
-        let mut words: Vec<String> = c.protection.iter().map(|color| color.name().to_lowercase()).collect();
-        if c.protection_colorless {
-            words.push("colorless".to_string());
-        }
-        if c.protection_colored_spells {
-            words.push("colored spells".to_string());
-        }
-        // Plural, as cards print it: "from instants", "from sorceries".
-        words.extend(c.protection_types.iter().map(|t| {
-            let name = t.name().to_lowercase();
-            match name.strip_suffix('y') {
-                Some(stem) => format!("{stem}ies"),
-                None => format!("{name}s"),
-            }
-        }));
-        for p in 0..8u8 {
-            if c.protection_players & (1 << p) != 0 {
-                words.push(self.names.get(p as usize).cloned().unwrap_or_else(|| format!("player {}", p + 1)));
-            }
-        }
-        match words.len() {
-            0 => None,
-            1 => Some(format!("Protection from {}", words[0])),
-            2 => Some(format!("Protection from {} and from {}", words[0], words[1])),
-            n => Some(format!("Protection from {}, and from {}", words[..n - 1].join(", from "), words[n - 1])),
-        }
+        protection_words(c, self.names)
     }
 
     /// A standing permission to play a card, as the viewer reads it: who may, what, and until when.
@@ -1515,6 +1487,44 @@ fn count(n: u32) -> i32 {
     i32::try_from(n).unwrap_or(i32::MAX)
 }
 
+/// The words of an object's protection (CR 702.16a), `names` being the seats' names.
+fn protection_words(c: &Chars, names: &[String]) -> Option<String> {
+    if c.protection_everything {
+        return Some("Protection from everything".to_string());
+    }
+    let mut words: Vec<String> = c.protection.iter().map(|color| color.name().to_lowercase()).collect();
+    if c.protection_colorless {
+        words.push("colorless".to_string());
+    }
+    if c.protection_colored_spells {
+        words.push("colored spells".to_string());
+    }
+    // Plural, as cards print it: "from instants", "from sorceries".
+    words.extend(c.protection_types.iter().map(|t| {
+        let name = t.name().to_lowercase();
+        match name.strip_suffix('y') {
+            Some(stem) => format!("{stem}ies"),
+            None => format!("{name}s"),
+        }
+    }));
+    // A creature type keeps its capital, as printed: "from Dragons", "from Elves".
+    words.extend(c.protection_subtypes.iter().map(|t| crate::text::plural(t.name())));
+    if let Some(least) = c.protection_mana_value {
+        words.push(format!("mana value {least} or greater"));
+    }
+    for p in 0..8u8 {
+        if c.protection_players & (1 << p) != 0 {
+            words.push(names.get(p as usize).cloned().unwrap_or_else(|| format!("player {}", p + 1)));
+        }
+    }
+    match words.len() {
+        0 => None,
+        1 => Some(format!("Protection from {}", words[0])),
+        2 => Some(format!("Protection from {} and from {}", words[0], words[1])),
+        n => Some(format!("Protection from {}, and from {}", words[..n - 1].join(", from "), words[n - 1])),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1543,5 +1553,23 @@ mod tests {
             .and(HexproofFrom::card_type(CardType::Creature))
             .and(HexproofFrom::card_type(CardType::Enchantment));
         assert_eq!(hexproof_from_text(types), "Hexproof from artifacts, creatures, and enchantments");
+    }
+
+    /// Protection from a creature type or a mana value, granted, is shown as it is printed (CR 702.16a).
+    #[test]
+    fn protection_from_creature_types_and_a_mana_value_is_worded() {
+        let cards = cantrip_engine::cards();
+        let deck = vec![cards.find("Plains").expect("the card"); 20];
+        let game = cantrip_engine::Game::new(cards, &Setup { decks: vec![deck.clone(), deck], ..Default::default() });
+        let id = game.state.zone(Zone::library(PlayerId(0)))[0];
+        let mut c = game.chars(id);
+        c.protection_subtypes = SubtypeSet::of(&[Subtype::Dragon]);
+        assert_eq!(protection_words(&c, &[]).as_deref(), Some("Protection from Dragons"));
+        c.protection_subtypes = SubtypeSet::of(&[Subtype::Elf, Subtype::Dragon]);
+        c.protection_mana_value = Some(3);
+        let text = protection_words(&c, &[]).expect("protection");
+        assert!(text.contains("Dragons") && text.contains("Elves") && text.ends_with("and from mana value 3 or greater"), "{text}");
+        c.protection_subtypes = SubtypeSet::NONE;
+        assert_eq!(protection_words(&c, &[]).as_deref(), Some("Protection from mana value 3 or greater"));
     }
 }
