@@ -1873,6 +1873,7 @@ pub fn last_known_from(cx: &Cx, id: ObjectId, c: &Chars) -> LastKnown {
         protection_everything: c.protection_everything,
         hexproof_from: c.hexproof_from,
         must_attack: c.must_attack,
+        attacking: cx.s().attackers.iter().any(|a| a.id == id),
         mana_value: cantrip_api::mana_value_of(&|card| cx.cards().get(card), cx.s(), id, c),
         abilities: c.abilities,
         words: cantrip_api::words(cx.s(), id),

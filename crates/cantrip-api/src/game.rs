@@ -459,6 +459,12 @@ pub trait Query {
         self.state().attackers.iter().any(|a| a.id == id)
     }
 
+    /// Whether a creature that has left the battlefield was attacking as it last was there (CR 506.3, 603.10a), from its
+    /// last-known information: combat forgets it the moment it leaves (CR 506.4), so `is_attacking` no longer says.
+    fn was_attacking(&self, id: ObjectId) -> bool {
+        self.state().last_known(id).is_some_and(|row| row.attacking)
+    }
+
     /// Whether an attacking creature has been blocked (CR 509.1h): it stays blocked when its blockers leave.
     fn is_blocked(&self, id: ObjectId) -> bool {
         self.state().attackers.iter().any(|a| a.id == id && a.blocked)

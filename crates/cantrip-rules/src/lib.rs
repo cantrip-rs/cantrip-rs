@@ -876,6 +876,7 @@ impl Game {
                     protection_everything: c.protection_everything,
                     hexproof_from: c.hexproof_from,
                     must_attack: c.must_attack,
+                    attacking: false,
                     mana_value,
                     abilities: c.abilities,
                     words: Words::NONE,
