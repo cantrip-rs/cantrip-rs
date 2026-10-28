@@ -1,0 +1,32 @@
+# S.H.I.E.L.D. Deployment Drone: "When this creature enters, create a 1/1 white Soldier creature token." {2}{U} is paid
+# exactly by Black Lotus's {U}{U}{U}. The Drone is a 2/2 artifact creature with flying; the Soldier is a white 1/1 token
+# (CR 111.4), and exactly one is made.
+
+[Bot1 Deck]
+Black Lotus
+S.H.I.E.L.D. Deployment Drone
+Island x5
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.S.H.I.E.L.D. Deployment Drone.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.S.H.I.E.L.D. Deployment Drone.Power = 2
+Bot1.Battlefield.S.H.I.E.L.D. Deployment Drone.Toughness = 2
+Bot1.Battlefield.S.H.I.E.L.D. Deployment Drone.Types = Artifact; Creature
+Bot1.Battlefield.S.H.I.E.L.D. Deployment Drone.Keywords = Flying
+Bot1.Battlefield.Soldier Token.Power = 1
+Bot1.Battlefield.Soldier Token.Toughness = 1
+Bot1.Battlefield.Soldier Token.Colors = White
+Bot1.Battlefield.Soldier Token.Token = true
+Bot1.Battlefield.Count = 2
