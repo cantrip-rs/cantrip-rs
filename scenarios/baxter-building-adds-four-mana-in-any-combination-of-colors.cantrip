@@ -1,0 +1,32 @@
+# Baxter Building: "{4}, {T}: Add four mana in any combination of colors" (CR 106.1b). Four Moxen pay the {4}; the four mana
+# are chosen as it resolves, repeats allowed: two red, a green and a blue.
+
+[Bot1 Deck]
+Baxter Building
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Baxter Building.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Baxter Building.Activate(Ability: Add four mana)
+Bot1.Colors(Red; Red; Green; Blue)
+
+[Expect]
+Bot1.Mana = {U}{R}{R}{G}
+Bot1.Battlefield.Baxter Building.Tapped = true

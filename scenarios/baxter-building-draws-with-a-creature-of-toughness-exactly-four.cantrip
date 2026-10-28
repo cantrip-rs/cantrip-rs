@@ -1,0 +1,44 @@
+# Baxter Building: "Activate only if you control a creature with toughness 4 or greater" is inclusive (CR 602.5b). A Giant
+# Spider (2/4) has exactly toughness 4; Black Lotus and Mox Emerald pay for it, then the other four Moxen pay the {4} and Bot1
+# draws an Island.
+
+[Bot1 Deck]
+Baxter Building
+Black Lotus
+Giant Spider
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Baxter Building.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Spider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Baxter Building.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island
+Bot1.Battlefield.Giant Spider.Toughness = 4
+Bot1.Battlefield.Baxter Building.Tapped = true

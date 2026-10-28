@@ -1,0 +1,40 @@
+# Baxter Building: "{4}, {T}: Draw a card. Activate only if you control a creature with toughness 4 or greater." Wall of
+# Stone is a 0/8, cast with a Black Lotus; four Moxen then pay the {4} and Bot1 draws an Island.
+
+[Bot1 Deck]
+Baxter Building
+Black Lotus
+Wall of Stone
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Baxter Building.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Red)
+Bot1.Hand.Wall of Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Baxter Building.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island
+Bot1.Battlefield.Baxter Building.Tapped = true

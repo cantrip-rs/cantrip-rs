@@ -1,0 +1,35 @@
+# Baxter Building: the draw needs a creature with toughness 4 or greater (CR 602.5b). A Grizzly Bears (2/2) is a creature but
+# not one of those, and with four Moxen's mana to pay the {4} the ability is still not offered.
+
+[Bot1 Deck]
+Baxter Building
+Black Lotus
+Grizzly Bears
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Baxter Building.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Baxter Building.Activate(Ability: Draw a card)
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Toughness = 2

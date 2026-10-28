@@ -1,0 +1,5 @@
+{
+  "name": "Baxter Building",
+  "type": "Land",
+  "oracleText": "{T}: Add {C}.\n{4}, {T}: Add four mana in any combination of colors.\n{4}, {T}: Draw a card. Activate only if you control a creature with toughness 4 or greater."
+}
