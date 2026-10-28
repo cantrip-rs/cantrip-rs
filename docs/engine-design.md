@@ -326,6 +326,8 @@ only the candidates the host's verdict on those picked says may be added.
   untap step" is the permanent's own `Keyword::DoesNotUntap` (Mana Vault, Bombur), or another permanent's
   `CardDef::untap_bans` (Intruder Alarm, Infinite Coursework): a rule of that source, no ability of the permanent (CR 113.1a),
   so losing its abilities leaves it and no keyword of the permanent says it ("creatures with no abilities", CR 613.1f).
+  "Can't become untapped" is `CardDef::cant_become_untapped` (Frozen in Ice): the same kind of rule, but it holds in every untap, an
+  effect's and a stun counter's too (`ops::untap`, CR 101.2, 122.1d).
 - **Text-changing effects (612, layer 3)** are `EffectKind::ChangeText { from, to }`, a `Word` (a color word or a
   subtype) replaced by another. The layers change the type line; card code reads every word of its rules text through
   `Query::words` (`Words`, the changes in timestamp order unless one depends on another), so the card does what its changed text says. A token's

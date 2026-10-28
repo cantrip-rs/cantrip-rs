@@ -158,6 +158,8 @@ mod static_rules;
 mod transformed_cast_tests;
 mod turn;
 #[cfg(test)]
+mod cant_become_untapped_tests;
+#[cfg(test)]
 mod untap_bans_tests;
 #[cfg(test)]
 mod untap_others_tests;
