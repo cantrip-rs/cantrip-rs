@@ -1,0 +1,49 @@
+# Wither (CR 702.80a, 120.3d): Sickle Ripper, a 2/1, is blocked by Bot2's Canopy Spider, a 1/3, and deals its 2 damage as two
+# -1/-1 counters, not as damage: the Spider is a -1/1 with no damage marked, and survives. The Spider's 1 damage kills the
+# Ripper (an ordinary source). Scuzzback Scrapper, a 1/1 with wither, is unblocked and deals its 1 damage to Bot2 as life
+# loss, not as a counter (damage to a player is the same with wither).
+# Bot1 casts the Ripper (Black Lotus) and the Scrapper (Mox Ruby) on turn 1; Bot2 casts the Spider (Moxen Emerald and
+# Pearl) on turn 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Sickle Ripper
+Scuzzback Scrapper
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Canopy Spider
+Island x21
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Sickle Ripper.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Scuzzback Scrapper.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Canopy Spider.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Sickle Ripper > Bot2; Scuzzback Scrapper > Bot2)
+Bot2.Block(Canopy Spider > Sickle Ripper)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Canopy Spider.Counters.MinusOneMinusOne = 2
+Bot2.Battlefield.Canopy Spider.Power = -1
+Bot2.Battlefield.Canopy Spider.Toughness = 1
+Bot2.Battlefield.Canopy Spider.Damage = 0
+Bot1.Graveyard = Sickle Ripper; Black Lotus
+Bot1.Battlefield.Scuzzback Scrapper.Counters.MinusOneMinusOne = (absent)
