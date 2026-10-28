@@ -66,9 +66,19 @@ def main():
     lcov = os.path.join(tempfile.mkdtemp(prefix="card-coverage-"), "card.lcov")
     run = subprocess.run(
         ["cargo", "llvm-cov", "run", "--profile", "cards", "-p", "cantrip-script", "--bin", "corpus",
-         "--lcov", "--output-path", lcov, "--", "--card", name],
+         "--no-report", "--", "--card", name],
         cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace")
     summary = [l for l in run.stdout.splitlines() if "scenarios:" in l]
+    if run.returncode == 0:
+        # The report is a step of its own: since cargo-llvm-cov 0.8, a run's report holds only the package it ran
+        # (cantrip-script), never the card's crate. `report --workspace` (0.9) holds every member; an older version
+        # takes no --workspace and holds them all without it.
+        for scope in (["--workspace"], []):
+            run = subprocess.run(
+                ["cargo", "llvm-cov", "report", "--profile", "cards", *scope, "--lcov", "--output-path", lcov],
+                cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace")
+            if run.returncode == 0:
+                break
     if run.returncode != 0 or not os.path.isfile(lcov):
         sys.stdout.write(run.stdout[-4000:] + run.stderr[-4000:])
         sys.exit("card-coverage: the coverage run failed (is cargo-llvm-cov installed?)")
