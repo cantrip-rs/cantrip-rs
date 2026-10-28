@@ -1,0 +1,57 @@
+# Gandalf, Spark Starter: "he deals 3 damage divided as you choose among one, two, or three targets" (CR 601.2d). Two
+# targets, unequal shares: Bot2's Ornithopter (0/2) takes 2 and dies, Bot2 takes the remaining 1 (19), and its Memnite,
+# left untargeted, is untouched. The sibling scenario divides it as 1, 1 and 1 among three targets.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Black Lotus
+Gandalf, Spark Starter
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gandalf, Spark Starter.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Divide(Bot2.Battlefield.Ornithopter: 2; Bot2: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Gandalf, Spark Starter.Keywords = Reach
+Bot1.Battlefield.Gandalf, Spark Starter.Power = 4
+Bot1.Battlefield.Gandalf, Spark Starter.Toughness = 3

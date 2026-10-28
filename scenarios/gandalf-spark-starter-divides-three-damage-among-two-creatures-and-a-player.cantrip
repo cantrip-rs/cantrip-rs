@@ -1,0 +1,57 @@
+# Gandalf, Spark Starter: "When Gandalf enters, he deals 3 damage divided as you choose among one, two, or three targets"
+# (CR 601.2d). Three targets, one damage each: Bot2's Memnite (1/1) dies, its Ornithopter (0/2) survives with exactly 1
+# damage, and Bot2 goes to 19. Paid with exactly {4}{R}{R}: Black Lotus and three Moxen, the pool empty after.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Black Lotus
+Gandalf, Spark Starter
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gandalf, Spark Starter.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Divide(Bot2: 1; Bot2.Battlefield.Memnite: 1; Bot2.Battlefield.Ornithopter: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Gandalf, Spark Starter.Keywords = Reach
+Bot1.Battlefield.Gandalf, Spark Starter.Power = 4
+Bot1.Battlefield.Gandalf, Spark Starter.Toughness = 3

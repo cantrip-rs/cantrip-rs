@@ -1,0 +1,11 @@
+{
+  "name": "Gandalf, Spark Starter",
+  "manaCost": "{4}{R}{R}",
+  "type": "Legendary Creature — Avatar Wizard",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Reach\nWhen Gandalf enters, he deals 3 damage divided as you choose among one, two, or three targets.",
+  "keywords": [
+    "Reach"
+  ]
+}
