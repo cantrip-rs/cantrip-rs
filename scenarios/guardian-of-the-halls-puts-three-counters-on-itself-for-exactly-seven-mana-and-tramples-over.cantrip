@@ -1,0 +1,62 @@
+# Guardian of the Halls, a 2/2 with trample: "{5}{G}{G}: Put three +1/+1 counters on this creature." On turn 1 Bot1 casts it for
+# {1}{G} and then pays the seven mana for the ability (two Black Lotuses and a Mox Sapphire; not offered with only four available,
+# the pool empty right after): a 5/5. On turn 3 it attacks and Bot2's Ornithopter (0/2) blocks: trample assigns lethal damage (2) to
+# the blocker and the other 3 to Bot2.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Guardian of the Halls
+Plains
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Guardian of the Halls.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Guardian of the Halls.Power = 2
+! Bot1.Battlefield.Guardian of the Halls.Activate(Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Guardian of the Halls.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Guardian of the Halls.Counters.PlusOnePlusOne = 3
+? Bot1.Battlefield.Guardian of the Halls.Power = 5
+? Bot1.Battlefield.Guardian of the Halls.Toughness = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Guardian of the Halls > Bot2)
+Bot1.Pass
+Bot2.Block(Ornithopter > Guardian of the Halls)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield.Ornithopter = (absent)

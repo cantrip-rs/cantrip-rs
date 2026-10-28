@@ -1,0 +1,11 @@
+{
+  "name": "Guardian of the Halls",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Trample\n{5}{G}{G}: Put three +1/+1 counters on this creature.",
+  "keywords": [
+    "Trample"
+  ]
+}
