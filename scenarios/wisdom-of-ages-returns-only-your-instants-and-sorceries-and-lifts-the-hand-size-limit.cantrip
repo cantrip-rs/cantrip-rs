@@ -1,0 +1,68 @@
+# Wisdom of Ages ({4}{U}{U}{U}): "Return all instant and sorcery cards from your graveyard to your hand. You have no maximum hand
+# size for the rest of the game. Exile Wisdom of Ages." Bot1's graveyard holds Lightning Bolt, Ancestral Recall and Mind Twist
+# (instants and a sorcery) and the Black Lotus sacrificed for the spell (an artifact); Bot2's holds a Lightning Bolt. Only
+# Bot1's three come back, the Lotus stays, Bot2's Bolt stays, and the spell exiles itself. Bot1 then draws on to nine cards by
+# turn 12 and is never asked to discard at cleanup (CR 402.2, 514.1).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Lightning Bolt
+Ancestral Recall
+Mind Twist
+Island
+Island
+Wisdom of Ages
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mind Twist.Cast(Bot2; X: 0)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wisdom of Ages.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Black Lotus
+? Bot2.Graveyard = Lightning Bolt
+? Exile = Wisdom of Ages
+? Bot1.Hand.Count = 5
+[T12 Bot2.Main1]
+
+[Expect]
+Bot1.Hand.Count = 9
+Bot1.Graveyard = Black Lotus
+Exile = Wisdom of Ages

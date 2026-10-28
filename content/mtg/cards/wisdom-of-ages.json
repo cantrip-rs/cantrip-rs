@@ -1,0 +1,6 @@
+{
+  "name": "Wisdom of Ages",
+  "manaCost": "{4}{U}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Return all instant and sorcery cards from your graveyard to your hand. You have no maximum hand size for the rest of the game.\nExile Wisdom of Ages."
+}
