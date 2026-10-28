@@ -3,23 +3,17 @@
 //!
 //! A card with persist lists `trigger(text)` among its `abilities`.
 
-use crate::triggers::THIS_DIES;
+use crate::returns_with_counter::{had_none, returns, trigger as returning};
 use cantrip_api::*;
 
-/// "If it had no -1/-1 counters on it" (CR 603.4): the permanent as it last was on the battlefield.
 fn had_no_minus_counters(q: &dyn Query, asker: &Asker) -> bool {
-    q.obj(asker.source).counters(CounterKind::MinusOne) == 0
+    had_none(q, asker, CounterKind::MinusOne)
 }
 
-/// The return: the card the permanent became in the graveyard, if it is still there (CR 400.7).
-fn returns(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(card) = g.found_after_move(item.object) else { return Ok(()) };
-    let owner = g.obj(card).owner;
-    g.put_onto_battlefield_with_counters(card, owner, false, &[(CounterKind::MinusOne, 1)])?;
-    Ok(())
+fn returns_with_a_minus_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    returns(g, item, CounterKind::MinusOne)
 }
 
 pub const fn trigger(text: &'static str) -> AbilityDef {
-    triggered(THIS_DIES, returns, text)
-        .condition(had_no_minus_counters)
+    returning(returns_with_a_minus_counter, had_no_minus_counters, text)
 }
