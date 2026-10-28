@@ -1,0 +1,56 @@
+# Dwarven Mattock: the only Dwarf Bot1 controls is the target of its enters trigger (chosen automatically) and becomes a 4/4 with ward
+# {1}. Bot2 has exactly two mana (Mountain and Mox Ruby): the Bolt takes one, the ward trigger asks {1}, Bot2 pays it with the other,
+# and the Bolt resolves, leaving 3 damage on the 4/4 (the control for the scenario in which Bot2 declines). A ward {2} could not have been
+# paid with one mana left. CR 702.21a.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Dwarven Provisioner
+Dwarven Mattock
+Island x15
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dwarven Provisioner.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dwarven Mattock.Cast
+Bot1.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Dwarven Provisioner)
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt
+Bot2.Mana =
+Bot1.Battlefield.Dwarven Provisioner.Damage = 3
+Bot1.Battlefield.Dwarven Provisioner.Power = 4
+Bot1.Battlefield.Dwarven Provisioner.Toughness = 4

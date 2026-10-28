@@ -1,0 +1,79 @@
+# Dwarven Mattock: "When this Equipment enters, attach it to target Dwarf you control. Equipped creature gets +2/+2 and has ward {1}."
+# Bot1 controls two Dwarven Provisioners (2/2 Dwarves), an Ornithopter and Bot2 has a Dwarf too: only Bot1's Dwarves may be chosen
+# (the Ornithopter and Bot2's Dwarf are refused), and the Mattock attaches to the one chosen, #2, making it a 4/4 while #1 stays 2/2.
+# The ward {1} it grants is a counter-unless-pays: Bot2's Bolt at the equipped Dwarf declines to pay and is countered, the Dwarf
+# unmarked (CR 702.21a, 701.3a, 301.5).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Dwarven Provisioner
+Dwarven Provisioner
+Dwarven Mattock
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Dwarven Provisioner
+Lightning Bolt
+Island x2
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dwarven Provisioner.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Dwarven Provisioner.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dwarven Provisioner.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dwarven Mattock.Cast
+Bot1.Pass
+! Bot1.Target(Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Dwarven Provisioner)
+Bot1.Target(Dwarven Provisioner#2)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Dwarven Mattock.AttachedTo = Dwarven Provisioner
+? Bot1.Battlefield.Dwarven Provisioner#1.Power = 2
+? Bot1.Battlefield.Dwarven Provisioner#2.Power = 4
+? Bot1.Battlefield.Dwarven Provisioner#2.Toughness = 4
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Dwarven Provisioner#2)
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Dwarven Provisioner#2.Damage = 0
+Bot1.Battlefield.Dwarven Provisioner#2.Power = 4
