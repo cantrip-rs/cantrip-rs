@@ -10,9 +10,9 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let former = g.controller(target);
     g.exile(target);
     let players: Vec<PlayerId> = g.state().seats().filter(|&p| p != former).collect();
-    for player in players {
-        g.create_token_copies_of(values, player, 1)?;
-    }
+    // Each of those players creates one, at once (CR 101.4).
+    let copies: Vec<(Copiable, PlayerId)> = players.into_iter().map(|player| (values, player)).collect();
+    g.create_token_copies_together(&copies)?;
     Ok(())
 }
 

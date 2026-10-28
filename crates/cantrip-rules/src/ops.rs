@@ -1944,6 +1944,27 @@ fn create_tokens_onto(
         .iter()
         .map(|&(card, controller)| (card, token_copy(cx.cards(), card, copy, words), controller))
         .collect();
+    create_tokens_proposed(cx, proposed, tapped, with, spell, host)
+}
+
+/// Creates tokens that are copies of different objects as one instruction (CR 707.2, 111.1, 101.4): "for each creature
+/// you control, create a token that's a copy of that creature". Each is a set of copiable values and who controls the token;
+/// all enter at once, and what watches them sees one event (CR 603.2c).
+pub fn create_token_copies_together(cx: &mut Cx, copies: &[(Copiable, PlayerId)]) -> R<Vec<ObjectId>> {
+    let proposed: Vec<(CardId, Option<Copiable>, PlayerId)> =
+        copies.iter().map(|&(values, controller)| (values.card, token_copy(cx.cards(), values.card, Some(values), Words::NONE), controller)).collect();
+    create_tokens_proposed(cx, proposed, false, &[], None, None)
+}
+
+/// The tokens `proposed` (each its card, copy values and controller), created together as `create_tokens_onto` says.
+fn create_tokens_proposed(
+    cx: &mut Cx,
+    proposed: Vec<(CardId, Option<Copiable>, PlayerId)>,
+    tapped: bool,
+    with: &[(CounterKind, i16)],
+    spell: Option<&StackItem>,
+    host: Option<ObjectId>,
+) -> R<Vec<ObjectId>> {
     // CR 614.1a: how many of each there are is decided by what would replace the creation, before any of them is made. The
     // token a copy of a permanent spell becomes as it resolves is not created (CR 111.13, 707.10f), so nothing replaces it.
     let replaced = if spell.is_some() { None } else { replace::token_batch(cx, &proposed) };

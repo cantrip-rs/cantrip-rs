@@ -29,10 +29,9 @@ fn cats(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         // A copy has the copiable values of what it copies (CR 707.2), not the words of Ocelot Pride's text.
         g.create_tokens_worded(&copies, false, None, Words::NONE)?;
     } else {
-        for t in tokens {
-            let values = g.copiable_values(t);
-            g.create_token_copies_of(values, you, 1)?;
-        }
+        // Copies of tokens that are themselves copies keep their exceptions (CR 707.2); they too enter at once (CR 101.4).
+        let copies: Vec<(Copiable, PlayerId)> = tokens.iter().map(|&t| (g.copiable_values(t), you)).collect();
+        g.create_token_copies_together(&copies)?;
     }
     Ok(())
 }
