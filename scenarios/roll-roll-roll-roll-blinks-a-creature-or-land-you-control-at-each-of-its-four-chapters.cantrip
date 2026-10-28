@@ -1,0 +1,74 @@
+# Roll-Roll-Roll-Roll: "I, II, III, IV - Exile up to one target creature or land you control. If you do, return it to the battlefield under its owner's
+# control at the beginning of the next end step." Cast on turn 1, chapter I exiles Bot1's Ornithopter and it is back at that turn's end step. On turn 3
+# chapter II takes an Island (the refusals: its own Mox and Bot2's Ornithopter are not legal targets) and the Island is back untapped at the end step.
+# On turn 5 chapter III takes no target and nothing is exiled or returned. On turn 7 chapter IV exiles the Ornithopter again, and after it the Saga is
+# sacrificed (CR 714.4).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Roll-Roll-Roll-Roll
+Ornithopter
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Roll-Roll-Roll-Roll.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+? Bot1.Battlefield.Count = 5
+[T2 Bot2.Main1]
+? Exile.Count = 0
+? Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Ornithopter; Roll-Roll-Roll-Roll; Island
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Island)
+Bot1.Pass
+Bot2.Pass
+? Exile = Island
+[T4 Bot2.Main1]
+? Exile.Count = 0
+[T5 Bot1.Main1]
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+[T7 Bot1.Main1]
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+[T8 Bot2.Main1]
+? Exile.Count = 0
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Ornithopter; Island
+Bot1.Graveyard = Roll-Roll-Roll-Roll

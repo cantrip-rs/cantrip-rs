@@ -1,0 +1,6 @@
+{
+  "name": "Roll-Roll-Roll-Roll",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI, II, III, IV — Exile up to one target creature or land you control. If you do, return it to the battlefield under its owner's control at the beginning of the next end step."
+}
