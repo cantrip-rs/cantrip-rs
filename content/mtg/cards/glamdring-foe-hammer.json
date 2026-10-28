@@ -1,0 +1,12 @@
+{
+  "name": "Glamdring, Foe-hammer",
+  "manaCost": "{2}",
+  "type": "Legendary Artifact — Equipment",
+  "oracleText": "Instant and sorcery spells you cast cost {X} less to cast, where X is equipped creature's power.\nEquip {2}",
+  "adventure": {
+    "name": "Gleam of Death",
+    "manaCost": "{3}{U}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Mill six cards, then put all instant and sorcery cards from among them into your hand. (Then exile this card. You may cast the artifact later from exile.)"
+  }
+}

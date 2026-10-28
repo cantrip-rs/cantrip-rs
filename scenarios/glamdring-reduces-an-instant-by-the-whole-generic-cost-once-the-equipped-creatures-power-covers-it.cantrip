@@ -1,0 +1,68 @@
+# Glamdring, Foe-hammer: with no creature equipped X is 0 and Sink into Stupor ({1}{U}{U}, an instant) costs all three mana. Equipped
+# to a 2/2 Dwarven Provisioner it costs {U}{U}: the whole generic part goes (two is more than the one generic mana), the colored mana is
+# never reduced, and the pool is empty after paying exactly {U}{U} (CR 601.2f, 118.7a, 118.7c).
+
+[Bot1 Deck]
+Island
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Dwarven Provisioner
+Glamdring, Foe-hammer
+Sink into Stupor
+Sink into Stupor
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dwarven Provisioner.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glamdring, Foe-hammer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sink into Stupor.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Glamdring, Foe-hammer.Activate(Dwarven Provisioner)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sink into Stupor.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Sink into Stupor; Sink into Stupor
+Bot2.Hand.Count = 8
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Glamdring, Foe-hammer.AttachedTo = Dwarven Provisioner

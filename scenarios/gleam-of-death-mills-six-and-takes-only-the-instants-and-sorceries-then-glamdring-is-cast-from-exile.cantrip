@@ -1,0 +1,57 @@
+# Glamdring, Foe-hammer's Adventure, Gleam of Death ({3}{U}, sorcery): mill six cards, then put all instant and sorcery cards from among
+# them into your hand. The six are Lightning Bolt, an Island, Opt, Preordain, an Ornithopter and an Elvish Mystic: the Bolt, Opt and
+# Preordain go to the hand, the others stay milled, and the seventh card of the library is not touched. The card is exiled as it
+# resolves and Glamdring is cast from there later for {2} (CR 701.17a, 715.4, 608.2c).
+
+[Bot1 Deck]
+Island
+Island
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Glamdring, Foe-hammer
+Lightning Bolt
+Island
+Opt
+Preordain
+Ornithopter
+Elvish Mystic
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Glamdring, Foe-hammer.Cast(Ability: Adventure)
+? Bot1.Mana =
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Hand = Island; Lightning Bolt; Opt; Preordain
+? Bot1.Graveyard = Elvish Mystic; Ornithopter; Island
+? Exile = Glamdring, Foe-hammer
+? Bot1.Library.Count = 13
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Glamdring, Foe-hammer.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Island; Mox Pearl; Mox Jet; Mox Ruby; Mox Sapphire; Glamdring, Foe-hammer
+Exile.Count = 0

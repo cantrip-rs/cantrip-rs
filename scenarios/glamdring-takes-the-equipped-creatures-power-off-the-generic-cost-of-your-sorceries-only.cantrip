@@ -1,0 +1,85 @@
+# Glamdring, Foe-hammer: "Instant and sorcery spells you cast cost {X} less to cast, where X is equipped creature's power." Equipped
+# to a 1/1 Elvish Mystic, it takes {1} off Harmless Offering ({2}{R}): Bot1 pays {1}{R} with exactly two Moxen and the pool is empty.
+# It reduces only Bot1's own sorceries and instants: Bot2's Harmless Offering still costs all {2}{R} (Bot2's three Moxen, pool empty
+# after), and a creature spell, Dwarven Provisioner ({1}{W}), is paid in full with two Moxen. The equip is paid with exactly {2}
+# (CR 601.2f, 118.7a, 702.6a).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Elvish Mystic
+Glamdring, Foe-hammer
+Dwarven Provisioner
+Harmless Offering
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Harmless Offering
+Ornithopter
+Island x2
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glamdring, Foe-hammer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Glamdring, Foe-hammer.Activate(Elvish Mystic)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Mox Sapphire)
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Harmless Offering.Cast
+Bot2.Target(Bot1)
+Bot2.Target(Ornithopter)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dwarven Provisioner.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Ruby; Mox Pearl; Mox Jet; Mox Sapphire
+Bot1.Battlefield = Mox Pearl; Mox Ruby; Mox Emerald; Elvish Mystic; Glamdring, Foe-hammer; Ornithopter; Dwarven Provisioner
+Bot1.Battlefield.Glamdring, Foe-hammer.AttachedTo = Elvish Mystic

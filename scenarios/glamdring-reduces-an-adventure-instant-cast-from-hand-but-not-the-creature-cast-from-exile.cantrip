@@ -1,0 +1,62 @@
+# Glamdring, Foe-hammer: "Instant and sorcery spells you cast cost {X} less to cast". Equipped to a 2/2 Dwarven Provisioner (X = 2), it
+# reduces Brazen Borrower's Adventure, Petty Theft ({1}{U}, an instant spell), to {U}: Bot1 pays it with the single Mox Sapphire and the
+# pool is empty. The Borrower later cast from exile is a creature spell and costs its full {1}{U}{U} (Sapphire, Island and Ruby, exactly).
+# The Adventure is judged by the characteristics it has on the stack (CR 715.3, 601.2f, 118.7a).
+
+[Bot1 Deck]
+Island
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Dwarven Provisioner
+Glamdring, Foe-hammer
+Brazen Borrower
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dwarven Provisioner.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glamdring, Foe-hammer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Glamdring, Foe-hammer.Activate(Dwarven Provisioner)
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brazen Borrower.Cast(Bot2.Battlefield.Ornithopter; Ability: Adventure)
+? Bot1.Mana =
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Brazen Borrower.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Brazen Borrower.Power = 3
+Exile.Count = 0
