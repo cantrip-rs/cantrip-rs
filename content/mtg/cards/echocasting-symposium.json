@@ -1,0 +1,6 @@
+{
+  "name": "Echocasting Symposium",
+  "manaCost": "{4}{U}{U}",
+  "type": "Sorcery — Lesson",
+  "oracleText": "Target player creates a token that's a copy of target creature you control.\nParadigm (Then exile this spell. After you first resolve a spell with this name, you may cast a copy of it from exile without paying its mana cost at the beginning of each of your first main phases.)"
+}
