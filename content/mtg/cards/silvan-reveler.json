@@ -1,0 +1,8 @@
+{
+  "name": "Silvan Reveler",
+  "manaCost": "{2}{G}{U}",
+  "type": "Creature — Elf Citizen",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, draw a card, then discard a card. If you discard a land card this way, put it from your graveyard onto the battlefield tapped.\nLandfall — Whenever a land you control enters, you may pay {1}{G}{U}. If you do, return this card from your graveyard to your hand."
+}
