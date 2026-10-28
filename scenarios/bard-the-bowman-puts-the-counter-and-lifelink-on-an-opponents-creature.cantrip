@@ -1,0 +1,53 @@
+# Bard the Bowman: "Reach" and "Whenever you draw your second card each turn, put a +1/+1 counter on target creature. It gains
+# lifelink until end of turn." Any creature may be chosen, an opponent's among them: the counter and lifelink go to Bot2's
+# Ornithopter (a 1/2 with flying and lifelink) and Bard has neither, the third and fourth cards drawn adding nothing. The
+# lifelink lasts to the end of the turn; the counter stays.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Bard the Bowman
+Ancestral Recall
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bard the Bowman.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Lifelink
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Bard the Bowman.Keywords = Reach
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Bard the Bowman.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Count = 6

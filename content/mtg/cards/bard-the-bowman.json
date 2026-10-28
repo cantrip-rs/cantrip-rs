@@ -1,0 +1,11 @@
+{
+  "name": "Bard the Bowman",
+  "manaCost": "{1}{W}{U}",
+  "type": "Legendary Creature — Human Archer",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Reach\nWhenever you draw your second card each turn, put a +1/+1 counter on target creature. It gains lifelink until end of turn.",
+  "keywords": [
+    "Reach"
+  ]
+}

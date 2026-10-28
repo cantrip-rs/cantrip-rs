@@ -1,0 +1,57 @@
+# Bard the Bowman: "Reach" and "Whenever you draw your second card each turn, put a +1/+1 counter on target creature. It gains
+# lifelink until end of turn." On turn 3 Bot1 draws for the turn (the first card), then casts Ancestral Recall and draws three more:
+# the second card triggers the ability once - the third and fourth do not - and Bot1 puts the counter on Bard, who has lifelink for
+# the turn and, attacking as a 2/4, gains Bot1 2 life; on turn 4 the lifelink is gone and the counter stays. A Mox Pearl is no
+# creature, so it is not a legal target (Bot2's Ornithopter is the other creature there is to choose).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Bard the Bowman
+Ancestral Recall
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bard the Bowman.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+Bot1.Target(Bard the Bowman)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bard the Bowman.Keywords = Lifelink; Reach
+? Bot1.Battlefield.Bard the Bowman.Power = 2
+Bot1.Attack(Bard the Bowman > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 22
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Bard the Bowman.Keywords = Reach
+
+[Expect]
+Bot1.Battlefield.Bard the Bowman.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot2.Life = 18
+Bot1.Hand.Count = 6
