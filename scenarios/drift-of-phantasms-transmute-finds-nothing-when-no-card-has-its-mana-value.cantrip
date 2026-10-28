@@ -1,0 +1,41 @@
+# Transmute searches for "a card with the same mana value" (CR 702.53a), a quality, so the search may find nothing (CR 701.23b)
+# and here must: the library holds only a mana value 2 (Silver Knight), a 5 (Baneslayer Angel) and a 4 (Fleshwrither), none of
+# which may be chosen. The ability is still paid for and the card still discarded, the library is searched and shuffled, and
+# nothing is put into the hand or revealed.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Sapphire
+Drift of Phantasms
+Plains
+Plains
+Plains
+Silver Knight
+Baneslayer Angel
+Fleshwrither
+Plains x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Drift of Phantasms.Activate(Ability: Transmute)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Pass
+! Bot1.Search(Silver Knight)
+! Bot1.Search(Baneslayer Angel)
+! Bot1.Search(Fleshwrither)
+Bot1.Search()
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains
+Bot1.Graveyard = Drift of Phantasms

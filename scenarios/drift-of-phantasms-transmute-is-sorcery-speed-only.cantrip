@@ -1,0 +1,42 @@
+# Transmute is activated "only as a sorcery" (CR 702.53a, 602.5d): Drift of Phantasms's transmute {1}{U}{U} is paid for with
+# Blasted Landscape and two Mox Sapphires, which stay untapped, and is not offered on Bot2's turn nor on Bot1's own while a
+# spell is still on the stack (a Mox Jet being cast). Once it has resolved, in Bot1's main phase with the stack empty, the same
+# activation is offered and finds the Mirran Crusader, the one card of the library with mana value 3.
+
+[Bot1 Deck]
+Blasted Landscape
+Mox Sapphire
+Mox Sapphire
+Drift of Phantasms
+Mox Jet
+Plains
+Plains
+Plains
+Mirran Crusader
+Plains x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Blasted Landscape.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+! Bot1.Hand.Drift of Phantasms.Activate(Ability: Transmute)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+! Bot1.Hand.Drift of Phantasms.Activate(Ability: Transmute)
+Bot1.Pass
+Bot1.Hand.Drift of Phantasms.Activate(Ability: Transmute)
+Bot1.Battlefield.Blasted Landscape.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Pass
+Bot1.Search(Mirran Crusader)
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Mirran Crusader
+Bot1.Graveyard = Drift of Phantasms

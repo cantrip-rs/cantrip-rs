@@ -1,0 +1,50 @@
+# Drift of Phantasms, a 0/5 flying defender: cast with Black Lotus mana, its characteristics as printed. Defender (CR 702.3b) means
+# it can't attack on a later turn, while a Memnite declared beside it may. Its transmute works only while it is in a hand (CR
+# 702.53a), though the ability continues to exist on the battlefield (CR 702.53b): with two Mox Sapphires and a Mox Ruby untapped,
+# {1}{U}{U} is there to pay and the activation is still not offered.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Drift of Phantasms
+Memnite
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Drift of Phantasms.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+! Bot1.Battlefield.Drift of Phantasms.Activate(Ability: Transmute)
+[T2 Bot2.End]
+? Bot1.Battlefield.Drift of Phantasms.Power = 0
+? Bot1.Battlefield.Drift of Phantasms.Toughness = 5
+? Bot1.Battlefield.Drift of Phantasms.Keywords = Defender; Flying
+? Bot1.Battlefield.Drift of Phantasms.Colors = Blue
+? Bot1.Battlefield.Drift of Phantasms.Types = Creature
+? Bot1.Battlefield.Drift of Phantasms.Subtypes = Spirit
+? Bot1.Battlefield.Drift of Phantasms.Supertypes = (absent)
+[T3 Bot1.Main1]
+! Bot1.Attack(Drift of Phantasms > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+! Bot1.Battlefield.Drift of Phantasms.Activate(Ability: Transmute)
+
+[Expect]
+Bot1.Battlefield.Drift of Phantasms.Tapped = false
+Bot2.Life = 19
