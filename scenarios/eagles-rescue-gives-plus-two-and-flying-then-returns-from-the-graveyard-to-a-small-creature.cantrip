@@ -1,0 +1,85 @@
+# Eagle's Rescue: "Enchanted creature gets +2/+2 and has flying" and "{2}{W/U}{W/U}: Return this card from your graveyard to the
+# battlefield attached to target creature you control with power 1 or less. Activate only as a sorcery." On turn 3 Bot1 enchants its
+# Eager Cadet (1/1, now a 3/3 with flying) and casts a Savannah Lions; Bot2's Lightning Bolt kills the Cadet on turn 4 and the Aura
+# goes to the graveyard. On turn 5 Bot1 casts a second Cadet and activates the Aura from the graveyard: the Lions (power 2) and Bot2's
+# Ornithopter (an opponent's, power 0) are not legal targets (refused); the new Cadet, power exactly 1, is, and the Aura enters
+# attached to it without its controller choosing, making it a 3/3 flyer again.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Eagle's Rescue
+Eager Cadet
+Savannah Lions
+Eager Cadet
+Plains x12
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Eagle's Rescue.Cast(Eager Cadet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Eager Cadet.Power = 3
+? Bot1.Battlefield.Eager Cadet.Toughness = 3
+? Bot1.Battlefield.Eager Cadet.Keywords = Flying
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Eager Cadet)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+? Bot1.Graveyard = Eagle's Rescue; Eager Cadet
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Graveyard.Eagle's Rescue.Activate(Savannah Lions)
+! Bot1.Graveyard.Eagle's Rescue.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Graveyard.Eagle's Rescue.Activate(Eager Cadet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Eagle's Rescue.AttachedTo = Eager Cadet
+Bot1.Battlefield.Eager Cadet.Power = 3
+Bot1.Battlefield.Eager Cadet.Keywords = Flying
+Bot1.Battlefield.Savannah Lions.Power = 2
+Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+Bot1.Graveyard = Eager Cadet

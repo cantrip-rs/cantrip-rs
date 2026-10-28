@@ -1,0 +1,6 @@
+{
+  "name": "Eagle's Rescue",
+  "manaCost": "{2}{W/U}{W/U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +2/+2 and has flying.\n{2}{W/U}{W/U}: Return this card from your graveyard to the battlefield attached to target creature you control with power 1 or less. Activate only as a sorcery."
+}

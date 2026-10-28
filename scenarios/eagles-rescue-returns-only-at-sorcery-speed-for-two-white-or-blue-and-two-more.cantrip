@@ -1,0 +1,79 @@
+# Eagle's Rescue: "{2}{W/U}{W/U}: Return this card from your graveyard to the battlefield attached to target creature you control with
+# power 1 or less. Activate only as a sorcery." Bot1's Rescue on its Ornithopter is destroyed by Bot2's Disenchant on turn 2. On
+# turn 3, with a Mox Emerald spell on the stack, the ability is not offered (refused: only as a sorcery). Once it has resolved and
+# a Savannah Lions has taken the Mox Pearl's {W}, Bot1's untapped sources - Sapphire, Jet, Ruby and Emerald - make four mana but only
+# one that is white or blue, which cannot pay the two {W/U} (refused). On turn 5, with the Pearl and Sapphire both there, it is paid,
+# and the Rescue is back on the Ornithopter (a 2/4, flying).
+
+[Bot1 Deck]
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Eagle's Rescue
+Mox Emerald
+Savannah Lions
+Swamp x12
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Island x17
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Eagle's Rescue.Cast(Ornithopter)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Eagle's Rescue)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Eagle's Rescue
+Bot1.Hand.Mox Emerald.Cast
+! Bot1.Graveyard.Eagle's Rescue.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Graveyard.Eagle's Rescue.Activate(Ornithopter; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Eagle's Rescue.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Eagle's Rescue.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Disenchant
