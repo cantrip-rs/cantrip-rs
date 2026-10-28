@@ -1,0 +1,54 @@
+# Absorbing Man. Turn 3, at the beginning of Bot1's first main phase, Absorbing Man becomes a copy of Mind Stone, except he is
+# named Absorbing Man, a legendary 4/4 Human Villain creature in addition to his other types, with vigilance (CR 707.2, 707.9b).
+# Turn 5, his controller's next turn has begun: he is Absorbing Man again, and with no target chosen he stays as he is.
+
+[Bot1 Deck]
+Absorbing Man
+Mind Stone
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Absorbing Man.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Target(Mind Stone)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Absorbing Man.Types = Artifact; Creature
+? Bot1.Battlefield.Absorbing Man.Subtypes = Human; Villain
+? Bot1.Battlefield.Absorbing Man.Supertypes = Legendary
+? Bot1.Battlefield.Absorbing Man.Power = 4
+? Bot1.Battlefield.Absorbing Man.Toughness = 4
+? Bot1.Battlefield.Absorbing Man.Keywords = Vigilance
+[T5 Bot1.Main1]
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Absorbing Man.Types = Creature
+? Bot1.Battlefield.Absorbing Man.Power = 4
+
+[Expect]
+Turn = 5
+Stack.Count = 0
