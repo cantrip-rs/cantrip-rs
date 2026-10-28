@@ -1,0 +1,65 @@
+# Orysa, Tide Choreographer ({4}{U}): "This spell costs {3} less to cast if creatures you control have total toughness 10 or
+# greater." Bot1 controls three Ornithopters (0/2) and a Hydro-Channeler (1/3): toughness 9, and Bot2 controls five Ornithopters
+# (toughness 10) that do not count. On turn 3 Orysa, with Mox Sapphire and Mox Ruby untapped, is refused at full price (Mana:
+# short); she herself, a 2/2 on the stack, adds nothing to the total. A fourth Ornithopter makes 11 and she is cast for {1}{U}
+# paid exactly (the pool empty after), her enters trigger drawing two cards.
+
+[Bot1 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Hydro-Channeler
+Mox Sapphire
+Mox Ruby
+Orysa, Tide Choreographer
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Island
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hydro-Channeler.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Orysa, Tide Choreographer.Cast(Mana: short)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Orysa, Tide Choreographer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 0
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Orysa, Tide Choreographer.Power = 2
+Bot1.Hand.Count = 2
+Stack.Count = 0
