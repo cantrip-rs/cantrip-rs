@@ -1,0 +1,74 @@
+# Atlantis Attacks: "Teamwork 4 ... Choose one. If this spell was cast using teamwork, choose both instead." Bot1 pays {5}{U}{U}
+# exactly (Black Lotus's {U}{U}{U} and four Moxen; the pool is empty) and taps its Bonecrusher Giant (power 4) for teamwork:
+# both modes happen, in printed order. Bot1 targets itself with the first, so it gets a 6/5 blue Leviathan token with hexproof,
+# and the second returns Bot2's Mox Pearl and Mox Jet, not its Island (a land: the refusal).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+Bonecrusher Giant
+Atlantis Attacks
+Island x13
+
+[Bot2 Deck]
+Island
+Mox Pearl
+Mox Jet
+Island x4
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bonecrusher Giant.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Atlantis Attacks.Cast
+Bot1.Modes(Teamwork 4)
+! Bot1.Modes(1)
+! Bot1.Modes(2)
+Bot1.Modes(1; 2)
+Bot1.Target(Bot1)
+! Bot1.Target(Bot2.Battlefield.Island)
+! Bot1.Target(Count: 0)
+! Bot1.Target(Bot2.Battlefield.Mox Pearl; Bot2.Battlefield.Mox Jet; Bot1.Battlefield.Mox Ruby)
+Bot1.Target(Bot2.Battlefield.Mox Pearl; Bot2.Battlefield.Mox Jet)
+Bot1.Choose(Bonecrusher Giant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Bonecrusher Giant.Tapped = true
+Bot1.Battlefield.Leviathan Token.Power = 6
+Bot1.Battlefield.Leviathan Token.Toughness = 5
+Bot1.Battlefield.Leviathan Token.Colors = Blue
+Bot1.Battlefield.Leviathan Token.Keywords = Hexproof
+Bot1.Battlefield.Leviathan Token.Token = true
+Bot2.Battlefield = Island
+Bot2.Hand.Count = 7
