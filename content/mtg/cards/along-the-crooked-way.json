@@ -1,0 +1,6 @@
+{
+  "name": "Along the Crooked Way",
+  "manaCost": "{2}{B}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, return target creature card from your graveyard to your hand.\nWhenever a creature card leaves your graveyard, amass Goblins 1.\n{1}{B}: Goblins and Orcs you control gain menace until end of turn."
+}

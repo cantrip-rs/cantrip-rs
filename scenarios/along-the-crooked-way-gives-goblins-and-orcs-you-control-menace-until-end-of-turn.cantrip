@@ -1,0 +1,66 @@
+# Along the Crooked Way {2}{B}'s "{1}{B}: Goblins and Orcs you control gain menace until end of turn." Bot1 controls an Orc (Orcish
+# Lumberjack), a Goblin (Mons's Goblin Raiders) and a Memnite; Bot2 controls a Goblin of its own. The Along is paid on turn 3 with
+# Mox Jet's {B} and two Mox Rubies, with no creature card in a graveyard for its enters ability to return; the ability is paid on
+# turn 5 exactly with Mox Jet and a Mox Ruby. Bot1's Orc and Goblin have menace; its Memnite and Bot2's Goblin do not. On turn 6
+# the menace is gone (CR 514.2).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Orcish Lumberjack
+Mons's Goblin Raiders
+Memnite
+Mox Jet
+Along the Crooked Way
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mons's Goblin Raiders
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Orcish Lumberjack.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Along the Crooked Way.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Along the Crooked Way.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Orcish Lumberjack.Keywords = Menace
+? Bot1.Battlefield.Mons's Goblin Raiders.Keywords = Menace
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+? Bot2.Battlefield.Mons's Goblin Raiders.Keywords = (absent)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Orcish Lumberjack.Keywords = (absent)
+Bot1.Battlefield.Mons's Goblin Raiders.Keywords = (absent)
