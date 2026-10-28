@@ -1,0 +1,100 @@
+# Baneslayer Angel, "protection from Demons and from Dragons" (CR 702.16b, 702.16f): two protections, each from a creature type.
+# On turn 4 Bot2's Nova Hellkite (a Dragon) enters and its ETB damage may not target the Baneslayer Angel: asked for a target
+# it may take the Ornithopter (the control, which gets 1 damage) or the Memnite, but the Angel is refused. On turn 5 the Angel
+# attacks into Bot2's untapped fliers: the Miasma Demon (a Demon) and the Nova Hellkite (a Dragon) may each not block it, though
+# the colorless Ornithopter may (the control), and the lifelinking first striker kills it, gaining Bot1 5.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Memnite
+Ornithopter
+Baneslayer Angel
+Plains x18
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Mox Ruby
+Miasma Demon
+Ornithopter
+Nova Hellkite
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Baneslayer Angel.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Miasma Demon.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose()
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Nova Hellkite.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Target(Baneslayer Angel)
+Bot2.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Damage = 1
+? Bot1.Battlefield.Baneslayer Angel.Damage = 0
+[T5 Bot1.Main1]
+Bot1.Attack(Baneslayer Angel > Bot2)
+[T5 Bot1.DeclareBlockers]
+! Bot2.Block(Miasma Demon > Baneslayer Angel)
+! Bot2.Block(Nova Hellkite > Baneslayer Angel)
+Bot2.Block(Ornithopter > Baneslayer Angel)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 25
+Bot2.Graveyard = Ornithopter; Black Lotus
