@@ -1,0 +1,11 @@
+{
+  "name": "Hawkeye, Young Avenger",
+  "manaCost": "{3}{R}",
+  "type": "Legendary Creature — Human Archer Hero",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Reach\nIf a source you control would deal noncombat damage to an opponent or a permanent an opponent controls, instead it deals that much damage plus X, where X is Hawkeye's power.",
+  "keywords": [
+    "Reach"
+  ]
+}

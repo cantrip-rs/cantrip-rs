@@ -1,0 +1,64 @@
+# Hawkeye, Young Avenger: "If a source you control would deal noncombat damage to an opponent or a permanent an opponent controls,
+# instead it deals that much damage plus X, where X is Hawkeye's power." He is a 2/4. Turn 3: Bot1's Lightning Bolt at Bot2 deals 3 + 2
+# (15); a Lightning Bolt at Hawkeye himself, a permanent Bot1 controls, deals only 3 (he survives, 3 damage on a 4 toughness);
+# Hawkeye's combat damage to Bot2 is 2, with nothing added (13). Turn 4: Bot2's Lightning Bolt at Bot1 is not a source Bot1's
+# Hawkeye cares about: 3 (17).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Hawkeye, Young Avenger
+Lightning Bolt
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hawkeye, Young Avenger.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 15
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Hawkeye, Young Avenger)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hawkeye, Young Avenger.Damage = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hawkeye, Young Avenger > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 13
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 13
