@@ -1,0 +1,70 @@
+# HYDRA Assault Robot: "Whenever another Villain and/or artifact you control enters, this creature deals 1 damage to target
+# opponent." Pings (Bot2 20 down): a non-Villain artifact (Memnite) 19; the robot itself entering, a land (Mountain) and Bot2's own
+# Memnite on turn 2 do not; an artifact that is a Villain too (Machinesmith Automaton) pings once (18); a Villain that is not an
+# artifact (Extremis Elite, turn 5) pings once more (17), and its Villain/artifact status is read as it entered (CR 603.6a).
+
+[Bot1 Deck]
+HYDRA Assault Robot
+Mox Ruby
+Mox Pearl
+Memnite
+Extremis Elite
+Machinesmith Automaton
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.HYDRA Assault Robot.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Machinesmith Automaton.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Extremis Elite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 20
+Stack.Count = 0

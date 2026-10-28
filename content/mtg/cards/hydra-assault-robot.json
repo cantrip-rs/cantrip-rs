@@ -1,0 +1,8 @@
+{
+  "name": "HYDRA Assault Robot",
+  "manaCost": "{1}{R}",
+  "type": "Artifact Creature — Robot Villain",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Whenever another Villain and/or artifact you control enters, this creature deals 1 damage to target opponent."
+}
