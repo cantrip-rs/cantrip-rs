@@ -1,0 +1,11 @@
+{
+  "name": "Barging Sergeant",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Minotaur Soldier",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Haste\nMentor (Whenever this creature attacks, put a +1/+1 counter on target attacking creature with lesser power.)",
+  "keywords": [
+    "Haste"
+  ]
+}
