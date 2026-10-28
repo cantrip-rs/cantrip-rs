@@ -87,7 +87,7 @@ fn in_case_of(old: &str, new: &str) -> String {
 }
 
 /// How a subtype is written in the plural: "Goblins", "Elves", "Plains".
-fn plural(name: &str) -> String {
+pub(crate) fn plural(name: &str) -> String {
     match name {
         "Elf" => "Elves".into(),
         "Dwarf" => "Dwarves".into(),
