@@ -1,0 +1,12 @@
+{
+  "name": "Iron Lad, Diverging Destiny",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Artifact Creature — Human Hero",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, vigilance\nYou may look at the top card of your library any time.\n{T}: Reveal the top card of your library. If it's an artifact card, draw a card.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}

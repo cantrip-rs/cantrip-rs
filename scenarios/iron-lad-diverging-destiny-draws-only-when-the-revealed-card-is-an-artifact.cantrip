@@ -1,0 +1,45 @@
+# Iron Lad, Diverging Destiny: "{T}: Reveal the top card of your library. If it's an artifact card, draw a card." {2}{U} is
+# paid exactly by Black Lotus. On turn 3 it attacks (vigilance: it stays untapped, and flies over for 2) and is then tapped for
+# its ability: the top card is an Ornithopter, an artifact, so it is drawn. On turn 5 the top card is an Island: revealed, it
+# stays on top and nothing is drawn.
+
+[Bot1 Deck]
+Black Lotus
+Iron Lad, Diverging Destiny
+Island x5
+Island
+Ornithopter
+Island
+Island
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Iron Lad, Diverging Destiny.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Iron Lad, Diverging Destiny > Bot2)
+? Bot1.Battlefield.Iron Lad, Diverging Destiny.Tapped = false
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Library.Count = 12
+Bot1.Battlefield.Iron Lad, Diverging Destiny.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 11
+? Bot1.Hand.Count = 7
+[T5 Bot1.Main1]
+? Bot1.Library.Count = 10
+Bot1.Battlefield.Iron Lad, Diverging Destiny.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Library.Count = 10
+Bot1.Battlefield.Iron Lad, Diverging Destiny.Tapped = true
