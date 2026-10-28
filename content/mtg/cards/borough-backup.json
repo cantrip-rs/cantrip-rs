@@ -1,0 +1,6 @@
+{
+  "name": "Borough Backup",
+  "manaCost": "{4}{W}",
+  "type": "Sorcery",
+  "oracleText": "Create two 3/2 white Hero creature tokens with vigilance.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)"
+}

@@ -1,0 +1,60 @@
+# Borough Backup: "Create two 3/2 white Hero creature tokens with vigilance." and "Basic landcycling {2}" (CR 702.29e). Turn 1: Bot1
+# cycles one copy for exactly {2} (the pool is empty after) and finds a basic Plains, not Tropical Island (a land with basic land types
+# but not a basic land, CR 205.4c). Turn 3 it casts the other copy for {4}{W} with five Moxen, which makes two 3/2 white Hero tokens with
+# vigilance, both at once.
+
+[Bot1 Deck]
+Borough Backup
+Borough Backup
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Tropical Island
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Borough Backup.Activate
+? Bot1.Mana =
+! Bot1.Search(Tropical Island)
+Bot1.Search(Plains)
+? Bot1.Graveyard = Borough Backup
+? Bot1.Hand = Borough Backup; Mox Jet; Mox Ruby; Mox Emerald; Plains
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Borough Backup.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Borough Backup; Borough Backup
+Bot1.Battlefield = Hero Token; Hero Token; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Hero Token#1.Power = 3
+Bot1.Battlefield.Hero Token#1.Toughness = 2
+Bot1.Battlefield.Hero Token#1.Keywords = Vigilance
+Bot1.Battlefield.Hero Token#1.Colors = White
+Bot1.Battlefield.Hero Token#1.Subtypes = Hero
+Bot1.Battlefield.Hero Token#2.Power = 3
