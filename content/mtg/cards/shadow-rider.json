@@ -1,0 +1,8 @@
+{
+  "name": "Shadow Rider",
+  "manaCost": "{2}{B}{B}",
+  "type": "Creature — Knight",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flanking (Whenever a creature without flanking blocks this creature, the blocking creature gets -1/-1 until end of turn.)"
+}
