@@ -1,0 +1,40 @@
+# Goblin Patrol: "Echo {R}" (CR 702.30a). The echo ability triggers at Bot1's upkeep on turn 3 and is on the stack when Bot2
+# kills Goblin Patrol with Lightning Bolt. The ability resolves with nothing to sacrifice and nothing to pay for: Bot1 is not
+# asked for {R} (CR 603.4, 400.7), and the Mox Ruby that could have paid is untouched.
+
+[Bot1 Deck]
+Goblin Patrol
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Patrol.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goblin Patrol)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Decline
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Goblin Patrol
+Bot1.Battlefield = Mox Ruby
+Bot1.Battlefield.Mox Ruby.Tapped = false

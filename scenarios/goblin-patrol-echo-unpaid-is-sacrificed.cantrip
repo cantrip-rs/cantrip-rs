@@ -1,0 +1,28 @@
+# Goblin Patrol: "Echo {R}" (CR 702.30a). At the beginning of Bot1's next upkeep (turn 3) it is asked to pay {R}, though Bot1
+# has a Mox Ruby that could pay it. Paying is optional: Bot1 declines, and sacrifices Goblin Patrol, which goes to its owner's
+# graveyard. The Mox Ruby is untouched.
+
+[Bot1 Deck]
+Goblin Patrol
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Patrol.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Goblin Patrol = (absent)
+? Bot1.Graveyard = Goblin Patrol
+
+[Expect]
+Bot1.Battlefield = Mox Ruby
+Bot1.Battlefield.Mox Ruby.Tapped = false

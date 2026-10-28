@@ -1,0 +1,59 @@
+# Goblin Patrol: "Echo {R}" asks whether the permanent "came under your control since the beginning of your last upkeep"
+# (CR 702.30a), not only whether it entered. Bot1 pays the echo on turn 3. On turn 4 Bot2's Act of Treason takes Goblin Patrol
+# until end of turn (CR 613.1b); when the turn ends it comes back under Bot1's control, after Bot1's last upkeep (turn 3). So
+# at Bot1's upkeep on turn 5 the echo triggers again and Bot1 is asked again (the Rakdos Headliner ruling: "or if you gained
+# control of it since the beginning of your last upkeep"). Declining then sacrifices it.
+
+[Bot1 Deck]
+Goblin Patrol
+Mox Ruby
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Act of Treason
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Goblin Patrol.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.PayCost
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Goblin Patrol)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Goblin Patrol.Tapped = false
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+? Bot1.Battlefield.Goblin Patrol.Tapped = false
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard = Goblin Patrol
+Bot1.Battlefield = Mox Ruby; Mox Ruby
+Bot2.Graveyard = Act of Treason
