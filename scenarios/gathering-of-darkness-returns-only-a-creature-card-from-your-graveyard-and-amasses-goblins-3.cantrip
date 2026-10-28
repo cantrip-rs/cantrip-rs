@@ -1,0 +1,61 @@
+# Gathering of Darkness {3}{B}: "Return up to one target creature card from your graveyard to your hand. Amass Goblins 3." Both
+# players have discarded a Memnite to Faithless Looting (Bot1's to its own, Bot2's to its graveyard) and Bot1's graveyard holds the
+# Looting, a noncreature card: neither is a legal target, only Bot1's own Memnite is. Bot1 pays Mox Jet's {B}, Mox Pearl's {W}
+# and Mana Crypt's {C}{C} exactly; the Memnite returns to its hand, Bot2's stays put, and a 0/0 Goblin Army token gets three
+# +1/+1 counters (a 3/3).
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Memnite
+Gathering of Darkness
+Mox Jet
+Mox Pearl
+Mana Crypt
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Memnite
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Plains)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Choose(Memnite; Island)
+[T3 Bot1.Main1]
+! Bot1.Hand.Gathering of Darkness.Cast(Bot2.Graveyard.Memnite)
+! Bot1.Hand.Gathering of Darkness.Cast(Bot1.Graveyard.Faithless Looting)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Gathering of Darkness.Cast(Bot1.Graveyard.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Memnite; Plains; Plains
+Bot2.Graveyard = Faithless Looting; Island; Memnite
+Bot1.Graveyard = Gathering of Darkness; Faithless Looting; Plains
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Goblin Army Token.Power = 3
+Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin

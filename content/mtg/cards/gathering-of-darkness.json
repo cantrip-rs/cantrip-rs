@@ -1,0 +1,6 @@
+{
+  "name": "Gathering of Darkness",
+  "manaCost": "{3}{B}",
+  "type": "Sorcery",
+  "oracleText": "Return up to one target creature card from your graveyard to your hand.\nAmass Goblins 3. (Put three +1/+1 counters on an Army you control. It's also a Goblin. If you don't control an Army, create a 0/0 black Goblin Army creature token first.)"
+}

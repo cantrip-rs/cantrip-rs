@@ -1,0 +1,43 @@
+# Gathering of Darkness's "up to one target": Bot1 has a Memnite in its graveyard (discarded to Faithless Looting) and chooses no
+# target, so the Memnite stays there and the second sentence still happens - a 3/3 Goblin Army token (CR 701.47a, 608.2b).
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Memnite
+Gathering of Darkness
+Mox Jet
+Mox Pearl
+Mana Crypt
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Plains)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Gathering of Darkness.Cast()
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Gathering of Darkness; Faithless Looting; Plains; Memnite
+Bot1.Hand = Plains
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Goblin Army Token.Power = 3
