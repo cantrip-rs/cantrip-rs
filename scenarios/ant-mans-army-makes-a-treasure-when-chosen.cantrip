@@ -1,0 +1,30 @@
+# Ant-Man's Army: "When this creature enters, create a Food token or a Treasure token" - the controller chooses as the
+# trigger resolves (CR 111.10): here Treasure, so the battlefield has a Treasure token and no Food.
+
+[Bot1 Deck]
+Forest
+Mox Pearl
+Mox Jet
+Ant-Man's Army
+Forest x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ant-Man's Army.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Modes(Treasure token)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Ant-Man's Army; Forest; Mox Jet; Mox Pearl; Treasure Token

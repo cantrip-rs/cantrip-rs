@@ -1,0 +1,8 @@
+{
+  "name": "Ant-Man's Army",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Insect",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, create a Food token or a Treasure token. (A Food token is an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\" A Treasure token is an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}
