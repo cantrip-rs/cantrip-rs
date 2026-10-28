@@ -1,0 +1,45 @@
+# Vibranium Energy Daggers has indestructible (CR 702.12b): Bot2's Disenchant ("destroy target artifact or enchantment") resolves
+# and Disenchant is spent, but the Daggers stay on the battlefield, still attached to the Ornithopter, which keeps its +2/+2.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Ornithopter
+Vibranium Energy Daggers
+Plains x14
+
+[Bot2 Deck]
+Mox Pearl
+Disenchant
+Plains x5
+Plains x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vibranium Energy Daggers.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Vibranium Energy Daggers.Activate(Bot1.Battlefield.Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Vibranium Energy Daggers)
+[Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Disenchant
+Bot1.Battlefield.Vibranium Energy Daggers.Types = Artifact
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4

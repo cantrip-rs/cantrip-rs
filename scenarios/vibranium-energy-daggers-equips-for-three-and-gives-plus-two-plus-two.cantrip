@@ -1,0 +1,41 @@
+# Vibranium Energy Daggers ({1}, Equip {3}): Bot1 casts it with a Mox Ruby and equips the Ornithopter (0/2) with three more
+# Moxen. Equipped creature gets +2/+2 (CR 301.5, 613.4c), so the Ornithopter is a 2/4 and, attacking on turn 3, deals 2
+# damage: Bot2 goes to 18. Only the one creature it is attached to grows, and the Equipment does not (it is no creature).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Ornithopter
+Vibranium Energy Daggers
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vibranium Energy Daggers.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Vibranium Energy Daggers.Activate(Bot1.Battlefield.Mox Emerald)
+Bot1.Battlefield.Vibranium Energy Daggers.Activate(Bot1.Battlefield.Ornithopter)
+[Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Vibranium Energy Daggers.Types = Artifact
