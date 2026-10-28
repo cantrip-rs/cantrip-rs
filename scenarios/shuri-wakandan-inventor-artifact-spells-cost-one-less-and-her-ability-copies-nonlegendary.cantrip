@@ -1,0 +1,66 @@
+# Shuri, Wakandan Inventor: "Artifact spells you cast cost {1} less to cast" and "{1}, {T}: Target artifact you control becomes a
+# copy of a second target artifact you control until end of turn, except it isn't legendary. Activate only as a sorcery." Cast in
+# turn 1 for {1}{U} (from a Black Lotus, which ends in the graveyard). In turn 3 Iron Lad ({2}{U}, an artifact creature) costs {1}{U}, paid exactly by those
+# two Moxen (the pool is empty); A.I.M. Scientists ({3}{U}), not an artifact spell, gets no discount: with the Moxen's three mana ({U}{B}{W}) it is refused (Mana: short). Then Shuri taps with Mox
+# Pearl's {W} for {1} and makes Bot1's Mox Pearl a copy of Iron Lad until end of turn: a 2/2 flying, vigilance artifact creature
+# that is not legendary, so the legend rule leaves both. The same Mox is refused as the second target (CR 115.3), and Bot2's Mox Ruby and the Black Lotus card in Bot1's graveyard (not a permanent) as either target.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Shuri, Wakandan Inventor
+Iron Lad, Diverging Destiny
+A.I.M. Scientists
+Black Lotus
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Island x6
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Shuri, Wakandan Inventor.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.A.I.M. Scientists.Cast(Mana: short)
+Bot1.Hand.Iron Lad, Diverging Destiny.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Shuri, Wakandan Inventor.Activate
+! Bot1.Target(Bot2.Battlefield.Mox Ruby)
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Target(Bot1.Battlefield.Mox Pearl)
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+! Bot1.Target(Bot2.Battlefield.Mox Ruby)
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Target(Bot1.Battlefield.Iron Lad, Diverging Destiny)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Iron Lad, Diverging Destiny#2.Types = Artifact; Creature
+Bot1.Battlefield.Iron Lad, Diverging Destiny#2.Supertypes = Legendary
+Bot1.Battlefield.Iron Lad, Diverging Destiny#1.Types = Artifact; Creature
+Bot1.Battlefield.Iron Lad, Diverging Destiny#1.Supertypes = (absent)
+Bot1.Battlefield.Iron Lad, Diverging Destiny#1.Keywords = Flying; Vigilance
+Bot1.Battlefield.Iron Lad, Diverging Destiny#1.Power = 2
+Bot1.Battlefield.Shuri, Wakandan Inventor.Tapped = true
+Bot1.Battlefield.Mox Jet.Tapped = true
