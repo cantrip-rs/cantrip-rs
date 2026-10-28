@@ -1,0 +1,51 @@
+# Attercop, a 2/1: "Landfall - Whenever a land you control enters, this creature gets +1/+1 until end of turn." Bot1 casts it on
+# turn 1 and plays a Forest: 3/2 (CR 611.2, exactly +1/+1). On turn 2 Bot2's own land entering gives it nothing ("you control"),
+# and the turn-1 pump has ended (a 2/1 again, "until end of turn"). On turn 3 another Forest pumps it again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Attercop
+Forest
+Forest
+Island
+Island
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Attercop.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Attercop.Power = 2
+? Bot1.Battlefield.Attercop.Toughness = 1
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Attercop.Power = 3
+? Bot1.Battlefield.Attercop.Toughness = 2
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Attercop.Power = 2
+? Bot1.Battlefield.Attercop.Toughness = 1
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Attercop.Power = 2
+? Bot1.Battlefield.Attercop.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Attercop.Power = 3
+Bot1.Battlefield.Attercop.Toughness = 2
