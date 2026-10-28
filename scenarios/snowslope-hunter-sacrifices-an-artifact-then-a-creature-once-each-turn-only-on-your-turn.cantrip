@@ -1,0 +1,69 @@
+# Snowslope Hunter: "Sacrifice another creature or artifact: Exile the top card of your library. You may play it until the
+# end of your next turn. Activate only during your turn and only once each turn." Turn 1: Bot1 sacrifices a Mox Jet (an artifact
+# that is not a creature) and exiles its Forest; a second activation the same turn is not offered although a Goblin Assailant
+# and Moxen are there to sacrifice. It is not offered on the opponent's turn 2 either. Turn 3: it is offered again, the Assailant
+# (a creature that is not an artifact) pays and exiles the Plains, and the Forest is played from exile as the turn's land
+# drop. Turn 5: the Plains, exiled on turn 3, is played from exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Black Lotus
+Snowslope Hunter
+Goblin Assailant
+Island
+Forest
+Island
+Plains
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Snowslope Hunter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Assailant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Snowslope Hunter.Activate
+Bot1.Choose(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest
+? Bot1.Graveyard = Mox Jet; Black Lotus
+! Bot1.Battlefield.Snowslope Hunter.Activate
+[T2 Bot2.Main1]
+Bot2.Pass
+! Bot1.Battlefield.Snowslope Hunter.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Snowslope Hunter.Activate
+Bot1.Choose(Goblin Assailant)
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest; Plains
+Bot1.Exile.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Exile.Plains.Play
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Snowslope Hunter; Forest; Plains
+Bot1.Graveyard = Goblin Assailant; Mox Jet; Black Lotus

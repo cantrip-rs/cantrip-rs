@@ -1,0 +1,8 @@
+{
+  "name": "Snowslope Hunter",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Ranger",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Sacrifice another creature or artifact: Exile the top card of your library. You may play it until the end of your next turn. Activate only during your turn and only once each turn."
+}

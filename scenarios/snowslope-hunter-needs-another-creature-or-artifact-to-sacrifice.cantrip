@@ -1,0 +1,40 @@
+# Snowslope Hunter: "Sacrifice another creature or artifact" - the Hunter cannot pay for its own ability. Alone on the
+# battlefield (Black Lotus paid for it and is gone) it has nothing else to sacrifice, so the ability is not offered; once Bot1
+# casts a Memnite the ability is offered and sacrificing it exiles the top card of Bot1's library (a Forest), which Bot1 may
+# play. (CR 118.3, 602.5b.)
+
+[Bot1 Deck]
+Black Lotus
+Snowslope Hunter
+Memnite
+Island
+Island
+Island
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Snowslope Hunter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Snowslope Hunter.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Snowslope Hunter.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Snowslope Hunter
+Bot1.Graveyard = Memnite; Black Lotus
+Exile = Forest
+Stack.Count = 0
