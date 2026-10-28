@@ -271,6 +271,11 @@ pub enum Event {
     /// turn began (723.1) or its controller left the game (CR 800.4a). Recorded only, so the history says who saw which
     /// hidden card when (`GameState::player_controller` is who controls them now).
     PlayerControlled { player: PlayerId, controller: PlayerId },
+    /// A permanent came under `controller`'s control without entering the battlefield (CR 108.4, 613.1b): a control-changing
+    /// effect began to apply, or ended and control went back. The same object (CR 110.2). Recorded only, for the history: the
+    /// one record of when an object came under a player's control besides its zone change onto the battlefield, which echo
+    /// asks (CR 702.30a: "came under your control since the beginning of your last upkeep").
+    ControlChanged { permanent: ObjectId, controller: PlayerId },
 }
 
 /// Why a player loses the game (CR 104.3): what a "can't lose the game" or "don't lose the game for ..." effect is asked
@@ -338,6 +343,7 @@ impl Event {
             | Event::Shuffled { player }
             | Event::Randomized { player, .. }
             | Event::PlayerControlled { player, .. } => Some(player),
+            Event::ControlChanged { controller, .. } => Some(controller),
             Event::Cast(c) => Some(c.player),
             Event::LandPlayed { player, .. } => Some(player),
             Event::BecameTarget { controller, .. } | Event::EnteredFaceDown { controller, .. } => Some(controller),
@@ -382,6 +388,7 @@ impl Event {
             | Event::TurnedFaceUp { permanent, .. }
             | Event::PhasedOut { permanent, .. }
             | Event::PhasedIn { permanent }
+            | Event::ControlChanged { permanent, .. }
             | Event::DoorUnlocked { permanent, .. } => permanent == object,
             Event::Unattached { attachment, from } => attachment == object || from == object,
             Event::Attached { attachment, to } => attachment == object || to == Target::Object(object),
@@ -470,6 +477,8 @@ impl EventMask {
     pub const CONVOKED: EventMask = EventMask(1 << 58);
     /// The player controlling a player changed (CR 723.1): recorded only, for what each player saw.
     pub const PLAYER_CONTROLLED: EventMask = EventMask(1 << 59);
+    /// A permanent came under a player's control without entering (CR 613.1b): recorded only, for the history.
+    pub const CONTROL_CHANGED: EventMask = EventMask(1 << 60);
 
     /// An event's kind as the history files it: every event has one. `of` is what triggers listen for, which leaves
     /// out the records no ability triggers on.
@@ -498,6 +507,7 @@ impl EventMask {
             Event::Randomized { .. } => EventMask::RANDOMIZED,
             Event::PhasedOut { .. } => EventMask::PHASED_OUT,
             Event::PlayerControlled { .. } => EventMask::PLAYER_CONTROLLED,
+            Event::ControlChanged { .. } => EventMask::CONTROL_CHANGED,
             other => EventMask::of(other),
         }
     }
