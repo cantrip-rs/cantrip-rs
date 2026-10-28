@@ -1,0 +1,11 @@
+{
+  "name": "Honored Hydra",
+  "manaCost": "{5}{G}",
+  "type": "Creature — Snake Hydra",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Trample\nEmbalm {3}{G} ({3}{G}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a white Zombie Snake Hydra with no mana cost. Embalm only as a sorcery.)",
+  "keywords": [
+    "Trample"
+  ]
+}
