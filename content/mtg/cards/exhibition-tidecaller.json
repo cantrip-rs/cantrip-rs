@@ -1,0 +1,8 @@
+{
+  "name": "Exhibition Tidecaller",
+  "manaCost": "{U}",
+  "type": "Creature — Djinn Wizard",
+  "power": 0,
+  "toughness": 2,
+  "oracleText": "Opus — Whenever you cast an instant or sorcery spell, target player mills three cards. If five or more mana was spent to cast that spell, that player mills ten cards instead."
+}
