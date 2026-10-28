@@ -1,0 +1,63 @@
+# Winter Soldier, Icy Assassin: "Then you may attach an Equipment you control to him" - one Equipment, of the two Bot1 controls
+# (Skullclamp and Sword of the Meek). Choosing both is refused; choosing Skullclamp makes him 5/1 (2/2, +2 for one Equipment
+# and Skullclamp's +1/-1), and the Sword stays unattached.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Skullclamp
+Winter Soldier, Icy Assassin
+Mox Emerald
+Mox Sapphire
+Sword of the Meek
+Forest x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Forest x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Skullclamp.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Winter Soldier, Icy Assassin.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Winter Soldier, Icy Assassin)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Sword of the Meek.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Graveyard.Winter Soldier, Icy Assassin.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Skullclamp; Sword of the Meek)
+Bot1.Choose(Skullclamp)
+
+[Expect]
+Bot1.Battlefield.Winter Soldier, Icy Assassin.Power = 5
+Bot1.Battlefield.Winter Soldier, Icy Assassin.Toughness = 1
+Attached = Skullclamp > Winter Soldier, Icy Assassin

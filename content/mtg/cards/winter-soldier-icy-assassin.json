@@ -1,0 +1,12 @@
+{
+  "name": "Winter Soldier, Icy Assassin",
+  "manaCost": "{W}{B}",
+  "type": "Legendary Creature — Human Assassin Villain",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance, menace\nWinter Soldier gets +2/+0 for each Equipment attached to him.\n{3}{W}{B}: Return this card from your graveyard to the battlefield with a finality counter on him. Then you may attach an Equipment you control to him. (If a creature with a finality counter on it would die, exile it instead.)",
+  "keywords": [
+    "Vigilance",
+    "Menace"
+  ]
+}
