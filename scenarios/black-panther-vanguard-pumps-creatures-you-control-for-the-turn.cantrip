@@ -1,0 +1,51 @@
+# Black Panther, Vanguard: the second mode gives creatures you control +1/+1 until end of turn (CR 611.2c): the 4/4 Black Panther and the 3/2 Spider-Man become 5/5 and 4/3, and no Soldier is made; at end of turn it wears off.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Ruby
+Black Panther, Vanguard
+Spider-Man, To the Rescue
+Forest
+Forest x10
+
+[Bot2 Deck]
+Forest x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Black Panther, Vanguard.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Spider-Man, To the Rescue.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Modes(Creatures you control get +1/+1 until end of turn)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Black Panther, Vanguard.Power = 5
+? Bot1.Battlefield.Black Panther, Vanguard.Toughness = 5
+? Bot1.Battlefield.Spider-Man, To the Rescue.Power = 4
+? Bot1.Battlefield.Spider-Man, To the Rescue.Toughness = 3
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Black Panther, Vanguard.Power = 4
+Bot1.Battlefield.Spider-Man, To the Rescue.Power = 3
