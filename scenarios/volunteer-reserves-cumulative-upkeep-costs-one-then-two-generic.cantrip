@@ -1,0 +1,55 @@
+# Volunteer Reserves {1}{W}, 2/4 with banding, "Cumulative upkeep {1}" (CR 702.24a). Cast on turn 1 (Black Lotus's {W}{W}{W},
+# one for Sol Ring, two for the Reserves), at Bot1's turn 3 upkeep it gets an age counter and the cost is {1} once: Sol Ring's
+# {C}{C} is made and one {C} paid, the other left. At turn 5 it gets a second and the cost is {1}{1}, two generic mana: with
+# nothing tapped paying is not offered, with Sol Ring tapped it is, the pool empty. At turn 7 the cost would be three; Bot1
+# declines and sacrifices it.
+
+[Bot1 Deck]
+Volunteer Reserves
+Black Lotus
+Sol Ring
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Volunteer Reserves.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = {C}
+? Bot1.Battlefield.Volunteer Reserves.Counters.Age = 1
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Volunteer Reserves.Counters.Age = 2
+? Bot1.Battlefield.Volunteer Reserves.Power = 2
+? Bot1.Battlefield.Volunteer Reserves.Toughness = 4
+? Bot1.Battlefield.Volunteer Reserves.Keywords = Banding
+? Bot1.Battlefield.Volunteer Reserves.Colors = White
+[T7 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard = Volunteer Reserves; Black Lotus
+Bot1.Battlefield.Volunteer Reserves = (absent)
