@@ -1,0 +1,38 @@
+# Spider-Man, To the Rescue: "When Spider-Man enters, you may tap him. When you do, another target nonattacking creature you
+# control gains indestructible until end of turn." Declined, he stays untapped and the "when you do" ability never triggers, so
+# Bot1's Ornithopter is no more indestructible than before.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Spider-Man, To the Rescue
+Ornithopter
+Forest x14
+
+[Bot2 Deck]
+Forest x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Spider-Man, To the Rescue.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spider-Man, To the Rescue.Tapped = false
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+
+[Expect]
+Turn = 1
