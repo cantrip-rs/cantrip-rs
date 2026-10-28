@@ -200,6 +200,17 @@ pub fn mode_not_chosen_before(q: &dyn Query, asker: &Asker, mode: u8) -> bool {
     })
 }
 
+/// "Choose one that hasn't been chosen this turn" (CR 700.2): whether mode `mode` has not been chosen this turn by the object
+/// that has the ability (`asker.source`), as its ability went on the stack. A mode chosen for an ability that was then
+/// countered stays chosen, and an object that left and came back is a new one (CR 400.7) with its own. With every mode chosen
+/// the ability still triggers and is removed as it would be put on the stack (CR 603.3c). Monument to Endurance and The Vision
+/// print it (`ModalDef::allowed`).
+pub fn mode_not_chosen_this_turn(q: &dyn Query, asker: &Asker, mode: u8) -> bool {
+    !q.history().this_turn().iter().any(|r| {
+        matches!(r.event, Event::ModesChosen { source, modes, .. } if source == asker.source && modes & (1 << mode) != 0)
+    })
+}
+
 /// "The sacrificed creature's power" (CR 601.2h, 608.2h): the power of what `spell`'s additional cost sacrificed, as it last
 /// existed on the battlefield, pumps, counters and copy effects included. The sacrifice is the last one from the battlefield
 /// in the history before the spell was cast. A copy of the spell was never cast: it reads what the original sacrificed (CR
