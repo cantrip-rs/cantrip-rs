@@ -1,0 +1,41 @@
+# Tester of the Tangential (1/1): increment (CR 702.191a) needs the mana spent to be greater than its power or its toughness. A
+# one-mana Lightning Bolt spends 1, which is neither, so no counter. At the beginning of combat Bot1 declines to pay {X}
+# ("you may", CR 603.12 not met), so nothing triggers and no counter moves; Bot2's Ornithopter gets none.
+
+[Bot1 Deck]
+Tester of the Tangential
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tester of the Tangential.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Tester of the Tangential.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.BeginCombat]
+Bot1.Decline
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot1.Battlefield.Tester of the Tangential.Power = 1
+Bot1.Battlefield.Tester of the Tangential.Toughness = 1
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
