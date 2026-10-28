@@ -1,0 +1,11 @@
+{
+  "name": "Eagle of the Great Shelf",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Bird Soldier",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Flying\nWhenever this creature attacks, it gets +1/+1 until end of turn for each other creature you control.",
+  "keywords": [
+    "Flying"
+  ]
+}

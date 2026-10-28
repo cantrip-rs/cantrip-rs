@@ -1,0 +1,57 @@
+# Eagle of the Great Shelf: "Whenever this creature attacks, it gets +1/+1 until end of turn for each other creature you
+# control." Bot1 controls two Ornithopters besides the 2/5 Eagle and Bot2 one (not counted, CR 109.5), so the Eagle is 4/7 and
+# deals 4 in the air (Bot2 20 -> 16). Next turn it is 2/5 again (CR 514.2).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Eagle of the Great Shelf
+Ornithopter
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Eagle of the Great Shelf.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Attack(Eagle of the Great Shelf > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Eagle of the Great Shelf.Power = 4
+? Bot1.Battlefield.Eagle of the Great Shelf.Toughness = 7
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Eagle of the Great Shelf.Power = 2
+Bot1.Battlefield.Eagle of the Great Shelf.Toughness = 5
