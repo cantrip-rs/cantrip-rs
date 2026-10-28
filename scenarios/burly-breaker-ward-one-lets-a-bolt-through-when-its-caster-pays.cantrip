@@ -1,0 +1,42 @@
+# Burly Breaker (day) has ward {1}: this time Bot2 has two mana (a Mountain and a Mox Ruby), pays exactly the {1} the ward trigger
+# asks, and the Lightning Bolt resolves: three damage marked on the 6/5 Breaker (the control for the scenario in which Bot2
+# cannot pay).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Burly Breaker
+Forest x21
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Burly Breaker.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Burly Breaker)
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Burly Breaker.Damage = 3
+Bot2.Graveyard = Lightning Bolt

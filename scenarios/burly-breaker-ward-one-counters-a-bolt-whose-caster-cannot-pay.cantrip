@@ -1,0 +1,40 @@
+# Burly Breaker (day) has ward {1}: Bot2 casts Lightning Bolt at it with its only mana, a single Mountain, and cannot pay the
+# {1} the ward trigger asks, so the Bolt is countered and the Breaker takes no damage (its control: the next scenario).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Burly Breaker
+Forest x21
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Burly Breaker.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Burly Breaker)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Emerald; Burly Breaker
+Bot1.Battlefield.Burly Breaker.Damage = 0
+Bot2.Graveyard = Lightning Bolt
