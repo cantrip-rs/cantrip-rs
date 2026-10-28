@@ -1,0 +1,52 @@
+# Wither (CR 702.80a, 120.3d) outside combat: Bushwhack's second mode has Bot1's Wildslayer Elves, a 3/3 with wither, fight
+# Bot2's Stone Golem, a 4/4. The Elves deal 3 damage to the Golem as three -1/-1 counters, not as damage: it is a 1/1 with
+# no damage marked, and survives. The Golem deals its 4 damage to the Elves as ordinary damage, which kills them.
+# Bot1 casts the Elves on turn 1 (Black Lotus green and Mox Emerald); Bot2 casts the Golem on turn 2 (Black Lotus and Moxen
+# Jet and Pearl). Bot1 casts Bushwhack on turn 3 (Mox Emerald again).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Wildslayer Elves
+Bushwhack
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Stone Golem
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wildslayer Elves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Stone Golem.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bushwhack.Cast
+Bot1.Modes(2)
+Bot1.Target(Wildslayer Elves)
+Bot1.Target(Bot2.Battlefield.Stone Golem)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Stone Golem.Counters.MinusOneMinusOne = 3
+Bot2.Battlefield.Stone Golem.Power = 1
+Bot2.Battlefield.Stone Golem.Toughness = 1
+Bot2.Battlefield.Stone Golem.Damage = 0
+Bot1.Graveyard = Wildslayer Elves; Bushwhack; Black Lotus
