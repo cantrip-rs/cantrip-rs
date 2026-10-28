@@ -26,11 +26,6 @@ fn elk(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-fn small_creature_an_opponent_controls(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    (targets::CREATURE_AN_OPPONENT_CONTROLS.filter)(q, asker, t)
-        && matches!(t, Target::Object(id) if q.chars(id).power.unwrap_or(0) <= 3)
-}
-
 /// "Exchange control of target artifact or creature you control and target creature an opponent controls with power
 /// 3 or less" (CR 701.12): if the whole exchange can't be completed, none of it happens. Both controllers are read
 /// before either changes.
@@ -51,7 +46,7 @@ pub static CARD: CardDef = CardDef {
         ability(loyalty(-5), exchange, "\u{2212}5: Exchange control of target artifact or creature you control and target creature an opponent controls with power 3 or less.")
             .targets(&[
                 targets::ARTIFACT_OR_CREATURE_YOU_CONTROL,
-                target(small_creature_an_opponent_controls),
+                targets::CREATURE_AN_OPPONENT_CONTROLS_WITH_POWER_3_OR_LESS,
             ]),
     ],
     ..oracle::OKO_THIEF_OF_CROWNS

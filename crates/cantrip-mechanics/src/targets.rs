@@ -596,6 +596,14 @@ pub const CREATURE_OR_PLANESWALKER_AN_OPPONENT_CONTROLS: TargetSpec = target(cre
 /// "Target creature an opponent controls". Palace Jailer and Mawloc print it.
 pub const CREATURE_AN_OPPONENT_CONTROLS: TargetSpec = target(creature_an_opponent_controls_filter);
 
+/// "Target creature an opponent controls with power `N` or less" (CR 115.1, 208.1): its power as the layers make it, as it is
+/// chosen and again as the ability resolves. A creature with no power cannot be a creature.
+pub fn creature_an_opponent_controls_with_power_at_most<const N: i16>(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_an_opponent_controls_filter(q, asker, t) && matches!(t, Target::Object(id) if q.chars(id).power.is_some_and(|power| power <= N))
+}
+/// "Target creature an opponent controls with power 3 or less". Elektra, Daughter of the Hand and Oko, Thief of Crowns print it.
+pub const CREATURE_AN_OPPONENT_CONTROLS_WITH_POWER_3_OR_LESS: TargetSpec = target(creature_an_opponent_controls_with_power_at_most::<3>);
+
 fn creature_that_dealt_damage_this_turn_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     creature_filter(q, asker, t) && matches!(t, Target::Object(id) if crate::history::dealt_damage_this_turn(q.history(), id))
 }
