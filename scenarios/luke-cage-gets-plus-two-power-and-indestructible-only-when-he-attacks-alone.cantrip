@@ -1,0 +1,53 @@
+# Luke Cage, Power Man: "Unbreakable Skin - Whenever Luke Cage attacks alone, he gets +2/+0 and gains indestructible until end of
+# turn." On turn 3 he attacks alone: a 4/5 with indestructible in combat, Bot2 goes from 20 to 16, and on turn 4 he is a 2/5 with no
+# keyword again. On turn 5 he attacks together with an Ornithopter: no trigger, he deals 2 (Bot2 to 14) and has no indestructible.
+
+[Bot1 Deck]
+Luke Cage, Power Man
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Luke Cage, Power Man.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Luke Cage, Power Man > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Luke Cage, Power Man.Power = 4
+? Bot1.Battlefield.Luke Cage, Power Man.Toughness = 5
+? Bot1.Battlefield.Luke Cage, Power Man.Keywords = Indestructible
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Luke Cage, Power Man.Power = 2
+? Bot1.Battlefield.Luke Cage, Power Man.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Attack(Luke Cage, Power Man > Bot2; Ornithopter > Bot2)
+? Bot1.Battlefield.Luke Cage, Power Man.Power = 2
+? Bot1.Battlefield.Luke Cage, Power Man.Keywords = (absent)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14

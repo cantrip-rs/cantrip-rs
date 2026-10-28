@@ -1,0 +1,8 @@
+{
+  "name": "Luke Cage, Power Man",
+  "manaCost": "{3}{W}",
+  "type": "Legendary Creature — Human Hero",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Unbreakable Skin — Whenever Luke Cage attacks alone, he gets +2/+0 and gains indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy him.)"
+}
