@@ -1,0 +1,67 @@
+# Worlds Within Worlds in a three-player game: "Each player may put any number of creature cards from their hand onto the
+# battlefield." Bot1 chooses first, then Bot2; while Bot2's question is outstanding Bot3 concedes (CR 104.3a) and leaves the
+# game (CR 800.4a), so it is never asked: the refusal of its Choose holds, and the Serra Angel it held goes with it. Bot1 puts
+# Hill Giant in and Bot2 puts Serra Angel in; Bot1's Grizzly Bears, exiled, goes back to its hand.
+
+[Bot1 Deck]
+Forest
+Island
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Grizzly Bears
+Worlds Within Worlds
+Hill Giant
+Forest x12
+
+[Bot2 Deck]
+Serra Angel
+Plains x13
+
+[Bot3 Deck]
+Serra Angel
+Plains x13
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T4 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Worlds Within Worlds.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Choose(Hill Giant)
+Bot3.Concede
+Bot2.Choose(Serra Angel)
+! Bot3.Choose(Serra Angel)
+[T4 Bot1.Main2]
+
+[Expect]
+Bot3.Status = Lost
+Bot1.Hand = Forest; Grizzly Bears
+Bot1.Battlefield = Forest; Hill Giant; Island; Mox Emerald; Mox Sapphire
+Bot2.Battlefield = Serra Angel
+Exile = Worlds Within Worlds
