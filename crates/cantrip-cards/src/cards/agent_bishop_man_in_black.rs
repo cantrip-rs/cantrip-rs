@@ -1,17 +1,10 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, triggers};
+use cantrip_mechanics::{effects, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Each of up to two target creatures" (CR 601.2c): one slot, up to two targets; each still legal gets a counter.
-fn counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let puts: Vec<(ObjectId, CounterKind, i16)> =
-        targets::legal_objects(g, item).into_iter().map(|creature| (creature, CounterKind::PlusOne, 1)).collect();
-    g.add_counters_together(&puts);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(triggers::BEGINNING_OF_YOUR_COMBAT, counters, "At the beginning of combat on your turn, put a +1/+1 counter on each of up to two target creatures.")
+    abilities: &[triggered(triggers::BEGINNING_OF_YOUR_COMBAT, effects::plus_one_counter_on_each_target, "At the beginning of combat on your turn, put a +1/+1 counter on each of up to two target creatures.")
         .targets(&[targets::CREATURE.between(0, 2)])],
     ..oracle::AGENT_BISHOP_MAN_IN_BLACK
 };

@@ -618,6 +618,16 @@ pub fn untap_self(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
+/// "Put a +1/+1 counter on each of up to N target creatures" (CR 122.1, 601.2c, 608.2b): on every target of the ability that is still
+/// legal as it resolves, put on together (CR 101.4), so a "one or more" ability triggers once. Agent Bishop, Man in Black and White
+/// Widow, Free Agent print it.
+pub fn plus_one_counter_on_each_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let puts: Vec<(ObjectId, CounterKind, i16)> =
+        crate::targets::legal_objects(g, item).into_iter().map(|creature| (creature, CounterKind::PlusOne, 1)).collect();
+    g.add_counters_together(&puts);
+    Ok(())
+}
+
 /// "Tap [N] target [permanents]" (CR 701.26a, 608.2b): each target that is still legal as the ability resolves. Divining
 /// Duelist (as a mode), Quake, Agent of S.H.I.E.L.D. and Raft Security Officer print it.
 pub fn tap_targets(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

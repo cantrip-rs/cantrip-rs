@@ -270,6 +270,16 @@ fn instant_or_sorcery_in_your_graveyard_filter(q: &dyn Query, asker: &Asker, t: 
 pub const INSTANT_OR_SORCERY_IN_YOUR_GRAVEYARD: TargetSpec =
     target(instant_or_sorcery_in_your_graveyard_filter);
 
+fn artifact_or_enchantment_card_in_your_graveyard_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    card_in_graveyard(q, t, &[CardType::Artifact, CardType::Enchantment])
+        && matches!(t, Target::Object(id) if q.obj(id).zone == Zone::graveyard(asker.controller))
+}
+
+/// "Target artifact or enchantment card in your graveyard" (CR 115.1, 404.1): a card there is the types it has in a graveyard.
+/// White Widow, Free Agent, Argivian Find, Cavalier of Dawn, Hanna, Ship's Navigator and Trusty Retriever print it.
+pub const ARTIFACT_OR_ENCHANTMENT_CARD_IN_YOUR_GRAVEYARD: TargetSpec =
+    target(artifact_or_enchantment_card_in_your_graveyard_filter);
+
 fn noncreature_artifact_or_enchantment_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     match t {
         Target::Object(id) if q.is_on_battlefield(id) => {
