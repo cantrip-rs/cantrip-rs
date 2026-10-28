@@ -1,0 +1,36 @@
+# Avengers Tower: "You may reveal a Hero card from among them" - it is optional. The top three are Agent Maria Hill (a Hero), a Plains
+# and a Swamp; Bot1 takes nothing and all three go to the bottom, nothing is revealed.
+
+[Bot1 Deck]
+Avengers Tower
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island
+Island
+Agent Maria Hill
+Plains
+Swamp
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Avengers Tower.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Avengers Tower.Activate(Ability: Look at the top three)
+Bot1.Arrange( | Agent Maria Hill; Plains; Swamp)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 13

@@ -1,0 +1,40 @@
+# The Ten Rings: the trigger has an intervening "if you have fewer than ten cards in hand" (CR 603.4). On turn 3 Bot1 draws to eleven and
+# plays an Island, so exactly ten are in hand at the end step: the ability does not trigger and nothing is on the stack.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+The Ten Rings
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Blue)
+Bot1.Hand.The Ten Rings.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+? Bot1.Hand.Count = 10
+[T3 Bot1.End]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand.Count = 10

@@ -6,9 +6,8 @@ use cantrip_oracle as oracle;
 
 /// "Tap target creature defending player controls": a target no longer legal is not tapped (CR 608.2b).
 fn tap_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(defender) = targets::object(g, item, 0) {
-        g.tap(defender);
-    }
+    let Some(defender) = targets::object(g, item, 0) else { return Ok(()) };
+    g.tap(defender);
     Ok(())
 }
 

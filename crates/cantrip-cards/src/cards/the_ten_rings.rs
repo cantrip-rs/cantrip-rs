@@ -10,10 +10,7 @@ fn fewer_than_ten(q: &dyn Query, asker: &Asker) -> bool {
 /// Draw cards equal to the difference between ten and the cards in hand, counted as the ability resolves (CR 608.2h).
 fn draw_the_difference(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let held = cards_in_hand(g, item.controller) as u32;
-    if held < 10 {
-        effects::draw(g, item, 10 - held)?;
-    }
-    Ok(())
+    effects::draw(g, item, 10_u32.saturating_sub(held))
 }
 
 pub static CARD: CardDef = CardDef {

@@ -1,0 +1,49 @@
+# Captain America's Shield: "tap target creature defending player controls". Bot1 attacks with the equipped Ornithopter; the one legal target is
+# Bot2's Ornithopter, and Bot2 answers with Lightning Bolt on it. The target is no longer legal as the trigger resolves (CR 608.2b),
+# so the trigger does nothing and Bot1's Ornithopter, which has vigilance, is untapped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Ornithopter
+Captain America's Shield
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Captain America's Shield.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Captain America's Shield.Activate(Bot1.Battlefield.Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Battlefield.Ornithopter.Tapped = false
+Stack.Count = 0

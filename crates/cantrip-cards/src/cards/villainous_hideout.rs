@@ -11,10 +11,8 @@ fn villain_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
 
 /// "Target Villain you control connives" (CR 701.50): the target is still the creature it was, if it is still legal (CR 608.2b).
 fn connive_villain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    match targets::object(g, item, 0) {
-        Some(villain) => cantrip_mechanics::connive(g, villain, item.object),
-        None => Ok(()),
-    }
+    let Some(villain) = targets::object(g, item, 0) else { return Ok(()) };
+    cantrip_mechanics::connive(g, villain, item.object)
 }
 
 pub static CARD: CardDef = CardDef {

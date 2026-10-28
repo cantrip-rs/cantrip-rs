@@ -27,6 +27,8 @@ Bot1.Hand.Forest.Play
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Forest.Activate
 Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
 ! Bot1.Battlefield.Dependable Quinjet.Activate(Ability: Crew 4)
 
 [Expect]

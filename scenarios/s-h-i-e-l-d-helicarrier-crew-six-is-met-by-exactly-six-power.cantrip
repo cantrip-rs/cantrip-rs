@@ -1,0 +1,51 @@
+# S.H.I.E.L.D. Helicarrier: Crew 6 needs total power 6 or more (CR 702.122a). The two Soldier tokens (1 + 1) and two Grizzly Bears (2 + 2)
+# add up to exactly 6, so crewing taps all four and the Helicarrier becomes an artifact creature.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+S.H.I.E.L.D. Helicarrier
+Grizzly Bears
+Grizzly Bears
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.S.H.I.E.L.D. Helicarrier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.S.H.I.E.L.D. Helicarrier.Activate(Ability: Crew 6)
+
+[Expect]
+Bot1.Battlefield.S.H.I.E.L.D. Helicarrier.Types = Artifact; Creature
+Bot1.Battlefield.Soldier Token#1.Tapped = true
+Bot1.Battlefield.Soldier Token#2.Tapped = true
+Bot1.Battlefield.Grizzly Bears#1.Tapped = true
+Bot1.Battlefield.Grizzly Bears#2.Tapped = true

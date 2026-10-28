@@ -1,0 +1,49 @@
+# Villainous Hideout: "Target Villain you control connives" (CR 701.50). Bot1 activates it on Aerial Doombot, a Villain; Bot2 answers with
+# Lightning Bolt and the Doombot dies. Its target is no longer legal as the ability resolves (CR 608.2b), so nothing connives: Bot1
+# draws and discards nothing and keeps Counterspell in hand.
+
+[Bot1 Deck]
+Villainous Hideout
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Aerial Doombot
+Counterspell
+Island
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Villainous Hideout.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aerial Doombot.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Villainous Hideout.Activate(Ability: Target Villain you control connives; Bot1.Battlefield.Aerial Doombot)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Aerial Doombot)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Aerial Doombot
+Bot1.Hand = Counterspell; Island
+Stack.Count = 0

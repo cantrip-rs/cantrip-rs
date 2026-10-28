@@ -1,0 +1,35 @@
+# Dependable Quinjet: Crew 4 needs total power 4 or more (CR 702.122a). An Accorder Paladin (power 3) is one short, so crewing is
+# never offered.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Dependable Quinjet
+Accorder Paladin
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dependable Quinjet.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Accorder Paladin.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Dependable Quinjet.Activate(Ability: Crew 4)
+
+[Expect]
+Bot1.Battlefield.Dependable Quinjet.Types = Artifact

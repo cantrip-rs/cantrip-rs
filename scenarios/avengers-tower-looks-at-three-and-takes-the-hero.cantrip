@@ -36,4 +36,5 @@ Bot1.Arrange(Agent Maria Hill | Swamp; Plains)
 [Expect]
 Bot1.Hand = Island; Island; Agent Maria Hill
 Bot1.Library.Count = 12
+Bot1.Revealed = Agent Maria Hill
 Bot1.Battlefield.Avengers Tower.Tapped = true

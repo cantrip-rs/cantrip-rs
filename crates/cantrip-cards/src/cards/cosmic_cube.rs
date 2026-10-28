@@ -16,9 +16,6 @@ fn greatest_attacking_power(g: &dyn Game, player: PlayerId) -> Option<i16> {
 fn attack(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
     let looked = cantrip_mechanics::top_of_library(g, you, 6);
-    if looked.is_empty() {
-        return Ok(());
-    }
     g.look_at(you, &looked);
     let limit = greatest_attacking_power(g, you);
     let within = |w: &CastWay| limit.is_some_and(|p| i64::from(w.mana_value) <= i64::from(p));
@@ -30,9 +27,10 @@ fn attack(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     }
     if let Some(&card) = choose::select(g, you, item.object, Purpose::CastFree, castable, select::cards(select::up_to(1)))?.first() {
         let ways: Vec<CastWay> = g.cast_ways_during_resolution(card).into_iter().filter(within).collect();
-        if let Some(way) = choose::cast_way(g, you, card, ways)? {
-            g.cast_during_resolution_as(card, CastTerms { instead: Some(ManaCost::ZERO), way: Some(way.way), ..CastTerms::default() })?;
-        }
+        // The card was offered because a way within the power exists, so `cast_way` always returns one.
+        choose::cast_way(g, you, card, ways)?
+            .map(|way| g.cast_during_resolution_as(card, CastTerms { instead: Some(ManaCost::ZERO), way: Some(way.way), ..CastTerms::default() }))
+            .transpose()?;
     }
     library::rest_to_bottom_in_random_order(g, you, &looked);
     Ok(())
