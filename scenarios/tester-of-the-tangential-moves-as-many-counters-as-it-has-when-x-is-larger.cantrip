@@ -1,0 +1,53 @@
+# Tester of the Tangential (1/1): increment, and "At the beginning of combat on your turn, you may pay {X}. When you do, move X
+# +1/+1 counters from this creature onto another target creature." On turn 3 a two-mana Chart a Course is greater than the
+# power 1 and the toughness 1, so increment puts a counter on it (2/2). At the beginning of combat Bot1 pays X = 2 with two
+# Moxen; the reflexive ability (CR 603.12) chooses its target as it goes on the stack, Bot2's Ornithopter, and only the one
+# counter the Tester has moves (CR 122.1): the Tester is a 1/1 again and the Ornithopter a 1/3 with the counter.
+
+[Bot1 Deck]
+Tester of the Tangential
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Chart a Course
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tester of the Tangential.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Chart a Course.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Tester of the Tangential.Power = 2
+? Bot1.Battlefield.Tester of the Tangential.Counters.PlusOnePlusOne = 1
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost(X: 2)
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Tester of the Tangential.Power = 1
+Bot1.Battlefield.Tester of the Tangential.Toughness = 1
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 3
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
