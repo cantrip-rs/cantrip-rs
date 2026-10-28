@@ -1,0 +1,69 @@
+# Super Strength: "Enchanted creature gets +4/+4 and has trample and ward {1}." Bot1's Grizzly Bears (2/2), enchanted, is a 6/6 with
+# trample: it attacks and Bot2's Grizzly Bears blocks it; the Bears assign the blocker lethal damage (2) and the other 4 to Bot2
+# (20 to 16), and take 2 themselves. The Aura costs all five Moxen (the pool is empty right after).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Grizzly Bears
+Super Strength
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Grizzly Bears
+Forest
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Forest x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Super Strength.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Grizzly Bears > Grizzly Bears)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 6
+Bot1.Battlefield.Grizzly Bears.Toughness = 6
+Bot1.Battlefield.Grizzly Bears.Keywords = Trample
+Bot1.Battlefield.Grizzly Bears.Damage = 2
+Bot2.Life = 16
+Bot2.Graveyard = Grizzly Bears
