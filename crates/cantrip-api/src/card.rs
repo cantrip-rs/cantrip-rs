@@ -1300,6 +1300,9 @@ pub struct ActivatedDef {
     /// ability. Asked of the event history, where every activation of an ability, a mana ability's included, is recorded;
     /// a permanent that left and came back is a new object (CR 400.7) with the ability unused.
     pub once: bool,
+    /// Power-up (CR 702.193a): the "activate only once" of `once` is one that "can be activated an additional time" for each
+    /// `CardDef::extra_power_up_activations` among the permanents its controller controls. Implies `once`.
+    pub power_up: bool,
     /// Its own cost change (CR 601.2f by way of 602.2b): "this ability costs {1} less to activate for each ...", power-up's
     /// "this ability's cost is reduced by this permanent's mana cost" (CR 702.193a). Its `source` is the object whose
     /// ability it is, and it is asked only for this ability, as this ability (`AbilityCostChange`).
@@ -1385,6 +1388,7 @@ impl ActivatedDef {
         once_each_turn: false,
         exhaust: false,
         once: false,
+        power_up: false,
         cost_change: None,
         restricted: None,
         waterbend: false,
@@ -3019,6 +3023,11 @@ pub struct CardDef {
     /// ability would be activated. Each such instance may be activated once each turn; an instance of the same ability it
     /// has another way is not limited.
     pub granted_once_each_turn: Option<fn(&dyn Query, ObjectId, AbilityRef) -> usize>,
+    /// "Each power-up ability of permanents you control can be activated an additional time" (CR 702.193a, 602.5b): how many
+    /// more times than once each power-up ability of a permanent its controller controls may be activated, while this
+    /// permanent is on the battlefield with its abilities. The additions of several such permanents are summed. Wonder Man,
+    /// Hollywood Hero.
+    pub extra_power_up_activations: u8,
     /// "You may activate abilities of creatures you control as though those creatures had haste" (CR 302.6, 702.10c): a
     /// {T} in the cost of an activated ability of such a creature may be paid though it came under its controller's control
     /// this turn. It gives no haste: the creature still can't attack. Shang-Chi, Master of Kung Fu and Thousand-Year
@@ -3196,6 +3205,7 @@ impl CardDef {
         legend_rule_exempt: &[],
         spend_any_color: &[],
         granted_once_each_turn: None,
+        extra_power_up_activations: 0,
         activate_as_though_haste: &[],
         cause_rules: &[],
         turn_begin: &[],
@@ -3297,7 +3307,7 @@ impl CardDef {
             (!self.trigger_rules.is_empty(), "trigger rules"),
             (!self.additional_triggers.is_empty(), "additional triggers"),
             (self.ascend || self.storied || self.start_your_engines, "a designation keyword"),
-            (self.may_not_untap || self.granted_once_each_turn.is_some(), "a permanent's rule"),
+            (self.may_not_untap || self.granted_once_each_turn.is_some() || self.extra_power_up_activations > 0, "a permanent's rule"),
             (self.untimely_cleanup_rider, "a cleanup rider"),
             (!self.basic_land_types.is_empty(), "basic land types"),
         ];

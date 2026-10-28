@@ -909,12 +909,22 @@ fn limit_reached(cx: &Cx, id: ObjectId, chars: &Chars, index: usize, def: &Activ
     // ability before, in any turn. A permanent that left and came back is another object, with the ability unused.
     if def.once
         && let Some(ability) = chars.abilities().nth(index)
-        && cx
+    {
+        // A power-up ability may be activated an additional time for each permanent its controller controls that says so
+        // (CR 702.193a, 602.5b): only asked once it has been activated, which is rare.
+        let mut allowed = 1;
+        let mut activations = cx
             .history()
             .select(EventQuery::kind(EventMask::ABILITY_ACTIVATED).object(id))
-            .any(|r| matches!(r.event, Event::AbilityActivated { ability: a, .. } if a == ability))
-    {
-        return true;
+            .filter(|r| matches!(r.event, Event::AbilityActivated { ability: a, .. } if a == ability));
+        if activations.next().is_some() {
+            if def.power_up {
+                allowed += extra_power_up_activations(cx, cx.s().obj(id).controller);
+            }
+            if 1 + activations.count() >= allowed as usize {
+                return true;
+            }
+        }
     }
     if granted_limit_reached(cx, id, chars, index) {
         return true;
@@ -924,6 +934,19 @@ fn limit_reached(cx: &Cx, id: ObjectId, chars: &Chars, index: usize, def: &Activ
     }
     let obj = cx.s().obj(id);
     obj.activated_turn == cx.s().turn.number && obj.activated_mask & (1 << index) != 0
+}
+
+/// "Each power-up ability of permanents you control can be activated an additional time" (CR 702.193a, 602.5b): how many more
+/// times than once `player`'s power-up abilities may be activated, the sum over the permanents they control on the battlefield
+/// that have the ability (`CardDef::extra_power_up_activations`) and have not lost their abilities (CR 613.1f).
+fn extra_power_up_activations(cx: &Cx, player: PlayerId) -> u32 {
+    cx.s()
+        .battlefield()
+        .iter()
+        .copied()
+        .filter(|&id| cx.s().obj(id).controller == player && !cx.lost_all_abilities(id))
+        .map(|id| u32::from(cx.card(cx.cards().current(cx.s().obj(id))).extra_power_up_activations))
+        .sum()
 }
 
 /// "You may activate each of those abilities only once each turn" (CR 602.5b, `CardDef::granted_once_each_turn`): the
