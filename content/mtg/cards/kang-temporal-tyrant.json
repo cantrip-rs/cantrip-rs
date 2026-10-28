@@ -1,0 +1,8 @@
+{
+  "name": "Kang, Temporal Tyrant",
+  "manaCost": "{2}{U}{B}",
+  "type": "Legendary Creature — Human Villain",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Whenever Kang attacks, he connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on this creature.)\nWhenever you draw your second card each turn, each opponent loses 1 life and you gain 1 life."
+}
