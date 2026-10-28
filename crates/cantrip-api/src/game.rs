@@ -650,6 +650,10 @@ pub trait Game: Query {
     /// Creates `count` tokens that are copies of these copiable values (CR 707.2, 111.1), the exceptions the effect
     /// states (CR 707.9b) among them: eternalize's "except it's a black Zombie 4/4 with no mana cost".
     fn create_token_copies_of(&mut self, values: Copiable, controller: PlayerId, count: u32) -> Result<Vec<ObjectId>, Suspend>;
+    /// Creates tokens that are copies of different copiable values as one instruction (CR 707.2, 111.1, 101.4): all enter
+    /// together, so each sees the others enter (CR 603.2c). Each is the values and who controls the token. Face Yourself's
+    /// "for each creature target player controls, create a token that's a copy of that creature".
+    fn create_token_copies_together(&mut self, copies: &[(Copiable, PlayerId)]) -> Result<Vec<ObjectId>, Suspend>;
     /// The player gets an emblem (CR 114.2): a new object in the command zone, owned by them, with the abilities
     /// of this definition. It never leaves.
     fn create_emblem(&mut self, def: CardId, player: PlayerId) -> ObjectId;

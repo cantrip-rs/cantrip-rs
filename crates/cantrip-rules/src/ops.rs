@@ -1713,6 +1713,31 @@ pub fn create_emblem(cx: &mut Cx, def: CardId, player: PlayerId) -> ObjectId {
     id
 }
 
+/// The copiable values of the tokens a creation makes (CR 707.2): one set for every token, or each token's own.
+#[derive(Clone, Copy)]
+enum Copies<'a> {
+    All(Option<Copiable>),
+    Each(&'a [Copiable]),
+}
+
+impl Copies<'_> {
+    fn of(&self, token: usize) -> Option<Copiable> {
+        match self {
+            Copies::All(copy) => *copy,
+            Copies::Each(each) => each.get(token).copied(),
+        }
+    }
+}
+
+/// Creates tokens that are copies of different permanents as one instruction (CR 707.2, 111.1, 101.4): each is a copy of
+/// its own copiable values, all enter together and what watches them sees one event (CR 603.2c), so each token sees the
+/// others enter (the Face Yourself ruling). `copies` are the values and who controls the token.
+pub fn create_token_copies_together(cx: &mut Cx, copies: &[(Copiable, PlayerId)]) -> R<Vec<ObjectId>> {
+    let tokens: Vec<(CardId, PlayerId)> = copies.iter().map(|&(values, controller)| (values.card, controller)).collect();
+    let values: Vec<Copiable> = copies.iter().map(|&(values, _)| values).collect();
+    create_tokens_onto(cx, &tokens, false, Copies::Each(&values), &[], Words::NONE, None, None)
+}
+
 /// Creates tokens that are copies of a permanent (CR 707.2, 111.1): the permanent's copiable values, its own copy
 /// effect's exceptions included.
 pub fn create_token_copies(cx: &mut Cx, values: Copiable, controller: PlayerId, count: u32) -> R<Vec<ObjectId>> {
@@ -1886,7 +1911,7 @@ pub fn create_tokens_worded(
     words: Words,
     spell: Option<&StackItem>,
 ) -> R<Vec<ObjectId>> {
-    create_tokens_onto(cx, tokens, tapped, copy, with, words, spell, None)
+    create_tokens_onto(cx, tokens, tapped, Copies::All(copy), with, words, spell, None)
 }
 
 /// Creates a token "attached to" a permanent (CR 111.1, 303.4): `Game::create_token_attached`, with the words of the text
@@ -1896,7 +1921,7 @@ pub fn create_token_attached(cx: &mut Cx, card: CardId, controller: PlayerId, ho
         Cause::Spell(source) | Cause::Ability { source, .. } => cantrip_api::words(cx.s(), source),
         _ => Words::NONE,
     };
-    create_tokens_onto(cx, &[(card, controller)], false, None, &[], words, None, Some(host))
+    create_tokens_onto(cx, &[(card, controller)], false, Copies::All(None), &[], words, None, Some(host))
 }
 
 /// `create_tokens_worded`, each token an effect says is created attached to `host` entering so (CR 303.4): an Aura only
@@ -1908,7 +1933,7 @@ fn create_tokens_onto(
     cx: &mut Cx,
     tokens: &[(CardId, PlayerId)],
     tapped: bool,
-    copy: Option<Copiable>,
+    copies: Copies,
     with: &[(CounterKind, i16)],
     words: Words,
     spell: Option<&StackItem>,
@@ -1917,7 +1942,8 @@ fn create_tokens_onto(
     // Replacements inspect copy exceptions and changed text too (CR 614.12).
     let proposed: Vec<(CardId, Option<Copiable>, PlayerId)> = tokens
         .iter()
-        .map(|&(card, controller)| (card, token_copy(cx.cards(), card, copy, words), controller))
+        .enumerate()
+        .map(|(i, &(card, controller))| (card, token_copy(cx.cards(), card, copies.of(i), words), controller))
         .collect();
     // CR 614.1a: how many of each there are is decided by what would replace the creation, before any of them is made. The
     // token a copy of a permanent spell becomes as it resolves is not created (CR 111.13, 707.10f), so nothing replaces it.
