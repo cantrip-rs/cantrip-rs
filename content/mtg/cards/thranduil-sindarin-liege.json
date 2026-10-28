@@ -1,0 +1,14 @@
+{
+  "name": "Thranduil, Sindarin Liege",
+  "manaCost": "{2}{G/U}{G/U}",
+  "type": "Legendary Creature — Elf Noble",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Other Elves you control get +1/+1.\nLandfall — Whenever a land you control enters, create a 1/1 green Elf creature token.",
+  "adventure": {
+    "name": "Silvan Rally",
+    "manaCost": "{1}{G/U}{G/U}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Mill four cards, then put up to two land cards from among them into your hand. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}
