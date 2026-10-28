@@ -1,0 +1,53 @@
+# Lowland Tracker (2/2 first strike, {4}{W}) attacks on turn 3 and provokes Bot2's Balduvian Bears, which must block it (CR 702.39a): its first-strike
+# damage (CR 702.7b) kills the Bears before they deal any, so the Tracker has no damage marked.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Lowland Tracker
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Balduvian Bears
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lowland Tracker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Balduvian Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Lowland Tracker > Bot2)
+Bot1.Accept
+! Bot2.Block(Count: 0)
+Bot2.Block(Balduvian Bears > Lowland Tracker)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Balduvian Bears
+Bot1.Battlefield.Lowland Tracker.Damage = 0
+Bot1.Battlefield.Lowland Tracker.Keywords = FirstStrike

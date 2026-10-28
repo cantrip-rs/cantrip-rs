@@ -1,0 +1,11 @@
+{
+  "name": "Lowland Tracker",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike\nProvoke (Whenever this creature attacks, you may have target creature defending player controls untap and block it if able.)",
+  "keywords": [
+    "FirstStrike"
+  ]
+}
