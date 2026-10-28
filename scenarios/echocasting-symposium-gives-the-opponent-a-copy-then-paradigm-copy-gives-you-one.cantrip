@@ -1,0 +1,52 @@
+# Echocasting Symposium ({4}{U}{U}): "Target player creates a token that's a copy of target creature you control" (CR 707.2) and
+# paradigm (CR 702.192a). Turn 1: Bot1 pays with Black Lotus (three blue), Mox Sapphire, Mox Jet and Mox Ruby and targets Bot2 and
+# its own Ornithopter: Bot2, not Bot1, creates and controls the Ornithopter token. Bot2's token is not a creature Bot1 controls, so
+# Bot1 can only copy its own. Turn 3: Bot1 accepts the free copy of the exiled spell and targets itself: it gets a token too.
+# Turn 5: the copy is declined, so nothing more happens.
+
+[Bot1 Deck]
+Ornithopter
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Echocasting Symposium
+Island x2
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Echocasting Symposium.Cast
+Bot1.Target(Bot2)
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot2.Battlefield = Ornithopter
+? Bot2.Battlefield.Ornithopter.Token = true
+? Bot1.Battlefield.Count = 4
+? Exile = Echocasting Symposium
+[T3 Bot1.Main1]
+Bot1.Accept
+Bot1.Target(Bot1)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Count = 5
+[T5 Bot1.Main1]
+Bot1.Decline
+[T5 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Exile = Echocasting Symposium
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield.Count = 5
