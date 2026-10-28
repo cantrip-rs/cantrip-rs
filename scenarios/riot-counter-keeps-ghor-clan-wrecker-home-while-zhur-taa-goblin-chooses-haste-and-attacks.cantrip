@@ -1,0 +1,50 @@
+# Riot (CR 702.136a): Bot1 casts Ghor-Clan Wrecker and chooses the +1/+1 counter - a 3/3 with menace and no haste - and Zhur-Taa
+# Goblin and chooses haste - a 2/2 with no counter. In the same declaration of attackers on turn 1 the Goblin may attack and
+# the Wrecker may not (summoning sick), so Bot2 takes 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ghor-Clan Wrecker
+Zhur-Taa Goblin
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ghor-Clan Wrecker.Cast
+Bot1.Pass
+Bot1.Name(+1/+1 counter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Zhur-Taa Goblin.Cast
+Bot1.Pass
+Bot1.Name(Haste)
+[T1 Bot1.DeclareAttackers]
+! Bot1.Attack(Ghor-Clan Wrecker > Bot2)
+Bot1.Attack(Zhur-Taa Goblin > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Ghor-Clan Wrecker.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ghor-Clan Wrecker.Power = 3
+Bot1.Battlefield.Ghor-Clan Wrecker.Toughness = 3
+Bot1.Battlefield.Ghor-Clan Wrecker.Keywords = Menace
+Bot1.Battlefield.Zhur-Taa Goblin.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Zhur-Taa Goblin.Power = 2
+Bot1.Battlefield.Zhur-Taa Goblin.Keywords = Haste
