@@ -160,6 +160,11 @@ pub fn run_modes(cx: &mut Cx, item: &StackItem, modal: &ModalDef) -> Result<(), 
             (mode.effect)(cx, &sub)?;
         }
     }
+    // An instruction printed ahead of the modes that they share is done once, after them, to all their targets (CR 700.2).
+    if let Some(shared) = modal.shared {
+        cx.judge_if_due();
+        shared(cx, item)?;
+    }
     Ok(())
 }
 

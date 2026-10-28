@@ -694,6 +694,12 @@ impl AbilityDef {
         AbilityDef::Triggered(TriggeredDef { triggers_each_turn: n, ..triggered_def(self, "only a triggered ability triggers") })
     }
 
+    /// "Up to that many target ..." where that many is the amount of the event that triggered it, as the life gained or the damage
+    /// dealt: a `TargetSpec::COUNTED` bound reads it as the ability is put on the stack (CR 603.3d, 601.2c).
+    pub const fn counted_by_amount(self) -> AbilityDef {
+        AbilityDef::Triggered(TriggeredDef { counted_by_amount: true, ..triggered_def(self, "only a triggered ability is counted by an event's amount") })
+    }
+
     /// Its first target slot divides a total among its targets (CR 601.2d).
     pub const fn divide(self, divide: Divide) -> AbilityDef {
         AbilityDef::Triggered(TriggeredDef { divide: Some(divide), ..triggered_def(self, "only a triggered ability divides this way") })
@@ -788,7 +794,7 @@ impl ModeDef {
 
 /// "Choose one —" (CR 700.2): the modes, in printed order.
 pub const fn modes(modes: &'static [ModeDef]) -> ModalDef {
-    ModalDef { modes, min: 1, max: 1, escalate: None, repeat: false, allowed: None, when_paid: None }
+    ModalDef { modes, min: 1, max: 1, escalate: None, repeat: false, allowed: None, when_paid: None, shared: None }
 }
 
 impl ModalDef {
@@ -807,6 +813,14 @@ impl ModalDef {
     /// Escalate (CR 702.120a): each mode beyond the first costs this more.
     pub const fn escalate(self, cost: Cost) -> ModalDef {
         ModalDef { escalate: Some(cost), ..self }
+    }
+
+    /// An instruction printed before the bulleted modes that is done to what all the chosen modes name together, once, as the
+    /// last of the spell (CR 700.2, 608.2c): "Choose up to two. Return those cards from your graveyard to your hand." Each
+    /// mode then only names its targets (`no_effect`), and `effect` reads all of the item's targets, in the printed order of
+    /// the chosen modes.
+    pub const fn shared(self, effect: Effect) -> ModalDef {
+        ModalDef { shared: Some(effect), ..self }
     }
 
     /// "You may choose the same mode more than once" (CR 700.2d).

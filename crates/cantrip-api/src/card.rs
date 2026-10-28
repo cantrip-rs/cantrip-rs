@@ -1337,7 +1337,8 @@ pub struct ActivatedDef {
     pub x_cant_be_zero: bool,
 }
 
-fn no_effect(_: &mut dyn Game, _: &StackItem) -> Result<(), Suspend> {
+/// An effect that does nothing: a mode that only names its targets for a `ModalDef::shared` instruction.
+pub fn no_effect(_: &mut dyn Game, _: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
@@ -1437,6 +1438,7 @@ impl TriggeredDef {
         mana_yield: TriggeredMana::Unstated,
         sums_per_subject: false,
         triggers_each_turn: 0,
+        counted_by_amount: false,
         chapter: 0,
         state: None,
         modal: None,
@@ -1537,6 +1539,9 @@ pub struct TriggeredDef {
     /// "This ability triggers only N times each turn" (no numbered rule; CR 603.2h is "do this only once each turn"): 0 for no limit. A triggering that would exceed it
     /// does not happen, and one that happens uses one up.
     pub triggers_each_turn: u8,
+    /// "Choose up to that many target ...", that many being the amount the trigger event carried (`Fired::data[0]`: the life gained):
+    /// a `TargetSpec::COUNTED` bound reads it as the ability is put on the stack (CR 603.3d, 601.2c).
+    pub counted_by_amount: bool,
     /// A Saga's chapter ability (CR 714.2): it triggers when lore counters are put on its source and their number
     /// becomes at least this, having been less. `listens` and `matches` are not used; the core owns the trigger.
     pub chapter: u8,
@@ -1729,6 +1734,8 @@ pub struct ModalDef {
     /// in content is a kicked modal spell), and gating it is owed with the first one.
     /// A spell's own: a modal triggered ability (Depth Defiler's) does not read it.
     pub when_paid: Option<(u8, u8)>,
+    /// An instruction common to every mode, done once after the chosen modes on all of the item's targets (`ModalDef::shared`).
+    pub shared: Option<Effect>,
 }
 
 impl ModalDef {

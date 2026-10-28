@@ -2241,6 +2241,10 @@ impl cantrip_api::Game for Cx<'_> {
         counters::remove_up_to(self, player, source, object, maximum).map_err(|_| Suspend)
     }
 
+    fn remove_a_counter_from_among(&mut self, player: PlayerId, source: ObjectId, permanents: &[ObjectId]) -> Result<bool, Suspend> {
+        counters::remove_one_from_among(self, player, source, permanents).map_err(|_| Suspend)
+    }
+
     fn add_effect(&mut self, source: ObjectId, affected: ObjectId, kind: EffectKind, duration: Duration) {
         // One change, though control and the "for as long as" durations it ends are settled with it.
         self.instruction(|cx| cx.begin_effect(source, affected, kind, duration), |_| true);

@@ -1005,6 +1005,11 @@ pub trait Game: Query {
     /// ability. Nothing is asked of an object with no counters, or one that has changed zones (CR 400.7). Says how many
     /// came off, for "for each counter removed this way" (Hex Parasite). Heartless Act, Hex Parasite, Price of Betrayal.
     fn remove_counters_up_to(&mut self, player: PlayerId, source: ObjectId, object: ObjectId, maximum: u8) -> Result<u16, Suspend>;
+    /// "Remove a counter from a [permanent] you control" as the effect resolves (CR 608.2d, 122.1): `player` chooses one counter
+    /// of any kind on any of `permanents` (the ones the effect may take it from), asked as `RequestKind::RemoveCounters`, and it
+    /// comes off. Whether one did, for "if you do": none when none of them has a counter or has changed zones (CR 400.7).
+    /// Mister Hyde, Monster Within, Sanctuary Warden and Chisei, Heart of Oceans print it.
+    fn remove_a_counter_from_among(&mut self, player: PlayerId, source: ObjectId, permanents: &[ObjectId]) -> Result<bool, Suspend>;
     /// A continuous effect from `source` on `affected` begins (CR 611.2). It is controlled by the controller of the spell or
     /// ability whose instruction makes it (CR 611.2a, 113.8) - or of the replacement effect or mana ability being carried
     /// out - whoever controls `source` by then: The One Ring's "you gain protection from everything" is its caster's though

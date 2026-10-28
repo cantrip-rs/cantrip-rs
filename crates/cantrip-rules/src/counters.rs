@@ -167,6 +167,36 @@ pub fn remove_up_to(cx: &mut Cx, player: PlayerId, source: ObjectId, id: ObjectI
     Ok(removed)
 }
 
+/// "Remove a counter from a [permanent] you control" as an effect resolves (CR 608.2d, 122.1): `player` chooses one counter, of
+/// any kind, on any of `permanents`, and it comes off. Nothing is asked when none of them has one (or they have changed zones,
+/// CR 400.7); says whether one came off, for "if you do". Mister Hyde, Monster Within, Sanctuary Warden and Chisei, Heart of Oceans.
+pub fn remove_one_from_among(cx: &mut Cx, player: PlayerId, source: ObjectId, permanents: &[ObjectId]) -> crate::R<bool> {
+    let mut pools: Vec<CounterPool> = Vec::new();
+    for &id in permanents {
+        if !live(cx.s(), id) || cx.s().obj(id).zone.is(ZoneKind::PhasedOut) {
+            continue;
+        }
+        let obj = cx.s().obj(id);
+        pools.extend(CounterKind::ALL.into_iter().filter_map(|kind| {
+            let count = obj.counters(kind);
+            (count > 0).then_some(CounterPool { object: id, kind, count: count as u16 })
+        }));
+    }
+    if pools.is_empty() {
+        return Ok(false);
+    }
+    let Answer::Counters(taken) = cx.ask_core(player, RequestKind::RemoveCounters { source, pools, total: 1, up_to: false }, false)? else {
+        return Ok(false);
+    };
+    let mut removed = false;
+    for (object, kind, n) in taken {
+        let before = cx.s().obj(object).counters(kind);
+        remove(cx, object, kind, n.min(i16::MAX as u16) as i16);
+        removed |= cx.s().obj(object).counters(kind) < before;
+    }
+    Ok(removed)
+}
+
 /// A Siege that has lost its last defense counter triggers its defeat ability (CR 310.12b).
 fn siege_defeat_triggers(cx: &mut Cx, id: ObjectId) {
     if !cx.s().obj(id).zone.is(ZoneKind::Battlefield) {
