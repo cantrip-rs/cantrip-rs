@@ -1,0 +1,52 @@
+# The Black Arrow: "Flash. When The Black Arrow enters, it deals 1 damage to any target. If a Dragon is dealt damage this way, destroy
+# it." Bot1 flashes it in at Bot2's end step (turn 2) for exactly {3}, aimed at Bot2's Chomping Changeling, a 1/2 Shapeshifter with
+# changeling and so a Dragon (CR 702.73a): the 1 damage alone would not kill it, the destruction does (CR 120.3, 701.8a, 702.36a).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+The Black Arrow
+Island x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Chomping Changeling
+Island x3
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Chomping Changeling.Cast
+Bot2.Pass
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Black Arrow.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Target(Chomping Changeling)
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Chomping Changeling
+Bot2.Battlefield.Count = 3
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Mox Jet; The Black Arrow
