@@ -84,6 +84,8 @@ pub mod offspring;
 pub mod outlaw;
 pub mod outside;
 pub mod persist;
+pub mod embalm;
+pub(crate) mod copy_from_graveyard;
 pub mod undying;
 pub(crate) mod returns_with_counter;
 pub mod overload;
