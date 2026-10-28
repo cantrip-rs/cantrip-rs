@@ -1,0 +1,75 @@
+# Monica Rambeau (3/3 flying, prowess; "{2}{R}{W}{W}: Transform Monica Rambeau. Activate only as a sorcery."), back face Photon, Living
+# Light (4/4 flying, hexproof, prowess; "Whenever you cast a noncreature spell, put a +1/+1 counter on each other creature you control").
+# Turn 1: Monica is cast, then a Mox (a noncreature spell) gives her prowess: a 4/4 until the end of turn. Turn 3: she transforms for
+# {2}{R}{W}{W} (only as a sorcery: refused on turn 2, Bot2's turn) and becomes Photon, the same permanent; casting another Mox then gives Photon its own prowess (5/5 for the turn) and
+# puts one counter on Bot1's other creature, the Ornithopter, but not on Photon herself or on Bot2's Ornithopter. Bot2's Lightning
+# Bolt can't target Photon (hexproof).
+
+[Bot1 Deck]
+Monica Rambeau
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Plains
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Monica Rambeau.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Monica Rambeau.Power = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+! Bot1.Battlefield.Monica Rambeau.Activate(Ability: Transform)
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Monica Rambeau.Activate(Ability: Transform)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Photon, Living Light.Power = 4
+? Bot1.Battlefield.Photon, Living Light.Keywords = Flying; Hexproof
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Photon, Living Light.Power = 5
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Photon, Living Light.Counters.PlusOnePlusOne = (absent)
+? Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Photon, Living Light)
+
+[Expect]
+Bot1.Battlefield.Photon, Living Light.Transformed = true
