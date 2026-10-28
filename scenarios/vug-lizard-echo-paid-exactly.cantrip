@@ -1,0 +1,49 @@
+# Vug Lizard {1}{R}{R}, "Echo {1}{R}{R}" (CR 702.30a). Cast on turn 1 (paid with generic from Sol Ring's colorless mana and R mana), it came under Bot1's control since the beginning of their last upkeep, so at Bot1's turn 3 upkeep the echo ability
+# triggers and asks for {1}{R}{R}. The colorless mana, a Mox Pearl (W) and 1 of the two R sources are tapped first (as much mana as the cost, one R
+# short, a W in place of it): paying is not offered. With the last R source tapped it is paid ({1}{R}{R} spent: the generic with colorless mana,
+# {R}{R} with R), and the W and the colorless left over stays in the pool. Vug Lizard stays.
+
+[Bot1 Deck]
+Vug Lizard
+Mox Pearl
+Mox Ruby
+Sol Ring
+Mountain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Vug Lizard.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mountain.Activate
+Bot1.PayCost(Spend: C, R, R)
+Bot1.Pass
+? Bot1.Mana = {W}{C}
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Vug Lizard.Power = 3
+Bot1.Battlefield.Vug Lizard.Toughness = 4
+Bot1.Battlefield.Vug Lizard.Keywords = Mountainwalk
+Bot1.Battlefield.Vug Lizard.Colors = Red
