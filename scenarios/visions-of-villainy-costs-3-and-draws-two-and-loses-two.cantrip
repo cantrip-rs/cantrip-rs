@@ -1,0 +1,50 @@
+# Without a Villain of its caster's, Visions of Villainy still costs {2}{B} (CR 601.2f): Bot2's Agents of HYDRA is a Villain, but
+# not one Bot1 controls. Two mana is not enough, three exactly is. You draw two cards and lose 2 life (CR 121.1, 119.3).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Visions of Villainy
+Swamp
+Swamp
+Swamp
+Island
+Island
+Swamp x10
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Agents of HYDRA
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Agents of HYDRA.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Agents of HYDRA.Tapped = false
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Visions of Villainy.Cast(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Visions of Villainy.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Count = 6
+Bot1.Graveyard = Visions of Villainy

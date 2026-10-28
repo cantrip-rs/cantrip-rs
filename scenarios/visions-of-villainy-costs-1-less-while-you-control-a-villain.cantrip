@@ -1,0 +1,57 @@
+# With a Villain you control (Agents of HYDRA) Visions of Villainy costs {1}{B} (CR 601.2f), paid with exactly two mana. An
+# opponent's Villain does not count: with Bot2's Agents on the battlefield and two mana open, the cast is refused for want of
+# the third mana.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Agents of HYDRA
+Visions of Villainy
+Swamp
+Island
+Island
+Island
+Swamp x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Emerald
+Agents of HYDRA
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Agents of HYDRA.Cast
+Bot2.Pass
+! Bot1.Hand.Visions of Villainy.Cast(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Visions of Villainy.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard = Visions of Villainy
+Bot1.Battlefield.Swamp#2.Tapped = false
