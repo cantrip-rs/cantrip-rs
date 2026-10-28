@@ -1,0 +1,32 @@
+# Jhessian Zombies' islandcycling {2} (CR 702.29e): paid with exactly Moxen Pearl and Jet, discarding the card from the hand
+# finds an Island card in the library and puts it into the hand; the library's Swamp is refused (the card has swampcycling
+# too, but this is the other ability). The ability is not offered with no mana (refusal first), and the pool ends empty.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Jhessian Zombies
+Plains x4
+Island
+Swamp
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+! Bot1.Hand.Jhessian Zombies.Activate(Ability: Islandcycling; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jhessian Zombies.Activate(Ability: Islandcycling)
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Search(Swamp)
+Bot1.Search(Island)
+
+[Expect]
+Bot1.Graveyard = Jhessian Zombies
+Bot1.Hand = Island; Plains; Plains; Plains; Plains
