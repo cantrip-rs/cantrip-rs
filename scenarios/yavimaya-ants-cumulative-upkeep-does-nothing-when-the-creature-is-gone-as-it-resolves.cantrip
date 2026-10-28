@@ -1,0 +1,45 @@
+# Yavimaya Ants: "Cumulative upkeep {G}{G}" (CR 702.24a) reads "if this permanent is on the battlefield". The ability is on the
+# stack at Bot1's turn 3 upkeep when Bot2 kills the 5/1 Ants with Lightning Bolt: it resolves with no permanent to put an age
+# counter on, and Bot1 is not asked for {G}{G} though a Mox Emerald and a Forest could pay it.
+
+[Bot1 Deck]
+Yavimaya Ants
+Black Lotus
+Mox Emerald
+Forest
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Yavimaya Ants.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Yavimaya Ants)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Decline
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Yavimaya Ants; Black Lotus
+Bot1.Battlefield = Mox Emerald; Forest

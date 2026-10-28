@@ -1,0 +1,12 @@
+{
+  "name": "Yavimaya Ants",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Insect",
+  "power": 5,
+  "toughness": 1,
+  "oracleText": "Trample, haste\nCumulative upkeep {G}{G} (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)",
+  "keywords": [
+    "Trample",
+    "Haste"
+  ]
+}
