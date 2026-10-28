@@ -1,0 +1,6 @@
+{
+  "name": "Beorn's Hospitality",
+  "manaCost": "{1}{G}",
+  "type": "Enchantment",
+  "oracleText": "Landfall — Whenever a land you control enters, put a +1/+1 counter on target creature you control.\n{5}{G}{G}: This enchantment becomes a Bear creature in addition to its other types and gains \"This creature's power and toughness are each equal to the number of lands you control.\" (This effect doesn't end.)"
+}

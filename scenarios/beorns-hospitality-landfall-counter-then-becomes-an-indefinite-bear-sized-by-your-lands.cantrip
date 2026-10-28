@@ -1,0 +1,78 @@
+# Beorn's Hospitality: "Landfall - Whenever a land you control enters, put a +1/+1 counter on target creature you control.
+# {5}{G}{G}: This enchantment becomes a Bear creature in addition to its other types and gains 'This creature's power and
+# toughness are each equal to the number of lands you control.' (This effect doesn't end.)" On turn 1 the enchantment is no
+# creature, so the Ornithopter is the only target of the Forest's landfall (a +1/+1 counter, the enchantment getting none). Bot2's
+# Island on turn 2 triggers nothing. On turn 3 the ability costs exactly seven mana: it becomes an Enchantment Creature - Bear
+# sized by Bot1's lands only (1/1, Bot2's Island not counted). It stays a creature through the end of turn (it doesn't end,
+# CR 611.2a) and on turn 5 a Plains makes it a legal target of its own landfall: two lands, a +1/+1 counter on top (CR 613.4c): 3/3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Beorn's Hospitality
+Ornithopter
+Forest
+Black Lotus
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Beorn's Hospitality.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Beorn's Hospitality.Types = Enchantment
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Beorn's Hospitality.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beorn's Hospitality.Types = Enchantment; Creature
+? Bot1.Battlefield.Beorn's Hospitality.Subtypes = Bear
+? Bot1.Battlefield.Beorn's Hospitality.Power = 1
+? Bot1.Battlefield.Beorn's Hospitality.Toughness = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Beorn's Hospitality.Types = Enchantment; Creature
+Bot1.Hand.Plains.Play
+Bot1.Target(Beorn's Hospitality)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Beorn's Hospitality.Power = 3
+Bot1.Battlefield.Beorn's Hospitality.Toughness = 3
+Bot1.Battlefield.Beorn's Hospitality.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
