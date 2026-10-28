@@ -26,10 +26,11 @@ const PREDEFINED_NAMED: [(&str, &str); 9] = [
 const TYPE_WORDS: [&str; 9] = ["artifact", "creature", "enchantment", "land", "planeswalker", "battle", "legendary", "snow", "kindred"];
 
 /// The keyword actions whose rules make a token (CR 701), as the card's text says them, and the token as the rule says it:
-/// empower Jace (CR 701.71a), amass (CR 701.47a) and investigate (CR 701.16a).
-const KEYWORD_TOKENS: [(&str, &str); 3] = [
+/// empower Jace (CR 701.71a), amass (CR 701.47a, Orcs and Goblins) and investigate (CR 701.16a).
+const KEYWORD_TOKENS: [(&str, &str); 4] = [
     ("empower jace", "a blue Jace planeswalker token"),
     ("amass orcs", "a 0/0 black Orc Army creature token"),
+    ("amass goblins", "a 0/0 black Goblin Army creature token"),
     ("investigate", "a Clue token"),
 ];
 
