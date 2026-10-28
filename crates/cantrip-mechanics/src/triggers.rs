@@ -734,6 +734,41 @@ pub const fn ward_discard_or_pay<const N: u8>(text: &'static str) -> AbilityDef 
         .ward()
 }
 
+/// What ward's poison cost asks the player whose spell or ability targeted, the question on that spell or ability.
+fn ward_poison_question(n: u8) -> &'static Question {
+    const DETAIL: &str = "Ward: what it targeted can't be targeted for free";
+    const FIVE: Question =
+        Question::new("PoisonUnlessCountered", "Get five poison counters, or {source} is countered?", DETAIL, "Get five poison counters", "Let it be countered").amount(5).no_default();
+    const ANY: Question =
+        Question::new("PoisonUnlessCountered", "Get the poison counters, or {source} is countered?", DETAIL, "Get the poison counters", "Let it be countered").no_default();
+    match n {
+        5 => &FIVE,
+        _ => &ANY,
+    }
+}
+
+fn ward_poison_effect<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Target::Object(by) = item.subject else { return Ok(()) };
+    let payer = PlayerId(item.data[0] as u8);
+    // A cost of getting counters can be paid by one who can get them (CR 118.3, 122.1, 101.2; Melira, Sylvok Outcast's "you
+    // can't get poison counters"); they are asked, and the counters are given by the ward ability like any a player gets.
+    if g.can_get_counters(payer, PlayerCounter::Poison)
+        && matches!(g.ask(payer, RequestKind::May { source: by, purpose: Purpose::Ask(ward_poison_question(N)) })?, Answer::Yes)
+    {
+        g.give_poison(payer, u32::from(N));
+        return Ok(());
+    }
+    g.counter_item(by, item.data[1] as usize);
+    Ok(())
+}
+
+/// Ward--Get N poison counters (CR 702.21a, 118.12): "Whenever this becomes the target of a spell or ability an opponent
+/// controls, counter it unless that player gets N poison counters." The Serpent Society prints it with five.
+pub const fn ward_poison<const N: u8>(text: &'static str) -> AbilityDef {
+    triggered(when(EventMask::BECAME_TARGET, ward_matches), ward_poison_effect::<N>, text)
+        .ward()
+}
+
 /// What ward's sacrifice cost asks the player whose spell or ability targeted, the question on that spell or ability.
 fn ward_sacrifice_question(n: u8) -> &'static Question {
     const DETAIL: &str = "Ward: what it targeted can't be targeted for free";
