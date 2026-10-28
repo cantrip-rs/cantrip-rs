@@ -828,8 +828,10 @@ pub fn exile_until_nonland(
     (exiled, None)
 }
 
-/// "An instant or sorcery card" as a search finds it (CR 205.2a, 701.23): the card's types as they are in the library. Mystical
-/// Tutor and Wild Idea (Sanar, Unfinished Genius's prepare spell) search for it.
+/// "An instant or sorcery card" as a search finds it (CR 205.2a, 701.23): the card's types as they are in the library, and as a
+/// card milled into a graveyard has them, or a spell on the stack. Mystical Tutor and Wild Idea (Sanar, Unfinished Genius's
+/// prepare spell) search for it; Gleam of Death takes them from among the cards it milled and Glamdring, Foe-hammer reduces
+/// the cost of the spells that are them.
 pub fn instant_or_sorcery_card(q: &dyn Query, card: ObjectId) -> bool {
     let chars = q.chars(card);
     chars.is(CardType::Instant) || chars.is(CardType::Sorcery)
