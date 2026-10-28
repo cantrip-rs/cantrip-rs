@@ -1,0 +1,52 @@
+# Shambleshark has flash (CR 702.8a) and evolve (CR 702.100a). Bot1 keeps Mox Emerald and Mox Sapphire untapped through turn 1 and,
+# in Bot2's upkeep on turn 2, taps them and casts it, a 2/1. On turn 3 Blade of the Sixth Pride (3/1, paid with Mox Pearl and
+# Mox Jet) has greater power but not greater toughness: evolve triggers and Shambleshark is 3/2.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Shambleshark
+Blade of the Sixth Pride
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Shambleshark.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Shambleshark.Power = 2
+? Bot1.Battlefield.Shambleshark.Toughness = 1
+? Bot1.Battlefield.Shambleshark.Keywords = Flash
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blade of the Sixth Pride.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Shambleshark.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Shambleshark.Power = 3
+Bot1.Battlefield.Shambleshark.Toughness = 2
