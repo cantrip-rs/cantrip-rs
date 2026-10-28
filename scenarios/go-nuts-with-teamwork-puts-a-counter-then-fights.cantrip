@@ -1,0 +1,75 @@
+# Go Nuts!: "Teamwork 3 ... Choose one. If this spell was cast using teamwork, choose both instead." Bot1 taps its Centaur Courser
+# (power 3, exactly the total needed) and so chooses both modes: the +1/+1 counter goes on the Courser (4/4) first (printed order,
+# CR 700.2d), then it fights Bot2's Grizzly Bears: the Courser deals 4 and the Bears die, the Bears deal 2 to it.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Centaur Courser
+Grizzly Bears
+Go Nuts!
+Forest
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Grizzly Bears
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Go Nuts!.Cast
+Bot1.Modes(Teamwork 3)
+Bot1.Target(Bot1.Battlefield.Centaur Courser)
+Bot1.Target(Bot1.Battlefield.Centaur Courser)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+! Bot1.Choose(Grizzly Bears)
+Bot1.Choose(Centaur Courser)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Centaur Courser.Power = 4
+Bot1.Battlefield.Centaur Courser.Toughness = 4
+Bot1.Battlefield.Centaur Courser.Damage = 2
+Bot1.Battlefield.Centaur Courser.Tapped = true
+Bot2.Graveyard = Grizzly Bears

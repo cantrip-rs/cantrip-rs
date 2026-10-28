@@ -1,0 +1,6 @@
+{
+  "name": "Go Nuts!",
+  "manaCost": "{G}",
+  "type": "Sorcery",
+  "oracleText": "Teamwork 3 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 3 or more.)\nChoose one. If this spell was cast using teamwork, choose both instead.\n• Put a +1/+1 counter on target creature.\n• Target creature you control fights target creature an opponent controls."
+}

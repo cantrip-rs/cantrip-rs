@@ -1,0 +1,70 @@
+# Go Nuts!: cast without teamwork and choosing the fight: Bot1's Centaur Courser (3/3) fights Bot2's Grizzly Bears (2/2), which dies
+# while the Courser takes 2 and gets no counter. The second target must be an opponent's creature, so Bot1's own Courser is refused.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Centaur Courser
+Grizzly Bears
+Go Nuts!
+Forest
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Grizzly Bears
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Go Nuts!.Cast
+Bot1.Modes(Cast without teamwork)
+Bot1.Modes(2)
+Bot1.Target(Bot1.Battlefield.Centaur Courser)
+! Bot1.Target(Bot1.Battlefield.Centaur Courser)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Centaur Courser.Power = 3
+Bot1.Battlefield.Centaur Courser.Damage = 2
