@@ -1,0 +1,41 @@
+# Titania's "Ward--Discard a card or pay {2}", paid by discarding (CR 702.21a, 118.12): Bot1 casts Titania on turn 1 with
+# three Moxen and an Island discarded. On turn 2 Bot2 taps its only mana for a Lightning Bolt, so it cannot pay {2} and is
+# asked only about the discard; it accepts and discards an Island, so the Bolt is not countered and deals 3 to the 5/5.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Titania, Rugged Rumbler
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Titania, Rugged Rumbler.Cast
+Bot1.Modes(Discard a card)
+Bot1.Choose(Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Titania, Rugged Rumbler)
+Bot2.Accept
+Bot2.Choose(Island)
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Titania, Rugged Rumbler.Damage = 3
+Bot2.Graveyard = Lightning Bolt; Island

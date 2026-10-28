@@ -1,0 +1,44 @@
+# Titania's "Ward--Discard a card or pay {2}" asks for {2}, not less (CR 702.21a, 118.12): Bot2 taps Mox Ruby for the
+# Lightning Bolt and holds only Mox Jet's one mana for the ward, so it cannot pay (the refusal) and declines the discard.
+# The Bolt is countered and Titania takes no damage.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Titania, Rugged Rumbler
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Titania, Rugged Rumbler.Cast
+Bot1.Modes(Discard a card)
+Bot1.Choose(Island)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Bolt.Cast(Titania, Rugged Rumbler)
+! Bot2.PayCost
+Bot2.Decline
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield.Titania, Rugged Rumbler.Damage = 0
+Bot2.Graveyard = Lightning Bolt
