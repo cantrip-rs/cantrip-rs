@@ -1,0 +1,41 @@
+# Villainous Hideout: "{3}, {T}: Target Villain you control connives. Activate only as a sorcery." (CR 701.50) Aerial Doombot,
+# a Villain, is cast with Mox Sapphire; the three other Moxen and the Hideout pay for the ability. It draws an Island, then
+# Bot1 discards Counterspell, a nonland card, so the Doombot gets a +1/+1 counter and is a 2/2.
+
+[Bot1 Deck]
+Villainous Hideout
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Aerial Doombot
+Counterspell
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Villainous Hideout.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aerial Doombot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Villainous Hideout.Activate(Ability: Target Villain you control connives; Bot1.Battlefield.Aerial Doombot)
+Bot1.Choose(Counterspell)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Aerial Doombot.Power = 2
+Bot1.Hand = Island
+Bot1.Graveyard = Counterspell

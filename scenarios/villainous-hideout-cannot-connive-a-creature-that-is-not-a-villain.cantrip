@@ -1,0 +1,35 @@
+# Villainous Hideout: its third ability targets a Villain you control (CR 115.1). With only Grizzly Bears, no Villain, on the
+# battlefield it has no legal target and cannot be activated.
+
+[Bot1 Deck]
+Villainous Hideout
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Grizzly Bears
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Villainous Hideout.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Villainous Hideout.Activate(Ability: Target Villain you control connives; Bot1.Battlefield.Grizzly Bears)
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2

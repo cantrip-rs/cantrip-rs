@@ -1,0 +1,19 @@
+# Villainous Hideout: the {U} it makes is for Villain spells and abilities of Villain sources only (CR 106.6). Brainstorm, a
+# one-mana blue instant that is no Villain, is not offered with it.
+
+[Bot1 Deck]
+Villainous Hideout
+Brainstorm
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Villainous Hideout.Play
+Bot1.Battlefield.Villainous Hideout.Activate(Ability: Add one mana of any color; Color: Blue)
+? Bot1.Mana = {U} (VillainSpellsOrAbilities)
+! Bot1.Hand.Brainstorm.Cast(Mana: short)
+
+[Expect]
+Bot1.Mana = {U} (VillainSpellsOrAbilities)

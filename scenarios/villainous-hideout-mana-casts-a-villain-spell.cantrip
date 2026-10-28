@@ -1,0 +1,22 @@
+# Villainous Hideout: "{T}: Add one mana of any color. Spend this mana only to cast a Villain spell or to activate an ability
+# of a Villain source" (CR 106.6). The {U} it makes pays for Aerial Doombot, an Artifact Creature - Robot Villain.
+
+[Bot1 Deck]
+Villainous Hideout
+Aerial Doombot
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Villainous Hideout.Play
+Bot1.Battlefield.Villainous Hideout.Activate(Ability: Add one mana of any color; Color: Blue)
+? Bot1.Mana = {U} (VillainSpellsOrAbilities)
+Bot1.Hand.Aerial Doombot.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Aerial Doombot.Power = 1
+Bot1.Mana =
