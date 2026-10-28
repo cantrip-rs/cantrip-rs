@@ -894,7 +894,9 @@ const BAND: Part = cantrip_api::select::part(&(up_to_one_without_banding as Sele
 
 /// Whether `blocker` may block `attacker` (CR 509.1b): a creature that can't block (decayed's too, CR 702.147a), one that
 /// can't be blocked (an ability, or a resolved effect: `EffectKind::CantBeBlocked`), a resolved restriction on the pair
-/// (`EffectKind::BlockRestriction`), one that can block only creatures with flying, flying (CR 702.9b), shadow (CR 702.28b), landwalk (CR 702.14c), protection (CR 702.16f). Menace (CR 702.111b) is about the
+/// (`EffectKind::BlockRestriction`), one that can block only creatures with flying, flying (CR 702.9b), shadow (CR 702.28b),
+/// horsemanship (CR 702.31b), fear (CR 702.36b), intimidate (CR 702.13b), skulk (CR 702.118b), landwalk (CR 702.14c),
+/// protection (CR 702.16f). Menace (CR 702.111b) is about the
 /// whole declaration, not a pair.
 fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[ObjectId]) -> bool {
     let a = cx.chars(attacker);
@@ -922,25 +924,45 @@ fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[Obj
     if a.has(Keyword::Shadow) != b.has(Keyword::Shadow) {
         return false;
     }
+    if a.has(Keyword::Horsemanship) && !b.has(Keyword::Horsemanship) {
+        return false;
+    }
+    if a.has(Keyword::Fear) && !b.is(CardType::Artifact) && !b.colors.has(Color::Black) {
+        return false;
+    }
+    if a.has(Keyword::Intimidate) && !b.is(CardType::Artifact) && !b.colors.intersects(a.colors) {
+        return false;
+    }
+    // Skulk (CR 702.118b): power as the layers have it now.
+    if a.has(Keyword::Skulk) && b.power.unwrap_or(0) > a.power.unwrap_or(0) {
+        return false;
+    }
     // "Can't be blocked by creatures with power 2 or less" (CR 509.1b): a creature with no power can't block it either.
     if a.has(Keyword::CantBeBlockedByPowerTwoOrLess) && b.power.is_none_or(|p| p <= 2) {
         return false;
     }
-    // Landwalk (CR 702.14c): not while the defending player - the blocker's controller - controls a land of its type, as the
+    // Landwalk (CR 702.14c): not while the defending player - the blocker's controller - controls a land of its type (a basic
+    // landwalk), without the supertype basic (nonbasic landwalk) or with the supertype legendary (legendary landwalk), as the
     // layers have that land now. A creature with landwalk of its own is no exception (CR 702.14d).
-    for (walk, land_type) in Keyword::LANDWALKS {
-        if a.has(walk) {
-            let defending = cx.s().obj(blocker).controller;
-            let has_land = cx.s().battlefield().iter().any(|&id| {
-                cx.s().obj(id).controller == defending && {
-                    let land = cx.chars(id);
-                    land.is(CardType::Land) && land.has_subtype(land_type)
-                }
-            });
-            if has_land {
-                return false;
+    let defending = cx.s().obj(blocker).controller;
+    let defending_controls = |land_is: &dyn Fn(&Chars) -> bool| {
+        cx.s().battlefield().iter().any(|&id| {
+            cx.s().obj(id).controller == defending && {
+                let land = cx.chars(id);
+                land.is(CardType::Land) && land_is(&land)
             }
+        })
+    };
+    for (walk, land_type) in Keyword::LANDWALKS {
+        if a.has(walk) && defending_controls(&|land| land.has_subtype(land_type)) {
+            return false;
         }
+    }
+    if a.has(Keyword::NonbasicLandwalk) && defending_controls(&|land| !land.supertypes.basic) {
+        return false;
+    }
+    if a.has(Keyword::LegendaryLandwalk) && defending_controls(&|land| land.supertypes.legendary) {
+        return false;
     }
     // CR 509.1b: a static ability that limits who may block whom, of the blocker, of the attacker, or of another permanent
     // ("creatures you control with power 2 or less can't be blocked by ...", Delney, Streetwise Lookout).

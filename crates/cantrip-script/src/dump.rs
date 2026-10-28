@@ -97,6 +97,13 @@ fn keyword_name(k: u8) -> &'static str {
         42 => "CantBeSacrificed",
         43 => "Morph",
         44 => "Disguise",
+        45 => "Horsemanship",
+        46 => "Fear",
+        47 => "Intimidate",
+        48 => "Skulk",
+        49 => "NonbasicLandwalk",
+        50 => "LegendaryLandwalk",
+        51 => "Wither",
         _ => "?",
     }
 }

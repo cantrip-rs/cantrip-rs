@@ -956,6 +956,25 @@ pub enum Keyword {
     /// Disguise (CR 702.168a), as morph: a card has it by its disguise way, and a face-down permanent that would not have it
     /// face up can't be turned face up for its disguise cost (CR 702.168d).
     Disguise = 44,
+    /// Horsemanship (CR 702.31): an evasion ability - it can't be blocked by creatures without horsemanship (CR 702.31b).
+    Horsemanship = 45,
+    /// Fear (CR 702.36): an evasion ability - it can't be blocked except by artifact creatures and/or black creatures
+    /// (CR 702.36b).
+    Fear = 46,
+    /// Intimidate (CR 702.13): an evasion ability - it can't be blocked except by artifact creatures and/or creatures that
+    /// share a color with it (CR 702.13b).
+    Intimidate = 47,
+    /// Skulk (CR 702.118): an evasion ability - it can't be blocked by creatures with greater power (CR 702.118b).
+    Skulk = 48,
+    /// Nonbasic landwalk (CR 702.14): it can't be blocked as long as the defending player controls a land without the
+    /// supertype basic (CR 702.14c). Dryad Sophisticate.
+    NonbasicLandwalk = 49,
+    /// Legendary landwalk (CR 702.14): it can't be blocked as long as the defending player controls a legendary land
+    /// (CR 702.14c). Ayumi, the Last Visitor.
+    LegendaryLandwalk = 50,
+    /// Wither (CR 702.80): damage it deals to a creature isn't marked on that creature but is dealt as that many -1/-1
+    /// counters (CR 702.80a, 120.3d), whatever zone it deals the damage from (CR 702.80c).
+    Wither = 51,
 }
 
 impl Keyword {
