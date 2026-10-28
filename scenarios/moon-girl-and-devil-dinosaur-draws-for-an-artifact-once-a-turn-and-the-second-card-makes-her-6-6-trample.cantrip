@@ -1,0 +1,77 @@
+# Moon Girl and Devil Dinosaur: "Whenever an artifact you control enters, draw a card. This ability triggers only once each
+# turn." Turn 1: Mox Pearl enters and draws (her first card that turn, so no 6/6), Sol Ring entering after it draws
+# nothing. Bot2's Mox Jet is not Bot1's artifact. Turn 3: the draw step is the first card, Memnite entering draws the
+# second: "base power and toughness become 6/6 and she gains trample" until end of turn; Mox Jet entering after that draws
+# nothing. Turn 4 she is a 2/2 again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Moon Girl and Devil Dinosaur
+Mox Pearl
+Sol Ring
+Memnite
+Forest
+Mox Jet
+Forest
+Forest x10
+
+[Bot2 Deck]
+Mox Jet
+Forest x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Moon Girl and Devil Dinosaur.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+? Bot1.Battlefield.Moon Girl and Devil Dinosaur.Power = 2
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Moon Girl and Devil Dinosaur.Power = 6
+? Bot1.Battlefield.Moon Girl and Devil Dinosaur.Toughness = 6
+? Bot1.Battlefield.Moon Girl and Devil Dinosaur.Keywords = Trample
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Moon Girl and Devil Dinosaur.Power = 2
+? Bot1.Battlefield.Moon Girl and Devil Dinosaur.Keywords = (absent)
+
+[Expect]
+Turn = 4
