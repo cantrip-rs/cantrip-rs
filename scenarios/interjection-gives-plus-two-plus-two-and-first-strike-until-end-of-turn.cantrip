@@ -1,0 +1,28 @@
+# Interjection: Bot1's Ornithopter (0/2) gets +2/+2 and first strike until end of turn, and is back to 0/2 without it the next turn.
+
+[Bot1 Deck]
+Plains x2
+Ornithopter
+Interjection
+Plains x3
+Plains x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Interjection.Cast(Bot1.Battlefield.Ornithopter)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+? Bot1.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Graveyard = Interjection
