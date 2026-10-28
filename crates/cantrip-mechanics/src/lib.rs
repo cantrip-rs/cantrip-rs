@@ -126,6 +126,7 @@ pub mod spectacle;
 pub mod spent;
 pub mod suspend;
 pub mod typecycling;
+pub mod scavenge;
 pub mod unearth;
 pub mod triggers;
 pub mod warp;
