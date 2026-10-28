@@ -1,0 +1,46 @@
+# Mist Intruder (1/2 flying, devoid, {1}{U}) attacks on turn 3. Bot2's Balduvian Bears can't block a creature with flying (CR 702.9b), so it connects: Bot2 is at 19
+# and exiles the top card of their library (ingest, CR 702.115a), the Lightning Bolt. Devoid (CR 702.114a) makes it colorless.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mist Intruder
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Balduvian Bears
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Lightning Bolt
+Swamp x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mist Intruder.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Balduvian Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Mist Intruder > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Exile = Lightning Bolt
+Bot1.Battlefield.Mist Intruder.Colors = (absent)
+Bot1.Battlefield.Mist Intruder.Keywords = Flying
