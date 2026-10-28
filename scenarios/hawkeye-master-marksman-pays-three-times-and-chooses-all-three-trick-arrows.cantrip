@@ -1,0 +1,54 @@
+# Hawkeye, Master Marksman: "Whenever Hawkeye becomes tapped, you may pay {1} up to three times. When you do, choose up to that many -
+# Net, Explosive, Boomerang." Turn 3: Hawkeye attacks (and so becomes tapped); Bot1 pays {1} three times with Black Lotus and chooses
+# all three: Bot2's Memnite can't block (it may not block him, the refusal), Bot2 takes 2 from Hawkeye (18) and Bot1 discards an
+# Island and draws a card (hand size unchanged), then Hawkeye's 2 combat damage connects (16).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Hawkeye, Master Marksman
+Black Lotus
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hawkeye, Master Marksman.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hawkeye, Master Marksman > Bot2)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.PayCost(Times: 4)
+Bot1.PayCost(Times: 3)
+Bot1.Modes(Net; Explosive; Boomerang)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+? Bot2.Life = 18
+? Bot1.Hand.Count = 4
+! Bot2.Block(Memnite > Hawkeye, Master Marksman)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard = Island; Black Lotus
