@@ -1488,6 +1488,7 @@ pub fn fused_half_unbuilt(half: &CardDef) -> Option<&'static str> {
         (!half.own_cost_changes.is_empty(), "its own cost changes"),
         (half.pay_with.any(), "convoke, delve or improvise"),
         (half.cast_as_though_flash, "a cast as though it had flash"),
+        (half.flash_if.is_some(), "a conditional cast as though it had flash"),
         (half.paradigm.is_some(), "paradigm"),
         (half.rebound, "rebound"),
         (half.splice.is_some(), "splice"),
@@ -2838,6 +2839,12 @@ pub struct CardDef {
     pub becomes_aura_enchant: Option<TargetSpec>,
     /// \"You may cast this spell as though it had flash\" (CR 307.5, 702.8): it may be cast whenever its caster could cast an instant.
     pub cast_as_though_flash: bool,
+    /// \"You may cast this spell as though it had flash if [condition]\" (CR 307.5, 702.8): the same permission as
+    /// `cast_as_though_flash` while the condition holds for its caster, asked with the card as source and the player who would
+    /// cast it as controller, as the spell is about to be cast (the rulings: only as the casting begins, never again). Bard's
+    /// Company ("if you control a Human"), Illusion Spinners ("a Faerie") and Scarring Memories ("an attacking legendary
+    /// creature") print it.
+    pub flash_if: Option<Condition>,
     /// Ascend (CR 702.131): while a permanent of this card is on the battlefield and its controller controls ten or more
     /// permanents, they get the city's blessing.
     pub ascend: bool,
@@ -3114,6 +3121,7 @@ impl CardDef {
         enchant: None,
         becomes_aura_enchant: None,
         cast_as_though_flash: false,
+        flash_if: None,
         ascend: false,
         storied: false,
         start_your_engines: false,

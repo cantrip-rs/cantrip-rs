@@ -422,7 +422,9 @@ shapes have an example:
   cast is begun, during a resolution too (CR 101.2, 601.3); **as though it had flash** is
   `EffectKind::CastAsThoughFlash(types)` for a resolved spell's effect and `CardDef.flash_rules` for a static ability
   ("You may cast Aura and Equipment spells as though they had flash", Sigarda's Aid; `fn(q, asker, spell, caster)`, the spell
-  read through the query as it would be on the stack under the caster); a static lifting a loyalty ability's timing is `CardDef.instant_activation`
+  read through the query as it would be on the stack under the caster), and a card's own condition ("You may cast this spell as
+  though it had flash if you control a Human", Bard's Company) is `CardDef.flash_if` (`fn(&dyn Query, &Asker) -> bool`, the card as
+  source and the player who would cast it as controller, judged as the casting begins); a static lifting a loyalty ability's timing is `CardDef.instant_activation`
   (The Wandering Emperor), and a resolved spell's "you may activate loyalty abilities of [Jace] planeswalkers you control
   ... any time you could cast an instant" is `EffectKind::InstantLoyalty(Some(Subtype::Jace))` (Jace's Machinations; `None`
   for every planeswalker), which changes only the timing (CR 606.3). The board is searched for these only when something is cast or activated.

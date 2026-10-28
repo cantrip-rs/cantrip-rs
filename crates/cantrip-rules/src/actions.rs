@@ -4784,6 +4784,7 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                         || !(chars.is(CardType::Instant)
                             || chars.has(Keyword::Flash)
                             || cx.card(cx.s().obj(id).card).cast_as_though_flash
+                            || flash_if_met(cx, cx.card(cx.s().obj(id).card), id, player)
                             || sorcery_timing(cx, player)
                             || as_though_flash(cx, id, None)) =>
                 {
@@ -5426,12 +5427,14 @@ fn extra_payable(cx: &Cx, id: ObjectId, player: PlayerId, def: &CardDef) -> bool
 struct Speed<'a> {
     cx: &'a Cx<'a>,
     card: ObjectId,
+    /// The player who would cast the card, whom a conditional permission of its own is judged for.
+    player: PlayerId,
 }
 
 impl Speed<'_> {
     /// The card cast as itself, with the card's own "you may cast this spell as though it had flash".
     fn whole(&self, def: &'static CardDef) -> bool {
-        def.cast_as_though_flash || own_speed(def) || as_though_flash(self.cx, self.card, None)
+        def.cast_as_though_flash || own_speed(def) || flash_if_met(self.cx, def, self.card, self.player) || as_though_flash(self.cx, self.card, None)
     }
 
     /// The card cast as `face`: a split card's half or a Room's door, an Adventure or an Omen, a back face, a bestowed Aura.
@@ -5447,7 +5450,7 @@ impl Speed<'_> {
     /// `of`, or `None` where a permission is not yet judged on the spell the card would be (`as_though_flash_judged`): asked
     /// for (`ask`) only where it would change what is offered.
     fn of_judged(&self, whole: &'static CardDef, way: u8, face: &'static CardDef) -> Option<bool> {
-        if way == 0 && (whole.cast_as_though_flash || own_speed(whole)) || way != 0 && own_speed(face) {
+        if way == 0 && (whole.cast_as_though_flash || own_speed(whole) || flash_if_met(self.cx, whole, self.card, self.player)) || way != 0 && own_speed(face) {
             return Some(true);
         }
         as_though_flash_judged(self.cx, self.card, self.face_id(way, face))
@@ -5462,6 +5465,13 @@ impl Speed<'_> {
     fn face_id(&self, way: u8, face: &'static CardDef) -> Option<CardId> {
         (way != 0).then(|| self.cx.card_id(face))
     }
+}
+
+/// "You may cast this spell as though it had flash if [condition]" (CR 307.5, 702.8): the card's own conditional permission
+/// (`CardDef::flash_if`), judged for `player`, who would cast it, now - as the casting would start (the rulings: losing what the
+/// condition asks for during the casting, or in response to the spell, changes nothing).
+fn flash_if_met(cx: &Cx, def: &CardDef, card: ObjectId, player: PlayerId) -> bool {
+    def.flash_if.is_some_and(|condition| condition(cx, &Asker { source: card, controller: player, by: None, spell: true }))
 }
 
 /// An instant, or a spell with flash (CR 307.5, 702.8).
@@ -5723,7 +5733,7 @@ impl<'a> Offer<'a> {
     }
 
     fn speed(&'a self, card: ObjectId) -> Speed<'a> {
-        Speed { cx: self.cx, card }
+        Speed { cx: self.cx, card, player: self.player }
     }
 
     fn asker(&self, card: ObjectId) -> Asker {
