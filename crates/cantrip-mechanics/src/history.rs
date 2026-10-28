@@ -322,3 +322,9 @@ pub fn this_combat(q: &dyn Query) -> &[Record] {
         None => &[],
     }
 }
+
+/// `cards_left_graveyard_this_turn` as a condition of the ability's controller: a triggered ability's intervening "if a card
+/// left your graveyard this turn" (CR 603.4). Gau, Feral Youth and Primary Research print it.
+pub fn a_card_left_your_graveyard_this_turn(q: &dyn Query, asker: &Asker) -> bool {
+    cards_left_graveyard_this_turn(q, asker.controller) > 0
+}
