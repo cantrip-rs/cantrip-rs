@@ -1,0 +1,39 @@
+# Stone Docent: "{W}, Exile this card from your graveyard: You gain 2 life. Surveil 1. Activate only as a sorcery." Bot2
+# bolts Bot1's Docent (3/1), and Bot1 later activates it from the graveyard: the refusal in its upkeep is the sorcery
+# timing (CR 307.5), then in its main phase the cost exiles the card (CR 602.2b), Bot1 gains 2 and surveils, putting the
+# top Island into the graveyard.
+
+[Bot1 Deck]
+Stone Docent
+Mox Pearl x2
+Island x4
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Stone Docent.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Stone Docent)
+[T3 Bot1.Upkeep]
+? Bot1.Graveyard = Stone Docent
+! Bot1.Graveyard.Stone Docent.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Graveyard.Stone Docent.Activate
+Bot1.Arrange( | Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Exile.Count = 1
+Bot1.Graveyard = Island
