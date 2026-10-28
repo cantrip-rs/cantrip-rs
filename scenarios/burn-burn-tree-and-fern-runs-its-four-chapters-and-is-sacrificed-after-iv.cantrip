@@ -1,0 +1,95 @@
+# Burn, Burn, Tree and Fern, cast on turn 3 with four Moxen. I (turn 3): 6 damage to target creature an opponent controls -
+# exactly 6 (Bot2's Kami of Old Stone, a 1/7, is left with exactly 6 damage), chosen over Bot2's Memnite, which is left alone; Bot1's own Memnite is refused. II (turn 5): destroy target artifact an opponent
+# controls - Bot2's Mox Sapphire; Bot1's own Mox Jet is refused (CR 115.1). III (turn 7) and IV (turn 9): each adds {R} (the pool
+# holds exactly {R} when the chapter has resolved), and after IV, with nothing on the stack, the Saga is sacrificed (CR 714.4).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Burn, Burn, Tree and Fern
+Memnite
+Island
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Kami of Old Stone
+Memnite
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Kami of Old Stone.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Burn, Burn, Tree and Fern.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot2.Battlefield.Kami of Old Stone)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Black Lotus
+? Bot2.Battlefield = Kami of Old Stone; Memnite; Mox Sapphire
+? Bot2.Battlefield.Kami of Old Stone.Damage = 6
+? Bot2.Battlefield.Memnite.Damage = 0
+? Bot1.Battlefield.Burn, Burn, Tree and Fern.Counters.Lore = 1
+[T5 Bot1.Main1]
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Kami of Old Stone; Memnite
+? Bot1.Battlefield.Burn, Burn, Tree and Fern.Counters.Lore = 2
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Burn, Burn, Tree and Fern.Counters.Lore = 3
+[T9 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}
+[T9 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Burn, Burn, Tree and Fern
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Jet; Mox Sapphire; Memnite
+Bot2.Battlefield = Kami of Old Stone; Memnite
+Bot2.Battlefield.Memnite.Damage = 0
+Stack.Count = 0
