@@ -1,0 +1,50 @@
+# Goblin-town Flunkies: haste (it attacks the turn it is cast) and "When this creature enters, amass Goblins 1" (CR 701.47a).
+# The first Flunkies makes a Goblin Army token with one +1/+1 counter; the second finds that Army and puts its counter on
+# it (no second token): a 2/2 Army. Both hasty 1/1s attack the same turn for 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Goblin-town Flunkies
+Goblin-town Flunkies
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin-town Flunkies.Cast
+? Bot1.Mana = {R}{R}
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Army Token.Power = 1
+Bot1.Hand.Goblin-town Flunkies.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Army Token.Power = 2
+Bot1.Attack(Goblin-town Flunkies#1; Goblin-town Flunkies#2 > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Goblin Army Token.Power = 2
+Bot1.Battlefield.Goblin Army Token.Toughness = 2
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
+Bot1.Battlefield.Goblin Army Token.Tapped = false
+Bot1.Battlefield.Goblin-town Flunkies#1.Keywords = Haste
+Bot1.Battlefield.Goblin-town Flunkies#1.Tapped = true
+Bot1.Battlefield.Goblin-town Flunkies#2.Tapped = true
