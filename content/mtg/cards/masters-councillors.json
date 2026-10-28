@@ -1,0 +1,11 @@
+{
+  "name": "Master's Councillors",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Advisor",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Vigilance\nThis creature gets +2/+0 for each graveyard with seven or more cards in it.\nWhenever you draw your second card each turn, target player mills three cards. (They put the top three cards of their library into their graveyard.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}

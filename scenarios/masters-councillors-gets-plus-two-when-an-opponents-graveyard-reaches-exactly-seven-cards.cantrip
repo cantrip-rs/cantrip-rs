@@ -1,0 +1,68 @@
+# Master's Councillors, a 1/3 with vigilance: "gets +2/+0 for each graveyard with seven or more cards in it" and "Whenever you draw your
+# second card each turn, target player mills three cards." Cast on turn 3 and Ancestral Recall (the second draw of the turn) makes Bot2 mill
+# three; on turn 5 the second Ancestral Recall makes it mill three more: six cards in Bot2's graveyard, and the Councillors still has power
+# 1 (? line). On turn 6 Bot2's Lightning Bolt goes to its graveyard as the seventh: power 3, and a toughness of 3 (the +2/+0 is power only).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Master's Councillors
+Ancestral Recall
+Ancestral Recall
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Master's Councillors.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 3
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 6
+? Bot1.Battlefield.Master's Councillors.Power = 1
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 7
+Bot1.Battlefield.Master's Councillors.Power = 3
+Bot1.Battlefield.Master's Councillors.Toughness = 3
+Bot1.Battlefield.Master's Councillors.Keywords = Vigilance

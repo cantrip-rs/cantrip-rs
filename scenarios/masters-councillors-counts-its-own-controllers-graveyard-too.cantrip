@@ -1,0 +1,52 @@
+# Master's Councillors: "+2/+0 for each graveyard with seven or more cards in it" counts every graveyard, its controller's own included
+# (CR 404.1). Bot1 targets itself with both second-draw triggers: after turn 3's Ancestral Recall and its trigger its graveyard holds four cards (the
+# Ancestral and three milled; power 1, the ? line), and after turn 5's, eight: power 3. (Scenario
+# masters-councillors-gets-plus-two-when-an-opponents-graveyard-reaches-exactly-seven-cards has the opponent's.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Master's Councillors
+Ancestral Recall
+Ancestral Recall
+Island
+Island x30
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Master's Councillors.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 4
+? Bot1.Battlefield.Master's Councillors.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 8
+Bot1.Battlefield.Master's Councillors.Power = 3
