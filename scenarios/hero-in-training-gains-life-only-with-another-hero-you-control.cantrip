@@ -1,0 +1,60 @@
+# Hero in Training: "When this creature enters, draw a card. If you control another Hero, you gain 2 life." Bot2's Hero (T2) is
+# alone on its side and gains Bot2 nothing; it does not count for Bot1 ("you control", T3: Bot1's first Hero gains nothing); Bot1's
+# second Hero (T5) sees the first as "another" (the Hero entering does not count itself) and gains 2. Each draws a card.
+
+[Bot1 Deck]
+Hero in Training
+Hero in Training
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Hero in Training
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hero in Training.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hero in Training.Cast
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Life = 20
+? Bot2.Life = 20
+? Bot1.Hand.Count = 5
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hero in Training.Cast
+Bot1.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot1.Hand.Count = 6

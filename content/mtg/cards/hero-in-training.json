@@ -1,0 +1,8 @@
+{
+  "name": "Hero in Training",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Hero",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, draw a card. If you control another Hero, you gain 2 life."
+}
