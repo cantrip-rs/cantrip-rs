@@ -1,0 +1,60 @@
+# S.H.I.E.L.D. Spy Kit: "Equipped creature gets +1/+1. Whenever equipped creature attacks alone, untap it and scry 1." Equip {1}.
+# Turn 3: the Kit (equipped to one of two Ornithopters for exactly {1}) makes a 1/3 flier; it attacks alone, is untapped by the
+# trigger (still attacking: 1 damage to Bot2) and Bot1 scries 1, putting Black Lotus (the card on top after the turn's draw, Lightning
+# Bolt) on the bottom. Turn 5: both Ornithopters attack, so there is no trigger: the equipped one stays tapped, and nothing is
+# scried (the next draw is an Island, not Black Lotus).
+
+[Bot1 Deck]
+S.H.I.E.L.D. Spy Kit
+Ornithopter
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Plains
+Plains
+Lightning Bolt
+Black Lotus
+Island
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.S.H.I.E.L.D. Spy Kit.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.S.H.I.E.L.D. Spy Kit.Activate(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Ornithopter#1.Power = 1
+? Bot1.Battlefield.Ornithopter#1.Toughness = 3
+? Bot1.Battlefield.Ornithopter#2.Power = 0
+? Bot1.Battlefield.Ornithopter#2.Toughness = 2
+Bot1.Attack(Ornithopter#1 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Tapped = false
+Bot1.Arrange( | Black Lotus)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+? Bot1.Library = Island; Island; Island; Black Lotus
+[T5 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Tapped = true
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
