@@ -1,0 +1,71 @@
+# Yavimaya Ants {2}{G}{G}, 5/1 trample and haste, "Cumulative upkeep {G}{G}" (CR 702.24a). Cast on turn 1 (Black Lotus's {G}{G}{G}
+# and Mox Emerald's {G}) it attacks at once (haste) for 5. At Bot1's turn 3 upkeep it gets an age counter and the cost is {G}{G}
+# once: Mox Emerald and a Forest are tapped, the pool empty after. At turn 5 it gets a second and the cost is {G}{G}{G}{G},
+# each symbol twice: Mox Emerald and both Forests tapped (one short) paying is not offered; the Gleemox's {G} makes it
+# payable. At turn 7 the cost would be six; Bot1 declines and sacrifices it.
+
+[Bot1 Deck]
+Yavimaya Ants
+Black Lotus
+Mox Emerald
+Gleemox
+Forest
+Forest
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Yavimaya Ants.Cast
+Bot1.Pass
+Bot1.Attack(Yavimaya Ants > Bot2)
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Yavimaya Ants.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Yavimaya Ants.Counters.Age = 2
+? Bot1.Battlefield.Yavimaya Ants.Power = 5
+? Bot1.Battlefield.Yavimaya Ants.Toughness = 1
+? Bot1.Battlefield.Yavimaya Ants.Keywords = Haste; Trample
+? Bot1.Battlefield.Yavimaya Ants.Colors = Green
+[T7 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot2.Life = 15
+Bot1.Graveyard = Yavimaya Ants; Black Lotus
+Bot1.Battlefield.Yavimaya Ants = (absent)
