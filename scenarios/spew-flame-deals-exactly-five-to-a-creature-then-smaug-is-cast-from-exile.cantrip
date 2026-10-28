@@ -1,0 +1,83 @@
+# Spew Flame, the Adventure of Smaug, the Great Calamity: "deals 5 damage to target creature" - exactly 5: Bot2's Fortress
+# Crab (1/6) survives with 5 damage marked, so neither 4 nor 6 would do. Paid with exactly {4}{R} (five Moxen, pool checked
+# empty). The card is exiled as the Adventure resolves (CR 715.4) and Smaug is then cast from exile on turn 5 for {5}{R}{R}
+# (three Mountains and the five Moxen), a 5/5 with flying.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Smaug, the Great Calamity
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Fortress Crab
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Fortress Crab.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Smaug, the Great Calamity.Cast(Bot2.Battlefield.Fortress Crab; Ability: Spew Flame)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Fortress Crab.Damage = 5
+? Exile = Smaug, the Great Calamity
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Exile.Smaug, the Great Calamity.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield.Fortress Crab.Toughness = 6
+Bot1.Battlefield.Smaug, the Great Calamity.Power = 5
+Bot1.Battlefield.Smaug, the Great Calamity.Toughness = 5
+Bot1.Battlefield.Smaug, the Great Calamity.Keywords = Flying

@@ -1,0 +1,17 @@
+{
+  "name": "Smaug, the Great Calamity",
+  "manaCost": "{5}{R}{R}",
+  "type": "Legendary Creature — Dragon",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying",
+  "keywords": [
+    "Flying"
+  ],
+  "adventure": {
+    "name": "Spew Flame",
+    "manaCost": "{4}{R}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Spew Flame deals 5 damage to target creature. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}
