@@ -1,0 +1,56 @@
+# Moment of Glory: "Put a +1/+1 counter on target creature you control. If this spell was cast from a graveyard, also put a
+# +1/+1 counter on each other creature you control." Cast from the hand for {W} it puts one counter on Ornithopter A and none on B
+# (CR 601.2a). Cast with flashback {4}{W} on turn 3 (a Black Lotus, a Mox Pearl and a Mox Sapphire pay exactly) it puts a
+# counter on its target B and one on each other creature Bot1 controls - A, and no one of Bot2's - and is exiled afterwards
+# (CR 702.34a).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Moment of Glory
+Ornithopter
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Moment of Glory.Cast(Bot1.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Graveyard.Moment of Glory.Cast(Bot1.Battlefield.Ornithopter#2; Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Exile = Moment of Glory

@@ -1,0 +1,6 @@
+{
+  "name": "Moment of Glory",
+  "manaCost": "{W}",
+  "type": "Sorcery",
+  "oracleText": "Put a +1/+1 counter on target creature you control. If this spell was cast from a graveyard, also put a +1/+1 counter on each other creature you control.\nFlashback {4}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}
