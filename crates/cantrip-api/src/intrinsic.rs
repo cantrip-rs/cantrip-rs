@@ -375,7 +375,7 @@ pub const COUNTERED_UNLESS_PAID: Question =
 /// subject is what targeted it, and its data who controls that and where it is on the stack.
 pub fn ward_matches(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::BecameTarget { target: Target::Object(t), by, controller } if *t == source && *controller != q.controller(source) => {
+        Event::BecameTarget { target: Target::Object(t), by, controller, .. } if *t == source && *controller != q.controller(source) => {
             // What targeted it, who controls that, and where it is on the stack (it is the top item as it is announced).
             Some(Fired {
                 subject: Target::Object(*by),

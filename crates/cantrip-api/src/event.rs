@@ -50,8 +50,9 @@ pub struct DamageResult {
 pub enum Event {
     /// A spell became cast (CR 601.2i), with how many spells its caster has cast this turn, this one included.
     SpellCast { spell: ObjectId, player: PlayerId, nth: u32 },
-    /// An object or player became the target of a spell or ability (CR 115.10).
-    BecameTarget { target: Target, by: ObjectId, controller: PlayerId },
+    /// An object or player became the target of a spell or ability (CR 115.10). `by` is the spell, or the source of the ability;
+    /// `ability` says which it was, since an ability's source can itself be a spell on the stack ("when you cast this spell").
+    BecameTarget { target: Target, by: ObjectId, controller: PlayerId, ability: bool },
     /// An object moved between zones. A token's creation comes from no zone (`Zone::GONE`).
     ZoneChange { old: ObjectId, new: ObjectId, from: Zone, to: Zone, reason: ZoneReason },
     /// Damage was dealt. `controller` and `kind.colors()` are the source's as it dealt it (CR 120.3, 609.7): "damage red sources

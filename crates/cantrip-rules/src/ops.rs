@@ -39,7 +39,7 @@ pub(crate) fn commit_crime(cx: &mut Cx, player: PlayerId, by: ObjectId, targets:
 /// ward or "whenever this becomes the target" ability triggers once for it. Called as a spell is cast, an ability activated
 /// or put on the stack, a copy put on the stack (CR 707.10) and targets changed or chosen anew (CR 115.7), with that
 /// procedure's targets; an empty slot (`Target::None`) is no target.
-pub(crate) fn became_targets(cx: &mut Cx, targets: impl IntoIterator<Item = Target>, by: ObjectId, controller: PlayerId) {
+pub(crate) fn became_targets(cx: &mut Cx, targets: impl IntoIterator<Item = Target>, by: ObjectId, controller: PlayerId, ability: bool) {
     // The first few in place, any past them in a list made only when there are that many.
     let mut seen = [Target::None; cantrip_state::INLINE_TARGETS];
     let mut more: Vec<Target> = Vec::new();
@@ -54,7 +54,7 @@ pub(crate) fn became_targets(cx: &mut Cx, targets: impl IntoIterator<Item = Targ
         } else {
             more.push(target);
         }
-        cx.emit(Event::BecameTarget { target, by, controller });
+        cx.emit(Event::BecameTarget { target, by, controller, ability });
     }
 }
 
@@ -2238,7 +2238,7 @@ pub fn copy_spell_as(cx: &mut Cx, spell: ObjectId, copier: PlayerId, new_targets
         item = retarget(cx, top, copy, spell, copier)?;
     }
     let targets = cx.s().targets(&item).to_vec();
-    became_targets(cx, targets, copy, copier);
+    became_targets(cx, targets, copy, copier, false);
     cx.emit(Event::Copied { copy, original: spell, player: copier });
     Ok(Some(copy))
 }
@@ -2278,7 +2278,7 @@ pub fn copy_ability(cx: &mut Cx, ability: Target, copier: PlayerId, new_targets:
     }
     // Each object or player it targets becomes a target once, however many of its slots name it (CR 115.2).
     let targets = cx.s().targets(&item).to_vec();
-    became_targets(cx, targets, item.object, copier);
+    became_targets(cx, targets, item.object, copier, true);
     Ok(Some(cx.s().stack[top].serial))
 }
 
@@ -2378,7 +2378,7 @@ pub fn choose_new_targets(cx: &mut Cx, spell: ObjectId, chooser: PlayerId) -> R<
     let before = cx.s().targets(&cx.s().stack[at]).to_vec();
     let after = retarget(cx, at, spell, spell, chooser)?;
     let new: Vec<Target> = cx.s().targets(&after).iter().copied().filter(|t| !before.contains(t)).collect();
-    became_targets(cx, new, spell, after.controller);
+    became_targets(cx, new, spell, after.controller, false);
     Ok(())
 }
 
@@ -2449,7 +2449,7 @@ pub fn change_target(cx: &mut Cx, of: Target, chooser: PlayerId) -> R<()> {
     let (of, shares) = (cx.s().spec_of(&item).to_vec(), cx.s().shares(&item).to_vec());
     cx.st().set_item_targets(&mut item, &changed, &of, &shares);
     cx.st().stack_set(at, item);
-    became_targets(cx, changed, item.object, item.controller);
+    became_targets(cx, changed, item.object, item.controller, item.kind != StackKind::Spell);
     Ok(())
 }
 
@@ -2544,7 +2544,7 @@ pub fn change_a_target_to(cx: &mut Cx, of: Target, to: ObjectId, chooser: Player
     };
     cx.st().set_item_target(&mut item, slot, new);
     cx.st().stack_set(at, item);
-    became_targets(cx, [new], item.object, item.controller);
+    became_targets(cx, [new], item.object, item.controller, item.kind != StackKind::Spell);
     Ok(())
 }
 
