@@ -8,17 +8,9 @@ fn attacking_creature_you_dont_control(q: &dyn Query, asker: &Asker, t: Target) 
     (targets::ATTACKING_CREATURE.filter)(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
 }
 
-/// "The owner of target attacking creature you don't control puts it on their choice of the top or bottom of their
-/// library." The owner (CR 108.3), not the controller, chooses. With its target gone the spell does
-/// not resolve (CR 608.2b).
-fn lagoon_breach(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    library::owner_puts_on_top_or_bottom(g, item.object, creature)
-}
-
 /// The Adventure (CR 715).
 pub static LAGOON_BREACH: CardDef = CardDef {
-    spell: spell(&[target(attacking_creature_you_dont_control)], lagoon_breach),
+    spell: spell(&[target(attacking_creature_you_dont_control)], library::owner_puts_first_target_on_top_or_bottom),
     ..oracle::LAGOON_BREACH
 };
 

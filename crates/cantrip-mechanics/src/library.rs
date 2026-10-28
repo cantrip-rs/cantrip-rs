@@ -925,3 +925,11 @@ pub fn owner_puts_on_top_or_bottom(g: &mut dyn Game, source: ObjectId, object: O
     }
     Ok(())
 }
+
+/// "Target creature's owner puts it on their choice of the top or bottom of their library": the first target's owner
+/// chooses (`owner_puts_on_top_or_bottom`). With its target gone the spell does not resolve (CR 608.2b). Uneasy Partings, Lagoon
+/// Breach (Horned Loch-Whale) and Run Behind print it.
+pub fn owner_puts_first_target_on_top_or_bottom(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    owner_puts_on_top_or_bottom(g, item.object, creature)
+}

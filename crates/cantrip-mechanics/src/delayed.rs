@@ -183,3 +183,26 @@ fn lose_the_game(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 /// The delayed ability `extra_turn_then_lose` sets up; a card lists it among its `delayed` abilities.
 pub const LOSE_AT_THAT_END_STEP: AbilityDef = delayed_trigger(lose_the_game, "At the beginning of that turn's end step, you lose the game.");
+
+/// Sets up the card's delayed ability number `ability` to trigger "at the beginning of your next main phase" (CR 603.7), about
+/// `subject`, controlled by the resolving ability's controller. Which step that is depends on when this resolves: from the
+/// controller's own precombat main phase or combat it is that turn's postcombat main phase, from anywhere else the
+/// precombat main phase of their next turn (this turn's, before it has begun). Mana Drain and Mana Sculpt use it.
+pub fn at_your_next_main_phase(g: &mut dyn Game, item: &StackItem, ability: u8, subject: Target) {
+    let turn = g.state().turn;
+    let step = if turn.active == item.controller
+        && (Step::PrecombatMain as u8..Step::PostcombatMain as u8).contains(&(turn.step() as u8))
+    {
+        Step::PostcombatMain
+    } else {
+        Step::PrecombatMain
+    };
+    let this = ability_card(g, item);
+    g.delayed_trigger(
+        DelayedWhen::Step { step, on_turn_of: Some(item.controller) },
+        item.object,
+        item.controller,
+        AbilityRef::delayed(this, ability),
+        subject,
+    );
+}

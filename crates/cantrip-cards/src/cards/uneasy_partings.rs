@@ -9,16 +9,8 @@ fn less_for_an_attacking_nontoken_creature(q: &dyn Query, _: ObjectId, _: Player
     if attacking { CostDelta::less(1) } else { CostDelta::NONE }
 }
 
-/// "Target creature's owner puts it on their choice of the top or bottom of their library." The owner (CR 108.3), not the
-/// controller, chooses, and puts all of what is put there in the order they wish. With its target gone the spell does not
-/// resolve (CR 608.2b).
-fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    library::owner_puts_on_top_or_bottom(g, item.object, creature)
-}
-
 pub static CARD: CardDef = CardDef {
-    spell: spell(&[targets::CREATURE], effect),
+    spell: spell(&[targets::CREATURE], library::owner_puts_first_target_on_top_or_bottom),
     own_cost_changes: &[less_for_an_attacking_nontoken_creature],
     ..oracle::UNEASY_PARTINGS
 };
