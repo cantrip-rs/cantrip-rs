@@ -913,3 +913,14 @@ pub static FRACTAL: CardDef = CardDef {
     toughness: Some(0),
     ..token!(Fractal)
 };
+
+/// The 3/3 blue and red Elemental creature token with flying. Campus Composer's Aqueous Aria and Muse's Encouragement make it.
+pub static ELEMENTAL_3_3_BLUE_RED: CardDef = CardDef {
+    colors: Some(ColorSet(ColorSet::of(Color::Blue).0 | ColorSet::of(Color::Red).0)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(3),
+    toughness: Some(3),
+    keywords: Keywords::of(&[Keyword::Flying]),
+    text: "Flying",
+    ..token!(Elemental)
+};

@@ -1,6 +1,6 @@
 //! Increment (CR 702.191a), a triggered ability: "Whenever you cast a spell, if this permanent is a creature and the amount of
 //! mana spent to cast that spell is greater than this creature's power or this creature's toughness, put a +1/+1 counter on
-//! this creature." Each instance triggers separately (CR 702.191b). Cuboid Colony and Hungry Graffalon print it.
+//! this creature." Each instance triggers separately (CR 702.191b). Cuboid Colony, Hungry Graffalon, Pensive Professor, Tester of the Tangential and Textbook Tabulator print it.
 //!
 //! An intervening "if" (CR 603.4): checked as the spell is cast and again as the ability resolves, with the mana spent read from
 //! the spell itself (the trigger's subject), so it still answers if the spell was countered or has left the stack (CR 608.2h),
