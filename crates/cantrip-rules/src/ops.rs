@@ -3076,11 +3076,11 @@ pub fn deal_damage_with(
             // CR 120.4a: any damage beyond 1 dealt to a creature by a source with deathtouch is excess, combat or not.
             batch.dealt[at].deathtouch |= deathtouch;
             if target_chars.is(CardType::Creature) {
-                if source_chars.has(Keyword::Infect) {
-                    // Damage from a source with infect is dealt to a creature as that many -1/-1 counters (CR 702.90c,
-                    // 120.3d), which "that source's controller" puts on it, whoever's turn or spell it is; it is still
-                    // damage dealt, so deathtouch counts (CR 702.2b). Put as an effect's: infect is a static ability (CR 702.90a),
-                    // static abilities create effects (CR 609.1), and it is infect's effect, not the turn-based action dealing
+                if source_chars.has(Keyword::Infect) || source_chars.has(Keyword::Wither) {
+                    // Damage from a source with infect or wither is dealt to a creature as that many -1/-1 counters (CR
+                    // 702.90c, 702.80a, 120.3d), which "that source's controller" puts on it, whoever's turn or spell it is; it is still
+                    // damage dealt, so deathtouch counts (CR 702.2b). Put as an effect's: infect and wither are static abilities (CR
+                    // 702.90a, 702.80a), static abilities create effects (CR 609.1), and it is their effect, not the turn-based action dealing
                     // combat damage, that puts the counters (CR 120.3d) - so "if an effect would put counters" applies.
                     let mut counts = [0; CounterKind::COUNT];
                     counts[CounterKind::MinusOne as usize] = amount.min(i16::MAX as u16) as i16;
