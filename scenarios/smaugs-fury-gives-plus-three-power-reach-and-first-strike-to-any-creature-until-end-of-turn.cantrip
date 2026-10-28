@@ -1,0 +1,65 @@
+# Smaug's Fury: "Target creature gets +3/+0 and gains reach and first strike until end of turn" (CR 611.2a). Bot1 casts it on
+# its own Goblin Assailant (2/2 becomes 5/2 with reach and first strike, toughness untouched) and the effect ends with the
+# turn, so the 2/2 is plain again on the opponent's turn; on turn 3 it targets the opponent's Ornithopter (0/2 flyer),
+# showing any creature is a legal target. The Assailant, not targeted the second time, stays 2/2.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Black Lotus
+Goblin Assailant
+Smaug's Fury
+Smaug's Fury
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Assailant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Smaug's Fury.Cast(Bot1.Battlefield.Goblin Assailant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Assailant.Power = 5
+? Bot1.Battlefield.Goblin Assailant.Toughness = 2
+? Bot1.Battlefield.Goblin Assailant.Keywords = FirstStrike; Reach
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Goblin Assailant.Power = 2
+? Bot1.Battlefield.Goblin Assailant.Keywords = (absent)
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Smaug's Fury.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 3
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Ornithopter.Keywords = FirstStrike; Flying; Reach
+Bot1.Battlefield.Goblin Assailant.Power = 2
+Bot1.Battlefield.Goblin Assailant.Keywords = (absent)
