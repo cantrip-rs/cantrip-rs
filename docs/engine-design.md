@@ -1755,6 +1755,11 @@ prompt's powers are signed: a creature whose power is still negative takes from 
 or comparison needs to use a negative value, it does so"), so the validation sums them as they are and the cost is
 payable while the creatures with positive power are enough.
 
+A creature tapped to pay a spell's teamwork cost (CR 702.194a) becomes tapped to pay it: `actions::cast` emits
+`Event::TappedForTeamwork { creature, spell }` for each, right after its `Tapped`, so "whenever [this] becomes tapped to pay a
+teamwork cost" (Agent Maria Hill) triggers once the cast is complete. A creature tapped for mana or convoke is none, and a crew or
+saddle cost is no teamwork cost.
+
 ### What the board was as a spell was cast
 
 "If you controlled a Faerie as you cast this spell" (Faerie Fencing) asks the board as the spell became cast (CR 601.2i), once

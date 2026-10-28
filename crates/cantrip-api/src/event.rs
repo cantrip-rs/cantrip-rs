@@ -132,6 +132,11 @@ pub enum Event {
     /// is now, or was as it last existed, is its row (CR 608.2h). Only recorded: "creatures that convoked it" asks
     /// `History::convoked`.
     Convoked { creature: ObjectId, spell: ObjectId },
+    /// `creature` became tapped to pay `spell`'s teamwork cost (CR 702.194a, 601.2h): the additional cost "tap any number of
+    /// creatures you control with total power N or more" it was cast with. Emitted for each creature tapped, right after its
+    /// `Tapped`, as the spell is cast, so "whenever [this] becomes tapped to pay a teamwork cost" triggers once the cast is
+    /// complete. A tap for mana, for convoke or for any other cost is none.
+    TappedForTeamwork { creature: ObjectId, spell: ObjectId },
     /// A player became the monarch (CR 725.1, 725.4): it was not theirs before.
     BecameMonarch { player: PlayerId },
     /// A player took the initiative (CR 726.1), even one who had it (CR 726.5): what makes them venture into Undercity
@@ -390,7 +395,7 @@ impl Event {
             Event::Unattached { attachment, from } => attachment == object || from == object,
             Event::Attached { attachment, to } => attachment == object || to == Target::Object(object),
             Event::ManaSpent { source, on, .. } => source == object || on == object,
-            Event::Convoked { creature, spell } => creature == object || spell == object,
+            Event::Convoked { creature, spell } | Event::TappedForTeamwork { creature, spell } => creature == object || spell == object,
             Event::LifeChange { .. } | Event::Searched { .. } | Event::AttackersDeclared { .. } | Event::StepBegan { .. } | Event::BecameMonarch { .. } | Event::TookInitiative { .. } | Event::GaveGift { .. } | Event::ChosenAtRandom { .. } | Event::CoinFlipped { .. } | Event::DieRolled { .. } | Event::TurnEnded { .. } | Event::TurnBegan { .. } | Event::DungeonCompleted { .. } | Event::Scried { .. } | Event::Surveilled { .. } | Event::SpeedChanged { .. } | Event::GameLost { .. } | Event::GameDrawn { .. } | Event::Shuffled { .. } | Event::PlayerControlled { .. } => false,
         }
     }
@@ -474,6 +479,8 @@ impl EventMask {
     pub const CONVOKED: EventMask = EventMask(1 << 58);
     /// The player controlling a player changed (CR 723.1): recorded only, for what each player saw.
     pub const PLAYER_CONTROLLED: EventMask = EventMask(1 << 59);
+    /// A creature became tapped to pay a spell's teamwork cost (CR 702.194a).
+    pub const TAPPED_FOR_TEAMWORK: EventMask = EventMask(1 << 60);
 
     /// An event's kind as the history files it: every event has one. `of` is what triggers listen for, which leaves
     /// out the records no ability triggers on.
@@ -540,6 +547,7 @@ impl EventMask {
             Event::Unattached { .. } => EventMask::UNATTACHED,
             Event::Attached { .. } => EventMask::ATTACHED,
             Event::Tapped { .. } => EventMask::TAPPED,
+            Event::TappedForTeamwork { .. } => EventMask::TAPPED_FOR_TEAMWORK,
             Event::BecameMonarch { .. } => EventMask::BECAME_MONARCH,
             Event::TookInitiative { .. } => EventMask::TOOK_INITIATIVE,
             Event::CoinFlipped { .. } => EventMask::COIN_FLIPPED,
