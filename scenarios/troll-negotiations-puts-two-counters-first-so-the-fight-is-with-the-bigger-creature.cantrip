@@ -1,0 +1,74 @@
+# Troll Negotiations: "Put two +1/+1 counters on target creature you control. Then it fights target creature an opponent controls."
+# Bot1's Grizzly Bears (2/2) gets exactly two counters (4/4) and only then fights Bot2's Hill Giant (3/3): the Hill Giant dies and
+# the Bears survive with 3 damage marked, which they could not as a 2/2 (CR 608.2c, 701.14). Bot1's own creature is no legal second
+# target, nor Bot2's the first (the refusals).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Troll Negotiations
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Hill Giant
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Troll Negotiations.Cast
+! Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Hill Giant = (absent)
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Damage = 3
