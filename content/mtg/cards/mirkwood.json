@@ -1,0 +1,5 @@
+{
+  "name": "Mirkwood",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {B} or {G}.\n{2}{B}{G}, {T}, Sacrifice this land: Put two +1/+1 counters on target Bear, Spider, or Wolf you control. Activate only as a sorcery."
+}
