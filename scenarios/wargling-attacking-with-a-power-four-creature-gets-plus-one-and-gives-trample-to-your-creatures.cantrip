@@ -1,0 +1,78 @@
+# Wargling, a 2/2: "Ferocious - Whenever this creature attacks while you control a creature with power 4 or greater, until end of
+# turn, this creature gets +1/+0 and creatures you control gain trample." On turn 3 Bot1 controls only a Hill Giant (power 3, just
+# short) and attacks with Wargling: no trigger, a 2/2 without trample and Bot2 at 18. After combat an Alpine Grizzly (power 4
+# exactly) arrives. On turn 5 Wargling attacks again: a 3/2 with trample, the Hill Giant and the Alpine Grizzly gain trample too,
+# Bot2's Ornithopter does not (creatures you control); Bot2 at 15. On turn 6 all of it has ended.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Wargling
+Hill Giant
+Alpine Grizzly
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wargling.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Wargling > Bot2)
+Bot1.Pass
+? Bot1.Battlefield.Wargling.Power = 2
+? Bot1.Battlefield.Wargling.Keywords = (absent)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Wargling > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wargling.Power = 3
+? Bot1.Battlefield.Wargling.Toughness = 2
+? Bot1.Battlefield.Wargling.Keywords = Trample
+? Bot1.Battlefield.Hill Giant.Keywords = Trample
+? Bot1.Battlefield.Hill Giant.Power = 3
+? Bot1.Battlefield.Alpine Grizzly.Keywords = Trample
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+[T5 Bot1.Main2]
+? Bot2.Life = 15
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Wargling.Power = 2
+? Bot1.Battlefield.Wargling.Keywords = (absent)
+? Bot1.Battlefield.Hill Giant.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 15

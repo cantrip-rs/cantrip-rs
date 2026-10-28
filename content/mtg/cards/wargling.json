@@ -1,0 +1,8 @@
+{
+  "name": "Wargling",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Wolf",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Ferocious — Whenever this creature attacks while you control a creature with power 4 or greater, until end of turn, this creature gets +1/+0 and creatures you control gain trample."
+}
