@@ -1,0 +1,74 @@
+# Desert Were-Worm: the total power that counts is the power of the creatures as they were declared (the ruling): on turn 5 the
+# Worm (6/5 with three Mountains) and a Cyclops of One-Eyed Pass (5/2) attack for a total of 11 - one short - and Smaug's Fury,
+# cast on the Cyclops once the attackers are declared (+3, total 14 now), is too late. There is no trigger, so no untap and no
+# additional combat phase: Bot2 (40 life) takes 6 + 5 + 3 = 14, and the Worm is still tapped afterwards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Desert Were-Worm
+Mountain
+Smaug's Fury
+Cyclops of One-Eyed Pass
+Mountain
+Mountain
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Life]
+Bot2: 40
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Desert Were-Worm.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Desert Were-Worm.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Cyclops of One-Eyed Pass.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+? Bot1.Battlefield.Desert Were-Worm.Power = 6
+Bot1.Attack(Desert Were-Worm; Cyclops of One-Eyed Pass > Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Smaug's Fury.Cast(Bot1.Battlefield.Cyclops of One-Eyed Pass)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cyclops of One-Eyed Pass.Power = 8
+? Bot1.Battlefield.Desert Were-Worm.Tapped = true
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 26
+Turn = 5
+Step = Main2
+Bot1.Battlefield.Desert Were-Worm.Tapped = true
+Bot1.Battlefield.Cyclops of One-Eyed Pass.Tapped = true

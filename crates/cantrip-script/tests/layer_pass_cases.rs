@@ -409,6 +409,10 @@ fn a_continued_part_depends_through_what_it_does() {
 /// The static abilities whose effect changes nothing on any object or raw state the check tries, each with why.
 const INERT: &[(&str, &str)] = &[
     (
+        "Desert Were-Worm",
+        "its effect counts the Mountains its controller controls, and the synthetic boards hold none; a scenario of the card shows the +2/+0 for each",
+    ),
+    (
         "Agatha's Soul Cauldron",
         "its effect gives the abilities of the creature cards exiled with it (`Obj::exiled`), a link no synthetic state makes; it reads them through the view and writes abilities only",
     ),

@@ -1,0 +1,86 @@
+# Desert Were-Worm: "for the first time each turn" means the first declaration this turn that reaches 12, so an earlier declaration of
+# 11 does not use it up and one of exactly 12 does. Turn 9 (Bot1 has four Mountains and a Plains: the Worm is an 8/5): the Worm and
+# Aurelia, the Warleader attack for 11 - no Worm trigger - and Aurelia's own trigger gives an additional combat. There they attack with
+# a Memnite too, for 12, the first declaration to reach it, so the Worm triggers and gives one more combat. There the same 12 is not the
+# first, so no fourth. Bot2 starts at 60: 11 + 12 + 12 = 35 damage, and the Worm, tapped by the last attack, was not untapped again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Desert Were-Worm
+Aurelia, the Warleader
+Memnite
+Mountain
+Plains
+Mountain
+Mountain
+Mountain
+Island x14
+
+[Bot2 Deck]
+Island x30
+
+[Life]
+Bot2: 60
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Desert Were-Worm.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mountain#3.Activate
+Bot1.Hand.Aurelia, the Warleader.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+? Bot1.Battlefield.Desert Were-Worm.Power = 8
+Bot1.Attack(Desert Were-Worm; Aurelia, the Warleader > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Desert Were-Worm.Tapped = false
+Bot1.Attack(Desert Were-Worm; Aurelia, the Warleader; Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Desert Were-Worm.Tapped = false
+Bot1.Attack(Desert Were-Worm; Aurelia, the Warleader; Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 25
+Turn = 9
+Bot1.Battlefield.Desert Were-Worm.Tapped = true

@@ -1,0 +1,76 @@
+# Desert Were-Worm: "Whenever you attack with creatures with total power 12 or greater for the first time each turn, untap all
+# attacking creatures. After this phase, there is an additional combat phase." and "+2/+0 for each Mountain you control". On
+# turn 5 Bot1 has three Mountains (the Worm is a 6/5), a Cyclops of One-Eyed Pass (5/2) and a Memnite (1/1): attacking with all
+# three is total power exactly 12, so the trigger untaps them and gives one more combat phase; attacking with the same
+# three again there is total power 12 again but not for the first time, so no third combat. Bot2 starts at 40 life: 12 + 12.
+# The Worm is the 6/5 it should be (not its printed 0/5), and attacked twice (untapped between).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Desert Were-Worm
+Mountain
+Memnite
+Cyclops of One-Eyed Pass
+Mountain
+Mountain
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Life]
+Bot2: 40
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Desert Were-Worm.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Desert Were-Worm.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Cyclops of One-Eyed Pass.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+? Bot1.Battlefield.Desert Were-Worm.Power = 6
+? Bot1.Battlefield.Desert Were-Worm.Toughness = 5
+Bot1.Attack(Desert Were-Worm; Cyclops of One-Eyed Pass; Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Desert Were-Worm.Tapped = false
+? Bot1.Battlefield.Cyclops of One-Eyed Pass.Tapped = false
+Bot1.Attack(Desert Were-Worm; Cyclops of One-Eyed Pass; Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Turn = 5
+Bot1.Battlefield.Desert Were-Worm.Tapped = true
