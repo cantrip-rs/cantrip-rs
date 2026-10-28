@@ -1,0 +1,63 @@
+# Ka-Zar of the Savage Land: "You may look at the top card of your library any time. You may play lands from the top of your library. When
+# Ka-Zar enters, create Zabu, a legendary 2/2 green Cat creature token with 'Landfall - Whenever a land you control enters, put a +1/+1
+# counter on Zabu.'" Turn 1: Ka-Zar enters and makes Zabu; the Forest on top of the library is played from there (Zabu 3/3), and that was
+# Bot1's land play for the turn, so the Forest in hand is refused. Turn 3: the top card is a Grizzly Bears, which can't be played from the
+# top of the library (only lands); a Forest from hand is, and Zabu is 4/4.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Ka-Zar of the Savage Land
+Forest
+Forest
+Forest
+Grizzly Bears
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ka-Zar of the Savage Land.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zabu.Power = 2
+Bot1.Library.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zabu.Power = 3
+! Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+! Bot1.Library.Grizzly Bears.Play
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Zabu.Power = 4
+
+[Expect]
+Bot1.Battlefield.Zabu.Power = 4
+Bot1.Battlefield.Zabu.Toughness = 4
+Bot1.Battlefield.Zabu.Subtypes = Cat
+Bot1.Battlefield.Zabu.Supertypes = Legendary
+Bot1.Battlefield.Zabu.Colors = Green
