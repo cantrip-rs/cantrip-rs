@@ -1,0 +1,52 @@
+# Earth's Mightiest Heroes revealing no creature card: the top eight are all Forests, so nobody is asked to choose and all eight go
+# into the graveyard (with the spell, nine cards).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Earth's Mightiest Heroes
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Grizzly Bears
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Earth's Mightiest Heroes.Cast
+Bot1.Modes(Cast without teamwork)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Count = 9
+Bot1.Library = Grizzly Bears

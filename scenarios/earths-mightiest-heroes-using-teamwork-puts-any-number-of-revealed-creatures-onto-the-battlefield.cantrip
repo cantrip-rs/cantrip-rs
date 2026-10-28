@@ -1,0 +1,80 @@
+# Earth's Mightiest Heroes, cast using teamwork 5 (as an additional cost, tap any number of creatures you control with total power 5 or
+# more): two Grizzly Bears (total power 4, one short) cannot pay it, a Grizzly Bears and a Centaur Courser (total 5, exactly the amount)
+# do. Then "put any number of creature cards from among them onto the battlefield instead": of the top eight, a third Grizzly Bears and
+# a second Centaur Courser, both creature cards, enter together, and the six Forests go into the graveyard.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Grizzly Bears
+Centaur Courser
+Grizzly Bears
+Earth's Mightiest Heroes
+Grizzly Bears
+Centaur Courser
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest x4
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Earth's Mightiest Heroes.Cast
+Bot1.Modes(Teamwork 5)
+! Bot1.Choose(Grizzly Bears#1; Grizzly Bears#2)
+Bot1.Choose(Grizzly Bears#1; Centaur Courser)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Centaur Courser)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears#1.Tapped = true
+Bot1.Battlefield.Centaur Courser#1.Tapped = true
+Bot1.Battlefield.Grizzly Bears#2.Tapped = false
+Bot1.Battlefield.Count = 11
+Bot1.Graveyard.Count = 7

@@ -1,0 +1,6 @@
+{
+  "name": "Earth's Mightiest Heroes",
+  "manaCost": "{4}{G}{G}",
+  "type": "Sorcery",
+  "oracleText": "Teamwork 5 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 5 or more.)\nReveal the top eight cards of your library. You may put a creature card from among them onto the battlefield. If this spell was cast using teamwork, put any number of creature cards from among them onto the battlefield instead. Put the rest into your graveyard."
+}

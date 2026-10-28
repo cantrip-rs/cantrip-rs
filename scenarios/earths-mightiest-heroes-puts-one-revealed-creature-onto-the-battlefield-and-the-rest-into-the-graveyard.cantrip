@@ -1,0 +1,59 @@
+# Earth's Mightiest Heroes, cast without teamwork: "Reveal the top eight cards of your library. You may put a creature card from among
+# them onto the battlefield. ... Put the rest into your graveyard." The top eight are a Grizzly Bears, a Centaur Courser and six Forests:
+# Bot1 may take only one creature (taking both is refused) and takes the Courser; the Bears and the Forests go into the graveyard, and
+# the ninth card stays in the library. The spell costs {4}{G}{G} (the pool is empty right after).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Earth's Mightiest Heroes
+Grizzly Bears
+Centaur Courser
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Island
+Forest x3
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Earth's Mightiest Heroes.Cast
+Bot1.Modes(Cast without teamwork)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Grizzly Bears; Centaur Courser)
+Bot1.Choose(Centaur Courser)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Centaur Courser.Power = 3
+Bot1.Graveyard.Count = 8
+Bot1.Library.Count = 4
