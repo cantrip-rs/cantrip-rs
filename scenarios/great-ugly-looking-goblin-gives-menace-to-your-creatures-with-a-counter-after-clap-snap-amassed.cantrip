@@ -1,0 +1,71 @@
+# Clap! Snap! {1}{B} (Adventure, CR 715): "Amass Goblins 2." Bot1 pays it exactly with Mox Jet's {B} and Mox Pearl's {W}: a 2/2 Goblin
+# Army token, and the card goes to exile (CR 715.4) to be cast from there as Great Ugly-Looking Goblin {5}{B}, paid exactly with
+# Mox Jet, Mox Pearl and two Mana Crypts. "Each creature you control with a +1/+1 counter on it has menace": the Army has
+# menace; the Goblin itself, with no counter, does not, and Bot2's Memnite, which Gollum's Meager Meal then gives a +1/+1 counter, does
+# not either (only creatures Bot1 controls).
+
+[Bot1 Deck]
+Great Ugly-Looking Goblin
+Mox Jet
+Mox Pearl
+Mox Jet
+Mox Pearl
+Mana Crypt
+Mana Crypt
+Gollum, Silent Slinker
+Plains x12
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Great Ugly-Looking Goblin.Cast(Ability: Clap! Snap!)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Exile = Great Ugly-Looking Goblin
+? Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Goblin Army Token.Keywords = (absent)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mana Crypt#1.Activate
+Bot1.Battlefield.Mana Crypt#2.Activate
+Bot1.Exile.Great Ugly-Looking Goblin.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Army Token.Keywords = Menace
+? Bot1.Battlefield.Great Ugly-Looking Goblin.Keywords = (absent)
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Gollum, Silent Slinker.Cast(Ability: Meager Meal)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Goblin Army Token.Keywords = Menace
+Bot1.Battlefield.Goblin Army Token.Power = 2
+Bot1.Battlefield.Great Ugly-Looking Goblin.Keywords = (absent)
+Exile = Gollum, Silent Slinker

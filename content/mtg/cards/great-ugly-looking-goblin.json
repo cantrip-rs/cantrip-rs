@@ -1,0 +1,14 @@
+{
+  "name": "Great Ugly-Looking Goblin",
+  "manaCost": "{5}{B}",
+  "type": "Creature — Goblin Soldier",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Each creature you control with a +1/+1 counter on it has menace. (It can't be blocked except by two or more creatures.)",
+  "adventure": {
+    "name": "Clap! Snap!",
+    "manaCost": "{1}{B}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Amass Goblins 2. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}
