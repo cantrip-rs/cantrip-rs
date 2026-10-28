@@ -2,11 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{targets, triggers};
 use cantrip_oracle as oracle;
 
-/// "Any other target" (CR 115.1): any target but this creature itself.
-fn any_other_target(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    t != Target::Object(asker.source) && (targets::ANY.filter)(q, asker, t)
-}
-
 /// It deals that much damage to any other target. If a player is dealt damage this way, they can't gain life for the rest of
 /// the game (CR 119.7): each player the damage actually reached, read from the damage events this resolution recorded
 /// (CR 120.3) - not a target a redirection (CR 614.1a, Ancient Adamantoise) or a prevention kept it from, and whoever a
@@ -32,7 +27,7 @@ fn retaliate(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(triggers::THIS_DEALT_DAMAGE, retaliate, "Whenever this creature is dealt damage, it deals that much damage to any other target. If a player is dealt damage this way, they can't gain life for the rest of the game.")
-        .targets(&[target(any_other_target)])
+        .targets(&[targets::ANY_OTHER_TARGET])
         .sums_per_subject()],
     ..oracle::SCREAMING_NEMESIS
 };

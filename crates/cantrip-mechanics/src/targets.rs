@@ -75,6 +75,14 @@ fn spell_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
 
 /// Any target (CR 115.4): a creature, a player, a planeswalker or a battle.
 pub const ANY: TargetSpec = target(any_target_filter);
+
+fn any_other_target_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    t != Target::Object(asker.source) && any_target_filter(q, asker, t)
+}
+
+/// "Any other target" (CR 115.1, 115.4): any target but the ability's own source. Screaming Nemesis, Iron Fist, Living Weapon and
+/// Red Hulk print it.
+pub const ANY_OTHER_TARGET: TargetSpec = target(any_other_target_filter);
 pub const CREATURE: TargetSpec = target(creature_filter);
 
 fn nonlegendary_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
