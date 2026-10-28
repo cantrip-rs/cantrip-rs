@@ -1,0 +1,68 @@
+# Misty Mountains Raider: "Whenever you attack, amass Goblins 2." (CR 508.1m, 701.47a). Attacking with the Raider and a
+# Goblin Assailant together triggers it once (the attack is declared once): a Goblin Army token with two +1/+1 counters, not
+# four. A later attack with the Raider alone adds two more counters to that same Army. No attack, no trigger: the turns
+# between (the opponent's) leave the Army as it is.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Misty Mountains Raider
+Goblin Assailant
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Misty Mountains Raider.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Goblin Assailant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Army Token = (absent)
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Attack(Misty Mountains Raider; Goblin Assailant > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Army Token.Power = 2
+? Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 2
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Misty Mountains Raider > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 10
+Bot1.Battlefield.Goblin Army Token.Power = 4
+Bot1.Battlefield.Goblin Army Token.Toughness = 4
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
