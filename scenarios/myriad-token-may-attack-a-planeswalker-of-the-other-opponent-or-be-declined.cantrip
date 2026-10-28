@@ -1,0 +1,73 @@
+# Myriad (CR 702.116a): Wyrm's Crossing Patrol attacks Bot2 and Bot3, the other opponent, controls Liliana of the Veil (loyalty 3), so
+# the token may attack Bot3 or "a planeswalker they control". Bot1 chooses Liliana: she goes to 2 and Bot3 keeps 20 life, Bot2
+# takes 1. The token is exiled at end of combat. Declining (an empty `Target()`) makes no token: the loyalty stays 2 on the
+# next attack (turn 7) and Bot2 takes only the Patrol's 1 again.
+
+[Bot1 Deck]
+Mox Pearl
+Wyrm's Crossing Patrol
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Liliana of the Veil
+Swamp x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wyrm's Crossing Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T3 Bot3.Main1]
+Bot3.Hand.Swamp.Play
+Bot3.Hand.Mox Jet.Cast
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Hand.Mox Ruby.Cast
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Battlefield.Swamp.Activate
+Bot3.Battlefield.Mox Jet.Activate
+Bot3.Battlefield.Mox Ruby.Activate
+Bot3.Hand.Liliana of the Veil.Cast
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot1.DeclareAttackers]
+Bot1.Attack(Wyrm's Crossing Patrol > Bot2)
+! Bot1.Target(Bot3; Bot3.Battlefield.Liliana of the Veil)
+Bot1.Target(Bot3.Battlefield.Liliana of the Veil)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Combat.Attackers = Wyrm's Crossing Patrol > Bot2; Wyrm's Crossing Patrol > Liliana of the Veil
+[T4 Bot1.Main2]
+? Bot3.Battlefield.Liliana of the Veil.Counters.Loyalty = 2
+? Bot2.Life = 19
+? Bot3.Life = 20
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Wyrm's Crossing Patrol > Bot2)
+! Bot1.Target(Bot3; Bot3.Battlefield.Liliana of the Veil)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Combat.Attackers = Wyrm's Crossing Patrol > Bot2
+[T7 Bot1.Main2]
+
+[Expect]
+Bot3.Battlefield.Liliana of the Veil.Counters.Loyalty = 2
+Bot2.Life = 18
+Bot3.Life = 20

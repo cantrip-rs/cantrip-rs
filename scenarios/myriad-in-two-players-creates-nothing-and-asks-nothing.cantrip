@@ -1,0 +1,31 @@
+# Myriad (CR 702.116a): "for each opponent other than defending player" - with a single opponent, who is the defending player,
+# there is none, so no token is created and nothing is asked (the ruling). The Patrol attacks alone on turn 3 for 1.
+# The positive control is the three-player scenario, where the same attack is asked what the token attacks.
+
+[Bot1 Deck]
+Mox Pearl
+Wyrm's Crossing Patrol
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wyrm's Crossing Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Wyrm's Crossing Patrol > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target
+? Combat.Attackers.Count = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Count = 2

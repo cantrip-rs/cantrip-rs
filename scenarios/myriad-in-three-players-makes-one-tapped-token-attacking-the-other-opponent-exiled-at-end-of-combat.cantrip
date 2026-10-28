@@ -1,0 +1,45 @@
+# Myriad (CR 702.116a): Wyrm's Crossing Patrol (1/1) attacks Bot2, so for each opponent other than the defending player - Bot3 - Bot1
+# may create a token copy tapped and attacking that player. It chooses Bot3: a tapped 1/1 copy attacking Bot3 while the
+# Patrol attacks Bot2. The token was never declared as an attacker, so its own myriad does not trigger (no second token, and no
+# question about Bot2). Both opponents take 1 in combat, and the token is exiled at end of combat. Mox Pearl pays for the Patrol.
+
+[Bot1 Deck]
+Mox Pearl
+Wyrm's Crossing Patrol
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wyrm's Crossing Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T4 Bot1.DeclareAttackers]
+Bot1.Attack(Wyrm's Crossing Patrol > Bot2)
+Bot1.Target(Bot3)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Combat.Attackers.Count = 2
+? Combat.Attackers = Wyrm's Crossing Patrol > Bot2; Wyrm's Crossing Patrol > Bot3
+? Bot1.Battlefield.Wyrm's Crossing Patrol#2.Tapped = true
+? Bot1.Battlefield.Wyrm's Crossing Patrol#2.Token = true
+[T4 Bot1.Main2]
+? Bot2.Life = 19
+? Bot3.Life = 19
+? Delayed.Count = 0
+
+[Expect]
+Bot1.Battlefield.Count = 2
+Bot1.Battlefield.Wyrm's Crossing Patrol.Tapped = true
+Exile.Count = 0
