@@ -810,6 +810,22 @@ pub fn damage_each_creature(g: &mut dyn Game, item: &StackItem, n: u16) {
     damage_each_creature_dealt(g, item, n);
 }
 
+/// "[This spell] deals `n` damage to each creature your opponents control" (CR 608.2c, 120.2): one damage event for every
+/// creature an opponent of the resolving item's controller controls as the effect is carried out, all dealt together.
+/// Iroh's Demonstration and Easy Pickings (Glóin the Mighty) print it.
+pub fn damage_each_creature_opponents_control(g: &mut dyn Game, item: &StackItem, n: u16) {
+    let opponents: Vec<PlayerId> = g.state().opponents(item.controller).collect();
+    let hits: Vec<(ObjectId, Target, u16)> = g
+        .state()
+        .battlefield()
+        .iter()
+        .copied()
+        .filter(|&id| g.chars(id).is(CardType::Creature) && opponents.contains(&g.controller(id)))
+        .map(|id| (item.object, Target::Object(id), n))
+        .collect();
+    g.damage_together(&hits);
+}
+
 /// "[This spell] deals `n` damage to each non-[subtype] creature" (CR 608.2c, 120.2): one damage event for every creature on
 /// the battlefield without `subtype` as the effect is carried out, all dealt together. The caller reads the subtype through
 /// the words of the object whose text names it (`g.words(item.object).subtype(..)`, CR 612). Desolation of Smaug (non-Dragon)

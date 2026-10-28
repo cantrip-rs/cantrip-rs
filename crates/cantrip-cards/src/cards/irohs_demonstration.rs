@@ -1,19 +1,10 @@
 use cantrip_api::*;
-use cantrip_mechanics::{damage_target, targets};
+use cantrip_mechanics::{damage_target, effects, targets};
 use cantrip_oracle as oracle;
 
-/// "Iroh's Demonstration deals 1 damage to each creature your opponents control": every such creature as it resolves,
-/// all at once (CR 120.2).
+/// "Iroh's Demonstration deals 1 damage to each creature your opponents control."
 fn opponents_creatures(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let hits: Vec<(ObjectId, Target, u16)> = g
-        .state()
-        .battlefield()
-        .iter()
-        .copied()
-        .filter(|&id| g.chars(id).is(CardType::Creature) && g.controller(id) != item.controller)
-        .map(|id| (item.object, Target::Object(id), 1))
-        .collect();
-    g.damage_together(&hits);
+    effects::damage_each_creature_opponents_control(g, item, 1);
     Ok(())
 }
 
