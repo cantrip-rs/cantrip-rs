@@ -14,6 +14,19 @@ pub fn attach_to_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     Ok(())
 }
 
+/// "Attach [first target] to [second target]" (CR 701.3a): both targets still legal as it resolves, the first is attached to
+/// the second; it does nothing if either was not chosen (an "up to one") or has become illegal (CR 608.2b), and an
+/// Equipment that cannot be attached to that creature stays where it is (CR 701.3b). Raubahn, Bull of Ala Mhigo and Iron Hills
+/// Stalwart print it.
+pub fn attach_first_target_to_second(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(attachment) = targets::object(g, item, 0)
+        && let Some(host) = targets::object(g, item, 1)
+    {
+        g.attach(attachment, host);
+    }
+    Ok(())
+}
+
 /// Equip [cost] (CR 702.6a): "[cost]: Attach this to target creature you control. Activate only as a sorcery."
 /// `text` is the ability's text, which a scenario's `Ability:` matches. Umezawa's Jitte and Lavaspur Boots print it.
 pub const fn equip(mana: ManaCost, text: &'static str) -> AbilityDef {
