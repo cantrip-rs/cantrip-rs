@@ -1,0 +1,11 @@
+{
+  "name": "Crossbones, Malicious Mercenary",
+  "manaCost": "{3}{B}",
+  "type": "Legendary Creature — Human Mercenary Villain",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Deathtouch\nWhenever another Villain you control enters, put a +1/+1 counter on Crossbones. He deals 2 damage to each opponent. This ability triggers only once each turn.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

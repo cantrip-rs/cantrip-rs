@@ -1,0 +1,65 @@
+# Crossbones, Malicious Mercenary: whenever another Villain you control enters, put a +1/+1 counter on him and he deals 2 damage
+# to each opponent, triggering only once each turn (CR 603.2, 122.1a). Bot2's Agents of HYDRA on turn 2 is not his controller's, so
+# nothing happens; on turn 3 the first Agents of HYDRA triggers it (4/4, Bot2 at 18) and the second, the same turn, does not.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Crossbones, Malicious Mercenary
+Agents of HYDRA
+Agents of HYDRA
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Sapphire
+Agents of HYDRA
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Hand.Crossbones, Malicious Mercenary.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Agents of HYDRA.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Crossbones, Malicious Mercenary.Power = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Crossbones, Malicious Mercenary.Power = 4
+Bot1.Battlefield.Crossbones, Malicious Mercenary.Toughness = 4
+Bot1.Battlefield.Crossbones, Malicious Mercenary.Counters.PlusOnePlusOne = 1
+Bot2.Life = 18
