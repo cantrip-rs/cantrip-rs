@@ -1,0 +1,11 @@
+{
+  "name": "Furtive Homunculus",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Homunculus",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Skulk (This creature can't be blocked by creatures with greater power.)",
+  "keywords": [
+    "Skulk"
+  ]
+}
