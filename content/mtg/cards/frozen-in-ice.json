@@ -1,0 +1,6 @@
+{
+  "name": "Frozen in Ice",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, tap enchanted creature.\nEnchanted creature loses all abilities and can't become untapped."
+}
