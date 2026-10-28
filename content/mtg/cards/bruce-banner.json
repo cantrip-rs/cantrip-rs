@@ -1,0 +1,20 @@
+{
+  "name": "Bruce Banner",
+  "manaCost": "{U}",
+  "type": "Legendary Creature — Human Scientist Hero",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{X}{X}, {T}: Draw X cards. Activate only as a sorcery.\n{2}{R}{R}{G}{G}: Transform Bruce Banner. Activate only as a sorcery.",
+  "backFace": {
+    "name": "The Incredible Hulk",
+    "manaCost": "{2}{R}{R}{G}{G}",
+    "type": "Legendary Creature — Gamma Berserker Hero",
+    "power": 8,
+    "toughness": 8,
+    "oracleText": "Reach, trample\nEnrage — Whenever The Incredible Hulk is dealt damage, put a +1/+1 counter on him. If he's attacking, untap him and there is an additional combat phase after this phase.",
+    "keywords": [
+      "Reach",
+      "Trample"
+    ]
+  }
+}
