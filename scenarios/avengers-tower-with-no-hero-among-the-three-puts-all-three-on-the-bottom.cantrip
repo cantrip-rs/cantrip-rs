@@ -1,0 +1,37 @@
+# Avengers Tower: with no Hero among the top three (Grizzly Bears, a Plains and a Swamp) nothing is taken, the creature card
+# that is not a Hero included, and all three go on the bottom of the library.
+
+[Bot1 Deck]
+Avengers Tower
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island
+Island
+Grizzly Bears
+Plains
+Swamp
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Avengers Tower.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Avengers Tower.Activate(Ability: Look at the top three)
+Bot1.Arrange( | Grizzly Bears; Swamp; Plains)
+[Bot1.Main2]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 13

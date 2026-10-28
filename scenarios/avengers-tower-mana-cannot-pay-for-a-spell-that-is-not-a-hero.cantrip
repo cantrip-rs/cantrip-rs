@@ -1,0 +1,19 @@
+# Avengers Tower: the {W} it makes is for Hero spells and abilities of Hero sources only (CR 106.6). Hinterland Sanctifier, a
+# one-mana white creature spell that is no Hero, is not offered with it.
+
+[Bot1 Deck]
+Avengers Tower
+Hinterland Sanctifier
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Avengers Tower.Play
+Bot1.Battlefield.Avengers Tower.Activate(Ability: Add one mana of any color; Color: White)
+? Bot1.Mana = {W} (HeroSpellsOrAbilities)
+! Bot1.Hand.Hinterland Sanctifier.Cast(Mana: short)
+
+[Expect]
+Bot1.Mana = {W} (HeroSpellsOrAbilities)

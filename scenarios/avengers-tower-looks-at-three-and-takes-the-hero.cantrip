@@ -1,0 +1,39 @@
+# Avengers Tower ({4}, {T}: look at the top three cards, may reveal a Hero card and put it into your hand, the rest on the
+# bottom in any order): the top three are Agent Maria Hill (a Hero), a Plains and a Swamp. Bot1 takes the Hero and puts the
+# Swamp, then the Plains, on the bottom, so the library ends with them last.
+
+[Bot1 Deck]
+Avengers Tower
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Island
+Island
+Agent Maria Hill
+Plains
+Swamp
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Avengers Tower.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Avengers Tower.Activate(Ability: Look at the top three)
+Bot1.Arrange(Agent Maria Hill | Swamp; Plains)
+[Bot1.Main2]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand = Island; Island; Agent Maria Hill
+Bot1.Library.Count = 12
+Bot1.Battlefield.Avengers Tower.Tapped = true

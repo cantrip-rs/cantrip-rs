@@ -1,0 +1,22 @@
+# Avengers Tower: "{T}: Add one mana of any color. Spend this mana only to cast a Hero spell or to activate an ability of a
+# Hero source" (CR 106.6). The {W} it makes pays for Agent Maria Hill, a Human Spy Hero.
+
+[Bot1 Deck]
+Avengers Tower
+Agent Maria Hill
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Avengers Tower.Play
+Bot1.Battlefield.Avengers Tower.Activate(Ability: Add one mana of any color; Color: White)
+? Bot1.Mana = {W} (HeroSpellsOrAbilities)
+Bot1.Hand.Agent Maria Hill.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Agent Maria Hill.Power = 2
+Bot1.Mana =
