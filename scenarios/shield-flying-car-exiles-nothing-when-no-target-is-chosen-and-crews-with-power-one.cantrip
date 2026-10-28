@@ -1,0 +1,47 @@
+# S.H.I.E.L.D. Flying Car's "up to one target creature": Bot1 chooses none (Target()), so the Llanowar Elves and both Ornithopters stay and
+# nothing is exiled or returned. On turn 3 Crew 1 is paid by tapping the Elves, power 1 (CR 702.122a: exactly the power the cost
+# names; the two Ornithopters, power 0 each, cannot pay it: the refusal), the Car becomes a 3/3 artifact creature and its attack, unblocked, takes Bot2 to 17.
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Llanowar Elves
+Ornithopter x2
+S.H.I.E.L.D. Flying Car
+Island x2
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.S.H.I.E.L.D. Flying Car.Cast
+Bot1.Pass
+Bot1.Target()
+[Bot1.Main2]
+? Exile.Count = 0
+? Bot1.Battlefield = Mox Emerald; Llanowar Elves; Ornithopter; Ornithopter; S.H.I.E.L.D. Flying Car
+[T3 Bot1.Main1]
+Bot1.Battlefield.S.H.I.E.L.D. Flying Car.Activate(Ability: Crew)
+! Bot1.Choose(Ornithopter#1; Ornithopter#2)
+Bot1.Choose(Llanowar Elves)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(S.H.I.E.L.D. Flying Car > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.S.H.I.E.L.D. Flying Car.Types = Artifact; Creature
