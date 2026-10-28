@@ -1,0 +1,35 @@
+# Joined Researchers // Secret Rendezvous: the condition is "more cards in hand than you" (CR 603.4). Bot2 empties its hand
+# to three on turn two; Bot1 casts the Researchers on turn three and plays a land, leaving four cards, so at that end step
+# (three) and at Bot2's end step on turn four (four cards, drawn for the turn - the same as Bot1's) no opponent has more,
+# and it is never prepared.
+
+[Bot1 Deck]
+Joined Researchers
+Mox Pearl x2
+Island x4
+Island x12
+
+[Bot2 Deck]
+Mox Ruby x5
+Island x15
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Joined Researchers.Cast
+Bot1.Hand.Island.Play
+[T5 Bot1.Upkeep]
+? Bot1.Hand.Count = 4
+? Bot2.Hand.Count = 4
+
+[Expect]
+Bot1.Battlefield.Joined Researchers.Prepared = (absent)

@@ -1,0 +1,36 @@
+# Joined Researchers // Secret Rendezvous: the intervening "if" is checked as the ability resolves too (CR 603.4). At
+# Bot1's end step on turn three Bot2 has six cards to Bot1's five, so the ability triggers; Bot2 casts Lightning Bolt in
+# response, leaving five each, and when it resolves the Researchers does not become prepared.
+
+[Bot1 Deck]
+Joined Researchers
+Mox Pearl x2
+Island x4
+Island x12
+
+[Bot2 Deck]
+Mox Ruby x2
+Lightning Bolt
+Island x4
+Island x12
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Joined Researchers.Cast
+[T3 Bot1.End]
+? Bot1.Hand.Count = 5
+? Stack.Count = 1
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Joined Researchers.Prepared = (absent)

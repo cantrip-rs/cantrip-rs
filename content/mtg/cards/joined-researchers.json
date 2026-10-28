@@ -1,0 +1,17 @@
+{
+  "name": "Joined Researchers",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Cleric Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike\nAt the beginning of each end step, if an opponent has more cards in hand than you, this creature becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "keywords": [
+    "FirstStrike"
+  ],
+  "prepare": {
+    "name": "Secret Rendezvous",
+    "manaCost": "{1}{W}{W}",
+    "type": "Sorcery",
+    "oracleText": "You and target opponent each draw three cards."
+  }
+}
