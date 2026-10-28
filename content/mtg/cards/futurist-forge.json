@@ -1,0 +1,6 @@
+{
+  "name": "Futurist Forge",
+  "manaCost": "{1}{U}",
+  "type": "Artifact",
+  "oracleText": "When this artifact enters, draw a card.\n{3}{U}, Sacrifice this artifact: Draw two cards."
+}

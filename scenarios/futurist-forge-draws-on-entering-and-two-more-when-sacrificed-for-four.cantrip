@@ -1,0 +1,44 @@
+# Futurist Forge: "When this artifact enters, draw a card" and "{3}{U}, Sacrifice this artifact: Draw two cards". {1}{U} is
+# paid exactly with Mox Sapphire's {U} and Mox Pearl's {W} (pool empty right after), and entering draws one Plains. The
+# ability is not offered with only a Mox Ruby's {R} (Mana: short) and is paid exactly with Black Lotus's {U}{U}{U} and
+# that {R}: the Forge is sacrificed and two more Plains are drawn.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Futurist Forge
+Black Lotus
+Mox Ruby
+Island x2
+Plains x3
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Futurist Forge.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+! Bot1.Battlefield.Futurist Forge.Activate(Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Futurist Forge.Activate
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Plains; Plains; Plains
+Bot1.Graveyard = Futurist Forge; Black Lotus
+Bot1.Library.Count = 10
