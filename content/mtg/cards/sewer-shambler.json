@@ -1,0 +1,11 @@
+{
+  "name": "Sewer Shambler",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)\nScavenge {2}{B} ({2}{B}, Exile this card from your graveyard: Put a number of +1/+1 counters equal to this card's power on target creature. Scavenge only as a sorcery.)",
+  "keywords": [
+    "Swampwalk"
+  ]
+}
