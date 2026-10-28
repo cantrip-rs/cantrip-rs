@@ -1,0 +1,47 @@
+# Textbook Tabulator (0/3): "When this creature enters, surveil 2" - the top Forest stays on top and the Swamp goes to the
+# graveyard - and increment. On turn 3 Bot1's one-mana Opt is greater than its power 0, so increment triggers; in response
+# Bot2 kills the Tabulator with Lightning Bolt (3 damage), and as the ability resolves the creature is gone (CR 603.4:
+# nothing to put a counter on, CR 702.191a): no counter anywhere and the Tabulator in the graveyard.
+
+[Bot1 Deck]
+Textbook Tabulator
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Opt
+Island
+Island
+Forest
+Swamp
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Textbook Tabulator.Cast
+Bot1.Pass
+Bot1.Arrange(Forest | Swamp)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Swamp
+? Bot1.Battlefield.Textbook Tabulator.Toughness = 3
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Textbook Tabulator)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Opt; Textbook Tabulator; Swamp
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire
