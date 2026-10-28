@@ -1,0 +1,52 @@
+# Mana Sculpt: "Counter target spell. If you control a Wizard, add an amount of {C} equal to the amount of mana spent to cast
+# that spell at the beginning of your next main phase." Bot1 controls a Hydro-Channeler (a Merfolk Wizard). Bot2 casts
+# Grizzly Bears for {1}{G} with two Moxen on turn 2, and Bot1 counters it with a Black Lotus; in its precombat main phase of
+# turn 3 Bot1 has {C}{C}, the two mana spent, once the delayed trigger resolves, and not before it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Hydro-Channeler
+Mana Sculpt
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hydro-Channeler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mana Sculpt.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Grizzly Bears
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {C}{C}
+
+[Expect]
+Turn = 3
+Bot2.Battlefield.Grizzly Bears = (absent)
+Bot1.Mana = {C}{C}

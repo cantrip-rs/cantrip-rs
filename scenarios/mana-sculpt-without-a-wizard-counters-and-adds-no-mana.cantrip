@@ -1,0 +1,35 @@
+# Mana Sculpt only adds mana if you control a Wizard as it resolves (the condition is checked then, CR 608.2c): Bot1 controls
+# no creature, so countering Bot2's Grizzly Bears on turn 2 puts nothing on the stack for its next main phase and its pool is
+# empty in turn 3.
+
+[Bot1 Deck]
+Black Lotus
+Mana Sculpt
+Island x18
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mana Sculpt.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Stack.Count = 0
+
+[Expect]
+Turn = 3
+Bot2.Graveyard = Grizzly Bears
+Bot1.Mana =
