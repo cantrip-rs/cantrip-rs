@@ -1,0 +1,12 @@
+{
+  "name": "Phyrexian Crusader",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Phyrexian Zombie Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike, protection from red and from white\nInfect (This creature deals damage to creatures in the form of -1/-1 counters and to players in the form of poison counters.)",
+  "keywords": [
+    "FirstStrike",
+    "Infect"
+  ]
+}
