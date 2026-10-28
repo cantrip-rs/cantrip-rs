@@ -1,0 +1,40 @@
+# War Machine, Legacy of Iron: "At the beginning of combat on your turn, another target creature you control gets +X/+0
+# until end of turn, where X is War Machine's power." On turn 1 his power is 1, so Memnite (his only legal target: he is
+# not "another") gets +1/+0 for that turn only. On turn 3 Rancor makes him 3/3 before combat, so Memnite gets +3/+0.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+War Machine, Legacy of Iron
+Memnite
+Rancor
+Forest x14
+
+[Bot2 Deck]
+Forest x14
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.War Machine, Legacy of Iron.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.War Machine, Legacy of Iron.Power = 1
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Rancor.Cast(Bot1.Battlefield.War Machine, Legacy of Iron)
+Bot1.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.War Machine, Legacy of Iron.Power = 3
+Bot1.Battlefield.Memnite.Power = 4
