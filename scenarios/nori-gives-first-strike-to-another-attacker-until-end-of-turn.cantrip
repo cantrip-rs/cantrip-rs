@@ -1,0 +1,58 @@
+# Nori, Teller of Tales: "Whenever Nori attacks, target attacking creature gains first strike until end of turn." Nori and a
+# Savannah Lions (2/1) attack on turn 3 into Bot2's Grizzly Bears (2/2) and Nori's trigger targets the Lions - a creature that is
+# not attacking (Bot2's Bears) is no legal target. The Lions strike first, kill the blocking Bears and survive; first strike
+# is gone on turn 4, and Nori herself (a 2/2) never had it.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Nori, Teller of Tales
+Savannah Lions
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mox Emerald
+Grizzly Bears
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Nori, Teller of Tales.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Nori, Teller of Tales > Bot2; Savannah Lions > Bot2)
+! Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Target(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Keywords = FirstStrike
+? Bot1.Battlefield.Nori, Teller of Tales.Keywords = (absent)
+Bot2.Block(Grizzly Bears > Savannah Lions)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Savannah Lions.Damage = 0
+Bot2.Life = 18

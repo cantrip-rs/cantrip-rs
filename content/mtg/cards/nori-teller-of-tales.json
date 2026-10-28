@@ -1,0 +1,8 @@
+{
+  "name": "Nori, Teller of Tales",
+  "manaCost": "{1}{R/W}",
+  "type": "Legendary Creature — Dwarf Bard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever Nori attacks, target attacking creature gains first strike until end of turn."
+}
