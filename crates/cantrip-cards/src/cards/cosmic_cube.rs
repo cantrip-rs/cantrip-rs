@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::{ward, YOU_ATTACK};
-use cantrip_mechanics::{choose, library};
+use cantrip_mechanics::{choose, library, select};
 use cantrip_oracle as oracle;
 
 /// The greatest power among the attacking creatures `player` controls, read as the ability resolves (CR 608.2h): none if
@@ -28,7 +28,7 @@ fn attack(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
             castable.push(c);
         }
     }
-    if let Some(&card) = choose::cards_from(g, you, item.object, Purpose::CastFree, looked.clone(), castable, 1, true)?.first() {
+    if let Some(&card) = choose::select(g, you, item.object, Purpose::CastFree, castable, select::cards(select::up_to(1)))?.first() {
         let ways: Vec<CastWay> = g.cast_ways_during_resolution(card).into_iter().filter(within).collect();
         if let Some(way) = choose::cast_way(g, you, card, ways)? {
             g.cast_during_resolution_as(card, CastTerms { instead: Some(ManaCost::ZERO), way: Some(way.way), ..CastTerms::default() })?;

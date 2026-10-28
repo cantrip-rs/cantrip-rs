@@ -1,0 +1,43 @@
+# Cosmic Cube: "look at the top six cards of your library". Ancestral Recall is the seventh card, out of reach: with only Islands and a
+# Hill Giant (too big) among the six, nothing can be cast, so choosing Ancestral Recall is refused.
+
+[Bot1 Deck]
+Black Lotus
+Cosmic Cube
+Grizzly Bears
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Island
+Island x5
+Hill Giant
+Ancestral Recall
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Green)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cosmic Cube.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2

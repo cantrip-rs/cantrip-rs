@@ -1,0 +1,42 @@
+# Cosmic Cube: "Put the rest on the bottom of your library in a random order." Bot1 casts nothing, so all six cards go to the bottom:
+# on turn 5 Bot1 draws the card after them, an Island, and not the Hill Giant that was on top of the library.
+
+[Bot1 Deck]
+Black Lotus
+Cosmic Cube
+Grizzly Bears
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Island
+Hill Giant
+Island x5
+Island x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Green)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cosmic Cube.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Island; Island
