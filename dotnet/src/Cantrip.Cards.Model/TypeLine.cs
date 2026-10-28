@@ -87,17 +87,17 @@ public static class CreatureType
     /// </summary>
     public static readonly IReadOnlyList<string> All =
     [
-        "Advisor", "Aetherborn", "Alien", "Ally", "Angel", "Antelope", "Ape", "Archer", "Archon", "Armadillo", "Army",
+        "Advisor", "Aetherborn", "Alien", "Ally", "Andorian", "Angel", "Antelope", "Ape", "Archer", "Archon", "Armadillo", "Army",
         "Artificer", "Assassin", "Assembly-Worker", "Astartes", "Atog", "Aurochs", "Avatar", "Azra", "Badger",
         "Balloon", "Barbarian", "Bard", "Basilisk", "Bat", "Bear", "Beast", "Beaver", "Beeble", "Beholder",
-        "Berserker", "Bird", "Bison", "Blinkmoth", "Boar", "Borg", "Bringer", "Brushwagg", "Camarid", "Camel", "Capybara",
+        "Berserker", "Bird", "Bison", "Blinkmoth", "Boar", "Borg", "Bringer", "Brushwagg", "Caitian", "Camarid", "Camel", "Capybara",
         "Caribou", "Carrier", "Cat", "Centaur", "Child", "Chimera", "Citizen", "Cleric", "Clown", "Cockatrice",
         "Construct", "Coward", "Coyote", "Crab", "Crocodile", "Custodes", "Cyberman", "Cyclops", "C’tan", "Dalek",
         "Dauthi", "Demigod", "Demon", "Deserter", "Detective", "Devil", "Dinosaur", "Djinn", "Doctor", "Dog", "Dragon",
         "Drake", "Dreadnought", "Drix", "Drone", "Druid", "Dryad", "Dwarf", "Echidna", "Efreet", "Egg", "Elder",
         "Eldrazi", "Elemental", "Elephant", "Elf", "Elk", "Employee", "Eternal", "Eye", "Faerie", "Ferret", "Fish",
         "Flagbearer", "Fox", "Fractal", "Frog", "Fungus", "Gamer", "Gamma", "Gargoyle", "Germ", "Giant", "Giraffe",
-        "Gith", "Glimmer", "Gnoll", "Gnome", "Goat", "Goblin", "God", "Golem", "Gorgon", "Graveborn", "Gremlin",
+        "Gith", "Glimmer", "Gnoll", "Gnome", "Goat", "Goblin", "God", "Golem", "Gorgon", "Gorn", "Graveborn", "Gremlin",
         "Griffin", "Guest", "Hag", "Halfling", "Hamster", "Harpy", "Hedgehog", "Hellion", "Hero", "Hippo",
         "Hippogriff", "Homarid", "Homunculus", "Horror", "Horse", "Human", "Hydra", "Hyena", "Illusion", "Imp",
         "Incarnation", "Inhuman", "Inkling", "Inquisitor", "Insect", "Jackal", "Jellyfish", "Juggernaut", "Kangaroo",
@@ -116,7 +116,7 @@ public static class CreatureType
         "Spellshaper", "Sphinx", "Spider", "Spike", "Spirit", "Splinter", "Sponge", "Spy", "Squid", "Squirrel",
         "Starfish", "Surrakar", "Survivor", "Symbiote", "Synth", "Tentacle", "Tetravite", "Thalakos", "Thopter",
         "Thrull", "Tiefling", "Time Lord", "Toy", "Treefolk", "Trilobite", "Triskelavite", "Troll", "Turtle",
-        "Tyranid", "Unicorn", "Utrom", "Vampire", "Varmint", "Vedalken", "Villain", "Volver", "Wall", "Walrus",
+        "Tyranid", "Unicorn", "Utrom", "Vampire", "Varmint", "Vedalken", "Villain", "Volver", "Vulcan", "Wall", "Walrus",
         "Warlock", "Warrior", "Weasel", "Weird", "Werewolf", "Whale", "Wizard", "Wolf", "Wolverine", "Wombat", "Worm",
         "Wraith", "Wurm", "Yeti", "Zombie", "Zubera"
     ];

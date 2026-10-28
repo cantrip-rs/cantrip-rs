@@ -48,10 +48,10 @@ public static class PromptFixtures
     /// <summary>Every creature type (CR 205.3m), the longest list of named options a card offers.</summary>
     public static readonly IReadOnlyList<string> CreatureTypes =
     [
-        "Advisor", "Aetherborn", "Alien", "Ally", "Angel", "Antelope", "Ape", "Archer", "Archon", "Armadillo",
+        "Advisor", "Aetherborn", "Alien", "Ally", "Andorian", "Angel", "Antelope", "Ape", "Archer", "Archon", "Armadillo",
         "Army", "Artificer", "Assassin", "Assembly-Worker", "Astartes", "Atog", "Aurochs", "Avatar", "Azra",
         "Badger", "Balloon", "Barbarian", "Bard", "Basilisk", "Bat", "Bear", "Beast", "Beaver", "Beeble",
-        "Beholder", "Berserker", "Bird", "Bison", "Blinkmoth", "Boar", "Borg", "Bringer", "Brushwagg", "Camarid", "Camel",
+        "Beholder", "Berserker", "Bird", "Bison", "Blinkmoth", "Boar", "Borg", "Bringer", "Brushwagg", "Caitian", "Camarid", "Camel",
         "Capybara", "Caribou", "Carrier", "Cat", "Centaur", "Child", "Chimera", "Citizen", "Cleric", "Clown",
         "Cockatrice", "Construct", "Coward", "Coyote", "Crab", "Crocodile", "Custodes", "Cyberman", "Cyclops",
         "C’tan", "Dalek", "Dauthi", "Demigod", "Demon", "Deserter", "Detective", "Devil", "Dinosaur", "Djinn",
@@ -59,7 +59,7 @@ public static class PromptFixtures
         "Efreet", "Egg", "Elder", "Eldrazi", "Elemental", "Elephant", "Elf", "Elk", "Employee", "Eternal", "Eye",
         "Faerie", "Ferret", "Fish", "Flagbearer", "Fox", "Fractal", "Frog", "Fungus", "Gamer", "Gamma", "Gargoyle",
         "Germ", "Giant", "Giraffe", "Gith", "Glimmer", "Gnoll", "Gnome", "Goat", "Goblin", "God", "Golem", "Gorgon",
-        "Graveborn", "Gremlin", "Griffin", "Guest", "Hag", "Halfling", "Hamster", "Harpy", "Hedgehog", "Hellion",
+        "Gorn", "Graveborn", "Gremlin", "Griffin", "Guest", "Hag", "Halfling", "Hamster", "Harpy", "Hedgehog", "Hellion",
         "Hero", "Hippo", "Hippogriff", "Homarid", "Homunculus", "Horror", "Horse", "Human", "Hydra", "Hyena",
         "Illusion", "Imp", "Incarnation", "Inhuman", "Inkling", "Inquisitor", "Insect", "Jackal", "Jellyfish",
         "Juggernaut", "Kangaroo", "Kavu", "Kirin", "Kithkin", "Klingon", "Knight", "Kobold", "Kor", "Kraken", "Kree", "Lamia",
@@ -78,7 +78,7 @@ public static class PromptFixtures
         "Spirit", "Splinter", "Sponge", "Spy", "Squid", "Squirrel", "Starfish", "Surrakar", "Survivor", "Symbiote",
         "Synth", "Tentacle", "Tetravite", "Thalakos", "Thopter", "Thrull", "Tiefling", "Time Lord", "Toy",
         "Treefolk", "Trilobite", "Triskelavite", "Troll", "Turtle", "Tyranid", "Unicorn", "Utrom", "Vampire",
-        "Varmint", "Vedalken", "Villain", "Volver", "Wall", "Walrus", "Warlock", "Warrior", "Weasel", "Weird",
+        "Varmint", "Vedalken", "Villain", "Volver", "Vulcan", "Wall", "Walrus", "Warlock", "Warrior", "Weasel", "Weird",
         "Werewolf", "Whale", "Wizard", "Wolf", "Wolverine", "Wombat", "Worm", "Wraith", "Wurm", "Yeti", "Zombie",
         "Zubera"
     ];
