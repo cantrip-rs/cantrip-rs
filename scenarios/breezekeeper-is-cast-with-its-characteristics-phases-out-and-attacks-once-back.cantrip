@@ -1,0 +1,42 @@
+# Breezekeeper (4/4 flying, phasing): cast with Black Lotus and Mox Sapphire, its characteristics as printed. It phases out in
+# Bot1's turn 3 untap step, so Bot1 has nothing to attack with (CR 702.26a, b), and phases in during turn 5's: it has been
+# under Bot1's control since turn 1 (phasing is no change of control, CR 702.26d), so it can attack at once and hits for 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Breezekeeper
+Plains x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Breezekeeper.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Breezekeeper.Power = 4
+? Bot1.Battlefield.Breezekeeper.Toughness = 4
+? Bot1.Battlefield.Breezekeeper.Keywords = Flying; Phasing
+? Bot1.Battlefield.Breezekeeper.Colors = Blue
+? Bot1.Battlefield.Breezekeeper.Types = Creature
+? Bot1.Battlefield.Breezekeeper.Subtypes = Djinn
+? Bot1.Battlefield.Breezekeeper.Supertypes = (absent)
+? Bot1.Battlefield.Breezekeeper.ProtectionFrom = (absent)
+[T2 Bot2.End]
+? Bot1.PhasedOut.Count = 0
+[T3 Bot1.Main1]
+? Bot1.PhasedOut = Breezekeeper
+? Bot1.Battlefield = Mox Sapphire
+[T5 Bot1.Main1]
+? Bot1.PhasedOut.Count = 0
+Bot1.Attack(Breezekeeper > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Breezekeeper.Tapped = true

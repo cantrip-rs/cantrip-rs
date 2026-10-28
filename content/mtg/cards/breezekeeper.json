@@ -1,0 +1,12 @@
+{
+  "name": "Breezekeeper",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Djinn",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying\nPhasing (This phases in or out before you untap during each of your untap steps. While it's phased out, it's treated as though it doesn't exist.)",
+  "keywords": [
+    "Flying",
+    "Phasing"
+  ]
+}
