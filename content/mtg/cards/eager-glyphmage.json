@@ -1,0 +1,8 @@
+{
+  "name": "Eager Glyphmage",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Cat Cleric",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, create a 1/1 white and black Inkling creature token with flying."
+}

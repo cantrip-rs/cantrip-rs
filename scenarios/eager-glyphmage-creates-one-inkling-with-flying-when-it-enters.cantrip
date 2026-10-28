@@ -1,0 +1,33 @@
+# Eager Glyphmage: when it enters, its controller creates a 1/1 white and black Inkling creature token with flying.
+
+[Bot1 Deck]
+Plains x4
+Eager Glyphmage
+Plains x2
+Plains x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Eager Glyphmage.Cast
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Plains; Plains; Plains; Eager Glyphmage; Inkling Token
+Bot1.Battlefield.Inkling Token.Power = 1
+Bot1.Battlefield.Inkling Token.Toughness = 1
+Bot1.Battlefield.Inkling Token.Keywords = Flying
+Bot1.Battlefield.Inkling Token.Colors = Black; White
+Bot1.Battlefield.Eager Glyphmage.Power = 3
