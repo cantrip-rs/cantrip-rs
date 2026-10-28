@@ -1,0 +1,6 @@
+{
+  "name": "Confusticate and Bebother",
+  "manaCost": "{2}{U}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Counter target spell unless its controller pays {4}.\n• Draw two cards, then discard a card."
+}

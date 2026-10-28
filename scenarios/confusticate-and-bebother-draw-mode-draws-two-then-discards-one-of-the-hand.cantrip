@@ -1,0 +1,40 @@
+# Confusticate and Bebother, second mode: "Draw two cards, then discard a card." Bot1 draws Plains and Swamp (the top two cards),
+# then discards the Plains it chooses, keeping the Swamp and its three Islands: the discard comes after both draws (the Plains
+# is in hand when chosen), so the hand is the Islands and the Swamp, net one card up on the three it held (CR 121.1, 701.9).
+# The scenario is cast on Bot1's own turn 1 off the three Moxen.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Confusticate and Bebother
+Island
+Island
+Island
+Plains
+Swamp
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Confusticate and Bebother.Cast
+Bot1.Modes(Draw two cards)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Choose(Plains)
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Swamp
+Bot1.Graveyard = Confusticate and Bebother; Plains
+Bot1.Library.Count = 20

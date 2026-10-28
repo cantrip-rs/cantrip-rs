@@ -1,0 +1,58 @@
+# Confusticate and Bebother, first mode: "Counter target spell unless its controller pays {4}" (CR 118.12). Bot2 casts Lightning
+# Bolt with its Mountain and holds four Moxen: it pays exactly {4} by tapping them (the pool is empty after) and the Bolt resolves,
+# Bot1 down to 17. Scenario confusticate-and-bebother-counter-mode-counters-a-spell-when-only-three-can-be-paid is the control.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Confusticate and Bebother
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Confusticate and Bebother.Cast
+Bot1.Modes(Counter target spell)
+Bot1.Target(Stack.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.PayCost
+? Bot2.Mana =
+
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Confusticate and Bebother
