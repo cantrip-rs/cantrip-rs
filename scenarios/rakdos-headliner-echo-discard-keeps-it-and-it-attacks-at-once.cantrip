@@ -1,0 +1,39 @@
+# Rakdos Headliner {B}{R}, 3/3 haste, "Echo--Discard a card." (CR 702.30a). Cast on turn 1 with Mox Jet's {B} and Mox Ruby's {R}, it
+# attacks at once (haste) for 3. At Bot1's turn 3 upkeep the echo asks
+# for a discard: Bot1 discards the Plains and keeps the Headliner.
+
+[Bot1 Deck]
+Rakdos Headliner
+Mox Jet
+Mox Ruby
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rakdos Headliner.Cast
+Bot1.Pass
+Bot1.Attack(Rakdos Headliner > Bot2)
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Choose(Plains)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Rakdos Headliner.Power = 3
+Bot1.Battlefield.Rakdos Headliner.Toughness = 3
+Bot1.Battlefield.Rakdos Headliner.Keywords = Haste
+Bot1.Battlefield.Rakdos Headliner.Colors = Black; Red
+Bot1.Graveyard = Plains
