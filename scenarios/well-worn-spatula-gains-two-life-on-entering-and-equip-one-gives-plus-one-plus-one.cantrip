@@ -1,0 +1,40 @@
+# Well-Worn Spatula: "When this Equipment enters, you gain 2 life." and "Equipped creature gets +1/+1. Equip {1}": the Spatula comes in
+# off a Mox (Bot1 22 life, Bot2 untouched at 20), the equip is paid with exactly {1} (a second Mox), and the Ornithopter 0/2 becomes
+# a 1/3 only while equipped (CR 702.6a, 613.4c); the Spatula is not attached to anything before the equip resolves.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Well-Worn Spatula
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Well-Worn Spatula.Cast
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Life = 22
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Well-Worn Spatula.AttachedTo = (absent)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Well-Worn Spatula.Activate(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot1.Battlefield.Well-Worn Spatula.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
