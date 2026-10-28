@@ -1,0 +1,11 @@
+{
+  "name": "Knight of Wundagore",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Cat Knight Villain",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Trample\nWhenever you put a +1/+1 counter on another creature, put a +1/+1 counter on this creature. This ability triggers only once each turn.",
+  "keywords": [
+    "Trample"
+  ]
+}
