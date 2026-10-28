@@ -1,0 +1,38 @@
+# The Astonishing Ant-Man's "Remove any number of +1/+1 counters" may remove all of them (CR 118.3, 602.2b): the one counter
+# the turn-3 draw gave it, so X of 1 makes one Insect token and leaves the Ant-Man a 1/1 with no counter, tapped.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+The Astonishing Ant-Man
+Mox Ruby
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Astonishing Ant-Man.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.The Astonishing Ant-Man.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.The Astonishing Ant-Man.Activate(X: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Insect Token; Mox Emerald; Mox Pearl; Mox Ruby; Mox Sapphire; The Astonishing Ant-Man
+Bot1.Battlefield.The Astonishing Ant-Man.Power = 1
+Bot1.Battlefield.The Astonishing Ant-Man.Tapped = true
