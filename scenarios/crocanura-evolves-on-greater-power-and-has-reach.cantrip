@@ -1,0 +1,37 @@
+# Evolve (CR 702.100a): Crocanura is a 1/3 with reach. Isamaru, Hound of Konda (2/2) has greater power only, so evolve triggers
+# and the Crocanura is 2/4. Black Lotus (three green) pays for it, Mox Pearl for Isamaru.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Crocanura
+Isamaru, Hound of Konda
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Crocanura.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Crocanura.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Crocanura.Power = 2
+Bot1.Battlefield.Crocanura.Toughness = 4
+Bot1.Battlefield.Crocanura.Keywords = Reach
