@@ -1,0 +1,46 @@
+# Spellbook Seeker is a 3/3 flier that enters prepared; on turn 3 Bot1 casts its Careful Study copy from exile for {U}: it
+# draws two cards (Lightning Bolt and Ornithopter) and then discards two, the Bolt and a Plains (CR 608.2c: the discard is
+# not part of the draw). The Seeker is unprepared afterwards.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Spellbook Seeker
+Plains
+Plains
+Lightning Bolt
+Ornithopter
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Spellbook Seeker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spellbook Seeker.Prepared = true
+? Bot1.Battlefield.Spellbook Seeker.Keywords = Flying
+? Bot1.Battlefield.Spellbook Seeker.Power = 3
+? Exile = Careful Study
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Careful Study.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt; Plains)
+
+[Expect]
+Bot1.Battlefield.Spellbook Seeker.Prepared = (absent)
+Exile =
+Bot1.Graveyard = Plains; Lightning Bolt

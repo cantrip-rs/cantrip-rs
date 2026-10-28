@@ -1,0 +1,17 @@
+{
+  "name": "Spellbook Seeker",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Bird Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "keywords": [
+    "Flying"
+  ],
+  "prepare": {
+    "name": "Careful Study",
+    "manaCost": "{U}",
+    "type": "Sorcery",
+    "oracleText": "Draw two cards, then discard two cards."
+  }
+}
