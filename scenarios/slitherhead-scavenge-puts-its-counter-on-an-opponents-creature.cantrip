@@ -1,0 +1,33 @@
+# Scavenge's target is any creature (CR 702.97a), not only one its controller controls: Bot2's Memnite, cast in Bot2's turn,
+# is the target of Bot1's Slitherhead on Bot1's next turn and ends up a 2/2 under Bot2's control, with the counter on it.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Slitherhead
+Island x17
+
+[Bot2 Deck]
+Memnite
+Island x23
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Slitherhead; Island)
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Graveyard.Slitherhead.Activate(Ability: Scavenge; Bot2.Battlefield.Memnite)
+Bot1.Pass
+
+[Expect]
+Exile = Slitherhead
+Bot1.Battlefield = Mox Ruby
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Memnite.Power = 2
+Bot2.Battlefield.Memnite.Toughness = 2

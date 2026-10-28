@@ -1,0 +1,39 @@
+# Scavenge functions only while the card is in a graveyard (CR 702.97a): a Slitherhead in hand and then one on the battlefield
+# (cast with a Mox Jet's {B}) offer no scavenge, though it costs nothing; the second copy, discarded to Faithless Looting, does,
+# putting one counter on Memnite and leaving the Slitherhead on the battlefield alone.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Faithless Looting
+Slitherhead x2
+Memnite
+Island x17
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+! Bot1.Hand.Slitherhead.Activate(Ability: Scavenge)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Slitherhead.Cast
+Bot1.Pass
+! Bot1.Battlefield.Slitherhead.Activate(Ability: Scavenge)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Slitherhead; Island)
+Bot1.Graveyard.Slitherhead.Activate(Ability: Scavenge; Bot1.Battlefield.Memnite)
+Bot1.Pass
+
+[Expect]
+Exile = Slitherhead
+Bot1.Graveyard = Faithless Looting; Island
+Bot1.Battlefield.Slitherhead.Power = 1
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1

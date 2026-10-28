@@ -1,0 +1,39 @@
+# Exiling the card is part of scavenge's cost (CR 702.97a, 118.3): Slitherhead is gone from the graveyard once the ability is
+# on the stack, so a Lightning Bolt cast in response that kills its target, Memnite, cannot bring it back. The ability then
+# resolves with no legal target (CR 608.2b) and puts no counters on anything.
+
+[Bot1 Deck]
+Mox Ruby x2
+Faithless Looting
+Slitherhead
+Memnite
+Lightning Bolt
+Island
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Slitherhead; Island)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Graveyard.Slitherhead.Activate(Ability: Scavenge; Bot1.Battlefield.Memnite)
+? Exile = Slitherhead
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Slitherhead
+Bot1.Battlefield = Mox Ruby; Mox Ruby
+Bot1.Graveyard = Memnite; Lightning Bolt; Faithless Looting; Island
