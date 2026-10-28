@@ -1,0 +1,45 @@
+# Giant-Sized Flying Ant has flash (CR 702.8): Bot1 casts it in Bot2's upkeep, {3}{U} paid exactly by Black Lotus's
+# {U}{U}{U} and Mox Sapphire's {U}. Its enters trigger is modal (CR 700.2a): Bot1 chooses "Tap target nonland permanent"
+# and the target is Bot2's Mox Pearl, not Bot2's Island (a land: the refusal, with the Mox Pearl the positive control).
+# As it resolves the Mox Pearl is tapped (CR 701.26a), and stays tapped through the rest of the turn.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Giant-Sized Flying Ant
+Island x4
+Island x14
+
+[Bot2 Deck]
+Island
+Mox Pearl
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Pearl.Cast
+[T4 Bot2.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Giant-Sized Flying Ant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Mox Pearl.Tapped = true
+Bot2.Battlefield.Island.Tapped = false
+Bot1.Battlefield.Giant-Sized Flying Ant.Power = 3
+Bot1.Battlefield.Giant-Sized Flying Ant.Keywords = Flash; Flying

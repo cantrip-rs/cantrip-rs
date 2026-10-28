@@ -1,0 +1,56 @@
+# Frozen in Ice: "Enchanted creature ... can't become untapped" (CR 101.2, 701.26b) holds against an effect, not only the
+# untap step. Bot1's Ornithopter is frozen on turn 1 (Black Lotus's {U}{U}{U}); on turn 3 Giant-Sized Flying Ant's
+# "Untap target nonland permanent" is aimed at it and does nothing: it stays tapped (the other scenario of the Ant shows the
+# same ability untapping a Mox that is not frozen).
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Frozen in Ice
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Giant-Sized Flying Ant
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Frozen in Ice.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Giant-Sized Flying Ant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(2)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Stack.Count = 0

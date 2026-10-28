@@ -1,0 +1,36 @@
+# Giant-Sized Flying Ant's second mode, "Untap target nonland permanent" (CR 701.26b): Bot1 pays {3}{U} with Black Lotus and
+# Mox Sapphire, then untaps the tapped Mox Sapphire. Its tapped Island is a land and no legal target (the refusal, beside
+# the Mox Sapphire).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Giant-Sized Flying Ant
+Island x3
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Giant-Sized Flying Ant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(2)
+! Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Battlefield.Island.Tapped = true

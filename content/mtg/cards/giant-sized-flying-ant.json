@@ -1,0 +1,12 @@
+{
+  "name": "Giant-Sized Flying Ant",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Insect",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flash\nFlying\nWhen this creature enters, choose one —\n• Tap target nonland permanent.\n• Untap target nonland permanent.",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}
