@@ -1,0 +1,11 @@
+{
+  "name": "Citanul Centaurs",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Centaur",
+  "power": 6,
+  "toughness": 3,
+  "oracleText": "Shroud (This creature can't be the target of spells or abilities.)\nEcho {3}{G} (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)",
+  "keywords": [
+    "Shroud"
+  ]
+}
