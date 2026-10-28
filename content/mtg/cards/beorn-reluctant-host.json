@@ -1,0 +1,17 @@
+{
+  "name": "Beorn, Reluctant Host",
+  "manaCost": "{4}{G}",
+  "type": "Legendary Creature — Human Bear Shapeshifter",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Trample",
+  "keywords": [
+    "Trample"
+  ],
+  "adventure": {
+    "name": "Till and Tend",
+    "manaCost": "{1}{G}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "You may play an additional land this turn. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

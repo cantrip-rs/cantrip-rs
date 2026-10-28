@@ -1,0 +1,56 @@
+# Beorn, Reluctant Host // Till and Tend (CR 715): "You may play an additional land this turn." On turn 1 Bot1 plays a Forest, casts
+# Till and Tend for {1}{G} from its two Moxen, then plays a Plains as its second land; a third land is refused (exactly one
+# additional land, CR 305.2). The Adventure card goes to exile, not the graveyard. On turn 3 the effect has ended (until end of turn):
+# one Plains is played and the next refused, and Beorn, a 5/5 with trample, is cast from exile for {4}{G} (the pool empty after).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Beorn, Reluctant Host
+Forest
+Plains
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Beorn, Reluctant Host.Cast(Ability: Adventure)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Exile = Beorn, Reluctant Host
+? Bot1.Graveyard.Count = 0
+Bot1.Hand.Plains.Play
+? Bot1.LandsPlayed = 2
+! Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+! Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Exile.Beorn, Reluctant Host.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Beorn, Reluctant Host.Power = 5
+Bot1.Battlefield.Beorn, Reluctant Host.Toughness = 5
+Bot1.Battlefield.Beorn, Reluctant Host.Keywords = Trample
+Bot1.Battlefield.Beorn, Reluctant Host.Subtypes = Bear; Human; Shapeshifter
+Bot1.Battlefield = Beorn, Reluctant Host; Forest; Mox Emerald; Mox Pearl; Plains; Plains
