@@ -1,0 +1,92 @@
+# Part in Friendship: "Whenever a nontoken creature you control dies, reveal cards from the top of your library until you reveal a
+# creature card. If its mana value is less than or equal to the number of lands you control, put it onto the battlefield. Otherwise,
+# put it into your hand. Put the rest on the bottom of your library in a random order. This ability triggers only once each turn."
+# Turn 2: Bot2's two Lightning Bolts kill both of Bot1's Ornithopters, but it triggers once: Bot1 has one land, the library's top
+# is a Lightning Bolt (put on the bottom) and then an Alpine Grizzly (mana value 3 > 1 land): into the hand, and the card
+# under it stays. Turn 4, with two lands, a third Bolt kills the Alpine Grizzly: it triggers again (a new turn) and the Grizzly Bears
+# (mana value 2 = 2 lands) on top enters the battlefield.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Part in Friendship
+Ornithopter
+Ornithopter
+Plains
+Lightning Bolt
+Alpine Grizzly
+Island
+Grizzly Bears
+Island
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Mountain
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Part in Friendship.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter = (absent)
+? Bot1.Hand = Alpine Grizzly
+? Bot1.Library.Count = 14
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Alpine Grizzly)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Pearl; Part in Friendship; Plains; Island; Grizzly Bears
+Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Library.Count = 12

@@ -1,0 +1,89 @@
+# Part in Friendship: "Whenever a nontoken creature you control dies, ..." Turn 2: Bot2's own Ornithopter dies to its own Bolt: not
+# a creature Bot1 controls, nothing. Turn 3: Lingering Souls makes two Spirit tokens. Turn 4: Bot2's Bolt kills a Spirit token:
+# a token is no nontoken creature, nothing (the library keeps its count). Then a Bolt kills Bot1's Ornithopter and it triggers
+# (the earlier token's death did not use up "once each turn"): the library has no creature card, so all of it is revealed and
+# put back on the bottom in a random order - 15 cards before and after, all of them revealed (and none before).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Part in Friendship
+Lingering Souls
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Mox Ruby
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Part in Friendship.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ornithopter = (absent)
+? Bot1.Library.Count = 16
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spirit Token#2.Power = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Spirit Token#1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Spirit Token#2 = (absent)
+? Bot1.Library.Count = 15
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Battlefield.Spirit Token.Power = 1
+Bot1.Library.Count = 15
+Bot1.Revealed.Count = 15
