@@ -1,0 +1,34 @@
+# Dig Site Inventory: a +1/+1 counter on Bot1's Ornithopter and vigilance until end of turn; then its flashback {W} casts it again from
+# the graveyard for a second counter, and it is exiled instead of going back to the graveyard.
+
+[Bot1 Deck]
+Plains x2
+Ornithopter
+Dig Site Inventory
+Plains x3
+Plains x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Dig Site Inventory.Cast(Bot1.Battlefield.Ornithopter)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+? Bot1.Graveyard = Dig Site Inventory
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Graveyard.Dig Site Inventory.Cast(Bot1.Battlefield.Ornithopter; Ability: Flashback)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+Exile = Dig Site Inventory
+Bot1.Graveyard.Count = 0
