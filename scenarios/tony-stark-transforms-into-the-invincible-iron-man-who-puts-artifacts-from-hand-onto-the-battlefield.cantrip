@@ -1,0 +1,65 @@
+# Tony Stark: "{4}{U}{R}: Transform Tony Stark. Activate only as a sorcery." In turn 3 Bot1 pays it exactly with Black Lotus's
+# {U}{U}{U}, Mox Ruby, Mox Jet and Mox Pearl (the pool is empty) and he becomes The Invincible Iron Man, a legendary 5/5 artifact
+# creature with flying and haste. "At the beginning of combat on your turn, you may put an artifact card from your hand onto the
+# battlefield. If it's an Equipment, attach it to The Invincible Iron Man": in turn 3 Lavaspur Boots (an Equipment) come in
+# attached (a 6/5 with ward), in turn 5 Mox Emerald (no Equipment) comes in and attaches to nothing; in turn 7 Bot1 chooses
+# nothing (it may), leaving an Ornithopter in hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Tony Stark
+Mox Ruby
+Mox Pearl
+Black Lotus
+Lavaspur Boots
+Mox Emerald
+Ornithopter
+Island x4
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tony Stark.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Tony Stark.Activate(Ability: Transform)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.The Invincible Iron Man.Transformed = true
+? Bot1.Battlefield.The Invincible Iron Man.Power = 5
+? Bot1.Battlefield.The Invincible Iron Man.Types = Artifact; Creature
+? Bot1.Battlefield.The Invincible Iron Man.Keywords = Flying; Haste
+[T3 Bot1.BeginCombat]
+Bot1.Choose(Lavaspur Boots)
+? Bot1.Battlefield.Lavaspur Boots.AttachedTo = The Invincible Iron Man
+? Bot1.Battlefield.The Invincible Iron Man.Power = 6
+[T5 Bot1.BeginCombat]
+Bot1.Choose(Mox Emerald)
+? Bot1.Battlefield.Mox Emerald.Types = Artifact
+? Bot1.Battlefield.Mox Emerald.AttachedTo = (absent)
+[T7 Bot1.BeginCombat]
+Bot1.Choose()
+
+[Expect]
+Bot1.Battlefield.The Invincible Iron Man.Power = 6
+Bot1.Hand.Count = 2

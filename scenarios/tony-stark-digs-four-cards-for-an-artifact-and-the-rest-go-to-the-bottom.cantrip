@@ -1,0 +1,56 @@
+# Tony Stark: "{1}, {T}: Look at the top four cards of your library. You may reveal an artifact card from among them and put it
+# into your hand. Put the rest on the bottom of your library in a random order." Cast in turn 1 ({1}{U}, Mox Sapphire and Mox
+# Jet). In turn 3 the top four are Island, Mox Pearl, Mox Ruby, Island: Bot1 reveals the Mox Pearl and takes it (two artifact cards are refused: it is one); the other
+# three go to the bottom (library 12 after the draw step, 11 now). In turn 5 the top four are Island, Mox Emerald, Island, Island: Bot1 takes nothing (it
+# is a "may", so none is allowed with an artifact card there) and they all go to the bottom (library 10 after the draw step and unchanged).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Tony Stark
+Island x4
+Island
+Island
+Mox Pearl
+Mox Ruby
+Island
+Island
+Island
+Mox Emerald
+Island
+Island
+Island x3
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tony Stark.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Tony Stark.Activate(Ability: Look at the top four)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Mox Pearl; Mox Ruby | Island; Island)
+Bot1.Arrange(Mox Pearl | Island; Mox Ruby; Island)
+? Bot1.Revealed = Mox Pearl
+? Bot1.Hand.Count = 6
+? Bot1.Library.Count = 11
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Tony Stark.Activate(Ability: Look at the top four)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island; Mox Emerald; Island; Island)
+
+[Expect]
+Bot1.Library.Count = 10
+Bot1.Hand.Count = 7
+Bot1.Battlefield.Tony Stark.Tapped = true
