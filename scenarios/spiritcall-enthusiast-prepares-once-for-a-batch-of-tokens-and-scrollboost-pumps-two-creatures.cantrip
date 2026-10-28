@@ -1,0 +1,48 @@
+# Spiritcall Enthusiast // Scrollboost (CR 722). "Whenever one or more tokens you control enter, this creature becomes
+# prepared": Lingering Souls' two Spirits enter together, so there is one trigger (CR 603.2c), not two. On turn five
+# Scrollboost - "One or two target creatures each get +2/+2 until end of turn" - makes both Spirits 3/3, until turn seven.
+
+[Bot1 Deck]
+Spiritcall Enthusiast
+Lingering Souls
+Mox Pearl x3
+Island x2
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Spiritcall Enthusiast.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Spiritcall Enthusiast.Prepared = (absent)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Spiritcall Enthusiast.Prepared = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Exile.Scrollboost.Cast
+Bot1.Target(Spirit Token#1; Spirit Token#2)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Spirit Token#1.Power = 3
+? Bot1.Battlefield.Spirit Token#2.Toughness = 3
+? Bot1.Battlefield.Spiritcall Enthusiast.Power = 3
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Spirit Token#1.Power = 1
+
+[Expect]
+Bot1.Battlefield.Spiritcall Enthusiast.Prepared = (absent)
+Exile.Count = 0

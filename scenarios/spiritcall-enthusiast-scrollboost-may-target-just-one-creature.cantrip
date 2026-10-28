@@ -1,0 +1,40 @@
+# Spiritcall Enthusiast // Scrollboost: "one or two" targets, so one is enough. Scrollboost targets only the Enthusiast
+# itself, a 5/5 until end of turn; the Spirits keep their 1 power. Three targets, and none, are refused.
+
+[Bot1 Deck]
+Spiritcall Enthusiast
+Lingering Souls
+Mox Pearl x3
+Island x2
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Spiritcall Enthusiast.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Lingering Souls.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Exile.Scrollboost.Cast
+! Bot1.Target(Spiritcall Enthusiast; Spirit Token#1; Spirit Token#2)
+! Bot1.Target(Count: 0)
+Bot1.Target(Spiritcall Enthusiast)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Spiritcall Enthusiast.Power = 5
+? Bot1.Battlefield.Spiritcall Enthusiast.Toughness = 5
+
+[Expect]
+Bot1.Battlefield.Spirit Token#1.Power = 1
+Bot1.Battlefield.Spirit Token#2.Power = 1

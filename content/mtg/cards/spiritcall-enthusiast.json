@@ -1,0 +1,15 @@
+{
+  "name": "Spiritcall Enthusiast",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Cat Cleric",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever one or more tokens you control enter, this creature becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "keywords": [],
+  "prepare": {
+    "name": "Scrollboost",
+    "manaCost": "{1}{W}",
+    "type": "Sorcery",
+    "oracleText": "One or two target creatures each get +2/+2 until end of turn."
+  }
+}

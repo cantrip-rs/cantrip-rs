@@ -1,0 +1,43 @@
+# Spiritcall Enthusiast // Scrollboost: with two targets and one illegal as it resolves, the spell does what it can to
+# the other (CR 608.2b). Bot2 bolts one Spirit in response; the other becomes a 3/3.
+
+[Bot1 Deck]
+Spiritcall Enthusiast
+Lingering Souls
+Mox Pearl x3
+Island x2
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Spiritcall Enthusiast.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Lingering Souls.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Exile.Scrollboost.Cast
+Bot1.Target(Spirit Token#1; Spirit Token#2)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Spirit Token#1)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt; Island
+Bot1.Battlefield.Spirit Token.Power = 3
+Bot1.Battlefield.Spirit Token.Toughness = 3

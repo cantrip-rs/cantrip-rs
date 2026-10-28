@@ -1,0 +1,38 @@
+# Spiritcall Enthusiast // Scrollboost: only tokens "you control" count (CR 603.2). Bot1's Ornithopter is a card, not a
+# token, and Bot2's Lingering Souls makes Spirits under Bot2's control: the Enthusiast stays unprepared.
+
+[Bot1 Deck]
+Spiritcall Enthusiast
+Mox Pearl x3
+Ornithopter
+Island x2
+Island x12
+
+[Bot2 Deck]
+Mox Pearl x3
+Lingering Souls
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Spiritcall Enthusiast.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Hand.Lingering Souls.Cast
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Spirit Token#1.Power = 1
+? Bot2.Battlefield.Spirit Token#2.Power = 1
+
+[Expect]
+Bot1.Battlefield.Spiritcall Enthusiast.Prepared = (absent)
