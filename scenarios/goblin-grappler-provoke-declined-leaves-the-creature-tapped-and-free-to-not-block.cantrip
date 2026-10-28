@@ -1,0 +1,56 @@
+# Provoke (CR 702.39a) is "you may": the same position as goblin-grappler-provoke-untaps-the-creature-and-it-must-block-the-provoker, but Bot1
+# declines. The Barbary Apes stay tapped and nothing is required of anyone: Bot2 blocks with nothing, and the Grappler and the Bear Cub deal
+# 3 damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Goblin Grappler
+Bear Cub
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Barbary Apes
+Swamp
+Swamp
+Swamp
+Swamp
+Cylian Elf
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Grappler.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bear Cub.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Barbary Apes.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Cylian Elf.Cast
+Bot2.Attack(Barbary Apes > Bot1)
+[T5 Bot1.Main1]
+Bot1.Attack(Goblin Grappler > Bot2; Bear Cub > Bot2)
+Bot1.Target(Bot2.Battlefield.Barbary Apes)
+Bot1.Decline
+Bot2.Block(Count: 0)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Barbary Apes.Tapped = true
+Bot2.Life = 17
+Bot1.Graveyard.Count = 0

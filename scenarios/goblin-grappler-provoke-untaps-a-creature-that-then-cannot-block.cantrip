@@ -1,0 +1,62 @@
+# Provoke (CR 702.39a) untaps the creature, but "block this creature if able" requires nothing of a creature that can't block (CR 509.1c):
+# on turn 5 Bot1 casts Headliner Scarlett, whose enters ability stops Bot2's creatures blocking this turn, then attacks with Scarlett (haste)
+# and Goblin Grappler and provokes Bot2's tapped Barbary Apes. They untap, but can't block, so Bot2 is not asked to block at all and takes 1 + 3.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Goblin Grappler
+Headliner Scarlett
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Barbary Apes
+Swamp
+Swamp
+Swamp
+Swamp
+Cylian Elf
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Grappler.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Barbary Apes.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Cylian Elf.Cast
+Bot2.Attack(Barbary Apes > Bot1)
+[T5 Bot1.Main1]
+Bot1.Hand.Headliner Scarlett.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot1.Attack(Goblin Grappler > Bot2; Headliner Scarlett > Bot2)
+Bot1.Target(Bot2.Battlefield.Barbary Apes)
+Bot1.Accept
+? Bot2.Battlefield.Barbary Apes.Tapped = false
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Battlefield.Barbary Apes.Tapped = false
+Bot1.Battlefield.Goblin Grappler.Damage = 0
