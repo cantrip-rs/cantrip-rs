@@ -1,0 +1,11 @@
+{
+  "name": "S.H.I.E.L.D. Helicarrier",
+  "manaCost": "{4}",
+  "type": "Artifact — Vehicle",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Flying\nWhen this Vehicle enters, create two 1/1 white Soldier creature tokens.\nCrew 6 (Tap any number of creatures you control with total power 6 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "keywords": [
+    "Flying"
+  ]
+}

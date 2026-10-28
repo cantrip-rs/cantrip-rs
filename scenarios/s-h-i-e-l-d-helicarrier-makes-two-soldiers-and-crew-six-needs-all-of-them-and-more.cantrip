@@ -1,0 +1,37 @@
+# S.H.I.E.L.D. Helicarrier ({4}, Crew 6, flying 4/5): "When this Vehicle enters, create two 1/1 white Soldier creature tokens"
+# (together). Crew 6 needs total power 6 or more (CR 702.122a): the two Soldiers (1 + 1) are far short, so crewing is
+# never offered; the Soldiers are exactly the two tokens and nothing else.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+S.H.I.E.L.D. Helicarrier
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.S.H.I.E.L.D. Helicarrier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+? Bot1.Battlefield.Soldier Token#1.Power = 1
+? Bot1.Battlefield.Soldier Token#2.Toughness = 1
+! Bot1.Battlefield.S.H.I.E.L.D. Helicarrier.Activate(Ability: Crew 6)
+
+[Expect]
+Bot1.Battlefield.S.H.I.E.L.D. Helicarrier.Types = Artifact
