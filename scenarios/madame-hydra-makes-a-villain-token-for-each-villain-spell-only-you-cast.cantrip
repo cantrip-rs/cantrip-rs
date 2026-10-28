@@ -1,0 +1,68 @@
+# Madame Hydra: "Whenever you cast a Villain spell, create a 2/1 black Villain creature token with menace." Bot2's Norman
+# Osborn (a Villain) triggers nothing, and neither does Bot1's own Ornithopter (not a Villain); Bot1's Norman Osborn does.
+# Hydra casting herself triggers nothing: she was a spell, not on the battlefield, when it was cast (CR 603.2).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Madame Hydra
+Ornithopter
+Norman Osborn
+Island x13
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Norman Osborn
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Madame Hydra.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Norman Osborn.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 5
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Norman Osborn.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 8
+Bot1.Battlefield.Villain Token.Power = 2
+Bot1.Battlefield.Villain Token.Toughness = 1
+Bot1.Battlefield.Villain Token.Keywords = Menace
+Bot1.Battlefield.Villain Token.Colors = Black
