@@ -1,0 +1,12 @@
+{
+  "name": "Farbog Revenant",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Spirit",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Skulk (This creature can't be blocked by creatures with greater power.)\nLifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Skulk",
+    "Lifelink"
+  ]
+}
