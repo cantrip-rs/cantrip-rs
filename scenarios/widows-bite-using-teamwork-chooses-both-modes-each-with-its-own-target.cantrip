@@ -1,0 +1,70 @@
+# Widow's Bite: "Teamwork 3 ... Choose one. If this spell was cast using teamwork, choose both instead." Bot1 pays teamwork by tapping
+# its Centaur Courser (power 3, exactly the total needed; Savannah Lions with power 2 cannot pay it alone), so it chooses both modes,
+# each with its own target (CR 700.2c): deathtouch for Bot1's own Savannah Lions, -2/-2 for its Centaur Courser, which is left a
+# 1/1. Paid for exactly {1}{B}.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Centaur Courser
+Savannah Lions
+Widow's Bite
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Widow's Bite.Cast
+Bot1.Modes(Teamwork 3)
+! Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Savannah Lions)
+Bot1.Target(Bot1.Battlefield.Centaur Courser)
+! Bot1.Choose(Savannah Lions)
+Bot1.Choose(Centaur Courser)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Centaur Courser.Power = 1
+Bot1.Battlefield.Centaur Courser.Toughness = 1
+Bot1.Battlefield.Centaur Courser.Tapped = true
+Bot1.Battlefield.Savannah Lions.Tapped = false
+Bot1.Battlefield.Savannah Lions.Keywords = Deathtouch
+Bot1.Battlefield.Savannah Lions.Power = 2
+Bot1.Graveyard = Widow's Bite

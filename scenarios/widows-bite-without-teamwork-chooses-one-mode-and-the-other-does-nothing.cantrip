@@ -1,0 +1,52 @@
+# Widow's Bite cast without teamwork chooses one mode (CR 700.2): the -2/-2 here, which kills Bot2's Grizzly Bears (toughness 2,
+# exactly lethal), and nothing is tapped. The deathtouch mode is not also chosen: Bot1's own Savannah Lions gains nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Savannah Lions
+Widow's Bite
+Swamp x20
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Widow's Bite.Cast
+Bot1.Modes(Cast without teamwork)
+Bot1.Modes(Target creature gets -2/-2 until end of turn.)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Savannah Lions.Tapped = false
+Bot1.Battlefield.Savannah Lions.Toughness = 1
+Bot1.Graveyard = Widow's Bite

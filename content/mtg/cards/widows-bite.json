@@ -1,0 +1,6 @@
+{
+  "name": "Widow's Bite",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Teamwork 3 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 3 or more.)\nChoose one. If this spell was cast using teamwork, choose both instead.\n• Target creature gains deathtouch until end of turn.\n• Target creature gets -2/-2 until end of turn."
+}
