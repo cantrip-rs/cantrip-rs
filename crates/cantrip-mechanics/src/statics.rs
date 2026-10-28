@@ -103,6 +103,13 @@ pub fn itself_with_threshold(q: &dyn LayerQuery, source: ObjectId, affected: Obj
     source == affected && state.zone(Zone::graveyard(state.obj(source).controller)).len() >= 7
 }
 
+/// "... attacks each combat if able" (CR 508.1d, layer 6) as a static ability's `StaticDef::apply`: one more requirement to attack
+/// (`Chars::must_attack`). Akoum Firebird, Alpine Guide, Anje's Ravager, Dragon's Rage Channeler (with delirium) and The Void, the
+/// token The Sentry, Golden Guardian gives, print it.
+pub fn attacks_each_combat_if_able(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.must_attack += 1;
+}
+
 /// "... has haste" (CR 702.10, layer 6) as a static ability's `StaticDef::apply`. Anger, Samut, Lavaspur Boots, Skateboard
 /// and dash's haste print it.
 pub fn have_haste(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
