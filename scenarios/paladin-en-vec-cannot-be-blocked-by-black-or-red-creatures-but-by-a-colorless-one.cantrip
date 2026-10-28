@@ -1,0 +1,64 @@
+# Paladin en-Vec, protection from black and from red (CR 702.16f): it can't be blocked by creatures that are black or red. Attacking
+# on turn 3 into Bot2's black Dregscape Zombie, red Dragon Moose and colorless Ornithopter, a block by the Zombie and a block by
+# the Moose are each refused, and the Ornithopter (the control) blocks and is killed by the first striker, so no damage is dealt
+# to Bot2, who keeps 20 life.
+
+[Bot1 Deck]
+Black Lotus
+Paladin en-Vec
+Plains x22
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Ruby
+Dregscape Zombie
+Dragon Moose
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Paladin en-Vec.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Dregscape Zombie.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Dragon Moose.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Paladin en-Vec > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Dregscape Zombie > Paladin en-Vec)
+! Bot2.Block(Dragon Moose > Paladin en-Vec)
+Bot2.Block(Ornithopter > Paladin en-Vec)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter; Black Lotus
+Bot1.Battlefield.Paladin en-Vec.Damage = 0

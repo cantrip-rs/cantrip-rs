@@ -1,0 +1,84 @@
+# Paladin en-Vec, protection from black and from red (CR 702.16e): all damage that would be dealt to it by a black source and by a red
+# source is prevented, each by its own ability. Blocking one attacker at a time, the first strike Paladin (2/2) takes no damage
+# from Bot2's red Dragon Moose (3/3) on turn 4, nor from its black Dead Reveler (2/3) on turn 6 (each survives the Paladin's
+# first strike), but a green Centaur Courser (3/3) on turn 8, the control, deals 3 and kills it.
+
+[Bot1 Deck]
+Black Lotus
+Paladin en-Vec
+Plains x22
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Dead Reveler
+Dragon Moose
+Centaur Courser
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Paladin en-Vec.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Dead Reveler.Cast
+Bot2.Decline
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dragon Moose.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Attack(Dragon Moose > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Block(Paladin en-Vec > Dragon Moose)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Paladin en-Vec.Damage = 0
+? Bot2.Battlefield.Dragon Moose.Damage = 2
+[T6 Bot2.Main1]
+Bot2.Attack(Dead Reveler > Bot1)
+[T6 Bot2.DeclareBlockers]
+Bot1.Block(Paladin en-Vec > Dead Reveler)
+[T6 Bot2.Main2]
+? Bot1.Battlefield.Paladin en-Vec.Damage = 0
+? Bot2.Battlefield.Dead Reveler.Damage = 2
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+Bot1.Pass
+[T8 Bot2.Main1]
+Bot2.Attack(Centaur Courser > Bot1)
+[T8 Bot2.DeclareBlockers]
+Bot1.Block(Paladin en-Vec > Centaur Courser)
+[T8 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Paladin en-Vec; Plains; Black Lotus
+Bot1.Life = 20
