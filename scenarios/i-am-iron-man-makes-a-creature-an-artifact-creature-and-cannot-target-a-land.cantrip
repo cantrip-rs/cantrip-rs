@@ -1,0 +1,40 @@
+# I Am Iron Man at a creature: Bot2's Grizzly Bears (a 2/2 Bear) become a 4/4 artifact creature with flying until end of turn
+# and stay a Bear (CR 205.1b). A land is not "artifact or creature", so Bot1's Island is not a legal target (a refusal), and
+# Black Lotus's {U}{U}{U} pay {2}{U} on turn 3.
+
+[Bot1 Deck]
+Black Lotus
+I Am Iron Man
+Island x5
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Hand.I Am Iron Man.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.I Am Iron Man.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Types = Creature; Artifact
+Bot2.Battlefield.Grizzly Bears.Subtypes = Bear
+Bot2.Battlefield.Grizzly Bears.Power = 4
+Bot2.Battlefield.Grizzly Bears.Toughness = 4
+Bot2.Battlefield.Grizzly Bears.Keywords = Flying
