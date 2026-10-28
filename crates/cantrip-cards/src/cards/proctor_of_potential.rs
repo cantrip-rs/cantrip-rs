@@ -14,13 +14,6 @@ fn scried_or_surveilled_this_turn(q: &dyn Query, asker: &Asker) -> bool {
     cantrip_mechanics::history::scried_or_surveilled_this_turn(q, asker.controller)
 }
 
-/// "{W}{U}: Return this card from your graveyard to the battlefield with a finality counter on it" (CR 122.6, 614.1c):
-/// it enters with the counter on it, so it is exiled instead of dying (CR 122.1h).
-fn return_with_finality(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.put_onto_battlefield_with_counters(item.object, item.controller, false, &[(CounterKind::Finality, 1)])?;
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
@@ -30,7 +23,7 @@ pub static CARD: CardDef = CardDef {
         ),
         ability(
             cost("{W}{U}"),
-            return_with_finality,
+            cantrip_mechanics::effects::return_this_card_with_finality,
             "{W}{U}: Return this card from your graveyard to the battlefield with a finality counter on it. Activate only if you've scried or surveilled this turn.",
         )
         .from(ZoneKind::Graveyard)

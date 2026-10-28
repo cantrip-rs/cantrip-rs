@@ -8,20 +8,12 @@ fn opponent_was_dealt_noncombat_damage_this_turn(q: &dyn Query, asker: &Asker) -
     cantrip_mechanics::history::opponent_dealt_noncombat_damage_this_turn(q.history(), q.state(), asker.controller)
 }
 
-/// "{B}{R}: Return this card from your graveyard to the battlefield with a finality counter on it" (CR 113.6k, 400.7): the
-/// card returns as a new object under its owner's control, untapped, with the counter (CR 614.1c).
-fn return_with_finality(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let owner = g.obj(item.object).owner;
-    g.put_onto_battlefield_with_counters(item.object, owner, false, &[(CounterKind::Finality, 1)])?;
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         PROWESS,
         ability(
             cost("{B}{R}"),
-            return_with_finality,
+            cantrip_mechanics::effects::return_this_card_with_finality,
             "{B}{R}: Return this card from your graveyard to the battlefield with a finality counter on it. Activate only if an opponent has been dealt noncombat damage this turn.",
         )
         .from(ZoneKind::Graveyard)

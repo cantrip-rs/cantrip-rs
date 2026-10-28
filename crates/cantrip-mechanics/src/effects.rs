@@ -810,6 +810,21 @@ pub fn return_this_card_to_battlefield(g: &mut dyn Game, item: &StackItem) -> Re
     Ok(())
 }
 
+/// "Return this card from your graveyard to the battlefield with a finality counter on it" (CR 400.7, 122.6, 614.1c): the
+/// ability's own source, put onto the battlefield untapped under its controller with the counter already on it, so it is
+/// exiled instead of dying (CR 122.1h). The new object, for an ability that goes on to do something with it. Winter Soldier,
+/// Icy Assassin prints it.
+pub fn put_this_card_onto_battlefield_with_finality(g: &mut dyn Game, item: &StackItem) -> Result<ObjectId, Suspend> {
+    g.put_onto_battlefield_with_counters(item.object, item.controller, false, &[(CounterKind::Finality, 1)])
+}
+
+/// "Return this card from your graveyard to the battlefield with a finality counter on it" and nothing more. Grim Repriser
+/// and Proctor of Potential print it.
+pub fn return_this_card_with_finality(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    put_this_card_onto_battlefield_with_finality(g, item)?;
+    Ok(())
+}
+
 /// "Return this [permanent or card] to its owner's hand" (CR 400.3): the ability's own source, from the battlefield or a
 /// graveyard. Nothing if it is no longer the object it was by the time the ability resolves (CR 400.7). Altar of the Wretched
 /// and Puppet Crafting ("from your graveyard") and Bramble Familiar ("this creature") print it.
