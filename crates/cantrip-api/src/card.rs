@@ -2471,6 +2471,13 @@ pub type SacrificeBan = fn(&dyn Query, &Asker, ObjectId) -> bool;
 /// doesn't untap during its controller's untap step". A permanent's own, printed or granted, is `Keyword::DoesNotUntap`.
 pub type UntapBan = fn(&dyn Query, &Asker, ObjectId) -> bool;
 
+/// A static ability that says permanents can't become untapped (CR 101.2, 701.26b): true for a permanent on the battlefield
+/// that can't, judged as it is now. Unlike `UntapBan` it holds in the untap step and everywhere else - an effect that untaps
+/// it, a stun counter that would replace its untap (CR 122.1d) - and it is the source's effect, no ability of the permanent,
+/// so one that loses its abilities is still under it (CR 613.1f): Frozen in Ice's and Blossombind's "enchanted creature ...
+/// can't become untapped".
+pub type CantBecomeUntapped = fn(&dyn Query, &Asker, ObjectId) -> bool;
+
 /// Whether a static ability makes this creature assign combat damage equal to its toughness rather than its power
 /// (CR 510.1a): given the rule's own asker.
 pub type DamageByToughnessRule = fn(&dyn Query, &Asker, ObjectId) -> bool;
@@ -2990,6 +2997,9 @@ pub struct CardDef {
     /// Its static abilities that say permanents don't untap during their controllers' untap steps (CR 502.3), while it is on
     /// the battlefield with its abilities. See `UntapBan`.
     pub untap_bans: &'static [UntapBan],
+    /// Its static abilities that say permanents can't become untapped (CR 101.2, 701.26b), while it is on the battlefield with
+    /// its abilities: Frozen in Ice's "enchanted creature ... can't become untapped". See `CantBecomeUntapped`.
+    pub cant_become_untapped: &'static [CantBecomeUntapped],
     /// "Each creature you control assigns combat damage equal to its toughness rather than its power" (CR 510.1a):
     /// Assault Formation, Doran, the Siege Tower.
     pub damage_by_toughness: &'static [DamageByToughnessRule],
@@ -3188,6 +3198,7 @@ impl CardDef {
         cost_bans: &[],
         sacrifice_bans: &[],
         untap_bans: &[],
+        cant_become_untapped: &[],
         damage_by_toughness: &[],
         damage_by_absolute_power: &[],
         damage_stays: &[],
@@ -3280,6 +3291,7 @@ impl CardDef {
             (!self.cost_bans.is_empty(), "cost bans"),
             (!self.sacrifice_bans.is_empty(), "sacrifice bans"),
             (!self.untap_bans.is_empty(), "untap bans"),
+            (!self.cant_become_untapped.is_empty(), "rules against becoming untapped"),
             (!self.damage_by_toughness.is_empty(), "damage by toughness"),
             (!self.damage_by_absolute_power.is_empty(), "damage by absolute power"),
             (!self.damage_stays.is_empty(), "a damage-stays rule"),
