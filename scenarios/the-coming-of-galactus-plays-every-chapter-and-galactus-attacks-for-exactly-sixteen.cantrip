@@ -1,0 +1,66 @@
+# The Coming of Galactus: I destroys up to one target nonland permanent (none chosen here), II and III each make each
+# opponent lose 2 life (20, 18, 16), and IV creates Galactus, a legendary 16/16 black Elder Alien token with flying and
+# trample, after which the Saga is sacrificed (CR 714.4). Galactus attacks on turn 9 (summoning sick before): his trigger
+# destroys target land, Bot2's Plains, and his 16 flying trample damage takes Bot2 from 16 to exactly 0.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+The Coming of Galactus
+Swamp
+Swamp
+Swamp
+Swamp x30
+
+[Bot2 Deck]
+Plains
+Plains x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Coming of Galactus.Cast
+Bot1.Pass
+Bot1.Target()
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot2.Life = 20
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+? Bot1.Battlefield.The Coming of Galactus.Counters.Lore = 2
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+? Bot2.Life = 18
+? Bot1.Battlefield.The Coming of Galactus.Counters.Lore = 3
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Galactus; Mox Emerald; Mox Jet
+? Bot1.Battlefield.Galactus.Power = 16
+? Bot1.Battlefield.Galactus.Toughness = 16
+? Bot1.Battlefield.Galactus.Keywords = Flying; Trample
+? Bot1.Battlefield.Galactus.Supertypes = Legendary
+? Bot1.Battlefield.Galactus.ManaValue = 0
+[T9 Bot1.Main1]
+Bot1.Attack(Galactus > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Result = Bot1 won
+Bot2.Life = 0
+Bot2.Battlefield.Count = 0

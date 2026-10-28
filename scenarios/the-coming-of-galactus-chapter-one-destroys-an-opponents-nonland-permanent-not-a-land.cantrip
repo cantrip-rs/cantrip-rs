@@ -1,0 +1,39 @@
+# The Coming of Galactus, chapter I: "Destroy up to one target nonland permanent" (CR 701.8, 115.1). Bot2's Plains is a
+# land and is refused as the target; its Mox Pearl is accepted and destroyed, and the Plains stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+The Coming of Galactus
+Swamp x30
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Plains x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Coming of Galactus.Cast
+Bot1.Pass
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Battlefield = Plains
+Bot2.Graveyard = Mox Pearl
