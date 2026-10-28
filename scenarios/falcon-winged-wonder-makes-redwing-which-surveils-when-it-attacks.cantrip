@@ -1,0 +1,49 @@
+# Falcon, Winged Wonder: "When Falcon enters, create Redwing, a legendary 1/1 blue Bird Scout creature token with flying and
+# 'Whenever Redwing attacks, surveil 1.'" {4}{U} is paid exactly by Black Lotus's {U}{U}{U} and Mox Jet and Mox Pearl. Redwing
+# is named Redwing (CR 111.4), legendary, blue, with flying. On turn 3 it attacks, Bot2 takes 1 and Bot1 surveils: the Mountain
+# on top of the library goes into the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Black Lotus
+Falcon, Winged Wonder
+Island x3
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Falcon, Winged Wonder.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Redwing.Supertypes = Legendary
+? Bot1.Battlefield.Redwing.Subtypes = Bird; Scout
+? Bot1.Battlefield.Redwing.Colors = Blue
+? Bot1.Battlefield.Redwing.Keywords = Flying
+? Bot1.Battlefield.Redwing.Token = true
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Redwing > Bot2)
+Bot1.Arrange( | Mountain)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Graveyard = Mountain; Black Lotus
+Bot1.Battlefield.Falcon, Winged Wonder.Power = 3
+Bot1.Battlefield.Falcon, Winged Wonder.Toughness = 4
+Bot1.Battlefield.Redwing.Power = 1
+Bot1.Battlefield.Redwing.Toughness = 1
