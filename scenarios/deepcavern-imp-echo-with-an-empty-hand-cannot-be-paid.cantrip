@@ -1,0 +1,45 @@
+# Deepcavern Imp: "Echo--Discard a card." With no cards in hand at the turn 3 upkeep Bot1 can't pay the cost: paying is not offered
+# (the card's ruling: "If you have no cards in hand, you can't pay the echo cost and Deepcavern Imp will be sacrificed").
+# All seven cards of the opening hand were cast on turn 1, so the hand is empty when the upkeep begins (the draw comes after).
+
+[Bot1 Deck]
+Deepcavern Imp
+Mox Jet
+Mox Pearl
+Sol Ring
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Deepcavern Imp.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+? Bot1.Hand.Count = 0
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard = Deepcavern Imp

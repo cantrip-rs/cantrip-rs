@@ -1,0 +1,45 @@
+# Deepcavern Imp {2}{B}, 2/2 flying, haste, "Echo--Discard a card." (CR 702.30a). Cast on turn 1 with Sol Ring's {C}{C} and Mox
+# Jet's {B} (Mox Pearl pays for Sol Ring), it attacks at once (haste) for 2. At Bot1's turn 3 upkeep the echo asks for a discard,
+# no mana: Bot1 pays it, discarding the Island they choose of the two in hand, and the Imp stays with the Mox Jet untapped.
+
+[Bot1 Deck]
+Deepcavern Imp
+Mox Jet
+Mox Pearl
+Sol Ring
+Island
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Deepcavern Imp.Cast
+Bot1.Pass
+Bot1.Attack(Deepcavern Imp > Bot2)
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Choose(Plains)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Deepcavern Imp.Tapped = false
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Deepcavern Imp.Power = 2
+Bot1.Battlefield.Deepcavern Imp.Keywords = Flying; Haste
+Bot1.Battlefield.Deepcavern Imp.Colors = Black
+Bot1.Graveyard = Plains
+Bot1.Battlefield.Mox Jet.Tapped = false
