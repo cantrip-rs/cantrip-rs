@@ -906,6 +906,20 @@ pub fn each_end_step(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired>
     }
 }
 
+/// "At the beginning of the upkeep of enchanted creature's controller" (CR 503.1a, 303.4): the upkeep step began on the turn
+/// of whoever controls the permanent the source is attached to, that player the trigger's subject ("that player"). Super
+/// Intelligence prints it, and so do Essence Flare, Maddening Wind and One Thousand Lashes.
+pub fn enchanted_creatures_controllers_upkeep(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::StepBegan { step: Step::Upkeep } => {
+            let host = q.obj(source).attached_to?;
+            let active = q.state().turn.active;
+            if q.controller(host) == active { Fired::about(Target::Player(active)) } else { None }
+        }
+        _ => None,
+    }
+}
+
 /// "At the beginning of each upkeep" (CR 503.1a): any player's upkeep step began. Command the Stage and Ginger, Queen of
 /// Sweets print it.
 pub fn each_upkeep(_: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
@@ -1373,6 +1387,7 @@ pub const YOUR_SECOND_MAIN_PHASE: Trigger = when_asked(EventMask::STEP_BEGAN, yo
 pub const EACH_OPPONENTS_UPKEEP: Trigger = when_asked(EventMask::STEP_BEGAN, each_opponents_upkeep);
 pub const BEGINNING_OF_YOUR_COMBAT: Trigger = when_asked(EventMask::STEP_BEGAN, beginning_of_your_combat);
 pub const YOUR_END_STEP: Trigger = when_asked(EventMask::STEP_BEGAN, your_end_step);
+pub const ENCHANTED_CREATURES_CONTROLLERS_UPKEEP: Trigger = when(EventMask::STEP_BEGAN, enchanted_creatures_controllers_upkeep);
 pub const EACH_UPKEEP: Trigger = when(EventMask::STEP_BEGAN, each_upkeep);
 pub const EACH_END_STEP: Trigger = when(EventMask::STEP_BEGAN, each_end_step);
 pub const END_OF_COMBAT: Trigger = when(EventMask::STEP_BEGAN, end_of_combat);
