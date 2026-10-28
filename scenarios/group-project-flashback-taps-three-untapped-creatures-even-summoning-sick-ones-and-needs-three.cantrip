@@ -1,0 +1,47 @@
+# Group Project: cast for {1}{W} it creates a 2/2 red and white Spirit. Its flashback, "Tap three untapped creatures you control",
+# is refused while Bot1 has only two untapped creatures of its own: the Spirit and one new Ornithopter, with a third Ornithopter
+# tapped from attacking and Bot2's untapped Ornithopter not Bot1's to tap. It is offered with three, the two newest summoning
+# sick, which does not stop tapping them as a cost. Bot1 makes a second Spirit and the card is exiled.
+
+[Bot1 Deck]
+Plains x3
+Ornithopter x3
+Group Project
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Group Project.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+! Bot1.Graveyard.Group Project.Cast(Ability: Flashback)
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Graveyard.Group Project.Cast(Ability: Flashback)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Graveyard.Group Project.Cast(Ability: Flashback)
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Battlefield = Plains; Plains; Ornithopter; Ornithopter; Ornithopter; Spirit Token; Spirit Token
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#2.Tapped = true
+Bot1.Battlefield.Ornithopter#3.Tapped = true
+Bot1.Battlefield.Spirit Token#1.Tapped = true
+Bot1.Battlefield.Spirit Token#2.Tapped = false
+Bot1.Battlefield.Spirit Token#1.Power = 2
+Bot1.Battlefield.Spirit Token#1.Colors = Red; White
+Exile = Group Project
+Bot2.Battlefield = Ornithopter
+Bot2.Battlefield.Ornithopter.Tapped = false
