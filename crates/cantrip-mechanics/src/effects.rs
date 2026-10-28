@@ -641,6 +641,18 @@ pub fn owner_puts_into_library_second_from_top_or_on_the_bottom(g: &mut dyn Game
     Ok(())
 }
 
+/// "Sacrifice it. When you do, ..." (CR 701.21a, 603.12): this permanent is sacrificed, and the card's `delayed` ability number 0
+/// triggers as a reflexive ability only if it really was (it had already gone, or could not be sacrificed: nothing). Claim the
+/// Kingdom, Death to Our Enemies, Doom Reigns Supreme, Rewrite History and Villainous Syndication print it after "When the fourth
+/// plan counter is put on this".
+pub fn sacrifice_this_when_you_do(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if g.sacrifice(item.controller, &[item.object]).is_empty() {
+        return Ok(());
+    }
+    g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(item.ability.card, 0), Target::None);
+    Ok(())
+}
+
 /// "You may [do something]" (CR 117.3, 609.3): asks `player` whether to, for `purpose`, and says whether they did. The
 /// question is the usual `May`, so a scenario answers it with `Accept` or `Decline`. Ad Nauseam, Cori-Steel Cutter and Currency Converter ask
 /// it.
