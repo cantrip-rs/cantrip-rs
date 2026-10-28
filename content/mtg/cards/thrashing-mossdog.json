@@ -1,0 +1,11 @@
+{
+  "name": "Thrashing Mossdog",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Plant Dog",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nScavenge {4}{G}{G} ({4}{G}{G}, Exile this card from your graveyard: Put a number of +1/+1 counters equal to this card's power on target creature. Scavenge only as a sorcery.)",
+  "keywords": [
+    "Reach"
+  ]
+}
