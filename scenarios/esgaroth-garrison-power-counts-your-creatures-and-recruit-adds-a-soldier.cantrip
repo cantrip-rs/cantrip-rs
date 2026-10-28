@@ -1,0 +1,55 @@
+# Esgaroth Garrison: its power is the number of creatures you control, itself included (CR 604.3), and when it enters it
+# recruits. Bot1 controls an Ornithopter, and Bot2 casts one too (not counted). Recruit draws an Ornithopter and discards it, a
+# nonland card, so a Soldier token joins: Garrison, Ornithopter and the token make its power 3 (toughness 5).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Jet
+Esgaroth Garrison
+Ornithopter
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Esgaroth Garrison.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Esgaroth Garrison.Power = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Esgaroth Garrison.Power = 3
+Bot1.Battlefield.Esgaroth Garrison.Toughness = 5
+Bot1.Battlefield.Human Soldier Token.Token = true
+Bot1.Graveyard = Ornithopter

@@ -1,0 +1,8 @@
+{
+  "name": "Esgaroth Garrison",
+  "manaCost": "{4}{W}",
+  "type": "Creature — Human Soldier",
+  "power": "*",
+  "toughness": 5,
+  "oracleText": "Esgaroth Garrison's power is equal to the number of creatures you control.\nWhen this creature enters, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)"
+}
