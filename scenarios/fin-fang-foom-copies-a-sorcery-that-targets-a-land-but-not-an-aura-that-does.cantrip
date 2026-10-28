@@ -1,0 +1,65 @@
+# Fin Fang Foom: "Whenever you cast an instant or sorcery spell that targets an artifact or land, copy that spell." Turn 3: Bot1 casts
+# the sorcery Avengers Disassembled (destroy target land) at Bot2's only Island and keeps the target for the copy: the copy destroys
+# the Island, Foom gets two counters (5/7) and the original has nothing left to destroy. Footfall Crater, an Aura that targets a
+# land but is neither an instant nor a sorcery, cast on Bot1's own Island sets nothing off (still two counters, nothing on the stack).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Jet
+Fin Fang Foom
+Avengers Disassembled
+Footfall Crater
+Island
+Island x12
+
+[Bot2 Deck]
+Island
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fin Fang Foom.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Avengers Disassembled.Cast
+Bot1.Modes(Destroy target land)
+Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 0
+? Bot1.Battlefield.Fin Fang Foom.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Footfall Crater.Cast(Bot1.Battlefield.Island)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Fin Fang Foom.Counters.PlusOnePlusOne = 2
+Stack.Count = 0
+Bot1.Battlefield.Footfall Crater.AttachedTo = Island

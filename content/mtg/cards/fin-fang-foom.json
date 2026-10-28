@@ -1,0 +1,11 @@
+{
+  "name": "Fin Fang Foom",
+  "manaCost": "{2}{R}{R}",
+  "type": "Legendary Creature — Alien Dragon Villain",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Flying\nWhenever you cast an instant or sorcery spell that targets an artifact or land, copy that spell. You may choose new targets for the copy. Put two +1/+1 counters on Fin Fang Foom.",
+  "keywords": [
+    "Flying"
+  ]
+}
