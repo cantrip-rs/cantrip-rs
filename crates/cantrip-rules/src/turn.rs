@@ -185,8 +185,8 @@ fn next_turn_taker(s: &mut GameState, after: PlayerId) -> PlayerId {
 /// ("until your next turn", CR 701.15a) ends here, as do Sparas Adjudicators' "can't attack or block until its controller's
 /// next turn".
 fn turn_would_have_begun(s: &mut GameState, p: PlayerId) {
-    if s.effects.iter().any(|e| e.duration == Duration::UntilNextTurnOf(p)) {
-        s.effects_retain(|e| e.duration != Duration::UntilNextTurnOf(p));
+    if s.effects.iter().any(|e| e.duration == Duration::UntilNextTurnOf(p) || e.duration == Duration::EndOfNextTurnOf(p)) {
+        s.effects_retain(|e| e.duration != Duration::UntilNextTurnOf(p) && e.duration != Duration::EndOfNextTurnOf(p));
     }
     for at in (0..s.delayed.len()).rev() {
         if s.delayed[at].when == DelayedWhen::UntilNextTurnOf(p) {
@@ -388,6 +388,13 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
             for at in (0..cx.s().delayed.len()).rev() {
                 if cx.s().delayed[at].when == DelayedWhen::UntilNextTurnOf(active) {
                     cx.st().delayed_remove(at);
+                }
+            }
+            // "Until the end of your next turn" is this turn from here on: it ends in the cleanup step (CR 514.2, 611.2a).
+            for at in 0..cx.s().effects.len() {
+                if cx.s().effects[at].duration == Duration::EndOfNextTurnOf(active) {
+                    let effect = ContinuousEffect { duration: Duration::EndOfTurn, ..cx.s().effects[at] };
+                    cx.st().effect_set(at, effect);
                 }
             }
             untap_step(cx, active)?;

@@ -1381,6 +1381,11 @@ pub enum Duration {
     WhileSourceOnBattlefield,
     /// Until the next turn of this player begins (CR 611.2b): "until your next turn".
     UntilNextTurnOf(PlayerId),
+    /// "Until the end of your next turn" (CR 611.2a, 514.2): the effect lasts through the next turn of this player to begin, whether
+    /// or not it is the turn it began in, and ends in that turn's cleanup step. It becomes `EndOfTurn` as that turn begins; a player
+    /// who has left the game would have begun it and the effect ends then (CR 800.4k, 800.4m). Evil's Thrall's "gain control of
+    /// that creature until the end of your next turn".
+    EndOfNextTurnOf(PlayerId),
     /// "During its controller's next turn" (CR 611.2a): the effect does something only during the first turn the affected
     /// object's controller - whoever controls it then - begins after both the turn they gained it and the turn the effect
     /// began in, `began`, which the core
