@@ -1,0 +1,67 @@
+# An Unexpected Party: "As this enchantment enters, choose a creature type. Creatures you control of the chosen type get
+# +2/+2." Bot1 chooses Dwarf as it enters (paid exactly with a Black Lotus and a Mox Pearl): its Dwarven Provisioner (2/2) becomes
+# 4/4, its Ornithopter (a Thopter) stays 0/2, and Bot2's Bastion Enforcer, also a Dwarf, stays 3/2 (CR 205.3m, 613.4c).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Dwarven Provisioner
+An Unexpected Party
+Ornithopter
+Plains
+Plains x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Bastion Enforcer
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dwarven Provisioner.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Bastion Enforcer.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.An Unexpected Party.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Dwarf)
+
+[Expect]
+Bot1.Battlefield.Dwarven Provisioner.Power = 4
+Bot1.Battlefield.Dwarven Provisioner.Toughness = 4
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Bastion Enforcer.Power = 3
+Bot2.Battlefield.Bastion Enforcer.Toughness = 2
