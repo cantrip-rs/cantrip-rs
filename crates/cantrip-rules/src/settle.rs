@@ -782,7 +782,7 @@ fn put_trigger_as(cx: &mut Cx, trigger: PendingTrigger, by: Option<Linked>) -> R
     }
     cx.st().set_item_targets(&mut item, &targets, &of, &shares);
     cx.st().stack_push(item);
-    ops::became_targets(cx, targets.iter().copied(), trigger.source, trigger.controller);
+    ops::became_targets(cx, targets.iter().copied(), trigger.source, trigger.controller, true);
     // The controller of a triggered ability puts it on the stack (CR 603.3a) and is who commits its crime (CR 700.13).
     ops::commit_crime(cx, trigger.controller, trigger.source, &targets);
     Ok(())

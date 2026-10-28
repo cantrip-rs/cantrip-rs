@@ -99,9 +99,9 @@ fn ward_triggers_when_an_opponent_targets_it_and_not_when_its_controller_does() 
     let (mut game, beast, _, theirs) = game();
     let mut cx = cx(&mut game);
     let cloaked = face_down(&mut cx, beast, FaceDown::Cloaked).expect("it enters face down");
-    cx.emit(Event::BecameTarget { target: Target::Object(cloaked), by: theirs, controller: YOU });
+    cx.emit(Event::BecameTarget { target: Target::Object(cloaked), by: theirs, controller: YOU, ability: false });
     assert!(!ward_triggered(&cx, cloaked));
-    cx.emit(Event::BecameTarget { target: Target::Object(cloaked), by: theirs, controller: THEM });
+    cx.emit(Event::BecameTarget { target: Target::Object(cloaked), by: theirs, controller: THEM, ability: false });
     assert!(ward_triggered(&cx, cloaked));
 }
 

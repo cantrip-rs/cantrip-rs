@@ -7595,7 +7595,7 @@ fn cast(
     }
     let nth = count_u32(cx.history().casts_by(player).count());
     cx.emit(Event::SpellCast { spell, player, nth });
-    ops::became_targets(cx, targets.iter().copied(), spell, player);
+    ops::became_targets(cx, targets.iter().copied(), spell, player, false);
     ops::commit_crime(cx, player, spell, targets);
     Ok(())
 }
@@ -9012,7 +9012,7 @@ fn activate(
         pay_materials(cx, source, &materials);
     }
     cx.emit(Event::AbilityActivated { source, ability, player, by: Grant::of(granted) });
-    ops::became_targets(cx, targets.iter().copied(), source, player);
+    ops::became_targets(cx, targets.iter().copied(), source, player, true);
     ops::commit_crime(cx, player, source, &targets);
     Ok(())
 }

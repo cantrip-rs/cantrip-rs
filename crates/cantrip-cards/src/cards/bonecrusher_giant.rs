@@ -16,11 +16,9 @@ pub static STOMP: CardDef = CardDef {
 };
 
 /// "Whenever this creature becomes the target of a spell": a spell, not an ability, from any player.
-fn targeted_by_spell(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+fn targeted_by_spell(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     match event {
-        Event::BecameTarget { target: Target::Object(t), by, controller }
-            if *t == source && q.state().stack.iter().any(|i| i.kind == StackKind::Spell && i.object == *by) =>
-        {
+        Event::BecameTarget { target: Target::Object(t), controller, ability: false, .. } if *t == source => {
             Fired::about(Target::Player(*controller))
         }
         _ => None,
