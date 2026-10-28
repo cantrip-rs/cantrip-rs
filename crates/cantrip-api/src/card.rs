@@ -882,6 +882,10 @@ pub enum VariableCost {
     /// Loamcrafter Faun's "you may discard one or more land cards" (`Game::may_pay_counted`, which says how many). The
     /// filter names a characteristic of the cards (CR 701.9c), so none of them is put into a hidden zone unrevealed.
     DiscardOneOrMore(ObjectFilter),
+    /// An activated ability's "Remove any number of [kind] counters from this permanent" (CR 118.3, 602.2b): how many is
+    /// announced as the ability is activated, up to the counters there are, and is the ability's X (`StackItem::x`), which
+    /// its effect reads as "that many" (CR 107.3). The Astonishing Ant-Man.
+    RemoveAnyNumberOfCounters(CounterKind),
 }
 
 impl VariableCost {
@@ -891,6 +895,7 @@ impl VariableCost {
     pub const fn governs(&self) -> &'static str {
         match self {
             VariableCost::SacrificeWithPowerX(_) => "the least power of the creature you sacrifice",
+            VariableCost::RemoveAnyNumberOfCounters(_) => "the number of counters you remove",
             _ => "",
         }
     }

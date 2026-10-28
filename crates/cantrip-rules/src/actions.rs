@@ -1306,6 +1306,8 @@ fn variable_candidates(cx: &Cx, source: ObjectId, player: PlayerId, variable: Va
         VariableCost::ExileFromGraveyardWithTypes(_) => {
             cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|&c| c != source).collect()
         }
+        // Counters on the source, not objects.
+        VariableCost::RemoveAnyNumberOfCounters(_) => Vec::new(),
         VariableCost::DiscardOneOrMore(filter) => {
             let asker = Asker { source, controller: player, by, spell: false };
             cx.s().zone(Zone::hand(player)).iter().copied().filter(|&c| c != source && filter(cx, &asker, c)).collect()
@@ -1333,7 +1335,7 @@ fn types_among(cx: &Cx, cards: &[ObjectId]) -> usize {
 /// Whether a variable cost could be paid at all: X may be zero, "one or more" needs one, and the exile needs enough types.
 fn variable_payable(cx: &Cx, source: ObjectId, player: PlayerId, variable: VariableCost, paid: Option<CostFor>) -> bool {
     match variable {
-        VariableCost::SacrificeX(_) | VariableCost::SacrificeAnyNumber { .. } => true,
+        VariableCost::SacrificeX(_) | VariableCost::SacrificeAnyNumber { .. } | VariableCost::RemoveAnyNumberOfCounters(_) => true,
         VariableCost::SacrificeOneOrMore(_) | VariableCost::DiscardOneOrMore(_) => !variable_candidates(cx, source, player, variable, paid, None).is_empty(),
         // Its power is read as the cost is paid (CR 601.2h), after the mana abilities of CR 601.2g, which may change it: any
         // permanent that passes the filter may yet pay.
@@ -1380,7 +1382,7 @@ fn choose_variable(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost,
 /// `choose_variable`'s sacrifices and exiles.
 fn choose_variable_permanents(cx: &mut Cx, player: PlayerId, source: ObjectId, variable: VariableCost, candidates: Vec<ObjectId>, x: u32) -> R<(Vec<ObjectId>, Vec<ObjectId>)> {
     match variable {
-        VariableCost::DiscardOneOrMore(_) => Ok((Vec::new(), Vec::new())),
+        VariableCost::DiscardOneOrMore(_) | VariableCost::RemoveAnyNumberOfCounters(_) => Ok((Vec::new(), Vec::new())),
         VariableCost::SacrificeX(_) | VariableCost::SacrificeAnyNumber { .. } => {
             if x == 0 {
                 return Ok((Vec::new(), Vec::new()));
@@ -8833,6 +8835,16 @@ fn activate(
         let cap = cx.s().obj(source).counters(CounterKind::Loyalty).max(0) as u16;
         item.x = announce_x(cx, player, source, mana, None, 0, u32::from(least_x(def.x_cant_be_zero)), u32::from(cap), true, 0, 0, "")? as u16;
     }
+    // CR 118.3, 602.2b: "Remove any number of [kind] counters from this" announces how many, up to the counters there are; the
+    // number is the ability's X (CR 107.3), which its effect reads as "that many".
+    let removes = match def.cost.variable {
+        Some(VariableCost::RemoveAnyNumberOfCounters(kind)) => {
+            let cap = cx.s().obj(source).counters(kind).clamp(0, i16::MAX) as u32;
+            item.x = announce_x(cx, player, source, mana, None, 0, 0, cap, false, 0, 0, VariableCost::RemoveAnyNumberOfCounters(kind).governs())? as u16;
+            Some((kind, item.x))
+        }
+        _ => None,
+    };
     announce_twobrids(cx, player, source, &mut mana, false)?;
     let life = announce_life(cx, player, source, &mut mana, false, paid)?;
     // What the mana paying its cost pays for (CR 106.6): the source as the ability is activated, as it begins to be put on
@@ -8969,6 +8981,11 @@ fn activate(
     pay_life_and_counters(cx, player, source, &def.cost);
     if let Some(kind) = counter {
         counters::remove(cx, source, kind, 1);
+    }
+    if let Some((kind, n)) = removes
+        && n > 0
+    {
+        counters::remove(cx, source, kind, n as i16);
     }
     pay_exert_and_tappers(cx, source, &def.cost, &tappers);
     note_activation(cx, source, index as usize, def);
