@@ -1,0 +1,43 @@
+# The Master of Lake-town's deathtouch (CR 702.2): it attacks on turn 3 and Bot2's Aegis Turtle (0/5) blocks; 3 damage is short of
+# 5, but the Turtle dies. The Master takes no damage from a 0-power blocker. (No life is lost, so nothing is milled.)
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+The Master of Lake-town
+Plains x16
+
+[Bot2 Deck]
+Mox Sapphire
+Aegis Turtle
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Master of Lake-town.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Master of Lake-town > Bot2)
+Bot2.Block(Aegis Turtle > The Master of Lake-town)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Aegis Turtle
+Bot1.Battlefield.The Master of Lake-town.Damage = 0
+Bot1.Graveyard.Count = 0

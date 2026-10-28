@@ -1,0 +1,45 @@
+# "Whenever a player loses life": gaining life does not trigger it. With the Master in play, Bot1's Meager Meal (paid exactly with
+# its third Mox Jet) gains Bot1 2 life, and nothing is milled: Bot1's library and graveyard are as they were.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Pearl
+The Master of Lake-town
+Gollum, Silent Slinker
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Master of Lake-town.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Gollum, Silent Slinker.Cast(Ability: Meager Meal)
+Bot1.Target()
+Bot1.Target(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Graveyard.Count = 0
+Bot1.Hand = Plains
+Exile = Gollum, Silent Slinker

@@ -1,0 +1,74 @@
+# The ruling: "If The Master of Lake-town dies at the same time that a player loses life ... you choose the order for its two triggered
+# abilities. If the mill effect resolves first, those cards - and also The Master of Lake-town - will be in graveyards before you
+# determine how many cards to draw." Bot1's graveyard holds five (Black Lotus, Lightning Bolt and the three cards the Bolt at
+# its own face milled). On turn 4 Bot2's Tyrox (4/1) is unblocked and Blade of the Sixth Pride (3/1) is blocked by the Master:
+# Bot1 loses 4 life and the Master dies at once. Draw first: the graveyard has only six (the Master joined it), so nothing is drawn.
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+The Master of Lake-town
+Black Lotus
+Lightning Bolt
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Pearl
+Mox Pearl
+Tyrox, Saurid Tyrant
+Blade of the Sixth Pride
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Master of Lake-town.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Hand.Tyrox, Saurid Tyrant.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Blade of the Sixth Pride.Cast
+Bot1.Pass
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Attack(Tyrox, Saurid Tyrant > Bot1; Blade of the Sixth Pride > Bot1)
+Bot1.Block(The Master of Lake-town > Blade of the Sixth Pride)
+Bot1.Triggers(mills that many; draw a card)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Hand = Plains; Plains
+Bot1.Graveyard.Count = 10
+Bot1.Life = 13

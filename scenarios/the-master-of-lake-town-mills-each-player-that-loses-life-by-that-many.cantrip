@@ -1,0 +1,68 @@
+# The Master of Lake-town {1}{B}{B}: "Whenever a player loses life, that player mills that many cards." Mox Jet and two Mox Pearls
+# make three mana but one {B}, so it is refused (the {B}{B} is pinned); a second Mox Jet pays it exactly with a Pearl. Bot1's
+# Lightning Bolt at Bot2 makes Bot2 lose 3 and mill its top three cards (Crimson Kobolds, Ornithopter, Memnite); Bot2's Bolt at Bot1
+# makes Bot1 - the Master's own controller - lose 3 and mill its own top three (Memnite, Ornithopter, Mox Emerald). Whoever lost
+# the life mills, not the Master's controller.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Pearl
+Mox Jet
+The Master of Lake-town
+Mox Ruby
+Lightning Bolt
+Memnite
+Ornithopter
+Mox Emerald
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Crimson Kobolds
+Ornithopter
+Memnite
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+! Bot1.Hand.The Master of Lake-town.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.The Master of Lake-town.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot2.Graveyard = Memnite; Ornithopter; Crimson Kobolds
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot1.Graveyard = Mox Emerald; Ornithopter; Memnite; Lightning Bolt
+Bot2.Graveyard = Lightning Bolt; Memnite; Ornithopter; Crimson Kobolds

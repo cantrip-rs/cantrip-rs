@@ -1,0 +1,63 @@
+# "When The Master of Lake-town dies, draw a card for each graveyard with seven or more cards in it." Bot1's two Lightning Bolts
+# (Black Lotus's {R}{R}{R}) take Bot2 from 20 to 14 and the Master mills six of Bot2's cards; on turn 2 Bot2's own Bolt kills the
+# Master, and that Bolt makes Bot2's graveyard exactly seven. Counted as the ability resolves, it is the one graveyard of seven
+# (Bot1's holds four: Lotus, two Bolts and the Master), so Bot1 draws one card - exactly one.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+The Master of Lake-town
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Master of Lake-town.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 14
+? Bot2.Graveyard.Count = 6
+? Bot1.Hand.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.The Master of Lake-town)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 7
+Bot1.Hand.Count = 1
+Bot1.Graveyard.Count = 4

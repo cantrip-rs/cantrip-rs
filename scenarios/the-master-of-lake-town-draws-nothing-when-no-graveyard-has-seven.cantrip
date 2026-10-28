@@ -1,0 +1,61 @@
+# The Master of Lake-town's death draw needs seven: after Bot1's two Lightning Bolts (Black Lotus) Bot2's graveyard holds six - one
+# short (it plays a land on turn 2 so as to discard nothing at cleanup) - and Bot1's five. Bot1 sacrifices the Master to Deadly Dispute on turn 3 (a cost, so nothing else goes to Bot2's
+# graveyard), the Master's trigger counts no graveyard of seven and draws nothing: Bot1 has only Deadly Dispute's two cards.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Pearl
+The Master of Lake-town
+Black Lotus
+Lightning Bolt
+Lightning Bolt
+Deadly Dispute
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Master of Lake-town.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deadly Dispute.Cast
+Bot1.Choose(The Master of Lake-town)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot2.Graveyard.Count = 6
+Bot1.Graveyard.Count = 5
