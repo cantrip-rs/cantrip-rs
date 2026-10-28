@@ -1,0 +1,48 @@
+# Patient Instructor: "Vigilance" and "When this creature enters, recruit" (CR 701.70a): Bot1 draws the Ornithopter and discards it,
+# a nonland card, so a 1/1 white Human Soldier token is created (CR 111.1) under Bot1. Both attack on turn 3: the Instructor has
+# vigilance (CR 702.20b) and stays untapped, the token, without it, is tapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Patient Instructor
+Plains
+Plains
+Plains
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Patient Instructor.Cast
+Bot1.Pass
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Patient Instructor > Bot2; Human Soldier Token > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Patient Instructor.Tapped = false
+? Bot1.Battlefield.Human Soldier Token.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Human Soldier Token.Token = true
+Bot1.Battlefield.Human Soldier Token.Colors = White
+Bot1.Battlefield.Human Soldier Token.Subtypes = Human; Soldier
+Bot1.Battlefield.Human Soldier Token.Power = 1
+Bot1.Battlefield.Human Soldier Token.Toughness = 1
+Bot1.Battlefield.Patient Instructor.Keywords = Vigilance
+Bot1.Battlefield.Patient Instructor.Power = 2
+Bot1.Graveyard = Ornithopter
+Bot2.Life = 17

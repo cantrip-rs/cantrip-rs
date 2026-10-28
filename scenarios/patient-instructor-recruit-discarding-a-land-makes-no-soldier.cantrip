@@ -1,0 +1,37 @@
+# Patient Instructor: "When this creature enters, recruit." Bot1 draws the Ornithopter and discards a Plains: a land card
+# discarded makes no token (CR 701.70a), though a nonland card was in hand to discard, and the Ornithopter stays in hand.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Patient Instructor
+Plains
+Plains
+Plains
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Patient Instructor.Cast
+Bot1.Pass
+Bot1.Choose(Plains)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Patient Instructor
+Bot1.Graveyard = Plains
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Hand.Count = 3

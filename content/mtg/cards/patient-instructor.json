@@ -1,0 +1,11 @@
+{
+  "name": "Patient Instructor",
+  "manaCost": "{2}{W/U}",
+  "type": "Creature — Human Citizen",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance\nWhen this creature enters, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}
