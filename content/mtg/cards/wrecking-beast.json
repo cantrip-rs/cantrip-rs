@@ -1,0 +1,11 @@
+{
+  "name": "Wrecking Beast",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Riot (This creature enters with your choice of a +1/+1 counter or haste.)\nTrample",
+  "keywords": [
+    "Trample"
+  ]
+}
