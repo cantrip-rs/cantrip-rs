@@ -1,0 +1,52 @@
+# Uktabi Drake {G}, "Echo {1}{G}{G}" (CR 702.30a). Cast on turn 1 (paid with generic from Sol Ring's colorless mana and G mana), it came under Bot1's control since the beginning of their last upkeep, so at Bot1's turn 3 upkeep the echo ability
+# triggers and asks for {1}{G}{G}. The colorless mana, a Mox Pearl (W) and 1 of the two G sources are tapped first (as much mana as the cost, one G
+# short, a W in place of it): paying is not offered. With the last G source tapped it is paid ({1}{G}{G} spent: the generic with colorless mana,
+# {G}{G} with G), and the W and the colorless left over stays in the pool. Uktabi Drake stays.
+# Haste: it attacks on turn 1, the turn it was cast.
+
+[Bot1 Deck]
+Uktabi Drake
+Mox Pearl
+Mox Emerald
+Sol Ring
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Uktabi Drake.Cast
+Bot1.Pass
+Bot1.Attack(Uktabi Drake > Bot2)
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Forest.Activate
+Bot1.PayCost(Spend: C, G, G)
+Bot1.Pass
+? Bot1.Mana = {W}{C}
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Uktabi Drake.Power = 2
+Bot1.Battlefield.Uktabi Drake.Toughness = 1
+Bot1.Battlefield.Uktabi Drake.Keywords = Flying; Haste
+Bot1.Battlefield.Uktabi Drake.Colors = Green
+Bot2.Life = 18
