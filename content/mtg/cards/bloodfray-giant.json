@@ -1,0 +1,11 @@
+{
+  "name": "Bloodfray Giant",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Giant",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Trample\nUnleash (You may have this creature enter with a +1/+1 counter on it. It can't block as long as it has a +1/+1 counter on it.)",
+  "keywords": [
+    "Trample"
+  ]
+}
