@@ -1,0 +1,35 @@
+# Sunburst (CR 702.44a): Skyreach Manta ({5}, an artifact creature) is paid with the five Moxen, one mana of each color, so it enters with five +1/+1 counters:
+# a 5/5 with flying.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Skyreach Manta
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Swamp x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Skyreach Manta.Cast
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Skyreach Manta.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Skyreach Manta.Power = 5
+Bot1.Battlefield.Skyreach Manta.Toughness = 5
+Bot1.Battlefield.Skyreach Manta.Keywords = Flying
