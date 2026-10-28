@@ -1,0 +1,43 @@
+# Orysa, Tide Choreographer with exactly ten total toughness (five Ornithopters, 0/2 each): the reduction applies at "10 or
+# greater", so she costs {1}{U}, paid with Mox Sapphire and Mox Ruby, exactly, and her enters trigger draws two cards.
+
+[Bot1 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Mox Sapphire
+Mox Ruby
+Orysa, Tide Choreographer
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Orysa, Tide Choreographer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Orysa, Tide Choreographer.Toughness = 2
+Stack.Count = 0
