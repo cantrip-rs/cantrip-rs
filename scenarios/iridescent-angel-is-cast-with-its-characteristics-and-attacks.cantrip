@@ -1,0 +1,52 @@
+# Iridescent Angel, a french vanilla creature: cast with Black Lotus and Moxen paying exactly its cost (the pool is empty right after), its
+# characteristics as printed (power, toughness, keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Protection from each color is protection from all five colors, not from colorless.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Iridescent Angel
+Plains x18
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Iridescent Angel.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T2 Bot2.End]
+? Bot1.Battlefield.Iridescent Angel.Power = 4
+? Bot1.Battlefield.Iridescent Angel.Toughness = 4
+? Bot1.Battlefield.Iridescent Angel.Keywords = Flying
+? Bot1.Battlefield.Iridescent Angel.Colors = Blue; White
+? Bot1.Battlefield.Iridescent Angel.Types = Creature
+? Bot1.Battlefield.Iridescent Angel.Subtypes = Angel
+? Bot1.Battlefield.Iridescent Angel.Supertypes = (absent)
+? Bot1.Battlefield.Iridescent Angel.ProtectionFrom = Black; Blue; Green; Red; White
+[T3 Bot1.Main1]
+Bot1.Attack(Iridescent Angel > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Iridescent Angel.Tapped = true

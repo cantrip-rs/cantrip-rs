@@ -1,0 +1,105 @@
+# Iridescent Angel, "protection from each color" (CR 702.16a): protection from all five colors at once, and not from colorless
+# (CR 105.2c). Bot2, with the mana for each, cannot target it with a red Lightning Bolt (turn 2), a blue Unsummon (turn 2), nor
+# enchant it with a green Rancor (turn 2); a colorless Pyrite Spellbomb's ability can target it and marks 2 damage (turn 4, the
+# control for targeting). On Bot1's turn 3 the Angel attacks past Bot2's flying Birds of Paradise (green), which may not block
+# it, and the colorless Ornithopter, which does (the control for blocking). A red Pyroclasm on turn 6 deals the Angel no damage
+# (it kills Bot2's own creatures), while Bot1's colorless Basilisk Collar may be equipped to it (the control for enchanting).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Iridescent Angel
+Basilisk Collar
+Plains x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Lightning Bolt
+Unsummon
+Birds of Paradise
+Ornithopter
+Rancor
+Pyrite Spellbomb
+Pyroclasm
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Iridescent Angel.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Birds of Paradise.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Iridescent Angel)
+! Bot2.Hand.Unsummon.Cast(Bot1.Battlefield.Iridescent Angel)
+! Bot2.Hand.Rancor.Cast(Bot1.Battlefield.Iridescent Angel)
+[T3 Bot1.Main1]
+Bot1.Attack(Iridescent Angel > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block(Birds of Paradise > Iridescent Angel)
+Bot2.Block(Ornithopter > Iridescent Angel)
+[T3 Bot1.Main2]
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Basilisk Collar.Activate(Iridescent Angel; Ability: Equip)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Iridescent Angel.Keywords = Deathtouch; Flying; Lifelink
+[T4 Bot2.Main1]
+Bot2.Hand.Pyrite Spellbomb.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Pyrite Spellbomb.Activate(Bot1.Battlefield.Iridescent Angel; Ability: damage)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Iridescent Angel.Damage = 2
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Pyroclasm.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Iridescent Angel.Damage = 0
+? Bot2.Graveyard.Birds of Paradise.Colors = Green
+
+[Expect]
+Bot2.Life = 20
