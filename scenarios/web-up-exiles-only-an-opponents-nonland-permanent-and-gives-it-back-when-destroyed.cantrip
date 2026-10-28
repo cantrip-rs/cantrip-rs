@@ -1,0 +1,53 @@
+# Web Up: "When this enchantment enters, exile target nonland permanent an opponent controls until this enchantment leaves the
+# battlefield" (CR 610.3). On turn three its trigger offers Bot2's Ornithopter and not Bot1's own Ornithopter or Bot2's Plains
+# (the refusals, beside the positive control of the Ornithopter that is chosen). On turn four Bot2's Disenchant destroys Web Up and
+# the exiled Ornithopter comes back to the battlefield under its owner's control, a new object (summoning sick).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Ornithopter
+Web Up
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Ornithopter
+Plains x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Web Up.Cast
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+? Bot2.Battlefield = Plains; Mox Pearl
+? Exile = Ornithopter
+[T4 Bot2.Main1]
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Web Up)
+[T4 Bot2.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Web Up
+Bot2.Battlefield = Plains; Mox Pearl; Ornithopter
+Bot2.Battlefield.Ornithopter.SummoningSick = true

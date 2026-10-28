@@ -1,0 +1,6 @@
+{
+  "name": "Web Up",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, exile target nonland permanent an opponent controls until this enchantment leaves the battlefield."
+}
