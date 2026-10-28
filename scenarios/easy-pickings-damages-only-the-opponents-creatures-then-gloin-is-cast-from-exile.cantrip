@@ -1,0 +1,73 @@
+# Easy Pickings, the Adventure of Glóin the Mighty: "deals 1 damage to each creature your opponents control", all at once
+# (CR 120.2): Bot2's Memnite (1/1) dies and its Ornithopter (0/2) survives with 1 damage, while Bot1's own Memnite takes
+# none. Cast as an Adventure the card is exiled as it resolves (CR 715.4) and Glóin the Mighty can be cast from exile on a
+# later turn (turn 5), with the Moxen untapped again.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Glóin the Mighty
+Memnite
+Island x15
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glóin the Mighty.Cast(Ability: Easy Pickings)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Ornithopter
+? Bot2.Graveyard = Memnite
+? Bot2.Battlefield.Ornithopter.Damage = 1
+? Bot1.Battlefield.Memnite.Damage = 0
+? Exile = Glóin the Mighty
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Glóin the Mighty.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Glóin the Mighty.Power = 4
+Bot1.Battlefield.Glóin the Mighty.Toughness = 3

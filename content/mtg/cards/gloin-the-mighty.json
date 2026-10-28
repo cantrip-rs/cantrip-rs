@@ -1,0 +1,14 @@
+{
+  "name": "Glóin the Mighty",
+  "manaCost": "{3}{R}",
+  "type": "Legendary Creature — Dwarf Warrior",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "At the beginning of your first main phase, add {R}{R}.",
+  "adventure": {
+    "name": "Easy Pickings",
+    "manaCost": "{2}{R}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Easy Pickings deals 1 damage to each creature your opponents control. (Then exile this card. You may cast the creature later from exile.)"
+  }
+}

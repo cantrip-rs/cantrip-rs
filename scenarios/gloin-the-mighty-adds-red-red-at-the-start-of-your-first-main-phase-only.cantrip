@@ -1,0 +1,44 @@
+# Glóin the Mighty: "At the beginning of your first main phase, add {R}{R}" (CR 106.4, 505.1a). Cast on turn 1 (Black Lotus
+# and Mox Ruby), it adds nothing in the opponent's turn 2 first main phase; on Bot1's turn 3 the trigger resolves and the pool
+# holds exactly {R}{R}, which pays for a Goblin Assailant ({1}{R}) with nothing left over.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Glóin the Mighty
+Goblin Assailant
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Glóin the Mighty.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}
+Bot1.Hand.Goblin Assailant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Glóin the Mighty; Goblin Assailant
+Bot1.Mana =
