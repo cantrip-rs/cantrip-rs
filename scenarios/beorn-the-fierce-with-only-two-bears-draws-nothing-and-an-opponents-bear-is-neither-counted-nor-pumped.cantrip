@@ -1,0 +1,70 @@
+# Beorn the Fierce: "At the beginning of combat on your turn, put a trample counter on up to one target creature you control. It
+# becomes a Bear in addition to its other types. Then if you control three or more Bears, draw two cards." On turn 1 Beorn targets
+# himself (a trample counter, already a Bear): one Bear, nothing drawn. Bot2's Forest Bear, cast on turn 2, is not pumped
+# ("Other Bears you control") and, with Grizzly Bears on turn 3, does not make Bot1's Bears three: "up to one" is chosen as none
+# and two Bears (one short of three) still draw nothing; Bot2's Bear is a 2/2 throughout.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Beorn the Fierce
+Grizzly Bears
+Forest
+Plains
+Plains
+Plains
+Plains
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Forest Bear
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Beorn the Fierce.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Beorn the Fierce)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beorn the Fierce.Counters.Trample = 1
+? Bot1.Hand.Count = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Forest Bear.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Forest Bear.Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+[T3 Bot1.BeginCombat]
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Forest Bear.Power = 2
+Bot2.Battlefield.Forest Bear.Toughness = 2
+Bot1.Hand.Count = 3

@@ -1,0 +1,65 @@
+# Beorn the Fierce, a 6/6 Bear: "Other Bears you control get +2/+2. At the beginning of combat on your turn, put a trample counter on
+# up to one target creature you control. It becomes a Bear in addition to its other types. Then if you control three or more Bears,
+# draw two cards." Bot1 controls Beorn and Grizzly Bears (a 4/4 with the bonus, Beorn himself getting none): only two Bears. At
+# combat the Ornithopter (not a Bear) gets a trample counter and becomes a Bear (no duration, CR 205.1b: still one on turn 3, and a
+# 2/4 with the +2/+2), and "Then" it is counted: three Bears, two cards drawn (CR 608.2c).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Beorn the Fierce
+Grizzly Bears
+Ornithopter
+Forest
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Beorn the Fierce.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Beorn the Fierce.Power = 6
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Toughness = 4
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Hand.Count = 1
+[T1 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Subtypes = Bear; Thopter
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.Trample = 1
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Trample
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Beorn the Fierce.Power = 6
+Bot1.Battlefield.Beorn the Fierce.Toughness = 6
+Bot1.Battlefield.Grizzly Bears.Power = 4

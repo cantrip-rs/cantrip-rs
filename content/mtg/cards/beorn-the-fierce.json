@@ -1,0 +1,11 @@
+{
+  "name": "Beorn the Fierce",
+  "manaCost": "{3}{G}{G}",
+  "type": "Legendary Creature — Bear Shapeshifter Warrior",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Trample\nOther Bears you control get +2/+2.\nAt the beginning of combat on your turn, put a trample counter on up to one target creature you control. It becomes a Bear in addition to its other types. Then if you control three or more Bears, draw two cards.",
+  "keywords": [
+    "Trample"
+  ]
+}
