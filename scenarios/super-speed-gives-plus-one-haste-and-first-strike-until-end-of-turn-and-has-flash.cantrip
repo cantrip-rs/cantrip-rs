@@ -1,0 +1,54 @@
+# Super Speed: "Flash. Enchant creature. When this Aura enters, enchanted creature gains first strike until end of turn. Enchanted
+# creature gets +1/+0 and has haste." Bot1 casts a Memnite and then Super Speed on it the same turn: a 2/1 with first strike and
+# haste attacks at once (Bot2 takes 2, 18). On Bot2's upkeep (turn 2) the Aura is still on it - 2/1, haste, but the first strike
+# ended with turn 1. Super Speed has flash: a second one, cast on Bot2's upkeep onto the same Memnite, gives first strike again
+# that turn only (3/1), and on turn 3 it is a 3/1 with haste and no first strike.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Memnite
+Super Speed
+Super Speed
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Super Speed.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike; Haste
+Bot1.Attack(Memnite > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 18
+[T2 Bot2.Upkeep]
+? Bot1.Battlefield.Memnite.Keywords = Haste
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Super Speed.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike; Haste
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Keywords = Haste
+
+[Expect]
+Turn = 3
