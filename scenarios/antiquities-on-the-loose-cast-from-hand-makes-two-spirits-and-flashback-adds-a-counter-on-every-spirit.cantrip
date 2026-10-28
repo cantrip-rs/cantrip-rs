@@ -1,0 +1,50 @@
+# Antiquities on the Loose: cast from hand, it creates two 2/2 red and white Spirits and nothing more; its flashback {4}{W}{W} makes
+# two more and, being cast from anywhere but the hand, puts a +1/+1 counter on each Spirit Bot1 controls -- the four, new and old.
+
+[Bot1 Deck]
+Plains x6
+Antiquities on the Loose
+Plains x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Antiquities on the Loose.Cast
+[T5 Bot1.Main2]
+? Bot1.Battlefield = Plains; Plains; Plains; Spirit Token; Spirit Token
+? Bot1.Battlefield.Spirit Token#1.Power = 2
+? Bot1.Battlefield.Spirit Token#2.Power = 2
+? Bot1.Battlefield.Spirit Token#1.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Spirit Token#2.Counters.PlusOnePlusOne = (absent)
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Graveyard.Antiquities on the Loose.Cast(Ability: Flashback)
+[T11 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Plains; Plains; Plains; Plains; Plains; Spirit Token; Spirit Token; Spirit Token; Spirit Token
+Bot1.Battlefield.Spirit Token#1.Power = 3
+Bot1.Battlefield.Spirit Token#2.Power = 3
+Bot1.Battlefield.Spirit Token#3.Power = 3
+Bot1.Battlefield.Spirit Token#4.Power = 3
+Bot1.Battlefield.Spirit Token#4.Counters.PlusOnePlusOne = 1
+Exile = Antiquities on the Loose
