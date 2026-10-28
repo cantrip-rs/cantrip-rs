@@ -543,6 +543,18 @@ pub static HERO_3_2_WHITE_VIGILANCE: CardDef = CardDef {
     ..token!(Hero)
 };
 
+/// The 2/1 black Villain creature token with menace. Agents of HYDRA, Arnim Zola, Bio-Fanatic, HYDRA Troopers, Madame Masque
+/// and Construct a Cosmic Cube make it.
+pub static VILLAIN_2_1_BLACK_MENACE: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Black)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(1),
+    keywords: Keywords::of(&[Keyword::Menace]),
+    text: "Menace",
+    ..token!(Villain)
+};
+
 /// The 0/4 colorless Wall creature token with defender. Doctor Spectrum, Super-Skrull, The Fantastic Four, Wall Off and
 /// Invisible Woman, Sue Storm make it.
 pub static WALL_0_4_DEFENDER: CardDef = CardDef {
