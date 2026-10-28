@@ -1,0 +1,8 @@
+{
+  "name": "The Astonishing Ant-Man",
+  "manaCost": "{G}{U}",
+  "type": "Legendary Creature — Human Scientist Hero",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever you draw a card, put a +1/+1 counter on The Astonishing Ant-Man.\n{2}{G}, {T}, Remove any number of +1/+1 counters from The Astonishing Ant-Man: Create that many 1/1 green Insect creature tokens."
+}

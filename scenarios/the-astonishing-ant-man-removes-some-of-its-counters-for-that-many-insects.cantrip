@@ -1,0 +1,57 @@
+# The Astonishing Ant-Man: "Whenever you draw a card, put a +1/+1 counter on The Astonishing Ant-Man" (the turn-3 draw, then
+# Ancestral Recall's three) and "{2}{G}, {T}, Remove any number of +1/+1 counters from The Astonishing Ant-Man: Create that
+# many 1/1 green Insect creature tokens" (CR 118.3, 602.2b). Four counters, three removed: three Insect tokens and a 2/2
+# Ant-Man with one counter left, tapped, the mana paid ({2}{G}: the Emerald, the Ruby and the Pearl).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+The Astonishing Ant-Man
+Mox Ruby
+Mox Pearl
+Ancestral Recall
+Brainstorm
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Astonishing Ant-Man.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.The Astonishing Ant-Man.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Astonishing Ant-Man.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.The Astonishing Ant-Man.Activate(X: 3)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Insect Token; Insect Token; Insect Token; Mox Emerald; Mox Pearl; Mox Ruby; Mox Sapphire; The Astonishing Ant-Man
+Bot1.Battlefield.The Astonishing Ant-Man.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.The Astonishing Ant-Man.Power = 2
+Bot1.Battlefield.The Astonishing Ant-Man.Tapped = true
+Bot1.Battlefield.Insect Token#1.Power = 1
+Bot1.Battlefield.Insect Token#1.Toughness = 1
+Bot1.Battlefield.Insect Token#1.Colors = Green
