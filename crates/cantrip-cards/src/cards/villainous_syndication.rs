@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, triggers};
+use cantrip_mechanics::{effects, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Tap an untapped Villain you control" (CR 602.2b): any untapped permanent of its controller's with the creature type, a
@@ -14,18 +14,6 @@ fn untapped_villain_you_control(q: &dyn Query, asker: &Asker, id: ObjectId) -> b
 fn mill_and_plan(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.mill(item.controller, 1);
     g.add_counters(item.object, CounterKind::Plan, 1);
-    Ok(())
-}
-
-/// "When the fourth plan counter is put on this enchantment, sacrifice it. When you do, ..." (CR 701.21a, 603.12): the
-/// reflexive ability triggers only if the enchantment was sacrificed, and is put on the stack only with a creature card
-/// to target.
-fn sacrifice_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if g.sacrifice(item.controller, &[item.object]).is_empty() {
-        return Ok(());
-    }
-    let this = g.card_id(&CARD);
-    g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
     Ok(())
 }
 
@@ -47,7 +35,7 @@ pub static CARD: CardDef = CardDef {
         .sorcery_speed(),
         triggered(
             when_asked(EventMask::COUNTERS, triggers::nth_counter_put_on_this::<{ CounterKind::Plan as u8 }, 4>),
-            sacrifice_it,
+            effects::sacrifice_this_when_you_do,
             "When the fourth plan counter is put on this enchantment, sacrifice it. When you do, return target creature card from your graveyard to the battlefield.",
         ),
     ],
