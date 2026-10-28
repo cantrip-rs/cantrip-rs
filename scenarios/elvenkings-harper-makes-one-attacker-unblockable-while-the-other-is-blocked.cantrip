@@ -1,0 +1,61 @@
+# Elvenking's Harper: "{4}{U}: Target creature can't be blocked this turn." Bot1 casts the Harper and Grizzly Bears on turn 1 and on turn 3 pays {4}{U}
+# with five Moxen (the pool empty after) for the Bears. Both attack: Bot2's Ornithopter may not block the Bears (the refusal, CR 509.1b) but blocks
+# the Harper (the control), so only the Bears connects and Bot2 is at 18.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Elvenking's Harper
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elvenking's Harper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Elvenking's Harper.Activate(Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2; Elvenking's Harper > Bot2)
+! Bot2.Block(Ornithopter > Grizzly Bears)
+Bot2.Block(Ornithopter > Elvenking's Harper)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18

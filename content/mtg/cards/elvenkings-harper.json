@@ -1,0 +1,8 @@
+{
+  "name": "Elvenking's Harper",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Elf Bard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{4}{U}: Target creature can't be blocked this turn."
+}
