@@ -1,0 +1,8 @@
+{
+  "name": "Project Deathlok Soldier",
+  "manaCost": "{B}",
+  "type": "Artifact Creature — Zombie Soldier",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{2}{B}: Return this card from your graveyard to your hand."
+}

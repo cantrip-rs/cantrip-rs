@@ -1,0 +1,46 @@
+# "{2}{B}: Return this card from your graveyard to your hand" works only from the graveyard (CR 113.6k): refused while the
+# Soldier is on the battlefield, offered once Lightning Bolt has killed it, and paid for with exactly {2}{B}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Project Deathlok Soldier
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Project Deathlok Soldier.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Battlefield.Project Deathlok Soldier.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Project Deathlok Soldier)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Graveyard.Project Deathlok Soldier.Activate
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Hand.Count = 3
