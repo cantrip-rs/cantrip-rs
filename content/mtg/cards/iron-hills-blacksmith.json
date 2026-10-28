@@ -1,0 +1,11 @@
+{
+  "name": "Iron Hills Blacksmith",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Dwarf Artificer",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Double strike\nWhen this creature enters, create a colorless Equipment artifact token named Axe with \"Equipped creature gets +1/+0\" and equip {2}.",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

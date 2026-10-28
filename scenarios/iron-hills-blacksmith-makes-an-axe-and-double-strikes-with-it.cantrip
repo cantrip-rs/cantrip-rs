@@ -1,0 +1,48 @@
+# Iron Hills Blacksmith: double strike, and when it enters it creates a colorless Equipment artifact token named Axe ("Equipped
+# creature gets +1/+0", equip {2}). On turn 3 the Axe is equipped to the Blacksmith for exactly {2} (CR 702.6a) and the 2/1
+# double striker attacks: 2 first-strike damage and 2 regular damage (CR 702.4b), Bot2 20 -> 16.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Iron Hills Blacksmith
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Iron Hills Blacksmith.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Axe.Types = Artifact
+? Bot1.Battlefield.Axe.Subtypes = Equipment
+? Bot1.Battlefield.Axe.Colors = (absent)
+? Bot1.Battlefield.Axe.AttachedTo = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Axe.Activate(Bot1.Battlefield.Iron Hills Blacksmith)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Iron Hills Blacksmith.Power = 2
+Bot1.Attack(Iron Hills Blacksmith > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Axe.AttachedTo = Iron Hills Blacksmith
+Bot1.Battlefield.Iron Hills Blacksmith.Keywords = DoubleStrike
