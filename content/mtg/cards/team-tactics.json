@@ -1,0 +1,6 @@
+{
+  "name": "Team Tactics",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "Teamwork 1 (As an additional cost to cast this spell, you may tap any number of creatures you control with total power 1 or more.)\nTarget creature gains double strike until end of turn. If this spell was cast using teamwork, that creature also gains trample until end of turn."
+}

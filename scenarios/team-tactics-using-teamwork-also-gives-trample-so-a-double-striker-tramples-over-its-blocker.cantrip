@@ -1,0 +1,57 @@
+# Team Tactics: "Teamwork 1 ... If this spell was cast using teamwork, that creature also gains trample until end of turn." On turn 3
+# Bot1 taps one Memnite (power 1, exactly the total needed) to pay and gives the other double strike and trample. It attacks and is
+# blocked by Bot2's Crimson Kobolds (0/1): the first-strike damage of 1 kills the blocker, and the regular damage of 1 tramples over
+# to Bot2 (CR 702.4b, 702.19b) - without trample a creature blocked by nothing now would deal none - so Bot2 is at 19.
+
+[Bot1 Deck]
+Team Tactics
+Mox Ruby
+Mox Pearl
+Memnite
+Memnite
+Crimson Kobolds
+Island
+Island x20
+
+[Bot2 Deck]
+Crimson Kobolds
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Crimson Kobolds.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Crimson Kobolds.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Team Tactics.Cast
+Bot1.Modes(Teamwork 1)
+Bot1.Target(Memnite#1)
+! Bot1.Choose(Crimson Kobolds)
+Bot1.Choose(Memnite#2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#2.Tapped = true
+? Bot1.Battlefield.Memnite#1.Keywords = DoubleStrike; Trample
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite#1 > Bot2)
+Bot2.Block(Crimson Kobolds > Memnite#1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot2.Graveyard = Crimson Kobolds
+Bot1.Battlefield.Memnite#1.Damage = 0
