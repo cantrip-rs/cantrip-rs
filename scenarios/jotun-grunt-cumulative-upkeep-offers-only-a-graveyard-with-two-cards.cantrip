@@ -1,0 +1,40 @@
+# Jötun Grunt: "Put two cards from a single graveyard on the bottom of their owner's library." Bot1's graveyard holds two Lotus
+# Petals and Bot2's one, so the only graveyard two cards can come from is Bot1's: at the turn 3 upkeep Bot1 is not asked which
+# graveyard (Bot2's has too few to be one), and puts both Petals on the bottom of their library. Bot2's stays.
+
+[Bot1 Deck]
+Jötun Grunt
+Lotus Petal
+Lotus Petal
+Island x20
+
+[Bot2 Deck]
+Lotus Petal
+Island x20
+
+[Actions]
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot1.Battlefield.Lotus Petal#1.Activate(Color: White)
+Bot1.Battlefield.Lotus Petal#1.Activate(Color: White)
+Bot1.Hand.Jötun Grunt.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Lotus Petal.Cast
+Bot2.Pass
+Bot2.Battlefield.Lotus Petal.Activate(Color: Blue)
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.ChoosePlayer
+Bot1.Choose(Lotus Petal; Lotus Petal)
+Bot1.Pass
+? Bot1.Battlefield.Jötun Grunt.Counters.Age = 1
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Lotus Petal

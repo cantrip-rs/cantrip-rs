@@ -1,0 +1,76 @@
+# Jötun Grunt {1}{W}, 4/4, "Cumulative upkeep--Put two cards from a single graveyard on the bottom of their owner's library."
+# (CR 702.24a). Bot1 has four Lotus Petals in their graveyard (two of them paid for the Grunt) and Bot2 two. At Bot1's turn 3
+# upkeep the Grunt gets an age counter and Bot1 puts two cards of their own graveyard on the bottom of their library. At turn 5
+# the second age counter makes it two such payments, a graveyard chosen separately for each (the ruling): two cards of Bot2's
+# graveyard, and the two left in Bot1's. All four go to the bottoms of their owners' libraries and both graveyards are empty.
+
+[Bot1 Deck]
+Jötun Grunt
+Lotus Petal
+Lotus Petal
+Lotus Petal
+Lotus Petal
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Lotus Petal
+Lotus Petal
+Island x20
+
+[Actions]
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Pass
+Bot1.Battlefield.Lotus Petal#1.Activate(Color: White)
+Bot1.Battlefield.Lotus Petal#1.Activate(Color: White)
+Bot1.Hand.Jötun Grunt.Cast
+Bot1.Pass
+Bot1.Battlefield.Lotus Petal#1.Activate(Color: White)
+Bot1.Battlefield.Lotus Petal#1.Activate(Color: White)
+[T2 Bot2.Main1]
+Bot2.Hand.Lotus Petal.Cast
+Bot2.Pass
+Bot2.Hand.Lotus Petal.Cast
+Bot2.Pass
+Bot2.Battlefield.Lotus Petal#1.Activate(Color: Blue)
+Bot2.Battlefield.Lotus Petal#1.Activate(Color: Blue)
+[T3 Bot1.Upkeep]
+? Bot1.Graveyard.Count = 4
+? Bot2.Graveyard.Count = 2
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.ChoosePlayer(Bot1)
+! Bot1.Choose()
+Bot1.Choose(Lotus Petal; Lotus Petal)
+Bot1.Pass
+? Bot1.Battlefield.Jötun Grunt.Counters.Age = 1
+? Bot1.Graveyard.Count = 2
+? Bot2.Graveyard.Count = 2
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.ChoosePlayer(Bot2)
+Bot1.Choose(Lotus Petal; Lotus Petal)
+Bot1.Choose(Lotus Petal; Lotus Petal)
+Bot1.Pass
+? Bot1.Battlefield.Jötun Grunt.Counters.Age = 2
+? Bot1.Battlefield.Jötun Grunt.Power = 4
+? Bot1.Battlefield.Jötun Grunt.Toughness = 4
+? Bot1.Battlefield.Jötun Grunt.Colors = White
+? Bot1.Library.Count = 23
+? Bot2.Library.Count = 15
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard.Count = 0

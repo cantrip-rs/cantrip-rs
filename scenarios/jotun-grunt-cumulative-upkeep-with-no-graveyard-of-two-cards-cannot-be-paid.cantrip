@@ -1,0 +1,33 @@
+# Jötun Grunt: "Cumulative upkeep--Put two cards from a single graveyard on the bottom of their owner's library." Bot1's graveyard
+# holds one card (Black Lotus, which paid for the Grunt) and Bot2's one (a Lotus Petal): two cards in all, but not in a single
+# graveyard, so at Bot1's turn 3 upkeep the cost can't be paid, Bot1 is not asked, and the Grunt is sacrificed.
+
+[Bot1 Deck]
+Jötun Grunt
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Lotus Petal
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Jötun Grunt.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Lotus Petal.Cast
+Bot2.Pass
+Bot2.Battlefield.Lotus Petal.Activate(Color: Blue)
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Jötun Grunt; Black Lotus
+Bot2.Graveyard = Lotus Petal
