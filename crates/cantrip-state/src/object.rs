@@ -1201,6 +1201,11 @@ pub enum EffectKind {
     /// The effect's controller has hexproof (CR 702.11c): their opponents' spells and abilities can't target them. It
     /// is about the player and outlives its `affected` object, which is only the source.
     PlayerHexproof,
+    /// Each creature the effect's controller controls with toughness greater than its power assigns combat damage equal to its
+    /// toughness rather than its power (CR 510.1a, 611.2c) while it lasts: a rule about the player's creatures as damage is
+    /// assigned, so it reaches one that arrives later. The Kingpin of Crime's "until end of turn". The same rule as a permanent's
+    /// static ability is `CardDef::damage_by_toughness`. Outlives its `affected` object, the source.
+    CreaturesAssignDamageByToughness,
     /// The effect's controller has protection from everything (CR 702.16j): nothing can target them, whoever controls it,
     /// and damage from any source is prevented. About the player, not its `affected` object, which is only the source.
     PlayerProtectionFromEverything,
@@ -1347,6 +1352,7 @@ impl EffectKind {
                 | EffectKind::CantCastSpellsFrom(..)
                 | EffectKind::ReplacementRule(_)
                 | EffectKind::CreaturesCantBlock(_)
+                | EffectKind::CreaturesAssignDamageByToughness
                 | EffectKind::PlayFromGraveyard
                 | EffectKind::PlayerManaAbility(_)
                 | EffectKind::NextSpellCantBeCountered

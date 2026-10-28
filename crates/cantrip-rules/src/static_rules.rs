@@ -330,7 +330,8 @@ pub fn combat_damage_of(cx: &Cx, creature: ObjectId) -> u16 {
     let by_toughness = sources(cx, |d| !d.damage_by_toughness.is_empty()).any(|(id, controller, def)| {
         let asker = Asker { source: id, controller, by: None, spell: false };
         def.damage_by_toughness.iter().any(|rule| rule(cx, &asker, creature))
-    });
+    }) || (c.toughness.unwrap_or(0) > c.power.unwrap_or(0)
+        && cx.s().effects.iter().any(|e| e.kind == EffectKind::CreaturesAssignDamageByToughness && e.controller == cx.s().obj(creature).controller));
     if by_toughness {
         return c.toughness.unwrap_or(0).max(0) as u16;
     }
