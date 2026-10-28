@@ -1,0 +1,32 @@
+# Wood Elves: the search is for a card with a quality, so Bot1 may find nothing even with a Forest in the library (CR 701.23b, the
+# ruling). Finding nothing leaves the battlefield without a land and the Forest in the library, whose count is unchanged.
+
+[Bot1 Deck]
+Black Lotus
+Wood Elves
+Plains
+Plains
+Plains
+Plains
+Plains
+Forest
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wood Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Wood Elves
+Bot1.Library.Count = 11

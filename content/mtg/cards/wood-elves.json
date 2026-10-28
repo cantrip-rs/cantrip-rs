@@ -1,0 +1,8 @@
+{
+  "name": "Wood Elves",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Scout",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, search your library for a Forest card, put that card onto the battlefield, then shuffle."
+}

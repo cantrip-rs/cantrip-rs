@@ -1,0 +1,54 @@
+# Wood Elves, a 1/1: "When this creature enters, search your library for a Forest card, put that card onto the battlefield, then
+# shuffle." A "Forest card" is any land with the subtype Forest (CR 205.3i), so a Taiga (a Mountain Forest) is one, while a Mountain, a
+# Plains and a Lightning Bolt are not (the refusals). Bot1 takes the Taiga, which enters untapped, and with an Attercop on the battlefield
+# its landfall makes it a 3/2 (the land entered under Bot1's control, CR 603.6a). Bot2's Forest stays in its own library.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Attercop
+Wood Elves
+Plains
+Plains
+Mountain
+Plains
+Taiga
+Lightning Bolt
+Plains x10
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Attercop.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wood Elves.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Search(Mountain)
+! Bot1.Search(Plains)
+! Bot1.Search(Lightning Bolt)
+Bot1.Search(Taiga)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Taiga.Tapped = false
+? Bot1.Battlefield.Attercop.Power = 3
+
+[Expect]
+Bot1.Battlefield.Taiga.Types = Land
+Bot1.Battlefield.Taiga.Subtypes = Forest; Mountain
+Bot1.Battlefield.Attercop.Toughness = 2
+Bot2.Library.Count = 13
