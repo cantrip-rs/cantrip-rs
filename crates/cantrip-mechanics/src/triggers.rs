@@ -790,6 +790,31 @@ pub fn you_cast_a_spell_that_targets_a_creature_you_control(q: &dyn Query, me: &
 pub const YOU_CAST_A_SPELL_THAT_TARGETS_A_CREATURE_YOU_CONTROL: Trigger =
     when_asked(EventMask::SPELL_CAST, you_cast_a_spell_that_targets_a_creature_you_control);
 
+/// Repartee (CR 207.2c, an ability word): "Whenever you cast an instant or sorcery spell that targets a creature" (CR 603.2,
+/// 601.2c). A question about the spell as it was cast, whose targets are public from the moment they were announced: any of
+/// its targets, in whatever mode was chosen, is a creature on the battlefield, whoever controls it. One trigger for the spell
+/// however many creatures it targets (CR 603.2c: one cast is one event). A copy an effect makes is not cast (CR 707.10) and
+/// sets nothing off, but a copy that is cast (a prepared creature's spell, CR 722, 707.12) is a spell cast and does; a spell
+/// that targets only players, cards in a graveyard or other spells does not. The ability has resolved or is gone
+/// by the time the spell does, so what the creature later becomes does not matter. Graduation Day, Informed Inkwright, Inkshape
+/// Demonstrator, Rehearsed Debater and Stirring Hopesinger print it.
+pub fn repartee(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    if let Event::SpellCast { spell, player, .. } = event
+        && *player == me.controller
+        && (q.chars(*spell).is(CardType::Instant) || q.chars(*spell).is(CardType::Sorcery))
+        && let Some(item) = q.state().stack.iter().find(|i| i.kind == StackKind::Spell && i.object == *spell)
+        && q.state().targets(item).iter().filter_map(|t| t.object()).any(|id| {
+            crate::targets::permanent(q, id) && q.chars(id).is(CardType::Creature)
+        })
+    {
+        Fired::PLAIN
+    } else {
+        None
+    }
+}
+
+pub const REPARTEE: Trigger = when_asked(EventMask::SPELL_CAST, repartee);
+
 /// "Whenever a player casts a noncreature spell" (CR 603.2, 601.2i): any player's, the ability's controller included, read as
 /// the spell stands on the stack. The ability is about the player who cast it (`StackItem::subject`). Magebane Lizard and Mai,
 /// Scornful Striker print it.
