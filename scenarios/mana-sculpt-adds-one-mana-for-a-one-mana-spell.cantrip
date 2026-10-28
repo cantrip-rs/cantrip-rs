@@ -1,0 +1,42 @@
+# Mana Sculpt adds as much colorless mana as was spent, down to one: Bot2 casts Elusive Otter ({U}) with a Mox Sapphire on turn
+# 2, Bot1 counters it with a Black Lotus while it controls a Hydro-Channeler (a Wizard), and has {C} in its turn 3 main phase.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Hydro-Channeler
+Mana Sculpt
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Sapphire
+Elusive Otter
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hydro-Channeler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Elusive Otter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mana Sculpt.Cast(Elusive Otter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Elusive Otter = (absent)
+Bot1.Mana = {C}

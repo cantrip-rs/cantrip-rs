@@ -1,0 +1,49 @@
+# "Your next main phase" is the next one to begin, which may be the same turn's postcombat main phase (CR 500.1, 505.1): on
+# turn 3 Bot1 casts Grizzly Bears for {1}{G} with two Moxen, then counters its own spell with Mana Sculpt, paid by a Black
+# Lotus, with a Hydro-Channeler (a Wizard) on the battlefield. It has nothing in its pool until the postcombat main phase of
+# that turn, and then {C}{C}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Hydro-Channeler
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Mana Sculpt
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hydro-Channeler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mana Sculpt.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Mana Sculpt; Grizzly Bears; Black Lotus
+? Bot1.Mana =
+[T3 Bot1.Main2]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {C}{C}
+
+[Expect]
+Turn = 3
+Bot1.Mana = {C}{C}
