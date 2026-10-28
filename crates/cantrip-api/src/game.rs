@@ -655,6 +655,14 @@ pub trait Game: Query {
     /// Creates `count` tokens that are copies of these copiable values (CR 707.2, 111.1), the exceptions the effect
     /// states (CR 707.9b) among them: eternalize's "except it's a black Zombie 4/4 with no mana cost".
     fn create_token_copies_of(&mut self, values: Copiable, controller: PlayerId, count: u32) -> Result<Vec<ObjectId>, Suspend>;
+    /// `create_token_copies_of`, each token tapped when `tapped` ("a token that's a copy of ..., tapped" - myriad's, CR 702.116a):
+    /// they all enter together, tapped as they enter, not tapped afterwards.
+    fn create_token_copies_tapped(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool) -> Result<Vec<ObjectId>, Suspend>;
+    /// Makes these permanents, just put onto the battlefield, attack `defender` (CR 508.4): attacking, but never declared as
+    /// attackers, so nothing that watches attackers being declared sees them. Each one the rules keep out of combat
+    /// (`create_tokens_attacking`'s limits: no combat, not a creature, a defender that can't be attacked) only stays where it
+    /// is. Tokens made by `create_token_copies_tapped` first, so a copy's attack is chosen after the tokens are created.
+    fn enter_attacking(&mut self, entered: &[ObjectId], defender: Target);
     /// The player gets an emblem (CR 114.2): a new object in the command zone, owned by them, with the abilities
     /// of this definition. It never leaves.
     fn create_emblem(&mut self, def: CardId, player: PlayerId) -> ObjectId;
