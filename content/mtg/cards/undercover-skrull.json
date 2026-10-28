@@ -1,0 +1,8 @@
+{
+  "name": "Undercover Skrull",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Skrull Shapeshifter Villain",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "As long as there are two or more creature cards in your graveyard, this creature gets +2/+2 and is all creature types.\n{T}: Add one mana of any color."
+}

@@ -1,0 +1,60 @@
+# Undercover Skrull: "As long as there are two or more creature cards in your graveyard, this creature gets +2/+2 and is all creature types.
+# {T}: Add one mana of any color." Faithless Looting discards one Grizzly Bears and a Forest on turn 1: one creature card, one short, so the
+# Skrull is a 1/1 of its own types alone. On turn 3 the Skrull taps for {R}, which with two Moxen pays Looting's flashback, discarding a
+# second Grizzly Bears: two creature cards, so it is a 3/3 and every creature type (a Human, say, and a Zombie).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Faithless Looting
+Undercover Skrull
+Grizzly Bears
+Forest
+Grizzly Bears
+Forest
+Grizzly Bears
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Forest)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Undercover Skrull.Cast
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Graveyard = Faithless Looting; Forest; Grizzly Bears
+? Bot1.Battlefield.Undercover Skrull.Power = 1
+? Bot1.Battlefield.Undercover Skrull.Toughness = 1
+? Bot1.Battlefield.Undercover Skrull.Subtypes = Shapeshifter; Skrull; Villain
+[T3 Bot1.Main1]
+Bot1.Battlefield.Undercover Skrull.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Forest)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Undercover Skrull.Power = 3
+Bot1.Battlefield.Undercover Skrull.Toughness = 3
+Bot1.Battlefield.Undercover Skrull.Types = Creature
+Bot1.Battlefield.Undercover Skrull.Subtypes = (every creature type)
+Bot1.Battlefield.Undercover Skrull.Tapped = true
