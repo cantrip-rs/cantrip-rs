@@ -1,0 +1,11 @@
+{
+  "name": "Simian Grunts",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Ape",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flash\nEcho {2}{G} (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)",
+  "keywords": [
+    "Flash"
+  ]
+}
