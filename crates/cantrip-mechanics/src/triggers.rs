@@ -1156,6 +1156,20 @@ pub fn creature_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Opti
     }
 }
 
+/// "Whenever you cast a [subtype] spell" (CR 603.2), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): its controller's spells
+/// only, judged on the spell as it is on the stack (CR 601.2i), the type read through the words of the source's text
+/// (CR 612). Gev, Scaled Scorch (Lizards) and Madame Hydra (Villains) print it.
+pub fn subtype_spell_you_cast<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, .. }
+            if *player == me.controller && q.chars(*spell).has_subtype(crate::lands::word(q, me.source, SUBTYPE)) =>
+        {
+            Fired::PLAIN
+        }
+        _ => None,
+    }
+}
+
 /// "Whenever you cast an artifact spell" (CR 603.2). Pinnacle Emissary and Ravenous Robots print it.
 pub fn artifact_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
