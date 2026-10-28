@@ -1,0 +1,68 @@
+# Sheltering Ancient {1}{G}, 5/5 trample, "Cumulative upkeep--Put a +1/+1 counter on a creature an opponent controls." (CR 702.24a).
+# Bot2 has a Balduvian Bears from turn 2 and a second from turn 4. At Bot1's turn 3 upkeep the Ancient gets an age counter and
+# Bot1 puts one counter on the only Bears. At turn 5 the second age counter makes the cost two counters, each on a creature
+# chosen separately (the ruling): one on the first Bears, which then has two, and one on the second, which has one.
+
+[Bot1 Deck]
+Sheltering Ancient
+Mox Emerald
+Forest
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Forest
+Forest
+Balduvian Bears
+Balduvian Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sheltering Ancient.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Balduvian Bears.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Choose()
+Bot1.Choose(Balduvian Bears)
+Bot1.Pass
+? Bot1.Battlefield.Sheltering Ancient.Counters.Age = 1
+? Bot2.Battlefield.Balduvian Bears.Counters.PlusOnePlusOne = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Hand.Balduvian Bears.Cast
+Bot2.Pass
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Bot2.Battlefield.Balduvian Bears#1)
+Bot1.Choose(Bot2.Battlefield.Balduvian Bears#2)
+Bot1.Pass
+? Bot1.Battlefield.Sheltering Ancient.Counters.Age = 2
+? Bot1.Battlefield.Sheltering Ancient.Power = 5
+? Bot1.Battlefield.Sheltering Ancient.Toughness = 5
+? Bot1.Battlefield.Sheltering Ancient.Keywords = Trample
+? Bot1.Battlefield.Sheltering Ancient.Colors = Green
+
+[Expect]
+Bot2.Battlefield.Balduvian Bears#1.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield.Balduvian Bears#2.Counters.PlusOnePlusOne = 1
