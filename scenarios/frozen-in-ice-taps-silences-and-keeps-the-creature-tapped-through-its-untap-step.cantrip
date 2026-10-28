@@ -1,0 +1,38 @@
+# Frozen in Ice: "When this Aura enters, tap enchanted creature. Enchanted creature loses all abilities and can't become
+# untapped." Cast on Bot1's own Ornithopter with Black Lotus's {U}{U}{U} ({2}{U} exactly): it is tapped and has lost flying,
+# and on turn 3 it is still tapped after Bot1's untap step, which the Aura's rule outlasts although the creature has lost
+# every ability (CR 701.26b, 613.1f). Bot1's Island, untapped for the turn, is the control.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Frozen in Ice
+Island x4
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Frozen in Ice.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = true
+? Bot1.Battlefield.Ornithopter.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+? Bot1.Battlefield.Island.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Keywords = (absent)
+Bot1.Battlefield.Frozen in Ice.AttachedTo = Ornithopter
