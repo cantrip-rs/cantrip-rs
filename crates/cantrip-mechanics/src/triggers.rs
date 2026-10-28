@@ -576,20 +576,27 @@ pub const fn ward_life_equal_to_power(text: &'static str) -> AbilityDef {
         .ward()
 }
 
-fn ward_discard_effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Target::Object(by) = item.subject else { return Ok(()) };
+/// Whether the player whose spell or ability targeted pays ward's discard cost (CR 118.12a): a player with no card in hand
+/// cannot pay and is not asked, nor is one whom the ward's controller's abilities can't make discard (CR 101.2; Tamiyo,
+/// Collector of Tales's ruling: "something happens unless you discard" can't be paid); one who can is asked whether to, and
+/// then which card.
+fn ward_discard_paid(g: &mut dyn Game, item: &StackItem, by: ObjectId) -> Result<bool, Suspend> {
     let payer = PlayerId(item.data[0] as u8);
-    // A player with no card in hand cannot pay and is not asked, nor is one whom the ward's controller's abilities can't make
-    // discard (CR 101.2; Tamiyo, Collector of Tales's ruling: "something happens unless you discard" can't be paid); one who
-    // can is asked whether to, and then which card.
     if !g.state().zone(Zone::hand(payer)).is_empty()
         && may_cause(&*g, item.controller, payer, CauseKind::Discard)
         && matches!(g.ask(payer, RequestKind::May { source: by, purpose: Purpose::Ask(&WARD_DISCARD) })?, Answer::Yes)
     {
         crate::discard_chosen(g, payer, item.object, 1)?;
-        return Ok(());
+        return Ok(true);
     }
-    g.counter_item(by, item.data[1] as usize);
+    Ok(false)
+}
+
+fn ward_discard_effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Target::Object(by) = item.subject else { return Ok(()) };
+    if !ward_discard_paid(g, item, by)? {
+        g.counter_item(by, item.data[1] as usize);
+    }
     Ok(())
 }
 
@@ -597,6 +604,25 @@ fn ward_discard_effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
 /// counter it unless that player discards a card." Sunset Saboteur prints it.
 pub const fn ward_discard(text: &'static str) -> AbilityDef {
     triggered(when(EventMask::BECAME_TARGET, ward_matches), ward_discard_effect, text)
+        .ward()
+}
+
+fn ward_discard_or_pay_effect<const N: u8>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Target::Object(by) = item.subject else { return Ok(()) };
+    let payer = PlayerId(item.data[0] as u8);
+    // The cost is either one: the payer is asked about the mana first, and about the discard if they decline or can't pay.
+    if g.may_pay(payer, item.object, by, Cost { mana: generic(N), ..Cost::NONE }, &crate::COUNTERED_UNLESS_PAID)? || ward_discard_paid(g, item, by)? {
+        return Ok(());
+    }
+    g.counter_item(by, item.data[1] as usize);
+    Ok(())
+}
+
+/// Ward--Discard a card or pay {N} (CR 702.21a, 118.12): "Whenever this becomes the target of a spell or ability an opponent
+/// controls, counter it unless that player discards a card or pays {N}." The player pays one of the two. Titania, Rugged
+/// Rumbler prints it with {2}.
+pub const fn ward_discard_or_pay<const N: u8>(text: &'static str) -> AbilityDef {
+    triggered(when(EventMask::BECAME_TARGET, ward_matches), ward_discard_or_pay_effect::<N>, text)
         .ward()
 }
 
