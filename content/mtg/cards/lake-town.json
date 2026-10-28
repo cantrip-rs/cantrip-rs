@@ -1,0 +1,5 @@
+{
+  "name": "Lake-town",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {W} or {U}.\n{2}{W}{U}, {T}, Sacrifice this land: Put two +1/+1 counters on target Human you control. Activate only as a sorcery."
+}

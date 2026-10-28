@@ -1,0 +1,80 @@
+# Lake-town: "This land enters tapped", "{T}: Add {W} or {U}" and "{2}{W}{U}, {T}, Sacrifice this land: Put two +1/+1
+# counters on target Human you control. Activate only as a sorcery." A Human. The land is tapped the turn it enters and untaps next
+# turn; it taps for either color and no other (Undo takes each tap back); the ability is refused outside a main phase and at an
+# Ornithopter or the opponent's Akrasan Squire, and puts exactly two counters on Bot1's Akrasan Squire (the {T} and the sacrifice are costs,
+# paid exactly with four Moxen) (CR 602.5d, 122.1).
+
+[Bot1 Deck]
+Lake-town
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Akrasan Squire
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Mox Pearl
+Akrasan Squire
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Lake-town.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Akrasan Squire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Lake-town.Tapped = true
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Akrasan Squire.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Lake-town.Tapped = false
+! Bot1.Battlefield.Lake-town.Activate(Color: Red)
+Bot1.Battlefield.Lake-town.Activate(Color: White)
+? Bot1.Mana = {W}
+Bot1.Undo
+Bot1.Battlefield.Lake-town.Activate(Color: Blue)
+? Bot1.Mana = {U}
+Bot1.Undo
+! Bot1.Battlefield.Lake-town.Activate(Ability: Put two)
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+! Bot1.Battlefield.Lake-town.Activate(Ability: Put two; Ornithopter)
+! Bot1.Battlefield.Lake-town.Activate(Ability: Put two; Bot2.Battlefield.Akrasan Squire)
+! Bot1.Battlefield.Lake-town.Activate(Ability: Put two; Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Lake-town.Activate(Ability: Put two; Akrasan Squire)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Akrasan Squire.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Akrasan Squire.Counters.PlusOnePlusOne = (absent)
+Bot1.Graveyard = Lake-town
+Bot1.Battlefield.Akrasan Squire.Power = 3
+Bot1.Battlefield.Akrasan Squire.Toughness = 3
