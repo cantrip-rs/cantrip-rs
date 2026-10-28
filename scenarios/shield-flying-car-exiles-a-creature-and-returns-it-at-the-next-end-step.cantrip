@@ -1,0 +1,34 @@
+# S.H.I.E.L.D. Flying Car: "When this Vehicle enters, exile up to one target creature you control. Return that card to the
+# battlefield under its owner's control at the beginning of the next end step" (CR 603.7). {2}{U} is paid exactly by Black
+# Lotus's {U}{U}{U}. The Car itself is not a creature (a Vehicle), so it is no candidate, and Bot1's Ornithopter is exiled
+# for the rest of turn 1 and is back, a new object, in turn 2. The Car is a 3/3 artifact with flash and flying.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+S.H.I.E.L.D. Flying Car
+Island x4
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.S.H.I.E.L.D. Flying Car.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Target(Ornithopter)
+[Bot1.Main2]
+? Exile = Ornithopter
+? Bot1.Battlefield = S.H.I.E.L.D. Flying Car
+[T2 Bot2.Main1]
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = S.H.I.E.L.D. Flying Car; Ornithopter
+Bot1.Battlefield.S.H.I.E.L.D. Flying Car.Types = Artifact
+Bot1.Battlefield.S.H.I.E.L.D. Flying Car.Keywords = Flash; Flying

@@ -1,0 +1,12 @@
+{
+  "name": "S.H.I.E.L.D. Flying Car",
+  "manaCost": "{2}{U}",
+  "type": "Artifact — Vehicle",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flash\nFlying\nWhen this Vehicle enters, exile up to one target creature you control. Return that card to the battlefield under its owner's control at the beginning of the next end step.\nCrew 1",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}
