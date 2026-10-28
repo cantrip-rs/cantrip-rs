@@ -1,0 +1,36 @@
+# Carnival Hellsteed's unleash (CR 702.98a): Bot1 casts it on turn 1 with free mana and accepts the counter, so it enters with a +1/+1
+# counter on it - a 6/5 - and can't block as long as it has it (it keeps its printed abilities).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mana Crypt
+Carnival Hellsteed
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Carnival Hellsteed.Cast
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Carnival Hellsteed.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Carnival Hellsteed.Power = 6
+Bot1.Battlefield.Carnival Hellsteed.Toughness = 5
+Bot1.Battlefield.Carnival Hellsteed.Keywords = CantBlock; FirstStrike; Haste
