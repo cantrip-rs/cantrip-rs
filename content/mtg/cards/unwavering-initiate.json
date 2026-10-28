@@ -1,0 +1,11 @@
+{
+  "name": "Unwavering Initiate",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Vigilance\nEmbalm {4}{W} ({4}{W}, Exile this card from your graveyard: Create a token that's a copy of it, except it's a white Zombie Human Warrior with no mana cost. Embalm only as a sorcery.)",
+  "keywords": [
+    "Vigilance"
+  ]
+}
