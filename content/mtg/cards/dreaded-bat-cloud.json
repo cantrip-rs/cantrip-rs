@@ -1,0 +1,12 @@
+{
+  "name": "Dreaded Bat-Cloud",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Bat",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "This spell costs {3} less to cast if a creature died this turn.\nFlying, deathtouch",
+  "keywords": [
+    "Flying",
+    "Deathtouch"
+  ]
+}

@@ -1,0 +1,54 @@
+# Dreaded Bat-Cloud {4}{B}: "This spell costs {3} less to cast if a creature died this turn." A creature died on turn 1 (Bot1 Bolted
+# its own Memnite), which does not count on turn 3: with Mox Jet, Mox Pearl and Mox Ruby untapped (three mana) it is refused, and
+# is not offered. Once Bot1's second Bolt kills Bot2's Memnite this turn - a creature the caster does not control - it costs {1}{B},
+# paid exactly with Mox Jet's {B} and Mox Pearl's {W}, and the pool ends empty. It is a 4/2 with flying and deathtouch.
+
+[Bot1 Deck]
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Memnite
+Mox Jet
+Mox Pearl
+Dreaded Bat-Cloud
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+! Bot1.Hand.Dreaded Bat-Cloud.Cast(Mana: short)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dreaded Bat-Cloud.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Dreaded Bat-Cloud.Power = 4
+Bot1.Battlefield.Dreaded Bat-Cloud.Toughness = 2
+Bot1.Battlefield.Dreaded Bat-Cloud.Keywords = Deathtouch; Flying
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Lightning Bolt; Memnite; Lightning Bolt
