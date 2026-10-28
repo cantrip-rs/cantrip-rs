@@ -1,0 +1,57 @@
+# Mentor (CR 702.134a, 608.2b): two Blade Instructors (3/1) attack with Isamaru (2/2). Each mentor's only creature of lesser power
+# is Isamaru - the other Instructor has equal power, which is not less - so both triggers target it. The first resolves and
+# Isamaru is 3/3; as the second resolves Isamaru's power is no longer less than 3, its target is illegal and it does nothing
+# (the ruling's own example): one counter, not two. Black Lotus, Mox Pearl and Plains pay for the creatures.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Blade Instructor
+Blade Instructor
+Isamaru, Hound of Konda
+Plains
+Plains
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Blade Instructor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Blade Instructor.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Blade Instructor#1 > Bot2; Blade Instructor#2 > Bot2; Isamaru, Hound of Konda > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Isamaru, Hound of Konda.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Isamaru, Hound of Konda.Power = 3
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Isamaru, Hound of Konda.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Isamaru, Hound of Konda.Power = 3
+Bot2.Life = 11
