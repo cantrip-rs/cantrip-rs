@@ -1,0 +1,11 @@
+{
+  "name": "Smoldering Butcher",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Elemental Warrior",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Wither (This deals damage to creatures in the form of -1/-1 counters.)",
+  "keywords": [
+    "Wither"
+  ]
+}
