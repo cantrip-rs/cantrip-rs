@@ -1,0 +1,35 @@
+# Riot (CR 702.136a): Bot1 casts Rampaging Rendhorn ({4}{G}) and chooses haste, so it has no counter - a 4/4 - and attacks
+# the turn it enters. Haste lasts: it is still hasty on turn 3.
+
+[Bot1 Deck]
+Black Lotus
+Mana Crypt
+Rampaging Rendhorn
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Rampaging Rendhorn.Cast
+Bot1.Pass
+Bot1.Name(Haste)
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Rampaging Rendhorn > Bot2)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Rampaging Rendhorn.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Rampaging Rendhorn.Power = 4
+Bot1.Battlefield.Rampaging Rendhorn.Toughness = 4
+Bot1.Battlefield.Rampaging Rendhorn.Keywords = Haste
