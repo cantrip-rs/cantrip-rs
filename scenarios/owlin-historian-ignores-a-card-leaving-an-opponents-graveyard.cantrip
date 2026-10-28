@@ -1,0 +1,50 @@
+# Owlin Historian: the trigger watches only "your graveyard". Bot1 bolts Bot2's Summoned Dromedary, and when Bot2 returns it
+# from its own graveyard to its hand on turn four, Bot1's Historian stays 2/3.
+
+[Bot1 Deck]
+Mox Ruby
+Lightning Bolt
+Mox Pearl x3
+Owlin Historian
+Island
+Island x15
+
+[Bot2 Deck]
+Summoned Dromedary
+Mox Pearl x4
+Island x2
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Owlin Historian.Cast
+Bot1.Arrange(Island | )
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Battlefield.Mox Pearl#4.Activate
+Bot2.Hand.Summoned Dromedary.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Summoned Dromedary)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Graveyard.Summoned Dromedary.Activate
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Owlin Historian.Power = 2
+Bot1.Battlefield.Owlin Historian.Toughness = 3

@@ -1,0 +1,48 @@
+# Owlin Historian: "When this creature enters, surveil 1" puts the top Island into Bot1's graveyard beside the Lightning
+# Bolt it cast; "Whenever one or more cards leave your graveyard, this creature gets +1/+1 until end of turn" is one trigger
+# for the two cards a Soaring Stoneglider exiles at once (CR 603.2c), so it is 3/4 and not 4/5, and 2/3 again afterwards.
+
+[Bot1 Deck]
+Mox Ruby
+Lightning Bolt
+Mox Pearl x3
+Owlin Historian
+Island
+Island
+Soaring Stoneglider
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Owlin Historian.Cast
+Bot1.Arrange( | Island)
+[T1 Bot1.Main2]
+? Bot1.Graveyard = Island; Lightning Bolt
+? Bot1.Battlefield.Owlin Historian.Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Soaring Stoneglider.Cast
+Bot1.Modes(Exile two cards from your graveyard)
+Bot1.Choose(Lightning Bolt; Island)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Owlin Historian.Power = 3
+? Bot1.Battlefield.Owlin Historian.Toughness = 4
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot1.Battlefield.Owlin Historian.Power = 2
+Bot1.Battlefield.Owlin Historian.Toughness = 3
+Exile.Count = 2

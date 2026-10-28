@@ -1,0 +1,11 @@
+{
+  "name": "Owlin Historian",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Bird Cleric",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\nWhenever one or more cards leave your graveyard, this creature gets +1/+1 until end of turn.",
+  "keywords": [
+    "Flying"
+  ]
+}
