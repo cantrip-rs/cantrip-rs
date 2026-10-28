@@ -1,0 +1,57 @@
+# Sphinx of the Steel Wind, a french vanilla creature: cast with Black Lotus and Moxen paying exactly its cost (the pool is empty right after), its
+# characteristics as printed (power, toughness, keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+# Vigilance means it does not tap to attack; lifelink gains Bot1 6.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Sphinx of the Steel Wind
+Plains x17
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sphinx of the Steel Wind.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T2 Bot2.End]
+? Bot1.Battlefield.Sphinx of the Steel Wind.Power = 6
+? Bot1.Battlefield.Sphinx of the Steel Wind.Toughness = 6
+? Bot1.Battlefield.Sphinx of the Steel Wind.Keywords = FirstStrike; Flying; Lifelink; Vigilance
+? Bot1.Battlefield.Sphinx of the Steel Wind.Colors = Black; Blue; White
+? Bot1.Battlefield.Sphinx of the Steel Wind.Types = Artifact; Creature
+? Bot1.Battlefield.Sphinx of the Steel Wind.Subtypes = Sphinx
+? Bot1.Battlefield.Sphinx of the Steel Wind.Supertypes = (absent)
+? Bot1.Battlefield.Sphinx of the Steel Wind.ProtectionFrom = Green; Red
+[T3 Bot1.Main1]
+Bot1.Attack(Sphinx of the Steel Wind > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 26
+Bot1.Battlefield.Sphinx of the Steel Wind.Tapped = false
