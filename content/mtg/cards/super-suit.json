@@ -1,0 +1,9 @@
+{
+  "name": "Super Suit",
+  "manaCost": "{1}{U}",
+  "type": "Artifact — Equipment",
+  "oracleText": "Flash\nWhen this Equipment enters, attach it to target creature you control. Untap that creature.\nEquipped creature gets +1/+2.\nEquip {2} ({2}: Attach to target creature you control. Equip only as a sorcery.)",
+  "keywords": [
+    "Flash"
+  ]
+}
