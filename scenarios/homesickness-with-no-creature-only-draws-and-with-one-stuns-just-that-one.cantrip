@@ -1,0 +1,52 @@
+# Homesickness's "up to two target creatures" can be none: on turn 1 Bot1 targets itself and no creature (nothing is on the
+# battlefield to target), draws two cards and nothing is tapped. The opponent as the player works too: on turn 3 it targets
+# Bot2 and its one Ornithopter, which is tapped with one stun counter, and Bot2 draws the two.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Homesickness
+Homesickness
+Island
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Homesickness.Cast
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Homesickness.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Counters.Stun = 1
