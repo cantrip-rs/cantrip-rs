@@ -1,0 +1,12 @@
+{
+  "name": "Vampire Cutthroat",
+  "manaCost": "{B}",
+  "type": "Creature — Vampire Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Skulk (This creature can't be blocked by creatures with greater power.)\nLifelink (Damage dealt by this creature also causes you to gain that much life.)",
+  "keywords": [
+    "Skulk",
+    "Lifelink"
+  ]
+}
