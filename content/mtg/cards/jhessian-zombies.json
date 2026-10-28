@@ -1,0 +1,11 @@
+{
+  "name": "Jhessian Zombies",
+  "manaCost": "{4}{U}{B}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Fear (This creature can't be blocked except by artifact creatures and/or black creatures.)\nIslandcycling {2}, swampcycling {2} ({2}, Discard this card: Search your library for an Island or Swamp card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Fear"
+  ]
+}
