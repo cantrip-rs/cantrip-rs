@@ -1,0 +1,86 @@
+# Bruce Banner: "{2}{R}{R}{G}{G}: Transform Bruce Banner. Activate only as a sorcery." In turn 3 Bot1 pays it exactly with
+# Black Lotus's {R}{R}{R}, Forest, Mox Emerald and Mox Pearl (the pool is empty) and he becomes The Incredible Hulk, an 8/8 with
+# reach and trample. "Enrage - Whenever The Incredible Hulk is dealt damage, put a +1/+1 counter on him. If he's attacking, untap
+# him and there is an additional combat phase after this phase." He attacks, Bot2's Grizzly Bears block and deal 2 to him: the
+# counter (a 9/9), he untaps and a second combat follows. The Bears took 2 and the trample 6 went to Bot2 (14); in the
+# second combat the unblocked 9/9 hits for 9 (5). In Bot2's turn 4 a Lightning Bolt hurts the tapped Hulk: another counter, but he
+# is not attacking, so he stays tapped and there is no extra combat.
+
+[Bot1 Deck]
+Forest
+Mox Sapphire
+Bruce Banner
+Black Lotus
+Mox Emerald
+Mox Pearl
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Mox Jet
+Mox Ruby
+Grizzly Bears
+Lightning Bolt
+Island x2
+Island x13
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bruce Banner.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Bruce Banner.Activate(Ability: Transform)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.The Incredible Hulk.Power = 8
+? Bot1.Battlefield.The Incredible Hulk.Keywords = Reach; Trample
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Incredible Hulk > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Grizzly Bears > The Incredible Hulk)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 14
+? Bot1.Battlefield.The Incredible Hulk.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.The Incredible Hulk.Tapped = false
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Incredible Hulk > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 5
+? Bot1.Battlefield.The Incredible Hulk.Tapped = true
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.The Incredible Hulk)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.The Incredible Hulk.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.The Incredible Hulk.Power = 10
+Bot1.Battlefield.The Incredible Hulk.Tapped = true
+Bot2.Life = 5

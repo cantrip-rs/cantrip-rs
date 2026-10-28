@@ -1,0 +1,50 @@
+# Bruce Banner: "{X}{X}, {T}: Draw X cards. Activate only as a sorcery." Cast in turn 1 ({U}, Mox Sapphire). In turn 3, with X = 2,
+# the ability costs {4}: paid exactly by four Moxen (the pool is empty after) and Bot1 draws two cards (hand 2 after turn 3's
+# draw step, 4 now). In turn 5 it can't be activated at the beginning of combat (a refusal; it is untapped, and mana to spare
+# would pay for it), though it can in the main phase.
+
+[Bot1 Deck]
+Mox Sapphire
+Bruce Banner
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bruce Banner.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Bruce Banner.Activate(Ability: Draw; X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Hand.Count = 4
+[T5 Bot1.BeginCombat]
+! Bot1.Battlefield.Bruce Banner.Activate(Ability: Draw)
+
+[Expect]
+Bot1.Battlefield.Bruce Banner.Tapped = false
+Bot1.Hand.Count = 5
