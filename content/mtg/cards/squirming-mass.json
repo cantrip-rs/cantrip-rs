@@ -1,0 +1,11 @@
+{
+  "name": "Squirming Mass",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Horror",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Fear (This creature can't be blocked except by artifact creatures and/or black creatures.)",
+  "keywords": [
+    "Fear"
+  ]
+}
