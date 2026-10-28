@@ -1,0 +1,8 @@
+{
+  "name": "Crimson Operative",
+  "manaCost": "{3}{R}",
+  "type": "Artifact Creature — Human Villain",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nWhen this creature enters, exile the top card of your library. Until the end of your next turn, you may play that card."
+}

@@ -1,0 +1,46 @@
+# Crimson Operative: "Until the end of your next turn": the Forest exiled on turn 1 is still playable on turn 3 (Bot1 plays an Island
+# instead, so the Forest stays in exile; the other scenario plays it then) but no longer on turn 5, the permission having ended with turn 3's cleanup step (CR 514.2).
+
+[Bot1 Deck]
+Crimson Operative
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island
+Island
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Crimson Operative.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+! Bot1.Exile.Forest.Play
+Bot1.Hand.Island.Play
+
+[Expect]
+Turn = 5
+Exile = Forest
+Bot1.Battlefield = Crimson Operative; Mox Ruby; Mox Pearl; Mox Sapphire; Mox Jet; Island; Island

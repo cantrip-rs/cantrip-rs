@@ -1,0 +1,57 @@
+# Crimson Operative: "When this creature enters, exile the top card of your library. Until the end of your next turn, you may play
+# that card." The Bolt on top of Bot1's library (not Bot2's top card, a Forest, which stays) is exiled and Bot1 casts it from exile on the same
+# turn with the land drop's Mountain; that noncreature spell triggers prowess (CR 702.108a), so the 3/2 is a 4/3 until end of turn.
+
+[Bot1 Deck]
+Crimson Operative
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mountain
+Island
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Island x7
+Forest
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Crimson Operative.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt
+? Bot1.Library.Count = 20
+? Bot2.Library.Count = 14
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Crimson Operative.Power = 4
+? Bot1.Battlefield.Crimson Operative.Toughness = 3
+
+[Expect]
+Bot2.Life = 17
+Exile.Count = 0
+Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield.Crimson Operative.Toughness = 3
+Bot2.Library.Count = 14
+Bot1.Battlefield.Crimson Operative.Power = 4
