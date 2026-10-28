@@ -1,0 +1,6 @@
+{
+  "name": "Through the Forest Gate",
+  "manaCost": "{6}{G}{G}",
+  "type": "Sorcery",
+  "oracleText": "Look at the top twenty cards of your library, put any number of land cards from among them onto the battlefield tapped, then shuffle. You gain 8 life."
+}

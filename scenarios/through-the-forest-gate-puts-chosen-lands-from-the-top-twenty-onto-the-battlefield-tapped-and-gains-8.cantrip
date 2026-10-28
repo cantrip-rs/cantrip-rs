@@ -1,0 +1,53 @@
+# Through the Forest Gate, {6}{G}{G}: "Look at the top twenty cards of your library, put any number of land cards from among them onto
+# the battlefield tapped, then shuffle. You gain 8 life." The top twenty are a Lightning Bolt, a Forest, a Grizzly Bears,
+# a Mountain, fifteen Plains and, twentieth, an Island; the twenty-first, a Swamp, is not looked at. Bot1 may not take the spells or the Swamp
+# (the refusals), and takes the Forest and the Island - two of the lands, not all: both enter tapped - and gains exactly 8 life.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Pearl
+Through the Forest Gate
+Plains
+Plains
+Lightning Bolt
+Forest
+Grizzly Bears
+Mountain
+Plains x15
+Island
+Swamp
+Plains x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Through the Forest Gate.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Lightning Bolt)
+! Bot1.Choose(Grizzly Bears)
+! Bot1.Choose(Swamp)
+Bot1.Choose(Forest; Island)
+
+[Expect]
+Bot1.Life = 28
+Bot1.Looked.Count = 20
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Island.Tapped = true
+Bot1.Library.Count = 24
