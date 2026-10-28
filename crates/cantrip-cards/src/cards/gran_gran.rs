@@ -1,14 +1,7 @@
 use cantrip_api::*;
+use cantrip_mechanics::triggers::THIS_BECOMES_TAPPED;
 use cantrip_mechanics::{effects, learn};
 use cantrip_oracle as oracle;
-
-/// "Whenever Gran-Gran becomes tapped" (CR 701.26a, 603.2): by any path that taps it.
-fn this_becomes_tapped(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    match event {
-        Event::Tapped { permanent } if *permanent == source => Fired::PLAIN,
-        _ => None,
-    }
-}
 
 /// "Noncreature spells you cast cost {1} less to cast as long as there are three or more Lesson cards in your graveyard"
 /// (CR 601.2f, 118.7a): asked of the spell's own characteristics as it is cast, only its controller's, and only while the
@@ -22,7 +15,7 @@ fn noncreature_spells_cost_one_less(q: &dyn Query, source: ObjectId, player: Pla
 }
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(when(EventMask::TAPPED, this_becomes_tapped), effects::loot, "Whenever Gran-Gran becomes tapped, draw a card, then discard a card.")],
+    abilities: &[triggered(THIS_BECOMES_TAPPED, effects::loot, "Whenever Gran-Gran becomes tapped, draw a card, then discard a card.")],
     cost_changes: &[noncreature_spells_cost_one_less],
     ..oracle::GRAN_GRAN
 };

@@ -17,6 +17,15 @@ pub fn this_enters(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fir
     }
 }
 
+/// "Whenever this creature becomes tapped" (CR 701.26a, 603.2): by any path that taps it, a tap for mana or a cost included.
+/// Gran-Gran and Hawkeye, Master Marksman print it.
+pub fn this_becomes_tapped(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Tapped { permanent } if *permanent == source => Fired::PLAIN,
+        _ => None,
+    }
+}
+
 /// "Whenever another creature or planeswalker you control enters" (CR 603.6a): a different permanent that entered
 /// the battlefield under this source's controller's control, and is a creature or planeswalker as it entered. Liliana
 /// the Faultless and Liliana the Repentant print it.
@@ -1377,6 +1386,7 @@ pub fn you_activate_a_nonmana_ability(q: &dyn Query, me: &Asker, event: &Event) 
 pub const YOU_ACTIVATE_A_NONMANA_ABILITY: Trigger = when_asked(EventMask::ABILITY_ACTIVATED, you_activate_a_nonmana_ability);
 
 pub const THIS_ENTERS: Trigger = when(EventMask::ZONE_CHANGE, this_enters);
+pub const THIS_BECOMES_TAPPED: Trigger = when(EventMask::TAPPED, this_becomes_tapped);
 pub const THIS_ENTERS_IF_CAST: Trigger = when(EventMask::ZONE_CHANGE, this_enters_if_cast);
 pub const LANDFALL: Trigger = when_asked(EventMask::ZONE_CHANGE, landfall);
 pub const YOU_UNLOCK_THIS_RIGHT_DOOR: Trigger = when(EventMask::DOOR_UNLOCKED, you_unlock_this_right_door);
