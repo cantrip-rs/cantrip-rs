@@ -1,0 +1,39 @@
+# Justice's enters trigger takes a nonland, nontoken permanent (CR 111.1): Bot2's Soldier token (from a S.H.I.E.L.D.
+# Deployment Drone) is no legal target (the refusal), Bot2's Drone is. It goes back to Bot2's hand, and Justice gets no
+# counter, because it was not a permanent Bot1 controlled: a 2/2.
+
+[Bot1 Deck]
+Black Lotus
+Justice, Vance Astrovik
+Island x5
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+S.H.I.E.L.D. Deployment Drone
+Island x5
+Island x13
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.S.H.I.E.L.D. Deployment Drone.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Justice, Vance Astrovik.Cast
+Bot1.Pass
+! Bot1.Target(Bot2.Battlefield.Soldier Token)
+Bot1.Target(Bot2.Battlefield.S.H.I.E.L.D. Deployment Drone)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Hand.Count = 7
+Bot2.Battlefield.Soldier Token.Power = 1
+Bot2.Battlefield.S.H.I.E.L.D. Deployment Drone = (absent)
+Bot1.Battlefield.Justice, Vance Astrovik.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Justice, Vance Astrovik.Power = 2

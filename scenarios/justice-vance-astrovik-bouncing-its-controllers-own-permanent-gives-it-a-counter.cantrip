@@ -1,0 +1,36 @@
+# Justice, Vance Astrovik: "When Justice enters, return up to one target nonland, nontoken permanent to its owner's hand" and
+# "Whenever another nonland permanent you control is returned to its owner's hand, put a +1/+1 counter on Justice." {2}{U} is
+# paid exactly by Black Lotus. Justice returns Bot1's own Mox Pearl, which Justice sees (it is on the battlefield as the
+# ability resolves): one counter, a 3/3. Bot1's Island is a land and no legal target (the refusal, beside the Mox).
+
+[Bot1 Deck]
+Island
+Mox Pearl
+Black Lotus
+Justice, Vance Astrovik
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Justice, Vance Astrovik.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Target(Bot1.Battlefield.Mox Pearl)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Mox Pearl; Island; Island; Island
+Bot1.Battlefield.Justice, Vance Astrovik.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Justice, Vance Astrovik.Power = 3
+Bot1.Battlefield.Justice, Vance Astrovik.Toughness = 3
+Bot1.Battlefield.Mox Pearl = (absent)
