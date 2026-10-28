@@ -1,0 +1,11 @@
+{
+  "name": "Harvest Gwyllion",
+  "manaCost": "{2}{W/B}{W/B}",
+  "type": "Creature — Hag",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Wither (This deals damage to creatures in the form of -1/-1 counters.)",
+  "keywords": [
+    "Wither"
+  ]
+}
