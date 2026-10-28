@@ -1,0 +1,11 @@
+{
+  "name": "Suq'Ata Lancer",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Haste\nFlanking (Whenever a creature without flanking blocks this creature, the blocking creature gets -1/-1 until end of turn.)",
+  "keywords": [
+    "Haste"
+  ]
+}
