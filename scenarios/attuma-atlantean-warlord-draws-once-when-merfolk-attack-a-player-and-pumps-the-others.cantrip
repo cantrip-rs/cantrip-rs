@@ -1,0 +1,63 @@
+# Attuma, Atlantean Warlord: "Other Merfolk you control get +1/+1" and "Whenever one or more Merfolk you control attack a
+# player, draw a card." Attuma is cast on turn 1 for {2}{U}{U} (Black Lotus's {U}{U}{U} and Mox Sapphire's {U}, nothing left
+# over). On turn 3 a Grizzly Bears, no Merfolk, attacks alone: no draw (library 12 after the draw step). Atlantean Cavalry, cast
+# with Sapphire, Emerald and Ruby, is a Merfolk Soldier and a 4/3 with Attuma. On turn 5 Attuma and the Cavalry attack together
+# (one draw for the pair, library 11 after the draw step and 10 after Attuma's trigger); that is the Cavalry's second card
+# of the turn, so it grows to a 5/4, and it deals 5 and Attuma 3 damage: Bot2 is at 12.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Black Lotus
+Attuma, Atlantean Warlord
+Grizzly Bears
+Atlantean Cavalry
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Attuma, Atlantean Warlord.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Atlantean Cavalry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Atlantean Cavalry.Power = 4
+? Bot1.Battlefield.Atlantean Cavalry.Toughness = 3
+? Bot1.Battlefield.Attuma, Atlantean Warlord.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Library.Count = 12
+? Bot2.Life = 18
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Attuma, Atlantean Warlord > Bot2; Atlantean Cavalry > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Library.Count = 10
+Bot2.Life = 10
+Bot1.Battlefield.Atlantean Cavalry.Power = 5

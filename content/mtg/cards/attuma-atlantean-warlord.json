@@ -1,0 +1,8 @@
+{
+  "name": "Attuma, Atlantean Warlord",
+  "manaCost": "{2}{U}{U}",
+  "type": "Legendary Creature — Merfolk Warrior Villain",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Other Merfolk you control get +1/+1.\nWhenever one or more Merfolk you control attack a player, draw a card."
+}

@@ -1,0 +1,43 @@
+# Attuma's trigger is for Merfolk that "attack a player" (CR 508.1): attacking a planeswalker does not count. Bot2's Ral Zarek,
+# Guest Lecturer ({1}{B}{B} from Black Lotus) is attacked by Attuma on turn 3: no card (library 12 after the draw step, still
+# 12 after combat). On turn 5 Attuma attacks Bot2 itself: the draw (11 after the draw step, 10 after the trigger).
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Attuma, Atlantean Warlord
+Island x4
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Ral Zarek, Guest Lecturer
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Attuma, Atlantean Warlord.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Ral Zarek, Guest Lecturer.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Attuma, Atlantean Warlord > Ral Zarek, Guest Lecturer)
+[T3 Bot1.Main2]
+? Bot1.Library.Count = 12
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Attuma, Atlantean Warlord > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Library.Count = 10
+Bot2.Life = 17
