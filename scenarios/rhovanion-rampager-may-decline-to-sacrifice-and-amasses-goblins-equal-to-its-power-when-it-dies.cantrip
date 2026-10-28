@@ -1,0 +1,49 @@
+# Rhovanion Rampager's attack trigger is a "may": Bot1 attacks on turn 3 with the Rampager (and its Memnite home) and declines to
+# sacrifice, so the Memnite lives and the Rampager gets no counters (3/2; Bot2 takes 3, to 17). "When this creature dies, amass Goblins
+# X, where X is this creature's power": Bot2's Lightning Bolt kills it on turn 4 and Bot1 gets a Goblin Army token with three counters.
+
+[Bot1 Deck]
+Mox Jet
+Mana Crypt
+Memnite
+Rhovanion Rampager
+Plains x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Rhovanion Rampager.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Rhovanion Rampager > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Rhovanion Rampager.Counters.PlusOnePlusOne = (absent)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Rhovanion Rampager)
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Rhovanion Rampager
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Goblin Army Token.Power = 3

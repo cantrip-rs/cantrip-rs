@@ -1,0 +1,52 @@
+# Rhovanion Rampager {2}{B} (paid exactly with Mox Jet and Mana Crypt, Black Lotus kept for later): "Whenever this creature attacks, you may sacrifice another
+# creature. If you do, put a number of +1/+1 counters on this creature equal to the sacrificed creature's power." Meager Meal (paid with Black Lotus, so something has left the battlefield before the sacrifice) has made
+# Bot1's Memnite a 2/2 (printed power 1), and the Rampager cannot sacrifice itself (refused). Sacrificing the Memnite gives 2
+# counters - its power as it last existed on the battlefield - so the Rampager is a 5/4 and hits Bot2 for 5 (15).
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Mana Crypt
+Memnite
+Rhovanion Rampager
+Gollum, Silent Slinker
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Rhovanion Rampager.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Gollum, Silent Slinker.Cast(Ability: Meager Meal)
+Bot1.Target(Memnite)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Rhovanion Rampager > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Rhovanion Rampager)
+Bot1.Choose(Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Battlefield.Rhovanion Rampager.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Rhovanion Rampager.Power = 5
+Bot1.Battlefield.Rhovanion Rampager.Toughness = 4
+Bot2.Life = 15

@@ -1,0 +1,45 @@
+# "You may sacrifice another creature" is one creature, not two (refused: Memnite and Ornithopter together), and the counters are the
+# sacrificed creature's power: Bot1 sacrifices its Memnite, power 1, and the Rampager gets one counter - a 4/3 - and hits Bot2 for 4 (16).
+# The Ornithopter (power 0) stays.
+
+[Bot1 Deck]
+Mox Jet
+Mana Crypt
+Memnite
+Ornithopter
+Rhovanion Rampager
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Rhovanion Rampager.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Rhovanion Rampager > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Memnite; Ornithopter)
+Bot1.Choose(Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Memnite
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Rhovanion Rampager.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Rhovanion Rampager.Power = 4
+Bot1.Battlefield.Rhovanion Rampager.Toughness = 3
+Bot2.Life = 16

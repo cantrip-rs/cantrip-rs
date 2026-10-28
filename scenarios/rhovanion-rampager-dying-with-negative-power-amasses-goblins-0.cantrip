@@ -1,0 +1,42 @@
+# "Amass Goblins X, where X is this creature's power": a power below 0 is no counters (CR 107.1b). Bot1's own Languish (-4/-4) kills the
+# Rampager, whose power as it last existed is -1: nothing breaks, the Goblin Army token it makes (0/0, no counters) dies at once, and
+# Bot1 controls nothing afterwards but its Moxen and Crypt. Languish ({2}{B}{B}) is paid exactly with two more Mox Jets and a Mana Crypt.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mana Crypt
+Rhovanion Rampager
+Languish
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Rhovanion Rampager.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Languish.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Rhovanion Rampager; Languish
+Bot1.Battlefield = Mana Crypt; Mox Jet; Mox Jet; Mox Jet
