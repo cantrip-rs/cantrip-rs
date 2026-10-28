@@ -1,0 +1,42 @@
+# Daredevil, Man Without Fear. Turn 1: Bot1 exiles the Hero Agent Maria Hill and casts it from exile that turn with Mox Pearl
+# (CR 601.3, 305.1). Turn 3: Daredevil attacks again and Bot1 declines the exile (CR 609.3): the Lightning Bolt is not exiled
+# (it stays the top card of the library, so it is drawn on turn 5, and Daredevil gets no bonus).
+
+[Bot1 Deck]
+Daredevil, Man Without Fear
+Black Lotus
+Mox Ruby
+Mox Pearl
+Island
+Island
+Island
+Agent Maria Hill
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Daredevil, Man Without Fear.Cast
+Bot1.Attack(Daredevil, Man Without Fear > Bot2)
+Bot1.Accept
+[T1 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Agent Maria Hill.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Daredevil, Man Without Fear > Bot2)
+Bot1.Decline
+? Bot1.Battlefield.Daredevil, Man Without Fear.Power = 3
+
+[T5 Bot1.Main1]
+! Bot1.Exile.Lightning Bolt.Cast
+
+[Expect]
+Bot2.Life = 12
