@@ -1,0 +1,38 @@
+# Soaring Stoneglider: the other way to pay the additional cost, exiling two cards from your graveyard (CR 118.8, 406.3).
+# Bot1 bolts Bot2 twice on turn one, so two Lightning Bolts are in its graveyard, and on turn three it casts the Stoneglider
+# for only {2}{W}, exiling both.
+
+[Bot1 Deck]
+Mox Ruby x2
+Lightning Bolt x2
+Mox Pearl x3
+Soaring Stoneglider
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Soaring Stoneglider.Cast
+Bot1.Modes(Exile two cards from your graveyard)
+Bot1.Choose(Lightning Bolt; Lightning Bolt)
+[T3 Bot1.Main2]
+
+[Expect]
+Exile.Count = 2
+Bot1.Graveyard.Count = 0
+Bot2.Life = 14
+Bot1.Battlefield.Soaring Stoneglider.Power = 4

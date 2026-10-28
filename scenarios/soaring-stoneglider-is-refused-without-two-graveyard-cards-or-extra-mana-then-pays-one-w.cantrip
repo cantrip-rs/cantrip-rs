@@ -1,0 +1,33 @@
+# Soaring Stoneglider: "As an additional cost to cast this spell, exile two cards from your graveyard or pay {1}{W}"
+# (CR 601.2b, 118.8). Bot1's graveyard is empty, so with three Mox Pearls ({2}{W} alone) the cast is refused; with five it
+# pays the {1}{W} and the 4/3 flier with vigilance enters.
+
+[Bot1 Deck]
+Soaring Stoneglider
+Mox Pearl x5
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+! Bot1.Hand.Soaring Stoneglider.Cast(Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.Soaring Stoneglider.Cast
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Soaring Stoneglider.Power = 4
+Bot1.Battlefield.Soaring Stoneglider.Toughness = 3
+Bot1.Battlefield.Soaring Stoneglider.Keywords = Flying; Vigilance
+Bot1.Graveyard.Count = 0

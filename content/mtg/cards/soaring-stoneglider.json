@@ -1,0 +1,12 @@
+{
+  "name": "Soaring Stoneglider",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Elephant Cleric",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "As an additional cost to cast this spell, exile two cards from your graveyard or pay {1}{W}.\nFlying, vigilance",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}
