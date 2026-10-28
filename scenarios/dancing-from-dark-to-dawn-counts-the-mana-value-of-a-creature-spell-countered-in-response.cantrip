@@ -1,0 +1,61 @@
+# Dancing from Dark to Dawn: "put X +1/+1 counters on target creature you control, where X is that spell's mana value." Bot1 casts an
+# Alpine Grizzly (mana value 3) and Bot2 counters it with a Counterspell before the trigger resolves: the spell has left the stack, but
+# the trigger still resolves with the mana value it last had there (CR 608.2h), three counters on the Ornithopter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Dancing from Dark to Dawn
+Ornithopter
+Alpine Grizzly
+Mox Jet
+Plains x10
+
+[Bot2 Deck]
+Mox Sapphire
+Gleemox
+Counterspell
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dancing from Dark to Dawn.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Gleemox.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Gleemox.Activate(Color: Blue)
+Bot2.Hand.Counterspell.Cast(Stack.Alpine Grizzly)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Alpine Grizzly = (absent)
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 3

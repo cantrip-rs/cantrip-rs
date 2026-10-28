@@ -1,0 +1,81 @@
+# Dancing from Dark to Dawn: "Whenever you cast a creature spell, put X +1/+1 counters on target creature you control, where X is
+# that spell's mana value. Landfall - Whenever a land you control enters, create a 2/2 green Bear creature token." On turn 1 Bot1
+# casts it for {3}{G}{G} and plays a Forest: a green 2/2 Bear. Bot2's own Grizzly Bears (mana value 2) and Ornithopter on turn 2 and Island trigger nothing. On
+# turn 3 Walking Ballista is cast with X of 1, a spell of mana value 2 on the stack (CR 202.3e): the Ornithopter (the opponent's is
+# no target) gets exactly two +1/+1 counters; then a Plains makes a second Bear.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Dancing from Dark to Dawn
+Ornithopter
+Walking Ballista
+Forest
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dancing from Dark to Dawn.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bear Token.Power = 2
+? Bot1.Battlefield.Bear Token.Colors = Green
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Bear Token#2.Power = 2
+Bot1.Battlefield.Bear Token#2.Toughness = 2
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2

@@ -1,0 +1,6 @@
+{
+  "name": "Dancing from Dark to Dawn",
+  "manaCost": "{3}{G}{G}",
+  "type": "Enchantment",
+  "oracleText": "Whenever you cast a creature spell, put X +1/+1 counters on target creature you control, where X is that spell's mana value.\nLandfall — Whenever a land you control enters, create a 2/2 green Bear creature token."
+}
