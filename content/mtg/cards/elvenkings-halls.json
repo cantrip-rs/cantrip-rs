@@ -1,0 +1,5 @@
+{
+  "name": "Elvenking's Halls",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {G} or {U}.\n{2}{G}{U}, {T}, Sacrifice this land: Put two +1/+1 counters on target Elf you control. Activate only as a sorcery."
+}

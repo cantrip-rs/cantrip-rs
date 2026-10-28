@@ -1,0 +1,80 @@
+# Elvenking's Halls: "This land enters tapped", "{T}: Add {G} or {U}" and "{2}{G}{U}, {T}, Sacrifice this land: Put two +1/+1
+# counters on target Elf you control. Activate only as a sorcery." An Elf. The land is tapped the turn it enters and untaps next
+# turn; it taps for either color and no other (Undo takes each tap back); the ability is refused outside a main phase and at an
+# Ornithopter or the opponent's Elvish Mystic, and puts exactly two counters on Bot1's Elvish Mystic (the {T} and the sacrifice are costs,
+# paid exactly with four Moxen) (CR 602.5d, 122.1).
+
+[Bot1 Deck]
+Elvenking's Halls
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Elvish Mystic
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Elvenking's Halls.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Elvenking's Halls.Tapped = true
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Elvenking's Halls.Tapped = false
+! Bot1.Battlefield.Elvenking's Halls.Activate(Color: Red)
+Bot1.Battlefield.Elvenking's Halls.Activate(Color: Green)
+? Bot1.Mana = {G}
+Bot1.Undo
+Bot1.Battlefield.Elvenking's Halls.Activate(Color: Blue)
+? Bot1.Mana = {U}
+Bot1.Undo
+! Bot1.Battlefield.Elvenking's Halls.Activate(Ability: Put two)
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+! Bot1.Battlefield.Elvenking's Halls.Activate(Ability: Put two; Ornithopter)
+! Bot1.Battlefield.Elvenking's Halls.Activate(Ability: Put two; Bot2.Battlefield.Elvish Mystic)
+! Bot1.Battlefield.Elvenking's Halls.Activate(Ability: Put two; Bot2)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Elvenking's Halls.Activate(Ability: Put two; Elvish Mystic)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = (absent)
+Bot1.Graveyard = Elvenking's Halls
+Bot1.Battlefield.Elvish Mystic.Power = 3
+Bot1.Battlefield.Elvish Mystic.Toughness = 3
