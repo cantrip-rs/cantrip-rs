@@ -1,0 +1,33 @@
+# Basic landcycling {2} (CR 702.29e): discard the Brutes from hand for exactly {2}, search for a basic land and put it into
+# hand. The nonbasic Bayou above the Forest in the library is not a legal find, and the Forest is.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Roxxon Brutes
+Island
+Island
+Island
+Island
+Bayou
+Forest
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Roxxon Brutes.Activate(Ability: Basic landcycling)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Graveyard = Roxxon Brutes
+Bot1.Hand = Island; Island; Island; Island; Forest

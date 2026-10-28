@@ -1,0 +1,69 @@
+# Roxxon Brutes (menace 4/4): whenever you draw your second card each turn, put a +1/+1 counter on target creature (CR 120.3,
+# 603.2). Turn 3's draw step is the first card, the first Consider's draw the second (a counter on Bot2's Savannah Lions, which are 2/1 with it 3/2) and the
+# second Consider's draw the third (nothing more).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Roxxon Brutes
+Island
+Consider
+Consider
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Roxxon Brutes.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Consider)
+Bot1.Target(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Island)
+
+[Expect]
+Bot1.Battlefield.Roxxon Brutes.Power = 4
+Bot2.Battlefield.Savannah Lions.Power = 3
+Bot2.Battlefield.Savannah Lions.Toughness = 2
+Bot2.Battlefield.Savannah Lions.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Roxxon Brutes.Keywords = Menace
