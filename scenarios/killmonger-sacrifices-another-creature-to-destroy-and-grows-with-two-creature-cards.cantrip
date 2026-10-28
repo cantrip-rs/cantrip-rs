@@ -1,0 +1,76 @@
+# Killmonger, Scourge of Wakanda: when he enters Bot1 may sacrifice another creature (never himself), and when it does destroys target
+# nonland permanent an opponent controls; as long as two or more creature cards are in Bot1's graveyard he gets +2/+1. Turn 3: Bot1
+# sacrifices Memnite#1 (one creature card in the graveyard: still 3/3) to destroy Bot2's Agents of HYDRA, and Bot2's Lightning Bolt then
+# kills the other Memnite on turn 4 (two creature cards: 5/4).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Killmonger, Scourge of Wakanda
+Memnite
+Memnite
+Forest x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Agents of HYDRA
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Agents of HYDRA.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Killmonger, Scourge of Wakanda.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Memnite#1; Memnite#2)
+Bot1.Choose(Memnite#1)
+Bot1.Target(Agents of HYDRA)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Agents of HYDRA = (absent)
+? Bot1.Graveyard = Memnite
+? Bot1.Battlefield.Killmonger, Scourge of Wakanda.Power = 3
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Memnite)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Memnite; Memnite
+Bot1.Battlefield.Killmonger, Scourge of Wakanda.Power = 5
+Bot1.Battlefield.Killmonger, Scourge of Wakanda.Toughness = 4
