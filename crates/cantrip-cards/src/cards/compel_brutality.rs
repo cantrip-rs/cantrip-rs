@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{fight::bite, targets};
+use cantrip_mechanics::{fight::targets_bite, targets};
 use cantrip_oracle as oracle;
 
 /// "Target planeswalker you control" (CR 115.1): a planeswalker on the battlefield under the caster's control.
@@ -10,9 +10,7 @@ fn planeswalker_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
 /// "Target creature you control deals damage equal to its power to target creature or planeswalker an opponent controls."
 /// (CR 120.3, 608.2b, 609.7; `fight::bite`.) If either target is illegal as it resolves, no damage is dealt.
 fn power_bite(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let (Some(creature), Some(victim)) = (targets::object(g, item, 0), targets::object(g, item, 1)) {
-        bite(g, creature, victim);
-    }
+    targets_bite(g, item, 0, 1);
     Ok(())
 }
 

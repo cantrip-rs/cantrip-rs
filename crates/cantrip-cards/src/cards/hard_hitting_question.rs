@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{fight::bite, targets};
+use cantrip_mechanics::{fight::targets_bite, targets};
 use cantrip_oracle as oracle;
 
 /// "Target creature you control deals damage equal to its power to target creature or planeswalker you don't control":
@@ -8,9 +8,7 @@ use cantrip_oracle as oracle;
 /// (CR 608.2b): a creature that is not a legal target cannot deal it, and there is nothing to deal it to. A creature with
 /// no power deals none (CR 120.8).
 fn deal_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let (Some(creature), Some(victim)) = (targets::object(g, item, 0), targets::object(g, item, 1)) {
-        bite(g, creature, victim);
-    }
+    targets_bite(g, item, 0, 1);
     Ok(())
 }
 

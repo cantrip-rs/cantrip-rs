@@ -24,3 +24,13 @@ pub fn bite(g: &mut dyn Game, creature: ObjectId, victim: ObjectId) {
         g.damage(creature, Target::Object(victim), power as u16);
     }
 }
+
+/// "Target creature you control deals damage equal to its power to target [creature]" (CR 120.3, 609.7, 608.2b): the creature
+/// `item` targeted in `source_slot` bites the object targeted in `victim_slot` (`bite`). Each target is judged as the spell resolves:
+/// if either is illegal then, no damage is dealt, a creature that is not a legal target being no source and nothing left to deal
+/// it to. Compel Brutality's first mode, Hard-Hitting Question and Quarrel print it.
+pub fn targets_bite(g: &mut dyn Game, item: &StackItem, source_slot: usize, victim_slot: usize) {
+    if let (Some(creature), Some(victim)) = (targets::object(g, item, source_slot), targets::object(g, item, victim_slot)) {
+        bite(g, creature, victim);
+    }
+}
