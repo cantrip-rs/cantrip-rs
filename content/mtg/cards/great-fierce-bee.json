@@ -1,0 +1,11 @@
+{
+  "name": "Great Fierce Bee",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Insect",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nWhenever one or more other creatures die, scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "keywords": [
+    "Flying"
+  ]
+}

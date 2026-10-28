@@ -1,0 +1,56 @@
+# "If Great Fierce Bee dies at the same time as one or more other creatures, its ability still triggers" (the ruling), and once
+# (CR 603.2c, 603.10a): Bot1's Damnation ({2}{B}{B}, paid exactly with two Mox Jets and a Mana Crypt) destroys the Bee and Bot2's Memnite
+# together. Bot1 scries 1 once, bottoming its Lightning Bolt; a second scry would be asked before its next priority.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mana Crypt
+Mana Crypt
+Great Fierce Bee
+Damnation
+Plains
+Lightning Bolt
+Plains x12
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mana Crypt#1.Activate
+Bot1.Hand.Great Fierce Bee.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mana Crypt#2.Activate
+Bot1.Hand.Damnation.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+! Bot1.Arrange
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Damnation; Great Fierce Bee
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Count = 5
