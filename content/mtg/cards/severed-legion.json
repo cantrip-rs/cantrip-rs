@@ -1,0 +1,11 @@
+{
+  "name": "Severed Legion",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Fear (This creature can't be blocked except by artifact creatures and/or black creatures.)",
+  "keywords": [
+    "Fear"
+  ]
+}
