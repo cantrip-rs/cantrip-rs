@@ -1,0 +1,62 @@
+# Powerful Broker: "{T}: For each kind of counter on target permanent or player, give that permanent or player another counter of that
+# kind. Activate only as a sorcery." Bot1's Grizzly Bears have a +1/+1 counter (Go Nuts!) and flying, first strike and lifelink counters
+# (Abigale, Eloquent First-Year): the Broker gives it one more of each of those four kinds (two of each), not four more of one, and none
+# of any kind it lacks. Its ability is refused while a spell is on the stack (sorcery speed).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Powerful Broker
+Grizzly Bears
+Abigale, Eloquent First-Year
+Go Nuts!
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Powerful Broker.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+! Bot1.Battlefield.Powerful Broker.Activate(Ability: {T})
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Go Nuts!.Cast
+Bot1.Modes(Cast without teamwork)
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Abigale, Eloquent First-Year.Cast
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Powerful Broker.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Grizzly Bears.Counters.Flying = 2
+Bot1.Battlefield.Grizzly Bears.Counters.FirstStrike = 2
+Bot1.Battlefield.Grizzly Bears.Counters.Lifelink = 2
+Bot1.Battlefield.Powerful Broker.Tapped = true

@@ -1,0 +1,74 @@
+# Powerful Broker targeting a player: "give that permanent or player another counter of each kind". Bot1 has an experience counter (Otharri,
+# Suns' Glory attacking), two energy counters (Rogue Refiner) and a poison counter (Bot2's Inkmoth Nexus hitting it), and the Broker
+# gives it one more of each: experience 2, energy 3, poison 2 - and no kind it lacks.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Otharri, Suns' Glory
+Rogue Refiner
+Forest
+Powerful Broker
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Inkmoth Nexus
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Otharri, Suns' Glory.Cast
+Bot1.Pass
+Bot1.Attack(Otharri, Suns' Glory > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Inkmoth Nexus.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rogue Refiner.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Inkmoth Nexus.Activate(Ability: {1})
+Bot2.Pass
+Bot2.Attack(Inkmoth Nexus > Bot1)
+[T5 Bot1.Main1]
+? Bot1.Poison = 1
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Powerful Broker.Cast
+Bot1.Pass
+[T7 Bot1.Main1]
+? Bot1.Experience = 1
+? Bot1.Energy = 2
+Bot1.Battlefield.Powerful Broker.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Experience = 2
+Bot1.Energy = 3
+Bot1.Poison = 2

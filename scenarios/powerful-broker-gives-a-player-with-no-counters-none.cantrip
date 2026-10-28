@@ -1,0 +1,38 @@
+# Powerful Broker targeting a player with no counters: "for each kind of counter on target ... player" counts no kinds, so Bot2 gets no
+# poison, energy or experience counter.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Powerful Broker
+Forest
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Powerful Broker.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Powerful Broker.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Poison = 0
+Bot2.Energy = 0
+Bot2.Experience = (absent)

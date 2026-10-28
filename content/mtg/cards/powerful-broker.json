@@ -1,0 +1,8 @@
+{
+  "name": "Powerful Broker",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Human Villain",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{T}: For each kind of counter on target permanent or player, give that permanent or player another counter of that kind. Activate only as a sorcery."
+}

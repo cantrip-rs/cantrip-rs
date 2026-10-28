@@ -1,0 +1,59 @@
+# Powerful Broker targeting a player with a single kind of counter: Galvanic Discharge gives Bot1 three energy counters and Bot1 pays two
+# of them for 2 damage to Bot2's Grizzly Bears, leaving exactly one. The Broker then gives it one more (2 energy): not a poison or an
+# experience counter, which it has none of.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Powerful Broker
+Galvanic Discharge
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Grizzly Bears
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Powerful Broker.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Galvanic Discharge.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Accept
+Bot1.Accept
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Energy = 1
+Bot1.Battlefield.Powerful Broker.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Energy = 2
+Bot1.Poison = 0
+Bot1.Experience = (absent)
+Bot2.Graveyard = Grizzly Bears
