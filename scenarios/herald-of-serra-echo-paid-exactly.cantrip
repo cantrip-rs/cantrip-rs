@@ -1,0 +1,49 @@
+# Herald of Serra {2}{W}{W}, "Echo {2}{W}{W}" (CR 702.30a). Cast on turn 1 (paid with generic from Sol Ring's colorless mana and W mana), it came under Bot1's control since the beginning of their last upkeep, so at Bot1's turn 3 upkeep the echo ability
+# triggers and asks for {2}{W}{W}. The colorless mana, a Mox Sapphire (U) and 1 of the two W sources are tapped first (as much mana as the cost, one W
+# short, a U in place of it): paying is not offered. With the last W source tapped it is paid ({2}{W}{W} spent: the generic with colorless mana,
+# {W}{W} with W), and the U stays in the pool. Herald of Serra stays.
+
+[Bot1 Deck]
+Herald of Serra
+Mox Sapphire
+Mox Pearl
+Sol Ring
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Herald of Serra.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost(Spend: C, C, W, W)
+Bot1.Pass
+? Bot1.Mana = {U}
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Herald of Serra.Power = 3
+Bot1.Battlefield.Herald of Serra.Toughness = 4
+Bot1.Battlefield.Herald of Serra.Keywords = Flying; Vigilance
+Bot1.Battlefield.Herald of Serra.Colors = White
