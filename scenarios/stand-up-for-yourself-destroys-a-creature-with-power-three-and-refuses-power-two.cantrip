@@ -1,0 +1,44 @@
+# Stand Up for Yourself: "Destroy target creature with power 3 or greater." Bot2 has a 3/3 Spiritcall Enthusiast and a 2/2
+# Joined Researchers; the 2/2 is not a legal target (the refusal), the 3/3 is destroyed (CR 701.8).
+
+[Bot1 Deck]
+Stand Up for Yourself
+Mox Pearl x3
+Island x3
+Island x12
+
+[Bot2 Deck]
+Spiritcall Enthusiast
+Joined Researchers
+Mox Pearl x5
+Island x13
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Hand.Spiritcall Enthusiast.Cast
+Bot2.Battlefield.Mox Pearl#4.Activate
+Bot2.Battlefield.Mox Pearl#5.Activate
+Bot2.Hand.Joined Researchers.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+! Bot1.Hand.Stand Up for Yourself.Cast(Bot2.Battlefield.Joined Researchers)
+Bot1.Hand.Stand Up for Yourself.Cast(Bot2.Battlefield.Spiritcall Enthusiast)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Spiritcall Enthusiast
+Bot2.Battlefield.Joined Researchers.Power = 2
+Bot1.Graveyard = Stand Up for Yourself

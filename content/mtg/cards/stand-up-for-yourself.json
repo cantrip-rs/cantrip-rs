@@ -1,0 +1,6 @@
+{
+  "name": "Stand Up for Yourself",
+  "manaCost": "{2}{W}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature with power 3 or greater."
+}
