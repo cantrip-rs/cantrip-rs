@@ -1,0 +1,28 @@
+# A.I.M. Labs enters tapped and its enters trigger gains 1 life, so it cannot make mana the turn it is played; on a later turn
+# its one mana ability makes black, a color chosen as it is activated; the output and the tapped cost are asserted exactly
+# (CR 614.1d, 605.1a, 605.3b, 118.3, 106.4, 119.3, 603.6a).
+
+[Bot1 Deck]
+A.I.M. Labs
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.A.I.M. Labs.Play
+? Bot1.Battlefield.A.I.M. Labs.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+! Bot1.Battlefield.A.I.M. Labs.Activate(Color: Black)
+[T3 Bot1.Main1]
+Bot1.Battlefield.A.I.M. Labs.Activate(Color: Black)
+? Bot1.Mana = {B}
+? Bot1.Battlefield.A.I.M. Labs.Tapped = true
+
+[Expect]
+Bot1.Life = 21
+Bot1.Mana = {B}
+Bot1.Battlefield.A.I.M. Labs.Tapped = true
+Stack.Count = 0
