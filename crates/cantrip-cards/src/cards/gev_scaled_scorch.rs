@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::history::opponents_who_lost_life_this_turn;
-use cantrip_mechanics::{damage_target, targets, triggers};
+use cantrip_mechanics::{damage_target, lands, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Other creatures you control enter with an additional +1/+1 counter on them for each opponent who lost life this turn"
@@ -23,19 +23,6 @@ fn apply(q: &dyn Query, asker: &Asker, proposal: &mut Proposal) {
     }
 }
 
-/// "Whenever you cast a Lizard spell" (CR 603.2): "Lizard" is a word of Gev's text (CR 612), and the spell is a Lizard by its
-/// own characteristics as it stands on the stack.
-fn you_cast_a_lizard_spell(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    match event {
-        Event::SpellCast { spell, player, .. }
-            if *player == q.controller(source) && q.chars(*spell).has_subtype(q.words(source).subtype(Subtype::Lizard)) =>
-        {
-            Fired::PLAIN
-        }
-        _ => None,
-    }
-}
-
 /// "Gev deals 1 damage to target opponent."
 fn ping(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     damage_target(g, item, 0, 1);
@@ -45,7 +32,7 @@ fn ping(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggers::ward_life::<2>("Ward\u{2014}Pay 2 life."),
-        triggered(when(EventMask::SPELL_CAST, you_cast_a_lizard_spell), ping, "Whenever you cast a Lizard spell, Gev deals 1 damage to target opponent.")
+        triggered(when_asked(EventMask::SPELL_CAST, triggers::subtype_spell_you_cast::<{ lands::sub(Subtype::Lizard) }>), ping, "Whenever you cast a Lizard spell, Gev deals 1 damage to target opponent.")
             .targets(&[targets::OPPONENT]),
     ],
     replacements: &[replacement(ReplacementKind::ZoneChange, applies, apply, "puts a +1/+1 counter on it for each opponent who lost life this turn")],
