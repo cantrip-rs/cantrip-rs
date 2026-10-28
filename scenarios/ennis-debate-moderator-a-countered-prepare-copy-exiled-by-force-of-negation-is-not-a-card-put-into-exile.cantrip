@@ -1,0 +1,45 @@
+# Ennis, Debate Moderator: "if one or more cards were put into exile this turn". On turn 3 Bot1 casts Rejoinder, the copy of
+# Elite Interceptor's prepare spell (CR 722), and Bot2 counters it with Force of Negation, which exiles it. A copy of a card is
+# not a card (CR 707.12, 111.1, 108.2) and ceases to exist in exile, so no card was put into exile and Ennis gets no counter.
+
+[Bot1 Deck]
+Ennis, Debate Moderator
+Elite Interceptor
+Mox Pearl x5
+Plains x13
+
+[Bot2 Deck]
+Mox Sapphire x3
+Force of Negation
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Ennis, Debate Moderator.Cast
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Elite Interceptor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Exile.Rejoinder.Cast(Elite Interceptor)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Sapphire#3.Activate
+Bot2.Hand.Force of Negation.Cast(Stack.Rejoinder)
+[T3 Bot1.End]
+? Bot1.Battlefield.Ennis, Debate Moderator.Counters.PlusOnePlusOne = (absent)
+
+[Expect]
+Exile.Count = 0
+Bot2.Graveyard = Force of Negation
+Bot1.Battlefield.Ennis, Debate Moderator.Counters.PlusOnePlusOne = (absent)

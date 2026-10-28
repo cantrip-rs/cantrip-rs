@@ -1,0 +1,37 @@
+# Ennis, Debate Moderator: with no other creature to exile, entering does nothing; but when Bot1 later that turn exiles a card with
+# Swords to Plowshares (Bot2's Ornithopter), a card was put into exile this turn, so Ennis grows at the beginning of Bot1's end step.
+# The turn before it has no exile, and no counter.
+
+[Bot1 Deck]
+Plains x2
+Ennis, Debate Moderator
+Swords to Plowshares
+Plains x3
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ennis, Debate Moderator.Cast
+[T3 Bot1.End]
+? Bot1.Battlefield.Ennis, Debate Moderator.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+[T7 Bot1.Main1]
+
+[Expect]
+Exile = Ornithopter
+Bot2.Life = 20
+Bot1.Battlefield.Ennis, Debate Moderator.Counters.PlusOnePlusOne = 1

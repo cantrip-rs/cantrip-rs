@@ -1,0 +1,36 @@
+# Ennis, Debate Moderator: Bot1's only other creature is a Spirit token (from Group Project). Ennis exiles it; a token that leaves the
+# battlefield ceases to exist, so it does not return at the end step (CR 111.7, 400.7), and a token is not a card (CR 111.1), so
+# "one or more cards were put into exile this turn" is false and Ennis gets no counter.
+
+[Bot1 Deck]
+Plains x3
+Group Project
+Ennis, Debate Moderator
+Plains x2
+Plains x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Group Project.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ennis, Debate Moderator.Cast
+Bot1.Target(Bot1.Battlefield.Spirit Token)
+[T5 Bot1.Main2]
+? Bot1.Battlefield = Plains; Plains; Plains; Ennis, Debate Moderator
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Plains; Plains; Plains; Ennis, Debate Moderator
+Bot1.Battlefield.Ennis, Debate Moderator.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ennis, Debate Moderator.Power = 1
+Exile.Count = 0

@@ -1,0 +1,32 @@
+# Ennis, Debate Moderator: entering, it exiles Bot1's Ornithopter (the "other" creature), which returns at the beginning of the next
+# end step as a new object; a card was put into exile this turn, so Ennis, at the beginning of Bot1's end step, gets a +1/+1 counter.
+
+[Bot1 Deck]
+Plains x2
+Ornithopter
+Ennis, Debate Moderator
+Plains x3
+Plains x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ennis, Debate Moderator.Cast
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+? Exile = Ornithopter
+? Bot1.Battlefield = Plains; Plains; Ennis, Debate Moderator
+[T5 Bot1.Main1]
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield = Plains; Plains; Ennis, Debate Moderator; Ornithopter
+Bot1.Battlefield.Ennis, Debate Moderator.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ennis, Debate Moderator.Power = 2
