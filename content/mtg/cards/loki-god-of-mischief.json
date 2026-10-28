@@ -1,0 +1,8 @@
+{
+  "name": "Loki, God of Mischief",
+  "manaCost": "{1}{U}",
+  "type": "Legendary Creature — God Sorcerer Villain",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Whenever a player or permanent becomes the target of an ability you control, draw a card. This ability triggers only once each turn."
+}
