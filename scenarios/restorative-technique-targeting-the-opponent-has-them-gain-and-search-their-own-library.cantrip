@@ -1,0 +1,49 @@
+# Restorative Technique, targeting the opponent and no creature ("up to one"): Bot2 gains the 2 life (22) and searches Bot2's own
+# library for a basic land (an Island, tapped onto Bot2's battlefield), not Bot1's, whose library keeps all its cards and whose
+# life stays 20; no counter is put anywhere.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Restorative Technique
+Forest
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island
+Island
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Restorative Technique.Cast
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Search(Island)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 22
+Bot1.Life = 20
+Bot2.Battlefield = Island
+Bot2.Battlefield.Island.Tapped = true
+Bot2.Library.Count = 9
+Bot1.Library.Count = 10

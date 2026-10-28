@@ -1,0 +1,48 @@
+# Restorative Technique, targeting its own caster and a creature: Bot1 gains 2 life (22), then searches its library for a basic land
+# card, puts it onto the battlefield tapped (the Forest, leaving the library one card shorter) and shuffles, and the Grizzly Bears get a
+# +1/+1 counter (3/3).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Restorative Technique
+Forest
+Forest
+Island
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Restorative Technique.Cast
+Bot1.Target(Bot1)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Forest)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Library.Count = 9

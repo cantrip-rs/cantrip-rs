@@ -1,0 +1,6 @@
+{
+  "name": "Restorative Technique",
+  "manaCost": "{2}{G}",
+  "type": "Sorcery",
+  "oracleText": "Target player gains 2 life, then searches their library for a basic land card, puts it onto the battlefield tapped, then shuffles. Put a +1/+1 counter on up to one target creature."
+}
