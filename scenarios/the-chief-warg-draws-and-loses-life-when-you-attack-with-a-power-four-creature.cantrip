@@ -1,0 +1,49 @@
+# The Chief Warg: "Ferocious - Whenever you attack while you control a creature with power 4 or greater, you draw a card and lose 1
+# life." Bot1 attacks on turn 3 with the Warg (power 3) and an Alpine Grizzly, power exactly 4: the ability triggers once, and
+# Bot1 draws a card (its turn's draw and this one) and loses exactly 1 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Ruby
+Forest
+The Chief Warg
+Alpine Grizzly
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.The Chief Warg.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 1
+Bot1.Attack(The Chief Warg > Bot2; Alpine Grizzly > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Hand.Count = 2
+Bot2.Life = 13
+Bot1.Battlefield.The Chief Warg.Keywords = Menace

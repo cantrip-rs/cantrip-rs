@@ -1,0 +1,11 @@
+{
+  "name": "The Chief Warg",
+  "manaCost": "{2}{B}{G}",
+  "type": "Legendary Creature — Wolf",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nFerocious — Whenever you attack while you control a creature with power 4 or greater, you draw a card and lose 1 life.",
+  "keywords": [
+    "Menace"
+  ]
+}

@@ -1,0 +1,52 @@
+# The Chief Warg: "while you control a creature with power 4 or greater" is about the Warg's controller. Bot2 controls an Alpine
+# Grizzly (power 4) and Bot1 attacks on turn 3 with the Warg (power 3) and a Savannah Lions: no draw, no life lost. Menace
+# (CR 702.111b): the Grizzly alone may not block the Warg, but blocks the Lions.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+The Chief Warg
+Savannah Lions
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Black Lotus
+Alpine Grizzly
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Chief Warg.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(The Chief Warg > Bot2; Savannah Lions > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot2.Block(Alpine Grizzly > The Chief Warg)
+Bot2.Block(Alpine Grizzly > Savannah Lions)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Hand.Count = 3
+Bot2.Life = 17
+Bot1.Graveyard = Savannah Lions; Black Lotus
