@@ -1,0 +1,83 @@
+# "Activate only if there are two or more creature cards in your graveyard" (CR 602.5b): your own graveyard only (Bot2's holds
+# two creature cards the whole time), the creature cards counted, not the Looting or the land beside them. With one it is
+# refused, with two (exactly the limit) it makes a tapped 2/1 black Villain token with menace for exactly {3}, tapping Zola.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Faithless Looting
+Arnim Zola, Bio-Fanatic
+Swamp
+Savannah Lions
+Plains
+Plains
+Savannah Lions
+Plains
+Swamp x10
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Savannah Lions
+Savannah Lions
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Arnim Zola, Bio-Fanatic.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot2.Choose(Savannah Lions#1; Savannah Lions#2)
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 3
+? Bot2.Graveyard.Count = 3
+Bot1.Hand.Plains.Play
+! Bot1.Battlefield.Arnim Zola, Bio-Fanatic.Activate
+Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Arnim Zola, Bio-Fanatic.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Plains.Activate
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Plains; Savannah Lions; Plains; Savannah Lions
+Bot1.Battlefield.Arnim Zola, Bio-Fanatic.Tapped = true
+Bot1.Battlefield.Villain Token.Tapped = true
+Bot1.Battlefield.Villain Token.Power = 2
+Bot1.Battlefield.Villain Token.Toughness = 1
+Bot1.Battlefield.Villain Token.Keywords = Menace
+Bot1.Battlefield.Villain Token.Colors = Black
+Bot1.Battlefield.Villain Token.Token = true
+Bot1.Battlefield.Count = 8

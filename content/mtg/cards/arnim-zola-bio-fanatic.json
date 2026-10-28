@@ -1,0 +1,8 @@
+{
+  "name": "Arnim Zola, Bio-Fanatic",
+  "manaCost": "{2}{B}",
+  "type": "Legendary Artifact Creature — Scientist Villain",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "{3}, {T}: Create a tapped 2/1 black Villain creature token with menace. Activate only if there are two or more creature cards in your graveyard. (It can't be blocked except by two or more creatures.)"
+}
