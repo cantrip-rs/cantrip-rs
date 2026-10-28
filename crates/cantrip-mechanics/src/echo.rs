@@ -55,10 +55,9 @@ fn came_under_control_since_last_upkeep(q: &dyn Query, permanent: ObjectId, play
     let last_upkeep = history.select(EventQuery::kind(EventMask::STEP_BEGAN).step(Step::Upkeep).in_turn_of(player)).last();
     let arrivals = EventQuery::kind(EventMask(EventMask::ZONE_CHANGE.0 | EventMask::CONTROL_CHANGED.0)).object(permanent);
     let arrivals = last_upkeep.map_or(arrivals, |upkeep| arrivals.after(upkeep.serial));
-    history.select(arrivals).any(|r| match r.event {
-        Event::ZoneChange { new, to, .. } => new == permanent && to.is(ZoneKind::Battlefield),
-        Event::ControlChanged { controller, .. } => controller == player,
-        _ => false,
+    history.select(arrivals).any(|r| {
+        matches!(r.event, Event::ZoneChange { new, to, .. } if new == permanent && to.is(ZoneKind::Battlefield))
+            || matches!(r.event, Event::ControlChanged { controller, .. } if controller == player)
     })
 }
 
