@@ -1,0 +1,42 @@
+# Mtenda Herder (1/1 flanking) attacks on turn 3 and Bot2's Balduvian Bears (2/2) block it. Flanking (CR 702.25a) makes the Bears a 1/1 until
+# end of turn, so the Herder's 1 damage kills them (a 2/2 would have survived it), and the Bears' 1 damage kills the Herder: both die.
+
+[Bot1 Deck]
+Mox Pearl
+Swamp
+Swamp
+Swamp
+Mtenda Herder
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Balduvian Bears
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mtenda Herder.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Balduvian Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Mtenda Herder > Bot2)
+Bot2.Block(Balduvian Bears > Mtenda Herder)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Mtenda Herder
+Bot2.Graveyard = Balduvian Bears
+Bot2.Life = 20
