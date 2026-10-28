@@ -1,0 +1,46 @@
+# Kid Loki: "Whenever you draw your second card each turn, put a +1/+1 counter on Kid Loki" and "Each creature you control that
+# you've put one or more +1/+1 counters on this turn has hexproof." In turn 3 the draw step's card is Bot1's first and Opt's is
+# the second: Kid Loki gets the counter (a 2/2) and, for the rest of that turn, hexproof: Bot2 cannot target it with Lightning
+# Bolt at the end step (the refusal). In Bot2's turn 4 the counter was put "this turn" no longer, so the Bolt can: it kills the 2/2.
+
+[Bot1 Deck]
+Mox Sapphire
+Kid Loki
+Opt
+Island
+Island x3
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kid Loki.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Arrange(Island |)
+[T3 Bot1.End]
+? Bot1.Battlefield.Kid Loki.Power = 2
+? Bot1.Battlefield.Kid Loki.Keywords = Hexproof
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kid Loki)
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kid Loki)
+
+[Expect]
+Bot1.Battlefield.Kid Loki = (absent)
+Bot1.Graveyard = Kid Loki; Opt

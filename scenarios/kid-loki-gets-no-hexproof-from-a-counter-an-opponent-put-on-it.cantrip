@@ -1,0 +1,42 @@
+# Kid Loki's hexproof is for creatures Bot1 has put +1/+1 counters on this turn (CR 122.6): Bot2's Revitalizing Repast puts a
+# counter on Kid Loki, and gives it indestructible, but no hexproof, so Bot2 can still target it with Lightning Bolt in the same
+# turn: it takes 3 damage and survives only through the Repast's indestructible.
+
+[Bot1 Deck]
+Mox Sapphire
+Kid Loki
+Island x5
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Revitalizing Repast
+Lightning Bolt
+Island x3
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kid Loki.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Revitalizing Repast.Cast(Bot1.Battlefield.Kid Loki)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kid Loki)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Kid Loki.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Kid Loki.Damage = 3
+Bot1.Battlefield.Kid Loki.Keywords = Indestructible

@@ -1,0 +1,52 @@
+# Kid Loki's hexproof reaches "each creature you control that you've put one or more +1/+1 counters on this turn", not only
+# itself. In turn 3 Bot1 casts A.I.M. Scientists (Black Lotus and Mox Sapphire), which connives: Bot1 draws a Lightning Bolt,
+# the second card of the turn (Kid Loki grows too), and discards it, so the Scientists get a counter. Both have hexproof at the
+# end step: Bot2's Bolt cannot target the Scientists (the refusal). A creature Bot1 has put no counter on, the Ornithopter
+# cast in turn 1, is not hexproof.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Kid Loki
+A.I.M. Scientists
+Ornithopter
+Island x2
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kid Loki.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.A.I.M. Scientists.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+[T3 Bot1.End]
+? Bot1.Battlefield.A.I.M. Scientists.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.A.I.M. Scientists.Keywords = Hexproof
+? Bot1.Battlefield.Kid Loki.Keywords = Hexproof
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.A.I.M. Scientists)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
