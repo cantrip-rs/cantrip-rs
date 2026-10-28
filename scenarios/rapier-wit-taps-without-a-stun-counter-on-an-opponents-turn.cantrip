@@ -1,0 +1,30 @@
+# Rapier Wit: the stun counter goes on only "if it's your turn" as the spell resolves. Cast in Bot2's upkeep of turn four it
+# taps Bot2's Ornithopter and draws a card, and puts no counter on it, so it untaps as usual on turn six.
+
+[Bot1 Deck]
+Rapier Wit
+Mox Pearl x2
+Island x4
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Upkeep]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Rapier Wit.Cast(Bot2.Battlefield.Ornithopter)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+? Bot1.Hand.Count = 6
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = false

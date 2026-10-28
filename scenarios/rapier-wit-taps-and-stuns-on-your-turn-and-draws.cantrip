@@ -1,0 +1,34 @@
+# Rapier Wit: "Tap target creature. If it's your turn, put a stun counter on it. Draw a card." On Bot1's turn three it taps
+# Bot2's Ornithopter and stuns it, and Bot1 draws. On turn four the untap step removes the counter instead of untapping
+# the Ornithopter (CR 122.1d); on turn six it untaps.
+
+[Bot1 Deck]
+Rapier Wit
+Mox Pearl x2
+Island x4
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Rapier Wit.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+? Bot1.Hand.Count = 6
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = false
