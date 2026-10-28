@@ -1,0 +1,43 @@
+# Slitherhead's scavenge {0} is activated only as a sorcery (CR 702.97a, 307.5): with Lightning Bolt on the stack in Bot1's own
+# main phase, and again in Bot2's turn, the ability is not offered - it costs nothing, so the timing alone is what refuses it. In
+# Bot1's next main phase with an empty stack it is offered and puts its one counter on Memnite.
+
+[Bot1 Deck]
+Mox Ruby x2
+Faithless Looting
+Slitherhead
+Memnite
+Lightning Bolt
+Island
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Slitherhead; Island)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+! Bot1.Graveyard.Slitherhead.Activate(Ability: Scavenge)
+Bot1.Pass
+[T2 Bot2.Main1]
+! Bot1.Graveyard.Slitherhead.Activate(Ability: Scavenge)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Graveyard.Slitherhead.Activate(Ability: Scavenge; Bot1.Battlefield.Memnite)
+Bot1.Pass
+
+[Expect]
+Exile = Slitherhead
+Bot2.Life = 17
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Memnite.Power = 2

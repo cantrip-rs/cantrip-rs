@@ -1,0 +1,36 @@
+# Slitherhead's scavenge {0} (CR 702.97a): discarded to Faithless Looting (paid with a Mox Ruby), the 1/1 card is exiled from
+# the graveyard as the cost, and the ability resolves, putting a number of +1/+1 counters equal to its power - one - on the
+# target creature, a Memnite (1/1, so now 2/2). The card is in exile, not the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Slitherhead
+Memnite
+Island x3
+Mountain x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Slitherhead; Island)
+Bot1.Graveyard.Slitherhead.Activate(Ability: Scavenge; Bot1.Battlefield.Memnite)
+? Exile = Slitherhead
+? Stack.Count = 1
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Exile = Slitherhead
+Bot1.Graveyard = Faithless Looting; Island
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
