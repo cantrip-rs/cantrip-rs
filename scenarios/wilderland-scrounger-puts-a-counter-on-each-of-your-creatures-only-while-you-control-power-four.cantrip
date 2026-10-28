@@ -1,0 +1,64 @@
+# Wilderland Scrounger, a 3/6: "Ferocious - Whenever this creature attacks while you control a creature with power 4 or greater, put
+# a +1/+1 counter on each creature you control." On turn 3 Bot1 controls a Scrounger (power 3) and an Ornithopter: attacking
+# triggers nothing. An Alpine Grizzly (power 4) arrives after combat. On turn 5 the Scrounger attacks and each of Bot1's three
+# creatures gets exactly one counter; Bot2's Ornithopter gets none. (The Scrounger, now 4/7, would count itself later.)
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Wilderland Scrounger
+Alpine Grizzly
+Ornithopter
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wilderland Scrounger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Wilderland Scrounger > Bot2)
+Bot1.Pass
+? Bot1.Battlefield.Wilderland Scrounger.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Wilderland Scrounger > Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Wilderland Scrounger.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Wilderland Scrounger.Power = 4
+Bot1.Battlefield.Alpine Grizzly.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Alpine Grizzly.Power = 5
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
