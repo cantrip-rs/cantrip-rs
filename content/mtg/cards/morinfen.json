@@ -1,0 +1,11 @@
+{
+  "name": "Morinfen",
+  "manaCost": "{3}{B}{B}",
+  "type": "Legendary Creature — Phyrexian Horror",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Flying\nCumulative upkeep—Pay 1 life. (At the beginning of your upkeep, put an age counter on this permanent, then sacrifice it unless you pay its upkeep cost for each age counter on it.)",
+  "keywords": [
+    "Flying"
+  ]
+}
