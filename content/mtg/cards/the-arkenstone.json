@@ -1,0 +1,12 @@
+{
+  "name": "The Arkenstone",
+  "manaCost": "{5}",
+  "type": "Legendary Artifact",
+  "oracleText": "Creatures you control get +1/+1.\nAt the beginning of your end step, draw a card.",
+  "adventure": {
+    "name": "Seek the Heart",
+    "manaCost": "{2}{W}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Search your library for a legendary creature card, reveal it, put it into your hand, then shuffle. (Then exile this card. You may cast the artifact later from exile.)"
+  }
+}

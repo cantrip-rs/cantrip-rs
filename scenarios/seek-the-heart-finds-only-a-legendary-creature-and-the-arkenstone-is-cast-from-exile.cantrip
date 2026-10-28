@@ -1,0 +1,59 @@
+# The Arkenstone's Adventure, Seek the Heart ({2}{W}, sorcery): "Search your library for a legendary creature card, reveal it, put it
+# into your hand, then shuffle." Only a legendary creature card may be found: the Elvish Mystic (creature, not legendary) and Glamdring
+# (legendary, not a creature) are refused, Giott is taken and revealed. The card is exiled as it resolves and The Arkenstone is cast from
+# there for {5} on turn 3 (CR 701.23, 701.20, 205.4, 715.4).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+The Arkenstone
+Island
+Elvish Mystic
+Glamdring, Foe-hammer
+Giott, King of the Dwarves
+Kiki-Jiki, Mirror Breaker
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Arkenstone.Cast(Ability: Adventure)
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Search(Elvish Mystic)
+! Bot1.Search(Glamdring, Foe-hammer)
+Bot1.Search(Giott, King of the Dwarves)
+? Bot1.Revealed = Giott, King of the Dwarves
+[T1 Bot1.Main2]
+? Bot1.Hand = Island; Giott, King of the Dwarves
+? Exile = The Arkenstone
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Exile.The Arkenstone.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Mox Jet; Mox Ruby; Mox Emerald; The Arkenstone
+Exile.Count = 0
