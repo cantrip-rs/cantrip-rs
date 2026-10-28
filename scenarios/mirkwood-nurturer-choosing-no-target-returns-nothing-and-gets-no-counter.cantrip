@@ -1,0 +1,34 @@
+# Mirkwood Nurturer: "up to one" - Bot1 may choose no target even with permanents to return, and then nothing is returned and no
+# counter is put on the Nurturer ("If you do"): it stays a 3/2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mirkwood Nurturer
+Swamp x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mirkwood Nurturer.Cast
+Bot1.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mirkwood Nurturer; Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Battlefield.Mirkwood Nurturer.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mirkwood Nurturer.Power = 3
+Bot1.Battlefield.Mirkwood Nurturer.Toughness = 2

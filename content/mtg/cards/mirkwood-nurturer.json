@@ -1,0 +1,8 @@
+{
+  "name": "Mirkwood Nurturer",
+  "manaCost": "{2}{G/U}",
+  "type": "Creature — Elf Ranger",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, return up to one other target permanent you control to its owner's hand. If you do, put a +1/+1 counter on this creature."
+}

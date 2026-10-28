@@ -1,0 +1,33 @@
+# Mirkwood Nurturer: "return up to one other target permanent you control to its owner's hand" - any permanent, a land too. Bot1 pays
+# for the Nurturer with a Forest and two Moxen on turn 1 and returns the tapped Forest to its hand; the Nurturer is a 4/3.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Mox Ruby
+Mirkwood Nurturer
+Swamp x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mirkwood Nurturer.Cast
+Bot1.Pass
+Bot1.Target(Forest)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Forest.Colors.Count = 0
+Bot1.Battlefield = Mirkwood Nurturer; Mox Jet; Mox Ruby
+Bot1.Battlefield.Mirkwood Nurturer.Power = 4
+Bot1.LandsPlayed = 1

@@ -1,0 +1,46 @@
+# Mirkwood Nurturer: "When this creature enters, return up to one other target permanent you control to its owner's hand. If you do,
+# put a +1/+1 counter on this creature." Bot1 casts it on turn 3 beside Bot2's Ornithopter: the Ornithopter (an opponent's) and the
+# Nurturer itself are not legal targets (refused); Bot1's tapped Mox Emerald, an artifact, is, and returns to Bot1's hand. The
+# Nurturer is a 4/3 with the counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mirkwood Nurturer
+Swamp x16
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mirkwood Nurturer.Cast
+Bot1.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Mirkwood Nurturer)
+Bot1.Target(Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Mox Emerald.Colors.Count = 0
+Bot1.Hand.Count = 5
+Bot1.Battlefield = Mirkwood Nurturer; Mox Jet; Mox Ruby
+Bot1.Battlefield.Mirkwood Nurturer.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mirkwood Nurturer.Power = 4
+Bot1.Battlefield.Mirkwood Nurturer.Toughness = 3
+Bot2.Battlefield = Ornithopter
