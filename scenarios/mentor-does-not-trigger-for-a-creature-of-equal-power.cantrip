@@ -1,0 +1,35 @@
+# Mentor (CR 702.134a, 115.1): "target attacking creature with lesser power" - equal power is not lesser. Sunhome Stalwart (2/2)
+# attacks with Isamaru (2/2): the only other attacker has equal power, so the ability has no legal target and is not put on the
+# stack, and Isamaru gets no counter. (The scenarios of the other mentor cards are the positive control: a 1/1 attacking with a
+# 2-power mentor does get one.) Black Lotus (three white) pays for both.
+
+[Bot1 Deck]
+Black Lotus
+Sunhome Stalwart
+Isamaru, Hound of Konda
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Sunhome Stalwart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Sunhome Stalwart > Bot2; Isamaru, Hound of Konda > Bot2)
+? Stack.Count = 0
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Isamaru, Hound of Konda.Counters.PlusOnePlusOne = (absent)
+Bot2.Life = 16
