@@ -1,0 +1,38 @@
+# Vow to Erebor on an Ornithopter (not a Dwarf): it gets +2/+2 (2/4) but the "if it's a Dwarf" sentence does nothing, so the
+# Ghostfire Blade Bot1 controls stays unattached though it could have been attached (CR 701.3a, 608.2c). Paid exactly with a
+# Mox Pearl and the Plains.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Ornithopter
+Ghostfire Blade
+Vow to Erebor
+Plains
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ghostfire Blade.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Vow to Erebor.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Ghostfire Blade.AttachedTo = (absent)

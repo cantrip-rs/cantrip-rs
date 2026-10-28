@@ -1,0 +1,6 @@
+{
+  "name": "Vow to Erebor",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Untap target creature you control. It gets +2/+2 until end of turn. If it's a Dwarf, you may attach an Equipment you control to it."
+}

@@ -1,0 +1,55 @@
+# Vow to Erebor: "Untap target creature you control. It gets +2/+2 until end of turn. If it's a Dwarf, you may attach an
+# Equipment you control to it." Bastion Enforcer (a Dwarf Soldier, 3/2) attacks on turn 3 and is untapped by the Vow, becomes
+# 5/4 and takes one Equipment of the two Bot1 controls - "an Equipment", so both together are refused (CR 701.3a): the Ghostfire
+# Blade (+2/+2) makes it 7/6 and Lavaspur Boots stay unattached. It deals 7, Bot2 20 -> 13. The mana is paid exactly.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Black Lotus
+Bastion Enforcer
+Vow to Erebor
+Ghostfire Blade
+Lavaspur Boots
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ghostfire Blade.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lavaspur Boots.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Bastion Enforcer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Bastion Enforcer > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Vow to Erebor.Cast(Bot1.Battlefield.Bastion Enforcer)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ghostfire Blade; Lavaspur Boots)
+Bot1.Choose(Ghostfire Blade)
+? Bot1.Battlefield.Bastion Enforcer.Tapped = false
+? Bot1.Battlefield.Bastion Enforcer.Power = 7
+? Bot1.Battlefield.Bastion Enforcer.Toughness = 6
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Ghostfire Blade.AttachedTo = Bastion Enforcer
+Bot1.Battlefield.Lavaspur Boots.AttachedTo = (absent)
