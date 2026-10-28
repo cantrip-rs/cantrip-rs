@@ -254,6 +254,24 @@ pub const fn annihilator<const N: u8>(text: &'static str) -> AbilityDef {
     triggered(ANNIHILATOR, annihilate::<N>, text)
 }
 
+/// Whether `player` has the most life or is tied for most life (CR 702.105a): no player still in the game has more (CR 800.4a
+/// leaves out a player who has left). Preacher of the Schism's two abilities and dethrone ask it.
+pub fn has_most_life(q: &dyn Query, player: PlayerId) -> bool {
+    let state = q.state();
+    state.apnap().all(|other| state.player(other).life <= state.player(player).life)
+}
+
+/// "Whenever this creature attacks the player with the most life or tied for most life" (CR 508.1m, 702.105a): it attacks a
+/// player, never a planeswalker or battle (the rulings), and that player has the most life as the attack is declared; once
+/// the ability has triggered, life totals no longer matter. Dethrone and Preacher of the Schism print it. The `listens` mask is
+/// `EventMask::ATTACKS`.
+pub fn this_attacks_the_player_with_the_most_life(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::Attacks { attacker, defender: Target::Player(p), .. } if *attacker == me.source && has_most_life(q, *p) => Fired::PLAIN,
+        _ => None,
+    }
+}
+
 /// "Whenever this creature attacks" (CR 508.1m, 603.2): its own attack, whatever it attacks. Aragorn, King of Gondor and
 /// Caustic Bronco print it. The `listens` mask is `EventMask::ATTACKS`.
 pub fn this_attacks(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {

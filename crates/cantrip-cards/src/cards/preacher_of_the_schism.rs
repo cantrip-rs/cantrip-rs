@@ -1,27 +1,11 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, tokens};
+use cantrip_mechanics::{effects, tokens, triggers};
 use cantrip_oracle as oracle;
-
-/// "Has the most life or is tied for most life": no player still in the game has more (CR 800.4a leaves out a player who has
-/// left). Asked as the attack is declared (CR 508.1m); once the ability has triggered, life totals no longer matter.
-fn has_most_life(q: &dyn Query, player: PlayerId) -> bool {
-    let state = q.state();
-    state.apnap().all(|other| state.player(other).life <= state.player(player).life)
-}
-
-/// "Whenever this creature attacks the player with the most life or tied for most life": it attacks a player, never a
-/// planeswalker or battle (the ruling), and that player has the most life.
-fn attacks_player_with_most_life(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    match event {
-        Event::Attacks { attacker, defender: Target::Player(p), .. } if *attacker == me.source && has_most_life(q, *p) => Fired::PLAIN,
-        _ => None,
-    }
-}
 
 /// "Whenever this creature attacks while you have the most life or are tied for most life": whatever it attacks.
 fn attacks_while_you_have_most_life(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::Attacks { attacker, .. } if *attacker == me.source && has_most_life(q, me.controller) => Fired::PLAIN,
+        Event::Attacks { attacker, .. } if *attacker == me.source && triggers::has_most_life(q, me.controller) => Fired::PLAIN,
         _ => None,
     }
 }
@@ -45,7 +29,7 @@ fn create_vampire(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
-            when_asked(EventMask::ATTACKS, attacks_player_with_most_life),
+            when_asked(EventMask::ATTACKS, triggers::this_attacks_the_player_with_the_most_life),
             create_vampire,
             "Whenever this creature attacks the player with the most life or tied for most life, create a 1/1 white Vampire creature token with lifelink.",
         ),
