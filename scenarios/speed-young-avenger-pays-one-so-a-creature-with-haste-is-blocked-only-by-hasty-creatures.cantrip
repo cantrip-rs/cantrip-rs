@@ -1,0 +1,73 @@
+# Speed, Young Avenger: "Whenever you cast a noncreature spell, you may pay {1}. When you do, target creature with haste can't be
+# blocked this turn except by creatures with haste." Turn 3: Bot1 casts Mox Pearl, pays {1} with Mox Emerald and targets Speed
+# (the only creature with haste): Bot2's Memnite may not block it and its Monastery Swiftspear (haste) may. Turn 5: Mox Sapphire
+# is cast and the payment declined, so nothing is restricted and the Memnite blocks Speed.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Speed, Young Avenger
+Mox Pearl
+Mox Sapphire
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Monastery Swiftspear
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Speed, Young Avenger.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Monastery Swiftspear.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+! Bot1.Target(Bot2.Battlefield.Memnite)
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Speed, Young Avenger)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Speed, Young Avenger.BlockRestriction = Can't be blocked except by creatures with haste
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Speed, Young Avenger > Bot2)
+! Bot2.Block(Memnite > Speed, Young Avenger)
+Bot2.Block(Monastery Swiftspear > Speed, Young Avenger)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Speed, Young Avenger.BlockRestriction = (absent)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Speed, Young Avenger.BlockRestriction = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Speed, Young Avenger > Bot2)
+Bot2.Block(Memnite > Speed, Young Avenger)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Memnite; Monastery Swiftspear
