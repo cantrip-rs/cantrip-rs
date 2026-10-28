@@ -1,0 +1,78 @@
+# Supper for Spiders {1}{B}: the cards it returns "are Food artifacts" - that is what they ENTER as (CR 614.12), never creatures that
+# become Food afterwards. Bot2 controls Authority of the Consuls ("Creatures your opponents control enter tapped. Whenever a
+# creature enters under an opponent's control, you gain 1 life."). Bot1's own Memnite, cast on turn 3, is a creature entering: it
+# enters tapped and gains Bot2 1 life (21). Bot1's Languish then kills Memnite, Crimson Kobolds and Ornithopter... Bot2's
+# Kobolds and Ornithopter come back under Bot1's control as Food artifacts that enter untapped, and Bot2 gains nothing more: 21.
+# (Bot2's own Memnite was Bolted on turn 2 and stays in the graveyard.)
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Pearl
+Languish
+Supper for Spiders
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Authority of the Consuls
+Lightning Bolt
+Memnite
+Crimson Kobolds
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Authority of the Consuls.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Hand.Crimson Kobolds.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Languish.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Supper for Spiders.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot1.Battlefield.Crimson Kobolds.Tapped = false
+? Bot2.Life = 21
+? Bot1.Battlefield.Ornithopter.Types = Artifact
+? Bot1.Battlefield.Crimson Kobolds.Types = Artifact
+? Bot1.Battlefield.Crimson Kobolds.Subtypes = Food
+[Expect]
+Bot2.Life = 21
+Bot1.Battlefield.Ornithopter.Types = Artifact

@@ -1,0 +1,62 @@
+# Supper for Spiders at a table of three: Bot2's Memnite and Bot3's Ornithopter (cast on their own turns) both die to Bot1's Languish
+# on turn 4, and "your opponents' graveyards" means both: each returns under Bot1's control as a Food artifact (the Ornithopter
+# keeping flying), and Bot2's and Bot3's graveyards are left with nothing. Languish is paid with Black Lotus's {B}{B}{B} and a Mox
+# Pearl, the Supper exactly with Mox Jet and a Mox Pearl.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Pearl
+Languish
+Supper for Spiders
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Bot3 Deck]
+Ornithopter
+Swamp x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot3.Pass
+[T3 Bot3.Main1]
+Bot3.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Languish.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Supper for Spiders.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Types = Artifact
+Bot1.Battlefield.Memnite.Subtypes = Food
+Bot1.Battlefield.Ornithopter.Types = Artifact
+Bot1.Battlefield.Ornithopter.Subtypes = Food
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Graveyard.Count = 0
+Bot3.Graveyard.Count = 0

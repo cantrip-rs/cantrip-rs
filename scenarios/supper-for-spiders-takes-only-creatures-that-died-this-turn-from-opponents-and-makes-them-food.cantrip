@@ -1,0 +1,87 @@
+# Supper for Spiders {1}{B}: "Put onto the battlefield under your control all creature cards in your opponents' graveyards that were
+# put there from the battlefield this turn. They are Food artifacts with '{2}, {T}, Sacrifice this artifact: You gain 3 life.' (They
+# lose all other types and subtypes.)" On turn 2 Bot2 Bolts its own Memnite (put there on an earlier turn: it stays). On turn 3
+# Bot1's Languish kills Bot1's Memnite (its own graveyard: stays), Bot2's Crimson Kobolds and Ornithopter (this turn: both
+# come back under Bot1's control). The Supper is paid exactly with Mox Jet and a Mox Pearl. Each is only a Food artifact now (no
+# creature type, no creature type of the Kobolds or the Ornithopter's Thopter), keeping its name, color, mana value and abilities
+# (the Ornithopter's flying). On turn 5 the Ornithopter Food is sacrificed for {2}: Bot1 gains 3 life, and the card goes to its
+# owner's graveyard, Bot2's.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Pearl
+Languish
+Supper for Spiders
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Memnite
+Crimson Kobolds
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Hand.Crimson Kobolds.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Languish.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Supper for Spiders.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Types = Artifact
+? Bot1.Battlefield.Ornithopter.Subtypes = Food
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Crimson Kobolds.Types = Artifact
+? Bot1.Battlefield.Crimson Kobolds.Subtypes = Food
+? Bot1.Battlefield.Crimson Kobolds.Colors = Red
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot1.Battlefield.Crimson Kobolds.Tapped = false
+? Bot1.Graveyard.Memnite.Power = 1
+? Bot2.Graveyard = Memnite; Lightning Bolt
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Ornithopter.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot2.Graveyard = Ornithopter; Memnite; Lightning Bolt
+Bot2.Graveyard.Ornithopter.Toughness = 2
+Bot1.Battlefield.Crimson Kobolds.Types = Artifact

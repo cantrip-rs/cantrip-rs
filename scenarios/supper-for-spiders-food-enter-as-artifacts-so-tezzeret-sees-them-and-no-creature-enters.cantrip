@@ -1,0 +1,63 @@
+# Supper for Spiders {1}{B}: the cards it returns "are Food artifacts", which is what they ENTER as (CR 614.12), so what watches
+# artifacts entering sees them. Bot1's Tezzeret, Cruel Captain ("Whenever an artifact you control enters, put a loyalty counter on
+# Tezzeret") is cast on turn 1 for Black Lotus's {B}{B}{B}, at 4 loyalty; the Mox Jet cast after it is an artifact entering: 5. On
+# turn 3 Fatal Push (paid with the Jet's {B} through a Dark Ritual's {B}{B}{B}) destroys Bot2's Ornithopter, and Supper for Spiders
+# (the other {B}{B}) returns it under Bot1's control as a Food artifact that enters untapped: Tezzeret gets a sixth counter. Bot2's
+# Memnite is still on the battlefield, so Tezzeret did not see it.
+
+[Bot1 Deck]
+Black Lotus
+Tezzeret, Cruel Captain
+Mox Jet
+Dark Ritual
+Fatal Push
+Supper for Spiders
+Plains
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tezzeret, Cruel Captain.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tezzeret, Cruel Captain.Counters.Loyalty = 4
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tezzeret, Cruel Captain.Counters.Loyalty = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot1.Hand.Fatal Push.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+? Bot1.Battlefield.Tezzeret, Cruel Captain.Counters.Loyalty = 5
+Bot1.Hand.Supper for Spiders.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Types = Artifact
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot2.Graveyard.Count = 0
+
+[Expect]
+Bot1.Battlefield.Tezzeret, Cruel Captain.Counters.Loyalty = 6
+Bot1.Battlefield.Ornithopter.Subtypes = Food
+Bot2.Battlefield.Memnite.Types = Artifact; Creature
