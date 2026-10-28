@@ -1,0 +1,39 @@
+# Hydro-Channeler's "{1}, {T}: Add one mana of any color. Spend this mana only to cast an instant or sorcery spell." On turn 3,
+# with Mox Jet's {B} in the pool the ability spends it for the {1} and makes
+# {R} (InstantOrSorcerySpells) for the {1}, and that {R} casts Lightning Bolt: Bot2 takes 3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Hydro-Channeler
+Mox Jet
+Lightning Bolt
+Plains
+Plains
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hydro-Channeler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hydro-Channeler.Activate(Ability: any color; Color: Red)
+? Bot1.Mana = {R} (InstantOrSorcerySpells)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot2.Life = 17
+Bot1.Battlefield.Hydro-Channeler.Tapped = true

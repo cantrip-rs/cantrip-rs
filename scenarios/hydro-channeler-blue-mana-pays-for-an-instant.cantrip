@@ -1,0 +1,44 @@
+# Hydro-Channeler's "{T}: Add {U}. Spend this mana only to cast an instant or sorcery spell." Bot1 casts it on turn 1. On turn 3
+# its {U} (InstantOrSorcerySpells) and Mox Jet's {B} are in the pool: Quick Study ({2}{U}) is paid exactly with them and
+# Mox Ruby's {R}, leaving the pool empty.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Hydro-Channeler
+Hydro-Channeler
+Mox Jet
+Quick Study
+Lightning Bolt
+Plains
+Plains
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hydro-Channeler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Hydro-Channeler.Activate(Ability: {T}: Add {U})
+? Bot1.Mana = {U} (InstantOrSorcerySpells)
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {B} {U} (InstantOrSorcerySpells)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Quick Study.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Hydro-Channeler.Tapped = true
+Bot1.Graveyard = Quick Study
+Bot1.Hand.Count = 5
