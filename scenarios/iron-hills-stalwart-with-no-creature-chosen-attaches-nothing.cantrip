@@ -1,0 +1,72 @@
+# Iron Hills Stalwart: the creature is "up to one target": with only the Equipment chosen, nothing is attached and Bot1's
+# Paradise Mantle stays on its Ornithopter (CR 601.2c, 701.3a). The sibling scenario, with a creature chosen, is the control.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Paradise Mantle
+Ornithopter
+Iron Hills Stalwart
+Island x20
+
+[Bot2 Deck]
+Paradise Mantle
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Paradise Mantle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Paradise Mantle.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Paradise Mantle.AttachedTo = Ornithopter
+[T2 Bot2.Main1]
+Bot2.Hand.Paradise Mantle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Iron Hills Stalwart.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Paradise Mantle)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Paradise Mantle.AttachedTo = Ornithopter
+Bot2.Battlefield.Paradise Mantle.AttachedTo = (absent)

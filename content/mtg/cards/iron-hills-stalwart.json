@@ -1,0 +1,12 @@
+{
+  "name": "Iron Hills Stalwart",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Dwarf Warrior",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Reach, trample\nWhen this creature enters, attach target Equipment you control to up to one target creature you control.",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}

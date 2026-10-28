@@ -1,0 +1,78 @@
+# Iron Hills Stalwart: "When this creature enters, attach target Equipment you control to up to one target creature you
+# control" (CR 701.3a). Bot1's Paradise Mantle is on its Ornithopter; the Stalwart's trigger moves it onto the Stalwart
+# itself, a creature Bot1 controls. The opponent's Paradise Mantle and Memnite (cast on turn 2) are refused as targets
+# (CR 115.1, "you control"), and reach and trample are the Stalwart's own.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Paradise Mantle
+Ornithopter
+Iron Hills Stalwart
+Island x20
+
+[Bot2 Deck]
+Paradise Mantle
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Paradise Mantle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Paradise Mantle.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Paradise Mantle.AttachedTo = Ornithopter
+[T2 Bot2.Main1]
+Bot2.Hand.Paradise Mantle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Iron Hills Stalwart.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Paradise Mantle)
+Bot1.Target(Bot1.Battlefield.Paradise Mantle)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Iron Hills Stalwart)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Paradise Mantle.AttachedTo = Iron Hills Stalwart
+Bot2.Battlefield.Paradise Mantle.AttachedTo = (absent)
+Bot1.Battlefield.Iron Hills Stalwart.Keywords = Reach; Trample
+Bot1.Battlefield.Ornithopter.Power = 0

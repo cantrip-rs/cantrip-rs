@@ -1,0 +1,54 @@
+# Iron Hills Stalwart: "attach target Equipment you control" needs an Equipment as its first target; with none on the
+# battlefield (the opponent's Paradise Mantle is not Bot1's) the triggered ability has no legal target and is removed from
+# the stack rather than put there (CR 603.3d), so Bot1 is never asked for a target.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Iron Hills Stalwart
+Island x20
+
+[Bot2 Deck]
+Paradise Mantle
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Paradise Mantle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Iron Hills Stalwart.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Paradise Mantle.AttachedTo = (absent)
+Bot1.Battlefield.Iron Hills Stalwart.Keywords = Reach; Trample
