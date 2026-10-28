@@ -1,0 +1,47 @@
+# Tidings of War: "Amass Goblins 1. If this spell was cast from a graveyard, amass Goblins 3 instead." Cast from the hand
+# for {R} it puts one counter on a new Goblin Army token (CR 701.47a). Flashed back for {3}{R} (paid exactly: Black Lotus's
+# three red and a Mox Pearl's white) it amasses 3 - not 1 and not 1+3 - onto that same Army (1 + 3 = 4 counters), and
+# the card is exiled afterwards (CR 702.34a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Tidings of War
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tidings of War.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Army Token.Power = 1
+? Bot1.Graveyard = Tidings of War
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Graveyard.Tidings of War.Cast(Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Army Token.Power = 4
+
+[Expect]
+Bot1.Battlefield.Goblin Army Token.Power = 4
+Bot1.Battlefield.Goblin Army Token.Toughness = 4
+Bot1.Battlefield.Goblin Army Token.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Goblin Army Token.Subtypes = Army; Goblin
+Bot1.Graveyard = Black Lotus
+Exile = Tidings of War
