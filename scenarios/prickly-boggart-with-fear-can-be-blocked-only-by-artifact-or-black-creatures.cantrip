@@ -1,0 +1,49 @@
+# Fear (CR 702.36b): Prickly Boggart attacking cannot be blocked by Bot2's Grappler Spider, a green nonartifact creature
+# (refusal), but can by Wei Scout, a black creature, and by Memnite, a colorless artifact creature (the positive controls:
+# both block, so each may). The Boggart, 1/1, takes 2 damage and dies; Bot2 takes none.
+# Bot1 casts the Boggart on turn 1 (Mox Jet); Bot2 casts its blockers on turn 2 (Moxen Jet and Pearl for the Scout, Emerald
+# and Ruby for the Spider, Memnite for free).
+
+[Bot1 Deck]
+Mox Jet
+Prickly Boggart
+Island x22
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Wei Scout
+Memnite
+Grappler Spider
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prickly Boggart.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Wei Scout.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grappler Spider.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Prickly Boggart > Bot2)
+! Bot2.Block(Grappler Spider > Prickly Boggart)
+Bot2.Block(Wei Scout > Prickly Boggart; Memnite > Prickly Boggart)
+? Combat.Blocks.Count = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Prickly Boggart

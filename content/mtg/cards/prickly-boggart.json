@@ -1,0 +1,11 @@
+{
+  "name": "Prickly Boggart",
+  "manaCost": "{B}",
+  "type": "Creature — Goblin Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Fear (This creature can't be blocked except by artifact creatures and/or black creatures.)",
+  "keywords": [
+    "Fear"
+  ]
+}
