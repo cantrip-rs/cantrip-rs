@@ -1,0 +1,11 @@
+{
+  "name": "Warchief Giant",
+  "manaCost": "{3}{R}{R}",
+  "type": "Creature — Giant Warrior",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "Haste\nMyriad (Whenever this creature attacks, for each opponent other than defending player, you may create a token copy that's tapped and attacking that player or a planeswalker they control. Exile the tokens at end of combat.)",
+  "keywords": [
+    "Haste"
+  ]
+}
