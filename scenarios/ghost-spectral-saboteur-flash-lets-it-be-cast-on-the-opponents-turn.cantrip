@@ -1,0 +1,31 @@
+# Ghost, Spectral Saboteur has flash (CR 702.8a): Bot1 casts it during Bot2's turn, with Bot2 the active player. A creature
+# spell without flash could not be cast then.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Ghost, Spectral Saboteur
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ghost, Spectral Saboteur.Cast
+
+[Expect]
+Turn = 2
+ActivePlayer = Bot2
+Bot1.Battlefield.Ghost, Spectral Saboteur.Keywords = CantBeBlocked; Flash
