@@ -43,13 +43,6 @@ fn pay(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Target nonland permanent card with mana value 3 or less from your graveyard" (CR 115.1, 202.3): a land card, an
-/// Enchantment Land like Urza's Saga among them, is not one.
-fn nonland_permanent_card_with_mana_value_3_or_less(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    let Target::Object(id) = t else { return false };
-    targets::nonland_permanent_card_in_your_graveyard(q, asker, t) && q.mana_value(id) <= 3
-}
-
 /// "Return [it] from your graveyard to the battlefield with a finality counter on it" (CR 122.6, 614.1c): it enters with the
 /// counter, under the control of the ability's controller. A target gone by then leaves the ability nothing to do, and it
 /// does not resolve (CR 608.2b).
@@ -66,6 +59,6 @@ pub static CARD: CardDef = CardDef {
         triggered(THIS_ENTERS_OR_ATTACKS, pay, "Whenever Zoraline enters or attacks, you may pay {W}{B} and 2 life. When you do, return target nonland permanent card with mana value 3 or less from your graveyard to the battlefield with a finality counter on it."),
     ],
     delayed: &[delayed_trigger(return_it, "When you do, return target nonland permanent card with mana value 3 or less from your graveyard to the battlefield with a finality counter on it.")
-        .targets(&[target(nonland_permanent_card_with_mana_value_3_or_less)])],
+        .targets(&[targets::NONLAND_PERMANENT_CARD_WITH_MANA_VALUE_3_OR_LESS_IN_YOUR_GRAVEYARD])],
     ..oracle::ZORALINE_COSMOS_CALLER
 };

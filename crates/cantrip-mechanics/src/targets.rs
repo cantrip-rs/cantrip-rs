@@ -880,6 +880,18 @@ pub fn nonland_permanent_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t:
 /// "Target nonland permanent card from your graveyard". Loamcrafter Faun prints it.
 pub const NONLAND_PERMANENT_CARD_IN_YOUR_GRAVEYARD: TargetSpec = target(nonland_permanent_card_in_your_graveyard);
 
+/// "Target nonland permanent card with mana value 3 or less from your graveyard" (CR 115.1, 202.3): a land card, an
+/// Enchantment Land like Urza's Saga among them, is not one, and X in a graveyard is 0 (CR 202.3e). Zoraline, Cosmos Caller
+/// and Primary Research print it.
+pub fn nonland_permanent_card_with_mana_value_3_or_less_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    matches!(t, Target::Object(id) if nonland_permanent_card_in_your_graveyard(q, asker, t) && q.mana_value(id) <= 3)
+}
+
+/// "Target nonland permanent card with mana value 3 or less from your graveyard". Zoraline, Cosmos Caller and Primary Research
+/// print it.
+pub const NONLAND_PERMANENT_CARD_WITH_MANA_VALUE_3_OR_LESS_IN_YOUR_GRAVEYARD: TargetSpec =
+    target(nonland_permanent_card_with_mana_value_3_or_less_in_your_graveyard);
+
 /// "Target land card from your graveyard" (CR 115.1, 400.7). Titania, Protector of Argoth, Wrenn and Six (up to one) and
 /// Carnivorous Cultivator print it.
 pub fn land_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Target) -> bool {
