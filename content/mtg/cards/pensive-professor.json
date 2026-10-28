@@ -1,0 +1,8 @@
+{
+  "name": "Pensive Professor",
+  "manaCost": "{1}{U}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 0,
+  "toughness": 2,
+  "oracleText": "Increment (Whenever you cast a spell, if the amount of mana you spent is greater than this creature's power or toughness, put a +1/+1 counter on this creature.)\nWhenever one or more +1/+1 counters are put on this creature, draw a card."
+}
