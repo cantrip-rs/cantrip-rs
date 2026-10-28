@@ -1,0 +1,11 @@
+{
+  "name": "Battering Krasis",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Shark Beast",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Trample\nEvolve (Whenever a creature you control enters, if that creature has greater power or toughness than this creature, put a +1/+1 counter on this creature.)",
+  "keywords": [
+    "Trample"
+  ]
+}
