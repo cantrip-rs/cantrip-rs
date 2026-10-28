@@ -1,0 +1,6 @@
+{
+  "name": "Gleaming Splendor",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment",
+  "oracleText": "Whenever an opponent draws their second card each turn, you create a Treasure token.\n{2}{W}: Two target players each draw a card."
+}

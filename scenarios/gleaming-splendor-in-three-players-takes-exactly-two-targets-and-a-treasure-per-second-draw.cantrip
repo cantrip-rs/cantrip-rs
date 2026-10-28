@@ -1,0 +1,43 @@
+# Gleaming Splendor in a game of three: "{2}{W}: Two target players each draw a card" takes exactly two targets, not three (CR
+# 115.1d). On turn 3, Bot3's turn, after its draw step (its first card), Bot1 activates it for Bot2 and Bot3: Bot3 draws its second
+# card of the turn, so Bot1 creates one Treasure; Bot2's draw is its first card that turn and makes none (CR 120.3, 603.2).
+
+[Bot1 Deck]
+Plains
+Mox Sapphire
+Black Lotus
+Gleaming Splendor
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gleaming Splendor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T3 Bot3.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Gleaming Splendor.Activate
+! Bot1.Target(Count: 3)
+! Bot1.Target(Count: 1)
+Bot1.Target(Bot2; Bot3)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Sapphire; Gleaming Splendor; Treasure Token
+Bot2.Hand.Count = 8
+Bot3.Hand.Count = 9

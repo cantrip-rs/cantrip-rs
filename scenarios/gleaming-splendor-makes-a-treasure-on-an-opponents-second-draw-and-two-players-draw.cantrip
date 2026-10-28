@@ -1,0 +1,43 @@
+# Gleaming Splendor: "Whenever an opponent draws their second card each turn, you create a Treasure token." On turn 2 Bot2's
+# draw step is its first card (no Treasure); then Bot1 activates "{2}{W}: Two target players each draw a card" (paid with a Black
+# Lotus, exactly) for Bot1 and Bot2, so Bot2 draws its second card and Bot1 gets a Treasure while Bot1's own draw makes none
+# (CR 120.3, 603.2). Both targets must be different players (CR 115.3).
+
+[Bot1 Deck]
+Plains
+Mox Sapphire
+Black Lotus
+Gleaming Splendor
+Mox Pearl
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Gleaming Splendor.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield = Plains; Mox Sapphire; Black Lotus; Gleaming Splendor
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Gleaming Splendor.Activate
+! Bot1.Target(Bot2; Bot2)
+! Bot1.Target(Count: 1)
+Bot1.Target(Bot1; Bot2)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Sapphire; Gleaming Splendor; Treasure Token
+Bot1.Hand.Count = 4
+Bot2.Hand.Count = 9
