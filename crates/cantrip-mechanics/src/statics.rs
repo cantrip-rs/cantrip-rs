@@ -259,6 +259,16 @@ pub fn plus_one_plus_one_per_artifact_you_control(view: &dyn LayerQuery, source:
     chars.toughness = chars.toughness.map(|v| v + n);
 }
 
+/// "Gets +1/+0 for each other artifact you control" (CR 613.4c, layer 7c): the artifacts as the earlier layers made them, under
+/// the control of the source's controller, the source itself not among them. Krang, Master Mind and Iron Man, Master of
+/// Machines print it.
+pub fn plus_power_per_other_artifact_you_control(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    let state = view.state();
+    let you = state.obj(source).controller;
+    let n = state.battlefield().iter().filter(|&&id| id != source && state.obj(id).controller == you && view.chars(id).is(CardType::Artifact)).count() as i16;
+    chars.power = chars.power.map(|v| v + n);
+}
+
 /// "... has trample" (CR 702.19, layer 6) as a static ability's `StaticDef::apply`. Ajani's Anguish, Keen-Eyed Curator, Orcrist
 /// and Rancor print it.
 pub fn have_trample(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
