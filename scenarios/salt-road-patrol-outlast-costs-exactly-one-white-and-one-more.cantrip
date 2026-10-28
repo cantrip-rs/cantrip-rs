@@ -1,0 +1,42 @@
+# Outlast {1}{W} (CR 702.107a) on Salt Road Patrol (2/5, {3}{W} paid by four Moxen): on turn 3, with the Patrol no longer summoning sick, Mox Pearl and Mox Jet pay
+# {1}{W} and nothing more, leaving Mox Ruby untapped and the pool empty, and the Patrol is a tapped 3/6.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Salt Road Patrol
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Swamp x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Salt Road Patrol.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Salt Road Patrol.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Salt Road Patrol.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Salt Road Patrol.Power = 3
+Bot1.Battlefield.Salt Road Patrol.Toughness = 6
+Bot1.Battlefield.Salt Road Patrol.Tapped = true
+Bot1.Battlefield.Mox Ruby.Tapped = false
