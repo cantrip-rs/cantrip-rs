@@ -1,0 +1,76 @@
+# Agent Phil Coulson: vigilance, and "{T}: Put a +1/+1 counter on each other Hero you control." He attacks on turn 3 without
+# tapping (vigilance, CR 702.20b), then taps in the second main phase: each of Bot1's two Masked Meowers (Heroes) gets one counter;
+# neither he himself ("other"), Bot1's Ornithopter (not a Hero) nor Bot2's Black Widow ("you control") does. On turn 5 he taps
+# again and a second counter goes on each, so it is one counter per activation.
+
+[Bot1 Deck]
+Agent Phil Coulson
+Masked Meower
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Masked Meower
+Plains x20
+
+[Bot2 Deck]
+Masked Meower
+Mox Ruby
+Mox Jet
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Agent Phil Coulson.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Masked Meower.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Masked Meower.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Masked Meower.Cast
+Bot1.Pass
+Bot1.Attack(Agent Phil Coulson > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Agent Phil Coulson.Tapped = false
+Bot1.Battlefield.Agent Phil Coulson.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Agent Phil Coulson.Tapped = true
+? Bot1.Battlefield.Masked Meower#1.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Masked Meower#2.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Agent Phil Coulson.Counters.PlusOnePlusOne = (absent)
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+? Bot2.Battlefield.Masked Meower.Counters.PlusOnePlusOne = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Agent Phil Coulson.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Masked Meower#1.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Masked Meower#2.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Agent Phil Coulson.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Agent Phil Coulson.Keywords = Vigilance
+Bot2.Battlefield.Masked Meower.Counters.PlusOnePlusOne = (absent)

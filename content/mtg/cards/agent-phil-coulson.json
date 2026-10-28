@@ -1,0 +1,11 @@
+{
+  "name": "Agent Phil Coulson",
+  "manaCost": "{1}{W}",
+  "type": "Legendary Creature — Human Spy Hero",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance\n{T}: Put a +1/+1 counter on each other Hero you control.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
