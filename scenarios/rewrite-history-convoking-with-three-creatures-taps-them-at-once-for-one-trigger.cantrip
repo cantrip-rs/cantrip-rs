@@ -1,0 +1,50 @@
+# Creatures tapped to pay for convoke are tapped at once (CR 601.2h, 702.51a), so Rewrite History's "whenever one or more creatures
+# you control become tapped" (CR 603.2c) triggers once for them. Bot1 casts Ledev Guardian ({3}{W}) in turn 3 convoking three
+# Ornithopters, with Mox Pearl's {W} for the rest: one trigger, so one card drawn, one discarded (an Island), and one plan counter.
+
+[Bot1 Deck]
+Black Lotus
+Rewrite History
+Ornithopter
+Ornithopter
+Ornithopter
+Mox Pearl
+Ledev Guardian
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Rewrite History.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ledev Guardian.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Rewrite History.Counters.Plan = 1
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#2.Tapped = true
+Bot1.Battlefield.Ornithopter#3.Tapped = true
+Bot1.Graveyard = Island; Black Lotus
