@@ -22,7 +22,7 @@ pub fn recruit(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<(
 }
 
 /// The resolution of "[you] recruit" as an ability's whole effect: the ability's controller recruits, on behalf of its
-/// source. The Queen of Dale, Celebrate the Mountain-king, Esgaroth Garrison, Great Gilded Boat, Lake-town Lookout and The Mountain-king's
+/// source. The Queen of Dale, Celebrate the Mountain-king, Esgaroth Garrison, Great Gilded Boat, Lake-town Lookout, Long Lake Nuisance and The Mountain-king's
 /// Return print it so.
 pub fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     recruit(g, item.controller, item.object)

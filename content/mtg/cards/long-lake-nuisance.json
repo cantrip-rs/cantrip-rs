@@ -1,0 +1,11 @@
+{
+  "name": "Long Lake Nuisance",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Bird",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Flying\nWhen this creature enters, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,42 @@
+# Long Lake Nuisance: Flying, and "When this creature enters, recruit" (CR 701.70a). Cast for {3}{U} off four Moxen on turn 1, it enters
+# and its trigger draws the Plains and discards the Mox Ruby left in hand - a nonland card - so a 1/1 white Human Soldier
+# token appears beside the 3/1 flier.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Emerald
+Long Lake Nuisance
+Mox Ruby
+Island
+Plains
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Long Lake Nuisance.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mox Ruby)
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Mox Emerald; Long Lake Nuisance; Human Soldier Token
+Bot1.Battlefield.Long Lake Nuisance.Keywords = Flying
+Bot1.Graveyard = Mox Ruby
+Bot1.Hand = Island; Plains
