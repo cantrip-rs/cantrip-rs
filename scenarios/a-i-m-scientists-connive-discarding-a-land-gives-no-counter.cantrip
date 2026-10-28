@@ -1,0 +1,31 @@
+# A.I.M. Scientists connives (CR 701.50a), but Bot1 discards the Island it kept in hand: a land discarded means no +1/+1
+# counter, so the Scientists stay 3/3 and the Lightning Bolt drawn stays in hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+A.I.M. Scientists
+Island x4
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.A.I.M. Scientists.Cast
+Bot1.Pass
+Bot1.Choose(Island)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.A.I.M. Scientists.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.A.I.M. Scientists.Power = 3
+Bot1.Graveyard = Island; Black Lotus
+Bot1.Hand = Lightning Bolt; Island; Island; Island
