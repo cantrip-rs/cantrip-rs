@@ -1,0 +1,71 @@
+# Celebrate the Mountain-king: "When this enchantment enters, for each opponent, exile up to one target nonland permanent
+# that player controls until this enchantment leaves the battlefield." and "When this enchantment enters, recruit." Bot2
+# controls an Ornithopter and an Island, Bot1 an Ornithopter: only Bot2's nonland permanent may be targeted (CR 115.1). Recruit
+# draws a Plains and discards it (a land card: no Soldier token, CR 701.70a). Bot2 destroys the enchantment with Disenchant,
+# and the Ornithopter returns under its owner's control at once (CR 610.3a).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Celebrate the Mountain-king
+Ornithopter
+Plains
+Plains x14
+
+[Bot2 Deck]
+Island
+Ornithopter
+Plains
+Disenchant
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Celebrate the Mountain-king.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+? Bot1.Graveyard = Plains
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+? Bot2.Battlefield = Island
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Celebrate the Mountain-king)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield = Island; Plains; Ornithopter
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Mox Ruby; Mox Emerald; Ornithopter
+Bot1.Graveyard = Celebrate the Mountain-king; Plains

@@ -1,0 +1,6 @@
+{
+  "name": "Celebrate the Mountain-king",
+  "manaCost": "{3}{W}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, for each opponent, exile up to one target nonland permanent that player controls until this enchantment leaves the battlefield.\nWhen this enchantment enters, recruit. (Draw a card, then discard a card. If you discarded a nonland card, create a 1/1 white Human Soldier creature token.)"
+}
