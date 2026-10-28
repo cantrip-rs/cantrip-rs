@@ -169,6 +169,14 @@ pub fn search_basic_land_to_battlefield(g: &mut dyn Game, player: PlayerId, sour
     Ok(())
 }
 
+/// "{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle."
+/// (CR 701.23, 701.21a): the land's own ability, the sacrifice being a cost. Escape Tunnel and Hobbit Hole print it.
+pub const SACRIFICE_TO_FETCH_BASIC_TAPPED: AbilityDef = ability(
+    TAP.and(SACRIFICE_THIS),
+    |g, item| search_basic_land_to_battlefield(g, item.controller, item.object, true),
+    "{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+);
+
 /// "Each of these players searches their library for up to N basic land cards, puts them onto the battlefield [tapped], then
 /// shuffles", done by the players together (CR 101.4, 701.23i): `searchers` are the players and how many basic lands each
 /// looks for, asked in turn order starting with the active player; every land found enters in one event, and only then does
