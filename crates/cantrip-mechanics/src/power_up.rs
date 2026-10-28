@@ -28,5 +28,5 @@ pub fn reduction(q: &dyn Query, asker: &Asker, _: Costed, _: &[Target]) -> CostD
 /// A power-up ability: `cost` reduced by the permanent's mana cost on the turn it entered, and activated only once
 /// (CR 702.193a).
 pub const fn ability(cost: Cost, effect: Effect, text: &'static str) -> AbilityDef {
-    cantrip_api::ability(cost, effect, text).cost_change(reduction).once()
+    cantrip_api::ability(cost, effect, text).cost_change(reduction).power_up()
 }

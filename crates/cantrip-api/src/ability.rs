@@ -561,6 +561,12 @@ impl AbilityDef {
         AbilityDef::Activated(ActivatedDef { once: true, ..activated(self, "only an activated ability is activated only once") })
     }
 
+    /// Power-up (CR 702.193a): "activate this ability only once", an additional time for each permanent its controller controls that
+    /// says so (`CardDef::extra_power_up_activations`).
+    pub const fn power_up(self) -> AbilityDef {
+        AbilityDef::Activated(ActivatedDef { once: true, power_up: true, ..activated(self, "only an activated ability is a power-up") })
+    }
+
     /// Its own cost change (CR 601.2f, 602.2b): "this ability costs ... less to activate".
     pub const fn cost_change(self, change: AbilityCostChange) -> AbilityDef {
         AbilityDef::Activated(ActivatedDef { cost_change: Some(change), ..activated(self, "only an activated ability has a cost") })
