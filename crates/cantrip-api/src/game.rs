@@ -5,7 +5,7 @@
 use cantrip_state::*;
 
 use crate::card::{CounterTo, EntersAs, FaceDown, LibraryPlace, TurnUp, WayDef};
-use crate::card::{AbilityDef, ActivatedDef, Asker, CardDef, CauseKind};
+use crate::card::{AbilityDef, ActivatedDef, Asker, CardDef, CauseKind, TriggeredDef};
 use crate::chars::Chars;
 use crate::history::{History, Record};
 use crate::DamageResult;
@@ -178,6 +178,21 @@ pub trait Query {
         };
         match def {
             Some(AbilityDef::Activated(def)) => Some(def),
+            _ => None,
+        }
+    }
+
+    /// The triggered ability (CR 603) an ability reference names, if it names one: as `activated_ability`, for the
+    /// abilities of an object (`chars(id).abilities()`), a printed one or one an effect grants.
+    fn triggered_ability(&self, ability: AbilityRef) -> Option<&'static TriggeredDef> {
+        let card = self.card(ability.card);
+        let def = if ability.is_delayed() {
+            card.delayed.get((ability.index - AbilityRef::DELAYED) as usize)
+        } else {
+            card.abilities.get(ability.index as usize)
+        };
+        match def {
+            Some(AbilityDef::Triggered(def)) => Some(def),
             _ => None,
         }
     }

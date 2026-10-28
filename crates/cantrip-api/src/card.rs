@@ -1443,6 +1443,7 @@ impl TriggeredDef {
         divide: None,
         subject_chooses_targets: false,
         ward: false,
+        flanking: false,
         on_sacrifice: false,
         attack_option: None,
     };
@@ -1555,6 +1556,8 @@ pub struct TriggeredDef {
     pub subject_chooses_targets: bool,
     /// A ward ability (CR 702.21a): a targeting rule can stop it from triggering (`TargetingRuleKind::SuppressWard`).
     pub ward: bool,
+    /// A flanking ability (CR 702.25a): "a creature without flanking" asks whether a creature has one (`Query::triggered_ability`).
+    pub flanking: bool,
     /// Its trigger event is a player sacrificing a permanent (CR 701.21a), not the zone change the sacrifice causes: "whenever
     /// you sacrifice a land" (Baloth Prime, Tireless Tracker). A rule that stops a creature dying from causing abilities to
     /// trigger leaves it alone (Hushbringer's rulings: "whenever you sacrifice a creature" still triggers).
