@@ -1,0 +1,76 @@
+# Red Guardian, Super-Soldier: Flash, and "When Red Guardian enters, destroy target creature an opponent controls that dealt damage
+# this turn." On turn 4 both of Bot2's Ageless Guardians (1/4) attack; Bot1's Ageless Guardian blocks one, so both deal 1 damage (one
+# to Bot1, one to the blocker), and nothing dies. Bot2 also has an Ornithopter that dealt none. Red Guardian, flashed in after combat
+# damage, can't choose Bot1's own Guardian (it dealt damage, but "an opponent controls") or the Ornithopter (an opponent's, but it
+# dealt none) - the refusals at the choice between the two Guardians - and destroys the unblocked one.
+
+[Bot1 Deck]
+Ageless Guardian
+Red Guardian, Super-Soldier
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Ageless Guardian
+Ageless Guardian
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ageless Guardian.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ageless Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Ageless Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Ageless Guardian#1 > Bot1; Ageless Guardian#2 > Bot1)
+Bot1.Block(Bot1.Battlefield.Ageless Guardian > Bot2.Battlefield.Ageless Guardian#1)
+[T4 Bot2.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Red Guardian, Super-Soldier.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Ageless Guardian)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Ageless Guardian#2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot2.Graveyard = Ageless Guardian
+Bot2.Battlefield = Ageless Guardian; Mox Jet; Mox Pearl; Mox Sapphire; Ornithopter; Plains
+Bot1.Battlefield = Ageless Guardian; Mox Jet; Mox Pearl; Mox Sapphire; Red Guardian, Super-Soldier

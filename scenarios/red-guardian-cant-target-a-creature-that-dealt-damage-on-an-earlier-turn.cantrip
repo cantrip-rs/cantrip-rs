@@ -1,0 +1,53 @@
+# Red Guardian, Super-Soldier: "destroy target creature an opponent controls that dealt damage this turn." Bot2's Ageless Guardian
+# attacks and deals 1 damage to Bot1 on turn 4, but Bot1 casts Red Guardian on turn 5, a different turn: no creature dealt damage
+# "this turn", so its trigger has no target and is removed, and the Guardian lives.
+
+[Bot1 Deck]
+Red Guardian, Super-Soldier
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Ageless Guardian
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ageless Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Ageless Guardian > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 19
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Red Guardian, Super-Soldier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield = Ageless Guardian; Mox Pearl; Mox Sapphire
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Red Guardian, Super-Soldier

@@ -1,0 +1,11 @@
+{
+  "name": "Red Guardian, Super-Soldier",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Human Soldier Villain",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash\nWhen Red Guardian enters, destroy target creature an opponent controls that dealt damage this turn.",
+  "keywords": [
+    "Flash"
+  ]
+}
