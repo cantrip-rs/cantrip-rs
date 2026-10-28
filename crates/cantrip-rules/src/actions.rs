@@ -7055,6 +7055,12 @@ fn cast(
             let there = u32::try_from(variable_candidates(cx, spell, player, variable, Some(CostFor::Spell), None).len()).unwrap_or(u32::MAX);
             // An X ("sacrifice X creatures") is a u16 (`StackItem::x`); the number "any number" announces is not.
             if less_each > 0 { there } else { there.min(u32::from(u16::MAX)) }
+        } else if let Some(more) = def.kicker.and_then(|k| k.extra).filter(|_| def.kicker.is_some_and(|k| k.multi)) {
+            // A multikicker whose cost is more than mana (Squad--Exile four cards from your graveyard): announced as many
+            // times as its whole cost can be paid (CR 601.2b, 118.3), the kicker's mana apart, which the payment judges as it
+            // does for any multikicker, and no more than a count of it holds (`Cost::most_times`).
+            let paid_with = extra;
+            (1..=more.most_times()).take_while(|&n| can_pay_other(cx, spell, player, &paid_with.and(more.times(n as u8)))).count() as u32
         } else {
             1000
         };
@@ -7076,6 +7082,11 @@ fn cast(
                 });
             } else {
                 cost.mana = kicker_total(cost.mana, k, n);
+                // What the kicker's cost is beside mana, once for each time it is kicked (Squad--Exile four cards, CR 702.157a),
+                // chosen and paid with the rest of the additional costs.
+                if let Some(more) = k.extra {
+                    extra = extra.and(more.times(n as u8));
+                }
                 item.kicked = n as u8;
                 cx.st().update_obj(spell, |o| o.kicked = n as u8);
             }

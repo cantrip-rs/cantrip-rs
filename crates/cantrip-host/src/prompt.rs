@@ -772,7 +772,12 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                 options: options_messages(game, handles, options),
                 has_x: total.x > 0 || (*announcing && kicker.is_some()),
                 x: wire(*x),
-                kicker: kicker.map_or(String::new(), |k| k.cost.to_string()),
+                // The kicker's cost: its mana, and in words what it is beside mana (Squad--Exile four cards, CR 702.157a), which
+                // the client reads for its mana symbols alone.
+                kicker: kicker.map_or(String::new(), |k| match k.extra {
+                    Some(more) => cost_text_of(&Cost { mana: k.cost, ..more }, def.name),
+                    None => k.cost.to_string(),
+                }),
                 multikicker: kicker.is_some_and(|k| k.multi),
                 kicker_paid: kicker.is_some() && *x > 0,
                 announces_x_or_kicks: *announcing,

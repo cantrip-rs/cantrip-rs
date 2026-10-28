@@ -8,7 +8,7 @@ use cantrip_api::*;
 
 /// The additional cost, paid once.
 pub const fn kicker(cost: ManaCost) -> Kicker {
-    Kicker { cost, multi: false, waterbend: false }
+    Kicker { cost, extra: None, multi: false, waterbend: false }
 }
 
 /// The intervening "if" (CR 603.4): its additional cost was paid.

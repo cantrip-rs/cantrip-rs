@@ -669,7 +669,7 @@ impl<'s> Run<'s> {
             // refusal proves nothing.
             if let Some(ScriptStep::Refused { action, line, text }) = self.current()
                 && matches!(action.verb, ScriptVerb::Cast | ScriptVerb::Activate)
-                && let Some(wanted) = action.named("X")
+                && let Some(wanted) = action.named("X").or_else(|| action.named("Kicked"))
                 && request.player == player_of(action.bot)
                 && let RequestKind::PayCosts { announcing: true, source, most, least, .. } = &request.kind
             {
