@@ -1,0 +1,60 @@
+# Mister Fantastic's "whenever one or more tokens you control enter" (CR 603.2c) triggers once for Lingering Souls' two Spirits
+# entering together, so Bot1 is asked once (a second question is refused) and draws one card. On turn 5 Lingering Souls' flashback ({1}{B}, exactly Mox Jet and Mox Ruby) makes two more
+# Spirits and Bot1 declines: no card. Mister
+# Fantastic is cast on turn 1 for {3}{U} exactly with four Moxen; Lingering Souls on turn 3 for {2}{W} exactly with Black Lotus.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mister Fantastic, Reed Richards
+Black Lotus
+Lingering Souls
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mister Fantastic, Reed Richards.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Lingering Souls.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Accept
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Lingering Souls.Cast(Ability: Flashback)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+! Bot1.Accept
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Spirit Token#1.Power = 1
+Bot1.Battlefield.Spirit Token#2.Power = 1
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Spirit Token#4.Power = 1

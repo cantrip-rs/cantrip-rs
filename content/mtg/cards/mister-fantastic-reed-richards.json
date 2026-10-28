@@ -1,0 +1,11 @@
+{
+  "name": "Mister Fantastic, Reed Richards",
+  "manaCost": "{3}{U}",
+  "type": "Legendary Creature — Human Scientist Hero",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Reach\nWhenever one or more tokens you control enter, you may draw a card.",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,57 @@
+# Mister Fantastic, Reed Richards: "Whenever one or more tokens you control enter, you may draw a card." Cast on turn 1 for
+# {3}{U} exactly (Black Lotus's {U}{U}{U} and an Island's {U}). Bot2's S.H.I.E.L.D. Deployment Drone makes a Soldier token on
+# turn 2, which Bot1 does not control: no question. On turn 3 Bot1's own Drone makes one, and Bot1 accepts and draws a card
+# (hand 4 in turn 3 after its draw step; the Island and the Drone leave it and the card drawn arrives: 3).
+
+[Bot1 Deck]
+Island
+Island
+Black Lotus
+Mox Sapphire
+Mister Fantastic, Reed Richards
+S.H.I.E.L.D. Deployment Drone
+Plains
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+S.H.I.E.L.D. Deployment Drone
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Mister Fantastic, Reed Richards.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.S.H.I.E.L.D. Deployment Drone.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Accept
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 4
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.S.H.I.E.L.D. Deployment Drone.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Soldier Token.Power = 1
