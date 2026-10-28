@@ -683,6 +683,14 @@ pub fn exile_top_play_until_end_of_next_turn(g: &mut dyn Game, player: PlayerId,
     exile_top_may_play(g, player, count, player, grant)
 }
 
+/// "Exile the top card of your library. You may play it until the end of your next turn" as a resolving ability's whole
+/// effect: `exile_top_play_until_end_of_next_turn` for the ability's controller, one card. An empty library exiles nothing.
+/// Clockwork Percussionist, Gundabad Opportunist and Snowslope Hunter print it.
+pub fn exile_top_card_play_until_end_of_next_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    exile_top_play_until_end_of_next_turn(g, item.controller, 1);
+    Ok(())
+}
+
 /// "Exile the top `count` cards of your library. You may play [it / those cards] this turn" (`exile_top_may_play`): the grant
 /// is to play, not only cast, a land among them under the ordinary land-play rules, until the cleanup step (CR 514.2). The
 /// cards still in exile. Laelia, the Blade Reforged, Emberheart Challenger and Experimental Synthesizer (one card each) print it.
