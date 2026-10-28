@@ -93,4 +93,36 @@ public sealed class AnnouncementTests
     [InlineData("{0}", 0)]
     public void A_cost_comes_to_its_mana_value_with_x_as_nothing(string cost, int value) =>
         Assert.Equal(value, Announcement.ManaValue(cost));
+
+    /// <summary>Squad (CR 702.157a) is not kicker, and what limits it is cards in the graveyard, not mana.</summary>
+    [Fact]
+    public void Squad_is_captioned_as_squad_and_limited_by_its_cards_not_by_mana()
+    {
+        PayCostsPromptMessage squad = Asked("{2}{B}", most: 2);
+        squad.Kicker = "Exile four other cards from your graveyard";
+        squad.Multikicker = true;
+        squad.Squad = true;
+
+        Assert.Equal("Pay squad for Ruthless Radrat?", Announcement.Title(squad, "Ruthless Radrat"));
+        Assert.Equal(
+            "squad can be paid up to 2 times (Exile four other cards from your graveyard each)",
+            Announcement.SquadReach(squad));
+        Assert.Equal("Pay squad once: Exile four other cards from your graveyard", Announcement.SquadRaiseHint(squad));
+        Assert.Equal("squad paid 2 times", Announcement.SquadPaid(2));
+        Assert.Equal("squad not paid", Announcement.SquadPaid(0));
+
+        string[] words = [Announcement.Title(squad, "Ruthless Radrat"), Announcement.SquadReach(squad), Announcement.SquadRaiseHint(squad), Announcement.SquadPaid(2)];
+        Assert.All(words, text =>
+        {
+            Assert.DoesNotContain("kick", text, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain("mana", text, StringComparison.OrdinalIgnoreCase);
+        });
+
+        squad.MostAnnounced = 0;
+        Assert.Equal("squad cannot be paid", Announcement.SquadReach(squad));
+
+        PayCostsPromptMessage kicker = Asked("{2}{B}");
+        kicker.Kicker = "{1}{G}";
+        Assert.Equal("Kick Spell?", Announcement.Title(kicker, "Spell"));
+    }
 }

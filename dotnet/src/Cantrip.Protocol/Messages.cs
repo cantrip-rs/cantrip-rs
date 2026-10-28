@@ -2620,6 +2620,15 @@ public sealed class PayCostsPromptMessage : PromptPayload
     [Key(27)]
     public string XGoverns { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Whether that optional additional cost is squad (CR 702.157a) rather than kicker: payable any number of times as
+    /// multikicker is, but <see cref="Kicker"/> then carries its whole cost in words (mana and what is beside it, such as
+    /// exiling cards from a graveyard), so a client says "pay squad", not "kick", and speaks of the limit
+    /// (<see cref="MostAnnounced"/>) as times, not as mana.
+    /// </summary>
+    [Key(28)]
+    public bool Squad { get; set; }
+
     /// <summary>Giving up on the spell, which is always among the options (CR 733.1).</summary>
     public override AnswerPayload Default() => new TakeActionAnswer { Kind = ActionKindView.CancelCasting };
 }

@@ -536,7 +536,7 @@ public sealed class Decisions
     /// <summary>Whether to pay an optional additional cost, and for multikicker how many times (CR 702.33).</summary>
     private int Kicker(GameClient client, PayCostsPromptMessage prompt)
     {
-        string what = prompt.Buyback ? "buy back" : "kick";
+        string what = prompt.Squad ? "pay squad for" : prompt.Buyback ? "buy back" : "kick";
         string spell = GameText.Named(client, prompt.Spell);
 
         if (!prompt.Multikicker)
@@ -546,7 +546,9 @@ public sealed class Decisions
 
         return One(new Question
         {
-            Heading = $"How many times do you want to kick {spell}? Each kick costs another {prompt.Kicker}.",
+            Heading = prompt.Squad
+                ? $"How many times do you want to pay squad for {spell}? Each time costs {prompt.Kicker}."
+                : $"How many times do you want to kick {spell}? Each kick costs another {prompt.Kicker}.",
             Choices = [.. Enumerable.Range(0, 4).Select(times => $"{times} time(s)")],
         });
     }
