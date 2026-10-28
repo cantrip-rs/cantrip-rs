@@ -1,0 +1,67 @@
+# Baron Strucker, HYDRA Overlord: Villain spells you cast cost {1} less (CR 601.2f) - Agents of HYDRA for {B} alone, a
+# non-Villain Dune Beetle still {1}{B} - and whenever another Villain you control enters you may have it connive, only once
+# each turn (the "do this only once each turn" is spent by doing it, CR 603.2h).
+# Turn 1: Agents #1 connives, Bot1 discards Dune Beetle (a nonland card) and Agents gets a +1/+1 counter. Turn 3: Agents #2
+# connives (draw Agents #3 earlier, Island discarded, no counter); Agents #3, the same turn, does not trigger it at all: the stack
+# is empty once it has entered.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Baron Strucker, HYDRA Overlord
+Agents of HYDRA
+Dune Beetle
+Agents of HYDRA
+Agents of HYDRA
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Baron Strucker, HYDRA Overlord.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Hand.Dune Beetle.Cast(Mana: short)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Accept
+Bot1.Choose(Dune Beetle)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Accept
+Bot1.Choose(Island)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Agents of HYDRA#1.Power = 2
+Bot1.Battlefield.Agents of HYDRA#2.Power = 1
+Bot1.Battlefield.Agents of HYDRA#3.Power = 1
+Bot1.Graveyard = Island; Dune Beetle
+Bot1.Library.Count = 11

@@ -1,0 +1,43 @@
+# Baron Strucker, HYDRA Overlord: "Villain spells you cast cost {1} less to cast" (CR 601.2f) takes one generic mana, not more:
+# Moonstone, Harsh Mistress ({3}{B}, a Villain) is paid for exactly {2}{B}. Its connive is declined.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Baron Strucker, HYDRA Overlord
+Moonstone, Harsh Mistress
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Baron Strucker, HYDRA Overlord.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Moonstone, Harsh Mistress.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Battlefield.Moonstone, Harsh Mistress.Power = 2
+Bot1.Hand.Count = 2

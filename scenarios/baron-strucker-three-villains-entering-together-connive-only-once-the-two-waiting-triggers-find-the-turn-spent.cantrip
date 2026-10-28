@@ -1,0 +1,80 @@
+# Baron Strucker, HYDRA Overlord: "Whenever another Villain you control enters, you may have it connive. Do this only once each
+# turn." Robot Domination's third plan counter makes three Robot Villains at once, so three triggers wait together; the first
+# is accepted and its Robot connives (draws, discards an Ornithopter, a nonland card: a +1/+1 counter), and the other two
+# find the turn's one spent (CR 603.2h, 603.4) and ask nothing, so those Robots stay 2/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Robot Domination
+Baron Strucker, HYDRA Overlord
+Island
+Thought Scour
+Ornithopter
+Island
+Thought Scour
+Island
+Ornithopter
+Island
+Thought Scour
+Swamp
+Ornithopter
+Island
+Ornithopter
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Robot Domination.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Baron Strucker, HYDRA Overlord.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand = Thought Scour
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Robot Domination.Counters.Plan = 1
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Robot Domination.Counters.Plan = 2
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Ornithopter)
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Count = 12
+Bot1.Battlefield.Robot Villain Token#1.Power = 2
+Bot1.Battlefield.Robot Villain Token#2.Power = 2
+Bot1.Battlefield.Robot Villain Token#3.Power = 3
+Bot1.Battlefield.Robot Villain Token#3.Counters.PlusOnePlusOne = 1

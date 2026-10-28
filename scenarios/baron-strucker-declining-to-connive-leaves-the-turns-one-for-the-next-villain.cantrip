@@ -1,0 +1,53 @@
+# "You may have it connive. Do this only once each turn": declining is not doing it (CR 603.2h), so the second Villain the same
+# turn is still offered the connive. The first Agents of HYDRA is declined, the second accepted: Bot1 draws an Island and
+# discards the Island, so the second has no counter and the first none.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Baron Strucker, HYDRA Overlord
+Agents of HYDRA
+Agents of HYDRA
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Baron Strucker, HYDRA Overlord.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Decline
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Accept
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Graveyard = Island
+Bot1.Library.Count = 12
+Bot1.Battlefield.Agents of HYDRA#1.Power = 1
+Bot1.Battlefield.Agents of HYDRA#2.Power = 1
