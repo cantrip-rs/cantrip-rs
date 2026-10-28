@@ -2,6 +2,17 @@
 
 use cantrip_api::*;
 
+/// "[This creature] can't be blocked this turn except by creatures with haste" (CR 509.1b): the restriction on the creature `on`,
+/// as an attacker, that only a creature with haste as blockers are declared may block it. It says nothing of its blocking, nor of
+/// a block already made. A card lists `EXCEPT_BY_HASTE` in its `lasting_block_rules` and the resolved ability adds
+/// `EffectKind::BlockRestriction` for it. Gingerbrute and Speed, Young Avenger print it.
+pub fn except_by_haste(q: &dyn Query, on: ObjectId, blocker: ObjectId, attacker: ObjectId) -> bool {
+    on != attacker || q.chars(blocker).has(Keyword::Haste)
+}
+
+/// The `LastingBlockRule` of `except_by_haste`.
+pub const EXCEPT_BY_HASTE: LastingBlockRule = LastingBlockRule { text: "Can't be blocked except by creatures with haste", allows: except_by_haste };
+
 /// "An unblocked attacking creature you control" (CR 509.1h): attacking, and no blocker was ever declared against it. What
 /// ninjutsu (CR 702.49a) and sneak (CR 702.190a) return to their owner's hand.
 pub fn unblocked_attacker_you_control(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
