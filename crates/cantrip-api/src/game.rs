@@ -239,8 +239,11 @@ pub trait Query {
         self.state().obj(id)
     }
 
+    /// Whether `id` is a permanent on the battlefield now. An object that has left keeps the zone it left from, so one
+    /// that has become a new object (CR 400.7) is not: what it became is another object.
     fn is_on_battlefield(&self, id: ObjectId) -> bool {
-        self.obj(id).zone.is(ZoneKind::Battlefield)
+        let obj = self.obj(id);
+        obj.became.is_none() && obj.zone.is(ZoneKind::Battlefield)
     }
 
     /// Current controller in the expected public zone, or the source's last controller while absent (CR 608.2h).
