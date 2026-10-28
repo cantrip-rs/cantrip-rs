@@ -5,9 +5,8 @@
 
 use cantrip_api::*;
 
-/// "It" is the card as it was in the graveyard, whose copiable values are read from the object that was exiled to pay
-/// (CR 608.2h); the exceptions become part of the token's own copiable values (CR 707.9b), and a color or size the card
-/// defines is left behind (CR 707.9d).
+/// "It" is the card as it was in the graveyard; the exceptions become part of the token's own copiable values (CR 707.9b),
+/// and a color or size the card defines is left behind (CR 707.9d).
 fn make_token(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let values = g
         .copiable_values(item.object)
@@ -20,7 +19,5 @@ fn make_token(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 pub const fn ability(cost: ManaCost, text: &'static str) -> AbilityDef {
-    cantrip_api::ability(Cost::mana(cost).and(EXILE_THIS), make_token, text)
-        .sorcery_speed()
-        .from(ZoneKind::Graveyard)
+    crate::copy_from_graveyard::ability(cost, make_token, text)
 }
