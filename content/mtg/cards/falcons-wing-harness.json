@@ -1,0 +1,6 @@
+{
+  "name": "Falcon's Wing Harness",
+  "manaCost": "{1}{U}",
+  "type": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, attach it to target creature you control.\nEquipped creature gets +1/+1 and has flying and ward {1}. (Whenever equipped creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)\nEquip {2}{U} ({2}{U}: Attach to target creature you control. Equip only as a sorcery.)"
+}
