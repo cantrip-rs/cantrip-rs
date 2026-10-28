@@ -1,0 +1,57 @@
+# Falcon's Wing Harness: "When this Equipment enters, attach it to target creature you control. Equipped creature gets +1/+1
+# and has flying and ward {1}." Bot1 has Grizzly Bears and an Ornithopter and chooses the Bears as the trigger goes on the
+# stack ({1}{U} from Black Lotus): they are a 3/3 with flying, the Ornithopter is not equipped (0/2). Bot2's Lightning Bolt
+# at the Bears, with only the Mox Ruby that paid for it, is countered by ward {1} (CR 702.21a): no damage.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Black Lotus
+Grizzly Bears
+Ornithopter
+Falcon's Wing Harness
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Falcon's Wing Harness.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Falcon's Wing Harness.AttachedTo = Grizzly Bears
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Keywords = Flying
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0

@@ -1,0 +1,60 @@
+# Falcon's Wing Harness: "Equip {2}{U}" (CR 702.6a). It enters on the Grizzly Bears on turn 1 ({1}{U} from Black Lotus). On
+# turn 3 Bot1 moves it to a freshly cast Ornithopter, paying {2}{U} exactly with Mox Sapphire, Mox Jet and Mox Ruby (the
+# pool is empty after, so the cost is neither more nor less): the Ornithopter is a 1/3 with flying, the Bears
+# a plain 2/2 again.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Black Lotus
+Grizzly Bears
+Falcon's Wing Harness
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Falcon's Wing Harness.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Falcon's Wing Harness.AttachedTo = Grizzly Bears
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Falcon's Wing Harness.Activate(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Falcon's Wing Harness.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Grizzly Bears.Keywords = (absent)

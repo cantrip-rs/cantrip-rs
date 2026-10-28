@@ -1,0 +1,50 @@
+# Falcon's Wing Harness's ward {1} costs exactly one mana (Bot2's pool is empty after): Bot2 has a Mox Ruby for the Lightning Bolt and a Mox Jet to pay the ward, so the Bolt is
+# not countered. The Bears are a 3/3 with the Harness and take 3 damage, which is lethal.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Black Lotus
+Grizzly Bears
+Falcon's Wing Harness
+Island x2
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Falcon's Wing Harness.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.PayCost
+
+[Expect]
+Bot1.Graveyard = Grizzly Bears; Black Lotus
+Bot2.Graveyard = Lightning Bolt
+Bot2.Mana = 
+Stack.Count = 0
