@@ -1,0 +1,17 @@
+{
+  "name": "Most Decrepit Old Bird",
+  "manaCost": "{U}",
+  "type": "Creature — Bird",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\nThreshold — This creature gets +1/+1 as long as there are seven or more cards in your graveyard.",
+  "keywords": [
+    "Flying"
+  ],
+  "adventure": {
+    "name": "Speak Secrets",
+    "manaCost": "{1}{U}",
+    "type": "Sorcery — Adventure",
+    "oracleText": "Mill four cards, then put an instant or sorcery card from among them into your hand."
+  }
+}

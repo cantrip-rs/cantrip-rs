@@ -1,0 +1,58 @@
+# Most Decrepit Old Bird, a 1/1 flier: "Threshold - gets +1/+1 as long as there are seven or more cards in your graveyard" (CR 207.2c).
+# Bot1 casts it, then two Thought Scours on itself: each mills two and goes to the graveyard, six cards (power 1, the ? line). On turn 3 it
+# casts Lightning Bolt at Bot2, the seventh card: a 2/2. Bot2's own graveyard is not Bot1's: Bot2 has none either way.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Most Decrepit Old Bird
+Thought Scour
+Thought Scour
+Island
+Island
+Island
+Island
+Island
+Island
+Lightning Bolt
+Island x30
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Most Decrepit Old Bird.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 6
+? Bot1.Battlefield.Most Decrepit Old Bird.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 7
+Bot1.Battlefield.Most Decrepit Old Bird.Power = 2
+Bot1.Battlefield.Most Decrepit Old Bird.Toughness = 2
+Bot2.Life = 17
