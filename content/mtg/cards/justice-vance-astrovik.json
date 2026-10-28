@@ -1,0 +1,11 @@
+{
+  "name": "Justice, Vance Astrovik",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Creature — Mutant Hero",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen Justice enters, return up to one target nonland, nontoken permanent to its owner's hand.\nWhenever another nonland permanent you control is returned to its owner's hand, put a +1/+1 counter on Justice.",
+  "keywords": [
+    "Flying"
+  ]
+}

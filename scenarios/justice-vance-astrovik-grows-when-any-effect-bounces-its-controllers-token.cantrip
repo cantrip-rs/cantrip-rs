@@ -1,0 +1,54 @@
+# Justice's second ability counts any way a nonland permanent Bot1 controls is returned to its owner's hand, a token too
+# (it goes to the hand for a moment before it ceases to exist, CR 111.7). Bot1 makes a Soldier token with a S.H.I.E.L.D.
+# Deployment Drone (Black Lotus), casts Justice with Mox Sapphire, Mox Jet and Mox Pearl choosing no target, and on turn 3
+# sacrifices an Aether Spellbomb to return its own Soldier token: one counter on Justice, a 3/3. The Spellbomb leaves for the
+# graveyard, not the hand, so it adds nothing.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Black Lotus
+S.H.I.E.L.D. Deployment Drone
+Justice, Vance Astrovik
+Aether Spellbomb
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.S.H.I.E.L.D. Deployment Drone.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Justice, Vance Astrovik.Cast
+Bot1.Pass
+Bot1.Target()
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Pass
+? Bot1.Battlefield.Justice, Vance Astrovik.Power = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Aether Spellbomb.Activate(Ability: Return target creature; Bot1.Battlefield.Soldier Token)
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Justice, Vance Astrovik.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Justice, Vance Astrovik.Power = 3
+Bot1.Battlefield.Soldier Token = (absent)
+Bot1.Hand.Count = 0
