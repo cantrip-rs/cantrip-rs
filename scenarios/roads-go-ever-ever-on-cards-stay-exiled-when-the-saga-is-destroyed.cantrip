@@ -1,0 +1,52 @@
+# Roads Go Ever, Ever On: chapter I exiles two Plains, and they are not exiled "until" anything - they stay in exile when Bot2
+# destroys the Saga with Disenchant on turn 2, before chapters II and III can return them (CR 607.2a: the link is only to
+# which cards later chapters may take; nothing makes the cards return when the Saga leaves, unlike CR 610.3).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Roads Go Ever, Ever On
+Plains
+Plains
+Plains
+Island
+Plains x12
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Disenchant
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Roads Go Ever, Ever On.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Plains; Plains)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Roads Go Ever, Ever On)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Roads Go Ever, Ever On
+Exile = Plains; Plains
+Bot1.Hand.Count = 3

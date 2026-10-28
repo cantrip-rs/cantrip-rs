@@ -1,0 +1,71 @@
+# Roads Go Ever, Ever On: I - search for up to two basic Plains cards, exile them, shuffle, gain 2 life; II, III - put a card
+# exiled with the Saga into its owner's hand; IV - whenever you attack this turn, target creature you control gets +1/+1 for each
+# Plains you control. Chapter I takes two Plains (an Island is refused, CR 205.3i), shuffles the library (CR 701.24) and gains 2
+# life (22). Chapters II and III each return one of the Plains to hand. On turn 7 Bot1 controls four Plains, Bot2 three: the
+# attacking Ornithopter becomes 4/6 (not 3/5, not 7/9) and deals 4, so Bot2 is at 16. The Saga is sacrificed after IV.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Roads Go Ever, Ever On
+Ornithopter
+Plains
+Plains
+Plains
+Island
+Swamp
+Mountain
+Forest
+Plains x12
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Roads Go Ever, Ever On.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Island)
+Bot1.Search(Plains; Plains)
+Bot1.Pass
+Bot2.Pass
+? Exile = Plains; Plains
+? Bot1.Library != Island; Swamp; Mountain; Forest; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains
+? Bot1.Life = 22
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Choose(Plains)
+Bot1.Hand.Plains.Play
+? Exile.Count = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Choose(Plains)
+Bot1.Hand.Plains.Play
+? Exile.Count = 0
+[T6 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 4
+? Bot1.Battlefield.Ornithopter.Toughness = 6
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Roads Go Ever, Ever On = (absent)
+Bot1.Graveyard = Roads Go Ever, Ever On
