@@ -1,0 +1,53 @@
+# Stature, Size Shifter: "Stature can't be blocked if her power is 1 or less" and "Power-up — {X}{U}{U}: Put X +1/+1 counters
+# on Stature". In turn 3 Stature is a 1/1 and Bot2's Ornithopter cannot block her (the refusal); she deals 1. After combat, with X
+# = 1, the power-up costs {1}{U}{U} (she did not enter this turn), paid exactly by two Islands and Mox Sapphire. In turn 5 she
+# is a 2/2 and the same block is allowed (the positive control): the Ornithopter blocks her and takes 2.
+
+[Bot1 Deck]
+Island
+Island
+Mox Sapphire
+Stature, Size Shifter
+Island x3
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x6
+Island x13
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stature, Size Shifter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Stature, Size Shifter > Bot2)
+! Bot2.Block(Ornithopter > Stature, Size Shifter)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Stature, Size Shifter.Activate(X: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = 
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Stature, Size Shifter > Bot2)
+Bot2.Block(Ornithopter > Stature, Size Shifter)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Stature, Size Shifter.Power = 2
+Bot1.Battlefield.Stature, Size Shifter.Toughness = 2
+Bot1.Battlefield.Stature, Size Shifter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter = (absent)

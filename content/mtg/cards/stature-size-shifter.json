@@ -1,0 +1,8 @@
+{
+  "name": "Stature, Size Shifter",
+  "manaCost": "{U}",
+  "type": "Legendary Creature — Human Hero",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Stature can't be blocked if her power is 1 or less.\nPower-up — {X}{U}{U}: Put X +1/+1 counters on Stature. (Activate each power-up ability only once. Reduce the cost by her mana cost if she entered this turn.)"
+}
