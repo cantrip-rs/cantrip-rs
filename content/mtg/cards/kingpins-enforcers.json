@@ -1,0 +1,11 @@
+{
+  "name": "Kingpin's Enforcers",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Human Villain",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Lifelink\n{2}{B}, Sacrifice an artifact or creature: Draw a card.",
+  "keywords": [
+    "Lifelink"
+  ]
+}

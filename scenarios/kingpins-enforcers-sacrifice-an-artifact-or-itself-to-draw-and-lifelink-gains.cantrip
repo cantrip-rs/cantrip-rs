@@ -1,0 +1,60 @@
+# "{2}{B}, Sacrifice an artifact or creature: Draw a card." (CR 602.2, 701.21): a Mox (an artifact) already tapped for mana is
+# sacrificed for one draw, then Kingpin's Enforcers itself (a creature) for another; each paid for exactly {2}{B}. Its lifelink
+# (CR 702.15b) gains 2 when it hits Bot2 for 2.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Kingpin's Enforcers
+Swamp
+Swamp
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kingpin's Enforcers.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Attack(Kingpin's Enforcers > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Kingpin's Enforcers.Activate
+Bot1.Choose(Mox Pearl)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Swamp#1.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Kingpin's Enforcers.Activate
+Bot1.Choose(Kingpin's Enforcers)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp#2.Activate
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Graveyard = Kingpin's Enforcers; Mox Pearl
+Bot1.Hand.Count = 3
