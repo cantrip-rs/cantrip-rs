@@ -1,0 +1,56 @@
+# Crested Craghorn (4/1 haste, {4}{R}) attacks on turn 1, the turn it is cast: Bot2 has no creature to provoke (no target, so no ability) and takes 4.
+# On turn 3 it attacks again and provokes Bot2's Balduvian Bears, which must block it (CR 702.39a, 509.1c); the Bears deal 2 to a 1-toughness
+# creature and the Craghorn kills them: both die.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Crested Craghorn
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Balduvian Bears
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Crested Craghorn.Cast
+[T1 Bot1.Main1]
+Bot1.Attack(Crested Craghorn > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Balduvian Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Crested Craghorn > Bot2)
+Bot1.Accept
+! Bot2.Block(Count: 0)
+Bot2.Block(Balduvian Bears > Crested Craghorn)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Balduvian Bears
+Bot1.Graveyard = Crested Craghorn
