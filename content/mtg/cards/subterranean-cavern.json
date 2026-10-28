@@ -1,0 +1,5 @@
+{
+  "name": "Subterranean Cavern",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {B} or {G}."
+}
