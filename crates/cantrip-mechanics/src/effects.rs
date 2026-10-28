@@ -139,6 +139,14 @@ pub fn counters_on_creatures_you_control(g: &mut dyn Game, player: PlayerId, kin
     creatures
 }
 
+/// "Put a +1/+1 counter on each creature you control" as a spell's or ability's whole effect: on the creatures its controller
+/// controls as it resolves (`counters_on_creatures_you_control`, CR 122.1, 608.2). Abandoned Air Temple, Cosmogrand Zenith (a mode),
+/// Denzilore Fatehold, Gavony Township, Origin of the Avengers (chapter III) and Wilderland Scrounger print it.
+pub fn plus_one_counter_on_each_creature_you_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    counters_on_creatures_you_control(g, item.controller, CounterKind::PlusOne, 1);
+    Ok(())
+}
+
 /// "Put a loyalty counter on each planeswalker you control": on the planeswalkers `item`'s controller controls as it resolves, all
 /// at once (CR 608.2, 101.4: one event; CR 306.5c, 122.1e: loyalty counters). Way of the Mentor, Way of the Necromancer and the Cat
 /// token of Worzel, the Protector ("{T}: Put a loyalty counter on each planeswalker you control") print it.

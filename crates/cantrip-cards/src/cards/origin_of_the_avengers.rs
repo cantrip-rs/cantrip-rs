@@ -25,12 +25,6 @@ fn chapter_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "III \u{2014} Put a +1/+1 counter on each creature you control." (CR 122.1, 701.)
-fn chapter_three(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::counters_on_creatures_you_control(g, item.controller, CounterKind::PlusOne, 1);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         chapter(1, |g, item| effects::scry(g, item, 2), "I \u{2014} Scry 2."),
@@ -39,7 +33,7 @@ pub static CARD: CardDef = CardDef {
             chapter_two,
             "II \u{2014} You may put a Hero creature card with mana value 3 or less from your hand onto the battlefield. If you don't, draw a card.",
         ),
-        chapter(3, chapter_three, "III \u{2014} Put a +1/+1 counter on each creature you control."),
+        chapter(3, effects::plus_one_counter_on_each_creature_you_control, "III \u{2014} Put a +1/+1 counter on each creature you control."),
     ],
     ..oracle::ORIGIN_OF_THE_AVENGERS
 };
