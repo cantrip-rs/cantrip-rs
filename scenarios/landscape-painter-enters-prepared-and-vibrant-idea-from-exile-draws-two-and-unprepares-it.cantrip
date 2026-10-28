@@ -1,0 +1,45 @@
+# Landscape Painter enters prepared (CR 722.3a): its Vibrant Idea copy sits in exile, and on turn 3 Bot1 casts it from there for
+# {4}{U} with a Black Lotus and two Moxen, drawing two cards (turn 3's draw step brought one, so it has 2 + 1 + 2 cards). The
+# Painter stays a 2/1 Merfolk Wizard on the battlefield, no longer prepared, and the copy is gone, not in the graveyard (CR
+# 722.3d).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Landscape Painter
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Landscape Painter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Landscape Painter.Prepared = true
+? Exile = Vibrant Idea
+? Bot1.Battlefield.Landscape Painter.Power = 2
+? Bot1.Battlefield.Landscape Painter.Toughness = 1
+? Bot1.Battlefield.Landscape Painter.Subtypes = Merfolk; Wizard
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Exile.Vibrant Idea.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Landscape Painter.Prepared = (absent)
+Exile =
+Bot1.Hand.Count = 6
+Bot1.Graveyard = Black Lotus

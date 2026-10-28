@@ -1,0 +1,14 @@
+{
+  "name": "Landscape Painter",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Merfolk Wizard",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "prepare": {
+    "name": "Vibrant Idea",
+    "manaCost": "{4}{U}",
+    "type": "Sorcery",
+    "oracleText": "Draw two cards."
+  }
+}
