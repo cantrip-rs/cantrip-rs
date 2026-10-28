@@ -1,0 +1,40 @@
+# Head of Security (2/2 first strike), cast with Black Lotus, its characteristics as printed. Attacking in turn 3 it is blocked by
+# Bot2's Wind Drake (2/2): its first-strike damage kills the Drake before the Drake deals any (CR 702.7b), so the Head takes none.
+
+[Bot1 Deck]
+Black Lotus
+Head of Security
+Plains x22
+
+[Bot2 Deck]
+Black Lotus
+Wind Drake
+Island x22
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Head of Security.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Head of Security.Power = 2
+? Bot1.Battlefield.Head of Security.Toughness = 2
+? Bot1.Battlefield.Head of Security.Keywords = FirstStrike
+? Bot1.Battlefield.Head of Security.Colors = White
+? Bot1.Battlefield.Head of Security.Types = Creature
+? Bot1.Battlefield.Head of Security.Subtypes = Andorian; Soldier
+? Bot1.Battlefield.Head of Security.Supertypes = (absent)
+? Bot1.Battlefield.Head of Security.ProtectionFrom = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wind Drake.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Head of Security > Bot2)
+Bot2.Block(Wind Drake > Head of Security)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Wind Drake; Black Lotus
+Bot1.Battlefield.Head of Security.Damage = 0

@@ -1,0 +1,11 @@
+{
+  "name": "Head of Security",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Andorian Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike (This creature deals combat damage before creatures without first strike.)",
+  "keywords": [
+    "FirstStrike"
+  ]
+}
