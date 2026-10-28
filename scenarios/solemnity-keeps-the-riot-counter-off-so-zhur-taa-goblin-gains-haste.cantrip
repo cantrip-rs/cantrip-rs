@@ -1,0 +1,42 @@
+# Riot (CR 702.136a) under Solemnity ("counters can't be put on creatures", CR 122.6, 101.2): Bot1 casts Solemnity, then
+# Zhur-Taa Goblin and chooses the +1/+1 counter. The counter can't be put on it, so it enters with none, and "if a creature
+# entering the battlefield has riot but can't have a +1/+1 counter put onto it, it gains haste" (the card's ruling): it
+# is a 2/2 with haste and attacks the turn it enters.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Solemnity
+Zhur-Taa Goblin
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Solemnity.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Zhur-Taa Goblin.Cast
+Bot1.Pass
+Bot1.Name(+1/+1 counter)
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Zhur-Taa Goblin > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Zhur-Taa Goblin.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Zhur-Taa Goblin.Power = 2
+Bot1.Battlefield.Zhur-Taa Goblin.Keywords = Haste
