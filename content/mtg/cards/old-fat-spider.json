@@ -1,0 +1,11 @@
+{
+  "name": "Old Fat Spider",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Spider",
+  "power": 6,
+  "toughness": 7,
+  "oracleText": "Reach\nThis creature can't be blocked by creatures with power 2 or less.\nWhenever this creature becomes the target of a spell or ability an opponent controls, draw a card.",
+  "keywords": [
+    "Reach"
+  ]
+}

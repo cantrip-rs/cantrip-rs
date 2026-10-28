@@ -1,0 +1,93 @@
+# Old Fat Spider, a 6/7: "Reach. This creature can't be blocked by creatures with power 2 or less. Whenever this creature becomes the
+# target of a spell or ability an opponent controls, draw a card." Turn 3: Bot1's own Giant Growth on it draws nothing (a spell
+# Bot1 controls). Turn 4: Bot2's Ornithopter attacks and the Spider blocks it (reach); then Bot2's Lightning Bolt targeting the Spider
+# draws exactly one card - the Swamp, the card under the Plains drawn for turn 3, so the Giant Growth drew none. Turn 5: the Spider
+# attacks and Bot2's untapped second Ornithopter (power 0) may not block it, while an Alpine Grizzly (power 4) may and does.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Old Fat Spider
+Giant Growth
+Mox Emerald
+Plains
+Plains
+Plains
+Swamp
+Mountain
+Plains x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Alpine Grizzly
+Ornithopter
+Ornithopter
+Lightning Bolt
+Plains
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Old Fat Spider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Old Fat Spider)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Plains; Plains; Plains
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Pass
+Bot1.Block(Old Fat Spider > Ornithopter)
+[T4 Bot2.Main2]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Old Fat Spider)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Old Fat Spider > Bot2)
+Bot1.Pass
+! Bot2.Block(Ornithopter#1 > Old Fat Spider)
+Bot2.Block(Alpine Grizzly > Old Fat Spider)
+[T5 Bot1.Main2]
+? Bot2.Battlefield.Alpine Grizzly = (absent)
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Swamp; Mountain
+Bot2.Life = 20
+Bot1.Life = 20
