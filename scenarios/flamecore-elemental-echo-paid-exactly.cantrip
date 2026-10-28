@@ -1,0 +1,48 @@
+# Flamecore Elemental {2}{R}{R}, "Echo {2}{R}{R}" (CR 702.30a). Cast on turn 1 (paid with generic from Sol Ring's colorless mana and R mana), it came under Bot1's control since the beginning of their last upkeep, so at Bot1's turn 3 upkeep the echo ability
+# triggers and asks for {2}{R}{R}. The colorless mana, a Mox Pearl (W) and 1 of the two R sources are tapped first (as much mana as the cost, one R
+# short, a W in place of it): paying is not offered. With the last R source tapped it is paid ({2}{R}{R} spent: the generic with colorless mana,
+# {R}{R} with R), and the W stays in the pool. Flamecore Elemental stays.
+
+[Bot1 Deck]
+Flamecore Elemental
+Mox Pearl
+Mox Ruby
+Sol Ring
+Mountain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Flamecore Elemental.Cast
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mountain.Activate
+Bot1.PayCost(Spend: C, C, R, R)
+Bot1.Pass
+? Bot1.Mana = {W}
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Flamecore Elemental.Power = 5
+Bot1.Battlefield.Flamecore Elemental.Toughness = 4
+Bot1.Battlefield.Flamecore Elemental.Colors = Red
