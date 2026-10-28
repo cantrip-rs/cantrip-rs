@@ -1,0 +1,13 @@
+{
+  "name": "Blor the Impervious",
+  "manaCost": "{3}{G}{G}",
+  "type": "Legendary Creature — Frog Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample, hexproof, indestructible",
+  "keywords": [
+    "Trample",
+    "Hexproof",
+    "Indestructible"
+  ]
+}
