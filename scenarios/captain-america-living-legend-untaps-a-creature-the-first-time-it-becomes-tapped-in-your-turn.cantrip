@@ -1,0 +1,69 @@
+# Captain America, Living Legend: "Whenever a creature you control becomes tapped during your turn, if it's the first time
+# that creature has become tapped this turn, untap it." Savannah Lions attacking (turn 5) is untapped by it. Llanowar
+# Elves tapped for mana twice in the same turn (turn 5): untapped the first time only. A Mox, which is no creature, stays
+# tapped (turn 3), as does Bot2's Llanowar Elves tapped for mana in Bot1's turn (turn 5): not Bot1's creature.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Captain America, Living Legend
+Savannah Lions
+Llanowar Elves
+Forest
+Island x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Hand.Captain America, Living Legend.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Pearl.Tapped = true
+[T5 Bot1.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+[T5 Bot1.Attackers]
+Bot1.Attack(Savannah Lions > Bot2)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Savannah Lions.Tapped = false

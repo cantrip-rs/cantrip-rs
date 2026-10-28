@@ -1,0 +1,11 @@
+{
+  "name": "Captain America, Living Legend",
+  "manaCost": "{1}{W}{U}",
+  "type": "Legendary Creature — Human Soldier Hero",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Vigilance\nWhenever a creature you control becomes tapped during your turn, if it's the first time that creature has become tapped this turn, untap it.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
