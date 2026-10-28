@@ -1,0 +1,64 @@
+# Iron Fist, Living Weapon: "Whenever you cast a spell that targets a creature you control, Iron Fist gains '{T}: Iron Fist deals damage
+# equal to his power to any other target' until end of turn." Turn 3: Super Speed (flash, +1/+0 and haste) cast on Bot2's Memnite
+# targets a creature Bot1 does not control: no ability, so Iron Fist cannot tap to deal damage (the refusal). A second Super Speed
+# on Iron Fist himself grants it: he is a 3/3 with haste, and tapping deals 3 damage to Bot2 (17); he is not a legal target of his
+# own ability ("any other target"). On turn 5, untapped again, he has no ability to activate.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Iron Fist, Living Weapon
+Super Speed
+Super Speed
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Iron Fist, Living Weapon.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Super Speed.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Iron Fist, Living Weapon.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Super Speed.Cast(Iron Fist, Living Weapon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Iron Fist, Living Weapon.Activate(Iron Fist, Living Weapon)
+Bot1.Battlefield.Iron Fist, Living Weapon.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Iron Fist, Living Weapon.Activate
+
+[Expect]
+Bot2.Life = 17

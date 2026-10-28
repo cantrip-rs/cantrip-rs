@@ -1,0 +1,62 @@
+# Iron Fist, Living Weapon's granted ability deals damage equal to his power, so a negative power deals none (CR 120.8). Turn 3: Super
+# Speed on Iron Fist grants the ability and makes him a 3/3. Icy Reception (which grants the ability again) gives him -5/-0, so his
+# power is -2, and tapping him at Bot2 deals no damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Iron Fist, Living Weapon
+Super Speed
+Icy Reception
+Mox Sapphire
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Iron Fist, Living Weapon.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Super Speed.Cast(Iron Fist, Living Weapon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Icy Reception.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot1.Battlefield.Iron Fist, Living Weapon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Iron Fist, Living Weapon.Power = -2
+Bot1.Battlefield.Iron Fist, Living Weapon.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Iron Fist, Living Weapon.Tapped = true

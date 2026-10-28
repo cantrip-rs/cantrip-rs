@@ -1,0 +1,8 @@
+{
+  "name": "Iron Fist, Living Weapon",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Human Warrior Hero",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever you cast a spell that targets a creature you control, Iron Fist gains \"{T}: Iron Fist deals damage equal to his power to any other target\" until end of turn."
+}
