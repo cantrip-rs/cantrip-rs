@@ -1,0 +1,11 @@
+{
+  "name": "Caller of the Pack",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Beast",
+  "power": 8,
+  "toughness": 6,
+  "oracleText": "Trample\nMyriad (Whenever this creature attacks, for each opponent other than defending player, you may create a token copy that's tapped and attacking that player or a planeswalker they control. Exile the tokens at end of combat.)",
+  "keywords": [
+    "Trample"
+  ]
+}
