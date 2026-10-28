@@ -1,0 +1,8 @@
+{
+  "name": "Flamecore Elemental",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Elemental",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Echo {2}{R}{R} (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)"
+}
