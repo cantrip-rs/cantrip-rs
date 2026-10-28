@@ -1,0 +1,12 @@
+{
+  "name": "Rustrazor Butcher",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "First strike\nWither (This deals damage to creatures in the form of -1/-1 counters.)",
+  "keywords": [
+    "FirstStrike",
+    "Wither"
+  ]
+}
