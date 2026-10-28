@@ -1,0 +1,8 @@
+{
+  "name": "Gundabad Opportunist",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Goblin Rogue",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "When this creature enters, exile the top card of your library. Until the end of your next turn, you may play that card."
+}

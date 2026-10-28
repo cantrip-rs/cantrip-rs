@@ -1,0 +1,43 @@
+# Gundabad Opportunist: the permission lasts "until the end of your next turn" and no longer. The Forest exiled on turn 1 is
+# not played on turn 3 (Bot1 plays an Island from its hand instead), and on turn 5, with a land drop open, Bot1 may no longer
+# play it from exile (CR 514.2); the Island played right after is the control that the drop was open.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Gundabad Opportunist
+Island
+Island
+Island
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gundabad Opportunist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+! Bot1.Exile.Forest.Play
+Bot1.Hand.Island.Play
+
+[Expect]
+Turn = 5
+Exile = Forest
+Bot1.Battlefield = Mox Ruby; Gundabad Opportunist; Island; Island

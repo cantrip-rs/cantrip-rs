@@ -1,0 +1,46 @@
+# Gundabad Opportunist: "When this creature enters, exile the top card of your library. Until the end of your next turn, you
+# may play that card." Bot1's Forest (its library's top) is exiled - the opponent's library is not touched - and, played
+# from exile as the land drop of Bot1's next turn (turn 3), it is still within "the end of your next turn".
+# Its sibling scenario shows the permission ending after that turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Gundabad Opportunist
+Island
+Island
+Island
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Swamp
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gundabad Opportunist.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Forest
+? Bot2.Library.Count = 14
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Exile.Forest.Play
+? Exile.Count = 0
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Gundabad Opportunist; Island; Forest
+Exile.Count = 0
+Bot2.Library.Count = 13
