@@ -1,0 +1,63 @@
+# Deluge Virtuoso (2/2): "When this creature enters, tap target creature an opponent controls and put a stun counter on it"
+# - Bot2's Ornithopter is tapped and stunned - and opus. On turn 3 Bot1's one-mana Lightning Bolt gives +1/+1 (3/3). On turn 5 a
+# Fireball with X = 4, five mana spent in all (CR 601.2h), gives +2/+2 until end of turn *instead* (CR 614.1a): a 4/4, not 5/5
+# and not 6/6.
+
+[Bot1 Deck]
+Deluge Virtuoso
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Lightning Bolt
+Black Lotus
+Fireball
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deluge Virtuoso.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Deluge Virtuoso.Power = 3
+? Bot1.Battlefield.Deluge Virtuoso.Toughness = 3
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Deluge Virtuoso.Power = 2
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fireball.Cast(X: 4)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Deluge Virtuoso.Power = 4
+? Bot1.Battlefield.Deluge Virtuoso.Toughness = 4
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Deluge Virtuoso.Power = 4
