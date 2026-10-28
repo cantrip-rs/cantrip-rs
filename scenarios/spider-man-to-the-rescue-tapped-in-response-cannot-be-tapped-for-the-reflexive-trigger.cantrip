@@ -1,0 +1,62 @@
+# Spider-Man, To the Rescue: "you may tap him. When you do, ..." Bot2's Pestermite taps him with the ability on the stack;
+# he is already tapped, so Bot1 cannot tap him (CR 602.2c, 701.26a) and "when you do" never happens: Memnite does not
+# gain indestructible.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Spider-Man, To the Rescue
+Memnite
+Forest x14
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Pestermite
+Forest x14
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Spider-Man, To the Rescue.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Pestermite.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Bot1.Battlefield.Spider-Man, To the Rescue)
+Bot2.Pass
+Bot1.Pass
+
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spider-Man, To the Rescue.Tapped = true
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Turn = 3
