@@ -1,0 +1,59 @@
+# Misty Knight, Hero for Hire: "{2}, {T}, Discard a card: Draw a card for each card you've discarded this turn." Turn 1: Faithless
+# Looting discards two cards. Turn 3: a second Looting discards two more, then Misty Knight's ability discards a third: the count is
+# read as it resolves and counts discards by anything, this turn only - the three of turn 3, not turn 1's two as well. The hand
+# holds one card before the ability (turn 3's Looting is cast, draws and discards two) and three after it (one discarded, three
+# drawn; it would be five if turn 1's discards counted, or one if only the ability's own did).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Misty Knight, Hero for Hire
+Faithless Looting
+Faithless Looting
+Island
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Misty Knight, Hero for Hire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+? Bot1.Graveyard.Count = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Island; Island)
+? Bot1.Hand.Count = 1
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Misty Knight, Hero for Hire.Activate
+Bot1.Choose(Island)
+Bot1.Pass
+
+[Expect]
+Bot1.Hand.Count = 3

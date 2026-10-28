@@ -1,0 +1,8 @@
+{
+  "name": "Misty Knight, Hero for Hire",
+  "manaCost": "{1}{R}",
+  "type": "Legendary Creature — Human Detective Hero",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "{2}, {T}, Discard a card: Draw a card for each card you've discarded this turn."
+}
