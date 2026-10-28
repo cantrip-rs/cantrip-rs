@@ -1,0 +1,6 @@
+{
+  "name": "Hawkeye's Bow",
+  "manaCost": "{R}",
+  "type": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +1/+0 and has reach.\nWhenever equipped creature becomes tapped, it deals 1 damage to each opponent.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)"
+}

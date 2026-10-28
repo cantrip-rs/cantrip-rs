@@ -1,0 +1,59 @@
+# Hawkeye's Bow: "Equipped creature gets +1/+0 and has reach. Whenever equipped creature becomes tapped, it deals 1 damage to each
+# opponent." Bot1 equips one of two Memnites (a 2/1 with reach beside a plain 1/1). On turn 3 both attack and become tapped, but
+# only the equipped one's tapping triggers the Bow (one trigger on the stack): Bot2 takes 1 from it, then 2 + 1 combat damage
+# (16). On turn 5 the Bow is moved to the other Memnite (equip {1}) and the first attacks alone: unequipped it is 1/1 without
+# reach and its tapping triggers nothing (Bot2 is at 15 after its 1 combat damage).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Memnite
+Memnite
+Hawkeye's Bow
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hawkeye's Bow.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hawkeye's Bow.Activate(Memnite#1)
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Memnite#1.Power = 2
+? Bot1.Battlefield.Memnite#1.Toughness = 1
+? Bot1.Battlefield.Memnite#1.Keywords = Reach
+? Bot1.Battlefield.Memnite#2.Power = 1
+? Bot1.Battlefield.Memnite#2.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite#1; Memnite#2 > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hawkeye's Bow.Activate(Memnite#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#1.Power = 1
+? Bot1.Battlefield.Memnite#1.Keywords = (absent)
+Bot1.Attack(Memnite#1 > Bot2)
+? Stack.Count = 0
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15

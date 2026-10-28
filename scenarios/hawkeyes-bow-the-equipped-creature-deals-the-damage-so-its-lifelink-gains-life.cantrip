@@ -1,0 +1,45 @@
+# Hawkeye's Bow: "Whenever equipped creature becomes tapped, it deals 1 damage to each opponent" - "it" is the equipped creature,
+# so that creature is the damage's source (CR 120.3, 702.15b): Healer's Hawk's lifelink gains Bot1 1 for the Bow's trigger, then 2
+# more for its combat damage (a 2/1 with the Bow). Bot2 is at 17, Bot1 at 23.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Healer's Hawk
+Hawkeye's Bow
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healer's Hawk.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hawkeye's Bow.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hawkeye's Bow.Activate(Healer's Hawk)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Healer's Hawk > Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 23
