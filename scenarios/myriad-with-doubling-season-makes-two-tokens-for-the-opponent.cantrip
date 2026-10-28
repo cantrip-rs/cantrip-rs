@@ -1,0 +1,64 @@
+# Myriad (CR 702.116a) with Doubling Season (CR 614.1a): the one token Bot1 chooses to create for Bot3 is doubled, so two tapped
+# 1/1 copies enter attacking Bot3 together (the ruling: Bot1 chooses for each token what it attacks - Bot3 has no planeswalker,
+# so there is nothing to ask for the second). Bot2 takes the Patrol's 1, Bot3 the two tokens' 2; both tokens are exiled at end
+# of combat. Black Lotus (white) and Mox Emerald and Mox Jet pay for Doubling Season, Mox Pearl for the Patrol.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Doubling Season
+Wyrm's Crossing Patrol
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Doubling Season.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wyrm's Crossing Patrol.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T4 Bot1.DeclareAttackers]
+Bot1.Attack(Wyrm's Crossing Patrol > Bot2)
+Bot1.Target(Bot3)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Combat.Attackers.Count = 3
+? Combat.Attackers = Wyrm's Crossing Patrol > Bot2; Wyrm's Crossing Patrol > Bot3; Wyrm's Crossing Patrol > Bot3
+[T4 Bot1.Main2]
+? Bot2.Life = 19
+? Bot3.Life = 18
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Exile.Count = 0
