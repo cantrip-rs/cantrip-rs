@@ -1,0 +1,49 @@
+# Evolve (CR 702.100a): Adaptive Snapjaw is a 6/2. Aegis Turtle (0/5) has less power but greater toughness, so evolve triggers
+# and the Snapjaw is 7/3. Black Lotus (three green), Mox Emerald and Mox Pearl pay for the Snapjaw's {4}{G}; Mox Sapphire is
+# tapped afterwards, so the Turtle's {U} is the only mana left for it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Adaptive Snapjaw
+Aegis Turtle
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Adaptive Snapjaw.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Adaptive Snapjaw.Power = 6
+? Bot1.Battlefield.Adaptive Snapjaw.Toughness = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Adaptive Snapjaw.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Adaptive Snapjaw.Power = 7
+Bot1.Battlefield.Adaptive Snapjaw.Toughness = 3
