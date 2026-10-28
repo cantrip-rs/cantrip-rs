@@ -1,0 +1,55 @@
+# Gandalf, Wandering Wizard, a 4/5: "{6}: Gandalf's owner shuffles him into their library and draws three cards." Cast on turn 1 with five of the six
+# Moxen; on turn 3 Bot1 draws for the turn and pays {6} with all six Moxen, the pool empty after: Gandalf is gone from the battlefield, shuffled into
+# the library (which then holds 17 cards: 20 less the turn's draw, plus him, less the three drawn) and the hand holds four (the turn's draw and three
+# drawn - the shuffle may well draw Gandalf himself, so the hand's cards are not named).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Gandalf, Wandering Wizard
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gandalf, Wandering Wizard.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Gandalf, Wandering Wizard.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Mox Emerald; Mox Sapphire
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 17

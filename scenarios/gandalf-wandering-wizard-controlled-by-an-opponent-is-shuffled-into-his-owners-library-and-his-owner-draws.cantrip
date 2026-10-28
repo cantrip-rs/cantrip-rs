@@ -1,0 +1,92 @@
+# Gandalf, Wandering Wizard: Ward {3} paid exactly, and "{6}: Gandalf's owner shuffles him into their library and draws three cards" activated by
+# a player who does not own him. Bot2 takes control with Mind Control on turn 2, paying the Ward {3} with a Black Lotus (the pool empty after, CR 702.21a).
+# On turn 4 Bot2 activates his ability with six Moxen: Bot1, the owner, shuffles him into Bot1's library and draws three cards;
+# Bot2 draws none (CR 108.3). Bot1's hand is the three cards plus its own turn-3 draw, Bot2's the single draw of its turn 4.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Gandalf, Wandering Wizard
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Black Lotus
+Mind Control
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gandalf, Wandering Wizard.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mind Control.Cast(Bot1.Battlefield.Gandalf, Wandering Wizard)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.PayCost
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Gandalf, Wandering Wizard.Tapped = false
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Gandalf, Wandering Wizard.Activate
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot2.Hand.Count = 1
+Bot1.Library.Count = 17
+Bot2.Battlefield = Mox Sapphire; Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Mox Emerald
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Mox Emerald

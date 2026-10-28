@@ -1,0 +1,69 @@
+# Gandalf, Wandering Wizard: Ward {3} (CR 702.21a). Bot2 casts Mind Control at him on turn 2 with its five Moxen and nothing left over for {3}: paying is
+# refused (! Bot2.PayCost) and Mind Control is countered, so Gandalf stays Bot1's. (Scenario
+# gandalf-wandering-wizard-controlled-by-an-opponent-is-shuffled-into-his-owners-library-and-his-owner-draws is the control, with the {3} paid.)
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Gandalf, Wandering Wizard
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mind Control
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gandalf, Wandering Wizard.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mind Control.Cast(Bot1.Battlefield.Gandalf, Wandering Wizard)
+Bot2.Pass
+Bot1.Pass
+! Bot2.PayCost
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Mind Control
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Mox Emerald; Gandalf, Wandering Wizard
+Bot2.Battlefield = Mox Sapphire; Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby
