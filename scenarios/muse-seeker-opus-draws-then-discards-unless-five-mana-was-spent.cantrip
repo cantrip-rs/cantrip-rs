@@ -1,0 +1,49 @@
+# Muse Seeker (1/2): "Opus - Whenever you cast an instant or sorcery spell, draw a card. Then discard a card unless five or more
+# mana was spent to cast that spell." On turn 1 a one-mana Lightning Bolt draws a card and then discards one (two cards in hand
+# afterwards); on turn 3 a Fireball with X = 4, five mana spent in all (CR 601.2h), draws and discards nothing.
+
+[Bot1 Deck]
+Muse Seeker
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Lightning Bolt
+Black Lotus
+Fireball
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Muse Seeker.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Choose(Island)
+Bot1.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 2
+? Bot1.Graveyard.Count = 2
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fireball.Cast(X: 4)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot2.Life = 13

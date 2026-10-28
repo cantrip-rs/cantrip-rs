@@ -1,0 +1,8 @@
+{
+  "name": "Muse Seeker",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Elf Wizard",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Opus — Whenever you cast an instant or sorcery spell, draw a card. Then discard a card unless five or more mana was spent to cast that spell."
+}
