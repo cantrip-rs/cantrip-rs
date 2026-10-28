@@ -77,6 +77,20 @@ fn spell_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
 pub const ANY: TargetSpec = target(any_target_filter);
 pub const CREATURE: TargetSpec = target(creature_filter);
 
+/// "Creature defending player controls" for a trigger about an attacking creature (its subject): the ability refers to the
+/// attacking creature and a defending player, so that is the player the creature attacked, or the controller of the
+/// planeswalker or the protector of the battle it attacked as it attacked - still so once that planeswalker has changed
+/// controller, or the creature has left combat (CR 508.5, `Query::defending_player`).
+pub fn creature_defending_player_controls(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    let Target::Object(attacker) = q.event_subject() else { return false };
+    let Some(defending) = q.defending_player(attacker) else { return false };
+    creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) == defending)
+}
+
+/// "Target creature defending player controls": see `creature_defending_player_controls`. Captain America's Shield prints it
+/// (Greatsword of Tyr's is "up to one").
+pub const CREATURE_DEFENDING_PLAYER_CONTROLS: TargetSpec = target(creature_defending_player_controls);
+
 fn nonlegendary_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     creature_filter(q, asker, t) && matches!(t, Target::Object(id) if !q.chars(id).supertypes.legendary)
 }
