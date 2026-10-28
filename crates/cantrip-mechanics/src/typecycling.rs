@@ -1,11 +1,11 @@
 //! Typecycling [cost] (CR 702.29e): "[Type]cycling [cost]" means "[Cost], Discard this card: Search your library for a
 //! [type] card, reveal it, put it into your hand. Then shuffle." Eagles of the North (Plainscycling), Generous Ent
-//! (Forestcycling), L\u{f3}rien Revealed (Islandcycling), Oliphaunt (Mountaincycling) and Troll of Khazad-d\u{fb}m
-//! (Swampcycling) print it. Plain cycling (CR 702.29a) is `triggers::cycling`; basic landcycling, whose type is the
+//! (Forestcycling), L\u{f3}rien Revealed (Islandcycling), Oliphaunt (Mountaincycling), Troll of Khazad-d\u{fb}m
+//! (Swampcycling) and Hobbit Hole (Halflingcycling) print it. Plain cycling (CR 702.29a) is `triggers::cycling`; basic landcycling, whose type is the
 //! basic supertype, is `basic_landcycling`.
 //!
 //! A card with typecycling lists `ability(subtype, cost, text)` among its `abilities`; `subtype` is the basic land type
-//! it searches for.
+//! (or, for Halflingcycling, the creature type) it searches for.
 
 use crate::search_library;
 use cantrip_api::*;
@@ -29,8 +29,9 @@ search_for!(search_island, Subtype::Island);
 search_for!(search_swamp, Subtype::Swamp);
 search_for!(search_mountain, Subtype::Mountain);
 search_for!(search_forest, Subtype::Forest);
+search_for!(search_halfling, Subtype::Halfling);
 
-/// The typecycling ability for a basic land type, from the hand. `text` is the ability's full text, which a scenario's
+/// The typecycling ability for a basic land type or Halfling, from the hand. `text` is the ability's full text, which a scenario's
 /// `Ability:` matches.
 pub const fn ability(subtype: Subtype, mana: ManaCost, text: &'static str) -> AbilityDef {
     let effect = match subtype {
@@ -39,7 +40,8 @@ pub const fn ability(subtype: Subtype, mana: ManaCost, text: &'static str) -> Ab
         Subtype::Swamp => search_swamp,
         Subtype::Mountain => search_mountain,
         Subtype::Forest => search_forest,
-        _ => panic!("typecycling is implemented for the basic land types"),
+        Subtype::Halfling => search_halfling,
+        _ => panic!("typecycling is implemented for the basic land types and Halfling"),
     };
     cantrip_api::ability(Cost::mana(mana).and(DISCARD_THIS), effect, text)
         .from(ZoneKind::Hand)
