@@ -1,0 +1,40 @@
+# Ingest (CR 702.115a): Culling Drone is unblocked on turn 3 and deals 2 combat damage to Bot2, so Bot2 exiles the top card of their library - the
+# Lightning Bolt they would draw next, face up - and not a card of Bot1's. Devoid (CR 702.114a): the Drone is colorless though its cost has {B}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Culling Drone
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Lightning Bolt
+Swamp x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Culling Drone.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Culling Drone > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Exile = Lightning Bolt
+Bot2.Library.Count = 10
+Bot1.Battlefield.Culling Drone.Colors = (absent)

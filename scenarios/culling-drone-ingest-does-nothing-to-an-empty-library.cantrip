@@ -1,0 +1,30 @@
+# Ingest (CR 702.115a, the rulings): Bot2's library is empty after their turn-2 draw (eight cards in all), so when Culling Drone deals combat damage on turn 3
+# nothing is exiled and Bot2 doesn't lose - they would only lose by drawing from it on turn 4.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Culling Drone
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Swamp x8
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Culling Drone.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Culling Drone > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Exile.Count = 0
+Bot2.Library.Count = 0
