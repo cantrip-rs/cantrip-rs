@@ -1,0 +1,44 @@
+# Informed Inkwright: a Lightning Bolt at a player makes no Inkling; a Lightning Bolt at Bot2's Ornithopter makes a 1/1
+# white and black Inkling with flying (Repartee: an instant or sorcery spell that targets a creature).
+
+[Bot1 Deck]
+Plains x2
+Mountain x2
+Informed Inkwright
+Lightning Bolt x2
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Informed Inkwright.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T5 Bot1.Main2]
+? Bot1.Battlefield = Plains; Plains; Mountain; Informed Inkwright
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Battlefield = Mountain
+Bot1.Battlefield = Plains; Plains; Mountain; Mountain; Informed Inkwright; Inkling Token
+Bot1.Battlefield.Inkling Token.Power = 1
+Bot1.Battlefield.Inkling Token.Toughness = 1
+Bot1.Battlefield.Inkling Token.Keywords = Flying
+Bot1.Battlefield.Inkling Token.Colors = Black; White

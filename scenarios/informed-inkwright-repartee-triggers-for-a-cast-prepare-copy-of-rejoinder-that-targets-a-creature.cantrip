@@ -1,0 +1,36 @@
+# Informed Inkwright with Elite Interceptor // Rejoinder (CR 722, 707.12, 601.2i). A prepared creature lets its controller
+# cast a copy of the prepare spell; a cast copy is a cast spell, so Repartee triggers when it targets a creature. Bot1 casts
+# Rejoinder at the Interceptor and gets an Inkling as well as the card.
+
+[Bot1 Deck]
+Informed Inkwright
+Elite Interceptor
+Mox Pearl x5
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Informed Inkwright.Cast
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Elite Interceptor.Cast
+[T1 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Exile.Rejoinder.Cast(Elite Interceptor)
+Bot1.Modes(Tap)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Elite Interceptor.Tapped = true
+Bot1.Battlefield.Inkling Token.Power = 1
+Bot1.Hand = Ornithopter
