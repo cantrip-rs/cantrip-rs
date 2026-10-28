@@ -1,0 +1,48 @@
+# Evolve (CR 702.100a) and defender (CR 702.3a): Clinging Anemones is a 1/4 defender. Elite Vanguard (2/1) has greater power only,
+# so evolve triggers and the Anemones are 2/5. On turn 3 Elite Vanguard may attack and the Anemones, having defender, may
+# not. Black Lotus (three blue) and Mox Sapphire pay for the Anemones' {3}{U}, Mox Pearl for the Vanguard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Clinging Anemones
+Elite Vanguard
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clinging Anemones.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elite Vanguard.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Clinging Anemones > Bot2)
+Bot1.Attack(Elite Vanguard > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Clinging Anemones.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Clinging Anemones.Power = 2
+Bot1.Battlefield.Clinging Anemones.Toughness = 5
+Bot1.Battlefield.Clinging Anemones.Keywords = Defender
+Bot2.Life = 18
