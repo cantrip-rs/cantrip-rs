@@ -1,0 +1,45 @@
+# Ravening Warg {1}{B} (paid exactly with Mox Jet and Mox Pearl): "Ferocious - Whenever this creature attacks while you control a
+# creature with power 4 or greater, you gain 2 life." Bot1 also controls Tyrox, Saurid Tyrant, a 4/1 - exactly power 4 - so on turn 3
+# the attacking Warg gains 2 life (22) and its 2 damage takes Bot2 to 18.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Pearl
+Mox Ruby
+Ravening Warg
+Tyrox, Saurid Tyrant
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Ravening Warg.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Tyrox, Saurid Tyrant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ravening Warg > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18

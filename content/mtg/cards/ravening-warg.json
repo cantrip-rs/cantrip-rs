@@ -1,0 +1,11 @@
+{
+  "name": "Ravening Warg",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Wolf",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Deathtouch\nFerocious — Whenever this creature attacks while you control a creature with power 4 or greater, you gain 2 life.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

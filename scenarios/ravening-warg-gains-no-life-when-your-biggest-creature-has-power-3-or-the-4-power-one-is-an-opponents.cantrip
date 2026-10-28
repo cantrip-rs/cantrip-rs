@@ -1,0 +1,56 @@
+# The control for ravening-warg-gains-2-life-on-attack-only-while-you-control-a-creature-with-power-4: Bot1 controls the Warg and
+# a Blade of the Sixth Pride (3/1, one short of 4), and Bot2 controls Tyrox, Saurid Tyrant, a 4/1 that is not Bot1's. The Warg
+# attacks and no ability triggers: Bot1 stays on 20 and Bot2 takes 2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Ravening Warg
+Blade of the Sixth Pride
+Plains x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Tyrox, Saurid Tyrant
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Ravening Warg.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Blade of the Sixth Pride.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Tyrox, Saurid Tyrant.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ravening Warg > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18

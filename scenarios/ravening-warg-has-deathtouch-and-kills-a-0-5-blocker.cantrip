@@ -1,0 +1,39 @@
+# Ravening Warg's deathtouch (CR 702.2): it deals 2 damage to Bot2's Aegis Turtle (0/5), which blocks it, and the Turtle dies though 2 is
+# short of 5; the Warg takes no damage. No creature with power 4 or greater is controlled, so it gains no life.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Ravening Warg
+Plains x17
+
+[Bot2 Deck]
+Mox Sapphire
+Aegis Turtle
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ravening Warg.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ravening Warg > Bot2)
+Bot2.Block(Aegis Turtle > Ravening Warg)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Aegis Turtle
+Bot1.Battlefield.Ravening Warg.Damage = 0
+Bot1.Life = 20
