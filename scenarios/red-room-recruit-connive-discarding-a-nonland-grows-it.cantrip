@@ -1,0 +1,35 @@
+# When Red Room Recruit enters it connives (CR 701.50): Bot1 draws Lightning Bolt and discards it, a nonland card, so the Recruit
+# gets a +1/+1 counter (2/3).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Red Room Recruit
+Swamp
+Swamp
+Swamp
+Swamp
+Lightning Bolt
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Red Room Recruit.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Choose(Lightning Bolt)
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield.Red Room Recruit.Power = 2
+Bot1.Battlefield.Red Room Recruit.Toughness = 3
+Bot1.Battlefield.Red Room Recruit.Counters.PlusOnePlusOne = 1
