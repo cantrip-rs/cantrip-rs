@@ -1,0 +1,65 @@
+# Ares, God of War: "Ares attacks each combat if able" (CR 508.1d): declaring no attackers is refused. "Whenever an
+# attacking creature you control dies, return that card to its owner's hand": Hill Giant blocks and kills Ares, who was
+# attacking, so he returns to Bot1's hand (the trigger sees him as he last was, CR 603.10a). Hill Giant dies too, and goes
+# to Bot2's graveyard: it is not Bot1's creature.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Ares, God of War
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Hill Giant
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ares, God of War.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Attackers]
+! Bot1.Attack()
+Bot1.Attack(Ares, God of War > Bot2)
+Bot2.Block(Hill Giant > Ares, God of War)
+[Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Ares, God of War; Island; Island; Island; Island
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Hill Giant
