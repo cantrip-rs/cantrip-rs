@@ -26,6 +26,20 @@ pub fn at_next_end_step(g: &mut dyn Game, item: &StackItem, ability: u8, subject
     );
 }
 
+/// "Exile [target permanent]. Return that card to the battlefield under its owner's control at the beginning of the next end
+/// step" (CR 603.7): the ability's or spell's first target, nothing at all if it is no longer a legal target (or none was
+/// chosen, "up to one"). The delayed ability is the card's `delayed` number 0, `return_subject_to_battlefield`; it is about
+/// the card in exile, and a token exiled this way ceases to exist, so there is nothing for it to find (CR 111.7, 400.7).
+/// Flickerwisp, S.H.I.E.L.D. Flying Car and Wiccan, Rising Magician print it.
+pub fn exile_target_and_return_at_next_end_step(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(permanent) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    let exiled = g.exile(permanent);
+    if g.obj(exiled).zone.is(ZoneKind::Exile) {
+        at_next_end_step(g, item, 0, Target::Object(exiled));
+    }
+    Ok(())
+}
+
 /// Sets up the card's delayed ability number 0 to trigger "this turn" (CR 603.7b): each time its `listens`/`matches`
 /// accept an event, until the turn ends, controlled by the resolving ability's controller. `source` is the object the
 /// ability's `matches` is asked of: the spell for "whenever a creature you control dies this turn", the creature it
