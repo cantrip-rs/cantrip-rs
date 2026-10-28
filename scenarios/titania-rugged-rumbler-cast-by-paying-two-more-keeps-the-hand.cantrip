@@ -1,0 +1,37 @@
+# Titania, Rugged Rumbler, the "pay {2}" branch of its additional cost (CR 601.2b, 118.3): five Moxen pay {2}{B/G} and {2},
+# nothing is discarded, and the Island in hand stays there.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Titania, Rugged Rumbler
+Island
+Island x13
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Titania, Rugged Rumbler.Cast
+Bot1.Modes(Pay {2})
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Titania, Rugged Rumbler
+Bot1.Graveyard.Count = 0
+Bot1.Hand = Island

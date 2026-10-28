@@ -1,0 +1,35 @@
+# Titania, Rugged Rumbler, the discard branch of "As an additional cost to cast this spell, discard a card or pay {2}"
+# (CR 601.2b): Bot1 pays {2}{B/G} with three Moxen (the hybrid cost takes Mox Jet's {B}) and discards an Island, keeping
+# the Moxen's Ruby and Pearl uncast. Titania enters, and the Island is in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Titania, Rugged Rumbler
+Island
+Island
+Mox Pearl
+Island x13
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Titania, Rugged Rumbler.Cast
+Bot1.Modes(Discard a card)
+Bot1.Choose(Island)
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Titania, Rugged Rumbler
+Bot1.Graveyard = Island
+Bot1.Hand = Island; Mox Pearl

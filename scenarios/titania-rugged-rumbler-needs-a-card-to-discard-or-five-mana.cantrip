@@ -1,0 +1,46 @@
+# Titania, Rugged Rumbler cannot be cast without one of its two additional costs (CR 601.2b). Bot1 empties its hand but for
+# Titania (it cannot discard itself): on turn 1 it has an Island and three Moxen, four mana, and {2}{B/G} + {2} is five,
+# so the cast is refused; on turn 3 the second Island makes five and the Titania is cast, nothing discarded.
+
+[Bot1 Deck]
+Island
+Mox Jet
+Mox Emerald
+Mox Ruby
+Ornithopter
+Ornithopter
+Titania, Rugged Rumbler
+Island
+Island x10
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Titania, Rugged Rumbler.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Titania, Rugged Rumbler.Cast
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Count = 0
+Bot1.Hand.Count = 0
+Bot1.Battlefield.Titania, Rugged Rumbler.Power = 5
