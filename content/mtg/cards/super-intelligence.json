@@ -1,0 +1,6 @@
+{
+  "name": "Super Intelligence",
+  "manaCost": "{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nAt the beginning of the upkeep of enchanted creature's controller, that player draws a card."
+}
