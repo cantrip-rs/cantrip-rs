@@ -1361,6 +1361,7 @@ impl<'a> Projector<'a> {
                     }
                     EffectKind::CantActivateAbilities => "Its activated abilities can't be activated",
                     EffectKind::CantBeSacrificed => "Can't be sacrificed",
+                    EffectKind::CantBecomeUntapped => "Can't become untapped",
                     // A resolved control-changing effect (CR 613.1b): who has it and for how long, named for where it came
                     // from, as nothing else on the permanent says so. A permanent given for good says nothing.
                     EffectKind::Control(p) if e.duration != Duration::Indefinite => {
