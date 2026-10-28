@@ -1,0 +1,8 @@
+{
+  "name": "Stone-Giant of High Pass",
+  "manaCost": "{5}{R}{R}",
+  "type": "Creature — Giant",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Whenever this creature enters or attacks, create a 3/1 colorless Wall artifact creature token with defender named Stone Boulder.\n{2}{R}, Sacrifice an artifact: This creature deals 4 damage to any target."
+}
