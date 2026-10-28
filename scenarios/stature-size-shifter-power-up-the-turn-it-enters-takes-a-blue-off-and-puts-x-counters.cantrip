@@ -1,0 +1,39 @@
+# Stature, Size Shifter: "Power-up — {X}{U}{U}: Put X +1/+1 counters on Stature." The turn she enters, her mana cost {U} takes
+# one {U} off (CR 702.193b, 118.7): X = 2 costs {2}{U}, paid exactly by an Island, Mox Jet and Mox Pearl (the pool is empty),
+# and she is a 3/3. With power 3 she is no longer unblockable by the rule that needs 1 or less.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Stature, Size Shifter
+Island x2
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stature, Size Shifter.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Stature, Size Shifter.Activate(X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Stature, Size Shifter.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Stature, Size Shifter.Power = 3
+Bot1.Battlefield.Stature, Size Shifter.Toughness = 3
