@@ -1,0 +1,58 @@
+# Dwarven Provisioner: "{3}{W}: Creatures you control get +1/+1 until end of turn." It is cast on turn 1 with the Plains and
+# a Mox, which leaves one source untapped: the activation is not offered (it costs four). On turn 3 exactly four sources pay
+# it (the pool is empty right after), and the Provisioner (2/2) and Bot1's Ornithopter (0/2) get +1/+1 while Bot2's Ornithopter
+# does not (CR 611.2c: "you control"). On Bot2's turn the effect is over (CR 514.2).
+
+[Bot1 Deck]
+Plains
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Dwarven Provisioner
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dwarven Provisioner.Cast
+Bot1.Pass
+! Bot1.Battlefield.Dwarven Provisioner.Activate(Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Dwarven Provisioner.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dwarven Provisioner.Power = 3
+? Bot1.Battlefield.Dwarven Provisioner.Toughness = 3
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Dwarven Provisioner.Power = 2
+Bot1.Battlefield.Dwarven Provisioner.Toughness = 2
+Bot1.Battlefield.Ornithopter.Toughness = 2

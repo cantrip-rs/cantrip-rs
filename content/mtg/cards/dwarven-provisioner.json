@@ -1,0 +1,8 @@
+{
+  "name": "Dwarven Provisioner",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Dwarf Citizen",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{3}{W}: Creatures you control get +1/+1 until end of turn."
+}
