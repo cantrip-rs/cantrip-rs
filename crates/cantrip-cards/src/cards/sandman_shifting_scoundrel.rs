@@ -1,15 +1,7 @@
 use cantrip_api::*;
-use cantrip_mechanics::lands::count_you_control;
+use cantrip_mechanics::lands;
 use cantrip_mechanics::targets;
 use cantrip_oracle as oracle;
-
-/// "Sandman's power and toughness are each equal to the number of lands you control" (CR 604.3, layer 7a): a
-/// characteristic-defining ability, so it works in every zone, counting its owner's lands off the battlefield (the ruling).
-fn size_is_lands_you_control(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
-    let lands = count_you_control(q, source, &|c| c.is(CardType::Land));
-    chars.power = Some(lands);
-    chars.toughness = Some(lands);
-}
 
 /// "Return this card and target land card from your graveyard to the battlefield tapped": both at once, under its
 /// controller's control (CR 110.2a). This card is not returned if it is no longer the card that was in the graveyard
@@ -27,7 +19,7 @@ pub static CARD: CardDef = CardDef {
     keywords: Keywords::of(&[Keyword::CantBeBlockedByPowerTwoOrLess]),
     statics: &[characteristic_defining(
         Layer::PtDefine,
-        size_is_lands_you_control,
+        lands::power_and_toughness_are_lands_you_control,
         "Sandman's power and toughness are each equal to the number of lands you control.",
     )
     .lost_pt(0, 0)],
