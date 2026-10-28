@@ -1,0 +1,11 @@
+{
+  "name": "Goblin War Buggy",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Haste\nEcho {1}{R} (At the beginning of your upkeep, if this came under your control since the beginning of your last upkeep, sacrifice it unless you pay its echo cost.)",
+  "keywords": [
+    "Haste"
+  ]
+}
