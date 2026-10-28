@@ -1,0 +1,8 @@
+{
+  "name": "Zhur-Taa Goblin",
+  "manaCost": "{R}{G}",
+  "type": "Creature — Goblin Berserker",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Riot (This creature enters with your choice of a +1/+1 counter or haste.)"
+}
