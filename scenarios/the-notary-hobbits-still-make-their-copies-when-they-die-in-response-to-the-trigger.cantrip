@@ -1,0 +1,52 @@
+# The Notary Hobbits: the enters ability's "if they're not a token" and the copies are of the permanent as it last existed when it has
+# left the battlefield (CR 608.2h, 707.2). Bot2 answers the trigger with a Lightning Bolt: the 1/1 dies, yet the ability resolves and
+# creates two nonlegendary tokens that are copies of it - the two tokens are all that is left on Bot1's side.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+The Notary Hobbits
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Notary Hobbits.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.The Notary Hobbits)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.The Notary Hobbits#1.Token = true
+Bot1.Battlefield.The Notary Hobbits#2.Token = true
+Bot1.Battlefield.The Notary Hobbits#1.Supertypes = (absent)
+Bot1.Battlefield.The Notary Hobbits#3 = (absent)
+Bot1.Graveyard.Count = 2

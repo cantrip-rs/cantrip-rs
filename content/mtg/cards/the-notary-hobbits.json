@@ -1,0 +1,8 @@
+{
+  "name": "The Notary Hobbits",
+  "manaCost": "{3}{G}{G}",
+  "type": "Legendary Creature — Halfling Advisor",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When The Notary Hobbits enter, if they're not a token, create two tokens that are copies of them, except the tokens aren't legendary.\n{T}: Add {C} for each Halfling you control."
+}

@@ -1,0 +1,58 @@
+# The Notary Hobbits, a legendary 1/1: "When The Notary Hobbits enter, if they're not a token, create two tokens that are copies of
+# them, except the tokens aren't legendary. {T}: Add {C} for each Halfling you control." Bot1 casts it: two tokens that are copies,
+# exactly two - the tokens' own entering triggers nothing (they are tokens) - not legendary, so the legend rule leaves all three. On
+# turn 3, with Bot2's Delighted Halfling on the battlefield (not counted: "you control"), tapping the original for mana gives
+# {C}{C}{C}, one for each of Bot1's three Halflings, and tapping a token the same.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+The Notary Hobbits
+Plains
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Mox Emerald
+Delighted Halfling
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Notary Hobbits.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Notary Hobbits#1.Supertypes = Legendary
+? Bot1.Battlefield.The Notary Hobbits#2.Token = true
+? Bot1.Battlefield.The Notary Hobbits#2.Supertypes = (absent)
+? Bot1.Battlefield.The Notary Hobbits#3.Token = true
+? Bot1.Battlefield.The Notary Hobbits#3.Subtypes = Advisor; Halfling
+? Bot1.Battlefield.The Notary Hobbits#4 = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Delighted Halfling.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.The Notary Hobbits#1.Activate
+? Bot1.Mana = {C}{C}{C}
+
+[Expect]
+Bot1.Battlefield.The Notary Hobbits#2.Tapped = false
+Bot2.Battlefield.Delighted Halfling.Tapped = false
