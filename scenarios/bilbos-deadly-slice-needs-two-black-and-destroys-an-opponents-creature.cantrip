@@ -1,0 +1,45 @@
+# Bilbo's Deadly Slice {1}{B}{B}: "Destroy target creature" (CR 701.8a). Bot1 has Mox Jet, two Mox Pearls and its own Memnite: three
+# mana but one {B}, so the Slice is refused (the colored pips are pinned); a second Mox Jet makes {B}{B} and the cast is paid
+# exactly. Bot2's Memnite, a creature the caster does not control, is destroyed on Bot2's turn and Bot1's survives.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Pearl
+Memnite
+Bilbo's Deadly Slice
+Mox Jet
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+! Bot1.Hand.Bilbo's Deadly Slice.Cast(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bilbo's Deadly Slice.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Bilbo's Deadly Slice
+Bot2.Graveyard = Memnite
+Bot1.Battlefield = Memnite; Mox Jet; Mox Jet; Mox Pearl; Mox Pearl
+Bot2.Battlefield.Count = 0

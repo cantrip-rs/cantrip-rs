@@ -1,0 +1,29 @@
+# Bilbo's Deadly Slice's "target creature" is any creature, the caster's included (CR 701.8a): Bot1 destroys its own Memnite at
+# instant speed with the Slice, paid from Black Lotus's {B}{B}{B}; Bot2's Memnite is left alone.
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Bilbo's Deadly Slice
+Plains x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Bilbo's Deadly Slice.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Bilbo's Deadly Slice; Memnite; Black Lotus
+Bot2.Battlefield.Memnite.Power = 1

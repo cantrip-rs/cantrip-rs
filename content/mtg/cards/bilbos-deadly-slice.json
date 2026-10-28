@@ -1,0 +1,6 @@
+{
+  "name": "Bilbo's Deadly Slice",
+  "manaCost": "{1}{B}{B}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature."
+}
