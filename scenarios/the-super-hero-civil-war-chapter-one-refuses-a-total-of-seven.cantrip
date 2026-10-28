@@ -1,0 +1,61 @@
+# The Super Hero Civil War, chapter I: Hill Giant (4) and Hired Blade (3) total 7, one past the 6 the targets may total, and are refused
+# (CR 601.2c, 202.3); the Giant alone is accepted and Bot2 keeps the Blade.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+The Super Hero Civil War
+Plains x24
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Jet
+Hill Giant
+Hired Blade
+Plains x22
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hill Giant.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Pass
+Bot2.Hand.Hired Blade.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.The Super Hero Civil War.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+! Bot1.Target(Hill Giant; Hired Blade)
+Bot1.Target(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Hill Giant; Mox Jet; Mox Pearl; The Super Hero Civil War
+Bot2.Battlefield = Hired Blade; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
