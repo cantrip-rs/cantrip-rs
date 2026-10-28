@@ -1,0 +1,43 @@
+# The Ruinous Wrecking Crew cast with X = 2 enters with two +1/+1 counters (CR 122.6) and chooses up to two modes (CR 700.2, 603.3c):
+# three are refused. Bot1 takes "Target opponent loses 2 life" and "Discard a card, then draw a card" (CR 119.3, 701.9, 121.1).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+The Ruinous Wrecking Crew
+Plains x2
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.The Ruinous Wrecking Crew.Cast(X: 2)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+! Bot1.Modes(1; 2; 3)
+Bot1.Modes(1; 2)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.The Ruinous Wrecking Crew.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.The Ruinous Wrecking Crew.Power = 4
+Bot1.Battlefield.The Ruinous Wrecking Crew.Toughness = 4
+Bot1.Hand.Count = 2
+Bot1.Graveyard.Count = 1
