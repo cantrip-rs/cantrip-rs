@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::attach::attached_object;
+use cantrip_mechanics::attach::{attached_object, equipped_creature_cant_be_blocked};
 use cantrip_mechanics::cloak::cloak_top_of_library;
 use cantrip_mechanics::effects::return_this_to_hand;
 use cantrip_mechanics::statics::plus_pt;
@@ -13,13 +13,6 @@ fn cloak_and_attach(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         g.attach(item.object, permanent);
     }
     Ok(())
-}
-
-/// "Equipped creature ... can't be blocked" (CR 509.1b): no "has", so a rule of the Equipment's, not an ability the creature
-/// gains (CR 113.1a). A creature that loses all its abilities is still under it (CR 613.1f), and it is no ability of the
-/// creature's for anything that asks ("creatures with no abilities").
-fn equipped_creature_cant_be_blocked(q: &dyn Query, source: ObjectId, _: ObjectId, attacker: ObjectId) -> bool {
-    q.obj(source).attached_to != Some(attacker)
 }
 
 pub static CARD: CardDef = CardDef {

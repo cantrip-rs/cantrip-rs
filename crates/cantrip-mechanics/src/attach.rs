@@ -106,6 +106,14 @@ pub fn attached_object(view: &dyn LayerQuery, source: ObjectId, affected: Object
     view.state().obj(source).attached_to == Some(affected)
 }
 
+/// "Equipped creature ... can't be blocked" (CR 509.1b) as a `CardDef::block_rules` entry: no "has", so a rule of the
+/// Equipment's, not an ability the creature gains (CR 113.1a). A creature that loses all its abilities is still under it
+/// (CR 613.1f), and it is no ability of the creature's for anything that asks ("creatures with no abilities"). Cryptic Coat
+/// and My Precious print it.
+pub fn equipped_creature_cant_be_blocked(q: &dyn Query, source: ObjectId, _: ObjectId, attacker: ObjectId) -> bool {
+    q.obj(source).attached_to != Some(attacker)
+}
+
 /// Living weapon (CR 702.92a): create a 0/0 black Phyrexian Germ creature token, then attach this Equipment to it.
 /// The Equipment attaches only if it is still on the battlefield and the token was made (CR 701.3b). Nettlecyst and
 /// Kaldra Compleat print it.
