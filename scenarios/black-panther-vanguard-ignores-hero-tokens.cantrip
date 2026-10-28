@@ -1,0 +1,47 @@
+# Black Panther, Vanguard: "another nontoken Hero" - Borough Backup's two 3/2 Hero tokens enter under Bot1's control and trigger
+# nothing: no choice is offered, no Soldier is made and Black Panther stays a 4/4 (CR 603.6a, 111.1).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Ruby
+Black Panther, Vanguard
+Borough Backup
+Forest
+Forest x10
+
+[Bot2 Deck]
+Forest x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Black Panther, Vanguard.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Borough Backup.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hero Token#1.Power = 3
+? Bot1.Battlefield.Hero Token#2.Power = 3
+
+[Expect]
+Bot1.Battlefield.Black Panther, Vanguard.Power = 4
