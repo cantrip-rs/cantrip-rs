@@ -1,0 +1,33 @@
+# Muse's Encouragement ({4}{U}): "Create a 3/3 blue and red Elemental creature token with flying. Surveil 2." Bot1 pays with
+# five Moxen-and-Lotus mana, gets the token, then surveils 2: the Forest goes to the graveyard, the Swamp stays on top.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Muse's Encouragement
+Island x3
+Forest
+Swamp
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Muse's Encouragement.Cast
+Bot1.Pass
+Bot1.Arrange(Swamp | Forest)
+? Bot1.Battlefield.Elemental Token.Power = 3
+? Bot1.Battlefield.Elemental Token.Toughness = 3
+? Bot1.Battlefield.Elemental Token.Keywords = Flying
+? Bot1.Graveyard.Count = 3
+
+[Expect]
+Stack.Count = 0
