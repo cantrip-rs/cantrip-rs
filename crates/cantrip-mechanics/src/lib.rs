@@ -50,6 +50,7 @@ pub mod devotion;
 pub mod domain;
 pub mod dredge;
 pub mod earthbend;
+pub mod echo;
 pub mod empower;
 pub mod enduring;
 pub mod enlist;
