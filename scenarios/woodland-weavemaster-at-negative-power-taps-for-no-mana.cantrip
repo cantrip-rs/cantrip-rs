@@ -1,0 +1,43 @@
+# Woodland Weavemaster, a 1/2: "{T}: Add X mana of any one color, where X is this creature's power." Icy Reception's second mode
+# makes it a -4/2 until end of turn: negative power with positive toughness does not kill it (CR 704.5f), and tapped it adds no
+# mana (a negative X is no mana, not a huge amount).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Woodland Weavemaster
+Icy Reception
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Woodland Weavemaster.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Icy Reception.Cast
+Bot1.Modes(2)
+Bot1.Target(Woodland Weavemaster)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Woodland Weavemaster.Power = -4
+? Bot1.Battlefield.Woodland Weavemaster.Toughness = 2
+Bot1.Battlefield.Woodland Weavemaster.Activate(Color: Green)
+
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield.Woodland Weavemaster.Tapped = true

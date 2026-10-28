@@ -1,0 +1,46 @@
+# Woodland Weavemaster: "{T}: Add X mana of any one color, where X is this creature's power." A Llanowar Elves entering makes it
+# a 2/3 and a Stab (-2/-2) a 0/1: tapped at power 0 it adds no mana at all, the pool staying empty.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Woodland Weavemaster
+Llanowar Elves
+Stab
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Woodland Weavemaster.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Woodland Weavemaster.Power = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stab.Cast(Woodland Weavemaster)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Woodland Weavemaster.Power = 0
+? Bot1.Battlefield.Woodland Weavemaster.Toughness = 1
+Bot1.Battlefield.Woodland Weavemaster.Activate(Color: Green)
+
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield.Woodland Weavemaster.Tapped = true

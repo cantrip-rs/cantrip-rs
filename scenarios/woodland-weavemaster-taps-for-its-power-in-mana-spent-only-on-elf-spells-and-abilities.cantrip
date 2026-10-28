@@ -1,0 +1,76 @@
+# Woodland Weavemaster, a 1/2 with vigilance: "Whenever another Elf you control enters, this creature gets +1/+1 until end of turn.
+# {T}: Add X mana of any one color, where X is this creature's power. Spend this mana only to cast Elf spells and activate abilities of
+# Elf sources." On turn 3 Bot1 casts a Llanowar Elves, which makes the Weavemaster a 2/3 (Bot2's Elf would not), then taps it for two
+# mana of one color, {G}{G}, that pay only for Elf things: not a Grizzly Bears, nor the Mountaincycling of an Oliphaunt (not an Elf
+# source), but the Forestcycling of a Wirewood Guardian, an Elf card in the hand (CR 106.6). On turn 4 the Weavemaster is a 1/2 again
+# (until end of turn) and on turn 5 a tap gives a single mana, {G}, for its power of 1 (X is its power as it is activated), which pays for an Elvish Mystic, an Elf spell (CR 106.6): the Weavemaster is a 2/3 again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Woodland Weavemaster
+Llanowar Elves
+Wirewood Guardian
+Oliphaunt
+Grizzly Bears
+Elvish Mystic
+Plains
+Forest
+Plains x10
+
+[Bot2 Deck]
+Llanowar Elves
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Woodland Weavemaster.Cast
+? Bot1.Mana = {G}
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Woodland Weavemaster.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Woodland Weavemaster.Power = 2
+? Bot1.Battlefield.Woodland Weavemaster.Toughness = 3
+Bot1.Battlefield.Woodland Weavemaster.Activate(Color: Green)
+? Bot1.Mana = {G}{G} (ElfSpellsOrAbilities)
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+! Bot1.Hand.Oliphaunt.Activate(Ability: Mountaincycling; Mana: short)
+Bot1.Hand.Wirewood Guardian.Activate(Ability: Forestcycling; Spend: G ElfSpellsOrAbilities, G ElfSpellsOrAbilities)
+? Bot1.Mana =
+Bot1.Search(Forest)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Woodland Weavemaster.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Woodland Weavemaster.Activate(Color: Green)
+? Bot1.Mana = {G} (ElfSpellsOrAbilities)
+Bot1.Hand.Elvish Mystic.Cast(Spend: G ElfSpellsOrAbilities)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Woodland Weavemaster.Power = 2
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Hand = Forest; Grizzly Bears; Oliphaunt; Plains

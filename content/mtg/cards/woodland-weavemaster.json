@@ -1,0 +1,11 @@
+{
+  "name": "Woodland Weavemaster",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Druid",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Vigilance\nWhenever another Elf you control enters, this creature gets +1/+1 until end of turn.\n{T}: Add X mana of any one color, where X is this creature's power. Spend this mana only to cast Elf spells and activate abilities of Elf sources.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
