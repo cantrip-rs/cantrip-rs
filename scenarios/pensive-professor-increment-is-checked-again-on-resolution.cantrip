@@ -1,0 +1,47 @@
+# Pensive Professor (0/2) with increment: the comparison is made again as the ability resolves (CR 603.4, the rulings). Bot1
+# casts a one-mana Lightning Bolt (1 > power 0: increment triggers), then in response a one-mana Giant Growth, which
+# triggers increment too (1 > 0). The Giant Growth's trigger resolves first and puts the one counter (1/3), drawing a card;
+# Giant Growth makes it 4/6; when the Bolt's increment ability resolves 1 is greater than neither 4 nor 6, so it does
+# nothing: one counter in all, one card drawn.
+
+[Bot1 Deck]
+Pensive Professor
+Mox Sapphire x2
+Mox Ruby
+Mox Emerald
+Lightning Bolt
+Giant Growth
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pensive Professor.Cast
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Pensive Professor)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Pensive Professor.Power = 4
+Bot1.Battlefield.Pensive Professor.Toughness = 6
+Bot1.Battlefield.Pensive Professor.Counters.PlusOnePlusOne = 1
