@@ -1,0 +1,11 @@
+{
+  "name": "Summoned Dromedary",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Spirit Camel",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Vigilance\n{1}{W}: Return this card from your graveyard to your hand. Activate only as a sorcery.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
