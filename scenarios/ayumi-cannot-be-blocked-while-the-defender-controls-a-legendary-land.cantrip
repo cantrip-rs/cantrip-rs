@@ -1,0 +1,34 @@
+# Legendary landwalk (CR 702.14c): Ayumi, the Last Visitor attacking Bot2, who controls Karakas (a legendary land), cannot be
+# blocked by Bot2's Memnite (refusal), so it deals its 7 damage to Bot2. The positive control is the next scenario, where
+# Bot2 controls no legendary land and the Memnite may block.
+# Bot1 casts Ayumi on turn 1 (two Black Lotuses, green); Bot2 plays Karakas and casts Memnite on turn 2.
+
+[Bot1 Deck]
+Black Lotus x2
+Ayumi, the Last Visitor
+Forest x21
+
+[Bot2 Deck]
+Karakas
+Memnite
+Plains x22
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Ayumi, the Last Visitor.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Karakas.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ayumi, the Last Visitor > Bot2)
+! Bot2.Block(Memnite > Ayumi, the Last Visitor)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Bot2.Battlefield = Karakas; Memnite
+Bot1.Battlefield.Ayumi, the Last Visitor.Damage = 0
