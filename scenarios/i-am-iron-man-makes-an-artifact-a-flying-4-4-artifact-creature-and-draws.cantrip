@@ -1,0 +1,36 @@
+# I Am Iron Man: "Until end of turn, target artifact or creature becomes an artifact creature with base power and toughness
+# 4/4 and gains flying. Draw a card." A Mox Pearl (a non-creature artifact) becomes a 4/4 flying artifact creature until
+# end of turn (CR 613.4b, 205.1b) and Bot1 draws; {2}{U} is paid exactly by Black Lotus's {U}{U}{U}. On turn 3 the Mox is a
+# plain artifact again, so it cannot attack as a creature.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+I Am Iron Man
+Island x4
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.I Am Iron Man.Cast(Bot1.Battlefield.Mox Pearl)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Pearl.Types = Artifact; Creature
+? Bot1.Battlefield.Mox Pearl.Power = 4
+? Bot1.Battlefield.Mox Pearl.Keywords = Flying
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Mox Pearl.Types = Artifact
+Bot1.Battlefield.Mox Pearl.Power = (absent)
+Bot1.Hand.Count = 6
+Bot1.Graveyard = I Am Iron Man; Black Lotus
