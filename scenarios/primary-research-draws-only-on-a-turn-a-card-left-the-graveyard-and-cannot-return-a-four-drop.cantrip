@@ -1,0 +1,50 @@
+# Primary Research: a Summoned Dromedary (mana value 4) in Bot1's graveyard is no target on turn three (CR 202.3), so no
+# card left the graveyard and the end step draws nothing. On turn five the Dromedary returns to hand for {1}{W}, and
+# "if a card left your graveyard this turn" is true at that end step: Bot1 draws.
+
+[Bot1 Deck]
+Summoned Dromedary
+Mox Pearl x5
+Island
+Primary Research
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Summoned Dromedary.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Summoned Dromedary)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.Primary Research.Cast
+[T4 Bot2.Upkeep]
+? Bot1.Hand.Count = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Graveyard.Summoned Dromedary.Activate
+[T6 Bot2.Upkeep]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 0

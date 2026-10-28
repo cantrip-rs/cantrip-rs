@@ -1,0 +1,42 @@
+# Primary Research: "When this enchantment enters, return target nonland permanent card with mana value 3 or less from your
+# graveyard to the battlefield" (CR 400.7), then "At the beginning of your end step, if a card left your graveyard this turn,
+# draw a card". Bot2 bolts Bot1's Ornithopter; on turn three it comes back, and the Bolt in Bot2's graveyard is not a legal
+# target of it, so the Ornithopter is the only choice.
+
+[Bot1 Deck]
+Ornithopter
+Mox Pearl x5
+Primary Research
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.Primary Research.Cast
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Tapped = false
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Graveyard.Count = 0
