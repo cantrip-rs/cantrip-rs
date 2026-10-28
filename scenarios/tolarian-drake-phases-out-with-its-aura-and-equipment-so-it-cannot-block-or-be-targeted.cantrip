@@ -1,0 +1,92 @@
+# Tolarian Drake (2/4 flying, phasing) wears Rancor (+2/+0) and Skullclamp (+1/-1), both Bot1's. In Bot1's turn 3 untap step it
+# phases out (CR 702.26a) and the Aura and the Equipment phase out with it, indirectly (CR 702.26g): all three are off Bot1's
+# battlefield and still attached (CR 702.26d). While it is out it can't block (CR 702.26b): Bot2's Wind Drake attacks in turn 4
+# and Bot1 has no creature to block with; and Lightning Bolt can't target it. In turn 5 all three phase in, still attached,
+# the Drake 5/3. Back in, it is a legal target again: Bot2's Bolt in turn 6 kills it (Skullclamp draws Bot1 two, and Rancor returns to hand: two draw steps, Rancor and two make 5 cards).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Tolarian Drake
+Rancor
+Skullclamp
+Plains x17
+
+[Bot2 Deck]
+Black Lotus
+Wind Drake
+Mountain
+Mountain
+Lightning Bolt
+Mountain
+Mountain
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Tolarian Drake.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rancor.Cast(Tolarian Drake)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Skullclamp.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Skullclamp.Activate(Ability: Equip; Tolarian Drake)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tolarian Drake.Keywords = Flying; Phasing; Trample
+? Bot1.Battlefield.Tolarian Drake.Colors = Blue
+? Bot1.Battlefield.Tolarian Drake.Subtypes = Drake
+? Bot1.Battlefield.Tolarian Drake.Power = 5
+? Bot1.Battlefield.Tolarian Drake.Toughness = 3
+? Bot1.Battlefield.Rancor.AttachedTo = Tolarian Drake
+? Bot1.Battlefield.Skullclamp.AttachedTo = Tolarian Drake
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wind Drake.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Bot1.PhasedOut = Tolarian Drake; Rancor; Skullclamp
+? Bot1.PhasedOut.Rancor.AttachedTo = Tolarian Drake
+? Bot1.PhasedOut.Skullclamp.AttachedTo = Tolarian Drake
+? Bot1.Battlefield = Mox Emerald; Mox Ruby; Mox Jet
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+! Bot2.Hand.Lightning Bolt.Cast(Tolarian Drake)
+Bot2.Attack(Wind Drake > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 18
+[T5 Bot1.Upkeep]
+? Bot1.PhasedOut.Count = 0
+? Bot1.Battlefield = Mox Emerald; Mox Ruby; Mox Jet; Tolarian Drake; Rancor; Skullclamp
+? Bot1.Battlefield.Rancor.AttachedTo = Tolarian Drake
+? Bot1.Battlefield.Skullclamp.AttachedTo = Tolarian Drake
+? Bot1.Battlefield.Tolarian Drake.Keywords = Flying; Phasing; Trample
+? Bot1.Battlefield.Tolarian Drake.Colors = Blue
+? Bot1.Battlefield.Tolarian Drake.Subtypes = Drake
+? Bot1.Battlefield.Tolarian Drake.Power = 5
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Tolarian Drake)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Tolarian Drake; Black Lotus
+Bot1.Hand.Count = 5
+Bot1.Hand.Rancor.Colors = Green
