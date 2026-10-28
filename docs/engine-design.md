@@ -207,6 +207,12 @@ objects form the first pile and the complement the second, either possibly empty
 pile's members in `Label::Pile`, so `RequestKind::objects` shows the chooser those objects and the host names the contents
 in the options. Separating a pile neither targets (CR 115.10a) nor moves its members (CR 700.3c).
 
+A face-down pile and a face-up pile (Riddles in the Dark; `choose::separate_face_down_and_face_up`, `choose::face_down_or_face_up_pile`)
+are separated with `Purpose::SeparateFaceDown`: the chosen objects are the face-down pile and the rest the face-up one. The later
+choice between the piles carries the face-up pile's members in `Label::FaceUpPile`, which `RequestKind::objects` shows its chooser, and
+only the number of cards the face-down pile holds in `Label::FaceDownPile`: the chooser may not look at them, so nothing of what they
+are reaches its view.
+
 A question that picks a set of cards - a choice of cards (`RequestKind::ChooseCards`) or a library search
 (`RequestKind::SearchLibrary`) - carries its **selection rule** (`Selection`, `cantrip-state/src/decision.rs`): which sets
 of its cards are an answer, as data. A rule is a `Count` (`Exactly(n)`, `UpTo(n)`, `AnyNumber`, `AsManyAsCan(n)` - fewer only

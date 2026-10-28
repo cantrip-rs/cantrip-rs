@@ -9,7 +9,7 @@
 //! | `PayCosts`             | `PayCostsPromptMessage` (announcing X/kicks sets `AnnouncesXOrKicks`)              |
 //! | `UnlessPays`           | `UnlessPaysPromptMessage`                                                          |
 //! | `ChooseCards`          | `ChooseCardsPromptMessage`                                                         |
-//! | `ChooseCards`          | `ChooseTargetPromptMessage` for an unrestricted `SeparatePiles` choice (`pile_selection`): untargeted, any number |
+//! | `ChooseCards`          | `ChooseTargetPromptMessage` for an unrestricted `SeparatePiles` or `SeparateFaceDown` choice (`pile_selection`): untargeted, any number |
 //! | `TapForPower`          | `ChooseCardsPromptMessage` (purpose `TapToPay`, `Powers`, `MinimumPower`; harmonize's: `TapToReduce`, up to one, `PowersUpTo`) |
 //! | `Craft`                | `ChooseCardsPromptMessage` (purpose `Craft`, the quality as `Kind`, `Minimum` for "one or more")               |
 //! | `ChooseTarget`         | `ChooseTargetPromptMessage`                                                        |
@@ -458,6 +458,7 @@ fn purpose_view(purpose: Purpose, opening: bool) -> CardChoicePurposeView {
         Purpose::PreventDamageFrom(_) => V::PreventDamageFrom,
         Purpose::PayLifeOrPutOnTop(_) => V::PayLifeOrPutOnTop,
         Purpose::SeparatePiles
+        | Purpose::SeparateFaceDown
         | Purpose::ChoosePile
         | Purpose::CopyAsEnters
         | Purpose::CopyWhich
@@ -576,7 +577,7 @@ fn modes_detail(game: &Game, modes: &[Label], faces: bool) -> (String, bool) {
                 (String::new(), false)
             }
         }
-        None if modes.iter().all(|l| matches!(l, Label::Card(..) | Label::Option(..) | Label::Name(_) | Label::Pile { .. })) => ("Chosen, not targeted".into(), false),
+        None if modes.iter().all(|l| matches!(l, Label::Card(..) | Label::Option(..) | Label::Name(_) | Label::Pile { .. } | Label::FaceUpPile { .. } | Label::FaceDownPile { .. })) => ("Chosen, not targeted".into(), false),
         None => (String::new(), false),
     }
 }
@@ -825,11 +826,16 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
         }),
         // The protocol already shows an unrestricted, non-targeted set choice. Keep that presentation for pile
         // separation while the engine asks and validates it through its selection rule.
-        RequestKind::ChooseCards { source, cards, .. } if pile_selection(&request.kind) => {
+        RequestKind::ChooseCards { source, cards, purpose, .. } if pile_selection(&request.kind) => {
             let source = source_handle(game, handles, *source);
+            let text = if *purpose == Purpose::SeparateFaceDown {
+                "Separate into a face-down pile and a face-up pile: choose the face-down pile; the rest form the face-up pile. Either pile may be empty."
+            } else {
+                "Separate into two piles: choose the first pile; the rest form the second. Either pile may be empty."
+            };
             PromptPayload::ChooseTargetPromptMessage(ChooseTargetPrompt {
                 player, source, ability: source,
-                text: "Separate into two piles: choose the first pile; the rest form the second. Either pile may be empty.".into(),
+                text: text.into(),
                 candidates: cards.iter().filter_map(|&id| target_message(handles, Target::Object(id))).collect(),
                 count: wire(count_u32(cards.len())),
                 targeted: false, optional: true, any_number: true,
@@ -1011,7 +1017,9 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
                         Label::CastPermission { own: true, .. } => "By its own permission: the permanent it becomes is sacrificed at the beginning of the next cleanup step".into(),
                         Label::CastPermission { by: Some(card), .. } => format!("By {}'s permission: it isn't sacrificed", game.cards.get(*card).name),
                         Label::CastPermission { by: None, .. } => "As an instant or with flash: it isn't sacrificed".into(),
-                        Label::Pile { cards, .. } if !cards.is_empty() => format!("{}: {}", label_text(l), cards.iter()
+                        // The face-down pile's cards are not the chooser's to see, only how many there are (CR 700.3).
+                        Label::FaceDownPile { count } if *count > 0 => format!("{}: {count} {}", label_text(l), if *count == 1 { "card" } else { "cards" }),
+                        Label::Pile { cards, .. } | Label::FaceUpPile { cards } if !cards.is_empty() => format!("{}: {}", label_text(l), cards.iter()
                             .map(|&id| {
                                 let name = game.name(id);
                                 if !name.is_empty() { name } else if game.obj(id).face_down { "Face-down permanent" } else { "Nameless permanent" }
@@ -1355,7 +1363,7 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
 /// The unrestricted pile selection that the protocol can show as its existing non-targeted choice. Any rule with
 /// further constraints keeps the ordinary selection prompt and its `Check` feedback.
 pub(crate) fn pile_selection(kind: &RequestKind) -> bool {
-    matches!(kind, RequestKind::ChooseCards { purpose: Purpose::SeparatePiles, rule, .. }
+    matches!(kind, RequestKind::ChooseCards { purpose: Purpose::SeparatePiles | Purpose::SeparateFaceDown, rule, .. }
         if rule.count == Count::AnyNumber && rule.parts().next().is_none() && rule.among.is_none())
 }
 
@@ -1710,6 +1718,41 @@ mod tests {
         game.state.update_obj(hidden, |o| { o.face_down = true; o.marks.face_down_as = Some(values); });
         let PromptPayload::ChooseModesPromptMessage(p) = prompt(&game, &ask(vec![renamed], vec![hidden]), &mut handles).expect("a prompt").0 else { panic!("piles") };
         assert_eq!(p.modes, ["First pile: Renamed permanent", "Second pile: Face-down permanent"]);
+    }
+
+    /// A face-down pile and a face-up pile (CR 700.3): the separator is asked for the face-down pile in words that say so, and the one
+    /// who chooses between the piles sees the face-up pile's cards by name but only how many cards the face-down pile holds, and has
+    /// the face-up pile's cards, not the face-down pile's, among the objects it may look at.
+    #[test]
+    fn a_face_down_pile_is_shown_to_its_chooser_as_a_count_only() {
+        let (game, hand) = game_with(&["Riddles in the Dark", "Lightning Bolt", "Counterspell", "Forest"]);
+        let seat = game.state.seats().next().expect("a seat");
+        let source = hand[0];
+        let mut handles = HandleSpace::new();
+        let rule = Selection::new(Count::AnyNumber);
+        let kind = RequestKind::ChooseCards { source, purpose: Purpose::SeparateFaceDown, cards: hand[1..4].to_vec(), rule: Box::new(rule) };
+        assert!(pile_selection(&kind), "an unrestricted face-down pile choice is shown as the non-targeted set choice");
+        let request = Request { id: 1, player: seat, may_cancel: false, kind };
+        let PromptPayload::ChooseTargetPromptMessage(p) = prompt(&game, &request, &mut handles).expect("a prompt").0 else { panic!("separation") };
+        assert!(p.text.contains("face-down pile") && p.text.contains("face-up pile"), "{}", p.text);
+
+        let ask = |face_up: Vec<ObjectId>, face_down: u16| Request {
+            id: 2, player: seat, may_cancel: false,
+            kind: RequestKind::ChooseModes {
+                source, modes: vec![Label::FaceUpPile { cards: face_up }, Label::FaceDownPile { count: face_down }],
+                eligible: vec![0, 1], count: 1, at_most: 0, affordable: Vec::new(), additional_cost: false, repeat: false,
+            },
+        };
+        let request = ask(vec![hand[1], hand[2]], 1);
+        let mut shown = Vec::new();
+        request.kind.objects(&mut |id| shown.push(id));
+        assert_eq!(shown, hand[..3], "the chooser sees the source and the face-up pile, and not the face-down pile's card");
+        let PromptPayload::ChooseModesPromptMessage(p) = prompt(&game, &request, &mut handles).expect("a prompt").0 else { panic!("piles") };
+        assert_eq!(p.modes, ["Face-up pile: Lightning Bolt, Counterspell", "Face-down pile: 1 card"]);
+        let PromptPayload::ChooseModesPromptMessage(p) = prompt(&game, &ask(vec![], 3), &mut handles).expect("a prompt").0 else { panic!("piles") };
+        assert_eq!(p.modes, ["Face-up pile: nothing", "Face-down pile: 3 cards"]);
+        let PromptPayload::ChooseModesPromptMessage(p) = prompt(&game, &ask(vec![hand[1]], 0), &mut handles).expect("a prompt").0 else { panic!("piles") };
+        assert_eq!(p.modes, ["Face-up pile: Lightning Bolt", "Face-down pile: nothing"]);
     }
 
     /// A prompt names the source and a held target by the name each has (CR 111.4, 612.2a, 707.2), not by its definition's: a

@@ -135,7 +135,10 @@ showing the player. The answer is still checked when it is given. Version 205.
 
 An unrestricted `SeparatePiles` selection (`AnyNumber`, no parts or candidate restriction) uses the existing non-targeted
 `ChooseTargetPromptMessage` presentation; its `TargetsChosenAnswer` is translated to the engine's card selection and
-checked by the same validator. A pile-choice mode names its members, with an empty pile named "nothing" (CR 700.3d).
+checked by the same validator. A pile-choice mode names its members, with an empty pile named "nothing" (CR 700.3d). The same
+holds for a `SeparateFaceDown` selection (the chosen cards are the face-down pile, the prompt says so). A face-up pile is named by its
+cards ("Face-up pile: Lightning Bolt, Counterspell") and a face-down pile by how many cards it holds only ("Face-down pile: 2 cards"),
+since the player choosing between the piles may not look at them.
 
 A mana ability can be taken back while nothing hidden has been shown and nothing has followed from it. While the last
 answer a seat gave activated one, and it and everything since only tapped, sacrificed from the battlefield, removed

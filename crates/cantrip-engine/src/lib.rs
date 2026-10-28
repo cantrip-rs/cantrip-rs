@@ -125,6 +125,10 @@ pub fn label_text_in(table: &'static CardTable, label: &Label) -> &'static str {
         Label::Pile { first: true, .. } => "First pile",
         Label::Pile { first: false, ref cards } if cards.is_empty() => "Second pile: nothing",
         Label::Pile { first: false, .. } => "Second pile",
+        Label::FaceUpPile { ref cards } if cards.is_empty() => "Face-up pile: nothing",
+        Label::FaceUpPile { .. } => "Face-up pile",
+        Label::FaceDownPile { count: 0 } => "Face-down pile: nothing",
+        Label::FaceDownPile { .. } => "Face-down pile",
         // A modal spell's or ability's mode, from the card's own definition (its spell's, or the modal ability's, a reflexive
         // one among them).
         Label::Mode(ability, i) => cards().modal_of(ability).and_then(|m| m.modes.get(i as usize)).map_or("", |m| m.text),

@@ -612,7 +612,7 @@ impl RequestKind {
             RequestKind::ChooseModes { source, modes, .. } => {
                 add(&[*source]);
                 for mode in modes {
-                    if let Label::Pile { cards, .. } = mode {
+                    if let Label::Pile { cards, .. } | Label::FaceUpPile { cards } = mode {
                         add(cards);
                     }
                 }
@@ -1308,6 +1308,9 @@ pub enum Purpose {
     TakeFromHand,
     /// Which objects go in the first pile (CR 700.3).
     SeparatePiles,
+    /// Which objects go in the face-down pile of two, a face-down pile and a face-up pile (CR 700.3): the rest are the face-up
+    /// pile. Riddles in the Dark.
+    SeparateFaceDown,
     /// Which pile.
     ChoosePile,
     /// Enter as a copy (CR 707.2).
@@ -1429,6 +1432,11 @@ pub enum Label {
     Name(CardId),
     /// One of two piles (CR 700.3), whose members the chooser sees. Fact or Fiction and Liliana of the Veil ask it.
     Pile { first: bool, cards: Vec<ObjectId> },
+    /// The face-up pile of a face-down pile and a face-up pile (CR 700.3), whose members everyone sees: Riddles in the Dark.
+    FaceUpPile { cards: Vec<ObjectId> },
+    /// The face-down pile of a face-down pile and a face-up pile (CR 700.3): only how many cards it holds is shown to a chooser
+    /// who may not look at them, so nothing of what they are is here. Riddles in the Dark.
+    FaceDownPile { count: u16 },
     /// The nth mode of a modal spell (its ability has index `u8::MAX`) or ability.
     Mode(AbilityRef, u8),
     /// The nth way of paying the source card's additional cost (`CardDef::additional_choice`).
