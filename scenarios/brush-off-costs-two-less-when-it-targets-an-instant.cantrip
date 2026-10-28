@@ -1,0 +1,33 @@
+# Brush Off ({2}{U}{U}): "This spell costs {1}{U} less to cast if it targets an instant or sorcery spell" (CR 601.2f). Bot1 casts
+# Lightning Bolt at Bot2; Bot2 counters it with Brush Off, paying {1}{U} from only two Moxen (Mox Sapphire and Mox Jet). Bot2
+# takes no damage and Bolt goes to Bot1's graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Brush Off
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Brush Off.Cast(Bot1.Stack.Lightning Bolt)
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 20
+Bot2.Graveyard = Brush Off
+Bot1.Graveyard = Lightning Bolt
