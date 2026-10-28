@@ -1,0 +1,11 @@
+{
+  "name": "S.H.I.E.L.D. Deployment Drone",
+  "manaCost": "{2}{U}",
+  "type": "Artifact Creature — Robot",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this creature enters, create a 1/1 white Soldier creature token.",
+  "keywords": [
+    "Flying"
+  ]
+}
