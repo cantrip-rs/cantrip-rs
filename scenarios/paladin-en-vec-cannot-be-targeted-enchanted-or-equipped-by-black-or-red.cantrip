@@ -1,0 +1,85 @@
+# Paladin en-Vec, protection from black and from red (CR 702.16b-d): each color is its own protection. On turn 2 Bot2, with the
+# mana for any of them, cannot target it with a black spell (Go for the Throat), a red spell (Lightning Bolt) or an Aura of
+# either color - Ferocity of the Hunt, black and green, and Quicksilver Dagger, blue and red - while a green Rancor, the control,
+# may enchant it. On turn 3 Bot1 cannot equip its own red Dire Flail to it, while the colorless Basilisk Collar attaches (the
+# control) and gives it deathtouch and lifelink.
+
+[Bot1 Deck]
+Black Lotus
+Paladin en-Vec
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Dire Flail
+Basilisk Collar
+Plains x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Go for the Throat
+Lightning Bolt
+Ferocity of the Hunt
+Quicksilver Dagger
+Rancor
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Paladin en-Vec.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Hand.Go for the Throat.Cast(Bot1.Battlefield.Paladin en-Vec)
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Paladin en-Vec)
+! Bot2.Hand.Ferocity of the Hunt.Cast(Bot1.Battlefield.Paladin en-Vec)
+! Bot2.Hand.Quicksilver Dagger.Cast(Bot1.Battlefield.Paladin en-Vec)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Rancor.Cast(Bot1.Battlefield.Paladin en-Vec)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Paladin en-Vec.Power = 4
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dire Flail.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Dire Flail.Activate(Paladin en-Vec; Ability: Equip)
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Basilisk Collar.Activate(Paladin en-Vec; Ability: Equip)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Paladin en-Vec.Keywords = Deathtouch; FirstStrike; Lifelink; Trample
+
+[Expect]
+Bot1.Battlefield.Dire Flail.AttachedTo = (absent)
+Bot1.Battlefield.Basilisk Collar.AttachedTo = Paladin en-Vec

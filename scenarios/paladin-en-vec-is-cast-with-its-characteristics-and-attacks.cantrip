@@ -1,0 +1,35 @@
+# Paladin en-Vec, a french vanilla creature: cast with Black Lotus and Moxen paying exactly its cost (the pool is empty right after), its
+# characteristics as printed (power, toughness, keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Paladin en-Vec
+Plains x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Paladin en-Vec.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T2 Bot2.End]
+? Bot1.Battlefield.Paladin en-Vec.Power = 2
+? Bot1.Battlefield.Paladin en-Vec.Toughness = 2
+? Bot1.Battlefield.Paladin en-Vec.Keywords = FirstStrike
+? Bot1.Battlefield.Paladin en-Vec.Colors = White
+? Bot1.Battlefield.Paladin en-Vec.Types = Creature
+? Bot1.Battlefield.Paladin en-Vec.Subtypes = Human; Knight
+? Bot1.Battlefield.Paladin en-Vec.Supertypes = (absent)
+? Bot1.Battlefield.Paladin en-Vec.ProtectionFrom = Black; Red
+[T3 Bot1.Main1]
+Bot1.Attack(Paladin en-Vec > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Paladin en-Vec.Tapped = true
