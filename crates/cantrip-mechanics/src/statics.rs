@@ -293,6 +293,15 @@ pub fn power_is_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, char
     chars.power = Some(crate::lands::count_you_control(q, source, &|c| c.is(CardType::Creature)));
 }
 
+/// "Gets +1/+0 for each other artifact you control" (CR 613.4c, layer 7c): the artifacts as the earlier layers made them, under
+/// the control of the source's controller, the source itself not among them. Krang, Master Mind and Iron Man, Master of
+/// Machines print it.
+pub fn plus_power_per_other_artifact_you_control(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    let artifacts = crate::lands::count_you_control(view, source, &|c| c.is(CardType::Artifact));
+    let itself = i16::from(view.chars(source).is(CardType::Artifact));
+    chars.power = chars.power.map(|v| v + artifacts - itself);
+}
+
 /// "... has trample" (CR 702.19, layer 6) as a static ability's `StaticDef::apply`. Ajani's Anguish, Keen-Eyed Curator, Orcrist
 /// and Rancor print it.
 pub fn have_trample(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
