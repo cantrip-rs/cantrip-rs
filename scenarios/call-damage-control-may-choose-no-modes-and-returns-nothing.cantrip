@@ -1,0 +1,58 @@
+# Call Damage Control: "Choose up to two" includes none: cast with no mode chosen it returns nothing, and every card stays in the
+# graveyard.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Faithless Looting
+Call Damage Control
+Grizzly Bears
+Mox Ruby
+Island
+Forest
+Rancor
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Mox Ruby)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest; Rancor)
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Rancor; Forest; Mox Ruby; Grizzly Bears
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Call Damage Control.Cast
+Bot1.Modes()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Call Damage Control; Rancor; Forest; Mox Ruby; Grizzly Bears
+Bot1.Hand = Island
