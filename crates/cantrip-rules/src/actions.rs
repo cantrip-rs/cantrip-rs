@@ -896,9 +896,7 @@ fn pay_exert_and_tappers(cx: &mut Cx, source: ObjectId, cost: &Cost, tappers: &[
     if cost.unattach_self {
         ops::unattach(cx, source);
     }
-    for &id in tappers {
-        ops::tap(cx, id);
-    }
+    ops::tap_together(cx, tappers);
 }
 
 /// "Activate only once each turn" (CR 602.5b-c): whether the `index`th ability of this object has been activated this
@@ -1442,9 +1440,7 @@ fn choose_variable_permanents(cx: &mut Cx, player: PlayerId, source: ObjectId, v
 /// spell's are not: that rule is of abilities.
 fn pay_permanents(cx: &mut Cx, player: PlayerId, cost: &Cost, chosen: &[ObjectId], ability: Option<Linked>) {
     if cost.tap_permanents {
-        for &id in chosen {
-            ops::tap(cx, id);
-        }
+        ops::tap_together(cx, chosen);
         return;
     }
     match cost.permanents.map(|p| p.action) {
@@ -10276,6 +10272,8 @@ pub(crate) fn pay_mana_used(cx: &mut Cx, player: PlayerId, source: ObjectId, mut
     // The cards delve exiles: one payment (CR 702.66a, 601.2h), exiled together when the cost is paid, so that a
     // "one or more cards are put into exile" ability triggers once (CR 603.2c).
     let mut delved: Vec<ObjectId> = Vec::new();
+    // The tapping that has paid, announced together once it is all paid.
+    let mut tapped_to_pay: Vec<Event> = Vec::new();
     // How many of the generic mana tapping has paid for as waterbend (CR 701.67b), against what waterbend may pay.
     let mut bent: u8 = 0;
     // The mana spent, unit by unit, with the source of each (CR 106.3).
@@ -10395,7 +10393,11 @@ pub(crate) fn pay_mana_used(cx: &mut Cx, player: PlayerId, source: ObjectId, mut
                 ActionKind::TapToPay => {
                     let id = action.source.expect("source");
                     let colors = cx.chars(id).colors;
-                    ops::tap(cx, id);
+                    // The creatures and artifacts tapped to pay are tapped as the cost is paid, all at once (CR 601.2h): their
+                    // events are announced together when it is (CR 603.2c).
+                    if ops::tap_quietly(cx, id) {
+                        tapped_to_pay.push(Event::Tapped { permanent: id });
+                    }
                     if action.index == PAY_CONVOKE {
                         convoking.push(colors);
                         // CR 702.51c: it convoked the spell, for "creatures that convoked it" to ask the history.
@@ -10428,6 +10430,9 @@ pub(crate) fn pay_mana_used(cx: &mut Cx, player: PlayerId, source: ObjectId, mut
     if !taken.is_empty() {
         let cast = helpers.purpose == Paying::Casting && cx.s().obj(source).zone.is(ZoneKind::Stack);
         record_spent(cx, player, source, cast, &taken);
+    }
+    if !tapped_to_pay.is_empty() {
+        cx.emit_batch(&tapped_to_pay, None);
     }
     if !delved.is_empty() {
         ops::exile_all(cx, &delved);

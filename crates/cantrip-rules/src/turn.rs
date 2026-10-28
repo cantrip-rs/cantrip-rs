@@ -703,11 +703,9 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
         // CR 508.1e: the bands among them, announced before they tap.
         let bands = declare_bands(cx, active, &attacks)?;
         // CR 508.1f: the chosen creatures become tapped, which is no cost, before any cost is paid (CR 508.1g-j).
-        for &(id, _) in &attacks {
-            if !cx.chars(id).has(Keyword::Vigilance) {
-                ops::tap(cx, id);
-            }
-        }
+        // They become tapped at once: "whenever one or more creatures you control become tapped" triggers once (CR 603.2c).
+        let tapping: Vec<ObjectId> = attacks.iter().map(|&(id, _)| id).filter(|&id| !cx.chars(id).has(Keyword::Vigilance)).collect();
+        ops::tap_together(cx, &tapping);
         // CR 508.1g: the optional costs to attack the active player chooses to pay.
         let options = choose_attack_options(cx, active, &attacks)?;
         let RequestKind::DeclareAttackers { costs, .. } = &kind else { unreachable!() };

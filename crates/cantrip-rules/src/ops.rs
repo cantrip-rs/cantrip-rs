@@ -3695,11 +3695,32 @@ pub fn proliferate(cx: &mut Cx, player: PlayerId, source: ObjectId) -> R<()> {
 
 /// Taps an untapped permanent (CR 701.26a): only a live, phased-in permanent on the battlefield can become tapped.
 pub fn tap(cx: &mut Cx, id: ObjectId) {
+    if tap_quietly(cx, id) {
+        cx.emit(Event::Tapped { permanent: id });
+    }
+}
+
+/// Taps a permanent (CR 701.26a) without announcing it: whether it became tapped. For permanents tapped at once, whose
+/// `Event::Tapped`s are announced together (`tap_together`, CR 603.2c).
+pub fn tap_quietly(cx: &mut Cx, id: ObjectId) -> bool {
     if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) || cx.s().obj(id).tapped {
-        return;
+        return false;
     }
     cx.st().update_obj(id, |o| o.tapped = true);
-    cx.emit(Event::Tapped { permanent: id });
+    true
+}
+
+/// Taps permanents at once (CR 701.26a, 603.2c): the attackers a declaration taps (CR 508.1f), the creatures a crew, saddle or
+/// teamwork cost taps, any other cost that taps several (CR 601.2h, 602.2b). Each is tapped, then what watches them sees one
+/// batch of events, so a "whenever one or more creatures you control become tapped" ability triggers once. The permanents that
+/// became tapped.
+pub fn tap_together(cx: &mut Cx, ids: &[ObjectId]) -> Vec<ObjectId> {
+    let tapped: Vec<ObjectId> = ids.iter().copied().filter(|&id| tap_quietly(cx, id)).collect();
+    if !tapped.is_empty() {
+        let events: Vec<Event> = tapped.iter().map(|&permanent| Event::Tapped { permanent }).collect();
+        cx.emit_batch(&events, None);
+    }
+    tapped
 }
 
 /// Marks the game as one where static abilities may apply, once an object whose card has any is made, or one that has
