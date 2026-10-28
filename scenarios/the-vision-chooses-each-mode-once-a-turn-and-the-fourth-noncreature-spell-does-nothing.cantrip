@@ -1,0 +1,48 @@
+# The Vision ({4}, 2/5 flying vigilance): "Whenever you cast a noncreature spell, choose one that hasn't been chosen this turn"
+# (CR 700.2). Three noncreature spells (Moxen) choose Technopathy (draw), Solar Beam (double strike) and Density Control
+# (indestructible) in turn; the fourth finds every mode chosen, so nothing happens (CR 603.3c). The Vision's own cast and the
+# spells before it do not trigger it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+The Vision
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.The Vision.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Vision.Keywords = Flying; Vigilance
+Bot1.Hand.Mox Jet.Cast
+Bot1.Modes(Technopathy)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Modes(Solar Beam)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Vision.Keywords = DoubleStrike; Flying; Indestructible; Vigilance
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot1.Battlefield.Count = 6
