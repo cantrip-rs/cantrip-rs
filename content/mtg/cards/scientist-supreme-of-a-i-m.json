@@ -1,0 +1,8 @@
+{
+  "name": "Scientist Supreme of A.I.M.",
+  "manaCost": "{U}{B}",
+  "type": "Legendary Creature — Human Scientist Villain",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Pay 2 life: Copy target activated or triggered ability you control from an artifact source. You may choose new targets for the copy. Activate only during your turn and only once each turn. (Mana abilities can't be targeted.)"
+}

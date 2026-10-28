@@ -1,0 +1,46 @@
+# Scientist Supreme of A.I.M. copies the ability of an artifact creature (CR 707.10): Walking Ballista's "Remove a +1/+1
+# counter: 1 damage to any target" aimed at Bot2, on the stack with the Ballista already gone (0/0). The copy is given a new
+# target, Bot1 (CR 707.10c): the Scientist's 2 life and the copy's 1 damage leave Bot1 at 17, the original's 1 leaves Bot2 at 19.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Scientist Supreme of A.I.M.
+Walking Ballista
+Island x14
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Scientist Supreme of A.I.M..Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Walking Ballista.Activate(Bot2; Ability: Remove)
+Bot1.Battlefield.Scientist Supreme of A.I.M..Activate(Stack.Walking Ballista)
+Bot1.Pass
+Bot1.Target(Bot1)
+Bot2.Pass
+? Bot1.Life = 17
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 19
+Bot1.Graveyard = Walking Ballista
+Stack.Count = 0

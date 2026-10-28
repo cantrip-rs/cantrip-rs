@@ -1,0 +1,46 @@
+# Scientist Supreme of A.I.M. "Pay 2 life: Copy target activated or triggered ability you control from an artifact source.
+# ... Activate only during your turn and only once each turn." Bot1 activates Mind Stone's "{1}, {T}, Sacrifice: Draw a
+# card" and, with it on the stack, pays 2 life to copy it (CR 707.10): two cards drawn though the Stone is gone (its
+# source an artifact as it last was, CR 113.7a). The ability may be activated only once each turn: a second copy is refused.
+
+[Bot1 Deck]
+Island
+Swamp
+Mox Pearl
+Mind Stone
+Scientist Supreme of A.I.M.
+Island x15
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mind Stone.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Scientist Supreme of A.I.M..Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Scientist Supreme of A.I.M..Activate(Stack.Mind Stone)
+! Bot1.Battlefield.Scientist Supreme of A.I.M..Activate(Stack.Mind Stone)
+? Bot1.Life = 18
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 2
+? Bot1.Hand.Count = 3
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+? Stack.Count = 0
