@@ -1,0 +1,6 @@
+{
+  "name": "Graduation Day",
+  "manaCost": "{W}",
+  "type": "Enchantment",
+  "oracleText": "Repartee — Whenever you cast an instant or sorcery spell that targets a creature, put a +1/+1 counter on target creature you control."
+}

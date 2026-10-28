@@ -1,0 +1,33 @@
+# Graduation Day: Repartee wants an instant or sorcery spell that targets a creature. A Lightning Bolt at Bot2 (a player) and a
+# creature spell (Ornithopter) each leave Bot1's creature without a counter.
+
+[Bot1 Deck]
+Plains
+Mountain
+Ornithopter
+Graduation Day
+Lightning Bolt
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Graduation Day.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter#1.Power = 0
