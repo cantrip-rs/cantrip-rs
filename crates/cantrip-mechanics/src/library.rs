@@ -456,6 +456,26 @@ pub fn look_at_top_onto_battlefield(
     tapped: bool,
     rest: Rest,
 ) -> Result<Vec<ObjectId>, Suspend> {
+    look_at_top_onto_battlefield_then(g, player, source, count, most, kind, wanted, total, tapped, rest, |_, _| Ok(()))
+}
+
+/// `look_at_top_onto_battlefield` with a step between the cards entering and the rest going to the bottom: "Put a Hero,
+/// Equipment, or Vehicle card from among them onto the battlefield. If it's a double-faced card, you may transform it. Put the
+/// rest on the bottom of your library in a random order" (CR 608.2c). `then` is handed the permanents that arrived and runs
+/// before the rest are placed. Nick Fury, Agent of S.H.I.E.L.D. prints it.
+pub fn look_at_top_onto_battlefield_then(
+    g: &mut dyn Game,
+    player: PlayerId,
+    source: ObjectId,
+    count: usize,
+    most: u8,
+    kind: &'static str,
+    wanted: impl Fn(&dyn Query, ObjectId) -> bool,
+    total: Option<u32>,
+    tapped: bool,
+    rest: Rest,
+    then: impl FnOnce(&mut dyn Game, &[ObjectId]) -> Result<(), Suspend>,
+) -> Result<Vec<ObjectId>, Suspend> {
     let looked = top_of_library(g, player, count);
     if looked.is_empty() {
         return Ok(Vec::new());
@@ -472,6 +492,7 @@ pub fn look_at_top_onto_battlefield(
         let entering: Vec<(ObjectId, PlayerId, bool)> = chosen.into_iter().map(|c| (c, player, tapped)).collect();
         g.put_all_onto_battlefield_as(&entering)?
     };
+    then(g, &arrived)?;
     match rest {
         Rest::BottomRandom => rest_to_bottom_in_random_order(g, player, &looked),
         Rest::BottomChosen => {
