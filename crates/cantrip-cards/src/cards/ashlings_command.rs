@@ -1,14 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{copy, effects, targets, tokens};
+use cantrip_mechanics::{copy, effects, lands, targets, tokens};
 use cantrip_oracle as oracle;
-
-/// "Target Elemental you control" (CR 115.1, 205.3): a permanent its controller controls that is an Elemental, the creature type
-/// read through the words of this card's text (CR 612).
-fn elemental_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    matches!(t, Target::Object(id) if targets::permanent(q, id)
-        && q.controller(id) == asker.controller
-        && q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Elemental)))
-}
 
 /// "Draw two cards" for the target player (see `effects::target_player_draws`).
 fn draw_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -38,7 +30,7 @@ fn two_treasures(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 static MODAL: ModalDef = modes(&[
     mode(copy::create_token_copy_of_target, "Create a token that's a copy of target Elemental you control.")
-        .targets(&[target(elemental_you_control)]),
+        .targets(&[target(targets::permanent_of_subtype_you_control::<{ lands::sub(Subtype::Elemental) }>)]),
     mode(draw_two, "Target player draws two cards.").targets(&[targets::PLAYER]),
     mode(two_damage_to_each_creature, "Ashling's Command deals 2 damage to each creature target player controls.")
         .targets(&[targets::PLAYER]),

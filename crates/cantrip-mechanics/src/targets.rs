@@ -582,6 +582,16 @@ pub const NONBASIC_LAND: TargetSpec = target(nonbasic_land_filter);
 pub const NONBASIC_LAND_AN_OPPONENT_CONTROLS: TargetSpec = target(nonbasic_land_an_opponent_controls_filter);
 /// "Target land you control". Earthbend (Badgermole Cub) and Sea Drake print it.
 pub const LAND_YOU_CONTROL: TargetSpec = target(land_you_control_filter);
+
+/// "Target [creature type] you control" (CR 115.1, 109.5, 205.3m): a permanent on the battlefield under the ability's controller's
+/// control that has the creature type `SUBTYPE` (`lands::sub`) as the layers made it, a changeling included. The type is read
+/// through the words of the text of the card that asks (CR 612.2). Ashling's Command (Elemental), Bejeweled Warg (Wolf), Dwarven
+/// Mattock and Iron Hills (Dwarf), Elvenking's Halls (Elf) and Lake-town (Human) print it.
+pub fn permanent_of_subtype_you_control<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    matches!(t, Target::Object(id) if on_battlefield(q, id)
+        && q.controller(id) == asker.controller
+        && q.chars(id).has_subtype(crate::lands::word(q, asker.source, SUBTYPE)))
+}
 /// "Target card from your graveyard" (CR 115.1): any card in the graveyard of the ability's controller, still the card that
 /// was there (CR 400.7). Eternal Witness, Emeritus of Abundance, Bala Ged Recovery, Cathartic Parting, Tamiyo, Collector of Tales
 /// and Quintorius Kand ("any number of target cards from your graveyard") print it.
