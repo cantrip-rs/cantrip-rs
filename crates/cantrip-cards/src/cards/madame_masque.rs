@@ -1,11 +1,7 @@
 use cantrip_api::*;
-use cantrip_mechanics::{connive, tokens, triggers};
+use cantrip_mechanics::{effects, tokens, triggers};
 use cantrip_oracle as oracle;
 
-/// "When Madame Masque enters, she connives." (CR 701.50): she connives even if she has already left the battlefield.
-fn connives(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    connive(g, item.object, item.object)
-}
 
 /// "Create a 2/1 black Villain creature token with menace." (CR 111.1.)
 fn villain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -15,7 +11,7 @@ fn villain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(triggers::THIS_ENTERS, connives, "When Madame Masque enters, she connives."),
+        triggered(triggers::THIS_ENTERS, effects::this_connives, "When Madame Masque enters, she connives."),
         triggered(
             triggers::YOU_DRAW_YOUR_SECOND_CARD,
             villain,
