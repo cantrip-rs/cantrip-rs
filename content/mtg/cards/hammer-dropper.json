@@ -1,0 +1,8 @@
+{
+  "name": "Hammer Dropper",
+  "manaCost": "{2}{R}{W}",
+  "type": "Creature — Giant Soldier",
+  "power": 5,
+  "toughness": 2,
+  "oracleText": "Mentor (Whenever this creature attacks, put a +1/+1 counter on target attacking creature with lesser power.)"
+}
