@@ -1,0 +1,43 @@
+# Dethrone (CR 702.105a) in a game of three: Bot1 has 10 life, Bot2 15 and Bot3 20. On turn 4 Bot1 attacks Bot3 with Grenzo's Cutthroat - Bot3 has the
+# most life, so it gets a +1/+1 counter - and Bot2 with Enraged Revolutionary - Bot2 has more than the attacker's controller but less than Bot3, so it
+# gets nothing. The trigger compares every player in the game, not just the one attacked and the one attacking.
+
+[Life]
+Bot1: 10
+Bot2: 15
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Black Lotus
+Grenzo's Cutthroat
+Enraged Revolutionary
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Bot3 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grenzo's Cutthroat.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Enraged Revolutionary.Cast
+[T4 Bot1.Main1]
+Bot1.Attack(Grenzo's Cutthroat > Bot3; Enraged Revolutionary > Bot2)
+[T4 Bot1.Main2]
+
+[Expect]
+Bot3.Life = 18
+Bot2.Life = 13
+Bot1.Battlefield.Grenzo's Cutthroat.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Enraged Revolutionary.Counters.PlusOnePlusOne = (absent)

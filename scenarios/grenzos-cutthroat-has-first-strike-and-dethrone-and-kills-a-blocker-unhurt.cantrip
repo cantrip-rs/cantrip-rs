@@ -1,0 +1,45 @@
+# Grenzo's Cutthroat (1/1 first strike) attacks Bot2 on turn 3 with both players at 20 life: dethrone (CR 702.105a) makes it 2/2 before blockers. Bot2's
+# Balduvian Bears (2/2) block, and its first-strike damage (CR 702.7b) kills them before they deal any: no damage on the Cutthroat.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Grenzo's Cutthroat
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Balduvian Bears
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grenzo's Cutthroat.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Balduvian Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Grenzo's Cutthroat > Bot2)
+Bot2.Block(Balduvian Bears > Grenzo's Cutthroat)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Balduvian Bears
+Bot1.Battlefield.Grenzo's Cutthroat.Damage = 0
+Bot1.Battlefield.Grenzo's Cutthroat.Power = 2
+Bot1.Battlefield.Grenzo's Cutthroat.Keywords = FirstStrike

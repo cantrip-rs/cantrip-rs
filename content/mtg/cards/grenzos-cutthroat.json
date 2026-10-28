@@ -1,0 +1,11 @@
+{
+  "name": "Grenzo's Cutthroat",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "First strike\nDethrone (Whenever this creature attacks the player with the most life or tied for most life, put a +1/+1 counter on it.)",
+  "keywords": [
+    "FirstStrike"
+  ]
+}
