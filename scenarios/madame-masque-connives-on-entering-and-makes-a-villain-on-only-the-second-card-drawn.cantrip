@@ -1,0 +1,65 @@
+# Madame Masque connives as she enters (CR 701.50): the Island is discarded, a land, so no counter. On turn 3 the draw step is
+# the first card drawn, the first Consider's draw is the second (a 2/1 black menace Villain token), the second Consider's draw
+# is the third and makes nothing (CR 120.3, 603.2).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Madame Masque
+Island
+Consider
+Consider
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Madame Masque.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+Bot1.Choose(Island)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Island)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Island)
+
+[Expect]
+Bot1.Battlefield.Madame Masque.Power = 3
+Bot1.Battlefield.Madame Masque.Toughness = 2
+Bot1.Graveyard = Consider; Consider; Island
+Bot1.Battlefield.Villain Token.Power = 2
+Bot1.Battlefield.Villain Token.Toughness = 1
+Bot1.Battlefield.Villain Token.Keywords = Menace
+Bot1.Battlefield.Villain Token.Colors = Black
+Bot1.Battlefield.Villain Token.Token = true
+Bot1.Battlefield.Count = 8
