@@ -1,0 +1,34 @@
+# Kolinahr Priest (3/2 flash): Bot1 casts it during Bot2's turn 2, at its end step (CR 702.8a), paying with a Black Lotus put
+# onto the battlefield in turn 1. Its characteristics are as printed; it can attack in turn 3, having been under Bot1's control
+# since before the turn began, and deals 3.
+
+[Bot1 Deck]
+Black Lotus
+Kolinahr Priest
+Island x22
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.End]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Kolinahr Priest.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kolinahr Priest.Power = 3
+? Bot1.Battlefield.Kolinahr Priest.Toughness = 2
+? Bot1.Battlefield.Kolinahr Priest.Keywords = Flash
+? Bot1.Battlefield.Kolinahr Priest.Colors = Blue
+? Bot1.Battlefield.Kolinahr Priest.Types = Creature
+? Bot1.Battlefield.Kolinahr Priest.Subtypes = Monk; Vulcan
+? Bot1.Battlefield.Kolinahr Priest.Supertypes = (absent)
+? Bot1.Battlefield.Kolinahr Priest.ProtectionFrom = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Kolinahr Priest > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
