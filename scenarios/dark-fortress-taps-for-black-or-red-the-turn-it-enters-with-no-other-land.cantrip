@@ -1,0 +1,18 @@
+# Dark Fortress: "{T}: Add {C}." and "{T}: Add {B} or {R}. Activate only if this land entered this turn or if you control a
+# basic land." Played on turn 1 with no other land it entered this turn, so {B} or {R} is offered: Bot1 taps it for {R}
+# (CR 605.3b, 106.5).
+
+[Bot1 Deck]
+Dark Fortress
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Dark Fortress.Play
+Bot1.Battlefield.Dark Fortress.Activate(Ability: or; Color: Red)
+
+[Expect]
+Bot1.Mana = {R}
+Bot1.Battlefield.Dark Fortress.Tapped = true

@@ -1,0 +1,28 @@
+# Dark Fortress after the turn it entered. On turn 3 Bot1 controls only a Blood Crypt (Swamp and Mountain types but not
+# basic, CR 205.4a) and Bot2 controls an Island (not Bot1's): {R} is refused (the refusal) while {C} is still offered. On
+# turn 5 a basic Swamp of Bot1's turns the ability back on (the positive control: the same action, the same land).
+
+[Bot1 Deck]
+Dark Fortress
+Blood Crypt
+Swamp
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Dark Fortress.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Blood Crypt.Play
+! Bot1.Battlefield.Dark Fortress.Activate(Ability: or; Color: Red)
+Bot1.Battlefield.Dark Fortress.Activate(Ability: {C})
+? Bot1.Mana = {C}
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Dark Fortress.Activate(Ability: or; Color: Red)
+
+[Expect]
+Bot1.Mana = {R}
