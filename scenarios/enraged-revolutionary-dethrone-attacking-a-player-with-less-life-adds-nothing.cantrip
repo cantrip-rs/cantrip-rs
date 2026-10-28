@@ -1,0 +1,35 @@
+# Dethrone (CR 702.105a): Bot2 has 10 life to Bot1's 20, so the Enraged Revolutionary that attacks Bot2 is not attacking the player with the most
+# life - no counter, and it deals 2.
+
+[Life]
+Bot2: 10
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Enraged Revolutionary
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Enraged Revolutionary.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Enraged Revolutionary > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 8
+Bot1.Battlefield.Enraged Revolutionary.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Enraged Revolutionary.Power = 2

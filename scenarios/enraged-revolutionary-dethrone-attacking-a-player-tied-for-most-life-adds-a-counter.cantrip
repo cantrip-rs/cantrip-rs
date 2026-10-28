@@ -1,0 +1,32 @@
+# Dethrone (CR 702.105a): Bot1 and Bot2 are tied at 20 life, so Bot2 is "tied for most life" and the Enraged Revolutionary that attacks
+# on turn 3 gets a +1/+1 counter before blockers (3/2), dealing 3. Compare enraged-revolutionary-dethrone-attacking-a-player-with-less-life-adds-nothing.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Enraged Revolutionary
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Enraged Revolutionary.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Enraged Revolutionary > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Enraged Revolutionary.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Enraged Revolutionary.Power = 3
