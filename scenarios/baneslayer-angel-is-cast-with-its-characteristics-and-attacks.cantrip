@@ -1,0 +1,44 @@
+# Baneslayer Angel, a french vanilla creature: cast with Black Lotus and Moxen paying exactly its cost (the pool is empty right after), its
+# characteristics as printed (power, toughness, keywords, colors, types, protection), then attacking Bot2, who has no creatures.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Baneslayer Angel
+Plains x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Baneslayer Angel.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[T2 Bot2.End]
+? Bot1.Battlefield.Baneslayer Angel.Power = 5
+? Bot1.Battlefield.Baneslayer Angel.Toughness = 5
+? Bot1.Battlefield.Baneslayer Angel.Keywords = FirstStrike; Flying; Lifelink
+? Bot1.Battlefield.Baneslayer Angel.Colors = White
+? Bot1.Battlefield.Baneslayer Angel.Types = Creature
+? Bot1.Battlefield.Baneslayer Angel.Subtypes = Angel
+? Bot1.Battlefield.Baneslayer Angel.Supertypes = (absent)
+? Bot1.Battlefield.Baneslayer Angel.ProtectionFromSubtypes = Demon; Dragon
+[T3 Bot1.Main1]
+Bot1.Attack(Baneslayer Angel > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Life = 25
+Bot1.Battlefield.Baneslayer Angel.Tapped = true

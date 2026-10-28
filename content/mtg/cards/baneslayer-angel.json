@@ -1,0 +1,13 @@
+{
+  "name": "Baneslayer Angel",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Angel",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Flying, first strike, lifelink, protection from Demons and from Dragons",
+  "keywords": [
+    "Flying",
+    "FirstStrike",
+    "Lifelink"
+  ]
+}
