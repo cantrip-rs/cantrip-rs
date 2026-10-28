@@ -1,0 +1,60 @@
+# Extort (CR 702.101a, 702.101b): Syndic of Tithes and Basilica Screecher each have extort, so every spell Bot1 casts triggers two
+# abilities, each asking whether to pay {W/B} as it resolves. Casting the Screecher triggers the Syndic's: Bot1 declines, and the
+# pool keeps its {B} (nothing is paid, nothing is lost). Casting Mox Ruby triggers both: Bot1 pays the first with the floating {B}
+# and the second with Mox Jet's, so each opponent loses 2 life in all (1 for each ability) and Bot1 gains 2 on top of the
+# 20 it began with; the pool is empty after.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Syndic of Tithes
+Basilica Screecher
+Mox Ruby
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Syndic of Tithes.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Basilica Screecher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Mana = {B}
+? Bot2.Life = 20
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {B}{B}
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
