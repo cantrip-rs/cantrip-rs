@@ -1,4 +1,5 @@
 use cantrip_api::*;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::triggers::YOUR_END_STEP;
 use cantrip_oracle as oracle;
 
@@ -18,12 +19,6 @@ fn you_cast_a_blue_spell(q: &dyn Query, source: ObjectId, event: &Event) -> Opti
 /// "If Hydro-Man is a creature" (CR 603.4): an intervening "if", checked as the ability triggers and as it resolves.
 fn is_a_creature(q: &dyn Query, asker: &Asker) -> bool {
     is_live(q, asker.source) && q.is_on_battlefield(asker.source) && q.chars(asker.source).is(CardType::Creature)
-}
-
-/// "He gets +1/+1 until end of turn."
-fn pump(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    cantrip_mechanics::pump(g, item.object, item.object, 1, 1);
-    Ok(())
 }
 
 /// "Untap Hydro-Man. Until your next turn, he becomes a land and gains '{T}: Add {U}.'" The land is exactly a land
@@ -47,7 +42,7 @@ fn become_a_land(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(when(EventMask::SPELL_CAST, you_cast_a_blue_spell), pump, "Whenever you cast a blue spell, if Hydro-Man is a creature, he gets +1/+1 until end of turn.")
+        triggered(when(EventMask::SPELL_CAST, you_cast_a_blue_spell), effects::this_gets::<1, 1>, "Whenever you cast a blue spell, if Hydro-Man is a creature, he gets +1/+1 until end of turn.")
             .condition(is_a_creature),
         triggered(YOUR_END_STEP, become_a_land, "At the beginning of your end step, untap Hydro-Man. Until your next turn, he becomes a land and gains \"{T}: Add {U}.\" (He's not a creature during that time.)"),
     ],

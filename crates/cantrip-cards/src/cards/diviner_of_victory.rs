@@ -15,13 +15,9 @@ static UNWIND_HISTORY: CardDef = CardDef {
  spell: spell(&[target(small_opposing)], unwind),
  text: "Return target creature an opponent controls with mana value 3 or less to its owner's hand. Surveil 1.", ..CardDef::BLANK
 };
-/// Each completed scry or surveil pumps the source (CR 603.2, 611.2c).
-fn pump(g: &mut dyn Game, i: &StackItem) -> Result<(), Suspend> {
- g.add_effect(i.object, i.object, EffectKind::Pump(1, 1), Duration::EndOfTurn); Ok(())
-}
 pub static CARD: CardDef = CardDef {
  enters: Some(prepare::enters_prepared), prepare: Some(&UNWIND_HISTORY),
- abilities: &[triggered(triggers::YOU_SCRY_OR_SURVEIL, pump, "Whenever you scry or surveil, this creature gets +1/+1 until end of turn.")],
+ abilities: &[triggered(triggers::YOU_SCRY_OR_SURVEIL, effects::this_gets::<1, 1>, "Whenever you scry or surveil, this creature gets +1/+1 until end of turn.")],
  ..oracle::DIVINER_OF_VICTORY
 };
 pub static EXTRA: &[&CardDef] = &[&UNWIND_HISTORY];

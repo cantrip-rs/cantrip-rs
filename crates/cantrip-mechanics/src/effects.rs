@@ -214,6 +214,17 @@ pub fn two_plus_one_counters_on_this(g: &mut dyn Game, item: &StackItem) -> Resu
     Ok(())
 }
 
+/// "[This creature] gets +`P`/+`T` until end of turn" (CR 611.2a, 613.4c): a continuous effect from the ability's source, which
+/// does nothing once the source has left the battlefield (CR 400.7). Each resolution adds its own, and they stack. The whole
+/// effect of an ability of Attercop, Basking Rootwalla, Blazing Rootwalla, Boughside Wanderers, Burnout Bashtronaut, Desolation
+/// Prowler, Diviner of Victory, Flameblade Adept, Hydro-Man, Fluid Felon, Knight of Dusk's Shadow, Mausoleum Wanderer,
+/// Nighthowl Pursuer, Ravine Raider, Skilled Battlecarver, Slickshot Show-Off, Undulating Witness, Veyran, Voice of Duality
+/// and Woodland Weavemaster.
+pub fn this_gets<const P: i16, const T: i16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    crate::pump(g, item.object, item.object, P, T);
+    Ok(())
+}
+
 fn creatures_on_the_battlefield(g: &dyn Game) -> Vec<ObjectId> {
     g.state().battlefield().iter().copied().filter(|&id| g.chars(id).is(CardType::Creature)).collect()
 }

@@ -1,13 +1,8 @@
 use cantrip_api::*;
-use cantrip_mechanics::pump;
+use cantrip_mechanics::effects;
 use cantrip_oracle as oracle;
 
-fn pump_self(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    pump(g, item.object, item.object, 2, 2);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
-    abilities: &[ability(life(2), pump_self, "Pay 2 life: This creature gets +2/+2 until end of turn. Activate only once each turn.").once_each_turn()],
+    abilities: &[ability(life(2), effects::this_gets::<2, 2>, "Pay 2 life: This creature gets +2/+2 until end of turn. Activate only once each turn.").once_each_turn()],
     ..oracle::DESOLATION_PROWLER
 };

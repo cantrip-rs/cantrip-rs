@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{Animation, animate, pump};
+use cantrip_mechanics::{Animation, animate, effects};
 use cantrip_oracle as oracle;
 
 /// "{5}: If this land isn't a creature, it becomes a 2/4 Wizard creature with '...' It's still a land." The check is
@@ -38,18 +38,12 @@ fn instant_or_sorcery_you_cast(q: &dyn Query, source: ObjectId, event: &Event) -
     }
 }
 
-/// "This creature gets +1/+0 until end of turn."
-fn pump_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    pump(g, item.object, item.object, 1, 0);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         mana_ability(TAP, add(Mana::C), "{T}: Add {C}."),
         mana_ability(TAP.and(life(1)), add_any_color(1).only_for(ManaRestriction::INSTANT_OR_SORCERY_SPELLS), "{T}, Pay 1 life: Add one mana of any color. Spend this mana only to cast an instant or sorcery spell."),
         ability(cost("{5}"), becomes_creature, "{5}: If this land isn't a creature, it becomes a 2/4 Wizard creature with \"Whenever you cast an instant or sorcery spell, this creature gets +1/+0 until end of turn.\" It's still a land."),
     ],
-    delayed: &[triggered(when(EventMask::SPELL_CAST, instant_or_sorcery_you_cast), pump_one, "Whenever you cast an instant or sorcery spell, this creature gets +1/+0 until end of turn.")],
+    delayed: &[triggered(when(EventMask::SPELL_CAST, instant_or_sorcery_you_cast), effects::this_gets::<1, 0>, "Whenever you cast an instant or sorcery spell, this creature gets +1/+0 until end of turn.")],
     ..oracle::GREAT_HALL_OF_THE_BIBLIOPLEX
 };

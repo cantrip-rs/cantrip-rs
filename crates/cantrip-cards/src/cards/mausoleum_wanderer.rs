@@ -1,13 +1,7 @@
 use cantrip_api::*;
-use cantrip_mechanics::{counter_unless_pays, lands, pump, targets, triggers};
+use cantrip_mechanics::effects;
+use cantrip_mechanics::{counter_unless_pays, lands, targets, triggers};
 use cantrip_oracle as oracle;
-
-/// "Whenever another Spirit you control enters, this creature gets +1/+1 until end of turn" (CR 611.2): each trigger adds
-/// one, and they stack.
-fn grow(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    pump(g, item.object, item.object, 1, 1);
-    Ok(())
-}
 
 /// "Sacrifice this creature: Counter target instant or sorcery spell unless its controller pays {X}, where X is this
 /// creature's power." The sacrifice is a cost (CR 601.2h), so the creature is gone when this resolves and X is its power
@@ -22,7 +16,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             when_asked(EventMask::ZONE_CHANGE, triggers::another_of_subtype_you_control_enters::<{ lands::sub(Subtype::Spirit) }>),
-            grow,
+            effects::this_gets::<1, 1>,
             "Whenever another Spirit you control enters, this creature gets +1/+1 until end of turn.",
         ),
         ability(SACRIFICE_THIS, counter, "Sacrifice this creature: Counter target instant or sorcery spell unless its controller pays {X}, where X is this creature's power.")
