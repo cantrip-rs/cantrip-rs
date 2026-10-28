@@ -1,0 +1,11 @@
+{
+  "name": "Ayumi, the Last Visitor",
+  "manaCost": "{3}{G}{G}",
+  "type": "Legendary Creature — Spirit",
+  "power": 7,
+  "toughness": 3,
+  "oracleText": "Legendary landwalk (This creature can't be blocked as long as defending player controls a legendary land.)",
+  "keywords": [
+    "LegendaryLandwalk"
+  ]
+}

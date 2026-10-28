@@ -1,0 +1,46 @@
+# Legendary landwalk (CR 702.14c) needs a land that is legendary: Ayumi, the Last Visitor attacking Bot2 may be blocked by
+# Bot2's Memnite when Bot2 controls only Tundra (a nonbasic land that is not legendary) and Sundial, Dawn Tyrant (a
+# legendary permanent that is not a land). Bot1's own Karakas, a legendary land, does not matter either: it is the defending
+# player's lands that count. Memnite takes 7 and dies; Ayumi takes 1; Bot2 takes nothing.
+# Bot1 plays Karakas and casts Ayumi on turn 1 (two Black Lotuses, green); Bot2 plays Tundra and casts Sundial (Moxen Pearl
+# and Jet) and Memnite on turn 2.
+
+[Bot1 Deck]
+Karakas
+Black Lotus x2
+Ayumi, the Last Visitor
+Forest x20
+
+[Bot2 Deck]
+Tundra
+Mox Pearl
+Mox Jet
+Sundial, Dawn Tyrant
+Memnite
+Plains x19
+
+[Actions]
+Bot1.Hand.Karakas.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Ayumi, the Last Visitor.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Tundra.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sundial, Dawn Tyrant.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ayumi, the Last Visitor > Bot2)
+Bot2.Block(Memnite > Ayumi, the Last Visitor)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Ayumi, the Last Visitor.Damage = 1
