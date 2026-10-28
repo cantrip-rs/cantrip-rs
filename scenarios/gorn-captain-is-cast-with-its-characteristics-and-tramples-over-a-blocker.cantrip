@@ -1,0 +1,40 @@
+# Gorn Captain (4/3 trample), cast with Black Lotus and Mox Emerald, its characteristics as printed. Attacking in turn 3 it is
+# blocked by Bot2's Ornithopter: it assigns the Ornithopter lethal damage, 2, and tramples the other 2 over to Bot2
+# (CR 702.19b); 20 - 2 = 18.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Gorn Captain
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gorn Captain.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gorn Captain.Power = 4
+? Bot1.Battlefield.Gorn Captain.Toughness = 3
+? Bot1.Battlefield.Gorn Captain.Keywords = Trample
+? Bot1.Battlefield.Gorn Captain.Colors = Green
+? Bot1.Battlefield.Gorn Captain.Types = Creature
+? Bot1.Battlefield.Gorn Captain.Subtypes = Gorn; Soldier
+? Bot1.Battlefield.Gorn Captain.Supertypes = (absent)
+? Bot1.Battlefield.Gorn Captain.ProtectionFrom = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Gorn Captain > Bot2)
+Bot2.Block(Ornithopter > Gorn Captain)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot2.Graveyard = Ornithopter
