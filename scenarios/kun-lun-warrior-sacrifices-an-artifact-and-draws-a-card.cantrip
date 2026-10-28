@@ -1,0 +1,37 @@
+# K'un-Lun Warrior: "When this creature enters, you may sacrifice an artifact or discard a card. If you do, draw a card." Bot1
+# casts it with Mox Ruby and Mox Jet, with a Mox Pearl in play too, and sacrifices the Pearl: the Pearl goes to the graveyard
+# (the Warrior is no artifact), the Warrior stays, and one card is drawn - the hand held three Islands after the casts and has four.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+K'un-Lun Warrior
+Island
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.K'un-Lun Warrior.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Modes(Sacrifice an artifact)
+Bot1.Choose(Mox Pearl)
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; K'un-Lun Warrior
+Bot1.Graveyard = Mox Pearl
+Bot1.Hand.Count = 4
+Stack.Count = 0

@@ -1,0 +1,8 @@
+{
+  "name": "K'un-Lun Warrior",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Warrior Hero",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, you may sacrifice an artifact or discard a card. If you do, draw a card."
+}

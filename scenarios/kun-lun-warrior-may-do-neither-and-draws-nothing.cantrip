@@ -1,0 +1,32 @@
+# K'un-Lun Warrior: "If you do, draw a card" - Bot1 declines both, so nothing is sacrificed or discarded and no card is drawn
+# (four Islands stay in hand).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+K'un-Lun Warrior
+Island
+Island
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.K'un-Lun Warrior.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Modes(Neither)
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; K'un-Lun Warrior
+Bot1.Graveyard.Count = 0
+Bot1.Hand.Count = 4
+Stack.Count = 0

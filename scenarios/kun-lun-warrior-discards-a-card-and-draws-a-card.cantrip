@@ -1,0 +1,33 @@
+# K'un-Lun Warrior: Bot1 casts it with Mox Ruby and Mox Jet and, from the offered sacrifice or discard, discards an Island: the
+# Island goes to the graveyard and a card is drawn, so the hand is as big as it was after the casts (four Islands).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+K'un-Lun Warrior
+Island
+Island
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.K'un-Lun Warrior.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Modes(Discard a card)
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Jet; K'un-Lun Warrior
+Bot1.Graveyard = Island
+Bot1.Hand.Count = 4
+Stack.Count = 0
