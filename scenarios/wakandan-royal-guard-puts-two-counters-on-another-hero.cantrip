@@ -1,0 +1,56 @@
+# Wakandan Royal Guard: "put a +1/+1 counter on target creature. If that creature is another Hero, put two +1/+1 counters on it instead." Targeting Bot2's Agent of Atlas (a Hero, 2/2) it gets two counters
+# (4/4), not one or three; the Guard itself stays 4/4 with vigilance.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Wakandan Royal Guard
+Forest x10
+
+[Bot2 Deck]
+Mox Pearl
+Agent of Atlas
+Forest
+Forest x10
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Agent of Atlas.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wakandan Royal Guard.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Agent of Atlas)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Agent of Atlas.Power = 4
+Bot2.Battlefield.Agent of Atlas.Toughness = 4
+Bot1.Battlefield.Wakandan Royal Guard.Power = 4

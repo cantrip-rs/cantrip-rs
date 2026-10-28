@@ -1,0 +1,11 @@
+{
+  "name": "Wakandan Royal Guard",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Human Soldier Hero",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Vigilance\nWhen this creature enters, put a +1/+1 counter on target creature. If that creature is another Hero, put two +1/+1 counters on it instead.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
