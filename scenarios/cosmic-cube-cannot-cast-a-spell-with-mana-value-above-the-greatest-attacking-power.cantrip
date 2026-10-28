@@ -1,0 +1,41 @@
+# Cosmic Cube: the spell cast must have mana value less than or equal to the greatest power among attacking creatures you
+# control. Bot1 attacks with a Grizzly Bears (power 2); Hill Giant, mana value 4, is among the top six, so it cannot be chosen.
+
+[Bot1 Deck]
+Black Lotus
+Cosmic Cube
+Grizzly Bears
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Island
+Hill Giant
+Ancestral Recall
+Island x4
+Island x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Ability: Sacrifice; Color: Green)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cosmic Cube.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+! Bot1.Choose(Hill Giant)
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
