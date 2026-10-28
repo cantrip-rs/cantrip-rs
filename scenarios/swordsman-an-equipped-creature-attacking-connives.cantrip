@@ -1,0 +1,48 @@
+# Swordsman, Sharp Scoundrel: whenever an equipped creature you control attacks, it connives (CR 701.50). Stolen Stark Tech is on
+# the Swordsman (3/2), which attacks on turn 3: it draws Lightning Bolt and discards it, a nonland card, so gets a +1/+1 counter and
+# deals 4 to Bot2. Connive draws the turn's draw step as well, so the Bolt was the second card.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Swordsman, Sharp Scoundrel
+Stolen Stark Tech
+Island
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swordsman, Sharp Scoundrel.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stolen Stark Tech.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Swordsman, Sharp Scoundrel > Bot2)
+Bot1.Choose(Lightning Bolt)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield.Swordsman, Sharp Scoundrel.Power = 4
+Bot1.Battlefield.Swordsman, Sharp Scoundrel.Toughness = 3
+Bot2.Life = 16

@@ -1,0 +1,60 @@
+# Swordsman, Sharp Scoundrel: whenever another Villain you control enters, attach up to one target Equipment you control to target
+# creature you control (CR 701.3a). Stolen Stark Tech starts on the Swordsman. The first Agents of HYDRA takes it (Agents 2/1, Swordsman
+# 2/2 again); the second Agents, the same turn, targets the Swordsman with no Equipment chosen, and nothing moves. The Swordsman,
+# no longer equipped, attacks without connive (the library is untouched).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Mox Ruby
+Agents of HYDRA
+Swordsman, Sharp Scoundrel
+Stolen Stark Tech
+Agents of HYDRA
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swordsman, Sharp Scoundrel.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stolen Stark Tech.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Stolen Stark Tech)
+Bot1.Target(Bot1.Battlefield.Agents of HYDRA)
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Agents of HYDRA.Cast
+Bot1.Pass
+Bot1.Target()
+Bot1.Target(Bot1.Battlefield.Swordsman, Sharp Scoundrel)
+Bot1.Pass
+Bot1.Pass
+Bot1.Attack(Swordsman, Sharp Scoundrel > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Stolen Stark Tech.AttachedTo = Agents of HYDRA
+Bot1.Battlefield.Swordsman, Sharp Scoundrel.Power = 2
+Bot2.Life = 18
+Bot1.Library.Count = 20

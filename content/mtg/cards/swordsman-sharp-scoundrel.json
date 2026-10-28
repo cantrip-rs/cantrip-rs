@@ -1,0 +1,8 @@
+{
+  "name": "Swordsman, Sharp Scoundrel",
+  "manaCost": "{1}{B}",
+  "type": "Legendary Creature — Human Hero Villain",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever another Villain you control enters, attach up to one target Equipment you control to target creature you control.\nWhenever an equipped creature you control attacks, it connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on that creature.)"
+}
