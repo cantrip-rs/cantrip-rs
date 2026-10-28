@@ -1,0 +1,12 @@
+{
+  "name": "The Lord of the Eagles",
+  "manaCost": "{7}{U}{U}",
+  "type": "Legendary Creature — Bird Noble",
+  "power": 8,
+  "toughness": 8,
+  "oracleText": "Flash\nThis spell costs {X} less to cast, where X is the total power of creatures you control with flying.\nFlying",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

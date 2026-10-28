@@ -1,0 +1,61 @@
+# The Lord of the Eagles ({7}{U}{U}, flash, flying 8/8): "This spell costs {X} less to cast, where X is the total power of creatures you control with flying" (CR 601.2f).
+# Bot1 controls two Zephyr Sprites (1/1 fliers, total power 2) and Grizzly Bears (2/2, no flying: not counted) and Bot2 a Zephyr Sprite of its own (not
+# counted), so the cost is {5}{U}{U}: during Bot2's turn 6 four Moxen are not enough (the refusal, with Mana: short) and with the Black Lotus's three it is cast
+# at instant speed, the pool empty after (so exactly seven mana, not five or six).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Zephyr Sprite
+Zephyr Sprite
+Grizzly Bears
+The Lord of the Eagles
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Zephyr Sprite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Zephyr Sprite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Zephyr Sprite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.The Lord of the Eagles.Cast(Mana: short)
+
+[Expect]
+Bot1.Battlefield.The Lord of the Eagles = (absent)
+Bot1.Hand.The Lord of the Eagles.Power = 8
