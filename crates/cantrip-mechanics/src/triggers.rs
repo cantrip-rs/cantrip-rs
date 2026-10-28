@@ -991,7 +991,8 @@ pub fn dragon_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Op
 
 /// "Whenever another [subtype] you control enters" (CR 603.6a), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): a permanent
 /// other than this one, under your control as it entered, that is that creature type (a token too), the type read through
-/// the words of the source's text (CR 612). Thalia's Lieutenant (Humans) and Youthful Valkyrie (Angels) print it.
+/// the words of the source's text (CR 612). Thalia's Lieutenant (Humans), Youthful Valkyrie (Angels), Mausoleum Wanderer (Spirits)
+/// and Woodland Weavemaster (Elves) print it.
 pub fn another_of_subtype_you_control_enters<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::ZoneChange { new, to, .. }
