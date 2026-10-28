@@ -1,0 +1,8 @@
+{
+  "name": "Culling Drone",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Eldrazi Drone",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Devoid (This card has no color.)\nIngest (Whenever this creature deals combat damage to a player, that player exiles the top card of their library.)"
+}

@@ -1,0 +1,44 @@
+# Ingest (CR 702.115a) triggers only on combat damage to a player: Culling Drone is blocked by Bot2's Balduvian Bears on turn 3 and deals its damage to
+# the Bears, so nothing is exiled from either library (the Drone and the Bears trade).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Culling Drone
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Balduvian Bears
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Culling Drone.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Balduvian Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Culling Drone > Bot2)
+Bot2.Block(Balduvian Bears > Culling Drone)
+[T3 Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot2.Life = 20
+Bot2.Graveyard = Balduvian Bears
