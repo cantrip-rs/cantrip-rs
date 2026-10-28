@@ -1,0 +1,6 @@
+{
+  "name": "Quarrel",
+  "manaCost": "{1}{G}",
+  "type": "Instant",
+  "oracleText": "Target creature you control deals damage equal to its power to target creature an opponent controls."
+}
