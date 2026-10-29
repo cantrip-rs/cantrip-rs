@@ -1,0 +1,11 @@
+{
+  "name": "Fractal Mascot",
+  "manaCost": "{4}{G}{U}",
+  "type": "Creature — Fractal Elk",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Trample\nWhen this creature enters, tap target creature an opponent controls. Put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)",
+  "keywords": [
+    "Trample"
+  ]
+}

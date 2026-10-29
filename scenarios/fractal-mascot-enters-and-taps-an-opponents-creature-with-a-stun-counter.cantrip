@@ -1,0 +1,54 @@
+# Fractal Mascot ({4}{G}{U}): when it enters, tap target creature an opponent controls and put a stun counter on it (CR 608.2c:
+# in that order, 122.1g). Only an opponent's creature is a legal target (the Mascot, Bot1's own, is refused). The tapped,
+# stunned Ornithopter stays tapped through Bot2's next untap step, which removes the counter instead (CR 122.1g).
+
+[Bot1 Deck]
+Fractal Mascot
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fractal Mascot.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Fractal Mascot)
+Bot1.Target(Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter#1.Tapped = true
+? Bot2.Battlefield.Ornithopter#1.Counters.Stun = 1
+? Bot2.Battlefield.Ornithopter#2.Tapped = false
+? Bot2.Battlefield.Ornithopter#2.Counters.Stun = (absent)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter#1.Tapped = true
+Bot2.Battlefield.Ornithopter#1.Counters.Stun = (absent)
+Bot1.Battlefield.Fractal Mascot.Power = 6
+Bot1.Battlefield.Fractal Mascot.Keywords = Trample
