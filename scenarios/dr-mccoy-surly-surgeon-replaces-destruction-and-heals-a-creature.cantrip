@@ -1,0 +1,40 @@
+# Surly Surgeon puts a counter on another creature. A lethal Lightning Bolt would destroy that creature, but the replacement removes its counters, heals its damage, and keeps it on the battlefield (CR 701.8, 614.6).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Black Lotus
+Grizzly Bears
+Dr. McCoy, Surly Surgeon
+Island x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dr. McCoy, Surly Surgeon.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard = Lightning Bolt
+

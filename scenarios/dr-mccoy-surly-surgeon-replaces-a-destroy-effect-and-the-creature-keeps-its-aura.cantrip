@@ -1,0 +1,50 @@
+# Go for the Throat ("destroy target nonartifact creature", regeneration allowed) would destroy Bot1's countered Grizzly
+# Bears; Dr. McCoy replaces the destruction with removing its counter (CR 614.1a, 614.6, 701.8a). The Bears never left the
+# battlefield, so Rancor stays attached to it and it is a 4/2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Black Lotus
+Grizzly Bears
+Dr. McCoy, Surly Surgeon
+Rancor
+Island x12
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Go for the Throat
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dr. McCoy, Surly Surgeon.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rancor.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 1
+[T4 Bot2.Main1]
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Go for the Throat.Cast(Bot1.Battlefield.Grizzly Bears)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Rancor.AttachedTo = Grizzly Bears
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard = Go for the Throat

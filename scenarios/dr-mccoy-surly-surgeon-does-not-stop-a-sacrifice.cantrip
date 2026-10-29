@@ -1,0 +1,39 @@
+# Bot1 sacrifices its countered Grizzly Bears to Ashnod's Altar. A sacrifice is not destruction (CR 701.21a, 701.8a), so
+# Dr. McCoy's replacement does not apply and the Bears goes to the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Black Lotus
+Grizzly Bears
+Dr. McCoy, Surly Surgeon
+Ashnod's Altar
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dr. McCoy, Surly Surgeon.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ashnod's Altar.Cast
+Bot1.Pass
+Bot1.Battlefield.Ashnod's Altar.Activate(Sacrifice: Grizzly Bears)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears = (absent)
+Bot1.Graveyard = Grizzly Bears; Black Lotus

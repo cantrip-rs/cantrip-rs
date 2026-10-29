@@ -1,0 +1,47 @@
+# Lightning Bolt deals lethal damage to Bot1's countered Grizzly Bears, so it would be destroyed. Rest in Peace and Dr.
+# McCoy both apply; Bot1 applies Rest in Peace first (CR 616.1), and the event is now an exile, not a destruction into the
+# graveyard, so McCoy no longer applies (CR 614.6) and the Bears is exiled with its counter.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Black Lotus
+Grizzly Bears
+Dr. McCoy, Surly Surgeon
+Rest in Peace
+Island x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dr. McCoy, Surly Surgeon.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rest in Peace.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot1.Replace(Rest in Peace)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears = (absent)
+Exile = Black Lotus; Grizzly Bears; Lightning Bolt

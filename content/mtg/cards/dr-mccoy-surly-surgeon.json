@@ -1,0 +1,8 @@
+{
+  "name": "Dr. McCoy, Surly Surgeon",
+  "manaCost": "{2}{W}{W}",
+  "type": "Legendary Creature — Human Doctor",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When Dr. McCoy enters, put a +1/+1 counter on another target creature you control.\nIf another creature you control with a +1/+1 counter on it would be destroyed, instead remove all +1/+1 counters from it and all damage already dealt to it is healed."
+}

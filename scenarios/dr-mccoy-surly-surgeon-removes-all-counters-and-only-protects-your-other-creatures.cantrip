@@ -1,0 +1,82 @@
+# Wrath destroys all creatures at once: the countered Grizzly Bears survives after all its counters are removed; Bot1's
+# uncountered Savannah Lions and Bot2's countered Walking Ballista are destroyed (CR 701.8, 614.6).
+
+[Bot1 Deck]
+Forest
+Plains
+Black Lotus
+Grizzly Bears
+Savannah Lions
+Mox Pearl
+Mox Ruby
+Angelfire Ignition
+Plains
+Dr. McCoy, Surly Surgeon
+Angelfire Ignition
+Plains x11
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Mox Emerald
+Mox Pearl
+Black Lotus
+Walking Ballista
+Wrath of God
+Grizzly Bears
+Island x12
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Angelfire Ignition.Cast(Bot1.Battlefield.Grizzly Bears)
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Dr. McCoy, Surly Surgeon.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Angelfire Ignition.Cast(Bot1.Battlefield.Dr. McCoy, Surly Surgeon)
+[T10 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Wrath of God.Cast
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Savannah Lions = (absent)
+Bot1.Graveyard.Savannah Lions.Colors = White
+Bot1.Graveyard.Dr. McCoy, Surly Surgeon.Colors = White
+Bot2.Battlefield.Walking Ballista = (absent)
+Bot2.Battlefield.Grizzly Bears = (absent)
