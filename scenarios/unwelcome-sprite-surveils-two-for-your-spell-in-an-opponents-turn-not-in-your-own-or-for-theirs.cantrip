@@ -1,0 +1,54 @@
+# Unwelcome Sprite: "Whenever you cast a spell during an opponent's turn, surveil 2" (CR 603.2, 701.25a). On turn 2 Bot2's own spells (free Ornithopters) don't
+# trigger it; Bot1's Lightning Bolt in response does, and the top TWO cards are looked at, so Giant Growth, second, goes to the graveyard while Counterspell
+# stays on top. On turn 3, Bot1's own turn, a second Bolt triggers nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Unwelcome Sprite
+Lightning Bolt
+Lightning Bolt
+Island
+Island
+Counterspell
+Giant Growth
+Island x11
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Unwelcome Sprite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+! Bot1.Arrange
+Bot2.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Counterspell | Giant Growth)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+! Bot1.Arrange
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Giant Growth
+Bot1.Hand = Counterspell; Island
+Bot1.Library.Count = 11
