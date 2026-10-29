@@ -1,0 +1,8 @@
+{
+  "name": "Blech, Loafing Pest",
+  "manaCost": "{1}{B}{G}",
+  "type": "Legendary Creature — Pest",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Whenever you gain life, put a +1/+1 counter on each Pest, Bat, Insect, Snake, and Spider you control."
+}
