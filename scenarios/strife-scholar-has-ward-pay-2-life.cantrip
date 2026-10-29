@@ -1,0 +1,42 @@
+# Strife Scholar: "Ward-Pay 2 life." (CR 702.21a) Bot2 casts two Lightning Bolts at it on turn 2. The first: Bot2 declines the ward
+# cost, so the Bolt is countered and the Scholar (3/2) is untouched and Bot2 keeps 20 life. The second: Bot2 pays 2 life (20 to 18),
+# the Bolt is not countered, and its 3 damage kills the Scholar.
+
+[Bot1 Deck]
+Black Lotus
+Strife Scholar
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Strife Scholar.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Strife Scholar)
+Bot2.Decline
+Bot1.Pass
+? Bot1.Battlefield.Strife Scholar.Damage = 0
+? Bot2.Life = 20
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Strife Scholar)
+Bot2.Accept
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Strife Scholar; Black Lotus
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt

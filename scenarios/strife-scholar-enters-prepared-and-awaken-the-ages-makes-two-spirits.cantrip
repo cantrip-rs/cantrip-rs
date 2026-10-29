@@ -1,0 +1,47 @@
+# Bot1 casts Strife Scholar on turn 1 with a Black Lotus's red mana; it enters prepared (CR 722.3), its copy of Awaken the Ages in
+# exile. On turn 3 the copy is cast from exile for {5}{R} (five Moxen and a Mountain) and creates two 2/2 Spirit tokens; the copy
+# ceases to exist and the Scholar is no longer prepared.
+
+[Bot1 Deck]
+Strife Scholar
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mountain
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Strife Scholar.Cast
+Bot1.Pass
+Bot2.Pass
+? Exile = Awaken the Ages
+? Bot1.Battlefield.Strife Scholar.Prepared = true
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Awaken the Ages.Cast
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot1.Battlefield = Mountain; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Spirit Token; Spirit Token; Strife Scholar
+Bot1.Battlefield.Strife Scholar.Prepared = (absent)
