@@ -1,0 +1,7 @@
+{
+  "name": "Unexpected Assistance",
+  "manaCost": "{3}{U}{U}",
+  "type": "Instant",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nDraw three cards, then discard a card.",
+  "convoke": true
+}

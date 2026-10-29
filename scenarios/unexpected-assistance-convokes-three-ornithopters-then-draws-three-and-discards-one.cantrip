@@ -1,0 +1,37 @@
+# Unexpected Assistance {3}{U}{U} (CR 702.51a): three Ornithopters tapped for convoke pay {1} each (they are colorless, so only generic mana), Mox
+# Sapphire and an Island pay the two {U}. "Draw three cards, then discard a card": the hand of Island holds that and three Plains after the draw,
+# the discard is chosen after the draw (a Plains goes), leaving three cards, and the library lost exactly three.
+
+[Bot1 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Unexpected Assistance
+Mox Sapphire
+Island
+Island
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Unexpected Assistance.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Choose(Plains)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Unexpected Assistance; Plains
+Bot1.Hand = Island; Plains; Plains
+Bot1.Library.Count = 10
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#2.Tapped = true
+Bot1.Battlefield.Ornithopter#3.Tapped = true
+Bot1.Mana =
