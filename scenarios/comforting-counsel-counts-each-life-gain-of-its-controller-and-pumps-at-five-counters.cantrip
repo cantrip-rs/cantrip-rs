@@ -1,0 +1,109 @@
+# Comforting Counsel: "Whenever you gain life, put a growth counter on this enchantment. As long as there are five or more
+# growth counters on this enchantment, creatures you control get +3/+3." Each Healing Salve is one event. Turn 1: three Salves
+# (Black Lotus) = three counters. Bot2's Salve on itself (turn 2) adds none: it is not Bot1's life. Turns 5 and 7: the fourth and
+# fifth counters; Llanowar Elves (1/1) is a 1/1 at four and a 4/4 at five, and Bot2's Ornithopter (0/2) is not pumped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Comforting Counsel
+Healing Salve
+Healing Salve
+Healing Salve
+Llanowar Elves
+Healing Salve
+Healing Salve
+Mountain x12
+
+[Bot2 Deck]
+Mox Pearl
+Healing Salve
+Ornithopter
+Mountain x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Comforting Counsel.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Comforting Counsel.Counters.Growth = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Target player gains 3 life)
+Bot2.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 23
+? Bot1.Battlefield.Comforting Counsel.Counters.Growth = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Comforting Counsel.Counters.Growth = 4
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Comforting Counsel.Counters.Growth = 5
+? Bot1.Battlefield.Llanowar Elves.Power = 4
+? Bot1.Battlefield.Llanowar Elves.Toughness = 4
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T8 Bot2.Main1]
+? Bot1.Battlefield.Llanowar Elves.Power = 4
+
+[Expect]
+Bot1.Life = 35
