@@ -1,0 +1,6 @@
+{
+  "name": "Death in the Family",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Exile target creature with mana value 3 or less."
+}

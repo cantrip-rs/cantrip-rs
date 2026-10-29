@@ -1,0 +1,31 @@
+# The low end of "mana value 3 or less" (CR 202.3): Bot2's Ornithopter has mana value 0 and is exiled. A Mox Jet in play is no creature, so Death in the Family cannot target it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Death in the Family
+Island x21
+
+[Bot2 Deck]
+Ornithopter
+Island x23
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Death in the Family.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Death in the Family.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Ornithopter
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard.Count = 0

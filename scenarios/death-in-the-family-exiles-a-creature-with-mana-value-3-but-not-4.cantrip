@@ -1,0 +1,62 @@
+# "Exile target creature with mana value 3 or less" (CR 115.2, 406.3): with Bot2's Goblin Spelunkers (mana value 3) and Hill Giant (mana value 4) in play,
+# Bot1 may not target the Hill Giant but may target the Spelunkers, which goes to exile (not the graveyard) while the Hill Giant stays. Death in the Family costs {1}{B}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Death in the Family
+Island x21
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Goblin Spelunkers
+Hill Giant
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Goblin Spelunkers.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Hill Giant.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Death in the Family.Cast(Bot2.Battlefield.Hill Giant)
+Bot1.Hand.Death in the Family.Cast(Bot2.Battlefield.Goblin Spelunkers)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Goblin Spelunkers
+Bot2.Graveyard = Black Lotus
+Bot2.Battlefield = Hill Giant; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Death in the Family
