@@ -1,0 +1,31 @@
+# Donatello's Technique costs {2}{U} and draws two cards. With only Mox Sapphire and Mox Jet it is refused ({2}{U} needs three sources); a third source, Mox Pearl, lets
+# it be cast and Bot1 draws two.
+# Hand: 7 - Sapphire - Jet = 5; refusal; - Pearl = 4; - Technique = 3; + 2 drawn = 5.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Donatello's Technique
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+! Bot1.Hand.Donatello's Technique.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Donatello's Technique.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Donatello's Technique
+Bot1.Hand.Count = 5
+Bot1.Mana =
