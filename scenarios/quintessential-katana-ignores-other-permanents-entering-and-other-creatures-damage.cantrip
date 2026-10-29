@@ -1,0 +1,58 @@
+# Quintessential Katana: only a Ninja you control entering offers the attach (a Savannah Lions, a Blood Artist and the Plains of
+# Bot1 offer nothing, and neither does Bot2's own Blade-Blizzard Kitsune), and the granted "untap it and you gain 2 life" is
+# for the equipped creature's own combat damage alone. Bot1 equips the Blood Artist (0/1, a 1/2 with the Katana); on T3 only
+# the Lions attacks, so Bot1 gains nothing (Bot2 20 - 2 = 18); on T5 the Artist attacks for 1 (damage of any amount more than 0
+# triggers it): Bot1 20 + 2 = 22 and Bot2 18 - 1 = 17.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Quintessential Katana
+Savannah Lions
+Blood Artist
+Mox Pearl
+Plains
+Plains x14
+
+[Bot2 Deck]
+Black Lotus
+Blade-Blizzard Kitsune
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Quintessential Katana.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Blood Artist.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Blade-Blizzard Kitsune.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Blade-Blizzard Kitsune.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Quintessential Katana.Activate(Bot1.Battlefield.Blood Artist; Ability: Equip {2})
+Bot1.Pass
+Bot1.Attack(Savannah Lions > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 20
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Attack(Blood Artist > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 17
