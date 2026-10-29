@@ -1084,6 +1084,9 @@ pub enum EffectKind {
     ProtectionFromColorless,
     /// Protection from objects of these card types (CR 702.16a): "protection from creatures", layer 6.
     ProtectionFromTypes(TypeSet),
+    /// Hexproof from these qualities (CR 702.11d-h), layer 6: "gains hexproof from [the color of your choice]" (Mondo Gecko; Veil of
+    /// Summer's "hexproof from blue and from black" prints the same). The qualities add to any it has (CR 702.11f).
+    HexproofFrom(HexproofFrom),
     /// Protection from everything (CR 702.16e), layer 6.
     ProtectionFromEverything,
     /// +N/+M (CR 613.4c), layer 7c.

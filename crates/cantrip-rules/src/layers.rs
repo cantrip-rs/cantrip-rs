@@ -2653,6 +2653,7 @@ pub(crate) fn effect_layer(kind: EffectKind) -> Option<Layer> {
         | EffectKind::Protection(_)
         | EffectKind::ProtectionFromColorless
         | EffectKind::ProtectionFromTypes(_)
+        | EffectKind::HexproofFrom(_)
         | EffectKind::ProtectionFromEverything
         | EffectKind::ProtectionFromPlayer(_)
         | EffectKind::AddKeywords(_)
@@ -2780,6 +2781,7 @@ fn apply_effect(effect: &ContinuousEffect, layer: Layer, chars: &mut Chars) {
             (Layer::Ability, EffectKind::Protection(colors)) => chars.protection = ColorSet(chars.protection.0 | colors.0),
             (Layer::Ability, EffectKind::ProtectionFromColorless) => chars.protection_colorless = true,
             (Layer::Ability, EffectKind::ProtectionFromTypes(types)) => chars.protection_types = TypeSet(chars.protection_types.0 | types.0),
+            (Layer::Ability, EffectKind::HexproofFrom(qualities)) => chars.hexproof_from = chars.hexproof_from.and(qualities),
             (Layer::Ability, EffectKind::ProtectionFromEverything) => chars.protection_everything = true,
             (Layer::Ability, EffectKind::ProtectionFromPlayer(p)) => chars.protection_players |= 1 << p.0,
             (Layer::Ability, EffectKind::AddKeywords(k)) => chars.keywords = Keywords(chars.keywords.0 | k.0),
