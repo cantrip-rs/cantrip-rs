@@ -1,0 +1,37 @@
+# Slithering Cryptid costs {2}{G/U}: Bot1 pays the hybrid symbol with blue (Mox Sapphire) and the generic with two more Moxen, and its enters trigger creates one colorless
+# Mutagen artifact token. The Cryptid is a 2/3 Fish Mutant.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Slithering Cryptid
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Slithering Cryptid.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Slithering Cryptid.Power = 2
+Bot1.Battlefield.Slithering Cryptid.Toughness = 3
+Bot1.Battlefield.Slithering Cryptid.Subtypes = Fish; Mutant
+Bot1.Battlefield.Mutagen Token.Types = Artifact
+Bot1.Battlefield.Mutagen Token.Token = true
+Bot1.Battlefield.Mutagen Token.Colors = (absent)
