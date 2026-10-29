@@ -1,0 +1,6 @@
+{
+  "name": "Suspend Aggression",
+  "manaCost": "{1}{R}{W}",
+  "type": "Instant",
+  "oracleText": "Exile target nonland permanent and the top card of your library. For each of those cards, its owner may play it until the end of their next turn."
+}
