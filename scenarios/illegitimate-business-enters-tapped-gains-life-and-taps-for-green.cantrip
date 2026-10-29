@@ -1,0 +1,27 @@
+# Illegitimate Business enters tapped, so it cannot produce mana then. After Bot1's next untap, it taps for exactly one green mana;
+# its enters trigger gains 1 life (CR 614.1d, 605.1a, 605.3b, 118.3, 106.4, 119.3, 603.6a).
+
+[Bot1 Deck]
+Illegitimate Business
+Swamp x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Illegitimate Business.Play
+? Bot1.Battlefield.Illegitimate Business.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+! Bot1.Battlefield.Illegitimate Business.Activate(Color: Green)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Illegitimate Business.Activate(Color: Green)
+? Bot1.Mana = {G}
+? Bot1.Battlefield.Illegitimate Business.Tapped = true
+
+[Expect]
+Bot1.Life = 21
+Bot1.Mana = {G}
+Bot1.Battlefield.Illegitimate Business.Tapped = true
+Stack.Count = 0
