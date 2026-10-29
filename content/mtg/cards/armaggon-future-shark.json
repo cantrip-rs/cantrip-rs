@@ -1,0 +1,11 @@
+{
+  "name": "Armaggon, Future Shark",
+  "manaCost": "{6}{B}{B}",
+  "type": "Legendary Creature — Shark Horror Mutant",
+  "power": 9,
+  "toughness": 6,
+  "oracleText": "Flash\nWhen Armaggon enters, destroy up to three target creatures.",
+  "keywords": [
+    "Flash"
+  ]
+}
