@@ -1,0 +1,55 @@
+# Cheerful Osteomancer enters prepared; its copy of Raise Dead returns a creature card from the graveyard to its owner's hand (Bot2 Bolted the Banemaker), and casting it unprepares the Osteomancer.
+
+[Bot1 Deck]
+Burrog Banemaker
+Cheerful Osteomancer
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island
+Island
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Hand.Cheerful Osteomancer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cheerful Osteomancer.Prepared = true
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Burrog Banemaker
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Exile.Raise Dead.Cast(Bot1.Graveyard.Burrog Banemaker)
+
+[Expect]
+Bot1.Hand.Burrog Banemaker.Power = 1
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Cheerful Osteomancer.Prepared = (absent)
+Exile.Count = 0

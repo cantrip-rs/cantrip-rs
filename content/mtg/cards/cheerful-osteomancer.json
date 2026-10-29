@@ -1,0 +1,15 @@
+{
+  "name": "Cheerful Osteomancer",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Orc Warlock",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": 4,
+  "toughness": 2,
+  "keywords": [],
+  "prepare": {
+    "name": "Raise Dead",
+    "manaCost": "{B}",
+    "type": "Sorcery",
+    "oracleText": "Return target creature card from your graveyard to your hand."
+  }
+}
