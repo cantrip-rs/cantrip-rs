@@ -1,0 +1,41 @@
+# Fractal Tender has ward {2} (CR 702.21a): Bot2's Lightning Bolt targeting it is countered unless Bot2 pays {2}. Paying exactly {2}
+# with two more Moxen lets the Bolt resolve, and the 3/3 Tender dies.
+
+[Bot1 Deck]
+Fractal Tender
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Lightning Bolt
+Mox Ruby
+Mox Jet
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fractal Tender.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Lightning Bolt.Cast(Fractal Tender)
+Bot2.PayCost
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Sapphire
+Bot1.Graveyard = Fractal Tender; Black Lotus
+Bot2.Graveyard = Lightning Bolt

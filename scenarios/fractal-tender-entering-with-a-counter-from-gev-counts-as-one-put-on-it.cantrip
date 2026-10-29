@@ -1,0 +1,49 @@
+# Fractal Tender entering with a +1/+1 counter counts as a counter put on it this turn (CR 122.6): with Gev, Scaled Scorch out
+# (other creatures Bot1 controls enter with an additional counter for each opponent who lost life this turn) and Bot2 bolted
+# earlier in turn 3, the Tender arrives with one counter, so at the end step Bot1 gets a Fractal with three counters, and Gev
+# gives that token its own additional counter: four.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Gev, Scaled Scorch
+Mox Emerald
+Mox Sapphire
+Black Lotus
+Lightning Bolt
+Fractal Tender
+Mountain x20
+
+[Bot2 Deck]
+Forest x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gev, Scaled Scorch.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fractal Tender.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Fractal Tender.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Fractal Token.Counters.PlusOnePlusOne = 4
