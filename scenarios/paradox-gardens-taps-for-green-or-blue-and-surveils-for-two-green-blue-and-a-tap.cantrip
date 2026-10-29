@@ -1,0 +1,53 @@
+# Paradox Gardens, a green-blue surveil land: it enters tapped (so nothing is offered on turn 1), taps for {G} on turn 3 and for {U} on
+# turn 5 and offers no {R}. On turn 7 its "{2}{G}{U}, {T}: Surveil 1." is refused with three Moxen that make neither {G} nor {U}, with
+# {G} added but no {U}, and goes through once Mox Sapphire makes the {U}: the Mountain on top of the library goes to the graveyard.
+
+[Bot1 Deck]
+Paradox Gardens
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Island
+Island x3
+Mountain
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Paradox Gardens.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+? Bot1.Battlefield.Paradox Gardens.Tapped = true
+! Bot1.Battlefield.Paradox Gardens.Activate(Color: Green)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Paradox Gardens.Activate(Color: Red)
+Bot1.Battlefield.Paradox Gardens.Activate(Color: Green)
+? Bot1.Mana = {G}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Paradox Gardens.Activate(Color: Blue)
+? Bot1.Mana = {U}
+[T7 Bot1.Main1]
+! Bot1.Battlefield.Paradox Gardens.Activate(Ability: Surveil; Mana: short)
+Bot1.Hand.Mox Emerald.Cast
+! Bot1.Battlefield.Paradox Gardens.Activate(Ability: Surveil; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Paradox Gardens.Activate(Ability: Surveil)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Mountain)
+
+[Expect]
+Turn = 7
+Bot1.Graveyard = Mountain
+Bot1.Library.Count = 8
+Bot1.Battlefield.Paradox Gardens.Tapped = true
+Bot1.Mana =
