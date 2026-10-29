@@ -334,6 +334,20 @@ pub fn loot(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
+/// "[Player] discards any number of cards, then draws that many cards" (CR 701.9, 121.1): `player` chooses any number of cards of
+/// their hand and discards them as one event, then draws as many as were discarded; nothing is asked of an empty hand and nothing
+/// is drawn for no cards. Leave // Chance discards and draws for its caster, Steal the Show for its target player.
+pub fn discard_any_number_then_draw(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<(), Suspend> {
+    let hand: Vec<ObjectId> = g.state().zone(Zone::hand(player)).to_vec();
+    let cards = crate::choose::any_number_of(g, player, source, Purpose::Discard, "", hand.clone(), hand)?;
+    if cards.is_empty() {
+        return Ok(());
+    }
+    g.discard_together(&cards);
+    g.draw(player, cards.len() as u32);
+    Ok(())
+}
+
 /// "Each player draws a card" (CR 121.1, 121.2c): every player still in the game draws one, in turn order from the active
 /// player. Faerie Mastermind and Geier Reach Sanitarium print it.
 pub fn each_player_draws_a_card(g: &mut dyn Game, _: &StackItem) -> Result<(), Suspend> {
