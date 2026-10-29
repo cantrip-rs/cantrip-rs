@@ -1,0 +1,31 @@
+# "This creature can't block." Bot2's Memnite attacks on turn 4. Bot1 may not block with Mudbutton Cursetosser (refused), while its
+# Ornithopter, in the same combat, can (the positive control): the Memnite is blocked and Bot1 takes no damage.
+
+[Bot1 Deck]
+Black Lotus
+Mudbutton Cursetosser
+Ornithopter
+Island x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Mudbutton Cursetosser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+! Bot1.Block(Mudbutton Cursetosser > Memnite)
+Bot1.Block(Ornithopter > Memnite)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield = Mudbutton Cursetosser; Ornithopter

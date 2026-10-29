@@ -1,0 +1,60 @@
+# Mudbutton Cursetosser: "When this creature dies, destroy target creature an opponent controls with power 2 or less" (CR 700.4,
+# 701.8, 115.1). Bot2 has a Hill Giant (3/3, one past the limit) and Savannah Lions (2/1, exactly at it); Bot1 also has an Ornithopter
+# (0/2, its own). Bot1 Bolts its own Cursetosser: Hill Giant and the Ornithopter are not legal targets, so the Lions are the only
+# one, chosen without a question, and are destroyed; the Giant and the Ornithopter stay.
+
+[Bot1 Deck]
+Black Lotus
+Mudbutton Cursetosser
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Gleemox
+Hill Giant
+Savannah Lions
+Island x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Mudbutton Cursetosser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Gleemox.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Gleemox.Activate(Color: Green)
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Mudbutton Cursetosser)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Savannah Lions
+Bot2.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Graveyard = Mudbutton Cursetosser; Lightning Bolt; Black Lotus
