@@ -1,0 +1,8 @@
+{
+  "name": "Aziza, Mage Tower Captain",
+  "manaCost": "{R}{W}",
+  "type": "Legendary Creature — Djinn Sorcerer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever you cast an instant or sorcery spell, you may tap three untapped creatures you control. If you do, copy that spell. You may choose new targets for the copy."
+}

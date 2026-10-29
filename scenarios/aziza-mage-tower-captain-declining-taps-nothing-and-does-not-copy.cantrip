@@ -1,0 +1,43 @@
+# Aziza, Mage Tower Captain: tapping three creatures is a "may". Bot1 has the creatures but declines: the Bolt is not copied
+# (Bot2 20 - 3 = 17) and nothing is tapped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Aziza, Mage Tower Captain
+Ornithopter
+Ornithopter
+Ornithopter
+Lightning Bolt
+Mountain
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aziza, Mage Tower Captain.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Ornithopter#1.Tapped = false
+Bot1.Battlefield.Ornithopter#2.Tapped = false
+Bot1.Battlefield.Ornithopter#3.Tapped = false
