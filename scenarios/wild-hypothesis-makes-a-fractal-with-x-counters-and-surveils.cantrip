@@ -1,0 +1,30 @@
+# Wild Hypothesis ({X}{G}): "Create a 0/0 green and blue Fractal creature token. Put X +1/+1 counters on it. Surveil 2." Bot1 casts it
+# with X = 2 (three Moxen): the Fractal is 2/2, and surveil 2 keeps the Swamp on top and bins the Forest.
+
+[Bot1 Deck]
+Wild Hypothesis
+Mox Emerald x3
+Island x3
+Forest
+Swamp
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Wild Hypothesis.Cast(X: 2)
+Bot1.Pass
+Bot1.Arrange(Swamp | Forest)
+? Bot1.Battlefield.Fractal Token.Power = 2
+? Bot1.Battlefield.Fractal Token.Toughness = 2
+
+[Expect]
+Bot1.Graveyard = Wild Hypothesis; Forest
+Bot1.Battlefield.Fractal Token.Counters.PlusOnePlusOne = 2

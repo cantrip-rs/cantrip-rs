@@ -1,0 +1,24 @@
+# Wild Hypothesis with X = 0 (one Mox): the Fractal gets no counters, is a 0/0 and dies to state-based actions (CR 704.5f); surveil 2
+# still happens: the Forest goes to the graveyard, the Swamp stays on top.
+
+[Bot1 Deck]
+Wild Hypothesis
+Mox Emerald
+Island x5
+Forest
+Swamp
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wild Hypothesis.Cast(X: 0)
+Bot1.Pass
+Bot1.Arrange(Swamp | Forest)
+
+[Expect]
+Bot1.Graveyard = Wild Hypothesis; Forest
+Bot1.Battlefield = Mox Emerald
