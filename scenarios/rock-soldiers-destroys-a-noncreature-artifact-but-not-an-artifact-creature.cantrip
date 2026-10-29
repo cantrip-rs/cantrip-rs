@@ -1,0 +1,47 @@
+# Rock Soldiers {3}{R}, 4/3: "When this creature enters, destroy up to one target noncreature artifact." On turn 3 it enters
+# aimed at Bot2's Ornithopter, an artifact but a creature (refused), then at Bot2's Mox Pearl, which is destroyed. The
+# Ornithopter is untouched.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Rock Soldiers
+Island x14
+
+[Bot2 Deck]
+Mox Pearl
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Rock Soldiers.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Graveyard = Mox Pearl
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Rock Soldiers.Power = 4

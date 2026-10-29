@@ -1,0 +1,8 @@
+{
+  "name": "Rock Soldiers",
+  "manaCost": "{3}{R}",
+  "type": "Artifact Creature — Elemental Soldier",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "When this creature enters, destroy up to one target noncreature artifact."
+}
