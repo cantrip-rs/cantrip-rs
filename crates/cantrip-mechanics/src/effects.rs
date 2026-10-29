@@ -24,6 +24,16 @@ pub fn enters_with_minus_one_counters<const N: i16>(_: &mut dyn Game, entering: 
     Ok(())
 }
 
+/// "Remove a -1/-1 counter from this creature" (CR 122.1, 608.2b): nothing from one that has left the battlefield or has none
+/// by now. Moonshadow and Creakwood Safewright print it.
+pub fn remove_a_minus_one_counter_from_this(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let source = item.object;
+    if crate::targets::permanent(g, source) && g.obj(source).counters(CounterKind::MinusOne) > 0 {
+        g.remove_counters(source, CounterKind::MinusOne, 1);
+    }
+    Ok(())
+}
+
 /// "Target creature gets +`P`/+`T` until end of turn" (CR 611.2a), the creature being the ability's first target; nothing
 /// if it is no longer a legal target as the spell or ability resolves (CR 608.2b). Bedeck // Bedazzle, Collective
 /// Brutality, Dismember, Fervent Champion, Giant Growth, Grim Bauble, Harvester of Misery, Icy Reception, Last Gasp,
