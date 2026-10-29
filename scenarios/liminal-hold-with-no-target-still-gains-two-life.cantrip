@@ -1,0 +1,32 @@
+# Liminal Hold: "up to one" target, so with Bot2 controlling only a Plains (a land, not a legal target) there is no target
+# and no question, the trigger resolves, and Bot1 still gains 2 life (22). Nothing is exiled.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Liminal Hold
+Island x17
+
+[Bot2 Deck]
+Plains
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Liminal Hold.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Exile.Count = 0
+Bot2.Battlefield = Plains

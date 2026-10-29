@@ -1,0 +1,49 @@
+# Liminal Hold: "When this enchantment enters, exile up to one target nonland permanent an opponent controls until this
+# enchantment leaves the battlefield. You gain 2 life." Bot2 controls a Plains and a Mox Ruby: the only legal target is the Mox
+# (a land is not one), which is exiled, and Bot1 gains 2 (22). Bot1's Disenchant on the Hold then returns the Mox (CR 610.3).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Liminal Hold
+Disenchant
+Island x14
+
+[Bot2 Deck]
+Plains
+Mox Ruby
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Liminal Hold.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot2.Battlefield = Plains
+? Exile.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Liminal Hold)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Plains; Mox Ruby
+Bot1.Life = 22
+Exile.Count = 0
