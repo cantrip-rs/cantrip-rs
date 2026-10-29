@@ -1,0 +1,39 @@
+# Quandrix Charm, mode three: target creature has base power and toughness 5/5 until end of turn (CR 613.4b, 514.2). Geometer's
+# Arthropod, a 1/4, is a 5/5 this turn and a 1/4 again once the turn ends.
+
+[Bot1 Deck]
+Geometer's Arthropod
+Quandrix Charm
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Geometer's Arthropod.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Quandrix Charm.Cast
+Bot1.Modes(Target creature has base power and toughness 5/5)
+Bot1.Target(Geometer's Arthropod)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Geometer's Arthropod.Power = 5
+? Bot1.Battlefield.Geometer's Arthropod.Toughness = 5
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Geometer's Arthropod.Power = 1
+Bot1.Battlefield.Geometer's Arthropod.Toughness = 4

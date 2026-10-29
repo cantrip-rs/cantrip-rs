@@ -1,0 +1,39 @@
+# Quandrix Charm ({G}{U}), mode one: counter target spell unless its controller pays {2} (CR 118.12). Bot2 has two untapped
+# Moxen after casting Ornithopter but declines to pay, so the Ornithopter is countered and Bot2's Moxen stay untapped.
+
+[Bot1 Deck]
+Quandrix Charm
+Mox Emerald
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Jet
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Quandrix Charm.Cast
+Bot1.Modes(Counter target spell)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Decline
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Mox Jet; Mox Ruby
+Bot2.Battlefield.Mox Jet.Tapped = false
+Bot2.Battlefield.Mox Ruby.Tapped = false
+Bot1.Graveyard = Quandrix Charm
