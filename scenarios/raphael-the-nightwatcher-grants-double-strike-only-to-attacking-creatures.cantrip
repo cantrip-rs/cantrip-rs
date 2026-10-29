@@ -1,0 +1,39 @@
+# "Attacking creatures you control have double strike" (CR 702.4): Raphael cast normally for {2}{R}{R} on turn 1 is not attacking, and neither is Bot1's Ornithopter,
+# so neither has double strike. On turn 3 the Ornithopter attacks and has it (Bot2 takes 0 from a 0/2, so the keyword is read mid-combat), while Raphael stays home without it.
+
+[Bot1 Deck]
+Mox Ruby x2
+Mox Pearl
+Mox Jet
+Raphael, the Nightwatcher
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Raphael, the Nightwatcher.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Raphael, the Nightwatcher.Keywords = (absent)
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+? Bot1.Battlefield.Ornithopter.Keywords = DoubleStrike; Flying
+? Bot1.Battlefield.Raphael, the Nightwatcher.Keywords = (absent)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Life = 20

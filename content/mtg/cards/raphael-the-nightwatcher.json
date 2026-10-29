@@ -1,0 +1,8 @@
+{
+  "name": "Raphael, the Nightwatcher",
+  "manaCost": "{2}{R}{R}",
+  "type": "Legendary Creature — Mutant Ninja Turtle",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Sneak {1}{R}{R} (You may cast this spell for {1}{R}{R} if you also return an unblocked attacker you control to hand during the declare blockers step. He enters tapped and attacking.)\nAttacking creatures you control have double strike."
+}

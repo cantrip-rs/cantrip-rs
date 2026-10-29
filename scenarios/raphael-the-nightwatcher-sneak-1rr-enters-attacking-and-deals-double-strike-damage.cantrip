@@ -1,0 +1,40 @@
+# Sneak {1}{R}{R} (CR 702.190a): Bot1 attacks on turn 3 with an Ornithopter, Bot2 does not block, and Raphael is cast in the declare blockers step for {1}{R}{R}
+# (two Mox Rubies and a Mox Pearl), returning the Ornithopter to hand. He enters attacking, so he has double strike while it lasts (CR 508.4, 702.4):
+# his 2 power is dealt twice, Bot2 takes 4, and once combat is over he is not attacking and the keyword is gone. Not offered in the main phase.
+
+[Bot1 Deck]
+Mox Ruby x2
+Mox Pearl
+Ornithopter
+Raphael, the Nightwatcher
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Raphael, the Nightwatcher.Cast(Ability: Sneak)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Raphael, the Nightwatcher.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Raphael, the Nightwatcher.Tapped = true
+? Bot1.Battlefield.Raphael, the Nightwatcher.Keywords = DoubleStrike
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Battlefield.Raphael, the Nightwatcher.Keywords = (absent)
+Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Pearl; Raphael, the Nightwatcher
