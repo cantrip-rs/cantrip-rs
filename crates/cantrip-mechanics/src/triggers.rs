@@ -1450,6 +1450,15 @@ pub fn creature_you_control_dies(q: &dyn Query, me: &Asker, event: &Event) -> Op
     }
 }
 
+/// "Whenever another creature you control dies" (CR 700.4, 603.10a): a creature other than the source, looked back on as it last
+/// was on the battlefield, under the controller it last had. Heirloom Auntie and Pitiless Plunderer print it.
+pub fn another_creature_you_control_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, .. } if *old == me.source => None,
+        _ => creature_you_control_dies(q, me, event),
+    }
+}
+
 /// "Whenever you cast a creature spell" (CR 603.2): its controller's spells only, judged on the spell as it is on the stack
 /// (CR 601.2i), so a card that is a creature only there counts. The spell rides along as the trigger's subject ("that spell":
 /// Dancing from Dark to Dawn's mana value). Bontu's Monument, Glimpse of Nature, Silk, Web Weaver and Spider-Man India print it.
@@ -1798,6 +1807,7 @@ pub const CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, creature_dies);
 /// A different creature dies, using the characteristics it last had on the battlefield.
 pub const ANOTHER_CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, another_creature_dies);
 pub const CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_dies);
+pub const ANOTHER_CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_dies);
 pub const ARTIFACT_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, artifact_spell_you_cast);
 pub const CREATURE_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, creature_spell_you_cast);
 pub const DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT: Trigger = when(EventMask::DAMAGE, deals_combat_damage_to_player_subject);
