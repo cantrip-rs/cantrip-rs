@@ -1,0 +1,42 @@
+# Spirit Mascot: "Whenever one or more cards leave your graveyard, put a +1/+1 counter on this creature." On turn 1 Bot1 casts the
+# Mascot and Faithless Looting, discarding two Plains: three cards went into the graveyard and none left it, so it is still
+# 2/2 on turn 2. On turn 3 it flashes Looting back (the card leaves the graveyard) and the Mascot gets one counter, once.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Spirit Mascot
+Faithless Looting
+Mountain
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Spirit Mascot.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Plains; Plains)
+[T2 Bot2.Main1]
+? Bot1.Graveyard.Count = 3
+? Bot1.Battlefield.Spirit Mascot.Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Graveyard.Faithless Looting.Cast(Ability: Flashback)
+Bot1.Choose(Plains; Plains)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Spirit Mascot.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Spirit Mascot.Power = 3
+Exile = Faithless Looting

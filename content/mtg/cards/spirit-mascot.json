@@ -1,0 +1,8 @@
+{
+  "name": "Spirit Mascot",
+  "manaCost": "{R}{W}",
+  "type": "Creature — Spirit Ox",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever one or more cards leave your graveyard, put a +1/+1 counter on this creature."
+}
