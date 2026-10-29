@@ -1,0 +1,61 @@
+# Goatnap: "Gain control of target creature until end of turn. Untap that creature. It gains haste until end of turn. If that
+# creature is a Goat, it also gets +3/+0 until end of turn." Bot2 has a Mountain Goat (1/1, a Goat) and a Llanowar Elves (1/1,
+# not a Goat), both tapped on their turn. Bot1 takes the Goat with one Goatnap (CR 613.1b): untapped, hasty, and 4/1 - only the
+# power rises (CR 613.4c) - so it hits for 4 (CR 702.10). The next turn Bot1 takes the Elves: it attacks as the 1/1 it is.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Mountain
+Goatnap
+Goatnap
+Mountain x15
+
+[Bot2 Deck]
+Mountain
+Forest
+Mountain Goat
+Llanowar Elves
+Forest x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Mountain Goat.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goatnap.Cast(Bot2.Battlefield.Mountain Goat)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mountain Goat.Power = 4
+? Bot1.Battlefield.Mountain Goat.Toughness = 1
+Bot1.Attack(Mountain Goat > Bot2)
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Mountain Goat.Power = 1
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goatnap.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+? Bot1.Battlefield.Llanowar Elves.Toughness = 1
+Bot1.Attack(Llanowar Elves > Bot2)
+[T8 Bot2.Main1]
+? Bot2.Battlefield.Llanowar Elves.Power = 1
+
+[Expect]
+Bot2.Life = 15
