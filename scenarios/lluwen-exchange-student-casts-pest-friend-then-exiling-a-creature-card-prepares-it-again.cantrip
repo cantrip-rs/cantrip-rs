@@ -1,0 +1,63 @@
+# Lluwen, Exchange Student enters prepared (CR 722): Bot1 casts its Pest Friend copy for {B/G} from Black Lotus, making a Pest token
+# and unpreparing Lluwen. Bot2's Lightning Bolt kills the Memnite on turn 2; on turn 3 Bot1 exiles that creature card from its
+# graveyard as a cost at sorcery speed and Lluwen becomes prepared again, with a new Pest Friend copy in exile beside the exiled Memnite.
+
+[Dice]
+1; 1; 1; 1; 1; 1
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Lluwen, Exchange Student
+Black Lotus
+Memnite
+Island x25
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x31
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lluwen, Exchange Student.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lluwen, Exchange Student.Prepared = true
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Exile.Pest Friend.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pest Token.Power = 1
+? Bot1.Battlefield.Lluwen, Exchange Student.Prepared = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Battlefield.Lluwen, Exchange Student.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Lluwen, Exchange Student.Prepared = true
+Bot1.Graveyard = Black Lotus
+Exile.Count = 2
