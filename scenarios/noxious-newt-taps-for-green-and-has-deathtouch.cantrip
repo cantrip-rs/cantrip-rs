@@ -1,0 +1,29 @@
+# Noxious Newt (1/2 deathtouch): "{T}: Add {G}." Bot1 casts it on turn 1 with two Moxen. On turn 3 it is no longer summoning sick
+# and taps for {G}, which pays for a Llanowar Elves; it has deathtouch.
+
+[Bot1 Deck]
+Noxious Newt
+Mox Emerald x2
+Llanowar Elves
+Forest x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Noxious Newt.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Noxious Newt.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Emerald; Noxious Newt; Llanowar Elves
+Bot1.Battlefield.Noxious Newt.Tapped = true
+Bot1.Battlefield.Noxious Newt.Keywords = Deathtouch
