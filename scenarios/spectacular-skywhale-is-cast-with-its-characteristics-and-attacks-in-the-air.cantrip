@@ -1,0 +1,43 @@
+# Spectacular Skywhale: cast with four Moxen, its characteristics as printed (power, toughness, keywords, colors, types), then
+# attacking Bot2, whose ground creature cannot block it (Flying, CR 702.9b).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Spectacular Skywhale
+Island x21
+
+[Bot2 Deck]
+Mox Sapphire
+Delver of Secrets
+Island x21
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Spectacular Skywhale.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Delver of Secrets.Cast
+[T2 Bot2.End]
+? Bot1.Battlefield.Spectacular Skywhale.Power = 1
+? Bot1.Battlefield.Spectacular Skywhale.Toughness = 4
+? Bot1.Battlefield.Spectacular Skywhale.Keywords = Flying
+? Bot1.Battlefield.Spectacular Skywhale.Colors = Blue; Red
+? Bot1.Battlefield.Spectacular Skywhale.Types = Creature
+? Bot1.Battlefield.Spectacular Skywhale.Subtypes = Elemental; Whale
+[T3 Bot1.Main1]
+Bot1.Attack(Spectacular Skywhale > Bot2)
+! Bot2.Block(Delver of Secrets > Spectacular Skywhale)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Spectacular Skywhale.Tapped = true
