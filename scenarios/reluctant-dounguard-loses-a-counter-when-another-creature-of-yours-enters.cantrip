@@ -1,0 +1,53 @@
+# Reluctant Dounguard (4/4 for {2}{W}): "enters with two -1/-1 counters" (2/2) and "Whenever another creature you control
+# enters while this creature has a -1/-1 counter on it, remove a -1/-1 counter from this creature." Bot1's Ornithopter and then
+# Ornithopter, each other creature entering takes one counter (3/3, 4/4); a third creature with none left
+# changes nothing, and Bot2's creature entering never does.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Reluctant Dounguard
+Ornithopter
+Ornithopter
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Reluctant Dounguard.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reluctant Dounguard.Power = 2
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Reluctant Dounguard.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reluctant Dounguard.Power = 3
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reluctant Dounguard.Power = 4
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Reluctant Dounguard.Toughness = 4
