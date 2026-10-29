@@ -130,6 +130,25 @@ pub fn may_put_onto_battlefield_tapped(
     put_from_hand(g, player, source, true, eligible)
 }
 
+/// `may_put_onto_battlefield_tapped` for "... from your hand onto the battlefield tapped and attacking" (CR 508.4): the card
+/// enters attacking what its controller chooses (`combat::choose_attack_target`, asked after the card), or just tapped when there
+/// is nothing to attack (CR 508.4: outside combat it is only tapped). The new object, or none if nothing was put. Kinscaer
+/// Sentry, Kaalia of the Vast and Preeminent Captain print it.
+pub fn may_put_onto_battlefield_attacking(
+    g: &mut dyn Game,
+    player: PlayerId,
+    source: ObjectId,
+    eligible: impl Fn(&dyn Game, ObjectId) -> bool,
+) -> Result<Option<ObjectId>, Suspend> {
+    let Some(card) = choose_from_hand(g, player, source, eligible)? else {
+        return Ok(None);
+    };
+    Ok(Some(match crate::combat::choose_attack_target(g, player, source)? {
+        Some(defender) => g.put_onto_battlefield_attacking(card, player, defender, &[])?,
+        None => g.put_onto_battlefield(card, player, true)?,
+    }))
+}
+
 fn put_from_hand(
     g: &mut dyn Game,
     player: PlayerId,
@@ -137,12 +156,21 @@ fn put_from_hand(
     tapped: bool,
     eligible: impl Fn(&dyn Game, ObjectId) -> bool,
 ) -> Result<Option<ObjectId>, Suspend> {
-    let hand = g.state().zone(Zone::hand(player)).to_vec();
-    let eligible: Vec<ObjectId> = hand.iter().copied().filter(|&c| eligible(&*g, c)).collect();
-    let Some(&card) = choose::cards_from(g, player, source, Purpose::PutOntoBattlefield, hand, eligible, 1, true)?.first() else {
+    let Some(card) = choose_from_hand(g, player, source, eligible)? else {
         return Ok(None);
     };
     Ok(Some(g.put_onto_battlefield(card, player, tapped)?))
+}
+
+fn choose_from_hand(
+    g: &mut dyn Game,
+    player: PlayerId,
+    source: ObjectId,
+    eligible: impl Fn(&dyn Game, ObjectId) -> bool,
+) -> Result<Option<ObjectId>, Suspend> {
+    let hand = g.state().zone(Zone::hand(player)).to_vec();
+    let eligible: Vec<ObjectId> = hand.iter().copied().filter(|&c| eligible(&*g, c)).collect();
+    Ok(choose::cards_from(g, player, source, Purpose::PutOntoBattlefield, hand, eligible, 1, true)?.first().copied())
 }
 
 /// "As this enters, look at an opponent's hand, then choose any card name." (CR 614.12a, 201.4): the opponent is chosen first
