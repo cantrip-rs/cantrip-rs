@@ -556,11 +556,35 @@ pub fn reveal_top_take_one_rest_to_graveyard(
     count: usize,
     wanted: fn(&Chars) -> bool,
 ) -> Result<(), Suspend> {
+    top_take_one_rest_to_graveyard(g, player, source, count, true, 0, wanted)
+}
+
+/// "Look at the top `count` cards of your library. Put one of those cards into your hand and the rest into your graveyard"
+/// (CR 701.20a, 400.3): the card is not revealed and taking it is not optional, so a library with any card shows the player
+/// what it has and one is taken (CR 609.3 for a short library); the rest go together, in the order their owner arranges them
+/// (CR 404.3). Stirring Honormancer prints it.
+pub fn look_at_top_take_one_rest_to_graveyard(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: usize) -> Result<(), Suspend> {
+    top_take_one_rest_to_graveyard(g, player, source, count, false, 1, |_| true)
+}
+
+fn top_take_one_rest_to_graveyard(
+    g: &mut dyn Game,
+    player: PlayerId,
+    source: ObjectId,
+    count: usize,
+    reveal: bool,
+    min: u8,
+    wanted: fn(&Chars) -> bool,
+) -> Result<(), Suspend> {
     let revealed = top_of_library(g, player, count);
     if revealed.is_empty() {
         return Ok(());
     }
-    g.reveal(player, &revealed);
+    if reveal {
+        g.reveal(player, &revealed);
+    } else {
+        g.look_at(player, &revealed);
+    }
     let takeable: Vec<ObjectId> = revealed.iter().copied().filter(|&c| wanted(&g.chars(c))).collect();
     let mut taken = Vec::new();
     if !takeable.is_empty() {
@@ -568,7 +592,7 @@ pub fn reveal_top_take_one_rest_to_graveyard(
             source,
             cards: revealed.clone(),
             destinations: vec![
-                Destination { kind: DestinationKind::Hand, min: 0, max: 1, eligible: takeable },
+                Destination { kind: DestinationKind::Hand, min, max: 1, eligible: takeable },
                 Destination { kind: DestinationKind::Graveyard, min: 0, max: u8::MAX, eligible: revealed.clone() },
             ],
             may_shuffle: false,
@@ -577,7 +601,11 @@ pub fn reveal_top_take_one_rest_to_graveyard(
             taken = placements[0].clone();
         }
     }
-    g.return_to_hand_revealed(&taken);
+    if reveal {
+        g.return_to_hand_revealed(&taken);
+    } else {
+        g.return_to_hand(&taken);
+    }
     let rest: Vec<ObjectId> = revealed.into_iter().filter(|c| !taken.contains(c)).collect();
     g.put_into_graveyard(&rest);
     Ok(())
