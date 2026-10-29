@@ -1,0 +1,15 @@
+{
+  "name": "Scathing Shadelock",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Snake Warlock",
+  "oracleText": "At the beginning of your first main phase, this creature becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": 4,
+  "toughness": 6,
+  "keywords": [],
+  "prepare": {
+    "name": "Venomous Words",
+    "manaCost": "{B}",
+    "type": "Sorcery",
+    "oracleText": "Target creature you control gets +2/+0 and gains deathtouch until end of turn."
+  }
+}

@@ -1,0 +1,43 @@
+# Scathing Shadelock becomes prepared at the beginning of its controller's first main phase (CR 722.3a), not before: on the turn it is cast it is not. Venomous Words gives +2/+0 and deathtouch until end of turn.
+
+[Bot1 Deck]
+Scathing Shadelock
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Hand.Scathing Shadelock.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Scathing Shadelock.Prepared = (absent)
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Scathing Shadelock.Prepared = true
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Exile.Venomous Words.Cast(Bot1.Battlefield.Scathing Shadelock)
+
+[Expect]
+Bot1.Battlefield.Scathing Shadelock.Power = 6
+Bot1.Battlefield.Scathing Shadelock.Toughness = 6
+Bot1.Battlefield.Scathing Shadelock.Keywords = Deathtouch
+Bot1.Battlefield.Scathing Shadelock.Prepared = (absent)
+Exile.Count = 0
