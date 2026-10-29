@@ -1,0 +1,24 @@
+# Disappear (CR 603.4): Bot1 pays for Michelangelo, Game Master ({2}{G}) with Black Lotus' GGG, so a permanent left the battlefield under Bot1's control this turn and at the
+# beginning of Bot1's end step Michelangelo gets a +1/+1 counter, a 4/4.
+
+[Bot1 Deck]
+Black Lotus
+Michelangelo, Game Master
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Michelangelo, Game Master.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Michelangelo, Game Master.Power = 3
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Battlefield = Michelangelo, Game Master
+Bot1.Battlefield.Michelangelo, Game Master.Power = 4
+Bot1.Battlefield.Michelangelo, Game Master.Toughness = 4
