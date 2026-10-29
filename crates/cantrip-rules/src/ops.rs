@@ -1604,6 +1604,13 @@ fn enter_as(cx: &mut Cx, id: ObjectId, b: Becomes) {
     kinds.extend(
         b.what.abilities.iter().filter(|&&i| usize::from(i) < listed).map(|&i| EffectKind::AddAbility(AbilityRef::delayed(b.card, i))),
     );
+    // "It's a 3/3 ... creature with flying": the keywords it gains (layer 6), then its power and toughness (layer 7b).
+    if b.what.keywords != Keywords::of(&[]) {
+        kinds.push(EffectKind::AddKeywords(b.what.keywords));
+    }
+    if let Some((power, toughness)) = b.what.power_toughness {
+        kinds.push(EffectKind::SetPt(power, toughness));
+    }
     for kind in kinds {
         let timestamp = cx.st().timestamp();
         cx.st().effect_push(cantrip_state::ContinuousEffect {

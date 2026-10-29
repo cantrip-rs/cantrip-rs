@@ -138,11 +138,24 @@ pub struct EntersAs {
     /// The abilities it gains (CR 613.1f): indexes in its effect's card's `delayed` list (`EffectKind::AddAbility`). An index
     /// past that list names no ability and gives none.
     pub abilities: &'static [u8],
+    /// "It's a 3/3 ... creature": its power and toughness (CR 613.4b, `EffectKind::SetPt`), set from the moment it enters.
+    pub power_toughness: Option<(i16, i16)>,
+    /// "It's a ... creature with flying": the keyword abilities it gains (CR 613.1f, `EffectKind::AddKeywords`).
+    pub keywords: Keywords,
 }
 
 impl EntersAs {
     /// It enters as itself: nothing changed.
-    pub const NONE: EntersAs = EntersAs { types: None, loses_subtypes_of: &[], subtypes: &[], aura: false, loses_other_abilities: false, abilities: &[] };
+    pub const NONE: EntersAs = EntersAs {
+        types: None,
+        loses_subtypes_of: &[],
+        subtypes: &[],
+        aura: false,
+        loses_other_abilities: false,
+        abilities: &[],
+        power_toughness: None,
+        keywords: Keywords::of(&[]),
+    };
 }
 
 /// An `EntersAs` an effect gives a permanent as it enters (`Entering::becomes`): what it is, and the card whose ability says

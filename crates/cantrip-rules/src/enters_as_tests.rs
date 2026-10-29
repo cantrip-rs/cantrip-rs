@@ -466,3 +466,26 @@ fn several_cards_enter_together_as_food_artifacts() {
     }
     assert!(g.state.triggers.is_empty(), "none of them entered as a creature");
 }
+
+/// "It's a 3/3 Robot artifact creature with flying": a card enters as that, its power and toughness and keywords from the moment
+/// it enters (CR 614.12, 613.1f, 613.4b), a creature as it enters, so what watches creatures enter sees it.
+#[test]
+fn a_card_enters_with_the_power_toughness_and_keywords_it_is_given() {
+    static AS_ROBOT: EntersAs = EntersAs {
+        types: Some(TypeSet::of(&[CardType::Artifact, CardType::Creature])),
+        subtypes: &[Subtype::Robot],
+        power_toughness: Some((3, 3)),
+        keywords: Keywords::of(&[Keyword::Flying]),
+        ..EntersAs::NONE
+    };
+    let mut g = game();
+    let source = put(&mut g, &TWO_ENCHANTS, YOU, Zone::graveyard(YOU));
+    let card = put(&mut g, &EQUIPPED_BEAR, YOU, Zone::graveyard(YOU));
+    let ability = AbilityRef { card: g.cards.id_of(&TWO_ENCHANTS), index: 0 };
+    let item = crate::actions::stack_item(StackKind::Spell, source, ability, YOU, &[]);
+    let entered = cantrip_api::Game::put_onto_battlefield_as(&mut cx(&mut g), card, YOU, &item, &AS_ROBOT).expect("nothing to ask").expect("it enters");
+    let chars = cx(&mut g).chars(entered);
+    assert!(chars.is(CardType::Artifact) && chars.is(CardType::Creature) && chars.has_subtype(Subtype::Robot));
+    assert_eq!((chars.power, chars.toughness), (Some(3), Some(3)));
+    assert!(chars.keywords.has(Keyword::Flying));
+}
