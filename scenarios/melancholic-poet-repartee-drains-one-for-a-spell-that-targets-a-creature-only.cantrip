@@ -1,0 +1,37 @@
+# Melancholic Poet: Repartee -- Lightning Bolt at Bot2's Ornithopter makes each opponent lose 1 life and Bot1 gain 1; Lightning Bolt at Bot2
+# (a player) is no creature target, so it drains nothing more. Bot2 ends at 17 (the Bolt) - 1 = 16; Bot1 at 21.
+
+[Bot1 Deck]
+Swamp
+Melancholic Poet
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Melancholic Poet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 16
+Bot2.Graveyard = Ornithopter
