@@ -1,0 +1,8 @@
+{
+  "name": "Deanna Troi, Psychic Counsel",
+  "manaCost": "{1}{W}",
+  "type": "Legendary Creature — Betazoid Human Advisor",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Other creatures you control enter with an additional +1/+1 counter on them."
+}

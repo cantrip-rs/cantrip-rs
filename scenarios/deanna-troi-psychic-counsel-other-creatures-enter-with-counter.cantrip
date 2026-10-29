@@ -1,0 +1,38 @@
+# CR 614.12, 122.6: Bot1's other creature enters with a +1/+1 counter; Bot2's creature, Deanna and Bot1's noncreature
+# Mox Jet do not.
+
+[Bot1 Deck]
+Deanna Troi, Psychic Counsel
+Mox Pearl
+Mox Sapphire
+Memnite
+Mox Jet
+Plains x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deanna Troi, Psychic Counsel.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Deanna Troi, Psychic Counsel.Power = 2
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mox Jet.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Deanna Troi, Psychic Counsel.Counters.PlusOnePlusOne = (absent)
