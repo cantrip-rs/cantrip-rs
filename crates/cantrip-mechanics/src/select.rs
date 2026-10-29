@@ -82,10 +82,6 @@ fn another_creature_or_artifact(q: &dyn Query, choice: &Choice, _: u32) -> Verdi
     Verdict::each(choice, |id| id != choice.source && (q.chars(id).is(CardType::Creature) || q.chars(id).is(CardType::Artifact)))
 }
 
-fn another_artifact(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    Verdict::each(choice, |id| id != choice.source && q.chars(id).is(CardType::Artifact))
-}
-
 fn another_creature(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
     Verdict::each(choice, |id| id != choice.source && q.chars(id).is(CardType::Creature))
 }
@@ -133,10 +129,6 @@ pub const ARTIFACT: Part = part(&(artifact as SelectFn), 0, "");
 /// "Another creature or artifact": a creature or artifact permanent other than the object whose text asks (`Choice::source`).
 /// The Sackville-Bagginses and Automated Warfare System sacrifice one.
 pub const ANOTHER_CREATURE_OR_ARTIFACT: Part = part(&(another_creature_or_artifact as SelectFn), 0, "");
-
-/// "Another artifact": an artifact permanent other than the object whose text asks (`Choice::source`). General Traag,
-/// Hungering Puppetbeast, Legion Extruder and Repurposing Bay sacrifice one.
-pub const ANOTHER_ARTIFACT: Part = part(&(another_artifact as SelectFn), 0, "");
 
 /// "Another creature": a creature permanent other than the object whose text asks (`Choice::source`). Bolg of the North and
 /// Sephiroth, Fabled SOLDIER sacrifice one.
@@ -395,12 +387,6 @@ pub const fn creature_cards(count: Count) -> Selection {
 /// Automated Warfare System's "you may sacrifice" is `up_to(1)`.
 pub const fn another_creature_or_artifact_permanents(count: Count) -> Selection {
     Selection::of(count, &[ANOTHER_CREATURE_OR_ARTIFACT]).called("other creature or artifact")
-}
-
-/// `count` of "another artifact" (CR 701.21a), chosen as an effect resolves: General Traag's "you may sacrifice" is
-/// `up_to(1)`.
-pub const fn another_artifact_permanents(count: Count) -> Selection {
-    Selection::of(count, &[ANOTHER_ARTIFACT]).called("other artifact")
 }
 
 /// `count` of "another creature" (CR 701.21a), chosen as an effect resolves: Bolg of the North's and Sephiroth, Fabled SOLDIER's

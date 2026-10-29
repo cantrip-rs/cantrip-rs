@@ -2,11 +2,17 @@ use cantrip_api::*;
 use cantrip_mechanics::{damage_target, effects, select, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
+/// "Another artifact" (CR 701.21a): an artifact permanent other than General Traag, the object whose text asks.
+fn another_artifact(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
+    Verdict::each(choice, |id| id != choice.source && q.chars(id).is(CardType::Artifact))
+}
+
+const ANOTHER_ARTIFACT: Selection = Selection::of(select::up_to(1), &[select::part(&(another_artifact as SelectFn), 0, "")]).called("other artifact");
+
 /// "When General Traag enters, you may sacrifice another artifact. When you do, ..." (CR 701.21a, 603.12): the sacrifice is
 /// chosen as the ability resolves, and the reflexive ability, with its target, exists only if an artifact was sacrificed.
 fn sacrifice_for_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let rule = select::another_artifact_permanents(select::up_to(1));
-    if !effects::may_sacrifice(g, item.controller, item.object, rule)?.is_empty() {
+    if !effects::may_sacrifice(g, item.controller, item.object, ANOTHER_ARTIFACT)?.is_empty() {
         let this = g.card_id(&CARD);
         g.reflexive_trigger(item.object, item.controller, AbilityRef::delayed(this, 0), Target::None);
     }
