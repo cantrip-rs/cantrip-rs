@@ -504,6 +504,16 @@ pub static GOBLIN: CardDef = CardDef {
     ..token!(Goblin)
 };
 
+/// The 1/1 black and red Goblin creature token (CR 111.4). Elder Auntie and Sourbread Auntie make it.
+pub static BLACK_RED_GOBLIN: CardDef = CardDef {
+    // Black (bit 2) and red (bit 3).
+    colors: Some(ColorSet(0b01100)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Goblin)
+};
+
 /// The 1/1 red Phyrexian Goblin creature token. Charforger, Chimney Rabble and Gleeful Demolition make it.
 pub static PHYREXIAN_GOBLIN: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Red)),
