@@ -1,0 +1,47 @@
+# Savanti Romero's X is "the number of counters on" it, of any kind. Bot1 casts it on turn 1 and then Rapier Wit on it: on Bot1's own
+# turn the tapped creature gets a stun counter. At the beginning of combat it gets a +1/+1 counter, so there are two counters on it, one
+# of each kind, and X is 2: Bot1 draws 2 (the 1 card Rapier Wit drew, plus 2) and loses 2 (life 18). Counting only the +1/+1 counters
+# would draw and lose 1.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Mox Pearl
+Mox Ruby
+Savanti Romero, Time's Exile
+Rapier Wit
+Swamp x16
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Savanti Romero, Time's Exile.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rapier Wit.Cast(Bot1.Battlefield.Savanti Romero, Time's Exile)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savanti Romero, Time's Exile.Counters.Stun = 1
+? Bot1.Hand.Count = 1
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Bot1.Hand.Count = 3
+? Bot1.Battlefield.Savanti Romero, Time's Exile.Counters.PlusOnePlusOne = 1
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Count = 3

@@ -1,0 +1,11 @@
+{
+  "name": "Savanti Romero, Time's Exile",
+  "manaCost": "{3}{B}{B}",
+  "type": "Legendary Creature — Demon Wizard",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample\nAt the beginning of combat on your turn, put a +1/+1 counter on Savanti Romero. Then you draw X cards and lose X life, where X is the number of counters on Savanti Romero.",
+  "keywords": [
+    "Trample"
+  ]
+}
