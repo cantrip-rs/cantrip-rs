@@ -152,6 +152,15 @@ pub fn equipped_creature_cant_be_blocked(q: &dyn Query, source: ObjectId, _: Obj
     q.obj(source).attached_to != Some(attacker)
 }
 
+/// "Enchanted creature" / "equipped creature" as a rule of the source's own that is no ability of the creature (CR 113.1a,
+/// 301.5, 303.4): the `CardDef::untap_bans`, `cant_become_untapped` and `sacrifice_bans` of an Aura or Equipment, true of
+/// exactly the permanent the source is attached to. It is no ability of that permanent, so the permanent losing all its
+/// abilities leaves the rule in force (CR 613.1f). Infinite Coursework's and Enchanted River's Grasp's "doesn't untap"
+/// (CR 502.3) and Frozen in Ice's "can't become untapped" print it.
+pub fn attached_to_it(q: &dyn Query, asker: &Asker, affected: ObjectId) -> bool {
+    q.obj(asker.source).attached_to == Some(affected)
+}
+
 /// Living weapon (CR 702.92a): create a 0/0 black Phyrexian Germ creature token, then attach this Equipment to it.
 /// The Equipment attaches only if it is still on the battlefield and the token was made (CR 701.3b). Nettlecyst and
 /// Kaldra Compleat print it.

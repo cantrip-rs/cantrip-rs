@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{attach::attached_object, effects, statics, targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{attach::{attached_object, attached_to_it}, effects, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
 /// "Tap enchanted creature and remove all counters from it." This trigger refers to the object attached when it resolves,
@@ -19,6 +19,6 @@ pub static CARD: CardDef = CardDef {
         "When this Aura enters, tap enchanted creature and remove all counters from it.",
     )],
     statics: &[loses_all_abilities(attached_object, "Enchanted creature loses all abilities.")],
-    untap_bans: &[statics::attached_permanent_doesnt_untap],
+    untap_bans: &[attached_to_it],
     ..oracle::ENCHANTED_RIVERS_GRASP
 };
