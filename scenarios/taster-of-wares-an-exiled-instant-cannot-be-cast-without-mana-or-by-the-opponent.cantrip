@@ -1,0 +1,36 @@
+# Taster of Wares: the permission is Bot1's alone ("you may cast it") and it only widens what mana may pay (CR 609.4b): it doesn't
+# waive the cost. Bot1 pays for the Taster with its Black Lotus and has no mana left, so it can't cast the exiled Lightning Bolt
+# (and does not pay life for it: 20 stays 20). On turn 2 Bot2 has an Island's mana open, which would pay for the Bolt it owns, but the
+# Taster's controller is Bot1, not Bot2: that cast is refused too.
+
+[Bot1 Deck]
+Black Lotus
+Taster of Wares
+Island x30
+
+[Bot2 Deck]
+Lightning Bolt
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Taster of Wares.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+Bot1.Choose(Lightning Bolt)
+? Exile = Lightning Bolt
+! Bot1.Exile.Lightning Bolt.Cast(Bot2; Mana: short)
+? Bot1.Life = 20
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+! Bot2.Exile.Lightning Bolt.Cast(Bot1)
+
+[Expect]
+Exile = Lightning Bolt
+Bot1.Life = 20
+Bot2.Life = 20

@@ -1,0 +1,51 @@
+# Taster of Wares: X is the number of Goblins Bot1 controls as the ability resolves (CR 608.2c): Bile-Vial Boggart and Taster make
+# two, so Bot2 reveals two cards of its choosing (a Mountain and the Lightning Bolt, not the Counterspell). Bot1 chooses the Mountain,
+# which Bot2 exiles: no instant or sorcery card was exiled, so a land can't be played from exile. Bot2's own Goblin (a Bile-Vial
+# Boggart it cast on turn 2) is no Goblin Bot1 controls, so it adds nothing to X.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Bile-Vial Boggart
+Taster of Wares
+Island x30
+
+[Bot2 Deck]
+Mox Jet
+Bile-Vial Boggart
+Mountain
+Lightning Bolt
+Counterspell
+Island x25
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bile-Vial Boggart.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Bile-Vial Boggart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Taster of Wares.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Mountain; Lightning Bolt)
+! Bot1.Choose(Counterspell)
+Bot1.Choose(Mountain)
+? Exile = Mountain
+! Bot1.Exile.Mountain.Play
+
+[Expect]
+Exile.Count = 1
+Bot2.Hand.Count = 5
+Bot2.Revealed = Mountain; Lightning Bolt

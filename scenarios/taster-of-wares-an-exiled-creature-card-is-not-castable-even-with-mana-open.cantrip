@@ -1,0 +1,33 @@
+# Taster of Wares: only "an instant or sorcery card exiled this way" may be cast (CR 608.2c, 604.1). Bot2 reveals its Savannah Lions,
+# the only card Taster's X of one lets it show, and Bot1 exiles it. With Mox Pearl's {W} open - mana the Lions would cost - a creature
+# card is not one the permission covers: the cast is refused, and the Lions stays in exile.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Taster of Wares
+Island x30
+
+[Bot2 Deck]
+Savannah Lions
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Taster of Wares.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Savannah Lions)
+Bot1.Choose(Savannah Lions)
+? Exile = Savannah Lions
+! Bot1.Exile.Savannah Lions.Cast
+
+[Expect]
+Exile = Savannah Lions
+Bot1.Battlefield.Mox Pearl.Tapped = false
