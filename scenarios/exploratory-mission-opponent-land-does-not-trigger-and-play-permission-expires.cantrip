@@ -1,0 +1,48 @@
+# The opponent's land does not trigger Exploratory Mission; the nonland card it previously exiled remains in exile, but
+# its play permission ends with the turn and it cannot be cast on the next turn (CR 305.1, 514.2, 601.3).
+# Exploratory Mission {2}{R}{R}: Enchantment
+#   Landfall — Whenever a land you control enters, put a quest counter on this enchantment. Then exile cards from the top of your library until you exile a nonland card. You may play that card this turn. If this enchantment has five or more quest counters on it, add {R}{R}.
+# Written by new-card.py --scenario: Exploratory Mission cast on turn 1 off zero-cost mana sources. Grow it a line at a time with
+#   cargo run --profile cards -p cantrip-script --bin corpus -- --scenario exploratory-mission-opponent-land-does-not-trigger-and-play-permission-expires --next --brief
+# and see which keys the card moved with --diff <the line number of its cast>.
+
+[Bot1 Deck]
+Exploratory Mission
+Black Lotus
+Mox Pearl
+Mountain x4
+Mountain
+Ornithopter
+Mountain x10
+
+[Bot2 Deck]
+Island x7
+Island x2
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Exploratory Mission.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Exploratory Mission.Counters.Quest = 1
+? Exile.Count = 2
+[T3 Bot1.Main1]
+! Bot1.Exile.Ornithopter.Cast
+
+[Expect]
+Bot1.Battlefield.Exploratory Mission.Counters.Quest = 1
+Exile.Count = 2
+Bot1.Exile.Ornithopter.Power = 0
+Bot2.Library.Count = 12

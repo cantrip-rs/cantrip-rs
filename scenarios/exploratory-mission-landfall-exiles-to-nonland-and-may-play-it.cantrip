@@ -1,0 +1,47 @@
+# The controller's landfall resolves in order: it adds a quest counter, exiles the top land and then nonland from their
+# library, and lets them cast the hit from exile during this turn (CR 603.2, 608.2c, 701.13a, 701.18b).
+# Exploratory Mission {2}{R}{R}: Enchantment
+#   Landfall — Whenever a land you control enters, put a quest counter on this enchantment. Then exile cards from the top of your library until you exile a nonland card. You may play that card this turn. If this enchantment has five or more quest counters on it, add {R}{R}.
+# Written by new-card.py --scenario: Exploratory Mission cast on turn 1 off zero-cost mana sources. Grow it a line at a time with
+#   cargo run --profile cards -p cantrip-script --bin corpus -- --scenario exploratory-mission-landfall-exiles-to-nonland-and-may-play-it --next --brief
+# and see which keys the card moved with --diff <the line number of its cast>.
+
+[Bot1 Deck]
+Exploratory Mission
+Black Lotus
+Mox Pearl
+Mountain x4
+Mountain
+Ornithopter
+Mountain x10
+
+[Bot2 Deck]
+Island x7
+Island x2
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Exploratory Mission.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Exploratory Mission.Counters.Quest = 1
+? Exile.Count = 2
+? Bot2.Library.Count = 13
+Bot1.Exile.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Exploratory Mission.Counters.Quest = 1
+Bot1.Battlefield.Ornithopter.Power = 0
+Exile = Mountain
+Bot2.Library.Count = 13
