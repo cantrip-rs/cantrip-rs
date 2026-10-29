@@ -1,0 +1,38 @@
+# Featherbrained Filcher: "When this creature leaves the battlefield, create a Food token." Bot1 destroys its own Filcher
+# with Grounded for Life (a 0/2 flier); the Food is made once, for Bot1, and is an artifact.
+
+[Bot1 Deck]
+Mox Pearl x3
+Black Lotus
+Featherbrained Filcher
+Grounded for Life
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Featherbrained Filcher.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Featherbrained Filcher.Keywords = Flying
+? Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Grounded for Life.Cast(Bot1.Battlefield.Featherbrained Filcher)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Grounded for Life; Featherbrained Filcher; Black Lotus
+Bot1.Battlefield.Food Token.Types = Artifact
+Bot1.Battlefield.Food Token.Types.Count = 1
+Bot2.Battlefield.Count = 0

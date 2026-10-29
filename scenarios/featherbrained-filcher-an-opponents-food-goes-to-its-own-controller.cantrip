@@ -1,0 +1,40 @@
+# Featherbrained Filcher: the Food goes to the controller of the creature that left (CR 111.2), not to whoever destroyed it.
+# Bot2's Filcher is destroyed by Bot1's Grounded for Life on turn 3; Bot2 gets the Food and Bot1 none.
+
+[Bot1 Deck]
+Mox Pearl x3
+Black Lotus
+Grounded for Life
+Island x15
+
+[Bot2 Deck]
+Featherbrained Filcher
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Featherbrained Filcher.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Grounded for Life.Cast(Bot2.Battlefield.Featherbrained Filcher)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Featherbrained Filcher
+Bot2.Battlefield.Food Token.Types = Artifact
+Bot1.Battlefield.Count = 3
+Bot2.Battlefield.Count = 2
