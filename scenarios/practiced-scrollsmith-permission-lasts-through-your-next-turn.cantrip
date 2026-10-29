@@ -1,0 +1,44 @@
+# Practiced Scrollsmith: the permission lasts "until the end of your next turn". Bot1's turn-1 Bolt is exiled by the Scrollsmith
+# on turn 3 and Bot1 waits to cast it on turn 5, its next turn.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Pearl
+Lightning Bolt
+Practiced Scrollsmith
+Mountain
+Island
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Practiced Scrollsmith.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+? Exile = Lightning Bolt
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Exile.Count = 0

@@ -1,0 +1,45 @@
+# Practiced Scrollsmith: the target is a noncreature, nonland card. Bot1's graveyard holds a Llanowar Elves (Bolted on turn 2) and
+# a Black Lotus (sacrificed on turn 1); only the Lotus is a legal target, so the trigger takes it without asking, and the Elves
+# stay in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Llanowar Elves
+Mox Ruby
+Mox Pearl
+Practiced Scrollsmith
+Mountain
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Practiced Scrollsmith.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Black Lotus
+Bot1.Graveyard = Llanowar Elves
