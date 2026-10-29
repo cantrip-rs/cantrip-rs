@@ -1,0 +1,32 @@
+# Poisoner's Apprentice: with no life gained this turn its enters trigger still targets Bot2's Ornithopter but does nothing -- it is a 0/2
+# afterwards, not dead. (Bot1 never gains life: the Apprentice is not lifelink.)
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Poisoner's Apprentice
+Swamp x16
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Poisoner's Apprentice.Cast
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Graveyard.Count = 0
