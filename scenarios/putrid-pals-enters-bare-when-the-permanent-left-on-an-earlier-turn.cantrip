@@ -1,0 +1,40 @@
+# Putrid Pals: Bot1's Black Lotus left the battlefield on turn 1, not the turn Putrid Pals is cast (turn 3), and nothing leaves that turn: Putrid Pals enters bare, a 3/3. It is paid
+# with the hybrid symbols {B/G}{B/G} from Mox Jet and Mox Emerald and the generic from two more Moxen.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Putrid Pals
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Putrid Pals.Cast(Spend: B, G, R, W)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Putrid Pals.Power = 3
+Bot1.Battlefield.Putrid Pals.Toughness = 3
+Bot1.Battlefield.Putrid Pals.Keywords = Deathtouch

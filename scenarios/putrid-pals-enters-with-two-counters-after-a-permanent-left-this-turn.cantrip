@@ -1,0 +1,30 @@
+# Putrid Pals: "Disappear - This creature enters with two +1/+1 counters on it if a permanent left the battlefield under your control this turn." Bot1 casts Black Lotus and sacrifices it
+# for {B}{B}{B}, a permanent leaving the battlefield under its control, then casts Putrid Pals ({2}{B/G}{B/G}) with the Lotus mana and a Mox Ruby: it enters with two counters, a 5/5
+# with deathtouch.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Putrid Pals
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Putrid Pals.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Putrid Pals.Power = 5
+Bot1.Battlefield.Putrid Pals.Toughness = 5
+Bot1.Battlefield.Putrid Pals.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Putrid Pals.Keywords = Deathtouch
