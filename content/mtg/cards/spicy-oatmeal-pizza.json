@@ -1,0 +1,6 @@
+{
+  "name": "Spicy Oatmeal Pizza",
+  "manaCost": "{2}{R}",
+  "type": "Artifact — Food",
+  "oracleText": "When this artifact enters, it deals 4 damage to any target and 3 damage to you.\n{2}, {T}, Sacrifice this artifact: You gain 3 life."
+}

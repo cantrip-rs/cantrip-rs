@@ -1,0 +1,41 @@
+# Spicy Oatmeal Pizza: "any target" includes a creature. On turn 3 it enters aimed at Bot2's Memnite, which takes 4 and dies,
+# while Bot1 still takes 3 (20 -> 17) and Bot2's life is untouched.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Spicy Oatmeal Pizza
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Spicy Oatmeal Pizza.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot1.Life = 17
+Bot2.Life = 20
+Bot1.Battlefield.Spicy Oatmeal Pizza.Types = Artifact
