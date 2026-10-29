@@ -1,0 +1,53 @@
+# "{1}{W}, Blight 2: Return this card from your graveyard to your hand. Activate only as a sorcery." Bot2's Lightning Bolt kills
+# the enchanted Savannah Lions and the Gift goes to Bot1's graveyard. On turn 3 the ability is refused with no creature to blight
+# (CR 701.68b); once a second Lions is cast it is paid with {1}{W}, putting two -1/-1 counters on that Lions (it dies), and the
+# Gift is back in hand.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Savannah Lions
+Evershrike's Gift
+Savannah Lions
+Mox Pearl
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Hand.Evershrike's Gift.Cast(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Savannah Lions)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Graveyard.Evershrike's Gift.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Graveyard.Evershrike's Gift.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Evershrike's Gift; Plains
+Bot1.Graveyard = Savannah Lions; Savannah Lions; Black Lotus

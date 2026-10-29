@@ -1,0 +1,36 @@
+# Evershrike's Gift on Bot1's Savannah Lions: enchanted creature gets +1/+0 and has flying (CR 303.4). The Lions is a 3/1 and
+# Bot2's Savannah Lions (no flying or reach) cannot block it: Bot2 takes 3.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Savannah Lions
+Evershrike's Gift
+Plains x16
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Hand.Evershrike's Gift.Cast(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Savannah Lions.Power = 3
