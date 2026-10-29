@@ -1,0 +1,47 @@
+# Growth Curve ({G}{U}): the +1/+1 counter goes on first (CR 608.2c), then the creature's +1/+1 counters are doubled (CR 122.1): one
+# cast takes 0 counters to 1 and then 2; a second takes 2 to 3 and then 6, so the order and the "then double" both show.
+
+[Bot1 Deck]
+Geometer's Arthropod
+Growth Curve
+Growth Curve
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Geometer's Arthropod.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Growth Curve.Cast(Geometer's Arthropod)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Geometer's Arthropod.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Growth Curve.Cast(Geometer's Arthropod)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Geometer's Arthropod.Counters.PlusOnePlusOne = 6
+Bot1.Battlefield.Geometer's Arthropod.Power = 7
+Bot1.Battlefield.Geometer's Arthropod.Toughness = 10
+Bot1.Graveyard = Growth Curve; Growth Curve
