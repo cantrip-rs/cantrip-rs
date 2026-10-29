@@ -163,6 +163,19 @@ pub mod vote;
 
 use cantrip_api::*;
 
+/// "Creatures you control have total power N or greater" (CR 208.1, 613.4): the current, modified power of every
+/// creature `player` controls, attacking or not. Negative powers subtract from the total (CR 107.1b). Cantankerous
+/// Captain checks after its pump resolves; Hologram Janeway checks only when you attack (`AbilityDef::only_if`, not
+/// an intervening "if", CR 603.4).
+pub fn creatures_have_total_power_at_least(q: &dyn Query, player: PlayerId, minimum: i32) -> bool {
+    q.permanents_of(player)
+        .into_iter()
+        .map(|id| q.chars(id))
+        .filter(|c| c.is(CardType::Creature))
+        .map(|c| i64::from(c.power.unwrap_or(0)))
+        .sum::<i64>() >= i64::from(minimum)
+}
+
 /// "Activate only during your turn" (CR 602.5b), and "if it's your turn" on an alternative cost (CR 118.9): the
 /// ability's or spell's controller is the active player. Wishclaw Talisman, Vivi Ornitier, Sundial of the Infinite and
 /// Mine Collapse print it.
