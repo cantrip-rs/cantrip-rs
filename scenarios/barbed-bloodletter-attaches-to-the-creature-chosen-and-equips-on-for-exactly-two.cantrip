@@ -1,0 +1,55 @@
+# Barbed Bloodletter's enter trigger attaches it to a creature Bot1 controls, chosen as the trigger goes on the stack: Bot2's
+# Ornithopter is refused, Bot1's own Ornithopter taken (1/4 equipped). Its equip {2} (CR 702.6a, sorcery speed) then moves it to the
+# Memnite for exactly {2}: the Memnite is a 2/3, the Ornithopter a 0/2 again, and nothing is left in the pool.
+
+[Bot1 Deck]
+Memnite
+Ornithopter
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Barbed Bloodletter
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Barbed Bloodletter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Wither
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Barbed Bloodletter.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Barbed Bloodletter.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
