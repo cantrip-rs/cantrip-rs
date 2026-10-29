@@ -1,0 +1,29 @@
+# Jennika, Bad Apple Big Sister has Plainscycling {2} (CR 702.29e): with only one mana available she cannot cycle from the
+# hand; with two she is discarded and Bot1 searches its library for a Plains, which goes into its hand.
+
+[Bot1 Deck]
+Mox Pearl x2
+Jennika, Bad Apple Big Sister
+Island x4
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+! Bot1.Hand.Jennika, Bad Apple Big Sister.Activate(Mana: short)
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Jennika, Bad Apple Big Sister.Activate
+Bot1.Search(Plains)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Mana =
+Bot1.Graveyard = Jennika, Bad Apple Big Sister
+Bot1.Hand = Island; Island; Island; Island; Plains
+Bot1.Library.Count = 12

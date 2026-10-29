@@ -1,0 +1,48 @@
+# Jennika, Bad Apple Big Sister: "When Jennika enters, create a 2/2 red Mutant creature token." Bot1 casts East Wind Avatar
+# first; Jennika ({4}{W}: Black Lotus and two Mox Pearls) then enters, and her trigger makes the token. East Wind Avatar sees
+# two creatures enter under its controller's control, Jennika and the Mutant, so it is 4/4 (2 + 2 counters of +1/+0).
+
+[Bot1 Deck]
+Mox Pearl x4
+East Wind Avatar
+Jennika, Bad Apple Big Sister
+Black Lotus
+Plains x13
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.East Wind Avatar.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Jennika, Bad Apple Big Sister.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mutant Token.Power = 2
+? Bot1.Battlefield.Mutant Token.Toughness = 2
+? Bot1.Battlefield.Mutant Token.Colors = Red
+? Bot1.Battlefield.Mutant Token.Subtypes = Mutant
+? Bot1.Battlefield.East Wind Avatar.Power = 4
+
+[Expect]
+Bot1.Battlefield.Count = 7
