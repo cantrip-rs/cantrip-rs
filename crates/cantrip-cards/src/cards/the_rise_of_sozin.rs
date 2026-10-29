@@ -33,15 +33,6 @@ fn combat_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Target creature card ... from that player's graveyard": a creature card in the graveyard of the player the combat damage
-/// was dealt to (the reflexive ability's subject, CR 603.12).
-fn creature_card_in_that_players_graveyard(q: &dyn Query, _: &Asker, t: Target) -> bool {
-    match (t, q.event_subject()) {
-        (Target::Object(id), Target::Player(p)) => targets::card_in_graveyard(q, t, &[CardType::Creature]) && q.obj(id).zone == Zone::graveyard(p),
-        _ => false,
-    }
-}
-
 /// "... put any number of target creature cards with total mana value X or less from that player's graveyard onto the
 /// battlefield under your control." The total was judged as the targets were chosen (CR 601.2c, 603.3d) and is judged again
 /// on resolution: if it has grown past X every target is illegal (CR 608.2b); otherwise the targets still legal enter under
@@ -59,7 +50,7 @@ pub static BACK: CardDef = CardDef {
         triggered(DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT, combat_damage, "Whenever Fire Lord Sozin deals combat damage to a player, you may pay {X}. When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control."),
     ],
     delayed: &[delayed_trigger(reanimate, "When you do, put any number of target creature cards with total mana value X or less from that player's graveyard onto the battlefield under your control.")
-        .targets(&[TargetSpec { min: 0, max: TargetSpec::ANY_NUMBER, ..target(creature_card_in_that_players_graveyard) }
+        .targets(&[TargetSpec { min: 0, max: TargetSpec::ANY_NUMBER, ..target(targets::creature_card_in_that_players_graveyard) }
             .together(select::total_mana_value_at_most(TargetSpec::COUNTED))
             .labelled("Creature cards from that player's graveyard to put onto the battlefield under your control")])],
     ..oracle::FIRE_LORD_SOZIN

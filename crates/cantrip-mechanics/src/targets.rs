@@ -985,6 +985,18 @@ fn creature_card_in_your_graveyard_filter(q: &dyn Query, asker: &Asker, t: Targe
 /// "Target creature card in your graveyard". Recurring Nightmare and Metamorphosis Fanatic print it.
 pub const CREATURE_CARD_IN_YOUR_GRAVEYARD: TargetSpec = target(creature_card_in_your_graveyard_filter);
 
+/// "Target creature card from that player's graveyard": a creature card in the graveyard of the player the trigger is about (its
+/// subject: the player combat damage was dealt to). Fire Lord Sozin's targets and Shark Shredder's one.
+pub fn creature_card_in_that_players_graveyard(q: &dyn Query, _: &Asker, t: Target) -> bool {
+    match (t, q.event_subject()) {
+        (Target::Object(id), Target::Player(p)) => card_in_graveyard(q, t, &[CardType::Creature]) && q.obj(id).zone == Zone::graveyard(p),
+        _ => false,
+    }
+}
+
+/// "Up to one target creature card from that player's graveyard": see `creature_card_in_that_players_graveyard`.
+pub const UP_TO_ONE_CREATURE_CARD_IN_THAT_PLAYERS_GRAVEYARD: TargetSpec = target(creature_card_in_that_players_graveyard).optional();
+
 /// "A nontoken artifact" (CR 111.1): an artifact permanent that is a card, not a token. Thopter Foundry sacrifices one as a
 /// cost (`filters::nontoken_artifact`) and Lorehold Charm makes each opponent sacrifice one.
 pub fn is_nontoken_artifact(q: &dyn Query, id: ObjectId) -> bool {
