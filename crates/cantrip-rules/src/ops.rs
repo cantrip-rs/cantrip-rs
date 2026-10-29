@@ -2164,6 +2164,12 @@ fn create_tokens_onto(
         events.extend(put);
         created.push(id);
     }
+    // What each token was as it entered (CR 603.6a, 614.12): judged once they are all there, as the permanents that enter by
+    // a move are, so the history says it of tokens too.
+    for &permanent in &created {
+        let (controller, types) = (cx.controller(permanent), cx.chars(permanent).types);
+        events.push(Event::Entered { permanent, controller, types });
+    }
     cx.emit_batch(&events, Some(crate::settle::Before { battlefield: &before, then: &then, seen_by_all: &[] }));
     Ok(created)
 }
