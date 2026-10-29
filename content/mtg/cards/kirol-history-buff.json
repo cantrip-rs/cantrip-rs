@@ -1,0 +1,14 @@
+{
+  "name": "Kirol, History Buff",
+  "manaCost": "{R}{W}",
+  "type": "Legendary Creature — Vampire Cleric",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever one or more cards leave your graveyard, Kirol becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "prepare": {
+    "name": "Pack a Punch",
+    "manaCost": "{1}{R}{W}",
+    "type": "Sorcery",
+    "oracleText": "Mill a card. Put two +1/+1 counters on target creature. It gains trample until end of turn."
+  }
+}

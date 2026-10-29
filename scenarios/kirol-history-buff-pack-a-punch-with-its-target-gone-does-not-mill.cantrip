@@ -1,0 +1,65 @@
+# Kirol, History Buff: Pack a Punch's whole effect needs its target ("Mill a card. Put two +1/+1 counters on target creature"),
+# and with the target illegal on resolution nothing happens (CR 608.2b) - the library is not milled. Bot1 gets Kirol prepared
+# as in the other scenario, casts Pack a Punch on Bot2's Llanowar Elves and Lightning Bolts the Elves in response.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Pearl
+Pursue the Past
+Kirol, History Buff
+Black Lotus
+Plains
+Lightning Bolt
+Mountain
+Island x11
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pursue the Past.Cast
+Bot1.Choose()
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Kirol, History Buff.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Pursue the Past.Cast(Ability: Flashback)
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kirol, History Buff.Prepared = true
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Pack a Punch.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Llanowar Elves
+Bot1.Battlefield.Kirol, History Buff.Power = 2
+Bot1.Graveyard.Count = 2

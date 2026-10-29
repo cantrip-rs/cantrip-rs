@@ -1,0 +1,53 @@
+# Kirol, History Buff {R}{W} 2/3: "Whenever one or more cards leave your graveyard, Kirol becomes prepared." On turn 1 Bot1 casts
+# Pursue the Past; on turn 3 it casts Kirol and then flashes Pursue back, which takes it out of the graveyard. Kirol is prepared
+# and on turn 5 Bot1 casts a copy of Pack a Punch {1}{R}{W} on Kirol: mill a card, two +1/+1 counters (4/5) and trample.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Pearl
+Pursue the Past
+Kirol, History Buff
+Black Lotus
+Plains
+Island x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pursue the Past.Cast
+Bot1.Choose()
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Kirol, History Buff.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Pursue the Past.Cast(Ability: Flashback)
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kirol, History Buff.Prepared = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Pack a Punch.Cast(Bot1.Battlefield.Kirol, History Buff)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Kirol, History Buff.Power = 4
+Bot1.Battlefield.Kirol, History Buff.Toughness = 5
+Bot1.Battlefield.Kirol, History Buff.Counters.PlusOnePlusOne = 2
+Bot1.Graveyard.Count = 2
