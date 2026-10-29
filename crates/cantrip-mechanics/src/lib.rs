@@ -163,6 +163,23 @@ pub mod vote;
 
 use cantrip_api::*;
 
+/// "The number of creature types among non-Borg creatures you control" (CR 205.3m): each creature type is counted
+/// once if at least one creature `player` controls has it. A creature with the Borg type is excluded altogether.
+/// Borg is read through `source`'s words (CR 612.2). Captain Jonathan Archer, Hoshi Sato, Exolinguist and Infinite
+/// Diversity print it.
+pub fn creature_types_among_non_borg(q: &dyn Query, source: ObjectId, player: PlayerId) -> usize {
+    let borg = q.words(source).subtype(Subtype::Borg);
+    let creatures: Vec<ObjectId> = q
+        .permanents_of(player)
+        .into_iter()
+        .filter(|&id| q.chars(id).is(CardType::Creature) && !q.chars(id).has_subtype(borg))
+        .collect();
+    Subtype::CREATURE_TYPES
+        .iter()
+        .filter(|&&kind| creatures.iter().any(|&id| q.chars(id).has_subtype(kind)))
+        .count()
+}
+
 /// "Creatures you control have total power N or greater" (CR 208.1, 613.4): the current, modified power of every
 /// creature `player` controls, attacking or not. Negative powers subtract from the total (CR 107.1b). Cantankerous
 /// Captain checks after its pump resolves; Hologram Janeway checks only when you attack (`AbilityDef::only_if`, not

@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, tokens, triggers};
+use cantrip_mechanics::{creature_types_among_non_borg, targets, tokens, triggers};
 use cantrip_oracle as oracle;
 
 /// Porthos, the legendary 1/1 green Dog token Captain Archer creates (CR 111.4).
@@ -18,22 +18,6 @@ pub static PORTHOS: CardDef = CardDef {
 fn make_porthos(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     tokens::create(g, item.controller, &PORTHOS, 1)?;
     Ok(())
-}
-
-/// "the number of creature types among non-Borg creatures you control" (CR 205.3m): each creature type is counted
-/// once if at least one creature the ability's controller controls has it. A creature with the Borg type is excluded
-/// altogether. Borg is read through Archer's words (CR 612.2).
-fn creature_types_among_non_borg(q: &dyn Query, source: ObjectId, player: PlayerId) -> usize {
-    let borg = q.words(source).subtype(Subtype::Borg);
-    let creatures: Vec<ObjectId> = q
-        .permanents_of(player)
-        .into_iter()
-        .filter(|&id| q.chars(id).is(CardType::Creature) && !q.chars(id).has_subtype(borg))
-        .collect();
-    Subtype::CREATURE_TYPES
-        .iter()
-        .filter(|&&kind| creatures.iter().any(|&id| q.chars(id).has_subtype(kind)))
-        .count()
 }
 
 /// "Target creature you control gets +X/+X until end of turn, where X is the number of creature types among non-Borg
