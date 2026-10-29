@@ -1168,8 +1168,8 @@ pub fn your_upkeep(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     your_step(q, me, event, Step::Upkeep)
 }
 
-/// "When this enters and at the beginning of your upkeep" (CR 603.2, 603.6a): one ability with two events. Obsessive Pursuit
-/// and Gathering Stone print it.
+/// "When this enters and at the beginning of your upkeep" (CR 603.2, 603.6a): one ability with two events. Obsessive Pursuit,
+/// Gathering Stone and Deep Space 9 print it.
 pub fn this_enters_or_your_upkeep(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     this_enters(q, me.source, event).or_else(|| your_upkeep(q, me, event))
 }

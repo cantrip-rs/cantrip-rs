@@ -1,0 +1,150 @@
+# CR 603.2, 702.184a, 613.4c: Deep Space 9's ETB and next upkeep exile four from its controller's library, putting all
+# permanent cards (a land and Sol Ring) onto the battlefield. Nine Warrior tokens station it to eight, then nine; only
+# Bot1's creatures get +3/+3.
+# Deep Space 9 {9}: Legendary Artifact — Spacecraft
+#   When Deep Space 9 enters and at the beginning of your upkeep, exile the top four cards of your library. Put all permanent cards exiled this way onto the battlefield.
+#   Station (Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery.)
+#   9+ | Creatures you control get +3/+3.
+# Written by new-card.py --scenario: Deep Space 9 cast on turn 17 off a land played each turn. Grow it a line at a time with
+#   cargo run --profile cards -p cantrip-script --bin corpus -- --scenario deep-space-9-exile-permanents-station-and-nine-plus --next --brief
+# and see which keys the card moved with --diff <the line number of its cast>.
+
+[Bot1 Deck]
+Deep Space 9
+Secure the Wastes
+Secure the Wastes
+Secure the Wastes
+Mountain
+Plains
+Mountain
+Plains
+Mountain
+Plains
+Mountain
+Plains
+Mountain
+Island
+Island
+Sol Ring
+Island
+Lightning Bolt
+Swamp
+Shock
+Lightning Bolt
+Shock
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x14
+Ornithopter
+Island x30
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Secure the Wastes.Cast(X: 2)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Secure the Wastes.Cast(X: 3)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Secure the Wastes.Cast(X: 4)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+[T11 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T15 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T17 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Deep Space 9.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Deep Space 9.Activate(Ability: Station)
+Bot1.Choose(Warrior Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Deep Space 9.Activate(Ability: Station)
+Bot1.Choose(Warrior Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Deep Space 9.Activate(Ability: Station)
+Bot1.Choose(Warrior Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Deep Space 9.Activate(Ability: Station)
+Bot1.Choose(Warrior Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Deep Space 9.Activate(Ability: Station)
+Bot1.Choose(Warrior Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Deep Space 9.Activate(Ability: Station)
+Bot1.Choose(Warrior Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Deep Space 9.Activate(Ability: Station)
+Bot1.Choose(Warrior Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Deep Space 9.Activate(Ability: Station)
+Bot1.Choose(Warrior Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Warrior Token#1.Power = 1
+Bot1.Battlefield.Deep Space 9.Activate(Ability: Station)
+Bot1.Choose(Warrior Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Deep Space 9.Counters.Charge = 9
+? Bot1.Battlefield.Warrior Token#1.Power = 4
+[T19 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 22
+Bot1.Battlefield.Deep Space 9.Counters.Charge = 9
+Bot1.Battlefield.Warrior Token#1.Power = 4
+Bot1.Battlefield.Sol Ring.Types = Artifact
+Exile.Count = 5
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Library.Count = 30
