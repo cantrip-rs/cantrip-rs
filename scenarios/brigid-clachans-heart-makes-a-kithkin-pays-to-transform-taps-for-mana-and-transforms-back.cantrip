@@ -1,0 +1,64 @@
+# Brigid, Clachan's Heart // Brigid, Doun's Mind. Turn 1: "whenever this creature enters ..., create a 1/1 green and white Kithkin
+# creature token". Turn 3: "at the beginning of your first main phase, you may pay {G}. If you do, transform Brigid" - Mox Emerald pays it as the
+# ability resolves and she becomes a 3/2 Kithkin Soldier (CR 701.27a); the front face's enters-or-transforms ability is not Doun's Mind's, so no
+# second token. Doun's Mind "{T}: Add X {G} or X {W}, where X is the number of other creatures you control" counts the Kithkin token and the
+# Ornithopter, not herself: tapped for white she adds {W}{W}. Turn 5: she pays {W} and transforms back (Mox Pearl), and "transforms into Brigid,
+# Clachan's Heart" makes a second Kithkin token.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Brigid, Clachan's Heart
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brigid, Clachan's Heart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Pearl; Mox Jet; Mox Sapphire; Mox Emerald; Ornithopter; Brigid, Clachan's Heart; Kithkin Token
+[T3 Bot1.Main1]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Brigid, Doun's Mind.Subtypes = Kithkin; Soldier
+? Bot1.Battlefield = Mox Pearl; Mox Jet; Mox Sapphire; Mox Emerald; Ornithopter; Brigid, Doun's Mind; Kithkin Token
+Bot1.Battlefield.Brigid, Doun's Mind.Activate(Color: White)
+? Bot1.Mana = {W}{W}
+[T5 Bot1.Main1]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Battlefield.Brigid, Clachan's Heart.Subtypes = Kithkin; Warrior
+Bot1.Battlefield = Mox Pearl; Mox Jet; Mox Sapphire; Mox Emerald; Ornithopter; Brigid, Clachan's Heart; Kithkin Token; Kithkin Token
