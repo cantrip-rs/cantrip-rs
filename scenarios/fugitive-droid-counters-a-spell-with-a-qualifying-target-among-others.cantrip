@@ -1,0 +1,62 @@
+# Fugitive Droid: a spell qualifies if any of its targets is an artifact or creature the Droid's controller controls. On turn 2
+# Bot2 casts Grizzly Bears and Hard-Hitting Question, targeting Bot2's own Bears and Bot1's Bears. Bot1 pays {U} (Mox Sapphire), sacrifices
+# the Droid, and counters the Question: neither Bears is damaged.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Fugitive Droid
+Grizzly Bears
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Forest
+Grizzly Bears
+Hard-Hitting Question
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Fugitive Droid.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Hard-Hitting Question.Cast
+Bot2.Target(Bot2.Battlefield.Grizzly Bears)
+Bot2.Target(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Fugitive Droid.Activate(Stack.Hard-Hitting Question)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Fugitive Droid = (absent)
+Bot2.Graveyard = Hard-Hitting Question

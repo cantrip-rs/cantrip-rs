@@ -1,0 +1,52 @@
+# Fugitive Droid asks for an artifact or creature on the battlefield (CR 400.7: one that has left is a new object, and no
+# longer the spell's target). On turn 2 Bot2 casts a Lightning Bolt at Bot1's Grizzly Bears and then another on top of it. The
+# top Bolt resolves and kills the Bears; the first, whose only target is gone, is refused to the Droid.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Fugitive Droid
+Grizzly Bears
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Fugitive Droid.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Grizzly Bears = (absent)
+? Stack.Count = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Fugitive Droid.Activate(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Fugitive Droid.Tapped = false
+Bot1.Battlefield.Grizzly Bears = (absent)

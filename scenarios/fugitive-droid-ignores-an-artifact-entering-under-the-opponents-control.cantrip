@@ -1,0 +1,52 @@
+# Fugitive Droid asks for an artifact entering "under your control". On turn 3 Bot1 casts nothing, and Bot2 casts Deadly Dispute
+# in Bot1's first main phase, sacrificing Mox Ruby for a Treasure: an artifact enters this turn, under Bot2. Bot2's Grizzly
+# Bears still block the Droid (Bot1's Droid dies, Bot2 takes nothing).
+
+[Bot1 Deck]
+Mox Sapphire
+Fugitive Droid
+Island x18
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Grizzly Bears
+Deadly Dispute
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fugitive Droid.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Deadly Dispute.Cast
+Bot2.Choose(Mox Ruby)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Treasure Token.Tapped = false
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Fugitive Droid > Bot2)
+Bot2.Block(Grizzly Bears > Fugitive Droid)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Fugitive Droid = (absent)

@@ -1,0 +1,37 @@
+# Fugitive Droid: only an artifact that entered "this turn" frees it. Bot1's Mox Sapphire entered on turn 1 along with the
+# Droid; on turn 3 Bot1 casts nothing, so Bot2's Grizzly Bears (cast on turn 2) may block the Droid, and kills it.
+
+[Bot1 Deck]
+Mox Sapphire
+Fugitive Droid
+Island x18
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fugitive Droid.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fugitive Droid > Bot2)
+Bot2.Block(Grizzly Bears > Fugitive Droid)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Fugitive Droid = (absent)
+Bot2.Battlefield.Grizzly Bears.Tapped = false
