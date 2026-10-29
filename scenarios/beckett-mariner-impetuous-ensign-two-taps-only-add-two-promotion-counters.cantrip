@@ -1,0 +1,30 @@
+# Two taps add two promotion counters, below the three-counter threshold; first strike is visible on the battlefield.
+# The attacks happen on separate turns so each becomes-tapped event resolves before the next one (CR 603.2e).
+
+[Bot1 Deck]
+Beckett Mariner, Impetuous Ensign
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Beckett Mariner, Impetuous Ensign.Cast
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Beckett Mariner, Impetuous Ensign > Bot2)
+[T3 Bot1.Main2]
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Beckett Mariner, Impetuous Ensign > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Beckett Mariner, Impetuous Ensign.Keywords = FirstStrike
+Bot1.Battlefield.Beckett Mariner, Impetuous Ensign.Counters.Promotion = 2
+Bot2.Life = 16

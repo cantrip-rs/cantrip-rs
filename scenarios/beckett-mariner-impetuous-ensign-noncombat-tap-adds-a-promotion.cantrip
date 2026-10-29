@@ -1,0 +1,31 @@
+# Paying Springleaf Drum's cost taps a summoning-sick Beckett without attacking (CR 603.2e, 701.26a).
+# Becoming tapped, rather than declaring an attack, must put the promotion counter on her.
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Beckett Mariner, Impetuous Ensign
+Springleaf Drum
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Springleaf Drum.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Beckett Mariner, Impetuous Ensign.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Springleaf Drum.Activate(Tap: Beckett Mariner, Impetuous Ensign; Color: Red)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Beckett Mariner, Impetuous Ensign.Counters.Promotion = 1
+Bot1.Battlefield.Beckett Mariner, Impetuous Ensign.Tapped = true
+Bot2.Life = 20

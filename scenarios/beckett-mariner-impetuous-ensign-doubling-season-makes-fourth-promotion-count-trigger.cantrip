@@ -1,0 +1,51 @@
+# Doubling Season makes each tap add two promotion counters: two then four. The four-counter case triggers and removes all counters, proving the threshold is three or more, not exactly three (CR 122.1, 608.2c).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Doubling Season
+Mountain
+Beckett Mariner, Impetuous Ensign
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Doubling Season.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Beckett Mariner, Impetuous Ensign.Cast
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Beckett Mariner, Impetuous Ensign > Bot2)
+[T5 Bot1.Main2]
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Beckett Mariner, Impetuous Ensign > Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Beckett Mariner, Impetuous Ensign.Keywords = FirstStrike
+Bot1.Battlefield.Beckett Mariner, Impetuous Ensign.Counters.Promotion = (absent)
+Bot2.Life = 14

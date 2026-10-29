@@ -1,0 +1,11 @@
+{
+  "name": "Beckett Mariner, Impetuous Ensign",
+  "manaCost": "{1}{R}",
+  "type": "Legendary Creature — Human Officer",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "First strike\nReckless Behavior — Whenever Beckett Mariner becomes tapped, put a promotion counter on her. Then if there are three or more promotion counters on her, remove those counters and she deals 2 damage to each opponent.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

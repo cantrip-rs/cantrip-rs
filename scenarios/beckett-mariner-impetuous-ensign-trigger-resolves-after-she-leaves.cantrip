@@ -1,0 +1,31 @@
+# The trigger has no target and still resolves after Beckett leaves, but the old permanent is no longer available for a promotion counter (CR 400.7, 122.6).
+
+[Bot1 Deck]
+Beckett Mariner, Impetuous Ensign
+Mox Ruby
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Beckett Mariner, Impetuous Ensign.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Beckett Mariner, Impetuous Ensign > Bot2)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Beckett Mariner, Impetuous Ensign)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Beckett Mariner, Impetuous Ensign.Counters.Promotion = (absent)
+Bot2.Life = 20
