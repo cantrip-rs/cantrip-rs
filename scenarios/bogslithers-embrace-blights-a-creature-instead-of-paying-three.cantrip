@@ -1,0 +1,38 @@
+# Bogslither's Embrace {1}{B} sorcery: "As an additional cost to cast this spell, blight 1 or pay {3}. Exile target creature" (CR 601.2b,
+# 701.68a, 701.13a). Bot1 pays {1}{B} with Mox Jet and Mox Ruby and blights its own Ornithopter (0/2): exactly one -1/-1 counter, so it
+# survives as -1/1. Bot2's Memnite is exiled, not put into the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Ornithopter
+Bogslither's Embrace
+Island x3
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Bogslither's Embrace.Cast(Bot2.Battlefield.Memnite)
+Bot1.Modes(Blight 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Exile.Memnite.Power = 1
+Bot2.Graveyard =
+Bot1.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+Bot1.Battlefield.Ornithopter.Toughness = 1
+Bot1.Graveyard = Bogslither's Embrace
