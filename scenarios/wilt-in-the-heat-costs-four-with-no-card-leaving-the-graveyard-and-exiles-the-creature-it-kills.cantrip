@@ -1,0 +1,43 @@
+# Wilt in the Heat {2}{R}{W}: "This spell costs {2} less to cast if one or more cards left your graveyard this turn. Wilt in the
+# Heat deals 5 damage to target creature. If that creature would die this turn, exile it instead." No card has left Bot1's
+# graveyard, so three mana (Mountain, Mox Ruby, Mox Pearl) is short; a fourth, Mox Jet, pays it and Bot2's Llanowar Elves
+# are exiled rather than put into the graveyard.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Pearl
+Wilt in the Heat
+Mox Jet
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Wilt in the Heat.Cast(Bot2.Battlefield.Llanowar Elves; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wilt in the Heat.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 0
+Exile = Llanowar Elves
+Bot1.Graveyard = Wilt in the Heat

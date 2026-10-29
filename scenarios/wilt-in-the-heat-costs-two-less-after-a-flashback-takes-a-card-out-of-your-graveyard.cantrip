@@ -1,0 +1,47 @@
+# Wilt in the Heat: on turn 1 Bot1 casts Pursue the Past (declining the discard) and on turn 3 flashes it back - a card leaves
+# Bot1's graveyard - paying {2}{R}{W} with Black Lotus's red and Mox Pearl. Wilt then costs {R}{W}, paid from Mox Ruby and
+# Plains, and exiles Bot2's Llanowar Elves.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Pursue the Past
+Black Lotus
+Wilt in the Heat
+Mountain
+Plains
+Plains x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pursue the Past.Cast
+Bot1.Choose()
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Pursue the Past.Cast(Ability: Flashback)
+Bot1.Choose()
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Wilt in the Heat.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 0
+Exile.Count = 2

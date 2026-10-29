@@ -1,0 +1,6 @@
+{
+  "name": "Wilt in the Heat",
+  "manaCost": "{2}{R}{W}",
+  "type": "Instant",
+  "oracleText": "This spell costs {2} less to cast if one or more cards left your graveyard this turn.\nWilt in the Heat deals 5 damage to target creature. If that creature would die this turn, exile it instead."
+}
