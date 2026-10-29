@@ -13,7 +13,9 @@ fn this_attacks(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired>
     }
 }
 
-fn pump_other_attackers(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+/// "Each other attacking creature gets +1/+0 until end of turn": the keyword's trigger, and the same ability worded out
+/// on Wingnut, Bat on the Belfry.
+pub fn pump_other_attackers(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let others: Vec<ObjectId> = g.state().attackers.iter().map(|a| a.id).filter(|&id| id != item.object).collect();
     // "Each other attacking creature": one instruction (CR 611.2c).
     instruction(g, |g| {

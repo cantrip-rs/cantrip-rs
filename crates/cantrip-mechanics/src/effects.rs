@@ -1138,6 +1138,17 @@ pub fn gain_until_end_of_turn(g: &mut dyn Game, source: ObjectId, target: Object
     g.add_effect(source, target, EffectKind::AddKeywords(Keywords::of(&[keyword])), Duration::EndOfTurn);
 }
 
+/// "`source` gains your choice of [keywords] until end of turn" (CR 608.2d, 611.2a): `target` gains the one the controller
+/// picks from `keywords`, labelled by `card`'s `labels` in the same order. Hungering Puppetbeast (trample, hexproof or haste)
+/// and Wingnut, Bat on the Belfry (flying, menace or haste) print it.
+pub fn gain_your_choice_until_end_of_turn(g: &mut dyn Game, item: &StackItem, card: &'static CardDef, target: ObjectId, keywords: &[Keyword]) -> Result<(), Suspend> {
+    let card = g.card_id(card);
+    let labels = (0..keywords.len() as u8).map(|option| Label::Card(card, option)).collect();
+    let keyword = keywords[crate::choose::one_of(g, item.controller, item.object, labels)? as usize];
+    gain_until_end_of_turn(g, item.object, target, keyword);
+    Ok(())
+}
+
 /// "This creature gains [a keyword] until end of turn" (CR 611.2a): the ability's source gains the keyword for the rest of
 /// the turn; an effect on a source that is no longer the object it was does nothing (CR 400.7). Afterthought Sentry, Psychic Frog and Spectacular Spider-Man
 /// ("flying"), Fleeting Spirit ("first strike") and Poison Dart Frog ("deathtouch") print it; the named wrappers below are

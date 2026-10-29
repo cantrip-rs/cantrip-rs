@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, effects, targets, tokens};
+use cantrip_mechanics::{effects, targets, tokens};
 use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_oracle as oracle;
 
@@ -13,14 +13,7 @@ fn create_heartwood(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 fn grow(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.add_counters(item.object, CounterKind::PlusOne, 1);
     g.end_sentence();
-    let card = g.card_id(&CARD);
-    let keyword = match choose::one_of(g, item.controller, item.object, (0..3).map(|option| Label::Card(card, option)).collect())? {
-        0 => Keyword::Trample,
-        1 => Keyword::Hexproof,
-        _ => Keyword::Haste,
-    };
-    effects::gain_until_end_of_turn(g, item.object, item.object, keyword);
-    Ok(())
+    effects::gain_your_choice_until_end_of_turn(g, item, &CARD, item.object, &[Keyword::Trample, Keyword::Hexproof, Keyword::Haste])
 }
 
 pub static CARD: CardDef = CardDef {
