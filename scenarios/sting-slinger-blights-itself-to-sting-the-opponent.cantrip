@@ -1,0 +1,36 @@
+# Sting-Slinger: "{1}{R}, {T}, Blight 1: This creature deals 2 damage to each opponent." (CR 701.68a, 120.3): on turn three Bot1 pays
+# {1}{R} and blights the Slinger itself (3/3 becomes 2/2), and Bot2 goes from 20 to 18.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Sting-Slinger
+Forest
+Forest x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sting-Slinger.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sting-Slinger.Activate
+Bot1.Choose(Sting-Slinger)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sting-Slinger.Toughness = 2
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20

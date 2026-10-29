@@ -1,0 +1,8 @@
+{
+  "name": "Sting-Slinger",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{1}{R}, {T}, Blight 1: This creature deals 2 damage to each opponent. (To blight 1, put a -1/-1 counter on a creature you control.)"
+}
