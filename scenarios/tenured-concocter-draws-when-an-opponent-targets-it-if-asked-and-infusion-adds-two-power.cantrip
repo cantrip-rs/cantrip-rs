@@ -1,0 +1,55 @@
+# Tenured Concocter, a 4/5 with vigilance: "Whenever this creature becomes the target of a spell or ability an opponent controls,
+# you may draw a card." Bot2's Lightning Bolt at it (turn 2): Bot1 draws (hand 2 -> 3); the Bolt's 3 damage does not kill it.
+# Infusion -- "+2/+0 as long as you gained life this turn": 4/5 on turn 3 until Lightning Helix gains Bot1 3 life, then 6/5.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Tenured Concocter
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Mox Jet
+Mountain x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Tenured Concocter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+? Bot1.Battlefield.Tenured Concocter.Power = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Tenured Concocter)
+Bot1.Accept
+? Bot1.Hand.Count = 3
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Tenured Concocter.Power = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tenured Concocter.Power = 6
+? Bot1.Battlefield.Tenured Concocter.Toughness = 5
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Tenured Concocter.Power = 4
+
+[Expect]
+Bot1.Life = 23
