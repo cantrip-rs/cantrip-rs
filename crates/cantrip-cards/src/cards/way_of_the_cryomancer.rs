@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{copy, delayed, empower, statics, triggers, triggers::THIS_ENTERS};
+use cantrip_mechanics::{copy, delayed, empower, statics, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
 /// "When Way of the Cryomancer enters, empower Jace 5."
@@ -22,11 +22,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[triggered(THIS_ENTERS, empower_jace, "When Way of the Cryomancer enters, empower Jace 5.")],
     delayed: &[
         ability(loyalty(-3), watch, MINUS_THREE),
-        triggered(
-            when_asked(EventMask::SPELL_CAST, triggers::you_cast_instant_or_sorcery),
-            copy::copy_the_cast_spell,
-            "When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy.",
-        ),
+        copy::COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST,
     ],
     statics: &[static_ability(
         Layer::Ability,
