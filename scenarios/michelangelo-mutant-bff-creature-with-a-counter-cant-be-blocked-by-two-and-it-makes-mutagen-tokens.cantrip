@@ -1,0 +1,61 @@
+# Michelangelo, Mutant BFF: "Each creature you control with a counter on it can't be blocked by more than one creature" (CR
+# 509.1b), and "Whenever Michelangelo enters or attacks, create a Mutagen token." He enters with Elvish Mystic (Mutagen #1); a
+# Mutagen puts a +1/+1 counter on him; he and the Mystic attack (Mutagen #2). Bot2's two Commandos may not both block the
+# countered Michelangelo, while both may block the counterless Mystic.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Elvish Mystic
+Michelangelo, Mutant BFF
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Crustacean Commando
+Crustacean Commando
+Forest x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Michelangelo, Mutant BFF.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Crustacean Commando.Cast
+Bot2.Hand.Crustacean Commando.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mutagen Token.Activate(Bot1.Battlefield.Michelangelo, Mutant BFF)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Michelangelo, Mutant BFF.Power = 5
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Michelangelo, Mutant BFF; Elvish Mystic > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+! Bot2.Block(Crustacean Commando#1 > Michelangelo, Mutant BFF; Crustacean Commando#2 > Michelangelo, Mutant BFF)
+Bot2.Block(Crustacean Commando#1 > Elvish Mystic; Crustacean Commando#2 > Elvish Mystic)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15

@@ -1,0 +1,53 @@
+# Michelangelo, Mutant BFF: the blocking limit is on "each creature you control" with a counter. Bot2's Crustacean Commando
+# gets a +1/+1 counter from its own Mutagen and attacks on turn 4; Bot1 blocks it with both Michelangelo and the Elvish Mystic.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Elvish Mystic
+Michelangelo, Mutant BFF
+Forest x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Crustacean Commando
+Forest x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Michelangelo, Mutant BFF.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Crustacean Commando.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mutagen Token.Activate(Bot2.Battlefield.Crustacean Commando)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Crustacean Commando.Power = 1
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Crustacean Commando > Bot1)
+Bot1.Block(Michelangelo, Mutant BFF > Crustacean Commando; Elvish Mystic > Crustacean Commando)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Crustacean Commando; Black Lotus
