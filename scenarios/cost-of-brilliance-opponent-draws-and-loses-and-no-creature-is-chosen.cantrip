@@ -1,0 +1,37 @@
+# Cost of Brilliance: the creature is "up to one" (CR 115.1d), so Bot1 may choose none: Bot2 is the target player, draws two
+# and goes to 18, and the Ornithopter gets no counter.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Cost of Brilliance
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+? Bot2.Hand.Count = 7
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Cost of Brilliance.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Count: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot2.Hand.Count = 9
+Bot1.Life = 20
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Ornithopter.Power = 0

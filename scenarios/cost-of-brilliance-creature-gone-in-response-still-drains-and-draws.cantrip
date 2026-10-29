@@ -1,0 +1,46 @@
+# Cost of Brilliance: a spell with several targets resolves, doing what it still can, unless every target is illegal
+# (CR 608.2b). Bot1 targets itself and its own Burrog Banemaker; Bot2 Bolts the Banemaker in response. The Banemaker is gone, so
+# there is no counter, but Bot1 still draws two and loses 2 life.
+
+[Bot1 Deck]
+Burrog Banemaker
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Cost of Brilliance
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Cost of Brilliance.Cast
+Bot1.Target(Bot1)
+Bot1.Target(Burrog Banemaker)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard = Cost of Brilliance; Burrog Banemaker
+Bot1.Hand.Count = 4
