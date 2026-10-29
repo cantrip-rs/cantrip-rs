@@ -1,0 +1,8 @@
+{
+  "name": "Pestered Wellguard",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Merfolk Soldier",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Whenever this creature becomes tapped, create a 1/1 blue and black Faerie creature token with flying."
+}

@@ -1,0 +1,39 @@
+# Pestered Wellguard {3}{U} (four Moxen, turn 1): "Whenever this creature becomes tapped, create a 1/1 blue and black Faerie creature
+# token with flying" (CR 603.2, 111.2). Attacking on turn 3 taps it and makes exactly one Faerie, 1/1, blue and black, with flying;
+# casting it, or the untapped Wellguard sitting on the battlefield, made none.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Pestered Wellguard
+Island x2
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pestered Wellguard.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Pestered Wellguard > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Pestered Wellguard.Tapped = true
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Faerie Token.Power = 1
+Bot1.Battlefield.Faerie Token.Toughness = 1
+Bot1.Battlefield.Faerie Token.Tapped = false
+Bot1.Battlefield.Faerie Token.Colors = Black; Blue
+Bot1.Battlefield.Faerie Token.Keywords = Flying
+Bot2.Life = 17
