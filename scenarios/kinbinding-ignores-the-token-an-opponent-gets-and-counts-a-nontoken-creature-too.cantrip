@@ -1,0 +1,65 @@
+# Kinbinding (CR 603.6a): only creatures that entered under Bot1's control this turn count, a nontoken one as well as a token. On turn 3 Bot1 casts an Ornithopter (an artifact
+# creature, not a token) before combat: X = 1 and the Kithkin from turn 1 is 2/2. The beginning-of-combat Kithkin is the second to enter, so X = 2 and both are 3/3. Bot1's
+# Stroke of Midnight then destroys Bot2's Llanowar Elves: Bot2 gets a Human token, which entered under Bot2's control and changes nothing.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Kinbinding
+Stroke of Midnight
+Ornithopter
+Plains x12
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Kinbinding.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Kithkin Token.Power = 2
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kithkin Token#1.Power = 3
+? Bot1.Battlefield.Kithkin Token#2.Power = 3
+? Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stroke of Midnight.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Count = 2
+? Bot1.Battlefield.Kithkin Token#1.Power = 3
+? Bot1.Battlefield.Ornithopter.Power = 2
+
+[Expect]
+Bot1.Battlefield.Count = 9
