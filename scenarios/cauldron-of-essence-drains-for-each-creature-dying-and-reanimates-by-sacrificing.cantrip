@@ -1,0 +1,64 @@
+# Cauldron of Essence: Bot2's Lightning Bolt kills Bot1's Memnite on turn 2 and Bot2 loses 1 life, Bot1 gains 1 (Bot2 19,
+# Bot1 21). On turn 3 Bot1 pays {1}{B}{G} and {T}, sacrificing the Ornithopter (its only creature), to return the Memnite: the
+# Ornithopter dying drains again (Bot2 18, Bot1 22) before the ability resolves, and the Memnite is back on the battlefield. The
+# target was chosen before the cost was paid, so it could not have been the sacrificed creature.
+
+[Dice]
+1; 1; 1; 1; 1; 1
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Cauldron of Essence
+Memnite
+Ornithopter
+Island
+Island x25
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x31
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cauldron of Essence.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 21
+? Bot2.Life = 19
+? Bot1.Graveyard = Memnite
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Cauldron of Essence.Activate(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Graveyard = Ornithopter
