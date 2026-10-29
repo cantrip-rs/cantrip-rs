@@ -1137,6 +1137,7 @@ counter_kinds! {
     Invitation = 51, "invitation", "Invitation";
     // CR 702.24a: cumulative upkeep puts one on its permanent each upkeep and charges its cost once for each.
     Age = 52, "age", "Age";
+    Growth = 53, "growth", "Growth";
 }
 
 impl CounterKind {
