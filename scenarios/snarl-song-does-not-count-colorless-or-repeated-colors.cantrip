@@ -1,0 +1,33 @@
+# Snarl Song: colorless mana is not a color (CR 105.1). Bot1 pays {5}{G} with Mana Crypt's {C}{C} and Mox Emerald, Mox Ruby, Mox Pearl and
+# Mox Sapphire: four colors, so two 4/4 Fractals and 4 life.
+
+[Bot1 Deck]
+Snarl Song
+Mana Crypt
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Forest x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Snarl Song.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 24
+Bot1.Battlefield.Fractal Token#1.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Fractal Token#2.Counters.PlusOnePlusOne = 4

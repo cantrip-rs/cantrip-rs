@@ -1,0 +1,28 @@
+# Snarl Song paid with only green mana (a Black Lotus's {G}{G}{G} and three Moxen Emerald): one color, so two 1/1 Fractals and 1 life.
+
+[Bot1 Deck]
+Snarl Song
+Black Lotus
+Mox Emerald x3
+Forest x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Snarl Song.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 21
+Bot1.Battlefield.Fractal Token#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Fractal Token#2.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield = Fractal Token; Fractal Token; Mox Emerald; Mox Emerald; Mox Emerald
