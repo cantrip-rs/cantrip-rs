@@ -1,0 +1,6 @@
+{
+  "name": "Grapple with Death",
+  "manaCost": "{1}{B}{G}",
+  "type": "Sorcery",
+  "oracleText": "Destroy target artifact or creature. You gain 1 life."
+}
