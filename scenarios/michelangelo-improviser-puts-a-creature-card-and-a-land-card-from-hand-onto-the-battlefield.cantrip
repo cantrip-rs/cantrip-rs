@@ -1,0 +1,43 @@
+# Michelangelo, Improviser: "Whenever Michelangelo deals combat damage to a player, you may put a creature card and/or a land card from your hand
+# onto the battlefield." Cast on turn 1 ({3}{G}: Black Lotus and Mox Emerald), he hits on turn 3. Only a creature card can be chosen for the first
+# card and only a land card for the second; Bot1 puts a Memnite and a Forest onto the battlefield, leaving the Ornithopter and the Plains in hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Michelangelo, Improviser
+Memnite
+Forest
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Michelangelo, Improviser.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Michelangelo, Improviser > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+! Bot1.Choose(Forest)
+! Bot1.Choose(Plains)
+! Bot1.Choose(Memnite; Ornithopter)
+Bot1.Choose(Memnite)
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Forest; Plains)
+Bot1.Choose(Forest)
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Life = 16
+Bot1.Battlefield = Forest; Memnite; Michelangelo, Improviser; Mox Emerald
+Bot1.Hand = Ornithopter; Plains; Plains

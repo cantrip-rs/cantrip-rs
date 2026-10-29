@@ -1,0 +1,8 @@
+{
+  "name": "Michelangelo, Improviser",
+  "manaCost": "{3}{G}",
+  "type": "Legendary Creature — Mutant Ninja Turtle",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Sneak {2}{G}{G} (You may cast this spell for {2}{G}{G} if you also return an unblocked attacker you control to hand during the declare blockers step. He enters tapped and attacking.)\nWhenever Michelangelo deals combat damage to a player, you may put a creature card and/or a land card from your hand onto the battlefield."
+}
