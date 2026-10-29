@@ -1,0 +1,40 @@
+# Mind Transfer Protocol on Bot1's Mox Jet (on the battlefield since turn one): "Until end of turn, target artifact or creature
+# becomes an artifact creature with base power and toughness 4/5. Draw a card." The Mox attacks as a 4/5 (Bot2 goes 20 to
+# 16) and Bot1 draws; at the end of the turn it is only an artifact again. Pre-attack: the Mox is an Artifact Creature 4/5.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mind Transfer Protocol
+Island x4
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mind Transfer Protocol.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Jet.Types = Artifact; Creature
+? Bot1.Battlefield.Mox Jet.Power = 4
+? Bot1.Battlefield.Mox Jet.Toughness = 5
+? Bot1.Hand.Count = 4
+Bot1.Attack(Mox Jet > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Mox Jet.Types = Artifact
+
+[Expect]
+Bot2.Life = 16

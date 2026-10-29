@@ -1,0 +1,6 @@
+{
+  "name": "Mind Transfer Protocol",
+  "manaCost": "{2}{U}",
+  "type": "Instant",
+  "oracleText": "Until end of turn, target artifact or creature becomes an artifact creature with base power and toughness 4/5.\nDraw a card."
+}
