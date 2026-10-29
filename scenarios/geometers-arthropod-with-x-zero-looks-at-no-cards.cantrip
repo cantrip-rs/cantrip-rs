@@ -1,0 +1,36 @@
+# Geometer's Arthropod: a spell with {X} in its cost triggers it even when X is 0 (CR 107.3), and then it looks at the top zero
+# cards: nothing is asked, taken or moved, though the ability does go on the stack.
+
+[Bot1 Deck]
+Geometer's Arthropod
+Pterafractyl
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Mox Sapphire
+Lightning Bolt
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Geometer's Arthropod.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Pterafractyl.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot1.Library.Count = 21
