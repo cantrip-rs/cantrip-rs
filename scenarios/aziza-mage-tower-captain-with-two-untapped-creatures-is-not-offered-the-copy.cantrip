@@ -1,0 +1,38 @@
+# Aziza, Mage Tower Captain: three untapped creatures are needed. Bot1 controls Aziza and one Ornithopter, two in all, so the
+# "may" is not even asked (CR 608.2d: a choice made impossible) and the Bolt resolves once: Bot2 20 - 3 = 17.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Aziza, Mage Tower Captain
+Ornithopter
+Lightning Bolt
+Mountain
+Island
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aziza, Mage Tower Captain.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Ornithopter.Tapped = false
