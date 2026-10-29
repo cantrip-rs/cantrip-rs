@@ -1,0 +1,54 @@
+# Wanderwine Farewell {5}{U}{U}, convoke: "Return one or two target nonland permanents to their owners' hands. Then if you control a Merfolk, create a 1/1 white
+# and blue Merfolk creature token for each permanent returned to its owner's hand this way." Black Lotus, Mox Sapphire and Mox Jet pay five of the seven, two
+# Ornithopters tapped for convoke the other two (CR 702.51a). An Island is no legal target (nonland). Bot1 returns Bot2's Raiders and its own tapped Mox Jet while
+# its Merfolk of the Pearl Trident stays: two permanents returned, two tokens (CR 111.4).
+
+[Bot1 Deck]
+Merfolk of the Pearl Trident
+Mox Sapphire
+Mox Jet
+Black Lotus
+Ornithopter
+Ornithopter
+Wanderwine Farewell
+Island
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Mons's Goblin Raiders
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: U)
+Bot1.Hand.Wanderwine Farewell.Cast(Convoke: Ornithopter, Ornithopter)
+! Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Mons's Goblin Raiders; Bot1.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana =
+Bot1.Hand = Mox Jet
+Bot2.Battlefield = Mox Ruby
+Bot2.Graveyard =
+Bot1.Battlefield = Merfolk of the Pearl Trident; Ornithopter; Ornithopter; Mox Sapphire; Island; Merfolk Token; Merfolk Token

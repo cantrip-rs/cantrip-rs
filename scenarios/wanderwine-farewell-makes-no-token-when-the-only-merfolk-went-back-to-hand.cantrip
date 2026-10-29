@@ -1,0 +1,49 @@
+# Wanderwine Farewell: "Return one or two target nonland permanents to their owners' hands. Then if you control a Merfolk, create a 1/1 white and blue Merfolk
+# creature token for each permanent returned." The order matters: Bot1 returns its own Merfolk of the Pearl Trident, its only Merfolk, with Bot2's Raiders, so after
+# the return it controls none and no token is made, though two permanents were returned.
+
+[Bot1 Deck]
+Merfolk of the Pearl Trident
+Mox Sapphire
+Mox Jet
+Black Lotus
+Ornithopter
+Ornithopter
+Wanderwine Farewell
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mons's Goblin Raiders
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: U)
+Bot1.Hand.Wanderwine Farewell.Cast(Convoke: Ornithopter, Ornithopter)
+Bot1.Target(Bot2.Battlefield.Mons's Goblin Raiders; Bot1.Battlefield.Merfolk of the Pearl Trident)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Merfolk of the Pearl Trident; Island
+Bot2.Battlefield = Mox Ruby
+Bot2.Graveyard =
+Bot1.Battlefield = Ornithopter; Ornithopter; Mox Sapphire; Mox Jet
