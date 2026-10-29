@@ -1,0 +1,50 @@
+# Donatello, Mutant Mechanic: "Whenever an artifact you control is put into a graveyard from the battlefield, if it had counters on it, put those counters on up to one target artifact or creature
+# you control." On turn 3 Bot1 makes Mox Ruby a 3/3 Robot, then taps it for {R} and Lightning Bolts it: the dead artifact had three +1/+1 counters, which go on Donatello (3/5 -> 6/8).
+# Donatello himself, Mox Sapphire, Mox Jet and Mox Pearl are the candidates, so the target is asked.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Donatello, Mutant Mechanic
+Lightning Bolt
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Donatello, Mutant Mechanic.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Donatello, Mutant Mechanic.Activate(Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Donatello, Mutant Mechanic)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Mox Ruby; Lightning Bolt
+Bot1.Battlefield.Donatello, Mutant Mechanic.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Donatello, Mutant Mechanic.Power = 6
+Bot1.Battlefield.Donatello, Mutant Mechanic.Toughness = 8

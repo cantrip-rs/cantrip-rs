@@ -1,0 +1,53 @@
+# Donatello, Mutant Mechanic: "{T}: Put three +1/+1 counters on target artifact you control. If it isn't a creature, it becomes a 0/0 Robot creature in addition to its other types.
+# Activate only as a sorcery." Cast on turn 1 with the four Moxen, he can tap on turn 3 (no longer summoning sick). In the declare attackers step the activation is refused (CR 602.5d,
+# although he is untapped); in the second main phase it targets Mox Ruby (one of four artifacts, so asked): three counters on a 0/0 Robot, a 3/3 that is still an artifact.
+# Bot2's Mox Emerald is an artifact too but is not Bot1's.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Donatello, Mutant Mechanic
+Island x2
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Donatello, Mutant Mechanic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Battlefield.Donatello, Mutant Mechanic.Activate(Bot1.Battlefield.Mox Ruby)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Donatello, Mutant Mechanic.Activate(Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mox Ruby.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Mox Ruby.Power = 3
+Bot1.Battlefield.Mox Ruby.Toughness = 3
+Bot1.Battlefield.Mox Ruby.Types = Artifact; Creature
+Bot1.Battlefield.Mox Ruby.Subtypes = Robot
+Bot1.Battlefield.Donatello, Mutant Mechanic.Tapped = true
+Bot2.Battlefield.Mox Emerald.Types = Artifact
