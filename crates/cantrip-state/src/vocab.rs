@@ -1107,6 +1107,7 @@ counter_kinds! {
     Ice = 49, "ice", "Ice";
     Soul = 50, "soul", "Soul";
     Invitation = 51, "invitation", "Invitation";
+    Growth = 52, "growth", "Growth";
 }
 
 impl CounterKind {
