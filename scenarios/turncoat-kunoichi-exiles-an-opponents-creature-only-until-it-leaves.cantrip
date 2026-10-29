@@ -1,0 +1,48 @@
+# Turncoat Kunoichi cast for its mana cost: "Exile that creature until this creature leaves the battlefield" (CR 610.3). Bot1 casts
+# it on turn 3 for Black Lotus; its own Ornithopter is not a legal target (an opponent's creature only), so the trigger takes Bot2's
+# Elvish Mystic into exile. Bot2 then casts Lightning Bolt on the Kunoichi on turn 4: it dies, and the Mystic comes back (a new
+# object) under Bot2's control.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Turncoat Kunoichi
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Forest
+Mountain
+Elvish Mystic
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Turncoat Kunoichi.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Exile.Elvish Mystic.Power = 1
+? Bot2.Battlefield.Count = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Turncoat Kunoichi)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Elvish Mystic.Power = 1
+
+[Expect]
+Bot1.Graveyard.Turncoat Kunoichi.Power = 3

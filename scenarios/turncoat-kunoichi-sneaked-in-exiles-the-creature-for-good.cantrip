@@ -1,0 +1,53 @@
+# Turncoat Kunoichi with its sneak cost paid (CR 702.190a): "instead exile the chosen creature", with no "until". Bot1 attacks with
+# Ornithopter on turn 3 and sneaks the Kunoichi in during the declare blockers step for {2}{W}{B} (Black Lotus and Mox Jet),
+# returning the Ornithopter; its trigger exiles Bot2's Elvish Mystic. Bot2's Lightning Bolt then kills the Kunoichi on turn 4, and the
+# Mystic stays in exile.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Jet
+Turncoat Kunoichi
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Forest
+Mountain
+Elvish Mystic
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Turncoat Kunoichi.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Exile.Elvish Mystic.Power = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Turncoat Kunoichi)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Exile.Elvish Mystic.Power = 1
+
+[Expect]
+Bot1.Graveyard.Turncoat Kunoichi.Power = 3

@@ -1,0 +1,8 @@
+{
+  "name": "Turncoat Kunoichi",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Mutant Ninja Fox",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Sneak {2}{W}{B} (You may cast this spell for {2}{W}{B} if you also return an unblocked attacker you control to hand during the declare blockers step. It enters tapped and attacking.)\nWhen this creature enters, choose target creature an opponent controls. Exile that creature until this creature leaves the battlefield. If this creature's sneak cost was paid, instead exile the chosen creature."
+}
