@@ -1,0 +1,39 @@
+# Suspend Aggression {1}{R}{W}: "Exile target nonland permanent and the top card of your library. For each of those cards, its
+# owner may play it until the end of their next turn." Bot1 exiles Bot2's Mox Ruby and its own top card, a Mountain, then plays
+# the Mountain as its land for the turn. On turn 4 Bot2 casts the Mox from exile (for {0}) and it is back on the battlefield.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Suspend Aggression
+Island x4
+Mountain
+Island x11
+
+[Bot2 Deck]
+Mox Ruby
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Suspend Aggression.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+Bot1.Exile.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Exile.Mox Ruby.Cast
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Mountain.Types = Land
+Bot2.Battlefield.Mox Ruby.Types = Artifact

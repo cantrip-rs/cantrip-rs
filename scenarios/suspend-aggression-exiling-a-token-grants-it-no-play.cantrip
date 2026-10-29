@@ -1,0 +1,39 @@
+# Suspend Aggression {1}{R}{W}: "Exile target nonland permanent and the top card of your library. For each of those cards, its
+# owner may play it until the end of their next turn." A token is not a card: Bot1 exiles Bot2's Fractal token (made by Fractal
+# Anomaly) and its own top card, a Mountain; only the Mountain stays in exile to be played, and the token is gone.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Suspend Aggression
+Island x4
+Mountain
+Island x11
+
+[Bot2 Deck]
+Island
+Fractal Anomaly
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Fractal Anomaly.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Suspend Aggression.Cast(Bot2.Battlefield.Fractal Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Mountain
+Bot2.Battlefield.Count = 1

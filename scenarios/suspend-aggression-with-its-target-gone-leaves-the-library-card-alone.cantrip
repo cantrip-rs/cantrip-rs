@@ -1,0 +1,37 @@
+# Suspend Aggression: "If the target is illegal, nothing happens" (CR 608.2b), so the top card of Bot1's library is not exiled
+# either. Bot1 targets Bot2's Black Lotus and Bot2 sacrifices it for mana in response.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Suspend Aggression
+Island x4
+Mountain
+Island x11
+
+[Bot2 Deck]
+Black Lotus
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Suspend Aggression.Cast(Bot2.Battlefield.Black Lotus)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Library.Count = 12
+Bot2.Graveyard = Black Lotus
