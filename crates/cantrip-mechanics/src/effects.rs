@@ -1262,3 +1262,12 @@ pub fn may_cast_first_target_free_exiling_it(g: &mut dyn Game, item: &StackItem)
     g.cast_during_resolution_as(card, CastTerms { instead: Some(ManaCost::ZERO), exile_instead: ExileInstead::Spell, way, ..CastTerms::default() })?;
     Ok(())
 }
+
+/// "Put two +1/+1 counters on target creature" (CR 122.1a, 608.2b), the first target still legal on resolution; with none chosen
+/// (an "up to one" slot) or none legal nothing is put on. Room of Refuge, Trash the Town and Silverquill Charm
+/// print it.
+pub fn two_plus_one_counters_on_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(object) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.add_counters(object, CounterKind::PlusOne, 2);
+    Ok(())
+}
