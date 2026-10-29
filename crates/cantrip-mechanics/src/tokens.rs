@@ -577,6 +577,16 @@ pub static SOLDIER: CardDef = CardDef {
     ..token!(Soldier)
 };
 
+/// The 2/2 red Mutant creature token. Jennika, Bad Apple Big Sister, Mighty Mutanimals, Sally Pride, Slash, Turtle Blimp, Wooden
+/// Cane, Old Hob and Splinter & Leo make it.
+pub static MUTANT: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Red)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    ..token!(Mutant)
+};
+
 /// The 4/4 white Angel creature token with flying and vigilance. Resplendent Angel and Parhelion II make it.
 pub static ANGEL: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),
