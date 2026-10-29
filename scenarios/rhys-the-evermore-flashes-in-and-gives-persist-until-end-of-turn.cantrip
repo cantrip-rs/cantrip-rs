@@ -1,0 +1,54 @@
+# Rhys has flash, and "when Rhys enters, another target creature you control gains persist until end of turn" (CR 702.79a). In
+# Bot2's turn 2, with Lightning Bolt on the stack aimed at Kinscaer Sentry, Bot1 flashes Rhys in; the Sentry gains persist,
+# the Bolt kills it and it returns with a -1/-1 counter (a 1/1). Then on turn 3 Rhys ({W}, {T}, sorcery speed) removes that
+# counter, leaving a 2/2.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Kinscaer Sentry
+Rhys, the Evermore
+Mox Pearl
+Plains
+Plains x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Hand.Kinscaer Sentry.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kinscaer Sentry)
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Rhys, the Evermore.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Rhys, the Evermore.Activate(Bot1.Battlefield.Kinscaer Sentry)
+Bot1.RemoveCounters(Kinscaer Sentry: MinusOneMinusOne 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Kinscaer Sentry.Power = 2
+Bot1.Battlefield.Kinscaer Sentry.Toughness = 2
