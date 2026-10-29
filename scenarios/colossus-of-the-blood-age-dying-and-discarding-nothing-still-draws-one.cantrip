@@ -1,0 +1,44 @@
+# Colossus of the Blood Age: "discard any number of cards, then draw that many cards plus one" - discarding none is a choice of
+# zero cards, and the draw is still one (0 + 1). Two Lightning Bolts kill it on turn 3; Bot1 keeps its Island, and ends with the
+# Island and the one card drawn.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Colossus of the Blood Age
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Colossus of the Blood Age.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Colossus of the Blood Age)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Colossus of the Blood Age)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Count = 5
+Bot1.Hand.Count = 2

@@ -1,0 +1,8 @@
+{
+  "name": "Colossus of the Blood Age",
+  "manaCost": "{4}{R}{W}",
+  "type": "Artifact Creature — Construct",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "When this creature enters, it deals 3 damage to each opponent and you gain 3 life.\nWhen this creature dies, discard any number of cards, then draw that many cards plus one."
+}
