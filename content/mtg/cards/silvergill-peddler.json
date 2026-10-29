@@ -1,0 +1,8 @@
+{
+  "name": "Silvergill Peddler",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Merfolk Citizen",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever this creature becomes tapped, draw a card, then discard a card."
+}

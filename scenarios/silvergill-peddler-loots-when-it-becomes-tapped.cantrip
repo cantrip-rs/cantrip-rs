@@ -1,0 +1,36 @@
+# Silvergill Peddler {2}{U} (three Moxen, turn 1): "Whenever this creature becomes tapped, draw a card, then discard a card" (CR 603.2,
+# 701.9). Casting it does nothing; attacking on turn 3 taps it, so Bot1 draws the Forest and discards a card: the hand stays the same size
+# (after the turn-3 draw it holds 4 cards, and still 4 after the loot), and one card went to the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Silvergill Peddler
+Island x3
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Silvergill Peddler.Cast
+? Bot1.Hand.Count = 3
+? Bot1.Graveyard.Count = 0
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 4
+Bot1.Attack(Silvergill Peddler > Bot2)
+Bot1.Choose(Island)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 1
+Bot1.Battlefield.Silvergill Peddler.Tapped = true
