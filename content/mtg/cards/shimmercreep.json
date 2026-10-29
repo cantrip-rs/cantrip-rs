@@ -1,0 +1,11 @@
+{
+  "name": "Shimmercreep",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nVivid — When this creature enters, each opponent loses X life and you gain X life, where X is the number of colors among permanents you control.",
+  "keywords": [
+    "Menace"
+  ]
+}

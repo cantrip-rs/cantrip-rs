@@ -1,0 +1,33 @@
+# Shimmercreep, {4}{B} 3/5 menace: "Vivid - When this creature enters, each opponent loses X life and you gain X life, where X is
+# the number of colors among permanents you control" (CR 207.2c, 105.2, 608.2h). Bot1 has a green Llanowar Elves, and the black
+# Shimmercreep itself; its Moxen and Black Lotus are colorless artifacts, which are no color. X is 2: Bot2 20 -> 18, Bot1 20 -> 22.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Llanowar Elves
+Black Lotus
+Shimmercreep
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shimmercreep.Cast
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Battlefield.Shimmercreep.Keywords = Menace
