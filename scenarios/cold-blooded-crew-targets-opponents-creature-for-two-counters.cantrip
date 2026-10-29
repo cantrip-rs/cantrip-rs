@@ -1,0 +1,43 @@
+# Cold-Blooded Crew's enters trigger targets a creature an opponent controls and puts exactly two +1/+1 counters on it. A Mox is
+# refused as a noncreature target (CR 115.1, 122.1a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Cold-Blooded Crew
+Island
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cold-Blooded Crew.Cast
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield.Ornithopter.Power = 2
+Bot2.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Cold-Blooded Crew.Power = 4
+Bot1.Battlefield.Cold-Blooded Crew.Toughness = 4

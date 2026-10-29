@@ -1,0 +1,32 @@
+# Basic landcycling {2} pays two mana exactly, discards Cold-Blooded Crew, and finds Plains;
+# Taiga has basic land types but is not basic and is refused (CR 205.4c, 702.29e).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Cold-Blooded Crew
+Island
+Forest
+Swamp
+Plains
+Taiga
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Cold-Blooded Crew.Activate
+? Bot1.Mana =
+! Bot1.Search(Taiga)
+Bot1.Search(Plains)
+
+[Expect]
+Bot1.Graveyard = Cold-Blooded Crew
+Bot1.Hand = Forest; Island; Plains; Plains; Swamp
+Bot1.Library.Count = 13

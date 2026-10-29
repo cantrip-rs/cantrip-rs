@@ -1,0 +1,70 @@
+# Cold-Blooded Crew's trigger can target itself among two creatures: the two counters make it 6/6. A 2/2 blocker is refused while a 3/3 can block it
+# (CR 115.1, 122.1a, 509.1b, 509.1h). It stays blocked after Hill Giant dies, so Bot2 takes no damage.
+
+[Bot1 Deck]
+Ornithopter
+Cold-Blooded Crew
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island
+Island x15
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Black Lotus
+Mox Ruby
+Hill Giant
+Island
+Island x15
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cold-Blooded Crew.Cast
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Cold-Blooded Crew)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Cold-Blooded Crew > Bot2)
+Bot2.Pass
+[T5 Bot1.DeclareBlockers]
+! Bot2.Block(Grizzly Bears > Cold-Blooded Crew)
+Bot2.Block(Hill Giant > Cold-Blooded Crew)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Cold-Blooded Crew.Power = 6
+Bot1.Battlefield.Cold-Blooded Crew.Toughness = 6
+Bot1.Battlefield.Cold-Blooded Crew.Damage = 3
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot2.Life = 20

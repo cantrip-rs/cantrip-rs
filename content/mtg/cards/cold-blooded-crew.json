@@ -1,0 +1,8 @@
+{
+  "name": "Cold-Blooded Crew",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Gorn Warrior",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, put two +1/+1 counters on target creature.\nThis creature can't be blocked by creatures with power 2 or less.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)"
+}
