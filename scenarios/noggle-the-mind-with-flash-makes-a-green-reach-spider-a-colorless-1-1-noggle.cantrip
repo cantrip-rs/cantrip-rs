@@ -1,0 +1,45 @@
+# Noggle the Mind has flash (CR 702.8a): Bot1 casts it in Bot2's end step onto Bot2's Giant Spider (a green 2/4 Spider with reach). The creature becomes a
+# colorless Noggle with base power and toughness 1/1 (layers 4, 5, 7b) and loses all abilities, reach included (layer 6, CR 613.1f).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Noggle the Mind
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Giant Spider
+Forest x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Giant Spider.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Giant Spider.Colors = Green
+? Bot2.Battlefield.Giant Spider.Keywords = Reach
+? Bot2.Battlefield.Giant Spider.Power = 2
+? Bot2.Battlefield.Giant Spider.Toughness = 4
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Noggle the Mind.Cast(Giant Spider)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Giant Spider.Colors = (absent)
+Bot2.Battlefield.Giant Spider.Subtypes = Noggle
+Bot2.Battlefield.Giant Spider.Types = Creature
+Bot2.Battlefield.Giant Spider.Power = 1
+Bot2.Battlefield.Giant Spider.Toughness = 1
+Bot2.Battlefield.Giant Spider.Keywords = (absent)
+Bot1.Battlefield.Noggle the Mind.AttachedTo = Giant Spider

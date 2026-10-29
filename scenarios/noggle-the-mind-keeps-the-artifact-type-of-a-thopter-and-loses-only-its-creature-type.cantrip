@@ -1,0 +1,35 @@
+# Noggle the Mind "loses all colors and all other creature types" - not all other card types (the rulings of Eaten by Piranhas differ): Bot2's Ornithopter, a colorless
+# 0/2 Artifact Creature - Thopter with flying, stays an artifact creature but is a Noggle and no longer a Thopter, with base power and toughness 1/1 (a 0/2 is
+# turned into a 1/1, so both numbers change) and without flying.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Noggle the Mind
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+? Bot2.Battlefield.Ornithopter.Subtypes = Thopter
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Noggle the Mind.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot2.Battlefield.Ornithopter.Subtypes = Noggle
+Bot2.Battlefield.Ornithopter.Colors = (absent)
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 1
+Bot2.Battlefield.Ornithopter.Keywords = (absent)
