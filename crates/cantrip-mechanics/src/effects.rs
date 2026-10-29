@@ -211,7 +211,8 @@ pub fn plus_one_counter_on_each_other_of_subtype_you_control<const SUBTYPE: u16>
 }
 
 /// "Put two +1/+1 counters on target [permanent]" (CR 122.1a, 608.2b), the first target still legal on resolution. The whole
-/// effect of the sacrifice ability of Elvenking's Halls, Goblin-town, Iron Hills, Lake-town and Mirkwood (`lands::sacrifice_for_two_counters`).
+/// effect of the sacrifice ability of Elvenking's Halls, Goblin-town, Iron Hills, Lake-town and Mirkwood (`lands::sacrifice_for_two_counters`),
+/// and of Room of Refuge, Trash the Town and Silverquill Charm: with none chosen (an "up to one" slot) or none legal nothing is put on.
 pub fn two_plus_one_counters_on_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(object) = crate::targets::object(g, item, 0) else { return Ok(()) };
     g.add_counters(object, CounterKind::PlusOne, 2);

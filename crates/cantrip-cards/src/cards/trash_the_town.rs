@@ -4,14 +4,6 @@ use cantrip_mechanics::targets;
 use cantrip_mechanics::triggers::DEALS_COMBAT_DAMAGE_TO_PLAYER;
 use cantrip_oracle as oracle;
 
-/// Mode 0: "Put two +1/+1 counters on target creature."
-fn counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        g.add_counters(creature, CounterKind::PlusOne, 2);
-    }
-    Ok(())
-}
-
 /// Mode 1: "Target creature gains trample until end of turn."
 fn trample(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(creature) = targets::object(g, item, 0) {
@@ -32,7 +24,7 @@ fn grant_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 const MODES: &[ModeDef] = &[
-    mode(counters, "+ {2} \u{2014} Put two +1/+1 counters on target creature.")
+    mode(effects::two_plus_one_counters_on_target, "+ {2} \u{2014} Put two +1/+1 counters on target creature.")
         .targets(&[targets::CREATURE])
         .cost(mana("{2}")),
     mode(trample, "+ {1} \u{2014} Target creature gains trample until end of turn.")
