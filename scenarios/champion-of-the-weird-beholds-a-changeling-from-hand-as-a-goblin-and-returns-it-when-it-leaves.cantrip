@@ -1,0 +1,38 @@
+# Champion of the Weird (CR 601.2b, 701.4a, 702.73a, 607.2q): the additional cost beholds a Goblin, and Chomping Changeling, a changeling
+# revealed from the hand, is every creature type, so it is one. It is exiled as the cost is paid. When Bot2's Swords to Plowshares
+# exiles the Champion, the exiled Chomping Changeling returns to its owner's hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Chomping Changeling
+Champion of the Weird
+Island x16
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Champion of the Weird.Cast
+Bot1.Choose(Chomping Changeling)
+[T1 Bot1.Main2]
+? Bot1.Hand.Count = 3
+? Exile.Count = 1
+? Bot1.Battlefield.Champion of the Weird.Power = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Champion of the Weird)
+[T2 Bot2.Main2]
+
+[Expect]
+Exile.Count = 1
+Bot1.Hand.Chomping Changeling.Power = 1
+Bot1.Battlefield.Count = 1
+Bot1.Life = 25
