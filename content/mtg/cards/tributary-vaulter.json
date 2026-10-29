@@ -1,0 +1,11 @@
+{
+  "name": "Tributary Vaulter",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Merfolk Warrior",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever this creature becomes tapped, another target Merfolk you control gets +2/+0 until end of turn.",
+  "keywords": [
+    "Flying"
+  ]
+}
