@@ -1,0 +1,6 @@
+{
+  "name": "Cauldron of Essence",
+  "manaCost": "{1}{B}{G}",
+  "type": "Artifact",
+  "oracleText": "Whenever a creature you control dies, each opponent loses 1 life and you gain 1 life.\n{1}{B}{G}, {T}, Sacrifice a creature: Return target creature card from your graveyard to the battlefield. Activate only as a sorcery."
+}
