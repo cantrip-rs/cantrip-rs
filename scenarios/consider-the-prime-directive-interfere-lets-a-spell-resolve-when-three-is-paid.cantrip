@@ -1,0 +1,52 @@
+# Consider the Prime Directive's Interfere mode asks the spell's controller for {3} (CR 118.12). Three available mana is
+# enough to pay exactly, so Lightning Bolt resolves; Confusticate and Bebother's {4} case is the amount control.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Consider the Prime Directive
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Emerald
+Mox Jet
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Consider the Prime Directive.Cast
+Bot1.Modes(Interfere)
+Bot1.Target(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.PayCost
+? Bot2.Mana =
+
+[Expect]
+Bot1.Life = 17
+Bot1.Graveyard = Consider the Prime Directive
+Bot2.Graveyard = Lightning Bolt

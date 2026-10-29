@@ -1,0 +1,35 @@
+# "Target creature" includes a creature you control. Observe taps the targeted Ornithopter, puts one stun counter on it,
+# then draws (CR 701.26a, 122.1d, 121.1).
+
+[Bot1 Deck]
+Ornithopter
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Consider the Prime Directive
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Consider the Prime Directive.Cast
+Bot1.Modes(Observe)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Counters.Stun = 1

@@ -1,0 +1,29 @@
+# Observe's target is up to one, so Bot1 may choose no creature and still draws a card. This runs the no-target arm of
+# Observe without requiring another permanent (CR 601.2c, 121.1).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Consider the Prime Directive
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Consider the Prime Directive.Cast
+Bot1.Modes(Observe)
+! Bot1.Target
+
+[Expect]
+Bot1.Hand.Count = 4

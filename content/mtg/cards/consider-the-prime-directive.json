@@ -1,0 +1,6 @@
+{
+  "name": "Consider the Prime Directive",
+  "manaCost": "{2}{U}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Interfere — Counter target spell unless its controller pays {3}.\n• Observe — Tap up to one target creature and put a stun counter on it. Draw a card. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}

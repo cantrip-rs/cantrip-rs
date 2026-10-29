@@ -1,0 +1,49 @@
+# Observe can target an opponent's creature, but not a noncreature permanent. Sol Ring is refused as the target; Birds of
+# Paradise is tapped and gets one stun counter, and the separate draw reduces Bot1's library by one (CR 701.26a, 122.1d, 121.1).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Consider the Prime Directive
+Island x20
+
+[Bot2 Deck]
+Forest
+Sol Ring
+Mox Emerald
+Birds of Paradise
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Birds of Paradise.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Consider the Prime Directive.Cast
+Bot1.Modes(Observe)
+! Bot1.Target(Bot2.Battlefield.Sol Ring)
+Bot1.Target(Bot2.Battlefield.Birds of Paradise)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Birds of Paradise.Tapped = true
+? Bot2.Battlefield.Birds of Paradise.Counters.Stun = 1
+? Bot1.Library.Count = 15
+
+[Expect]
+Bot2.Battlefield.Birds of Paradise.Tapped = true
+Bot2.Battlefield.Birds of Paradise.Counters.Stun = 1
+Bot1.Library.Count = 15
