@@ -1,0 +1,11 @@
+{
+  "name": "Bebop, Warthog Warrior",
+  "manaCost": "{4}{B}",
+  "type": "Legendary Creature — Boar Mutant Warrior",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nRhinos you control have menace.\nSwampcycling {2} ({2}, Discard this card: Search your library for a Swamp card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Menace"
+  ]
+}

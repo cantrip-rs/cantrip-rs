@@ -1,0 +1,27 @@
+# Bebop's swampcycling {2} (CR 702.29e): with one Mox it is not offered; with two it discards Bebop from the hand and puts the Swamp from the library into the hand.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Bebop, Warthog Warrior
+Plains x4
+Swamp
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Bebop, Warthog Warrior.Activate(Ability: Swampcycling; Mana: short)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bebop, Warthog Warrior.Activate(Ability: Swampcycling)
+Bot1.Pass
+? Bot1.Mana =
+Bot1.Search(Swamp)
+
+[Expect]
+Bot1.Graveyard = Bebop, Warthog Warrior
+Bot1.Hand = Plains; Plains; Plains; Plains; Swamp
