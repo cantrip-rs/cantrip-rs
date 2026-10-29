@@ -1,0 +1,42 @@
+# Champions of the Shoal (CR 603.10a, 607.2q) with no creature to target: "up to one" is chosen as none. Its cost beholds
+# Coral Merfolk from the hand, exiling it, and when Bot2's Swords to Plowshares exiles the Shoal the Merfolk returns
+# to its owner's hand.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Coral Merfolk
+Champions of the Shoal
+Island x13
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Champions of the Shoal.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Coral Merfolk)
+Bot1.Target()
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Champions of the Shoal)
+[T2 Bot2.Main2]
+
+[Expect]
+Exile.Count = 1
+Bot1.Hand = Coral Merfolk
+Bot1.Life = 24

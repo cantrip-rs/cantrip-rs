@@ -14,18 +14,11 @@ fn reveal_and_exile(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Return the exiled card to its owner's hand."
-fn return_exiled(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let exiled = g.exiled_with(g.linked(item));
-    g.return_to_hand(&exiled);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(THIS_ENTERS, reveal_and_exile, "When this creature enters, target opponent reveals their hand and you choose a nonland card from it. Exile that card.")
             .targets(&[targets::OPPONENT]),
-        triggered(cantrip_mechanics::triggers::THIS_LEAVES, return_exiled, "When this creature leaves the battlefield, return the exiled card to its owner's hand."),
+        triggered(cantrip_mechanics::triggers::THIS_LEAVES, cantrip_mechanics::effects::return_exiled_to_hand, "When this creature leaves the battlefield, return the exiled card to its owner's hand."),
     ],
     ..oracle::TIDEHOLLOW_SCULLER
 };

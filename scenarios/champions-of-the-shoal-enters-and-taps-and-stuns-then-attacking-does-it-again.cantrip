@@ -1,0 +1,51 @@
+# Champions of the Shoal (CR 603.2, 122.1d, 701.4a): cast on turn 3 beholding Coral Merfolk from the hand (exiling it), it
+# enters and taps Bot2's Llanowar Elves with a stun counter. On turn 4 the Elves cannot untap (the counter is removed
+# instead, CR 122.1d); on turn 5 attacking taps the Shoal, which triggers again, and the already tapped Elves still get
+# a stun counter.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Coral Merfolk
+Champions of the Shoal
+Island x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Champions of the Shoal.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Choose(Coral Merfolk)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+? Bot2.Battlefield.Llanowar Elves.Counters.Stun = 1
+? Exile.Count = 1
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Champions of the Shoal > Bot2)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot2.Battlefield.Llanowar Elves.Counters.Stun = 1
+Bot1.Battlefield.Champions of the Shoal.Tapped = true

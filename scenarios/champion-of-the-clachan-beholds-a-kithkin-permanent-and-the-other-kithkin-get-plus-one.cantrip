@@ -1,0 +1,42 @@
+# Champion of the Clachan beholding a Kithkin on the battlefield (CR 701.4a): Figure of Destiny is exiled as the cost is paid,
+# leaving the other Figure of Destiny, which "Other Kithkin you control get +1/+1" makes a 2/2 while the 4/5 Champion itself
+# gets no bonus. Bot1 casts the Figures on turn 1 with Mox Pearl and Mox Ruby, and the Champion on turn 3 with five mana.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Mox Jet
+Figure of Destiny
+Figure of Destiny
+Champion of the Clachan
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Figure of Destiny.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Figure of Destiny.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Champion of the Clachan.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Choose(Figure of Destiny)
+[T3 Bot1.Main2]
+
+[Expect]
+Exile.Count = 1
+Bot1.Battlefield.Figure of Destiny.Power = 2
+Bot1.Battlefield.Figure of Destiny.Toughness = 2
+Bot1.Battlefield.Champion of the Clachan.Power = 4
+Bot1.Battlefield.Champion of the Clachan.Toughness = 5
