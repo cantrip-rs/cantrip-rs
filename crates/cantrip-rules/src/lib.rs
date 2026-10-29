@@ -1804,6 +1804,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::damage_together(self, damage)
     }
 
+    fn heal(&mut self, permanent: ObjectId) {
+        ops::heal(self, permanent)
+    }
+
     fn each_opponent_loses_life(&mut self, player: PlayerId, amount: i32) -> i32 {
         ops::each_opponent_loses_life(self, player, amount)
     }

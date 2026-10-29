@@ -577,6 +577,8 @@ pub trait Game: Query {
     /// event, so "whenever this deals damage" triggers once. Each entry is a source, a recipient and an amount; an effect
     /// that heals the damage already marked does not heal what the event itself dealt. How much each was dealt, in order.
     fn damage_together(&mut self, damage: &[(ObjectId, Target, u16)]) -> Vec<u16>;
+    /// Removes all damage marked on `permanent` (CR 701.69a). A permanent with no marked damage is unchanged.
+    fn heal(&mut self, permanent: ObjectId);
     /// Destroys permanents at once (CR 701.8a, 101.4, 603.10a): a leaves-the-battlefield ability sees all of them leave. An
     /// indestructible one stays (CR 702.12b); a regeneration shield replaces its destruction (CR 701.19a); the rest go to
     /// their owners' graveyards. Something that is no longer the object it was is not destroyed (CR 400.7). The new objects,

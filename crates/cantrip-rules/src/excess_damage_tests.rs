@@ -266,3 +266,17 @@ fn excess_damage_heals_the_marks_its_replacement_heals() {
     assert_eq!(hit(&mut g, ids[0], ids[1], 6).unwrap().excess, 2);
     assert_eq!(g.state.obj(ids[1]).damage, 6);
 }
+
+/// Healing (CR 701.69a) removes marked damage and its deathtouch state.
+#[test]
+fn heal_removes_all_marked_damage() {
+    let (mut g, ids) = game(&[&BEAR]);
+    g.state.update_obj(ids[0], |o| {
+        o.damage = 3;
+        o.deathtouched = true;
+    });
+    let mut cx = cx(&mut g);
+    cantrip_api::Game::heal(&mut cx, ids[0]);
+    assert_eq!(g.state.obj(ids[0]).damage, 0);
+    assert!(!g.state.obj(ids[0]).deathtouched);
+}

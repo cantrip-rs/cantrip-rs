@@ -2986,6 +2986,25 @@ pub fn damage_together(cx: &mut Cx, hits: &[(ObjectId, Target, u16)]) -> Vec<u16
     dealt
 }
 
+/// Heals all damage marked on a permanent (CR 701.69a). A phased-out or new-zone object is not affected.
+pub fn heal(cx: &mut Cx, permanent: ObjectId) {
+    if !live(cx.s(), permanent)
+        || !cx.s().obj(permanent).zone.is(ZoneKind::Battlefield)
+        || cx.s().obj(permanent).zone.is(ZoneKind::PhasedOut)
+    {
+        return;
+    }
+    let object = cx.s().obj(permanent);
+    if object.damage == 0 && !object.deathtouched {
+        return;
+    }
+    cx.st().update_obj(permanent, |o| {
+        o.damage = 0;
+        o.deathtouched = false;
+    });
+    cx.state_changed();
+}
+
 /// The order in which the assignments of one simultaneous damage event (CR 120.2, 510.2) meet the prevention shields of
 /// their recipients, as indices into `hits`: "If damage would be dealt to the shielded permanent or player by two or more
 /// applicable sources at the same time, the player or the controller of the permanent chooses which damage the shield
