@@ -1,0 +1,32 @@
+# Silverquill Charm, first mode: two +1/+1 counters on target creature. Ornithopter (0/2) becomes 2/4.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Ornithopter
+Silverquill Charm
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill Charm.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Graveyard = Silverquill Charm
