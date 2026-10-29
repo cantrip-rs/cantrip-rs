@@ -1,7 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::statics::plus_pt;
 use cantrip_mechanics::triggers::THIS_ENTERS;
-use cantrip_mechanics::{choose, destroy_target, targets};
+use cantrip_mechanics::{destroy_target, effects, select, targets};
 use cantrip_oracle as oracle;
 
 /// "You may sacrifice another creature. When you do, destroy target nonland permanent an opponent controls." (CR 701.21a, 603.12):
@@ -9,10 +9,8 @@ use cantrip_oracle as oracle;
 /// reflexive ability exists only for a creature actually sacrificed, whether or not Killmonger is still on the battlefield.
 fn sacrifice_another_to_destroy(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let you = item.controller;
-    let eligible: Vec<ObjectId> =
-        g.permanents_of(you).into_iter().filter(|&id| id != item.object && g.chars(id).is(CardType::Creature)).collect();
-    let chosen = choose::cards(g, you, item.object, Purpose::Sacrifice, eligible, 1, true)?;
-    if g.sacrifice(you, &chosen).is_empty() {
+    let rule = select::another_creature_permanents(select::up_to(1));
+    if effects::may_sacrifice(g, you, item.object, rule)?.is_empty() {
         return Ok(());
     }
     let this = g.card_id(&CARD);
