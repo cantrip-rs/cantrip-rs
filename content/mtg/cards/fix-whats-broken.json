@@ -1,0 +1,6 @@
+{
+  "name": "Fix What's Broken",
+  "manaCost": "{2}{W}{B}",
+  "type": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, pay X life.\nReturn each artifact and creature card with mana value X from your graveyard to the battlefield."
+}
