@@ -1,0 +1,46 @@
+# Boggart Prankster, "Whenever you attack, target attacking Goblin you control gets +1/+0 until end of turn" (CR 508.1, 603.2,
+# 115.1). Bot1 attacks with the Prankster (a 1/3 Goblin), Bile-Vial Boggart (a 1/1 Goblin) and an Ornithopter (0/2, no Goblin):
+# the Ornithopter is refused as a target and the Boggart chosen, so it is 2/1 with its toughness unchanged, the Prankster still
+# 1/3 and the Ornithopter 0/2; at the next turn the Boggart is 1/1 again.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Pearl
+Boggart Prankster
+Bile-Vial Boggart
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Boggart Prankster.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Bile-Vial Boggart.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot1.Attack(Boggart Prankster > Bot2; Bile-Vial Boggart > Bot2; Ornithopter > Bot2)
+! Bot1.Target(Ornithopter)
+Bot1.Target(Bile-Vial Boggart)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bile-Vial Boggart.Power = 2
+? Bot1.Battlefield.Bile-Vial Boggart.Toughness = 1
+? Bot1.Battlefield.Boggart Prankster.Power = 1
+? Bot1.Battlefield.Boggart Prankster.Toughness = 3
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Bile-Vial Boggart.Power = 1
+Bot2.Life = 17
