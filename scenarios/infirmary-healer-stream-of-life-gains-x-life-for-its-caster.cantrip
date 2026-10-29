@@ -1,0 +1,39 @@
+# Infirmary Healer's Stream of Life targeting its own caster with X of 2 gains 2 life; a creature is no legal target.
+
+[Bot1 Deck]
+Infirmary Healer
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Jet
+Mox Jet
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Infirmary Healer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Infirmary Healer.Prepared = true
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+! Bot1.Exile.Stream of Life.Cast(Bot1.Battlefield.Infirmary Healer; X: 2)
+Bot1.Exile.Stream of Life.Cast(Bot1; X: 2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Battlefield.Infirmary Healer.Prepared = (absent)
+Exile.Count = 0

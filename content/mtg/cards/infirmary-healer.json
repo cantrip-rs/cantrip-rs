@@ -1,0 +1,14 @@
+{
+  "name": "Infirmary Healer",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Cat Cleric",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "prepare": {
+    "name": "Stream of Life",
+    "manaCost": "{X}{G}",
+    "type": "Sorcery",
+    "oracleText": "Target player gains X life."
+  }
+}
