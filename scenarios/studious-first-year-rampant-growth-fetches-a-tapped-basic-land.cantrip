@@ -1,0 +1,40 @@
+# Studious First-Year enters prepared; its copy of Rampant Growth puts a basic land (not the Temple Garden) from the library onto the battlefield tapped, then shuffles (CR 701.23, 722). Casting the copy unprepares it.
+
+[Bot1 Deck]
+Studious First-Year
+Mox Emerald
+Mox Emerald
+Mox Jet
+Mox Jet
+Island
+Island
+Temple Garden
+Forest
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Studious First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Studious First-Year.Prepared = true
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Exile.Rampant Growth.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Temple Garden)
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Studious First-Year.Prepared = (absent)
+Exile.Count = 0
