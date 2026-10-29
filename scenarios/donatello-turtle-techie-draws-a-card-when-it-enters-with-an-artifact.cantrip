@@ -1,0 +1,37 @@
+# Donatello, Turtle Techie: "When Donatello enters, if you control an artifact, draw a card." Bot1 pays {3}{U} with four Moxes, which stay on the battlefield (tapped)
+# and are artifacts, so the trigger goes on the stack and Bot1 draws: hand 7 - four Moxes - Donatello = 2, then 3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Donatello, Turtle Techie
+Island x2
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Donatello, Turtle Techie.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Hand.Count = 2
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Donatello, Turtle Techie.Power = 3
+Bot1.Battlefield.Donatello, Turtle Techie.Toughness = 4
+Stack.Count = 0
