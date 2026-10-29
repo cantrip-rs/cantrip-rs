@@ -7,13 +7,20 @@ use cantrip_oracle as oracle;
 /// (a changeling has them all, CR 702.73a). A single card shares a type with itself, any of the cards of a set that shares
 /// one share it too, and with nothing chosen yet every type is shared, so only a creature type of its own is wanted of a card.
 fn share_a_creature_type(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
-    let all_have = |t: Subtype| choice.selected.iter().all(|&c| q.chars(c).subtypes.has(t));
-    let complete = Subtype::CREATURE_TYPES.iter().any(|&t| all_have(t));
-    let addable = Bits::of(choice.candidates.len(), |i| {
-        let candidate = q.chars(choice.candidates[i]);
-        Subtype::CREATURE_TYPES.iter().any(|&t| all_have(t) && candidate.subtypes.has(t))
-    });
+    let selected: Vec<SubtypeSet> = choice.selected.iter().map(|&c| q.chars(c).subtypes).collect();
+    let complete = shares_a_creature_type(&selected);
+    let addable = Bits::of(choice.candidates.len(), |i| may_join(&selected, q.chars(choice.candidates[i]).subtypes));
     Verdict { complete, addable }
+}
+
+/// Some one creature type is among `types` of every card (none chosen share every type).
+fn shares_a_creature_type(selected: &[SubtypeSet]) -> bool {
+    Subtype::CREATURE_TYPES.iter().any(|&t| selected.iter().all(|s| s.has(t)))
+}
+
+/// A card with `candidate` for subtypes may be added to `selected`: it has a creature type all of them have.
+fn may_join(selected: &[SubtypeSet], candidate: SubtypeSet) -> bool {
+    Subtype::CREATURE_TYPES.iter().any(|&t| selected.iter().all(|s| s.has(t)) && candidate.has(t))
 }
 
 /// A largest set that shares a creature type: the candidates of the creature type the most of them have.
@@ -44,3 +51,23 @@ static MODAL: ModalDef = modes(&[
 ]);
 
 pub static CARD: CardDef = CardDef { spell: Some(SpellDef::MODAL), modal: Some(&MODAL), ..oracle::UNBURY };
+
+#[cfg(test)]
+mod tests {
+    use super::{may_join, shares_a_creature_type};
+    use cantrip_api::{Subtype, SubtypeSet};
+
+    /// With a Goblin and an Elf chosen no type is shared, so no card may join them; with only the Goblin chosen a Goblin
+    /// may join and an Elf may not; with nothing chosen any creature may.
+    #[test]
+    fn a_card_may_join_only_if_it_has_a_type_every_chosen_card_has() {
+        let goblin = SubtypeSet::of(&[Subtype::Goblin]);
+        let elf = SubtypeSet::of(&[Subtype::Elf]);
+        let goblin_elf = SubtypeSet::of(&[Subtype::Goblin, Subtype::Elf]);
+        assert!(may_join(&[], elf));
+        assert!(may_join(&[goblin], goblin) && may_join(&[goblin], goblin_elf));
+        assert!(!may_join(&[goblin], elf), "an Elf shares nothing with a Goblin");
+        assert!(!may_join(&[goblin, elf], goblin_elf), "no type is on both chosen cards");
+        assert!(shares_a_creature_type(&[goblin, goblin_elf]) && !shares_a_creature_type(&[goblin, elf]));
+    }
+}

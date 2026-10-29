@@ -1,0 +1,86 @@
+# Taster of Wares: "you may cast it for as long as you control this creature" (CR 611.2a, 611.2b, 113.8). With the Taster's
+# enters trigger on the stack Bot1 shrinks it with Ray of Enfeeblement (power 3 - 4 is no more than Old Man of the Sea's 2) and
+# takes it with Old Man. The trigger still resolves under Bot2, who controls one Goblin (the Chomping Changeling) so X is 1, and
+# Bot1's Lightning Bolt is exiled - but Bot2 no longer controls the Taster, so "for as long as you control this creature" has
+# ended before it began, and Bot1, who never was "you", may not cast the Bolt either, though a Mox Ruby's mana is open.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Old Man of the Sea
+Ray of Enfeeblement
+Lightning Bolt
+Mountain x30
+
+[Bot2 Deck]
+Black Lotus
+Chomping Changeling
+Taster of Wares
+Swamp
+Swamp
+Mox Jet
+Island x30
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Old Man of the Sea.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: G)
+Bot2.Hand.Chomping Changeling.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Taster of Wares.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ray of Enfeeblement.Cast(Bot2.Battlefield.Taster of Wares)
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Battlefield.Old Man of the Sea.Activate(Bot2.Battlefield.Taster of Wares)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Taster of Wares.Types = Creature
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Lightning Bolt)
+Bot2.Choose(Lightning Bolt)
+? Exile = Lightning Bolt
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Exile = Lightning Bolt
+Bot1.Life = 20
+Bot2.Life = 20

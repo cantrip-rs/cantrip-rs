@@ -8,6 +8,9 @@ use cantrip_oracle as oracle;
 /// resolves, among the Goblins its controller controls (this one included, if it is still there); the target opponent chooses
 /// which cards to reveal, all of them when the hand holds no more than X; then the controller chooses one, and the opponent exiles
 /// it, linked to this creature as it was when the trigger was put on the stack. An empty hand reveals nothing and nothing happens.
+/// If the ability's controller no longer controls this creature as the card is exiled (an effect took it while the trigger was
+/// on the stack), "for as long as you control this creature" (CR 611.2b, 113.8) has ended before it began: the card is exiled
+/// with nothing linked to it, and nobody may cast it.
 fn reveal_and_exile(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(opponent) = targets::player(g, item, 0) else { return Ok(()) };
     let hand = g.state().zone(Zone::hand(opponent)).to_vec();
@@ -19,7 +22,11 @@ fn reveal_and_exile(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let revealed = choose::select(g, opponent, item.object, Purpose::Reveal, hand, Selection::new(select::as_many_as_can(count)))?;
     g.reveal(opponent, &revealed);
     let chosen = choose::select(g, item.controller, item.object, Purpose::Exile, revealed, Selection::new(select::exactly(1)))?;
-    g.exile_with(&chosen, g.linked(item), false);
+    if g.is_on_battlefield(item.object) && g.controller(item.object) != item.controller {
+        g.exile_all(&chosen);
+    } else {
+        g.exile_with(&chosen, g.linked(item), false);
+    }
     Ok(())
 }
 
