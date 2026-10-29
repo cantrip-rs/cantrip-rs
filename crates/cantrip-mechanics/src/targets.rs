@@ -282,6 +282,14 @@ pub const SPELL_OR_ABILITY_WITH_A_SINGLE_TARGET: TargetSpec = target(spell_or_ab
 /// "Target spell or permanent" (CR 115.1): Artificial Evolution and Venser, Shaper Savant print it.
 pub const SPELL_OR_PERMANENT: TargetSpec = target(spell_or_permanent_filter);
 
+/// "Target spell or creature" (CR 115.1): a spell on the stack, of any kind, or a creature on the battlefield. Fatehold Charm and
+/// Swat Away print it.
+pub const SPELL_OR_CREATURE: TargetSpec = target(spell_or_creature_filter);
+
+fn spell_or_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    spell_filter(q, asker, t) || creature_filter(q, asker, t)
+}
+
 fn spell_or_permanent_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     spell_filter(q, asker, t) || permanent_filter(q, asker, t)
 }

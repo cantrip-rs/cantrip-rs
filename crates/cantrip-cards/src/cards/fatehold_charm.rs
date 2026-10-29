@@ -9,13 +9,6 @@ fn draw_and_empower(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     empower::jace(g, item.controller, item.object, 2)
 }
 
-/// "Target spell or creature" (CR 115.1): a spell on the stack, or a creature on the battlefield.
-fn spell_or_creature(q: &dyn Query, _: &Asker, t: Target) -> bool {
-    let Target::Object(id) = t else { return false };
-    q.state().stack.iter().any(|i| i.kind == StackKind::Spell && i.object == id)
-        || targets::permanent(q, id) && q.chars(id).is(CardType::Creature)
-}
-
 /// "Return target spell or creature to its owner's hand." A spell leaves the stack without being countered (CR 400.3).
 fn bounce(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(object) = targets::object(g, item, 0) {
@@ -26,7 +19,7 @@ fn bounce(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 static MODAL: ModalDef = modes(&[
     mode(draw_and_empower, "Draw a card. Empower Jace 2."),
-    mode(bounce, "Return target spell or creature to its owner's hand.").targets(&[target(spell_or_creature)]),
+    mode(bounce, "Return target spell or creature to its owner's hand.").targets(&[targets::SPELL_OR_CREATURE]),
     mode(effects::creatures_you_control_get::<1, 2>, "Creatures you control get +1/+2 until end of turn."),
 ]);
 
