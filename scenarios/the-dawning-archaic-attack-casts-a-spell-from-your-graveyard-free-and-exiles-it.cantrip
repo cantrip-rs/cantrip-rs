@@ -1,0 +1,65 @@
+# The Dawning Archaic (cast on turn 3 for {6}, four instants and sorceries in Bot1's graveyard). On turn 5 it attacks and its
+# trigger offers "target instant or sorcery card from your graveyard": refused are the Black Lotus (an artifact) and Bot2's Shock
+# (the other player's graveyard); Bot1's own Lightning Bolt is chosen, cast for no mana (all four Mox Rubies stay untapped) at Bot2
+# and, resolving, exiled rather than put into the graveyard. The 7/7 is unblocked: Bot2 takes 3 on turn 1, 3 and 7 on turn 5.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Faithless Looting
+Lightning Bolt
+Black Lotus
+Lightning Strike
+Duress
+The Dawning Archaic
+Mountain x12
+
+[Bot2 Deck]
+Mountain
+Shock
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Lightning Strike; Duress)
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.The Dawning Archaic.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Attack(The Dawning Archaic)
+! Bot1.Target(Black Lotus)
+! Bot1.Target(Shock)
+Bot1.Target(Lightning Bolt)
+Bot1.Accept
+Bot1.Target(Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Exile = Lightning Bolt
+Bot1.Graveyard = Black Lotus; Faithless Looting; Duress; Lightning Strike
+Bot2.Graveyard = Shock
+Bot2.Life = 7
+Bot1.Battlefield.Mox Ruby#1.Tapped = false
+Bot1.Battlefield.Mox Ruby#4.Tapped = false
