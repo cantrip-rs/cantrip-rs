@@ -74,7 +74,23 @@ pub fn auto_pay(
     // Convoke taps the creatures it names, one per question, and Delve exiles that many cards from the graveyard, the
     // first offered each time: what pays the cost instead of mana (CR 601.2h).
     if !plan.convoke.is_empty() && options.iter().any(|o| o.kind == ActionKind::TapToPay) {
-        let wanted = plan.convoke.pop_front().unwrap();
+        let mut wanted = plan.convoke.pop_front().unwrap();
+        // A name with a comma in it (`Eirdu, Carrier of Dawn`) arrives split at the comma: when the piece alone names no
+        // creature offered, the pieces after it are joined to it until they do.
+        let offered_named = |name: &str| {
+            options.iter().any(|o| {
+                o.kind == ActionKind::TapToPay && o.source.is_some_and(|s| game.known_name(s).eq_ignore_ascii_case(name))
+            })
+        };
+        if !offered_named(&wanted)
+            && let Some(joined) = (1..=plan.convoke.len()).find_map(|n| {
+                let name = std::iter::once(wanted.as_str()).chain(plan.convoke.iter().take(n).map(String::as_str)).collect::<Vec<_>>().join(", ");
+                offered_named(&name).then_some((n, name))
+            })
+        {
+            plan.convoke.drain(..joined.0);
+            wanted = joined.1;
+        }
         let tap = options.iter().find(|o| {
             o.kind == ActionKind::TapToPay
                 && o.source

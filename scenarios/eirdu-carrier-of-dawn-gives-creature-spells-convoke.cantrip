@@ -1,5 +1,5 @@
 # Eirdu, Carrier of Dawn: "Creature spells you cast have convoke." Bot1 casts Eirdu on turn 1 for {3}{W}{W} (Black Lotus, Mox Pearl, Mox Jet). On turn 3
-# Serra Angel ({3}{W}{W}) is paid with Mox Pearl, a Plains, Mox Jet and two Ornithopters tapped by convoke (CR 702.51a).
+# Serra Angel ({3}{W}{W}) is paid with Mox Pearl, Mox Jet and Eirdu (white, paying {W}) and two Ornithopters tapped by convoke (CR 702.51a).
 
 [Bot1 Deck]
 Black Lotus
@@ -31,14 +31,12 @@ Bot2.Pass
 Bot1.Pass
 Bot2.Pass
 Bot1.Decline
-Bot1.Hand.Plains.Play
 Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Jet.Activate
-Bot1.Battlefield.Plains.Activate
-Bot1.Hand.Serra Angel.Cast(Convoke: Ornithopter, Ornithopter)
+Bot1.Hand.Serra Angel.Cast(Convoke: Eirdu, Carrier of Dawn, Ornithopter, Ornithopter)
 
 Bot1.Pass
 Bot2.Pass
 
 [Expect]
-Bot1.Battlefield = Eirdu, Carrier of Dawn; Mox Jet; Mox Pearl; Ornithopter; Ornithopter; Plains; Serra Angel
+Bot1.Battlefield = Eirdu, Carrier of Dawn; Mox Jet; Mox Pearl; Ornithopter; Ornithopter; Serra Angel

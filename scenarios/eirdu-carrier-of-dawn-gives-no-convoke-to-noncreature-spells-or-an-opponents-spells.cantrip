@@ -1,0 +1,48 @@
+# Eirdu, Carrier of Dawn: "Creature spells you cast have convoke." Not noncreature spells, and not Bot2's creature spells.
+# Bot1 has Eirdu and two Ornithopters (turn 1, Black Lotus and Mox Pearl/Mox Jet) and Mox Ruby; on turn 3 convoking Crib Swap
+# ({2}{W}, an instant) with Mox Pearl and two Ornithopters is refused. On turn 4 Bot2's Serra Angel cannot be paid with an Island
+# and Bot1's creatures: Bot2 has no Mox and no convoke.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Eirdu, Carrier of Dawn
+Ornithopter
+Ornithopter
+Crib Swap
+Plains x13
+
+[Bot2 Deck]
+Serra Angel
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Eirdu, Carrier of Dawn.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Hand.Serra Angel.Cast(Convoke: Ornithopter; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Crib Swap.Cast(Bot2.Battlefield.Ornithopter; Convoke: Ornithopter, Ornithopter; Mana: short)
+
+[Expect]
+Turn = 3
