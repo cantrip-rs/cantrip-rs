@@ -1,0 +1,8 @@
+{
+  "name": "Melancholic Poet",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Elf Bard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Repartee — Whenever you cast an instant or sorcery spell that targets a creature, each opponent loses 1 life and you gain 1 life."
+}
