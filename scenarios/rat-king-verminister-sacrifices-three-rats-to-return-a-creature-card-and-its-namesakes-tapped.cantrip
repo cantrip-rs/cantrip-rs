@@ -1,0 +1,57 @@
+# Rat King's disappear (Black Lotus is sacrificed on turn 1) makes a Rat token at that end step. Two Typhoid Rats are Entombed into
+# Bot1's graveyard (a third stays in the library). With only Rat King and the token the ability is refused: three Rats are
+# needed. Once Muck Rats is cast, Rat King taps and sacrifices himself, the token and Muck Rats (CR 701.21): the target Typhoid
+# Rats and the other Typhoid Rats of the graveyard return together, tapped. The third is not in the graveyard and stays put.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Rat King, Verminister
+Muck Rats
+Entomb
+Entomb
+Typhoid Rats
+Typhoid Rats
+Typhoid Rats
+Swamp x10
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rat King, Verminister.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Typhoid Rats)
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Typhoid Rats)
+? Bot1.Graveyard = Entomb; Typhoid Rats; Entomb; Typhoid Rats; Black Lotus
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Rat King, Verminister.Activate(Bot1.Graveyard.Typhoid Rats)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Muck Rats.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Rat King, Verminister.Activate(Bot1.Graveyard.Typhoid Rats)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Jet; Mox Emerald; Typhoid Rats; Typhoid Rats
+? Bot1.Battlefield.Typhoid Rats#1.Tapped = True
+? Bot1.Battlefield.Typhoid Rats#2.Tapped = True
+? Bot1.Graveyard = Muck Rats; Rat King, Verminister; Entomb; Entomb; Black Lotus
+? Bot1.Library.Count = 10
+
+[Expect]
+Bot1.Hand.Count = 1

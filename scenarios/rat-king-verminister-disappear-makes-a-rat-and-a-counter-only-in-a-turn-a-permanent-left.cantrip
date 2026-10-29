@@ -1,0 +1,39 @@
+# Disappear: nothing leaves Bot1's battlefield on turn 1, so its end step makes nothing (Rat King stays 1/1, three permanents).
+# On turn 3 Bot1 casts Black Lotus and sacrifices it, a permanent leaving under their control, so at the beginning of the end step
+# a 1/1 black Rat token is made and Rat King gets a +1/+1 counter (2/2; the four permanents are the two Moxen, Rat King and the token).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Rat King, Verminister
+Swamp x16
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rat King, Verminister.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Count = 3
+? Bot1.Battlefield.Rat King, Verminister.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 4
+? Bot1.Battlefield.Rat King, Verminister.Power = 2
+? Bot1.Battlefield.Rat King, Verminister.Toughness = 2
+? Bot1.Battlefield.Rat Token.Power = 1
+? Bot1.Battlefield.Rat Token.Toughness = 1
+
+[Expect]
+Bot1.Battlefield.Rat King, Verminister.Power = 2
