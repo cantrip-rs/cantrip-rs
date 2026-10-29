@@ -1,0 +1,45 @@
+# Donatello, Gadget Master (3/2): "Whenever Donatello deals combat damage to a player, create a token that's a copy of target artifact you control." Cast on turn 1 with three Moxen
+# ({2}{U}), he attacks on turn 3 unblocked and deals 3. The trigger targets Mox Jet (one of three artifacts, so the target is asked) and the token is a Mox Jet.
+# Bot2's Mox Ruby is an artifact too but is not Bot1's: it is not offered.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Donatello, Gadget Master
+Island x3
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Donatello, Gadget Master.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Donatello, Gadget Master > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Target(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Mox Jet#1.Types = Artifact

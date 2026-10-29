@@ -1,0 +1,49 @@
+# Donatello, Gadget Master: damage dealt to a creature is not combat damage to a player, so a Grizzly Bears blocking him makes no trigger and no token. He (3/2) and the Bears (2/2)
+# both die; there is no Mox Jet Token.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Donatello, Gadget Master
+Island x3
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Donatello, Gadget Master.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Donatello, Gadget Master > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Grizzly Bears > Donatello, Gadget Master)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Count = 3
