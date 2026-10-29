@@ -1,0 +1,7 @@
+{
+  "name": "Collective Inferno",
+  "manaCost": "{3}{R}{R}",
+  "type": "Enchantment",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nAs this enchantment enters, choose a creature type.\nDouble all damage that sources you control of the chosen type would deal.",
+  "convoke": true
+}

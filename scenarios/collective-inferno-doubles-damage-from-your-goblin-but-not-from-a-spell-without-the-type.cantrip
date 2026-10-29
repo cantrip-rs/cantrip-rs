@@ -1,0 +1,49 @@
+# Collective Inferno: "As this enchantment enters, choose a creature type. Double all damage that sources you control of the
+# chosen type would deal." Bot1 chooses Goblin (CR 614.12a). Their Goblin Roughrider (3/2) attacks for 3 doubled to 6
+# (CR 614.1, 120.3); their Lightning Bolt is a source they control but not a Goblin, so its 3 is not doubled. Bot2's life:
+# 20 - 6 - 3 = 11.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Collective Inferno
+Goblin Roughrider
+Lightning Bolt
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Collective Inferno.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Roughrider.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Attack(Goblin Roughrider > Bot2)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 11

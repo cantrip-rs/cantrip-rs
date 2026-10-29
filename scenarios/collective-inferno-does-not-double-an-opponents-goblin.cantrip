@@ -1,0 +1,47 @@
+# Collective Inferno doubles damage from "sources you control" of the chosen type (CR 614.1, 120.3), so Bot2's Raging Goblin
+# (1/1 haste, a Goblin) deals its 1 to Bot1 undoubled while Bot1's own Raging Goblin deals 2.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Collective Inferno
+Raging Goblin
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Mountain
+Raging Goblin
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Collective Inferno.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Attack(Raging Goblin > Bot1)
+[T3 Bot1.Main1]
+? Bot1.Life = 19
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Raging Goblin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Raging Goblin > Bot2)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 18
