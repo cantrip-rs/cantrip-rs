@@ -1,0 +1,39 @@
+# Auntie's Sentence, second mode: "Target creature gets -2/-2 until end of turn" (CR 611.2a, 514.2). Bot2's Wall of Earth (0/6)
+# survives as -2/4 for the rest of turn 3 and is 0/6 again once Bot2's turn 4 begins.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Auntie's Sentence
+Swamp x11
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Wall of Earth
+Island x11
+
+[Actions]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Earth.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Auntie's Sentence.Cast
+Bot1.Modes(2)
+Bot1.Target(Wall of Earth)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Wall of Earth.Power = -2
+? Bot2.Battlefield.Wall of Earth.Toughness = 4
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Wall of Earth.Power = 0
+Bot2.Battlefield.Wall of Earth.Toughness = 6
+Bot1.Graveyard = Auntie's Sentence
