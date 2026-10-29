@@ -1,0 +1,43 @@
+# Scarblade's Malice, {B}, "Target creature you control gains deathtouch and lifelink until end of turn" (CR 702.2, 702.15,
+# 115.1). Bot1's Memnite (1/1) attacks on turn 3 and Bot2's Ornithopter (0/2) blocks it. The Ornithopter of Bot2 is refused as a
+# target (it is not Bot1's), Memnite is chosen: its one damage is lethal to the Ornithopter by deathtouch and Bot1 gains 1 from
+# lifelink. Memnite survives (the Ornithopter has no power), and both keywords are gone after the turn.
+
+[Bot1 Deck]
+Mox Jet
+Memnite
+Ornithopter
+Scarblade's Malice
+Swamp x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Ornithopter > Memnite)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Scarblade's Malice.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Scarblade's Malice.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Life = 21
+? Bot2.Graveyard = Ornithopter
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Count = 3
