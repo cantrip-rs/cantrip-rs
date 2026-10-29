@@ -1,0 +1,44 @@
+# Choreographed Sparks, both modes (CR 700.2, 608.2c): with Memnite and, in response, Lightning Bolt (aimed at Bot2) on the
+# stack, Sparks copies the Bolt (the copy given the new target Bot1) and the creature spell (a hasty token). Bolt copy: Bot1 17;
+# Bolt: Bot2 17; the token and the Memnite card both come out, and the token goes at the end step.
+
+[Bot1 Deck]
+Black Lotus
+Memnite
+Lightning Bolt
+Choreographed Sparks
+Island x14
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Choreographed Sparks.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Stack.Lightning Bolt)
+Bot1.Target(Stack.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+? Bot2.Life = 17
+? Bot1.Battlefield = Memnite; Memnite
+? Bot1.Battlefield.Memnite#1.Keywords = Haste
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Memnite
