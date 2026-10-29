@@ -1,19 +1,8 @@
 use cantrip_api::*;
 use cantrip_mechanics::amass::amass;
-use cantrip_mechanics::triggers::THIS_ENTERS;
+use cantrip_mechanics::triggers::{THIS_ENTERS, creature_card_leaves_your_graveyard};
 use cantrip_mechanics::{effects, targets, tokens};
 use cantrip_oracle as oracle;
-
-/// "Whenever a creature card leaves your graveyard" (CR 603.10a): a card that was a creature card in the source's
-/// controller's graveyard and went anywhere else, however it was moved; each card is its own event, so several leaving
-/// together trigger it as many times (CR 603.2c). A token is never a card there, and another player's graveyard is no one's
-/// but theirs.
-fn creature_card_leaves_your_graveyard(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    match event {
-        Event::ZoneChange { old, from, .. } if *from == Zone::graveyard(me.controller) && q.chars(*old).is(CardType::Creature) => Fired::PLAIN,
-        _ => None,
-    }
-}
 
 /// "Amass Goblins 1." (CR 701.47a.)
 fn amass_goblins(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

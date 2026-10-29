@@ -7,15 +7,9 @@ use cantrip_oracle as oracle;
 /// graveyard long enough to leave one, CR 111.7, 704.5d). The cards that left together are the subjects of the matching
 /// events, so the batch triggers it once.
 fn artifact_or_creature_cards_leave_your_graveyard(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    match event {
-        Event::ZoneChange { old, from, .. }
-            if *from == Zone::graveyard(me.controller)
-                && (q.chars(*old).is(CardType::Artifact) || q.chars(*old).is(CardType::Creature)) =>
-        {
-            Fired::about(Target::Object(*old))
-        }
-        _ => None,
-    }
+    let fired = triggers::cards_leave_your_graveyard(q, me, event)?;
+    let chars = q.chars(fired.subject.object()?);
+    (chars.is(CardType::Artifact) || chars.is(CardType::Creature)).then_some(fired)
 }
 
 /// "Mill four cards. You may put an artifact, creature, or land card from among the milled cards into your hand."
