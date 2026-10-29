@@ -1,0 +1,59 @@
+# Transcendent Archaic, converge, paid by six Mox Jets and a Mox Ruby: seven mana of two colors (black and red), so it draws two,
+# not seven or one, and discards exactly two (the two it drew, Forest and Swamp). Then a second Archaic, cast on turn 5 from the
+# same Moxen, is declined: no draw, so nothing is discarded and the library stays at nine cards, the Plains on top of it.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Ruby
+Transcendent Archaic
+Forest
+Swamp
+Transcendent Archaic
+Plains
+Island x8
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Battlefield.Mox Jet#6.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Transcendent Archaic.Cast
+Bot1.Accept
+Bot1.Choose(Forest; Swamp)
+? Bot1.Hand.Count = 0
+? Bot1.Graveyard.Count = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Battlefield.Mox Jet#6.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Transcendent Archaic.Cast
+Bot1.Decline
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Library.Count = 9
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield.Count = 9

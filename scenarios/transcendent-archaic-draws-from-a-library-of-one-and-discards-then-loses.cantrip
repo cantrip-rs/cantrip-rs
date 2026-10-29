@@ -1,0 +1,42 @@
+# Transcendent Archaic with two colors spent (six Mox Jets and a Mox Ruby) and a library of a single Forest: asked to draw two,
+# Bot1 draws the one card there is, and that is "one or more cards", so the discard of two follows and takes the only card in
+# hand, the Forest (CR 121.2, 701.9b). The empty library then loses Bot1 the game at the next state-based check (CR 704.5b).
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Ruby
+Transcendent Archaic
+Forest
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Battlefield.Mox Jet#6.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Transcendent Archaic.Cast
+Bot1.Accept
+
+[Expect]
+Bot1.Graveyard = Forest
+Bot1.Hand.Count = 0
+Bot1.Status = Lost
+Bot1.LostTo = EmptyLibrary
