@@ -1,0 +1,39 @@
+# Leader's Talent at level 1 has no life-gain ability: Bot1's Ornithopter attacks on turn 3, gets a +1/+1 counter, and Bot2's
+# Bolt kills it (toughness 3, three damage). Bot1 stays at 20.
+
+[Bot1 Deck]
+Mox Pearl x2
+Leader's Talent
+Ornithopter
+Plains x3
+Plains x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Leader's Talent.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Count = 3
+Bot2.Graveyard = Lightning Bolt

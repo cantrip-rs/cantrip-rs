@@ -1,0 +1,66 @@
+# Leader's Talent, level 3 ({3}{W}): "Whenever you cast a spell, put a +1/+1 counter on each creature you control." With
+# three mana sources it is refused (`Mana: short`) on turns 3 and 5; the fourth, a Plains, comes on turn 5. Casting a third
+# Ornithopter at level 2 on turn 3 adds nothing. After level 3, casting Mox Jet puts a counter on all three of Bot1's
+# Ornithopters and not on Bot2's.
+
+[Bot1 Deck]
+Mox Pearl x3
+Leader's Talent
+Ornithopter x2
+Plains
+Ornithopter
+Mox Jet
+Plains x11
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Leader's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Leader's Talent.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Leader's Talent.Activate(Ability: Level 3; Mana: short)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Ornithopter#1.Power = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+! Bot1.Battlefield.Leader's Talent.Activate(Ability: Level 3; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Leader's Talent.Activate(Ability: Level 3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Leader's Talent.ClassLevel = 3
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter#2.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter#3.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Power = 0

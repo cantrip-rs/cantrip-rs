@@ -1,0 +1,63 @@
+# Leader's Talent, level 2: "Whenever a creature you control with a counter on it leaves the battlefield, you gain 2 life."
+# Level 2 costs {2}{W}: on turn 1, with two of Bot1's three Moxes tapped for the Talent, it is refused (`Mana: short`). It is
+# paid on turn 3. Bot1's first Ornithopter attacks and gets a counter. Bot2's Bolt kills the second Ornithopter (no
+# counter): no life. The next Bolt kills the first (a +1/+1 counter, toughness 3): Bot1 gains 2 (20 -> 22).
+
+[Bot1 Deck]
+Mox Pearl x3
+Leader's Talent
+Ornithopter x2
+Plains
+Plains x14
+
+[Bot2 Deck]
+Mox Ruby x2
+Lightning Bolt x2
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Leader's Talent.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Leader's Talent.Activate(Ability: Level 2; Mana: short)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Leader's Talent.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+?Bot1.Battlefield.Leader's Talent.ClassLevel = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter#1 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#2)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+? Bot1.Battlefield.Count = 5
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Battlefield.Count = 4
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt
