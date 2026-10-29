@@ -164,6 +164,9 @@ impl EntersAs {
 pub struct Becomes {
     pub what: &'static EntersAs,
     pub card: CardId,
+    /// The text of the ability putting it onto the battlefield, as it has it now (CR 612.1): a subtype it gives is read through it,
+    /// so "a 1/1 Spirit" is an Elf once Spirit was changed to Elf.
+    pub words: Words,
 }
 
 /// Where a spell countered by `Game::counter_to` goes instead of its owner's graveyard.

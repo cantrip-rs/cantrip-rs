@@ -1590,7 +1590,7 @@ fn enter_as(cx: &mut Cx, id: ObjectId, b: Becomes) {
         }
         // "(They lose all other types and subtypes.)": then the subtypes it gains (CR 205.1a).
         kinds.extend(b.what.loses_subtypes_of.iter().map(|&t| EffectKind::LoseSubtypesOf(t)));
-        kinds.extend(b.what.subtypes.iter().map(|&s| EffectKind::AddSubtype(s)));
+        kinds.extend(b.what.subtypes.iter().map(|&s| EffectKind::AddSubtype(b.words.subtype(s))));
     }
     if b.what.loses_other_abilities {
         kinds.push(EffectKind::LoseAllAbilities);
@@ -1633,17 +1633,17 @@ fn enter_as(cx: &mut Cx, id: ObjectId, b: Becomes) {
 /// Puts one object onto the battlefield as an effect says it is (`Game::put_onto_battlefield_as`, CR 614.12): the batch of
 /// one. The permanent, or None if it did not enter.
 pub fn put_onto_battlefield_becoming(cx: &mut Cx, id: ObjectId, controller: PlayerId, becomes: Becomes) -> R<Option<ObjectId>> {
-    Ok(put_onto_battlefield_becoming_all(cx, &[(id, controller, false)], becomes)?.first().copied())
+    Ok(put_onto_battlefield_becoming_all(cx, &[(id, controller, false)], &[], becomes)?.first().copied())
 }
 
 /// Puts objects onto the battlefield together as an effect says they are (`Game::put_all_onto_battlefield_becoming`, CR 110.2a,
 /// 614.12): each one's entering replacements judged on it as that (`as_it_would_exist`), as an Aura choosing what it enchants as
-/// it enters and staying where it is with nothing to enchant (CR 303.4f-g), and all arriving as that in one move. A card a
+/// it enters and staying where it is with nothing to enchant (CR 303.4f-g), and all arriving as that in one move, each with the counters `with` names (CR 122.6, 614.1c). A card a
 /// static ability keeps from entering stays where it is (CR 101.2, 101.3), judged as the card it is there, not as what the
 /// effect would make it (Grafdigger's Cage's ruling); nor does an instant or sorcery card, whatever the effect says it is
 /// (CR 304.4, 307.4). The permanents that entered.
-pub fn put_onto_battlefield_becoming_all(cx: &mut Cx, objects: &[(ObjectId, PlayerId, bool)], becomes: Becomes) -> R<Vec<ObjectId>> {
-    let moved = put_onto_battlefield_along(cx, Vec::new(), objects, ZoneReason::Other, &[], Some(becomes))?;
+pub fn put_onto_battlefield_becoming_all(cx: &mut Cx, objects: &[(ObjectId, PlayerId, bool)], with: &[(CounterKind, i16)], becomes: Becomes) -> R<Vec<ObjectId>> {
+    let moved = put_onto_battlefield_along(cx, Vec::new(), objects, ZoneReason::Other, with, Some(becomes))?;
     Ok(moved.into_iter().filter(|&n| live(cx.s(), n) && cx.s().obj(n).zone.is(ZoneKind::Battlefield)).collect())
 }
 

@@ -680,8 +680,9 @@ pub trait Game: Query {
     fn put_onto_battlefield_as(&mut self, object: ObjectId, controller: PlayerId, item: &StackItem, what: &'static EntersAs) -> Result<Option<ObjectId>, Suspend>;
     /// `put_onto_battlefield_as` for several objects at once (CR 110.2a): they all enter together, one event, each under the
     /// player given and each as `what` says (CR 614.12), so what watches creatures enter does not see Supper for Spiders' Food
-    /// artifacts, and what watches artifacts does. The permanents that entered; one that could not stays where it is.
-    fn put_all_onto_battlefield_becoming(&mut self, objects: &[(ObjectId, PlayerId)], item: &StackItem, what: &'static EntersAs) -> Result<Vec<ObjectId>, Suspend>;
+    /// artifacts, and what watches artifacts does. Each enters with `counters` as well (CR 122.6, 614.1c): Ghost Vacuum's Spirits, 1/1
+    /// with a flying counter. The permanents that entered; one that could not stays where it is.
+    fn put_all_onto_battlefield_becoming(&mut self, objects: &[(ObjectId, PlayerId)], item: &StackItem, what: &'static EntersAs, counters: &[(CounterKind, i16)]) -> Result<Vec<ObjectId>, Suspend>;
     /// Puts several objects onto the battlefield at once (CR 110.2a), each under the player given.
     fn put_all_onto_battlefield(&mut self, objects: &[(ObjectId, PlayerId)]) -> Result<Vec<ObjectId>, Suspend>;
     /// The same, each with whether it enters tapped: Winds of Abandon puts the basic lands it found onto the battlefield

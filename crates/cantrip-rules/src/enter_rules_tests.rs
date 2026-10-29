@@ -77,7 +77,7 @@ fn a_card_put_onto_the_battlefield_as_something_else_is_judged_as_the_card_it_is
     let bear = put(&mut game, table, &BEAR, Zone::graveyard(YOU));
     let relic = put(&mut game, table, &RELIC, Zone::graveyard(YOU));
     let mut cx = cx(&mut game);
-    let becomes = |what| Becomes { what, card: table.id_of(&CAGE) };
+    let becomes = |what| Becomes { what, card: table.id_of(&CAGE), words: Words::NONE };
     let bear_entered = ops::put_onto_battlefield_becoming(&mut cx, bear, YOU, becomes(&AN_ENCHANTMENT)).expect("nothing is asked");
     assert_eq!(bear_entered, None);
     assert!(cx.s().zone(Zone::graveyard(YOU)).contains(&bear));

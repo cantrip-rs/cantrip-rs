@@ -1867,14 +1867,14 @@ impl cantrip_api::Game for Cx<'_> {
     }
 
     fn put_onto_battlefield_as(&mut self, object: ObjectId, controller: PlayerId, item: &StackItem, what: &'static EntersAs) -> Result<Option<ObjectId>, Suspend> {
-        let becomes = Becomes { what, card: item.ability.card };
+        let becomes = Becomes { what, card: item.ability.card, words: self.words(item.object) };
         ops::put_onto_battlefield_becoming(self, object, controller, becomes).map_err(|_| Suspend)
     }
 
-    fn put_all_onto_battlefield_becoming(&mut self, objects: &[(ObjectId, PlayerId)], item: &StackItem, what: &'static EntersAs) -> Result<Vec<ObjectId>, Suspend> {
-        let becomes = Becomes { what, card: item.ability.card };
+    fn put_all_onto_battlefield_becoming(&mut self, objects: &[(ObjectId, PlayerId)], item: &StackItem, what: &'static EntersAs, counters: &[(CounterKind, i16)]) -> Result<Vec<ObjectId>, Suspend> {
+        let becomes = Becomes { what, card: item.ability.card, words: self.words(item.object) };
         let all: Vec<(ObjectId, PlayerId, bool)> = objects.iter().map(|&(id, p)| (id, p, false)).collect();
-        ops::put_onto_battlefield_becoming_all(self, &all, becomes).map_err(|_| Suspend)
+        ops::put_onto_battlefield_becoming_all(self, &all, counters, becomes).map_err(|_| Suspend)
     }
 
     fn put_onto_battlefield_attached(&mut self, object: ObjectId, controller: PlayerId, host: ObjectId) -> Result<Option<ObjectId>, Suspend> {

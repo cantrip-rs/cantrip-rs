@@ -83,7 +83,7 @@ fn an_instant_card_put_onto_the_battlefield_stays_where_it_is() {
     assert_eq!(after, bolt);
     assert!(cx.s().zone(Zone::graveyard(YOU)).contains(&bolt));
     // Not as what the effect would make it either: "it's an enchantment" makes no instant card a permanent card.
-    let becomes = Becomes { what: &AN_ENCHANTMENT, card: table.id_of(&BEAR) };
+    let becomes = Becomes { what: &AN_ENCHANTMENT, card: table.id_of(&BEAR), words: Words::NONE };
     assert_eq!(ops::put_onto_battlefield_becoming(&mut cx, bolt, YOU, becomes).expect("nothing is asked"), None);
     assert!(cx.s().zone(Zone::graveyard(YOU)).contains(&bolt));
 }
@@ -96,7 +96,7 @@ fn a_card_put_onto_the_battlefield_becoming_something_turned_over_to_a_sorcery_f
     let wolf = put(&mut game, table, &WOLF, Zone::graveyard(YOU));
     game.state.update_turn(|t| t.day_night = DayNight::Night);
     let mut cx = cx(&mut game);
-    let becomes = Becomes { what: &AN_ENCHANTMENT, card: table.id_of(&BEAR) };
+    let becomes = Becomes { what: &AN_ENCHANTMENT, card: table.id_of(&BEAR), words: Words::NONE };
     assert_eq!(ops::put_onto_battlefield_becoming(&mut cx, wolf, YOU, becomes).expect("nothing is asked"), None);
     assert!(cx.s().zone(Zone::graveyard(YOU)).contains(&wolf));
     cx.st().update_turn(|t| t.day_night = DayNight::Day);

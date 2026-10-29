@@ -32,7 +32,7 @@ fn put_onto_the_battlefield_as_food(g: &mut dyn Game, item: &StackItem) -> Resul
             }
         }
     }
-    g.put_all_onto_battlefield_becoming(&cards, item, &AS_FOOD)?;
+    g.put_all_onto_battlefield_becoming(&cards, item, &AS_FOOD, &[])?;
     Ok(())
 }
 

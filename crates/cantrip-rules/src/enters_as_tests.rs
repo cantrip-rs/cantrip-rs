@@ -398,7 +398,7 @@ fn an_aura_with_no_enchant_ability_may_enchant_anything() {
         transformed: false,
         protector: None,
         instead: None,
-        becomes: Some(Becomes { what: &AS_BARE_AURA, card: g.cards.id_of(&BEAR) }),
+        becomes: Some(Becomes { what: &AS_BARE_AURA, card: g.cards.id_of(&BEAR), words: Words::NONE }),
         own: None,
     };
     let mut c = cx(&mut g);
@@ -454,7 +454,7 @@ fn several_cards_enter_together_as_food_artifacts() {
     let equipped = put(&mut g, &EQUIPPED_BEAR, THEM, Zone::graveyard(THEM));
     let ability = AbilityRef { card: g.cards.id_of(&TWO_ENCHANTS), index: 0 };
     let item = crate::actions::stack_item(StackKind::Spell, source, ability, YOU, &[]);
-    let entered = cantrip_api::Game::put_all_onto_battlefield_becoming(&mut cx(&mut g), &[(bear, YOU), (equipped, YOU)], &item, &AS_FOOD)
+    let entered = cantrip_api::Game::put_all_onto_battlefield_becoming(&mut cx(&mut g), &[(bear, YOU), (equipped, YOU)], &item, &AS_FOOD, &[])
         .expect("nothing to ask");
     assert_eq!(entered.len(), 2);
     for &p in &entered {
