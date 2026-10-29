@@ -1,0 +1,44 @@
+# Energize's spell targets a creature an opponent controls (CR 115.1, 601.2c), then returns it to its owner's hand (CR 400.3).
+# Bot1 has a creature and a noncreature artifact to refuse; Bot2's creature is the legal target and returns to Bot2's hand.
+
+[Bot1 Deck]
+Island
+Ornithopter
+Mox Sapphire
+Mox Pearl
+Energize
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Energize.Cast(Bot1.Battlefield.Ornithopter)
+! Bot1.Hand.Energize.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Energize.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Energize
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Llanowar Elves = (absent)
+Bot2.Graveyard.Count = 0
+Bot2.Hand = Island; Island; Island; Island; Island; Island; Llanowar Elves

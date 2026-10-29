@@ -1,0 +1,63 @@
+# Beam me up is a graveyard alternative cost (CR 118.9, 601.2f–h): pay exactly {3}{U} and return a creature you control as a cost.
+# The ordinary cast first returns Bot2's Elf; the beam cast returns Bot1's Ornithopter, bounces Bot2's other creature, then exiles Energize as it leaves the stack, as flashback does (CR 702.34a; Beam me up is newer than the rules text here).
+
+[Bot1 Deck]
+Forest
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Ornithopter
+Energize
+Island
+Forest x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Energize.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Graveyard.Energize.Cast(Bot2.Battlefield.Ornithopter; Ability: Beam me up)
+! Bot1.Choose(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Energize
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Hand = Forest; Forest; Ornithopter
+Bot2.Battlefield.Llanowar Elves = (absent)
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Hand = Island; Island; Island; Island; Island; Island; Llanowar Elves; Ornithopter

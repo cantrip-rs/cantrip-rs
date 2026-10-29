@@ -1,0 +1,6 @@
+{
+  "name": "Energize",
+  "manaCost": "{1}{U}",
+  "type": "Sorcery",
+  "oracleText": "Return target creature an opponent controls to its owner's hand.\nBeam me up {3}{U} (You may cast this card from your graveyard for {3}{U} if you also return a creature you control to its owner's hand. Then exile this spell.)"
+}

@@ -1,0 +1,58 @@
+# Energize's {3}{U} alternative cost still needs blue mana (CR 118.9c). Black Lotus funds its ordinary cast; two blue instants
+# spend the leftover blue before the card reaches the graveyard. Four nonblue mana later cannot cast the spell.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Ornithopter
+Mox Emerald
+Mox Pearl
+Energize
+Opt
+Consider
+Forest
+Forest x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Energize.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Hand.Opt.Cast
+Bot1.Hand.Consider.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+! Bot1.Graveyard.Energize.Cast(Bot2.Battlefield.Ornithopter; Ability: Beam me up; Mana: short)
+
+[Expect]
+Bot1.Graveyard = Energize; Opt; Consider; Black Lotus
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Ornithopter.Toughness = 2
