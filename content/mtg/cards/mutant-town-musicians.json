@@ -1,0 +1,11 @@
+{
+  "name": "Mutant Town Musicians",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Mutant Bard Performer",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Trample\nAlliance — Whenever another creature you control enters, this creature gets +1/+0 until end of turn.",
+  "keywords": [
+    "Trample"
+  ]
+}
