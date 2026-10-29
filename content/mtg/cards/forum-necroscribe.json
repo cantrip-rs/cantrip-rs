@@ -1,0 +1,8 @@
+{
+  "name": "Forum Necroscribe",
+  "manaCost": "{5}{B}",
+  "type": "Creature — Troll Warlock",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Ward—Discard a card.\nRepartee — Whenever you cast an instant or sorcery spell that targets a creature, return target creature card from your graveyard to the battlefield."
+}

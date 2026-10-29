@@ -1,0 +1,39 @@
+# Forum Necroscribe's ward -- discard a card: Bot2's Lightning Bolt at it is countered unless Bot2 discards; Bot2 discards an Island and the Bolt resolves
+# (3 damage on a 5/4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mountain
+Forum Necroscribe
+Mountain x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island
+Plains x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Forum Necroscribe.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Forum Necroscribe)
+Bot2.Accept
+Bot2.Choose(Island)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt; Island
+Bot1.Battlefield.Forum Necroscribe.Damage = 3
