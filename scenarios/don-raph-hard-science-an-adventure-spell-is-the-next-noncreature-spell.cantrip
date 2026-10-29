@@ -1,0 +1,47 @@
+# Don & Raph, Hard Science: a card with an Adventure is a creature card in the hand, but cast as its Adventure it is a
+# noncreature spell (CR 715.3a, 601.2a), so it is "the next noncreature spell" and has the affinity. After the attack Bot1 casts
+# Bonecrusher Giant's Stomp ({1}{R}, 2 damage to Bot2): with the three Moxen there the {1} comes off and Mox Ruby's {R}
+# pays all of it. The affinity is then used up, so Mind Stone ({2}) afterwards costs its full price, paid with the other two Moxen.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Don & Raph, Hard Science
+Bonecrusher Giant
+Mind Stone
+Island
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Don & Raph, Hard Science.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Don & Raph, Hard Science > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bonecrusher Giant.Cast(Bot2; Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Don & Raph, Hard Science; Mind Stone; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Mana =
