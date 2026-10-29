@@ -1,0 +1,11 @@
+{
+  "name": "Practiced Scrollsmith",
+  "manaCost": "{R}{R/W}{W}",
+  "type": "Creature — Dwarf Cleric",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "First strike\nWhen this creature enters, exile target noncreature, nonland card from your graveyard. Until the end of your next turn, you may cast that card.",
+  "keywords": [
+    "FirstStrike"
+  ]
+}

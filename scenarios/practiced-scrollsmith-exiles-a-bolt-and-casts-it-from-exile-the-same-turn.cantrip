@@ -1,0 +1,46 @@
+# Practiced Scrollsmith {R}{R/W}{W}, first strike: "When this creature enters, exile target noncreature, nonland card from your
+# graveyard. Until the end of your next turn, you may cast that card." On turn 1 Bot1 Bolts Bot2 (17). On turn 3 the Scrollsmith
+# exiles that Bolt and Bot1 casts it from exile with a second Mountain, back to 14; the Bolt returns to the graveyard.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Pearl
+Lightning Bolt
+Practiced Scrollsmith
+Mountain
+Island
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Practiced Scrollsmith.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Exile.Count = 0
+Bot1.Graveyard = Lightning Bolt
