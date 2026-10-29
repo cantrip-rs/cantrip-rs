@@ -1,0 +1,52 @@
+# Chrome Dome: "{5}: Create a token that's a copy of another target artifact you control. That token gains haste.
+# Sacrifice it at the beginning of the next end step." On turn three Bot1 floats five mana from its Moxen. Chrome Dome is
+# not "another" artifact and Bot2's Ornithopter is not Bot1's, so neither is a legal target; the ability copies Bot1's
+# Ornithopter. The token is a 1/2 flyer (Chrome Dome's +1/+0), has haste, attacks the turn it arrives and Bot2 goes to 19,
+# and it is sacrificed at the beginning of the end step, leaving the original (CR 707.2, 702.10, 603.7).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Chrome Dome
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chrome Dome.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Chrome Dome.Activate(Ability: copy; Bot1.Battlefield.Chrome Dome)
+! Bot1.Battlefield.Chrome Dome.Activate(Ability: copy; Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Chrome Dome.Activate(Ability: copy; Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter#2.Power = 1
+? Bot1.Battlefield.Ornithopter#2.Keywords = Flying; Haste
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bot1.Battlefield.Ornithopter#2 > Bot2)
+[T3 Bot1.End]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield = Chrome Dome; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter
