@@ -1,0 +1,76 @@
+# CR 702.12: Bot1's artifact creature has indestructible. Bot2 mills Memnite into its graveyard, and Death Is Irrelevant
+# assimilates it at Bot1's next end step.
+# Death Is Irrelevant {6}{B}{B}: Enchantment
+#   Artifact creatures you control have indestructible.
+#   At the beginning of your end step, assimilate target creature card from a graveyard. (Put it onto the battlefield under your control with a +1/+1 counter. It's a Borg artifact creature and loses all other creature types.)
+# Written by new-card.py --scenario: Death Is Irrelevant cast on turn 1 off zero-cost mana sources. Grow it a line at a time with
+#   cargo run --profile cards -p cantrip-script --bin corpus -- --scenario death-is-irrelevant-assimilate-and-indestructible --next --brief
+# and see which keys the card moved with --diff <the line number of its cast>.
+
+[Bot1 Deck]
+Death Is Irrelevant
+Black Lotus
+Mana Vault
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Swamp x20
+
+[Bot2 Deck]
+Thought Scour
+Mox Sapphire
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x2
+Island
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mana Vault.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mana Vault.Activate
+Bot1.Hand.Death Is Irrelevant.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Indestructible
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Damage = 3
+Bot2.Hand.Thought Scour.Cast(Bot2)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Indestructible
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Subtypes = Borg
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Graveyard.Count = 3

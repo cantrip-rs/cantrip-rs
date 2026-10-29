@@ -1,0 +1,6 @@
+{
+  "name": "Death Is Irrelevant",
+  "manaCost": "{6}{B}{B}",
+  "type": "Enchantment",
+  "oracleText": "Artifact creatures you control have indestructible.\nAt the beginning of your end step, assimilate target creature card from a graveyard. (Put it onto the battlefield under your control with a +1/+1 counter. It's a Borg artifact creature and loses all other creature types.)"
+}

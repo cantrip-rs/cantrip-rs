@@ -1,0 +1,54 @@
+# Death Is Irrelevant can target your own creature card: Thought Scour mills a Memnite and a noncreature Island from Bot1's
+# library. At Bot1's next end step, only the Memnite is offered and assimilated (CR 122.6, 205.1b, 614.12). Indestructible goes to artifact creatures only:
+# the assimilated Memnite has it, Dryad Arbor (a creature, not an artifact) and Mox Pearl (an artifact, not a creature) don't.
+
+[Bot1 Deck]
+Death Is Irrelevant
+Black Lotus
+Mana Vault
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Thought Scour
+Dryad Arbor
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mana Vault.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mana Vault.Activate
+Bot1.Hand.Death Is Irrelevant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Subtypes = Borg
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Memnite.Keywords = Indestructible
+Bot1.Battlefield.Dryad Arbor.Keywords = (absent)
+Bot1.Battlefield.Mox Pearl.Keywords = (absent)
