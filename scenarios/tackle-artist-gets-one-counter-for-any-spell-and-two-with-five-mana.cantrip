@@ -1,0 +1,55 @@
+# Opus: Lightning Bolt (one mana) puts one +1/+1 counter on Tackle Artist; Archaic's Agony paid with five mana (Moxen of all five
+# colors) puts two on it instead, not one and two - three counters in all, a 7/6.
+
+[Bot1 Deck]
+Tackle Artist
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Lightning Bolt
+Archaic's Agony
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tackle Artist.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tackle Artist.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Archaic's Agony.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Tackle Artist.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Tackle Artist.Power = 7
+Bot1.Battlefield.Tackle Artist.Toughness = 6
