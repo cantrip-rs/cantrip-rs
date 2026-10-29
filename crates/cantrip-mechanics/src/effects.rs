@@ -1295,15 +1295,40 @@ pub fn return_target_card_to_battlefield(g: &mut dyn Game, item: &StackItem) -> 
     Ok(())
 }
 
-/// "When this creature dies, put its counters on [up to one] target creature": as many of each kind as it had as it died, read
-/// from its last existence on the battlefield (CR 603.10a, 608.2h); the counters are put on, not moved (the rulings), every kind
-/// of them, -1/-1 counters too, together as one event (CR 122.6). Nothing if the target is no longer legal (CR 608.2b) or none
-/// was chosen. Essence Channeler, Graft Surgeon and Scolding Administrator print it.
-pub fn put_its_counters_on_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
-    let counters = g.obj(item.object).counter_array();
-    let puts: Vec<(ObjectId, CounterKind, i16)> = CounterKind::ALL.into_iter().map(|kind| (creature, kind, counters[kind as usize])).collect();
+/// "Put [its / those] counters on [up to one] target [permanent]": as many of each kind as `from` had as it left, read from its
+/// last existence on the battlefield (CR 603.10a, 608.2h); the counters are put on, not moved (the rulings), every kind of
+/// them, -1/-1 counters too, together as one event (CR 122.6). Nothing if the target is no longer legal (CR 608.2b) or none was
+/// chosen. `put_its_counters_on_target` is the ability's own source; Donatello, Mutant Mechanic's is the artifact that died.
+pub fn put_counters_of_on_target(g: &mut dyn Game, item: &StackItem, from: ObjectId) -> Result<(), Suspend> {
+    let Some(target) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    let counters = g.obj(from).counter_array();
+    let puts: Vec<(ObjectId, CounterKind, i16)> = CounterKind::ALL.into_iter().map(|kind| (target, kind, counters[kind as usize])).collect();
     g.add_counters_together(&puts);
+    Ok(())
+}
+
+/// "When this creature dies, put its counters on [up to one] target creature" (see `put_counters_of_on_target`). Essence
+/// Channeler, Graft Surgeon and Scolding Administrator print it.
+pub fn put_its_counters_on_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    put_counters_of_on_target(g, item, item.object)
+}
+
+/// "Put three +1/+1 counters on target artifact you control. If it isn't a creature, it becomes a 0/0 Robot creature in
+/// addition to its other types" (CR 122.1a, 205.1b, 613.1d): the first target, if still legal. The counters always land; the
+/// target is made a creature only if it needed to become one, so an artifact creature keeps the power and toughness it had.
+/// Does Machines and Donatello, Mutant Mechanic print it.
+pub fn three_counters_and_becomes_robot(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(artifact) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.add_counters(artifact, CounterKind::PlusOne, 3);
+    g.end_sentence();
+    if !g.chars(artifact).is(CardType::Creature) {
+        let robot = g.words(item.object).subtype(Subtype::Robot);
+        instruction(g, |g| {
+            g.add_effect(item.object, artifact, EffectKind::AddTypes(TypeSet::of(&[CardType::Creature])), Duration::Indefinite);
+            g.add_effect(item.object, artifact, EffectKind::AddSubtype(robot), Duration::Indefinite);
+            g.add_effect(item.object, artifact, EffectKind::SetPt(0, 0), Duration::Indefinite);
+        });
+    }
     Ok(())
 }
 

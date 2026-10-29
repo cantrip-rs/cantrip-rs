@@ -521,6 +521,13 @@ fn artifact_an_opponent_controls_filter(q: &dyn Query, asker: &Asker, t: Target)
     artifact_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
 }
 
+fn artifact_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    artifact_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) == asker.controller)
+}
+
+/// "Target artifact you control" (CR 115.1). Does Machines and Donatello, Mutant Mechanic print it.
+pub const ARTIFACT_YOU_CONTROL: TargetSpec = target(artifact_you_control_filter);
+
 /// "Target artifact an opponent controls" (CR 115.1). Burn, Burn, Tree and Fern, Fall of the First Civilization, Hyperion
 /// Blacksmith, Sawblade Slinger and Shrapnel Slinger print it.
 pub const ARTIFACT_AN_OPPONENT_CONTROLS: TargetSpec = target(artifact_an_opponent_controls_filter);

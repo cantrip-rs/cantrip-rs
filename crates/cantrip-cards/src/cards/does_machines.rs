@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{class, discard_chosen, targets};
+use cantrip_mechanics::{class, discard_chosen, effects, targets};
 use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_oracle as oracle;
 
@@ -37,29 +37,6 @@ fn combat_at_level_three(q: &dyn Query, source: ObjectId, event: &Event) -> Opti
     }
 }
 
-/// "Target artifact you control" (CR 115.1).
-fn artifact_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    (targets::ARTIFACT.filter)(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) == asker.controller)
-}
-
-/// "Put three +1/+1 counters on target artifact you control. If it isn't a creature, it becomes a 0/0 Robot creature in
-/// addition to its other types." The counters always land; the target is a creature only if it needed to become one, so
-/// an artifact creature keeps the power and toughness it had.
-fn grow_artifact(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(artifact) = targets::object(g, item, 0) else { return Ok(()) };
-    g.add_counters(artifact, CounterKind::PlusOne, 3);
-    g.end_sentence();
-    if !g.chars(artifact).is(CardType::Creature) {
-        let robot = g.words(item.object).subtype(Subtype::Robot);
-        instruction(g, |g| {
-            g.add_effect(item.object, artifact, EffectKind::AddTypes(TypeSet::of(&[CardType::Creature])), Duration::Indefinite);
-            g.add_effect(item.object, artifact, EffectKind::AddSubtype(robot), Duration::Indefinite);
-            g.add_effect(item.object, artifact, EffectKind::SetPt(0, 0), Duration::Indefinite);
-        });
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         class::level_two("{1}{U}", "{1}{U}: Level 2"),
@@ -67,8 +44,8 @@ pub static CARD: CardDef = CardDef {
         triggered(THIS_ENTERS, loot, "When this Class enters, mill two cards, draw two cards, then discard two cards."),
         triggered(class::BECOMES_LEVEL_TWO, return_artifacts, "When this Class becomes level 2, return up to two target artifact cards from your graveyard to your hand.")
             .targets(&[up_to(2, artifact_card_in_your_graveyard)]),
-        triggered(when(EventMask::STEP_BEGAN, combat_at_level_three), grow_artifact, "At the beginning of combat on your turn, put three +1/+1 counters on target artifact you control. If it isn't a creature, it becomes a 0/0 Robot creature in addition to its other types.")
-            .targets(&[target(artifact_you_control)]),
+        triggered(when(EventMask::STEP_BEGAN, combat_at_level_three), effects::three_counters_and_becomes_robot, "At the beginning of combat on your turn, put three +1/+1 counters on target artifact you control. If it isn't a creature, it becomes a 0/0 Robot creature in addition to its other types.")
+            .targets(&[targets::ARTIFACT_YOU_CONTROL]),
     ],
     ..oracle::DOES_MACHINES
 };
