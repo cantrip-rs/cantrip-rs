@@ -1,0 +1,11 @@
+{
+  "name": "Pterafractyl",
+  "manaCost": "{X}{G}{U}",
+  "type": "Creature — Dinosaur Fractal",
+  "power": 1,
+  "toughness": 0,
+  "oracleText": "Flying\nThis creature enters with X +1/+1 counters on it.\nWhen this creature enters, you gain 2 life.",
+  "keywords": [
+    "Flying"
+  ]
+}
