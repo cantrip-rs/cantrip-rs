@@ -1,0 +1,47 @@
+# Ray Fillet's "Remove a +1/+1 counter from a creature you control": the only +1/+1 counter on the battlefield is on Bot2's
+# Llanowar Elves (a Mutagen token put it there), so with {2} available the ability is not offered (refused).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Ray Fillet, Man Ray
+Island x3
+Island x12
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ray Fillet, Man Ray.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mutagen Token.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 1
+! Bot1.Battlefield.Ray Fillet, Man Ray.Activate
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Power = 2
