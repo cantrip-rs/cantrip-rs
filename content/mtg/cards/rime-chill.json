@@ -1,0 +1,6 @@
+{
+  "name": "Rime Chill",
+  "manaCost": "{6}{U}",
+  "type": "Instant",
+  "oracleText": "Vivid — This spell costs {1} less to cast for each color among permanents you control.\nTap up to two target creatures. Put a stun counter on each of them. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nDraw a card."
+}

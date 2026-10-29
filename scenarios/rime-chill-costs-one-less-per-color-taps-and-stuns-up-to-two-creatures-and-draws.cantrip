@@ -1,0 +1,66 @@
+# Rime Chill {6}{U}: "Vivid - This spell costs {1} less to cast for each color among permanents you control. Tap up to two target creatures. Put a stun
+# counter on each of them. Draw a card." Bot1 controls a white Savannah Lions and a green Llanowar Elves beside colorless Moxen: two colors, so it costs {4}{U}
+# and the five Moxen pay it exactly (Bot2's red Raiders does not count). It taps and stuns Bot1's own Lions and Bot2's Raiders (CR 122.1d) - the untapped Raiders ends
+# tapped - and draws a card; on turn 4 Bot2's untap step spends the Raiders' stun counter instead of untapping it, while a Mox target is refused (not a creature).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Savannah Lions
+Llanowar Elves
+Rime Chill
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Mons's Goblin Raiders
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Hand.Count = 1
+Bot1.Hand.Rime Chill.Cast
+! Bot1.Target(Mox Jet)
+! Bot1.Target(Savannah Lions; Llanowar Elves; Bot2.Battlefield.Mons's Goblin Raiders)
+Bot1.Target(Savannah Lions; Bot2.Battlefield.Mons's Goblin Raiders)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Hand.Count = 1
+? Bot1.Battlefield.Savannah Lions.Tapped = true
+? Bot1.Battlefield.Savannah Lions.Counters.Stun = 1
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+? Bot1.Battlefield.Llanowar Elves.Counters.Stun = (absent)
+? Bot2.Battlefield.Mons's Goblin Raiders.Tapped = true
+? Bot2.Battlefield.Mons's Goblin Raiders.Counters.Stun = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Mons's Goblin Raiders.Tapped = true
+Bot2.Battlefield.Mons's Goblin Raiders.Counters.Stun = (absent)
+Bot1.Graveyard = Rime Chill
