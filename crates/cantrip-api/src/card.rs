@@ -1650,6 +1650,8 @@ pub enum WayKind {
     Surge,
     /// Freerunning (CR 702.173a): "cast for its freerunning cost" asks it.
     Freerunning,
+    /// Sneak (CR 702.190a): "if his sneak cost was paid" asks it of the permanent the spell became.
+    Sneak,
 }
 
 impl WayKind {
