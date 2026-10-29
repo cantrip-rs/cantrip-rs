@@ -2381,6 +2381,14 @@ impl cantrip_api::Game for Cx<'_> {
         counters::remove_one_from_among(self, player, source, permanents).map_err(|_| Suspend)
     }
 
+    fn choose_counter_kind(&mut self, player: PlayerId, source: ObjectId, object: ObjectId) -> Result<Option<CounterKind>, Suspend> {
+        // A permanent that has left, or is phased out (CR 702.26b), has no counters to choose among.
+        if !layers::live(self.s(), object) || self.s().obj(object).zone.is(ZoneKind::PhasedOut) {
+            return Ok(None);
+        }
+        counters::choose_kind(self, player, source, object, false).map_err(|_| Suspend)
+    }
+
     fn add_effect(&mut self, source: ObjectId, affected: ObjectId, kind: EffectKind, duration: Duration) {
         // One change, though control and the "for as long as" durations it ends are settled with it.
         self.instruction(|cx| cx.begin_effect(source, affected, kind, duration), |_| true);

@@ -219,6 +219,32 @@ pub fn remove_one_from_among(cx: &mut Cx, player: PlayerId, source: ObjectId, pe
     Ok(removed)
 }
 
+/// Chooses a kind of counter already on `object`, removing none (CR 122.1): the only kind it has with no question, or the
+/// player's choice among several. For an effect (CR 608.2d; Dathon, His Heart Open), `cost` false: no kind is `None`, and
+/// the question can't be cancelled. For a cost that removes "a counter of any kind" from its source (CR 118.3, 601.2b),
+/// `cost` true: the question is asked as part of the cost, and the player may back out of it (`Stop::Cancel`).
+pub fn choose_kind(cx: &mut Cx, player: PlayerId, source: ObjectId, object: ObjectId, cost: bool) -> crate::R<Option<CounterKind>> {
+    let kinds: Vec<CounterKind> = CounterKind::ALL.into_iter().filter(|&kind| cx.s().obj(object).counters(kind) > 0).collect();
+    if kinds.len() <= 1 {
+        return Ok(kinds.first().copied());
+    }
+    let ask = RequestKind::ChooseModes {
+        source,
+        modes: kinds.iter().map(|&kind| Label::Counter(kind)).collect(),
+        eligible: (0..kinds.len() as u8).collect(),
+        count: 1,
+        at_most: 0,
+        affordable: Vec::new(),
+        additional_cost: cost,
+        repeat: false,
+    };
+    match cx.ask_core(player, ask, cost)? {
+        Answer::Modes(chosen) => Ok(chosen.first().map(|&index| kinds[index as usize])),
+        _ if cost => Err(crate::Stop::Cancel),
+        _ => Ok(None),
+    }
+}
+
 /// A Siege that has lost its last defense counter triggers its defeat ability (CR 310.12b).
 fn siege_defeat_triggers(cx: &mut Cx, id: ObjectId) {
     if !cx.s().obj(id).zone.is(ZoneKind::Battlefield) {

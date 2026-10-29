@@ -87,3 +87,15 @@ fn nothing_is_asked_with_no_counters_to_remove() {
     cx.st().update_obj(gone, |o| o.zone = Zone::GONE);
     assert_eq!(counters::remove_up_to(&mut cx, YOU, gone, gone, 3), Ok(0));
 }
+
+/// Choosing a counter kind reads the kinds present and does not remove the selected counter (CR 122.1, 608.2d).
+#[test]
+fn choosing_the_only_counter_kind_leaves_it_on_the_permanent() {
+    let mut game = game();
+    let source = bear(&mut game);
+    let target = bear(&mut game);
+    let mut cx = cx(&mut game);
+    counters::put(&mut cx, target, CounterKind::PlusOne, 1, YOU, counters::How::Effect);
+    assert_eq!(counters::choose_kind(&mut cx, YOU, source, target, false), Ok(Some(CounterKind::PlusOne)));
+    assert_eq!(cx.s().obj(target).counters(CounterKind::PlusOne), 1);
+}

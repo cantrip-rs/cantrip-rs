@@ -1279,25 +1279,7 @@ fn choose_counter_kind(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &C
     if !cost.remove_any_counter {
         return Ok(None);
     }
-    let kinds: Vec<CounterKind> =
-        CounterKind::ALL.into_iter().filter(|&k| cx.s().obj(source).counters(k) > 0).collect();
-    if kinds.len() <= 1 {
-        return Ok(kinds.first().copied());
-    }
-    let ask = RequestKind::ChooseModes {
-        source,
-        modes: kinds.iter().map(|&k| Label::Counter(k)).collect(),
-        eligible: (0..kinds.len() as u8).collect(),
-        count: 1,
-        at_most: 0,
-        affordable: Vec::new(),
-        additional_cost: true,
-        repeat: false,
-    };
-    match cx.ask_core(player, ask, true)? {
-        Answer::Modes(chosen) => Ok(chosen.first().map(|&i| kinds[i as usize])),
-        _ => Err(Stop::Cancel),
-    }
+    counters::choose_kind(cx, player, source, source, true)
 }
 
 /// The other cards of `player`'s hand that could pay "exile any number of [white] cards from your hand" (`ExileFromHandForLess`).

@@ -1098,6 +1098,9 @@ pub trait Game: Query {
     /// comes off. Whether one did, for "if you do": none when none of them has a counter or has changed zones (CR 400.7).
     /// Mister Hyde, Monster Within, Sanctuary Warden and Chisei, Heart of Oceans print it.
     fn remove_a_counter_from_among(&mut self, player: PlayerId, source: ObjectId, permanents: &[ObjectId]) -> Result<bool, Suspend>;
+    /// Chooses one kind of counter already on `object`, without removing it (CR 122.1, 608.2d). No choice when the object
+    /// has changed zones, phased out, or has no counters; otherwise the sole kind is automatic and several kinds are asked.
+    fn choose_counter_kind(&mut self, player: PlayerId, source: ObjectId, object: ObjectId) -> Result<Option<CounterKind>, Suspend>;
     /// A continuous effect from `source` on `affected` begins (CR 611.2). It is controlled by the controller of the spell or
     /// ability whose instruction makes it (CR 611.2a, 113.8) - or of the replacement effect or mana ability being carried
     /// out - whoever controls `source` by then: The One Ring's "you gain protection from everything" is its caster's though
