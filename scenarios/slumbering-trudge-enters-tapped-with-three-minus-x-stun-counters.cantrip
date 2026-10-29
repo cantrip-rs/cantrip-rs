@@ -1,0 +1,37 @@
+# Slumbering Trudge ({X}{G}, 6/6): "enters with a number of stun counters on it equal to three minus X. If X is 2 or less, it enters
+# tapped." Bot1 casts one with X = 0 (a Mox Emerald): three stun counters, tapped. And one with X = 2 (Mox Emerald, Mox Ruby,
+# Mox Pearl): one stun counter, tapped.
+
+[Bot1 Deck]
+Slumbering Trudge x2
+Mox Emerald x2
+Mox Ruby
+Mox Pearl
+Mox Jet
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Slumbering Trudge.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Slumbering Trudge.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Slumbering Trudge#1.Counters.Stun = 3
+Bot1.Battlefield.Slumbering Trudge#1.Tapped = true
+Bot1.Battlefield.Slumbering Trudge#2.Counters.Stun = 1
+Bot1.Battlefield.Slumbering Trudge#2.Tapped = true
+Bot1.Battlefield.Slumbering Trudge#2.Power = 6

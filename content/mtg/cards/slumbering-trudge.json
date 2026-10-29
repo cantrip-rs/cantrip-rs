@@ -1,0 +1,8 @@
+{
+  "name": "Slumbering Trudge",
+  "manaCost": "{X}{G}",
+  "type": "Creature — Plant Beast",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "This creature enters with a number of stun counters on it equal to three minus X. If X is 2 or less, it enters tapped. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}
