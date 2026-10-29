@@ -1,24 +1,13 @@
 use cantrip_api::*;
-use cantrip_mechanics::{prepare, pump, targets, triggers};
+use cantrip_mechanics::{effects, prepare, targets, triggers};
 use cantrip_oracle as oracle;
-
-/// "Scrollboost - One or two target creatures each get +2/+2 until end of turn."
-fn scrollboost(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let creatures = targets::legal_objects(g, item);
-    instruction(g, |g| {
-        for creature in creatures {
-            pump(g, item.object, creature, 2, 2);
-        }
-    });
-    Ok(())
-}
 
 /// Spiritcall Enthusiast's prepare spell (CR 722): not a card, only ever a copy cast from exile (CR 722.3c).
 pub static SCROLLBOOST: CardDef = CardDef {
     name: "Scrollboost",
     cost: mana("{1}{W}"),
     types: TypeSet::of(&[CardType::Sorcery]),
-    spell: spell(&[targets::CREATURE.between(1, 2)], scrollboost),
+    spell: spell(&[targets::CREATURE.between(1, 2)], effects::targets_get::<2, 2>),
     text: "One or two target creatures each get +2/+2 until end of turn.",
     ..CardDef::BLANK
 };

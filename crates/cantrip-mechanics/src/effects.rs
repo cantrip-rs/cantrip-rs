@@ -35,6 +35,19 @@ pub fn target_creature_gets<const P: i16, const T: i16>(g: &mut dyn Game, item: 
     Ok(())
 }
 
+/// "One or two target creatures each get +`P`/+`T` until end of turn" (CR 611.2a): every target still legal as the spell
+/// resolves (CR 608.2b), pumped as one instruction. Appeal to Eirdu (+2/+1), Opera Love Song's mode (+2/+0) and Spiritcall
+/// Enthusiast's Scrollboost (+2/+2) print it.
+pub fn targets_get<const P: i16, const T: i16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let creatures = crate::targets::legal_objects(g, item);
+    instruction(g, |g| {
+        for creature in creatures {
+            crate::pump(g, item.object, creature, P, T);
+        }
+    });
+    Ok(())
+}
+
 /// "Destroy all nonland permanents with mana value `limit` or less" (CR 701.8a): every such permanent on the battlefield,
 /// destroyed at once. The permanents it destroyed, for what the rest of the text does with them. Culling Ritual (2) and
 /// Pest Control (1) print it.

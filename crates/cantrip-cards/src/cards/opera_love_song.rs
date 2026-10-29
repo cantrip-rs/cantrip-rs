@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{library, targets};
+use cantrip_mechanics::{effects, library, targets};
 use cantrip_oracle as oracle;
 
 /// "Exile the top two cards of your library. You may play those cards until your next end step": a permission to play, so a
@@ -9,20 +9,9 @@ fn exile_and_play(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "One or two target creatures each get +2/+0 until end of turn."
-fn two_creatures_get_plus_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let creatures = targets::legal_objects(g, item);
-    instruction(g, |g| {
-        for creature in creatures {
-            cantrip_mechanics::pump(g, item.object, creature, 2, 0);
-        }
-    });
-    Ok(())
-}
-
 static MODAL: ModalDef = modes(&[
     mode(exile_and_play, "Exile the top two cards of your library. You may play those cards until your next end step."),
-    mode(two_creatures_get_plus_two, "One or two target creatures each get +2/+0 until end of turn.").targets(&[targets::CREATURE.between(1, 2)]),
+    mode(effects::targets_get::<2, 0>, "One or two target creatures each get +2/+0 until end of turn.").targets(&[targets::CREATURE.between(1, 2)]),
 ]);
 
 pub static CARD: CardDef = CardDef { spell: Some(SpellDef::MODAL), modal: Some(&MODAL), ..oracle::OPERA_LOVE_SONG };
