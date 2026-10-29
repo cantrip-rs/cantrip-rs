@@ -1,0 +1,25 @@
+# Earth, Sector 001's same {T} mana ability can instead add blue; the output shows the color choice exactly. Red is
+# refused while the land is untapped, and no land enters untapped (CR 614.1d, 605.1a, 605.3b, 106.4).
+
+[Bot1 Deck]
+Earth, Sector 001
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Earth, Sector 001.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Earth, Sector 001.Activate(Color: Red)
+Bot1.Battlefield.Earth, Sector 001.Activate(Color: Blue)
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Earth, Sector 001.Tapped = true
+
+[Expect]
+Bot1.Life = 21
+Bot1.Mana = {U}
+Bot1.Battlefield.Earth, Sector 001.Tapped = true
+Stack.Count = 0

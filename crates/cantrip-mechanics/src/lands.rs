@@ -319,7 +319,7 @@ pub const fn bounce_land(a: Mana, b: Mana, text: &'static str) -> [AbilityDef; 2
 
 /// A gain land's two abilities, mana ability last: "When this land enters, you gain 1 life" (CR 603.6a) and "{T}: Add {A} or
 /// {B}." (`text` is its full text), the color chosen as it resolves (CR 608.2d). With `enters: Some(mana::enters_tapped)`
-/// it is Andoria, Bajor, Wind-Scarred Crag, A.I.M. Labs, Asgardian Citadel, Avengers Hangar, Birnin Zana Plaza, Fisk Tower,
+/// it is Andoria, Bajor, Earth, Sector 001, Wind-Scarred Crag, A.I.M. Labs, Asgardian Citadel, Avengers Hangar, Birnin Zana Plaza, Fisk Tower,
 /// Hell's Kitchen, Los Diablos Missile Base, Pym Technologies, Stark Industries and Subterranean Cavern.
 pub const fn gain_land(a: Color, b: Color, text: &'static str) -> [AbilityDef; 2] {
     [

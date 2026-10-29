@@ -1,0 +1,27 @@
+# Earth, Sector 001 enters tapped and gains exactly 1 life. After its controller's next untap, it taps for green;
+# the mana pool and tapped state show the choice and {T} cost (CR 614.1d, 603.6a, 119.3, 605.1a, 605.3b, 106.4).
+
+[Bot1 Deck]
+Earth, Sector 001
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Earth, Sector 001.Play
+? Bot1.Battlefield.Earth, Sector 001.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Earth, Sector 001.Activate(Color: Red)
+Bot1.Battlefield.Earth, Sector 001.Activate(Color: Green)
+? Bot1.Mana = {G}
+? Bot1.Battlefield.Earth, Sector 001.Tapped = true
+
+[Expect]
+Bot1.Life = 21
+Bot1.Mana = {G}
+Bot1.Battlefield.Earth, Sector 001.Tapped = true
+Stack.Count = 0
