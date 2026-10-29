@@ -1,0 +1,41 @@
+# The enter trigger may sacrifice a nonland artifact; its reflexive ability then targets an opponent and deals 2 damage (CR 603.12, 701.21a, 120.2b).
+[Bot1 Deck]
+Dahar Master
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Dahar Master.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+! Bot1.Choose(Dahar Master)
+! Bot1.Choose(Mountain)
+Bot1.Choose(Mox Sapphire)
+Bot1.Target(Bot2)
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Mox Sapphire
+Bot1.Battlefield.Dahar Master.Power = 4
+Bot1.Battlefield.Dahar Master.Toughness = 3

@@ -1,0 +1,8 @@
+{
+  "name": "Dahar Master",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Klingon Warrior",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "When this creature enters, you may sacrifice another nonland permanent. When you do, this creature deals 2 damage to any target."
+}
