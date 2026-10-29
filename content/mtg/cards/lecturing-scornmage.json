@@ -1,0 +1,8 @@
+{
+  "name": "Lecturing Scornmage",
+  "manaCost": "{B}",
+  "type": "Creature — Human Warlock",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Repartee — Whenever you cast an instant or sorcery spell that targets a creature, put a +1/+1 counter on this creature."
+}
