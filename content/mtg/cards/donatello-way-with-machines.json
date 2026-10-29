@@ -1,0 +1,11 @@
+{
+  "name": "Donatello, Way with Machines",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Creature — Mutant Ninja Turtle",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flying\nWhenever an artifact you control enters, put a +1/+1 counter on Donatello.",
+  "keywords": [
+    "Flying"
+  ]
+}
