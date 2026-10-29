@@ -1,0 +1,6 @@
+{
+  "name": "Embrace the Paradox",
+  "manaCost": "{3}{G}{U}",
+  "type": "Instant",
+  "oracleText": "Draw three cards. You may put a land card from your hand onto the battlefield tapped."
+}

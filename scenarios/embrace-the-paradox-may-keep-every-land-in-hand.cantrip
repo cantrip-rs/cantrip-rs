@@ -1,0 +1,33 @@
+# Embrace the Paradox: "you may" - declining (choosing no card) leaves every land in hand after the three cards are drawn.
+
+[Bot1 Deck]
+Embrace the Paradox
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Plains
+Lightning Bolt
+Lightning Bolt
+Forest
+Island
+Swamp
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Embrace the Paradox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Hand = Forest; Island; Lightning Bolt; Lightning Bolt; Plains; Swamp
+Bot1.Battlefield = Mox Emerald; Mox Sapphire
