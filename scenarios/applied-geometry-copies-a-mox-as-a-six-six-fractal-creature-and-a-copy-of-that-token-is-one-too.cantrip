@@ -1,0 +1,53 @@
+# Applied Geometry ({2}{G}{U}): create a token that's a copy of target non-Aura permanent you control, except it's a 0/0 Fractal
+# creature in addition to its other types (CR 707.9b), then put six +1/+1 counters on it. A copy of Mox Ruby is an artifact
+# creature Fractal 6/6, untapped and without the original's tapped state. The exception is part of the token's copiable values
+# (CR 707.2), so a second cast copying that token makes another 0/0 Fractal artifact creature that gets six counters: 6/6.
+
+[Bot1 Deck]
+Applied Geometry
+Applied Geometry
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Applied Geometry.Cast(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Ruby#2.Counters.PlusOnePlusOne = 6
+? Bot1.Battlefield.Mox Ruby#2.Power = 6
+? Bot1.Battlefield.Mox Ruby#2.Toughness = 6
+? Bot1.Battlefield.Mox Ruby#2.Types = Artifact; Creature
+? Bot1.Battlefield.Mox Ruby#2.Subtypes = Fractal
+? Bot1.Battlefield.Mox Ruby#2.Tapped = false
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Applied Geometry.Cast(Mox Ruby#2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mox Ruby#3.Counters.PlusOnePlusOne = 6
+Bot1.Battlefield.Mox Ruby#3.Power = 6
+Bot1.Battlefield.Mox Ruby#3.Toughness = 6
+Bot1.Battlefield.Mox Ruby#3.Types = Artifact; Creature
+Bot1.Battlefield.Mox Ruby#3.Subtypes = Fractal
+Bot1.Battlefield.Mox Ruby#1.Types = Artifact
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Mox Ruby; Mox Ruby; Mox Sapphire
