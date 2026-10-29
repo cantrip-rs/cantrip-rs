@@ -1,0 +1,51 @@
+# Run Away Together's ruling (CR 608.2b): "If both creatures are controlled by the same player as Run Away Together tries to resolve, both targets are illegal. The
+# spell doesn't resolve." On turn 3 Bot1 casts it on its Ornithopter and Bot2's Elvish Mystic, and in response taps Old Man of the Sea to gain control of the Mystic: both are
+# Bot1's as it tries to resolve, so neither goes back to a hand.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Old Man of the Sea
+Run Away Together
+Ornithopter
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Old Man of the Sea.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Run Away Together.Cast
+Bot1.Target(Ornithopter; Elvish Mystic)
+Bot1.Battlefield.Old Man of the Sea.Activate(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island
+Bot1.Battlefield = Island; Island; Mox Sapphire; Mox Jet; Old Man of the Sea; Ornithopter; Elvish Mystic
+Bot2.Battlefield = Forest
+Bot1.Graveyard = Run Away Together

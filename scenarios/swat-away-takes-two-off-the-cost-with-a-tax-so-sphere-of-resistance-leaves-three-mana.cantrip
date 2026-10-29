@@ -1,0 +1,58 @@
+# Swat Away {2}{U}{U}: "This spell costs {2} less to cast if a creature is attacking you." Increases apply first, then the reduction (CR 601.2f).
+# With Sphere of Resistance out the price is {3}{U}{U}, then {2} less: {1}{U}{U}, three mana, not {U}{U}. On turn 4 Bot2's Memnite attacks Bot1,
+# whose only untapped sources are two Mox Sapphires (Ruby, Jet and the third Sapphire were spent on turn 3): short, refused. On turn 6 the Memnite
+# attacks again (Bot1 took 1 from the first attack), three Sapphires pay {1}{U}{U}, and Bot2, the owner, declines the top and puts the Memnite on the bottom of its library.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Sphere of Resistance
+Swat Away
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sphere of Resistance.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+! Bot1.Hand.Swat Away.Cast(Bot2.Battlefield.Memnite; Mana: short)
+[T6 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Swat Away.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+
+[Expect]
+Bot1.Mana =
+Bot1.Life = 19
+Bot2.Battlefield = Island
+Bot1.Graveyard = Swat Away
