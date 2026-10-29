@@ -1,0 +1,45 @@
+# Sneak {2}{R} (CR 702.190a): Bot1 attacks on turn 3 with an Ornithopter, Bot2 does not block, and Raphael's Technique, an instant, is cast in the declare blockers step for
+# {2}{R} (Mox Ruby, Mox Pearl, Mox Jet), returning the Ornithopter to hand. Each player may discard their hand, and each who does draws seven cards; both accept (CR 101.4, 701.9a, 121.2c).
+# Not offered in the main phase.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Ornithopter
+Raphael's Technique
+Forest x2
+Plains x13
+
+[Bot2 Deck]
+Island x7
+Swamp x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Raphael's Technique.Cast(Ability: Sneak)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Raphael's Technique.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana =
+Bot1.Accept
+Bot2.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 7
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Plains; Plains
+Bot1.Graveyard.Count = 5
+Bot1.Graveyard = Raphael's Technique; Ornithopter; Plains; Forest; Forest
+Bot2.Hand = Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp
+Bot2.Graveyard.Count = 8
+Bot2.Life = 20

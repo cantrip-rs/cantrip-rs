@@ -1,0 +1,6 @@
+{
+  "name": "Raphael's Technique",
+  "manaCost": "{4}{R}{R}",
+  "type": "Instant",
+  "oracleText": "Sneak {2}{R} (You may cast this spell for {2}{R} if you also return an unblocked attacker you control to hand during the declare blockers step.)\nEach player may discard their hand and draw seven cards."
+}

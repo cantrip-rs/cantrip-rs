@@ -1,0 +1,36 @@
+# Raphael's Technique costs {4}{R}{R}: refused with the three mana of two Mox Rubies and a Mox Pearl, cast once Black Lotus adds three red. Bot1 accepts and Bot2 declines (CR 101.4, 701.9a):
+# only Bot1 discards their hand and draws seven.
+
+[Bot1 Deck]
+Mox Ruby x2
+Mox Pearl
+Black Lotus
+Raphael's Technique
+Forest x2
+Plains x15
+
+[Bot2 Deck]
+Island x7
+Swamp x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Raphael's Technique.Cast(Mana: short)
+Bot1.Battlefield.Black Lotus.Activate(Color: R)
+Bot1.Hand.Raphael's Technique.Cast
+? Bot1.Mana =
+Bot1.Accept
+Bot2.Decline
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 7
+Bot1.Graveyard.Count = 4
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 0
