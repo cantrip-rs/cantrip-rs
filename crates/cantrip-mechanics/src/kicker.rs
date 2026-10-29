@@ -13,3 +13,11 @@ pub fn enters_with_counters<const KIND: usize>(g: &mut dyn Game, entering: &mut 
     entering.counters[KIND] += g.obj(entering.object).kicked as i16;
     Ok(())
 }
+
+/// A kicker whose cost is not mana (CR 702.33a: "Kicker - Sacrifice an artifact or creature"), a card's `optional_cost`.
+/// It is announced as an optional cost is, by choosing between its two `labels` before any target, and paying it kicks the
+/// spell once (CR 702.33b), so "if this spell was kicked" is the spell's `kicked`, as for any kicker. A kicker with mana is the
+/// card's `kicker` instead.
+pub const fn non_mana(cost: Cost) -> OptionalCost {
+    OptionalCost { cost, kicker: true }
+}
