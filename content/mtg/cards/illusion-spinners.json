@@ -1,0 +1,11 @@
+{
+  "name": "Illusion Spinners",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Faerie Wizard",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "You may cast this spell as though it had flash if you control a Faerie.\nFlying\nThis creature has hexproof as long as it's untapped. (It can't be the target of spells or abilities your opponents control.)",
+  "keywords": [
+    "Flying"
+  ]
+}

@@ -1,0 +1,59 @@
+# Illusion Spinners: "You may cast this spell as though it had flash if you control a Faerie. Flying. This creature has hexproof as long as it's untapped."
+# Bot1 controls a Faerie (Glamer Gifter), so at the end of Bot2's turn 4 it casts the Spinners ({4}{U}: three Moxen and Black Lotus) at instant speed. Untapped it
+# is hexproof, so Bot2's Lightning Bolt cannot target it (CR 702.11b); on turn 5 it attacks, tapping (no vigilance), loses hexproof, and the Bolt - the same one,
+# refused before - now targets it and kills it (3 damage on 3 toughness).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Black Lotus
+Glamer Gifter
+Illusion Spinners
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glamer Gifter.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.End]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Illusion Spinners.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Illusion Spinners)
+? Bot1.Battlefield.Illusion Spinners.Keywords = Flying; Hexproof
+[T5 Bot1.Main1]
+Bot1.Attack(Illusion Spinners > Bot2)
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Illusion Spinners)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Illusion Spinners; Black Lotus
+Bot1.Battlefield.Glamer Gifter.Keywords = Flash; Flying

@@ -1,0 +1,58 @@
+# Illusion Spinners: the permission to cast it as though it had flash needs a Faerie the caster controls. Bot2 controls a Faerie (Glamer Gifter) and Bot1
+# controls none - an Ornithopter is no Faerie - so at the end of Bot2's turn 2 Bot1, with the five mana for it, may not cast the Spinners (refused).
+# On Bot1's own turn 3 it casts it at sorcery speed all the same.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Illusion Spinners
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Glamer Gifter
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Glamer Gifter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Target()
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Illusion Spinners.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Illusion Spinners.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Illusion Spinners.Power = 4
+Bot1.Battlefield.Illusion Spinners.Keywords = Flying; Hexproof
