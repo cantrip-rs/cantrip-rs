@@ -1,0 +1,36 @@
+# Mutant Chain Reaction: a creature without flying (Grizzly Bears) is not a legal target; an enchantment (Hardened Scales) is.
+# The Scales are destroyed and Bot1 gets a Mutagen token.
+
+[Bot1 Deck]
+Black Lotus
+Mutant Chain Reaction
+Forest x18
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Hardened Scales
+Forest x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Hardened Scales.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Mutant Chain Reaction.Cast(Grizzly Bears)
+Bot1.Hand.Mutant Chain Reaction.Cast(Hardened Scales)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Hardened Scales; Black Lotus
+Bot1.Battlefield = Mutagen Token

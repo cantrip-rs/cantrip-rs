@@ -1,0 +1,21 @@
+# Mutant Chain Reaction: "up to one" target, so it is cast with none and still creates a Mutagen token.
+
+[Bot1 Deck]
+Black Lotus
+Mutant Chain Reaction
+Forest x18
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mutant Chain Reaction.Cast()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mutagen Token

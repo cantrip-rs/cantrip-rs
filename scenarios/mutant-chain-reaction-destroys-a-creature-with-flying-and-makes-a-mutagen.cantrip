@@ -1,0 +1,33 @@
+# Mutant Chain Reaction: "Destroy up to one target artifact, enchantment, or creature with flying. Create a Mutagen token."
+# Bot2's Wind Drake (flying) is destroyed, and Bot1 gets a Mutagen token. (Bot1's Lotus is spent, its Moxen absent.)
+
+[Bot1 Deck]
+Black Lotus
+Mutant Chain Reaction
+Forest x18
+
+[Bot2 Deck]
+Black Lotus
+Wind Drake
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wind Drake.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mutant Chain Reaction.Cast(Wind Drake)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Wind Drake; Black Lotus
+Bot1.Battlefield = Mutagen Token
