@@ -254,7 +254,7 @@ fn cx(game: &mut Game) -> Cx<'_> {
 
 fn add_mana(g: &mut Game, n: u32) {
     let source = g.state.battlefield().first().copied().unwrap_or(ObjectId(0));
-    g.state.add_mana(YOU, Mana::C, n, source, None, false);
+    g.state.add_mana(YOU, Mana::C, n, source, None, ManaLasts::Step);
 }
 
 /// Runs to the next question and gives it back.
@@ -631,7 +631,7 @@ fn a_phyrexian_symbol_in_a_cost_paid_as_a_spell_resolves_is_paid_with_its_color_
     // {B} in the pool: paid with the mana, no life.
     let mut g = game();
     let toll = put(&mut g, &TOLL, Zone::hand(YOU));
-    g.state.add_mana(YOU, Mana::B, 1, toll, None, false);
+    g.state.add_mana(YOU, Mana::B, 1, toll, None, ManaLasts::Step);
     let r = cast_to_payment(&mut g, toll);
     let pay = pays(&r).expect("{B} pays it");
     answer(&mut g, &r, Answer::Act(Action::of(&pay)));

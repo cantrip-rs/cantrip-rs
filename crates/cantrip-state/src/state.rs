@@ -696,9 +696,8 @@ impl GameState {
     }
 
     /// Adds `n` mana of one kind that `source` produced (CR 106.3) to `player`'s pool (CR 106.4): mana `restriction` limits,
-    /// if it has one (CR 106.6), kept apart; mana that lasts until end of combat if `lasting` (CR 500.5a), which no
-    /// restricted mana does.
-    pub fn add_mana(&mut self, player: PlayerId, mana: Mana, n: u32, source: ObjectId, restriction: Option<ManaRestriction>, lasting: bool) {
+    /// if it has one (CR 106.6), kept apart; mana that lasts as `lasts` says (CR 500.5a), which no restricted mana does.
+    pub fn add_mana(&mut self, player: PlayerId, mana: Mana, n: u32, source: ObjectId, restriction: Option<ManaRestriction>, lasts: ManaLasts) {
         let m = mana as usize;
         // A pool has no limit (CR 106.4); its counts are `u32`, past any number of rounds a loop is let run, and saturate
         // rather than wrap so that the sources' entries still add up to them.
@@ -713,14 +712,14 @@ impl GameState {
         match restriction {
             Some(r) => self.add_restricted_mana(player, r, mana, n),
             None => self.update_player(player, |p| {
-                if lasting {
+                if lasts != ManaLasts::Step {
                     p.lasting.0[m] = p.lasting_mana().0[m] + n;
                 }
                 p.pool.0[m] += n;
             }),
         }
-        let lasting = lasting && restriction.is_none();
-        match self.mana_from.iter().position(|e| e.player == player && e.restriction == restriction && e.source == source && e.lasting == lasting) {
+        let lasts = if restriction.is_none() { lasts } else { ManaLasts::Step };
+        match self.mana_from.iter().position(|e| e.player == player && e.restriction == restriction && e.source == source && e.lasts == lasts) {
             Some(at) => {
                 let old = self.mana_from[at];
                 self.mana_from[at].pool.0[m] += n;
@@ -729,7 +728,7 @@ impl GameState {
             None => {
                 let mut pool = ManaPool::default();
                 pool.0[m] = n;
-                self.mana_from.push(ManaFrom { player, restriction, source, lasting, pool });
+                self.mana_from.push(ManaFrom { player, restriction, source, lasts, pool });
                 self.log(Undo::ManaFromPushed);
             }
         }
@@ -749,11 +748,11 @@ impl GameState {
     ) -> u8 {
         let m = mana as usize;
         let mut left = n;
-        for lasting in [false, true] {
+        for lasts in [ManaLasts::Step, ManaLasts::Combat, ManaLasts::Turn] {
             let mut at = 0;
             while left > 0 && at < self.mana_from.len() {
                 let e = self.mana_from[at];
-                if e.player == player && e.restriction == restriction && e.lasting == lasting && e.pool.0[m] > 0 && pick.takes(e.source) {
+                if e.player == player && e.restriction == restriction && e.lasts == lasts && e.pool.0[m] > 0 && pick.takes(e.source) {
                     let take = e.pool.0[m].min(u32::from(left)) as u8;
                     left -= take;
                     taken.push((e.source, mana, take));
@@ -780,7 +779,7 @@ impl GameState {
             }
             None => {
                 let lasting: u32 =
-                    self.mana_from.iter().filter(|e| e.player == player && e.restriction.is_none() && e.lasting).map(|e| e.pool.0[m]).sum();
+                    self.mana_from.iter().filter(|e| e.player == player && e.restriction.is_none() && e.lasts != ManaLasts::Step).map(|e| e.pool.0[m]).sum();
                 self.update_player(player, |p| {
                     p.pool.0[m] -= u32::from(spent);
                     p.lasting.0[m] = lasting;
@@ -790,19 +789,25 @@ impl GameState {
         spent
     }
 
-    /// Empties `player`'s pool as a step or phase ends (CR 106.4, 500.4): all of it, or, `keep_lasting`, all but the mana
-    /// that lasts until end of combat (CR 500.5a).
-    pub fn empty_mana(&mut self, player: PlayerId, keep_lasting: bool) {
+    /// Empties `player`'s pool as `ending` ends (CR 106.4, 500.4): a step, the combat phase or the turn - all of it but the
+    /// mana that lasts past that (`ManaLasts`, CR 500.5a).
+    pub fn empty_mana(&mut self, player: PlayerId, ending: ManaLasts) {
         if !self.players[player.index()].pool.is_empty() || !self.players[player.index()].lasting.is_empty() {
+            let mut kept = ManaPool::default();
+            for e in self.mana_from.iter().filter(|e| e.player == player && e.restriction.is_none() && e.lasts > ending) {
+                for (k, n) in kept.0.iter_mut().zip(e.pool.0) {
+                    *k += n;
+                }
+            }
             self.update_player(player, |pl| {
-                pl.pool = if keep_lasting { pl.lasting_mana() } else { ManaPool::default() };
-                pl.lasting = pl.pool;
+                pl.pool = kept;
+                pl.lasting = kept;
             });
         }
         self.empty_restricted_mana(player);
-        if self.mana_from.iter().any(|e| e.player == player && !(keep_lasting && e.lasting)) {
+        if self.mana_from.iter().any(|e| e.player == player && e.lasts <= ending) {
             let old = self.mana_from.clone();
-            self.mana_from.retain(|e| e.player != player || (keep_lasting && e.lasting));
+            self.mana_from.retain(|e| e.player != player || e.lasts > ending);
             self.log(Undo::ManaFromAll(old));
         }
     }
@@ -2052,10 +2057,10 @@ mod tests {
         let mut s = GameState::new(2, 1);
         let p = PlayerId(0);
         for i in 0..300u32 {
-            s.add_mana(p, Mana::B, 1, ObjectId(i), None, false);
+            s.add_mana(p, Mana::B, 1, ObjectId(i), None, ManaLasts::Step);
         }
         for _ in 0..300u32 {
-            s.add_mana(p, Mana::B, 1, ObjectId(1000), None, false);
+            s.add_mana(p, Mana::B, 1, ObjectId(1000), None, ManaLasts::Step);
         }
         assert_eq!(s.player(p).pool.get(Mana::B), 600);
         let shares: u32 = s.mana_from_of(p).map(|e| e.pool.get(Mana::B)).sum();
@@ -2064,5 +2069,41 @@ mod tests {
         assert_eq!(s.spend_mana(p, None, Mana::B, 200, ManaPick::Any, &mut taken), 200);
         assert_eq!(s.player(p).pool.get(Mana::B), 400);
         assert_eq!(s.mana_from_of(p).map(|e| e.pool.get(Mana::B)).sum::<u32>(), 400);
+    }
+
+    /// Mana that lasts (CR 500.5a) stays through the endings it outlasts and no further: step mana empties at any ending, combat
+    /// mana at the end of combat and of the turn, turn mana only at the end of the turn; and mana is spent step first, then
+    /// combat, then turn, so the longest-lasting mana is the last used.
+    #[test]
+    fn mana_that_lasts_empties_at_the_ending_it_does_not_outlast_and_is_spent_last() {
+        let mut s = GameState::new(2, 1);
+        let p = PlayerId(0);
+        let src = ObjectId(1);
+        let pool = |s: &GameState| (s.player(p).pool.get(Mana::R), s.player(p).pool.get(Mana::G), s.player(p).pool.get(Mana::B));
+        let add = |s: &mut GameState| {
+            s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Step);
+            s.add_mana(p, Mana::G, 2, src, None, ManaLasts::Combat);
+            s.add_mana(p, Mana::B, 3, src, None, ManaLasts::Turn);
+        };
+        add(&mut s);
+        assert_eq!(pool(&s), (1, 2, 3));
+        s.empty_mana(p, ManaLasts::Step);
+        assert_eq!(pool(&s), (0, 2, 3));
+        s.empty_mana(p, ManaLasts::Combat);
+        assert_eq!(pool(&s), (0, 0, 3));
+        s.empty_mana(p, ManaLasts::Turn);
+        assert_eq!(pool(&s), (0, 0, 0));
+        assert_eq!(s.mana_from_of(p).count(), 0);
+
+        // One kind of mana of each duration: spending two takes the step's, then the combat's, leaving the turn's.
+        s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Turn);
+        s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Combat);
+        s.add_mana(p, Mana::R, 1, src, None, ManaLasts::Step);
+        let mut taken = Vec::new();
+        assert_eq!(s.spend_mana(p, None, Mana::R, 2, ManaPick::Any, &mut taken), 2);
+        s.empty_mana(p, ManaLasts::Combat);
+        assert_eq!(s.player(p).pool.get(Mana::R), 1);
+        s.empty_mana(p, ManaLasts::Turn);
+        assert_eq!(s.player(p).pool.get(Mana::R), 0);
     }
 }

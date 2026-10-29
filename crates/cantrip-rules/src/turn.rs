@@ -52,10 +52,17 @@ pub fn next_step(game: &mut Game) {
         || (turn.ending && matches!(ending, Step::BeginCombat | Step::DeclareAttackers | Step::DeclareBlockers | Step::CombatDamage));
 
     // Mana empties as each step ends (CR 500.4), except the mana that lasts until the end of combat, which is lost as
-    // the combat phase ends (CR 106.4, 500.5a).
+    // the combat phase ends, and the mana that lasts until end of turn, lost as the cleanup step does (CR 106.4, 500.5a).
     if turn.number > 0 {
+        let ends = if ending == Step::Cleanup && !turn.cleanup_again {
+            ManaLasts::Turn
+        } else if combat_ends {
+            ManaLasts::Combat
+        } else {
+            ManaLasts::Step
+        };
         for p in s.seats().collect::<Vec<_>>() {
-            s.empty_mana(p, !combat_ends);
+            s.empty_mana(p, ends);
         }
     }
     // CR 724.1d: a turn ended during combat removes every creature and planeswalker from combat as the step ends, as

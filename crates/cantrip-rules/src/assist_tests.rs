@@ -62,7 +62,7 @@ fn put(g: &mut Game, def: &'static CardDef, owner: PlayerId, zone: Zone) -> Obje
 
 fn add(g: &mut Game, player: PlayerId, mana: Mana, n: u32) {
     let source = g.state.zone(Zone::library(player))[0];
-    g.state.add_mana(player, mana, n, source, None, false);
+    g.state.add_mana(player, mana, n, source, None, ManaLasts::Step);
     if let Some(at) = g.state.agenda.len().checked_sub(1)
         && g.state.agenda[at].pending.as_ref().is_some_and(|r| matches!(r.kind, RequestKind::Priority { .. }))
     {
@@ -265,7 +265,7 @@ fn what_the_assisting_players_mana_does_to_a_spell_it_does_to_this_one() {
     add(&mut g, YOU, Mana::G, 1);
     add(&mut g, YOU, Mana::C, 4);
     let source = g.state.zone(Zone::library(THEM))[0];
-    g.state.add_mana(THEM, Mana::R, 1, source, Some(ManaRestriction::GainsHaste), false);
+    g.state.add_mana(THEM, Mana::R, 1, source, Some(ManaRestriction::GainsHaste), ManaLasts::Step);
     let option = cast_option(&mut g, card).expect("the cast");
     answer(&mut g, Answer::Act(Action::of(&option)));
     answer(&mut g, Answer::Yes);

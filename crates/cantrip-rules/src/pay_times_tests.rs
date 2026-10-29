@@ -63,7 +63,7 @@ fn game(green: u32) -> (Game, ObjectId) {
     g.state.frame_push(Frame::new(FrameKind::Priority));
     let hatch = g.state.push_obj(Obj::new(g.cards.id_of(&HATCH), YOU, Zone::hand(YOU)));
     g.state.zone_push(Zone::hand(YOU), hatch);
-    g.state.add_mana(YOU, Mana::G, green, hatch, None, false);
+    g.state.add_mana(YOU, Mana::G, green, hatch, None, ManaLasts::Step);
     (g, hatch)
 }
 

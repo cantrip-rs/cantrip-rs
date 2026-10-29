@@ -75,7 +75,7 @@ fn game(def: &'static CardDef, pool: &[Mana]) -> (Game, ObjectId) {
         .expect("nothing is asked")
         .expect("it enters face down");
     for &m in pool {
-        g.state.add_mana(YOU, m, 1, tailor, None, false);
+        g.state.add_mana(YOU, m, 1, tailor, None, ManaLasts::Step);
     }
     (g, cloaked)
 }

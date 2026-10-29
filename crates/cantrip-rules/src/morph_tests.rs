@@ -193,7 +193,7 @@ fn put(g: &mut Game, def: &'static CardDef, zone: Zone) -> ObjectId {
 /// `n` of `mana` in your pool, from nothing in particular; a priority already offered is offered again, with it.
 fn add(g: &mut Game, mana: Mana, n: u32) {
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, mana, n, source, None, false);
+    g.state.add_mana(YOU, mana, n, source, None, ManaLasts::Step);
     reoffer(g);
 }
 

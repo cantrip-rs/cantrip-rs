@@ -3942,7 +3942,7 @@ fn replaced_yields(cx: &Cx, id: ObjectId, player: PlayerId, fixed: [u32; 6], k: 
     let mut out: Vec<ManaProduction> = Vec::new();
     let mut changed = false;
     let mut each = |made: [u32; 6]| {
-        let production = ManaProduction { permanent: id, player, to: player, mana: ManaPool(made), restriction, lasting: false };
+        let production = ManaProduction { permanent: id, player, to: player, mana: ManaPool(made), restriction, lasts: ManaLasts::Step };
         if production.mana.is_empty() {
             out.push(production);
             return;
@@ -9344,25 +9344,25 @@ fn produce(cx: &mut Cx, player: PlayerId, source: ObjectId, held: &[crate::Produ
     // One event for each pool and rider the mana has. A mana ability's mana goes to one pool with one rider (every printed
     // one); one that gave some of its mana a rider and some another, or sent it to two pools, would leave the effects nothing
     // to say which rider or pool the mana they make has.
-    let mut parts: Vec<(PlayerId, Option<ManaRestriction>, bool)> = Vec::new();
+    let mut parts: Vec<(PlayerId, Option<ManaRestriction>, ManaLasts)> = Vec::new();
     for h in held {
-        if !parts.contains(&(h.to, h.restriction, h.lasting)) {
-            parts.push((h.to, h.restriction, h.lasting));
+        if !parts.contains(&(h.to, h.restriction, h.lasts)) {
+            parts.push((h.to, h.restriction, h.lasts));
         }
     }
     if crate::layers::verifying() {
         assert!(parts.len() <= 1, "{source:?}'s mana ability produced mana of two riders or to two pools in one production (CR 106.12b)");
     }
-    for (to, restriction, lasting) in parts {
+    for (to, restriction, lasts) in parts {
         let mut mana = ManaPool::default();
-        for h in held.iter().filter(|h| (h.to, h.restriction, h.lasting) == (to, restriction, lasting)) {
+        for h in held.iter().filter(|h| (h.to, h.restriction, h.lasts) == (to, restriction, lasts)) {
             mana.0[h.mana as usize] += h.amount;
         }
-        let result = crate::replace::mana_production(cx, ManaProduction { permanent: source, player, to, mana, restriction, lasting });
+        let result = crate::replace::mana_production(cx, ManaProduction { permanent: source, player, to, mana, restriction, lasts });
         for m in Mana::ALL {
             let n = result.mana.get(m);
             if n > 0 {
-                cx.st().add_mana(result.to, m, n, source, result.restriction, result.lasting);
+                cx.st().add_mana(result.to, m, n, source, result.restriction, result.lasts);
                 produced.0[m as usize] += n;
             }
         }

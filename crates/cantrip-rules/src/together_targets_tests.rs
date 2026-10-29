@@ -283,7 +283,7 @@ fn board(spell: &'static CardDef, mana: u32) -> (Game, ObjectId, [ObjectId; 4]) 
     let cards = [put(&mut g, &ONE, graveyard), put(&mut g, &OTHER_ONE, graveyard), put(&mut g, &TWO, graveyard), put(&mut g, &THREE, graveyard)];
     let card = put(&mut g, spell, Zone::hand(YOU));
     if mana > 0 {
-        g.state.add_mana(YOU, Mana::C, mana, ObjectId(0), None, false);
+        g.state.add_mana(YOU, Mana::C, mana, ObjectId(0), None, ManaLasts::Step);
     }
     (g, card, cards)
 }
@@ -485,7 +485,7 @@ fn a_target_that_loses_a_quality_of_its_own_is_illegal_alone() {
     let two = put(&mut g, &TWO, graveyard);
     let gather = put(&mut g, &GATHER, Zone::hand(YOU));
     let draw = put(&mut g, &DRAW, Zone::hand(YOU));
-    g.state.add_mana(YOU, Mana::C, 1, ObjectId(0), None, false);
+    g.state.add_mana(YOU, Mana::C, 1, ObjectId(0), None, ManaLasts::Step);
     let r = cast(&mut g, gather, Some(1));
     // The Star's power is 1 (the Draw in hand), Two's 1: both have power X 1 or less, and different mana values.
     answer(&mut g, &r, Answer::Targets(objects(&[star, two])));
@@ -514,7 +514,7 @@ fn whether_a_count_can_be_reached_together_is_found_at_once_among_many_cards() {
             }
         }
         let rest = put(&mut g, &REST, Zone::hand(YOU));
-        g.state.add_mana(YOU, Mana::C, x, ObjectId(0), None, false);
+        g.state.add_mana(YOU, Mana::C, x, ObjectId(0), None, ManaLasts::Step);
         let r = cast(&mut g, rest, Some(x));
         if reachable {
             let RequestKind::ChooseTarget { candidates, least, .. } = &r.kind else { panic!("expected the targets, got {:?}", r.kind) };

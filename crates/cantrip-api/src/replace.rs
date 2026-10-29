@@ -197,8 +197,8 @@ pub struct ManaProduction {
     /// What restricts the mana or what it does as it is spent (CR 106.6): a rider of the ability, which stays on all the
     /// mana it produces, however much and of whatever type (Mana Reflection's ruling).
     pub restriction: Option<ManaRestriction>,
-    /// The mana lasts until end of combat (CR 106.4, 500.5a), as the ability says.
-    pub lasting: bool,
+    /// How long the mana lasts (CR 106.4, 500.5a), as the ability says.
+    pub lasts: ManaLasts,
 }
 
 impl ManaProduction {

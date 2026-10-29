@@ -466,7 +466,7 @@ fn write_position<H: Hasher>(s: &GameState, canon: &Canon, h: &mut H, hashed: bo
     s.restricted_mana.hash(h);
     s.mana_from.len().hash(h);
     for m in &s.mana_from {
-        (m.player, m.restriction, canon.id(m.source), m.lasting, m.pool).hash(h);
+        (m.player, m.restriction, canon.id(m.source), m.lasts, m.pool).hash(h);
     }
     s.counter_stamps.len().hash(h);
     for c in &s.counter_stamps {

@@ -101,7 +101,7 @@ fn game_with(theirs: &str) -> (RulesGame, ObjectId, ObjectId) {
         t.set_step(Step::PrecombatMain);
         t.began = true;
     });
-    game.state.add_mana(THEM, Mana::C, 1, ObjectId::NONE, None, false);
+    game.state.add_mana(THEM, Mana::C, 1, ObjectId::NONE, None, ManaLasts::Step);
     game.state.frame_push(Frame::new(FrameKind::Priority));
     (game, probe_id, card_id)
 }

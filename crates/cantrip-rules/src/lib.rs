@@ -1027,14 +1027,14 @@ pub(crate) struct Cx<'a> {
 }
 
 /// One addition of mana to a pool held as part of a production (`Cx::producing`): the player whose pool it goes to, its type,
-/// how much, its restriction (CR 106.6) and whether it lasts until end of combat (CR 106.4).
+/// how much, its restriction (CR 106.6) and how long it lasts (CR 106.4).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) struct Produced {
     pub to: PlayerId,
     pub mana: Mana,
     pub amount: u32,
     pub restriction: Option<ManaRestriction>,
-    pub lasting: bool,
+    pub lasts: ManaLasts,
 }
 
 impl<'a> Cx<'a> {
@@ -1408,6 +1408,15 @@ impl<'a> Cx<'a> {
             }
             _ => false,
         }
+    }
+
+    /// Adds unrestricted mana that lasts past the end of its step, as `lasts` says (CR 106.4, 500.5a).
+    fn add_lasting_mana(&mut self, player: PlayerId, mana: Mana, amount: u32, lasts: ManaLasts) {
+        if self.hold(Produced { to: player, mana, amount, restriction: None, lasts }) {
+            return;
+        }
+        let source = self.mana_source();
+        self.g.state.add_mana(player, mana, amount, source, None, lasts);
     }
 
     /// The source of mana added now (CR 106.3): the mana ability's source while one runs, else the spell resolving or the
@@ -2207,11 +2216,11 @@ impl cantrip_api::Game for Cx<'_> {
     }
 
     fn add_mana(&mut self, player: PlayerId, mana: Mana, amount: u32) {
-        if self.hold(Produced { to: player, mana, amount, restriction: None, lasting: false }) {
+        if self.hold(Produced { to: player, mana, amount, restriction: None, lasts: ManaLasts::Step }) {
             return;
         }
         let source = self.mana_source();
-        self.g.state.add_mana(player, mana, amount, source, None, false);
+        self.g.state.add_mana(player, mana, amount, source, None, ManaLasts::Step);
     }
 
     fn become_day(&mut self) -> Result<(), Suspend> {
@@ -2227,19 +2236,19 @@ impl cantrip_api::Game for Cx<'_> {
     }
 
     fn add_mana_until_end_of_combat(&mut self, player: PlayerId, mana: Mana, amount: u32) {
-        if self.hold(Produced { to: player, mana, amount, restriction: None, lasting: true }) {
-            return;
-        }
-        let source = self.mana_source();
-        self.g.state.add_mana(player, mana, amount, source, None, true);
+        self.add_lasting_mana(player, mana, amount, ManaLasts::Combat);
+    }
+
+    fn add_mana_until_end_of_turn(&mut self, player: PlayerId, mana: Mana, amount: u32) {
+        self.add_lasting_mana(player, mana, amount, ManaLasts::Turn);
     }
 
     fn add_restricted_mana(&mut self, player: PlayerId, mana: Mana, amount: u32, restriction: ManaRestriction) {
-        if self.hold(Produced { to: player, mana, amount, restriction: Some(restriction), lasting: false }) {
+        if self.hold(Produced { to: player, mana, amount, restriction: Some(restriction), lasts: ManaLasts::Step }) {
             return;
         }
         let source = self.mana_source();
-        self.g.state.add_mana(player, mana, amount, source, Some(restriction), false);
+        self.g.state.add_mana(player, mana, amount, source, Some(restriction), ManaLasts::Step);
     }
 
     fn add_counters(&mut self, object: ObjectId, kind: CounterKind, amount: i16) {

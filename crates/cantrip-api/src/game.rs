@@ -1029,6 +1029,8 @@ pub trait Game: Query {
     fn add_mana(&mut self, player: PlayerId, mana: Mana, amount: u32);
     /// Adds mana that lasts until the end of combat (CR 106.4, 500.5a): not lost as the steps before it end.
     fn add_mana_until_end_of_combat(&mut self, player: PlayerId, mana: Mana, amount: u32);
+    /// Adds mana that lasts until the end of the turn (CR 106.4, 500.5a): not lost as the steps and phases before it end.
+    fn add_mana_until_end_of_turn(&mut self, player: PlayerId, mana: Mana, amount: u32);
     /// Adds mana that can only be spent as `restriction` allows (CR 106.6).
     fn add_restricted_mana(&mut self, player: PlayerId, mana: Mana, amount: u32, restriction: ManaRestriction);
     /// Puts `amount` counters of one kind on an object, as the effect being carried out does (CR 609.1, 122.6): put by the

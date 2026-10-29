@@ -415,7 +415,7 @@ fn cx(game: &mut Game) -> Cx<'_> {
 }
 
 fn add_mana(g: &mut Game, n: u32) {
-    g.state.add_mana(YOU, Mana::C, n, ObjectId(0), None, false);
+    g.state.add_mana(YOU, Mana::C, n, ObjectId(0), None, ManaLasts::Step);
 }
 
 fn next(g: &mut Game) -> Request {

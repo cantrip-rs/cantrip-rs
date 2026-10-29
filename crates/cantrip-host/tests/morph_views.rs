@@ -44,8 +44,8 @@ fn game() -> (Game, ObjectId) {
     let card = g.state.push_obj(Obj::new(table.id_of(&SKYWARDEN), YOU, Zone::hand(YOU)));
     g.state.zone_push(Zone::hand(YOU), card);
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, Mana::C, 3, source, None, false);
-    g.state.add_mana(YOU, Mana::W, 4, source, None, false);
+    g.state.add_mana(YOU, Mana::C, 3, source, None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::W, 4, source, None, ManaLasts::Step);
     g.run();
     (g, card)
 }
@@ -114,8 +114,8 @@ fn a_face_down_spell_is_offered_shown_and_turned_up_as_such() {
     }
     let permanent = g.state.obj(spell).became.expect("it resolved");
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, Mana::W, 1, source, None, false);
-    g.state.add_mana(YOU, Mana::C, 3, source, None, false);
+    g.state.add_mana(YOU, Mana::W, 1, source, None, ManaLasts::Step);
+    g.state.add_mana(YOU, Mana::C, 3, source, None, ManaLasts::Step);
     // The priority offered before the mana was added is offered again.
     let at = g.state.agenda.len() - 1;
     g.state.update_frame(at, |f| f.pending = None);

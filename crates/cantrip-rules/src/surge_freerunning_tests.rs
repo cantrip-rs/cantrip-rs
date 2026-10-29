@@ -109,7 +109,7 @@ fn reoffer(g: &mut Game) {
 
 fn add(g: &mut Game, mana: Mana, n: u32) {
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, mana, n, source, None, false);
+    g.state.add_mana(YOU, mana, n, source, None, ManaLasts::Step);
     reoffer(g);
 }
 

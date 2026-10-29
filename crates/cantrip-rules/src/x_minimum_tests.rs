@@ -168,7 +168,7 @@ fn cx(game: &mut Game) -> Cx<'_> {
 fn add_mana(g: &mut Game, pool: &[Mana]) {
     let source = g.state.battlefield().first().copied().unwrap_or(ObjectId(0));
     for &m in pool {
-        g.state.add_mana(YOU, m, 1, source, None, false);
+        g.state.add_mana(YOU, m, 1, source, None, ManaLasts::Step);
     }
 }
 

@@ -207,7 +207,7 @@ fn current_controller_casts_and_consumes_the_original_linked_copy_despite_abilit
     // The old exile zone still belongs to the creator, but the current permanent controller has the permission.
     assert_eq!(g.state.obj(copy).owner, YOU);
     assert!(g.state.obj(source).prepared);
-    g.state.add_mana(THEM, Mana::U, 2, land, None, false);
+    g.state.add_mana(THEM, Mana::U, 2, land, None, ManaLasts::Step);
     refresh_priority(&mut g);
     action(&mut g, ActionKind::CastSpell, copy);
     let r = g.pending().cloned().unwrap();

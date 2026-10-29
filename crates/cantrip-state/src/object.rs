@@ -1723,9 +1723,10 @@ pub struct Player {
     /// The life total the player began the game with (CR 103.4): "half your starting life total".
     pub starting_life: i32,
     pub pool: ManaPool,
-    /// How much of each kind in the pool lasts until the end of combat (CR 106.4, 500.5a): firebending's mana. Spent
-    /// last, since the ordinary mana of a kind is spent first, which is never worse for the player; a count above
-    /// what the pool holds is stale, and `lasting_mana` clamps it.
+    /// How much of each kind in the pool lasts past the end of the step (`ManaLasts`; CR 106.4, 500.5a): firebending's mana
+    /// until end of combat, Raphael, Ninja Destroyer's until end of turn. Spent last, since the ordinary mana of a kind is
+    /// spent first, which is never worse for the player; a count above what the pool holds is stale, and `lasting_mana`
+    /// clamps it.
     pub lasting: ManaPool,
     /// Lands played this turn (CR 305.2): the rules' own count, which "may play an additional land" is checked against at
     /// every priority and the loop watch fingerprints with the player, so it is kept here rather than asked of the history.
@@ -1778,7 +1779,7 @@ pub struct RestrictedMana {
 }
 
 /// Where some of the mana in a player's pool came from (CR 106.3): the source that produced it, of one restriction or
-/// none (CR 106.6) and lasting until end of combat or not (CR 106.4). The breakdown of the pools by source, kept in
+/// none (CR 106.6) and lasting past its step or not (`ManaLasts`, CR 106.4). The breakdown of the pools by source, kept in
 /// `GameState::mana_from` beside the pools themselves (`Player::pool`, `GameState::restricted_mana`), which the entries of a
 /// player add up to: written only by the state's mana methods, which write both. An entry whose mana is all spent is gone.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -1787,9 +1788,21 @@ pub struct ManaFrom {
     pub restriction: Option<ManaRestriction>,
     /// The object that produced it (CR 106.3), `ObjectId::NONE` for a player's own mana ability (CR 605.1a).
     pub source: ObjectId,
-    /// Mana that lasts until end of combat (CR 106.4, 500.5a).
-    pub lasting: bool,
+    /// How long the mana lasts (CR 106.4, 500.5a).
+    pub lasts: ManaLasts,
     pub pool: ManaPool,
+}
+
+/// How long mana added to a pool lasts before it is lost (CR 106.4): as the step it was added in ends (CR 500.4), as the combat
+/// phase ends ("until end of combat", CR 500.5a: firebending), or as the turn ends ("until end of turn, you don't lose this
+/// mana as steps and phases end": Raphael, Ninja Destroyer). Ordered by how long, so that mana lasts through an ending that is
+/// shorter than it.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, Ord, Hash, Default)]
+pub enum ManaLasts {
+    #[default]
+    Step,
+    Combat,
+    Turn,
 }
 
 /// Which mana of a kind a spending takes, by its source (CR 106.3).
@@ -2347,7 +2360,7 @@ impl Player {
     }
 
     /// Spends `n` mana of one kind from the pool, the ordinary mana of that kind before the mana that lasts.
-    /// The mana in the pool that lasts until the end of combat.
+    /// The mana in the pool that lasts past the end of its step.
     pub fn lasting_mana(&self) -> ManaPool {
         let mut lasting = self.lasting;
         for (l, p) in lasting.0.iter_mut().zip(self.pool.0) {

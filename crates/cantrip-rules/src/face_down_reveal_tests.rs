@@ -71,7 +71,7 @@ fn face_down_spell(g: &mut Game) -> ObjectId {
     let caster = g.state.turn.active;
     let card = put(g, &SKYWARDEN, caster, Zone::hand(caster));
     let source = g.state.zone(Zone::library(caster))[0];
-    g.state.add_mana(caster, Mana::C, 3, source, None, false);
+    g.state.add_mana(caster, Mana::C, 3, source, None, ManaLasts::Step);
     if let Some(at) = g.state.agenda.len().checked_sub(1) {
         g.state.update_frame(at, |f| f.pending = None);
     }

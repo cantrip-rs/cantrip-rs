@@ -80,7 +80,7 @@ fn put(g: &mut Game, def: &'static CardDef, zone: Zone) -> ObjectId {
 
 fn add(g: &mut Game, mana: Mana, n: u32) {
     let source = g.state.zone(Zone::library(YOU))[0];
-    g.state.add_mana(YOU, mana, n, source, None, false);
+    g.state.add_mana(YOU, mana, n, source, None, ManaLasts::Step);
     if let Some(at) = g.state.agenda.len().checked_sub(1)
         && g.state.agenda[at].pending.as_ref().is_some_and(|r| matches!(r.kind, RequestKind::Priority { .. }))
     {
