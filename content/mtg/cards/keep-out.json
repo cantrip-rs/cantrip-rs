@@ -1,0 +1,6 @@
+{
+  "name": "Keep Out",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Keep Out deals 4 damage to target tapped creature.\n• Destroy target enchantment."
+}

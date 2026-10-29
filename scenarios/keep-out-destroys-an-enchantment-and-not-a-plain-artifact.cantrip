@@ -1,0 +1,45 @@
+# Keep Out, second mode: "Destroy target enchantment." Bot2 has Clachan Festival (a Kindred Enchantment) and a Mox Jet (an
+# artifact). Bot1 cannot aim the mode at the Mox, and destroys the Festival (the Kithkin tokens it made stay).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Keep Out
+Island x17
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Clachan Festival
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Clachan Festival.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Keep Out.Cast
+Bot1.Modes(Destroy target enchantment)
+! Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Clachan Festival)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Clachan Festival
+Bot2.Battlefield.Count = 5
+Bot1.Graveyard = Keep Out

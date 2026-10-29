@@ -1,0 +1,37 @@
+# Keep Out, first mode: "Keep Out deals 4 damage to target tapped creature." Bot2 attacks with one of its two Ornithopters on
+# turn 4, so that one is tapped and the other is not. At Bot2's end step Bot1 cannot aim the mode at the untapped Ornithopter, and
+# its 4 damage kills the tapped one.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Keep Out
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter#1.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Attack(Ornithopter#1 > Bot1)
+[T4 Bot2.End]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Keep Out.Cast
+Bot1.Modes(Keep Out deals 4 damage)
+! Bot1.Target(Bot2.Battlefield.Ornithopter#2)
+Bot1.Target(Bot2.Battlefield.Ornithopter#1)
+
+[Expect]
+Bot2.Battlefield = Ornithopter
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Keep Out
