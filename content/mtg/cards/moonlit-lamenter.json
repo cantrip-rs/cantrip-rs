@@ -1,0 +1,8 @@
+{
+  "name": "Moonlit Lamenter",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Treefolk Cleric",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "This creature enters with a -1/-1 counter on it.\n{1}{W}, Remove a counter from this creature: Draw a card. Activate only as a sorcery."
+}

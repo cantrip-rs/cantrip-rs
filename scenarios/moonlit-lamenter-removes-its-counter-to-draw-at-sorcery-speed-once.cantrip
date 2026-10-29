@@ -1,0 +1,50 @@
+# Moonlit Lamenter (2/5): "This creature enters with a -1/-1 counter on it" (1/4) and "{1}{W}, Remove a counter from this
+# creature: Draw a card. Activate only as a sorcery." On turn 3 the ability is refused with a spell on the stack (CR 602.5d, 307.1),
+# then Mox Pearl and Mox Ruby pay it exactly: the counter comes off (2/5) and Bot1 draws one card. On turn 5 with the mana
+# untapped again it is refused: there is no counter left to remove.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Moonlit Lamenter
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Moonlit Lamenter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Moonlit Lamenter.Counters.MinusOneMinusOne = 1
+? Bot1.Battlefield.Moonlit Lamenter.Power = 1
+? Bot1.Battlefield.Moonlit Lamenter.Toughness = 4
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 4
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Battlefield.Moonlit Lamenter.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Moonlit Lamenter.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Moonlit Lamenter.Power = 2
+? Bot1.Battlefield.Moonlit Lamenter.Toughness = 5
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Moonlit Lamenter.Activate
+
+[Expect]
+Bot1.Battlefield.Moonlit Lamenter.Power = 2
+Bot1.Hand.Count = 5
