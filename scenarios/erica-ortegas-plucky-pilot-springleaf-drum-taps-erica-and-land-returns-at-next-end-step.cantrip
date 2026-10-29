@@ -1,0 +1,58 @@
+# Erica's trigger fires when a mana ability taps her, not only when she attacks (CR 603.2e, 701.26a). She may put a land
+# from her hand onto the battlefield; then, at the next end step, she must return a land she controls (CR 603.7a, 608.2d).
+# Bot2's Island in hand and on the battlefield are refused; Bot1's Forest is accepted at both choices.
+
+[Bot1 Deck]
+Erica Ortegas, Plucky Pilot
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Springleaf Drum
+Shock
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Springleaf Drum.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Erica Ortegas, Plucky Pilot.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+? Bot1.Hand = Forest; Shock
+Bot1.Battlefield.Springleaf Drum.Activate(Tap: Erica Ortegas, Plucky Pilot; Color: Red)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Bot2.Hand.Island)
+! Bot1.Choose(Shock)
+Bot1.Choose(Forest)
+? Delayed.Count = 1
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Bot2.Battlefield.Island)
+Bot1.Choose(Forest)
+
+[Expect]
+Bot1.Hand = Forest; Shock
+Bot1.Battlefield.Erica Ortegas, Plucky Pilot.Tapped = true
+Bot1.Battlefield.Springleaf Drum.Tapped = true
+Bot1.Battlefield.Forest = (absent)
+Bot1.LandsPlayed = 0
+Delayed.Count = 0
+Bot2.Battlefield.Island.Tapped = false

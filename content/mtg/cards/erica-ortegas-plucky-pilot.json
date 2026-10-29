@@ -1,0 +1,11 @@
+{
+  "name": "Erica Ortegas, Plucky Pilot",
+  "manaCost": "{3}{R}",
+  "type": "Legendary Creature — Human Pilot",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste\nWhenever Erica Ortegas becomes tapped, you may put a land card from your hand onto the battlefield. If you do, return a land you control to its owner's hand at the beginning of the next end step.",
+  "keywords": [
+    "Haste"
+  ]
+}

@@ -299,7 +299,8 @@ pub fn choose_a_land_to_return(g: &mut dyn Game, item: &StackItem) -> Result<Opt
     choose::card(g, player, item.object, Purpose::ReturnToHand, lands)
 }
 
-fn return_a_land(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+/// The whole ability effect: choose a land you control as it resolves and return it to its owner's hand.
+pub fn return_a_land(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(land) = choose_a_land_to_return(g, item)? {
         g.return_to_hand(&[land]);
     }

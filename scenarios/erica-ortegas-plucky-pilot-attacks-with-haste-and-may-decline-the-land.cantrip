@@ -1,0 +1,51 @@
+# Erica has haste, so she can attack in the turn she entered (CR 702.10b). She becomes tapped and her trigger offers the land
+# from Bot1's hand; Bot1 declines. The land remains in hand and no delayed return is created.
+
+[Bot1 Deck]
+Erica Ortegas, Plucky Pilot
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Forest
+Island
+Shock
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Erica Ortegas, Plucky Pilot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+? Bot1.Hand = Island; Shock
+Bot1.Attack(Erica Ortegas, Plucky Pilot > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Shock)
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Delayed.Count = 0
+
+[Expect]
+Bot1.Hand = Island; Shock
+Bot1.Battlefield.Erica Ortegas, Plucky Pilot.Tapped = true
+Bot1.Battlefield.Erica Ortegas, Plucky Pilot.Keywords = Haste
+Bot1.Battlefield.Forest.Tapped = false
+Delayed.Count = 0
+

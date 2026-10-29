@@ -1,0 +1,62 @@
+# A land creature from Bot1's hand is chosen, but Bot2's Containment Priest replaces its entry with exile. Since no land was
+# actually put onto the battlefield, the "If you do" delayed return is not created (CR 608.2c, 603.7).
+
+[Bot1 Deck]
+Erica Ortegas, Plucky Pilot
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Springleaf Drum
+Forest
+Dryad Arbor
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Plains
+Containment Priest
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Springleaf Drum.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Erica Ortegas, Plucky Pilot.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Containment Priest.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand = Dryad Arbor
+Bot1.Battlefield.Springleaf Drum.Activate(Tap: Erica Ortegas, Plucky Pilot; Color: Blue)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Dryad Arbor)
+? Exile = Dryad Arbor
+? Delayed.Count = 0
+
+[Expect]
+Exile = Dryad Arbor
+Bot1.Hand.Count = 0
+Bot1.Battlefield.Dryad Arbor = (absent)
+Bot1.Battlefield.Erica Ortegas, Plucky Pilot.Tapped = true
+Delayed.Count = 0
+Bot2.Battlefield.Containment Priest.Types = Creature
+
