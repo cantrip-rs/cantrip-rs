@@ -1,0 +1,36 @@
+# Technodrome: "This creature can't attack or block unless its power is 6 or greater." At 3 power it is refused as an
+# attacker on turn three and as a blocker when Bot2's Ornithopter attacks on turn four (CR 508.1c, 509.1b), where
+# Bot1's own Ornithopter blocks instead.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Technodrome
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Technodrome.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Technodrome > Bot2)
+Bot1.Attack()
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+! Bot1.Block(Technodrome > Ornithopter)
+Bot1.Block(Ornithopter > Ornithopter)
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Technodrome.Power = 3

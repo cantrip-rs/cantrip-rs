@@ -1,0 +1,12 @@
+{
+  "name": "Technodrome",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Construct",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Reach, trample\nThis creature can't attack or block unless its power is 6 or greater.\n{T}, Sacrifice another artifact: Draw a card. Put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}

@@ -1,0 +1,66 @@
+# Technodrome: "{T}, Sacrifice another artifact: Draw a card. Put a +1/+1 counter on this creature." It cannot sacrifice
+# itself (CR 109.1); each use draws a card and adds exactly one counter (3/3 -> 4/4 -> 5/5 -> 6/6, CR 122.1). At five
+# power it is still refused as an attacker (turn seven); at exactly six it blocks Bot2's Ornithopter (turn ten) and then
+# attacks with trample (turn eleven).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Technodrome
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Technodrome.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+! Bot1.Battlefield.Technodrome.Activate(Sacrifice: Technodrome)
+? Bot1.Hand.Count = 1
+Bot1.Battlefield.Technodrome.Activate(Sacrifice: Mox Pearl)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 2
+? Bot1.Battlefield.Technodrome.Power = 4
+[T5 Bot1.Main1]
+Bot1.Battlefield.Technodrome.Activate(Sacrifice: Mox Sapphire)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Technodrome.Power = 5
+[T7 Bot1.DeclareAttackers]
+! Bot1.Attack(Technodrome > Bot2)
+Bot1.Attack()
+[T7 Bot1.Main2]
+Bot1.Battlefield.Technodrome.Activate(Sacrifice: Mox Emerald)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Technodrome.Power = 6
+[T10 Bot2.Main1]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Block(Technodrome > Ornithopter)
+[T11 Bot1.DeclareAttackers]
+Bot1.Attack(Technodrome > Bot2)
+[T11 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 20
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Technodrome.Power = 6
+Bot1.Battlefield.Technodrome.Toughness = 6
+Bot1.Graveyard.Count = 3
