@@ -1,0 +1,12 @@
+{
+  "name": "Bitterbloom Bearer",
+  "manaCost": "{B}{B}",
+  "type": "Creature — Faerie Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flash\nFlying\nAt the beginning of your upkeep, you lose 1 life and create a 1/1 blue and black Faerie creature token with flying.",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

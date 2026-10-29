@@ -1,0 +1,30 @@
+# Bitterbloom Bearer has flash: Bot1 casts it on Bot2's turn 2, so its first trigger is the turn-3 upkeep. The Faerie token it makes
+# is a 1/1 that is both blue and black, with flying (CR 111.10f, 105.2); the Bearer itself is black alone.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Bitterbloom Bearer
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bitterbloom Bearer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Bitterbloom Bearer.Colors = Black
+Bot1.Battlefield.Faerie Token.Colors = Black; Blue
+Bot1.Battlefield.Faerie Token.Power = 1
+Bot1.Battlefield.Faerie Token.Toughness = 1
+Bot1.Battlefield.Faerie Token.Keywords = Flying
