@@ -1,0 +1,60 @@
+# Mikey & Don, Party Planners: "You may play lands and cast Mutant, Ninja, or Turtle spells from the top of your library. If you cast a creature spell this way, that creature
+# enters with an additional +1/+1 counter on it." In turn 1 Bot1 casts Mikey & Don, plays the Island on top as its land play, then casts the Foot Elite (a Ninja, 2/4) now on
+# top with Black Lotus: it enters a 3/5 with a counter. The Ornithopter under it is none of those types (it costs nothing, so only the permission could be missing): it may not be
+# cast from the library. Memnite, cast from the hand, is the positive control for the counter: a 1/1 with none.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mikey & Don, Party Planners
+Memnite
+Island
+Foot Elite
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mikey & Don, Party Planners.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Library.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Library.Foot Elite.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Library.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Foot Elite.Power = 3
+Bot1.Battlefield.Foot Elite.Toughness = 5
+Bot1.Battlefield.Foot Elite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
