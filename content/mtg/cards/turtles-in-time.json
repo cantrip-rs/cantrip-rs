@@ -1,0 +1,6 @@
+{
+  "name": "Turtles in Time",
+  "manaCost": "{5}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Return all creatures to their owners' hands. Each player may shuffle their hand and graveyard into their library, then each player who does draws seven cards.\nExile Turtles in Time."
+}

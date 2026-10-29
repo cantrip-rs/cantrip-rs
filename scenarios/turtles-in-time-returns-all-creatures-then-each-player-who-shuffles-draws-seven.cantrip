@@ -1,0 +1,60 @@
+# Turtles in Time: "Return all creatures to their owners' hands. Each player may shuffle their hand and graveyard into their
+# library, then each player who does draws seven cards. Exile Turtles in Time." Both players say yes: each creature is in its
+# owner's hand when the hands are shuffled in (CR 400.7), every graveyard goes too, and each draws a new seven. The spell is
+# exiled, not shuffled in.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Ornithopter
+Turtles in Time
+Island x30
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Ruby
+Lightning Bolt
+Forest x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Graveyard = Black Lotus
+? Bot2.Graveyard = Lightning Bolt
+Bot1.Hand.Turtles in Time.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot2.Accept
+? Bot1.Hand.Count = 7
+? Bot2.Hand.Count = 7
+? Bot1.Graveyard.Count = 0
+? Bot2.Graveyard.Count = 0
+? Bot1.Exile.Turtles in Time.Colors.Count = 1
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Jet; Mox Pearl; Mox Emerald
+Bot2.Battlefield = Forest; Mox Ruby
