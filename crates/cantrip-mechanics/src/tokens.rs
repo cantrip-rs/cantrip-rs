@@ -447,6 +447,21 @@ pub fn create(g: &mut dyn Game, controller: PlayerId, def: &'static CardDef, cou
     g.create_tokens(def, controller, count, false)
 }
 
+/// "Create a 0/0 green and blue Fractal creature token. Put `n` +1/+1 counters on it" (CR 111.1, 122.1, 608.2c): two
+/// instructions, the counters put on every token that was made (a token doubler makes two) all together as one event. With
+/// `n` of 0 nothing is put, and the 0/0 token goes to the graveyard as a state-based action (CR 704.5f). The card file lists
+/// `tokens::FRACTAL` in its `EXTRA`. The tokens made. Additive Evolution, Berta, Wise Extrapolator, Emil, Vastlands Roamer,
+/// Fractal Anomaly, Fractal Tender and Wild Hypothesis print it.
+pub fn create_fractal_with_counters(g: &mut dyn Game, controller: PlayerId, n: i16) -> Result<Vec<ObjectId>, Suspend> {
+    let made = create(g, controller, &FRACTAL, 1)?;
+    g.end_sentence();
+    if n > 0 {
+        let puts: Vec<(ObjectId, CounterKind, i16)> = made.iter().map(|&token| (token, CounterKind::PlusOne, n)).collect();
+        g.add_counters_together(&puts);
+    }
+    Ok(made)
+}
+
 /// Creates `count` tokens of `def` under `controller`, a token whose characteristics a rule defines and no printed text:
 /// a predefined token (CR 111.10: a Treasure, a Clue, a Heartwood), a keyword's own (job select's Hero, recruit's Human
 /// Soldier, a gift's Fish), or one created by name, whose characteristics are the Oracle card's of that name (CR 111.11:

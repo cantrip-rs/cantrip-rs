@@ -13,9 +13,7 @@ fn fractal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         }
     }
     let x = counted.len() as i16;
-    let made = tokens::create(g, item.controller, &tokens::FRACTAL, 1)?;
-    let puts: Vec<(ObjectId, CounterKind, i16)> = made.iter().map(|&token| (token, CounterKind::PlusOne, x)).collect();
-    g.add_counters_together(&puts);
+    tokens::create_fractal_with_counters(g, item.controller, x)?;
     Ok(())
 }
 
