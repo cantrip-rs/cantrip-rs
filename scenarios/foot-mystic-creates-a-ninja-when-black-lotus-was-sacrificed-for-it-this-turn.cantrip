@@ -1,0 +1,30 @@
+# Disappear (CR 207.2c ability word; "a permanent left the battlefield under your control this turn", CR 603.4): Bot1 pays for Foot Mystic ({3}{B}) with Black Lotus' BBB and Mox Jet,
+# and sacrificing the Lotus for mana is a permanent leaving under Bot1's control this turn, so Foot Mystic's enter trigger creates a 1/1 black Ninja token. Foot Mystic has lifelink.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Foot Mystic
+Island x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Foot Mystic.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Foot Mystic; Mox Jet; Ninja Token
+Bot1.Battlefield.Foot Mystic.Keywords = Lifelink
+Bot1.Battlefield.Ninja Token.Power = 1
+Bot1.Battlefield.Ninja Token.Toughness = 1
+Bot1.Battlefield.Ninja Token.Colors = Black
+Bot1.Battlefield.Ninja Token.Subtypes = Ninja

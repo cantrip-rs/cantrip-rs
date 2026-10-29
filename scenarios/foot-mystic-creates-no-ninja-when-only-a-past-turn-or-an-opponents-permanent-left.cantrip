@@ -1,0 +1,40 @@
+# Disappear counts only the turn it is checked in, and only your permanents (CR 603.4): Bot1 sacrifices Black Lotus on turn 1, and on turn 3 casts Foot Mystic with four Moxen
+# ({3}{B}) while Bot2 answers by sacrificing its own Black Lotus. Neither counts, so Foot Mystic enters and creates no Ninja token.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Foot Mystic
+Island x18
+
+[Bot2 Deck]
+Black Lotus
+Island x23
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Foot Mystic.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Foot Mystic; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot2.Battlefield.Count = 0
