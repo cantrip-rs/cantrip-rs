@@ -1,0 +1,36 @@
+# "{1}{W}: Leonardo gains first strike until end of turn." Leonardo (2/1) attacks Bot2's Grizzly Bears (2/2), who blocks; Bot1
+# pays {1}{W} (Plains and Mox Pearl) after blocks. First strike: Leonardo's 2 damage kills the Bears before they deal damage,
+# so Leonardo survives.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Plains
+Leonardo, Leader in Blue
+Plains x16
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Leonardo, Leader in Blue.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Attack(Leonardo, Leader in Blue > Bot2)
+Bot2.Block(Grizzly Bears > Leonardo, Leader in Blue)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Leonardo, Leader in Blue.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears; Black Lotus
+Bot1.Battlefield.Leonardo, Leader in Blue.Damage = 0

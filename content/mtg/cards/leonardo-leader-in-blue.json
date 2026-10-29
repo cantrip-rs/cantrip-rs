@@ -1,0 +1,8 @@
+{
+  "name": "Leonardo, Leader in Blue",
+  "manaCost": "{W}",
+  "type": "Legendary Creature — Mutant Ninja Turtle",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Sneak {3}{W}{W} (You may cast this spell for {3}{W}{W} if you also return an unblocked attacker you control to hand during the declare blockers step. He enters tapped and attacking.)\nWhen Leonardo enters, if his sneak cost was paid, creatures you control get +2/+0 until end of turn.\n{1}{W}: Leonardo gains first strike until end of turn."
+}

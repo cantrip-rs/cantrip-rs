@@ -1,0 +1,47 @@
+# Sneak {3}{W}{W} (CR 702.190a) and "When Leonardo enters, if his sneak cost was paid, creatures you control get +2/+0 until
+# end of turn" (CR 603.4, 611.2c). Bot1 attacks Bot2 with Ornithopter and Savannah Lions on turn 3, nobody blocks; in the declare
+# blockers step Bot1 casts Leonardo for Black Lotus and two Plains, returning the Ornithopter. Leonardo (2/1) enters tapped and
+# attacking, and the trigger gives Leonardo and the Lions +2/+0 (4 each): 8 combat damage, Bot2 at 12. The Ornithopter, back in
+# hand, is not affected.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Black Lotus
+Ornithopter
+Savannah Lions
+Leonardo, Leader in Blue
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Attack(Ornithopter > Bot2; Savannah Lions > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Leonardo, Leader in Blue.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Leonardo, Leader in Blue.Power = 4
+? Bot1.Battlefield.Savannah Lions.Power = 4
+? Bot1.Battlefield.Savannah Lions.Toughness = 1
+? Bot1.Battlefield.Leonardo, Leader in Blue.Toughness = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
+Bot1.Battlefield.Leonardo, Leader in Blue.Tapped = true

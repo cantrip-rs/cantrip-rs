@@ -1,0 +1,28 @@
+# "If his sneak cost was paid" (CR 603.4): Leonardo cast for {W} from hand, not sneaked, does not trigger usefully - Savannah
+# Lions stays 2/1 and Leonardo 2/1.
+
+[Bot1 Deck]
+Plains
+Savannah Lions
+Leonardo, Leader in Blue
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Leonardo, Leader in Blue.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Leonardo, Leader in Blue.Power = 2
+? Bot1.Battlefield.Savannah Lions.Power = 2
+
+[Expect]
+Bot1.Battlefield.Leonardo, Leader in Blue.Power = 2
+Bot1.Battlefield.Savannah Lions.Power = 2
