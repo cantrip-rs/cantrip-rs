@@ -1,0 +1,42 @@
+# Stomped by the Foot kicked by sacrificing a creature gives exactly -5/-5 until end of turn (not -4/-4 or -6/-6, and not -2/-2
+# as well): Bot2's Catacomb Slug (2/6) is a -3/1 and survives; Bot1's Ornithopter is sacrificed to pay.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Ornithopter
+Stomped by the Foot
+Plains x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Catacomb Slug
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Catacomb Slug.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stomped by the Foot.Cast(Bot2.Battlefield.Catacomb Slug)
+Bot1.Modes(Kicker—Sacrifice an artifact or creature)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Catacomb Slug.Power = -3
+? Bot2.Battlefield.Catacomb Slug.Toughness = 1
+
+[Expect]
+Bot2.Battlefield.Catacomb Slug.Power = -3
+Bot2.Battlefield.Catacomb Slug.Toughness = 1

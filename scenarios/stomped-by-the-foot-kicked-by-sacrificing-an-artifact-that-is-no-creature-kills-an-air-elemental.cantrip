@@ -1,0 +1,42 @@
+# Stomped by the Foot's kicker is "Sacrifice an artifact or creature" (CR 702.33a): Bot1 pays it with Mox Pearl, an artifact that is
+# no creature, so the spell is kicked (CR 702.33b) and gives -5/-5 instead of -2/-2 (CR 608.2c), which kills Bot2's Air Elemental (4/4)
+# where the unkicked -2/-2 would not. Bot1 taps Mox Jet and Mox Ruby for the spell's own {1}{B}, so the kicker costs no mana.
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Stomped by the Foot
+Plains x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Air Elemental
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Air Elemental.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stomped by the Foot.Cast(Bot2.Battlefield.Air Elemental)
+Bot1.Modes(Kicker—Sacrifice an artifact or creature)
+Bot1.Choose(Mox Pearl)
+Bot1.Pass
+Bot1.Pass
+? Bot2.Graveyard = Air Elemental; Black Lotus
+? Bot1.Graveyard = Stomped by the Foot; Mox Pearl
+
+[Expect]
+Bot2.Graveyard = Air Elemental; Black Lotus
+Bot1.Graveyard = Stomped by the Foot; Mox Pearl

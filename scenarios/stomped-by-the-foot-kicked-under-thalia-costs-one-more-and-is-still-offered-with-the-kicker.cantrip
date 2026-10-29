@@ -1,0 +1,38 @@
+# Stomped by the Foot kicked with a cost increase in play (CR 601.2b-f, 702.33a): Thalia, Guardian of Thraben makes the noncreature
+# spell cost {1} more, {2}{B} in all, and the kicker (a sacrifice, no mana) is still announced and paid: Bot1 pays with Mox Jet,
+# Mox Ruby and Mox Pearl, sacrifices the Ornithopter and Thalia (2 toughness) dies.
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Ornithopter
+Stomped by the Foot
+Plains x15
+
+[Bot2 Deck]
+Black Lotus
+Thalia, Guardian of Thraben
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Thalia, Guardian of Thraben.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stomped by the Foot.Cast(Bot2.Battlefield.Thalia, Guardian of Thraben)
+Bot1.Modes(Kicker—Sacrifice an artifact or creature)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot1.Pass
+? Bot2.Graveyard = Thalia, Guardian of Thraben; Black Lotus
+? Bot1.Graveyard = Stomped by the Foot; Ornithopter
+
+[Expect]
+Bot1.Graveyard = Stomped by the Foot; Ornithopter

@@ -1,0 +1,42 @@
+# Stomped by the Foot kicked by sacrificing a creature (Ornithopter): the target gets -5/-5 instead of -2/-2 (CR 608.2c), so
+# Bot2's Air Elemental (4/4) dies. A second copy of the effect on top of -2/-2 would be -7/-7 and prove nothing, so
+# the dying Elemental alone is the check on -5/-5; the unkicked scenario shows -2/-2 leaves it alive.
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Ornithopter
+Stomped by the Foot
+Plains x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Air Elemental
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Air Elemental.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stomped by the Foot.Cast(Bot2.Battlefield.Air Elemental)
+Bot1.Modes(Kicker—Sacrifice an artifact or creature)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot1.Pass
+? Bot2.Graveyard = Air Elemental; Black Lotus
+? Bot1.Graveyard = Stomped by the Foot; Ornithopter
+
+[Expect]
+Bot2.Graveyard = Air Elemental; Black Lotus
+Bot1.Graveyard = Stomped by the Foot; Ornithopter
