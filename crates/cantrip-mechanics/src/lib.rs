@@ -418,8 +418,8 @@ pub fn creature_cards_in_graveyard(q: &dyn Query, player: PlayerId) -> usize {
 }
 
 /// How many cards of `subtype` are in `player`'s graveyard (CR 205.3d, 404.1): cards only, never tokens, and any card type, a
-/// Kindred noncreature card included, counted as it is asked. Morcant's Eyes counts the Elf cards for a number; Lys Alana
-/// Dignitary and Trystan, Callous Cultivator ask whether there is one.
+/// Kindred noncreature card included, counted as it is asked. Morcant's Eyes, Dawnhand Eulogist, Creakwood Safewright and Gloom
+/// Ripper count the Elf cards for a number; Lys Alana Dignitary and Trystan, Callous Cultivator ask whether there is one.
 pub fn subtype_cards_in_graveyard(q: &dyn Query, player: PlayerId, subtype: Subtype) -> usize {
     q.state().zone(Zone::graveyard(player)).iter().filter(|&&card| q.chars(card).has_subtype(subtype)).count()
 }
@@ -661,6 +661,13 @@ pub fn zone_cast_from(q: &dyn Query, spell: ObjectId) -> Option<ZoneKind> {
 /// Ajani, Nacatl Pariah, Emeritus of Truce, Oath of Druids and Stadium Headliner count it exactly so.
 pub fn creatures_you_control(q: &dyn Query, player: PlayerId) -> usize {
     q.permanents_of(player).into_iter().filter(|&id| q.chars(id).is(CardType::Creature)).count()
+}
+
+/// "The number of [subtype]s [player] controls" (CR 205.3, 109.4): every permanent of that subtype they control, read through
+/// the layers, so a changeling counts for each creature type. Beorn the Fierce's Bears, The Notary Hobbits' Halflings and Gloom Ripper's Elves
+/// are such counts.
+pub fn permanents_with_subtype_you_control(q: &dyn Query, player: PlayerId, subtype: Subtype) -> usize {
+    q.permanents_of(player).into_iter().filter(|&id| q.chars(id).has_subtype(subtype)).count()
 }
 
 /// "The number of lands [player] controls": every land on the battlefield they control, read through the layers. Beza, the
