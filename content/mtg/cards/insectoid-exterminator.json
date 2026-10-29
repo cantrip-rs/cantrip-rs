@@ -1,0 +1,11 @@
+{
+  "name": "Insectoid Exterminator",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Insect Mutant",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nDisappear — At the beginning of your end step, if a permanent left the battlefield under your control this turn, scry 1. (Look at the top card of your library. You may put that card on the bottom.)",
+  "keywords": [
+    "Flying"
+  ]
+}

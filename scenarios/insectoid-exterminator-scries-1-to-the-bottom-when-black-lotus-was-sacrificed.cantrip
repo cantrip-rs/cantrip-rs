@@ -1,0 +1,26 @@
+# Disappear (CR 603.4) and scry 1 (CR 701.22a): Bot1 pays for Insectoid Exterminator ({2}{B}) with Black Lotus' BBB, so a permanent left the battlefield under Bot1's control this turn
+# and at the beginning of Bot1's end step it scries 1. Lightning Bolt goes to the bottom, so Counterspell is the new top card.
+
+[Bot1 Deck]
+Black Lotus
+Insectoid Exterminator
+Island x5
+Lightning Bolt
+Counterspell
+Mountain
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Insectoid Exterminator.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+
+[Expect]
+Bot1.Library = Counterspell; Mountain; Lightning Bolt
+Bot1.Battlefield = Insectoid Exterminator
+Bot1.Battlefield.Insectoid Exterminator.Keywords = Flying

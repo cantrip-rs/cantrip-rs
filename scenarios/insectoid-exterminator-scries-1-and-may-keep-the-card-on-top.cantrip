@@ -1,0 +1,23 @@
+# Scry 1 may leave the card where it is (CR 701.22a): after Black Lotus was sacrificed for Insectoid Exterminator this turn (disappear), Bot1 keeps Lightning Bolt on top.
+
+[Bot1 Deck]
+Black Lotus
+Insectoid Exterminator
+Island x5
+Lightning Bolt
+Counterspell
+Mountain
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Insectoid Exterminator.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Lightning Bolt | )
+
+[Expect]
+Bot1.Library = Lightning Bolt; Counterspell; Mountain

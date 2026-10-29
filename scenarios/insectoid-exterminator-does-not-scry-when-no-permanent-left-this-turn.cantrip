@@ -1,0 +1,39 @@
+# Disappear's intervening "if" (CR 603.4): Insectoid Exterminator is cast with three Moxen ({2}{B}), nothing leaves the battlefield under Bot1's control, so the end step trigger
+# never happens and no scry is offered (the library keeps its 11 cards). On turn 3 Bot1 sacrifices Black Lotus and does scry, putting Lightning Bolt on the bottom.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Emerald
+Insectoid Exterminator
+Black Lotus
+Island x2
+Island
+Lightning Bolt
+Counterspell
+Mountain
+Island x7
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Insectoid Exterminator.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Library.Count = 11
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+
+[Expect]
+Bot1.Library = Counterspell; Mountain; Island; Island; Island; Island; Island; Island; Island; Lightning Bolt
