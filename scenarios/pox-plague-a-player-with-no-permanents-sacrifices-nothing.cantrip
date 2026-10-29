@@ -1,0 +1,38 @@
+# Pox Plague: a player who controls no permanents sacrifices none and nothing is asked of them (Bot2); Bot1, with one card left in hand, discards none (half of 1 rounds down to 0) and sacrifices two of its five Moxen.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Pox Plague
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Hand.Pox Plague.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mox Jet#1; Mox Jet#2)
+
+[Expect]
+Bot1.Life = 10
+Bot2.Life = 10
+Bot1.Hand.Count = 1
+Bot2.Hand.Count = 4
+Bot1.Battlefield.Count = 3
+Bot2.Battlefield.Count = 0

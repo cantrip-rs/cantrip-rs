@@ -1,0 +1,49 @@
+# Pox Plague: a player takes half of all the permanents they control, those that can't be sacrificed counted among them (CR 701.21a, 101.2). Bot2 controls a Mox Ruby and a Hithlain Rope ("This artifact can't be sacrificed."): half of two is one, and the only one that can be sacrificed is the Mox, so it goes with no choice to make and the Rope stays.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Pox Plague
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Black Lotus
+Hithlain Rope
+Island
+Island
+Island
+Island
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hithlain Rope.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Hand.Pox Plague.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+Bot2.Choose(Island; Island)
+Bot1.Choose(Mox Jet#1; Mox Jet#2)
+
+[Expect]
+Bot2.Battlefield = Hithlain Rope
+Bot2.Graveyard.Count = 4
