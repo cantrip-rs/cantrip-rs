@@ -1,0 +1,32 @@
+# Retched Wretch: "if it had a -1/-1 counter on it" (CR 603.4, 603.10a). Bolted with no counter on it, the 4/2 dies and the
+# ability finds its condition false, so it stays in the graveyard. The three Moxen pay the Wretch, Bot2's Mox Ruby the Bolt.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Retched Wretch
+Swamp x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Retched Wretch.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Retched Wretch)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Retched Wretch
+Bot1.Battlefield.Count = 3

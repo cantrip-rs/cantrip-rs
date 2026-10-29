@@ -1,0 +1,8 @@
+{
+  "name": "Retched Wretch",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Goblin",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "When this creature dies, if it had a -1/-1 counter on it, return it to the battlefield under its owner's control and it loses all abilities."
+}

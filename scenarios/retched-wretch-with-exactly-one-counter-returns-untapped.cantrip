@@ -1,0 +1,50 @@
+# Retched Wretch: "if it had a -1/-1 counter on it" (CR 603.4, 603.10a) is true with exactly one. Bot2 Lightning Bolts Bot1's
+# Bile-Vial Boggart, whose dying ability puts a -1/-1 counter on the Wretch (a 3/1); a second Bolt kills the Wretch, and it
+# returns, untapped, as a new 4/2 with no counter. The three Moxen pay the Wretch, a Swamp the Boggart, and Bot2's two Mox Rubies
+# the Bolts.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Swamp
+Retched Wretch
+Bile-Vial Boggart
+Swamp x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Retched Wretch.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Bile-Vial Boggart.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bile-Vial Boggart)
+Bot1.Target(Retched Wretch)
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Retched Wretch.Power = 3
+? Bot1.Battlefield.Retched Wretch.Toughness = 1
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Retched Wretch)
+[T2 Bot2.End]
+
+[Expect]
+Bot1.Battlefield.Retched Wretch.Power = 4
+Bot1.Battlefield.Retched Wretch.Toughness = 2
+Bot1.Battlefield.Retched Wretch.Tapped = false
+Bot1.Graveyard = Bile-Vial Boggart
