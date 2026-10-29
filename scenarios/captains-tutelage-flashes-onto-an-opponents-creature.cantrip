@@ -1,0 +1,43 @@
+# Captain's Tutelage's flash lets Bot1 cast it during Bot2's turn; the Aura enchants a creature Bot1 doesn't control, giving it first strike and +2/+0.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Captain's Tutelage
+Island
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island
+Island
+Island
+Island
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Hand.Captain's Tutelage.Cast(Bot2.Llanowar Elves)
+Bot1.Mountain.Activate
+Bot1.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Captain's Tutelage.AttachedTo = Llanowar Elves
+Bot2.Battlefield.Llanowar Elves.Power = 3
+Bot2.Battlefield.Llanowar Elves.Toughness = 1
+Bot2.Battlefield.Llanowar Elves.Keywords = FirstStrike

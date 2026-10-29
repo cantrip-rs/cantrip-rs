@@ -1,0 +1,35 @@
+# Captain's Tutelage grants first strike through Bot1's current turn, then the temporary ability expires at cleanup while the Aura's +2/+0 remains.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Ornithopter
+Captain's Tutelage
+Island
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x10
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Captain's Tutelage.Cast(Bot1.Ornithopter)
+Bot1.Mountain.Activate
+Bot1.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Captain's Tutelage.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying

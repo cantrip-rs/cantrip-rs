@@ -1,0 +1,9 @@
+{
+  "name": "Captain's Tutelage",
+  "manaCost": "{1}{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nWhen this Aura enters, enchanted creature gains first strike until end of turn.\nEnchanted creature gets +2/+0.",
+  "keywords": [
+    "Flash"
+  ]
+}
