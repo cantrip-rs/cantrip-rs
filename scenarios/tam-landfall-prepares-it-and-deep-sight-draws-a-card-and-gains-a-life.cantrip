@@ -1,0 +1,48 @@
+# Tam, Observant Sequencer ({2}{G}{U}): landfall - whenever a land you control enters, it becomes prepared (CR 722.2). Bot1 plays
+# a Forest after casting it, the trigger resolves, and the prepared Tam offers a copy of Deep Sight ({G}{U} sorcery: "You draw a
+# card and gain 1 life"). Casting the copy draws the Mountain, gains 1 life, and unprepares Tam (CR 722.3c).
+
+[Bot1 Deck]
+Tam, Observant Sequencer
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Forest
+Plains
+Mountain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tam, Observant Sequencer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tam, Observant Sequencer.Prepared = (absent)
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tam, Observant Sequencer.Prepared = true
+? Exile.Count = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Deep Sight.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 21
+Bot1.Hand = Mountain; Plains; Island
+Bot1.Battlefield.Tam, Observant Sequencer.Prepared = (absent)
+Exile.Count = 0

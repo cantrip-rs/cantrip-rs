@@ -1,0 +1,58 @@
+# Tam: "a land you control" - Bot2's Island does not prepare it (a copy of Deep Sight is refused). Bot1's Forest does, and a second
+# landfall on turn 5 while Tam is already prepared (CR 722.2) leaves it with one copy: casting it once unprepares Tam, and a
+# second cast is refused (CR 722.3c).
+
+[Bot1 Deck]
+Tam, Observant Sequencer
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Forest
+Plains
+Mountain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tam, Observant Sequencer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Tam, Observant Sequencer.Prepared = (absent)
+[T3 Bot1.Main1]
+! Bot1.Exile.Deep Sight.Cast
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tam, Observant Sequencer.Prepared = true
+? Exile.Count = 1
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Deep Sight.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Exile.Deep Sight.Cast
+
+[Expect]
+Bot1.Life = 21
+Exile.Count = 0
+Bot1.Battlefield.Tam, Observant Sequencer.Prepared = (absent)
