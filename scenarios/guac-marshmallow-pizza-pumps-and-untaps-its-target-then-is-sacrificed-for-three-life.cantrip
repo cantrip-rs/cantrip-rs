@@ -1,0 +1,40 @@
+# Guac & Marshmallow Pizza: "When this artifact enters, target creature gets +2/+2 until end of turn. Untap it." Frog Butler has
+# tapped for the {G} that pays for it, so it enters targeting the tapped Butler, a 3/3 and untapped when the trigger has
+# resolved. "{2}, {T}, Sacrifice this artifact: You gain 3 life." then takes two Moxen and the Pizza itself.
+
+[Bot1 Deck]
+Black Lotus
+Frog Butler
+Mox Jet
+Mox Ruby
+Guac & Marshmallow Pizza
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Frog Butler.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Frog Butler.Activate(Ability: Add one mana; Color: Green)
+Bot1.Hand.Guac & Marshmallow Pizza.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Frog Butler.Power = 3
+? Bot1.Battlefield.Frog Butler.Tapped = false
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Guac & Marshmallow Pizza.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Graveyard = Guac & Marshmallow Pizza; Black Lotus
