@@ -1,0 +1,31 @@
+# Kulrath Zealot's basic landcycling {1}{R} (CR 702.29e): paying it with Mox Ruby and Mox Pearl discards the card from the hand and
+# finds a basic land card (Tropical Island, which has basic land types but is not basic, may not be found, CR 205.4c).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Kulrath Zealot
+Plains x4
+Tropical Island
+Forest
+Plains x11
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kulrath Zealot.Activate(Ability: Basic landcycling)
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Search(Tropical Island)
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Graveyard = Kulrath Zealot
+Bot1.Hand = Forest; Plains; Plains; Plains; Plains

@@ -1,0 +1,42 @@
+# Kulrath Zealot: "When this creature enters, exile the top card of your library. Until the end of your next turn, you may play that
+# card." Bot1 casts it on turn one with Black Lotus and three Moxen; the Mountain on top of the library is exiled and Bot1 plays it
+# as the turn's land drop from exile.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Kulrath Zealot
+Forest
+Forest
+Mountain
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kulrath Zealot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Mountain
+Bot1.Exile.Mountain.Play
+
+[Expect]
+Bot1.Battlefield = Kulrath Zealot; Mountain; Mox Emerald; Mox Pearl; Mox Ruby
+Exile =
