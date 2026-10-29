@@ -1,0 +1,53 @@
+# Stress Dream deals exactly 5 damage: Bot2's Guardians of Meletis (0/6) survives it, marked with 5 damage, and the look still
+# follows (Bot1 takes Ancestral Recall, Mox Jet goes to the bottom).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Stress Dream
+Island
+Island
+Island
+Island
+Ancestral Recall
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Guardians of Meletis
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Guardians of Meletis.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stress Dream.Cast(Bot2.Battlefield.Guardians of Meletis)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ancestral Recall | Mox Jet)
+
+[Expect]
+Bot2.Battlefield = Guardians of Meletis
+Bot2.Battlefield.Guardians of Meletis.Damage = 5
+Bot1.Hand = Island; Island; Island; Island; Ancestral Recall
+Bot1.Library.Count = 21

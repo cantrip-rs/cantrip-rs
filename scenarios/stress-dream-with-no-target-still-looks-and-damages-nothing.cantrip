@@ -1,0 +1,44 @@
+# Stress Dream says "up to one target creature": cast with no target it still resolves, damages nothing (the Ornithopter on the
+# battlefield is not touched), and does the look: Bot1 takes the Mox Jet and the Ancestral Recall goes to the bottom.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Stress Dream
+Ornithopter
+Island
+Island
+Ancestral Recall
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stress Dream.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mox Jet | Ancestral Recall)
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Sapphire; Ornithopter
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Hand = Island; Island; Mox Jet
+Bot1.Library.Count = 21

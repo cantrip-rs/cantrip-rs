@@ -1,0 +1,37 @@
+# Stress Dream with a single card in the library: "Look at the top two cards" sees only that one, which goes to hand
+# (nothing goes to the bottom) and Bot1 does not lose (it is not drawing from an empty library).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Stress Dream
+Island
+Island
+Island
+Ancestral Recall
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stress Dream.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Ancestral Recall
+Bot1.Library.Count = 0
+Bot1.Graveyard = Stress Dream; Black Lotus

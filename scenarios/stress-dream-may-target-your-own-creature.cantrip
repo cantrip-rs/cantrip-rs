@@ -1,0 +1,45 @@
+# Stress Dream: any creature is a legal target, one's own too. Bot1 targets its own Ornithopter (toughness 2): it dies to the
+# 5 damage, and the look still follows. The top two are Ancestral Recall and Mox Jet; the Jet goes to hand and the Recall to the
+# bottom, so the order of the pair does not matter.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Stress Dream
+Ornithopter
+Island
+Island
+Ancestral Recall
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stress Dream.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mox Jet | Ancestral Recall)
+
+[Expect]
+Bot1.Battlefield = Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Ornithopter; Stress Dream; Black Lotus
+Bot1.Hand = Island; Island; Mox Jet
+Bot1.Library.Count = 21
