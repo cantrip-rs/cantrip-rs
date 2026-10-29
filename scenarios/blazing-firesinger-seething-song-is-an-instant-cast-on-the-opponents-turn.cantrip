@@ -1,0 +1,44 @@
+# Seething Song is an instant (CR 304.1): Bot1 casts the copy on Bot2's turn 2 in response to Bot2's Memnite, and the five {R} are in
+# Bot1's pool when it resolves (CR 605.1a), before the Memnite does.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Blazing Firesinger
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Memnite
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blazing Firesinger.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Seething Song.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Mana = {R}{R}{R}{R}{R}
+
+[Expect]
+Bot1.Battlefield.Blazing Firesinger.Prepared = (absent)
+Exile.Count = 0

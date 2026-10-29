@@ -1,0 +1,49 @@
+# Blazing Firesinger enters prepared (CR 722.3a); casting the copy of Seething Song from exile unprepares it (CR 722.3c), the copy
+# ceases to exist after it resolves, and the spell adds {R}{R}{R}{R}{R} as it resolves: a spell, not a mana ability (CR 605.1a), so it
+# is on the stack first, where Bot2 may respond, and the mana is not in the pool until it resolves.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Blazing Firesinger
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blazing Firesinger.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blazing Firesinger.Prepared = true
+? Exile.Count = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Seething Song.Cast
+? Bot1.Battlefield.Blazing Firesinger.Prepared = (absent)
+? Bot1.Mana =
+Bot1.Pass
+? Stack.Count = 1
+? Bot1.Mana =
+Bot2.Pass
+? Bot1.Mana = {R}{R}{R}{R}{R}
+
+[Expect]
+Bot1.Battlefield.Blazing Firesinger.Prepared = (absent)
+Exile.Count = 0
+Bot1.Graveyard.Count = 0
+Bot1.Mana = {R}{R}{R}{R}{R}
