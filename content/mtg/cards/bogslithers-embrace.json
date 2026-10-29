@@ -1,0 +1,6 @@
+{
+  "name": "Bogslither's Embrace",
+  "manaCost": "{1}{B}",
+  "type": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, blight 1 or pay {3}. (To blight 1, put a -1/-1 counter on a creature you control.)\nExile target creature."
+}

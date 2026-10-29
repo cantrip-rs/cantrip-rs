@@ -1,0 +1,39 @@
+# Bogslither's Embrace {1}{B} sorcery: "As an additional cost to cast this spell, blight 1 or pay {3}. Exile target creature" (CR 601.2b,
+# 118.8). Bot1 has a creature it could blight (Memnite) but pays {3} instead, five mana in all from Black Lotus, Mox Jet and Mox Ruby:
+# its Memnite keeps no counter and Bot2's Memnite is exiled.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Black Lotus
+Memnite
+Bogslither's Embrace
+Island x2
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Bogslither's Embrace.Cast(Bot2.Battlefield.Memnite)
+Bot1.Modes(Pay {3})
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Exile.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Counters.MinusOneMinusOne = (absent)
+Bot1.Battlefield.Memnite.Power = 1
