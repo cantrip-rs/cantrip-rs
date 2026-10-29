@@ -1,0 +1,8 @@
+{
+  "name": "Wanderbrine Preacher",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Merfolk Cleric",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature becomes tapped, you gain 2 life."
+}
