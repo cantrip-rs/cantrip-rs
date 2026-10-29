@@ -1,0 +1,37 @@
+# Embrace the Paradox ({3}{G}{U}): draw three cards (CR 121.1), then (CR 608.2c) you may put a land card from your hand - one
+# just drawn counts - onto the battlefield tapped (CR 305.1: not a land play). A nonland card in hand is not offered.
+
+[Bot1 Deck]
+Embrace the Paradox
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Plains
+Lightning Bolt
+Lightning Bolt
+Forest
+Island
+Swamp
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Embrace the Paradox.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Forest)
+
+[Expect]
+Bot1.Hand = Island; Lightning Bolt; Lightning Bolt; Plains; Swamp
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Library.Count = 20
+Bot1.LandsPlayed = 0
