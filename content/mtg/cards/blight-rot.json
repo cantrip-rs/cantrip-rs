@@ -1,0 +1,6 @@
+{
+  "name": "Blight Rot",
+  "manaCost": "{2}{B}",
+  "type": "Instant",
+  "oracleText": "Put four -1/-1 counters on target creature."
+}
