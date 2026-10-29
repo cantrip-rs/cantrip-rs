@@ -1,0 +1,27 @@
+# Slumbering Trudge with X = 4 (Black Lotus's {G}{G}{G} and two Moxen): three minus four is below zero, and a number of counters is
+# never negative (the ruling), so no stun counters, and no counters of any kind, and it enters untapped.
+
+[Bot1 Deck]
+Slumbering Trudge
+Black Lotus
+Mox Emerald
+Mox Ruby
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Slumbering Trudge.Cast(X: 4)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Slumbering Trudge.Tapped = false
+Bot1.Battlefield.Slumbering Trudge.Power = 6
