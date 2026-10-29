@@ -18,10 +18,14 @@ use cantrip_api::*;
 
 use crate::combat::unblocked_attacker_you_control;
 
-/// "During your declare blockers step" (CR 702.190a): the declare blockers step of a turn of the player casting it.
-fn your_declare_blockers_step(q: &dyn Query, asker: &Asker) -> bool {
+/// "During your declare blockers step" (CR 702.190a): the declare blockers step of a turn of `player`.
+fn in_declare_blockers_step_of(q: &dyn Query, player: PlayerId) -> bool {
     let turn = &q.state().turn;
-    turn.active == asker.controller && turn.step() == Step::DeclareBlockers
+    turn.active == player && turn.step() == Step::DeclareBlockers
+}
+
+fn your_declare_blockers_step(q: &dyn Query, asker: &Asker) -> bool {
+    in_declare_blockers_step_of(q, asker.controller)
 }
 
 /// The alternative cost of sneak: `cost` and an unblocked attacker you control returned to its owner's hand. `text` is the
@@ -34,6 +38,19 @@ pub const fn way(cost: ManaCost, text: &'static str) -> WayDef {
         .kind(WayKind::Sneak)
 }
 
+/// The cost of a sneak a permanent gives (CR 702.190a, 113.6, 604): `mana` and an unblocked attacker `player` controls returned
+/// to its owner's hand, or `None` outside the declare blockers step of their turn, when it can't be cast that way.
+pub fn granted_cost(q: &dyn Query, player: PlayerId, mana: ManaCost) -> Option<Cost> {
+    in_declare_blockers_step_of(q, player).then(|| Cost::mana(mana).and(return_to_hand(1, unblocked_attacker_you_control)))
+}
+
+/// Sneak a permanent gives to the cards in `from` (CR 702.190a, 113.6): "creature cards in your graveyard have sneak {3}{B}"
+/// (Ninja Teen). `cost` is each card's sneak cost, `granted_cost` of its mana, or none for a card without it. Like a card's own
+/// sneak it is cast whenever an instant could be, and a permanent spell cast so enters tapped and attacking (CR 702.190b).
+pub const fn granted(from: ZoneKind, cost: GrantedCost) -> GrantedWay {
+    GrantedWay { text: "Sneak", cost, from, kind: WayKind::Sneak, instant_speed: true, enters_attacking: true, ..GrantedWay::CAST }
+}
+
 /// "If this spell's sneak cost was paid": it was cast for its first alternative cost, which a card with sneak lists first
 /// and, so far, alone. A copy of the spell was not cast, but it copies the alternative cost the original was cast for (CR
 /// 707.10): its sneak cost was paid too.
@@ -42,9 +59,21 @@ pub fn paid(_: &dyn Query, item: &StackItem) -> bool {
 }
 
 /// "If its sneak cost was paid" of a permanent (CR 702.190a): it was cast through the way a card lists as sneak
-/// (`WayKind::Sneak`, set by `way`). Another way, a copy and a permanent that was not cast were not. Leonardo, Leader in Blue
-/// and Turncoat Kunoichi ask it of the creature whose enters ability is on the stack.
+/// (`WayKind::Sneak`, set by `way` and `granted`), the card's own or one a permanent gave it (Ninja Teen). Another way, a copy
+/// and a permanent that was not cast were not. Leonardo, Leader in Blue and Turncoat Kunoichi ask it of the creature whose
+/// enters ability is on the stack. Read from the spell's `Cast` record, as `escape::escaped` is.
 pub fn was_cast_for_sneak(q: &dyn Query, id: ObjectId) -> bool {
-    let object = q.state().obj(id);
-    object.cast_way > 0 && q.card(object.card).ways.get(object.cast_way as usize - 1).is_some_and(|w| w.kind == WayKind::Sneak)
+    let cast = q.history().all().iter().rev().find_map(|r| match &r.event {
+        Event::Cast(c) if c.spell == id || q.obj(c.spell).became == Some(id) => Some(*c),
+        _ => None,
+    });
+    let Some(cast) = cast else { return false };
+    match cast.granted_by() {
+        Some(grant) => grant
+            .ability
+            .as_granted_way()
+            .and_then(|k| q.card(grant.ability.card).granted_ways.get(k))
+            .is_some_and(|w| w.kind == WayKind::Sneak),
+        None => cast.way > 0 && q.card(q.obj(cast.spell).card).ways.get(cast.way as usize - 1).is_some_and(|w| w.kind == WayKind::Sneak),
+    }
 }
