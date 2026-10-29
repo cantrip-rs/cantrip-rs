@@ -256,9 +256,11 @@ pub enum Event {
     Resolved { source: ObjectId, ability: AbilityRef },
     /// A triggered ability of this object triggered and was put on the stack: what "triggers only N times each turn" counts.
     Triggered { source: ObjectId, ability: AbilityRef },
-    /// The modes of a modal spell or ability of this object were chosen (CR 601.2b, 602.2b, 603.3c, 700.2), as a
-    /// `ModalDef` mask: what "choose one that hasn't been chosen" asks of the history.
-    ModesChosen { source: ObjectId, ability: AbilityRef, modes: u32 },
+    /// `player` chose the modes of a modal spell or ability of this object (CR 601.2b, 602.2b, 603.3c, 700.2), as a
+    /// `ModalDef` mask, none for a "choose up to" spell or ability that chose none: what "choose one that hasn't been
+    /// chosen" asks of the history, and what "whenever you face a dilemma" triggers on
+    /// (`cantrip_mechanics::history::faced_a_dilemma`).
+    ModesChosen { player: PlayerId, source: ObjectId, ability: AbilityRef, modes: u32 },
     /// The player did what an ability says they may do only once each turn (CR 603.2h: "do this only once each turn").
     Done { source: ObjectId, ability: AbilityRef, player: PlayerId },
     /// An effect ended the turn (CR 724.1) of `player`, the player whose turn it was: recorded as the stack is exiled.
@@ -375,7 +377,8 @@ impl Event {
             | Event::Shown { player, .. }
             | Event::Shuffled { player }
             | Event::Randomized { player, .. }
-            | Event::PlayerControlled { player, .. } => Some(player),
+            | Event::PlayerControlled { player, .. }
+            | Event::ModesChosen { player, .. } => Some(player),
             Event::ControlChanged { controller, .. } => Some(controller),
             Event::Cast(c) => Some(c.player),
             Event::LandPlayed { player, .. } => Some(player),
@@ -612,6 +615,8 @@ impl EventMask {
             Event::AbilityActivated { .. } => EventMask::ABILITY_ACTIVATED,
             Event::DoorUnlocked { .. } => EventMask::DOOR_UNLOCKED,
             Event::GaveGift { .. } => EventMask::GAVE_GIFT,
+            // "Whenever you face a dilemma": the modes of a spell or ability were chosen (CR 700.2a, 700.2b).
+            Event::ModesChosen { .. } => EventMask::MODES_CHOSEN,
             Event::CrimeCommitted { .. } => EventMask::CRIME,
             Event::Scried { .. } => EventMask::SCRIED,
             Event::Surveilled { .. } => EventMask::SURVEILLED,

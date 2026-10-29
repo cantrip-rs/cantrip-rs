@@ -8534,7 +8534,7 @@ fn choose_modes(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, ab
     match cx.ask_core(player, ask, true)? {
         Answer::Modes(chosen) => {
             let modes = chosen.iter().fold(0u32, |mask, &i| modal.with(mask, i as usize));
-            cx.record(Event::ModesChosen { source, ability, modes });
+            cx.emit(Event::ModesChosen { player, source, ability, modes });
             Ok(modes)
         }
         _ => Err(Stop::Cancel),

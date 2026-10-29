@@ -234,6 +234,19 @@ pub fn mode_not_chosen_this_turn(q: &dyn Query, asker: &Asker, mode: u8) -> bool
     })
 }
 
+/// "You face a dilemma as you choose one or more modes for a spell or ability" (CR 700.2a, 700.2b): the player who faced
+/// one in `event`, if it is one - modes chosen as a spell is cast (CR 601.2b), an ability activated (CR 602.2b) or a
+/// triggered ability put on the stack (CR 603.3c). However many modes are chosen, the same one more than once too (CR
+/// 700.2d), it is one dilemma; a "choose up to" spell or ability that chose none faced none, and a copy, which copies its
+/// modes, chooses none (CR 700.2g). What "whenever you face a dilemma" (`triggers::YOU_FACE_A_DILEMMA`) triggers on and
+/// what Captain Benjamin Sisko counts this turn.
+pub fn faced_a_dilemma(event: &Event) -> Option<PlayerId> {
+    match *event {
+        Event::ModesChosen { player, modes, .. } if modes != 0 => Some(player),
+        _ => None,
+    }
+}
+
 /// "The sacrificed creature's power" (CR 601.2h, 608.2h): the power of what `spell`'s additional cost sacrificed, as it last
 /// existed on the battlefield, pumps, counters and copy effects included. The sacrifice is the last one from the battlefield
 /// in the history before the spell was cast. A copy of the spell was never cast: it reads what the original sacrificed (CR

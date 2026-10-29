@@ -716,7 +716,7 @@ fn put_trigger_as(cx: &mut Cx, trigger: PendingTrigger, by: Option<Linked>) -> R
             return Ok(());
         }
         // Chosen as it goes on the stack: chosen even if the ability is later countered (CR 603.3c, 700.2).
-        cx.record(Event::ModesChosen { source: trigger.source, ability: trigger.ability, modes: mask });
+        cx.emit(Event::ModesChosen { player: trigger.controller, source: trigger.source, ability: trigger.ability, modes: mask });
         let mut first_spec = 0u8;
         for (n, mode) in modal.modes.iter().enumerate() {
             for _ in 0..modal.times(mask, n) {

@@ -1585,6 +1585,17 @@ pub fn you_commit_a_crime(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fi
 /// "Whenever you commit a crime" as a trigger condition: `triggered(YOU_COMMIT_A_CRIME, ..)`.
 pub const YOU_COMMIT_A_CRIME: Trigger = when_asked(EventMask::CRIME, you_commit_a_crime);
 
+/// "Whenever you face a dilemma" ("You face a dilemma as you choose one or more modes for a spell or ability", CR 700.2a,
+/// 700.2b, 601.2b, 602.2b, 603.3c): the ability's controller chose at least one mode, once however many they chose
+/// (`history::faced_a_dilemma`). Choosing none is no dilemma, and a copy chooses none (CR 700.2g). Elim Garak, Simple
+/// Tailor, Gabriel Lorca, Mirror Menace, Jett Reno, Problem Solver and Obsidian Order Operative print it.
+pub fn you_face_a_dilemma(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    if crate::history::faced_a_dilemma(event) == Some(me.controller) { Fired::PLAIN } else { None }
+}
+
+/// "Whenever you face a dilemma" as a trigger condition: `triggered(YOU_FACE_A_DILEMMA, ..)`.
+pub const YOU_FACE_A_DILEMMA: Trigger = when_asked(EventMask::MODES_CHOSEN, you_face_a_dilemma);
+
 /// "Whenever you discard a card" (CR 701.9a): each card of a discard is its own event, so the ability triggers once for
 /// each card discarded, and the card, in the graveyard, is what it is about. With `.once_per_batch()` it is "whenever you
 /// discard one or more cards" (CR 603.2c). Ivora, Currency Converter, Marauding Mako, Inti and Cool but Rude print it.

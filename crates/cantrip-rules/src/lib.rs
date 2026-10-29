@@ -10,6 +10,8 @@ mod as_transforms_tests;
 #[cfg(test)]
 mod daybound_copy_tests;
 #[cfg(test)]
+mod dilemma_tests;
+#[cfg(test)]
 mod token_faces_tests;
 #[cfg(test)]
 mod attack_effect_tests;
