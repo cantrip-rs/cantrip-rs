@@ -1,0 +1,11 @@
+{
+  "name": "Frog Butler",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Frog Spirit",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch\n{T}: Add one mana of any color.\n{2}: This creature gains reach until end of turn.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

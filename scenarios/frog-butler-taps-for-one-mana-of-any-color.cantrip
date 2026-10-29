@@ -1,0 +1,21 @@
+# Frog Butler: "{T}: Add one mana of any color." Named blue, which is not a color it has, it adds {U} and no more.
+
+[Bot1 Deck]
+Black Lotus
+Frog Butler
+Forest x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Frog Butler.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Frog Butler.Activate(Ability: Add one mana; Color: Blue)
+? Bot1.Mana = {U}
+
+[Expect]
+Bot1.Battlefield.Frog Butler.Tapped = true

@@ -1,0 +1,35 @@
+# Frog Butler: "{2}: This creature gains reach until end of turn." Bot1 pays {2} (two Moxen, the Butler untapped) at the start of
+# Bot2's combat, and the Butler blocks the attacking Ornithopter, killing it with deathtouch.
+
+[Bot1 Deck]
+Black Lotus
+Frog Butler
+Mox Jet
+Mox Ruby
+Forest x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Frog Butler.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Frog Butler.Activate(Ability: gains reach)
+Bot1.Pass
+Bot2.Pass
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Block(Frog Butler > Ornithopter)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter

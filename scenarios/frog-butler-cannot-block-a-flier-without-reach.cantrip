@@ -1,0 +1,27 @@
+# Frog Butler: with no reach (and none yet paid for), it cannot block Bot2's attacking Ornithopter, a flier. The Ornithopter's
+# 0 power deals no damage, so nothing else shows.
+
+[Bot1 Deck]
+Black Lotus
+Frog Butler
+Forest x18
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Frog Butler.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+! Bot1.Block(Frog Butler > Ornithopter)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Damage = 0
+Bot1.Battlefield.Frog Butler.Damage = 0
