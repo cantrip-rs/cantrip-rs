@@ -79,10 +79,22 @@ pub struct ZoneChange {
     pub destroy: bool,
     /// A regeneration shield replaced the destruction (CR 701.19a): the permanent does not move, and is regenerated instead.
     pub regenerated: bool,
-    /// A shield counter replaced the destruction (CR 122.1c): "if this permanent would be destroyed as the result of an effect,
-    /// instead remove a shield counter from it". The permanent does not move; a shield counter is removed from it. Not a
-    /// regeneration (the rulings), and not for a permanent that is sacrificed or destroyed by a state-based action.
+    /// A shield counter replaced destruction due to an effect (CR 122.1c): "if this permanent would be destroyed as the
+    /// result of an effect, instead remove a shield counter from it". Not a regeneration (the rulings), and not for state-based destruction.
     pub shielded: bool,
+    /// A replacement effect made this event impossible, so the object does not move and no further replacement applies (CR 614.6).
+    /// Its `then` instructions still resolve as part of the effect that replaced it.
+    pub replaced: bool,
+}
+
+impl ZoneChange {
+    /// The move is a destruction (CR 701.8a), whether or not a regeneration shield may replace it: by an effect that destroys,
+    /// one that says it can't be regenerated (CR 701.19c), or lethal damage (CR 704.5g-h). Read from `destroy` and `reason`,
+    /// never stored apart. A later replacement that changes `to` away from the owner's graveyard has changed the destruction
+    /// event (CR 614.6); a reader checks `to` for that.
+    pub fn destruction(&self) -> bool {
+        self.destroy || self.reason == ZoneReason::DestroyNoRegen
+    }
 }
 
 /// Counters that would be put on a permanent (CR 122.6, 614.1a): by an effect, or as it enters with them.

@@ -284,6 +284,7 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
     let mut plans: Vec<Plan> = Vec::with_capacity(moves.len());
     let mut regenerating: Vec<ObjectId> = Vec::new();
     let mut shielded: Vec<ObjectId> = Vec::new();
+    let mut replaced: Vec<ObjectId> = Vec::new();
     let together = moves.iter().any(|m| m.entering.is_some()) && moves.iter().any(|m| cx.s().obj(m.id).zone.is(ZoneKind::Battlefield));
     let leaving: Vec<ObjectId> =
         if together { moves.iter().map(|m| m.id).filter(|&id| cx.s().obj(id).zone.is(ZoneKind::Battlefield)).collect() } else { Vec::new() };
@@ -335,6 +336,7 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
             destroy: m.destroy || reason == ZoneReason::Destroy,
             regenerated: false,
             shielded: false,
+            replaced: false,
         };
         // A permanent entering is judged as it would exist on the battlefield (CR 614.12), and its own replacements are
         // ordered with the others (CR 616.1). One its own replacement sent elsewhere instead does not enter at all.
@@ -356,6 +358,10 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
         // permanent instead, once every move is worked out.
         if change.shielded {
             shielded.push(m.id);
+            continue;
+        }
+        if change.replaced {
+            replaced.push(m.id);
             continue;
         }
         let m = &m;
@@ -468,8 +474,9 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
         plans.push(Plan { m: *m, reason, old, from, to, change, madness, entering, new, counts, counts_by, last_known, seen_by_all });
     }
     *cx.s().leaving_together.borrow_mut() = outer_leaving;
-    // The permanents regenerated instead of destroyed stay (CR 701.19a): no attachment of theirs ends for their sake.
-    if !regenerating.is_empty() || !shielded.is_empty() {
+    // The permanents regenerated, shielded or otherwise replaced instead of moving stay (CR 701.19a, 614.6): no attachment
+    // of theirs ends for their sake.
+    if !regenerating.is_empty() || !shielded.is_empty() || !replaced.is_empty() {
         let moving = |id: &ObjectId| plans.iter().any(|p| p.m.id == *id);
         events.retain(|e| !matches!(e, Event::Unattached { attachment, from } if !moving(attachment) && !moving(from)));
         regenerate_instead(cx, &regenerating);
@@ -2154,6 +2161,7 @@ fn create_tokens_onto(
             destroy: false,
             regenerated: false,
             shielded: false,
+            replaced: false,
         };
         let change = entry_replacements(cx, &mut entering, proposed);
         // An effect that sends it elsewhere instead (CR 614.1a): a token anywhere but the battlefield ceases to exist
