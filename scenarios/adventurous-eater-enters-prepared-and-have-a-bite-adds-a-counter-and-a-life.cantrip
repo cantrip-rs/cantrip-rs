@@ -1,0 +1,38 @@
+# Adventurous Eater enters prepared (CR 722); its copy of Have a Bite puts a +1/+1 counter on a creature and gains 1 life, and casting it unprepares the Eater (CR 722.3c).
+
+[Bot1 Deck]
+Adventurous Eater
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Adventurous Eater.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Adventurous Eater.Prepared = true
+? Exile.Count = 1
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Exile.Have a Bite.Cast(Bot1.Battlefield.Adventurous Eater)
+
+[Expect]
+Bot1.Battlefield.Adventurous Eater.Power = 4
+Bot1.Battlefield.Adventurous Eater.Toughness = 3
+Bot1.Battlefield.Adventurous Eater.Counters.PlusOnePlusOne = 1
+Bot1.Life = 21
+Bot1.Battlefield.Adventurous Eater.Prepared = (absent)
+Exile.Count = 0

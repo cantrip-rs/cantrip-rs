@@ -1,0 +1,15 @@
+{
+  "name": "Adventurous Eater",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Human Warlock",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": 3,
+  "toughness": 2,
+  "keywords": [],
+  "prepare": {
+    "name": "Have a Bite",
+    "manaCost": "{B}",
+    "type": "Sorcery",
+    "oracleText": "Put a +1/+1 counter on target creature. You gain 1 life."
+  }
+}
