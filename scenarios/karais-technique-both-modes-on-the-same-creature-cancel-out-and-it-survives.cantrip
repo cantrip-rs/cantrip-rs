@@ -1,0 +1,55 @@
+# Karai's Technique cast for {1}{W}{B} with both modes aimed at the same creature (CR 700.2c): Bot2's Coral Merfolk (2/1) gets +3/+3 and then -3/-3 until end
+# of turn, and is a 2/1 again; it is a 5/4 for the instant between them and the state-based actions see only the end of both (CR 704.3), so it lives.
+# Mode 2 alone, on a creature that cannot survive, is the other scenario's sneak.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Karai's Technique
+Swamp x15
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Emerald
+Coral Merfolk
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Coral Merfolk.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Karai's Technique.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Coral Merfolk)
+Bot1.Target(Coral Merfolk)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Coral Merfolk.Power = 2
+? Bot2.Battlefield.Coral Merfolk.Toughness = 1
+
+[Expect]
+Bot2.Battlefield = Coral Merfolk; Mox Emerald; Mox Sapphire
+Bot1.Graveyard = Karai's Technique

@@ -1,0 +1,6 @@
+{
+  "name": "Karai's Technique",
+  "manaCost": "{1}{W}{B}",
+  "type": "Sorcery",
+  "oracleText": "Sneak {W}{B} (You may cast this spell for {W}{B} if you also return an unblocked attacker you control to hand during the declare blockers step.)\nChoose one or both —\n• Target creature gets +3/+3 until end of turn.\n• Target creature gets -3/-3 until end of turn."
+}

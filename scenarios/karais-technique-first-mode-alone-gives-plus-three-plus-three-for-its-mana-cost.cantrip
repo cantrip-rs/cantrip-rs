@@ -1,0 +1,59 @@
+# Karai's Technique cast for its mana cost {1}{W}{B} (Mox Pearl, Mox Jet, Mox Ruby) with only the first mode: Bot2's Coral Merfolk (2/1) gets +3/+3 until end of
+# turn and is a 5/4 (CR 611.2a). The second mode was not chosen, so nothing shrinks. It is a sorcery: it is not offered while a spell is on the stack.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ornithopter
+Karai's Technique
+Swamp x15
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Emerald
+Coral Merfolk
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Coral Merfolk.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Hand.Karai's Technique.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Karai's Technique.Cast
+! Bot1.Modes(Count: 0)
+Bot1.Modes(1)
+Bot1.Target(Coral Merfolk)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Coral Merfolk.Power = 5
+? Bot2.Battlefield.Coral Merfolk.Toughness = 4
+
+[Expect]
+Bot2.Battlefield = Coral Merfolk; Mox Emerald; Mox Sapphire
+Bot1.Graveyard = Karai's Technique

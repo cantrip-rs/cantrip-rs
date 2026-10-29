@@ -1,0 +1,42 @@
+# Karai's Technique, Sneak {W}{B} (CR 702.190a), "Choose one or both" (CR 700.2). Bot1's Ornithopter attacks unblocked; in the declare blockers step Bot1 casts the
+# sorcery for {W}{B} (Mox Pearl and Mox Jet), returning the Ornithopter to hand. Mode 1 gives Memnite +3/+3 (4/4) and mode 2 gives Bot2's Ornithopter (0/2)
+# -3/-3, which dies.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Memnite
+Ornithopter
+Karai's Technique
+Swamp x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Karai's Technique.Cast(Ability: Sneak)
+Bot1.Modes(1; 2)
+Bot1.Target(Memnite)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Power = 4
+? Bot1.Battlefield.Memnite.Toughness = 4
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot1.Hand = Ornithopter; Swamp; Swamp; Swamp
+Bot1.Graveyard = Karai's Technique
