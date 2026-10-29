@@ -1,0 +1,67 @@
+# Thornfist Striker, a 3/3: "Infusion -- Creatures you control get +1/+0 and have trample as long as you gained life this turn."
+# Turn 3: Striker is a 3/3 and Grizzly Bears (2/2) has no keywords. Lightning Helix gains Bot1 3 life: Striker is 4/3 with trample, Bears 3/2
+# with trample. Bot2's Grizzly Bears (cast on turn 2) is not "yours", and keeps 2/2 with no trample. Turn 4: all back.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Thornfist Striker
+Grizzly Bears
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Mountain x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Mountain x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thornfist Striker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Thornfist Striker.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thornfist Striker.Power = 4
+? Bot1.Battlefield.Thornfist Striker.Toughness = 3
+? Bot1.Battlefield.Thornfist Striker.Keywords = Trample
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Keywords = Trample
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Bot2.Battlefield.Grizzly Bears.Keywords = (absent)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Thornfist Striker.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+
+[Expect]
+Bot1.Life = 23

@@ -1,0 +1,65 @@
+# Thornfist Striker: Infusion needs any life gained this turn, not several. Oracle's Restoration gains Bot1 exactly 1 life, so Striker is 4/3 with trample.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Thornfist Striker
+Grizzly Bears
+Mox Ruby
+Mox Emerald
+Oracle's Restoration
+Mountain x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Mountain x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thornfist Striker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Thornfist Striker.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Oracle's Restoration.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thornfist Striker.Power = 4
+? Bot1.Battlefield.Thornfist Striker.Toughness = 3
+? Bot1.Battlefield.Thornfist Striker.Keywords = Trample
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Keywords = Trample
+? Bot2.Battlefield.Grizzly Bears.Power = 2
+? Bot2.Battlefield.Grizzly Bears.Keywords = (absent)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Thornfist Striker.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+
+[Expect]
+Bot1.Life = 21

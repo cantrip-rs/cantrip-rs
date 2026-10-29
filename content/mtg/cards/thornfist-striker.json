@@ -1,0 +1,8 @@
+{
+  "name": "Thornfist Striker",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Druid",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Ward {1} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {1}.)\nInfusion — Creatures you control get +1/+0 and have trample as long as you gained life this turn."
+}
