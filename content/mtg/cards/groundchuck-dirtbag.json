@@ -1,0 +1,11 @@
+{
+  "name": "Groundchuck & Dirtbag",
+  "manaCost": "{4}{G}{G}",
+  "type": "Legendary Creature — Ox Mole Mutant",
+  "power": 8,
+  "toughness": 8,
+  "oracleText": "Trample\nWhenever you tap a land for mana, add {G}.",
+  "keywords": [
+    "Trample"
+  ]
+}

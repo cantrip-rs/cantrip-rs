@@ -1,0 +1,42 @@
+# Groundchuck & Dirtbag: "Whenever you tap a land for mana, add {G}." It is a mana ability triggered by a mana ability (CR
+# 605.1b): it resolves at once, no stack. Bot1 casts it from Black Lotus and three Moxen (none of them lands, so nothing extra),
+# then on turn 3 a Forest taps for {G}{G} while a Mox Ruby, an artifact, adds only its own {R}. Bot2 tapping its own Island on
+# turn 4 gives Bot1 nothing: it is "you tap".
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Groundchuck & Dirtbag
+Forest
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Groundchuck & Dirtbag.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+? Bot1.Mana = {G}{G}
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {R}{G}{G}
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+? Bot2.Mana = {U}
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Groundchuck & Dirtbag.Power = 8
