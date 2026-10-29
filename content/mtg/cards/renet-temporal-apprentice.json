@@ -1,0 +1,11 @@
+{
+  "name": "Renet, Temporal Apprentice",
+  "manaCost": "{3}{U}{U}",
+  "type": "Legendary Creature — Human Wizard",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Flash\nWhen Renet enters, return each other nonland permanent that entered this turn to its owner's hand.",
+  "keywords": [
+    "Flash"
+  ]
+}
