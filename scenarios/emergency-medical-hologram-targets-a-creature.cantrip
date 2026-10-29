@@ -1,0 +1,43 @@
+# Both players can choose creatures they control, and an opponent's creature is also a legal target. The noncreature artifact is refused; each resolution gives exactly one counter and one life (CR 115.1d, 603.2, 608.2b).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Crimson Kobolds
+Emergency Medical Hologram
+Plains x10
+
+[Bot2 Deck]
+Mox Pearl
+Memnite
+Emergency Medical Hologram
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Crimson Kobolds.Cast
+Bot1.Pass
+Bot1.Hand.Emergency Medical Hologram.Cast
+! Bot1.Target(Mox Jet)
+Bot1.Target(Crimson Kobolds)
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Emergency Medical Hologram.Cast
+Bot2.Target(Bot1.Battlefield.Crimson Kobolds)
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 21
+Bot1.Battlefield.Crimson Kobolds.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Count = 4
+Bot2.Battlefield.Count = 3

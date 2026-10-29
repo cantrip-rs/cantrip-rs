@@ -1,0 +1,8 @@
+{
+  "name": "Emergency Medical Hologram",
+  "manaCost": "{W}",
+  "type": "Artifact Creature — Illusion Doctor",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "When this creature enters, put a +1/+1 counter on target creature. You gain 1 life."
+}
