@@ -1,0 +1,6 @@
+{
+  "name": "Additive Evolution",
+  "manaCost": "{3}{G}{G}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, create a 0/0 green and blue Fractal creature token. Put three +1/+1 counters on it.\nAt the beginning of combat on your turn, put a +1/+1 counter on target creature you control. It gains vigilance until end of turn."
+}
