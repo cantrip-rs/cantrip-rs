@@ -1,0 +1,64 @@
+# Don & Raph, Hard Science: only a spell Bot1 casts is "the next noncreature spell you cast". After the attack Bot2 casts
+# Lightning Bolt and Bot1 flashes in Venser, a creature spell, whose trigger copies the Bolt twice. The copies are spells
+# on the stack but were not cast, and Venser is a creature, so Mind Stone ({2}) afterwards still costs {0} with the five
+# artifacts counted (all tapped for Venser). Both copies are aimed at Bot2 (6) and the Bolt itself at Bot1 (3), and Don & Raph's attack
+# gets through for 2 (Bot2 at 12).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Opal
+Sol Ring
+Don & Raph, Hard Science
+Venser, Fervent Forger
+Mind Stone
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Opal.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Opal.Activate(Color: Blue)
+Bot1.Hand.Don & Raph, Hard Science.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Don & Raph, Hard Science > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+? Stack = Lightning Bolt
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Opal.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Venser, Fervent Forger.Cast
+Bot1.Modes(Copy target instant or sorcery spell an opponent controls twice. You may choose new targets for the copies.)
+Bot1.Target(Bot2)
+Bot1.Target(Bot2)
+[T3 Bot1.Main2]
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 12
+Bot1.Battlefield = Don & Raph, Hard Science; Mind Stone; Mox Jet; Mox Opal; Mox Ruby; Mox Sapphire; Sol Ring; Venser, Fervent Forger
+Bot1.Mana =

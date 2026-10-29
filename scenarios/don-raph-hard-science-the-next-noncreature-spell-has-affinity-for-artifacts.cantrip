@@ -1,0 +1,42 @@
+# Don & Raph, Hard Science: "Whenever Don & Raph attack, the next noncreature spell you cast this turn has affinity for
+# artifacts." Bot1 has three Moxen and Don & Raph. Attacking, Bot1 then casts Mind Stone ({2}) in the second main phase
+# with no mana at all: affinity for artifacts takes {1} off for each of the three artifacts, so it costs {0}. Don & Raph
+# has menace, which Bot2 (no creatures) cannot touch. Bot2 takes 2 and all three Moxen are still untapped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Don & Raph, Hard Science
+Mind Stone
+Island
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Don & Raph, Hard Science.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Don & Raph, Hard Science > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield = Don & Raph, Hard Science; Mind Stone; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Battlefield.Mox Jet.Tapped = false

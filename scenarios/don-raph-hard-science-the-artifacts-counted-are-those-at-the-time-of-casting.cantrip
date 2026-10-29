@@ -1,0 +1,43 @@
+# Don & Raph, Hard Science: affinity counts the artifacts when the spell is cast (CR 601.2f), not when the attack
+# trigger resolved. Bot1 attacks with three Moxen, then casts Ornithopter (an artifact creature spell, which does not use
+# the affinity up) and then Everflowing Chalice kicked once ({2} + {2} = {4}) with no mana at all: the four artifacts
+# there now (three Moxen and Ornithopter) take off the whole cost, where the three at the attack would leave {1}.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Don & Raph, Hard Science
+Everflowing Chalice
+Ornithopter
+Island
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Don & Raph, Hard Science.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Don & Raph, Hard Science > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Everflowing Chalice.Cast(Kicked: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Don & Raph, Hard Science; Everflowing Chalice; Mox Jet; Mox Ruby; Mox Sapphire; Ornithopter
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Mana =

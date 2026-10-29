@@ -1,0 +1,49 @@
+# Don & Raph, Hard Science: the affinity is for "the next noncreature spell", so a creature spell cast first neither gets
+# it nor uses it up. After attacking, Bot1 casts Horned Turtle ({2}{U}) in the second main phase and must pay all three
+# Moxen for it. Mind Stone ({2}), the next noncreature spell, then still costs {0} with the three tapped Moxen counted.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Don & Raph, Hard Science
+Mind Stone
+Horned Turtle
+Island
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Don & Raph, Hard Science.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Don & Raph, Hard Science > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Horned Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Horned Turtle.Power = 1
+? Bot1.Mana =
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Don & Raph, Hard Science; Horned Turtle; Mind Stone; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot1.Battlefield.Mox Jet.Tapped = true
+Bot1.Mana =

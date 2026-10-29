@@ -1,0 +1,42 @@
+# Don & Raph, Hard Science: the affinity lasts "this turn". Bot1 attacks on turn 3 and casts nothing, so the next
+# noncreature spell is not affected on turn 5: Mind Stone ({2}) paid with two Moxen uses exactly their mana, leaving the
+# pool empty (had affinity lasted, the two mana would have been left floating).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Don & Raph, Hard Science
+Mind Stone
+Island
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Don & Raph, Hard Science.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Don & Raph, Hard Science > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mind Stone.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Don & Raph, Hard Science; Mind Stone; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Mana =
