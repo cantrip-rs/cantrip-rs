@@ -1,0 +1,41 @@
+# Pursue the Past: declining the discard (choosing no card) gains the 2 life and draws nothing. On turn 3 Bot1 flashes it back
+# for {2}{R}{W} (Mountain, Plains, Mox Ruby, Mox Pearl), gains 2 more, again declines, and the card is exiled, not returned
+# to the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Pursue the Past
+Mountain
+Plains
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pursue the Past.Cast
+Bot1.Choose()
+? Bot1.Life = 22
+? Bot1.Graveyard = Pursue the Past
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Pursue the Past.Cast(Ability: Flashback)
+Bot1.Choose()
+[Bot1.Main2]
+
+[Expect]
+Bot1.Life = 24
+Exile = Pursue the Past
+Bot1.Graveyard.Count = 0

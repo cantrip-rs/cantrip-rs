@@ -1,0 +1,6 @@
+{
+  "name": "Pursue the Past",
+  "manaCost": "{R}{W}",
+  "type": "Sorcery",
+  "oracleText": "You gain 2 life. You may discard a card. If you do, draw two cards.\nFlashback {2}{R}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}
