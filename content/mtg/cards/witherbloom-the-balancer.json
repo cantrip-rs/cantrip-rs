@@ -1,0 +1,12 @@
+{
+  "name": "Witherbloom, the Balancer",
+  "manaCost": "{6}{B}{G}",
+  "type": "Legendary Creature — Elder Dragon",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Affinity for creatures (This spell costs {1} less to cast for each creature you control.)\nFlying, deathtouch\nInstant and sorcery spells you cast have affinity for creatures.",
+  "keywords": [
+    "Flying",
+    "Deathtouch"
+  ]
+}
