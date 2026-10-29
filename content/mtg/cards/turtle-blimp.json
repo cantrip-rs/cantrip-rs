@@ -1,0 +1,11 @@
+{
+  "name": "Turtle Blimp",
+  "manaCost": "{5}",
+  "type": "Artifact — Vehicle",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nWhen this Vehicle enters, create a 2/2 red Mutant creature token.\nCrew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "keywords": [
+    "Flying"
+  ]
+}

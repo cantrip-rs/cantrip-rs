@@ -1,0 +1,42 @@
+# Turtle Blimp: Crew 2 needs total power 2 or more (CR 702.122a). Bot1 casts it with a Prehistoric Pet (1/2); Bot2 Lightning Bolts the Mutant token on turn 2, so the Pet is
+# Bot1's only creature and on turn 3 the crew ability is not offered.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Turtle Blimp
+Prehistoric Pet
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Prehistoric Pet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Turtle Blimp.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mutant Token)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Turtle Blimp.Activate(Ability: Crew 2)
+
+[Expect]
+Bot1.Battlefield.Turtle Blimp.Types = Artifact
+Bot1.Battlefield.Count = 5

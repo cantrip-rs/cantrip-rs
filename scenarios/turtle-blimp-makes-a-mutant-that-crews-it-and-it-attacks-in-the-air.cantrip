@@ -1,0 +1,40 @@
+# Turtle Blimp: "When this Vehicle enters, create a 2/2 red Mutant creature token." and Crew 2 (CR 702.122a). Bot1 casts it on turn 1 with Black Lotus and two Moxen. On turn 3
+# the Mutant (power 2, exactly enough, and summoning sickness does not matter to crewing) crews it; it is an artifact creature until end of turn and attacks as a 3/4 flier: Bot2's
+# Grizzly Bears cannot block it and Bot2 is at 17. Before it is crewed it is only an artifact.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Turtle Blimp
+Island x16
+
+[Bot2 Deck]
+Grizzly Bears
+Forest x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Turtle Blimp.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Turtle Blimp.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Battlefield.Turtle Blimp.Activate(Ability: Crew 2)
+Bot1.Choose(Mutant Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Turtle Blimp > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Mutant Token.Tapped = true
+Bot1.Battlefield.Mutant Token.Power = 2
+Bot1.Battlefield.Turtle Blimp.Types = Artifact; Creature
+Bot1.Battlefield.Turtle Blimp.Keywords = Flying
