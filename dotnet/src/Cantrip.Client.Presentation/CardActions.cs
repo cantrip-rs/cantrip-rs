@@ -681,6 +681,7 @@ public sealed class CardActions
         ManaSpendFilterView.CreatureSpellsOrAbilitiesOfCreatures => "creature spells and abilities of creatures on the battlefield",
         ManaSpendFilterView.CreatureSpellsOrAbilities => "creature spells and abilities of creature sources",
         ManaSpendFilterView.ArtifactSpellsOrAbilitiesOfArtifacts => "artifact spells and abilities of artifacts on the battlefield",
+        ManaSpendFilterView.ArtifactSpellsOrAnyAbility => "artifact spells and abilities",
         _ => "anything",
     };
 

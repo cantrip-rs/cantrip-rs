@@ -440,6 +440,8 @@ public enum ManaSpendFilterView
     /// <summary>Only to cast a spell with one of the subtypes named beside it or activate an ability of a permanent with one
     /// (CR 109.2): "Elemental spells or abilities of Elementals".</summary>
     SubtypeSpellsOrAbilitiesOfPermanents = 24,
+    /// <summary>Only to cast artifact spells or activate abilities of any source: "an artifact spell or ... an ability".</summary>
+    ArtifactSpellsOrAnyAbility = 25,
 }
 
 /// <summary>What spending some mana does to whatever it pays for (CR 106.6): the effect half of a restriction.</summary>

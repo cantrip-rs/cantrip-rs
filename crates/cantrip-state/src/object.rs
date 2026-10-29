@@ -1877,6 +1877,12 @@ pub enum ManaRestriction {
     /// the hand's owner compared with the payer). From your hand: Heartwood Crafter (its prepare spell's copy is cast from
     /// exile, CR 722.3).
     NotSpellsFrom(ZoneKind),
+    /// "Spend this mana only to [do this] or [do that]" (CR 106.6): mana that may be spent on whatever any one of these
+    /// restrictions allows - a union of restrictions that each stand on their own. Each is one of `NAMED` without an effect
+    /// of its own, and the union is one of `ANY_OF` (`is_known`), the wire naming it by its parts. Artifact spells or any
+    /// ability: Purple Dragon Punks. This is for restrictions of different kinds; "any of these subtypes" (Dragon spells or
+    /// Omen spells) is the set of subtypes `SubtypeSpells` holds, not a union.
+    AnyOf(&'static [ManaRestriction]),
 }
 
 /// Where the source of an ability that restricted mana may pay for must be (CR 106.6, 109.2).
@@ -2043,6 +2049,13 @@ impl ManaRestriction {
         ManaRestriction::SpellsOrAbilities(TypeSet::of(&[CardType::Artifact]), AbilitiesOf::Permanents);
     pub const SPELLS_FROM_EXILE: ManaRestriction = ManaRestriction::SpellsFrom(ZoneKind::Exile);
     pub const NOT_SPELLS_FROM_HAND: ManaRestriction = ManaRestriction::NotSpellsFrom(ZoneKind::Hand);
+    /// "Spend this mana only to cast an artifact spell or to activate an ability" (Purple Dragon Punks): an ability of any
+    /// source, and artifact spells - not a nonartifact spell, nor "unless ... pays".
+    pub const ARTIFACT_SPELLS_OR_ANY_ABILITY: ManaRestriction =
+        ManaRestriction::AnyOf(&[ManaRestriction::ARTIFACT_SPELLS, ManaRestriction::ABILITIES]);
+
+    /// The unions the wire has a word for, by their parts (`AnyOf`).
+    pub const ANY_OF: [&'static [ManaRestriction]; 1] = [&[ManaRestriction::ARTIFACT_SPELLS, ManaRestriction::ABILITIES]];
 
     /// "Spend this mana only to cast spells with mana value `n` or greater."
     pub const fn mana_value_at_least(n: u8) -> ManaRestriction {
@@ -2091,6 +2104,19 @@ impl ManaRestriction {
             | (ManaRestriction::SpellsOrAbilities(a, x), ManaRestriction::SpellsOrAbilities(b, y)) => a.0 == b.0 && x as u8 == y as u8,
             (ManaRestriction::SpellsFrom(a), ManaRestriction::SpellsFrom(b))
             | (ManaRestriction::NotSpellsFrom(a), ManaRestriction::NotSpellsFrom(b)) => a as u8 == b as u8,
+            (ManaRestriction::AnyOf(a), ManaRestriction::AnyOf(b)) => {
+                if a.len() != b.len() {
+                    return false;
+                }
+                let mut i = 0;
+                while i < a.len() {
+                    if !a[i].same(b[i]) {
+                        return false;
+                    }
+                    i += 1;
+                }
+                true
+            }
             _ => false,
         }
     }
@@ -2103,6 +2129,16 @@ impl ManaRestriction {
         }
         if let ManaRestriction::Subtypes(_) | ManaRestriction::ManaValue(_) = self {
             return true;
+        }
+        if let ManaRestriction::AnyOf(_) = self {
+            let mut i = 0;
+            while i < ManaRestriction::ANY_OF.len() {
+                if self.same(ManaRestriction::AnyOf(ManaRestriction::ANY_OF[i])) {
+                    return true;
+                }
+                i += 1;
+            }
+            return false;
         }
         let mut i = 0;
         while i < ManaRestriction::NAMED.len() {
@@ -2119,6 +2155,14 @@ impl ManaRestriction {
         matches!(self, ManaRestriction::Subtypes(_))
     }
 
+    /// The restrictions a union is of; none for one that is not a union.
+    pub fn parts(self) -> &'static [ManaRestriction] {
+        match self {
+            ManaRestriction::AnyOf(parts) => parts,
+            _ => &[],
+        }
+    }
+
     /// The least mana value of a spell it pays for, where it limits mana by that (`ManaValue`): what a spell with {X}
     /// still to be announced could reach (advice).
     pub fn least_mana_value(self) -> Option<u8> {
@@ -2131,6 +2175,7 @@ impl ManaRestriction {
     /// Whether mana under this restriction may be spent on `payment` (CR 106.6).
     pub fn may_pay(self, payment: &ManaPayment) -> bool {
         match (self, *payment) {
+            (ManaRestriction::AnyOf(parts), _) => parts.iter().any(|r| r.may_pay(payment)),
             (ManaRestriction::NonSpells(barred), ManaPayment::Spell { types, .. }) => barred.0 & types.0 == 0,
             (ManaRestriction::ManaValue(m), ManaPayment::Spell { mana_value, x, .. }) => m.admits(mana_value, x),
             // "Can't be spent to cast nonartifact spells": everything but casting a nonartifact spell.
@@ -2176,6 +2221,9 @@ impl ManaRestriction {
     /// "ElementalSpellsOrAbilities"),
     /// "NoTypeCreatureSpells" for a chosen type never chosen, with ", CantBeCountered" after it for its effect.
     pub fn name(self) -> String {
+        if let ManaRestriction::AnyOf(parts) = self {
+            return format!("AnyOf({})", parts.iter().map(|r| r.name()).collect::<Vec<_>>().join("+"));
+        }
         if let ManaRestriction::ManaValue(m) = self {
             return format!("ManaValue{}OrGreater{}Spells", m.at_least, if m.or_x { "OrX" } else { "" });
         }
@@ -2208,6 +2256,13 @@ impl ManaRestriction {
         };
         if let Some((r, _)) = ManaRestriction::NAMED.iter().find(|(_, n)| matches(n)) {
             return Some(*r);
+        }
+        // A union of restrictions: "AnyOf(ArtifactSpells+Abilities)".
+        if let [one] = text.as_slice() {
+            let union = ManaRestriction::ANY_OF.iter().map(|&parts| ManaRestriction::AnyOf(parts)).find(|r| r.name().eq_ignore_ascii_case(one));
+            if union.is_some() {
+                return union;
+            }
         }
         // A mana value restriction: "ManaValue4OrGreaterSpells", "ManaValue5OrGreaterOrXSpells".
         if let [one] = text.as_slice()

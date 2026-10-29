@@ -661,6 +661,7 @@ public sealed partial class MainPage
         (ManaSpendFilterView.CreatureSpellsOrAbilitiesOfCreatures, _) => "creatures & battlefield creature abilities",
         (ManaSpendFilterView.CreatureSpellsOrAbilities, _) => "creatures & creature abilities",
         (ManaSpendFilterView.ArtifactSpellsOrAbilitiesOfArtifacts, _) => "artifacts & battlefield artifact abilities",
+        (ManaSpendFilterView.ArtifactSpellsOrAnyAbility, _) => "artifacts & abilities",
         (_, ManaSpendEffectView.GainsHaste) => "haste",
         (_, ManaSpendEffectView.CantBeCountered) => "uncounterable",
         _ => "restricted",
@@ -714,6 +715,7 @@ public sealed partial class MainPage
                 "Spend this mana only to cast creature spells or activate abilities of creature sources.",
             ManaSpendFilterView.ArtifactSpellsOrAbilitiesOfArtifacts =>
                 "Spend this mana only to cast artifact spells or activate abilities of artifacts on the battlefield.",
+            ManaSpendFilterView.ArtifactSpellsOrAnyAbility => "Spend this mana only to cast an artifact spell or to activate an ability.",
             _ => "This mana may only be spent on certain things.",
         };
 

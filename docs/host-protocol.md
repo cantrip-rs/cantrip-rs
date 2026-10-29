@@ -204,7 +204,7 @@ their default answer closes the window, announces nothing more, or assigns the f
 **Squad is not kicker.** A `PayCostsPromptMessage` whose optional additional cost is squad (CR 702.157a) sets `Squad`
 beside `Multikicker`: `Kicker` is then the whole cost in words, the mana and the rest ("Exile four other cards from your
 graveyard"), and the number of times it can be paid is `MostAnnounced`, set by the cards there are, not by mana. A client
-says "pay squad for [Spell]", never "kick", and does not speak of mana for it. Version 218.
+says "pay squad for [Spell]", never "kick", and does not speak of mana for it. Version 219.
 
 A draw the players agree to (`docs/rules-exceptions.md`, RX-4) is not a request of the host's: the offer and the answers to it
 are the server's (`GameSession.OfferDraw`, `AnswerDraw`, over the C# protocol's `OfferDrawMessage`, `AnswerDrawMessage` and

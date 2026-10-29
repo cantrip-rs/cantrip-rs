@@ -137,6 +137,7 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
         r if r == ManaRestriction::CREATURE_SPELLS_OR_ABILITIES_OF_CREATURES => ManaSpendFilterView::CreatureSpellsOrAbilitiesOfCreatures,
         r if r == ManaRestriction::CREATURE_SPELLS_OR_ABILITIES => ManaSpendFilterView::CreatureSpellsOrAbilities,
         r if r == ManaRestriction::ARTIFACT_SPELLS_OR_ABILITIES_OF_ARTIFACTS => ManaSpendFilterView::ArtifactSpellsOrAbilitiesOfArtifacts,
+        r if r == ManaRestriction::ARTIFACT_SPELLS_OR_ANY_ABILITY => ManaSpendFilterView::ArtifactSpellsOrAnyAbility,
         r => panic!("a mana restriction the wire has no word for: {}", r.name()),
     };
     let effect = match restriction.effects() {
@@ -180,7 +181,8 @@ pub fn restriction_of(filter: ManaSpendFilterView, effect: ManaSpendEffectView, 
             },
         }));
     }
-    ManaRestriction::NAMED.into_iter().map(|(r, _)| r).find(|&r| restriction_view(r) == (filter, effect, Vec::new(), 0))
+    let unions = ManaRestriction::ANY_OF.into_iter().map(ManaRestriction::AnyOf);
+    ManaRestriction::NAMED.into_iter().map(|(r, _)| r).chain(unions).find(|&r| restriction_view(r) == (filter, effect, Vec::new(), 0))
 }
 
 pub fn mana_view(mana: Mana) -> ManaTypeView {

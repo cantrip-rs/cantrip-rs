@@ -359,6 +359,8 @@ pub enum ManaSpendFilterView {
     /// Spells with one of the subtypes named beside it, or abilities of permanents with one (CR 109.2): "Elemental spells
     /// or abilities of Elementals".
     SubtypeSpellsOrAbilitiesOfPermanents,
+    /// Artifact spells, or abilities of any source: "an artifact spell or ... an ability" (`ManaRestriction::AnyOf`).
+    ArtifactSpellsOrAnyAbility,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]
