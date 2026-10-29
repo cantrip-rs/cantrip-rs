@@ -1,0 +1,31 @@
+# Masterful Flourish: "Target creature you control gets +1/+0 and gains indestructible until end of turn." (CR 611.2a, 702.12)
+# Bot1 casts it on Burrog Banemaker on its own turn: 2/1 with indestructible; both wear off at the cleanup step (CR 514.2),
+# so on turn 3 it is a 1/1 again.
+
+[Bot1 Deck]
+Burrog Banemaker
+Mox Jet
+Mox Jet
+Masterful Flourish
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Masterful Flourish.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Burrog Banemaker.Power = 2
+? Bot1.Battlefield.Burrog Banemaker.Toughness = 1
+? Bot1.Battlefield.Burrog Banemaker.Keywords = Deathtouch; Indestructible
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Burrog Banemaker.Power = 1
+Bot1.Battlefield.Burrog Banemaker.Keywords = Deathtouch
