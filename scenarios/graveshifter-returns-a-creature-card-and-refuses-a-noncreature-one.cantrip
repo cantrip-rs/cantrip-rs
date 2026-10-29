@@ -1,0 +1,38 @@
+# Graveshifter {3}{B} 2/2 changeling: "When this creature enters, you may return target creature card from your graveyard to your hand."
+# Bot1's graveyard holds Memnite (killed by its own Lightning Bolt) and the Bolt: the Bolt is not a legal target (CR 115.1, it is not a
+# creature card), so the Memnite is the only one and is chosen without a question, and accepting returns it. Black Lotus (BBB) and Mox Jet pay the four mana.
+# The twin that declines is "graveshifter-declined-leaves-the-creature-card-in-the-graveyard".
+
+[Bot1 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Black Lotus
+Mox Jet
+Graveshifter
+Island x4
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Graveshifter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Black Lotus; Lightning Bolt
+Bot1.Battlefield.Graveshifter.Keywords = Changeling

@@ -1,0 +1,11 @@
+{
+  "name": "Graveshifter",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Shapeshifter",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Changeling (This card is every creature type.)\nWhen this creature enters, you may return target creature card from your graveyard to your hand.",
+  "keywords": [
+    "Changeling"
+  ]
+}
