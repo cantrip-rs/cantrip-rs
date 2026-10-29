@@ -1,0 +1,64 @@
+# Gloom Ripper {3}{B}{B} 4/4: "When this creature enters, target creature you control gets +X/+0 until end of turn and up to one target
+# creature an opponent controls gets -0/-X until end of turn, where X is the number of Elves you control plus the number of Elf cards in
+# your graveyard" (CR 611.2a, 608.2h). In turn 3 Bot1's Scarblade Scout (an Elf Scout) mills Llanowar Elves and an Island, then Gloom
+# Ripper (an Elf too) enters: X is 2 Elves it controls + 1 Elf card in its graveyard = 3, so Gloom Ripper becomes 7/4 and Bot2's Wall
+# of Earth (0/6) becomes 0/3. The two numbers differ and are not 2 and 2, so adding them is told from multiplying. Four Moxen and
+# Black Lotus pay for both in turn 3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Black Lotus
+Scarblade Scout
+Gloom Ripper
+Island
+Llanowar Elves
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Wall of Earth
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Earth.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Scarblade Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Gloom Ripper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Gloom Ripper)
+Bot1.Target(Wall of Earth)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Island; Llanowar Elves; Black Lotus
+Bot1.Battlefield.Gloom Ripper.Power = 7
+Bot1.Battlefield.Gloom Ripper.Toughness = 4
+Bot1.Battlefield.Scarblade Scout.Power = 2
+Bot1.Battlefield.Scarblade Scout.Toughness = 2
+Bot2.Battlefield.Wall of Earth.Power = 0
+Bot2.Battlefield.Wall of Earth.Toughness = 3

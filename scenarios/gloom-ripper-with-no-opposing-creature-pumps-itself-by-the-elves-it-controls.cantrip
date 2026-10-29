@@ -1,0 +1,32 @@
+# Gloom Ripper {3}{B}{B} 4/4: "When this creature enters, target creature you control gets +X/+0 until end of turn and up to one target
+# creature an opponent controls gets -0/-X until end of turn, where X is the number of Elves you control plus the number of Elf cards in
+# your graveyard" (CR 601.2c, 608.2h). Bot2 has no creature, so the second target is simply left out; Gloom Ripper, the only creature
+# Bot1 controls, is the first target without a choice. X is 1 (itself) + 0 (no Elf card in the graveyard) = 1, so it becomes 5/4.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Black Lotus
+Gloom Ripper
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Gloom Ripper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Gloom Ripper.Power = 5
+Bot1.Battlefield.Gloom Ripper.Toughness = 4
