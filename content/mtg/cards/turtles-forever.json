@@ -1,0 +1,6 @@
+{
+  "name": "Turtles Forever",
+  "manaCost": "{3}{W}",
+  "type": "Instant",
+  "oracleText": "Search your library and/or outside the game for exactly four legendary creature cards you own with different names, then reveal those cards. An opponent chooses two of them. Put the chosen cards into your hand and shuffle the rest into your library."
+}

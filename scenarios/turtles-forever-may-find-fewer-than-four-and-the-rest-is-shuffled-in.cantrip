@@ -1,0 +1,40 @@
+# Turtles Forever searches for stated qualities (CR 701.23b), so Bot1 need not find all four: with Lutri and Isamaru in the library
+# and Lurrus outside the game, four with different names exist (Kaheera also outside), but Bot1 finds only Lutri and Lurrus.
+# Both go to Bot1's hand with no choice to make (an opponent chooses two of two), nothing is left to shuffle in, and the library is shuffled all the same.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Turtles Forever
+Plains
+Plains
+Plains
+Plains
+Lutri, the Spellchaser
+Isamaru, Hound of Konda
+Plains x11
+
+[Bot1 Sideboard]
+Lurrus of the Dream-Den
+Kaheera, the Orphanguard
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Turtles Forever.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Lutri, the Spellchaser; Lurrus of the Dream-Den)
+
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Lurrus of the Dream-Den; Lutri, the Spellchaser; Plains; Plains; Plains; Plains
+Bot1.Library.Count = 12
+Bot1.Library != Isamaru, Hound of Konda; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains
+Bot1.Sideboard = Kaheera, the Orphanguard

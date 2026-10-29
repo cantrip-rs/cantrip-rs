@@ -1,0 +1,49 @@
+# Turtles Forever: the search is a search of Bot1's library, so Bot2's Wan Shi Tong, Librarian ("whenever an opponent searches
+# their library") grows to a 2/2 and draws a card, and the four cards found are revealed (CR 701.20a) before Bot2 chooses two.
+# Bot1 holds Black Lotus and Mox Pearl for T3; its library has Lutri, Isamaru, Kaheera and Lurrus after one Plains.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Turtles Forever
+Plains
+Plains
+Plains
+Plains
+Plains
+Lutri, the Spellchaser
+Isamaru, Hound of Konda
+Kaheera, the Orphanguard
+Lurrus of the Dream-Den
+Plains x8
+
+[Bot2 Deck]
+Black Lotus
+Wan Shi Tong, Librarian
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wan Shi Tong, Librarian.Cast(X: 0)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Turtles Forever.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Lutri, the Spellchaser; Isamaru, Hound of Konda; Kaheera, the Orphanguard; Lurrus of the Dream-Den)
+? Bot1.Revealed = Isamaru, Hound of Konda; Kaheera, the Orphanguard; Lurrus of the Dream-Den; Lutri, the Spellchaser
+Bot2.Choose(Lutri, the Spellchaser; Isamaru, Hound of Konda)
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Wan Shi Tong, Librarian.Power = 2
+Bot2.Battlefield.Wan Shi Tong, Librarian.Counters.PlusOnePlusOne = 1
+Bot1.Library.Count = 10

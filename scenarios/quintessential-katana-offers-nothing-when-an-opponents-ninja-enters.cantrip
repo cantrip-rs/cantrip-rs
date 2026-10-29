@@ -30,3 +30,4 @@ Bot1.Pass
 [Expect]
 Bot2.Battlefield = Plains; Prehistoric Pet
 Bot1.Battlefield.Quintessential Katana.AttachedTo = (absent)
+Stack.Count = 0
