@@ -1,0 +1,8 @@
+{
+  "name": "Moonglove Extractor",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Elf Warlock",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Whenever this creature attacks, you draw a card and lose 1 life."
+}
