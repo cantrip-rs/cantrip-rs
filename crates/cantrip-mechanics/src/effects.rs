@@ -829,6 +829,18 @@ pub fn return_spell_or_permanent_to_hand(g: &mut dyn Game, object: ObjectId) {
     }
 }
 
+const MAY_RETURN_TARGET_TO_HAND: Question = Question::new("ReturnToHand", "return the targeted card to your hand?", "", "Return it", "Leave it");
+
+/// "You may return target card from your graveyard to your hand" (CR 608.2b, 117.3): asked as the ability resolves, and only
+/// if the first target is still legal. Eternal Witness and Graveshifter print it.
+pub fn may_return_first_target_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(card) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    if ask_may(g, item.controller, item.object, Purpose::Ask(&MAY_RETURN_TARGET_TO_HAND))? {
+        g.return_to_hand(&[card]);
+    }
+    Ok(())
+}
+
 /// "Return target [permanent] to its owner's hand" (CR 400.3): the ability's or
 /// spell's first target, nothing at all if it is no longer a legal target (CR 608.2b). A token that is returned ceases to
 /// exist (CR 111.7). Aether Spellbomb, Banishing Knack, Karakas, Mystic Confluence, Brazen Borrower's Petty Theft and
