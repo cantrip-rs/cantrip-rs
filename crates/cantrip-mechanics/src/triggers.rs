@@ -147,7 +147,7 @@ pub fn another_nontoken_you_control_enters<const TYPE: u8>(q: &dyn Query, me: &A
 /// "Whenever one or more cards leave your graveyard" (CR 603.2c, 603.10a): a card of the source's controller's graveyard going
 /// to any other zone. A token is in no graveyard long enough to leave one (CR 111.7, 704.5d), and the core records no departure
 /// for it. The cards that left together are the subjects of the matching events, so the batch triggers it once (with
-/// `once_per_batch`). Hardened Academic and Owlin Historian print it.
+/// `once_per_batch`). Hardened Academic, Owlin Historian, Ark of Hunger, Kirol, History Buff and Spirit Mascot print it.
 pub fn cards_leave_your_graveyard(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::ZoneChange { old, from, .. } if *from == Zone::graveyard(me.controller) => Fired::about(Target::Object(*old)),

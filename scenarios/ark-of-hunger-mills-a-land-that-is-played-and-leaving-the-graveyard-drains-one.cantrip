@@ -1,0 +1,39 @@
+# Ark of Hunger: "{T}: Mill a card. You may play that card this turn." The Ark taps the turn it enters (an artifact has no
+# summoning sickness), mills a Mountain, and Bot1 plays it from the graveyard as its land drop. Milling the Mountain was a card
+# entering the graveyard, so it drained nothing (life is still 20 and 20 after the mill); the Mountain leaving the graveyard does:
+# "this artifact deals 1 damage to each opponent and you gain 1 life".
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ark of Hunger
+Island x4
+Mountain
+Island x12
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ark of Hunger.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ark of Hunger.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Mountain; Black Lotus
+? Bot1.Life = 20
+? Bot2.Life = 20
+Bot1.Graveyard.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mountain.Tapped = false
+Bot1.Graveyard = Black Lotus
+Bot1.Life = 21
+Bot2.Life = 19
