@@ -1,0 +1,6 @@
+{
+  "name": "Dina's Guidance",
+  "manaCost": "{1}{B}{G}",
+  "type": "Instant",
+  "oracleText": "Search your library for a creature card, reveal it, put it into your hand or graveyard, then shuffle."
+}

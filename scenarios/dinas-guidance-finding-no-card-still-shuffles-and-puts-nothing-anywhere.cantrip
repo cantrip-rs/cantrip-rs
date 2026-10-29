@@ -1,0 +1,37 @@
+# Dina's Guidance: Bot1 searches and chooses to find nothing even though the library holds creature cards (CR 701.23b): nothing
+# is revealed or moved, so no choice of hand or graveyard is asked, the Islands are the only cards in hand and the Guidance is
+# alone in the graveyard.
+
+[Dice]
+1; 1; 1; 1; 1; 1
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Dina's Guidance
+Island
+Island
+Island
+Ornithopter
+Memnite
+Island x3
+[Bot2 Deck]
+Island x32
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dina's Guidance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Dina's Guidance
+Bot1.Library != Ornithopter; Memnite; Island; Island; Island

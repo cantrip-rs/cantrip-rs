@@ -1,0 +1,38 @@
+# Dina's Guidance: Bot1 searches for the Ornithopter, reveals it and puts it into the graveyard instead of hand: the three Islands
+# are the only cards in hand, and the Ornithopter is in the graveyard with the Guidance.
+
+[Dice]
+1; 1; 1; 1; 1; 1
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Dina's Guidance
+Island
+Island
+Island
+Ornithopter
+Memnite
+Island x3
+[Bot2 Deck]
+Island x32
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dina's Guidance.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Ornithopter)
+Bot1.Modes(Put it into your graveyard)
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Dina's Guidance; Ornithopter
+Bot1.Revealed = Ornithopter
+Bot1.Library != Memnite; Island; Island; Island
