@@ -1,0 +1,8 @@
+{
+  "name": "Captain Kathryn Janeway",
+  "manaCost": "{3}{G}",
+  "type": "Legendary Creature — Human Officer",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "You may play an additional land on each of your turns.\nWhenever Captain Janeway or another creature you control enters, that creature explores. (Reveal the top card of your library. Put that card into your hand if it's a land. Otherwise, put a +1/+1 counter on the creature, then put the card back or put it into your graveyard.)"
+}

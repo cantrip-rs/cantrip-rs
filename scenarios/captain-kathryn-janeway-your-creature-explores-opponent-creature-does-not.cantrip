@@ -1,0 +1,62 @@
+# Janeway's entry explores a Forest to Bot1's hand; her own additional land play lets Bot1 play two Forests this turn but
+# refuses a third. Ornithopter is another creature Bot1 controls, so its entry explores a nonland; Bot1 declines to bin it,
+# leaving it on top while Ornithopter gets a +1/+1 counter. Bot2's Llanowar Elves doesn't trigger Janeway: had it
+# explored, Bot2's Lightning Bolt on top would have given it a counter (CR 305.2, 603.6a,
+# 701.44a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Captain Kathryn Janeway
+Ornithopter
+Forest
+Forest
+Island
+Forest
+Lightning Bolt
+Mountain
+Island x12
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island
+Island
+Island
+Island
+Island
+Island
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Captain Kathryn Janeway.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Decline
+Bot1.Hand.Forest.Play
+Bot1.Hand.Forest.Play
+! Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Captain Kathryn Janeway.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = (absent)
+Bot1.LandsPlayed = 2
+Bot1.Hand = Forest; Island
+Bot1.Library.Count = 14
+Bot1.Revealed = Forest; Lightning Bolt
+Bot2.Life = 20
+Stack.Count = 0

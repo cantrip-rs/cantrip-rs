@@ -1,0 +1,34 @@
+# Captain Kathryn Janeway's own entry triggers the ability. Exploring a nonland puts a +1/+1 counter on her and lets
+# Bot1 put the revealed card into the graveyard (CR 701.44a, 603.6a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Captain Kathryn Janeway
+Island
+Island
+Island
+Island
+Lightning Bolt
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Captain Kathryn Janeway.Cast
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Captain Kathryn Janeway.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Library = Mountain; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island
+Stack.Count = 0
