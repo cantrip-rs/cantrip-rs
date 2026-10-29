@@ -1,0 +1,11 @@
+{
+  "name": "Pest Mascot",
+  "manaCost": "{1}{B}{G}",
+  "type": "Creature — Pest Ape",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Trample\nWhenever you gain life, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Trample"
+  ]
+}
