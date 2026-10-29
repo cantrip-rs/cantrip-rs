@@ -1,0 +1,49 @@
+# Boggart Mischief: declined (CR 117.3), no counter and no Goblin tokens come. Bot1 also has two Bile-Vial Boggarts (Goblins);
+# Bot2's Pyroclasm kills both, and its two death triggers each drain 1: Bot2 18, Bot1 22 (CR 603.2c). Their own triggers' targets
+# go unchosen. Bot2's Ornithopter is no Goblin and drains nothing. Mox Ruby and Mox Jet pay the Boggarts, Black Lotus the Mischief.
+
+[Bot1 Deck]
+Black Lotus
+Boggart Mischief
+Mox Jet
+Mox Jet
+Bile-Vial Boggart
+Bile-Vial Boggart
+Island x2
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Pyroclasm
+Ornithopter
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Bile-Vial Boggart.Cast
+Bot1.Hand.Bile-Vial Boggart.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Boggart Mischief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Count = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Pyroclasm.Cast
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Graveyard.Count = 3
+Bot2.Graveyard = Ornithopter; Pyroclasm

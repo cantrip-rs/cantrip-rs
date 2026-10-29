@@ -1,0 +1,65 @@
+# Boggart Mischief {2}{B}: "When this enchantment enters, you may blight 1. If you do, create two 1/1 black and red Goblin creature
+# tokens. Whenever a Goblin creature you control dies, each opponent loses 1 life and you gain 1 life" (CR 701.68a, 700.4, 603.10a).
+# Bot1 blights its Ornithopter (a -1/1) and gets two Goblin tokens. On turn 2 Bot2 Lightning Bolts one token (Bot2 19, Bot1 21),
+# then the Ornithopter (not a Goblin: no change) and its own Bile-Vial Boggart (a Goblin, but not Bot1's: no change).
+
+[Bot1 Deck]
+Black Lotus
+Boggart Mischief
+Ornithopter
+Island x4
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Jet
+Bile-Vial Boggart
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x12
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Boggart Mischief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Ornithopter)
+? Bot1.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+? Bot1.Battlefield.Goblin Token#1.Power = 1
+? Bot1.Battlefield.Goblin Token#1.Toughness = 1
+? Bot1.Battlefield.Goblin Token#1.Colors = Black; Red
+? Bot1.Battlefield.Goblin Token#2.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bile-Vial Boggart.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goblin Token#1)
+? Bot2.Life = 20
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Bile-Vial Boggart)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.Battlefield.Count = 2
+Bot1.Graveyard.Count = 2
+Bot2.Graveyard.Bile-Vial Boggart.Power = 1
