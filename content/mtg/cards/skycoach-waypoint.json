@@ -1,0 +1,5 @@
+{
+  "name": "Skycoach Waypoint",
+  "type": "Land",
+  "oracleText": "{T}: Add {C}.\n{3}, {T}: Target creature becomes prepared. (Only creatures with prepare spells can become prepared.)"
+}
