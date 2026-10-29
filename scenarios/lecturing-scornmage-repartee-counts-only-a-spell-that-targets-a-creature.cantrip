@@ -1,0 +1,38 @@
+# Lecturing Scornmage: Repartee puts a +1/+1 counter on it for an instant or sorcery spell that targets a creature -- Lightning Bolt at Bot2's
+# Ornithopter does; a second Lightning Bolt at Bot2 (a player) does not, so the Scornmage ends with one counter and is a 2/2.
+
+[Bot1 Deck]
+Swamp
+Lecturing Scornmage
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Lecturing Scornmage.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Lecturing Scornmage.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Lecturing Scornmage.Power = 2
+Bot1.Battlefield.Lecturing Scornmage.Toughness = 2
+Bot2.Life = 17
+Bot2.Graveyard = Ornithopter
