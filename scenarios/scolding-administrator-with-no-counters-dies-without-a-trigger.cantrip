@@ -1,0 +1,38 @@
+# Scolding Administrator: "if it had counters on it" -- with none, its death trigger never goes on the stack (CR 603.4), so
+# Bot1 is asked for no target and Ornithopter gets nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Scolding Administrator
+Ornithopter
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Scolding Administrator.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Scolding Administrator)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Target
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Scolding Administrator
+Bot1.Battlefield.Ornithopter.Power = 0
+Stack.Count = 0
