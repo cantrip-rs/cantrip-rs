@@ -1,0 +1,66 @@
+# Bloodline Bidding returns "all creature cards of the chosen type": a card of that type that is no creature card stays. Bot2's
+# Duress takes Boggart Mischief (a Kindred Enchantment - Goblin) from Bot1's hand on turn 4 and Bolts Bot1's Bile-Vial Boggart and
+# an Ornithopter on turn 2. On turn 7 Bot1 casts Bloodline Bidding with Black Lotus ({B}{B}{B}), its three Moxen and two
+# creatures convoked, and chooses Goblin: the Boggart returns, the Goblin enchantment card and the Ornithopter stay.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Bile-Vial Boggart
+Ornithopter
+Ornithopter
+Memnite
+Boggart Mischief
+Black Lotus
+Bloodline Bidding
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Pearl
+Lightning Bolt
+Lightning Bolt
+Island
+Duress
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bile-Vial Boggart.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Bile-Vial Boggart)
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Duress.Cast(Bot1)
+Bot2.Choose(Boggart Mischief)
+[T7 Bot1.Main1]
+? Bot1.Graveyard.Count = 3
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bloodline Bidding.Cast(Convoke: Ornithopter, Memnite)
+Bot1.Modes(Goblin)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Bile-Vial Boggart.Power = 1
+Bot1.Battlefield.Boggart Mischief = (absent)
+Bot1.Battlefield.Count = 6
+Bot1.Graveyard.Count = 4
