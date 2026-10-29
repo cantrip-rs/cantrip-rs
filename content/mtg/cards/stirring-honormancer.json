@@ -1,0 +1,8 @@
+{
+  "name": "Stirring Honormancer",
+  "manaCost": "{2}{W}{W/B}{B}",
+  "type": "Creature — Rhino Bard",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "When this creature enters, look at the top X cards of your library, where X is the number of creatures you control. Put one of those cards into your hand and the rest into your graveyard."
+}

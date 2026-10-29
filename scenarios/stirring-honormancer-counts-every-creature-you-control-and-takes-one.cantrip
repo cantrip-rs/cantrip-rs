@@ -1,0 +1,39 @@
+# Stirring Honormancer: X is the number of creatures you control as the ability resolves -- Honormancer itself and Ornithopter,
+# so two cards are looked at. Bot1 puts Ponder into the hand and the Lightning Bolt into the graveyard; the third card stays on top.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Ornithopter
+Stirring Honormancer
+Plains x2
+Lightning Bolt
+Ponder
+Island
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stirring Honormancer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ponder | Lightning Bolt)
+
+[Expect]
+Bot1.Hand = Plains; Plains; Ponder
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Library.Count = 13
+Bot1.Looked = Lightning Bolt; Ponder
