@@ -1,0 +1,41 @@
+# Mouser Mark III: "This creature can't attack unless you control another artifact" (CR 508.1c). Cast on turn 3 for {1}{U/R} from two Islands (blue pays the
+# hybrid symbol), it is the only artifact Bot1 controls. A Coral Merfolk (not an artifact, so it doesn't count and it attacks freely) is cast on turn 5. On turn 7
+# Mouser can't attack; on turn 9 Bot1 casts an Ornithopter (another artifact) first and both attack: 2 + 2 damage.
+
+[Bot1 Deck]
+Island
+Island
+Mouser Mark III
+Coral Merfolk
+Ornithopter
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Mouser Mark III.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Coral Merfolk.Cast
+Bot1.Pass
+[T7 Bot1.Main1]
+! Bot1.Attack(Mouser Mark III > Bot2)
+[T9 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Attack(Mouser Mark III; Coral Merfolk > Bot2)
+[T9 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
