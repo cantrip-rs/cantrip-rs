@@ -1,0 +1,31 @@
+# Bitterbloom Bearer {B}{B} 1/1 flash, flying: "At the beginning of your upkeep, you lose 1 life and create a 1/1 blue and black
+# Faerie creature token with flying" (CR 503.1a, 119.3, 111.10f). Cast on turn 1 from a Swamp and Mox Jet, it does nothing in
+# Bot2's turn-2 upkeep; Bot1's turn-3 upkeep costs 1 life (19) and makes a Faerie, and turn 5's another (18) and a second one.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Bitterbloom Bearer
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bitterbloom Bearer.Cast
+[T2 Bot2.Draw]
+? Bot1.Life = 20
+? Bot1.Battlefield = Swamp; Mox Jet; Bitterbloom Bearer
+[T3 Bot1.Main1]
+? Bot1.Life = 19
+? Bot1.Battlefield = Swamp; Mox Jet; Bitterbloom Bearer; Faerie Token
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot1.Battlefield = Swamp; Mox Jet; Bitterbloom Bearer; Faerie Token; Faerie Token
