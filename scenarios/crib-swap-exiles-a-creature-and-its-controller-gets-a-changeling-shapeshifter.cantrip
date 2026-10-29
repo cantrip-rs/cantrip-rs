@@ -1,0 +1,35 @@
+# Crib Swap: "Exile target creature. Its controller creates a 1/1 colorless Shapeshifter creature token with changeling." Bot1
+# casts it with its three Moxen on Bot2's Ornithopter: the Ornithopter is exiled and Bot2, its controller, gets the 1/1
+# Shapeshifter with changeling (the spell is a Kindred instant, itself a changeling, so it goes to Bot1's graveyard).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Crib Swap
+Island x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Crib Swap.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Shapeshifter Token
+Bot2.Battlefield.Shapeshifter Token.Keywords = Changeling
+Bot2.Exile.Ornithopter.Toughness = 2
+Bot1.Graveyard = Crib Swap

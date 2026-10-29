@@ -1,0 +1,9 @@
+{
+  "name": "Crib Swap",
+  "manaCost": "{2}{W}",
+  "type": "Kindred Instant — Shapeshifter",
+  "oracleText": "Changeling (This card is every creature type.)\nExile target creature. Its controller creates a 1/1 colorless Shapeshifter creature token with changeling.",
+  "keywords": [
+    "Changeling"
+  ]
+}
