@@ -1,0 +1,44 @@
+# Ooze Spill: "Counter target spell. Create a Mutagen token." Bot2's Lightning Bolt (aimed at Bot1) is answered by two Ooze
+# Spills, the second cast on top of the first and both aimed at the Bolt. The second resolves first: the Bolt is countered
+# and Bot1 gets a Mutagen token. Then the first Ooze Spill's one target is gone, so it is countered on resolution (CR
+# 608.2b) and makes no token: one Mutagen token only, and Bot1 took no damage.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Ooze Spill
+Ooze Spill
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ooze Spill.Cast(Lightning Bolt)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ooze Spill.Cast(Lightning Bolt)
+? Stack = Ooze Spill; Ooze Spill; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mutagen Token
+? Stack = Ooze Spill
+? Bot2.Graveyard = Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield = Mutagen Token
+Bot1.Graveyard = Ooze Spill; Ooze Spill; Black Lotus; Black Lotus
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0
