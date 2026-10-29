@@ -1,0 +1,59 @@
+# Pull from the Grave: if it has targets and every one is illegal as it resolves, it does not resolve and no life is gained
+# (CR 608.2b, the ruling). Bot2 answers with Tormod's Crypt, exiling Bot1's graveyard.
+
+[Bot1 Deck]
+Burrog Banemaker
+Burrog Banemaker
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Pull from the Grave
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Tormod's Crypt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker#1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard = Burrog Banemaker; Burrog Banemaker
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Pull from the Grave.Cast
+Bot1.Target(Bot1.Graveyard.Burrog Banemaker#1; Bot1.Graveyard.Burrog Banemaker#2)
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
