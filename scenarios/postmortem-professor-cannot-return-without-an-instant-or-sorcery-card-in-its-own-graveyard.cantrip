@@ -1,0 +1,36 @@
+# Postmortem Professor: Bot2's Bolt kills it, so the only instant in a graveyard is Bot2's. The ability exiles an instant or sorcery card from *your*
+# graveyard (Bot1's holds just the Professor), so Bot1 cannot activate it even with the mana.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Postmortem Professor
+Swamp x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Postmortem Professor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Postmortem Professor)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Graveyard.Postmortem Professor.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Postmortem Professor
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl

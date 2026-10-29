@@ -1,0 +1,36 @@
+# Postmortem Professor: "This creature can't block." Bot2's Llanowar Elves attacks on turn 4; Bot1's untapped Professor may not block it (refusal),
+# while Bot1's Ornithopter, the positive control, does: the Elves deal their 1 damage to the Ornithopter and none to Bot1.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Postmortem Professor
+Ornithopter
+Swamp x16
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Postmortem Professor.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1)
+! Bot1.Block(Postmortem Professor > Llanowar Elves)
+Bot1.Block(Ornithopter > Llanowar Elves)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot2.Battlefield.Llanowar Elves.Damage = 0
+Bot1.Battlefield.Postmortem Professor.Damage = 0

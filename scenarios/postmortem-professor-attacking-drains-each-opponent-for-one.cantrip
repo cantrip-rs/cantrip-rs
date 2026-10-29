@@ -1,0 +1,25 @@
+# Postmortem Professor: "Whenever this creature attacks, each opponent loses 1 life and you gain 1 life." Attacking unblocked on turn 3, Bot2 loses 1 to the
+# trigger and 2 to combat damage, and Bot1 gains 1.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Postmortem Professor
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Postmortem Professor.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Postmortem Professor > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 21
