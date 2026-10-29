@@ -1,0 +1,38 @@
+# "Up to one other target nonland permanent" (CR 115.1d): Bot1 chooses no target and Bot2's Mox Ruby stays; and a land is no legal target, so with only Bot2's Island
+# beside Bespoke Bo's own side's artifacts the Island is refused as a target.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Bespoke Bō
+Island x3
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Island x19
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bespoke Bō.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Ruby; Island
+Bot2.Hand.Count = 6
+Stack.Count = 0

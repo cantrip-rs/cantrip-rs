@@ -1,0 +1,6 @@
+{
+  "name": "Bespoke Bō",
+  "manaCost": "{2}{U}",
+  "type": "Artifact — Equipment",
+  "oracleText": "When this Equipment enters, return up to one other target nonland permanent to its owner's hand.\nEquipped creature gets +2/+1 and has vigilance.\nEquip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)"
+}
