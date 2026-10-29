@@ -783,6 +783,16 @@ pub fn exile_top_play_this_turn(g: &mut dyn Game, player: PlayerId, count: usize
     exile_top_may_play(g, player, count, player, grant)
 }
 
+/// "Mill a card. You may play that card this turn" as a resolving ability's whole effect (CR 701.17, 601.3, 305.1): the card the
+/// mill put into the graveyard is the object that may be played, a land under the ordinary land-play rules, until the cleanup
+/// step (CR 514.2); with an empty library nothing is milled and nothing is granted. Tablet of Discovery and Ark of Hunger print it.
+pub fn mill_a_card_and_play_it_this_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    for card in g.mill(item.controller, 1) {
+        g.allow_play(card, item.controller, PlayGrant { lands: true, expiry: Expiry::EndOfTurn, ..PlayGrant::CAST });
+    }
+    Ok(())
+}
+
 /// "Exile the top `count` cards of your library. You may play [it / those cards] until your next end step"
 /// (`exile_top_may_play`): the grant is to play, not only cast, so a land among them may be the turn's land drop (CR 305.1),
 /// and it ends as `player`'s next end step begins (CR 500.4). The cards still in exile. Dragonhawk, Fate's Tempest (X cards),
