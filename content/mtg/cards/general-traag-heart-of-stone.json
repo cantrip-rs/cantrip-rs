@@ -1,0 +1,11 @@
+{
+  "name": "General Traag, Heart of Stone",
+  "manaCost": "{3}{R}{R}",
+  "type": "Legendary Artifact Creature — Elemental Soldier",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Trample\nWhen General Traag enters, you may sacrifice another artifact. When you do, General Traag deals 4 damage to target creature.",
+  "keywords": [
+    "Trample"
+  ]
+}

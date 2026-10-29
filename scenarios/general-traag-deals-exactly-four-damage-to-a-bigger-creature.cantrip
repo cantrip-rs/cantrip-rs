@@ -1,0 +1,49 @@
+# General Traag deals exactly 4 damage (CR 120.3): Bot2's Aegis Turtle (0/5) takes 4 and survives with 4 damage marked, a
+# Mox Jet gone as the sacrifice.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Jet
+Mox Jet
+General Traag, Heart of Stone
+Island x14
+
+[Bot2 Deck]
+Mox Sapphire
+Aegis Turtle
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.General Traag, Heart of Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mox Jet#1)
+Bot1.Target(Bot2.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Battlefield.Aegis Turtle.Damage = 4
+Bot1.Graveyard = Mox Jet

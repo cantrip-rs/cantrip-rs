@@ -1,0 +1,39 @@
+# General Traag is an artifact itself, but "another artifact" leaves it out: cast with Black Lotus's mana (the Lotus is
+# sacrificed for it) and two Mountains, no other artifact is left, so nothing is asked, nothing is sacrificed and no damage
+# is dealt - Bot2's Memnite lives.
+
+[Bot1 Deck]
+Black Lotus
+Mountain
+Mountain
+General Traag, Heart of Stone
+Island x16
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.General Traag, Heart of Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+? Stack.Count = 0
+
+[Expect]
+Bot2.Battlefield.Memnite.Types = Artifact; Creature
+Bot1.Battlefield.General Traag, Heart of Stone.Types = Artifact; Creature
+Bot1.Graveyard = Black Lotus
