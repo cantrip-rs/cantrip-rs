@@ -1,12 +1,8 @@
 use cantrip_api::*;
 use cantrip_mechanics::effects;
 use cantrip_mechanics::max_speed::itself_at_max_speed;
+use cantrip_mechanics::statics::have_double_strike;
 use cantrip_oracle as oracle;
-
-/// "Max speed \u{2014} This creature has double strike." (CR 702.178a, 702.4, layer 6): while its controller's speed is 4.
-fn have_double_strike(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
-    chars.keywords = chars.keywords.with(Keyword::DoubleStrike);
-}
 
 pub static CARD: CardDef = CardDef {
     start_your_engines: true,
