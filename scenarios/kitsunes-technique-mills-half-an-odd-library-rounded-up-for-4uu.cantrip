@@ -1,0 +1,34 @@
+# Kitsune's Technique ({4}{U}{U}): "Target opponent mills half their library, rounded up" (CR 701.17a). Bot2's library holds 13 cards after its seven-card hand, so 7 are milled
+# (rounding up, not 6) and 6 remain. Bot1 pays with Black Lotus (UUU), Mox Sapphire, Mox Jet and Mox Pearl; with only Sapphire, Jet and Pearl the spell is refused.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Kitsune's Technique
+Island x2
+Island x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Kitsune's Technique.Cast(Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Kitsune's Technique.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 7
+Bot2.Library.Count = 6
+Bot1.Graveyard = Kitsune's Technique; Black Lotus
+Bot1.Mana =

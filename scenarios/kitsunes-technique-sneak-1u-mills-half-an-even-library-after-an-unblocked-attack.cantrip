@@ -1,0 +1,37 @@
+# Sneak {1}{U} (CR 702.190a): Bot1 attacks with an Ornithopter on turn 3, Bot2 does not block, and Kitsune's Technique, an instant, is cast in the declare blockers step for {1}{U} (Mox
+# Sapphire, Mox Jet), returning the Ornithopter. Bot2's library is 22 cards - 7 in hand - 1 drawn on turn 2 = 14: half is exactly 7, so 7 are milled and 7 remain.
+# Bot2's graveyard holds the 7 milled and the one card it discarded to hand size on turn 2.
+# Not offered in the main phase. Hand: 7 - 3 cast = 4, turn 3 draw 5, - Technique + Ornithopter = 5.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Ornithopter
+Kitsune's Technique
+Island x3
+Island x13
+
+[Bot2 Deck]
+Swamp x22
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Kitsune's Technique.Cast(Ability: Sneak)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Kitsune's Technique.Cast(Bot2; Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard.Count = 8
+Bot2.Library.Count = 7
+Bot2.Life = 20
+Bot1.Hand.Count = 5
