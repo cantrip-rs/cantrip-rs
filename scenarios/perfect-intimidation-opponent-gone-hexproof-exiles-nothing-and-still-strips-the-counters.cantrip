@@ -1,0 +1,51 @@
+# Perfect Intimidation with both modes, Bot2 answering with Surge of Salvation: Bot2 is no longer a legal target as the
+# spell resolves, so the first mode does nothing and Bot2 exiles no card (CR 608.2b), while Bot1's own Creakwood
+# Safewright, still a legal target, loses its three -1/-1 counters (CR 122.1).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Creakwood Safewright
+Perfect Intimidation
+Swamp x16
+
+[Bot2 Deck]
+Plains
+Surge of Salvation
+Island x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Creakwood Safewright.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Creakwood Safewright.Counters.MinusOneMinusOne = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Perfect Intimidation.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Bot2)
+Bot1.Target(Creakwood Safewright)
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Surge of Salvation.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack = Perfect Intimidation
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile =
+Bot2.Hand.Count = 6
+Bot1.Battlefield.Creakwood Safewright.Toughness = 5
+Bot1.Graveyard = Perfect Intimidation; Black Lotus

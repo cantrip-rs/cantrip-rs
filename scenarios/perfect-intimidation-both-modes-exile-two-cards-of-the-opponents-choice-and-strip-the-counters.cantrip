@@ -1,0 +1,49 @@
+# Perfect Intimidation, "Choose one or both" (CR 700.2), costing exactly {3}{B}: both modes. Mode 1 has Bot2 choose two cards of
+# its hand and exile them (CR 406.2), the rest of the hand staying; mode 2 removes the one +1/+1 counter from Bot2's Walking
+# Ballista (cast for X=1), which is then a 0/0 and dies (CR 122.1, 704.5f). Black Lotus and Mox Jet pay all four mana.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Perfect Intimidation
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Walking Ballista
+Island
+Forest
+Plains
+Mountain
+Swamp x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Perfect Intimidation.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Bot2)
+Bot1.Target(Walking Ballista)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island; Forest)
+
+[Expect]
+Exile = Island; Forest
+Bot2.Hand.Count = 3
+Bot2.Graveyard = Walking Ballista
+Bot1.Graveyard = Perfect Intimidation; Black Lotus
