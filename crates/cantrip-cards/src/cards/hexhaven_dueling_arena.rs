@@ -1,4 +1,5 @@
 use cantrip_api::*;
+use cantrip_mechanics::prepare::target_becomes_prepared as prepare;
 use cantrip_mechanics::targets;
 use cantrip_oracle as oracle;
 
@@ -6,14 +7,6 @@ use cantrip_oracle as oracle;
 /// attacking still counts.
 fn attacked_this_turn(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     (targets::CREATURE.filter)(q, asker, t) && matches!(t, Target::Object(id) if q.history().attacked_this_turn(id))
-}
-
-/// "Target creature becomes prepared" (CR 722.3a): only a permanent with a prepare spell can; the verb owns that.
-fn prepare(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(id) = targets::object(g, item, 0) {
-        g.become_prepared(id);
-    }
-    Ok(())
 }
 
 pub static CARD: CardDef = CardDef {
