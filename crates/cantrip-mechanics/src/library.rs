@@ -909,6 +909,16 @@ pub fn shuffle_graveyard_into_library(g: &mut dyn Game, player: PlayerId) {
     g.shuffle(player);
 }
 
+/// "Put target card from a graveyard on the bottom of its owner's library" (CR 401.4): the first target goes there as the
+/// ability resolves, if it is still the card that was targeted (CR 608.2b); the library it joins is its owner's, whatever
+/// graveyard it was in. Paradox Shaper (a card from your graveyard) and Sundering Archaic (from a graveyard) print it.
+pub fn put_first_target_on_the_bottom(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(card) = crate::targets::object(g, item, 0) {
+        g.put_into_library(&[card], LibraryPlace::Bottom);
+    }
+    Ok(())
+}
+
 const TOP_OR_BOTTOM: Question = Question::new("PutOnTop", "put it on top of its owner's library?", "If you don't, it goes on the bottom", "Top", "Bottom");
 
 /// "Its owner puts it on their choice of the top or bottom of their library": the owner of `object` (CR 108.3), not its

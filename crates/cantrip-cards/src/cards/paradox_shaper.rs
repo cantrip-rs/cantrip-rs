@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{library, targets};
 use cantrip_mechanics::triggers::YOUR_UPKEEP;
 use cantrip_oracle as oracle;
 
@@ -21,15 +21,6 @@ fn this_is_not_prepared(q: &dyn Query, me: &Asker) -> bool {
     !q.obj(me.source).prepared
 }
 
-/// "{2}: Put target card from your graveyard on the bottom of your library." The card is put on the bottom as the
-/// ability resolves, if its target is still there (CR 608.2b).
-fn bottom_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(card) = targets::object(g, item, 0) {
-        g.put_into_library(&[card], LibraryPlace::Bottom);
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
@@ -38,7 +29,7 @@ pub static CARD: CardDef = CardDef {
             "At the beginning of your upkeep, if this creature isn't prepared, it becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
         )
         .condition(this_is_not_prepared),
-        ability(cost("{2}"), bottom_target, "{2}: Put target card from your graveyard on the bottom of your library.")
+        ability(cost("{2}"), library::put_first_target_on_the_bottom, "{2}: Put target card from your graveyard on the bottom of your library.")
             .targets(&[targets::CARD_IN_YOUR_GRAVEYARD]),
     ],
     prepare: Some(&OMIT_VARIABLES),
