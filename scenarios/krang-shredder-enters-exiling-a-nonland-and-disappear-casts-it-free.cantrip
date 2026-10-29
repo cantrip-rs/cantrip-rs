@@ -1,0 +1,45 @@
+# Krang & Shredder: "Whenever Krang & Shredder enter or attack, each opponent exiles cards from the top of their library until they exile a nonland card." Bot1 pays {4}{U/B}{U/B} with Black Lotus'
+# BBB (sacrificed, so a permanent left), Mox Jet, Mox Sapphire and Mox Pearl. Bot2's two top Islands and then Grizzly Bears are exiled with it. "Disappear - ... you may cast a card exiled with
+# Krang & Shredder without paying its mana cost": at the end step a land among them is no choice (it cannot be cast), the Bears is, and it enters under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Krang & Shredder
+Swamp x15
+
+[Bot2 Deck]
+Island x7
+Island
+Island
+Grizzly Bears
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Krang & Shredder.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Island; Island; Grizzly Bears
+[T1 Bot1.End]
+! Bot1.Choose(Island)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Island; Island
+Bot2.Library.Count = 10
+Bot1.Battlefield.Grizzly Bears.Types = Creature
+Bot1.Battlefield.Krang & Shredder.Power = 6

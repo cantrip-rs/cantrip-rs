@@ -1,0 +1,55 @@
+# Krang & Shredder: "you may cast a card exiled with Krang & Shredder" is one card, of all those it has exiled over the game. Turn 1 it enters with nothing leaving (no disappear) and exiles an Island and the
+# Grizzly Bears; on turn 3 Bot1 casts Black Lotus and sacrifices it for mana, attacks, and its second exile takes Lightning Bolt. At the end step the Bears and the Bolt can both be cast, and Bot1 casts
+# the Bears: the Bolt stays exiled and is not offered a second time.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Krang & Shredder
+Swamp
+Black Lotus
+Swamp x12
+
+[Bot2 Deck]
+Island x7
+Island
+Grizzly Bears
+Island
+Lightning Bolt
+Island x9
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Krang & Shredder.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Island; Grizzly Bears
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Attack(Krang & Shredder > Bot2)
+[T3 Bot1.End]
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Island; Lightning Bolt
+Bot2.Life = 14
+Bot1.Battlefield.Grizzly Bears.Types = Creature

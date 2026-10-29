@@ -1,0 +1,49 @@
+# Krang & Shredder: the attack half of "enter or attack", and the disappear condition. Bot1 pays {4}{U/B}{U/B} with five Moxen and a Swamp, so nothing leaves the battlefield and at the end step of
+# turn 1 no card is cast: the Grizzly Bears exiled when it entered stays exiled. On turn 3 it attacks, and each opponent exiles from the top of their library until a nonland card (the Island
+# of turn 2's draw having gone to hand, the Lightning Bolt is on top): Bot2 takes 6, and at the end step still nothing has left, so the Bolt is not cast either.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Krang & Shredder
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Island x7
+Island
+Grizzly Bears
+Island
+Lightning Bolt
+Island x9
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Krang & Shredder.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Island; Grizzly Bears
+[T3 Bot1.Main1]
+Bot1.Attack(Krang & Shredder > Bot2)
+[T3 Bot1.End]
+
+[Expect]
+Exile = Island; Grizzly Bears; Lightning Bolt
+Bot2.Life = 14
+Bot1.Battlefield.Count = 7

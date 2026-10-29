@@ -1,0 +1,8 @@
+{
+  "name": "Krang & Shredder",
+  "manaCost": "{4}{U/B}{U/B}",
+  "type": "Legendary Creature — Utrom Human Ninja",
+  "power": 6,
+  "toughness": 7,
+  "oracleText": "Whenever Krang & Shredder enter or attack, each opponent exiles cards from the top of their library until they exile a nonland card.\nDisappear — At the beginning of your end step, if a permanent left the battlefield under your control this turn, you may cast a card exiled with Krang & Shredder without paying its mana cost."
+}
