@@ -1,0 +1,44 @@
+# Gnarlbark Elm: "Target creature gets -2/-2 until end of turn. Activate only as a sorcery" (CR 602.5d, 611.2a, 514.2). On Bot2's
+# turn, with Bot2's Memnite on the stack, the ability is refused though the mana and both counters are there. On turn 3 Bot1
+# targets its own Elm: with its counters gone it is a 3/4, which -2/-2 makes a 1/2 for the turn, a 3/4 again on turn 4.
+
+[Bot1 Deck]
+Black Lotus
+Gnarlbark Elm
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Gnarlbark Elm.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+! Bot1.Battlefield.Gnarlbark Elm.Activate(Gnarlbark Elm)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gnarlbark Elm.Activate(Gnarlbark Elm)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gnarlbark Elm.Power = 1
+? Bot1.Battlefield.Gnarlbark Elm.Toughness = 2
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Gnarlbark Elm.Power = 3
+Bot1.Battlefield.Gnarlbark Elm.Toughness = 4
+Bot1.Battlefield.Gnarlbark Elm.Counters.MinusOneMinusOne = (absent)

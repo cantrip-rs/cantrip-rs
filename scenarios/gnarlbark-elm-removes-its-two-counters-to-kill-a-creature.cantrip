@@ -1,0 +1,51 @@
+# Gnarlbark Elm {2}{B} 3/4: "This creature enters with two -1/-1 counters on it. {2}{B}, Remove two counters from this creature:
+# Target creature gets -2/-2 until end of turn. Activate only as a sorcery" (CR 122.1, 118.3, 602.5d). Cast from the Lotus it is a 1/2
+# with two counters; on turn 3 it pays {2}{B} from Jet, Ruby and Pearl, takes both counters off (a 3/4 at last) and Bot2's Memnite
+# dies. The spare mana (Gleemox, Sapphire and an Island, a black source among it) would pay again, but with no counter left it cannot.
+
+[Bot1 Deck]
+Black Lotus
+Gnarlbark Elm
+Mox Jet
+Mox Ruby
+Gleemox
+Mox Pearl
+Mox Sapphire
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Gnarlbark Elm.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gnarlbark Elm.Counters.MinusOneMinusOne = 2
+? Bot1.Battlefield.Gnarlbark Elm.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gnarlbark Elm.Activate(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite = (absent)
+? Bot1.Battlefield.Gnarlbark Elm.Counters.MinusOneMinusOne = (absent)
+! Bot1.Battlefield.Gnarlbark Elm.Activate(Gnarlbark Elm)
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Gnarlbark Elm.Power = 3
+Bot1.Battlefield.Gnarlbark Elm.Toughness = 4
