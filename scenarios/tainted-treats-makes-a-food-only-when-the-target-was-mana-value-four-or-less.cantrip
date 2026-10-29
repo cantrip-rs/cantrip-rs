@@ -1,0 +1,96 @@
+# Tainted Treats ({1}{B}{G}): "Destroy target artifact or creature. If its mana value was 4 or less, create a Food token." Bot2 builds five Moxen and a Sol Ring
+# and casts a Catacomb Crocodile (mana value 5) on turn 2, a Phantom Monster (mana value 4) and a Darksteel Citadel (an indestructible artifact land, mana value 0) on
+# turn 4. Bot1 destroys the Crocodile on turn 3 (no Food, the value being over 4), the Phantom Monster on turn 5 (a Food, the value being exactly 4) and
+# targets the Citadel on turn 7: it is not destroyed, yet the Food is still created.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Tainted Treats
+Tainted Treats
+Tainted Treats
+Island
+Island x20
+
+[Bot2 Deck]
+Sol Ring
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Catacomb Crocodile
+Phantom Monster
+Darksteel Citadel
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Catacomb Crocodile.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tainted Treats.Cast(Bot2.Battlefield.Catacomb Crocodile)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Catacomb Crocodile
+? Bot1.Battlefield.Count = 3
+[T4 Bot2.Main1]
+Bot2.Hand.Darksteel Citadel.Play
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Phantom Monster.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tainted Treats.Cast(Bot2.Battlefield.Phantom Monster)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Phantom Monster; Catacomb Crocodile
+? Bot1.Battlefield.Count = 4
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tainted Treats.Cast(Bot2.Battlefield.Darksteel Citadel)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Darksteel Citadel.ManaValue = 0
+Bot2.Graveyard = Phantom Monster; Catacomb Crocodile
+Bot1.Battlefield = Food Token; Food Token; Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Graveyard = Tainted Treats; Tainted Treats; Tainted Treats
