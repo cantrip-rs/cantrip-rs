@@ -155,6 +155,7 @@ pub mod flanking;
 pub mod dethrone;
 pub mod sunburst;
 pub mod untap;
+pub mod vivid;
 pub mod vote;
 
 use cantrip_api::*;
