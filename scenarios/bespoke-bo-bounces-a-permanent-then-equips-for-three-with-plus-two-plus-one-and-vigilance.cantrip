@@ -1,0 +1,55 @@
+# Bespoke Bo: entering, it returns up to one other target nonland permanent to its owner's hand (Bot2's Mox Ruby here). Equip {3} is refused with only two untapped
+# sources, then with three attaches it to an Ornithopter (a 0/2 flier): "Equipped creature gets +2/+1 and has vigilance", a 2/3 with flying and vigilance.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Ornithopter
+Bespoke Bō
+Mox Ruby
+Mox Emerald
+Gleemox
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bespoke Bō.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Hand.Count = 8
+? Bot2.Battlefield.Count = 0
+? Bot1.Battlefield.Ornithopter.Power = 0
+! Bot1.Battlefield.Bespoke Bō.Activate(Bot1.Battlefield.Ornithopter; Mana: short)
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Bespoke Bō.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Bespoke Bō.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+Bot1.Mana =
