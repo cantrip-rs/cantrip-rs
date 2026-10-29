@@ -1,0 +1,43 @@
+# Scarblade's Malice: "When that creature dies this turn, create a 2/2 black and green Elf creature token" (CR 603.7c, 111.1).
+# Bot1 casts Malice ({B} from Mox Jet) on its Memnite and, once it has resolved, Lightning Bolts its Memnite and its
+# Ornithopter with Black Lotus's {R}{R}{R}: the Memnite dies and Bot1 makes one 2/2 black and green Elf; the Ornithopter, not
+# the chosen creature, dies and makes none.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Memnite
+Ornithopter
+Scarblade's Malice
+Lightning Bolt
+Lightning Bolt
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Scarblade's Malice.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Elf Token.Power = 2
+Bot1.Battlefield.Elf Token.Toughness = 2
+Bot1.Battlefield.Elf Token.Colors = Black; Green
+Bot1.Battlefield.Count = 2
