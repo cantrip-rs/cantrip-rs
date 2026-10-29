@@ -28,3 +28,4 @@ Bot1.Arrange(Mountain | )
 [Expect]
 Bot1.Hand = Plains; Plains; Plains; Mountain
 Bot1.Library.Count = 0
+Bot1.Looked = Mountain

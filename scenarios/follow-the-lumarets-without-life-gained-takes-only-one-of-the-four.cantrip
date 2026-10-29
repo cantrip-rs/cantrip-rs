@@ -34,3 +34,4 @@ Bot1.Hand = Grizzly Bears; Mox Jet; Mox Jet; Mox Jet; Mox Jet
 Bot1.Graveyard = Follow the Lumarets
 Bot1.Library.Count = 15
 Bot1.Revealed = Grizzly Bears
+Bot1.Looked = Island; Ornithopter; Lightning Bolt; Grizzly Bears

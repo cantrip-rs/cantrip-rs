@@ -428,6 +428,7 @@ pub fn look_at_top(
     if looked.is_empty() {
         return Ok(Vec::new());
     }
+    g.look_at(player, &looked);
     let takeable: Vec<ObjectId> = looked.iter().copied().filter(|&c| wanted(&g.chars(c))).collect();
     // At most the cards that qualify, saturating: past 255 of them a bound of 255 (`u8::MAX`, "any number") stays one.
     let qualifying = u8::try_from(takeable.len()).unwrap_or(u8::MAX);
