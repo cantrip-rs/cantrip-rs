@@ -1,0 +1,53 @@
+# Turn 1: four Moxen pay Garrison Excavator. Turn 3: Firebolt, cast for {R}, goes to the graveyard. Turn 5: it is cast again with flashback
+# {4}{R} from the graveyard, which takes it out of the graveyard - and the Excavator's trigger makes a 2/2 red and white Spirit,
+# a trigger that goes on the stack above the flashed-back Firebolt (CR 603.2, 603.10a), so the Spirit is there as it resolves.
+
+[Bot1 Deck]
+Garrison Excavator
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Firebolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Garrison Excavator.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Firebolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Firebolt.Cast(Bot2; Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot2.Life = 16
+Exile = Firebolt

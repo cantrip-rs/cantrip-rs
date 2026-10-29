@@ -1,0 +1,11 @@
+{
+  "name": "Garrison Excavator",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Orc Sorcerer",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhenever one or more cards leave your graveyard, create a 2/2 red and white Spirit creature token.",
+  "keywords": [
+    "Menace"
+  ]
+}

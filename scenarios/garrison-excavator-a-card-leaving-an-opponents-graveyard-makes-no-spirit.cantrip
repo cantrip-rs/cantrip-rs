@@ -1,0 +1,52 @@
+# Garrison Excavator: "leave YOUR graveyard". Turn 1: four Moxen pay the Excavator and a Mountain pays a Ghost Vacuum. On turn 2 Bot2
+# casts Faithless Looting (discarding two Islands) and in Bot2's second main phase the Vacuum exiles an Island from BOT2's graveyard:
+# a card left a graveyard, but not Bot1's, so there is no Spirit - the battlefield stays the Excavator, the Vacuum, four Moxen and
+# a Mountain, seven permanents.
+
+[Bot1 Deck]
+Garrison Excavator
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mountain
+Ghost Vacuum
+Island x20
+
+[Bot2 Deck]
+Mountain
+Faithless Looting
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Garrison Excavator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Ghost Vacuum.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Choose(Island; Island)
+[T2 Bot2.Main2]
+? Bot2.Graveyard.Count = 3
+Bot1.Battlefield.Ghost Vacuum.Activate(Bot2.Graveyard.Island)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 2
+Exile.Count = 1
+Bot1.Battlefield.Count = 7
