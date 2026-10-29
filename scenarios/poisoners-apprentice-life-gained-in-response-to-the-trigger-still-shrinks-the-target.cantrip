@@ -1,0 +1,46 @@
+# Poisoner's Apprentice: "if you gained life this turn" is asked as the ability resolves, not as it triggers (it is not an intervening if). Bot1
+# has gained nothing when the Apprentice enters and the trigger goes on the stack targeting Bot2's Ornithopter; Lightning Helix cast in response
+# gains 3, so the trigger resolves and the Ornithopter dies.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Poisoner's Apprentice
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Poisoner's Apprentice.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 17
+Bot2.Graveyard = Ornithopter

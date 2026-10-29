@@ -1,0 +1,57 @@
+# Poisoner's Apprentice: -4/-4 until end of turn is exactly that. Bot2's Grizzled Outrider (5/5, the opponent's only creature) is shrunk to 1/1 and
+# survives, once Lightning Helix has gained Bot1 life this turn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Poisoner's Apprentice
+Swamp x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Grizzled Outrider
+Island x14
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Grizzled Outrider.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Poisoner's Apprentice.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Grizzled Outrider.Power = 1
+Bot2.Battlefield.Grizzled Outrider.Toughness = 1
