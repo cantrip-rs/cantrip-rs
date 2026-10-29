@@ -1,0 +1,45 @@
+# Fugitive Droid asks what the permanent was as it entered (CR 603.10a), not what it has become since. On turn 3 Bot1 plays
+# Inkmoth Nexus (a land when it entered) and animates it with Mox Sapphire: an artifact creature now, but no artifact entered,
+# so Bot2's Grizzly Bears may block the Droid, and kill it. (Darksteel Mutation, the card this stands in for, is not in the
+# engine.) Reading the current types, the Droid would be unblockable and Bot2 would take 1.
+
+[Bot1 Deck]
+Mox Sapphire
+Fugitive Droid
+Inkmoth Nexus
+Island x17
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fugitive Droid.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Inkmoth Nexus.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Inkmoth Nexus.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Inkmoth Nexus.Types = Land; Artifact; Creature
+Bot1.Attack(Fugitive Droid > Bot2)
+Bot2.Block(Grizzly Bears > Fugitive Droid)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Fugitive Droid = (absent)

@@ -1,0 +1,43 @@
+# Fugitive Droid's ability costs {U}: Bot1 has only Mox Jet ({B}) untapped when Bot2's Lightning Bolt targets Bot1's Grizzly
+# Bears on turn 2, so the activation is refused, the Droid stays and the Bears die.
+
+[Bot1 Deck]
+Island
+Mox Jet
+Mox Emerald
+Mox Ruby
+Fugitive Droid
+Grizzly Bears
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Fugitive Droid.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Fugitive Droid.Activate(Stack.Lightning Bolt; Mana: short)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears = (absent)
+Bot1.Battlefield.Fugitive Droid.Tapped = false

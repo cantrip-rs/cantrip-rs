@@ -1,0 +1,8 @@
+{
+  "name": "Fugitive Droid",
+  "manaCost": "{U}",
+  "type": "Artifact Creature — Robot Scientist",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "This creature can't be blocked if an artifact entered the battlefield under your control this turn.\n{U}, Sacrifice this creature: Counter target spell that targets an artifact or creature you control."
+}

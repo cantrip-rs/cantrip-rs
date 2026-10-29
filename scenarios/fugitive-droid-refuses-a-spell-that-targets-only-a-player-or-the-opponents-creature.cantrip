@@ -1,0 +1,58 @@
+# Fugitive Droid counters only a spell that targets an artifact or creature its controller controls. On turn 2 Bot2 casts
+# Lightning Bolt at Bot1's face: refused, the Droid stays and Bot1 takes 3. On turn 3 Bot1 casts a Lightning Bolt at Bot2's
+# Grizzly Bears: refused as well (the Bears are the opponent's), and the Bears die.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Fugitive Droid
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mox Emerald
+Grizzly Bears
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Fugitive Droid.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Fugitive Droid.Activate(Stack.Lightning Bolt)
+! Bot1.Battlefield.Fugitive Droid.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Fugitive Droid.Activate(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Fugitive Droid.Tapped = false
+Bot2.Battlefield.Grizzly Bears = (absent)
