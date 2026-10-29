@@ -1,0 +1,30 @@
+# Startled Relic Sloth: a 4/4 with trample and lifelink. "At the beginning of combat on your turn, exile up to one target card from a
+# graveyard": on turn 1 the Black Lotus Bot1 sacrificed for mana is the target.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Startled Relic Sloth
+Island x4
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Startled Relic Sloth.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Startled Relic Sloth.Keywords = Lifelink; Trample
+? Bot1.Battlefield.Startled Relic Sloth.Power = 4
+? Bot1.Graveyard = Black Lotus
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+[Bot1.Main2]
+
+[Expect]
+Exile = Black Lotus
+Bot1.Graveyard.Count = 0

@@ -1,0 +1,12 @@
+{
+  "name": "Startled Relic Sloth",
+  "manaCost": "{2}{R}{W}",
+  "type": "Creature — Sloth Beast",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample, lifelink\nAt the beginning of combat on your turn, exile up to one target card from a graveyard.",
+  "keywords": [
+    "Trample",
+    "Lifelink"
+  ]
+}
