@@ -1,0 +1,42 @@
+# April, Reporter of the Weird (2/2): "Whenever April deals combat damage to a player, draw that many cards, then discard a card." She is cast on turn 1 with three Moxen
+# and attacks on turn 3 unblocked: 2 damage, so two cards are drawn (not one) before the discard, so the two Islands drawn are both in hand when the Plains is chosen.
+# Hand: 7 - 3 Moxen - April = 3, turn-3 draw 4, +2 = 6, -1 = 5.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+April, Reporter of the Weird
+Plains
+Swamp
+Mountain
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.April, Reporter of the Weird.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(April, Reporter of the Weird > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Hand.Count = 5
+Bot1.Graveyard = Plains
