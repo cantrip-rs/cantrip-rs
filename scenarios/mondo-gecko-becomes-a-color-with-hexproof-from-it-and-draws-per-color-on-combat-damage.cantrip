@@ -1,0 +1,52 @@
+# Mondo Gecko: "{1}, Discard a card: Until end of turn, Mondo Gecko becomes the color of your choice and gains hexproof from
+# that color" (CR 105.3, 702.11d), and "Whenever Mondo Gecko deals combat damage to a player, draw a card for each color among
+# permanents you control" (CR 105.2). Bot1 discards an Island and makes Mondo red: Bot2's Lightning Bolt can't target it
+# (refused). The colors among Bot1's permanents are then red (Mondo, no longer blue) and green (Llanowar Elves): two cards
+# when it connects, Bot2 going from 20 to 18. At the end of turn it is blue again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mondo Gecko
+Forest
+Llanowar Elves
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mondo Gecko.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mondo Gecko.Activate
+Bot1.Colors(Red)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mondo Gecko.Colors = Red
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mondo Gecko)
+Bot1.Attack(Mondo Gecko > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Mondo Gecko.Colors = Blue
+
+[Expect]
+Bot2.Life = 18
