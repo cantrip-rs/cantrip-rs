@@ -1,0 +1,8 @@
+{
+  "name": "Zealous Lorecaster",
+  "manaCost": "{5}{R}",
+  "type": "Creature — Giant Sorcerer",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, return target instant or sorcery card from your graveyard to your hand."
+}
