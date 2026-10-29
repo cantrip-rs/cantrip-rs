@@ -1,0 +1,59 @@
+# Baxter Stockman: "When Baxter Stockman enters, create a 1/1 colorless Robot artifact creature token. At the beginning of combat on your turn, target artifact creature you
+# control gets +3/+0 and gains first strike and vigilance until end of turn." Turn 1 Bot1 casts Memnite, Ornithopter and Baxter (Black Lotus for {U}{U}{U}, Mox Ruby, Mox
+# Pearl): the Robot token enters. On turn 3 the combat trigger refuses Baxter (no artifact), and Bot2's Ornithopter (not Bot1's); Bot1 picks Memnite:
+# 4/1 with first strike and vigilance, the Robot and the Ornithopter unchanged.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Baxter Stockman
+Memnite
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Baxter Stockman.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+! Bot1.Target(Bot1.Battlefield.Baxter Stockman)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 4
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike; Vigilance
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 4
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Robot Token.Power = 1
+Bot1.Battlefield.Robot Token.Subtypes = Robot
+Bot1.Battlefield.Robot Token.Keywords = (absent)
+Bot1.Battlefield.Baxter Stockman.Power = 3

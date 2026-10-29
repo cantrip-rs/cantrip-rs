@@ -1,0 +1,8 @@
+{
+  "name": "Baxter Stockman",
+  "manaCost": "{3}{U}{R}",
+  "type": "Legendary Creature — Human Scientist",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When Baxter Stockman enters, create a 1/1 colorless Robot artifact creature token.\nAt the beginning of combat on your turn, target artifact creature you control gets +3/+0 and gains first strike and vigilance until end of turn."
+}
