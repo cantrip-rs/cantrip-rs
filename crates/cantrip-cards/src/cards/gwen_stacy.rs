@@ -28,11 +28,6 @@ fn put_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Remove two counters from Ghost-Spider": counters of any kind, from the source alone (CR 118.3, 122.1).
-fn itself(_: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
-    id == asker.source
-}
-
 /// "Exile the top card of your library. You may play that card this turn."
 fn exile_top_play_this_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     library::exile_top_play_this_turn(g, item.controller, 1);
@@ -47,7 +42,7 @@ pub static BACK: CardDef = CardDef {
             "Whenever you play a land from exile or cast a spell from exile, put a +1/+1 counter on Ghost-Spider.",
         ),
         ability(
-            remove_counters_among(2, itself),
+            remove_counters_among(2, cantrip_mechanics::targets::filters::this_permanent),
             exile_top_play_this_turn,
             "Remove two counters from Ghost-Spider: Exile the top card of your library. You may play that card this turn.",
         ),

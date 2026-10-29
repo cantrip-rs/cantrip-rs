@@ -1107,6 +1107,11 @@ pub fn is_nontoken_artifact(q: &dyn Query, id: ObjectId) -> bool {
 pub mod filters {
     use cantrip_api::*;
 
+    /// "This permanent": the source of the cost alone, for counters removed "from this creature" (CR 118.3, 122.1). Loch Mare, Gwen
+    /// Stacy and Gnarlbark Elm remove two counters from themselves.
+    pub fn this_permanent(_: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
+        id == asker.source
+    }
     /// A creature. Bankrupt in Blood and Culling the Weak sacrifice one.
     pub fn creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
         q.chars(id).is(CardType::Creature)
