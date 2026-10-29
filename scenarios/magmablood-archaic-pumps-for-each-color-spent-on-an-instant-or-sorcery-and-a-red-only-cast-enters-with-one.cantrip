@@ -1,0 +1,31 @@
+# Black Lotus's three red mana pay all of {2/R}{2/R}{2/R}: one color, so Magmablood Archaic enters with one counter, a 3/3. Casting
+# Lightning Bolt with a Mox Ruby then triggers it: creatures get +1/+0 for the one color spent on the Bolt, a 4/3, until end of
+# turn - and the Bolt itself is still on the stack when the trigger has resolved, so it was the Bolt's mana that was counted.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Magmablood Archaic
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Magmablood Archaic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Magmablood Archaic.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Magmablood Archaic.Power = 4
+Bot1.Battlefield.Magmablood Archaic.Toughness = 3
+Bot2.Life = 17
