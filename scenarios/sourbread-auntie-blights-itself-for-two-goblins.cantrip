@@ -1,0 +1,38 @@
+# Sourbread Auntie: "you may blight 2. If you do, create two 1/1 black and red Goblin creature tokens" (CR 701.68a, 118.12):
+# paying puts two -1/-1 counters on the Auntie (the only creature, 4/3 becomes 2/1) and makes two Goblins.
+
+[Bot1 Deck]
+Mountain
+Mox Jet
+Mox Pearl
+Mox Ruby
+Sourbread Auntie
+Forest x15
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sourbread Auntie.Cast
+Bot1.Pass
+Bot1.PayCost
+Bot1.Choose(Sourbread Auntie)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Sourbread Auntie.Counters.MinusOneMinusOne = 2
+? Bot1.Battlefield.Sourbread Auntie.Power = 2
+? Bot1.Battlefield.Sourbread Auntie.Toughness = 1
+? Bot1.Battlefield.Goblin Token#1.Colors = Black; Red
+
+[Expect]
+Bot1.Battlefield = Goblin Token; Goblin Token; Mountain; Mox Jet; Mox Pearl; Mox Ruby; Sourbread Auntie

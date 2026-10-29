@@ -1,0 +1,32 @@
+# Sourbread Auntie: the blight is a "you may" (CR 118.12): declined, no counters go on the Auntie and no Goblin is made.
+
+[Bot1 Deck]
+Mountain
+Mox Jet
+Mox Pearl
+Mox Ruby
+Sourbread Auntie
+Forest x15
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sourbread Auntie.Cast
+Bot1.Pass
+Bot1.Decline
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Jet; Mox Pearl; Mox Ruby; Sourbread Auntie

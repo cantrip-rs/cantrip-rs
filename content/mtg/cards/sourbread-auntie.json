@@ -1,0 +1,8 @@
+{
+  "name": "Sourbread Auntie",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "When this creature enters, you may blight 2. If you do, create two 1/1 black and red Goblin creature tokens. (To blight 2, put two -1/-1 counters on a creature you control.)"
+}
