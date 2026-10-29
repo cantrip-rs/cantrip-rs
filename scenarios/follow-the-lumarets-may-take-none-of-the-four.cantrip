@@ -1,0 +1,31 @@
+# Follow the Lumarets: the take is "you may", so with no life gained Bot1 may put none of the top four into its hand: all four go to the bottom.
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Follow the Lumarets
+Island
+Ornithopter
+Lightning Bolt
+Grizzly Bears
+Island x12
+[Bot2 Deck]
+Island x18
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Follow the Lumarets.Cast
+Bot1.Pass
+Bot2.Pass
+
+Bot1.Arrange( | Island; Ornithopter; Lightning Bolt; Grizzly Bears)
+[Expect]
+Bot1.Hand = Mox Jet; Mox Jet; Mox Jet; Mox Jet
+Bot1.Graveyard = Follow the Lumarets
+Bot1.Library.Count = 16
+Bot1.Revealed = (absent)
