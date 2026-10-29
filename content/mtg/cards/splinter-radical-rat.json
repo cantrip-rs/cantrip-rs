@@ -1,0 +1,8 @@
+{
+  "name": "Splinter, Radical Rat",
+  "manaCost": "{1}{W/B}{W/B}",
+  "type": "Legendary Creature — Mutant Ninja Rat",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "If a triggered ability of a Ninja creature you control triggers, that ability triggers an additional time.\n{1}{U}: Target Ninja can't be blocked this turn."
+}

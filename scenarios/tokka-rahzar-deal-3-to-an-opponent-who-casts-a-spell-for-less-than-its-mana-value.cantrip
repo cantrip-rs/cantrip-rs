@@ -1,0 +1,52 @@
+# Tokka & Rahzar, Terrible Twos: "Whenever a player casts a spell, if the amount of mana spent to cast it was less than its mana value, Tokka & Rahzar deal 3 damage to that player." Bot2 casts it
+# on turn 2 with Mox Jet and Mox Ruby. On turn 3 Bot1 casts Gush for its alternative cost, returning two Islands: no mana was spent on a spell of mana value 6 ({4}{U}), so Bot1, the caster
+# and not Tokka & Rahzar's controller, takes 3: 17. Bot2's Mox Pearl, cast with the mana value of 0 and 0 spent, deals nothing to it.
+
+[Bot1 Deck]
+Island
+Island
+Gush
+Island x3
+Island x2
+Island x10
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Tokka & Rahzar, Terrible Twos
+Swamp x16
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Tokka & Rahzar, Terrible Twos.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Gush.Cast(Ability: Return)
+Bot1.Choose(Island; Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 20
+Bot1.Graveyard = Gush
