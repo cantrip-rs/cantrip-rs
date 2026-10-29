@@ -1270,6 +1270,15 @@ pub fn may_cast_first_target_free_exiling_it(g: &mut dyn Game, item: &StackItem)
     Ok(())
 }
 
+/// "Return target [card] from your graveyard to the battlefield" (CR 400.7, 110.2): the first target, if it is still that card
+/// in the graveyard (CR 608.2b), put onto the battlefield untapped as a new object under the ability's controller. Nothing if it
+/// is gone. Moment of Reckoning, Primary Research, Recurring Nightmare, Restoration Seminar and Unearth print it.
+pub fn return_target_card_to_battlefield(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(card) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.put_onto_battlefield(card, item.controller, false)?;
+    Ok(())
+}
+
 /// "When this creature dies, put its counters on [up to one] target creature": as many of each kind as it had as it died, read
 /// from its last existence on the battlefield (CR 603.10a, 608.2h); the counters are put on, not moved (the rulings), every kind
 /// of them, -1/-1 counters too, together as one event (CR 122.6). Nothing if the target is no longer legal (CR 608.2b) or none
