@@ -865,17 +865,26 @@ pub fn card_has_name(q: &dyn Query, card: CardId, wanted: CardId) -> bool {
 /// only that (CR 707.9b), and so has one whose name an effect set (CR 612.8); and anything else its own name, one for each
 /// of the two faces' names of a card written "A // B".
 pub fn object_names(q: &dyn Query, id: ObjectId) -> Vec<&'static str> {
-    let c = q.chars(id);
-    let obj = q.obj(id);
+    let chars = q.chars(id);
+    names_of(q.state(), id, chars, q.card(chars.card), q.state().obj(id))
+}
+
+/// The names an object has during the layer pass (CR 201.2a): the static ability of Captain Pike, Fullness of Time counts
+/// lands by these names even while it defines Pike's own power and toughness.
+pub fn object_names_in_layers(q: &dyn LayerQuery, id: ObjectId) -> Vec<&'static str> {
+    let chars = q.chars(id);
+    names_of(q.state(), id, chars, q.cards().get(chars.card), q.state().obj(id))
+}
+
+fn names_of(state: &GameState, id: ObjectId, c: Chars, def: &'static CardDef, obj: &Obj) -> Vec<&'static str> {
     if c.name_set || (obj.face_down_values().is_none() && obj.copy.as_ref().is_some_and(|copy| copy.name.is_some())) {
         return vec![c.name];
     }
-    let def = q.card(c.card);
     if def.is_room() && obj.zone.is(ZoneKind::Battlefield) {
         return def.unlocked_doors(obj.marks.doors).map(|half| half.name).collect();
     }
     // One that has left is as it last was (CR 608.2h): a Room the names of the doors it had unlocked, "A // B" both.
-    if def.is_room() && q.state().last_known(id).is_some() {
+    if def.is_room() && state.last_known(id).is_some() {
         return c.name.split(" // ").filter(|name| !name.is_empty()).collect();
     }
     if let Some((left, right)) = def.split {

@@ -528,6 +528,21 @@ pub fn count_you_control(q: &dyn LayerQuery, source: ObjectId, counts: &dyn Fn(&
     state.battlefield().iter().filter(|&&id| state.obj(id).controller == obj.controller && counts(&q.chars(id))).count() as i16
 }
 
+/// "The number of differently named lands you control" (CR 201.2a-b): count the largest set of lands whose names do not
+/// overlap, including split cards and Rooms with multiple names, so the count is the true largest set whatever the order of the
+/// lands. Emil, Vastlands Roamer, Astute Terraformer, Branching Timeline, Cloak and Phaser and Deep Space Scan print it.
+pub fn differently_named_lands(q: &dyn Query, player: PlayerId) -> usize {
+    let names: Vec<Vec<&'static str>> = q
+        .state()
+        .battlefield()
+        .iter()
+        .copied()
+        .filter(|&id| q.obj(id).controller == player && q.chars(id).is(CardType::Land))
+        .map(|id| crate::library::object_names(q, id))
+        .collect();
+    crate::select::largest_name_set(&names).len()
+}
+
 /// "[This creature]'s power and toughness are each equal to the number of lands you control" as the `StaticDef::apply` of the
 /// ability (CR 613.4a for a characteristic-defining one, CR 604.3; layer 7b for one an effect gave, CR 613.4b), read live
 /// (CR 611.3a). "You" is the controller of `source` (see `count_you_control`). Beorn's Hospitality (given), Lumra, Bellow of the

@@ -1,18 +1,12 @@
 use cantrip_api::*;
 use cantrip_mechanics::statics::{have_trample, your_creatures_with_plus_one_counters};
-use cantrip_mechanics::{same_name, tokens};
+use cantrip_mechanics::{lands, tokens};
 use cantrip_oracle as oracle;
 
 /// "Create a 0/0 green and blue Fractal creature token. Put X +1/+1 counters on it, where X is the number of differently named
-/// lands you control": counted as the ability resolves, each land once unless its name is one already counted (CR 201.2b, ruling).
+/// lands you control": counted as the ability resolves, the largest set of lands with no name in common (CR 201.2a-b, ruling).
 fn fractal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let mut counted: Vec<ObjectId> = Vec::new();
-    for id in g.permanents_of(item.controller) {
-        if g.chars(id).is(CardType::Land) && !counted.iter().any(|&other| same_name(g, other, id)) {
-            counted.push(id);
-        }
-    }
-    let x = counted.len() as i16;
+    let x = lands::differently_named_lands(g, item.controller) as i16;
     tokens::create_fractal_with_counters(g, item.controller, x)?;
     Ok(())
 }

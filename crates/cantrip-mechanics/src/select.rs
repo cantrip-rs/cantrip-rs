@@ -173,15 +173,22 @@ fn different_names(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
 pub const DIFFERENT_NAMES: Part = set_part(&(different_names as SelectFn), &(largest_different_names as LargestFn), 0, "with different names");
 
 /// A largest set of cards with different names: the most cards no two of which share a name. A card's names are its own
-/// (CR 201.2a: a split card's halves', a Room's doors'), and no name is two printed cards', so the cards that share names fall
+/// (CR 201.2a-b: a split card's halves', a Room's doors'), and no name is two printed cards', so the cards that share names fall
 /// into groups each within the names of one printed card (two for a split card or a Room, five at most): a largest set is
 /// the largest of each group together, each found by trying the sets of names the group's cards have.
 fn largest_different_names(q: &dyn Query, choice: &Choice, _: u32) -> Vec<ObjectId> {
-    let cards: Vec<(usize, Vec<&'static str>)> =
-        choice.candidates.iter().enumerate().map(|(i, &c)| (i, crate::library::object_names(q, c))).filter(|(_, names)| !names.is_empty()).collect();
+    let name_sets: Vec<Vec<&'static str>> = choice.candidates.iter().map(|&c| crate::library::object_names(q, c)).collect();
+    largest_name_set(&name_sets).into_iter().map(|i| choice.candidates[i]).collect()
+}
+
+/// Indices of a largest set of objects whose name sets have no names in common (CR 201.2a-b). Used by
+/// `DIFFERENT_NAMES` and `lands::differently_named_lands` (Emil, Vastlands Roamer).
+pub fn largest_name_set(name_sets: &[Vec<&'static str>]) -> Vec<usize> {
+    let cards: Vec<(usize, &[&'static str])> =
+        name_sets.iter().enumerate().filter(|(_, names)| !names.is_empty()).map(|(i, names)| (i, names.as_slice())).collect();
     // The names, and the group each is in, joined through the cards that have several.
     let mut names: Vec<&'static str> = Vec::new();
-    for (_, own) in &cards {
+    for &(_, own) in &cards {
         for &name in own {
             if !names.contains(&name) {
                 names.push(name);
@@ -197,7 +204,7 @@ fn largest_different_names(q: &dyn Query, choice: &Choice, _: u32) -> Vec<Object
     }
     let index = |name: &str| names.iter().position(|&n| n == name).unwrap_or(0);
     let mut group: Vec<usize> = (0..names.len()).collect();
-    for (_, own) in &cards {
+    for &(_, own) in &cards {
         for pair in own.windows(2) {
             let (a, b) = (root(&mut group, index(pair[0])), root(&mut group, index(pair[1])));
             group[a] = b;
@@ -211,7 +218,7 @@ fn largest_different_names(q: &dyn Query, choice: &Choice, _: u32) -> Vec<Object
         // The group's names, and each different set of them a card has (with the first such card), as sets of their places.
         let members: Vec<usize> = (0..names.len()).filter(|&i| root(&mut group, i) == r).collect();
         let mut sets: Vec<(Vec<usize>, usize)> = Vec::new();
-        for (i, own) in &cards {
+        for &(i, own) in &cards {
             if root(&mut group, index(own[0])) != r {
                 continue;
             }
@@ -219,18 +226,18 @@ fn largest_different_names(q: &dyn Query, choice: &Choice, _: u32) -> Vec<Object
             set.sort();
             set.dedup();
             if !sets.iter().any(|(s, _)| *s == set) {
-                sets.push((set, *i));
+                sets.push((set, i));
             }
         }
         kept.extend(most_apart(&sets, members.len()));
     }
     kept.sort();
-    kept.into_iter().map(|i| choice.candidates[i]).collect()
+    kept
 }
 
 /// The cards of the most of `sets` (sets of a group's `names` places, each with its card) no two of which share a name: each
 /// tried in turn with what it leaves, remembered by the names used - as many tries as there are sets of names among the
-/// group's cards, which the one printed card the group's names are bounds (CR 201.2a).
+/// group's cards, which the one printed card the group's names are bounds (CR 201.2a-b).
 fn most_apart(sets: &[(Vec<usize>, usize)], names: usize) -> Vec<usize> {
     type Memo = std::collections::HashMap<(usize, Vec<bool>), usize>;
     fn go(sets: &[(Vec<usize>, usize)], at: usize, used: &mut Vec<bool>, memo: &mut Memo) -> usize {
@@ -399,4 +406,21 @@ pub const fn another_creature_permanents(count: Count) -> Selection {
 /// `mana_value_at_most(1)`.
 pub const fn artifact_cards(count: Count) -> Selection {
     Selection::of(count, &[ARTIFACT]).called("artifact")
+}
+
+#[cfg(test)]
+mod name_set_tests {
+    use super::largest_name_set;
+
+    #[test]
+    fn largest_name_set_handles_overlapping_and_nameless_objects() {
+        let names = [
+            vec!["A", "B"],
+            vec!["A"],
+            vec!["B"],
+            vec!["C"],
+            vec![],
+        ];
+        assert_eq!(largest_name_set(&names), vec![1, 2, 3]);
+    }
 }
