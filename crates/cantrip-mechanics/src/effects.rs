@@ -380,6 +380,18 @@ pub fn may_discard_to_draw(g: &mut dyn Game, item: &StackItem, n: u32) -> Result
     Ok(())
 }
 
+/// "You may put a card from your hand on the bottom of your library. If you do, draw a card" (CR 401.4, 121.1): the card is
+/// chosen as the effect resolves, so an empty hand is asked nothing; the draw follows a card actually put there (CR 608.2c).
+/// Volcanic Spite and Manhole Missile print it after their damage.
+pub fn may_put_a_card_from_hand_on_the_bottom_to_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let hand = g.state().zone(Zone::hand(item.controller)).to_vec();
+    let chosen = crate::choose::select(g, item.controller, item.object, Purpose::PutOnBottom, hand, crate::select::cards(crate::select::up_to(1)))?;
+    if !g.put_into_library(&chosen, LibraryPlace::Bottom).is_empty() {
+        g.draw(item.controller, 1);
+    }
+    Ok(())
+}
+
 /// "You may discard a card" (CR 701.9): the controller chooses a card of their hand to discard or none, as the ability
 /// resolves and not as a cost, so nothing is asked of an empty hand. Whether a card was discarded, for the "if you do" or the
 /// reflexive "when you do" (CR 603.12) that follows: a card chosen that its owner can't be made to discard stays (CR 101.2),
