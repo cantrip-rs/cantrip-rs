@@ -1,0 +1,43 @@
+# Artistic Process's third mode: a 3/3 blue and red Elemental creature token with flying that "gains haste until end of turn"
+# (CR 611.2a, 702.10): it attacks the turn it is made, dealing 3 to Bot2, and has lost the haste by the next turn (CR 514.2).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mountain
+Artistic Process
+Mountain x14
+
+[Bot2 Deck]
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Artistic Process.Cast
+Bot1.Modes(3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elemental Token.Keywords = Flying; Haste
+[Bot1.DeclareAttackers]
+Bot1.Attack(Elemental Token > Bot2)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Elemental Token.Token = true
+Bot1.Battlefield.Elemental Token.Power = 3
+Bot1.Battlefield.Elemental Token.Toughness = 3
+Bot1.Battlefield.Elemental Token.Colors = Blue; Red
+Bot1.Battlefield.Elemental Token.Subtypes = Elemental
+Bot1.Battlefield.Elemental Token.Keywords = Flying
