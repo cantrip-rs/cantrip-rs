@@ -161,6 +161,18 @@ pub fn itself_while_you_control_another<const SUBTYPE: u16>(view: &dyn LayerQuer
     state.battlefield().iter().any(|&id| id != source && state.obj(id).controller == you && view.chars(id).has_subtype(word))
 }
 
+/// "You may cast this spell as though it had flash if you control a [subtype]" (CR 307.5, 702.8) as `CardDef::flash_if`,
+/// `SUBTYPE` a `Subtype` as `u16` (`lands::sub`): asked of the player who would cast it as the casting begins, and not again
+/// (the rulings). A [subtype] is a permanent with that creature type, read through the words of the card's text (CR 612); an
+/// opponent's does not count, and neither does one that is not on the battlefield. Bard's Company (Human) and Illusion
+/// Spinners (Faerie) print it.
+pub fn flash_if_you_control_a<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker) -> bool {
+    let Some(word) = Subtype::ALL.into_iter().find(|&s| s as u16 == SUBTYPE).map(|printed| q.words(asker.source).subtype(printed)) else {
+        return false;
+    };
+    q.permanents_of(asker.controller).into_iter().any(|id| q.chars(id).has_subtype(word))
+}
+
 /// "... can't be countered" (CR 101.2, layer 6) as the `StaticDef::apply` of a static ability that covers spells on the
 /// stack (declared `everywhere`). Hexing Squelcher ("Spells you control") and Frenzied Baloth ("Creature spells you
 /// control") print it.
