@@ -1,0 +1,45 @@
+# Karai, Future of the Foot: cast for {1}{W}{B} (no sneak) on turn 1, she attacks on turn 3 and deals 3 combat damage: "return target creature card from your graveyard to your hand". Bot2 Lightning
+# Bolted Bot1's Ornithopter on turn 2, so it is the one creature card in the graveyard (the target is chosen for her), and it goes to hand, not the battlefield.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Karai, Future of the Foot
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Karai, Future of the Foot.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Karai, Future of the Foot > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand = Island; Island; Island; Ornithopter
+Bot1.Battlefield.Count = 4

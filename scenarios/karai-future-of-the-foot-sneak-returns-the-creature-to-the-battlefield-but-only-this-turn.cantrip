@@ -1,0 +1,71 @@
+# Karai, Future of the Foot: "Whenever Karai deals combat damage to a player, return target creature card from your graveyard to your hand. If Karai's sneak cost was paid this turn, instead return it to
+# the battlefield." Bot2 Lightning Bolts one of Bot1's two Ornithopters on turn 2. On turn 3 Bot1 attacks with the other, unblocked, and sneaks Karai in for {2}{W}{B}, returning it to hand: she
+# deals 3 combat damage and the dead Ornithopter comes back to the battlefield. On turn 4 Bot2 Bolts that Ornithopter too, and on turn 5 Karai hits again: her sneak cost was paid turn 3, not this turn,
+# so the Ornithopter goes to hand (Bot1 cast the one the sneak returned first, a cast this turn that is not Karai's, and it stays on the battlefield).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Karai, Future of the Foot
+Ornithopter
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#2)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Karai, Future of the Foot.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+? Bot1.Battlefield.Count = 6
+? Bot1.Hand = Island; Ornithopter
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Attack(Karai, Future of the Foot > Bot2)
+[T5 Bot1.CombatDamage]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Hand = Island; Island; Ornithopter
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Count = 6

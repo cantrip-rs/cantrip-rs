@@ -1,0 +1,8 @@
+{
+  "name": "Karai, Future of the Foot",
+  "manaCost": "{1}{W}{B}",
+  "type": "Legendary Creature — Human Ninja",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Sneak {2}{W}{B} (You may cast this spell for {2}{W}{B} if you also return an unblocked attacker you control to hand during the declare blockers step. She enters tapped and attacking.)\nWhenever Karai deals combat damage to a player, return target creature card from your graveyard to your hand. If her sneak cost was paid this turn, instead return that card to the battlefield."
+}
