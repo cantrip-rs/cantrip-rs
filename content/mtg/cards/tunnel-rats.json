@@ -1,0 +1,8 @@
+{
+  "name": "Tunnel Rats",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Rat",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{4}{B}: Return this card from your graveyard to the battlefield tapped."
+}

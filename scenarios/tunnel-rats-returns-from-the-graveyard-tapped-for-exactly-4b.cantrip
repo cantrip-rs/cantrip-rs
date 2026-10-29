@@ -1,0 +1,52 @@
+# Bot2's Lightning Bolt kills Tunnel Rats. On Bot1's turn Sapphire pays for an Ancestral Recall, so the graveyard ability
+# ({4}{B}) has Black Lotus's three and Mox Jet's one, four mana: it is refused. Playing a Swamp makes five and it is paid:
+# the Rats return tapped (CR 113.6m) and the pool is empty. The ability cannot be activated from the battlefield.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Black Lotus
+Tunnel Rats
+Ancestral Recall
+Swamp x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tunnel Rats.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Tunnel Rats)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Tunnel Rats
+[T3 Bot1.Main1]
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Graveyard.Tunnel Rats.Activate(Mana: short)
+Bot1.Hand.Swamp.Play
+Bot1.Graveyard.Tunnel Rats.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tunnel Rats.Tapped = True
+! Bot1.Battlefield.Tunnel Rats.Activate
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Sapphire; Swamp; Tunnel Rats
+Bot1.Mana = 
