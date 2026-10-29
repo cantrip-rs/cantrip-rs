@@ -1,0 +1,42 @@
+# Fractal Tender: "if you put a counter on this creature this turn" - a counter Bot1 puts on its Ornithopter (Growth Curve) is a
+# counter on another creature (CR 122.6), so no Fractal at the end step; Growth Curve's two mana is not more than the Tender's
+# power or toughness, so increment gives it no counter either.
+
+[Bot1 Deck]
+Fractal Tender
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Ornithopter
+Growth Curve
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fractal Tender.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Growth Curve.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield = Fractal Tender; Mox Emerald; Mox Sapphire; Ornithopter
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Fractal Tender.Counters.PlusOnePlusOne = (absent)

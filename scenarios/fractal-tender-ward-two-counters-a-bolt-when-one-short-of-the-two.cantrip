@@ -1,0 +1,39 @@
+# Fractal Tender has ward {2}: Bot2 can pay only {1} of it (one spare Mox), so the Lightning Bolt targeting the Tender is countered and
+# the Tender lives with no damage.
+
+[Bot1 Deck]
+Fractal Tender
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Lightning Bolt
+Mox Ruby
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fractal Tender.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Bolt.Cast(Fractal Tender)
+! Bot2.PayCost
+Bot2.Decline
+
+[Expect]
+Bot1.Battlefield = Fractal Tender; Mox Emerald; Mox Sapphire
+Bot1.Battlefield.Fractal Tender.Damage = 0
+Bot2.Graveyard = Lightning Bolt

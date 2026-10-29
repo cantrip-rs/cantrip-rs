@@ -1,0 +1,43 @@
+# Fractal Tender: increment needs the mana spent to be greater than its power or toughness - three mana is not greater than
+# 3/3 (CR 702.191a), so Paradox Surveyor cast for {G}{G/U}{U} puts no counter on it and the end step makes no Fractal (CR 603.4).
+
+[Bot1 Deck]
+Fractal Tender
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Paradox Surveyor
+Mox Emerald
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Fractal Tender.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Paradox Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island; Island; Island; Island; Island)
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Fractal Tender.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Count = 6

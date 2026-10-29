@@ -1,0 +1,62 @@
+# Fractal Tender ({3}{G}{U}, 3/3): increment gives it a +1/+1 counter when Bot1 casts a spell with four mana (more than its
+# power or toughness 3), and then "at the beginning of each end step, if you put a counter on this creature this turn" makes a
+# Fractal with three +1/+1 counters (CR 603.4). Turn 1's end step (no counter put yet) and Bot2's end step on turn 4 (the counter
+# was put on another turn) make nothing; only turn 3's end step does.
+
+[Bot1 Deck]
+Fractal Tender
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Proctor's Gaze
+Mox Jet
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fractal Tender.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Count = 3
+? Bot1.Battlefield.Fractal Tender.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Proctor's Gaze.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Island)
+? Bot1.Battlefield.Fractal Tender.Counters.PlusOnePlusOne = 1
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fractal Token.Power = 3
+[T4 Bot2.End]
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Fractal Tender.Power = 4
+Bot1.Battlefield.Fractal Tender.Toughness = 4
+Bot1.Battlefield.Fractal Token.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Fractal Token.Toughness = 3
+Bot1.Battlefield.Fractal Token.Colors = Blue; Green

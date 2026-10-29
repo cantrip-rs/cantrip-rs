@@ -1,0 +1,59 @@
+# Fractal Tender: the stun counter Bot2's Fractal Mascot puts on it (after Bot2 pays ward {2}) is a counter Bot2 put, not one "you
+# put" (CR 122.6), so Bot1 gets no Fractal at the end step although the Tender has a counter.
+
+[Bot1 Deck]
+Fractal Tender
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Fractal Mascot
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fractal Tender.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fractal Mascot.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+? Bot1.Battlefield.Fractal Tender.Counters.Stun = 1
+? Bot1.Battlefield.Fractal Tender.Tapped = true
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Fractal Tender; Mox Emerald; Mox Sapphire
+Bot1.Battlefield.Count = 3
