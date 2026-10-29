@@ -1,0 +1,6 @@
+{
+  "name": "Uneasy Alliance",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can't attack or block.\n{5}, Sacrifice this Aura: Exile enchanted creature. You create a 1/1 black Ninja creature token. Activate only as a sorcery."
+}
