@@ -1,0 +1,46 @@
+# Ambitious Augmenter dying with no counters on it ("if it had one or more counters on it", CR 603.4): Bot1 kills its own with a
+# Lightning Bolt right away, and the ability never triggers, so no Fractal token. A token that was made would die at once as a 0/0,
+# and Blood Artist, which Bot1 cast first so that the Augmenter does not increment, would trigger a second time: it triggers for
+# the Augmenter alone, so Bot2 is at 19 and Bot1 at 21.
+
+[Bot1 Deck]
+Ambitious Augmenter
+Blood Artist
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blood Artist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ambitious Augmenter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Ambitious Augmenter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Ambitious Augmenter; Lightning Bolt
+Bot1.Battlefield = Blood Artist; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Life = 21
+Bot2.Life = 19
+LeftBattlefield = Ambitious Augmenter
