@@ -76,3 +76,6 @@ ai/**/out/
 ai/**/*.onnx
 ai/spike/rs/target/
 ai/spike/web/node_modules/
+
+# llvm-cov raw profiles
+*.profraw
