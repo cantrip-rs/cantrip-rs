@@ -1,0 +1,78 @@
+# Ninja Teen level 3: "You may cast creature spells from your graveyard using their sneak abilities." Oroku Saki, Shredder Rising (sneak {1}{B}) is cast on turn 5 and bolted by Bot2 on turn 6
+# (the leave trigger drains Bot2 to 19). On turn 7 Bot1's Ornithopter attacks and, in the declare blockers step, Oroku is cast from the graveyard for its own sneak cost {1}{B}
+# (not {3}{B}), returning the Ornithopter (Bot2 to 18). He enters tapped and attacking Bot2 as a 4/1 with the level 2 bonus: Bot2 at 14, and his trigger draws Bot1 a card for 1 life.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Ninja Teen
+Ornithopter
+Oroku Saki, Shredder Rising
+Island
+Swamp x13
+
+[Bot2 Deck]
+Lightning Bolt
+Mountain x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ninja Teen.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 3)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Oroku Saki, Shredder Rising.Cast
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Oroku Saki, Shredder Rising)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 19
+[T7 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Attack(Ornithopter > Bot2)
+[T7 Bot1.DeclareBlockers]
+Bot1.Graveyard.Oroku Saki, Shredder Rising.Cast(Ability: Sneak (own cost))
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Oroku Saki, Shredder Rising > Bot2
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 19
+Bot1.Battlefield.Oroku Saki, Shredder Rising.Tapped = true

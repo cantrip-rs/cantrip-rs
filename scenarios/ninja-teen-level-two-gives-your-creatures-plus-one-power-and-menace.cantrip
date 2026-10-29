@@ -1,0 +1,47 @@
+# Ninja Teen level 2 (CR 716.2): "Creatures you control get +1/+0 and have menace." At level 1 Bot1's Ornithopter is a 0/2 without menace; after {1}{B} for Level 2 on turn 3 it is a 1/2
+# with menace (CR 702.110b) and Bot2's lone Ornithopter cannot block it, so it deals 1: Bot2 at 19. Bot2's own Ornithopter is still 0/2 without menace.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Ninja Teen
+Ornithopter
+Island x2
+Mountain x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ninja Teen.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Attack(Ornithopter > Bot2)
+! Bot2.Block(Ornithopter > Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19

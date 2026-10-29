@@ -1,0 +1,48 @@
+# Ninja Teen gives creature cards in the graveyard sneak {3}{B} only at level 3 (CR 716.2). At level 2, in the declare blockers step of turn 5 with an unblocked Ornithopter attacking
+# and every mana source untapped, the graveyard Ornithopter is refused for sneak: it stays there and the attacker stays on the battlefield.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Ninja Teen
+Ornithopter
+Ornithopter
+Lightning Bolt
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ninja Teen.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T5 Bot1.DeclareBlockers]
+! Bot1.Graveyard.Ornithopter.Cast(Ability: Sneak {3}{B})
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Battlefield.Ornithopter.Tapped = true

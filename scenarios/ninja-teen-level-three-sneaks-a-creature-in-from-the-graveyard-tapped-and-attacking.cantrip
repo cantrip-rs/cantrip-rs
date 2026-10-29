@@ -1,0 +1,68 @@
+# Ninja Teen level 3: "Creature cards in your graveyard have sneak {3}{B}." Bot1 levels it up to 3 on turn 3, bolts its own Ornithopter into the graveyard (the leave trigger drains Bot2 to 19)
+# and casts a second one. On turn 5 that Ornithopter attacks Bot2 and, in the declare blockers step, the graveyard Ornithopter is cast for sneak {3}{B} returning the attacker to hand
+# (CR 702.190a; leaving, it drains Bot2 to 18). The graveyard Ornithopter enters tapped and attacking Bot2 (CR 702.190b), as a 1/2 with the level 2 bonus, and deals 1: Bot2 at 17.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Ninja Teen
+Ornithopter
+Ornithopter
+Lightning Bolt
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ninja Teen.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Ninja Teen.Activate(Ability: Level 3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Hand.Ornithopter.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Attack(Ornithopter > Bot2)
+[T5 Bot1.DeclareBlockers]
+Bot1.Graveyard.Ornithopter.Cast(Ability: Sneak {3}{B})
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Ornithopter > Bot2
+? Bot1.Battlefield.Ornithopter.Tapped = true
+? Bot1.Graveyard.Count = 1
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand = Ornithopter
+Bot1.Graveyard = Lightning Bolt
