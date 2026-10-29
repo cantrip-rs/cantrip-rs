@@ -1731,9 +1731,22 @@ pub struct Divide {
 /// total power N or more". Announced once, like a kicker, by choosing between paying it and not, before any target;
 /// paid with the other costs. A spell that paid it has `paid` 1 (how many, for a cost that sacrifices one or more),
 /// which is not `kicked`: a card with a kicker and an optional cost of this kind is not ambiguous.
+///
+/// A kicker whose cost is not mana (Kicker - Sacrifice an artifact or creature, CR 702.33a) is announced the same way, but
+/// paying it is being kicked: `cantrip_mechanics::kicker::non_mana` sets `kicked` instead of `paid`, and every rule that reads "if this spell
+/// was kicked" reads it.
 #[derive(Clone, Copy)]
 pub struct OptionalCost {
     pub cost: Cost,
+    /// Paying it kicks the spell (CR 702.33a): the spell is `kicked` once rather than `paid`.
+    pub kicker: bool,
+}
+
+impl OptionalCost {
+    /// An optional additional cost that is not a kicker.
+    pub const fn new(cost: Cost) -> OptionalCost {
+        OptionalCost { cost, kicker: false }
+    }
 }
 
 /// One mode of a modal spell or ability (CR 700.2). Its target slots are each one target (CR 700.2c); `cost` is what
@@ -3466,6 +3479,11 @@ macro_rules! token {
 static RENAMED_TOKENS: std::sync::Mutex<Vec<&'static str>> = std::sync::Mutex::new(Vec::new());
 
 impl CardDef {
+    /// The card has a kicker (CR 702.33a): a mana one (`kicker`) or one whose cost is not mana (`OptionalCost::kicker`).
+    pub const fn has_kicker(&self) -> bool {
+        self.kicker.is_some() || matches!(self.optional_cost, Some(OptionalCost { kicker: true, .. }))
+    }
+
     /// The keywords the card prints: those it lists, and morph or disguise where it prints a way of that keyword (CR 702.37a,
     /// 702.168a; `WayKind::Morph`, `Megamorph`, `Disguise`), which the way holds the cost of. What the layers start an object
     /// of this card from (CR 613.1f takes them as it takes any ability).

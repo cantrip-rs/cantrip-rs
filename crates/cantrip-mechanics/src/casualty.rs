@@ -33,13 +33,13 @@ fn creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
 
 /// Casualty N's additional cost: "you may sacrifice a creature with power N or greater".
 pub const fn optional<const N: u8>() -> OptionalCost {
-    OptionalCost { cost: Cost::sacrifice(1, creature_with_power_at_least::<N>) }
+    OptionalCost::new(Cost::sacrifice(1, creature_with_power_at_least::<N>))
 }
 
 /// Casualty X's additional cost: "you may sacrifice a creature with power X or greater", X announced once the intention to
 /// pay it is (CR 601.2b). The creature's power is read as it is sacrificed (CR 601.2h), after the mana abilities activated
 /// while paying (CR 601.2g), so X may be announced up to the most a power can be (`VariableCost::SacrificeWithPowerX`).
-pub const X: OptionalCost = OptionalCost { cost: Cost { variable: Some(VariableCost::SacrificeWithPowerX(creature)), ..Cost::NONE } };
+pub const X: OptionalCost = OptionalCost::new(Cost { variable: Some(VariableCost::SacrificeWithPowerX(creature)), ..Cost::NONE });
 
 /// "When you cast this spell, if a casualty cost was paid for it" (CR 603.4): it functions on the stack, and a cast without
 /// the cost paid triggers nothing.

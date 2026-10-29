@@ -1771,11 +1771,11 @@ fn offer_spell(cx: &Cx, asker: &Asker, def: &'static CardDef, option: &mut Actio
                     || (if if_promised { target_candidates_if_promised(cx, asker, spec) } else { target_candidates(cx, asker, spec) }).len() >= spec.min as usize
             })
         };
-        return def.kicker.is_some() || met(false) || (def.gift.is_some() && met(true));
+        return def.has_kicker() || met(false) || (def.gift.is_some() && met(true));
     }
     // "If this spell was kicked, instead choose ..." (CR 702.33a, 601.2c): the targets wait for the kicker, and it may be
     // cast if it could be announced either unkicked or, with a kicker to pay, kicked.
-    if def.kicker.is_some() && specs.iter().any(|spec| spec.if_kicked.is_some()) {
+    if def.has_kicker() && specs.iter().any(|spec| spec.if_kicked.is_some()) {
         return slots_satisfiable(cx, asker, specs) || slots_satisfiable(cx, asker, &specs.iter().map(|spec| spec.when_kicked(1)).collect::<Vec<_>>());
     }
     with_targets(cx, asker, specs, option)
@@ -2326,6 +2326,10 @@ fn some_cast(
                 let counted = u32::from(if x > 0 { x } else { u16::from(kicked) });
                 let mut obj = *cx.s().obj(card);
                 (obj.x, obj.kicked, obj.paid) = (x, kicked, u32::from(paid));
+                // A kicker that is not mana is kicked by paying it (CR 702.33a).
+                if paid && def.optional_cost.is_some_and(|o| o.kicker) {
+                    (obj.kicked, obj.paid) = (1, 0);
+                }
                 let masks: Vec<Option<u32>> = match def.modal {
                     Some(modal) if open => {
                         let range = match modal.when_paid {
@@ -7090,8 +7094,14 @@ fn cast(
     {
         extra = extra.and(optional.cost);
         cost.mana = add_cost(cost.mana, optional.cost.mana);
-        item.paid = 1;
-        cx.st().update_obj(spell, |o| o.paid = 1);
+        if optional.kicker {
+            // Kicker with a cost that is not mana (CR 702.33a): paying it is kicking the spell, once (CR 702.33b).
+            item.kicked = 1;
+            cx.st().update_obj(spell, |o| o.kicked = 1);
+        } else {
+            item.paid = 1;
+            cx.st().update_obj(spell, |o| o.paid = 1);
+        }
     }
 
     // CR 702.180b, 601.2b: the creature harmonize taps is chosen as the harmonize cost is, before any target. What is announced

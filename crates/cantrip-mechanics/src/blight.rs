@@ -18,7 +18,7 @@ pub const fn cost(n: u8) -> Cost {
 
 /// "As an additional cost to cast this spell, you may blight N."
 pub const fn optional(n: u8) -> OptionalCost {
-    OptionalCost { cost: cost(n) }
+    OptionalCost::new(cost(n))
 }
 
 /// "If this spell's additional cost was paid": it was cast with its optional cost paid. A copy of the spell has it paid

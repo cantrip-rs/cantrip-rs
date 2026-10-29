@@ -12,7 +12,7 @@ use cantrip_api::*;
 
 /// "Teamwork N" (CR 702.194a) as the spell's optional additional cost.
 pub const fn optional(power: u8) -> OptionalCost {
-    OptionalCost { cost: Cost { tap_creatures: Some(TapCreatures { power, greater_with: None }), ..Cost::NONE } }
+    OptionalCost::new(Cost { tap_creatures: Some(TapCreatures { power, greater_with: None }), ..Cost::NONE })
 }
 
 /// "If this spell was cast using teamwork" (CR 702.194b): its caster declared the intention to pay the teamwork cost as they

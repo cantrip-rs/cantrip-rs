@@ -20,9 +20,7 @@ fn copy_for_each(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     spell: spell(&[], effects::draw_a_card_and_lose_1_life),
-    optional_cost: Some(OptionalCost {
-        cost: Cost { variable: Some(VariableCost::SacrificeOneOrMore(filters::creature)), ..Cost::NONE },
-    }),
+    optional_cost: Some(OptionalCost::new(Cost { variable: Some(VariableCost::SacrificeOneOrMore(filters::creature)), ..Cost::NONE })),
     labels: &["Cast without sacrificing", "Sacrifice one or more creatures"],
     abilities: &[triggered(CAST_THIS_SPELL, copy_for_each, "When you do, copy this spell for each creature sacrificed this way.")
         .condition(sacrificed_creatures)],

@@ -5,7 +5,7 @@ use cantrip_oracle as oracle;
 /// "As an additional cost to cast this spell, you may collect evidence 8" (CR 701.59a, 601.2b): announced like any optional
 /// additional cost; the spell has `paid` set when it was paid. It cannot be chosen without cards in the graveyard with total
 /// mana value 8 or more (CR 701.59a ruling: "you can't choose to collect evidence at all").
-const OPTIONAL_COST: OptionalCost = OptionalCost { cost: Cost { collect_evidence: 8, ..Cost::NONE } };
+const OPTIONAL_COST: OptionalCost = OptionalCost::new(Cost { collect_evidence: 8, ..Cost::NONE });
 
 const LABELS: &[&str] = &["Cast without collecting evidence", "Collect evidence 8"];
 

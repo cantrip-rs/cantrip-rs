@@ -4,7 +4,7 @@ use cantrip_oracle as oracle;
 
 /// "As an additional cost to cast this spell, you may collect evidence 6" (CR 701.59a, 601.2b): announced like any
 /// optional additional cost; the spell has `paid` set when it was paid.
-const OPTIONAL_COST: OptionalCost = OptionalCost { cost: Cost { collect_evidence: 6, ..Cost::NONE } };
+const OPTIONAL_COST: OptionalCost = OptionalCost::new(Cost { collect_evidence: 6, ..Cost::NONE });
 
 const LABELS: &[&str] = &["Cast without collecting evidence", "Collect evidence 6"];
 

@@ -12,7 +12,7 @@ fn artifact_enchantment_or_token(q: &dyn Query, _: &Asker, id: ObjectId) -> bool
 }
 
 /// The additional cost: sacrifice an artifact, enchantment or token.
-pub const OPTIONAL_COST: OptionalCost = OptionalCost { cost: Cost::sacrifice(1, artifact_enchantment_or_token) };
+pub const OPTIONAL_COST: OptionalCost = OptionalCost::new(Cost::sacrifice(1, artifact_enchantment_or_token));
 
 pub const LABELS: &[&str] = &["Cast without bargain", "Bargain: Sacrifice an artifact, enchantment, or token"];
 

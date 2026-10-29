@@ -20,7 +20,7 @@ pub const fn cost(filter: ObjectFilter, quality: &'static str) -> Cost {
 
 /// "As an additional cost to cast this spell, you may behold a [quality]."
 pub const fn optional(filter: ObjectFilter, quality: &'static str) -> OptionalCost {
-    OptionalCost { cost: cost(filter, quality) }
+    OptionalCost::new(cost(filter, quality))
 }
 
 /// "If a [quality] was beheld": the spell's optional additional cost was paid. A copy of the spell has it paid when the
