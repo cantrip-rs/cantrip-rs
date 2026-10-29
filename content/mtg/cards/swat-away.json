@@ -1,0 +1,6 @@
+{
+  "name": "Swat Away",
+  "manaCost": "{2}{U}{U}",
+  "type": "Instant",
+  "oracleText": "This spell costs {2} less to cast if a creature is attacking you.\nThe owner of target spell or creature puts it on their choice of the top or bottom of their library."
+}

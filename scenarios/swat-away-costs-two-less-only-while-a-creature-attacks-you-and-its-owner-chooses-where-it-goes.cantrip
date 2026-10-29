@@ -1,0 +1,39 @@
+# Swat Away {2}{U}{U}: "This spell costs {2} less to cast if a creature is attacking you. The owner of target spell or creature puts it on their choice of the top
+# or bottom of their library." With nothing attacking Bot1 on turn 3, its two untapped Mox Sapphires (two mana) are short of the full price: refused. On turn 4 Bot2's
+# Memnite attacks Bot1 and the Swat Away costs {U}{U}, paid exactly by the two Moxen (the pool ends empty); Bot2, the owner, declines the top and puts the Memnite on the bottom of
+# its library (CR 108.3), and Bot1 takes no damage.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Swat Away
+Island x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Swat Away.Cast(Bot2.Battlefield.Memnite; Mana: short)
+[T4 Bot2.Main1]
+Bot2.Attack(Memnite > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Swat Away.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+
+[Expect]
+Bot1.Mana =
+Bot1.Life = 20
+Bot2.Battlefield =
+Bot2.Library = Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Memnite
+Bot1.Graveyard = Swat Away
