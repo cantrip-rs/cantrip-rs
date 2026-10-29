@@ -136,6 +136,8 @@ mod preparation_tests;
 #[cfg(test)]
 mod convoked_tests;
 #[cfg(test)]
+mod crewed_tests;
+#[cfg(test)]
 mod cycled_tests;
 #[cfg(test)]
 mod counters_together_tests;

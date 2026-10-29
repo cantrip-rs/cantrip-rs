@@ -422,6 +422,17 @@ impl<'a> History<'a> {
         })
     }
 
+    /// The creatures that crewed `vehicle` this turn (CR 702.122a), in the order they were tapped, one entry for each time they
+    /// crewed it: a creature that crewed twice is named twice. By id, so a creature that has since left the battlefield
+    /// still counts, read as it last existed (CR 608.2h). Getaway Car, Golden Argosy, Luxurious Locomotive, Subterranean
+    /// Schooner and Turtle Van ask it.
+    pub fn crewed(&self, vehicle: ObjectId) -> impl Iterator<Item = ObjectId> + 'a {
+        self.this_turn().iter().filter_map(move |r| match r.event {
+            Event::Crewed { creature, vehicle: v } if v == vehicle => Some(creature),
+            _ => None,
+        })
+    }
+
     /// How many times this ability of this object has resolved this turn (CR 608.2m).
     pub fn resolutions(&self, source: ObjectId, ability: AbilityRef) -> usize {
         self.this_turn()
