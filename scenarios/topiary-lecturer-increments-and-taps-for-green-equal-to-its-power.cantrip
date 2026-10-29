@@ -1,0 +1,50 @@
+# Topiary Lecturer (1/2): Increment, and "{T}: Add an amount of {G} equal to this creature's power." Bot1 casts it on turn 1 with
+# three Moxen. On turn 3 a one-mana Lightning Bolt is not greater than its power 1 or toughness 2, so there is no counter, and
+# tapping it adds one {G}. On turn 5 a two-mana Lightning Helix is greater than the power 1: increment puts a +1/+1 counter on it
+# (2/3), and tapping it adds {G}{G}.
+
+[Bot1 Deck]
+Topiary Lecturer
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Lightning Bolt
+Lightning Helix
+Forest x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Topiary Lecturer.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Topiary Lecturer.Power = 1
+Bot1.Battlefield.Topiary Lecturer.Activate
+? Bot1.Mana = {G}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Topiary Lecturer.Power = 2
+Bot1.Battlefield.Topiary Lecturer.Activate
+? Bot1.Mana = {G}{G}
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Topiary Lecturer.Power = 2
+Bot1.Battlefield.Topiary Lecturer.Toughness = 3

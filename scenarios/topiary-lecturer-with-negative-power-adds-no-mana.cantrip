@@ -1,0 +1,39 @@
+# Topiary Lecturer (1/2): "{T}: Add an amount of {G} equal to this creature's power." Bot1 casts it on turn 1 with three Moxen, then on
+# turn 3 casts Ray of Enfeeblement ({B}, -4/-1) on it with Mox Jet: its power is -3, and a power below 0 adds nothing (CR 107.1b),
+# not a negative amount of mana.
+
+[Bot1 Deck]
+Topiary Lecturer
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Ray of Enfeeblement
+Forest x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Topiary Lecturer.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ray of Enfeeblement.Cast(Bot1.Battlefield.Topiary Lecturer)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Topiary Lecturer.Power = -3
+Bot1.Battlefield.Topiary Lecturer.Activate
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Topiary Lecturer.Power = -3
+Bot1.Battlefield.Topiary Lecturer.Toughness = 1
+Bot1.Mana =
