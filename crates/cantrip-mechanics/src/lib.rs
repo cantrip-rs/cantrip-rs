@@ -20,6 +20,7 @@ pub mod discover;
 pub mod combat;
 pub mod companion;
 pub mod copy;
+pub mod cost_reduction;
 pub mod channel;
 pub mod class;
 pub mod choose;
