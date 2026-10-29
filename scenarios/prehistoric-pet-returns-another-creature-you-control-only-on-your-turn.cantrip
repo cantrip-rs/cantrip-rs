@@ -1,0 +1,52 @@
+# Prehistoric Pet: "{1}{W}, {T}: Return another target creature you control to its owner's hand. Activate only during your turn."
+# Bot1 has only Islands on turn 3: no white mana, so it is refused. On turn 5, with a Plains, it cannot target itself ("another")
+# or Bot2's Elvish Mystic ("you control"). On Bot2's turn 6, untapped and with {1}{W} to pay, it is still refused (CR 602.5b).
+# On turn 7 it returns Bot1's Ornithopter, paid exactly with a Plains and an Island: the pool is empty and the Pet tapped.
+
+[Bot1 Deck]
+Black Lotus
+Prehistoric Pet
+Ornithopter
+Island
+Island
+Plains
+Island x17
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Plains x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Prehistoric Pet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+! Bot1.Battlefield.Prehistoric Pet.Activate(Bot1.Battlefield.Ornithopter; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Island#1.Activate
+! Bot1.Battlefield.Prehistoric Pet.Activate(Bot1.Battlefield.Prehistoric Pet)
+! Bot1.Battlefield.Prehistoric Pet.Activate(Bot2.Battlefield.Elvish Mystic)
+[T6 Bot2.Main1]
+! Bot1.Battlefield.Prehistoric Pet.Activate(Bot1.Battlefield.Ornithopter)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Prehistoric Pet.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Prehistoric Pet.Tapped = true
+Bot1.Hand = Island; Island; Island; Island; Ornithopter

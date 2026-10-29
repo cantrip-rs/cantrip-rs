@@ -1,0 +1,37 @@
+# The restriction is checked as blockers are declared (CR 509.1b; the ruling: changing a power afterwards does not make an
+# attacker unblocked). Bot2's Elvish Mystic (1/1, power not greater than the Pet's 1) blocks the attacking Prehistoric Pet; Bot2
+# then casts Full Bore on it (+3/+2, so power 4). The block stands: the Pet takes 4 and dies, the Mystic survives with 1 damage.
+
+[Bot1 Deck]
+Plains
+Prehistoric Pet
+Plains x18
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Elvish Mystic
+Full Bore
+Plains x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Prehistoric Pet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Prehistoric Pet > Bot2)
+Bot2.Block(Elvish Mystic > Prehistoric Pet)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Full Bore.Cast(Elvish Mystic)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Prehistoric Pet
+Bot2.Battlefield.Elvish Mystic.Damage = 1
+Bot2.Battlefield.Elvish Mystic.Power = 4

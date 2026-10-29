@@ -1,0 +1,42 @@
+# Prehistoric Pet (1/2): "can't be blocked by creatures with greater power" (CR 509.1b). Pet and Savannah Lions (2/1) attack Bot2,
+# who has Grizzly Bears (2/2) and Elvish Mystic (1/1). The Bears (power 2) may not block the Pet (power 1) - refused - but the
+# Mystic (power 1, not greater) may; and the Bears may block the Lions, which the restriction does not cover. The Mystic dies to the
+# Pet's 1 damage and the Pet survives its 1; the Bears and the Lions trade (both die).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Prehistoric Pet
+Savannah Lions
+Plains x16
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Elvish Mystic
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Prehistoric Pet.Cast
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Prehistoric Pet > Bot2; Savannah Lions > Bot2)
+! Bot2.Block(Grizzly Bears > Prehistoric Pet)
+Bot2.Block(Elvish Mystic > Prehistoric Pet; Grizzly Bears > Savannah Lions)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Prehistoric Pet.Damage = 1
+Bot1.Battlefield.Prehistoric Pet.Power = 1
+Bot2.Graveyard = Elvish Mystic; Grizzly Bears; Black Lotus
+Bot1.Graveyard = Savannah Lions
