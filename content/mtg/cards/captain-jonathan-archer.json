@@ -1,0 +1,8 @@
+{
+  "name": "Captain Jonathan Archer",
+  "manaCost": "{2}{G}",
+  "type": "Legendary Creature — Human Officer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When Captain Archer enters, create Porthos, a legendary 1/1 green Dog creature token.\nFederation — {G}, {T}: Target creature you control gets +X/+X until end of turn, where X is the number of creature types among non-Borg creatures you control. Activate only as a sorcery."
+}

@@ -1,0 +1,49 @@
+# Captain Archer's Federation ability costs {G}: with only white and blue sources untapped it can't be activated. It is
+# activated only as a sorcery (CR 602.5d, 307.1): not while Universal Automaton is on the stack, with the green source
+# untapped. Universal Automaton has changeling, so it is every creature type, Borg included (CR 702.73a, 205.3m), and the
+# count is of non-Borg creatures: X is Archer's Human and Officer and Porthos's Dog, 3, and Porthos becomes 4/4.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Captain Jonathan Archer
+Universal Automaton
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Captain Jonathan Archer.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Captain Jonathan Archer.Activate(Bot1.Battlefield.Porthos; Ability: Federation; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Universal Automaton.Cast
+! Bot1.Battlefield.Captain Jonathan Archer.Activate(Bot1.Battlefield.Porthos; Ability: Federation)
+Bot1.Pass
+Bot1.Battlefield.Captain Jonathan Archer.Activate(Bot1.Battlefield.Porthos; Ability: Federation)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Porthos.Power = 4
+? Bot1.Battlefield.Porthos.Toughness = 4
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Universal Automaton.Power = 1
+Bot1.Battlefield.Captain Jonathan Archer.Tapped = true

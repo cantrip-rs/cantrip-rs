@@ -1,0 +1,65 @@
+# The six distinct types among Archer (Human, Officer), Porthos (Dog), Memnite (Construct), and Serpent Specialist
+# (Human, Snake, Villain) give +6/+6; duplicate Human counts once. Assembly Specialist and its Borg token, and Bot2's
+# unique Thopter, are excluded. The opposing Memnite is refused as a target. The checks show the pump before and after cleanup (CR 115.1c, 205.3m,
+# 608.2h, 611.2a, 514.2).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Black Lotus
+Captain Jonathan Archer
+Assembly Specialist
+Memnite
+Serpent Specialist
+Forest
+Island x20
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Captain Jonathan Archer.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Assembly Specialist.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Serpent Specialist.Cast
+Bot1.Pass
+! Bot1.Battlefield.Captain Jonathan Archer.Activate(Bot2.Battlefield.Memnite; Ability: Federation)
+Bot1.Battlefield.Captain Jonathan Archer.Activate(Bot1.Battlefield.Memnite; Ability: Federation)
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 7
+? Bot1.Battlefield.Memnite.Toughness = 7
+[T3 Bot1.Main2]
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Porthos.Power = 1
+Bot1.Battlefield.Assembly Specialist.Subtypes = Borg
+Bot1.Battlefield.Borg Token.Subtypes = Borg
