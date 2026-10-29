@@ -1,0 +1,11 @@
+{
+  "name": "High-Flying Ace",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Bird Mutant",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\n{3}{W}: Target creature without flying gains flying until end of turn. Activate only as a sorcery.",
+  "keywords": [
+    "Flying"
+  ]
+}
