@@ -1,0 +1,6 @@
+{
+  "name": "Common Goal",
+  "manaCost": "{1}{G}",
+  "type": "Sorcery",
+  "oracleText": "One or two target creatures you control each deal damage equal to their power to target creature an opponent controls."
+}

@@ -1,0 +1,40 @@
+# Common Goal reads a source's power as it resolves. Tragic Trajectory reduces Affa Protector from 1/4 to -1/2 before
+# Common Goal resolves; the negative power's damage amount is treated as zero (CR 107.1b).
+
+[Bot1 Deck]
+Island
+Mox Jet
+Black Lotus
+Affa Protector
+Tragic Trajectory
+Common Goal
+Forest
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Affa Protector.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tragic Trajectory.Cast(Bot1.Battlefield.Affa Protector)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Common Goal.Cast
+Bot1.Target(Bot1.Battlefield.Affa Protector)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Affa Protector.Power = -1
+Bot1.Battlefield.Affa Protector.Toughness = 2
+Bot2.Battlefield.Ornithopter.Damage = 0

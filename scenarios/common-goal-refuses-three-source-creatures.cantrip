@@ -1,0 +1,43 @@
+# Common Goal allows at most two source creatures. Three are available and the opponent's Wall is a valid recipient, but
+# the attempted four-target cast is not offered (CR 601.2c).
+
+[Bot1 Deck]
+Mox Emerald
+Black Lotus
+Ornithopter
+Grizzly Bears
+Llanowar Elves
+Common Goal
+Forest
+Island x12
+
+[Bot2 Deck]
+Island
+Black Lotus
+Wall of Mist
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Llanowar Elves.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Mist.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Common Goal.Cast
+! Bot1.Target(Bot1.Battlefield.Ornithopter; Bot1.Battlefield.Grizzly Bears; Bot1.Battlefield.Llanowar Elves)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears; Bot1.Battlefield.Llanowar Elves)
+Bot1.Target(Bot2.Battlefield.Wall of Mist)
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Common Goal.Colors = Green
+Bot2.Battlefield.Wall of Mist.Damage = 3

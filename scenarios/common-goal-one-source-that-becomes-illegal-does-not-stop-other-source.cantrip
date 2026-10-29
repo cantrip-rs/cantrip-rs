@@ -1,0 +1,51 @@
+# The spell has two creature targets and a recipient; a Bolt removes one source before resolution (CR 608.2b),
+# while the remaining source still deals damage equal to its power.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Grizzly Bears
+Llanowar Elves
+Common Goal
+Forest
+Island
+Island x12
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Wall of Mist
+Lightning Bolt
+Island x12
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Mist.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Common Goal.Cast
+Bot1.Target(Bot1.Battlefield.Llanowar Elves; Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Wall of Mist)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves = (absent)
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Wall of Mist.Damage = 2

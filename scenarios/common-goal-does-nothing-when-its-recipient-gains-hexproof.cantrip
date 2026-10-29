@@ -1,0 +1,53 @@
+# Tamiyo's Safekeeping makes the recipient an illegal target before resolution (CR 608.2b); Common Goal deals no damage.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Grizzly Bears
+Llanowar Elves
+Common Goal
+Forest
+Island
+Island x12
+
+[Bot2 Deck]
+Mountain
+Mox Emerald
+Black Lotus
+Wall of Mist
+Tamiyo's Safekeeping
+Island x12
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wall of Mist.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Common Goal.Cast
+Bot1.Target(Bot1.Battlefield.Llanowar Elves; Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Wall of Mist)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Tamiyo's Safekeeping.Cast(Bot2.Battlefield.Wall of Mist)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot2.Battlefield.Wall of Mist.Damage = 0
+Bot2.Life = 22
