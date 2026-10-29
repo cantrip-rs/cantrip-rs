@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::attach::equipment_controlled;
-use cantrip_mechanics::{choose, effects};
+use cantrip_mechanics::{choose, effects, select};
 use cantrip_oracle as oracle;
 
 /// "Gets +2/+0 for each Equipment attached to him" (CR 613.4c, layer 7c; CR 301.5a): the Equipment as the earlier layers made
@@ -17,7 +17,7 @@ fn plus_two_power_per_equipment_attached(view: &dyn LayerQuery, source: ObjectId
 fn return_and_may_equip(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let returned = effects::put_this_card_onto_battlefield_with_finality(g, item)?;
     let equipment = equipment_controlled(g, item.controller);
-    for attachment in choose::cards(g, item.controller, item.object, Purpose::Attach, equipment, 1, true)? {
+    for attachment in choose::select(g, item.controller, item.object, Purpose::Attach, equipment, select::cards(select::up_to(1)))? {
         g.attach(attachment, returned);
     }
     Ok(())
