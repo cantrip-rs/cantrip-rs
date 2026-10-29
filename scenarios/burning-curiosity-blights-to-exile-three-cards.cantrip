@@ -1,0 +1,40 @@
+# Burning Curiosity blighting 1 onto Bot1's Ornithopter (0/3, it survives with a -1/-1 counter, CR 701.68a) exiles the top three cards instead: Mountain, Island and Forest. The Mountain is played from exile.
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Ornithopter
+Burning Curiosity
+Plains
+Plains
+Mountain
+Island
+Forest
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burning Curiosity.Cast
+Bot1.Modes(Blight 1)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Exile.Mountain.Play
+
+[Expect]
+Exile = Forest; Island
+Bot1.Library.Count = 11
+Bot1.Battlefield = Mountain; Mox Jet; Mox Pearl; Mox Ruby; Ornithopter
