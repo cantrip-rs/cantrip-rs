@@ -3,14 +3,6 @@ use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_mechanics::{effects, evoke, spent, targets};
 use cantrip_oracle as oracle;
 
-/// "Put three -1/-1 counters on up to one target creature."
-fn three_minus_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        g.add_counters(creature, CounterKind::MinusOne, 3);
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     ways: &[evoke::way(Cost::mana(mana("{W/B}{W/B}")), "Evoke {W/B}{W/B}")],
     abilities: &[
@@ -24,7 +16,7 @@ pub static CARD: CardDef = CardDef {
         .condition(spent::two::<{ Mana::W as u8 }>),
         triggered(
             THIS_ENTERS,
-            three_minus_counters,
+            effects::minus_one_counters_on_target::<3>,
             "When this creature enters, if {B}{B} was spent to cast it, put three -1/-1 counters on up to one target creature.",
         )
         .targets(&[targets::CREATURE.between(0, 1)])
