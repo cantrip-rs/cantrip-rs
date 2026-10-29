@@ -1,0 +1,8 @@
+{
+  "name": "Postmortem Professor",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Zombie Warlock",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "This creature can't block.\nWhenever this creature attacks, each opponent loses 1 life and you gain 1 life.\n{1}{B}, Exile an instant or sorcery card from your graveyard: Return this card from your graveyard to the battlefield."
+}

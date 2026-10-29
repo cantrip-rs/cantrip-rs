@@ -1,0 +1,39 @@
+# Postmortem Professor: bolted by Bot1 itself, it is in the graveyard with the Bolt on top. "{1}{B}, Exile an instant or sorcery card from your graveyard:
+# Return this card from your graveyard to the battlefield" (Mox Jet and Mox Pearl pay): the Bolt is exiled, the Professor is back, and the ability does
+# nothing from the battlefield (refused; it works only from the graveyard).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Postmortem Professor
+Lightning Bolt
+Swamp x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Postmortem Professor.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Postmortem Professor)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Postmortem Professor.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Postmortem Professor.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Postmortem Professor
+Bot1.Graveyard =
+Exile = Lightning Bolt
