@@ -1,0 +1,6 @@
+{
+  "name": "Cloak and Phaser",
+  "manaCost": "{8}{U}",
+  "type": "Sorcery",
+  "oracleText": "Strange new worlds — This spell costs {X} less to cast, where X is the number of differently named lands you control.\nCreate two 2/2 black Romulan creature tokens. Draw two cards, then discard a card."
+}

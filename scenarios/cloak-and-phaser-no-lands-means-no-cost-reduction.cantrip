@@ -1,0 +1,39 @@
+# With no lands, X is zero and the {8}{U} cost remains full; these mana rocks pay exactly that cost (CR 601.2f).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Sol Ring x2
+Black Lotus
+Cloak and Phaser
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cloak and Phaser.Cast(Spend: C, C, C, C, R, R, R, G, U)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield.Romulan Token#1.Power = 2
+Bot1.Battlefield.Romulan Token#2.Power = 2
+Bot1.Graveyard = Cloak and Phaser; Island; Black Lotus

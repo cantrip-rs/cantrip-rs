@@ -1,0 +1,61 @@
+# Two Forest/Island names reduce {8}{U} to {6}{U}; the duplicate Island does not add another reduction. The pool is empty after
+# paying exactly, two Romulans enter, then the two draws happen before Bot1 discards one of the cards drawn (CR 601.2f, 118.7a,
+# 111.1, 121.1, 701.9). Bot2's Plains is not a land Bot1 controls and does not reduce it.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Sapphire
+Sol Ring
+Cloak and Phaser
+Island
+Island
+Plains
+Swamp
+Mountain
+Wurmwall Sweeper
+Island x10
+
+[Bot2 Deck]
+Plains
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Cloak and Phaser.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Wurmwall Sweeper)
+
+[Expect]
+Bot1.Battlefield.Romulan Token#1.Power = 2
+Bot1.Battlefield.Romulan Token#1.Toughness = 2
+Bot1.Battlefield.Romulan Token#1.Colors = Black
+Bot1.Battlefield.Romulan Token#1.Subtypes = Romulan
+Bot1.Battlefield.Romulan Token#2.Power = 2
+Bot1.Battlefield.Romulan Token#2.Toughness = 2
+Bot1.Graveyard = Cloak and Phaser; Wurmwall Sweeper
+Bot1.Hand.Count = 3
+Bot1.Battlefield = Forest; Island; Island; Mox Ruby; Mox Sapphire; Sol Ring; Romulan Token; Romulan Token
+Bot2.Battlefield = Plains
