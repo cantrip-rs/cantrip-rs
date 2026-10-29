@@ -1,0 +1,55 @@
+# Bot1's Ornithopter attacks unblocked; Splinter is sneaked in for {B} (Mox Jet, the pool left empty), returning the
+# Ornithopter. He enters tapped and attacking with menace, a 1/3 himself: "other Ninjas you control get +1/+1" leaves him out,
+# lifts Bot1's Fang of Shigeki, and does not lift Bot2's. He deals 1 combat damage (Bot2 at 19).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Ornithopter
+Splinter, Hamato Yoshi
+Fang of Shigeki
+Swamp x17
+
+[Bot2 Deck]
+Mox Emerald
+Fang of Shigeki
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fang of Shigeki.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Fang of Shigeki.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Fang of Shigeki.Power = 1
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Splinter, Hamato Yoshi.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Splinter, Hamato Yoshi > Bot2
+? Bot1.Mana = 
+? Bot1.Battlefield.Splinter, Hamato Yoshi.Tapped = True
+? Bot1.Battlefield.Splinter, Hamato Yoshi.Power = 1
+? Bot1.Battlefield.Splinter, Hamato Yoshi.Toughness = 3
+? Bot1.Battlefield.Fang of Shigeki.Power = 2
+? Bot2.Battlefield.Fang of Shigeki.Power = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Fang of Shigeki.Toughness = 2
+Bot2.Battlefield.Fang of Shigeki.Toughness = 1

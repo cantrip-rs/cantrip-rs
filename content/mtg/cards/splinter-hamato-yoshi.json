@@ -1,0 +1,11 @@
+{
+  "name": "Splinter, Hamato Yoshi",
+  "manaCost": "{1}{B}",
+  "type": "Legendary Creature — Mutant Ninja Rat",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Sneak {B} (You may cast this spell for {B} if you also return an unblocked attacker you control to hand during the declare blockers step. He enters tapped and attacking.)\nMenace (This creature can't be blocked except by two or more creatures.)\nOther Ninjas you control get +1/+1.",
+  "keywords": [
+    "Menace"
+  ]
+}
