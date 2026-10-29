@@ -1,0 +1,39 @@
+# "Target creature" is any creature, your own included: Bot1 hits its own 0/4 Living Library, which survives with exactly 3 damage
+# (so the amount is 3, not 4). "You may put a card from your hand on the bottom": Bot1 declines (`Choose()`), so nothing goes under the
+# library and no card is drawn ("if you do").
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Manhole Missile
+Living Library
+Plains
+Forest
+Swamp
+Island
+Mox Pearl
+Forest x6
+
+[Bot2 Deck]
+Plains x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Living Library.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Manhole Missile.Cast(Bot1.Battlefield.Living Library)
+Bot1.Pass
+Bot1.Choose()
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Living Library.Damage = 3
+Bot1.Hand = Forest; Island; Plains; Swamp
+Bot1.Library = Mox Pearl; Forest; Forest; Forest; Forest; Forest; Forest

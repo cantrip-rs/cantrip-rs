@@ -1,0 +1,51 @@
+# Manhole Missile deals exactly 3 damage to target creature (CR 120.3), killing Bot2's 2/3 Eumidian Terrabotanist, then "you may
+# put a card from your hand on the bottom of your library. If you do, draw a card" (CR 401.4, 121.1). Bot1 bottoms the Swamp, so
+# it goes under the whole library, and draws the Mox Pearl on top; Bot2's hand and library are untouched. A Mox Jet and a player are
+# no legal targets (refused), the Terrabotanist is (the control). Paid exactly with Mox Ruby and Mox Jet: nothing is left in the pool.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Manhole Missile
+Plains
+Forest
+Swamp
+Island
+Mountain
+Mox Pearl
+Forest x6
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Eumidian Terrabotanist
+Plains x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Eumidian Terrabotanist.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Manhole Missile.Cast(Bot2.Battlefield.Mox Jet)
+! Bot1.Hand.Manhole Missile.Cast(Bot2)
+Bot1.Hand.Manhole Missile.Cast(Bot2.Battlefield.Eumidian Terrabotanist)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Choose(Swamp)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Eumidian Terrabotanist
+Bot2.Hand.Count = 5
+Bot1.Hand = Forest; Island; Mountain; Mox Pearl; Plains
+Bot1.Library = Forest; Forest; Forest; Forest; Forest; Forest; Swamp
