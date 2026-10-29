@@ -10,18 +10,10 @@ fn another_attacking_creature(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     (targets::CREATURE.filter)(q, asker, t) && matches!(t, Target::Object(id) if id != asker.source && q.is_attacking(id))
 }
 
-/// "... gains flying until end of turn." A target no longer legal (no longer attacking) gains nothing (CR 608.2b).
-fn gains_flying(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        effects::gain_until_end_of_turn(g, item.object, creature, Keyword::Flying);
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
         THIS_ATTACKS,
-        gains_flying,
+        effects::first_target_gains_flying,
         "Whenever this creature attacks, another target attacking creature gains flying until end of turn.",
     )
     .targets(&[target(another_attacking_creature)])],

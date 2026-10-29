@@ -1111,6 +1111,15 @@ pub fn this_gains_flying(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
     this_gains_until_end_of_turn(g, item, Keyword::Flying)
 }
 
+/// "Target creature gains flying until end of turn" (CR 702.9b, 611.2a): the ability's first target. A target no longer legal gains
+/// nothing (CR 608.2b). Helitrooper and Stratosoarer print it.
+pub fn first_target_gains_flying(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        gain_until_end_of_turn(g, item.object, creature, Keyword::Flying);
+    }
+    Ok(())
+}
+
 /// "This creature gains first strike until end of turn" (CR 702.7a): `this_gains_until_end_of_turn` for first strike.
 pub fn this_gains_first_strike(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     this_gains_until_end_of_turn(g, item, Keyword::FirstStrike)
