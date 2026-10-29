@@ -1,0 +1,42 @@
+# Bile-Vial Boggart {B} 1/1: "When this creature dies, put a -1/-1 counter on up to one target creature." Bot1 kills its own Boggart with
+# Blight Rot (four counters, so it dies as a -3/-3; CR 704.5f) and the death trigger puts exactly one counter on Bot2's Wall of Earth
+# (0/6 becomes -1/5). The counter goes on the creature chosen, not on the Boggart's killer. The twin that chooses nobody is
+# "...-with-no-target-chosen-puts-no-counter".
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Bile-Vial Boggart
+Blight Rot
+Island x4
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Wall of Earth
+Island x17
+
+[Actions]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Earth.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bile-Vial Boggart.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Blight Rot.Cast(Bile-Vial Boggart)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Wall of Earth)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet
+Bot1.Graveyard.Count = 3
+Bot2.Battlefield.Wall of Earth.Counters.MinusOneMinusOne = 1
+Bot2.Battlefield.Wall of Earth.Toughness = 5

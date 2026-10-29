@@ -1,0 +1,8 @@
+{
+  "name": "Bile-Vial Boggart",
+  "manaCost": "{B}",
+  "type": "Creature — Goblin Assassin",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature dies, put a -1/-1 counter on up to one target creature."
+}
