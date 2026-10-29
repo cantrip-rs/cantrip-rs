@@ -1,0 +1,54 @@
+# Madame Null when the creature is gone (CR 608.2b, 113.7a): Bot1 casts Hill Giant on turn 3 and Bot2, in response to Madame Null's trigger, kills it with Lightning Bolt.
+# The payment is still its last known power, 3 life (20 - 3 = 17), but there is no creature to put counters on, and the Giant stays in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Madame Null, Power Broker
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Hill Giant
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x22
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Madame Null, Power Broker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Hill Giant.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hill Giant)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot1.Graveyard = Hill Giant; Black Lotus
+Bot1.Battlefield = Madame Null, Power Broker; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby

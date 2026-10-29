@@ -1,0 +1,40 @@
+# Madame Null's "you may pay" (CR 118.12): Bot1 declines to pay 3 life for Hill Giant, which stays a 3/3 and Bot1's life stays 20.
+
+[Bot1 Deck]
+Black Lotus
+Madame Null, Power Broker
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Hill Giant
+Island x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Madame Null, Power Broker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Hill Giant.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.Hill Giant.Toughness = 3

@@ -1,0 +1,28 @@
+# Madame Null with a power-0 creature (CR 118.1, 122.1): Ornithopter enters, paying 0 life is allowed and puts 0 counters on it, so nothing changes (life 20, no counters).
+
+[Bot1 Deck]
+Black Lotus
+Madame Null, Power Broker
+Ornithopter
+Island x21
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Madame Null, Power Broker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
