@@ -1,0 +1,11 @@
+{
+  "name": "Shredder, Unrelenting",
+  "manaCost": "{4}{B}",
+  "type": "Legendary Creature — Human Ninja",
+  "power": 6,
+  "toughness": 4,
+  "oracleText": "Sneak {3}{B} (You may cast this spell for {3}{B} if you also return an unblocked attacker you control to hand during the declare blockers step. He enters tapped and attacking.)\nDeathtouch\nWhenever Shredder enters or attacks, another target creature you control gains deathtouch until end of turn.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

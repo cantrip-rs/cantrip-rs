@@ -1,0 +1,49 @@
+# Cast for {4}{B} (Black Lotus, Mox Jet, Mox Emerald), the enters trigger may not target Shredder himself ("another") and gives
+# the Dryad Arbor deathtouch. On Bot1's next turn, attacking, the trigger may not target Bot2's Ornithopter
+# ("you control") and gives it to the Arbor again.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Shredder, Unrelenting
+Dryad Arbor
+Ornithopter
+Swamp x14
+
+[Bot2 Deck]
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Shredder, Unrelenting.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Shredder, Unrelenting)
+Bot1.Target(Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dryad Arbor.Keywords = Deathtouch
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Shredder, Unrelenting > Bot2)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dryad Arbor.Keywords = Deathtouch
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14

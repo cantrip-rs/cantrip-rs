@@ -1,0 +1,40 @@
+# Bot1's Ornithopter attacks unblocked; Shredder is sneaked in for {3}{B} (Black Lotus and Mox Jet), returning the Ornithopter. He enters
+# tapped and attacking, which is an "enters" and not an "attacks" event, and the one trigger gives Bot1's Dryad Arbor deathtouch
+# until end of turn. He deals 6 (Bot2 at 14).
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Ornithopter
+Shredder, Unrelenting
+Dryad Arbor
+Swamp x14
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Shredder, Unrelenting.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Shredder, Unrelenting > Bot2
+? Bot1.Battlefield.Shredder, Unrelenting.Tapped = True
+? Bot1.Battlefield.Dryad Arbor.Keywords = Deathtouch
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
