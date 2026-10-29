@@ -1,0 +1,36 @@
+# "Any artifact or creature on the battlefield": a choice, not a target, and an opponent's permanent is as available as
+# your own (CR 707.2, 614.12). Bot2's Ornithopter is the only candidate; Dominion Saboteur enters as Bot1's Ornithopter.
+
+[Bot1 Deck]
+Dominion Saboteur
+Island x24
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Dominion Saboteur.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Accept
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Island; Island; Island; Island; Island; Ornithopter
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Battlefield = Ornithopter

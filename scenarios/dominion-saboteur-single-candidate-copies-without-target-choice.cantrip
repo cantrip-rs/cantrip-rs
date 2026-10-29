@@ -1,0 +1,39 @@
+# Ornithopter is the sole artifact or creature on the battlefield as Dominion Saboteur enters (CR 614.12); accepting copies
+# it without a target question. Five land drops pay for Saboteur on turn 9.
+
+[Bot1 Deck]
+Dominion Saboteur
+Ornithopter
+Island x24
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Dominion Saboteur.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Accept
+! Bot1.Target
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Island; Island; Island; Island; Island; Ornithopter; Ornithopter
+Bot1.Battlefield.Ornithopter#1.Types = Artifact; Creature
+Bot1.Battlefield.Ornithopter#2.Types = Artifact; Creature
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot1.Battlefield.Ornithopter#2.Toughness = 2
+Bot1.Battlefield.Ornithopter#2.Keywords = Flying

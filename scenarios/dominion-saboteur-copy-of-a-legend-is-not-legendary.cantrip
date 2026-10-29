@@ -1,0 +1,44 @@
+# "Except it isn't legendary" (CR 707.9b): Dominion Saboteur copies Isamaru, Hound of Konda and keeps its name, but the copy
+# is not legendary, so the legend rule (CR 704.5j) leaves both on the battlefield.
+
+[Bot1 Deck]
+Isamaru, Hound of Konda
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Plains
+Dominion Saboteur
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Dominion Saboteur.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Accept
+Bot1.Target(Isamaru, Hound of Konda)
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Isamaru, Hound of Konda#1.Supertypes = Legendary
+Bot1.Battlefield.Isamaru, Hound of Konda#2.Supertypes = (absent)
+Bot1.Battlefield.Isamaru, Hound of Konda#2.Power = 2
+Bot1.Battlefield.Isamaru, Hound of Konda#2.Counters.PlusOnePlusOne = (absent)

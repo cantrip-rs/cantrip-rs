@@ -1,0 +1,37 @@
+# Sol Ring is the only eligible permanent (artifact, not creature) on the battlefield as Dominion Saboteur enters. Accepting
+# copies it without a target choice; the lands are not artifact or creature candidates (CR 614.12, 707.2).
+
+[Bot1 Deck]
+Dominion Saboteur
+Sol Ring
+Island x24
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Dominion Saboteur.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Accept
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Sol Ring#1.Types = Artifact
+Bot1.Battlefield.Sol Ring#2.Types = Artifact

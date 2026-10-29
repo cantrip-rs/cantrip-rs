@@ -1,0 +1,8 @@
+{
+  "name": "Dominion Saboteur",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Shapeshifter",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "You may have this creature enter as a copy of any artifact or creature on the battlefield, except it isn't legendary. If you do, it enters with additional counters on it equal to the same number and kinds of counters the copied permanent has on it."
+}

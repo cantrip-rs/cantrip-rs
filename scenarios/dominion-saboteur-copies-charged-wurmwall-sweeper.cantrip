@@ -1,0 +1,63 @@
+# Dominion Saboteur copies Wurmwall Sweeper after it gains four charge counters by stationing (CR 707.2, 614.12); the copy
+# receives the same number and kind of counters, so it is a 2/2 flying artifact creature rather than an unstationed artifact.
+
+[Bot1 Deck]
+Wurmwall Sweeper
+Sunset Saboteur
+Dominion Saboteur
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Wurmwall Sweeper.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island; Island |)
+Bot1.Hand.Sunset Saboteur.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot1.Battlefield.Wurmwall Sweeper.Activate(Ability: Station)
+Bot1.Choose(Sunset Saboteur)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wurmwall Sweeper.Types = Artifact; Creature
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Dominion Saboteur.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Accept
+Bot1.Target(Wurmwall Sweeper)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island; Island |)
+
+[Expect]
+Bot1.Battlefield.Wurmwall Sweeper#1.Counters.Charge = 4
+Bot1.Battlefield.Wurmwall Sweeper#2.Counters.Charge = 4
+Bot1.Battlefield.Wurmwall Sweeper#2.Types = Artifact; Creature
+Bot1.Battlefield.Wurmwall Sweeper#2.Power = 2
+Bot1.Battlefield.Wurmwall Sweeper#2.Toughness = 2
+Bot1.Battlefield.Wurmwall Sweeper#2.Keywords = Flying

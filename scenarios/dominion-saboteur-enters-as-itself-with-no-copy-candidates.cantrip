@@ -1,0 +1,33 @@
+# With only lands on the battlefield, Dominion Saboteur has no artifact or creature to copy (CR 614.12), so no may-choice
+# is offered and it enters as its printed 3/3 Shapeshifter. Five land drops pay for it on turn 9.
+
+[Bot1 Deck]
+Dominion Saboteur
+Island x24
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Dominion Saboteur.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Accept
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Dominion Saboteur.Power = 3
+Bot1.Battlefield.Dominion Saboteur.Toughness = 3
+Bot1.Battlefield.Dominion Saboteur.Subtypes = Shapeshifter

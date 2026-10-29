@@ -1,0 +1,36 @@
+# Declining Dominion Saboteur's optional copy replacement leaves it as its printed 3/3 Shapeshifter (CR 614.12). Ornithopter
+# is the lone copy candidate; five land drops pay for Saboteur on turn 9.
+
+[Bot1 Deck]
+Dominion Saboteur
+Ornithopter
+Island x24
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Dominion Saboteur.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Decline
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Island; Island; Island; Island; Island; Ornithopter; Dominion Saboteur
+Bot1.Battlefield.Dominion Saboteur.Power = 3
+Bot1.Battlefield.Dominion Saboteur.Toughness = 3
+Bot1.Battlefield.Dominion Saboteur.Subtypes = Shapeshifter

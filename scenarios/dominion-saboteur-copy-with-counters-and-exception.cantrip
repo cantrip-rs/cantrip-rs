@@ -1,0 +1,56 @@
+# Dominion Saboteur copies a countered legendary creature (CR 707.2, 707.9a-b, 614.12): its copy effect keeps the
+# copied name and +1/+1 counter, but removes legendary. Three Moxen plus Plains cast Isamaru and Dominion Supervisor on
+# turn 1; the Supervisor puts a counter on Isamaru. The untapped sources on turn 3 pay for Saboteur.
+
+[Bot1 Deck]
+Dominion Supervisor
+Isamaru, Hound of Konda
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Plains
+Dominion Saboteur
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dominion Supervisor.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Target(Isamaru, Hound of Konda)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Dominion Saboteur.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Accept
+! Bot1.Decline
+Bot1.Target(Isamaru, Hound of Konda)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Isamaru, Hound of Konda#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Isamaru, Hound of Konda#2.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Isamaru, Hound of Konda#1.Power = 3
+Bot1.Battlefield.Isamaru, Hound of Konda#2.Power = 3
+Bot1.Battlefield.Isamaru, Hound of Konda#1.Supertypes = Legendary
+Bot1.Battlefield.Isamaru, Hound of Konda#2.Supertypes = (absent)
