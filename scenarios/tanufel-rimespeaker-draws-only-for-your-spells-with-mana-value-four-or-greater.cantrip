@@ -1,0 +1,64 @@
+# Tanufel Rimespeaker {3}{U} (four Moxen, turn 1): "Whenever you cast a spell with mana value 4 or greater, draw a card" (CR 603.2, 202.3).
+# On turn 3 Bot1 (hand after the turn-3 draw: Memnite, Salvagers, Island) casts Memnite (mana value 0) - no draw, 2 cards left - then Auriok
+# Salvagers ({3}{W}, mana value 4): 1 card left, and the trigger draws one, so 2 again. On turn 4 Bot2 casts a Salvagers from four Moxen of
+# their own: that is not Bot1's spell, so Bot1 draws nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Tanufel Rimespeaker
+Memnite
+Auriok Salvagers
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Auriok Salvagers
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tanufel Rimespeaker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+Bot1.Hand.Auriok Salvagers.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T4 Bot2.Main1]
+Bot2.Hand.Auriok Salvagers.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot2.Battlefield.Auriok Salvagers.Power = 2

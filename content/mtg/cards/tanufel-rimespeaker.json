@@ -1,0 +1,8 @@
+{
+  "name": "Tanufel Rimespeaker",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Elemental Wizard",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Whenever you cast a spell with mana value 4 or greater, draw a card."
+}
