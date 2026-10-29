@@ -408,6 +408,8 @@ Several names that are all among the candidates are instead one answer, which th
 `! Bot1.Target(Ornithopter#1; Ornithopter#2; Ornithopter#3)` for "up to two target creatures" (more than the slot takes), or one
 object named twice, `! Bot1.Target(Ornithopter#1; Ornithopter#1)`, as many as the slot takes, so that the repetition is what is
 refused (CR 115.3), or targets whose mana values add up to more than the slot's total allows (CR 601.2c). The engine's own check of the answer decides (`check_answer`).
+A lone name that is a legal target is one answer too when the slot takes at least two, and is refused as too few:
+`! Bot1.Target(Bot2.Battlefield.Memnite)` for Kitsune's "two other target creatures" (CR 601.2c, 115.1).
 `! Bot1.Target(Count: N)` fails instead if the question takes N targets, and proves nothing when it has fewer candidates than
 that; `Count: 0` is choosing none, which no answer naming targets can say. It shows a slot takes at least one target (The Eagles Are Coming! unkicked, where kicked it takes any number).
 

@@ -1849,7 +1849,10 @@ impl<'s> Run<'s> {
                 // `! Bot1.Target(Grizzly Bears; Grizzly Bears)` (CR 115.3: one object is not chosen twice for one word
                 // "target"), which must then be as many as the slot takes, so that the repetition is what is refused.
                 let named: Vec<Option<Target>> = action.positional().map(|spec| self.target(action, spec.trim(), candidates)).collect::<R<_>>()?;
-                if named.len() > 1 && named.iter().all(Option::is_some) {
+                // A lone name that is a candidate is one answer too when the slot takes more than one target (`! Bot1.Target(A)` for
+                // "two target creatures"): too few, which the question must refuse.
+                let too_few = named.len() == 1 && *least > 1;
+                if (named.len() > 1 || too_few) && named.iter().all(Option::is_some) {
                     let repeated = named.iter().enumerate().any(|(i, t)| named[..i].contains(t));
                     if repeated
                         && let RequestKind::ChooseTarget { least, count, .. } = &request.kind
