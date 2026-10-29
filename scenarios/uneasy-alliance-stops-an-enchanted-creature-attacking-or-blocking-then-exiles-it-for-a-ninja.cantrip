@@ -1,0 +1,72 @@
+# Uneasy Alliance: Bot1 enchants Bot2's Elvish Mystic. The Mystic cannot block Bot1's Savannah Lions (T3), cannot attack
+# (T4), while the ability ({5}, Sacrifice this Aura; sorcery speed) is refused in combat. On T5 Bot1 pays {5} in its second main
+# phase: the Aura is sacrificed, the Mystic is exiled (the Aura's last-known enchanted creature, CR 608.2h) and Bot1 creates a
+# 1/1 black Ninja token.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Mox Jet
+Savannah Lions
+Uneasy Alliance
+Plains
+Plains x13
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Elvish Mystic
+Elvish Mystic
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Uneasy Alliance.Cast(Bot2.Battlefield.Elvish Mystic#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Savannah Lions > Bot2)
+! Bot2.Block(Elvish Mystic#1 > Savannah Lions)
+[T4 Bot2.Main1]
+! Bot2.Attack(Elvish Mystic#1 > Bot1)
+[T5 Bot1.Main1]
+Bot1.Attack(Savannah Lions > Bot2)
+! Bot1.Battlefield.Uneasy Alliance.Activate
+[T5 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Uneasy Alliance.Activate
+? Bot1.Graveyard = Uneasy Alliance
+? Bot2.Battlefield.Elvish Mystic#1.Power = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 3
+Bot2.Exile.Elvish Mystic.Power = 1
+Bot1.Graveyard = Uneasy Alliance
+Bot1.Battlefield.Ninja Token.Power = 1
+Bot1.Battlefield.Ninja Token.Toughness = 1
+Bot1.Battlefield.Ninja Token.Colors = Black
+Bot2.Life = 16
