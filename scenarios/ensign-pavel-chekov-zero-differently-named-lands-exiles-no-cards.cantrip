@@ -1,0 +1,43 @@
+# With no lands controlled, X is zero. No card is exiled and there is no land choice to make (CR 201.2b, 406.2, 608.2d).
+
+[Bot1 Deck]
+Ensign Pavel Chekov
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Forest
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ensign Pavel Chekov.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Library.Count = 15
+Bot1.Battlefield.Ensign Pavel Chekov.Types = Creature
+

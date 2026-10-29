@@ -1,0 +1,58 @@
+# X is one because Bot1 controls one distinct land name. Bot2's exiled card is a nonland, so no impossible land choice is asked for that opponent; Bot3's Mountain remains selectable. CR 201.2b, 406.2, 608.2d.
+
+[Bot1 Deck]
+Forest
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Ensign Pavel Chekov
+Island x2
+Island x20
+
+[Bot2 Deck]
+Island x7
+Black Lotus
+Island x20
+
+[Bot3 Deck]
+Island x7
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ensign Pavel Chekov.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Exile.Count = 2
+Bot1.Choose(Bot3.Exile.Mountain)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+
+[Expect]
+Bot2.Library.Count = 20
+Bot3.Library.Count = 20
+Exile = Black Lotus; Mountain
+Exile.Count = 2
+Bot1.Battlefield.Ensign Pavel Chekov.Types = Creature

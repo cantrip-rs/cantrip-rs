@@ -1,0 +1,86 @@
+# Two opponents each lose exactly the top two cards because Bot1 controls two distinct land names. Their own Plains and Swamp do not add to X. Bot1 rejects the other opponent's land and a nonland, chooses one land owned by each, plays only one immediately, then the second later after Chekov leaves. CR 201.2b, 101.4, 406.2, 608.2d, 305.1.
+
+[Bot1 Deck]
+Forest
+Island
+Mox Sapphire
+Mox Pearl
+Ensign Pavel Chekov
+Island x2
+Island x20
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Island x5
+Island x2
+Forest
+Black Lotus
+Island x20
+
+[Bot3 Deck]
+Swamp
+Island x6
+Island x2
+Swamp
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot3.Main1]
+Bot3.Hand.Swamp.Play
+[T4 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ensign Pavel Chekov.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Exile.Count = 4
+! Bot1.Choose(Bot3.Exile.Swamp)
+! Bot1.Choose(Bot2.Exile.Black Lotus)
+Bot1.Choose(Bot2.Exile.Forest)
+! Bot1.Choose(Bot2.Exile.Forest)
+Bot1.Choose(Bot3.Exile.Swamp)
+! Bot1.Exile.Mountain.Play
+Bot1.Exile.Forest.Play
+[T8 Bot2.Main1]
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ensign Pavel Chekov)
+Bot2.Pass
+Bot3.Pass
+[T10 Bot1.Main1]
+Bot1.Exile.Swamp.Play
+
+[Expect]
+Bot2.Library.Count = 19
+Bot3.Library.Count = 19
+Bot1.Life = 21
+Bot1.Battlefield.Ensign Pavel Chekov = (absent)
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Forest#1.Tapped = false
+Bot1.Battlefield.Forest#2.Tapped = false
+Bot1.Battlefield.Island.Tapped = false
+Bot1.Battlefield.Swamp.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = false
+Exile = Black Lotus; Ensign Pavel Chekov; Mountain
+

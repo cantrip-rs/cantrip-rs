@@ -1,0 +1,44 @@
+# Bot1 controls Forest, Island and a second Island (three lands, two differently named) plus Mox Sapphire (not a land), so X is 2 and exactly the top two cards of Bot2's library (Plains, Mountain) are exiled; counting lands (3) would also exile an Island. CR 201.2a-b, 608.2c.
+
+[Bot1 Deck]
+Forest
+Island
+Island
+Mox Sapphire
+Ensign Pavel Chekov
+Island x3
+Island x20
+
+[Bot2 Deck]
+Island x9
+Plains
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ensign Pavel Chekov.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+Bot1.Choose(Bot2.Exile.Plains)
+Bot1.Exile.Plains.Play
+
+[Expect]
+Bot2.Library.Count = 19
+Exile = Mountain
+Bot1.Battlefield.Plains.Tapped = false
+Bot1.Battlefield.Count = 6

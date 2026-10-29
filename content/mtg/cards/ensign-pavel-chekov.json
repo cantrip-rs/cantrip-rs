@@ -1,0 +1,8 @@
+{
+  "name": "Ensign Pavel Chekov",
+  "manaCost": "{3}{U}",
+  "type": "Legendary Creature — Human Pilot",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": "Strange new worlds — When Ensign Chekov enters, each opponent exiles the top X cards of their library, where X is the number of differently named lands you control. For each opponent, choose a land card that player owns exiled this way. You may play the chosen cards for as long as they remain exiled."
+}
