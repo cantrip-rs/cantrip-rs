@@ -1,0 +1,8 @@
+{
+  "name": "Sundering Archaic",
+  "manaCost": "{6}",
+  "type": "Creature — Avatar",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Converge — When this creature enters, exile target nonland permanent an opponent controls with mana value less than or equal to the number of colors of mana spent to cast this creature.\n{2}: Put target card from a graveyard on the bottom of its owner's library."
+}
