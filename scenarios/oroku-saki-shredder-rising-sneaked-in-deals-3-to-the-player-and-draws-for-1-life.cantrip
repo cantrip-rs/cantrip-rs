@@ -1,0 +1,40 @@
+# Sneak {1}{B} (CR 702.190a-b) and "whenever Oroku Saki deals combat damage to a player, you draw a card and lose 1 life": Bot1 attacks Bot2 with Ornithopter on turn 3, unblocked, and in the declare
+# blockers step casts Oroku Saki for {1}{B} (Mox Jet, Mox Pearl), returning the Ornithopter. He enters tapped and attacking Bot2, deals 3: Bot2 at 17, Bot1 draws Lightning Bolt (the
+# card under the Counterspell drawn for the turn) and loses exactly 1 life: 19.
+
+[Bot1 Deck]
+Ornithopter
+Oroku Saki, Shredder Rising
+Mox Jet
+Mox Pearl
+Island x3
+Counterspell
+Lightning Bolt
+Mountain x11
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Oroku Saki, Shredder Rising.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Oroku Saki, Shredder Rising > Bot2
+? Bot1.Battlefield.Oroku Saki, Shredder Rising.Tapped = true
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 19
+Bot1.Hand = Counterspell; Island; Island; Island; Lightning Bolt; Ornithopter
+Bot1.Battlefield = Mox Jet; Mox Pearl; Oroku Saki, Shredder Rising

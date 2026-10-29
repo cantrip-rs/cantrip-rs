@@ -1,0 +1,45 @@
+# Oroku Saki's trigger needs combat damage "to a player" (CR 510.2): Bot1's Ornithopter attacks Bot2's Liliana of the Veil (3 loyalty) and Oroku Saki, sneaked in for {1}{B}, enters attacking
+# the same planeswalker (CR 702.190b). His 3 damage removes all its loyalty (it dies), but no card is drawn and no life is lost: Bot1 keeps 20 life and its hand.
+
+[Bot1 Deck]
+Ornithopter
+Oroku Saki, Shredder Rising
+Mox Jet
+Mox Pearl
+Island x3
+Counterspell
+Lightning Bolt
+Mountain x11
+
+[Bot2 Deck]
+Black Lotus
+Liliana of the Veil
+Island x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Liliana of the Veil.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2.Battlefield.Liliana of the Veil)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Oroku Saki, Shredder Rising.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot2.Battlefield.Count = 0
+Bot1.Hand = Counterspell; Island; Island; Island; Ornithopter

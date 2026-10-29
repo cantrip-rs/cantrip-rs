@@ -1,0 +1,8 @@
+{
+  "name": "Oroku Saki, Shredder Rising",
+  "manaCost": "{2}{B}",
+  "type": "Legendary Creature — Human Ninja",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "Sneak {1}{B} (You may cast this spell for {1}{B} if you also return an unblocked attacker you control to hand during the declare blockers step. He enters tapped and attacking.)\nWhenever Oroku Saki deals combat damage to a player, you draw a card and lose 1 life."
+}
