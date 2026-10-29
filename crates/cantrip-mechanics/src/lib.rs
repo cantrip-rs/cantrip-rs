@@ -177,6 +177,16 @@ pub fn discard_chosen(g: &mut dyn Game, player: PlayerId, source: ObjectId, coun
     Ok(chosen)
 }
 
+/// "A player exiles `count` cards from their hand" (CR 406.2, 608.2c): they choose them (all of the hand if it has fewer),
+/// asked even when the choice is forced except of an empty hand, and they are exiled together. The cards chosen. Ruthless
+/// Negotiation (one) and Perfect Intimidation (two) print it.
+pub fn exile_chosen_from_hand(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: u32) -> Result<Vec<ObjectId>, Suspend> {
+    let hand = g.state().zone(Zone::hand(player)).to_vec();
+    let chosen = choose::cards(g, player, source, Purpose::Exile, hand, count, false)?;
+    g.exile_all(&chosen);
+    Ok(chosen)
+}
+
 /// The cards a player chooses from their own hand for a discard, without discarding them yet.
 pub fn choose_from_hand(g: &mut dyn Game, player: PlayerId, source: ObjectId, count: u32) -> Result<Vec<ObjectId>, Suspend> {
     let hand = g.state().zone(Zone::hand(player)).to_vec();

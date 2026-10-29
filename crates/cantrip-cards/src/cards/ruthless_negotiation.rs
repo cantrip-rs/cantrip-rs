@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, effects, flashback, targets};
+use cantrip_mechanics::{effects, exile_chosen_from_hand, flashback, targets};
 use cantrip_oracle as oracle;
 
 /// "Target opponent exiles a card from their hand": the opponent chooses it (CR 608.2d), asked even when it is their only
@@ -8,10 +8,7 @@ use cantrip_oracle as oracle;
 /// draws nothing.
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(opponent) = targets::player(g, item, 0) else { return Ok(()) };
-    let hand = g.state().zone(Zone::hand(opponent)).to_vec();
-    if let Some(card) = choose::card(g, opponent, item.object, Purpose::Exile, hand)? {
-        g.exile_all(&[card]);
-    }
+    exile_chosen_from_hand(g, opponent, item.object, 1)?;
     if g.obj(item.object).cast_from == Some(ZoneKind::Graveyard) {
         effects::draw(g, item, 1)?;
     }
