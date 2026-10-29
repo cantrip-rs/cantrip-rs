@@ -15,6 +15,19 @@ pub fn targets_fight(g: &mut dyn Game, item: &StackItem, first: usize, second: u
     }
 }
 
+/// "Enchanted creature fights up to one target creature an opponent controls" / "equipped creature fights ..." (CR 701.14), the
+/// ability's first target being the one fought. The enchanted or equipped creature is the one the source is attached to as the
+/// ability resolves, or, if the source has left the battlefield by then, the one it was attached to as it left (CR 608.2h). The
+/// fight does nothing unless both are creatures on the battlefield (CR 701.14b); with no target chosen, or the target gone,
+/// there is nothing to fight. Meltstrider's Resolve and Novel Nunchaku print it.
+pub fn attached_creature_fights_first_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(prey) = targets::object(g, item, 0) else { return Ok(()) };
+    if let Some(attached) = g.obj(item.object).attached_to {
+        g.fight(attached, prey);
+    }
+    Ok(())
+}
+
 /// "[Creature] deals damage equal to its power to [target]" (CR 120.3, 609.7, 120.8): one-sided, the creature being the
 /// source of the damage, so its abilities (lifelink, deathtouch) and colors count. Its power is read now, as the spell or
 /// ability resolves (CR 608.2c); a creature with no power deals none. Hard-Hitting Question and Archdruid's Charm print it.
