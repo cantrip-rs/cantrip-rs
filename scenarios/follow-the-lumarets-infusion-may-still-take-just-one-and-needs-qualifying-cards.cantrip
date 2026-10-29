@@ -41,3 +41,4 @@ Bot1.Arrange(Island | Lightning Bolt; Lightning Bolt; Lightning Bolt)
 Bot1.Hand = Island; Mox Jet
 Bot1.Library.Count = 15
 Bot1.Revealed = Island
+Bot1.Looked = Lightning Bolt; Island; Lightning Bolt; Lightning Bolt
