@@ -1,0 +1,7 @@
+{
+  "name": "Bloodline Bidding",
+  "manaCost": "{6}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nChoose a creature type. Return all creature cards of the chosen type from your graveyard to the battlefield.",
+  "convoke": true
+}
