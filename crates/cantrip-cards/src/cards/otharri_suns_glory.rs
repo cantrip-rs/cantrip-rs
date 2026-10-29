@@ -1,5 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::combat::create_attacking_of_your_choice;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::tokens::REBEL;
 use cantrip_mechanics::triggers;
 use cantrip_oracle as oracle;
@@ -21,18 +22,10 @@ fn untapped_rebel(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
     q.controller(id) == asker.controller && !q.obj(id).tapped && q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Rebel))
 }
 
-/// Return this card from your graveyard to the battlefield tapped.
-fn return_tapped(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if is_live(g, item.object) && g.obj(item.object).zone.is(ZoneKind::Graveyard) {
-        g.put_onto_battlefield(item.object, item.controller, true)?;
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(triggers::THIS_ATTACKS, rebels, "Whenever Otharri attacks, you get an experience counter. Then create a 2/2 red Rebel creature token that's tapped and attacking for each experience counter you have."),
-        ability(cost("{2}{W}{R}").and(tap_untapped(1, untapped_rebel)), return_tapped, "{2}{R}{W}, Tap an untapped Rebel you control: Return this card from your graveyard to the battlefield tapped.")
+        ability(cost("{2}{W}{R}").and(tap_untapped(1, untapped_rebel)), effects::return_this_card_to_battlefield_tapped, "{2}{R}{W}, Tap an untapped Rebel you control: Return this card from your graveyard to the battlefield tapped.")
             .from(ZoneKind::Graveyard),
     ],
     ..oracle::OTHARRI_SUNS_GLORY
