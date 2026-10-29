@@ -1,0 +1,65 @@
+# Cinder Strike without blighting: 2 damage to Bot2's 2/4 Boneclub Berserker, which survives with 2 damage (CR 120.3).
+
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Pearl
+Mox Jet
+Elder Auntie
+Cinder Strike
+Forest x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Boneclub Berserker
+Plains x15
+
+[Actions]
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elder Auntie.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Boneclub Berserker.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cinder Strike.Cast
+Bot1.Modes(Cast without blighting)
+Bot1.Target(Bot2.Battlefield.Boneclub Berserker)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Boneclub Berserker.Damage = 2
+
+[Expect]
+Bot2.Battlefield = Boneclub Berserker; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Battlefield = Elder Auntie; Goblin Token; Mox Jet; Mox Pearl; Mox Ruby; Mox Ruby
