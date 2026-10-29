@@ -1565,6 +1565,15 @@ pub fn planeswalker_becomes_creature_preventing_damage(
     crate::prevention::this_turn(g, item, Target::Object(item.object), index, Shield::All);
 }
 
+/// "Put `N` -1/-1 counters on target creature" (CR 122.1a, 608.2b), the first target still legal on resolution; nothing when the
+/// slot was left empty ("up to one") or the target is gone. Emptiness (three), Bile-Vial Boggart and Nightmare Sower (one) and
+/// Blight Rot (four) print it.
+pub fn minus_one_counters_on_target<const N: i16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.add_counters(creature, CounterKind::MinusOne, N);
+    Ok(())
+}
+
 /// "Put a +1/+1 counter on target [permanent]" (CR 122.1a, 608.2b), the first target still legal on resolution.
 /// Bristly Bill, Spine Sower, Bow of Nylea, Yoshimaru, Beloved Companion, Kenrith, the Returned King and
 /// Gallia, the Merrymaker print it.
