@@ -1,0 +1,42 @@
+# Meek Attack: "{1}{R}: You may put a creature card with total power and toughness 5 or less from your hand onto the battlefield.
+# That creature gains haste. At the beginning of the next end step, sacrifice that creature." Bot1 holds Goblin Roughrider (3/2,
+# total 5) and Hill Giant (4/2, total 6). The Giant is one past the limit and is not offered (CR 608.2d); the Roughrider is,
+# and comes in hasty (CR 702.10) - able to attack the turn it arrives - and is sacrificed at the beginning of the end step
+# (CR 603.7). The ability cost {1}{R} is paid exactly (CR 118.1): the pool is empty after it.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Meek Attack
+Mox Ruby
+Goblin Roughrider
+Hill Giant
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Meek Attack.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Meek Attack.Activate
+! Bot1.Choose(Hill Giant)
+Bot1.Choose(Goblin Roughrider)
+? Bot1.Battlefield.Goblin Roughrider.Keywords = Haste
+? Bot1.Mana = 
+Bot1.Pass
+? Bot1.Battlefield.Goblin Roughrider.Keywords = Haste
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Goblin Roughrider = (absent)
+
+[Expect]
+Bot1.Hand = Hill Giant; Mountain
+Bot1.Graveyard = Goblin Roughrider; Black Lotus
+Bot1.Battlefield = Meek Attack; Mountain; Mox Ruby

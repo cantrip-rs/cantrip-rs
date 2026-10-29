@@ -1,0 +1,49 @@
+# Meek Attack with Bot2's Containment Priest out: a creature put onto the battlefield without being cast is exiled instead
+# (CR 614), so the Goblin Roughrider never arrives: it is in exile, not on the battlefield, and no sacrifice is set up (nothing
+# is left to sacrifice at the end step).
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Meek Attack
+Mox Ruby
+Goblin Roughrider
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Plains
+Mox Jet
+Containment Priest
+Island x4
+Island x14
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Containment Priest.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Meek Attack.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Meek Attack.Activate
+Bot1.Choose(Goblin Roughrider)
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Exile = Goblin Roughrider
+Bot1.Battlefield = Mountain; Mox Ruby; Meek Attack

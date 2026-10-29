@@ -1,0 +1,31 @@
+# Meek Attack: the creature is a "may" (CR 608.2d): Bot1 chooses none, so the Goblin Roughrider stays in hand and nothing is
+# sacrificed at the end step.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Meek Attack
+Mox Ruby
+Goblin Roughrider
+Mountain x2
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Meek Attack.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Meek Attack.Activate
+Bot1.Choose()
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Hand = Goblin Roughrider; Mountain; Mountain
+Bot1.Battlefield = Meek Attack; Mountain; Mox Ruby
