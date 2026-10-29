@@ -1,0 +1,31 @@
+# Boulder Dash: "2 damage to any target and 1 damage to any other target" (CR 120.3). Bot2 takes 2 (20 to 18) and Bot1 itself,
+# the other target, takes 1 (20 to 19); the second target can't be the first one again (CR 115.3).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Boulder Dash
+Forest x17
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Boulder Dash.Cast
+Bot1.Target(Bot2)
+! Bot1.Target(Bot2)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Life = 19
+
+[Expect]
+Bot1.Graveyard = Boulder Dash
