@@ -9261,6 +9261,9 @@ fn activate_mana_as(
         let hand = choose_discards(cx, player, source, &def.cost, by)?;
         pay_discards(cx, &hand);
     }
+    // "Exile a card from your graveyard" (Rubble Rouser): chosen and exiled as any ability's cost is (CR 602.2b, 601.2h).
+    let exiles = choose_exiles(cx, player, source, &def.cost)?;
+    pay_exiles(cx, &exiles);
     pay_permanents(cx, player, &def.cost, &chosen, Some(Linked { object: source, text: cx.g.cards.linked_card(ability.card), acquired }));
     pay_life_and_counters(cx, player, source, &def.cost);
     if def.cost.sacrifice_self {
