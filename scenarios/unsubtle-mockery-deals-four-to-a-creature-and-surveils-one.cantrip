@@ -1,0 +1,31 @@
+# Unsubtle Mockery deals 4 damage to Bot2's Grizzly Bears (2/2), which dies, then Bot1 surveils 1: the Mountain on top of the library
+# goes to the graveyard, so Bot1's graveyard is the Mockery and the Mountain.
+
+[Bot1 Deck]
+Unsubtle Mockery
+Black Lotus
+Island x6
+Mountain
+Island x12
+
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Unsubtle Mockery.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Mountain)
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears; Black Lotus
+Bot1.Graveyard = Unsubtle Mockery; Mountain; Black Lotus
