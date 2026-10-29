@@ -1,0 +1,48 @@
+# "When this creature enters, create a 2/2 red Mutant creature token" and Alliance, "whenever another creature you control enters,
+# put a +1/+1 counter on target creature you control". Turn 1: Mighty Mutanimals (2/1) for Black Lotus and a Plains makes the
+# Mutant; the Mutant's entering triggers Alliance, which Bot1 aims at the Mutant (3/3); Mutanimals' own entering did not
+# ("another"). Turn 2: Bot2's Elvish Mystic entering triggers nothing ("you control"). Turn 3: Savannah Lions entering triggers
+# it again, aimed at Mutanimals (3/2); the Lions stay 2/1.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mighty Mutanimals
+Savannah Lions
+Plains x16
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Mighty Mutanimals.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Target(Mutant Token)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Target(Mighty Mutanimals)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Mutant Token.Power = 3
+Bot1.Battlefield.Mutant Token.Toughness = 3
+Bot1.Battlefield.Mighty Mutanimals.Power = 3
+Bot1.Battlefield.Mighty Mutanimals.Toughness = 2
+Bot1.Battlefield.Savannah Lions.Power = 2
+Bot2.Battlefield.Elvish Mystic.Power = 1
