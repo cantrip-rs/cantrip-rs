@@ -1,0 +1,5 @@
+{
+  "name": "Artificial Anomaly",
+  "type": "Land",
+  "oracleText": "{T}: Add {C}.\n{3}{B}, {T}, Sacrifice this land: Each opponent loses 2 life and you gain 2 life. Create a tapped Planet land token named New Planet with \"{T}: Add one mana of any color.\""
+}
