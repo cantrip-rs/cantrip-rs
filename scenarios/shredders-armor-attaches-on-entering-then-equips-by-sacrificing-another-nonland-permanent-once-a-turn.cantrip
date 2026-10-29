@@ -1,0 +1,49 @@
+# Shredder's Armor ({1}{B}): when it enters it attaches to target creature you control (CR 701.3a), and the equipped creature
+# gets +2/+1 - Ornithopter 0/2 becomes 2/3. Equip is "Sacrifice another nonland permanent", once each turn, at sorcery speed:
+# Bot1 sacrifices Mox Ruby to move it to Llanowar Elves (1/1 -> 3/2), and the Armor cannot be activated a second time that turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Shredder's Armor
+Ornithopter
+Llanowar Elves
+Mox Emerald
+Plains x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Expect]
+Bot1.Battlefield.Shredder's Armor.AttachedTo = Llanowar Elves
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shredder's Armor.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Shredder's Armor.AttachedTo = Ornithopter
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot1.Pass
+Bot1.Battlefield.Shredder's Armor.Activate(Llanowar Elves)
+Bot1.Choose(Mox Ruby)
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Shredder's Armor.AttachedTo = Llanowar Elves
+? Bot1.Battlefield.Llanowar Elves.Power = 3
+? Bot1.Battlefield.Llanowar Elves.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Power = 0
+! Bot1.Battlefield.Shredder's Armor.Activate(Ornithopter)

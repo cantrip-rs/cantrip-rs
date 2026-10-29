@@ -1,0 +1,41 @@
+# Shredder's Armor entering with no creature to target attaches to nothing (its trigger never goes on the stack), then equip
+# needs "another nonland permanent" to sacrifice (CR 701.21a): a Plains is no payment, and neither is the Armor itself, so
+# Bot1 sacrifices Mox Ruby and the Armor goes onto Ornithopter (0/2 -> 2/3).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Shredder's Armor
+Ornithopter
+Plains x11
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shredder's Armor.Cast
+Bot1.Pass
+Bot1.Pass
+? Stack.Count = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Shredder's Armor.Activate(Ornithopter)
+! Bot1.Choose(Plains)
+! Bot1.Choose(Shredder's Armor)
+Bot1.Choose(Mox Ruby)
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Shredder's Armor.AttachedTo = Ornithopter
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Graveyard = Mox Ruby
+
+[Expect]
+Bot1.Battlefield.Shredder's Armor.AttachedTo = Ornithopter
+Bot1.Graveyard = Mox Ruby
