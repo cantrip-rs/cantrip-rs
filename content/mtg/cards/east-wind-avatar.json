@@ -1,0 +1,12 @@
+{
+  "name": "East Wind Avatar",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Bird Spirit Avatar",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Flying, vigilance\nAlliance — Whenever another creature you control enters, this creature gets +1/+0 until end of turn.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}
