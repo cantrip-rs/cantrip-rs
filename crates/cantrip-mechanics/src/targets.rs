@@ -174,6 +174,15 @@ pub fn attacking_or_blocking_creature_filter(q: &dyn Query, _: &Asker, t: Target
 pub const ATTACKING_OR_BLOCKING_CREATURE: TargetSpec = target(attacking_or_blocking_creature_filter);
 pub const CREATURE_YOU_CONTROL: TargetSpec = target(creature_you_control_filter);
 
+/// "Target creature you own": a creature on the battlefield whose owner is the caster, whoever controls it (CR 108.3, 115.1).
+/// The Eagles Are Coming! and Northampton Farm print it.
+pub fn creature_you_own_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.obj(id).owner == asker.controller)
+}
+
+/// "Target creature you own": see `creature_you_own_filter`.
+pub const CREATURE_YOU_OWN: TargetSpec = target(creature_you_own_filter);
+
 /// "A creature is attacking alone if it's attacking but no other creatures are" (CR 506.5): attacking now, whether declared as an
 /// attacker or put onto the battlefield attacking, and the only attacking creature.
 pub fn attacking_alone(q: &dyn Query, id: ObjectId) -> bool {

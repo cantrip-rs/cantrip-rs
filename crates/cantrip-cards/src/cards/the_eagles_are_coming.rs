@@ -2,11 +2,6 @@ use cantrip_api::*;
 use cantrip_mechanics::{targets, tokens};
 use cantrip_oracle as oracle;
 
-/// "Target creature you own": a creature on the battlefield whose owner is the caster, whoever controls it (CR 108.3).
-fn creature_you_own(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    (targets::CREATURE.filter)(q, asker, t) && matches!(t, Target::Object(id) if q.obj(id).owner == asker.controller)
-}
-
 /// "Return each chosen creature to your hand. At the beginning of the next upkeep, create a 4/4 white Bird Soldier
 /// creature token with flying for each creature returned to your hand this way." The targets still legal go back together
 /// (CR 608.2b); those that reached their owner's hand, the caster's, are remembered for the delayed trigger (CR 603.7),
@@ -40,7 +35,7 @@ static BIRD_SOLDIER: CardDef = CardDef {
 
 pub static CARD: CardDef = CardDef {
     // One target creature you own; kicked, any number of them (CR 702.33a, 601.2c).
-    spell: spell(&[target(creature_you_own).if_kicked(0, TargetSpec::ANY_NUMBER)], effect),
+    spell: spell(&[targets::CREATURE_YOU_OWN.if_kicked(0, TargetSpec::ANY_NUMBER)], effect),
     kicker: kicker(mana("{2}{W}{W}")),
     delayed: &[delayed_trigger(
         create_birds,
