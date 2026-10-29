@@ -1,0 +1,53 @@
+# Grub, Notorious Auntie (CR 701.68a, 707.2, 707.8a, 508.4, 704.5j): transformed on turn 3, Grub attacks and its controller blights Grub
+# itself - a -1/-1 counter on a 2/1. The token is a copy of Grub as it is now, without the counter (CR 707.2), created tapped and
+# attacking Bot2 but never declared as an attacker (CR 508.4), so its own "whenever Grub attacks" does not trigger: nothing is on the
+# stack and no second blight is offered (! Bot1.Accept). The two Grubs are legendary, so the legend rule has Bot1 keep one (the token);
+# the counter-bearing original dies of its toughness 0 either way. The token deals 2 to Bot2 and is sacrificed at the end step.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Sol Ring
+Black Lotus
+Grub, Storied Matriarch
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Grub, Storied Matriarch.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grub, Notorious Auntie > Bot2)
+Bot1.Accept
+Bot1.Choose(Grub, Notorious Auntie)
+Bot1.Choose(Grub, Notorious Auntie#2)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+! Bot1.Accept
+? Combat.Attackers = Grub, Notorious Auntie > Bot2
+? Bot1.Battlefield.Grub, Notorious Auntie.Token = true
+? Bot1.Battlefield.Grub, Notorious Auntie.Tapped = true
+? Bot1.Battlefield.Grub, Notorious Auntie.Counters.MinusOneMinusOne = (absent)
+? Bot1.Graveyard.Grub, Storied Matriarch.Power = 2
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Grub, Notorious Auntie = (absent)
+Bot2.Life = 18

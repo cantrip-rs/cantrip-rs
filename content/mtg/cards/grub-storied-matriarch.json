@@ -1,0 +1,24 @@
+{
+  "name": "Grub, Storied Matriarch",
+  "manaCost": "{2}{B}",
+  "type": "Legendary Creature — Goblin Warlock",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Menace\nWhenever this creature enters or transforms into Grub, Storied Matriarch, return up to one target Goblin card from your graveyard to your hand.\nAt the beginning of your first main phase, you may pay {R}. If you do, transform Grub.",
+  "keywords": [
+    "Menace"
+  ],
+  "backFace": {
+    "name": "Grub, Notorious Auntie",
+    "colorIndicator": [
+      "Red"
+    ],
+    "type": "Legendary Creature — Goblin Warrior",
+    "power": 2,
+    "toughness": 1,
+    "oracleText": "Menace\nWhenever Grub attacks, you may blight 1. If you do, create a tapped and attacking token that's a copy of the blighted creature, except it has \"At the beginning of the end step, sacrifice this token.\"\nAt the beginning of your first main phase, you may pay {B}. If you do, transform Grub.",
+    "keywords": [
+      "Menace"
+    ]
+  }
+}

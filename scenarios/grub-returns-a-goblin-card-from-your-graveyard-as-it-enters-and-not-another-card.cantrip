@@ -1,0 +1,45 @@
+# Grub, Storied Matriarch (CR 603.1, 115.1, 404.1): "return up to one target Goblin card from your graveyard to your hand". On turn 1
+# Bot1 casts Goblin Grappler and Lightning Bolt (at Bot2's face); on turn 2 Bot2's Lightning Bolt kills the Grappler. On turn 3 Grub
+# enters with Black Lotus and the target must be a Goblin card: the Bolt in the graveyard is refused, and the Grappler is returned.
+
+[Bot1 Deck]
+Mox Ruby
+Mountain
+Goblin Grappler
+Lightning Bolt
+Black Lotus
+Grub, Storied Matriarch
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Grappler.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goblin Grappler)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Grub, Storied Matriarch.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Lightning Bolt)
+Bot1.Target(Goblin Grappler)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Goblin Grappler.Power = 1
+Bot1.Graveyard = Black Lotus; Lightning Bolt
+Bot1.Battlefield.Grub, Storied Matriarch.Power = 2
