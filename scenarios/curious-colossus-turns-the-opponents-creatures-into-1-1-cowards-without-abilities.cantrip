@@ -1,0 +1,59 @@
+# Curious Colossus: each creature target opponent controls loses all abilities, becomes a Coward in addition to its other types,
+# and has base power and toughness 1/1 (CR 613). Bot2's Ornithopter (0/2) becomes a 1/1 Thopter Coward, and Mother of Runes
+# can no longer give protection (a refused activation on turn 4, where it would otherwise be allowed). Bot1's own Savannah
+# Lions keeps 2/1 and its types.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Savannah Lions
+Curious Colossus
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Plains x12
+
+[Bot2 Deck]
+Plains
+Mother of Runes
+Ornithopter
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Mother of Runes.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Hand.Curious Colossus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+! Bot2.Battlefield.Mother of Runes.Activate(Bot2.Battlefield.Ornithopter)
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 1
+Bot2.Battlefield.Ornithopter.Subtypes = Coward; Thopter
+Bot2.Battlefield.Mother of Runes.Subtypes = Cleric; Coward; Human
+Bot1.Battlefield.Savannah Lions.Power = 2
+Bot1.Battlefield.Savannah Lions.Toughness = 1
+Bot1.Battlefield.Savannah Lions.Subtypes = Cat

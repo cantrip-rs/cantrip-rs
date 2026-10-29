@@ -1,0 +1,8 @@
+{
+  "name": "Curious Colossus",
+  "manaCost": "{5}{W}{W}",
+  "type": "Creature — Giant Warrior",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "When this creature enters, each creature target opponent controls loses all abilities, becomes a Coward in addition to its other types, and has base power and toughness 1/1."
+}
