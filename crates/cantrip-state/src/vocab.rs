@@ -1140,6 +1140,7 @@ counter_kinds! {
     Growth = 53, "growth", "Growth";
     Invasion = 54, "invasion", "Invasion";
     Dream = 55, "dream", "Dream";
+    Promotion = 56, "promotion", "Promotion";
 }
 
 impl CounterKind {
