@@ -1,0 +1,34 @@
+# Proctor's Gaze: "up to one" target - cast with none, nothing returns, but the search still happens (CR 608.2b: a spell with no
+# targets chosen is not countered for it); the basic land enters tapped.
+
+[Bot1 Deck]
+Proctor's Gaze
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Forest
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Proctor's Gaze.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Island)
+
+[Expect]
+Bot1.Hand = Forest; Island
+Bot1.Battlefield.Island.Tapped = true
+Bot1.Battlefield = Island; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire

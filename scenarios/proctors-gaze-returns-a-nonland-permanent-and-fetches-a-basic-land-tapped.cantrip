@@ -1,0 +1,40 @@
+# Proctor's Gaze ({2}{G}{U}): return up to one target nonland permanent to its owner's hand (CR 400.3), then search for a basic
+# land card, put it onto the battlefield tapped, and shuffle. A land is not a legal target (CR 115.1).
+
+[Bot1 Deck]
+Proctor's Gaze
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Forest
+Geometer's Arthropod
+Mountain
+Wasteland
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Proctor's Gaze.Cast(Forest)
+Bot1.Hand.Proctor's Gaze.Cast(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Wasteland)
+Bot1.Search(Mountain)
+
+[Expect]
+Bot1.Hand = Geometer's Arthropod; Mox Ruby
+Bot1.Battlefield.Mountain.Tapped = true
+Bot1.Battlefield = Forest; Mountain; Mox Emerald; Mox Jet; Mox Sapphire
+Bot1.LandsPlayed = 1
