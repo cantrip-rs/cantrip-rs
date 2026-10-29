@@ -1,0 +1,8 @@
+{
+  "name": "Blighted Blackthorn",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Treefolk Warlock",
+  "power": 3,
+  "toughness": 7,
+  "oracleText": "Whenever this creature enters or attacks, you may blight 2. If you do, you draw a card and lose 1 life. (To blight 2, put two -1/-1 counters on a creature you control.)"
+}

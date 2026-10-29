@@ -1,0 +1,39 @@
+# Blighted Blackthorn: "Whenever this creature enters or attacks, you may blight 2. If you do, you draw a card and lose 1 life".
+# Declined when it enters (CR 117.3): nothing happens. On turn 3 it attacks, Bot1 blights 2 (the 3/7 becomes a 1/5, so it hits
+# Bot2 for 1), draws a card and loses 1 life. The twin that does the reverse is
+# "...-blights-on-entering-and-draws-but-declines-on-attacking".
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Blighted Blackthorn
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blighted Blackthorn.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Life = 20
+? Bot1.Hand.Count = 3
+? Bot1.Battlefield.Blighted Blackthorn.Counters.MinusOneMinusOne = (absent)
+[T3 Bot1.Main1]
+Bot1.Attack(Blighted Blackthorn > Bot2)
+Bot1.Accept
+Bot1.Choose(Blighted Blackthorn)
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Blighted Blackthorn.Counters.MinusOneMinusOne = 2
+Bot1.Hand.Count = 5
