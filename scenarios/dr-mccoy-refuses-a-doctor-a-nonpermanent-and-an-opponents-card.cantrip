@@ -1,0 +1,46 @@
+# Dr. McCoy's first mode targets a non-Doctor permanent card in its controller's graveyard (CR 115.1, 110.4b): Dr. Beverly
+# Crusher (a Doctor), Thought Scour (not a permanent card) and Bot2's Memnite (another graveyard) are refused, and Black
+# Lotus returns to Bot1's hand, chosen over the milled Island.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Thought Scour
+Thought Scour
+Dr. Leonard "Bones" McCoy
+Island
+Dr. Beverly Crusher
+Island x21
+
+[Bot2 Deck]
+Island x7
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot2)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dr. Leonard "Bones" McCoy.Cast
+Bot1.Pass
+Bot1.Modes(1)
+! Bot1.Target(Bot1.Graveyard.Dr. Beverly Crusher)
+! Bot1.Target(Bot1.Graveyard.Thought Scour)
+! Bot1.Target(Bot2.Graveyard.Memnite)
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Thought Scour; Thought Scour; Island; Dr. Beverly Crusher
+Bot2.Graveyard = Island; Memnite
+Bot1.Hand.Black Lotus.Colors =

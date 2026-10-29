@@ -1,0 +1,11 @@
+{
+  "name": "Dr. Leonard \"Bones\" McCoy",
+  "manaCost": "{1}{G}{G}",
+  "type": "Legendary Creature — Human Doctor",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flash\nWhen Dr. McCoy enters, choose one —\n• Return target non-Doctor permanent card from your graveyard to your hand.\n• Choose up to one other target creature. When it dies this turn, return that card to the battlefield under its owner's control with a +1/+1 counter on it at the beginning of the next end step.",
+  "keywords": [
+    "Flash"
+  ]
+}

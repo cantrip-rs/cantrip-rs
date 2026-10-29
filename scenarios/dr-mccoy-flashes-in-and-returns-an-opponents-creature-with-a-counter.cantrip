@@ -1,0 +1,45 @@
+# Bot2 bolts its own Goblin Piker on turn 2. Dr. McCoy's flash lets Bot1 respond, choose the second mode and target that
+# opponent's creature; after it dies this turn, it returns to its owner's battlefield with one +1/+1 counter (CR 702.8, 603.7).
+
+[Bot1 Deck]
+Black Lotus
+Dr. Leonard "Bones" McCoy
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Goblin Piker
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Goblin Piker.Cast
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Goblin Piker)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dr. Leonard "Bones" McCoy.Cast
+Bot1.Modes(2)
+! Bot1.Target(Bot1.Battlefield.Dr. Leonard "Bones" McCoy)
+Bot1.Target(Bot2.Battlefield.Goblin Piker)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Dr. Leonard "Bones" McCoy.Power = 3
+Bot2.Battlefield.Goblin Piker.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Goblin Piker.Power = 3
+Bot2.Battlefield.Goblin Piker.Toughness = 2
+

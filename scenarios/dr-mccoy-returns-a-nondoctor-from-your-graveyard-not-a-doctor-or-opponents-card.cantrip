@@ -1,0 +1,26 @@
+# Dr. McCoy returns a non-Doctor permanent card in its controller's graveyard to hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Dr. Leonard "Bones" McCoy
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dr. Leonard "Bones" McCoy.Cast
+Bot1.Modes(1)
+
+[Expect]
+Bot1.Hand = Black Lotus; Island; Island
+Bot1.Graveyard =
+Bot1.Battlefield.Dr. Leonard "Bones" McCoy.Power = 3

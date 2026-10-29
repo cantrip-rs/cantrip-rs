@@ -1,0 +1,23 @@
+# The second mode is "choose up to one other target creature": Dr. McCoy cannot target himself, and Bot1 may choose none
+# even though Ornithopter is a legal target (CR 115.1, 603.7a).
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Dr. Leonard "Bones" McCoy
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dr. Leonard "Bones" McCoy.Cast
+Bot1.Modes(2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Dr. Leonard "Bones" McCoy; Ornithopter
+Bot1.Graveyard = Black Lotus
