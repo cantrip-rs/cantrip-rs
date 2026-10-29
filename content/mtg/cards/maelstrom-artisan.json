@@ -1,0 +1,15 @@
+{
+  "name": "Maelstrom Artisan",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Minotaur Sorcerer",
+  "oracleText": "Haste\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": 3,
+  "toughness": 2,
+  "keywords": ["Haste"],
+  "prepare": {
+    "name": "Rocket Volley",
+    "manaCost": "{1}{R}",
+    "type": "Sorcery",
+    "oracleText": "Destroy target nonbasic land."
+  }
+}

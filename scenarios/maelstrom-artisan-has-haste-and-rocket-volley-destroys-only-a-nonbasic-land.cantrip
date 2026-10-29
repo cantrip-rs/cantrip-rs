@@ -1,0 +1,46 @@
+# Maelstrom Artisan has haste (CR 702.10) and enters prepared (CR 722.3a): it attacks the turn it is cast for 3. Its copy of Rocket Volley
+# destroys a nonbasic land (Bot2's Wasteland); a basic Mountain is refused as a target (CR 115.1, 205.4). Casting the copy unprepares it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Maelstrom Artisan
+Mountain
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Wasteland
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Maelstrom Artisan.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Maelstrom Artisan.Prepared = true
+[Bot1.DeclareAttackers]
+Bot1.Attack(Maelstrom Artisan > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Wasteland.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+! Bot1.Exile.Rocket Volley.Cast(Mountain#1)
+Bot1.Exile.Rocket Volley.Cast(Wasteland)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Wasteland
+Bot2.Battlefield.Wasteland = (absent)
+Bot1.Battlefield.Maelstrom Artisan.Prepared = (absent)
+Bot1.Graveyard.Count = 0
+Exile.Count = 0
