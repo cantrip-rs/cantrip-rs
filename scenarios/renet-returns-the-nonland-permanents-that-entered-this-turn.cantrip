@@ -1,0 +1,45 @@
+# Renet, Temporal Apprentice: "Flash. When Renet enters, return each other nonland permanent that entered this turn to its
+# owner's hand." In Bot2's turn two, after Bot2 plays a Forest, casts Llanowar Elves and Mox Ruby, Bot1 flashes in Renet:
+# the Elves and the Ruby, both of Bot2's, go back to Bot2's hand; the Forest (a land) stays, and so do Bot1's Mox Jet and
+# Mox Sapphire, which entered in turn one, and Renet herself ("other").
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Renet, Temporal Apprentice
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Ruby
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Forest; Llanowar Elves; Mox Ruby
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Renet, Temporal Apprentice.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield = Forest
+Bot2.Hand = Forest; Forest; Forest; Forest; Forest; Llanowar Elves; Mox Ruby
+Bot1.Battlefield = Mox Jet; Mox Sapphire; Renet, Temporal Apprentice

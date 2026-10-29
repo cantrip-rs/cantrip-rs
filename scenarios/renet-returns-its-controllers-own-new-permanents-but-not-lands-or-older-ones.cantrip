@@ -1,0 +1,38 @@
+# Renet in Bot1's own turn three: the Island played and the second Ornithopter cast this turn are the ones in play that
+# "entered this turn", but Island is a land, so only the Ornithopter goes back to Bot1's hand. The first Ornithopter (cast in
+# turn one), the Moxen and Renet herself stay. Bot1 draws the ninth card, an Island, in turn three.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Ornithopter
+Ornithopter
+Renet, Temporal Apprentice
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Renet, Temporal Apprentice.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Island; Mox Jet; Mox Sapphire; Ornithopter; Renet, Temporal Apprentice
+Bot1.Hand = Island; Ornithopter
