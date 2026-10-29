@@ -1,0 +1,53 @@
+# Kulrath Mystic {2}{U} (cast on turn 1 from three Moxen), a 2/4: "Whenever you cast a spell with mana value 4 or greater, this creature gets
+# +2/+0 and gains vigilance until end of turn" (CR 603.2, 611.2a, 702.20). On turn 3 Bot1 casts Auriok Salvagers ({3}{W}, mana value 4):
+# the Mystic is a 4/4 with vigilance, so attacking leaves it untapped and Bot2 takes 4. On turn 5 (nothing cast) it attacks as a plain 2/4:
+# it is tapped by attacking and Bot2 takes 2 more - the pump and the vigilance both ended with turn 3 (CR 514.2).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Kulrath Mystic
+Auriok Salvagers
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kulrath Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Auriok Salvagers.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kulrath Mystic.Power = 4
+? Bot1.Battlefield.Kulrath Mystic.Toughness = 4
+? Bot1.Battlefield.Kulrath Mystic.Keywords = Vigilance
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Kulrath Mystic > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Kulrath Mystic.Tapped = false
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Kulrath Mystic.Power = 2
+? Bot1.Battlefield.Kulrath Mystic.Keywords = (absent)
+Bot1.Attack(Kulrath Mystic > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Kulrath Mystic.Tapped = true
+Bot2.Life = 14
