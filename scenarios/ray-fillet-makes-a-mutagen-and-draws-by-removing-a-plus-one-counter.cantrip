@@ -1,0 +1,46 @@
+# Ray Fillet, Man Ray: "When Ray Fillet enters, create a Mutagen token." and "{2}, Remove a +1/+1 counter from a creature you
+# control: Draw a card." With no +1/+1 counter on a creature of Bot1's the ability is refused. The Mutagen token (sacrificed
+# on turn three for {1}) puts a +1/+1 counter on Ray Fillet, the counter is removed to draw a card, and Ray Fillet is a
+# 3/3 flier again (the hand: two Islands left from the opening seven, the turn-three draw, and the card drawn).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Ray Fillet, Man Ray
+Island x3
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ray Fillet, Man Ray.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Sapphire; Mutagen Token; Ray Fillet, Man Ray
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Ray Fillet, Man Ray.Activate
+Bot1.Battlefield.Mutagen Token.Activate(Bot1.Battlefield.Ray Fillet, Man Ray)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ray Fillet, Man Ray.Power = 4
+Bot1.Battlefield.Ray Fillet, Man Ray.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ray Fillet, Man Ray.Power = 3
+Bot1.Hand.Count = 4
