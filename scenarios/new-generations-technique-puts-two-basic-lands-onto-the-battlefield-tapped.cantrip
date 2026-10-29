@@ -1,0 +1,38 @@
+# New Generation's Technique, {3}{G}: "Search your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle." (CR 701.23)
+# Paid with Black Lotus and Mox Emerald. Only basic land cards can be found (not a Tropical Island, not a creature) and no more than two; the Forest and the Island
+# found enter tapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+New Generation's Technique
+Plains x4
+Forest
+Island
+Tropical Island
+Llanowar Elves
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.New Generation's Technique.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Tropical Island)
+! Bot1.Search(Llanowar Elves)
+! Bot1.Search(Forest; Island; Plains)
+Bot1.Search(Forest; Island)
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Battlefield.Island.Tapped = true
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Forest; Island; Mox Emerald
+Bot1.Graveyard = New Generation's Technique; Black Lotus
+Bot1.Library.Count = 12

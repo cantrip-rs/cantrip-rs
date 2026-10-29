@@ -1,0 +1,6 @@
+{
+  "name": "New Generation's Technique",
+  "manaCost": "{3}{G}",
+  "type": "Sorcery",
+  "oracleText": "Sneak {2}{G} (You may cast this spell for {2}{G} if you also return an unblocked attacker you control to hand during the declare blockers step.)\nSearch your library for up to two basic land cards, put them onto the battlefield tapped, then shuffle."
+}
