@@ -1,0 +1,34 @@
+# Cast the free mana sources first so Kirk enters with an empty hand and may choose both token and team-pump modes.
+
+[Bot1 Deck]
+Black Lotus x2
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Captain James T. Kirk
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Captain James T. Kirk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(2; 3)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Battlefield.Officer Token.Power = 2
+Bot1.Battlefield.Captain James T. Kirk.Power = 3
+Bot1.Battlefield.Captain James T. Kirk.Toughness = 2

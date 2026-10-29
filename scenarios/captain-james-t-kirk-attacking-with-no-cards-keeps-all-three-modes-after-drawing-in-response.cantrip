@@ -1,0 +1,62 @@
+# "Whenever Captain Kirk enters or attacks, choose one. If you have no cards in hand, choose one or more instead": the hand
+# is read, and the modes chosen, as the trigger is put on the stack (CR 603.3c, 700.2), not again as it resolves. Kirk
+# enters on turn 1 with Mox Pearl still in hand, so two modes are refused and one is chosen (an Officer). On turn 3 Bot1
+# plays the Mountain it drew and casts the Pearl, attacks with an empty hand and chooses all three modes; in response it
+# sacrifices Mind Stone to draw a card, so its hand is not empty as the trigger resolves. All three modes still happen, in
+# printed order: it discards the drawn Mountain and draws, makes a second Officer, then both Officers and Kirk get +1/+0.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mind Stone
+Captain James T. Kirk
+Mox Pearl
+Mountain x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Captain James T. Kirk.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Modes(2; 3)
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 2
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Attack(Captain James T. Kirk > Bot2)
+Bot1.Modes(1; 2; 3)
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw a card)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Hand.Count = 1
+Bot1.Battlefield = Captain James T. Kirk; Mountain; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Officer Token; Officer Token
+Bot1.Battlefield.Officer Token#1.Power = 2
+Bot1.Battlefield.Officer Token#2.Power = 2
+Bot1.Battlefield.Captain James T. Kirk.Power = 3
+Bot2.Life = 17
+Bot1.Graveyard = Mountain; Mind Stone; Black Lotus

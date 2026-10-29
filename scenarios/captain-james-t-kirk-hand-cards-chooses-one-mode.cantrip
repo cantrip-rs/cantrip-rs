@@ -1,0 +1,32 @@
+# Kirk's conditional maximum applies only with an empty hand; retaining a Mountain keeps the normal one-mode limit.
+
+[Bot1 Deck]
+Black Lotus x2
+Mox Ruby
+Mox Emerald
+Mox Jet
+Captain James T. Kirk
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Captain James T. Kirk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot1.Battlefield.Captain James T. Kirk.ChosenModes = 1
+Bot1.Battlefield.Captain James T. Kirk.Power = 2
+Bot1.Battlefield.Captain James T. Kirk.Toughness = 2

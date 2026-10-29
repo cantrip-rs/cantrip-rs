@@ -1,0 +1,8 @@
+{
+  "name": "Captain James T. Kirk",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Human Officer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever Captain Kirk enters or attacks, choose one. If you have no cards in hand, choose one or more instead.\n• Discard a card, then draw a card.\n• Create a 1/1 red Officer creature token.\n• Creatures you control get +1/+0 until end of turn."
+}
