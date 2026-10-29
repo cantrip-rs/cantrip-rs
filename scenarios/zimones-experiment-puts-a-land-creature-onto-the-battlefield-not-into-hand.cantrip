@@ -1,0 +1,39 @@
+# Zimone's Experiment: Dryad Arbor is both a land and a creature card; it goes onto the battlefield tapped as a land card and is not also put into the hand. Grizzly Bears goes to the hand.
+
+[Bot1 Deck]
+Zimone's Experiment
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Mountain
+Dryad Arbor
+Grizzly Bears
+Lightning Bolt
+Island
+Giant Growth
+Ornithopter x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Zimone's Experiment.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Dryad Arbor; Grizzly Bears)
+
+[Expect]
+Bot1.Battlefield.Dryad Arbor.Tapped = true
+Bot1.Hand.Count = 3
+Bot1.Revealed = Dryad Arbor; Grizzly Bears
+Bot1.Looked = Dryad Arbor; Grizzly Bears; Lightning Bolt; Island; Giant Growth

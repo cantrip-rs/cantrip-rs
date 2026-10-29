@@ -1,0 +1,40 @@
+# Zimone's Experiment: of the top five, Bot1 reveals Grizzly Bears (to hand) and Forest (onto the battlefield tapped); a third card is refused; the other three Forests go to the bottom, under the nine Ornithopters.
+
+[Bot1 Deck]
+Zimone's Experiment
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Mountain
+Grizzly Bears
+Forest x4
+Ornithopter x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Zimone's Experiment.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Grizzly Bears; Forest; Forest)
+Bot1.Choose(Grizzly Bears; Forest)
+
+[Expect]
+Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Hand.Count = 3
+Bot1.Library.Count = 12
+Bot1.Library = Ornithopter; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Ornithopter; Forest; Forest; Forest
+Bot1.Looked = Grizzly Bears; Forest; Forest; Forest; Forest
+Bot1.Revealed = Grizzly Bears; Forest
