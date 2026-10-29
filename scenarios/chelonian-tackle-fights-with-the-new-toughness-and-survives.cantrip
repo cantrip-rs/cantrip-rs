@@ -1,0 +1,59 @@
+# Chelonian Tackle: Grizzly Bears gets +0/+10, then fights a Hill Giant: it deals 2 and takes 3, and survives as a 2/12 (CR 701.14).
+
+[Bot1 Deck]
+Chelonian Tackle
+Grizzly Bears
+Lightning Bolt
+Mox Emerald
+Mox Emerald
+Mox Ruby
+Mox Ruby
+Mountain x13
+
+[Bot2 Deck]
+Hill Giant
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Battlefield.Mox Ruby#4.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Chelonian Tackle.Cast
+Bot1.Target(Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Toughness = 12
+Bot1.Battlefield.Grizzly Bears.Damage = 3
+Bot2.Battlefield.Hill Giant.Damage = 2
