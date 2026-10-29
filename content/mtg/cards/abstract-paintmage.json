@@ -1,0 +1,8 @@
+{
+  "name": "Abstract Paintmage",
+  "manaCost": "{U}{U/R}{R}",
+  "type": "Creature — Djinn Sorcerer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "At the beginning of your first main phase, add {U}{R}. Spend this mana only to cast instant and sorcery spells."
+}

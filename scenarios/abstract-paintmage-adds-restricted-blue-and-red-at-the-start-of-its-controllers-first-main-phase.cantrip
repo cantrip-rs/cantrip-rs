@@ -1,0 +1,49 @@
+# Abstract Paintmage: "At the beginning of your first main phase, add {U}{R}. Spend this mana only to cast instant and sorcery
+# spells." Bot1 casts it on turn 1 with Black Lotus (blue) and Mox Ruby; the Lotus is gone, so the only source left is the
+# Mox, which makes {R} and no {U}. On turn 2 (Bot2's first main phase) the pool is empty. On turn 3 the trigger adds {U}{R},
+# restricted: Delver of Secrets, a creature spell for {U}, is refused although {U} floats in the pool. The restricted {R}
+# pays Lightning Bolt (3 damage) and leaves the {U} (the Mox is still untapped), which empties with the phase (CR 106.4):
+# in the second main phase there is no {U} for Opt.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Abstract Paintmage
+Lightning Bolt
+Opt
+Delver of Secrets
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Abstract Paintmage.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Mana =
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {U} (InstantOrSorcerySpells) {R} (InstantOrSorcerySpells)
+! Bot1.Hand.Delver of Secrets.Cast(Mana: short)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot1.Mana = {U} (InstantOrSorcerySpells)
+Bot1.Pass
+[Bot1.Main2]
+? Bot1.Mana =
+! Bot1.Hand.Opt.Cast(Mana: short)
+
+[Expect]
+Bot1.Hand.Count = 4
