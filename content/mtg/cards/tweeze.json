@@ -1,0 +1,6 @@
+{
+  "name": "Tweeze",
+  "manaCost": "{2}{R}",
+  "type": "Instant",
+  "oracleText": "Tweeze deals 3 damage to any target. You may discard a card. If you do, draw a card."
+}

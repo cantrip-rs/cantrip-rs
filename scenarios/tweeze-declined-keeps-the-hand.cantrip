@@ -1,0 +1,37 @@
+# Tweeze: the discard is "you may": declined, nothing is discarded and nothing is drawn (CR 608.2c). Tweeze hits Bot1's own
+# face this time (any target, 20 to 17).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Tweeze
+Forest
+Forest
+Forest
+Plains
+Plains x12
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tweeze.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T1 Bot1.Main2]
+? Bot1.Life = 17
+
+[Expect]
+Bot1.Graveyard = Tweeze
+Bot1.Hand = Forest; Forest; Forest
