@@ -1,0 +1,14 @@
+{
+  "name": "Studious First-Year",
+  "manaCost": "{G}",
+  "type": "Creature — Bear Wizard",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "prepare": {
+    "name": "Rampant Growth",
+    "manaCost": "{1}{G}",
+    "type": "Sorcery",
+    "oracleText": "Search your library for a basic land card, put that card onto the battlefield tapped, then shuffle."
+  }
+}
