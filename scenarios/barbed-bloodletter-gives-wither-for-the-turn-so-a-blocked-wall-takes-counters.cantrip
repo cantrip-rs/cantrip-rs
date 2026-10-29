@@ -1,0 +1,55 @@
+# Barbed Bloodletter {1}{B} Equipment, flash: "When this Equipment enters, attach it to target creature you control. That creature
+# gains wither until end of turn. Equipped creature gets +1/+2" (CR 702.80a, 611.2a). Bot1's Memnite becomes a 2/3 with wither and
+# attacks into Bot2's Wall of Earth (0/6): the 2 damage is dealt as two -1/-1 counters (a -2/4 Wall), not marked damage (CR 120.3d).
+# Once the turn is over the Memnite no longer has wither, but is still equipped.
+
+[Bot1 Deck]
+Memnite
+Mox Jet
+Mox Ruby
+Barbed Bloodletter
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Wall of Earth
+Island x17
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Earth.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Barbed Bloodletter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Wither
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Wall of Earth > Memnite)
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Wall of Earth.Counters.MinusOneMinusOne = 2
+? Bot2.Battlefield.Wall of Earth.Damage = 0
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Wall of Earth.Power = -2
+Bot2.Battlefield.Wall of Earth.Toughness = 4
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Barbed Bloodletter.AttachedTo = Memnite
