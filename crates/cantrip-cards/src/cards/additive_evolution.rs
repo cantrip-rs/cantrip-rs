@@ -5,9 +5,7 @@ use cantrip_oracle as oracle;
 
 /// "When this enchantment enters, create a 0/0 green and blue Fractal creature token. Put three +1/+1 counters on it."
 fn fractal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    for token in tokens::create(g, item.controller, &tokens::FRACTAL, 1)? {
-        g.add_counters(token, CounterKind::PlusOne, 3);
-    }
+    tokens::create_fractal_with_counters(g, item.controller, 3)?;
     Ok(())
 }
 
