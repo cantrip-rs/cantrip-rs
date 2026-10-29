@@ -1,0 +1,8 @@
+{
+  "name": "D'Vana Tendi, Optimistic Ensign",
+  "manaCost": "{1}{G/U}{G/U}",
+  "type": "Legendary Creature — Orion Scientist",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "{T}: Untap another target permanent.\n{3}: Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)"
+}

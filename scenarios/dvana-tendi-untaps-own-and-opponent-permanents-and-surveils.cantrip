@@ -1,0 +1,57 @@
+# Tendi untaps an opponent's land Bot2 tapped for Opt (checked on Bot1's turn, before Bot2's untap step could), then a
+# tapped Mox on Bot1's next turn; it cannot target itself or a card in hand (CR 115.1, 701.26b).
+# The next turn, its {3} ability bins the known top card, showing both abilities and the surveil action (CR 701.25a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Sapphire
+D'Vana Tendi, Optimistic Ensign
+Forest
+Forest
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island
+Opt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.D'Vana Tendi, Optimistic Ensign.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Opt.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Island.Tapped = true
+Bot1.Battlefield.D'Vana Tendi, Optimistic Ensign.Activate(Bot2.Battlefield.Island; Ability: {T})
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Island.Tapped = false
+[T5 Bot1.Main1]
+! Bot1.Battlefield.D'Vana Tendi, Optimistic Ensign.Activate(D'Vana Tendi, Optimistic Ensign; Ability: {T})
+! Bot1.Battlefield.D'Vana Tendi, Optimistic Ensign.Activate(Bot1.Hand.Forest; Ability: {T})
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.D'Vana Tendi, Optimistic Ensign.Activate(Mox Emerald; Ability: {T})
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.D'Vana Tendi, Optimistic Ensign.Activate(Ability: Surveil 1)
+? Bot1.Mana =
+Bot1.Arrange( | Island)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Island.Tapped = false
+Bot1.Battlefield.Mox Emerald.Tapped = false
+Bot1.Graveyard = Island; Black Lotus
+Bot1.Battlefield.D'Vana Tendi, Optimistic Ensign.Tapped = true
