@@ -1,0 +1,50 @@
+# Rabid Attack: in response to a Lightning Bolt, both creatures get +1/+0 and "When this creature dies, draw a card" until end of turn; the Bolted one dies and its controller draws (CR 603.10a).
+
+[Bot1 Deck]
+Burrog Banemaker
+Burrog Banemaker
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Rabid Attack
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker#1)
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Rabid Attack.Cast
+Bot1.Target(Bot1.Battlefield.Burrog Banemaker#1; Bot1.Battlefield.Burrog Banemaker#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot1.Graveyard = Burrog Banemaker; Rabid Attack
+Bot1.Battlefield.Burrog Banemaker.Power = 2
+Bot1.Battlefield.Burrog Banemaker.Toughness = 1
