@@ -1,0 +1,59 @@
+# End-Blaze Epiphany with X = 3 on Bot2's Alpine Grizzly (4/2): it dies (CR 704.5g), so its delayed trigger (CR 603.7c) exiles
+# cards equal to its power, 4 (not X), from the top of Bot1's library - not Bot2's - and Bot1 chooses Lightning Bolt. Only that
+# card is playable: the three Mountains exiled with it are refused although Bot1 has a land drop (CR 305.1). The Bolt is cast
+# from exile this turn.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+End-Blaze Epiphany
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain
+Lightning Bolt
+Mountain
+Mountain
+Mountain x9
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Alpine Grizzly
+Forest x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.End-Blaze Epiphany.Cast(Bot2.Battlefield.Alpine Grizzly; X: 3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+! Bot1.Exile.Mountain.Play
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Alpine Grizzly; Black Lotus
+Exile = Mountain; Mountain; Mountain
+Bot1.Library.Count = 8

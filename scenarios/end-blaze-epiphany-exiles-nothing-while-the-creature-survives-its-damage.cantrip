@@ -1,0 +1,48 @@
+# End-Blaze Epiphany with X = 1 on Bot2's Alpine Grizzly (4/2): 1 damage does not kill it (CR 120.6, 704.5g), so the delayed
+# trigger (CR 603.7c) never fires and nothing is exiled from the top of Bot1's library: the cards stay put.
+
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+End-Blaze Epiphany
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain
+Lightning Bolt
+Mountain
+Mountain
+Mountain x9
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Alpine Grizzly
+Forest x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.End-Blaze Epiphany.Cast(Bot2.Battlefield.Alpine Grizzly; X: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Library.Count = 12
+Exile = 
+Bot2.Battlefield = Alpine Grizzly
+Bot2.Graveyard = Black Lotus

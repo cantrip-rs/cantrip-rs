@@ -1,0 +1,6 @@
+{
+  "name": "End-Blaze Epiphany",
+  "manaCost": "{X}{R}",
+  "type": "Instant",
+  "oracleText": "End-Blaze Epiphany deals X damage to target creature. When that creature dies this turn, exile a number of cards from the top of your library equal to its power, then choose a card exiled this way. Until the end of your next turn, you may play that card."
+}
