@@ -1,0 +1,12 @@
+{
+  "name": "Wildgrowth Archaic",
+  "manaCost": "{2/G}{2/G}",
+  "type": "Creature — Avatar",
+  "power": 0,
+  "toughness": 0,
+  "oracleText": "Reach, trample\nConverge — This creature enters with a +1/+1 counter on it for each color of mana spent to cast it.\nWhenever you cast a creature spell, that creature enters with X additional +1/+1 counters on it, where X is the number of colors of mana spent to cast it.",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}

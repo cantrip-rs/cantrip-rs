@@ -1,0 +1,28 @@
+# Wildgrowth Archaic paid {G} for one {2/G} and {R}{W} for the other (a hybrid {2} can be paid with two mana of any colors): three
+# colors of mana were spent, so it enters with three +1/+1 counters, a 3/3.
+
+[Bot1 Deck]
+Wildgrowth Archaic
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wildgrowth Archaic.Cast
+Bot1.Modes({2/G})
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Wildgrowth Archaic.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Wildgrowth Archaic.Power = 3

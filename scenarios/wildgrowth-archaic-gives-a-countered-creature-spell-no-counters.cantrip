@@ -1,0 +1,40 @@
+# Wildgrowth Archaic: the extra counters are a replacement effect on the creature spell entering the battlefield (CR 614.12), and a
+# creature spell that is countered never enters: Bot1 casts Grizzly Bears with {G}{R} after the Archaic is out, the trigger
+# resolves, and Bot1 counters its own spell with Counterspell (Black Lotus' {U}{U}{U}). The Bears go to the graveyard with no counters.
+
+[Bot1 Deck]
+Wildgrowth Archaic
+Grizzly Bears
+Counterspell
+Black Lotus
+Mox Emerald x3
+Mox Ruby
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Wildgrowth Archaic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Counterspell.Cast(Stack.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Counterspell; Grizzly Bears; Black Lotus
+Bot1.Graveyard.Grizzly Bears.Counters.PlusOnePlusOne = (absent)
