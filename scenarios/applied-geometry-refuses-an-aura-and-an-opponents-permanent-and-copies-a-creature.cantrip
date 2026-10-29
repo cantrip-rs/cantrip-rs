@@ -1,0 +1,54 @@
+# Applied Geometry: the target is a non-Aura permanent you control (CR 115.1) - Bot1's Rancor (an Aura) and Bot2's Mox Ruby are
+# both refused. Geometer's Arthropod, a creature, is copied: the token is a 0/0 Fractal Crab with the Arthropod's text and six
+# +1/+1 counters (6/6), not the original's 1/4 (CR 707.9b).
+
+[Bot1 Deck]
+Geometer's Arthropod
+Rancor
+Applied Geometry
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Geometer's Arthropod.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Rancor.Cast(Geometer's Arthropod)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Applied Geometry.Cast(Rancor)
+! Bot1.Hand.Applied Geometry.Cast(Mox Ruby)
+Bot1.Hand.Applied Geometry.Cast(Geometer's Arthropod)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Geometer's Arthropod#2.Counters.PlusOnePlusOne = 6
+Bot1.Battlefield.Geometer's Arthropod#2.Power = 6
+Bot1.Battlefield.Geometer's Arthropod#2.Toughness = 6
+Bot1.Battlefield.Geometer's Arthropod#2.Subtypes = Crab; Fractal
+Bot1.Battlefield.Geometer's Arthropod#1.Power = 3
+Bot1.Battlefield = Geometer's Arthropod; Geometer's Arthropod; Mox Emerald; Mox Emerald; Mox Jet; Mox Sapphire; Rancor
