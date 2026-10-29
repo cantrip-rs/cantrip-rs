@@ -1,0 +1,50 @@
+# Leonardo's finality counter is a replacement effect of Leonardo's own ability (CR 614.1c): a Mardu Scout dashed from the graveyard
+# while Leonardo is on the battlefield is cast with his permission, but Bot2's Lightning Bolt kills Leonardo with the spell still
+# on the stack. Leonardo no longer applies his ability when the Scout enters, so it enters without a finality counter.
+
+[Bot1 Deck]
+Black Lotus
+Leonardo, Sewer Samurai
+Plains
+Mox Ruby
+Faithless Looting
+Mardu Scout
+Plains
+Plains x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Mardu Scout; Plains)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Leonardo, Sewer Samurai.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Graveyard.Mardu Scout.Cast(Ability: Dash)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Leonardo, Sewer Samurai)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Leonardo, Sewer Samurai; Black Lotus; Faithless Looting; Plains
+Bot1.Battlefield.Mardu Scout.Power = 3
+Bot1.Battlefield.Mardu Scout.Counters.Finality = (absent)

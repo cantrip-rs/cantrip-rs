@@ -1,0 +1,49 @@
+# "During your turn, you may cast creature spells with power or toughness 1 or less from your graveyard. If you cast a spell this
+# way, that creature enters with a finality counter on it." Faithless Looting discards Cathar Commando (3/1, flash: toughness 1
+# is enough) and Hovermyr (1/2: power 1 is enough) on turn 1, and Leonardo comes down for Black Lotus and a Plains. On Bot2's
+# turn 2 Bot1 holds {W} and {G} from Mox Pearl and Mox Emerald but cannot cast the flash Commando from the graveyard (the
+# refusal): it is not Bot1's turn. On turn 3 both are cast from the graveyard for their own mana costs, and each enters with a
+# finality counter.
+
+[Bot1 Deck]
+Black Lotus
+Leonardo, Sewer Samurai
+Plains
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Faithless Looting
+Cathar Commando
+Hovermyr
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Cathar Commando; Hovermyr)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Leonardo, Sewer Samurai.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+! Bot1.Graveyard.Cathar Commando.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Cathar Commando.Cast(Ability: During your turn)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Hovermyr.Cast(Ability: During your turn)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Cathar Commando.Counters.Finality = 1
+Bot1.Battlefield.Hovermyr.Counters.Finality = 1

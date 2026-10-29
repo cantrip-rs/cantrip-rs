@@ -1,0 +1,41 @@
+# Leonardo's permission is to cast the card, not a cost of its own (CR 601.3): a creature in the graveyard with power or toughness
+# 1 or less may be cast from there for an alternative cost it has (CR 118.9). Faithless Looting discards Mardu Scout (3/1) on
+# turn 1, Leonardo comes down for Black Lotus and a Plains, and on turn 3 the Scout is cast from the graveyard for its dash cost
+# {1}{R}: it enters with a finality counter and haste, and attacks for 3.
+
+[Bot1 Deck]
+Black Lotus
+Leonardo, Sewer Samurai
+Plains
+Mox Ruby
+Faithless Looting
+Mardu Scout
+Plains
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Mardu Scout; Plains)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Leonardo, Sewer Samurai.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Graveyard.Mardu Scout.Cast(Ability: Dash)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Mardu Scout > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Mardu Scout.Counters.Finality = 1
+Bot2.Life = 17

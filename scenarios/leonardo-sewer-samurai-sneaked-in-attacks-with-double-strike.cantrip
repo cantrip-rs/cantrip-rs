@@ -1,0 +1,35 @@
+# Sneak {2}{W}{W} (CR 702.190a-b) and double strike (CR 702.4): Bot1 attacks Bot2 with Ornithopter on turn 3, nobody blocks; in the
+# declare blockers step Bot1 casts Leonardo for Black Lotus and a Plains, returning the Ornithopter. He enters tapped and
+# attacking with double strike, dealing 3 in the first-strike damage step and 3 in the regular one: Bot2 at 14.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Ornithopter
+Leonardo, Sewer Samurai
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Leonardo, Sewer Samurai.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Leonardo, Sewer Samurai.Tapped = true
