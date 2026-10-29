@@ -565,6 +565,31 @@ pub fn rest_to_bottom_in_random_order(g: &mut dyn Game, player: PlayerId, looked
     g.bottom_in_random_order(player, &rest);
 }
 
+/// "Reveal the top `count` cards of your library. Put a land card from among them onto the battlefield [tapped] and the
+/// rest into your graveyard" (CR 701.20, 404.3). A land must be chosen whenever one is revealed; revealing moves nothing,
+/// and the rest go to the graveyard together in their owner's chosen order. An empty library does nothing. Cavalier of
+/// Thorns prints it untapped; Hit It! prints it tapped.
+pub fn reveal_top_land_to_battlefield_rest_to_graveyard(
+    g: &mut dyn Game,
+    player: PlayerId,
+    source: ObjectId,
+    count: usize,
+    tapped: bool,
+) -> Result<(), Suspend> {
+    let revealed = top_of_library(g, player, count);
+    if revealed.is_empty() {
+        return Ok(());
+    }
+    g.reveal(player, &revealed);
+    let land = crate::choose::select(g, player, source, Purpose::PutOntoBattlefield, revealed.clone(), crate::select::land_cards(crate::select::as_many_as_can(1)))?.first().copied();
+    if let Some(land) = land {
+        g.put_onto_battlefield(land, player, tapped)?;
+    }
+    let rest: Vec<ObjectId> = revealed.into_iter().filter(|&c| Some(c) != land).collect();
+    g.put_into_graveyard(&rest);
+    Ok(())
+}
+
 /// "Reveal the top `count` cards of your library. You may put a card that passes `wanted` from among them into your hand.
 /// Put the rest into your graveyard" (CR 701.20, 400.3): the rest go together, in the order their owner arranges them (CR
 /// 404.3, asked by the core). With nothing to take

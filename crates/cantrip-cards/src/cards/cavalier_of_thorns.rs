@@ -1,7 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::top_of_library;
 use cantrip_mechanics::triggers::{THIS_DIES, THIS_ENTERS};
-use cantrip_mechanics::{choose, effects, select, targets};
+use cantrip_mechanics::{effects, library, targets};
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("ExileCavalier", "exile Cavalier of Thorns to put the target card on top of your library?", "The target card goes on top of your library", "Exile it", "Don't");
@@ -10,19 +9,7 @@ const ASK: Question = Question::new("ExileCavalier", "exile Cavalier of Thorns t
 /// battlefield and the rest into your graveyard." (CR 701.20): the land is not optional, one is chosen whenever any
 /// revealed card is a land; every other revealed card is put into the graveyard (CR 701.20a: revealing moves nothing), together, in the order their owner arranges them (CR 404.3).
 fn reveal_five(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let player = item.controller;
-    let revealed = top_of_library(g, player, 5);
-    if revealed.is_empty() {
-        return Ok(());
-    }
-    g.reveal(player, &revealed);
-    let land = choose::select(g, player, item.object, Purpose::PutOntoBattlefield, revealed.clone(), select::land_cards(select::as_many_as_can(1)))?.first().copied();
-    if let Some(land) = land {
-        g.put_onto_battlefield(land, player, false)?;
-    }
-    let rest: Vec<ObjectId> = revealed.into_iter().filter(|&c| Some(c) != land).collect();
-    g.put_into_graveyard(&rest);
-    Ok(())
+    library::reveal_top_land_to_battlefield_rest_to_graveyard(g, item.controller, item.object, 5, false)
 }
 
 /// "Another target card from your graveyard" (CR 115.1): any card there but the Cavalier itself, which is in the graveyard
