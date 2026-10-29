@@ -925,3 +925,14 @@ pub fn owner_puts_on_top_or_bottom(g: &mut dyn Game, source: ObjectId, object: O
     }
     Ok(())
 }
+
+/// "Its owner puts it into their library second from the top or on the bottom": the owner of `object` (CR 108.3), not its
+/// controller, chooses, and the card's `labels` are "Second from the top" then "On the bottom" (the modes the player
+/// answers). Wan Shi Tong, All-Knowing and Temporal Cleansing print it.
+pub fn owner_puts_second_from_top_or_bottom(g: &mut dyn Game, source: ObjectId, object: ObjectId) -> Result<(), Suspend> {
+    let owner = g.obj(object).owner;
+    let card = g.obj(source).card;
+    let second_from_top = crate::choose::one_of(g, owner, source, vec![Label::Card(card, 0), Label::Card(card, 1)])? == 0;
+    g.put_into_library(&[object], if second_from_top { LibraryPlace::FromTop(1) } else { LibraryPlace::Bottom });
+    Ok(())
+}
