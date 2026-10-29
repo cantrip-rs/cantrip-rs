@@ -1,0 +1,33 @@
+# Page, Loose Leaf, a 0/2 for {2}: "{T}: Add {C}." and Grandeur, which is paid by discarding another card named Page, Loose Leaf.
+# With no other Page in hand (only Islands) Grandeur is refused on turn 1 and again on turn 3; the mana ability taps for {C}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Page, Loose Leaf
+Island
+Island
+Island
+Island
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Page, Loose Leaf.Cast
+Bot1.Pass
+! Bot1.Battlefield.Page, Loose Leaf.Activate(Ability: Grandeur)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Page, Loose Leaf.Activate(Ability: Grandeur)
+Bot1.Battlefield.Page, Loose Leaf.Activate(Ability: Add)
+
+[Expect]
+Bot1.Mana = {C}
+Bot1.Battlefield.Page, Loose Leaf.Tapped = true
+Bot1.Library.Count = 12
