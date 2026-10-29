@@ -1,0 +1,55 @@
+# Mornsong Aria, {1}{B}{B}: "Players can't draw cards or gain life. At the beginning of each player's draw step, that player
+# loses 3 life, searches their library for a card, puts it into their hand, then shuffles" (CR 121.1, 119.7, 504.1, 701.23).
+# Bot1 casts it on turn 1 with Black Lotus's {B}{B}{B}. On turn 2 Bot2 draws nothing, loses 3 (17) and finds Lightning Bolt: 8
+# cards in hand, not 9. On turn 3 Bot1, its controller, does the same (17, finding an Island: 5 cards, not 6); Swords to
+# Plowshares on its own Memnite gains it nothing, and Night's Whisper draws nothing but loses its 2 (15).
+
+[Bot1 Deck]
+Black Lotus
+Mornsong Aria
+Memnite
+Swords to Plowshares
+Night's Whisper
+Mox Jet
+Mox Pearl
+Island x13
+
+[Bot2 Deck]
+Island x7
+Lightning Bolt
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Mornsong Aria.Cast
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot2.Search(Lightning Bolt)
+? Bot2.Life = 17
+? Bot2.Hand.Count = 8
+? Bot2.Revealed = (absent)
+[T3 Bot1.Upkeep]
+Bot1.Search(Island)
+? Bot1.Life = 17
+? Bot1.Hand.Count = 5
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Night's Whisper.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 15
+Bot1.Hand.Count = 0
+Bot2.Life = 17

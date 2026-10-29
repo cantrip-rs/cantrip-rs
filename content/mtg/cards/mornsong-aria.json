@@ -1,0 +1,6 @@
+{
+  "name": "Mornsong Aria",
+  "manaCost": "{1}{B}{B}",
+  "type": "Legendary Enchantment",
+  "oracleText": "Players can't draw cards or gain life.\nAt the beginning of each player's draw step, that player loses 3 life, searches their library for a card, puts it into their hand, then shuffles."
+}
