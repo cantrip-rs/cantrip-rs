@@ -1,18 +1,11 @@
 use cantrip_api::*;
-use cantrip_mechanics::{discard_chosen, targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{effects, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
-
-/// "Draw three cards, then discard a card." (CR 121.1, 701.9): the card discarded is chosen once the three are drawn.
-fn coil_and_catch(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.draw(item.controller, 3);
-    discard_chosen(g, item.controller, item.object, 1)?;
-    Ok(())
-}
 
 /// The Omen (CR 720): cast from the hand as an Omen instant for {3}{U}; as it resolves it is shuffled into its owner's
 /// library (CR 720.3d, the core's).
 pub static COIL_AND_CATCH: CardDef = CardDef {
-    spell: spell(&[], coil_and_catch),
+    spell: spell(&[], effects::draw_three_then_discard),
     ..oracle::COIL_AND_CATCH
 };
 
