@@ -1,0 +1,40 @@
+# Disruptor of Currents {3}{U}{U} (CR 702.51a, 603.2): three Ornithopters tapped for convoke pay the {3} (colorless, so generic only), Mox Sapphire and an
+# Island pay the {U}{U}. "Return up to one other target nonland permanent": the Island (a land) is refused, another permanent is not - Bot1's own tapped
+# Ornithopter goes back to the hand while the other two stay. Disruptor itself is not a legal target ("other").
+
+[Bot1 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Disruptor of Currents
+Mox Sapphire
+Island
+Island
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Disruptor of Currents.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Island)
+! Bot1.Target(Bot1.Battlefield.Disruptor of Currents)
+Bot1.Target(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Ornithopter
+Bot1.Battlefield = Ornithopter; Ornithopter; Mox Sapphire; Island; Disruptor of Currents
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#2.Tapped = true
+Bot1.Battlefield.Disruptor of Currents.Keywords = Flash
+Bot1.Mana =

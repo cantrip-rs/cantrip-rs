@@ -1,0 +1,39 @@
+# Disruptor of Currents: "return up to one other target nonland permanent to its owner's hand" (CR 603.2, 701.1a). On turn 3 Black Lotus and two Moxen pay
+# the five mana; Bot2's Forest (a land) is refused as a target, its Elvish Mystic is accepted and goes back to Bot2's hand, not the controller's.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Disruptor of Currents
+Island x16
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Disruptor of Currents.Cast
+Bot1.Pass
+! Bot1.Target(Bot2.Battlefield.Forest)
+Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Hand.Elvish Mystic.Power = 1
+Bot2.Battlefield = Forest
+Bot1.Battlefield.Disruptor of Currents.Tapped = false

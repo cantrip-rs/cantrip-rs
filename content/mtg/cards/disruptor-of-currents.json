@@ -1,0 +1,12 @@
+{
+  "name": "Disruptor of Currents",
+  "manaCost": "{3}{U}{U}",
+  "type": "Creature — Merfolk Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flash\nConvoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nWhen this creature enters, return up to one other target nonland permanent to its owner's hand.",
+  "keywords": [
+    "Flash"
+  ],
+  "convoke": true
+}
