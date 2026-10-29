@@ -1,0 +1,6 @@
+{
+  "name": "Heated Argument",
+  "manaCost": "{4}{R}",
+  "type": "Instant",
+  "oracleText": "Heated Argument deals 6 damage to target creature. You may exile a card from your graveyard. If you do, Heated Argument also deals 2 damage to that creature's controller."
+}
