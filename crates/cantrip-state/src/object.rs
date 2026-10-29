@@ -1928,7 +1928,7 @@ impl ManaValueSpells {
 pub struct SubtypeSpells {
     /// The subtypes, any one of which the spell must have. Read through the words of the text that names them (CR 612)
     /// as the mana is added.
-    pub subtypes: [Option<Subtype>; 2],
+    pub subtypes: SubtypeSet,
     /// "Of the chosen type" (CR 205.3m, 607.2a): as the mana is added, `subtypes` becomes the type chosen for the source
     /// as it entered, or nothing at all if none was, which then no spell has.
     pub chosen: bool,
@@ -1948,26 +1948,28 @@ pub struct SubtypeSpells {
 impl SubtypeSpells {
     /// "Spend this mana only to cast a creature spell of the chosen type."
     pub const CHOSEN_TYPE_CREATURE: SubtypeSpells =
-        SubtypeSpells { subtypes: [None, None], chosen: true, creature: true, uncounterable: false, abilities: None };
+        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: true, uncounterable: false, abilities: None };
 
     /// "Spend this mana only to cast a spell of the chosen type or activate an ability of a source of the chosen type"
     /// (Eclipsed Realms).
     pub const CHOSEN_TYPE_SPELLS_OR_ABILITIES: SubtypeSpells =
-        SubtypeSpells { subtypes: [None, None], chosen: true, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources) };
+        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources) };
 
     /// "Spend this mana only to cast a creature spell of the chosen type or activate an ability of a creature source of the
     /// chosen type" (Secluded Courtyard): `creature` limits the ability's source as it does the spell.
     pub const CHOSEN_TYPE_CREATURE_SPELLS_OR_ABILITIES: SubtypeSpells =
-        SubtypeSpells { subtypes: [None, None], chosen: true, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources) };
+        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources) };
 
     /// "Spend this mana only to cast [subtype] spells."
     pub const fn of(subtype: Subtype) -> SubtypeSpells {
-        SubtypeSpells { subtypes: [Some(subtype), None], chosen: false, creature: false, uncounterable: false, abilities: None }
+        SubtypeSpells { subtypes: SubtypeSet::of(&[subtype]), chosen: false, creature: false, uncounterable: false, abilities: None }
     }
 
-    /// "Spend this mana only to cast a [subtype] spell or a [subtype] spell."
-    pub const fn either(a: Subtype, b: Subtype) -> SubtypeSpells {
-        SubtypeSpells { subtypes: [Some(a), Some(b)], chosen: false, creature: false, uncounterable: false, abilities: None }
+    /// "Spend this mana only to cast a [subtype] spell or a [subtype] spell [or ...]": any number of subtypes, any one of
+    /// which the spell must have. This is the one way to say "any of these subtypes"; `ManaRestriction::AnyOf` is for a union
+    /// of restrictions of different kinds.
+    pub const fn of_any(subtypes: &[Subtype]) -> SubtypeSpells {
+        SubtypeSpells { subtypes: SubtypeSet::of(subtypes), chosen: false, creature: false, uncounterable: false, abilities: None }
     }
 
     /// "... and that spell can't be countered."
@@ -1987,7 +1989,7 @@ impl SubtypeSpells {
 
     /// Whether a spell with these characteristics may be paid for with the mana.
     fn admits(self, types: TypeSet, subtypes: &SubtypeSet) -> bool {
-        (!self.creature || types.has(CardType::Creature)) && self.subtypes.iter().flatten().any(|&s| subtypes.has(s))
+        (!self.creature || types.has(CardType::Creature)) && self.subtypes.intersects(*subtypes)
     }
 }
 
@@ -2153,7 +2155,7 @@ impl ManaRestriction {
             (ManaRestriction::Subtypes(s), ManaPayment::Ability { source, ref subtypes, on_battlefield }) => {
                 s.abilities.is_some_and(|of| of.admits(on_battlefield))
                     && (!s.creature || source.has(CardType::Creature))
-                    && s.subtypes.iter().flatten().any(|&t| subtypes.has(t))
+                    && s.subtypes.intersects(*subtypes)
             }
             _ => false,
         }
@@ -2178,7 +2180,7 @@ impl ManaRestriction {
             return format!("ManaValue{}OrGreater{}Spells", m.at_least, if m.or_x { "OrX" } else { "" });
         }
         if let ManaRestriction::Subtypes(s) = self {
-            let types: Vec<String> = s.subtypes.iter().flatten().map(|t| t.name().replace(' ', "")).collect();
+            let types: Vec<String> = s.subtypes.iter().map(|t| t.name().replace(' ', "")).collect();
             let mut name = if types.is_empty() { "NoType".to_string() } else { types.join("Or") };
             if s.chosen {
                 name = "ChosenType".to_string();
@@ -2232,19 +2234,18 @@ impl ManaRestriction {
             Some(body) => (body, true),
             None => (limit.strip_suffix("spells")?, false),
         };
-        // One subtype's name, or two joined by "Or": read against the names themselves, since a name may hold "or" (Orc,
-        // Warrior, Horror).
-        let named = |text: &str| Subtype::ALL.into_iter().find(|t| t.name().replace(' ', "").eq_ignore_ascii_case(text));
-        let subtypes = if body == "notype" {
-            [None, None]
-        } else if let Some(one) = named(body) {
-            [Some(one), None]
-        } else {
+        // One subtype's name, or any number joined by "Or": read against the names themselves, since a name may hold "or"
+        // (Orc, Warrior, Horror).
+        fn names(text: &str) -> Option<SubtypeSet> {
+            if let Some(one) = Subtype::ALL.into_iter().find(|t| t.name().replace(' ', "").eq_ignore_ascii_case(text)) {
+                return Some(SubtypeSet::of(&[one]));
+            }
             Subtype::ALL.into_iter().find_map(|first| {
-                let rest = body.strip_prefix(first.name().replace(' ', "").to_ascii_lowercase().as_str())?.strip_prefix("or")?;
-                Some([Some(first), Some(named(rest)?)])
-            })?
-        };
+                let rest = text.strip_prefix(first.name().replace(' ', "").to_ascii_lowercase().as_str())?.strip_prefix("or")?;
+                Some(names(rest)?.with(first))
+            })
+        }
+        let subtypes = if body == "notype" { SubtypeSet::NONE } else { names(body)? };
         Some(ManaRestriction::Subtypes(SubtypeSpells { subtypes, chosen: false, creature, uncounterable, abilities }))
     }
 }
@@ -2533,14 +2534,16 @@ mod tests {
     fn subtype_restriction_names_read_back() {
         let one = |t| ManaRestriction::Subtypes(SubtypeSpells::of(t));
         let mut all: Vec<ManaRestriction> = Subtype::ALL.into_iter().map(one).collect();
-        all.push(ManaRestriction::Subtypes(SubtypeSpells::either(Subtype::Orc, Subtype::Warrior)));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells::either(Subtype::Horror, Subtype::Orc)));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells::either(Subtype::Dragon, Subtype::Omen)));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: [Some(Subtype::Elf), None], chosen: false, creature: true, uncounterable: true, abilities: None }));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: [None, None], chosen: false, creature: true, uncounterable: false, abilities: None }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Orc, Subtype::Warrior])));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Horror, Subtype::Orc])));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Dragon, Subtype::Omen])));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Dragon, Subtype::Omen, Subtype::Elf])));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Horror, Subtype::Orc, Subtype::Warrior])));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::of(&[Subtype::Elf]), chosen: false, creature: true, uncounterable: true, abilities: None }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: false, creature: true, uncounterable: false, abilities: None }));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Elemental).or_abilities()));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: [Some(Subtype::Elf), None], chosen: false, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources) }));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: [None, None], chosen: false, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources) }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::of(&[Subtype::Elf]), chosen: false, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources) }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: false, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources) }));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Elemental).or_abilities_of_permanents()));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Myr).or_abilities_of_permanents()));
         all.push(ManaRestriction::mana_value_at_least(4));
@@ -2551,6 +2554,26 @@ mod tests {
             let name = r.name();
             assert_eq!(ManaRestriction::parse(name.split_whitespace()), Some(r), "{name}");
         }
+    }
+
+    /// A restriction by subtype names any number of them, each exactly: the third of three pays for a spell with it, which a
+    /// list cut down to two would have left out (CR 106.6, 205.3).
+    #[test]
+    fn a_subtype_restriction_of_three_subtypes_admits_a_spell_with_the_third() {
+        let restriction = ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Dragon, Subtype::Omen, Subtype::Elf]));
+        let spell = |subtype| ManaPayment::Spell {
+            types: TypeSet::of(&[CardType::Creature]),
+            subtypes: SubtypeSet::of(&[subtype]),
+            legendary: false,
+            mana_value: 2,
+            x: false,
+            from: ZoneKind::Hand,
+        };
+        for subtype in [Subtype::Dragon, Subtype::Omen, Subtype::Elf] {
+            assert!(restriction.may_pay(&spell(subtype)), "{subtype:?}");
+        }
+        assert!(!restriction.may_pay(&spell(Subtype::Human)));
+        assert_eq!(restriction.name(), "DragonOrElfOrOmenSpells");
     }
 
     /// "Abilities of [type]s" are a permanent's only (CR 109.2), "abilities of [type] sources" a source's in any zone (CR

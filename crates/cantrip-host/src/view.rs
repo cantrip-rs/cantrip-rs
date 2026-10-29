@@ -110,7 +110,7 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
         }
         r if r == ManaRestriction::NONCREATURE_SPELLS => ManaSpendFilterView::NoncreatureSpells,
         ManaRestriction::Subtypes(s) => {
-            subtypes = s.subtypes.iter().flatten().map(|t| t.name().to_string()).collect();
+            subtypes = s.subtypes.iter().map(|t| t.name().to_string()).collect();
             match (s.creature, s.abilities) {
                 (true, Some(AbilitiesOf::Sources)) => ManaSpendFilterView::SubtypeCreatureSpellsOrAbilities,
                 (false, Some(AbilitiesOf::Sources)) => ManaSpendFilterView::SubtypeSpellsOrAbilities,
@@ -164,12 +164,9 @@ pub fn restriction_of(filter: ManaSpendFilterView, effect: ManaSpendEffectView, 
             | ManaSpendFilterView::SubtypeCreatureSpellsOrAbilities
             | ManaSpendFilterView::SubtypeSpellsOrAbilitiesOfPermanents
     ) {
-        if subtypes.len() > 2 {
-            return None;
-        }
-        let mut named = [None, None];
-        for (slot, name) in named.iter_mut().zip(subtypes) {
-            *slot = Some(Subtype::named(name)?);
+        let mut named = SubtypeSet::NONE;
+        for name in subtypes {
+            named = named.with(Subtype::named(name)?);
         }
         return Some(ManaRestriction::Subtypes(SubtypeSpells {
             subtypes: named,

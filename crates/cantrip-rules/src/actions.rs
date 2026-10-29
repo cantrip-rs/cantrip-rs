@@ -9998,11 +9998,12 @@ fn spell_payment(cx: &Cx, spell: ObjectId, with_subtypes: bool) -> ManaPayment {
 pub fn restriction_from(cx: &Cx, source: ObjectId, restriction: ManaRestriction, by: Option<Linked>) -> ManaRestriction {
     let ManaRestriction::Subtypes(mut s) = restriction else { return restriction };
     if s.chosen {
-        s.subtypes = [cx.s().chosen_subtype(by.unwrap_or_else(|| cx.text_linked(source))), None];
+        let chosen = cx.s().chosen_subtype(by.unwrap_or_else(|| cx.text_linked(source)));
+        s.subtypes = chosen.map_or(SubtypeSet::NONE, |t| SubtypeSet::of(&[t]));
         s.chosen = false;
     } else {
         let words = cantrip_api::words(cx.s(), source);
-        s.subtypes = s.subtypes.map(|t| t.map(|t| words.subtype(t)));
+        s.subtypes = s.subtypes.iter().fold(SubtypeSet::NONE, |set, t| set.with(words.subtype(t)));
     }
     ManaRestriction::Subtypes(s)
 }

@@ -18,7 +18,7 @@ pub static CARD: CardDef = CardDef {
         // subtype as it is cast; the words are the land's own, as the mana is added (CR 612).
         mana_ability(
             TAP,
-            add_any_color(1).only_for(ManaRestriction::Subtypes(SubtypeSpells::either(Subtype::Dragon, Subtype::Omen))),
+            add_any_color(1).only_for(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Dragon, Subtype::Omen]))),
             "{T}: Add one mana of any color. Spend this mana only to cast a Dragon spell or an Omen spell.",
         ),
         ability(
