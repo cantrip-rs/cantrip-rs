@@ -496,6 +496,30 @@ pub fn players_discard_hands_then_draw_seven(g: &mut dyn Game, players: &[Player
     }
 }
 
+const WHEEL: Question = Question::new(
+    "DiscardHandToDrawSeven",
+    "discard your hand and draw seven cards?",
+    "You may discard even an empty hand",
+    "Discard hand, draw seven",
+    "Keep hand",
+)
+.no_default();
+
+/// "Each player may discard their hand and draw seven cards." Choices are made in APNAP order before the simultaneous
+/// discards (CR 101.4, 701.9a); the consenting players then draw in APNAP order (CR 121.2c). A player who can't draw seven
+/// cards is not offered the choice (CR 121.2b). Arc of Fortune and Raphael's Technique print it.
+pub fn each_player_may_discard_hand_and_draw_seven(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let players: Vec<PlayerId> = g.state().apnap().collect();
+    let mut willing = Vec::new();
+    for player in players {
+        if !cant_draw(g, player, 7) && ask_may(g, player, item.object, Purpose::Ask(&WHEEL))? {
+            willing.push(player);
+        }
+    }
+    players_discard_hands_then_draw_seven(g, &willing);
+    Ok(())
+}
+
 /// "You gain N life" (CR 119.3). Zuran Orb and Inventor's Fair print it (two and one).
 pub fn gain_life(g: &mut dyn Game, item: &StackItem, n: i32) -> Result<(), Suspend> {
     g.gain_life(item.controller, n);
