@@ -1,0 +1,36 @@
+# Spiral into Solitude on Bot1's own Savannah Lions: "enchanted creature can't attack" (CR 508.1c), so declaring it as an
+# attacker is refused and Bot2 stays at 20. No combat prompt is offered at all (no creature may attack), the Lions stays untapped. Bot1 casts the Lions with Black Lotus on turn 1 and the Aura on turn 3.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Savannah Lions
+Spiral into Solitude
+Mox Pearl
+Plains
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Spiral into Solitude.Cast(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Savannah Lions.Tapped = false

@@ -1,0 +1,49 @@
+# "{1}{W}, Blight 1, Sacrifice this Aura: Exile enchanted creature." Bot1 enchants Bot2's Savannah Lions on turn 3, then pays
+# {1}{W} (exactly {1}{W} from a Mox and a Plains), blights its own Lions (a -1/-1 counter kills it) and sacrifices the
+# Aura: Bot2's Lions is exiled, the Aura goes to the graveyard.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Savannah Lions
+Spiral into Solitude
+Mox Pearl
+Mox Ruby
+Plains x14
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Spiral into Solitude.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Spiral into Solitude.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield.Count = 1
+Bot1.Graveyard = Savannah Lions; Spiral into Solitude; Black Lotus

@@ -1,0 +1,52 @@
+# The Aura is sacrificed as a cost, so Bot1 can respond to the ability: Lightning Bolt (from Black Lotus) kills the enchanted
+# Savannah Lions first and the ability, resolving, finds no creature to exile (CR 400.7, 608.2b): the Lions is in Bot2's
+# graveyard (the Aura is in Bot1's).
+
+[Bot1 Deck]
+Plains
+Savannah Lions
+Spiral into Solitude
+Mox Pearl
+Mox Ruby
+Black Lotus
+Lightning Bolt
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Spiral into Solitude.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Spiral into Solitude.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: R)
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Savannah Lions
+Bot1.Graveyard = Lightning Bolt; Black Lotus; Savannah Lions; Spiral into Solitude
