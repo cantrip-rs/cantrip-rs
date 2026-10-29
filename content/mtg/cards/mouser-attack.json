@@ -1,0 +1,6 @@
+{
+  "name": "Mouser Attack!",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Create a 1/1 colorless Robot artifact creature token.\n• Target creature gets +3/+0 and gains first strike until end of turn."
+}

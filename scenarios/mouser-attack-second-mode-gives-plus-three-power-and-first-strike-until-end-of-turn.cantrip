@@ -1,0 +1,54 @@
+# Mouser Attack! {1}{R}, the second mode: "Target creature gets +3/+0 and gains first strike until end of turn." Bot1 casts it twice
+# on turn 3 (Black Lotus' RRR pays the first and half the second, Mox Ruby the rest): on Bot2's Ornithopter (0/2 flier becomes
+# 3/2, toughness unchanged) and on its own Memnite (1/1 becomes 4/1). Mox Ruby is no creature and is refused as a target.
+# On turn 5 both are back to their printed values with no first strike.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Memnite
+Mouser Attack!
+Mouser Attack!
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Mouser Attack!.Cast
+Bot1.Modes(Target creature gets +3/+0 and gains first strike until end of turn.)
+! Bot1.Target(Bot1.Battlefield.Mox Ruby)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 3
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mouser Attack!.Cast
+Bot1.Modes(Target creature gets +3/+0 and gains first strike until end of turn.)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 4
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike
+? Bot1.Mana =
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Graveyard = Mouser Attack!; Mouser Attack!; Black Lotus
