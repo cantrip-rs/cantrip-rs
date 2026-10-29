@@ -1,0 +1,6 @@
+{
+  "name": "Mind into Matter",
+  "manaCost": "{X}{G}{U}",
+  "type": "Sorcery",
+  "oracleText": "Draw X cards. Then you may put a permanent card with mana value X or less from your hand onto the battlefield tapped."
+}

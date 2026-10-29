@@ -1,0 +1,38 @@
+# Mind into Matter ({X}{G}{U}), X = 2: draw two cards (CR 121.1), then you may put a permanent card with mana value 2 or less
+# from your hand onto the battlefield tapped: Geometer's Arthropod (2) is allowed, Paradox Surveyor (3) is not.
+
+[Bot1 Deck]
+Mind into Matter
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Paradox Surveyor
+Lightning Bolt
+Geometer's Arthropod
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mind into Matter.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Paradox Surveyor)
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Geometer's Arthropod)
+
+[Expect]
+Bot1.Hand = Island; Lightning Bolt; Paradox Surveyor
+Bot1.Battlefield.Geometer's Arthropod.Tapped = true
+Bot1.Library.Count = 20
