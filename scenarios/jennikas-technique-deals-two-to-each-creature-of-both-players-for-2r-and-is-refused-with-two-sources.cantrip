@@ -1,0 +1,47 @@
+# Jennika's Technique costs {2}{R} (refused with two sources) and deals 2 damage to each creature, whoever controls it: Bot1's Ornithopter (0/2) and Bot2's
+# Ornithopter die, Bot1's Fanatic of Rhonas (1/4) survives with 2 damage, and neither player is hurt. Bot2 casts it on turn 2 with Mox Ruby, Mox Jet and Mox Pearl.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Ornithopter
+Fanatic of Rhonas
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Ornithopter
+Jennika's Technique
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fanatic of Rhonas.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Ornithopter.Cast
+! Bot2.Hand.Jennika's Technique.Cast(Mana: short)
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Jennika's Technique.Cast
+? Bot2.Mana =
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Ruby; Mox Emerald; Fanatic of Rhonas
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield.Fanatic of Rhonas.Damage = 2
+Bot1.Life = 20
+Bot2.Battlefield = Mox Ruby; Mox Jet; Mox Pearl
+Bot2.Graveyard = Ornithopter; Jennika's Technique
+Bot2.Life = 20

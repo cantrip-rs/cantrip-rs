@@ -1,0 +1,45 @@
+# Sneak {R} (CR 702.190a): Bot1 attacks on turn 3 with an Ornithopter, Bot2 does not block, and Jennika's Technique, an instant, is cast in the declare blockers step for
+# {R} (Mox Ruby), returning the Ornithopter to hand. It deals 2 damage to each creature: Bot2's Ornithopter dies, Bot1's Fanatic of Rhonas (1/4) survives with 2 damage. The returned
+# Ornithopter dealt no damage. Not offered in the main phase, with Mox Ruby untapped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Ornithopter
+Fanatic of Rhonas
+Jennika's Technique
+Island x4
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fanatic of Rhonas.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Jennika's Technique.Cast(Ability: Sneak)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Jennika's Technique.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield = Mox Ruby; Mox Emerald; Mox Pearl; Fanatic of Rhonas
+Bot1.Battlefield.Fanatic of Rhonas.Damage = 2
+Bot1.Graveyard = Jennika's Technique
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Ornithopter

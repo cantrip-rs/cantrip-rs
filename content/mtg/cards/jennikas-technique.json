@@ -1,0 +1,6 @@
+{
+  "name": "Jennika's Technique",
+  "manaCost": "{2}{R}",
+  "type": "Instant",
+  "oracleText": "Sneak {R} (You may cast this spell for {R} if you also return an unblocked attacker you control to hand during the declare blockers step.)\nJennika's Technique deals 2 damage to each creature."
+}
