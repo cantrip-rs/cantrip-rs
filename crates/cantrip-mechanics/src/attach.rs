@@ -138,6 +138,16 @@ pub fn is_equipped(q: &dyn Query, creature: ObjectId) -> bool {
     q.state().battlefield().iter().any(|&id| q.attached_to(id) == Some(creature) && q.chars(id).has_subtype(Subtype::Equipment))
 }
 
+/// "When this Aura enters, enchanted creature gains [a keyword] until end of turn" (CR 611.2a). The enchanted creature is the one the Aura
+/// is attached to as the ability resolves, or, if the Aura has left the battlefield by then, the one it was attached to as it left
+/// (CR 608.2h); an effect on a creature that has left does nothing (CR 400.7). Super Speed (first strike) and Aquitect's Defenses
+/// (hexproof) print it.
+pub fn enchanted_creature_gains_until_end_of_turn(g: &mut dyn Game, item: &StackItem, keyword: Keyword) {
+    if let Some(enchanted) = g.obj(item.object).attached_to {
+        crate::effects::gain_until_end_of_turn(g, item.object, enchanted, keyword);
+    }
+}
+
 /// A static ability's `affects` for "equipped creature" and "enchanted creature" (CR 301.5, 303.4): exactly the
 /// permanent the source is attached to.
 pub fn attached_object(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {

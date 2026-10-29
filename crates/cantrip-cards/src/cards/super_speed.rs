@@ -1,15 +1,10 @@
 use cantrip_api::*;
 use cantrip_mechanics::statics::{have_haste, plus_pt};
-use cantrip_mechanics::{attach::attached_object, effects, targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{attach::attached_object, attach::enchanted_creature_gains_until_end_of_turn, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
-/// "When this Aura enters, enchanted creature gains first strike until end of turn" (CR 611.2a, 702.7). The enchanted creature is
-/// the one the Aura is attached to as the ability resolves, or, if the Aura has left the battlefield by then, the one it was
-/// attached to as it left (CR 608.2h); an effect on a creature that has left does nothing (CR 400.7).
 fn first_strike(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(enchanted) = g.obj(item.object).attached_to {
-        effects::gain_until_end_of_turn(g, item.object, enchanted, Keyword::FirstStrike);
-    }
+    enchanted_creature_gains_until_end_of_turn(g, item, Keyword::FirstStrike);
     Ok(())
 }
 
