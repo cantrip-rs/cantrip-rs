@@ -1,0 +1,38 @@
+# Leader's Talent, level 1: "Whenever you attack, put a +1/+1 counter on target attacking creature." Bot1's Ornithopter
+# attacks on turn 3 and gets the counter (power 1, toughness 3) when the trigger resolves; Bot1 keeps it. On turn 4 Bot2's own
+# Ornithopter attacks: the Talent is Bot1's, so nothing triggers (Stack stays empty) and Bot1's Ornithopter has no more counters.
+
+[Bot1 Deck]
+Mox Pearl x2
+Leader's Talent
+Ornithopter
+Plains x3
+Plains x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Leader's Talent.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Power = 0
