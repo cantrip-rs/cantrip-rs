@@ -1,0 +1,53 @@
+# Fields of Strife, a red-white surveil land: it enters tapped (so nothing is offered on turn 1), taps for {R} on turn 3 and for {W} on
+# turn 5 and offers no {G}. On turn 7 its "{2}{R}{W}, {T}: Surveil 1." is refused with three Moxen that make neither {R} nor {W}, with
+# {R} added but no {W}, and goes through once Mox Pearl makes the {W}: the Mountain on top of the library goes to the graveyard.
+
+[Bot1 Deck]
+Fields of Strife
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Island
+Island x3
+Mountain
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Fields of Strife.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+? Bot1.Battlefield.Fields of Strife.Tapped = true
+! Bot1.Battlefield.Fields of Strife.Activate(Color: Red)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Fields of Strife.Activate(Color: Green)
+Bot1.Battlefield.Fields of Strife.Activate(Color: Red)
+? Bot1.Mana = {R}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Fields of Strife.Activate(Color: White)
+? Bot1.Mana = {W}
+[T7 Bot1.Main1]
+! Bot1.Battlefield.Fields of Strife.Activate(Ability: Surveil; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+! Bot1.Battlefield.Fields of Strife.Activate(Ability: Surveil; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Fields of Strife.Activate(Ability: Surveil)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Mountain)
+
+[Expect]
+Turn = 7
+Bot1.Graveyard = Mountain
+Bot1.Library.Count = 8
+Bot1.Battlefield.Fields of Strife.Tapped = true
+Bot1.Mana =
