@@ -1,0 +1,49 @@
+# Grapple with Death destroys Bot2's Ornithopter and Bot1 gains 1 life (21): Bot1's Pest Mascot (2/3 trample) gets a +1/+1
+# counter (3/4) (CR 119.1). The Ornithopter is in Bot2's graveyard.
+
+[Dice]
+1; 1; 1; 1; 1; 1
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Pest Mascot
+Grapple with Death
+Island
+Island
+Island x25
+[Bot2 Deck]
+Ornithopter
+Island x32
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pest Mascot.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grapple with Death.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 21
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Pest Mascot.Power = 3
+Bot1.Battlefield.Pest Mascot.Toughness = 4
+Bot1.Battlefield.Pest Mascot.Keywords = Trample
