@@ -1,0 +1,46 @@
+# Wingnut, Bat on the Belfry: "Whenever Wingnut attacks, each other attacking creature gets +1/+0 until end of turn." Turn 1:
+# Wingnut and two Ornithopters (0/2). Turn 3: all three attack and the trigger gives each Ornithopter +1/+0 (Wingnut stays 1/2,
+# an Ornithopter left home would stay 0/2): Bot2 takes 1 + 1 + 1 and is at 17.
+
+[Bot1 Deck]
+Mox Ruby x2
+Wingnut, Bat on the Belfry
+Ornithopter
+Ornithopter
+Ornithopter
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Wingnut, Bat on the Belfry.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Flying)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Flying)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Wingnut, Bat on the Belfry > Bot2; Ornithopter#1 > Bot2; Ornithopter#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 1
+? Bot1.Battlefield.Ornithopter#2.Power = 1
+? Bot1.Battlefield.Wingnut, Bat on the Belfry.Power = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17

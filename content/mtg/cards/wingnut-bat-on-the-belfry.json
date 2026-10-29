@@ -1,0 +1,8 @@
+{
+  "name": "Wingnut, Bat on the Belfry",
+  "manaCost": "{1}{R}",
+  "type": "Legendary Creature — Bat Mutant",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Alliance — Whenever another creature you control enters, Wingnut gains your choice of flying, menace, or haste until end of turn.\nWhenever Wingnut attacks, each other attacking creature gets +1/+0 until end of turn."
+}

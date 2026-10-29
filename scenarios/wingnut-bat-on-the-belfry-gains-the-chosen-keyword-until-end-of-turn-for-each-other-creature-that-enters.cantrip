@@ -1,0 +1,66 @@
+# Wingnut, Bat on the Belfry: "Alliance — Whenever another creature you control enters, Wingnut gains your choice of flying,
+# menace, or haste until end of turn." Turn 1: Wingnut for {1}{R} (his own entering is not "another": no keywords), then three
+# Ornithopters, choosing flying, menace and haste in turn, each keyword in addition to the last. Choosing haste lets the
+# summoning-sick Wingnut attack at once (Bot2 19). At the next turn the keywords are gone, and neither Bot2's Ornithopter
+# entering on turn 2 ("you control") nor Bot1's own Mox Ruby on turn 3 (not a creature) gives him one.
+
+[Bot1 Deck]
+Mox Ruby x2
+Wingnut, Bat on the Belfry
+Ornithopter
+Ornithopter
+Ornithopter
+Mox Ruby
+Mountain x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Wingnut, Bat on the Belfry.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wingnut, Bat on the Belfry.Keywords = (absent)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Flying)
+? Bot1.Battlefield.Wingnut, Bat on the Belfry.Keywords = Flying
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Menace)
+? Bot1.Battlefield.Wingnut, Bat on the Belfry.Keywords = Flying; Menace
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Haste)
+? Bot1.Battlefield.Wingnut, Bat on the Belfry.Keywords = Flying; Haste; Menace
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Wingnut, Bat on the Belfry > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 19
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Wingnut, Bat on the Belfry.Keywords = (absent)
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Wingnut, Bat on the Belfry.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Wingnut, Bat on the Belfry.Keywords = (absent)
