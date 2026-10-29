@@ -121,19 +121,18 @@ pub fn token_you_control_enters(q: &dyn Query, me: &Asker, event: &Event) -> Opt
     }
 }
 
-/// The card types `another_nontoken_you_control_enters` is parameterised by (`CardType as u8`).
+/// The card types `nontoken_you_control_enters` and `another_nontoken_you_control_enters` are parameterised by (`CardType as u8`).
 pub const ARTIFACT_TYPE: u8 = CardType::Artifact as u8;
 pub const CREATURE_TYPE: u8 = CardType::Creature as u8;
 
-/// "Whenever another nontoken [artifact or creature] you control enters" (CR 603.6a): a permanent of card type `TYPE`
-/// (`ARTIFACT_TYPE`, `CREATURE_TYPE`) that is not a token, other than the source, under the source's controller's control
-/// as it entered. The entering permanent is the
-/// event's subject. Arni, Humble Scribe (creatures) and Ultron, Artificial Malevolence (artifacts) print it.
-pub fn another_nontoken_you_control_enters<const TYPE: u8>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+/// "Whenever a nontoken [artifact or creature] you control enters" (CR 603.6a): a permanent of card type `TYPE`
+/// (`ARTIFACT_TYPE`, `CREATURE_TYPE`) that is not a token, under the source's controller's control as it entered. It
+/// includes the source itself when that enters as such a permanent. The entering permanent is the event's subject.
+/// Weapons Manufacturing and Conquest Mission (artifacts) print it.
+pub fn nontoken_you_control_enters<const TYPE: u8>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
         Event::ZoneChange { new, to, .. }
-            if *new != me.source
-                && to.is(ZoneKind::Battlefield)
+            if to.is(ZoneKind::Battlefield)
                 && q.controller(*new) == me.controller
                 && !q.obj(*new).token
                 && q.chars(*new).types.0 & (1 << TYPE) != 0 =>
@@ -141,6 +140,15 @@ pub fn another_nontoken_you_control_enters<const TYPE: u8>(q: &dyn Query, me: &A
             Fired::about(Target::Object(*new))
         }
         _ => None,
+    }
+}
+
+/// "Whenever another nontoken [artifact or creature] you control enters" (CR 603.6a): `nontoken_you_control_enters`
+/// other than the source. Arni, Humble Scribe (creatures) and Ultron, Artificial Malevolence (artifacts) print it.
+pub fn another_nontoken_you_control_enters<const TYPE: u8>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { new, .. } if *new == me.source => None,
+        _ => nontoken_you_control_enters::<TYPE>(q, me, event),
     }
 }
 
@@ -1830,6 +1838,8 @@ pub const DRAGON_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE
 pub const OPPONENTS_CREATURE_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, opponents_creature_enters);
 pub const LEGENDARY_CREATURE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, legendary_creature_you_control_enters);
 pub const ARTIFACT_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, artifact_you_control_enters);
+pub const NONTOKEN_ARTIFACT_YOU_CONTROL_ENTERS: Trigger =
+    when_asked(EventMask::ZONE_CHANGE, nontoken_you_control_enters::<ARTIFACT_TYPE>);
 pub const ANOTHER_ARTIFACT_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, another_artifact_you_control_enters);
 pub const ANOTHER_CREATURE_YOU_CONTROL_ENTERS: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_enters);
 pub const CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, creature_dies);
