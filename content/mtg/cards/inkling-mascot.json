@@ -1,0 +1,8 @@
+{
+  "name": "Inkling Mascot",
+  "manaCost": "{W}{B}",
+  "type": "Creature — Inkling Cat",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Repartee — Whenever you cast an instant or sorcery spell that targets a creature, this creature gains flying until end of turn. Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)"
+}

@@ -1,0 +1,34 @@
+# Inkling Mascot: Repartee -- casting an instant that targets a creature gives Mascot flying until end of turn, and then
+# it surveils 1 (CR 701.25): the Swamp on top goes to the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Inkling Mascot
+Giant Growth
+Mox Emerald
+Plains x2
+Swamp
+Plains x15
+
+[Bot2 Deck]
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Inkling Mascot.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Inkling Mascot)
+Bot1.Arrange( | Swamp)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Giant Growth; Swamp
+Bot1.Battlefield.Inkling Mascot.Keywords = Flying
+Bot1.Battlefield.Inkling Mascot.Power = 5
