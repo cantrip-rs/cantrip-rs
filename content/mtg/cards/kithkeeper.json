@@ -1,0 +1,8 @@
+{
+  "name": "Kithkeeper",
+  "manaCost": "{6}{W}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Vivid — When this creature enters, create X 1/1 green and white Kithkin creature tokens, where X is the number of colors among permanents you control.\nTap three untapped creatures you control: This creature gets +3/+0 and gains flying until end of turn."
+}
