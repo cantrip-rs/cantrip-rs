@@ -1,0 +1,68 @@
+# Sundering Archaic's "{2}: Put target card from a graveyard on the bottom of its owner's library": cast on turn 1 with nothing
+# of Bot2's on the battlefield to exile (its trigger has no target and leaves the stack). On turn 3 Bot1 puts Bot2's Lightning
+# Bolt (cast at Bot1 on turn 2) on the bottom of Bot2's library, not Bot1's, and then its own Bolt on the bottom of its own.
+# Each {2} is paid exactly (the pool is empty after) and a Mox Pearl is left over.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Sundering Archaic
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Sundering Archaic.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Sundering Archaic.Activate(Ability: {2}; Bot2.Graveyard.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 0
+? Bot1.Graveyard.Count = 1
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Sundering Archaic.Activate(Ability: {2}; Bot1.Graveyard.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard.Count = 0
+Bot1.Library.Count = 11
+Bot2.Library = Island; Island; Island; Island; Lightning Bolt
+Bot1.Life = 17
+Bot2.Life = 17
