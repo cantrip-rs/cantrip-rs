@@ -1,0 +1,11 @@
+{
+  "name": "Shore Lurker",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Merfolk Scout",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "keywords": [
+    "Flying"
+  ]
+}

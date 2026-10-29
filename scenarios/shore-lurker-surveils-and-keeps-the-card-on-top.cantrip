@@ -1,0 +1,29 @@
+# Shore Lurker's surveil 1 may keep the card: Bot1 leaves the Mountain on top (CR 701.25a), the graveyard holds only the
+# sacrificed Lotus, and the Mountain is the card Bot1 draws on its next turn.
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Shore Lurker
+Island x4
+Mountain
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shore Lurker.Cast
+Bot1.Arrange(Mountain |)
+? Bot1.Graveyard = Black Lotus
+? Bot1.Library.Count = 13
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Black Lotus
+Bot1.Hand = Island; Island; Island; Island; Mountain
+Bot1.Library.Count = 12

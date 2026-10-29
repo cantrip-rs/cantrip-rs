@@ -1,0 +1,31 @@
+# Shore Lurker: "Flying. When this creature enters, surveil 1." Bot1 pays {3}{W} with Black Lotus and Mox Pearl, the enters
+# trigger surveils one card, and Bot1 puts the top card (Mountain) into the graveyard (CR 701.25a); the Plains under it stays in
+# the library, so only one card was looked at. The 3/3 flies.
+
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Shore Lurker
+Island x4
+Mountain
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shore Lurker.Cast
+Bot1.Arrange(| Mountain)
+? Bot1.Graveyard = Mountain; Black Lotus
+? Bot1.Battlefield.Shore Lurker.Keywords = Flying
+? Bot1.Battlefield.Shore Lurker.Power = 3
+? Bot1.Battlefield.Shore Lurker.Toughness = 3
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Shore Lurker
+Bot1.Library.Count = 12
+Bot1.Hand = Island; Island; Island; Island
