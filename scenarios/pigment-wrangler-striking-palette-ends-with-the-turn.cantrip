@@ -1,0 +1,41 @@
+# Striking Palette's delayed trigger ends with the turn if no instant or sorcery is cast (CR 603.7b): Bot1 casts it on turn 3 and no
+# spell after, then casts Lightning Bolt on turn 5, which is not copied: Bot2 takes 3, not 6, and Bot1 nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Pigment Wrangler
+Mountain
+Lightning Bolt
+Mountain x13
+
+[Bot2 Deck]
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pigment Wrangler.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Striking Palette.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17
+Stack.Count = 0
