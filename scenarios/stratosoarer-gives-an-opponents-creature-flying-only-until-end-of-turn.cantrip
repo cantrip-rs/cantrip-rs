@@ -1,0 +1,41 @@
+# Stratosoarer {4}{U}: "When this creature enters, target creature gains flying until end of turn" (CR 702.9b, 611.2a). On turn 3 Black Lotus, Mox Sapphire and
+# Mox Jet pay the five; Mox Jet (not a creature) is refused as a target and Bot2's Elvish Mystic is accepted, so "target creature" does not care whose it is.
+# The Mystic flies for the rest of that turn and no longer does on Bot2's turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Stratosoarer
+Island x16
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Stratosoarer.Cast
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+[Bot1.Main2]
+? Bot2.Battlefield.Elvish Mystic.Keywords = Flying
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Elvish Mystic.Keywords = (absent)
+Bot1.Battlefield.Stratosoarer.Keywords = Flying

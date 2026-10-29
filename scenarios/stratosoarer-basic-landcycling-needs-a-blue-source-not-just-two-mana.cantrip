@@ -1,0 +1,29 @@
+# Stratosoarer: the {U} of "Basic landcycling {1}{U}" is a colored symbol (CR 107.4, 702.29e): Mox Pearl and Mox Jet are two mana, which is enough for the
+# {1} and a second mana, but neither is blue, so the cycling is refused until Mox Sapphire is added.
+
+[Bot1 Deck]
+Stratosoarer
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Plains
+Plains
+Plains
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Stratosoarer.Activate(Mana: short)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stratosoarer.Activate
+Bot1.Search(Island)
+
+[Expect]
+Bot1.Graveyard = Stratosoarer

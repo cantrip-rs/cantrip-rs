@@ -1,0 +1,29 @@
+# Stratosoarer: "Basic landcycling {1}{U}" (CR 702.29e). One Mox Pearl alone cannot pay it (refused); with Mox Sapphire added it is exactly {1}{U},
+# the pool is empty after paying, and the card finds the basic Island.
+
+[Bot1 Deck]
+Stratosoarer
+Mox Pearl
+Mox Sapphire
+Plains
+Plains
+Plains
+Plains
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Stratosoarer.Activate(Mana: short)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stratosoarer.Activate
+? Bot1.Mana =
+Bot1.Search(Island)
+
+[Expect]
+Bot1.Graveyard = Stratosoarer
+Bot1.Hand = Plains; Plains; Plains; Plains; Island

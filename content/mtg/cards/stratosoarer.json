@@ -1,0 +1,11 @@
+{
+  "name": "Stratosoarer",
+  "manaCost": "{4}{U}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Flying\nWhen this creature enters, target creature gains flying until end of turn.\nBasic landcycling {1}{U} ({1}{U}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Flying"
+  ]
+}
