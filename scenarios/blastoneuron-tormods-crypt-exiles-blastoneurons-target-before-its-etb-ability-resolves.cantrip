@@ -1,0 +1,49 @@
+# Tormod's Crypt exiles Blastoneuron's sole legal target in response to its ETB trigger. The target is illegal on resolution,
+# so it makes no token (CR 608.2b); the simultaneous graveyard exile still triggers Blastoneuron once (CR 603.2c, 603.10a).
+
+[Bot1 Deck]
+Mox Ruby
+Faithless Looting
+Grizzly Bears
+Mox Jet
+Black Lotus
+Blastoneuron
+Tormod's Crypt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Grizzly Bears; Island)
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blastoneuron.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blastoneuron.Power = 2
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Exile.Grizzly Bears.Power = 2
+Bot1.Battlefield = Blastoneuron; Mox Jet; Mox Ruby
+Bot1.Life = 21
+Bot2.Life = 19

@@ -1,0 +1,71 @@
+# Looting puts two eligible creatures and an ineligible MV-4 creature into your graveyard, so the target choice is explicit.
+# The exiled card is copied with haste and sacrificed at the next end step (CR 202.3, 707.2, 611.2a, 603.7c). Later, one Crypt
+# exiles several of Bot1's graveyard cards as a batch (one trigger); another exiles Bot2's graveyard (no trigger).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Black Lotus
+Faithless Looting
+Faithless Looting
+Grizzly Bears
+Simian Spirit Guide
+Vampire Nighthawk
+Hill Giant
+Blastoneuron
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Grizzly Bears
+Hill Giant
+Tormod's Crypt
+Tormod's Crypt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Grizzly Bears; Vampire Nighthawk)
+Bot1.Hand.Simian Spirit Guide.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Hill Giant; Island)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blastoneuron.Cast
+! Bot1.Target(Bot1.Graveyard.Hill Giant)
+Bot1.Target(Bot1.Graveyard.Vampire Nighthawk)
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blastoneuron.Keywords = Flying
+? Bot1.Battlefield = Blastoneuron; Mox Jet; Mox Ruby; Vampire Nighthawk
+? Bot1.Exile.Vampire Nighthawk.Power = 2
+? Bot1.Battlefield.Vampire Nighthawk.Keywords = Deathtouch; Flying; Haste; Lifelink
+Bot1.Pass
+[T1 Bot1.End]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot2.Choose(Grizzly Bears; Hill Giant)
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot2)
+
+[Expect]
+Bot1.Exile.Vampire Nighthawk.Power = 2
+Bot1.Battlefield = Blastoneuron; Mox Jet; Mox Ruby
+Bot2.Life = 18
+Bot1.Life = 22

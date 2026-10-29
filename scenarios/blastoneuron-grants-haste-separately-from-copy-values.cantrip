@@ -1,0 +1,41 @@
+# Blastoneuron grants haste after creating its copy; haste is not copied by a later Image (CR 707.2, 611.2a).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Black Lotus
+Faithless Looting
+Grizzly Bears
+Blastoneuron
+Phantasmal Image
+Mox Sapphire
+Black Lotus
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Grizzly Bears; Mox Sapphire)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Blastoneuron.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Phantasmal Image.Cast
+Bot1.Accept
+Bot1.Target(Grizzly Bears)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears#1.Keywords = Haste
+Bot1.Battlefield.Grizzly Bears#2.Keywords = (absent)

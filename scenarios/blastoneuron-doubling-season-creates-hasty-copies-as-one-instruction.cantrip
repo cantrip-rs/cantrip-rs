@@ -1,0 +1,50 @@
+# Doubling Season doubles Blastoneuron's token. Both copies gain haste as one instruction (CR 608.2c), and the
+# delayed ability sacrifices both at the next end step: it is about every token the instruction made (CR 603.7c).
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Doubling Season
+Island
+Blastoneuron
+Faithless Looting
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Doubling Season.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Grizzly Bears; Island)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Blastoneuron.Cast
+[T7 Bot1.Main2]
+? Bot1.Battlefield.Grizzly Bears#1.Keywords = Haste
+? Bot1.Battlefield.Grizzly Bears#2.Keywords = Haste
+[T7 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears = (absent)
+Bot1.Battlefield.Blastoneuron.Power = 2

@@ -1,0 +1,11 @@
+{
+  "name": "Blastoneuron",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Jellyfish Leech",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this creature enters, exile target creature card with mana value 3 or less from your graveyard. Create a token that's a copy of it. That token gains haste. Sacrifice it at the beginning of the next end step.\nWhenever one or more cards leave your graveyard, each opponent loses 1 life and you gain 1 life.",
+  "keywords": [
+    "Flying"
+  ]
+}
