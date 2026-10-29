@@ -1,0 +1,46 @@
+# Mind Transfer Protocol on Bot2's Llanowar Elves, after Giant Growth (+3/+3) was cast on it: the base power and toughness
+# become 4/5 in layer 7b and the +3/+3 applies on top, 7/8. The Elves stays an Elf Druid, gains the artifact type, and Bot1
+# draws. In the next turn it is a 1/1 creature again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Giant Growth
+Mind Transfer Protocol
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Power = 4
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mind Transfer Protocol.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Power = 7
+? Bot2.Battlefield.Llanowar Elves.Toughness = 8
+? Bot2.Battlefield.Llanowar Elves.Types = Creature; Artifact
+? Bot2.Battlefield.Llanowar Elves.Subtypes = Druid; Elf
+? Bot1.Hand.Count = 4
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Llanowar Elves.Power = 1
+? Bot2.Battlefield.Llanowar Elves.Types = Creature
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Toughness = 1
