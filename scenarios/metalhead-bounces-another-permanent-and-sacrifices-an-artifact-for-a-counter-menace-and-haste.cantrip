@@ -1,0 +1,50 @@
+# Metalhead: "When Metalhead enters, return up to one other target artifact or creature to its owner's hand." The trigger
+# cannot target Metalhead itself (an artifact creature): Bot1 chooses Ornithopter, which goes back to the hand. "{R},
+# Sacrifice another artifact: Put a +1/+1 counter on Metalhead. He gains menace and haste until end of turn." Metalhead
+# itself is not offered as the sacrifice (refused); Mox Jet is sacrificed for the counter, and the hasty 5/5 attacks the
+# turn it came down: Bot2 goes from 20 to 15.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Metalhead
+Ornithopter
+Island x2
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Metalhead.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Metalhead)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Metalhead.Activate(Sacrifice: Metalhead)
+Bot1.Battlefield.Metalhead.Activate(Sacrifice: Mox Jet)
+Bot1.Choose(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Metalhead.Power = 5
+? Bot1.Battlefield.Metalhead.Keywords = Haste; Menace
+Bot1.Attack(Metalhead > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Graveyard = Mox Jet; Black Lotus

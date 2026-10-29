@@ -1,0 +1,8 @@
+{
+  "name": "Metalhead",
+  "manaCost": "{4}{U}",
+  "type": "Legendary Artifact Creature — Robot Turtle",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When Metalhead enters, return up to one other target artifact or creature to its owner's hand.\n{R}, Sacrifice another artifact: Put a +1/+1 counter on Metalhead. He gains menace and haste until end of turn."
+}
