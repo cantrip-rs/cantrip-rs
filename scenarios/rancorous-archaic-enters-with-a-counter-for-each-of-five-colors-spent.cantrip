@@ -1,0 +1,33 @@
+# Rancorous Archaic, converge: "This creature enters with a +1/+1 counter on it for each color of mana spent to cast it." Paid
+# with one mana of each of the five colors it enters with five counters, a 7/7.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Rancorous Archaic
+Island x12
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rancorous Archaic.Cast
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Rancorous Archaic.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Rancorous Archaic.Power = 7
+Bot1.Battlefield.Rancorous Archaic.Toughness = 7

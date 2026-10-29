@@ -1,0 +1,34 @@
+# Rancorous Archaic, converge counts colors, not mana: five mana from two Mountains (red twice), Mox Ruby (red again), Mox Pearl
+# and Mox Jet is three colors (red, white, black), so it enters with three counters, a 5/5.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mountain
+Mountain
+Rancorous Archaic
+Island x12
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Rancorous Archaic.Cast
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Rancorous Archaic.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Rancorous Archaic.Power = 5
+Bot1.Battlefield.Rancorous Archaic.Toughness = 5

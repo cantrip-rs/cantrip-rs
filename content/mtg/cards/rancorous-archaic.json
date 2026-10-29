@@ -1,0 +1,12 @@
+{
+  "name": "Rancorous Archaic",
+  "manaCost": "{5}",
+  "type": "Creature — Avatar",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Reach, trample\nConverge — This creature enters with a +1/+1 counter on it for each color of mana spent to cast it.",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}
