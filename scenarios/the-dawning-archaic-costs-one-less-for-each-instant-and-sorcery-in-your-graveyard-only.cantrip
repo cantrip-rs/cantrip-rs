@@ -1,0 +1,59 @@
+# The Dawning Archaic, {10}: "This spell costs {1} less to cast for each instant and sorcery card in your graveyard." On turn 1 Bot1
+# casts Faithless Looting (a sorcery) discarding Lightning Strike and Duress, and Lightning Bolt (an instant), so four cards count;
+# the Black Lotus sacrificed on turn 3 is an artifact and counts for nothing, and neither does the Shock Bot2 cast on turn 2 from
+# its own graveyard. On turn 3 Bot1 taps seven red mana (four Mox Rubies and the Lotus) and the Archaic costs {6}, so one red
+# mana is left in the pool (a reduction of 4, not 5 which would leave two, nor 3 which would leave none). It has Reach.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Faithless Looting
+Lightning Bolt
+Black Lotus
+Lightning Strike
+Duress
+The Dawning Archaic
+Mountain x12
+
+[Bot2 Deck]
+Mountain
+Shock
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Lightning Strike; Duress)
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.The Dawning Archaic.Cast
+Bot1.Pass
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Battlefield.The Dawning Archaic.Power = 7
+Bot1.Battlefield.The Dawning Archaic.Keywords = Reach
+Bot1.Mana = {R}
+Bot2.Graveyard = Shock
+Bot2.Life = 17
+Bot1.Life = 18

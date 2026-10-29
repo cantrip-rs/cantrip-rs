@@ -1,0 +1,11 @@
+{
+  "name": "The Dawning Archaic",
+  "manaCost": "{10}",
+  "type": "Legendary Creature — Avatar",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "This spell costs {1} less to cast for each instant and sorcery card in your graveyard.\nReach\nWhenever The Dawning Archaic attacks, you may cast target instant or sorcery card from your graveyard without paying its mana cost. If that spell would be put into your graveyard, exile it instead.",
+  "keywords": [
+    "Reach"
+  ]
+}
