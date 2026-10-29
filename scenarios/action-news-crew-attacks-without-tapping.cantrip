@@ -1,0 +1,26 @@
+# Action News Crew has vigilance (CR 702.20b): attacking on turn 3 does not tap it, and it deals its 2 damage.
+
+[Bot1 Deck]
+Mox Pearl x2
+Action News Crew
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Action News Crew.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Action News Crew > Bot2)
+? Bot1.Battlefield.Action News Crew.Tapped = false
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Action News Crew.Tapped = false
