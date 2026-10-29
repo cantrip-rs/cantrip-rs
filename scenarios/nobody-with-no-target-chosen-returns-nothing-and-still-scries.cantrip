@@ -1,0 +1,41 @@
+# Nobody: "up to one" target, so Bot1 chooses none (`Bot1.Target()`): no artifact is returned, but the scry still happens (CR 608.2b); it keeps the
+# top card, Lightning Bolt, on top.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Nobody
+Island
+Island
+Island
+Island
+Lightning Bolt
+Black Lotus
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nobody.Cast
+Bot1.Pass
+Bot1.Target()
+Bot1.Pass
+Bot1.Arrange(Lightning Bolt |)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Island; Island; Island
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire; Nobody
+Bot1.Library.Count = 10

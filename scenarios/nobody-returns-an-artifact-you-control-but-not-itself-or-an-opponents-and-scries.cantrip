@@ -1,0 +1,50 @@
+# Nobody: "When this creature enters, return up to one other target artifact you control to its owner's hand. Scry 1." Cast for {1}{U/R}{U/R} from three
+# Moxen on turn 3. The trigger cannot target Nobody itself (an artifact creature, "other"), Bot2's Mox Pearl ("you control"), Bot1's own Island (not an
+# artifact) or the Memnite in Bot1's hand (not on the battlefield); Bot1 returns its own Mox Jet to hand and bottoms the top card of its library,
+# Lightning Bolt, with the scry.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Nobody
+Memnite
+Island
+Island
+Island
+Lightning Bolt
+Black Lotus
+Island x8
+
+[Bot2 Deck]
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nobody.Cast
+Bot1.Pass
+! Bot1.Target(Nobody; Island; Bot1.Hand.Memnite; Bot2.Battlefield.Mox Pearl)
+Bot1.Target(Mox Jet)
+Bot1.Pass
+Bot1.Arrange( | Lightning Bolt)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Island; Memnite; Mox Jet
+Bot1.Battlefield = Island; Mox Ruby; Mox Sapphire; Nobody
+Bot1.Library = Black Lotus; Island; Island; Island; Island; Island; Island; Island; Island; Lightning Bolt
