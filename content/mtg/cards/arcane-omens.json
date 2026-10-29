@@ -1,0 +1,6 @@
+{
+  "name": "Arcane Omens",
+  "manaCost": "{4}{B}",
+  "type": "Sorcery",
+  "oracleText": "Converge — Target player discards X cards, where X is the number of colors of mana spent to cast this spell."
+}
