@@ -1,0 +1,8 @@
+{
+  "name": "Boggart Prankster",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Goblin Warrior",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Whenever you attack, target attacking Goblin you control gets +1/+0 until end of turn."
+}
