@@ -1,0 +1,8 @@
+{
+  "name": "Summit Sentinel",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Elemental Soldier",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "When this creature dies, draw a card."
+}

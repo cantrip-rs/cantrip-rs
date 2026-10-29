@@ -1,0 +1,35 @@
+# Summit Sentinel: "When this creature dies, draw a card." Bot1 casts it off two Moxen on turn 1 (seven cards, three cast, four left); on turn 2
+# Bot2 Bolts it, it dies (CR 700.4), and the trigger draws exactly one card: five in hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Summit Sentinel
+Swamp x4
+Swamp x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Summit Sentinel.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Summit Sentinel)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Summit Sentinel
+Bot1.Hand.Count = 5
