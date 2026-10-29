@@ -1,0 +1,63 @@
+# Rocksteady, Crash Courser: "Boars you control can't be blocked by more than one creature." (CR 509.1b). Bot1 casts Zoo Escapees (a Boar Rhino)
+# on turn 1 and Rocksteady (not attacking) on turn 3, then attacks with the Zoo Escapees into Bot2's two Ornithopters: two blockers on it are
+# refused, one is allowed and dies to its 2 damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Zoo Escapees
+Rocksteady, Crash Courser
+Forest x12
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Zoo Escapees.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rocksteady, Crash Courser.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Zoo Escapees > Bot2)
+! Bot2.Block(Ornithopter#1 > Zoo Escapees; Ornithopter#2 > Zoo Escapees)
+Bot2.Block(Ornithopter#1 > Zoo Escapees)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter

@@ -1,0 +1,31 @@
+# Rocksteady, Crash Courser's forestcycling {2} (CR 702.29e): paying it and discarding the card from the hand finds the Forest in the library
+# and puts it into the hand, and Rocksteady is in the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Rocksteady, Crash Courser
+Plains x4
+Forest
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rocksteady, Crash Courser.Activate(Ability: Forestcycling)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Graveyard = Rocksteady, Crash Courser
+Bot1.Hand = Forest; Plains; Plains; Plains; Plains

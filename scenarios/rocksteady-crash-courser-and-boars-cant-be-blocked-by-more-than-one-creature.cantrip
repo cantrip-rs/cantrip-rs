@@ -1,0 +1,56 @@
+# Rocksteady, Crash Courser: "Rocksteady can't be blocked by more than one creature." (CR 509.1b). Bot1 casts Rocksteady and a Memnite on turn 1
+# and attacks with both on turn 3 into Bot2's two Ornithopters. Two blockers on Rocksteady are refused; the same two on the Memnite (no limit
+# of its own) are allowed, so Rocksteady gets through: 7 damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Mox Pearl
+Memnite
+Rocksteady, Crash Courser
+Forest x12
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rocksteady, Crash Courser.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Rocksteady, Crash Courser; Memnite > Bot2)
+! Bot2.Block(Ornithopter#1 > Rocksteady, Crash Courser; Ornithopter#2 > Rocksteady, Crash Courser)
+Bot2.Block(Ornithopter#1 > Memnite; Ornithopter#2 > Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
