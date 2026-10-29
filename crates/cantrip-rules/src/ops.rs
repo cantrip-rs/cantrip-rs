@@ -2204,6 +2204,10 @@ pub fn copy_spell_as(cx: &mut Cx, spell: ObjectId, copier: PlayerId, new_targets
             None => return Ok(None),
         },
     };
+    // "This spell can't be copied" (Choreographed Sparks): the 'can't' beats the copy effect (CR 101.2, 707.10), which does nothing.
+    if cx.chars(spell).keywords.has(Keyword::CantBeCopied) {
+        return Ok(None);
+    }
     if cx.s().player(copier).lost {
         return Ok(None);
     }

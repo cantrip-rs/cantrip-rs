@@ -956,6 +956,8 @@ pub enum Keyword {
     /// Disguise (CR 702.168a), as morph: a card has it by its disguise way, and a face-down permanent that would not have it
     /// face up can't be turned face up for its disguise cost (CR 702.168d).
     Disguise = 44,
+    /// "This spell can't be copied" (CR 101.2, 707.10): a characteristic of the spell, so no effect copies it. Printed on Choreographed Sparks.
+    CantBeCopied = 45,
 }
 
 impl Keyword {
