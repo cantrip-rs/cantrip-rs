@@ -1,0 +1,47 @@
+# Aberrant Manawurm (2/5 trample): "Whenever you cast an instant or sorcery spell, this creature gets +X/+0 until end of turn,
+# where X is the amount of mana spent to cast that spell." Bot1 casts it on turn 1 (four Moxen). On turn 3 a Gitaxian Probe paid
+# with 2 life has had no mana spent on it: the Manawurm stays 2/5. A Lightning Helix (two mana) then makes it 4/5.
+
+[Bot1 Deck]
+Aberrant Manawurm
+Mox Emerald x2
+Mox Ruby
+Mox Pearl
+Gitaxian Probe
+Lightning Helix
+Forest x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aberrant Manawurm.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Aberrant Manawurm.Power = 2
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Aberrant Manawurm.Power = 2
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Aberrant Manawurm.Power = 4
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 17
+Bot1.Battlefield.Aberrant Manawurm.Power = 4
+Bot1.Battlefield.Aberrant Manawurm.Toughness = 5

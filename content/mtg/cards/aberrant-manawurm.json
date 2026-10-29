@@ -1,0 +1,11 @@
+{
+  "name": "Aberrant Manawurm",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Wurm",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Trample\nWhenever you cast an instant or sorcery spell, this creature gets +X/+0 until end of turn, where X is the amount of mana spent to cast that spell.",
+  "keywords": [
+    "Trample"
+  ]
+}
