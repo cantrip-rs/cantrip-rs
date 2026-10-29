@@ -1,0 +1,46 @@
+# Mind Control's continuous layer-2 effect makes Bot2 the Drone's controller. Its layer-7a power counts itself and
+# Bot2's Ornithopter, not the two artifact creatures still controlled by Bot1 (CR 613.1b, 613.4a).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Memnite x2
+Collective Drone
+Island x12
+
+[Bot2 Deck]
+Island
+Mox Ruby
+Mox Pearl
+Ornithopter
+Black Lotus
+Mind Control
+Island x12
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Collective Drone.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Mind Control.Cast(Bot1.Battlefield.Collective Drone; Spend: R, W, U, U, U)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Collective Drone.Power = 2
+Bot1.Battlefield.Memnite#1.Power = 1
+Bot1.Battlefield.Memnite#2.Power = 1

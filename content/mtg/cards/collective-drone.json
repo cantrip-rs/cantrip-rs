@@ -1,0 +1,8 @@
+{
+  "name": "Collective Drone",
+  "manaCost": "{1}{B}",
+  "type": "Artifact Creature — Borg",
+  "power": "*",
+  "toughness": 2,
+  "oracleText": "Collective Drone's power is equal to the number of artifact creatures you control."
+}

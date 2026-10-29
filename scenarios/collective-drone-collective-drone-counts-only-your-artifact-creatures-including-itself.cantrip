@@ -1,0 +1,53 @@
+# Collective Drone's characteristic-defining ability counts itself and Bot1's other artifact creature, but not Mox Jet,
+# Bot1's nonartifact creature, or Bot2's artifact creature (CR 604.3, 208.2a, 613.4a). The ability works in every zone:
+# a second Drone at the bottom of Bot1's library counts Bot1's two artifact creatures too.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Collective Drone
+Memnite
+Llanowar Elves
+Forest
+Island
+Island x12
+Collective Drone
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Collective Drone.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Collective Drone.Power = 1
+? Bot1.Battlefield.Collective Drone.Toughness = 2
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Collective Drone.Power = 1
+[T2 Bot2.Main2]
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Collective Drone.Power = 2
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Collective Drone.Power = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Collective Drone.Power = 2
+Bot1.Battlefield.Collective Drone.Toughness = 2
+Bot2.Battlefield.Memnite.Power = 1
+Stack.Count = 0
+Bot1.Library.Collective Drone.Power = 2
