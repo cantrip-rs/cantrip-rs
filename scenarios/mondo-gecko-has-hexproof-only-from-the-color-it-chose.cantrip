@@ -1,0 +1,39 @@
+# Mondo Gecko: "gains hexproof from that color" and no other (CR 702.11d). Bot1 makes Mondo black; Bot2's red Lightning Bolt
+# still targets it and kills the 2/3. With no other colored permanent, it was blue alone before.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mondo Gecko
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mondo Gecko.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mondo Gecko.Activate
+Bot1.Colors(Black)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mondo Gecko.Colors = Black
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mondo Gecko)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Mondo Gecko; Island; Black Lotus
+Bot2.Graveyard = Lightning Bolt

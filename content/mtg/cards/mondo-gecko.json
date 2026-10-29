@@ -1,0 +1,8 @@
+{
+  "name": "Mondo Gecko",
+  "manaCost": "{1}{U}{U}",
+  "type": "Legendary Creature — Lizard Mutant",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "{1}, Discard a card: Until end of turn, Mondo Gecko becomes the color of your choice and gains hexproof from that color.\nWhenever Mondo Gecko deals combat damage to a player, draw a card for each color among permanents you control."
+}
