@@ -1,0 +1,6 @@
+{
+  "name": "Borrowed Knowledge",
+  "manaCost": "{2}{R}{W}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• Discard your hand, then draw cards equal to the number of cards in target opponent's hand.\n• Discard your hand, then draw cards equal to the number of cards discarded this way."
+}
