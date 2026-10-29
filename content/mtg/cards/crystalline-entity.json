@@ -1,0 +1,11 @@
+{
+  "name": "Crystalline Entity",
+  "manaCost": "{8}",
+  "type": "Artifact Creature — Elemental",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Flying\nWhen this creature enters, if you cast it, destroy all nonartifact creatures.",
+  "keywords": [
+    "Flying"
+  ]
+}

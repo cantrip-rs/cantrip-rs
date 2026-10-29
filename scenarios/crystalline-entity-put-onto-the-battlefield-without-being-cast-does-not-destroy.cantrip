@@ -1,0 +1,39 @@
+# Through the Breach puts Crystalline Entity from hand onto the battlefield, so the Entity was not cast and its intervening-if
+# triggered ability never triggers (CR 603.4, 701.5a). Bot2's creature therefore survives its entry.
+
+[Bot1 Deck]
+Through the Breach
+Crystalline Entity
+Black Lotus
+Mox Ruby
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Through the Breach.Cast
+Bot1.Choose(Crystalline Entity)
+
+[Expect]
+Bot1.Battlefield.Crystalline Entity.Keywords = Flying; Haste
+Bot2.Battlefield.Llanowar Elves.Tapped = false
+Bot2.Graveyard =
+Stack.Count = 0
