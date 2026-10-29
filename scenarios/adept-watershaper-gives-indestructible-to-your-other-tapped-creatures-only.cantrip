@@ -1,0 +1,48 @@
+# Adept Watershaper: "Other tapped creatures you control have indestructible." Bot1 attacks on turn 3 with Adept Watershaper and
+# one of two Ornithopters and Bot2 attacks with its Elves on turn 4, all of them tapped still. The attacking Ornithopter is tapped and so indestructible (CR 702.12, 613.1f); the untapped one, the
+# tapped Watershaper itself ("other") and Bot2's tapped Llanowar Elves ("you control") are not.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Adept Watershaper
+Ornithopter
+Ornithopter
+Island x18
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Adept Watershaper.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Adept Watershaper; Ornithopter#1 > Bot2)
+[T4 Bot2.Main1]
+Bot2.Attack(Llanowar Elves > Bot1)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Adept Watershaper.Tapped = true
+Bot1.Battlefield.Adept Watershaper.Keywords = (absent)
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#1.Keywords = Flying; Indestructible
+Bot1.Battlefield.Ornithopter#2.Tapped = false
+Bot1.Battlefield.Ornithopter#2.Keywords = Flying
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot2.Battlefield.Llanowar Elves.Keywords = (absent)
