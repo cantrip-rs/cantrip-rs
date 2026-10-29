@@ -80,6 +80,13 @@ pub fn itself(_: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Char
     source == affected
 }
 
+/// "... as long as you gained life this turn" (CR 611.3a, 119.3) as a static ability's `StaticDef::affects`: only the source itself,
+/// and only while its controller has gained life this turn. The layers ask again whenever characteristics are computed, so it
+/// turns on with the gain and off as the turn ends. Ulna Alley Shopkeep and Tenured Concocter print it.
+pub fn itself_while_you_gained_life(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, _: &Chars) -> bool {
+    source == affected && q.history().life_gained(q.state().obj(source).controller) > 0
+}
+
 /// "Delirium - This creature gets/has ... as long as there are four or more card types among cards in your graveyard"
 /// (CR 207.2c, 604.1, 611.3a) as a static ability's `StaticDef::affects`: only the source itself, and only while four or more
 /// card types are among the cards in its controller's graveyard, each judged as the layers make it (the types are asked
