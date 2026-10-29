@@ -1,0 +1,55 @@
+# CR 603.4: with exactly six cards in Bot1's graveyard, the threshold intervening-if is false at Bot2's upkeep;
+# De-evolve remains attached, and the static text still makes its creature a Salamander with -4/-0 that can't block.
+# De-evolve {1}{B}: Enchantment — Aura
+#   Enchant creature
+#   Enchanted creature gets -4/-0, can't block, and is a Salamander. (It loses all other creature types.)
+#   Threshold — At the beginning of each upkeep, if there are seven or more cards in your graveyard, exile enchanted creature.
+# Written by new-card.py --scenario: De-evolve cast on turn 1 off zero-cost mana sources. Grow it a line at a time with
+#   cargo run --profile cards -p cantrip-script --bin corpus -- --scenario de-evolve-aura-threshold-and-type-change --next --brief
+# and see which keys the card moved with --diff <the line number of its cast>.
+
+[Bot1 Deck]
+De-evolve
+Thought Scour
+Gitaxian Probe
+Gitaxian Probe
+Memnite
+Black Lotus
+Mox Sapphire
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+Bot1.Pass
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Pass
+Bot1.Hand.Gitaxian Probe.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.De-evolve.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = -3
+? Bot1.Battlefield.Memnite.Subtypes = Salamander
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 6
+Bot1.Battlefield.Memnite.Power = -3
+Bot1.Battlefield.Memnite.Subtypes = Salamander
+Bot1.Battlefield.Memnite.Keywords = (absent)

@@ -1,0 +1,40 @@
+# CR 509.1b: De-evolve's enchanted creature can't block, so Bot2's Memnite cannot block Bot1's attacking Memnite.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Memnite
+Island
+De-evolve
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.De-evolve.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+! Bot2.Block(Memnite > Memnite)
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Memnite.Keywords = (absent)

@@ -1,0 +1,6 @@
+{
+  "name": "De-evolve",
+  "manaCost": "{1}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets -4/-0, can't block, and is a Salamander. (It loses all other creature types.)\nThreshold — At the beginning of each upkeep, if there are seven or more cards in your graveyard, exile enchanted creature."
+}

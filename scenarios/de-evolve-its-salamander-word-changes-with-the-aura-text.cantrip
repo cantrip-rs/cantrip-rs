@@ -1,0 +1,39 @@
+# Artificial Evolution changes De-evolve's printed creature-type word Salamander to Elf. Because the Aura reads its own
+# changed text (CR 612.2), the enchanted Memnite becomes an Elf instead, while keeping the -4/-0 and can't-block effects.
+
+[Bot1 Deck]
+De-evolve
+Memnite
+Mox Jet
+Mox Sapphire
+Artificial Evolution
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.De-evolve.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Artificial Evolution.Cast(Bot1.Battlefield.De-evolve)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Salamander)
+Bot1.Modes(Elf)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = -3
+Bot1.Battlefield.Memnite.Subtypes = Elf
+Bot1.Battlefield.Memnite.Keywords = (absent)
