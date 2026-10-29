@@ -1,0 +1,39 @@
+# Grounded for Life: "This spell costs {3} less to cast if it targets a tapped creature. Destroy target creature." The total
+# cost is determined once the target is announced (CR 601.2c, 601.2f). Bot2's first Ornithopter attacked on turn 4 and is
+# still tapped on Bot1's turn 5; the second is untapped. With only {W}{W} in Bot1's pool, the cast at the untapped
+# Ornithopter ({4}{W}) is not offered; the cast at the tapped one costs {1}{W}, empties the pool and destroys it.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Grounded for Life
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter#1 > Bot1)
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana = {W}{W}
+! Bot1.Hand.Grounded for Life.Cast(Bot2.Battlefield.Ornithopter#2; Mana: short)
+Bot1.Hand.Grounded for Life.Cast(Bot2.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Turn = 5
+Bot1.Graveyard = Grounded for Life
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield.Ornithopter.Tapped = false
