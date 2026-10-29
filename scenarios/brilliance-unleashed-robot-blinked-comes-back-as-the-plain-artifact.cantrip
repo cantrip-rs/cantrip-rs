@@ -1,0 +1,76 @@
+# Brilliance Unleashed's "it's a 3/3 Robot artifact creature with flying" (CR 614.12) belongs to the object that entered: Bot1 returns Black Lotus as that Robot on turn 3 (the
+# creature type, 3/3 and flying are there), then on turn 5 Ephemerate exiles and returns it. A card that changes zones is a new object (CR 400.7), so the Lotus comes back as the
+# plain noncreature artifact it is printed as: no Robot, no power or toughness, no flying.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Brilliance Unleashed
+Swamp
+Swamp
+Ephemerate
+Swamp x11
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Wall of Stone
+Island x16
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Stone.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brilliance Unleashed.Cast
+! Bot1.Modes(Count: 0)
+Bot1.Modes(1; 2)
+Bot1.Target(Wall of Stone)
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Pass
+Bot2.Pass
+
+? Bot1.Battlefield.Black Lotus.Types = Artifact; Creature
+? Bot1.Battlefield.Black Lotus.Keywords = Flying
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ephemerate.Cast(Black Lotus)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Black Lotus.Types = Artifact
+Bot1.Battlefield.Black Lotus.Keywords = (absent)
+Bot1.Battlefield.Black Lotus.Subtypes = (absent)
+Bot1.Battlefield.Black Lotus.Power = (absent)
