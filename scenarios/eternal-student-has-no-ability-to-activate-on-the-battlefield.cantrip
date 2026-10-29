@@ -1,0 +1,38 @@
+# Eternal Student: the ability works only from the graveyard (CR 113.6): on the battlefield, there is nothing to activate.
+
+[Bot1 Deck]
+Eternal Student
+Mox Jet
+Mox Jet
+Mox Jet
+Black Lotus
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island
+Island
+Island
+Island
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Eternal Student.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+! Bot1.Battlefield.Eternal Student.Activate
+
+[Expect]
+Bot1.Battlefield.Eternal Student.Power = 4
