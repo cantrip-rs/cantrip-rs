@@ -2225,6 +2225,12 @@ pub type BlockerLimit = fn(&dyn Query, ObjectId, ObjectId) -> Option<usize>;
 /// declaration must obey as many requirements as any declaration that obeys every restriction could (CR 509.1c).
 pub type BlockRequirement = fn(&dyn Query, ObjectId, ObjectId, ObjectId) -> bool;
 
+/// A static ability that requires an attacker to be blocked if able (CR 509.1c): asked, while the object that has it is on the
+/// battlefield with its abilities, of each attacker some block is allowed for - the object as `source`, then the attacker; true
+/// makes one requirement on that attacker, obeyed once by any creature blocking it, however many do. "This creature must be
+/// blocked if able" (Raphael, Ninja Destroyer, Canopy Stalker).
+pub type MustBeBlocked = fn(&dyn Query, ObjectId, ObjectId) -> bool;
+
 /// A static ability that says a creature can't attack (CR 508.1c), usually unless something holds: asked, while the object
 /// that has it is on the battlefield with its abilities, of each creature that could otherwise be declared an attacker (the
 /// object itself or another), with the object as `source`; false keeps the creature from attacking at all. "Delirium - This
@@ -2996,6 +3002,8 @@ pub struct CardDef {
     pub blocker_limits: &'static [BlockerLimit],
     /// Its static abilities that require creatures to block (CR 509.1c), while it is on the battlefield.
     pub block_requirements: &'static [BlockRequirement],
+    /// Its static abilities that require an attacker to be blocked (CR 509.1c), while it is on the battlefield.
+    pub must_be_blocked: &'static [MustBeBlocked],
     /// Its static abilities that keep creatures from attacking (CR 508.1c), while it is on the battlefield.
     pub attack_rules: &'static [AttackRule],
     /// Its static abilities that make attacking cost something (CR 508.1d, 508.1h), while it is on the battlefield.
@@ -3247,6 +3255,7 @@ impl CardDef {
         block_rules: &[],
         blocker_limits: &[],
         block_requirements: &[],
+        must_be_blocked: &[],
         attack_rules: &[],
         attack_costs: &[],
         attack_limits: &[],
@@ -3340,6 +3349,7 @@ impl CardDef {
             (!self.block_rules.is_empty(), "block rules"),
             (!self.blocker_limits.is_empty(), "blocker limits"),
             (!self.block_requirements.is_empty(), "block requirements"),
+            (!self.must_be_blocked.is_empty(), "must be blocked"),
             (!self.attack_rules.is_empty(), "attack rules"),
             (!self.attack_costs.is_empty(), "attack costs"),
             (!self.attack_limits.is_empty(), "attack limits"),

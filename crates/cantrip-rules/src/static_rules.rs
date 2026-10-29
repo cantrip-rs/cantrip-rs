@@ -504,12 +504,24 @@ pub fn attack_rules_allow(q: &dyn Query, cards: &CardTable, creature: ObjectId) 
 /// creature do so"): one for each permanent and each block it requires, so two Lures on a creature make two of each creature
 /// able to block it. A board with no such permanent, nearly every board, makes none.
 pub fn block_requirements(cx: &Cx, allowed: &[(ObjectId, ObjectId)]) -> Vec<RequiredBlock> {
-    let rules: Vec<(ObjectId, PlayerId, &'static CardDef)> = sources(cx, |d| !d.block_requirements.is_empty()).collect();
+    let rules: Vec<(ObjectId, PlayerId, &'static CardDef)> =
+        sources(cx, |d| !d.block_requirements.is_empty() || !d.must_be_blocked.is_empty()).collect();
     let mut required = Vec::new();
     for &(id, _, def) in &rules {
         for &(blocker, attacker) in allowed {
             if def.block_requirements.iter().any(|rule| rule(cx, id, blocker, attacker)) {
                 required.push(RequiredBlock { blocker: Some(blocker), attacker: Some(attacker) });
+            }
+        }
+        // "Must be blocked if able" (`CardDef::must_be_blocked`): one requirement on an attacker some block is allowed for,
+        // however many creatures may block it.
+        let mut asked: Vec<ObjectId> = Vec::new();
+        for &(_, attacker) in allowed {
+            if !asked.contains(&attacker) {
+                asked.push(attacker);
+                if def.must_be_blocked.iter().any(|rule| rule(cx, id, attacker)) {
+                    required.push(RequiredBlock { blocker: None, attacker: Some(attacker) });
+                }
             }
         }
     }

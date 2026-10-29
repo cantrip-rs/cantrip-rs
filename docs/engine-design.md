@@ -2218,7 +2218,9 @@ two "blocks this turn if able" on a creature two): a blocker and an attacker it 
 must block whichever attacker it blocks; or an attacker with no blocker, which must be blocked by any creature ("must be
 blocked if able", obeyed once however many block it). Lure's "all creatures able to block enchanted creature do so" is a
 `CardDef::block_requirements` entry (`BlockRequirement`), asked of each block the restrictions allow with the permanent as its
-source (`static_rules::block_requirements`, only while a permanent with one is on the battlefield with its abilities); "target
+source (`static_rules::block_requirements`, only while a permanent with one is on the battlefield with its abilities); "this creature
+must be blocked if able" is a `CardDef::must_be_blocked` entry (`MustBeBlocked`), asked of each attacker some block is allowed for,
+true making one requirement with no blocker (Raphael, Ninja Destroyer); "target
 creature blocks this turn if able" is a resolved effect, `EffectKind::MustBlock` (an effect, not an ability: a creature that
 loses its abilities still must), one requirement per effect of a creature that may block something; provoke's "blocks this creature
 this combat if able" is `EffectKind::MustBlockAttacker(attacker)` with `Duration::EndOfCombat`, one requirement naming the blocker and
