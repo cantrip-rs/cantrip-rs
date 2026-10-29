@@ -1,0 +1,8 @@
+{
+  "name": "Conciliator's Duelist",
+  "manaCost": "{W}{W}{B}{B}",
+  "type": "Creature — Kor Warlock",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "When this creature enters, draw a card. Each player loses 1 life.\nRepartee — Whenever you cast an instant or sorcery spell that targets a creature, exile up to one target creature. Return that card to the battlefield under its owner's control at the beginning of the next end step."
+}

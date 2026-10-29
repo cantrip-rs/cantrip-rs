@@ -1,0 +1,56 @@
+# Conciliator's Duelist: Repartee -- Bot1 casts Silverquill Charm on the Duelist, and the trigger exiles Bot2's Ornithopter. It
+# stays in exile for the rest of the turn and returns under its owner's control at the beginning of the next end step (CR 603.7).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Gleemox
+Plains
+Conciliator's Duelist
+Silverquill Charm
+Plains
+Plains x2
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Conciliator's Duelist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill Charm.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Conciliator's Duelist)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+? Bot2.Battlefield.Count = 0
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield = Ornithopter

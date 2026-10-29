@@ -1,0 +1,35 @@
+# Conciliator's Duelist: when it enters, Bot1 draws a card and then each player loses 1 life (Bot1 19, Bot2 19). The cost {W}{W}{B}{B}
+# is paid with Mox Pearl, Plains, Mox Jet and Gleemox.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Gleemox
+Plains
+Conciliator's Duelist
+Plains x2
+Island
+Plains x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Conciliator's Duelist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Hand = Plains; Plains; Island
