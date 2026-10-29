@@ -1,0 +1,28 @@
+# Auntie's Sentence, first mode, against a hand with only a land and an instant: neither is a nonland permanent card, so there is
+# nothing to choose and nothing is discarded (CR 608.2d); the hand is still revealed. Bot2 keeps its hand (the Forest in its graveyard is its turn-2 discard to hand size).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Auntie's Sentence
+Swamp x11
+
+[Bot2 Deck]
+Forest
+Lightning Bolt
+Forest x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Auntie's Sentence.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Forest
+Bot2.Hand.Count = 7
+Bot1.Graveyard = Auntie's Sentence

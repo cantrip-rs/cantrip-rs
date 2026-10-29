@@ -1,0 +1,32 @@
+# Auntie's Sentence {1}{B} sorcery, first mode: "Target opponent reveals their hand. You choose a nonland permanent card from it. That
+# player discards that card" (CR 701.20a, 701.9a, 110.4a). Bot2's hand holds a Forest, a Lightning Bolt (not a permanent card), a
+# Llanowar Elves and a Memnite: Bot1 may take only the Elves or the Memnite, and takes the Elves.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Auntie's Sentence
+Swamp x11
+
+[Bot2 Deck]
+Forest
+Lightning Bolt
+Llanowar Elves
+Memnite
+Forest x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Auntie's Sentence.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2)
+Bot1.Choose(Llanowar Elves)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Llanowar Elves
+Bot2.Hand.Count = 7
+Bot1.Graveyard = Auntie's Sentence

@@ -1,0 +1,6 @@
+{
+  "name": "Auntie's Sentence",
+  "manaCost": "{1}{B}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• Target opponent reveals their hand. You choose a nonland permanent card from it. That player discards that card.\n• Target creature gets -2/-2 until end of turn."
+}
