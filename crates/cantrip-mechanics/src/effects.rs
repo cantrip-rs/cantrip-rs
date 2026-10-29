@@ -1372,15 +1372,22 @@ pub fn put_its_counters_on_target(g: &mut dyn Game, item: &StackItem) -> Result<
 /// target is made a creature only if it needed to become one, so an artifact creature keeps the power and toughness it had.
 /// Does Machines and Donatello, Mutant Mechanic print it.
 pub fn three_counters_and_becomes_robot(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(artifact) = crate::targets::object(g, item, 0) else { return Ok(()) };
-    g.add_counters(artifact, CounterKind::PlusOne, 3);
+    three_counters_and_becomes(g, item, Subtype::Robot)
+}
+
+/// "Put three +1/+1 counters on [up to one] target [permanent]. If it isn't a creature, it becomes a 0/0 `kind` creature in
+/// addition to its other types" (see `three_counters_and_becomes_robot`, which is the Robot of it). Pizza Face, Gastromancer
+/// prints the Mutant.
+pub fn three_counters_and_becomes(g: &mut dyn Game, item: &StackItem, kind: Subtype) -> Result<(), Suspend> {
+    let Some(target) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.add_counters(target, CounterKind::PlusOne, 3);
     g.end_sentence();
-    if !g.chars(artifact).is(CardType::Creature) {
-        let robot = g.words(item.object).subtype(Subtype::Robot);
+    if !g.chars(target).is(CardType::Creature) {
+        let kind = g.words(item.object).subtype(kind);
         instruction(g, |g| {
-            g.add_effect(item.object, artifact, EffectKind::AddTypes(TypeSet::of(&[CardType::Creature])), Duration::Indefinite);
-            g.add_effect(item.object, artifact, EffectKind::AddSubtype(robot), Duration::Indefinite);
-            g.add_effect(item.object, artifact, EffectKind::SetPt(0, 0), Duration::Indefinite);
+            g.add_effect(item.object, target, EffectKind::AddTypes(TypeSet::of(&[CardType::Creature])), Duration::Indefinite);
+            g.add_effect(item.object, target, EffectKind::AddSubtype(kind), Duration::Indefinite);
+            g.add_effect(item.object, target, EffectKind::SetPt(0, 0), Duration::Indefinite);
         });
     }
     Ok(())
