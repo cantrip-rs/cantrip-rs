@@ -1,0 +1,64 @@
+# Branching Timeline counts only the three differently named lands Bot1 controls (Forest, Island, Plains): Bot2's
+# Mountain would make four if the controller were ignored. It reveals exactly three cards from Bot1's library, puts
+# both the artifact and creature there onto the battlefield tapped, leaves the fourth card on top, and bottoms the
+# nonpermanent. Bot2's matching library cards stay untouched.
+[Bot1 Deck]
+Branching Timeline
+Forest x3
+Island x2
+Plains
+Forest
+Island
+Island x5
+Sol Ring
+Negate
+Llanowar Elves
+Blightsteel Colossus
+Island x10
+
+[Bot2 Deck]
+Mountain
+Island x6
+Island x7
+Sol Ring
+Negate
+Llanowar Elves
+Island x10
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T15 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Branching Timeline.Cast
+[T15 Bot1.Main2]
+
+[Expect]
+Bot1.Revealed = Sol Ring; Negate; Llanowar Elves
+Bot1.Battlefield = Forest; Forest; Forest; Forest; Island; Island; Island; Plains; Sol Ring; Llanowar Elves
+Bot1.Battlefield.Sol Ring.Tapped = true
+Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Graveyard = Branching Timeline
+Bot1.Library = Blightsteel Colossus; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Negate
+Bot2.Battlefield = Mountain
+Bot2.Library = Sol Ring; Negate; Llanowar Elves; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island

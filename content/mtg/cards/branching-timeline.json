@@ -1,0 +1,6 @@
+{
+  "name": "Branching Timeline",
+  "manaCost": "{6}{G}{G}",
+  "type": "Sorcery",
+  "oracleText": "Strange new worlds — Reveal the top X cards of your library, where X is the number of differently named lands you control. Put all permanent cards revealed this way onto the battlefield tapped and the rest on the bottom of your library in a random order."
+}

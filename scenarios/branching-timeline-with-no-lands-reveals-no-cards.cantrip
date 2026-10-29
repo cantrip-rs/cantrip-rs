@@ -1,0 +1,40 @@
+# With no lands, X is zero despite controlling Mox Emerald. Seven Petals and the Mox pay for the spell;
+# the top permanent remains in the library because no cards are revealed (CR 608.2h).
+[Bot1 Deck]
+Branching Timeline
+Lotus Petal x6
+Lotus Petal
+Mox Emerald
+Sol Ring
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Hand.Lotus Petal.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Lotus Petal.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Lotus Petal.Activate(Color: G)
+Bot1.Battlefield.Lotus Petal.Activate(Color: G)
+Bot1.Battlefield.Lotus Petal.Activate(Color: G)
+Bot1.Battlefield.Lotus Petal.Activate(Color: G)
+Bot1.Battlefield.Lotus Petal.Activate(Color: G)
+Bot1.Battlefield.Lotus Petal.Activate(Color: G)
+Bot1.Battlefield.Lotus Petal.Activate(Color: G)
+Bot1.Hand.Branching Timeline.Cast
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Emerald
+Bot1.Graveyard = Branching Timeline; Lotus Petal; Lotus Petal; Lotus Petal; Lotus Petal; Lotus Petal; Lotus Petal; Lotus Petal
+Bot1.Library = Sol Ring; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island

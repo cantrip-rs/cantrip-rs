@@ -1,0 +1,45 @@
+# Eight Forests have just one name, so X is one. Negate is revealed and bottomed; Sol Ring stays on top, and nothing
+# enters the battlefield. This exercises the all-nonpermanent case and distinguishes names from the number of lands.
+[Bot1 Deck]
+Branching Timeline
+Forest x6
+Forest x7
+Negate
+Sol Ring
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T15 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Branching Timeline.Cast
+[T15 Bot1.Main2]
+
+[Expect]
+Bot1.Revealed = Negate
+Bot1.Battlefield = Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest
+Bot1.Graveyard = Branching Timeline
+Bot1.Library = Sol Ring; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Negate
