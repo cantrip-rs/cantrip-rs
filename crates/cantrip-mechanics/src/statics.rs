@@ -609,3 +609,10 @@ pub fn every_basic_land_type(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars)
         chars.subtypes = chars.subtypes.union(SubtypeSet::of(&[Subtype::Plains, Subtype::Island, Subtype::Swamp, Subtype::Mountain, Subtype::Forest]));
     }
 }
+
+/// "Shares a creature type with" (CR 205.3m): whether the two sets of subtypes have a creature type in common. A changeling
+/// has every creature type, so it shares one with any creature that has one; an object with no creature type shares one with
+/// nothing. Shared Animosity, Heirloom Blade and Winnowing ask it.
+pub fn shares_creature_type(a: SubtypeSet, b: SubtypeSet) -> bool {
+    Subtype::CREATURE_TYPES.iter().any(|&t| a.has(t) && b.has(t))
+}

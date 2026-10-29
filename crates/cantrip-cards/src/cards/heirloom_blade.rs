@@ -30,7 +30,7 @@ fn reveal_until_shared(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     }
     let (found, revealed) = cantrip_mechanics::library::reveal_until(g, you, &|q, card| {
         let c = q.chars(card);
-        c.is(CardType::Creature) && Subtype::ALL.iter().any(|&s| s.is_creature_type() && types.has(s) && c.subtypes.has(s))
+        c.is(CardType::Creature) && cantrip_mechanics::statics::shares_creature_type(types, c.subtypes)
     });
     if found.is_none() && revealed.is_empty() {
         return Ok(());
