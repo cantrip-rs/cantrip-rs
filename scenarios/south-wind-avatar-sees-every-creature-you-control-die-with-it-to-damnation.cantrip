@@ -1,0 +1,49 @@
+# Damnation (Mox Jet, Swamp, Mox Emerald, Dryad Arbor) kills South Wind Avatar, Bot1's Dryad Arbor (1/1) and Ornithopter (0/2) and
+# Bot2's Dryad Arbor together. The Avatar looks back at the two others it controlled: 1 + 2 = 3 life (23), one trigger each. It is
+# gone by the time the life is gained, so its second ability does not fire and Bot2 stays at 20.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+South Wind Avatar
+Dryad Arbor
+Swamp
+Damnation
+Ornithopter
+Swamp x12
+
+[Bot2 Deck]
+Dryad Arbor
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.South Wind Avatar.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Dryad Arbor.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Damnation.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Dryad Arbor.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 20
+Bot2.Graveyard = Dryad Arbor

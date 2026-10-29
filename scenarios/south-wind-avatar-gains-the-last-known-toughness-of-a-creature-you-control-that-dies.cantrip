@@ -1,0 +1,48 @@
+# South Wind Avatar costs {3}{B}: Black Lotus (black) and Mox Jet. Later Bot1's Dryad Arbor is grown by Giant Growth (G from Mox
+# Emerald) to 4/4, then destroyed by Go for the Throat (Mox Jet and a Swamp). The Avatar gains Bot1 life equal to the toughness
+# the Arbor last had, 4 (CR 608.2h): 24. That is one life-gain event, so each opponent loses exactly 1 (Bot2 at 19).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+South Wind Avatar
+Dryad Arbor
+Go for the Throat
+Giant Growth
+Swamp x13
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.South Wind Avatar.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Dryad Arbor)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dryad Arbor.Toughness = 4
+Bot1.Hand.Go for the Throat.Cast(Bot1.Battlefield.Dryad Arbor)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot2.Pass
+? Stack = South Wind Avatar
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 19

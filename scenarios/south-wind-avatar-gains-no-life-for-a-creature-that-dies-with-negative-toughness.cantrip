@@ -1,0 +1,40 @@
+# South Wind Avatar gains life equal to the toughness the creature last had (CR 608.2h), never less than 0: Stomped by the Foot
+# gives Bot1's Dryad Arbor (1/1) -2/-2, so it dies with toughness -1 and Bot1 gains nothing - no life gain, so Bot2 loses nothing
+# either (both stay at 20).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Black Lotus
+South Wind Avatar
+Dryad Arbor
+Stomped by the Foot
+Swamp x14
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Dryad Arbor.Play
+Bot1.Hand.South Wind Avatar.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Stomped by the Foot.Cast(Bot1.Battlefield.Dryad Arbor)
+Bot1.Modes(Cast without kicking)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Dryad Arbor; Stomped by the Foot; Black Lotus
+? Bot1.Life = 20
+? Bot2.Life = 20
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20

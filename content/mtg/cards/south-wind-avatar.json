@@ -1,0 +1,11 @@
+{
+  "name": "South Wind Avatar",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Snake Spirit Avatar",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Deathtouch\nWhenever another creature you control dies, you gain life equal to its toughness.\nWhenever you gain life, each opponent loses 1 life.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

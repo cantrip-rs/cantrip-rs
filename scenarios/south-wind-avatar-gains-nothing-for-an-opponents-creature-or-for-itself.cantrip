@@ -1,0 +1,49 @@
+# "Another creature you control": Go for the Throat on Bot2's Dryad Arbor (Mox Jet and Mox Emerald) and then on South Wind Avatar
+# itself (Mox Ruby and a Swamp) gains Bot1 no life, so Bot2 loses none either (both at 20).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Black Lotus
+South Wind Avatar
+Go for the Throat
+Go for the Throat
+Swamp x13
+
+[Bot2 Deck]
+Dryad Arbor
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.South Wind Avatar.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Dryad Arbor.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Go for the Throat.Cast(Bot2.Battlefield.Dryad Arbor)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Dryad Arbor
+? Bot1.Life = 20
+Bot1.Hand.Go for the Throat.Cast(Bot1.Battlefield.South Wind Avatar)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Go for the Throat; South Wind Avatar; Go for the Throat; Black Lotus
