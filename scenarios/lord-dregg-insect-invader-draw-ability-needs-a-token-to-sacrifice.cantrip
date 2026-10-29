@@ -1,0 +1,37 @@
+# Lord Dregg's "{3}{G}, Sacrifice a token: Draw a card" (CR 118.3, 602.2): with {3}{G} available (Mox Emerald and three more Moxen) but no token on the battlefield, the sacrifice cost cannot be
+# paid and the ability is not offered. Dregg's own Disappear made nothing, since no permanent left Bot1's battlefield on turn 1.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Lord Dregg, Insect Invader
+Mox Emerald
+Counterspell
+Lightning Bolt
+Island x17
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Lord Dregg, Insect Invader.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+! Bot1.Battlefield.Lord Dregg, Insect Invader.Activate
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield = Lord Dregg, Insect Invader; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Hand = Counterspell; Lightning Bolt

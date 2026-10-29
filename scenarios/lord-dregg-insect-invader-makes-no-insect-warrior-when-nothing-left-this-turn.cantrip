@@ -1,0 +1,29 @@
+# Disappear's intervening "if" (CR 603.4): Lord Dregg ({3}{B}) is cast with four Moxen and nothing leaves the battlefield under Bot1's control, so no Insect Warrior is made at the end step.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Lord Dregg, Insect Invader
+Island x19
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Lord Dregg, Insect Invader.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield = Lord Dregg, Insect Invader; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby

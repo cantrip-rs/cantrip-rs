@@ -1,0 +1,53 @@
+# Lord Dregg: Disappear (CR 603.4) makes a 1/1 black Insect Warrior with flying at Bot1's end step once Black Lotus was sacrificed for the {3}{B} on turn 1. On turn 3 "{3}{G}, Sacrifice a token: Draw a card"
+# costs exactly Mox Emerald's G and three other Moxen, draws exactly one card, and sacrificing the token is itself a permanent leaving (a token counts, CR 111.7), so a new Insect Warrior comes at the end step.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Lord Dregg, Insect Invader
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Counterspell
+Lightning Bolt
+Mountain
+Island x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Lord Dregg, Insect Invader.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield = Insect Warrior Token; Lord Dregg, Insect Invader; Mox Jet
+? Bot1.Battlefield.Insect Warrior Token.Power = 1
+? Bot1.Battlefield.Insect Warrior Token.Toughness = 1
+? Bot1.Battlefield.Insect Warrior Token.Colors = Black
+? Bot1.Battlefield.Insect Warrior Token.Keywords = Flying
+? Bot1.Battlefield.Insect Warrior Token.Subtypes = Insect; Warrior
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+! Bot1.Battlefield.Lord Dregg, Insect Invader.Activate(Sacrifice: Mox Jet)
+Bot1.Battlefield.Lord Dregg, Insect Invader.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Counterspell; Lightning Bolt
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield = Insect Warrior Token; Lord Dregg, Insect Invader; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
+Bot1.Hand = Counterspell; Lightning Bolt

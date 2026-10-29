@@ -1,0 +1,11 @@
+{
+  "name": "Lord Dregg, Insect Invader",
+  "manaCost": "{3}{B}",
+  "type": "Legendary Creature — Insect Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying\nDisappear — At the beginning of your end step, if a permanent left the battlefield under your control this turn, create a 1/1 black Insect Warrior creature token with flying.\n{3}{G}, Sacrifice a token: Draw a card.",
+  "keywords": [
+    "Flying"
+  ]
+}
