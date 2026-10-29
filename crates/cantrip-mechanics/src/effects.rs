@@ -1270,6 +1270,18 @@ pub fn may_cast_first_target_free_exiling_it(g: &mut dyn Game, item: &StackItem)
     Ok(())
 }
 
+/// "When this creature dies, put its counters on [up to one] target creature": as many of each kind as it had as it died, read
+/// from its last existence on the battlefield (CR 603.10a, 608.2h); the counters are put on, not moved (the rulings), every kind
+/// of them, -1/-1 counters too, together as one event (CR 122.6). Nothing if the target is no longer legal (CR 608.2b) or none
+/// was chosen. Essence Channeler, Graft Surgeon and Scolding Administrator print it.
+pub fn put_its_counters_on_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    let counters = g.obj(item.object).counter_array();
+    let puts: Vec<(ObjectId, CounterKind, i16)> = CounterKind::ALL.into_iter().map(|kind| (creature, kind, counters[kind as usize])).collect();
+    g.add_counters_together(&puts);
+    Ok(())
+}
+
 /// "Put two +1/+1 counters on target creature" (CR 122.1a, 608.2b), the first target still legal on resolution; with none chosen
 /// (an "up to one" slot) or none legal nothing is put on. Room of Refuge, Trash the Town and Silverquill Charm
 /// print it.
