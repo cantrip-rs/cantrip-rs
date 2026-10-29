@@ -1,0 +1,49 @@
+# "Artifact, enchantment, or creature with power 4 or greater": the power condition belongs to the creature only. Make Your Move
+# destroys Bot2's Ornithopter (an artifact creature of power 0) on turn 5, and its Connecting the Dots (an enchantment) on turn 7.
+
+[Bot1 Deck]
+Plains
+Plains
+Make Your Move
+Make Your Move
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Mountain
+Mountain
+Connecting the Dots
+Mountain x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Hand.Connecting the Dots.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Hand.Make Your Move.Cast(Bot2.Battlefield.Ornithopter)
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Hand.Make Your Move.Cast(Bot2.Battlefield.Connecting the Dots)
+
+[Expect]
+Turn = 7
+Exile.Count = 0
+Bot2.Graveyard = Connecting the Dots; Ornithopter
+Bot2.Battlefield.Count = 2
+Bot1.Graveyard = Make Your Move; Make Your Move

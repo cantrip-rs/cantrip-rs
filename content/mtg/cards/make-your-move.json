@@ -1,0 +1,6 @@
+{
+  "name": "Make Your Move",
+  "manaCost": "{2}{W}",
+  "type": "Instant",
+  "oracleText": "Destroy target artifact, enchantment, or creature with power 4 or greater."
+}
