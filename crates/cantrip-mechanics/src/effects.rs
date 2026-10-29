@@ -502,6 +502,12 @@ pub fn gain_life(g: &mut dyn Game, item: &StackItem, n: i32) -> Result<(), Suspe
     Ok(())
 }
 
+/// "You gain 3 life" as an ability's callback: the Food ability "{2}, {T}, Sacrifice this permanent: You gain 3 life." (CR 111.10b)
+/// of the Food token, Ygra, Eater of All's creatures and Spicy Oatmeal Pizza.
+pub fn gain_three_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    gain_life(g, item, 3)
+}
+
 /// "You gain 1 life" as a triggered or activated ability. Koth of the Homestead and Medic's Kitesail use this callback.
 pub fn gain_one_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     gain_life(g, item, 1)

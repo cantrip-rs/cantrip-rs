@@ -223,16 +223,11 @@ pub fn create_map(g: &mut dyn Game, controller: PlayerId) -> Result<(), Suspend>
     Ok(())
 }
 
-fn gain_three_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.gain_life(item.controller, 3);
-    Ok(())
-}
-
 /// A colorless Food artifact token with "{2}, {T}, Sacrifice this token: You gain 3 life." (CR 111.10b). Generous Ent
 /// and Oko, Thief of Crowns create it.
 pub static FOOD: CardDef = CardDef {
     types: TypeSet::of(&[CardType::Artifact]),
-    abilities: &[ability(cost("{2}, {T}").and(SACRIFICE_THIS), gain_three_life, "{2}, {T}, Sacrifice this token: You gain 3 life.")],
+    abilities: &[ability(cost("{2}, {T}").and(SACRIFICE_THIS), crate::effects::gain_three_life, "{2}, {T}, Sacrifice this token: You gain 3 life.")],
     text: "{2}, {T}, Sacrifice this token: You gain 3 life.",
     ..token!(Food)
 };

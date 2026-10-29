@@ -21,12 +21,6 @@ fn food_artifacts_too(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.subtypes = chars.subtypes.with(Subtype::Food);
 }
 
-/// "{2}, {T}, Sacrifice this permanent: You gain 3 life.": the ability each other creature has (Ygra's first `delayed`
-/// ability), activated by that creature's controller, who gains the life.
-fn gain_three_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::gain_life(g, item, 3)
-}
-
 /// "Whenever a Food is put into a graveyard from the battlefield" (CR 603.6c, 603.10a): any Food, anyone's, token or card,
 /// looked back on as it last existed on the battlefield - a creature that was a Food only because of Ygra counts when it
 /// dies with Ygra. Each Food is its own event, so several at once trigger as many times (CR 603.2c).
@@ -50,7 +44,7 @@ pub static CARD: CardDef = CardDef {
             "Whenever a Food is put into a graveyard from the battlefield, put two +1/+1 counters on Ygra.",
         ),
     ],
-    delayed: &[ability(cost("{2}, {T}").and(SACRIFICE_THIS), gain_three_life, "{2}, {T}, Sacrifice this permanent: You gain 3 life.")],
+    delayed: &[ability(cost("{2}, {T}").and(SACRIFICE_THIS), effects::gain_three_life, "{2}, {T}, Sacrifice this permanent: You gain 3 life.")],
     statics: &[
         static_ability(Layer::Type, other_creatures, food_artifacts_too, OTHER_CREATURES),
         // CR 613.6: the effect that began in layer 4 applies to the same creatures in layer 6.
