@@ -1,0 +1,58 @@
+# Grub, Notorious Auntie (CR 701.68a, 707.2, 707.9a, 508.4, 603.7): Grub, transformed on turn 3, attacks and its controller blights a Hill Giant
+# (3/3 -> 2/2). The token is a copy of the blighted creature - a 3/3, the -1/-1 counters are not copied (CR 707.2) - created tapped
+# and attacking Bot2 without having been declared as an attacker, so Bot2 takes 2 from Grub and 3 from the copy. At the beginning of the
+# end step the token is sacrificed, by the ability it has from the copy's exception; the Hill Giant stays, still a 2/2.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Sol Ring
+Black Lotus
+Grub, Storied Matriarch
+Hill Giant
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Grub, Storied Matriarch.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grub, Notorious Auntie > Bot2)
+Bot1.Accept
+Bot1.Choose(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Grub, Notorious Auntie > Bot2; Hill Giant > Bot2
+? Bot1.Battlefield.Hill Giant#1.Counters.MinusOneMinusOne = 1
+? Bot1.Battlefield.Hill Giant#2.Tapped = true
+? Bot1.Battlefield.Hill Giant#2.Token = true
+? Bot1.Battlefield.Hill Giant#2.Power = 3
+[T3 Bot1.Main2]
+? Bot2.Life = 15
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Hill Giant#2 = (absent)
+Bot1.Battlefield.Hill Giant.Power = 2
+Bot1.Battlefield.Hill Giant.Toughness = 2
+Bot2.Life = 15
