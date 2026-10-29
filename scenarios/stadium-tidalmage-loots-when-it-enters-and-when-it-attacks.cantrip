@@ -1,0 +1,44 @@
+# Stadium Tidalmage: "Whenever this creature enters or attacks, you may draw a card. If you do, discard a card." Bot1 casts it on turn 1
+# (Black Lotus and Mox Ruby pay {2}{U}{R}); accepting the enter trigger draws Ancestral Recall and discards the chosen Island. On turn 3
+# the attack trigger is accepted too: Bot1 draws an Island (after the turn-3 draw) and discards the chosen Mox Pearl. The attack deals 4 to Bot2.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Stadium Tidalmage
+Mox Jet
+Mox Pearl
+Island
+Ancestral Recall
+Island x22
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stadium Tidalmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Island)
+[T3 Bot1.Main1]
+Bot1.Attack(Stadium Tidalmage > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Mox Pearl)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Ancestral Recall; Island; Island; Mox Jet
+Bot1.Graveyard = Mox Pearl; Island; Black Lotus
+Bot1.Library.Count = 20
+Bot2.Life = 16

@@ -1,0 +1,41 @@
+# Stadium Tidalmage: the loot is a "may": declining draws and discards nothing, on entering (turn 1) and on attacking (turn 3).
+# The hand and library stay as they were, and the attack still deals 4.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Stadium Tidalmage
+Mox Jet
+Mox Pearl
+Island
+Ancestral Recall
+Island x22
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Stadium Tidalmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Attack(Stadium Tidalmage > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Ancestral Recall; Island; Mox Jet; Mox Pearl
+Bot1.Graveyard = Black Lotus
+Bot1.Library.Count = 22
+Bot2.Life = 16

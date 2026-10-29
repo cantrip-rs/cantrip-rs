@@ -1,0 +1,8 @@
+{
+  "name": "Stadium Tidalmage",
+  "manaCost": "{2}{U}{R}",
+  "type": "Creature — Djinn Sorcerer",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Whenever this creature enters or attacks, you may draw a card. If you do, discard a card."
+}
