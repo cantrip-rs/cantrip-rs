@@ -1,0 +1,41 @@
+# A Quilled Slagwurm stations eight counters on Class-F Shuttlecraft after it has been on the battlefield since turn one.
+# It is a 2/4 artifact creature with flying and vigilance at six or more charge counters (CR 721.2a-b).
+
+[Bot1 Deck]
+Black Lotus x4
+Class-F Shuttlecraft
+Quilled Slagwurm
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Class-F Shuttlecraft.Cast
+Bot1.Pass
+Bot1.Hand.Quilled Slagwurm.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Class-F Shuttlecraft.Activate(Ability: Station)
+Bot1.Choose(Quilled Slagwurm)
+
+[Expect]
+Bot1.Battlefield.Class-F Shuttlecraft.Counters.Charge = 8
+Bot1.Battlefield.Class-F Shuttlecraft.Types = Artifact; Creature
+Bot1.Battlefield.Class-F Shuttlecraft.Power = 2
+Bot1.Battlefield.Class-F Shuttlecraft.Toughness = 4
+Bot1.Battlefield.Class-F Shuttlecraft.Keywords = Flying; Vigilance
+Bot1.Battlefield.Quilled Slagwurm.Tapped = true
+

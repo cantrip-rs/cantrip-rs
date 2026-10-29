@@ -1,0 +1,28 @@
+# Before it has six charge counters, Class-F Shuttlecraft is only an artifact. Its mana ability can make blue to cast Opt.
+
+[Bot1 Deck]
+Black Lotus
+Class-F Shuttlecraft
+Opt
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Class-F Shuttlecraft.Cast
+Bot1.Pass
+Bot1.Battlefield.Class-F Shuttlecraft.Activate(Color: Blue)
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Class-F Shuttlecraft.Types = Artifact
+Bot1.Battlefield.Class-F Shuttlecraft.Power = (absent)
+Bot1.Battlefield.Class-F Shuttlecraft.Toughness = (absent)
+Bot1.Battlefield.Class-F Shuttlecraft.Keywords = (absent)
+Bot1.Graveyard = Opt; Black Lotus

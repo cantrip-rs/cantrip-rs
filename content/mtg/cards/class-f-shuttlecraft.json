@@ -1,0 +1,7 @@
+{
+  "name": "Class-F Shuttlecraft",
+  "manaCost": "{3}",
+  "type": "Artifact — Spacecraft",
+  "stationPt": "2/4",
+  "oracleText": "{T}: Add one mana of any color.\nStation (Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery. It's an artifact creature at 6+.)\n6+ | Flying, vigilance"
+}

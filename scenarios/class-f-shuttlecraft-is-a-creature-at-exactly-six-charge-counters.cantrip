@@ -1,0 +1,51 @@
+# Class-F Shuttlecraft's 6+ striation applies at exactly six charge counters (CR 721.2a-b): Phyrexian Hulk stations five,
+# and it is still only an artifact; Memnite stations one more, and it is a 2/4 artifact creature with flying and vigilance.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Class-F Shuttlecraft
+Phyrexian Hulk
+Memnite
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Class-F Shuttlecraft.Cast
+Bot1.Pass
+Bot1.Hand.Phyrexian Hulk.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Class-F Shuttlecraft.Activate(Ability: Station)
+Bot1.Choose(Phyrexian Hulk)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Class-F Shuttlecraft.Counters.Charge = 5
+? Bot1.Battlefield.Class-F Shuttlecraft.Types = Artifact
+? Bot1.Battlefield.Class-F Shuttlecraft.Keywords = (absent)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Class-F Shuttlecraft.Activate(Ability: Station)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Class-F Shuttlecraft.Counters.Charge = 6
+Bot1.Battlefield.Class-F Shuttlecraft.Types = Artifact; Creature
+Bot1.Battlefield.Class-F Shuttlecraft.Power = 2
+Bot1.Battlefield.Class-F Shuttlecraft.Toughness = 4
+Bot1.Battlefield.Class-F Shuttlecraft.Keywords = Flying; Vigilance
