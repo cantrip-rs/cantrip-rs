@@ -1,0 +1,54 @@
+# April O'Neil, Kunoichi Trainee: "When April O'Neil enters, scry 2" puts Lightning Bolt (second) on the bottom and keeps Island
+# on top (CR 701.22a). "Can't be blocked by creatures with power 3 or greater" (CR 509.1b): Bot2's Cathar Commando (3/1)
+# may not block her, its Ornithopter (power 0) may. The restriction is April's alone: Commando does block Bot1's Action News
+# Crew, and the two trade.
+
+[Bot1 Deck]
+Mox Pearl x2
+April O'Neil, Kunoichi Trainee
+Action News Crew
+Black Lotus
+Plains x2
+Island
+Lightning Bolt
+
+[Bot2 Deck]
+Mox Pearl x2
+Cathar Commando
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.April O'Neil, Kunoichi Trainee.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | Lightning Bolt)
+? Bot1.Library = Island; Lightning Bolt
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Action News Crew.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Cathar Commando.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(April O'Neil, Kunoichi Trainee > Bot2; Action News Crew > Bot2)
+! Bot2.Block(Bot2.Battlefield.Cathar Commando > Bot1.Battlefield.April O'Neil, Kunoichi Trainee)
+Bot2.Block(Bot2.Battlefield.Ornithopter > Bot1.Battlefield.April O'Neil, Kunoichi Trainee; Bot2.Battlefield.Cathar Commando > Bot1.Battlefield.Action News Crew)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter; Cathar Commando
+Bot1.Graveyard = Action News Crew; Black Lotus
