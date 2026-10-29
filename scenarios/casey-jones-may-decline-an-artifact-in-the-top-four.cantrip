@@ -1,0 +1,29 @@
+# Casey Jones, Jury-Rig Justiciar: the artifact is a "may". With Mox Jet among the top four Bot1 takes nothing, and all four
+# go to the bottom: the hand stays at four Islands and nothing is revealed.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Casey Jones, Jury-Rig Justiciar
+Island x4
+Island
+Mox Jet
+Lightning Bolt
+Duress
+Island x10
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Casey Jones, Jury-Rig Justiciar.Cast
+Bot1.Arrange( | Island; Mox Jet; Lightning Bolt; Duress)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island
+Bot1.Library.Count = 14

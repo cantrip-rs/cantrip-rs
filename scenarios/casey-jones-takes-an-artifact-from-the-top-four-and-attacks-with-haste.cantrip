@@ -1,0 +1,36 @@
+# Casey Jones, Jury-Rig Justiciar {1}{R}, 2/1 haste: "When Casey Jones enters, look at the top four cards of your library. You may
+# reveal an artifact card from among them and put it into your hand. Put the rest on the bottom ... random order." The top four
+# are Island, Mox Jet, Lightning Bolt and Sol Ring: Lightning Bolt is no artifact (refused), Bot1 takes Mox Jet. Casey has haste
+# and attacks the turn it enters.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Casey Jones, Jury-Rig Justiciar
+Island x4
+Island
+Mox Jet
+Lightning Bolt
+Sol Ring
+Island x10
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Casey Jones, Jury-Rig Justiciar.Cast
+! Bot1.Arrange(Lightning Bolt | Island; Mox Jet; Sol Ring)
+! Bot1.Arrange(Mox Jet; Sol Ring | Island; Lightning Bolt)
+Bot1.Arrange(Mox Jet | Island; Lightning Bolt; Sol Ring)
+Bot1.Attack(Casey Jones, Jury-Rig Justiciar > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Revealed = Mox Jet
+Bot1.Hand = Island; Island; Island; Island; Mox Jet
+Bot1.Library.Count = 13
+Bot2.Life = 18

@@ -1,0 +1,30 @@
+# Casey Jones, Jury-Rig Justiciar: "You may reveal an artifact card from among them" - with none in the top four (Sol Ring is
+# fifth) Bot1 still looks at the four and they all go to the bottom, so the hand does not grow.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Casey Jones, Jury-Rig Justiciar
+Island x4
+Island
+Lightning Bolt
+Llanowar Elves
+Duress
+Sol Ring
+Island x10
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Casey Jones, Jury-Rig Justiciar.Cast
+Bot1.Arrange( | Island; Lightning Bolt; Llanowar Elves; Duress)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 15

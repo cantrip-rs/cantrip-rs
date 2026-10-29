@@ -1,0 +1,11 @@
+{
+  "name": "Casey Jones, Jury-Rig Justiciar",
+  "manaCost": "{1}{R}",
+  "type": "Legendary Creature — Human Berserker",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Haste\nWhen Casey Jones enters, look at the top four cards of your library. You may reveal an artifact card from among them and put it into your hand. Put the rest on the bottom of your library in a random order.",
+  "keywords": [
+    "Haste"
+  ]
+}
