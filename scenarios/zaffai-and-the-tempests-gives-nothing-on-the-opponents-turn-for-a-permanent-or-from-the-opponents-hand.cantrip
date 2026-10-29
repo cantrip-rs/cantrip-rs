@@ -1,0 +1,60 @@
+# Zaffai and the Tempests only lets its controller cast an instant or sorcery spell from their own hand during their own turn
+# (CR 118.9, 601.2). Bot1 casts it on turn 1 with every source tapped. On Bot2's turn 2 Bot1's Lightning Bolt has no free cast to use
+# and cannot be paid. On turn 3, with the permission unspent, Delver of Secrets (a creature, {U}) is refused too, and so is Bot2's own
+# Lightning Bolt in Bot1's upkeep: it is not Bot1's hand. Bot1's Bolt is still free once it is a legal one - the permission was never
+# used up by the refusals.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Sol Ring
+Zaffai and the Tempests
+Lightning Bolt
+Delver of Secrets
+Island x20
+
+[Bot2 Deck]
+Lightning Bolt
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Zaffai and the Tempests.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+[T3 Bot1.Upkeep]
+! Bot2.Hand.Lightning Bolt.Cast(Bot1; Mana: short)
+[T3 Bot1.Main1]
+! Bot1.Hand.Delver of Secrets.Cast(Mana: short)
+! Bot1.Hand.Delver of Secrets.Cast(Ability: Once during each of your turns)
+Bot1.Hand.Lightning Bolt.Cast(Bot2; Ability: Once during each of your turns)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 20
+Bot1.Hand = Delver of Secrets

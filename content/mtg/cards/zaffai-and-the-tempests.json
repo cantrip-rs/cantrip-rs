@@ -1,0 +1,8 @@
+{
+  "name": "Zaffai and the Tempests",
+  "manaCost": "{5}{U}{R}",
+  "type": "Legendary Creature — Human Bard Sorcerer",
+  "power": 5,
+  "toughness": 7,
+  "oracleText": "Once during each of your turns, you may cast an instant or sorcery spell from your hand without paying its mana cost."
+}

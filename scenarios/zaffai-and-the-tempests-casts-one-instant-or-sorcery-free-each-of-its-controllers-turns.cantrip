@@ -1,0 +1,63 @@
+# Zaffai and the Tempests: "Once during each of your turns, you may cast an instant or sorcery spell from your hand without paying its
+# mana cost." (CR 118.9, 601.2) Bot1 casts it on turn 1 (Black Lotus, Mox Ruby, Mox Pearl and Sol Ring, paid for by Mox Jet), tapping
+# every blue source. On turn 3 the first spell, Lightning Bolt, is cast from hand with nothing paid and deals 3; the second,
+# Ancestral Recall, is refused (it costs {U} and the permission is used up for the turn). On turn 5 the permission is back: the Recall is
+# cast free and draws three.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Sol Ring
+Zaffai and the Tempests
+Ancestral Recall
+Lightning Bolt
+Island
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Zaffai and the Tempests.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot2; Ability: Once during each of your turns)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+! Bot1.Hand.Ancestral Recall.Cast(Bot1; Ability: Once during each of your turns)
+! Bot1.Hand.Ancestral Recall.Cast(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Ancestral Recall.Cast(Bot1; Ability: Once during each of your turns)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand.Count = 4
+Bot1.Graveyard = Ancestral Recall; Lightning Bolt; Black Lotus
