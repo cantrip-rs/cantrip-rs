@@ -1,0 +1,36 @@
+# Goldmeadow Nomad: "{W}, Exile this card from your graveyard: Create a 1/1 green and white Kithkin creature token. Activate
+# only as a sorcery." Bot2 bolts Bot1's Nomad (1/2), and Bot1 later activates it from the graveyard: refused in its upkeep
+# (sorcery timing, CR 307.5), then in its main phase the {W} (Mox Pearl) is paid exactly, the card is exiled as a cost and one
+# Kithkin token is created.
+
+[Bot1 Deck]
+Goldmeadow Nomad
+Mox Pearl x2
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Goldmeadow Nomad.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goldmeadow Nomad)
+[T3 Bot1.Upkeep]
+? Bot1.Graveyard = Goldmeadow Nomad
+! Bot1.Graveyard.Goldmeadow Nomad.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Graveyard.Goldmeadow Nomad.Activate
+? Bot1.Mana =
+
+[Expect]
+Exile.Count = 1
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Kithkin Token

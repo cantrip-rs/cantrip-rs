@@ -1,0 +1,8 @@
+{
+  "name": "Goldmeadow Nomad",
+  "manaCost": "{W}",
+  "type": "Creature — Kithkin Scout",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{W}, Exile this card from your graveyard: Create a 1/1 green and white Kithkin creature token. Activate only as a sorcery."
+}
