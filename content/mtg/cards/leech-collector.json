@@ -1,0 +1,14 @@
+{
+  "name": "Leech Collector",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Human Warlock",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever you gain life for the first time each turn, this creature becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "prepare": {
+    "name": "Bloodletting",
+    "manaCost": "{B}",
+    "type": "Sorcery",
+    "oracleText": "Each opponent loses 2 life."
+  }
+}

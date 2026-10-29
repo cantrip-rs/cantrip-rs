@@ -1,0 +1,34 @@
+# Leech Collector: gaining 0 life is not gaining life (CR 119.9). Swords to Plowshares on Bot1's own Ornithopter (power 0) gains its controller 0 life, so the
+# Leech Collector does not become prepared.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Leech Collector
+Ornithopter
+Swords to Plowshares
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Leech Collector.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Ornithopter
+Bot1.Life = 20
+Bot1.Battlefield.Leech Collector.Prepared = (absent)

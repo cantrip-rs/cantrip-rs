@@ -1,0 +1,36 @@
+# Leech Collector: any life gain counts, even 1. Postmortem Professor attacking gains Bot1 exactly 1 life with its trigger, and the Leech Collector
+# becomes prepared.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Pearl
+Leech Collector
+Postmortem Professor
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Leech Collector.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Postmortem Professor.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Postmortem Professor > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+
+[Expect]
+Bot1.Battlefield.Leech Collector.Prepared = true
