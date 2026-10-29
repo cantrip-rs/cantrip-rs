@@ -1,0 +1,49 @@
+# Molten Note: cast for {R}{W} on turn 3 (2 damage), then on turn 5 flashed back for {6}{R}{W} - X is 0 and the mana spent is
+# all eight (two Black Lotus for the generic, Mox Ruby, Mox Pearl): 8 damage to the 10/10 Gigantosaurus. Flashback exiles it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Molten Note
+Black Lotus
+Black Lotus
+Island x2
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Gigantosaurus
+Forest x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Gigantosaurus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Molten Note.Cast(Gigantosaurus; X: 0)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Gigantosaurus.Damage = 2
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Molten Note.Cast(Gigantosaurus; Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Gigantosaurus.Damage = 8
+Exile = Molten Note
+Bot1.Graveyard.Count = 2
