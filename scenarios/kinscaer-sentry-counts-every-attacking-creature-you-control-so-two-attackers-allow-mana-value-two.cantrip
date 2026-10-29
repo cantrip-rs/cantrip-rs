@@ -1,0 +1,36 @@
+# Kinscaer Sentry attacking beside Ornithopter: X is 2, the number of attacking creatures Bot1 controls. Hill Giant (mana value 4) is
+# refused and Grizzly Bears (2) is put onto the battlefield tapped and attacking Bot2. The Sentry deals 2 (Bot1 gains 2), Ornithopter
+# 0, the Bears 2: Bot2 20 - 4 = 16, Bot1 22.
+
+[Bot1 Deck]
+Mox Pearl x2
+Ornithopter
+Kinscaer Sentry
+Grizzly Bears
+Hill Giant
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Kinscaer Sentry.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kinscaer Sentry; Ornithopter)
+! Bot1.Choose(Hill Giant)
+Bot1.Choose(Grizzly Bears)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot1.Hand = Hill Giant; Island; Island
+Bot1.Life = 22
+Bot2.Life = 16

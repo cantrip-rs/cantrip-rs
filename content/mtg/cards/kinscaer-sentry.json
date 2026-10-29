@@ -1,0 +1,12 @@
+{
+  "name": "Kinscaer Sentry",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Kithkin Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "First strike, lifelink\nWhenever this creature attacks, you may put a creature card with mana value X or less from your hand onto the battlefield tapped and attacking, where X is the number of attacking creatures you control.",
+  "keywords": [
+    "FirstStrike",
+    "Lifelink"
+  ]
+}
