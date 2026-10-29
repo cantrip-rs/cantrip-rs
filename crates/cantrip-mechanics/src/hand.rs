@@ -71,6 +71,19 @@ pub fn discard_chosen_nonland_from_revealed_hand(g: &mut dyn Game, item: &StackI
     discard_chosen_from_revealed_hand_of_kind(g, item, player, Purpose::TakeFromHand, "nonland", |q, c| !q.chars(c).is(CardType::Land))
 }
 
+/// "[Target opponent] reveals their hand. You choose a nonland permanent card from it. That player discards that card." (CR 701.9a,
+/// 110.4a): only an artifact, battle, creature, enchantment or planeswalker card may be taken, and none being there, no choice is
+/// asked (CR 608.2d). Solve for Disappointment and Auntie's Sentence print it.
+pub fn discard_chosen_nonland_permanent_from_revealed_hand(
+    g: &mut dyn Game,
+    item: &StackItem,
+    player: PlayerId,
+) -> Result<Vec<ObjectId>, Suspend> {
+    discard_chosen_from_revealed_hand_of_kind(g, item, player, Purpose::TakeFromHand, "nonland permanent", |q, card| {
+        crate::targets::is_nonland_permanent_card(&q.chars(card))
+    })
+}
+
 /// "Look at target player's hand. You may choose a card from it [that passes `eligible`]": the ability's controller sees the hand
 /// (it is shown to them alone, not revealed) and may choose one eligible card. Looking is part of the ability, so the choice is
 /// asked of any hand that is not empty, even when nothing in it is eligible; an empty hand is nothing to look at. The card chosen

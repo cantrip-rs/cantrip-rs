@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::hand::discard_chosen_from_revealed_hand_of_kind;
+use cantrip_mechanics::hand::discard_chosen_nonland_permanent_from_revealed_hand;
 use cantrip_mechanics::{empower, targets};
 use cantrip_oracle as oracle;
 
@@ -9,14 +9,7 @@ use cantrip_oracle as oracle;
 /// (CR 608.2d). An opponent who is no longer a legal target stops the whole spell, empower included (CR 608.2b).
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(opponent) = targets::player(g, item, 0) else { return Ok(()) };
-    discard_chosen_from_revealed_hand_of_kind(
-        g,
-        item,
-        opponent,
-        Purpose::TakeFromHand,
-        "nonland permanent",
-        |q, card| targets::is_nonland_permanent_card(&q.chars(card)),
-    )?;
+    discard_chosen_nonland_permanent_from_revealed_hand(g, item, opponent)?;
     // "Empower Jace 1" is the last instruction, so it happens after the discard (CR 608.2c).
     empower::jace(g, item.controller, item.object, 1)
 }
