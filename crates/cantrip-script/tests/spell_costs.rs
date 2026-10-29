@@ -62,6 +62,13 @@ fn noncreature(q: &dyn Query, spell: ObjectId) -> bool {
     !q.chars(spell).is(CardType::Creature)
 }
 
+fn twice_this_turn(g: &mut dyn Rules, item: &StackItem) -> Result<(), Suspend> {
+    g.spells_cost_this_turn(item, item.controller, 0);
+    g.end_sentence();
+    g.spells_cost_this_turn(item, item.controller, 0);
+    Ok(())
+}
+
 /// An instant for {0}: "The next noncreature spell you cast this turn costs {1} less to cast."
 static NEXT: CardDef = CardDef {
     name: "Probe Next",
@@ -108,9 +115,18 @@ static BEAST: CardDef =
 /// A land with no mana ability: nothing here is paid for with mana.
 static FILLER: CardDef = CardDef { name: "Filler", has_cost: false, types: TypeSet::of(&[CardType::Land]), ..CardDef::BLANK };
 
+/// An instant for {0} that makes the effect of Probe Next twice, as two triggers of one ability resolving in a turn do.
+static TWICE: CardDef = CardDef {
+    name: "Probe Twice",
+    types: TypeSet::of(&[CardType::Instant]),
+    spell: spell(&[], twice_this_turn),
+    lasting_cost_changes: &[LastingCostChange { text: "The next noncreature spell you cast this turn costs {1} less to cast.", change: next_noncreature_less, next: Some(noncreature) }],
+    ..CardDef::BLANK
+};
+
 fn table() -> &'static CardTable {
     static TABLE: OnceLock<CardTable> = OnceLock::new();
-    TABLE.get_or_init(|| CardTable::new([&WARS, &TAX, &NEXT, &HEART, &TRINKET, &BAUBLE, &ROCK, &BEAST, &FILLER]))
+    TABLE.get_or_init(|| CardTable::new([&WARS, &TAX, &NEXT, &TWICE, &HEART, &TRINKET, &BAUBLE, &ROCK, &BEAST, &FILLER]))
 }
 
 /// A two-player game, Bot1 first, each hand the named cards, then Fillers.
@@ -287,4 +303,17 @@ fn a_next_spell_cost_change_not_used_ends_with_the_turn() {
     let options = main_phase(&mut game, 3);
     assert_eq!(lasting(&game), 0);
     assert!(!offered(&game, &options, "Probe Rock"));
+}
+
+/// CR 611.2a, 601.2f: two "next noncreature spell" effects made in one turn both change the first noncreature spell and both
+/// are used up by it; the second noncreature spell has neither.
+#[test]
+fn two_next_spell_cost_changes_are_both_used_up_by_the_same_spell() {
+    let mut game = deal(&["Probe Twice", "Probe Rock", "Probe Rock"], &[]);
+    let options = main_phase(&mut game, 1);
+    let options = cast(&mut game, &options, "Probe Twice");
+    assert_eq!(lasting(&game), 2);
+    let options = cast(&mut game, &options, "Probe Rock");
+    assert_eq!(lasting(&game), 0, "the first noncreature spell used up both");
+    assert!(!offered(&game, &options, "Probe Rock"), "the second pays its {{1}}");
 }
