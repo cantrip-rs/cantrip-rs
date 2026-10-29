@@ -2617,6 +2617,7 @@ mod tests {
         all.push(ManaRestriction::mana_value_at_least(4));
         all.push(ManaRestriction::mana_value_at_least_or_x(5));
         all.push(ManaRestriction::mana_value_at_least(12));
+        all.push(ManaRestriction::ARTIFACT_SPELLS_OR_ANY_ABILITY);
         all.extend(ManaRestriction::NAMED.map(|(r, _)| r));
         for r in all {
             let name = r.name();
@@ -2678,6 +2679,13 @@ mod tests {
         assert!(!smokebraider.may_pay(&ability(creature, elemental(), false)));
         let flamebraider = ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Elemental).or_abilities());
         assert!(flamebraider.may_pay(&ability(creature, elemental(), false)));
+
+        // Purple Dragon Punks: an artifact spell or any ability, whatever its source - not a nonartifact spell (CR 106.6).
+        let punks = ManaRestriction::ARTIFACT_SPELLS_OR_ANY_ABILITY;
+        assert!(punks.may_pay(&spell(artifact)) && !punks.may_pay(&spell(creature)));
+        assert!(punks.may_pay(&ability(creature, elemental(), false)) && punks.may_pay(&ability(TypeSet::NONE, SubtypeSet::NONE, true)));
+        assert_eq!(punks.parts(), &[ManaRestriction::ARTIFACT_SPELLS, ManaRestriction::ABILITIES]);
+        assert!(punks.is_known() && !ManaRestriction::AnyOf(&[ManaRestriction::ABILITIES]).is_known());
     }
 }
 

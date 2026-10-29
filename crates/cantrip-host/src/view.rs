@@ -1530,6 +1530,18 @@ fn protection_words(c: &Chars, names: &[String]) -> Option<String> {
 mod tests {
     use super::*;
 
+    /// A restriction the wire has a word for reads back as it was sent, a union of restrictions (`AnyOf`) among them: Purple
+    /// Dragon Punks' mana is the same restriction when the client answers with it (CR 106.6).
+    #[test]
+    fn a_mana_restriction_reads_back_from_the_wire_as_it_was_sent() {
+        for restriction in ManaRestriction::NAMED.into_iter().map(|(r, _)| r).chain(ManaRestriction::ANY_OF.into_iter().map(ManaRestriction::AnyOf)) {
+            let (filter, effect, subtypes, mana_value) = restriction_view(restriction);
+            assert_eq!(restriction_of(filter, effect, &subtypes, mana_value), Some(restriction), "{}", restriction.name());
+        }
+        let (filter, ..) = restriction_view(ManaRestriction::ARTIFACT_SPELLS_OR_ANY_ABILITY);
+        assert_eq!(filter, ManaSpendFilterView::ArtifactSpellsOrAnyAbility);
+    }
+
     /// A power and toughness printed as stars are not a number on the printed card: the goyfs' sizes are their abilities'
     /// (CR 208.2a), and what the stars are worth once that is lost is the ability's (`StaticDef::lost_pt`), so the card as read
     /// in a deck builder or a booster shows none.
