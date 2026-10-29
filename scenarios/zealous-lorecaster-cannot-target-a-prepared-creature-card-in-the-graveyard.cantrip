@@ -1,0 +1,56 @@
+# A preparation card is a creature card in every zone and has only its normal characteristics there (CR 722.4): Hallway Heckler in
+# Bot1's graveyard, killed by Bot2's Lightning Bolt, is not an instant or sorcery card, whatever its prepare spell is (ruling
+# 2026-03-20). Zealous Lorecaster's trigger has no legal target and is removed from the stack (CR 603.3d), so the graveyard is as it was.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mountain
+Mountain
+Hallway Heckler
+Zealous Lorecaster
+Mountain x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hallway Heckler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Hallway Heckler)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Hallway Heckler
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Zealous Lorecaster.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Graveyard = Hallway Heckler
+Bot1.Battlefield.Zealous Lorecaster.Power = 4
