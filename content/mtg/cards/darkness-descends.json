@@ -1,0 +1,6 @@
+{
+  "name": "Darkness Descends",
+  "manaCost": "{2}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Put two -1/-1 counters on each creature."
+}
