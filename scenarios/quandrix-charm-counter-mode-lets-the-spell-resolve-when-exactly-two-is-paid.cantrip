@@ -1,0 +1,40 @@
+# Quandrix Charm, mode one: Bot2 pays exactly {2} with its two untapped Moxen (CR 118.12), so the Ornithopter is not countered
+# and both Moxen are tapped by the payment.
+
+[Bot1 Deck]
+Quandrix Charm
+Mox Emerald
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Jet
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Quandrix Charm.Cast
+Bot1.Modes(Counter target spell)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.PayCost
+
+[Expect]
+Bot2.Battlefield = Mox Jet; Mox Ruby; Ornithopter
+Bot2.Battlefield.Mox Jet.Tapped = true
+Bot2.Battlefield.Mox Ruby.Tapped = true
+Bot2.Graveyard.Count = 0

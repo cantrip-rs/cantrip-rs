@@ -1,0 +1,41 @@
+# Quandrix Charm, mode two: destroy target enchantment (CR 701.8). Bot2's Authority of the Consuls is destroyed; the Ornithopter
+# (a creature, not an enchantment) is refused as a target.
+
+[Bot1 Deck]
+Quandrix Charm
+Mox Emerald
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Authority of the Consuls
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Authority of the Consuls.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Quandrix Charm.Cast
+Bot1.Modes(Destroy target enchantment)
+! Bot1.Target(Ornithopter)
+Bot1.Target(Authority of the Consuls)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Authority of the Consuls
+Bot2.Battlefield = Mox Pearl; Ornithopter
