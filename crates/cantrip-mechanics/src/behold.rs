@@ -34,6 +34,12 @@ pub fn dragon(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
     q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Dragon))
 }
 
+/// A Goblin, read through the words of the card whose text says it (CR 612): a permanent or a card in a hand. Mudbutton
+/// Cursetosser and Champion of the Weird behold one.
+pub fn goblin(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
+    q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Goblin))
+}
+
 /// A Jace, a permanent or a card in a hand: a planeswalker type is not a word a text-changing effect changes (CR 612.1,
 /// 205.3j). Theorist's Sanctum and Countersculpt behold one.
 pub fn jace(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
