@@ -1,0 +1,63 @@
+# Killian's Confidence: "one or more creatures ... deal combat damage to a player" is one trigger for each player damaged (CR 603.2c),
+# not one for each creature. Inkmage and Snooping Page both hit Bot2 on turn 5, and with Page's own draw trigger there are exactly two
+# items on the stack, not three. Bot1 pays once and gets the Confidence back.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Imperious Inkmage
+Snooping Page
+Killian's Confidence
+Plains
+Plains x3
+Plains x4
+Island
+Plains x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Imperious Inkmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Snooping Page.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Killian's Confidence.Cast(Bot1.Battlefield.Imperious Inkmage)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Imperious Inkmage > Bot2; Snooping Page > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Triggers(Killian's Confidence; Snooping Page)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+
+[Expect]
+Bot2.Life = 14
+Bot1.Graveyard.Count = 0

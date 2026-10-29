@@ -1,0 +1,48 @@
+# Killian's Confidence: Inkmage gets +1/+1 (4/4) and Bot1 draws. In the graveyard it triggers when a creature Bot1 controls deals combat
+# damage to a player (CR 113.6b): Bot1 pays {W/B} with Plains and returns it to hand. Bot2 takes 4.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Imperious Inkmage
+Killian's Confidence
+Plains x2
+Plains x3
+Island
+Plains x11
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Imperious Inkmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Killian's Confidence.Cast(Bot1.Battlefield.Imperious Inkmage)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Imperious Inkmage.Power = 4
+? Bot1.Battlefield.Imperious Inkmage.Toughness = 4
+Bot1.Attack(Imperious Inkmage > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+
+[Expect]
+Bot2.Life = 16
+Bot1.Hand = Plains; Plains; Plains; Plains; Killian's Confidence
+Bot1.Graveyard.Count = 0
