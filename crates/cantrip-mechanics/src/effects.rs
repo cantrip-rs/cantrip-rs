@@ -632,6 +632,13 @@ pub fn next_spell_cant_be_countered(g: &mut dyn Game, item: &StackItem) -> Resul
     Ok(())
 }
 
+/// "Destroy up to N target [things]" (CR 701.8, 608.2b, 101.4): every object target that is still legal, destroyed together,
+/// so none is gone before another is destroyed. Force of Vigor and Armaggon, Future Shark print it.
+pub fn destroy_each_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.destroy_all(&crate::targets::legal_objects(g, item));
+    Ok(())
+}
+
 /// "Destroy target [thing]" (CR 701.8): the ability's first target.
 pub fn destroy_first_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     crate::destroy_target(g, item, 0);
