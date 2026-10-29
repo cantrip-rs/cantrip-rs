@@ -1,0 +1,39 @@
+# Bark of Doran gives +0/+1, and its second ability applies only "as long as equipped creature's toughness is greater than its
+# power". Accorder Paladin is a 3/1, so 3/2 equipped: toughness is not greater than power and it still assigns its power, 3 combat
+# damage, not 2 (CR 510.1a). Black Lotus (white), Mox Ruby and Mox Pearl pay {1}{W}, {1}{W} and equip {1} on turn 1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Accorder Paladin
+Bark of Doran
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Accorder Paladin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bark of Doran.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Bark of Doran.Activate(Bot1.Battlefield.Accorder Paladin)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Accorder Paladin.Power = 3
+? Bot1.Battlefield.Accorder Paladin.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Attack(Accorder Paladin > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17

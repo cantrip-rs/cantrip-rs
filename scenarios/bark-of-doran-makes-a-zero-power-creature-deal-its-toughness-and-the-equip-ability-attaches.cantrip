@@ -1,0 +1,33 @@
+# Bark of Doran: "Equipped creature gets +0/+1. As long as equipped creature's toughness is greater than its power, it assigns
+# combat damage equal to its toughness rather than its power. Equip {1}". Bot1 pays {1}{W} for it and {1} to equip it on the
+# Ornithopter (0/2, so 0/3) with Black Lotus; on turn 3 the Ornithopter attacks and deals 3, its toughness (CR 510.1a).
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Bark of Doran
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Bark of Doran.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Bark of Doran.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Bark of Doran.AttachedTo = Ornithopter
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17

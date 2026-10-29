@@ -1,0 +1,6 @@
+{
+  "name": "Bark of Doran",
+  "manaCost": "{1}{W}",
+  "type": "Artifact — Equipment",
+  "oracleText": "Equipped creature gets +0/+1.\nAs long as equipped creature's toughness is greater than its power, it assigns combat damage equal to its toughness rather than its power.\nEquip {1} ({1}: Attach to target creature you control. Equip only as a sorcery.)"
+}
