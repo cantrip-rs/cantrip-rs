@@ -1,0 +1,46 @@
+# Root Manipulation: the Ornithopter on the battlefield as it resolves gets +2/+2 (power 2, toughness 4), menace and "Whenever
+# this creature attacks, you gain 1 life" until end of turn - it attacks for 2 (Bot2 18) and Bot1 gains 1 (21). A Memnite cast
+# afterwards gets none of it: still 1/1 with no keywords (CR 611.2c, 613.1f).
+
+[Dice]
+1; 1; 1; 1; 1; 1
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Root Manipulation
+Ornithopter
+Memnite
+Island
+Island x25
+[Bot2 Deck]
+Island x32
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Root Manipulation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Attack(Ornithopter > Bot2)
+[Bot1.Main2]
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 18
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+Bot1.Battlefield.Memnite.Power = 1
