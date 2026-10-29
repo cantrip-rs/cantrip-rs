@@ -1,0 +1,39 @@
+# Liminal Hold: "exile up to one target nonland permanent an opponent controls": two targets are refused. Bot2 controls a Mox Ruby and
+# a Mox Jet; Bot1 targets only the Mox Ruby, which is exiled, and Bot1 gains 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Liminal Hold
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Liminal Hold.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Mox Ruby; Bot2.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Jet
+Bot1.Life = 22

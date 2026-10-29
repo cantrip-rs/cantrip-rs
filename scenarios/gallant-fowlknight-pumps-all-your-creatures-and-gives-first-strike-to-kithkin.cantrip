@@ -48,5 +48,6 @@ Bot2.Pass
 
 [Expect]
 Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 2
 Bot1.Battlefield.Ornithopter.Keywords = Flying
 Bot2.Battlefield.Ornithopter.Power = 0

@@ -1,0 +1,47 @@
+# Meanders Guide: "you may tap another untapped Merfolk you control" is one Merfolk, never two. Bot1 has two Merfolk of the Pearl
+# Trident besides Meanders Guide; attacking on turn 3, naming both is refused and it taps one.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Meanders Guide
+Merfolk of the Pearl Trident
+Merfolk of the Pearl Trident
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Meanders Guide.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Meanders Guide)
+! Bot1.Choose(Merfolk of the Pearl Trident#1; Merfolk of the Pearl Trident#2)
+Bot1.Choose(Merfolk of the Pearl Trident#1)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Merfolk of the Pearl Trident#1.Tapped = true
+Bot1.Battlefield.Merfolk of the Pearl Trident#2.Tapped = false

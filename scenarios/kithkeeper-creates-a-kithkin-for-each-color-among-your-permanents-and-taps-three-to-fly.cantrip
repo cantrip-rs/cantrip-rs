@@ -51,4 +51,5 @@ Bot1.Battlefield.Kithkin Token#2.Tapped = false
 Bot1.Battlefield.Llanowar Elves.Tapped = true
 Bot1.Battlefield.Kithkeeper.Tapped = true
 Bot1.Battlefield.Kithkeeper.Power = 6
+Bot1.Battlefield.Kithkeeper.Toughness = 3
 Bot1.Battlefield.Kithkeeper.Keywords = Flying

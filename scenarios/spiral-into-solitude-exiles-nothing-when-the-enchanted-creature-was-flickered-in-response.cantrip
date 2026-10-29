@@ -1,0 +1,58 @@
+# Spiral into Solitude's ability exiles "enchanted creature" as the Aura was when it was sacrificed (CR 608.2h), but a creature
+# that left and returned is a new object (CR 400.7). Bot1 pays for the ability on Bot2's Savannah Lions; in response Bot2 pays {W}
+# (Mox Pearl) for Ephemerate on it. The new Lions is not exiled.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Ruby
+Serra Angel
+Spiral into Solitude
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Mox Pearl
+Ephemerate
+Plains x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Serra Angel.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Spiral into Solitude.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Spiral into Solitude.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Ephemerate.Cast(Bot2.Battlefield.Savannah Lions)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Plains; Mox Pearl; Savannah Lions

@@ -1,0 +1,51 @@
+# "{1}{W}, Blight 1, Sacrifice this Aura: Exile enchanted creature." Blight 1 puts exactly one -1/-1 counter on a creature Bot1
+# controls: its Serra Angel (4/4) ends with one counter, a 3/3, while Bot2's Savannah Lions is exiled.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Ruby
+Serra Angel
+Spiral into Solitude
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Serra Angel.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Spiral into Solitude.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Spiral into Solitude.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Plains
+Bot1.Battlefield.Serra Angel.Counters.MinusOneMinusOne = 1
+Bot1.Battlefield.Serra Angel.Power = 3

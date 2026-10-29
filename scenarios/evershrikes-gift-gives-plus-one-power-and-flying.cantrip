@@ -34,3 +34,4 @@ Bot1.Attack(Savannah Lions > Bot2)
 [Expect]
 Bot2.Life = 17
 Bot1.Battlefield.Savannah Lions.Power = 3
+Bot1.Battlefield.Savannah Lions.Toughness = 1

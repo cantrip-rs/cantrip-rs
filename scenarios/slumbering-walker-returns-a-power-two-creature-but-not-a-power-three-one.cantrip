@@ -1,0 +1,57 @@
+# Slumbering Walker's reflexive target is a creature card "with power 2 or less" in your graveyard (CR 208.1), the boundary being
+# included: Bot2's Wrath of God puts Bot1's Accorder Paladin (power 3) and Bronze Sable (power 2) in its graveyard, and removing a
+# counter on turn 7 returns the Sable, the only legal target, while the Paladin stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Bronze Sable
+Accorder Paladin
+Mox Pearl
+Slumbering Walker
+Plains x13
+
+[Bot2 Deck]
+Plains
+Black Lotus
+Wrath of God
+Plains x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Bronze Sable.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Accorder Paladin.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Wrath of God.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Slumbering Walker.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.End]
+Bot1.Accept
+Bot1.RemoveCounters(Slumbering Walker: 1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Bronze Sable.Power = 2
+Bot1.Graveyard = Accorder Paladin; Black Lotus

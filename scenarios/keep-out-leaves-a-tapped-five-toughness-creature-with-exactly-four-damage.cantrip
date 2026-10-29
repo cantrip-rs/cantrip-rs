@@ -1,0 +1,34 @@
+# Keep Out's first mode deals exactly 4 damage: Bot2's Aegis Turtle (0/5) attacks on turn 4 and is tapped, and Keep Out leaves it
+# alive with 4 damage marked, not 3 or 5.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Keep Out
+Island x17
+
+[Bot2 Deck]
+Aegis Turtle
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Aegis Turtle > Bot1)
+[T4 Bot2.End]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Keep Out.Cast
+Bot1.Modes(Keep Out deals 4 damage)
+Bot1.Target(Bot2.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Aegis Turtle.Damage = 4

@@ -1,0 +1,46 @@
+# Spiral into Solitude on Bot2's Savannah Lions: "enchanted creature can't block" (CR 509.1b) only for that creature. Bot2 also has an Ornithopter,
+# which can block: blocking with the Lions is refused, and Bot2's Ornithopter blocks Bot1's Lions (no damage to Bot2).
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Savannah Lions
+Spiral into Solitude
+Mox Pearl
+Plains
+Plains x14
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Ornithopter
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Spiral into Solitude.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Savannah Lions > Bot2)
+! Bot2.Block(Savannah Lions > Savannah Lions)
+Bot2.Block(Ornithopter > Savannah Lions)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20

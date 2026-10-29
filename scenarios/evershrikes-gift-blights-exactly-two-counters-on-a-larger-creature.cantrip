@@ -1,0 +1,54 @@
+# "{1}{W}, Blight 2: Return this card from your graveyard to your hand." Blight 2 puts exactly two -1/-1 counters on a creature
+# Bot1 controls: its Aegis Turtle (0/5) ends with two, a -2/3, and the Gift is back in hand. Bot2's Lightning Bolt had put the
+# Gift in the graveyard by killing the Lions it enchanted.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Savannah Lions
+Evershrike's Gift
+Aegis Turtle
+Mox Pearl
+Mox Sapphire
+Plains
+Plains x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: W)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Hand.Evershrike's Gift.Cast(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Savannah Lions)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Graveyard.Evershrike's Gift.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Evershrike's Gift
+Bot1.Battlefield.Aegis Turtle.Counters.MinusOneMinusOne = 2
+Bot1.Battlefield.Aegis Turtle.Toughness = 3

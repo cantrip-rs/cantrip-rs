@@ -1,0 +1,45 @@
+# Crib Swap exiles, it does not destroy: Bot1 aims it at Bot2's Ornithopter and Bot2 responds with Valorous Stance (Mox Pearl and
+# Mox Ruby), giving it indestructible. The Ornithopter is exiled all the same and Bot2, its controller, gets the Shapeshifter.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Crib Swap
+Island x16
+
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Ornithopter
+Valorous Stance
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Crib Swap.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Valorous Stance.Cast
+Bot2.Modes(Target creature gains indestructible)
+Bot2.Target(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Pearl; Mox Ruby; Shapeshifter Token
+Bot2.Exile.Ornithopter.Toughness = 2

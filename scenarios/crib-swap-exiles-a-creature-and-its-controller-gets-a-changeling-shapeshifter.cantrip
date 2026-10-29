@@ -31,5 +31,7 @@ Bot2.Pass
 [Expect]
 Bot2.Battlefield = Shapeshifter Token
 Bot2.Battlefield.Shapeshifter Token.Keywords = Changeling
+Bot2.Battlefield.Shapeshifter Token.Power = 1
+Bot2.Battlefield.Shapeshifter Token.Toughness = 1
 Bot2.Exile.Ornithopter.Toughness = 2
 Bot1.Graveyard = Crib Swap
