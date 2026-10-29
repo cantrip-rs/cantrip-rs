@@ -1323,3 +1323,18 @@ pub fn plus_one_counter_on_target(g: &mut dyn Game, item: &StackItem) -> Result<
     g.add_counters(object, CounterKind::PlusOne, 1);
     Ok(())
 }
+
+/// "You may cast [the target card] from your graveyard without paying its mana cost. If that spell would be put into your
+/// graveyard, exile it instead." The cast is part of the resolution, ignoring timing (CR 608.2g); an {X} in the cost is 0
+/// (CR 107.3b, the rulings). A cast that cannot be completed is given up (CR 733.1). Dreadhorde Arcanist and The Dawning
+/// Archaic print it.
+pub fn may_cast_first_target_free_exiling_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(card) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    if !g.could_cast_during_resolution(card) || !ask_may(g, item.controller, item.object, Purpose::Cast)? {
+        return Ok(());
+    }
+    let ways = g.cast_ways_during_resolution(card);
+    let way = crate::choose::cast_way(g, item.controller, card, ways)?.map(|w| w.way);
+    g.cast_during_resolution_as(card, CastTerms { instead: Some(ManaCost::ZERO), exile_instead: ExileInstead::Spell, way, ..CastTerms::default() })?;
+    Ok(())
+}

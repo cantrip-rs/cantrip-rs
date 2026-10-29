@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{choose, effects, targets, triggers};
+use cantrip_mechanics::{effects, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Target instant or sorcery card with mana value less than or equal to this creature's power from your graveyard"
@@ -11,22 +11,8 @@ fn instant_or_sorcery_up_to_its_power(q: &dyn Query, asker: &Asker, t: Target) -
         .is_ok_and(|power| targets::card_in_your_graveyard_with_mana_value_at_most(q, asker, t, &[CardType::Instant, CardType::Sorcery], power))
 }
 
-/// "You may cast [it] from your graveyard without paying its mana cost. If that spell would be put into your graveyard,
-/// exile it instead." The cast is part of the resolution, ignoring timing (CR 608.2g); an {X} in the cost is 0
-/// (CR 107.3b, the rulings). A cast that cannot be completed is given up (CR 733.1).
-fn cast_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(card) = targets::object(g, item, 0) else { return Ok(()) };
-    if !g.could_cast_during_resolution(card) || !effects::ask_may(g, item.controller, item.object, Purpose::Cast)? {
-        return Ok(());
-    }
-    let ways = g.cast_ways_during_resolution(card);
-    let way = choose::cast_way(g, item.controller, card, ways)?.map(|w| w.way);
-    g.cast_during_resolution_as(card, CastTerms { instead: Some(ManaCost::ZERO), exile_instead: ExileInstead::Spell, way, ..CastTerms::default() })?;
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(triggers::THIS_ATTACKS, cast_it, "Whenever this creature attacks, you may cast target instant or sorcery card with mana value less than or equal to this creature's power from your graveyard without paying its mana cost. If that spell would be put into your graveyard, exile it instead.")
+    abilities: &[triggered(triggers::THIS_ATTACKS, effects::may_cast_first_target_free_exiling_it, "Whenever this creature attacks, you may cast target instant or sorcery card with mana value less than or equal to this creature's power from your graveyard without paying its mana cost. If that spell would be put into your graveyard, exile it instead.")
         .targets(&[target(instant_or_sorcery_up_to_its_power)])],
     ..oracle::DREADHORDE_ARCANIST
 };
