@@ -305,6 +305,12 @@ pub fn have_double_strike_and_trample(_: &dyn LayerQuery, _: ObjectId, chars: &m
     chars.keywords = chars.keywords.with(Keyword::DoubleStrike).with(Keyword::Trample);
 }
 
+/// "... has double strike" (CR 702.4, layer 6) as a static ability's `StaticDef::apply`. Hard-Won Jitte's equipped creature and
+/// Fireshrieker's print it.
+pub fn have_double_strike(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    chars.keywords = chars.keywords.with(Keyword::DoubleStrike);
+}
+
 /// "If this card is in your opening hand, you may begin the game with it on the battlefield" (CR 103.6a), for `CardDef::opening_hand`:
 /// any player may, nothing else is required. The Leylines (Punishment and Resonance) and Leyline Axe print it.
 pub const BEGIN_ON_THE_BATTLEFIELD: OpeningHandAction = OpeningHandAction { condition: in_any_opening_hand, counter: None, exile_from_hand: 0 };
