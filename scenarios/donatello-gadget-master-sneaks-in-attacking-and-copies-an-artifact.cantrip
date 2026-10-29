@@ -1,0 +1,39 @@
+# Sneak {1}{U} (CR 702.190a) and the trigger: Bot1 attacks on turn 3 with an unblocked Ornithopter, and in the declare blockers step casts Donatello, Gadget Master for {1}{U} (Mox Sapphire,
+# Mox Jet), returning the Ornithopter. He enters tapped and attacking, deals 3 combat damage, and copies the Mox Sapphire (Ornithopter is in hand, so Sapphire and Jet are the artifacts).
+# Not offered in the main phase.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Ornithopter
+Donatello, Gadget Master
+Island x3
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Donatello, Gadget Master.Cast(Ability: Sneak)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Donatello, Gadget Master.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Target(Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Mox Sapphire#1.Types = Artifact
