@@ -1,0 +1,43 @@
+# Quandrix, the Proof ({4}{G}{U}, mana value 6): it has cascade itself (CR 702.85a) - exile cards from the top until a nonland card
+# that costs less: the Mountain (a land) is passed, Fractal Mascot (mana value 6, not less than 6) is exiled but not cast, and
+# Lightning Bolt (1) is cast free at Bot2. The Mountain and Mascot go to the bottom.
+
+[Bot1 Deck]
+Quandrix, the Proof
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Plains
+Plains
+Mountain
+Fractal Mascot
+Lightning Bolt
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Quandrix, the Proof.Cast
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Battlefield.Quandrix, the Proof.Keywords = Flying; Trample
+Bot1.Library = Island; Island; Island; Island; Island; Mountain; Fractal Mascot
+Exile.Count = 0
