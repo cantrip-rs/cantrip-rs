@@ -610,6 +610,22 @@ pub fn creature_with_mana_value_at_most<const N: u32>(q: &dyn Query, asker: &Ask
     creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.mana_value(id) <= N)
 }
 
+/// "Target artifact, enchantment, or creature with power `N` or greater" (CR 115.1): the power condition belongs to the
+/// creature alone, so an artifact or enchantment of any size (an artifact creature too) is a legal target. Exorcise and Make
+/// Your Move print it (4).
+pub fn artifact_enchantment_or_creature_with_power_at_least<const N: i16>(q: &dyn Query, _: &Asker, t: Target) -> bool {
+    let Target::Object(id) = t else { return false };
+    if !permanent(q, id) {
+        return false;
+    }
+    let c = q.chars(id);
+    c.is(CardType::Artifact) || c.is(CardType::Enchantment) || (c.is(CardType::Creature) && c.power.is_some_and(|p| p >= N))
+}
+
+/// "Target artifact, enchantment, or creature with power 4 or greater". Exorcise and Make Your Move print it.
+pub const ARTIFACT_ENCHANTMENT_OR_CREATURE_WITH_POWER_4_OR_GREATER: TargetSpec =
+    target(artifact_enchantment_or_creature_with_power_at_least::<4>);
+
 /// "Target noncreature, nonland permanent" (CR 115.1): a permanent that is neither, so no creature that is also a land.
 /// Archive Arbiter and Witherbloom Command (with a mana value limit) print it.
 pub fn noncreature_nonland_permanent(q: &dyn Query, asker: &Asker, t: Target) -> bool {

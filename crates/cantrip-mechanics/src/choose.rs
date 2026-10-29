@@ -135,25 +135,32 @@ pub fn card_from(g: &mut dyn Game, player: PlayerId, source: ObjectId, purpose: 
     Ok(cards_from(g, player, source, purpose, shown, eligible, 1, false)?.first().copied())
 }
 
-/// "An opponent chooses one of them": the spell or ability's controller says which opponent chooses - the effect names no
+/// "An opponent chooses `count` of them": the spell or ability's controller says which opponent chooses - the effect names no
 /// opponent of its own, so which one it is is a choice it leaves to them as it applies (CR 608.2d), asked only when they
-/// have more than one - and that opponent names one of `cards`, every one of which they see. The one card is taken without
-/// asking, and `None` comes back for no cards at all or for a controller with no opponent. Karn, Scion of Urza and
-/// Extrapolate the Impossible print it.
-pub fn opponent_chooses_one(g: &mut dyn Game, controller: PlayerId, source: ObjectId, cards: Vec<ObjectId>) -> Result<Option<ObjectId>, Suspend> {
-    if cards.len() <= 1 {
-        return Ok(cards.first().copied());
+/// have more than one - and that opponent names `count` of `cards` (all of them when there are no more), every one of which
+/// they see. Nothing is asked when the choice is forced, and nothing comes back for no cards at all or for a controller with
+/// no opponent. Turtles Forever (two) prints it; `opponent_chooses_one` is Karn, Scion of Urza's and Extrapolate the
+/// Impossible's.
+pub fn opponent_chooses(g: &mut dyn Game, controller: PlayerId, source: ObjectId, cards: Vec<ObjectId>, count: u32) -> Result<Vec<ObjectId>, Suspend> {
+    if cards.len() <= count as usize {
+        return Ok(cards);
     }
     let opponents: Vec<PlayerId> = g.state().opponents(controller).collect();
     let chooser = match opponents.len() {
-        0 => return Ok(None),
+        0 => return Ok(Vec::new()),
         1 => opponents[0],
         _ => match player(g, controller, source, opponents, "ChooseRevealedCard", 0)? {
             Some(chooser) => chooser,
-            None => return Ok(None),
+            None => return Ok(Vec::new()),
         },
     };
-    card(g, chooser, source, Purpose::PutIntoHand, cards)
+    self::cards(g, chooser, source, Purpose::PutIntoHand, cards, count, false)
+}
+
+/// "An opponent chooses one of them" (`opponent_chooses`): the one card, taken without asking when it is the only one.
+/// Karn, Scion of Urza and Extrapolate the Impossible print it.
+pub fn opponent_chooses_one(g: &mut dyn Game, controller: PlayerId, source: ObjectId, cards: Vec<ObjectId>) -> Result<Option<ObjectId>, Suspend> {
+    Ok(opponent_chooses(g, controller, source, cards, 1)?.first().copied())
 }
 
 /// A player of `candidates`, chosen without targeting (CR 608.2d, 614.12a), asked even when the choice is forced; none

@@ -587,6 +587,15 @@ pub static MUTANT: CardDef = CardDef {
     ..token!(Mutant)
 };
 
+/// The 1/1 black Ninja creature token. Dark Leo & Shredder, Endless Foot Assault, Foot Chopper, Foot Mystic and Uneasy Alliance make it.
+pub static NINJA: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Black)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Ninja)
+};
+
 /// "Create a 2/2 red Mutant creature token" as an effect (CR 111.1): one `MUTANT` under the controller of the resolving
 /// spell or ability. Jennika, Bad Apple Big Sister and Mighty Mutanimals print it.
 pub fn create_a_mutant(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
