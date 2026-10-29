@@ -1,0 +1,46 @@
+# Unbury, {1}{B}, "Choose one": the second mode needs two target creature cards that share a creature type (CR 205.3m, 601.2c).
+# Bot1's graveyard holds only an Ornithopter (a Thopter) and a Memnite (a Construct): no two of its creature cards share a type
+# (the Lightning Bolts aren't creature cards), so that mode has no legal pair of targets and can't be chosen (CR 601.2c, 700.2),
+# though there are two creature cards to take. The first mode still can be, and returns the card chosen for it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Ornithopter
+Memnite
+Unbury
+Lightning Bolt
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unbury.Cast
+! Bot1.Modes(2)
+Bot1.Modes(1)
+Bot1.Target(Bot1.Graveyard.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Memnite
+Bot1.Graveyard.Count = 5

@@ -1,0 +1,70 @@
+# Unbury's second mode targets Bot1's two Ornithopters; in response Bot2's Scavenging Ooze exiles one. The other still
+# shares a creature type (Thopter) with the exiled one as it last was in the graveyard, so it is still a legal target and
+# returns to Bot1's hand (CR 608.2b; Unbury's ruling of 2025-11-17).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Ornithopter
+Ornithopter
+Memnite
+Unbury
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Gleemox
+Scavenging Ooze
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Gleemox.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Scavenging Ooze.Cast
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter#1)
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter#2)
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Unbury.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot1.Graveyard.Ornithopter#1; Bot1.Graveyard.Ornithopter#2)
+Bot1.Pass
+Bot2.Battlefield.Gleemox.Activate(Color: Green)
+Bot2.Battlefield.Scavenging Ooze.Activate(Bot1.Graveyard.Ornithopter#1)
+Bot2.Pass
+Bot1.Pass
+? Exile = Ornithopter
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Ornithopter
+Exile = Ornithopter
+Bot1.Graveyard = Unbury; Lightning Bolt; Lightning Bolt; Memnite; Lightning Bolt; Black Lotus
