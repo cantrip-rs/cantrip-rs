@@ -1173,6 +1173,12 @@ pub fn this_gains_deathtouch(g: &mut dyn Game, item: &StackItem) -> Result<(), S
     this_gains_until_end_of_turn(g, item, Keyword::Deathtouch)
 }
 
+/// "This creature gains reach until end of turn" (CR 702.17b): `this_gains_until_end_of_turn` for reach. Death-Hood Cobra
+/// ({1}{G}) and Moopsy ({2}) print it.
+pub fn this_gains_reach(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    this_gains_until_end_of_turn(g, item, Keyword::Reach)
+}
+
 /// "This creature gains indestructible until end of turn" (CR 702.12b): `this_gains_until_end_of_turn` for indestructible.
 /// Belligerent Regisaur prints it.
 pub fn this_gains_indestructible(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
