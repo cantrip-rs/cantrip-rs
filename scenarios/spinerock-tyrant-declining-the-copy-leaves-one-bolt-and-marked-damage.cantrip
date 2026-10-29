@@ -1,0 +1,43 @@
+# Spinerock Tyrant: the copy is a "may". Bot1 casts Lightning Bolt at its own Tyrant and declines: no copy, no wither, so the Bolt
+# marks 3 damage on the 6/6 Tyrant as usual (CR 120.3e) rather than putting counters on it, and Bot2 keeps all 20 life.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Black Lotus
+Spinerock Tyrant
+Lightning Bolt
+Mountain
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Spinerock Tyrant.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#3.Activate
+Bot1.Hand.Lightning Bolt.Cast(Spinerock Tyrant)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Spinerock Tyrant.Power = 6
+? Bot2.Life = 20
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Black Lotus

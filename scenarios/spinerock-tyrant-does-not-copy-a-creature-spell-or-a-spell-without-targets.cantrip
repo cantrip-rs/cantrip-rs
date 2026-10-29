@@ -1,0 +1,43 @@
+# Spinerock Tyrant: only an instant or sorcery with a single target is copied. Mountain Goat is a creature spell and Boltwave (3 damage
+# to each opponent) is a sorcery with no target: neither triggers it (CR 115.1), so nothing is asked and each spell resolves once.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Black Lotus
+Spinerock Tyrant
+Boltwave
+Mountain Goat
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Spinerock Tyrant.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Hand.Mountain Goat.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Boltwave.Cast
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 17

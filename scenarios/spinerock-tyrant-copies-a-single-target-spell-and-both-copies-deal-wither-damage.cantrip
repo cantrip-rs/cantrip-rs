@@ -1,0 +1,51 @@
+# Spinerock Tyrant: "Whenever you cast an instant or sorcery spell with a single target, you may copy it. If you do, those spells gain
+# wither. You may choose new targets for the copy." Bot1 casts Lightning Bolt at its own Tyrant (6/6); Bot1 copies it and aims the copy
+# at Bot2. The original Bolt's 3 damage is dealt to the Tyrant as three -1/-1 counters (CR 702.80a), not marked damage, so it is a 3/3
+# with no damage; the copy's 3 to Bot2 is damage to a player, as usual.
+
+[Bot1 Deck]
+Mountain
+Mountain
+Black Lotus
+Spinerock Tyrant
+Lightning Bolt
+Mountain
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Spinerock Tyrant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Spinerock Tyrant.Power = 6
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#3.Activate
+Bot1.Hand.Lightning Bolt.Cast(Spinerock Tyrant)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Life = 17
+? Bot1.Battlefield.Spinerock Tyrant.Power = 3
+? Bot1.Battlefield.Spinerock Tyrant.Counters.MinusOneMinusOne = 3
+
+[Expect]
+Bot2.Life = 17
