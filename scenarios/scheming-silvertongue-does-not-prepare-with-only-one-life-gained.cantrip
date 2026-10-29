@@ -1,0 +1,27 @@
+# Scheming Silvertongue: attacking alone gains Bot1 just 1 life with lifelink, short of 2, so it is not prepared at the second main phase.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Scheming Silvertongue
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Scheming Silvertongue.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Scheming Silvertongue > Bot2)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.Battlefield.Scheming Silvertongue.Prepared = (absent)

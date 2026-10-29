@@ -1,0 +1,50 @@
+# Scheming Silvertongue: "At the beginning of your second main phase, if you gained 2 or more life this turn, this creature becomes prepared." Attacking
+# with it (flying, lifelink) and the Postmortem Professor (its trigger gains 1) gains Bot1 1 life twice, 2 in all, so at the second main phase it is prepared.
+# Sign in Blood ({B}{B}, cast from exile) targets Bot1: it draws two cards and loses 2 life, and the Silvertongue is unprepared.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Mox Ruby
+Mox Pearl
+Scheming Silvertongue
+Postmortem Professor
+Swamp
+Island x5
+Swamp x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp#1.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Scheming Silvertongue.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Postmortem Professor.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Scheming Silvertongue; Postmortem Professor > Bot2)
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Scheming Silvertongue.Keywords = Flying; Lifelink
+? Bot1.Battlefield.Scheming Silvertongue.Prepared = true
+? Bot1.Life = 22
+? Bot2.Life = 16
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Exile.Sign in Blood.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Scheming Silvertongue.Prepared = (absent)
+Exile.Count = 0

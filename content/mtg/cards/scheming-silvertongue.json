@@ -1,0 +1,18 @@
+{
+  "name": "Scheming Silvertongue",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Vampire Warlock",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying, lifelink\nAt the beginning of your second main phase, if you gained 2 or more life this turn, this creature becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ],
+  "prepare": {
+    "name": "Sign in Blood",
+    "manaCost": "{B}{B}",
+    "type": "Sorcery",
+    "oracleText": "Target player draws two cards and loses 2 life."
+  }
+}
