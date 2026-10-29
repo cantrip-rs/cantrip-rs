@@ -1,0 +1,6 @@
+{
+  "name": "Ark of Hunger",
+  "manaCost": "{2}{R}{W}",
+  "type": "Artifact",
+  "oracleText": "Whenever one or more cards leave your graveyard, this artifact deals 1 damage to each opponent and you gain 1 life.\n{T}: Mill a card. You may play that card this turn."
+}
