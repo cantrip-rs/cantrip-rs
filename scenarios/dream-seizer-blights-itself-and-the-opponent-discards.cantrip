@@ -1,0 +1,35 @@
+# Dream Seizer {3}{B} 3/2 flying: "When this creature enters, you may blight 1. If you do, each opponent discards a card." To blight 1 is to
+# put a -1/-1 counter on a creature you control as the ability resolves (CR 701.68a): the only one is the Seizer itself, which becomes a 2/1,
+# and Bot2 then discards a card of its choice (CR 701.9), the Memnite. Black Lotus (BBB) and Mox Jet pay the four mana exactly.
+# The twin that declines is "...-declined-blights-nothing-and-nobody-discards".
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Dream Seizer
+Island x4
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dream Seizer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Dream Seizer)
+Bot2.Choose(Memnite)
+
+[Expect]
+Bot1.Battlefield.Dream Seizer.Counters.MinusOneMinusOne = 1
+Bot1.Battlefield.Dream Seizer.Power = 2
+Bot1.Battlefield.Dream Seizer.Toughness = 1
+Bot2.Graveyard = Memnite
+Bot2.Hand.Count = 6

@@ -1,0 +1,47 @@
+# Solemnity (CR 118.3, 101.2, 701.68b): a creature that can't have counters put on it can't be blighted, so a player whose only creature is
+# that one can't blight. Dream Seizer's "you may blight 1" is not offered at all, no -1/-1 counter lands, and Bot2 discards nothing.
+# The positive control is "dream-seizer-blights-itself-and-the-opponent-discards".
+
+[Bot1 Deck]
+Plains
+Sol Ring
+Mox Pearl
+Mox Jet
+Solemnity
+Dream Seizer
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Solemnity.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Dream Seizer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Dream Seizer.Counters.MinusOneMinusOne = (absent)
+Bot1.Battlefield.Dream Seizer.Toughness = 2
+Bot2.Graveyard =
