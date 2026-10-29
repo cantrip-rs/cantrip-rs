@@ -1,0 +1,36 @@
+# Gravelgill Scoundrel: with no other untapped creature of yours the trigger has nothing to tap (CR 609.3) and the Scoundrel stays blockable. On turn 3
+# Bot1 attacks with the Scoundrel and an Ornithopter, which attacking taps (it has no vigilance), so only tapped creatures remain, and Bot2's untapped
+# Elvish Mystic is not Bot1's to tap. The Mystic blocks the Scoundrel.
+
+[Bot1 Deck]
+Mox Sapphire
+Gravelgill Scoundrel
+Ornithopter
+Island x17
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Gravelgill Scoundrel.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Gravelgill Scoundrel > Bot2; Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Elvish Mystic > Gravelgill Scoundrel)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Gravelgill Scoundrel.Damage = 1

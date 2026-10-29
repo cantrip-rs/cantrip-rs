@@ -1,0 +1,51 @@
+# Gravelgill Scoundrel: "Whenever this creature attacks, you may tap another untapped creature you control. If you do, this creature can't be blocked
+# this turn" (CR 701.26a, 509.1b). On turn 3 the two Ornithopters (not Bot2's Elvish Mystic, not the Scoundrel itself) are what the trigger offers, and
+# only one may be tapped; tapping it, Bot2's Mystic may not block the Scoundrel, which has vigilance. On turn 5 Bot1 answers none, the Scoundrel is
+# blockable again and the Mystic blocks it.
+
+[Bot1 Deck]
+Mox Sapphire
+Gravelgill Scoundrel
+Ornithopter
+Ornithopter
+Island x16
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Gravelgill Scoundrel.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Gravelgill Scoundrel > Bot2)
+! Bot1.Choose(Gravelgill Scoundrel)
+! Bot1.Choose(Ornithopter#1; Ornithopter#2)
+Bot1.Choose(Ornithopter#1)
+[T3 Bot1.DeclareBlockers]
+! Bot2.Block
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter#1.Tapped = True
+? Bot1.Battlefield.Ornithopter#2.Tapped = False
+[T5 Bot1.Main1]
+Bot1.Attack(Gravelgill Scoundrel > Bot2)
+Bot1.Choose()
+[T5 Bot1.DeclareBlockers]
+Bot2.Block(Elvish Mystic > Gravelgill Scoundrel)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Ornithopter#1.Tapped = False
+Bot1.Battlefield.Ornithopter#2.Tapped = False

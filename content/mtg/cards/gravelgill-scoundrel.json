@@ -1,0 +1,11 @@
+{
+  "name": "Gravelgill Scoundrel",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Merfolk Rogue",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Vigilance\nWhenever this creature attacks, you may tap another untapped creature you control. If you do, this creature can't be blocked this turn.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
