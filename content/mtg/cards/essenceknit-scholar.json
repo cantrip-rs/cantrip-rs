@@ -1,0 +1,8 @@
+{
+  "name": "Essenceknit Scholar",
+  "manaCost": "{B}{B/G}{G}",
+  "type": "Creature — Dryad Warlock",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "When this creature enters, create a 1/1 black and green Pest creature token with \"Whenever this token attacks, you gain 1 life.\"\nAt the beginning of your end step, if a creature died under your control this turn, draw a card."
+}

@@ -1,0 +1,43 @@
+# Essenceknit Scholar makes a Pest as it enters. On turn 1 no creature has died under Bot1's control, so the end step trigger does
+# not happen (Bot1 keeps 4 cards in hand). On turn 3 Bot2's Lightning Bolt kills the Pest token in Bot1's upkeep - a token counts -
+# and Bot1 draws at the beginning of the end step: 4 + the draw step's card + that card = 6 (CR 603.4, 700.4).
+
+[Dice]
+1; 1; 1; 1; 1; 1
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Essenceknit Scholar
+Island x4
+Island x25
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x31
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Essenceknit Scholar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+? Bot1.Hand.Count = 4
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Pest Token)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Count = 6
