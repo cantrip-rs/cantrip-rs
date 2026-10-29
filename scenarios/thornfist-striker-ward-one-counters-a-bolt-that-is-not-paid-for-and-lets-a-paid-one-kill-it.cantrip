@@ -1,0 +1,49 @@
+# Thornfist Striker, a 3/3 with ward {1} (CR 702.21a). Turn 2: Bot2's Lightning Bolt at it triggers the ward and Bot2 declines
+# to pay: the Bolt is countered, the Striker untouched. Turn 4: Bot2's second Bolt is paid for ({1} from Mox Ruby) and kills it.
+
+[Bot1 Deck]
+Black Lotus
+Thornfist Striker
+Mountain x18
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thornfist Striker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Thornfist Striker)
+Bot2.Decline
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thornfist Striker.Damage = 0
+? Bot2.Graveyard = Lightning Bolt
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Thornfist Striker)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.PayCost
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Thornfist Striker; Black Lotus
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt
