@@ -1,0 +1,63 @@
+# Boldwyr Aggressor: "Other Giants you control have double strike" (CR 702.4, 613.1f). Bot1's Bonecrusher Giant has it, the
+# Aggressor has its own printed double strike, and Bot2's Bonecrusher Giant (not "you control") does not.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Boldwyr Aggressor
+Bonecrusher Giant
+Forest x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Bonecrusher Giant
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Boldwyr Aggressor.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Bonecrusher Giant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bonecrusher Giant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Boldwyr Aggressor.Keywords = DoubleStrike
+? Bot1.Battlefield.Bonecrusher Giant.Keywords = DoubleStrike
+? Bot2.Battlefield.Bonecrusher Giant.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield = Boldwyr Aggressor; Bonecrusher Giant; Mox Jet; Mox Pearl; Mox Ruby; Mox Ruby; Mox Sapphire

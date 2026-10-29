@@ -1,0 +1,11 @@
+{
+  "name": "Boldwyr Aggressor",
+  "manaCost": "{3}{R}{R}",
+  "type": "Creature — Giant Warrior",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "Double strike\nOther Giants you control have double strike.",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}
