@@ -1,0 +1,8 @@
+{
+  "name": "Flame-Chain Mauler",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Elemental Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{1}{R}: This creature gets +1/+0 and gains menace until end of turn. (It can't be blocked except by two or more creatures.)"
+}

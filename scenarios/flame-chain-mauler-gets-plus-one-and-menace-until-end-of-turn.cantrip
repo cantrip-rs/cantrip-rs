@@ -1,0 +1,46 @@
+# Flame-Chain Mauler: "{1}{R}: This creature gets +1/+0 and gains menace until end of turn." The 2/2 is 3/2 with menace after
+# one activation (the toughness is unchanged) and 2/2 without it again on the next turn (CR 514.2).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Pearl
+Mox Jet
+Flame-Chain Mauler
+Mox Sapphire
+Mox Emerald
+Forest x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Flame-Chain Mauler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Flame-Chain Mauler.Power = 2
+? Bot1.Battlefield.Flame-Chain Mauler.Keywords = (absent)
+Bot1.Battlefield.Flame-Chain Mauler.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Flame-Chain Mauler.Power = 3
+? Bot1.Battlefield.Flame-Chain Mauler.Toughness = 2
+? Bot1.Battlefield.Flame-Chain Mauler.Keywords = Menace
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Flame-Chain Mauler.Power = 2
+? Bot1.Battlefield.Flame-Chain Mauler.Keywords = (absent)
+
+[Expect]
+Bot1.Battlefield = Flame-Chain Mauler; Mox Jet; Mox Pearl; Mox Ruby; Mox Ruby
