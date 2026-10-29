@@ -1,0 +1,6 @@
+{
+  "name": "Proctor's Gaze",
+  "manaCost": "{2}{G}{U}",
+  "type": "Instant",
+  "oracleText": "Return up to one target nonland permanent to its owner's hand. Search your library for a basic land card, put it onto the battlefield tapped, then shuffle."
+}
