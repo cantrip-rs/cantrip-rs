@@ -1,0 +1,11 @@
+{
+  "name": "Mona Lisa, Science Geek",
+  "manaCost": "{2}{G}",
+  "type": "Legendary Creature — Lizard Mutant",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Reach\n{T}: Add X mana of any one color, where X is Mona Lisa's power.",
+  "keywords": [
+    "Reach"
+  ]
+}

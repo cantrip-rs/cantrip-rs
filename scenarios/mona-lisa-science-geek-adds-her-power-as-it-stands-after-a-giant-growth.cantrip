@@ -1,0 +1,30 @@
+# Mona Lisa, Science Geek: X is her power as the ability resolves. Giant Growth makes her a 4/6, so tapping her adds four
+# mana of the one color named.
+
+[Bot1 Deck]
+Black Lotus
+Mona Lisa, Science Geek
+Mox Emerald
+Giant Growth
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mona Lisa, Science Geek.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Mona Lisa, Science Geek)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mona Lisa, Science Geek.Power = 4
+Bot1.Battlefield.Mona Lisa, Science Geek.Activate(Color: Red)
+? Bot1.Mana = {R}{R}{R}{R}
+
+[Expect]
+Bot1.Battlefield.Mona Lisa, Science Geek.Tapped = true

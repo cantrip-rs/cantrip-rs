@@ -1,0 +1,22 @@
+# Mona Lisa, Science Geek: "{T}: Add X mana of any one color, where X is Mona Lisa's power." A 1/3, she adds one mana of the
+# color named (red, not her own green).
+
+[Bot1 Deck]
+Black Lotus
+Mona Lisa, Science Geek
+Forest x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mona Lisa, Science Geek.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mona Lisa, Science Geek.Activate(Color: Red)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Battlefield.Mona Lisa, Science Geek.Tapped = true

@@ -1,0 +1,29 @@
+# Mona Lisa, Science Geek: a power of 0 or less adds no mana at all. Stab makes her a -1/1 and tapping her leaves the pool empty.
+
+[Bot1 Deck]
+Black Lotus
+Mona Lisa, Science Geek
+Mox Jet
+Stab
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mona Lisa, Science Geek.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stab.Cast(Mona Lisa, Science Geek)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mona Lisa, Science Geek.Power = -1
+Bot1.Battlefield.Mona Lisa, Science Geek.Activate(Color: Red)
+
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield.Mona Lisa, Science Geek.Tapped = true
