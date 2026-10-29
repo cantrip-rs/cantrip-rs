@@ -1,0 +1,36 @@
+# Primordial Pachyderm, a 4/4 for {3}{G} with reach and trample: "When this creature enters, you gain 2 life." The life comes once the trigger resolves, not as it is cast.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Primordial Pachyderm
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Primordial Pachyderm.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Stack.Count = 0
+Bot1.Battlefield.Primordial Pachyderm.Power = 4
+Bot1.Battlefield.Primordial Pachyderm.Toughness = 4
+Bot1.Battlefield.Primordial Pachyderm.Keywords = Reach; Trample

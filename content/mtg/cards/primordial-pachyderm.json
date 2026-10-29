@@ -1,0 +1,12 @@
+{
+  "name": "Primordial Pachyderm",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elephant Avatar",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach, trample\nWhen this creature enters, you gain 2 life.",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}
