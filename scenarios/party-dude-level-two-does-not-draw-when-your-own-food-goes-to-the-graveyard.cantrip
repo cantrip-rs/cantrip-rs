@@ -1,0 +1,37 @@
+# Party Dude at level 2 draws only for an artifact an opponent controls: Bot1's Mutant Chain Reaction destroys Bot1's own Food and no card is drawn.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Party Dude
+Mutant Chain Reaction
+Forest
+Forest
+Forest
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Party Dude.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Party Dude.Activate(Ability: Level 2)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mutant Chain Reaction.Cast(Bot1.Battlefield.Food Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Library.Count = 14
+Bot2.Battlefield = Food Token

@@ -1,0 +1,6 @@
+{
+  "name": "Party Dude",
+  "manaCost": "{G}",
+  "type": "Enchantment — Class",
+  "oracleText": "(Gain the next level as a sorcery to add its ability.)\nWhen this Class enters, each player creates a Food token.\n{1}{G}: Level 2\nWhenever an artifact an opponent controls is put into a graveyard from the battlefield, draw a card.\n{4}{G}: Level 3\nWhenever one or more of your opponents are attacked, up to one target attacking creature gets +X/+X until end of turn, where X is the number of cards in your hand."
+}

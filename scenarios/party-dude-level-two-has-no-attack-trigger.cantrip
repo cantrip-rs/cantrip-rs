@@ -1,0 +1,50 @@
+# Party Dude stopped at level 2 has no attack trigger: the Grizzly Bears attacks as a 2/2 and Bot2 takes 2.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Party Dude
+Grizzly Bears
+Sol Ring
+Forest
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Party Dude.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Party Dude.Activate(Ability: Level 2)
+Bot2.Pass
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+
+Bot1.Battlefield.Sol Ring.Activate
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears)
+Bot1.Pass
+? Stack.Count = 0
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
