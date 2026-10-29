@@ -1,0 +1,39 @@
+# Northampton Farm: with one creature exiled with it, the third ability returns that creature to the battlefield under
+# its owner's control (the one creature card shown is chosen), and nothing else is returned (CR 607.2a, 113.7a). Bot1 exiles its Ornithopter on
+# turn one and on turn three pays {2} and sacrifices the Farm; the Ornithopter is back (a new object, summoning sick)
+# and the hand is as it was.
+
+[Bot1 Deck]
+Northampton Farm
+Mox Jet
+Mox Ruby
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Northampton Farm.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Northampton Farm.Activate(Ability: Exile target; Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Exile.Count = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Northampton Farm.Activate(Ability: Return)
+Bot1.Choose(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Mana = 
+Bot1.Battlefield = Mox Jet; Mox Ruby; Ornithopter
+Bot1.Graveyard = Northampton Farm
+Bot1.Battlefield.Ornithopter.Tapped = false

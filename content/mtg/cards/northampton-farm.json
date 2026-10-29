@@ -1,0 +1,5 @@
+{
+  "name": "Northampton Farm",
+  "type": "Land",
+  "oracleText": "{T}: Add {C}.\n{1}, {T}: Exile target creature you own.\n{2}, {T}, Sacrifice this land: Return a creature card exiled with this land to the battlefield under your control. Return each other card exiled with this land to its owner's hand."
+}

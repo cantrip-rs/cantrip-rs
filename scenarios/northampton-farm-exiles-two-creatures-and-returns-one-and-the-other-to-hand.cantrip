@@ -1,0 +1,54 @@
+# Northampton Farm: "{1}, {T}: Exile target creature you own." and "{2}, {T}, Sacrifice this land: Return a creature card
+# exiled with this land to the battlefield under your control. Return each other card exiled with this land to its owner's
+# hand." Bot1 exiles its Ornithopter on turn one and its Llanowar Elves on turn three (each time {1} from a Mox, the pool
+# empty after), then on turn five pays {2}, sacrifices the Farm and chooses the Elves to return to the battlefield; the
+# Ornithopter goes to hand (CR 607.2a, 113.7a, 400.3).
+
+[Bot1 Deck]
+Northampton Farm
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ornithopter
+Llanowar Elves
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Northampton Farm.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Northampton Farm.Activate(Ability: Exile target; Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Mana = 
+? Exile.Count = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Northampton Farm.Activate(Ability: Exile target; Bot1.Battlefield.Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+? Exile.Count = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Northampton Farm.Activate(Ability: Return)
+Bot1.Choose(Llanowar Elves)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Mana = 
+Bot1.Battlefield = Llanowar Elves; Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Hand = Ornithopter; Plains; Plains; Plains
+Bot1.Graveyard = Northampton Farm

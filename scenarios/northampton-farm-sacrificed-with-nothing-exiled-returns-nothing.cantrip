@@ -1,0 +1,32 @@
+# Northampton Farm: with nothing exiled with it, its third ability still costs {2}, {T} and the Farm and does nothing
+# else (CR 607.2a). Bot1 pays {2} and sacrifices the Farm on turn three: the Farm is in the graveyard, the hand is the
+# same and the exact two mana was paid (CR 118.3).
+
+[Bot1 Deck]
+Northampton Farm
+Mox Jet
+Mox Ruby
+Mox Emerald
+Plains x17
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Northampton Farm.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Northampton Farm.Activate(Ability: Return; Spend: B, R)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Mana = {G}
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby
+Bot1.Graveyard = Northampton Farm
+Exile.Count = 0
