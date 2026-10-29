@@ -1,0 +1,81 @@
+# Prismari, the Inspiration: "Instant and sorcery spells you cast have storm." (CR 702.40a) Bot1 casts it on turn 1 (Black Lotus,
+# Mox Sapphire, Mox Ruby, Mox Jet and a Mountain pay {5}{U}{R}). On turn 3 Bot2 casts Lightning Bolt at Bot1 in the upkeep (not a
+# storm spell: Prismari gives it only to its controller's spells) and Bot1 then casts two Bolts at Bot2. The first has one spell
+# before it (Bot2's), so it is copied once: 3 + 3 = 6. The second has two before it (Bot2's Bolt and the first), so it is copied
+# twice, not four times - the copy of a spell is not cast, so it is not counted (CR 707.10): 3 + 3 + 3 = 9. Bot2 is left on 20 - 15 = 5
+# and Bot1 on 17.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mountain
+Prismari, the Inspiration
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x25
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Prismari, the Inspiration.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Upkeep]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 14
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Life = 5
+Bot1.Life = 17
+Stack.Count = 0
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+Bot2.Graveyard = Lightning Bolt

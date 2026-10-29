@@ -1,0 +1,11 @@
+{
+  "name": "Prismari, the Inspiration",
+  "manaCost": "{5}{U}{R}",
+  "type": "Legendary Creature — Elder Dragon",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Flying\nWard—Pay 5 life.\nInstant and sorcery spells you cast have storm. (Whenever you cast an instant or sorcery spell, copy it for each spell cast before it this turn. You may choose new targets for the copies.)",
+  "keywords": [
+    "Flying"
+  ]
+}

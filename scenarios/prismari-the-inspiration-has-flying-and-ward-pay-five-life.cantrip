@@ -1,0 +1,68 @@
+# Prismari, the Inspiration: "Flying. Ward—Pay 5 life." (CR 702.9, 702.21a) It is a 7/7 flying Elder Dragon. Bot2 casts two Lightning
+# Bolts at it on turn 2. The first: Bot2 declines the ward cost, so the Bolt is countered, Prismari is undamaged and Bot2 keeps 20
+# life. The second: Bot2 pays 5 life (20 to 15), the Bolt is not countered and deals 3 damage to Prismari, which survives.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mountain
+Prismari, the Inspiration
+Island
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Prismari, the Inspiration.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Prismari, the Inspiration)
+Bot2.Decline
+Bot1.Pass
+? Bot1.Battlefield.Prismari, the Inspiration.Damage = 0
+? Bot2.Life = 20
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Prismari, the Inspiration)
+Bot2.Accept
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Prismari, the Inspiration.Damage = 3
+Bot1.Battlefield.Prismari, the Inspiration.Power = 7
+Bot1.Battlefield.Prismari, the Inspiration.Toughness = 7
+Bot1.Battlefield.Prismari, the Inspiration.Keywords = Flying
+Bot1.Battlefield.Prismari, the Inspiration.Subtypes = Dragon; Elder
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt
