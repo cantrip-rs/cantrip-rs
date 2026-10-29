@@ -1,0 +1,57 @@
+# CR 608.2h: the six-land board includes a duplicate Island, so X is five. Ancestral Recall leaves an oversized hand;
+# Deep Space Scan's effect prevents the cleanup discard through this turn and expires before Bot1's next cleanup.
+# Deep Space Scan {4}{U}{U}: Sorcery
+#   Strange new worlds — Draw X cards, where X is the number of differently named lands you control. You have no maximum hand size until your next turn.
+# Bot2's Forest is no land Bot1 controls, so it adds no name (CR 201.2, 402.2, 514.1).
+
+[Bot1 Deck]
+Deep Space Scan
+Mox Sapphire
+Island
+Plains
+Swamp
+Mountain
+Forest
+Ancestral Recall
+Adarkar Wastes
+Island x20
+
+[Bot2 Deck]
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Adarkar Wastes.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Adarkar Wastes.Activate(Ability: {W} or {U}; Color: Blue)
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Deep Space Scan.Cast
+Bot1.Pass
+Bot2.Pass
+[T12 Bot2.Main1]
+? Bot1.Hand.Count = 11
+[T13 Bot1.Cleanup]
+
+[Expect]
+Bot1.Hand.Count = 7

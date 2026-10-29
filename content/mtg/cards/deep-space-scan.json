@@ -1,0 +1,6 @@
+{
+  "name": "Deep Space Scan",
+  "manaCost": "{4}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Strange new worlds — Draw X cards, where X is the number of differently named lands you control. You have no maximum hand size until your next turn."
+}
