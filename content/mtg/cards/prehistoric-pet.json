@@ -1,0 +1,8 @@
+{
+  "name": "Prehistoric Pet",
+  "manaCost": "{W}",
+  "type": "Creature — Dinosaur Ninja",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "This creature can't be blocked by creatures with greater power.\n{1}{W}, {T}: Return another target creature you control to its owner's hand. Activate only during your turn."
+}
