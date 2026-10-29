@@ -1,0 +1,47 @@
+# Sally Pride, Lioness Leader: "When Sally Pride enters, create X 2/2 red Mutant creature tokens, where X is the number of
+# nontoken creatures you control." Bot1 has Ornithopter and Savannah Lions, so with Sally Pride X is 3 (the tokens it makes
+# are not counted: not 6). On turn 5 Sally attacks: "put a +1/+1 counter on each creature you control" - all seven.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Ornithopter
+Savannah Lions
+Black Lotus
+Sally Pride, Lioness Leader
+Plains
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Sally Pride, Lioness Leader.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mutant Token#3.Power = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Sally Pride, Lioness Leader > Bot2)
+Bot1.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Sally Pride, Lioness Leader.Power = 3
+Bot1.Battlefield.Savannah Lions.Power = 3
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Mutant Token#1.Power = 3
+Bot1.Battlefield.Mutant Token#3.Toughness = 3
+Bot1.Battlefield.Count = 9
