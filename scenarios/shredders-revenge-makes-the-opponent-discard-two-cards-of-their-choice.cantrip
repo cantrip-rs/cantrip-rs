@@ -1,0 +1,37 @@
+# Shredder's Revenge, first mode, aimed at Bot2: Bot2 chooses two cards of their hand (Forest and Mountain) and discards them
+# (CR 701.9); Bot2 had already discarded one to the hand size on turn 2. {2}{B} is paid by three Moxen and the pool is left empty.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Shredder's Revenge
+Swamp x17
+
+[Bot2 Deck]
+Island
+Forest
+Mountain
+Plains
+Swamp x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shredder's Revenge.Cast
+Bot1.Modes(Target player discards two cards)
+Bot1.Target(Bot2)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Forest; Mountain)
+
+[Expect]
+Bot2.Hand.Count = 5
+Bot2.Graveyard.Count = 3
+Bot1.Graveyard = Shredder's Revenge

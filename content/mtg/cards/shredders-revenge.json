@@ -1,0 +1,6 @@
+{
+  "name": "Shredder's Revenge",
+  "manaCost": "{2}{B}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• Target player discards two cards.\n• Target player draws two cards and loses 2 life."
+}

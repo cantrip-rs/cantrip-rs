@@ -1,0 +1,33 @@
+# Shredder's Revenge, second mode, aimed at Bot1 itself: two cards drawn and 2 life lost (Bot1 at 18). The first mode is not
+# done: no card is discarded.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Shredder's Revenge
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shredder's Revenge.Cast
+Bot1.Modes(Target player draws two cards and loses 2 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 6
+Bot1.Life = 18
+Bot2.Life = 20
+Bot1.Graveyard = Shredder's Revenge
