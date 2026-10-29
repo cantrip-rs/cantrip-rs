@@ -1,0 +1,51 @@
+# Winnowing: a changeling has every creature type (CR 205.3m, 702.73a), so it shares one with the chosen creature, whatever that is. Bot1 controls no
+# creature, so nothing is chosen for it and it is not asked. Bot1 chooses Bot2's Llanowar Elves: Universal Automaton shares Elf with it and stays,
+# the Memnite shares nothing and is sacrificed.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Winnowing
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Llanowar Elves
+Universal Automaton
+Memnite
+Forest
+Forest
+Forest x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Universal Automaton.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Winnowing.Cast
+Bot1.Choose(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Winnowing; Black Lotus
+Bot2.Battlefield = Forest; Mox Emerald; Llanowar Elves; Universal Automaton
+Bot2.Graveyard = Memnite

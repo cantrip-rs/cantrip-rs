@@ -1,0 +1,57 @@
+# Winnowing: "For each player, you choose a creature that player controls. Then each player sacrifices all other creatures they control that don't
+# share a creature type with the chosen creature they control." Bot1 casts it on turn 3 for {4}{W}{W}: Black Lotus, Mox Pearl and a Plains
+# for five of it and a Memnite tapped by convoke (CR 702.51) for the sixth. Bot1 chooses its own Ornithopter: the other Ornithopter shares its Thopter
+# type and stays, the Memnite (a Construct) is sacrificed. Bot1 chooses Bot2's Llanowar Elves: the Elvish Mystic shares Elf and stays, the Ornithopter
+# and the Memnite are sacrificed. Both players sacrifice together.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Winnowing
+Ornithopter
+Ornithopter
+Memnite
+Plains
+Plains x13
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Llanowar Elves
+Elvish Mystic
+Ornithopter
+Memnite
+Forest
+Forest x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Winnowing.Cast(Convoke: Memnite)
+Bot1.Choose(Ornithopter)
+Bot1.Choose(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Pearl; Ornithopter; Ornithopter
+Bot1.Graveyard = Winnowing; Memnite; Black Lotus
+Bot2.Battlefield = Forest; Mox Emerald; Llanowar Elves; Elvish Mystic
+Bot2.Graveyard = Memnite; Ornithopter
