@@ -1,0 +1,28 @@
+# Bot1's turn-three draw triggers Data's ability once; Bot2's turn-two draw does not, per "you draw" (CR 603.2, 121.1).
+[Bot1 Deck]
+Data, New Life
+Mox Sapphire
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Data, New Life.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Draw]
+? Bot1.Battlefield.Data, New Life.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Draw]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Data, New Life.Counters.PlusOnePlusOne = 1

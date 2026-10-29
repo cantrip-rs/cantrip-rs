@@ -1,0 +1,8 @@
+{
+  "name": "Data, New Life",
+  "manaCost": "{1}{U}",
+  "type": "Legendary Artifact Creature — Android Scientist",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "Whenever you draw a card, put a +1/+1 counter on Data."
+}
