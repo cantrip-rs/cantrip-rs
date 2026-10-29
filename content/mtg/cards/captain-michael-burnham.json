@@ -1,0 +1,11 @@
+{
+  "name": "Captain Michael Burnham",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Human Officer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample\nLandfall — Whenever a land you control enters, Captain Burnham deals 1 damage to each opponent. If this is the second time this ability has resolved this turn, put a +1/+1 counter on Captain Burnham.",
+  "keywords": [
+    "Trample"
+  ]
+}

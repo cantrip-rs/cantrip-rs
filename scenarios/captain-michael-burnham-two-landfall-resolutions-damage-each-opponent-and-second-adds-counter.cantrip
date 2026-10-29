@@ -1,0 +1,88 @@
+# Captain Michael Burnham's three landfall abilities resolve on Bot1's turn 4: each deals exactly 1 to both opponents,
+# and only the second adds a +1/+1 counter (CR 603.6a, 608.2c, 120.3, 122.1). Crop Rotation makes the third land enter.
+# Bot2 and Bot3 each play a land on their own turns without triggering her. On Bot1's next turn a landfall deals 1 to each
+# opponent again, but the turn's history has reset, so it adds no second counter.
+
+[Bot1 Deck]
+Black Lotus
+Captain Michael Burnham
+Scalding Tarn
+Scalding Tarn
+Crop Rotation
+Mox Emerald
+Island
+Forest
+Island
+Forest
+Island x12
+
+[Bot2 Deck]
+Forest
+Island
+Island
+Island
+Island
+Island
+Island
+Island x12
+
+[Bot3 Deck]
+Forest
+Island
+Island
+Island
+Island
+Island
+Island
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Captain Michael Burnham.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+[T3 Bot3.Main1]
+Bot3.Hand.Forest.Play
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot1.Main1]
+Bot1.Hand.Scalding Tarn.Play
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Scalding Tarn.Activate
+Bot1.Search(Island)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Crop Rotation.Cast
+Bot1.Search(Forest)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Scalding Tarn.Play
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Captain Michael Burnham.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Captain Michael Burnham.Keywords = Trample
+Bot1.Battlefield.Captain Michael Burnham.Power = 4
+Bot1.Battlefield.Captain Michael Burnham.Toughness = 4
+Bot2.Life = 16
+Bot3.Life = 16
+Stack.Count = 0
