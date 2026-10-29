@@ -1,0 +1,25 @@
+# Triceraton Commander cast with X = 0 ({W}{W}) enters and creates X = 0 Dinosaur Soldiers: only the Commander itself.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Triceraton Commander
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Triceraton Commander.Cast(X: 0)
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Triceraton Commander.Power = 2
+Bot1.Battlefield.Count = 3

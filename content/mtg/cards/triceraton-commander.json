@@ -1,0 +1,11 @@
+{
+  "name": "Triceraton Commander",
+  "manaCost": "{X}{X}{W}{W}",
+  "type": "Creature — Dinosaur Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this creature enters, create X 2/2 white Dinosaur Soldier creature tokens.\nWhenever this creature attacks, Dinosaurs you control other than this creature get +1/+1 and gain flying until end of turn.",
+  "keywords": [
+    "Flying"
+  ]
+}

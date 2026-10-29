@@ -1,0 +1,42 @@
+# Triceraton Commander ({X}{X}{W}{W}, 2/2 flying): cast with X = 1 for Black Lotus and a Plains, it makes one 2/2 white
+# Dinosaur Soldier. On turn 3 Bot1 casts Savannah Lions, then attacks with the Commander and the Soldier: "Dinosaurs you
+# control other than this creature get +1/+1 and gain flying until end of turn" - the Soldier is a 3/3 flier, the Commander
+# is not pumped (2) and the Lions, no Dinosaur, is not either. Bot2 takes 2 + 3 = 5.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Triceraton Commander
+Savannah Lions
+Plains
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Triceraton Commander.Cast(X: 1)
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Triceraton Commander > Bot2; Dinosaur Soldier Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Dinosaur Soldier Token.Power = 3
+Bot1.Battlefield.Dinosaur Soldier Token.Toughness = 3
+Bot1.Battlefield.Triceraton Commander.Power = 2
+Bot1.Battlefield.Savannah Lions.Power = 2
