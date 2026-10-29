@@ -1,0 +1,45 @@
+# CR 106.6, 118.12: Purple Dragon Punks' {R} may be spent only to cast an artifact spell or to activate an ability, and paying
+# the "unless its controller pays {2}" of Bot2's Lose Focus is neither. Turn 3: Bot1 casts Sol Ring with the Mox Ruby's
+# unrestricted {R}, leaving Punks' {R} and the Mox Jet's {B} floating - enough for {2} if Punks' mana could pay it - and
+# paying is not offered, so Sol Ring is countered.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Purple Dragon Punks
+Sol Ring
+Island x16
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Lose Focus
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Purple Dragon Punks.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Purple Dragon Punks.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {B}{R} {R} (AnyOf(ArtifactSpells+Abilities))
+Bot1.Hand.Sol Ring.Cast(Spend: R)
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Lose Focus.Cast(Stack.Sol Ring)
+Bot1.Pass
+! Bot1.PayCost
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Sol Ring
+Bot2.Graveyard = Lose Focus

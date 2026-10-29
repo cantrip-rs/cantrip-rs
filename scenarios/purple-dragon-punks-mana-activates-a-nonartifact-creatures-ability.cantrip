@@ -1,0 +1,38 @@
+# Purple Dragon Punks: "... or to activate an ability" (CR 106.6, 602.2b) - any ability, not only an artifact's. Turn 3: its
+# restricted {R} pays the {R} of Blazing Rootwalla's pump, a nonartifact creature's activated ability, while both Moxen
+# stay untapped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Purple Dragon Punks
+Blazing Rootwalla
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Purple Dragon Punks.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Blazing Rootwalla.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Purple Dragon Punks.Activate
+? Bot1.Mana = {R} (AnyOf(ArtifactSpells+Abilities))
+Bot1.Battlefield.Blazing Rootwalla.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Blazing Rootwalla.Power = 3
+Bot1.Battlefield.Mox Ruby#2.Tapped = false

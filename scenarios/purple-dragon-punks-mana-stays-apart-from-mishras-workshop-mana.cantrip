@@ -1,0 +1,43 @@
+# Two restricted manas in the pool at once, each paying only what its own restriction allows (CR 106.6): Purple Dragon
+# Punks' {R} ("an artifact spell or ... an ability") and Mishra's Workshop's {C}{C}{C} ("only to cast artifact spells").
+# Turn 3: Blazing Rootwalla's {R} pump is an ability, which the Workshop's mana can't pay, so Punks' {R} pays it and the
+# Workshop's {C}{C}{C} stays floating - then casts Sol Ring.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Purple Dragon Punks
+Mishra's Workshop
+Blazing Rootwalla
+Sol Ring
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mishra's Workshop.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Purple Dragon Punks.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Blazing Rootwalla.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mishra's Workshop.Activate
+Bot1.Battlefield.Purple Dragon Punks.Activate
+Bot1.Battlefield.Blazing Rootwalla.Activate
+? Bot1.Mana = {C}{C}{C} (ArtifactSpells)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Blazing Rootwalla.Power = 3
+Bot1.Battlefield.Sol Ring.Types = Artifact
+Bot1.Mana = {C}{C} (ArtifactSpells)

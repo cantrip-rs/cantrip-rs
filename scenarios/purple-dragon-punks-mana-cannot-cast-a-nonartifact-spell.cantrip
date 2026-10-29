@@ -1,0 +1,37 @@
+# Purple Dragon Punks: "Spend this mana only to cast an artifact spell or to activate an ability" (CR 106.6). Turn 3: the
+# Mox Ruby's {R} casts Sol Ring first, so Punks' restricted {R} is the only red mana left, and Lightning Bolt, a
+# nonartifact spell, can't be paid with it (the Mox Jet's {B} can't pay {R}): it is not offered, and Bot2 stays at 20.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Purple Dragon Punks
+Lightning Bolt
+Sol Ring
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Purple Dragon Punks.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Purple Dragon Punks.Activate
+? Bot1.Mana = {R} (AnyOf(ArtifactSpells+Abilities))
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+? Bot1.Mana = {R} (AnyOf(ArtifactSpells+Abilities))
+
+[Expect]
+Bot1.Battlefield.Sol Ring.Types = Artifact
+Bot1.Hand.Lightning Bolt.Colors = Red
+Bot2.Life = 20

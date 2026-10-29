@@ -1,0 +1,8 @@
+{
+  "name": "Purple Dragon Punks",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Rogue",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{T}: Add {R}. Spend this mana only to cast an artifact spell or to activate an ability."
+}
