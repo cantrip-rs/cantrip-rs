@@ -1,0 +1,31 @@
+# Borrowed Knowledge {2}{R}{W}: "Choose one - Discard your hand, then draw cards equal to the number of cards in target opponent's
+# hand." Bot1 casts it with its last three cards (Islands) in hand and discards them; Bot2 holds seven cards, so Bot1 draws seven.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Black Lotus
+Borrowed Knowledge
+Island x3
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Borrowed Knowledge.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 7
+Bot1.Graveyard.Count = 5
+Bot2.Hand.Count = 7
