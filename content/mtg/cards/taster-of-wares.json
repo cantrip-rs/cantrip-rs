@@ -1,0 +1,8 @@
+{
+  "name": "Taster of Wares",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Goblin Warlock",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, target opponent reveals X cards from their hand, where X is the number of Goblins you control. You choose one of those cards. That player exiles it. If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell."
+}

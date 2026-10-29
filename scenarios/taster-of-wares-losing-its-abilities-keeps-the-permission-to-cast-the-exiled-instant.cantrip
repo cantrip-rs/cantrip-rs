@@ -1,0 +1,49 @@
+# The permission Taster of Wares gives is the effect of its resolved triggered ability (CR 611.2a), lasting "for as long as you
+# control this creature" (CR 611.2b), not a static ability of the Taster: after Bot2's Lightning Bolt is exiled, Bot1 turns its
+# own Taster into a Frog with no abilities (Turn to Frog), still controls it, and casts the Bolt from exile with Mox Pearl's {W}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Taster of Wares
+Turn to Frog
+Island x30
+
+[Bot2 Deck]
+Lightning Bolt
+Counterspell
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Taster of Wares.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+Bot1.Choose(Lightning Bolt)
+? Exile = Lightning Bolt
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Turn to Frog.Cast(Taster of Wares)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Taster of Wares.Power = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Lightning Bolt
+Exile.Count = 0

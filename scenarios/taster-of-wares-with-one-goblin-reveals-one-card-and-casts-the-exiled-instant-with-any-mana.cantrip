@@ -1,0 +1,46 @@
+# Taster of Wares {2}{B}: "When this creature enters, target opponent reveals X cards from their hand, where X is the number of
+# Goblins you control. You choose one of those cards. That player exiles it. If an instant or sorcery card is exiled this way, you
+# may cast it for as long as you control this creature, and mana of any type can be spent to cast that spell" (CR 701.20a, 608.2d,
+# 609.4b). Taster is Bot1's only Goblin, so Bot2 reveals one card of its choosing - the Lightning Bolt, not the Counterspell or an
+# Island - and it is exiled. Mox Pearl's {W} pays for the Bolt cast from exile, which hits Bot2 and goes to its owner's graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Taster of Wares
+Island x30
+
+[Bot2 Deck]
+Lightning Bolt
+Counterspell
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Taster of Wares.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack = Taster of Wares
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+Bot1.Choose(Lightning Bolt)
+? Exile = Lightning Bolt
+? Bot2.Revealed = Lightning Bolt
+? Bot2.Hand.Count = 6
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Lightning Bolt
+Exile.Count = 0
+Bot2.Hand.Count = 6
+Bot1.Battlefield.Mox Pearl.Tapped = true

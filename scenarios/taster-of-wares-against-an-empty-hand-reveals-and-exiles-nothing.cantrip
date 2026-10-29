@@ -1,0 +1,54 @@
+# Taster of Wares: with nothing in the target opponent's hand, nothing is revealed and nothing is exiled (CR 701.20a, 608.2d). Bot2
+# casts and plays everything it holds on turn 2 (Lightning Bolt at Bot1's face, Bot1 20 -> 17), so on turn 3 the enter ability
+# asks no one anything and the game goes on.
+
+[Bot1 Deck]
+Black Lotus
+Taster of Wares
+Island x30
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Island
+Lightning Bolt
+Black Lotus
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot2.Hand.Count = 0
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Taster of Wares.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 0
+Bot2.Hand.Count = 0
+Bot1.Life = 17

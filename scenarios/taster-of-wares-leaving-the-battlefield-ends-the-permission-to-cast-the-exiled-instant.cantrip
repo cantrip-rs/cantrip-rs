@@ -1,0 +1,41 @@
+# Taster of Wares: the card is exiled by the enter ability (CR 607.2a) but may be cast only "for as long as you control this
+# creature" (CR 611.2b). Bot2 reveals its Lightning Bolt, Bot1 exiles it, then Bot2 kills the Taster with the Shock it
+# held back: with Mox Pearl open Bot1 can no longer cast the Bolt from exile, and nobody else may.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Taster of Wares
+Island x30
+
+[Bot2 Deck]
+Lightning Bolt
+Shock
+Mountain x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Taster of Wares.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+Bot1.Choose(Lightning Bolt)
+? Exile = Lightning Bolt
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Taster of Wares)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Exile = Lightning Bolt
+Bot1.Graveyard = Taster of Wares; Black Lotus
