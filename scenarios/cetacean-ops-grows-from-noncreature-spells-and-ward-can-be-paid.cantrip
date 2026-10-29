@@ -1,0 +1,59 @@
+# Cetacean Ops gets a +1/+1 counter when its controller casts Sol Ring, but not when it casts a creature. Bot2 pays ward {1} for Lightning Bolt; the now 4/4 Whale survives the 3 damage.
+
+[Bot1 Deck]
+Black Lotus
+Cetacean Ops
+Mox Emerald
+Mox Emerald
+Island
+Sol Ring
+Grizzly Bears
+Island x12
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Cetacean Ops.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cetacean Ops.Counters.PlusOnePlusOne = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cetacean Ops.Counters.PlusOnePlusOne = 1
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Cetacean Ops)
+Bot2.Pass
+Bot1.Pass
+Bot2.PayCost
+
+[Expect]
+Bot1.Battlefield.Cetacean Ops.Power = 4
+Bot1.Battlefield.Cetacean Ops.Toughness = 4
+Bot1.Battlefield.Cetacean Ops.Damage = 3
+Bot2.Graveyard = Lightning Bolt; Island; Island
+Bot2.Mana =
