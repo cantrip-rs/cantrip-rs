@@ -1,0 +1,8 @@
+{
+  "name": "Heirloom Auntie",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Goblin Warlock",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "This creature enters with two -1/-1 counters on it.\nWhenever another creature you control dies, surveil 1, then remove a -1/-1 counter from this creature. (To surveil 1, look at the top card of your library. You may put it into your graveyard.)"
+}

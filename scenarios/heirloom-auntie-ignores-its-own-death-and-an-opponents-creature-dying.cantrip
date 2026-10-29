@@ -1,0 +1,42 @@
+# Heirloom Auntie {2}{B} 4/4: "Whenever another creature you control dies, surveil 1, then remove a -1/-1 counter from this creature"
+# (CR 700.4). A creature of Bot2's dying sets nothing off: Bot1's Lightning Bolt kills Bot2's Memnite and the Auntie keeps both its
+# counters and asks nothing; then a second Bolt kills the Auntie itself (2/2), which is not "another" creature, so it surveils nothing
+# either (no prompt for the Island on top of the library).
+
+[Bot1 Deck]
+Black Lotus
+Heirloom Auntie
+Mox Ruby
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Heirloom Auntie.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Heirloom Auntie.Counters.MinusOneMinusOne = 2
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Heirloom Auntie)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite = (absent)
+Bot1.Battlefield.Heirloom Auntie = (absent)
+Bot1.Library.Count = 12
