@@ -1,0 +1,50 @@
+# Turncoat Kunoichi sneaked in (CR 702.190a): the trigger asks whether "its sneak cost was paid" of the permanent as it last existed
+# (CR 603.10a, 608.2h). Bot2 answers the trigger with Lightning Bolt on the Kunoichi, so it is in the graveyard when the trigger
+# resolves, and the chosen Ornithopter is still exiled, for good.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Jet
+Turncoat Kunoichi
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Turncoat Kunoichi.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Turncoat Kunoichi)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Turncoat Kunoichi.Power = 3
+Bot2.Exile.Ornithopter.Power = 0
+Bot2.Battlefield = Mountain
