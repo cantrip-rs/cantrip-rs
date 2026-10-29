@@ -1,0 +1,11 @@
+{
+  "name": "Transdimensional Bovine",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Ox Avatar",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "Flying\n{T}: Add two mana of any one color.",
+  "keywords": [
+    "Flying"
+  ]
+}

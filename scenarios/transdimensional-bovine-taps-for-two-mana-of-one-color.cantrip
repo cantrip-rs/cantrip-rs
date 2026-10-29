@@ -1,0 +1,42 @@
+# Transdimensional Bovine, a 0/4 flier for {2}{G}: "{T}: Add two mana of any one color." It is a {T} cost on a creature (CR 302.6), so the turn it is cast it cannot be tapped
+# (refusal). Next turn the two red mana it adds cast Lightning Bolt twice, which nothing else Bot1 controls could.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Transdimensional Bovine
+Lightning Bolt
+Lightning Bolt
+Forest
+Forest x12
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Transdimensional Bovine.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Transdimensional Bovine.Keywords = Flying
+! Bot1.Battlefield.Transdimensional Bovine.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Transdimensional Bovine.Activate(Color: Red)
+? Bot1.Mana = {R}{R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Transdimensional Bovine.Power = 0
+Bot1.Battlefield.Transdimensional Bovine.Toughness = 4
