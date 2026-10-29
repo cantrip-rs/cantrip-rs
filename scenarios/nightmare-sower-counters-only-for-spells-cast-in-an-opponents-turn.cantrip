@@ -1,0 +1,49 @@
+# Nightmare Sower {3}{B} 2/3 flying lifelink: "Whenever you cast a spell during an opponent's turn, put a -1/-1 counter on up to one target
+# creature" (CR 601.2i, 603.2). Bot1 casts Lightning Bolt in Bot2's turn 2: the trigger puts one counter on Bot2's Wall of Earth (0/6
+# becomes -1/5). Its second Bolt, cast in its own turn 3, sets nothing off, so the Wall keeps exactly one counter. Black Lotus (BBB)
+# and Mox Jet pay for the Sower in turn 1.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Nightmare Sower
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Wall of Earth
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Nightmare Sower.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Earth.Cast
+[T2 Bot2.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Target(Wall of Earth)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Wall of Earth.Counters.MinusOneMinusOne = 1
+Bot2.Battlefield.Wall of Earth.Toughness = 5
+Bot2.Life = 14
+Bot1.Battlefield.Nightmare Sower.Keywords = Flying; Lifelink
