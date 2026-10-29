@@ -1,0 +1,6 @@
+{
+  "name": "Foolish Fate",
+  "manaCost": "{2}{B}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature.\nInfusion — If you gained life this turn, that creature's controller loses 3 life."
+}

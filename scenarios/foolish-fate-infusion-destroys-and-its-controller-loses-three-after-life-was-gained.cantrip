@@ -1,0 +1,39 @@
+# Foolish Fate: destroy target creature; Infusion -- if Bot1 gained life this turn, that creature's controller loses 3 life. Lightning Helix
+# (Ruby, Pearl) hits Bot2 for 3 and gains Bot1 3; Foolish Fate (Jet, Sapphire, Emerald) destroys Bot2's Ornithopter and Bot2 loses 3 more.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Foolish Fate
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Foolish Fate.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 14
+Bot2.Graveyard = Ornithopter
