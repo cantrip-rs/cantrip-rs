@@ -1,0 +1,6 @@
+{
+  "name": "Bot Bashing Time",
+  "manaCost": "{3}{R}",
+  "type": "Sorcery",
+  "oracleText": "Bot Bashing Time deals 6 damage to target creature. If that creature would die this turn, exile it instead."
+}

@@ -1,0 +1,40 @@
+# Bot Bashing Time {3}{R}: three mana is short (refused); a fourth pays it exactly. The 6 damage kills Bot2's Llanowar Elves
+# and "if that creature would die this turn, exile it instead" puts it in exile, not the graveyard.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Pearl
+Bot Bashing Time
+Mox Jet
+Island
+Island x14
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Bot Bashing Time.Cast(Bot2.Battlefield.Llanowar Elves; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bot Bashing Time.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 0
+Exile = Llanowar Elves
+Bot1.Graveyard = Bot Bashing Time

@@ -1,0 +1,52 @@
+# Bot Bashing Time {3}{R}: "Bot Bashing Time deals 6 damage to target creature. If that creature would die this turn, exile it
+# instead." Against Bot2's Gigantosaurus (10/10) the creature survives with exactly 6 damage (not 5 or 7). On a later turn Bot1's
+# Go for the Throat destroys it and it goes to the graveyard: the replacement lasted only the turn it was cast.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Pearl
+Bot Bashing Time
+Mox Jet
+Go for the Throat
+Island
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Gigantosaurus
+Forest x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Gigantosaurus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bot Bashing Time.Cast(Bot2.Battlefield.Gigantosaurus)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Gigantosaurus.Damage = 6
+? Exile.Count = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Go for the Throat.Cast(Bot2.Battlefield.Gigantosaurus)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Gigantosaurus; Black Lotus; Black Lotus
+Exile.Count = 0
+Bot1.Graveyard = Go for the Throat; Bot Bashing Time
