@@ -1,0 +1,42 @@
+# Feed the Flames: "target creature" is any creature, Bot1's own included. Five damage kills Bot1's Armored Whirl Turtle (0/5, exactly
+# lethal) and it is exiled instead of dying (CR 614.1a): it never reaches the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Armored Whirl Turtle
+Black Lotus
+Mox Ruby
+Feed the Flames
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Armored Whirl Turtle.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Feed the Flames.Cast(Armored Whirl Turtle)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Armored Whirl Turtle
+Bot1.Graveyard = Feed the Flames; Black Lotus

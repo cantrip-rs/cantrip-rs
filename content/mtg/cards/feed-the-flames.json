@@ -1,0 +1,6 @@
+{
+  "name": "Feed the Flames",
+  "manaCost": "{3}{R}",
+  "type": "Instant",
+  "oracleText": "Feed the Flames deals 5 damage to target creature. If that creature would die this turn, exile it instead."
+}

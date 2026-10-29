@@ -1,0 +1,56 @@
+# Feed the Flames: "deals 5 damage to target creature. If that creature would die this turn, exile it instead." Bot2's Fortress Crab
+# (3/6) survives exactly 5 damage; a noncreature (Mox Jet) is refused as the target. The replacement lasts the turn (CR 611.2c), so
+# the Lightning Bolt that then kills the Crab exiles it instead of putting it into the graveyard (CR 614.1a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Feed the Flames
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Fortress Crab
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Fortress Crab.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Feed the Flames.Cast(Mox Jet)
+Bot1.Hand.Feed the Flames.Cast(Fortress Crab)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Fortress Crab.Damage = 5
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Fortress Crab)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Fortress Crab
+Bot2.Graveyard = Black Lotus
