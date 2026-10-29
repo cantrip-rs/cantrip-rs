@@ -1,0 +1,49 @@
+# Shinestriker {4}{U}{U}: "Flying. Vivid - When this creature enters, draw cards equal to the number of colors among permanents you control." Bot1 controls a
+# Savannah Lions (white) beside the Shinestriker itself (blue), so it draws two; Bot2's red Mons's Goblin Raiders, and Bot1's own Moxen (colorless artifacts) and Black
+# Lotus, count for nothing (CR 105.2c, the rulings: colorless is not a color).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Black Lotus
+Savannah Lions
+Island
+Shinestriker
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Mons's Goblin Raiders
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: U)
+? Bot1.Hand.Count = 2
+Bot1.Hand.Shinestriker.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Shinestriker.Keywords = Flying
+Bot1.Hand.Count = 3

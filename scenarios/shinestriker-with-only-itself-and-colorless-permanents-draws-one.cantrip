@@ -1,0 +1,42 @@
+# Shinestriker {4}{U}{U}: "Vivid - When this creature enters, draw cards equal to the number of colors among permanents you control." With only colorless Moxen and
+# Black Lotus beside it (and Bot2's Mons's Goblin Raiders, red, which is not Bot1's), the one color among Bot1's permanents is the Shinestriker's own blue: it draws one.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Black Lotus
+Shinestriker
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mons's Goblin Raiders
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: U)
+? Bot1.Hand.Count = 3
+Bot1.Hand.Shinestriker.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 3

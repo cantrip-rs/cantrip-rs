@@ -1,0 +1,11 @@
+{
+  "name": "Shinestriker",
+  "manaCost": "{4}{U}{U}",
+  "type": "Creature — Elemental",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nVivid — When this creature enters, draw cards equal to the number of colors among permanents you control.",
+  "keywords": [
+    "Flying"
+  ]
+}
