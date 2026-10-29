@@ -1,0 +1,32 @@
+# Silvergill Mentor's other additional cost: with a Merfolk card in hand Bot1 may still choose to pay {2} instead (CR 601.2b), and then nothing is beheld or
+# revealed. The whole cost is {1}{U}{2} = 4 mana, paid exactly by a Black Lotus (three blue) and a Mox Sapphire, and the pool is empty.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Silvergill Mentor
+Cenote Scout
+Island x16
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Silvergill Mentor.Cast
+Bot1.Modes(Pay {2})
+! Bot1.Choose
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Revealed = (absent)
+Bot1.Hand = Cenote Scout; Island; Island; Island
+Bot1.Battlefield = Merfolk Token; Mox Sapphire; Silvergill Mentor

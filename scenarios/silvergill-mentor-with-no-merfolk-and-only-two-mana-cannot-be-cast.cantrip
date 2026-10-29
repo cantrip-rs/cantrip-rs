@@ -1,0 +1,24 @@
+# With no Merfolk to behold, Silvergill Mentor's additional cost can only be paid as {2}, so it costs {1}{U}{2} (CR 601.2b, 601.2f): Bot1, with only an Island and a
+# Mox Sapphire, is not offered the cast. The positive control is silvergill-mentor-beholding-a-merfolk-card-in-hand-reveals-it-and-costs-only-two: the same mana
+# and a Merfolk card in hand, and the cast is made.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Silvergill Mentor
+Island x4
+Island x10
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Silvergill Mentor.Cast(Mana: short)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Silvergill Mentor.Power = 2

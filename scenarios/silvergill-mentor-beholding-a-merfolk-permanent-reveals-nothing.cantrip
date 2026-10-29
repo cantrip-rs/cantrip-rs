@@ -1,0 +1,38 @@
+# Silvergill Mentor beholding a Merfolk permanent (CR 701.4a): choosing a permanent reveals nothing, and the spell costs {1}{U} alone, paid by Mox Sapphire and an Island.
+# Cenote Scout, cast first with a Mox Emerald, is the Merfolk Bot1 controls; its explore reveals the Island on top (the only card revealed, so beholding Scout revealed nothing).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Emerald
+Cenote Scout
+Silvergill Mentor
+Island x2
+Island x11
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Silvergill Mentor.Cast
+Bot1.Modes(Behold a Merfolk)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Cenote Scout)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Revealed = Island
+Bot1.Battlefield = Cenote Scout; Island; Merfolk Token; Mox Emerald; Mox Sapphire; Silvergill Mentor

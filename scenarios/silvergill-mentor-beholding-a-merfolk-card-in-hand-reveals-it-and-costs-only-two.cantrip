@@ -1,0 +1,38 @@
+# Silvergill Mentor: "As an additional cost to cast this spell, behold a Merfolk or pay {2}" (CR 601.2b, 701.4a) and "When this creature enters, create a 1/1 white
+# and blue Merfolk creature token". Bot1 beholds the Cenote Scout card in hand, which is revealed and stays there, so the spell costs {1}{U} alone: Mox Sapphire
+# and an Island pay it and the pool is empty. The token is a 1/1 white and blue Merfolk (CR 111.4).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Silvergill Mentor
+Cenote Scout
+Island x3
+Island x10
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Silvergill Mentor.Cast
+Bot1.Modes(Behold a Merfolk)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Choose(Cenote Scout)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Revealed = Cenote Scout
+Bot1.Hand = Cenote Scout; Island; Island; Island
+Bot1.Battlefield = Island; Mox Sapphire; Silvergill Mentor; Merfolk Token
+Bot1.Battlefield.Merfolk Token.Colors = Blue; White
+Bot1.Battlefield.Merfolk Token.Power = 1
+Bot1.Battlefield.Merfolk Token.Toughness = 1
+Bot1.Battlefield.Merfolk Token.Subtypes = Merfolk
