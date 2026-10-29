@@ -1,0 +1,43 @@
+# "You may exile it. When you do, ..." (CR 603.12): Bot1 declines when Paramecia Coloniex dies, so it stays in the graveyard, nothing is put on top of the library, and Bot1 draws the
+# top card (Island) on turn 3. The milled Hill Giant stays in the graveyard.
+
+[Bot1 Deck]
+Paramecia Coloniex
+Mox Jet
+Mox Pearl
+Island x4
+Hill Giant
+Counterspell
+Grizzly Bears
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x22
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Paramecia Coloniex.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Paramecia Coloniex)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Paramecia Coloniex; Grizzly Bears; Counterspell; Hill Giant
+Bot1.Hand = Island; Island; Island; Island; Island

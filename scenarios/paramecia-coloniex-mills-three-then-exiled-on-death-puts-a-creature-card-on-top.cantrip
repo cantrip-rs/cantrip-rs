@@ -1,0 +1,47 @@
+# Paramecia Coloniex (CR 701.17, 603.12): entering it mills three (Hill Giant, Counterspell, Grizzly Bears). Bot2's Lightning Bolt kills it; Bot1 exiles it, and the reflexive ability targets a
+# creature card in the graveyard (not the Counterspell: `!`). Grizzly Bears goes on top of the library and is drawn on turn 3. The Worm itself ends in exile.
+
+[Bot1 Deck]
+Paramecia Coloniex
+Mox Jet
+Mox Pearl
+Island x4
+Hill Giant
+Counterspell
+Grizzly Bears
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x22
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Paramecia Coloniex.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Paramecia Coloniex)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Accept
+! Bot1.Target(Bot1.Graveyard.Counterspell)
+Bot1.Target(Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Exile = Paramecia Coloniex
+Bot1.Graveyard = Counterspell; Hill Giant
+Bot1.Hand = Grizzly Bears; Island; Island; Island; Island

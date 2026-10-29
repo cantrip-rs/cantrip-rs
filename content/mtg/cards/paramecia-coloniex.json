@@ -1,0 +1,8 @@
+{
+  "name": "Paramecia Coloniex",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Zombie Worm",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, mill three cards. (Put the top three cards of your library into your graveyard.)\nWhen this creature dies, you may exile it. When you do, put target creature card from your graveyard on top of your library."
+}
