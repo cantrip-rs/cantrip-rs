@@ -1,0 +1,46 @@
+# Turtle Lair: "{3}, {T}: Target Ninja or Turtle can't be blocked this turn." Turn 1 Ninja of the Hand and Ornithopter
+# are cast. Turn 3 the Lair may not target the Ornithopter (no Ninja, no Turtle), and makes the Ninja unblockable:
+# Bot2's Birds of Paradise may not block it, so it deals 2.
+
+[Bot1 Deck]
+Turtle Lair
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Ninja of the Hand
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Forest
+Birds of Paradise
+Forest x18
+
+[Actions]
+Bot1.Hand.Turtle Lair.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ninja of the Hand.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Birds of Paradise.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Turtle Lair.Activate(Ornithopter; Ability: blocked)
+Bot1.Battlefield.Turtle Lair.Activate(Ninja of the Hand; Ability: blocked)
+Bot1.Attack(Ninja of the Hand)
+! Bot2.Block(Birds of Paradise > Ninja of the Hand)
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 18

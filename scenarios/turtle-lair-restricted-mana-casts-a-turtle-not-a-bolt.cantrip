@@ -1,0 +1,31 @@
+# Turtle Lair: "{T}: Add one mana of any color. Spend this mana only to cast a Ninja or Turtle spell" (CR 106.6, 205.3).
+# Turn 1: the blue mana is alone in the pool; Lightning Bolt can't be cast with it, Aegis Turtle (a Turtle) is, and
+# Mox Jet's black is not what paid. The other ability adds plain {C}.
+
+[Bot1 Deck]
+Turtle Lair
+Mox Jet
+Lightning Bolt
+Aegis Turtle
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Turtle Lair.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Turtle Lair.Activate(Ability: any color; Color: Blue)
+? Bot1.Mana = {U} (NinjaOrTurtleSpells)
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+Bot1.Hand.Aegis Turtle.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Mana =
+Bot1.Battlefield = Turtle Lair; Mox Jet; Aegis Turtle
+Bot1.Hand = Lightning Bolt; Plains; Plains; Plains
