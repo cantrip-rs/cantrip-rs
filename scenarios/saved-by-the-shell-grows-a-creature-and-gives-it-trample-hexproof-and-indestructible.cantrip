@@ -1,0 +1,34 @@
+# Saved by the Shell, {1}{G}: "Put a +1/+1 counter on target creature you control. It gains trample, hexproof, and indestructible until end of turn." With no Turtle it costs the full
+# {1}{G} (Mox Emerald and Mox Jet, the pool empty after), and the Ornithopter (0/2) becomes a 1/3 with the three keywords, which wear off at the end of the turn.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Ornithopter
+Saved by the Shell
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Saved by the Shell.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Hexproof; Indestructible; Trample
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Ornithopter.Keywords = Flying

@@ -1,0 +1,36 @@
+# Saved by the Shell: "This spell costs {1} less to cast if you control a Turtle." Bot1 controls Michelangelo, Game Master (a Mutant Ninja Turtle), so it costs {G} alone: Mox Emerald
+# pays for it and the pool is empty after. The target is Michelangelo himself, a 4/4 with a +1/+1 counter.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Ruby
+Mox Jet
+Michelangelo, Game Master
+Saved by the Shell
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Michelangelo, Game Master.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Saved by the Shell.Cast(Bot1.Battlefield.Michelangelo, Game Master)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Michelangelo, Game Master.Power = 4
+Bot1.Battlefield.Michelangelo, Game Master.Toughness = 4
+Bot1.Battlefield.Michelangelo, Game Master.Keywords = Hexproof; Indestructible; Trample
