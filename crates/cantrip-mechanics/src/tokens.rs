@@ -1017,6 +1017,18 @@ pub static OFFICER: CardDef = CardDef {
     ..token!(Officer)
 };
 
+/// The colorless Planet land token named New Planet, with "{T}: Add one mana of any color." (CR 111.4, 205.3i). Artificial
+/// Anomaly, David and Carol Marcus, Creators, Gaseous Anomaly and Genesis Effect make it, tapped.
+pub static NEW_PLANET: CardDef = CardDef {
+    name: "New Planet",
+    has_cost: false,
+    types: TypeSet::of(&[CardType::Land]),
+    subtypes: SubtypeSet::of(&[Subtype::Planet]),
+    abilities: &[mana_ability(TAP, add_any_color(1).by(add_one_of_any_color), "{T}: Add one mana of any color.")],
+    text: "{T}: Add one mana of any color.",
+    ..CardDef::BLANK
+};
+
 /// The 2/2 green Bear creature token (CR 111.1, 111.4). Argoth, Sanctum of Nature, Ayula's Influence, Bearscape, Caller of the
 /// Claw, Dancing from Dark to Dawn, Path to the World Tree and Words of Wilding make it.
 pub static BEAR: CardDef = CardDef {
