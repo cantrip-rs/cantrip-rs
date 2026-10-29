@@ -1,0 +1,63 @@
+# Steal the Show's first mode on an opponent: the target player, not the caster, chooses (CR 701.9) - Bot2 discards a Memnite and a Mountain together and draws two cards. Bot1 loses nothing and gains nothing from it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Steal the Show
+Mountain x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Hill Giant
+Mountain
+Memnite
+Mountain x10
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Steal the Show.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2)
+Bot2.Choose(Memnite; Mountain)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 2
+Bot2.Hand.Count = 3
+Bot2.Battlefield.Hill Giant.Damage = 0
