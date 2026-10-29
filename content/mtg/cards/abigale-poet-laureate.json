@@ -1,0 +1,17 @@
+{
+  "name": "Abigale, Poet Laureate",
+  "manaCost": "{1}{W}{B}",
+  "type": "Legendary Creature — Bird Bard",
+  "oracleText": "Flying\nWhenever you cast a creature spell, Abigale becomes prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": 2,
+  "toughness": 3,
+  "keywords": [
+    "Flying"
+  ],
+  "prepare": {
+    "name": "Heroic Stanza",
+    "manaCost": "{1}{W/B}",
+    "type": "Sorcery",
+    "oracleText": "Put a +1/+1 counter on target creature."
+  }
+}
