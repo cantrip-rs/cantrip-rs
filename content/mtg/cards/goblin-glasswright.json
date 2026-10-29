@@ -1,0 +1,15 @@
+{
+  "name": "Goblin Glasswright",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Sorcerer",
+  "oracleText": "This creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": 2,
+  "toughness": 2,
+  "keywords": [],
+  "prepare": {
+    "name": "Craft with Pride",
+    "manaCost": "{R}",
+    "type": "Sorcery",
+    "oracleText": "Create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+  }
+}
