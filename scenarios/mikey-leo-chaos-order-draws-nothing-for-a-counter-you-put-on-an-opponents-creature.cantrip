@@ -1,0 +1,49 @@
+# Mikey & Leo, Chaos & Order: "Whenever you put a counter on a creature you control" - the creature must be yours. On turn 3 Bot1 casts Floodpits Drowner, whose trigger puts a stun counter
+# (any kind of counter counts, CR 122.6) on Bot2's Ornithopter: Bot1 put it, but not on a creature it controls, so nothing is drawn.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mikey & Leo, Chaos & Order
+Floodpits Drowner
+Island x4
+Mox Ruby
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mikey & Leo, Chaos & Order.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Floodpits Drowner.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+Bot1.Hand = Island; Island; Island

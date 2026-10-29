@@ -1,0 +1,86 @@
+# Mikey & Leo, Chaos & Order: "Whenever you put a counter on a creature you control, draw a card. This ability triggers only once each turn." On turn 3 Bot1 casts EPF Point Squad,
+# then Ornithopter and Memnite: each entering creature puts a +1/+1 counter on the Squad (CR 122.6), but only the first triggers Mikey & Leo, so one card is drawn (the Island on top),
+# not two. Bot2's own Squad takes counters too, on a creature Bot1 does not control, and draws nothing for Bot1.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mikey & Leo, Chaos & Order
+EPF Point Squad
+Memnite
+Ornithopter
+Island x4
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+EPF Point Squad
+Ornithopter
+Island x4
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mikey & Leo, Chaos & Order.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.EPF Point Squad.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.EPF Point Squad.Counters.PlusOnePlusOne = 1
+? Bot1.Hand = EPF Point Squad; Memnite
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.EPF Point Squad.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.EPF Point Squad.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.EPF Point Squad.Counters.PlusOnePlusOne = 2
+Bot1.Hand = Island
