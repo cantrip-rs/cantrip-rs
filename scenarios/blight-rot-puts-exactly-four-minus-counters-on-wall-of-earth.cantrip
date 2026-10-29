@@ -1,0 +1,32 @@
+# Blight Rot {2}{B}: "Put four -1/-1 counters on target creature" (CR 122.1, 613.4c). Wall of Earth (0/6) survives as a -4/2 with exactly
+# four counters; one counter more or fewer would show in its toughness. Black Lotus pays the three mana as BBB.
+
+[Bot1 Deck]
+Black Lotus
+Blight Rot
+Island x4
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Wall of Earth
+Island x17
+
+[Actions]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Earth.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Blight Rot.Cast(Wall of Earth)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Wall of Earth.Counters.MinusOneMinusOne = 4
+Bot2.Battlefield.Wall of Earth.Power = -4
+Bot2.Battlefield.Wall of Earth.Toughness = 2
+Bot1.Graveyard.Count = 2
