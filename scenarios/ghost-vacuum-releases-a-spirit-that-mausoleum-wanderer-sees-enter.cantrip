@@ -1,0 +1,61 @@
+# Ghost Vacuum: "Each of them is a 1/1 Spirit in addition to its other types." The creature enters as a Spirit (CR 614.12), so what watches Spirits
+# enter sees it: Mausoleum Wanderer, "Whenever another Spirit you control enters, this creature gets +1/+1 until end of turn", is a 2/2 after the
+# Vacuum releases the Dark Confidant Bot1 Bolted on turn 3. It would stay 1/1 if the Confidant entered as the Human Wizard it is printed as
+# and became a Spirit afterwards.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ghost Vacuum
+Mausoleum Wanderer
+Lightning Bolt
+Island
+Island x15
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Dark Confidant
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ghost Vacuum.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Mausoleum Wanderer.Cast
+Bot1.Battlefield.Island.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Dark Confidant.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Dark Confidant)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot1.Battlefield.Ghost Vacuum.Activate(Ability: Exile target; Bot2.Graveyard.Dark Confidant)
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+? Bot1.Battlefield.Mausoleum Wanderer.Power = 1
+Bot1.Battlefield.Ghost Vacuum.Activate(Ability: Put each)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+
+[Expect]
+Turn = 5
+Bot1.Battlefield.Mausoleum Wanderer.Power = 2
+Bot1.Battlefield.Mausoleum Wanderer.Toughness = 2
+Bot1.Battlefield.Dark Confidant.Subtypes = Human; Spirit; Wizard

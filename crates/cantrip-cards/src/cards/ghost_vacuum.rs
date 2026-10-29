@@ -4,29 +4,23 @@ use cantrip_oracle as oracle;
 
 /// Exile it; it is exiled with this artifact (CR 607.2a), where the second ability finds it.
 fn exile_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(card) = targets::object(g, item, 0) {
-        g.exile_with(&[card], g.linked(item), false);
-    }
+    let Some(card) = targets::object(g, item, 0) else { return Ok(()) };
+    g.exile_with(&[card], g.linked(item), false);
     Ok(())
 }
 
+/// "Each of them is a 1/1 Spirit in addition to its other types" (CR 614.12, 613.4b, 205.1a): each enters as that, so what
+/// watches creatures enter sees a 1/1 Spirit and not the card's own power and toughness. The subtype is read through the
+/// words the Vacuum last had (CR 612.1, 113.7a), as the sacrificed artifact's ability is.
+static AS_A_SPIRIT: EntersAs = EntersAs { subtypes: &[Subtype::Spirit], power_toughness: Some((1, 1)), ..EntersAs::NONE };
+
 /// Put each creature card exiled with this artifact onto the battlefield under your control with a flying counter on it
-/// (CR 614.1c), all at once (CR 110.2a: so each sees the others enter, CR 603.6a); each of them is a 1/1 Spirit in addition to
-/// its other types (CR 611.2c, 613.4b). The artifact was sacrificed as a cost, and the exile link outlives it (CR 113.7a).
+/// (CR 614.1c, 122.6), all at once (CR 110.2a: so each sees the others enter, CR 603.6a), each as a 1/1 Spirit in addition to
+/// its other types. The artifact was sacrificed as a cost, and the exile link outlives it (CR 113.7a).
 fn release(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let cards: Vec<(ObjectId, PlayerId, bool)> =
-        g.exiled_with(g.linked(item)).into_iter().filter(|&id| g.chars(id).is(CardType::Creature)).map(|id| (id, item.controller, false)).collect();
-    let spirit = g.words(item.object).subtype(Subtype::Spirit);
-    let arrived = g.put_all_onto_battlefield_with_counters(&cards, &[(CounterKind::Flying, 1)])?;
-    g.end_sentence();
-    instruction(g, |g| {
-        for arrived in arrived {
-            if targets::permanent(g, arrived) {
-                g.add_effect(item.object, arrived, EffectKind::SetPt(1, 1), Duration::Indefinite);
-                g.add_effect(item.object, arrived, EffectKind::AddSubtype(spirit), Duration::Indefinite);
-            }
-        }
-    });
+    let cards: Vec<(ObjectId, PlayerId)> =
+        g.exiled_with(g.linked(item)).into_iter().filter(|&id| g.chars(id).is(CardType::Creature)).map(|id| (id, item.controller)).collect();
+    g.put_all_onto_battlefield_becoming(&cards, item, &AS_A_SPIRIT, &[(CounterKind::Flying, 1)])?;
     Ok(())
 }
 

@@ -1,0 +1,77 @@
+# Ghost Vacuum: "Each of them is a 1/1 Spirit in addition to its other types." The creatures enter as that (CR 614.12), so what watches creatures
+# enter sees a 1/1: Kiora, Behemoth Beckoner's "Whenever a creature you control with power 4 or greater enters, draw a card" does not draw for the
+# Craw Wurm, a 6/4 on every other day of its life, that Bot1 destroys on turn 3, exiles with the Vacuum, and releases on turn 5. It would draw
+# if the Wurm entered as the 6/4 and was made 1/1 afterwards.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ghost Vacuum
+Kiora, Behemoth Beckoner
+Go for the Throat
+Island
+Island x15
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Craw Wurm
+Forest x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ghost Vacuum.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kiora, Behemoth Beckoner.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Craw Wurm.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Go for the Throat.Cast(Bot2.Battlefield.Craw Wurm)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot1.Battlefield.Ghost Vacuum.Activate(Ability: Exile target; Bot2.Graveyard.Craw Wurm)
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Ghost Vacuum.Activate(Ability: Put each)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+
+[Expect]
+Turn = 5
+Bot1.Battlefield.Craw Wurm.Power = 1
+Bot1.Battlefield.Craw Wurm.Toughness = 1
+Bot1.Battlefield.Craw Wurm.Subtypes = Spirit; Wurm
+Bot1.Battlefield.Craw Wurm.Keywords = Flying
+Bot1.Hand.Count = 0
