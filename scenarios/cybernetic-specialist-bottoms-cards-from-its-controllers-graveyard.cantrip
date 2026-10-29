@@ -1,0 +1,65 @@
+# The activated ability moves only cards in its controller's graveyard. It bottoms a creature and an artifact card, pays {1}
+# and taps the source each time, and refuses the opponent's graveyard card (CR 602.2a, 608.2b).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Cybernetic Specialist
+Island
+Island
+Island
+Island
+Grizzly Bears
+Island
+Island
+
+[Bot2 Deck]
+Island
+Opt
+Island
+Island
+Island
+Island
+Island
+Forest
+Island
+Island
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Cybernetic Specialist.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+? Bot1.Mana = {U}
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(| Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Opt.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Arrange(Island |)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+! Bot1.Battlefield.Cybernetic Specialist.Activate(Bot2.Graveyard.Opt)
+Bot1.Battlefield.Cybernetic Specialist.Activate(Bot1.Graveyard.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Cybernetic Specialist.Activate(Bot1.Graveyard.Black Lotus)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Cybernetic Specialist.Tapped = true
+Bot1.Graveyard.Count = 0
+Bot1.Library = Grizzly Bears; Black Lotus
+Bot2.Graveyard = Opt

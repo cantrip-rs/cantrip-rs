@@ -1,0 +1,27 @@
+# Cybernetic Specialist's enters trigger may put the top card into its controller's graveyard during surveil 1 (CR 701.25a).
+
+[Bot1 Deck]
+Cybernetic Specialist
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Cybernetic Specialist.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana =
+Bot1.Arrange(| Island)
+
+[Expect]
+Bot1.Battlefield = Cybernetic Specialist; Mox Pearl; Mox Sapphire
+Bot1.Graveyard = Island
+Bot1.Library.Count = 15
+Bot2.Library.Count = 13

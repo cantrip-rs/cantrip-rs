@@ -1,0 +1,8 @@
+{
+  "name": "Cybernetic Specialist",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Human Scientist",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\n{1}, {T}: Put target card from your graveyard on the bottom of your library."
+}
