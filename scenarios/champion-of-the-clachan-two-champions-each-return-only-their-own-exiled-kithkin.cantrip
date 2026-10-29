@@ -1,0 +1,48 @@
+# Champion of the Clachan (CR 607.2q): the Kithkin exiled as the cost is linked to the permanent that spell became, so each of two Champions returns only its own.
+# Bot1 casts one beholding Figure of Destiny from its hand on turn 1 and the second beholding Knight of Meadowgrain on turn 3. When Bot2's Swords to Plowshares
+# exiles the first Champion on turn 4, the Figure returns to its owner's hand and the Knight stays exiled for the second.
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Figure of Destiny
+Knight of Meadowgrain
+Champion of the Clachan
+Champion of the Clachan
+Plains x12
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Champion of the Clachan.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Choose(Figure of Destiny)
+[T3 Bot1.Main1]
+Bot1.Hand.Champion of the Clachan.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Choose(Knight of Meadowgrain)
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Champion of the Clachan#1)
+[T4 Bot2.Main2]
+
+[Expect]
+Exile.Count = 2
+Bot1.Hand = Figure of Destiny
+Bot1.Battlefield.Count = 5

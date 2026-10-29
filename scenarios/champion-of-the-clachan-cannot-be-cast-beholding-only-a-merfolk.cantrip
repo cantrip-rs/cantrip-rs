@@ -1,0 +1,29 @@
+# Champion of the Clachan (CR 601.2b, 701.4a): the additional cost beholds a Kithkin, and Coral Merfolk in the hand is not one, nor is a Mox on the battlefield, so with
+# the {3}{W} paid for in full the Champion cannot be cast.
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Coral Merfolk
+Champion of the Clachan
+Plains
+Plains x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+! Bot1.Hand.Champion of the Clachan.Cast
+
+[Expect]
+Exile.Count = 0
