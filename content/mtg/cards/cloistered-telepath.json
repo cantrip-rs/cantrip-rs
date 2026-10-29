@@ -1,0 +1,11 @@
+{
+  "name": "Cloistered Telepath",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Talosian Advisor",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flash\nWhen this creature enters, draw a card, then discard a card.",
+  "keywords": [
+    "Flash"
+  ]
+}

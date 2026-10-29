@@ -1,0 +1,29 @@
+# Flash lets Bot1 cast this during Bot2's turn. The trigger draws Forest, then discards that newly drawn card;
+# if the order were reversed, Forest could not be chosen.
+
+[Bot1 Deck]
+Black Lotus
+Cloistered Telepath
+Lightning Bolt
+Island x4
+Forest
+Mountain
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Cloistered Telepath.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+
+[Expect]
+Bot1.Battlefield.Cloistered Telepath.Power = 2
+Bot1.Battlefield.Cloistered Telepath.Toughness = 1
+Bot1.Graveyard = Forest; Black Lotus
+Bot1.Hand = Island; Island; Island; Island; Lightning Bolt
