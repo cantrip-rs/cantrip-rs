@@ -1,0 +1,11 @@
+{
+  "name": "Sneering Shadewriter",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Vampire Warlock",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature enters, each opponent loses 2 life and you gain 2 life.",
+  "keywords": [
+    "Flying"
+  ]
+}
