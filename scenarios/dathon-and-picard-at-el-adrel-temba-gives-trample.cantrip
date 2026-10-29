@@ -1,0 +1,53 @@
+# Temba targets an opposing creature and gives it +3/+3 and trample for the rest of this turn (CR 608.2c, 611.2a). A noncreature (Mox Emerald) is refused as the target.
+# Dathon and Picard at El-Adrel {2}{G}: Instant
+#   Choose one —
+#   • Temba, His Arms Wide — Target creature gets +3/+3 and gains trample until end of turn.
+#   • Shaka, When the Walls Fell — Each opponent sacrifices a nontoken artifact or enchantment of their choice.
+# Written by new-card.py --scenario: Dathon and Picard at El-Adrel cast on turn 1 off zero-cost mana sources. Grow it a line at a time with
+#   cargo run --profile cards -p cantrip-script --bin corpus -- --scenario dathon-and-picard-at-el-adrel-temba-gives-trample --next --brief
+# and see which keys the card moved with --diff <the line number of its cast>.
+
+[Bot1 Deck]
+Dathon and Picard at El-Adrel
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dathon and Picard at El-Adrel.Cast
+Bot1.Modes(Target creature gets +3/+3 and gains trample until end of turn.)
+! Bot1.Target(Bot1.Battlefield.Mox Emerald)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Llanowar Elves.Power = 4
+? Bot2.Battlefield.Llanowar Elves.Toughness = 4
+? Bot2.Battlefield.Llanowar Elves.Keywords = Trample
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot2.Battlefield.Llanowar Elves.Toughness = 1
+Bot2.Battlefield.Llanowar Elves.Keywords = (absent)

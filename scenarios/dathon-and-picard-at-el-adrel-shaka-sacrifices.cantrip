@@ -1,0 +1,42 @@
+# Shaka makes each opponent choose one nontoken artifact or enchantment they control to sacrifice (CR 701.21a).
+# Dathon and Picard at El-Adrel {2}{G}: Instant
+#   Choose one —
+#   • Temba, His Arms Wide — Target creature gets +3/+3 and gains trample until end of turn.
+#   • Shaka, When the Walls Fell — Each opponent sacrifices a nontoken artifact or enchantment of their choice.
+# Written by new-card.py --scenario: Dathon and Picard at El-Adrel cast on turn 1 off zero-cost mana sources. Grow it a line at a time with
+#   cargo run --profile cards -p cantrip-script --bin corpus -- --scenario dathon-and-picard-at-el-adrel-shaka-sacrifices --next --brief
+# and see which keys the card moved with --diff <the line number of its cast>.
+
+[Bot1 Deck]
+Dathon and Picard at El-Adrel
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest x20
+
+[Bot2 Deck]
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dathon and Picard at El-Adrel.Cast
+Bot1.Modes(Each opponent sacrifices a nontoken artifact or enchantment of their choice.)
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard = Mox Jet
+Bot2.Battlefield.Count = 0

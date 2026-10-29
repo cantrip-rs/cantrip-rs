@@ -1,0 +1,55 @@
+# Shaka may sacrifice a nontoken enchantment, while an artifact token is not eligible (CR 701.21a). A land (Plains) is not eligible either.
+[Bot1 Deck]
+Dathon and Picard at El-Adrel
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest x20
+
+[Bot2 Deck]
+Black Lotus
+Plains
+Ornithopter
+Thraben Inspector
+Rancor
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Thraben Inspector.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Rancor.Cast(Bot2.Battlefield.Thraben Inspector)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dathon and Picard at El-Adrel.Cast
+Bot1.Modes(Each opponent sacrifices a nontoken artifact or enchantment of their choice.)
+Bot1.Pass
+! Bot2.Choose(Clue Token)
+! Bot2.Choose(Plains)
+Bot2.Choose(Rancor)
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Clue Token.Token = true
+Bot2.Battlefield.Ornithopter.Token = (absent)
+Bot2.Hand = Island; Island; Island; Rancor

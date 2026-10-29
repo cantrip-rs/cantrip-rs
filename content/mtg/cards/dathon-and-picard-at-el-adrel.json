@@ -1,0 +1,6 @@
+{
+  "name": "Dathon and Picard at El-Adrel",
+  "manaCost": "{2}{G}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Temba, His Arms Wide — Target creature gets +3/+3 and gains trample until end of turn.\n• Shaka, When the Walls Fell — Each opponent sacrifices a nontoken artifact or enchantment of their choice."
+}
