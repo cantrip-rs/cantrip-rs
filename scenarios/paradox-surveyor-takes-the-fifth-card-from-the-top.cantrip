@@ -1,0 +1,37 @@
+# Paradox Surveyor: the fifth card from the top is still among the five looked at, so the Pterafractyl there (an {X} card)
+# can be taken and the other four go to the bottom.
+
+[Bot1 Deck]
+Paradox Surveyor
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Plains
+Plains
+Plains
+Lightning Bolt
+Giant Growth
+Grizzly Bears
+Hill Giant
+Pterafractyl
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Paradox Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Pterafractyl | Lightning Bolt; Giant Growth; Grizzly Bears; Hill Giant)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Island; Plains; Plains; Plains; Pterafractyl
+Bot1.Library.Count = 23

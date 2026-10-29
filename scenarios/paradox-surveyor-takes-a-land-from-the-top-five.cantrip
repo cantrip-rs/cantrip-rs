@@ -1,0 +1,38 @@
+# Paradox Surveyor: a land card among the top five may be taken (CR 305.7 aside, it is only put into hand), and a card that is
+# neither land nor has {X} (Lightning Bolt) is refused as the one to take.
+
+[Bot1 Deck]
+Paradox Surveyor
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Plains
+Plains
+Plains
+Lightning Bolt
+Pterafractyl
+Forest
+Giant Growth
+Grizzly Bears
+Hill Giant
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Paradox Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Lightning Bolt | Pterafractyl; Forest; Giant Growth; Grizzly Bears)
+Bot1.Arrange(Forest | Lightning Bolt; Pterafractyl; Giant Growth; Grizzly Bears)
+
+[Expect]
+Bot1.Hand = Forest; Plains; Plains; Plains
+Bot1.Library.Count = 25
