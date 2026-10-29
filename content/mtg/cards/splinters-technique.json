@@ -1,0 +1,6 @@
+{
+  "name": "Splinter's Technique",
+  "manaCost": "{3}{B}",
+  "type": "Sorcery",
+  "oracleText": "Sneak {1}{B} (You may cast this spell for {1}{B} if you also return an unblocked attacker you control to hand during the declare blockers step.)\nSearch your library for a card, put that card into your hand, then shuffle."
+}

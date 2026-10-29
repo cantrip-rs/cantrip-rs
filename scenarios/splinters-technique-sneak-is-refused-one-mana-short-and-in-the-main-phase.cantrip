@@ -1,0 +1,25 @@
+# Sneak {1}{B} is two mana: with Mox Jet alone in the declare blockers step for an unblocked attacker it is refused for want
+# of mana (CR 702.190a, 118.5), and it is not offered in the main phase at all.
+
+[Bot1 Deck]
+Mox Jet
+Ornithopter
+Splinter's Technique
+Swamp x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Splinter's Technique.Cast(Ability: Sneak)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+! Bot1.Hand.Splinter's Technique.Cast(Ability: Sneak; Mana: short)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Ornithopter
+Bot1.Graveyard.Count = 0
