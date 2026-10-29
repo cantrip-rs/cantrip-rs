@@ -1,0 +1,42 @@
+# Kicked Eject the Warp Core sacrifices Mox Pearl and gives Bot2's Wall of Ice -6/-6 instead of -2/-2 (CR 702.33a, 702.33d).
+# The 0/7 Wall survives as a 0/1, so the expectation catches either size being wrong and proves the effect is “instead.”
+
+[Bot1 Deck]
+Eject the Warp Core
+Mox Jet
+Mox Pearl
+Island x12
+
+[Bot2 Deck]
+Wall of Ice
+Forest x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Wall of Ice.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eject the Warp Core.Cast(Bot2.Battlefield.Wall of Ice)
+Bot1.Modes(Kicker—Sacrifice an artifact or creature)
+Bot1.Choose(Mox Pearl)
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Eject the Warp Core; Mox Pearl
+Bot2.Battlefield.Wall of Ice.Power = -6
+Bot2.Battlefield.Wall of Ice.Toughness = 1

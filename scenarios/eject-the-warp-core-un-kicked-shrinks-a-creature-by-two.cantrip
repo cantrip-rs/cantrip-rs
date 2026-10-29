@@ -1,0 +1,33 @@
+# Eject the Warp Core shrinks its controller's Phyrexian Walker by exactly 2/2, then the effect ends at cleanup (CR 611.2a).
+# Mox Pearl is present as an invalid noncreature target; the refusal proves the spell targets only creatures (CR 115.1).
+
+[Bot1 Deck]
+Eject the Warp Core
+Mox Jet
+Mox Pearl
+Phyrexian Walker
+Island x12
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Eject the Warp Core.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Eject the Warp Core.Cast(Bot1.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Phyrexian Walker.Power = -2
+? Bot1.Battlefield.Phyrexian Walker.Toughness = 1
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Phyrexian Walker.Power = 0
+Bot1.Battlefield.Phyrexian Walker.Toughness = 3

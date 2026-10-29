@@ -1,0 +1,48 @@
+# Kicker's sacrifice option can be paid with a nontoken creature (CR 701.21a, 702.33a); this spell then gives an opponent's Wall of Ice -6/-6.
+
+[Bot1 Deck]
+Eject the Warp Core
+Swamp
+Mox Jet
+Mox Pearl
+Eager Cadet
+Island x12
+
+[Bot2 Deck]
+Wall of Ice
+Forest x12
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Wall of Ice.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Eject the Warp Core.Cast(Bot2.Battlefield.Wall of Ice)
+Bot1.Modes(Kicker—Sacrifice an artifact or creature)
+Bot1.Choose(Eager Cadet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Eject the Warp Core; Eager Cadet
+Bot2.Battlefield.Wall of Ice.Power = -6
+Bot2.Battlefield.Wall of Ice.Toughness = 1
