@@ -408,6 +408,14 @@ pub static PEST_THAT_GAINS_LIFE_ON_ATTACK: CardDef = CardDef {
     ..token!(Pest)
 };
 
+/// "Create a 1/1 black and green Pest creature token with 'Whenever this token attacks, you gain 1 life.'" (CR 111.1): one
+/// `PEST_THAT_GAINS_LIFE_ON_ATTACK` under `item`'s controller, the card file listing it in its `EXTRA`. Essenceknit Scholar, Moseo,
+/// Vein's New Dean, Pest Friend and Send in the Pest print it.
+pub fn create_a_pest_that_gains_life_on_attack(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &PEST_THAT_GAINS_LIFE_ON_ATTACK, 1)?;
+    Ok(())
+}
+
 /// A colorless Gold artifact token with "Sacrifice this artifact: Add one mana of any color." (CR 111.10c).
 pub static GOLD: CardDef = CardDef {
     types: TypeSet::of(&[CardType::Artifact]),
