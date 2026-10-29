@@ -1,0 +1,52 @@
+# Efflorescence: Infusion -- Bot1 gained 3 life this turn (Lightning Helix on Bot2), so Grizzly Bears gets two +1/+1 counters and
+# also trample and indestructible until end of turn. Bot2's Lightning Bolt (3 damage) does not destroy the 4/4 indestructible Bears.
+# The counters stay on turn 4; the keywords are gone.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Grizzly Bears
+Efflorescence
+Lightning Helix
+Mountain x12
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Efflorescence.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Toughness = 4
+? Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Grizzly Bears.Keywords = Indestructible; Trample
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+
+[Expect]
+Bot1.Graveyard = Efflorescence; Lightning Helix

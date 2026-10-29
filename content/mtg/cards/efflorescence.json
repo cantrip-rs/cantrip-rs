@@ -1,0 +1,6 @@
+{
+  "name": "Efflorescence",
+  "manaCost": "{2}{G}",
+  "type": "Instant",
+  "oracleText": "Put two +1/+1 counters on target creature.\nInfusion — If you gained life this turn, that creature also gains trample and indestructible until end of turn."
+}
