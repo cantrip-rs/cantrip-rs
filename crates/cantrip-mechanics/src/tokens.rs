@@ -1041,6 +1041,18 @@ pub static KLINGON: CardDef = CardDef {
     ..token!(Klingon Warrior)
 };
 
+/// The 2/2 red and green Worm creature token with "This token can't block." (CR 111.1, 509.1b). Cleveland Booker, Empath
+/// makes it.
+pub static RED_AND_GREEN_WORM: CardDef = CardDef {
+    colors: Some(ColorSet(0b11000)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    keywords: Keywords::of(&[Keyword::CantBlock]),
+    text: "This token can't block.",
+    ..token!(Worm)
+};
+
 /// The 2/2 green Bear creature token (CR 111.1, 111.4). Argoth, Sanctum of Nature, Ayula's Influence, Bearscape, Caller of the
 /// Claw, Dancing from Dark to Dawn, Path to the World Tree and Words of Wilding make it.
 pub static BEAR: CardDef = CardDef {
