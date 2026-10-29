@@ -1,0 +1,11 @@
+{
+  "name": "Featherbrained Filcher",
+  "manaCost": "{W}",
+  "type": "Creature — Bird Mutant",
+  "power": 0,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this creature leaves the battlefield, create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")",
+  "keywords": [
+    "Flying"
+  ]
+}
