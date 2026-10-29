@@ -1,0 +1,6 @@
+{
+  "name": "Render Speechless",
+  "manaCost": "{2}{W}{B}",
+  "type": "Sorcery",
+  "oracleText": "Target opponent reveals their hand. You choose a nonland card from it. That player discards that card.\nPut two +1/+1 counters on up to one target creature."
+}

@@ -1,0 +1,33 @@
+# Render Speechless: a hand holding only lands has no nonland card to choose, so Bot1 is asked nothing (the refused Choose) and
+# nothing is discarded; the counters are put on the creature all the same, as the spell still resolves in full.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Ornithopter
+Render Speechless
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Render Speechless.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+
+[Expect]
+Bot2.Graveyard.Count = 0
+Bot2.Hand.Count = 7
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2

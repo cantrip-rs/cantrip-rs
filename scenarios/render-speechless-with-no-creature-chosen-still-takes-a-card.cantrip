@@ -1,0 +1,35 @@
+# Render Speechless: the creature is "up to one", so it may be left unchosen (an empty slot) and the opponent's hand is still
+# revealed and a nonland card still taken. No counters are put anywhere.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Ornithopter
+Render Speechless
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Lightning Bolt
+Counterspell
+Island x5
+Island x11
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Render Speechless.Cast
+Bot1.Target(Bot2)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Ornithopter.Power = 0
