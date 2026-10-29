@@ -1,0 +1,8 @@
+{
+  "name": "Leonardo, Big Brother",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Mutant Ninja Turtle",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Sneak {W} (You may cast this spell for {W} if you also return an unblocked attacker you control to hand during the declare blockers step. He enters tapped and attacking.)\nLeonardo gets +1/+0 for each other creature you control."
+}

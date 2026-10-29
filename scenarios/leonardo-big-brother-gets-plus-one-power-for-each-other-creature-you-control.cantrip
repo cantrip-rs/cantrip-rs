@@ -1,0 +1,54 @@
+# Leonardo, Big Brother (1/3): "gets +1/+0 for each other creature you control" (CR 613.4c). He does not count himself (power 1
+# alone), grows with Bot1's Ornithopter (2) and Action News Crew (3), and ignores Bot2's Ornithopter (still 3). When Bot2's
+# Lightning Bolt kills Bot1's Ornithopter he is 2/3 again; the toughness never changes.
+
+[Bot1 Deck]
+Mox Pearl x2
+Black Lotus
+Leonardo, Big Brother
+Action News Crew
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Leonardo, Big Brother.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Leonardo, Big Brother.Power = 1
+? Bot1.Battlefield.Leonardo, Big Brother.Toughness = 3
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Leonardo, Big Brother.Power = 2
+Bot1.Hand.Action News Crew.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Leonardo, Big Brother.Power = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Leonardo, Big Brother.Power = 3
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Leonardo, Big Brother.Power = 2
+Bot1.Battlefield.Leonardo, Big Brother.Toughness = 3
+Bot1.Graveyard = Ornithopter; Black Lotus

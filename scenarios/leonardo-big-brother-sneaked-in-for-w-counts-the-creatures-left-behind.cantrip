@@ -1,0 +1,44 @@
+# Sneak {W} (CR 702.190a-b): Bot1 attacks with Ornithopter on turn 3 and nobody blocks; in the declare blockers step it casts
+# Leonardo, Big Brother for {W}, returning the Ornithopter to its hand. He enters tapped and attacking Bot2 and, with Action
+# News Crew the one other creature Bot1 controls (the returned Ornithopter is no longer one), is 2/3 and deals 2: Bot2 at 18.
+
+[Bot1 Deck]
+Plains
+Mox Pearl x2
+Ornithopter
+Action News Crew
+Leonardo, Big Brother
+Plains x14
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Action News Crew.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Leonardo, Big Brother.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Plains.Activate
+? Stack = Leonardo, Big Brother
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Leonardo, Big Brother > Bot2
+? Bot1.Battlefield.Leonardo, Big Brother.Tapped = true
+? Bot1.Battlefield.Leonardo, Big Brother.Power = 2
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Leonardo, Big Brother.Power = 2
+Bot1.Hand.Count = 3
