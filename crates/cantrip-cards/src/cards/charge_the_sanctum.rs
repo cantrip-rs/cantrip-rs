@@ -5,14 +5,10 @@ use cantrip_oracle as oracle;
 /// Mode 1: "Target creature gets +2/+0 and gains first strike until end of turn. Put a +1/+1 counter on it." (CR 611.2,
 /// 702.7, 122.1.)
 fn charge_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        instruction(g, |g| {
-            g.add_effect(item.object, creature, EffectKind::Pump(2, 0), Duration::EndOfTurn);
-            effects::gain_until_end_of_turn(g, item.object, creature, Keyword::FirstStrike);
-        });
-        g.end_sentence();
-        g.add_counters(creature, CounterKind::PlusOne, 1);
-    }
+    effects::target_creature_gets_and_gains_first_strike::<2, 0>(g, item)?;
+    let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
+    g.end_sentence();
+    g.add_counters(creature, CounterKind::PlusOne, 1);
     Ok(())
 }
 
