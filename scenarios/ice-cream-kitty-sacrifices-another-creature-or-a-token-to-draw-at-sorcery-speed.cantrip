@@ -1,0 +1,68 @@
+# Ice Cream Kitty, "{2}, Sacrifice another creature or token: Draw a card. Activate only as a sorcery." Bot1 has Dori (a creature that makes a Treasure token), the
+# Kitty and five Moxen. On turn 3 the Treasure token (not a creature) is sacrificed for one card; with that ability still on the stack no second one can be
+# activated (CR 307.1, sorcery timing); once it has resolved, Dori (a creature) is sacrificed for another. The cost refuses a Mox (an artifact that is neither a
+# creature nor a token) and the Kitty itself ("another").
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Dori, Bearer of Friends
+Ice Cream Kitty
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dori, Bearer of Friends.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Dori, Bearer of Friends; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Treasure Token
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ice Cream Kitty.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Ice Cream Kitty.Activate(Ability: Draw; Sacrifice: Mox Emerald)
+! Bot1.Battlefield.Ice Cream Kitty.Activate(Ability: Draw; Sacrifice: Ice Cream Kitty)
+Bot1.Battlefield.Ice Cream Kitty.Activate(Ability: Draw; Sacrifice: Treasure Token)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Ice Cream Kitty.Activate(Ability: Draw; Sacrifice: Dori, Bearer of Friends)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Island; Island
+Bot1.Battlefield.Ice Cream Kitty.Activate(Ability: Draw; Sacrifice: Dori, Bearer of Friends)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Island
+Bot1.Graveyard = Dori, Bearer of Friends
+Bot1.Battlefield = Ice Cream Kitty; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire

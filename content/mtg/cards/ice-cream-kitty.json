@@ -1,0 +1,8 @@
+{
+  "name": "Ice Cream Kitty",
+  "manaCost": "{1}{B/G}",
+  "type": "Artifact Creature — Food Cat Mutant",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{2}, Sacrifice another creature or token: Draw a card. Activate only as a sorcery.\n{2}, {T}, Sacrifice this creature: You gain 3 life."
+}

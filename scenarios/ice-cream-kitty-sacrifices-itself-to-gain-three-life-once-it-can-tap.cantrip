@@ -1,0 +1,46 @@
+# Ice Cream Kitty, "{2}, {T}, Sacrifice this creature: You gain 3 life." The {T} needs it to have been under Bot1's control since the turn began (CR 302.6): the turn
+# it enters the ability is refused, on turn 3 it is paid with two Moxen, the Kitty goes to the graveyard and Bot1 gains 3 life.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Emerald
+Ice Cream Kitty
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ice Cream Kitty.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Ice Cream Kitty.Activate(Ability: gain 3 life)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Ice Cream Kitty.Activate(Ability: gain 3 life)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Graveyard = Ice Cream Kitty
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
