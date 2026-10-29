@@ -1,0 +1,40 @@
+# "Choose one that hasn't been chosen this turn" (CR 700.2) is asked of this turn alone. Turn 3: Savannah Lions chooses the
+# +1/+1 counter. Turn 5: another Savannah Lions may choose the +1/+1 counter again (Lita has two counters).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Lita, Little Orphan Amphibian
+Savannah Lions
+Savannah Lions
+Plains
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lita, Little Orphan Amphibian.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Modes(+1/+1 counter)
+Bot1.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Lita, Little Orphan Amphibian.Counters.PlusOnePlusOne = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Modes(+1/+1 counter)
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Lita, Little Orphan Amphibian.Counters.PlusOnePlusOne = 2
