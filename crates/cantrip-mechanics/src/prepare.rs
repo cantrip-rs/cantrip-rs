@@ -17,6 +17,15 @@ pub fn become_prepared(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     Ok(())
 }
 
+/// "Target creature becomes prepared" (CR 722.3a): only a permanent with a prepare spell can, which the verb checks. Hexhaven
+/// Dueling Arena, Skycoach Waypoint and Biblioplex Tomekeeper print it.
+pub fn target_becomes_prepared(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(id) = crate::targets::object(g, item, 0) {
+        g.become_prepared(id);
+    }
+    Ok(())
+}
+
 /// Whether this object is a prepare spell (CR 722.3c-d), including copies. The
 /// exile-only `prepared_from` link belongs to the old object after casting, so
 /// follow the history's zone-change and copy provenance rather than a card name.
