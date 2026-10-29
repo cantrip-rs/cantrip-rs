@@ -1,0 +1,29 @@
+# Turtles Forever with nothing to search: Bot1's library is empty and it owns nothing outside the game, so the search finds nothing,
+# nothing is revealed or chosen, and the spell does nothing else.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Turtles Forever
+Plains
+Plains
+Plains
+Plains
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Turtles Forever.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains
+Bot1.Library.Count = 0
+Bot1.Graveyard = Turtles Forever; Black Lotus

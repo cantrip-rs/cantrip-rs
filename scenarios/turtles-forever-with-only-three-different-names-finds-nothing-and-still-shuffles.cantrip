@@ -1,0 +1,40 @@
+# "Exactly four ... with different names": Bot1 owns two Lutri in the library, an Isamaru there and a Lurrus outside the game, four
+# legendary creature cards of only three names, so four cannot be found. The four cannot be chosen (the answer with both Lutri is refused), and Bot1 finds nothing (CR 701.23b); nothing is chosen, and
+# Bot1's hand, library and sideboard stay as they were.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Turtles Forever
+Plains
+Plains
+Plains
+Plains
+Lutri, the Spellchaser
+Lutri, the Spellchaser
+Isamaru, Hound of Konda
+Plains x10
+
+[Bot1 Sideboard]
+Lurrus of the Dream-Den
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Turtles Forever.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Lutri, the Spellchaser; Lutri, the Spellchaser; Isamaru, Hound of Konda; Lurrus of the Dream-Den)
+Bot1.Search()
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains
+Bot1.Library.Count = 13
+Bot1.Library != Lutri, the Spellchaser; Lutri, the Spellchaser; Isamaru, Hound of Konda; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains
+Bot1.Sideboard = Lurrus of the Dream-Den

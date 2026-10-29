@@ -1,0 +1,54 @@
+# Turtles Forever (Black Lotus and Mox Pearl pay {3}{W}): Bot1 searches the library and outside the game together for exactly four
+# legendary creature cards with different names (Lutri and Isamaru from the library, Lurrus and Kaheera from the sideboard; a Savannah
+# Lions outside is not legendary,
+# a fifth, Thalia, is legendary but five is refused: the search is for no more than four; Bot2's own library holds a Lutri that must stay). Bot2 chooses two of the four, Lutri (from the
+# library) and Lurrus (from outside the game): they go into Bot1's hand, and Isamaru and Kaheera are shuffled into Bot1's library
+# (Kaheera from outside the game among them), so the Kaheera is a library card afterwards and the sideboard keeps the Lions and Thalia.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Turtles Forever
+Plains
+Plains
+Plains
+Plains
+Lutri, the Spellchaser
+Isamaru, Hound of Konda
+Plains x11
+
+[Bot1 Sideboard]
+Lurrus of the Dream-Den
+Kaheera, the Orphanguard
+Savannah Lions
+Thalia, Guardian of Thraben
+
+[Bot2 Deck]
+Island x13
+Lutri, the Spellchaser
+Island x6
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Turtles Forever.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Plains)
+! Bot1.Search(Lutri, the Spellchaser; Isamaru, Hound of Konda; Lurrus of the Dream-Den; Kaheera, the Orphanguard; Thalia, Guardian of Thraben)
+! Bot1.Search(Savannah Lions)
+Bot1.Search(Lutri, the Spellchaser; Isamaru, Hound of Konda; Lurrus of the Dream-Den; Kaheera, the Orphanguard)
+Bot2.Choose(Lutri, the Spellchaser; Lurrus of the Dream-Den)
+
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Lurrus of the Dream-Den; Lutri, the Spellchaser; Plains; Plains; Plains; Plains
+Bot1.Library.Isamaru, Hound of Konda.Power = 2
+Bot1.Library.Kaheera, the Orphanguard.Power = 3
+Bot1.Library.Count = 13
+Bot1.Sideboard = Savannah Lions; Thalia, Guardian of Thraben
+Bot2.Library.Lutri, the Spellchaser.Power = 3
+Bot2.Library.Count = 13
