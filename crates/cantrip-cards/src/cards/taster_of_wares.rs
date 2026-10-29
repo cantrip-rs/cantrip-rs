@@ -23,14 +23,18 @@ fn reveal_and_exile(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature": a static ability
-/// (CR 604.1, 611.3a) of this permanent that lets its controller cast an exiled instant or sorcery card the linked enters ability
-/// exiled (CR 607.2a), asked whenever the cast would begin (CR 601.3). It stops when this creature leaves the battlefield or
-/// changes controller, and the card, still exiled, can then be cast by nobody.
+/// "If an instant or sorcery card is exiled this way, you may cast it for as long as you control this creature": a continuous
+/// effect of the resolved ability (CR 611.2a), so "you" is the ability's controller and the duration ends the first time they
+/// stop controlling the creature, for good (CR 611.2b): the card exiled with it (CR 607.2a) can be cast by this creature's
+/// controller while no effect has changed its control since the card was exiled. After one has, nobody can cast it (the new
+/// controller never was "you", the old one no longer controls it), nor after it leaves the battlefield. Asked whenever the
+/// cast would begin (CR 601.3).
 fn may_cast_the_exiled_card(q: &dyn Query, asker: &Asker, card: ObjectId, player: PlayerId) -> bool {
+    let exiled = q.history().select(EventQuery::kind(EventMask::ZONE_CHANGE).object(card).to(ZoneKind::Exile)).last();
     player == asker.controller
         && q.exiled_with(q.linked_to(asker)).contains(&card)
         && (q.chars(card).is(CardType::Instant) || q.chars(card).is(CardType::Sorcery))
+        && exiled.is_some_and(|e| !q.history().any(EventQuery::kind(EventMask::CONTROL_CHANGED).object(asker.source).after(e.serial)))
 }
 
 pub static CARD: CardDef = CardDef {

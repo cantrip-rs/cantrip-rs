@@ -1,0 +1,50 @@
+# Taster of Wares: "you may cast it for as long as you control this creature" (CR 611.2a, 611.2b). Bot2's Taster exiles Bot1's
+# Lightning Bolt. The permission belongs to Bot2 while Bot2 controls the Taster: when Bot1 takes the Taster with Act of Treason,
+# Bot2 no longer controls it and Bot1, who never was "you", doesn't either, so Bot1 may not cast its own exiled Bolt even with
+# the Mox Ruby's mana open. The duration has ended for good: when the Taster goes back to Bot2 at end of turn, Bot2 may not cast
+# it either, though Bot2 has an Island's mana open.
+
+[Bot1 Deck]
+Black Lotus
+Lightning Bolt
+Act of Treason
+Mox Ruby
+Mountain x30
+
+[Bot2 Deck]
+Black Lotus
+Taster of Wares
+Island x30
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: B)
+Bot2.Hand.Taster of Wares.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Lightning Bolt)
+Bot2.Choose(Lightning Bolt)
+? Exile = Lightning Bolt
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: R)
+Bot1.Hand.Act of Treason.Cast(Bot2.Battlefield.Taster of Wares)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Taster of Wares.Types = Creature
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+! Bot2.Exile.Lightning Bolt.Cast(Bot1)
+
+[Expect]
+Exile = Lightning Bolt
+Bot1.Life = 20
+Bot2.Life = 20
