@@ -1,0 +1,78 @@
+# "Choose a counter on target enchantment you control. Put another counter of that kind on it": with two kinds on the
+# enchantment the controller is asked which (CR 122.1, 608.2d). Claim the Kingdom's four landfalls (Windswept Heath,
+# Flooded Strand and the lands they fetch) put four +1/+1 counters on Fear of Missing Out, an enchantment creature, and its
+# fourth plan counter puts an indestructible counter on it. Dathon chooses indestructible, the second kind offered, and only that kind grows.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Claim the Kingdom
+Fear of Missing Out
+Windswept Heath
+Flooded Strand
+Mountain
+Dathon, His Heart Open
+Forest x10
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Claim the Kingdom.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fear of Missing Out.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mountain)
+Bot1.Hand.Windswept Heath.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Windswept Heath.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fear of Missing Out.Counters.PlusOnePlusOne = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Flooded Strand.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Flooded Strand.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fear of Missing Out.Counters.PlusOnePlusOne = 4
+? Bot1.Battlefield.Fear of Missing Out.Counters.Indestructible = 1
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dathon, His Heart Open.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Dathon, His Heart Open.Activate(Fear of Missing Out; Ability: {2})
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(indestructible)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot1.Battlefield.Fear of Missing Out.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Fear of Missing Out.Counters.Indestructible = 2
+Bot1.Battlefield.Fear of Missing Out.Power = 6

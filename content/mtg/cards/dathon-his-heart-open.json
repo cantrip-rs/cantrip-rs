@@ -1,0 +1,8 @@
+{
+  "name": "Dathon, His Heart Open",
+  "manaCost": "{G}{U}{R}",
+  "type": "Legendary Creature — Tamarian Officer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever you cast an enchantment spell, draw a card. If it's a Saga spell, Dathon deals 2 damage to each opponent.\n{2}: Choose a counter on target enchantment you control. Put another counter of that kind on it. Activate only as a sorcery."
+}

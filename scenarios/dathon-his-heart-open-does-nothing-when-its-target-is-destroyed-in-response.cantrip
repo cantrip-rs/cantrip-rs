@@ -1,0 +1,60 @@
+# Dathon's "{2}: Choose a counter on target enchantment you control" does nothing when that enchantment is gone before the
+# ability resolves (CR 608.2b): Bot2 answers the activation by destroying Kumano Faces Kakkazan, and no counter kind is asked.
+
+[Bot1 Deck]
+Dathon, His Heart Open
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Mountain
+Kumano Faces Kakkazan
+Forest x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dathon, His Heart Open.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Kumano Faces Kakkazan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Kumano Faces Kakkazan.Counters.Lore = 2
+Bot1.Battlefield.Dathon, His Heart Open.Activate(Kumano Faces Kakkazan; Ability: {2})
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Kumano Faces Kakkazan)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Graveyard = Kumano Faces Kakkazan; Black Lotus
+Bot2.Graveyard = Disenchant
