@@ -1,0 +1,52 @@
+# Gallant Fowlknight: "When this creature enters, creatures you control get +1/+0 until end of turn. Kithkin creatures you
+# control also gain first strike until end of turn." Bot1 has a Kithkin token (from Clachan Festival, 1/1) and an Ornithopter
+# (0/2, not a Kithkin). The Fowlknight (3/4, a Kithkin Knight) enters: all three get +1/+0, but only the token and the Fowlknight
+# gain first strike. The Ornithopter's flying is untouched and first strike is not given to it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Jet
+Clachan Festival
+Gallant Fowlknight
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Clachan Festival.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gallant Fowlknight.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gallant Fowlknight.Power = 4
+? Bot1.Battlefield.Gallant Fowlknight.Keywords = FirstStrike
+? Bot1.Battlefield.Kithkin Token#1.Power = 2
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Battlefield.Ornithopter.Power = 0

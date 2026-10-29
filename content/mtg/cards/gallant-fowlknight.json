@@ -1,0 +1,8 @@
+{
+  "name": "Gallant Fowlknight",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Kithkin Knight",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "When this creature enters, creatures you control get +1/+0 until end of turn. Kithkin creatures you control also gain first strike until end of turn."
+}
