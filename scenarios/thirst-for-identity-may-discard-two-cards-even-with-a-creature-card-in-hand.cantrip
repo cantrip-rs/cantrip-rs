@@ -1,0 +1,35 @@
+# Thirst for Identity: "discard two cards unless you discard a creature card" is a choice (CR 608.2d): with a creature card in hand the player may
+# still discard two cards, and the creature card may be one of them (the Elves and an Island here), the Ornithopter staying.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Thirst for Identity
+Ornithopter
+Plains
+Plains
+Llanowar Elves
+Island
+Island
+Plains x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Thirst for Identity.Cast
+Bot1.Modes(Discard two cards)
+Bot1.Choose(Llanowar Elves; Island)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Thirst for Identity; Island; Llanowar Elves
+Bot1.Hand = Ornithopter; Plains; Plains; Island
+Bot1.Library.Count = 10

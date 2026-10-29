@@ -203,7 +203,7 @@ pub fn each_discards_a_card(g: &mut dyn Game, players: &[PlayerId], source: Obje
 ///
 /// The one card pays the "unless", a cost that specifies a characteristic of it (CR 118.12a): no replacement that would put
 /// it into a hidden zone unrevealed is offered (CR 701.9c, `Game::discard_paying`). The two cards specify none. Steamcore
-/// Scholar, Winternight Stories and Bandit's Talent print it.
+/// Scholar, Thirst for Identity, Winternight Stories and Bandit's Talent print it.
 pub fn discard_two_unless_discarding(
     g: &mut dyn Game,
     players: &[PlayerId],
