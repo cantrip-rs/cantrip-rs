@@ -1,0 +1,38 @@
+# Snarl Song ({5}{G}), converge: "Create two 0/0 green and blue Fractal creature tokens. Put X +1/+1 counters on each of them and you
+# gain X life, where X is the number of colors of mana spent to cast this spell." Bot1 pays with all five colors (and a second
+# green): two 5/5 Fractals and 5 life.
+
+[Bot1 Deck]
+Snarl Song
+Mox Emerald x2
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Forest x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Snarl Song.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 25
+Bot1.Battlefield.Fractal Token#1.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Fractal Token#2.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Fractal Token#1.Power = 5
+Bot1.Battlefield.Fractal Token#2.Toughness = 5
