@@ -1,0 +1,26 @@
+# Terramorphic Expanse: tap and sacrifice it to search for a basic land card - a nonbasic land (Volcanic Island) and a nonland
+# card are not offered - which enters tapped; the opponent's library is left alone.
+
+[Bot1 Deck]
+Terramorphic Expanse
+Island x6
+Volcanic Island
+Lightning Bolt
+Forest
+Island x9
+
+[Bot2 Deck]
+Swamp x18
+
+[Actions]
+Bot1.Hand.Terramorphic Expanse.Play
+Bot1.Battlefield.Terramorphic Expanse.Activate(Ability: Search your library)
+! Bot1.Search(Volcanic Island)
+! Bot1.Search(Lightning Bolt)
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Battlefield = Forest
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Graveyard = Terramorphic Expanse
+Bot2.Library.Count = 11
