@@ -913,3 +913,10 @@ pub fn create_an_elf(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     create(g, item.controller, &ELF, 1)?;
     Ok(())
 }
+
+/// "Create a 1/1 green and white Kithkin creature token" as an ability's whole effect (CR 111.1, 701.7a): one, under its
+/// controller. Clachan Festival's {4}{W} ability and Goldmeadow Nomad print it.
+pub fn create_a_kithkin(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &KITHKIN, 1)?;
+    Ok(())
+}
