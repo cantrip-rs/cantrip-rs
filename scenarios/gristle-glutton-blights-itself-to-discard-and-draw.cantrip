@@ -1,0 +1,40 @@
+# Gristle Glutton: "{T}, Blight 1: Discard a card. If you do, draw a card." (CR 701.68a, 701.9): the Glutton is the only creature, so
+# it blights itself (1/3 becomes 0/2), then Bot1 discards a Forest and draws the card after it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Gristle Glutton
+Forest
+Forest
+Forest
+Forest
+Swamp
+Island
+Forest x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gristle Glutton.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gristle Glutton.Activate
+Bot1.Choose(Gristle Glutton)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp)
+? Bot1.Battlefield.Gristle Glutton.Counters.MinusOneMinusOne = 1
+? Bot1.Battlefield.Gristle Glutton.Toughness = 2
+
+[Expect]
+Bot1.Hand = Forest; Forest; Forest; Island
+Bot1.Graveyard = Swamp

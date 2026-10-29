@@ -1,0 +1,44 @@
+# Gristle Glutton: "Discard a card. If you do, draw a card." With an empty hand nothing is discarded (CR 701.9), so nothing is drawn.
+# Bot1 plays the card drawn on turn three, leaving no hand, and activates: the blight is paid, the library stays as it was.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Gristle Glutton
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Forest
+Forest
+Island
+Forest x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gristle Glutton.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Gristle Glutton.Activate
+Bot1.Choose(Gristle Glutton)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand =
+Bot1.Graveyard =

@@ -1,0 +1,8 @@
+{
+  "name": "Gristle Glutton",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Scout",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{T}, Blight 1: Discard a card. If you do, draw a card. (To blight 1, put a -1/-1 counter on a creature you control.)"
+}
