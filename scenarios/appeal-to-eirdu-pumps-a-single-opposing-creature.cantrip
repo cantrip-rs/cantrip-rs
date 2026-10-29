@@ -1,0 +1,35 @@
+# Appeal to Eirdu: one target is enough, and it may be an opponent's creature. Bot1 casts it on Bot2's Llanowar Elves (1/1) with
+# Mox Pearl and three Ornithopters tapped by convoke; the Elves become 3/2 and the pool is empty right after the cast.
+
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Ornithopter
+Ornithopter
+Appeal to Eirdu
+Island x19
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x14
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Appeal to Eirdu.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Power = 3
+Bot2.Battlefield.Llanowar Elves.Toughness = 2

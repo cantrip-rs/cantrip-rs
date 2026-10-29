@@ -1,0 +1,38 @@
+# Appeal to Eirdu: "Convoke. One or two target creatures each get +2/+1 until end of turn." Bot1 casts it on turn 1 for {3}{W}
+# with Mox Pearl for {W} and three Ornithopters tapped by convoke (CR 702.51) for the generic mana, targeting two of them: each
+# 0/2 becomes 2/3 (CR 611.2a) and the third stays 0/2. On turn 3 the effect is over.
+
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Ornithopter
+Ornithopter
+Appeal to Eirdu
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Appeal to Eirdu.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter#1; Bot1.Battlefield.Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 2
+? Bot1.Battlefield.Ornithopter#1.Toughness = 3
+? Bot1.Battlefield.Ornithopter#2.Power = 2
+? Bot1.Battlefield.Ornithopter#2.Toughness = 3
+? Bot1.Battlefield.Ornithopter#3.Power = 0
+? Bot1.Battlefield.Ornithopter#3.Toughness = 2
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Power = 0
+Bot1.Battlefield.Ornithopter#1.Toughness = 2
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot1.Battlefield.Ornithopter#2.Toughness = 2
