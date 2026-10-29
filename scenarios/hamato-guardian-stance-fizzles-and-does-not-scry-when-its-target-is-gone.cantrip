@@ -1,0 +1,46 @@
+# Hamato Guardian Stance's only target is gone when it resolves (Bot2 Bolts Bot1's Action News Crew in response), so the spell
+# does not resolve (CR 608.2b): nothing is pumped and the "Scry 1" never happens (`! Bot1.Arrange`, and the library, Black
+# Lotus above Mox Sapphire, is untouched).
+
+[Bot1 Deck]
+Mox Pearl x3
+Action News Crew
+Hamato Guardian Stance
+Plains x2
+Lightning Bolt
+Black Lotus
+Mox Sapphire
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Action News Crew.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Hamato Guardian Stance.Cast(Bot1.Battlefield.Action News Crew)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Action News Crew)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+! Bot1.Arrange
+
+[Expect]
+Bot1.Graveyard = Hamato Guardian Stance; Action News Crew
+Bot2.Graveyard = Lightning Bolt
+Bot1.Library = Black Lotus; Mox Sapphire

@@ -1,0 +1,40 @@
+# Hamato Guardian Stance targets any creature: on turn 3 Bot1 makes Bot2's Action News Crew a 3/5 flier, and the scry may
+# leave the card looked at on top (CR 701.22a): Black Lotus stays on top of Bot1's library, above Mox Sapphire. Lightning Bolt
+# was drawn on turn 3.
+
+[Bot1 Deck]
+Mox Pearl
+Hamato Guardian Stance
+Plains x5
+Lightning Bolt
+Black Lotus
+Mox Sapphire
+
+[Bot2 Deck]
+Mox Pearl x2
+Action News Crew
+Plains x4
+Island
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Action News Crew.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hamato Guardian Stance.Cast(Bot2.Battlefield.Action News Crew)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Black Lotus | )
+? Bot2.Battlefield.Action News Crew.Power = 3
+? Bot2.Battlefield.Action News Crew.Toughness = 5
+? Bot2.Battlefield.Action News Crew.Keywords = Flying; Vigilance
+
+[Expect]
+Bot1.Library = Black Lotus; Mox Sapphire

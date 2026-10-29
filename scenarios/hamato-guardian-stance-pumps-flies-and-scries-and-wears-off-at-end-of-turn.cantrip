@@ -1,0 +1,43 @@
+# Hamato Guardian Stance: "Target creature gets +1/+3 and gains flying until end of turn. Scry 1." Bot1's Action News Crew (2/2,
+# vigilance) becomes a 3/5 flier; the scry puts the top card, Lightning Bolt, on the bottom (CR 701.22a). At the next turn the
+# Crew is a 2/2 without flying again (CR 514.2).
+
+[Bot1 Deck]
+Mox Pearl x3
+Action News Crew
+Hamato Guardian Stance
+Plains x2
+Lightning Bolt
+Black Lotus
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Action News Crew.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Action News Crew.Power = 2
+? Bot1.Battlefield.Action News Crew.Toughness = 2
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Hamato Guardian Stance.Cast(Bot1.Battlefield.Action News Crew)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+? Bot1.Battlefield.Action News Crew.Power = 3
+? Bot1.Battlefield.Action News Crew.Toughness = 5
+? Bot1.Battlefield.Action News Crew.Keywords = Flying; Vigilance
+? Bot1.Library = Black Lotus; Lightning Bolt
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Action News Crew.Power = 2
+? Bot1.Battlefield.Action News Crew.Toughness = 2
+? Bot1.Battlefield.Action News Crew.Keywords = Vigilance
+
+[Expect]
+Bot1.Graveyard = Hamato Guardian Stance
+Bot1.Library = Black Lotus; Lightning Bolt
