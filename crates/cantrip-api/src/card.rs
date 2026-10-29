@@ -228,7 +228,7 @@ pub trait LayerQuery {
     /// The cards in exile exiled by `by` (CR 607.2a; `Query::exiled_with`), in exile order.
     fn exiled_with(&self, by: Linked) -> Vec<ObjectId> {
         let s = self.state();
-        s.seats().flat_map(|p| s.zone(Zone::exile(p)).iter().copied()).filter(|&id| s.obj(id).exiled.is_some_and(|l| l.is_by(by))).collect()
+        s.seats().flat_map(|p| s.zone(Zone::exile(p)).iter().copied()).filter(|&id| s.obj(id).exiled.is_some_and(|l| l.is_by_in(s, by))).collect()
     }
     /// Another object's characteristics, through the layers before the one being applied.
     fn chars(&self, id: ObjectId) -> Chars;
@@ -791,11 +791,15 @@ pub struct Cost {
     /// source, chosen as the cost is chosen.
     pub collect_evidence: u8,
     /// Behold N (CR 701.4a): for each, choose a permanent you control or reveal a card from your hand that passes the
-    /// filter ("behold a Dragon"), chosen as the cost is chosen. Nothing moves: a permanent is only chosen, a hand card
+    /// filter ("behold a Dragon"), chosen as the cost is chosen. Nothing moves unless `behold_exile`: a permanent is only chosen, a hand card
     /// is revealed as the cost is paid (CR 601.2h). Payable only with that many to choose among. Dispelling Exhale,
     /// Caustic Exhale, Kinsbaile Aspirant. Paid when a spell is cast only: an activation does not choose or pay it yet.
     /// The quality's name ("Dragon") is what the prompt says.
     pub behold: Option<(u8, ObjectFilter, &'static str)>,
+    /// "...and exile it" after the behold (Champion of the Clachan, Champions of the Shoal): each card chosen is exiled as the cost
+    /// is paid (CR 601.2h), a permanent from the battlefield and a card from the hand, linked to the spell and so to the
+    /// permanent it becomes (CR 607.2q). Only with `behold`. A spell that is countered leaves the card exiled.
+    pub behold_exile: bool,
     /// Blight N (CR 701.68a): put this many -1/-1 counters on a creature you control, chosen as the cost is chosen and
     /// put as it is paid. Payable only with a creature to put them on (CR 701.68b). A spell's (Requiting Hex, Cinder
     /// Strike) or an activated ability's (Dawnhand Dissident, Gristle Glutton, Sting-Slinger).
@@ -980,6 +984,7 @@ impl Cost {
             discard_hand,
             collect_evidence,
             behold,
+            behold_exile,
             blight,
             tap_to_reduce,
             materials,
@@ -1013,6 +1018,7 @@ impl Cost {
             && !discard_hand
             && collect_evidence == 0
             && behold.is_none()
+            && !behold_exile
             && blight == 0
             && !tap_to_reduce
             && materials.is_none()
@@ -1160,6 +1166,7 @@ impl Cost {
             (None, b) => b,
             (a, None) => a,
         };
+        c.behold_exile |= other.behold_exile;
         c.blight += other.blight;
         if c.materials.is_none() {
             c.materials = other.materials;
@@ -1200,6 +1207,7 @@ impl Cost {
             discard_hand: false,
             collect_evidence: 0,
             behold: None,
+            behold_exile: false,
             blight: 0,
             tap_to_reduce: false,
             materials: None,

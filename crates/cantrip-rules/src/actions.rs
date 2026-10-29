@@ -740,11 +740,17 @@ fn choose_behold(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost) -
 }
 
 /// Pays the behold part of a cost (CR 701.4a): each card chosen from the hand is revealed; a permanent is only chosen.
-/// Returns the cards revealed.
-fn pay_behold(cx: &mut Cx, player: PlayerId, chosen: &[ObjectId]) -> Vec<ObjectId> {
+/// With `exile` ("behold a Kithkin and exile it"), each chosen is then exiled, linked to `spell` and so to the permanent it
+/// becomes (CR 607.2q), and none stays revealed on the stack: they are in exile. Returns the cards revealed.
+fn pay_behold(cx: &mut Cx, player: PlayerId, spell: ObjectId, exile: bool, chosen: &[ObjectId]) -> Vec<ObjectId> {
     let revealed: Vec<ObjectId> = chosen.iter().copied().filter(|&id| cx.s().obj(id).zone.is(ZoneKind::Hand)).collect();
     if !revealed.is_empty() {
         Game::reveal(cx, player, &revealed);
+    }
+    if exile && !chosen.is_empty() {
+        let by = Query::text_linked(cx, spell);
+        ops::exile_with(cx, chosen, by, false);
+        return Vec::new();
     }
     revealed
 }
@@ -7515,8 +7521,8 @@ fn cast(
     pay_exiles(cx, &hand_exiled);
     pay_life_and_counters(cx, player, spell, &cost);
     pay_permanents(cx, player, &extra, &extra_chosen, None);
-    let mut revealed = pay_behold(cx, player, &beheld);
-    revealed.extend(pay_behold(cx, player, &extra_beheld));
+    let mut revealed = pay_behold(cx, player, spell, cost.behold_exile, &beheld);
+    revealed.extend(pay_behold(cx, player, spell, extra.behold_exile, &extra_beheld));
     if let Some(at) = cx.s().stack.iter().rposition(|i| i.kind == StackKind::Spell && i.object == spell) {
         add_revealed_to_item(cx, at, &revealed);
     }
@@ -8961,7 +8967,7 @@ fn activate(
     pay_blight(cx, player, &def.cost, blighted);
     pay_counters_among(cx, &removed);
     pay_permanents(cx, player, &def.cost, &chosen, Some(cx.linked(&item)));
-    let revealed = pay_behold(cx, player, &beheld);
+    let revealed = pay_behold(cx, player, source, false, &beheld);
     let at = cx.s().stack.len() - 1;
     add_revealed_to_item(cx, at, &revealed);
     pay_discards(cx, &discards);
@@ -9155,7 +9161,7 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     pay_blight(cx, player, &whole, blighted);
     pay_counters_among(cx, &removed);
     pay_permanents(cx, player, &whole, &chosen, None);
-    pay_behold(cx, player, &beheld);
+    pay_behold(cx, player, source, false, &beheld);
     pay_discards(cx, &discards);
     pay_exiles(cx, &exiles);
     pay_life_and_counters(cx, player, source, &whole);
@@ -10769,7 +10775,7 @@ fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Co
     pay_permanents(cx, payer, cost, &chosen, None);
     // Revealed for the effect paying it, as part of that effect (CR 701.20a): no reveal of the effect's own lasts past the
     // instruction it is for (`ops::seen_by_all`).
-    pay_behold(cx, payer, &beheld);
+    pay_behold(cx, payer, source, false, &beheld);
     pay_discards(cx, &discards);
     pay_discards(cx, &variable_discards);
     pay_exiles(cx, &exiles);
@@ -10834,6 +10840,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         discard_hand: _,
         collect_evidence: _,
         behold: _,
+        behold_exile: _,
         blight: _,
         tap_to_reduce,
         materials,

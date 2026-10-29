@@ -420,6 +420,17 @@ impl ExileLink {
         self.by == ability.object && self.text == ability.text && self.acquired == ability.acquired
     }
 
+    /// Whether it was exiled by `ability` (`is_by`), or while paying the cost of the permanent spell that became the object
+    /// `ability` is of (CR 607.2q): the spell is the object that became it as it resolved, a permanent that left and came
+    /// back being none (CR 400.7).
+    pub fn is_by_in(&self, s: &crate::GameState, ability: Linked) -> bool {
+        self.is_by(ability)
+            || (self.text == ability.text
+                && self.acquired == ability.acquired
+                && s.obj(self.by).zone.is(ZoneKind::Stack)
+                && s.obj(self.by).became == Some(ability.object))
+    }
+
     /// A link to the ability `by`, from `from`.
     pub fn new(by: Linked, from: Zone, until_leaves: bool) -> ExileLink {
         ExileLink { by: by.object, text: by.text, acquired: by.acquired, from, until_leaves, encoded: false }

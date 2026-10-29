@@ -393,7 +393,7 @@ pub trait Query {
     /// is a new object (CR 400.7) with none; in exile order.
     fn exiled_with(&self, by: Linked) -> Vec<ObjectId> {
         let s = self.state();
-        s.seats().flat_map(|p| s.zone(Zone::exile(p)).iter().copied()).filter(|&id| self.obj(id).exiled.is_some_and(|l| l.is_by(by))).collect()
+        s.seats().flat_map(|p| s.zone(Zone::exile(p)).iter().copied()).filter(|&id| self.obj(id).exiled.is_some_and(|l| l.is_by_in(s, by))).collect()
     }
 
     /// The card a face's abilities are printed on, as linked abilities know it (CR 607.1, 607.1b): `CardTable::linked_card`.

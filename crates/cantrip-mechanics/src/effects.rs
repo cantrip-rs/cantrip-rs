@@ -1282,3 +1282,11 @@ pub fn plus_one_counter_on_target(g: &mut dyn Game, item: &StackItem) -> Result<
     g.add_counters(object, CounterKind::PlusOne, 1);
     Ok(())
 }
+
+/// "Return the exiled card to its owner's hand" (CR 607.2a): the cards exiled with this ability's object, linked to it. Tidehollow
+/// Sculler's second ability, and Champion of the Clachan's and Champions of the Shoal's, whose cost exiled it (CR 607.2q).
+pub fn return_exiled_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let exiled = g.exiled_with(g.linked(item));
+    g.return_to_hand(&exiled);
+    Ok(())
+}
