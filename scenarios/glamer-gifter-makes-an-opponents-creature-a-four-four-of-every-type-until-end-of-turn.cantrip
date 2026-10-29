@@ -1,0 +1,40 @@
+# Glamer Gifter: "Flash. Flying. When this creature enters, choose up to one other target creature. Until end of turn, that creature has base power and toughness
+# 4/4 and gains all creature types." Bot1 flashes it in during Bot2's turn 2 end step (Moxen paying {1}{U}) with Bot2's Memnite (1/1) as the target: the Gifter itself
+# is refused ("other"), and the Memnite becomes a 4/4 (CR 613.4b) of every creature type (CR 613.1d) with its Artifact type kept. On Bot1's turn 3 the
+# effects have ended (CR 514.2): it is a 1/1 with no creature types.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Glamer Gifter
+Island x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T2 Bot2.End]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glamer Gifter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Glamer Gifter)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 4
+? Bot2.Battlefield.Memnite.Toughness = 4
+? Bot2.Battlefield.Memnite.Subtypes = (every creature type)
+[T3 Bot1.Upkeep]
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Subtypes = Construct
+
+[Expect]
+Bot1.Battlefield.Glamer Gifter.Keywords = Flash; Flying
+Bot2.Battlefield.Memnite.Toughness = 1

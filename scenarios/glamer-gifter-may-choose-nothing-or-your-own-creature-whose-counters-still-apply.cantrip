@@ -1,0 +1,61 @@
+# Glamer Gifter: "choose up to one other target creature" - the target may be one of your own, or none. Bot1 casts one Gifter on its own Walking Ballista (X = 0 cast
+# for nothing but a 0/0 would die, so it is X = 1: a 1/1 with a +1/+1 counter) which becomes a 5/5 (base 4/4, the counter on top, CR 613.4b and 613.4c) of every
+# creature type; a second Gifter chooses no target (Target() is allowed, "up to one") and changes nothing.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Black Lotus
+Walking Ballista
+Glamer Gifter
+Glamer Gifter
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Glamer Gifter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Walking Ballista)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Walking Ballista.Power = 5
+? Bot1.Battlefield.Walking Ballista.Toughness = 5
+? Bot1.Battlefield.Walking Ballista.Subtypes = (every creature type)
+? Bot1.Battlefield.Glamer Gifter.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glamer Gifter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Walking Ballista.Power = 1
+Bot1.Battlefield.Walking Ballista.Toughness = 1
+Bot1.Battlefield.Walking Ballista.Subtypes = Construct

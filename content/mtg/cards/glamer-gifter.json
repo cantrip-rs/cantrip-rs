@@ -1,0 +1,12 @@
+{
+  "name": "Glamer Gifter",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Faerie Wizard",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Flash\nFlying\nWhen this creature enters, choose up to one other target creature. Until end of turn, that creature has base power and toughness 4/4 and gains all creature types.",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}
