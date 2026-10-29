@@ -1081,6 +1081,16 @@ pub fn gain_indestructible_until_end_of_turn(g: &mut dyn Game, source: ObjectId,
     gain_until_end_of_turn(g, source, target, Keyword::Indestructible);
 }
 
+/// "Target creature gains indestructible until end of turn" (CR 702.12b, 611.2a), the creature being the ability's first target;
+/// nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b). Valorous Stance's first mode and
+/// Burdened Stoneback print it.
+pub fn target_creature_gains_indestructible(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        gain_indestructible_until_end_of_turn(g, item.object, creature);
+    }
+    Ok(())
+}
+
 /// "This creature gains indestructible until end of turn. Tap it." (CR 702.12b, 611.2a, 701.26a): if the ability's source is
 /// still on the battlefield as the permanent it was (CR 400.7), it gains the keyword for the rest of the turn, then it is
 /// tapped. The tap is the ability's own instruction, not its cost, so the ability can be activated while it is tapped
