@@ -1,0 +1,6 @@
+{
+  "name": "Moment of Reckoning",
+  "manaCost": "{3}{W}{W}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Choose up to four. You may choose the same mode more than once.\n• Destroy target nonland permanent.\n• Return target nonland permanent card from your graveyard to the battlefield."
+}
