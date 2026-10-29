@@ -1,0 +1,6 @@
+{
+  "name": "Dose of Dawnglow",
+  "manaCost": "{4}{B}",
+  "type": "Instant",
+  "oracleText": "Return target creature card from your graveyard to the battlefield. Then if it isn't your main phase, blight 2. (Put two -1/-1 counters on a creature you control.)"
+}
