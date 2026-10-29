@@ -1,0 +1,45 @@
+# Pestbrood Sloth (4/4 reach): "When this creature dies, create two 1/1 black and green Pest creature tokens with 'Whenever this
+# token attacks, you gain 1 life.'" Bot1 casts it on turn 1 with four Moxen. On turn 2 Bot2 kills it with two Lightning Bolts
+# (4 damage): Bot1 gets two Pest tokens, which are able to attack on turn 3 and gain 1 life each.
+
+[Bot1 Deck]
+Pestbrood Sloth
+Mox Emerald x4
+Forest x20
+
+[Bot2 Deck]
+Lightning Bolt x2
+Mox Ruby x2
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mox Emerald#4.Activate
+Bot1.Hand.Pestbrood Sloth.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Pestbrood Sloth)
+Bot2.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Pestbrood Sloth)
+Bot2.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield = Mox Emerald; Mox Emerald; Mox Emerald; Mox Emerald; Pest Token; Pest Token
+Bot1.Attack(Pest Token#1 > Bot2; Pest Token#2 > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Graveyard = Pestbrood Sloth

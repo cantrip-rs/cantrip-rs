@@ -1,0 +1,11 @@
+{
+  "name": "Pestbrood Sloth",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Plant Sloth",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach\nWhen this creature dies, create two 1/1 black and green Pest creature tokens with \"Whenever this token attacks, you gain 1 life.\"",
+  "keywords": [
+    "Reach"
+  ]
+}
