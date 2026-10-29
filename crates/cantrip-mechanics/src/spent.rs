@@ -23,6 +23,16 @@ pub fn colors_of_mana_spent(q: &dyn Query, object: ObjectId) -> u32 {
     [Mana::W, Mana::U, Mana::B, Mana::R, Mana::G].into_iter().filter(|&m| spent.get(m) > 0).count() as u32
 }
 
+/// Converge (an ability word, CR 207.2c): "This creature enters with a +1/+1 counter on it for each color of mana spent to cast
+/// it", the `enters` replacement (CR 614.1c, 122.6) that puts one counter on it for each color `colors_of_mana_spent` finds. A
+/// creature put onto the battlefield without being cast has had no mana spent, so it enters with none. Magmablood Archaic,
+/// Wildgrowth Archaic and Rancorous Archaic print it.
+pub fn enters_with_a_plus_one_counter_for_each_color_spent(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
+    let colors = colors_of_mana_spent(g, entering.object) as i16;
+    entering.counters[CounterKind::PlusOne as usize] += colors;
+    Ok(())
+}
+
 /// Opus (an ability word, CR 207.2c): "if five or more mana was spent to cast that spell", where the spell is the one the
 /// ability triggered on (`item.subject`). Its mana spent (CR 601.2h) is read from the spell's own object, so it still answers once
 /// the spell has been countered or has left the stack (CR 608.2h); a spell cast without paying its mana cost has had none spent.
