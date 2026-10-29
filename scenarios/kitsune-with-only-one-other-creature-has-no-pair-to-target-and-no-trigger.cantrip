@@ -1,0 +1,35 @@
+# Kitsune's "two other target creatures" needs two (CR 115.1, 601.2c): with only Bot2's Memnite besides Kitsune herself there
+# is no pair to target, so the enters trigger is not put on the stack at all (CR 603.3d) and nothing is exchanged.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Kitsune, Dragon's Daughter
+Island x15
+
+[Bot2 Deck]
+Memnite
+Island x15
+
+[Actions]
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kitsune, Dragon's Daughter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Kitsune, Dragon's Daughter; Mox Jet; Mox Ruby; Mox Sapphire
+Bot2.Battlefield = Memnite

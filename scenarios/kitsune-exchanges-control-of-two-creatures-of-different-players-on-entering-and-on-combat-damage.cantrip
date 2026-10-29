@@ -1,0 +1,63 @@
+# Kitsune, Dragon's Daughter: "Whenever Kitsune enters or deals combat damage to a player, you may exchange control of two
+# other target creatures controlled by different players." (CR 701.12a-b, 601.2c.) Kitsune itself is not a target ("other"),
+# and two creatures one player controls are not a pair (refused). On entering, Bot1 exchanges its Ornithopter for Bot2's
+# Llanowar Elves (each new to its controller, so the Elves is summoning sick); on its next attack Kitsune connects and the
+# second ability exchanges them back, Bot2 going from 20 to 14.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Memnite
+Kitsune, Dragon's Daughter
+Island x14
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kitsune, Dragon's Daughter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Kitsune, Dragon's Daughter)
+! Bot1.Target(Bot1.Battlefield.Ornithopter; Bot1.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Battlefield.Llanowar Elves.SummoningSick = true
+? Bot2.Battlefield.Ornithopter.SummoningSick = true
+[T5 Bot1.Main1]
+Bot1.Attack(Kitsune, Dragon's Daughter > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Llanowar Elves; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield = Kitsune, Dragon's Daughter; Memnite; Mox Jet; Mox Ruby; Mox Sapphire; Ornithopter
+Bot2.Battlefield = Forest; Llanowar Elves

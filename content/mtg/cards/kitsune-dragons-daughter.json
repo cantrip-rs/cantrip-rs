@@ -1,0 +1,11 @@
+{
+  "name": "Kitsune, Dragon's Daughter",
+  "manaCost": "{4}{U}{U}",
+  "type": "Legendary Creature — Fox Warlock Avatar",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Vigilance\nWhenever Kitsune enters or deals combat damage to a player, you may exchange control of two other target creatures controlled by different players.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

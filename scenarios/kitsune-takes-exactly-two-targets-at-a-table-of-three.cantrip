@@ -1,0 +1,53 @@
+# Kitsune: "two other target creatures controlled by different players" is exactly two targets (CR 115.1, 601.2c), even when
+# a third player has a creature too: three creatures of three players are refused. Bot1 exchanges Bot2's Memnite for Bot3's
+# Ornithopter, leaving its own Ornithopter alone.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Kitsune, Dragon's Daughter
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x15
+
+[Bot3 Deck]
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot3.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Ornithopter.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kitsune, Dragon's Daughter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+! Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Memnite; Bot3.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Memnite; Bot3.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Accept
+
+[Expect]
+Bot2.Battlefield = Ornithopter
+Bot3.Battlefield = Memnite
+Bot1.Battlefield = Kitsune, Dragon's Daughter; Mox Jet; Mox Ruby; Mox Sapphire; Ornithopter

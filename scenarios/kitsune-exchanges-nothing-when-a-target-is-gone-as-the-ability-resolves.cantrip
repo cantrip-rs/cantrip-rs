@@ -1,0 +1,54 @@
+# Kitsune: if one of the two targets is illegal as the ability resolves, the exchange can't be completed and none of it happens
+# (CR 701.12a, 608.2b; its ruling), and no question is asked. In response Bot2 bolts Bot1's Ornithopter; Bot2 keeps the Elves.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Memnite
+Kitsune, Dragon's Daughter
+Island x14
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Ruby
+Lightning Bolt
+Forest x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kitsune, Dragon's Daughter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Kitsune, Dragon's Daughter; Memnite; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Graveyard = Ornithopter; Black Lotus
+Bot2.Battlefield = Forest; Llanowar Elves; Mox Ruby
+Bot2.Graveyard = Lightning Bolt
