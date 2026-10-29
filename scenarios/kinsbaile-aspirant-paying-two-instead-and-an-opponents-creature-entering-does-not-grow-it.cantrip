@@ -1,0 +1,34 @@
+# Kinsbaile Aspirant cast with no Kithkin to behold: the additional cost is paid as {2}, so it costs {W}{2} (CR 601.2b): three
+# Moxen pay it exactly. Next turn Bot2's Ornithopter enters under Bot2's control, not "a creature you control", so the Aspirant is
+# still a 2/1 in Bot1's turn 3.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Kinsbaile Aspirant
+Island x3
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kinsbaile Aspirant.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Kinsbaile Aspirant.Power = 2
+Bot1.Battlefield.Kinsbaile Aspirant.Toughness = 1

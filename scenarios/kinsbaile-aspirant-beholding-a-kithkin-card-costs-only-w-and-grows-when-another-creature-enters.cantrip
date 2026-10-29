@@ -1,0 +1,34 @@
+# Kinsbaile Aspirant (2/1): "behold a Kithkin or pay {2}" (CR 701.4a). Bot1 beholds the Kithkin card Kinscaer Sentry from the hand
+# (revealed, it stays) and pays only {W} from a Mox Pearl. Ornithopter then enters under Bot1's control: "another creature you
+# control" triggers it, and it is 3/2 until end of turn.
+
+[Bot1 Deck]
+Mox Pearl
+Kinsbaile Aspirant
+Kinscaer Sentry
+Ornithopter
+Island x3
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Kinsbaile Aspirant.Cast
+Bot1.Modes(Behold a Kithkin)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Kinscaer Sentry)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Revealed = Kinscaer Sentry
+Bot1.Hand = Island; Island; Island; Kinscaer Sentry
+Bot1.Battlefield.Kinsbaile Aspirant.Power = 3
+Bot1.Battlefield.Kinsbaile Aspirant.Toughness = 2

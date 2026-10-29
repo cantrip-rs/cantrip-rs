@@ -1,0 +1,22 @@
+# With no Kithkin to behold, Kinsbaile Aspirant's additional cost can only be paid as {2}: {W}{2} is three mana, and Bot1's two Moxen are
+# not enough (CR 601.2b, 601.2f). The positive control is kinsbaile-aspirant-beholding-a-kithkin-card-costs-only-w-and-grows-when-another-creature-enters.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Kinsbaile Aspirant
+Island x3
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Kinsbaile Aspirant.Cast(Mana: short)
+
+[Expect]
+Bot1.Hand.Count = 5
