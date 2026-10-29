@@ -1,0 +1,37 @@
+# Heirloom Auntie {2}{B} 4/4: "This creature enters with two -1/-1 counters on it. Whenever another creature you control dies, surveil 1,
+# then remove a -1/-1 counter from this creature" (CR 614.1c, 700.4, 701.25a). Bot1's Lightning Bolt kills its own Memnite: Heirloom
+# Auntie surveils (the Island on top goes to the graveyard) and one counter comes off, 2/2 becoming 3/3.
+
+[Bot1 Deck]
+Black Lotus
+Heirloom Auntie
+Memnite
+Mox Ruby
+Lightning Bolt
+Island x2
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Heirloom Auntie.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island)
+
+[Expect]
+Bot1.Battlefield.Heirloom Auntie.Counters.MinusOneMinusOne = 1
+Bot1.Battlefield.Heirloom Auntie.Power = 3
+Bot1.Battlefield.Heirloom Auntie.Toughness = 3
+Bot1.Graveyard = Island; Memnite; Lightning Bolt; Black Lotus
