@@ -1,0 +1,6 @@
+{
+  "name": "Comforting Counsel",
+  "manaCost": "{1}{G}",
+  "type": "Enchantment",
+  "oracleText": "Whenever you gain life, put a growth counter on this enchantment.\nAs long as there are five or more growth counters on this enchantment, creatures you control get +3/+3."
+}
