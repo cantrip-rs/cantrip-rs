@@ -1,0 +1,72 @@
+# Scolding Administrator: "put those counters on up to one target creature" is every counter it had as it died, of every kind (CR 603.10a,
+# 122.6). Repartee puts a +1/+1 counter on it as Bot1 casts Giant Growth on it; it attacks on turn 3 and a sacrificed Cryogen Relic
+# puts a stun counter on the tapped creature. Bot2's Lightning Bolt then kills it, and Bot2's Ornithopter, the target Bot1 picks, gets
+# both: a +1/+1 counter and a stun counter, not just one of them.
+
+[Bot1 Deck]
+Scolding Administrator
+Mox Pearl
+Mox Jet
+Black Lotus
+Giant Growth
+Mox Sapphire
+Cryogen Relic
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Scolding Administrator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Scolding Administrator)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Cryogen Relic.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Scolding Administrator.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Scolding Administrator > Bot2)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Cryogen Relic.Activate(Bot1.Battlefield.Scolding Administrator)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Scolding Administrator)
+Bot2.Pass
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+Stack.Count = 0
