@@ -1,0 +1,46 @@
+# Strixhaven Skycoach's enters trigger: Bot1 accepts the "may" and takes the Swamp, a basic land, though Forest comes first;
+# it is revealed and put into the hand. The Taiga (a nonbasic land) and the Llanowar Elves (a nonland) are not on offer. Bot1's
+# library is one card smaller (11 to 10); Bot2's, which also holds a Swamp, is untouched (8).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Strixhaven Skycoach
+Island
+Island
+Island
+Forest
+Taiga
+Llanowar Elves
+Swamp
+Mountain
+Plains x6
+
+[Bot2 Deck]
+Island x7
+Swamp
+Island x7
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Strixhaven Skycoach.Cast
+Bot1.Accept
+! Bot1.Search(Taiga)
+! Bot1.Search(Llanowar Elves)
+Bot1.Search(Swamp)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Island; Island; Island; Swamp
+Bot1.Revealed = Swamp
+Bot1.Battlefield = Mox Sapphire; Mox Emerald; Mox Pearl; Strixhaven Skycoach
+Bot1.Library.Count = 10
+Bot2.Library.Count = 8
+Stack.Count = 0

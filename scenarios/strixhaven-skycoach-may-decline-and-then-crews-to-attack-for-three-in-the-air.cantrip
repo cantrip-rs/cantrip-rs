@@ -1,0 +1,44 @@
+# Strixhaven Skycoach, "you may search": Bot1 declines, so nothing is revealed and the library is not shuffled (CR 701.23): it is still
+# in the order the decklist gave. On turn 3 Grizzly Bears (power 2, the printed crew 2 exactly) crews it and the 3/2 flying Vehicle
+# attacks Bot2 for 3 (the crew keyword's own refusals are Smuggler's Copter's scenarios).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Strixhaven Skycoach
+Grizzly Bears
+Zephyr Sprite
+Island
+Swamp
+Forest
+Mountain
+Plains x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Strixhaven Skycoach.Cast
+Bot1.Decline
+? Bot1.Library = Swamp; Forest; Mountain; Plains; Plains; Plains; Plains; Plains; Plains
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Strixhaven Skycoach.Activate(Ability: Crew)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Strixhaven Skycoach > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Grizzly Bears.Tapped = true
