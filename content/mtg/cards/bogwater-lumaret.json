@@ -1,0 +1,8 @@
+{
+  "name": "Bogwater Lumaret",
+  "manaCost": "{B}{G}",
+  "type": "Creature — Spirit Frog",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature or another creature you control enters, you gain 1 life."
+}
