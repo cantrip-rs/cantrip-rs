@@ -1,0 +1,67 @@
+# Skycoach Waypoint (a land): "{T}: Add {C}." and "{3}, {T}: Target creature becomes prepared" (CR 722.3a). On turn 3 a Mox Jet (not a
+# creature) is refused as the target, then three Moxen pay exactly {3} (the pool is empty) and Bloodline Recollector becomes
+# prepared, a copy of Ancestral Craving waiting in exile. Turn 5 taps it for {C}. Turn 7 targets the prepared Recollector again:
+# still the one copy in exile (CR 722.3a). Turn 9 targets Bot2's Ornithopter, a creature with no prepare spell: a legal target
+# that changes nothing (CR 722.3a, the rulings).
+
+[Bot1 Deck]
+Skycoach Waypoint
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Bloodline Recollector
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Skycoach Waypoint.Play
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Hand.Bloodline Recollector.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Skycoach Waypoint.Activate(Ability: {3}, {T}; Bot1.Battlefield.Mox Jet#1)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Skycoach Waypoint.Activate(Ability: {3}, {T}; Bot1.Battlefield.Bloodline Recollector)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bloodline Recollector.Prepared = true
+? Exile = Ancestral Craving
+[T5 Bot1.Main1]
+Bot1.Battlefield.Skycoach Waypoint.Activate(Ability: Add {C})
+? Bot1.Mana = {C}
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Skycoach Waypoint.Activate(Ability: {3}, {T}; Bot1.Battlefield.Bloodline Recollector)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ancestral Craving
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Skycoach Waypoint.Activate(Ability: {3}, {T}; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Bloodline Recollector.Prepared = true
+Bot2.Battlefield.Ornithopter.Prepared = (absent)
+Bot1.Battlefield.Skycoach Waypoint.Tapped = true
+Exile = Ancestral Craving
