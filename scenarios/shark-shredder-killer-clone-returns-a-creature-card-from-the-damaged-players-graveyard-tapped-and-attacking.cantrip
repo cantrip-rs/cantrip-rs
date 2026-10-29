@@ -1,0 +1,67 @@
+# Shark Shredder (first strike) is cast on turn 1 (Black Lotus and Mox Emerald). Bot1 also Entombs a Typhoid Rats into their own
+# graveyard, and Bot2 (turn 2) Entombs a Nighthowl Pursuer into theirs. On turn 3 Shark Shredder hits for 4 in the first-strike
+# step (Bot2 at 16) and the trigger returns the creature card of the damaged player's graveyard, never Bot1's own Typhoid Rats:
+# Nighthowl Pursuer enters under Bot1, tapped and attacking Bot2. It was never declared as an attacker, so its "attacks while you
+# control a creature with power 4 or greater" does not fire (still 1/1), and it is without first strike: it deals its 1 damage
+# in the regular step (Bot2 at 15).
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Shark Shredder, Killer Clone
+Entomb
+Swamp x2
+Typhoid Rats
+Swamp x12
+
+[Bot2 Deck]
+Mox Jet
+Entomb
+Swamp x5
+Swamp x4
+Nighthowl Pursuer
+Swamp x7
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Shark Shredder, Killer Clone.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Entomb.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Typhoid Rats)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Entomb.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Search(Nighthowl Pursuer)
+[T3 Bot1.Main1]
+Bot1.Attack(Shark Shredder, Killer Clone > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+Bot1.Target(Nighthowl Pursuer)
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Nighthowl Pursuer > Bot2; Shark Shredder, Killer Clone > Bot2
+? Bot1.Battlefield.Nighthowl Pursuer.Tapped = True
+? Bot1.Battlefield.Nighthowl Pursuer.Power = 1
+? Bot2.Graveyard = Entomb
+? Bot1.Graveyard = Entomb; Typhoid Rats; Black Lotus
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15

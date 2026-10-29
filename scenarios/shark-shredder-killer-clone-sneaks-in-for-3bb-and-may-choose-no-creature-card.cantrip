@@ -1,0 +1,58 @@
+# Shark Shredder is sneaked in for {3}{B}{B} (Black Lotus, Mox Jet, Mox Emerald) over Bot1's unblocked Ornithopter, entering tapped
+# and attacking. He deals 4 first-strike damage (Bot2 at 16) and, "up to one", Bot1 chooses no target: the Nighthowl Pursuer
+# that Bot2 Entombed stays in their graveyard and nothing else enters.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Shark Shredder, Killer Clone
+Ornithopter
+Swamp x15
+
+[Bot2 Deck]
+Mox Jet
+Entomb
+Swamp x5
+Swamp x4
+Nighthowl Pursuer
+Swamp x7
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Entomb.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Search(Nighthowl Pursuer)
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Shark Shredder, Killer Clone.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers = Shark Shredder, Killer Clone > Bot2
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Entomb; Nighthowl Pursuer
+? Combat.Attackers.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
