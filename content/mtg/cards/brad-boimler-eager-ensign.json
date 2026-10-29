@@ -1,0 +1,11 @@
+{
+  "name": "Brad Boimler, Eager Ensign",
+  "manaCost": "{1}{W}",
+  "type": "Legendary Creature — Human Officer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Lifelink\nWhenever Brad Boimler becomes tapped, until end of turn, if one or more counters would be put on a permanent you control, that many plus one of each of those kinds of counters are put on that permanent instead.",
+  "keywords": [
+    "Lifelink"
+  ]
+}

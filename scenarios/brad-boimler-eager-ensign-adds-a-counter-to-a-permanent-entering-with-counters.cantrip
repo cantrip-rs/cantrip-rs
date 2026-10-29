@@ -1,0 +1,47 @@
+# After Brad's trigger resolves from his attack, Baloth Prime enters with six stun counters and receives one extra; an entering object counts as a permanent under CR 122.6 and 614.12.
+
+[Bot1 Deck]
+Brad Boimler, Eager Ensign
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Plains
+Baloth Prime
+Plains
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Brad Boimler, Eager Ensign.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Brad Boimler, Eager Ensign > Bot2)
+Bot1.Pass
+[T5 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Baloth Prime.Cast
+
+[Expect]
+Bot1.Battlefield.Baloth Prime.Tapped = true
+Bot1.Battlefield.Baloth Prime.Counters.Stun = 7

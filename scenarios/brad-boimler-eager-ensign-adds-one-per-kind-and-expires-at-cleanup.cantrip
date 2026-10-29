@@ -1,0 +1,45 @@
+# Two +1/+1 counters are one event, so Brad makes them three; a second copy on the next turn proves the turn-long replacement expires at cleanup (CR 611.2a, 614.1a).
+
+[Bot1 Deck]
+Brad Boimler, Eager Ensign
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Angelfire Ignition x2
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brad Boimler, Eager Ensign.Cast
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Brad Boimler, Eager Ensign > Bot2)
+Bot1.Pass
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Angelfire Ignition.Cast(Brad Boimler, Eager Ensign)
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Angelfire Ignition.Cast(Brad Boimler, Eager Ensign)
+
+[Expect]
+Bot1.Battlefield.Brad Boimler, Eager Ensign.Counters.PlusOnePlusOne = 5

@@ -1,0 +1,52 @@
+# After Mirrorweave copies Brad, his granted counter replacement remains; Hardened Scales makes both replacement hints get inspected (CR 611.2a, 616.1).
+# Brad's resolved replacement continues after Mirrorweave changes Brad's copiable values (CR 611.2a).
+[Bot1 Deck]
+Brad Boimler, Eager Ensign
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Grizzly Bears
+Mirrorweave
+Island
+Snakeskin Veil
+Black Lotus
+Hardened Scales
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brad Boimler, Eager Ensign.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Brad Boimler, Eager Ensign > Bot2)
+[T9 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Mirrorweave.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hardened Scales.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Snakeskin Veil.Cast(Grizzly Bears#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears#1.Counters.PlusOnePlusOne = 3

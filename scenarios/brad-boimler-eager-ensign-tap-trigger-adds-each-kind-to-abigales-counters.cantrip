@@ -1,0 +1,37 @@
+# Brad attacks, so the tap trigger resolves before Abigale adds three different kinds of counters to him; lifelink proves the printed keyword too (CR 603.2e, 702.15).
+
+[Bot1 Deck]
+Brad Boimler, Eager Ensign
+Mox Pearl
+Mox Sapphire
+Abigale, Eloquent First-Year
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brad Boimler, Eager Ensign.Cast
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Brad Boimler, Eager Ensign > Bot2)
+Bot1.Pass
+[T3 Bot1.Main2]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Abigale, Eloquent First-Year.Cast
+Bot1.Pass
+Bot1.Target(Brad Boimler, Eager Ensign)
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Battlefield.Brad Boimler, Eager Ensign.Counters.Flying = 2
+Bot1.Battlefield.Brad Boimler, Eager Ensign.Counters.FirstStrike = 2
+Bot1.Battlefield.Brad Boimler, Eager Ensign.Counters.Lifelink = 2
