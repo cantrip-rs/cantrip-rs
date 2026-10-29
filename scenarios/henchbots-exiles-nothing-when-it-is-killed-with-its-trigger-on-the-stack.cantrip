@@ -1,0 +1,45 @@
+# Henchbots is killed in response to its own enters trigger: Bot2's tapped attacker was the target, but Henchbots has
+# already left the battlefield when the trigger resolves, so the Ornithopter is not exiled (CR 610.3c, ruling 2026-01-27).
+
+[Bot1 Deck]
+Henchbots
+Black Lotus
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Lightning Bolt
+Mountain x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Bot2.Battlefield.Ornithopter > Bot1)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Henchbots.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Henchbots)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 5
+Exile.Count = 0
+Stack.Count = 0
+Bot1.Battlefield = Mox Pearl
+Bot1.Graveyard = Henchbots; Black Lotus; Island
+Bot2.Battlefield = Mountain; Ornithopter
+Bot2.Graveyard = Lightning Bolt

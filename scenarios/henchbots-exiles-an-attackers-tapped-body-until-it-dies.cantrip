@@ -1,0 +1,49 @@
+# Henchbots' enters trigger exiles target tapped creature an opponent controls: Bot2 attacked with one of its two
+# Ornithopters on turn four, so on turn five only that one is tapped, and it is the one legal target (chosen by itself);
+# it is exiled until Henchbots leaves the battlefield (CR 610.3), the untapped one stays. Bot2's Lightning Bolt kills the
+# 2/3 Henchbots on turn six and the Ornithopter returns to the battlefield under its owner's control (CR 610.3a, 400.7).
+
+[Bot1 Deck]
+Henchbots
+Black Lotus
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Lightning Bolt
+Mountain x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Bot2.Battlefield.Ornithopter#1 > Bot1)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Henchbots.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+? Bot2.Battlefield.Count = 2
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Henchbots)
+
+[Expect]
+Turn = 6
+Exile.Count = 0
+Stack.Count = 0
+Bot1.Battlefield = Mox Pearl
+Bot1.Graveyard = Henchbots; Black Lotus; Island
+Bot2.Battlefield = Mountain; Mountain; Ornithopter; Ornithopter
+Bot2.Graveyard = Lightning Bolt

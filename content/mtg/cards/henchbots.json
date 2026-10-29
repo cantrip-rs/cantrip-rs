@@ -1,0 +1,8 @@
+{
+  "name": "Henchbots",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Robot",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "When this creature enters, exile target tapped creature an opponent controls until this creature leaves the battlefield."
+}
