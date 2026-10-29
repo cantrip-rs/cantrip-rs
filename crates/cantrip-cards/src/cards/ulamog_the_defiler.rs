@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, top_of_library};
+use cantrip_mechanics::{half_of_library_rounded_up, targets, top_of_library};
 use cantrip_mechanics::triggers::{ANNIHILATOR, CAST_THIS_SPELL, annihilate_n, ward_sacrifice};
 use cantrip_oracle as oracle;
 
@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// Ulamog does, whatever becomes of the spell (the ruling); the half is of the library as the ability resolves.
 fn exile_half(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(opponent) = item.target(0).player() else { return Ok(()) };
-    let half = g.state().zone(Zone::library(opponent)).len().div_ceil(2);
+    let half = half_of_library_rounded_up(g, opponent) as usize;
     let top = top_of_library(g, opponent, half);
     g.exile_all(&top);
     Ok(())
