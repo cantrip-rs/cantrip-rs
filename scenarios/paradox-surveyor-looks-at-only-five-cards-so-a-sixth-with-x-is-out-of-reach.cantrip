@@ -1,0 +1,38 @@
+# Paradox Surveyor looks at exactly five cards (CR 701.20): with none of the top five a land or a card with {X}, nothing can be
+# taken, and the Pterafractyl sixth from the top is not among those looked at; it is on top afterwards and Bot1 draws it on turn 3.
+
+[Bot1 Deck]
+Paradox Surveyor
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Plains
+Plains
+Plains
+Lightning Bolt
+Giant Growth
+Grizzly Bears
+Hill Giant
+Lightning Bolt
+Pterafractyl
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Paradox Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt; Giant Growth; Grizzly Bears; Hill Giant; Lightning Bolt)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Pterafractyl
+Bot1.Library.Count = 25

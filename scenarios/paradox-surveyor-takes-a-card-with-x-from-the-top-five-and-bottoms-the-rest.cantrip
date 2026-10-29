@@ -1,0 +1,42 @@
+# Paradox Surveyor ({G}{G/U}{U}): when it enters, look at the top five cards; you may reveal a land card or a card with {X} in its
+# mana cost from among them and put it into your hand, the rest on the bottom (CR 107.3: Pterafractyl's printed {X} counts).
+# Bolt, Pterafractyl, Forest, Giant Growth and Bears are the five; Bot1 takes the Pterafractyl, the sixth card (Hill Giant) is
+# then on top and is what Bot1 draws on turn 3.
+
+[Bot1 Deck]
+Paradox Surveyor
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Plains
+Plains
+Plains
+Lightning Bolt
+Pterafractyl
+Forest
+Giant Growth
+Grizzly Bears
+Hill Giant
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Paradox Surveyor.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Pterafractyl; Forest | Lightning Bolt; Giant Growth; Grizzly Bears)
+Bot1.Arrange(Pterafractyl | Lightning Bolt; Forest; Giant Growth; Grizzly Bears)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Hill Giant; Plains; Plains; Plains; Pterafractyl
+Bot1.Library.Count = 24
+Bot1.Revealed = Pterafractyl
