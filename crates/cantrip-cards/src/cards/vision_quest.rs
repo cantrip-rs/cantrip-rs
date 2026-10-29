@@ -32,7 +32,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let picked = match options.as_slice() {
         [] => None,
         &[only] => Some(only),
-        _ => choose::card(g, you, item.object, Purpose::PutOntoBattlefield, options)?,
+        _ => choose::select(g, you, item.object, Purpose::PutOntoBattlefield, options, select::cards(select::exactly(1)))?.first().copied(),
     };
     if let Some(card) = picked {
         let counters = [(CounterKind::PlusOne, i16::try_from(x).unwrap_or(i16::MAX))];
