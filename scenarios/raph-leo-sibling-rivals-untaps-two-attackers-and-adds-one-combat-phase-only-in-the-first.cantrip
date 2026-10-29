@@ -1,0 +1,55 @@
+# Raph & Leo, Sibling Rivals: "Whenever Raph & Leo attack, if it's the first combat phase of the turn, untap one or two target attacking creatures. After this phase, there is an
+# additional combat phase" (CR 500.8, 603.4). On turn 3 Bot1 attacks with Raph & Leo, Memnite and Ornithopter and untaps Raph & Leo and Memnite. Raph & Leo attacks again in the additional
+# combat phase, which is not the first, so it triggers nothing and no third phase follows: 3 damage in each, Bot2 on 14.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Raph & Leo, Sibling Rivals
+Memnite
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Raph & Leo, Sibling Rivals.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Raph & Leo, Sibling Rivals; Memnite; Ornithopter)
+Bot1.Target(Raph & Leo, Sibling Rivals; Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Raph & Leo, Sibling Rivals.Tapped = false
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot1.Battlefield.Ornithopter.Tapped = true
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Attack(Raph & Leo, Sibling Rivals; Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
