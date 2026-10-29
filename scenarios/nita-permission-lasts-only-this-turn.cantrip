@@ -1,0 +1,49 @@
+# Nita, Forum Conciliator: "You may cast it this turn". Bot1 exiles Bot2's Lightning Bolt but does not cast it; on its next turn the
+# exiled Bolt can no longer be cast, and it stays in exile. Nita gets no counter, as nothing was cast.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Ornithopter
+Nita, Forum Conciliator
+Plains x2
+Plains x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Nita, Forum Conciliator.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Nita, Forum Conciliator.Activate(Bot2.Graveyard.Lightning Bolt)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+! Bot1.Exile.Lightning Bolt.Cast
+
+[Expect]
+Exile = Lightning Bolt
+Bot1.Battlefield.Nita, Forum Conciliator.Power = 2
+Bot2.Life = 20

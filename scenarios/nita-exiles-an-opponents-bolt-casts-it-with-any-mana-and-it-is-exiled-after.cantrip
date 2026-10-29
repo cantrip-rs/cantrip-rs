@@ -1,0 +1,56 @@
+# Nita, Forum Conciliator: {2}, sacrifice Ornithopter: exile Bot2's Lightning Bolt from its graveyard. Bot1 may cast it this turn,
+# paying its {R} with white mana from Mox Pearl (mana of any type). Casting a spell it doesn't own puts a +1/+1 counter on each creature
+# Bot1 controls (Nita, 3/4). The Bolt resolves and, instead of going to the graveyard, is exiled again: Bot2 is at 17.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Ornithopter
+Nita, Forum Conciliator
+Plains x2
+Plains x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Nita, Forum Conciliator.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Nita, Forum Conciliator.Activate(Bot2.Graveyard.Lightning Bolt)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Nita, Forum Conciliator.Counters.PlusOnePlusOne = 1
+Exile = Lightning Bolt
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Ornithopter
