@@ -1240,6 +1240,16 @@ pub fn creature_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Opti
     }
 }
 
+/// "Whenever you cast a multicolored spell" (CR 603.2): a spell its controller casts that is two or more colors as it is on the
+/// stack (CR 105.2b, 601.2i). General Ferrous Rokiric and Mage Tower Referee print it.
+pub fn multicolored_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, .. } if *player == me.controller && q.chars(*spell).colors.0.count_ones() >= 2 => Fired::PLAIN,
+        _ => None,
+    }
+}
+pub const MULTICOLORED_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, multicolored_spell_you_cast);
+
 /// "Whenever you cast an artifact spell" (CR 603.2). Pinnacle Emissary and Ravenous Robots print it.
 pub fn artifact_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {

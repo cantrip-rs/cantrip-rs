@@ -1,15 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::tokens;
+use cantrip_mechanics::{tokens, triggers};
 use cantrip_oracle as oracle;
-
-/// "Whenever you cast a multicolored spell" (CR 603.2): a spell its controller casts that is two or more colors as it is
-/// on the stack (CR 105.2b, 601.2i).
-fn multicolored_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    match event {
-        Event::SpellCast { spell, player, .. } if *player == me.controller && q.chars(*spell).colors.0.count_ones() >= 2 => Fired::PLAIN,
-        _ => None,
-    }
-}
 
 /// "Create a 4/4 red and white Golem artifact creature token." Its colors and creature type are the words of the text
 /// that makes it (CR 612.4).
@@ -31,7 +22,7 @@ pub static CARD: CardDef = CardDef {
     // "Hexproof from monocolored" (CR 702.11d).
     hexproof_from: HexproofFrom::MONOCOLORED,
     abilities: &[triggered(
-        when_asked(EventMask::SPELL_CAST, multicolored_spell_you_cast),
+        triggers::MULTICOLORED_SPELL_YOU_CAST,
         make_golem,
         "Whenever you cast a multicolored spell, create a 4/4 red and white Golem artifact creature token.",
     )],
