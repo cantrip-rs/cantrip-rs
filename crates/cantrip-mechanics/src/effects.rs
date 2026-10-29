@@ -583,6 +583,15 @@ pub fn damage_each_opponent(g: &mut dyn Game, item: &StackItem, n: u16) {
     g.damage_together(&hits);
 }
 
+/// "[This source] deals `n` damage to each opponent and you gain `n` life" (CR 120.3, 119.3): `damage_each_opponent`, then the
+/// controller gains the life whether or not the damage was dealt (CR 608.2c). Extended Absence, Screeching Soulbreaker, Eye of
+/// Jace, Aurelia, the Law Above, Quintorius Kand, Sanctum Lurker, Ark of Hunger and Colossus of the Blood Age print it.
+pub fn damage_each_opponent_and_gain_life(g: &mut dyn Game, item: &StackItem, n: u16) -> Result<(), Suspend> {
+    damage_each_opponent(g, item, n);
+    g.gain_life(item.controller, i32::from(n));
+    Ok(())
+}
+
 /// "This source deals 1 damage to that creature's controller", the creature being the trigger's subject: its controller
 /// as the ability resolves, or as it last existed if it has left the battlefield (CR 608.2h), with no target and no
 /// retest of the trigger condition. The damage is dealt by the ability's source, as it last existed if it has left

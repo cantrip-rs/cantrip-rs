@@ -15,9 +15,7 @@ fn a_player_attacks_with_at_least<const N: u32>(_: &dyn Query, _: ObjectId, even
 /// "Aurelia deals 3 damage to each of your opponents and you gain 3 life": the life is gained whether or not the damage was
 /// dealt (CR 608.2c).
 fn drain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::damage_each_opponent(g, item, 3);
-    g.gain_life(item.controller, 3);
-    Ok(())
+    effects::damage_each_opponent_and_gain_life(g, item, 3)
 }
 
 pub static CARD: CardDef = CardDef {

@@ -15,9 +15,7 @@ pub static SPIRIT: CardDef = CardDef {
 /// "Whenever you cast a spell from exile, Quintorius Kand deals 2 damage to each opponent and you gain 2 life." Both happen
 /// even if Quintorius has left the battlefield by the time it resolves (CR 113.7a, 608.2h).
 fn ping_and_gain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::damage_each_opponent(g, item, 2);
-    g.gain_life(item.controller, 2);
-    Ok(())
+    effects::damage_each_opponent_and_gain_life(g, item, 2)
 }
 
 /// "+1: Create a 3/2 red and white Spirit creature token."

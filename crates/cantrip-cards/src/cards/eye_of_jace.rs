@@ -12,8 +12,7 @@ fn surveil_then_burst(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     effects::surveil(g, item, 1)?;
     if cantrip_mechanics::threshold(g, you) {
         g.sacrifice(you, &[item.object]);
-        cantrip_mechanics::effects::damage_each_opponent(g, item, 2);
-        g.gain_life(you, 2);
+        effects::damage_each_opponent_and_gain_life(g, item, 2)?;
     }
     Ok(())
 }
