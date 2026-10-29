@@ -1,0 +1,72 @@
+# Genghis Frog: "Whenever Genghis Frog or another Mutant you control enters, create a Mutagen token." Turn 1 Bot1 casts the Frog ({G}{U}) for its own Mutagen, then an Ornithopter
+# (no Mutant, no token): 7 permanents. Turn 2 Bot2 casts its own Slithering Cryptid, a Mutant under the other player's control: no token for Bot1. Turn 3 Bot1's Cryptid is
+# a Mutant that enters under its control: the Cryptid's own Mutagen and the Frog's, 10 permanents (four Moxen, Frog, Ornithopter, Cryptid, three Mutagen).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Genghis Frog
+Slithering Cryptid
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Slithering Cryptid
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Genghis Frog.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Slithering Cryptid.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 7
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Slithering Cryptid.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 10
+Bot1.Battlefield.Genghis Frog.Keywords = Trample

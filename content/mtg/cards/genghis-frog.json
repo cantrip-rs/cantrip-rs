@@ -1,0 +1,11 @@
+{
+  "name": "Genghis Frog",
+  "manaCost": "{G}{U}",
+  "type": "Legendary Creature — Frog Mutant Rogue",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Trample\nWhenever Genghis Frog or another Mutant you control enters, create a Mutagen token. (It's an artifact with \"{1}, {T}, Sacrifice this token: Put a +1/+1 counter on target creature. Activate only as a sorcery.\")",
+  "keywords": [
+    "Trample"
+  ]
+}
