@@ -1,0 +1,36 @@
+# Explosive Prodigy: Bot1 controls a green Llanowar Elves and the red Prodigy: two colors (CR 105.2), so X is 2 and it kills
+# Bot2's Ornithopter (0/2); a Forest adds no color. The Ornithopter is not an Elf, only artifact: it is the target, as "target
+# creature an opponent controls" (CR 608.2b).
+
+[Bot1 Deck]
+Forest
+Mountain
+Llanowar Elves
+Explosive Prodigy
+Forest x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Explosive Prodigy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = 
+Bot2.Graveyard = Ornithopter

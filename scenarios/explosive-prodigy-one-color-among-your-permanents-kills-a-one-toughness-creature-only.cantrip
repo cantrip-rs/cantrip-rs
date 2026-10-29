@@ -1,0 +1,35 @@
+# Explosive Prodigy: "Vivid - When this creature enters, it deals X damage to target creature an opponent controls, where X is
+# the number of colors among permanents you control." Bot1 controls only Mountains (colorless) and the red Prodigy: one color
+# (CR 105.2), so X is 1 - it kills Bot2's Llanowar Elves (1/1) and that is all it does. Land is colorless (CR 105.2).
+
+[Bot1 Deck]
+Mountain
+Mountain
+Explosive Prodigy
+Mountain x17
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Explosive Prodigy.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Explosive Prodigy; Mountain; Mountain
+Bot2.Battlefield = Forest
+Bot2.Graveyard = Llanowar Elves

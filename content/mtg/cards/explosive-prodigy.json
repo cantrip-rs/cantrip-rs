@@ -1,0 +1,8 @@
+{
+  "name": "Explosive Prodigy",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Elemental Sorcerer",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Vivid — When this creature enters, it deals X damage to target creature an opponent controls, where X is the number of colors among permanents you control."
+}

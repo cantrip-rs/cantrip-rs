@@ -1,0 +1,7 @@
+# Explosive Prodigy: "Vivid - When this creature enters, it deals X damage to target creature an opponent controls, where X is
+# the number of colors among permanents you control." Bot1 controls a red Sizzling Changeling-free board: a Mountain
+# (colorless) and the Prodigy itself (red) - one color, so 1 damage (CR 105.2): it does not kill Bot2's 0/5 Armored Whirl
+# Turtle but marks it with 1. The second Prodigy, with a green Llanowar Elves also in play, counts two colors: 2 damage.
+
+[Bot1 Deck]
+Mountain
