@@ -1,0 +1,51 @@
+# Morningtide's Light: a token that is exiled ceases to exist (CR 111.7, 704.5d), so it is not among "those cards" that return. Bot1 exiles one of
+# Bot2's Spirit tokens (from Lingering Souls) and its own Ornithopter; at the end step only the Ornithopter returns, tapped. Bot2 keeps the other Spirit.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Ornithopter
+Morningtide's Light
+Plains x14
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Lingering Souls
+Plains x12
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lingering Souls.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Morningtide's Light.Cast
+Bot1.Target(Bot2.Battlefield.Spirit Token#1; Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Exile = Morningtide's Light; Ornithopter
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Morningtide's Light
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield = Mox Pearl; Mox Jet; Mox Ruby; Spirit Token

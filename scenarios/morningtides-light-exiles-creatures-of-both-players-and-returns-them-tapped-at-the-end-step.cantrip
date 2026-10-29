@@ -1,0 +1,50 @@
+# Morningtide's Light: "Exile any number of target creatures. At the beginning of the next end step, return those cards to the battlefield tapped under
+# their owners' control." Bot1 exiles its own untapped Ornithopter and Bot2's untapped Llanowar Elves in its second main phase; both are gone until
+# the end step (CR 603.7), where each comes back tapped (CR 110.2a) under its owner. The Light itself was exiled as its last instruction, not put into
+# the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Ornithopter
+Morningtide's Light
+Plains
+Plains x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Morningtide's Light.Cast
+Bot1.Target(Bot2.Battlefield.Llanowar Elves; Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Exile = Llanowar Elves; Morningtide's Light; Ornithopter
+? Bot2.Battlefield = Forest
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Morningtide's Light
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Llanowar Elves.Tapped = true
