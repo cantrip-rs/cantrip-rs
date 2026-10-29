@@ -1,0 +1,44 @@
+# Tome Blast, cast for {1}{R} on turn 1, deals 2 damage to Bot2; on turn 3 it is cast again from the graveyard with flashback {4}{R}
+# at Bot2's Ornithopter (0/2), which dies, and Tome Blast is exiled.
+
+[Bot1 Deck]
+Tome Blast
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tome Blast.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Tome Blast.Cast(Bot2.Battlefield.Ornithopter; Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Exile = Tome Blast
+Bot2.Life = 18
