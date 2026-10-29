@@ -1,0 +1,70 @@
+# Mage Tower Referee: "Whenever you cast a multicolored spell, put a +1/+1 counter on this creature." An opponent's multicolored
+# Lightning Helix (red and white) gives it nothing; Bot1's own Helix puts the counter on before the spell resolves (the trigger
+# is above it, the opponent still at 23); Bot1's Lightning Bolt (red alone) and Mox Emerald (colorless) give none. The Referee
+# ends a 3/2 with the one counter.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mage Tower Referee
+Lightning Helix
+Lightning Bolt
+Mox Emerald
+Mountain
+Island x10
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mage Tower Referee.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Lightning Helix.Cast(Bot1)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Bot1.Battlefield.Mage Tower Referee.Counters.PlusOnePlusOne = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Mage Tower Referee.Counters.PlusOnePlusOne = 1
+? Bot2.Life = 23
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Hand.Mox Emerald.Cast
+? Stack.Count = 1
+? Bot1.Battlefield.Mage Tower Referee.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot1.Battlefield.Mage Tower Referee.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mage Tower Referee.Power = 3
+Bot1.Battlefield.Mage Tower Referee.Toughness = 2
