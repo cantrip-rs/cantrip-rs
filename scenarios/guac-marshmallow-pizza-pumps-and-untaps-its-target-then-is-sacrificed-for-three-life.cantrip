@@ -28,6 +28,7 @@ Bot2.Pass
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Battlefield.Frog Butler.Power = 3
+? Bot1.Battlefield.Frog Butler.Toughness = 3
 ? Bot1.Battlefield.Frog Butler.Tapped = false
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
