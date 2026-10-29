@@ -1,0 +1,37 @@
+# Seize the Spoils: "As an additional cost to cast this spell, discard a card" (CR 601.2b, 118.8). Bot1 discards the Memnite it
+# chooses as the cost, then draws two cards and creates an untapped Treasure token (CR 111.10a): the hand ends as the Mountain
+# and Ornithopter it still held plus the two cards drawn, and the graveyard holds the discarded Memnite and the spell.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Seize the Spoils
+Memnite
+Mountain
+Ornithopter
+Mox Sapphire
+Mox Emerald
+Mountain x8
+
+[Bot2 Deck]
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Seize the Spoils.Cast
+Bot1.Choose(Memnite)
+? Bot1.Graveyard = Memnite
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Mountain; Mox Emerald; Mox Sapphire; Ornithopter
+Bot1.Graveyard = Seize the Spoils; Memnite
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Treasure Token.Tapped = false
