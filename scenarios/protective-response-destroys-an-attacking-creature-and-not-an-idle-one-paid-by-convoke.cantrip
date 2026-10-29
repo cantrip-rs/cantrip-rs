@@ -1,0 +1,31 @@
+# Protective Response: "Convoke. Destroy target attacking or blocking creature." Bot1 attacks with one of three Ornithopters on
+# turn 3. An idle Ornithopter is no target (CR 508.1); Protective Response {2}{W} is cast on the attacker, paid with Mox Pearl for
+# {W} and the other two Ornithopters tapped by convoke for the generic mana (CR 702.51), and destroys it (CR 701.8).
+
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Ornithopter
+Ornithopter
+Protective Response
+Island x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Protective Response.Cast(Bot1.Battlefield.Ornithopter#2; Convoke: Ornithopter, Ornithopter)
+Bot1.Hand.Protective Response.Cast(Bot1.Battlefield.Ornithopter#1; Convoke: Ornithopter, Ornithopter)
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Protective Response; Ornithopter
+Bot1.Battlefield.Ornithopter#2.Tapped = true
+Bot1.Battlefield.Mox Pearl.Tapped = true

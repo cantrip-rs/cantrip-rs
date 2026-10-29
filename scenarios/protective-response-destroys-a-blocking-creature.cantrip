@@ -1,0 +1,34 @@
+# Protective Response: "Destroy target attacking or blocking creature." Bot1 attacks with with an Ornithopter and
+# Bot2 blocks with its own Ornithopter; Bot1 casts it on the blocker (CR 509.1g), paid by Mox Pearl and two convoking Ornithopters.
+
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Ornithopter
+Ornithopter
+Protective Response
+Island x19
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter#1 > Bot2)
+Bot2.Block(Ornithopter > Ornithopter#1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Protective Response.Cast(Bot2.Battlefield.Ornithopter; Convoke: Ornithopter, Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Ornithopter#1.Tapped = true

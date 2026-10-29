@@ -1,0 +1,7 @@
+{
+  "name": "Protective Response",
+  "manaCost": "{2}{W}",
+  "type": "Instant",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nDestroy target attacking or blocking creature.",
+  "convoke": true
+}
