@@ -1,0 +1,63 @@
+# Zog, Triceraton Castaway {4}{R}, 5/4 reach and trample: "When Zog enters, target creature can't block this turn." Zog enters on
+# turn 3 aimed at Bot2's Ornithopter (Mox Ruby, no creature, is refused as a target). Bot1 attacks with Grizzly
+# Bears: the Ornithopter may not block it, while Bot2's Memnite, not aimed at, may and does. On turn 5 the effect is over, and
+# the Ornithopter blocks the Bears.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Grizzly Bears
+Zog, Triceraton Castaway
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Zog, Triceraton Castaway.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Ruby)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Grizzly Bears > Bot2)
+! Bot2.Block(Ornithopter > Grizzly Bears)
+Bot2.Block(Memnite > Grizzly Bears)
+[T3 Bot1.Main2]
+? Bot2.Graveyard = Memnite
+[T5 Bot1.Main1]
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Ornithopter > Grizzly Bears)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter; Memnite
+Bot2.Life = 20
+Bot1.Battlefield.Zog, Triceraton Castaway.Keywords = Reach; Trample

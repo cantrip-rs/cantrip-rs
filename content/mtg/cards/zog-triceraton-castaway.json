@@ -1,0 +1,12 @@
+{
+  "name": "Zog, Triceraton Castaway",
+  "manaCost": "{4}{R}",
+  "type": "Legendary Creature — Dinosaur Soldier",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Reach, trample\nWhen Zog enters, target creature can't block this turn.\nMountaincycling {2} ({2}, Discard this card: Search your library for a Mountain card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}

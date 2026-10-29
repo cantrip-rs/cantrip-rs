@@ -1,0 +1,29 @@
+# Zog's mountaincycling {2} (CR 702.29e): paying it and discarding the card from the hand finds the Mountain in the library and
+# puts it into the hand. The cost {2} is paid exactly with Mana Crypt's {C}{C}, so it holds no colored pip, and the pool ends
+# empty; with only Blasted Landscape's {C} the ability is not offered.
+
+[Bot1 Deck]
+Blasted Landscape
+Mana Crypt
+Zog, Triceraton Castaway
+Plains x4
+Mountain
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Blasted Landscape.Play
+! Bot1.Hand.Zog, Triceraton Castaway.Activate(Ability: Mountaincycling; Mana: short)
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Zog, Triceraton Castaway.Activate(Ability: Mountaincycling)
+Bot1.Pass
+? Bot1.Mana =
+Bot1.Search(Mountain)
+
+[Expect]
+Bot1.Graveyard.Zog, Triceraton Castaway.Colors = Red
+Bot1.Hand = Mountain; Plains; Plains; Plains; Plains

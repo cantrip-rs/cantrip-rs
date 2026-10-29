@@ -1,0 +1,54 @@
+# Zog, Triceraton Castaway {4}{R}: "When Zog enters, target creature can't block this turn." Any creature is a legal target, the
+# controller's own included. On turn 3 Zog enters aimed at Bot1's own Grizzly Bears (accepted, where a Mox is refused), and the
+# ability resolves. The effect ends with the turn: on turn 4 the Bears block Bot2's attacking Memnite and kill it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Grizzly Bears
+Zog, Triceraton Castaway
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Zog, Triceraton Castaway.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Ruby)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Grizzly Bears > Memnite)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot1.Life = 20
+Bot1.Battlefield.Grizzly Bears.Damage = 1
