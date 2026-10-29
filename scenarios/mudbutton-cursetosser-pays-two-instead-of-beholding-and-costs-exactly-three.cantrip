@@ -1,0 +1,23 @@
+# Mudbutton Cursetosser {B} 2/1: "As an additional cost to cast this spell, behold a Goblin or pay {2}" (CR 601.2b, 701.4a). With no
+# Goblin to behold (its own card is on the stack, not in the hand) Bot1 pays {2}: Black Lotus's {B}{B}{B} is exactly {B}{2}, and the
+# pool is empty afterwards, with nothing revealed.
+
+[Bot1 Deck]
+Black Lotus
+Mudbutton Cursetosser
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Mudbutton Cursetosser.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mudbutton Cursetosser.Power = 2
+Bot1.Battlefield.Mudbutton Cursetosser.Toughness = 1

@@ -1,0 +1,34 @@
+# Mudbutton Cursetosser {B}: beholding a Goblin (CR 701.4a) is the whole additional cost. Bot1 casts the first from Mox Jet, revealing
+# the second, a Goblin card in its hand (the Warlock stays in hand); then casts the second from a Swamp, beholding the first, a Goblin
+# it controls on the battlefield, which a Goblin permanent reveals nothing for. Both are on the battlefield, each paid with {B} only.
+
+[Bot1 Deck]
+Mox Jet
+Swamp
+Mudbutton Cursetosser
+Mudbutton Cursetosser
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mudbutton Cursetosser.Cast
+Bot1.Modes(Behold a Goblin)
+Bot1.Choose(Mudbutton Cursetosser)
+? Bot1.Revealed = Mudbutton Cursetosser
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Mudbutton Cursetosser.Cast
+Bot1.Modes(Behold a Goblin)
+Bot1.Choose(Mudbutton Cursetosser)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Swamp; Mox Jet; Mudbutton Cursetosser; Mudbutton Cursetosser
+Bot1.Hand.Count = 3
