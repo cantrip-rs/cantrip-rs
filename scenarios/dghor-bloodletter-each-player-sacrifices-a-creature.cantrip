@@ -1,0 +1,44 @@
+# CR 101.4, 701.21a: the second mode asks Bot1 and Bot2 to choose a creature they control; each player sacrifices one,
+# while D'Ghor and Bot2's unchosen Memnite remain.
+
+[Bot1 Deck]
+D'Ghor Bloodletter
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Memnite
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.D'Ghor Bloodletter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+Bot2.Choose(Memnite)
+
+[Expect]
+Bot1.Battlefield.D'Ghor Bloodletter.Power = 2
+Bot1.Graveyard.Count = 1
+Bot2.Graveyard.Count = 1
+Bot2.Battlefield.Count = 1

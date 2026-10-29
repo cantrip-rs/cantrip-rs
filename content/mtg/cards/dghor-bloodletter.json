@@ -1,0 +1,8 @@
+{
+  "name": "D'Ghor Bloodletter",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Klingon Assassin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, choose one —\n• All other creatures get -1/-1 until end of turn.\n• Each player sacrifices a creature of their choice."
+}

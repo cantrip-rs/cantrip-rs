@@ -1,0 +1,53 @@
+# CR 611.2: the first mode gives every other creature -1/-1 for the turn, including creatures controlled by both players,
+# but not D'Ghor itself. The three Memnites die as 1/1s, while Grizzly Bears shrinks from 2/2 to 1/1 and survives.
+
+[Bot1 Deck]
+D'Ghor Bloodletter
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Memnite
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Grizzly Bears
+Mox Emerald
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.D'Ghor Bloodletter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Power = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.D'Ghor Bloodletter.Power = 2
+Bot1.Graveyard.Count = 1
+Bot2.Graveyard.Count = 2
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
