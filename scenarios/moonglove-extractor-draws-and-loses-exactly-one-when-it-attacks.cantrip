@@ -1,0 +1,31 @@
+# Moonglove Extractor {2}{B} 2/1: "Whenever this creature attacks, you draw a card and lose 1 life" (CR 508.1m, 121.1, 119.3). It attacks
+# on turn 3: Bot1 draws one card (one more in hand than before the attack) and loses exactly 1 life; the 2 damage goes to Bot2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Moonglove Extractor
+Island x4
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Moonglove Extractor.Cast
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 4
+Bot1.Attack(Moonglove Extractor)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Life = 19
+Bot2.Life = 18
