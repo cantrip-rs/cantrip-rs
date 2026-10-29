@@ -1,0 +1,9 @@
+{
+  "name": "Retro-Mutation",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nEnchanted creature is a Turtle with base power and toughness 0/1. It can't attack and loses all abilities. (It also loses all other creature types.)",
+  "keywords": [
+    "Flash"
+  ]
+}

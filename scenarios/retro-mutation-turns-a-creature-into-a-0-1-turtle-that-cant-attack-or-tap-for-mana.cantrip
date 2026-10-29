@@ -1,0 +1,43 @@
+# Retro-Mutation on Bot1's own Llanowar Elves: "Enchanted creature is a Turtle with base power and toughness 0/1. It can't
+# attack and loses all abilities." The Elves is a 0/1 Turtle (its Elf and Druid types are gone, it is still a green creature),
+# and in turn three, long past summoning sickness, its mana ability is gone (refused) and it can't attack (refused), while Ornithopter attacks.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Llanowar Elves
+Retro-Mutation
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Retro-Mutation.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Subtypes = Turtle
+? Bot1.Battlefield.Llanowar Elves.Power = 0
+? Bot1.Battlefield.Llanowar Elves.Toughness = 1
+? Bot1.Battlefield.Llanowar Elves.Colors = Green
+? Bot1.Battlefield.Llanowar Elves.Types = Creature
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Llanowar Elves.Activate
+! Bot1.Attack(Llanowar Elves > Bot2)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Llanowar Elves.Subtypes = Turtle
