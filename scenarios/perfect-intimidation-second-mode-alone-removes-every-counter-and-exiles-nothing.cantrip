@@ -1,0 +1,48 @@
+# Perfect Intimidation, the second mode alone (CR 700.2): "Remove all counters from target creature" takes every counter of a
+# creature, all of each (CR 122.1, 122.8). Bot2's Walking Ballista, cast for X=2, is left 0/0 and dies; the first mode was not
+# chosen, so Bot2 exiles nothing and keeps its hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Perfect Intimidation
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Walking Ballista
+Island
+Swamp x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Walking Ballista.Cast(X: 2)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Perfect Intimidation.Cast
+! Bot1.Modes(Count: 0)
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Hand.Count = 3
+Bot2.Graveyard = Walking Ballista

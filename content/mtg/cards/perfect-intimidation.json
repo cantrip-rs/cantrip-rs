@@ -1,0 +1,6 @@
+{
+  "name": "Perfect Intimidation",
+  "manaCost": "{3}{B}",
+  "type": "Sorcery",
+  "oracleText": "Choose one or both —\n• Target opponent exiles two cards from their hand.\n• Remove all counters from target creature."
+}
