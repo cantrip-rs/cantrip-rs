@@ -1,0 +1,35 @@
+# Turtle Van has crew 1: tap creatures with total power 1 or more (CR 702.122a). Ornithopter is a 0/2, so it cannot crew
+# the Van alone; the Elves, with power 1, can.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Turtle Van
+Llanowar Elves
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Turtle Van.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Turtle Van.Activate(Ability: Crew)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Llanowar Elves)
+
+[Expect]
+Bot1.Battlefield.Turtle Van.Tapped = false

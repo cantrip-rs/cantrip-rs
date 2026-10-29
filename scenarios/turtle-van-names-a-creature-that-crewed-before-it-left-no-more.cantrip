@@ -1,0 +1,53 @@
+# Turtle Van: a creature that crewed it and has since left the battlefield is no target (CR 115.1). Turn 3 the Elves and
+# the Turtle crew the Van, then Lightning Bolt kills the Elves; at the attack the Elves are not a legal target and the
+# Turtle is: 1 counter doubled to 2, a 3/6. The Van hits for 4.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Turtle Van
+Llanowar Elves
+Horned Turtle
+Lightning Bolt
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Turtle Van.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Horned Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Turtle Van.Activate(Ability: Crew)
+Bot1.Choose(Llanowar Elves; Horned Turtle)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Turtle Van)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard = Llanowar Elves; Lightning Bolt
+Bot1.Battlefield.Horned Turtle.Power = 3
+Bot1.Battlefield.Horned Turtle.Toughness = 6

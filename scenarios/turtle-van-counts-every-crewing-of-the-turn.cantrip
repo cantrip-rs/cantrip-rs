@@ -1,0 +1,52 @@
+# Turtle Van: crewing again in the same turn names more creatures, not fewer (CR 702.122a). Turn 3 the Elves crew the Van,
+# then the Turtle crews it again; the first crew member is still a target. It gets one counter, a 2/2 and not doubled.
+# The Van hits for 4.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Turtle Van
+Llanowar Elves
+Horned Turtle
+Lightning Bolt
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Turtle Van.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Horned Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Turtle Van.Activate(Ability: Crew)
+Bot1.Choose(Llanowar Elves)
+Bot1.Battlefield.Turtle Van.Activate(Ability: Crew)
+Bot1.Choose(Horned Turtle)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Turtle Van)
+Bot1.Target(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Llanowar Elves.Power = 2
+Bot1.Battlefield.Llanowar Elves.Toughness = 2
+Bot1.Battlefield.Horned Turtle.Power = 1
