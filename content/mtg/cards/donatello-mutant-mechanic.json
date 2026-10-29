@@ -1,0 +1,8 @@
+{
+  "name": "Donatello, Mutant Mechanic",
+  "manaCost": "{3}{U}",
+  "type": "Legendary Creature — Mutant Ninja Turtle",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "{T}: Put three +1/+1 counters on target artifact you control. If it isn't a creature, it becomes a 0/0 Robot creature in addition to its other types. Activate only as a sorcery.\nWhenever an artifact you control is put into a graveyard from the battlefield, if it had counters on it, put those counters on up to one target artifact or creature you control."
+}
