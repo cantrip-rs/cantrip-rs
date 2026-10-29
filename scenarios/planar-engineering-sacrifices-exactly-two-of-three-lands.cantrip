@@ -1,0 +1,45 @@
+# Planar Engineering with three lands: Bot1 sacrifices exactly two of its choice, not all three, and the third stays; the four basic lands found enter tapped.
+
+[Bot1 Deck]
+Planar Engineering
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Island
+Island
+Island
+Island
+Forest
+Swamp
+Mountain
+Plains
+Ornithopter x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Planar Engineering.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island#1; Island#2)
+Bot1.Search(Forest; Swamp; Mountain; Plains)
+
+[Expect]
+Bot1.Graveyard = Planar Engineering; Island; Island
+Bot1.Battlefield.Count = 9
+Bot1.Battlefield.Plains.Tapped = true
