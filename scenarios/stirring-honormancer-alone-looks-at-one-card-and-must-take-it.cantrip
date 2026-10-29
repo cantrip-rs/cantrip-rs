@@ -1,0 +1,33 @@
+# Stirring Honormancer: with no other creature X is 1 (it counts itself, CR 608.2h and 603.7 -- it is on the battlefield when the
+# ability resolves). The one card looked at is put into the hand; nothing goes to the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Stirring Honormancer
+Plains x3
+Ponder
+Island
+Plains x12
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stirring Honormancer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ponder | )
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Ponder
+Bot1.Graveyard = Black Lotus
+Bot1.Library.Count = 13
+Bot1.Looked = Ponder
