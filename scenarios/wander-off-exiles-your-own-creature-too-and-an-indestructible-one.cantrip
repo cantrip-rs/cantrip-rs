@@ -1,0 +1,37 @@
+# Wander Off exiles any creature, one of Bot1's own included (CR 701.13a), and indestructible does not stop it: Bot1 gives
+# Burrog Banemaker indestructible with Masterful Flourish (CR 702.12b) and then exiles it with Wander Off.
+
+[Bot1 Deck]
+Burrog Banemaker
+Mox Jet
+Mox Jet
+Mox Jet
+Black Lotus
+Wander Off
+Masterful Flourish
+Island x19
+
+[Bot2 Deck]
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Masterful Flourish.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Burrog Banemaker.Keywords = Deathtouch; Indestructible
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Wander Off.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Burrog Banemaker
+Bot1.Graveyard = Wander Off; Black Lotus; Masterful Flourish

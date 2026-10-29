@@ -1,0 +1,6 @@
+{
+  "name": "Wander Off",
+  "manaCost": "{3}{B}",
+  "type": "Instant",
+  "oracleText": "Exile target creature."
+}
