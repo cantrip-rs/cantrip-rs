@@ -1,0 +1,53 @@
+# Mindful Biomancer (2/2): "When this creature enters, you gain 1 life." and "{2}{G}: This creature gets +2/+2 until end of turn.
+# Activate only once each turn." Bot1 casts it on turn 1 with two of six Moxen (20 -> 21 life). On turn 3 it pays {2}{G} once and
+# is a 4/4; a second activation with three more Moxen is refused (once each turn). At the end of turn it is a 2/2 again, and on
+# turn 5 it can be activated again.
+
+[Bot1 Deck]
+Mindful Biomancer
+Mox Emerald x6
+Forest x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Mindful Biomancer.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Life = 21
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mindful Biomancer.Activate
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Mindful Biomancer.Power = 4
+? Bot1.Battlefield.Mindful Biomancer.Toughness = 4
+Bot1.Battlefield.Mox Emerald#4.Activate
+Bot1.Battlefield.Mox Emerald#5.Activate
+Bot1.Battlefield.Mox Emerald#6.Activate
+! Bot1.Battlefield.Mindful Biomancer.Activate
+Bot1.Attack(Mindful Biomancer > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mindful Biomancer.Activate
+Bot1.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot1.Battlefield.Mindful Biomancer.Power = 4
