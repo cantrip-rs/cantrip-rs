@@ -740,6 +740,12 @@ pub fn top_of_library(g: &dyn Query, player: PlayerId, count: usize) -> Vec<Obje
     g.state().zone(Zone::library(player)).iter().take(count).copied().collect()
 }
 
+/// "Half their library, rounded up" (CR 107.1a): the number of cards, counted as the ability or spell resolves. Ulamog, the Defiler
+/// exiles that many from the top and Kitsune's Technique mills them.
+pub fn half_of_library_rounded_up(g: &dyn Query, player: PlayerId) -> u32 {
+    g.state().zone(Zone::library(player)).len().div_ceil(2) as u32
+}
+
 /// "[It] gets +P/+T until end of turn" (CR 611.2): a continuous effect from the resolving ability's source.
 pub fn pump(g: &mut dyn Game, source: ObjectId, creature: ObjectId, power: i16, toughness: i16) {
     if g.is_on_battlefield(creature) && g.obj(creature).became.is_none() {
