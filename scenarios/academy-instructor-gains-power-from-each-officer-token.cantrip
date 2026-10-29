@@ -1,0 +1,30 @@
+# Each noncreature spell creates one Officer token; the Instructor's power counts its own tokens and stays at base toughness.
+
+[Bot1 Deck]
+Black Lotus
+Academy Instructor
+Island x4
+Sol Ring
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Academy Instructor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Academy Instructor.Power = 1
+Bot1.Battlefield.Academy Instructor.Toughness = 3
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Officer Token.Power = 1
+Bot1.Battlefield.Sol Ring.ManaValue = 1

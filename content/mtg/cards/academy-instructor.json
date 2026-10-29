@@ -1,0 +1,8 @@
+{
+  "name": "Academy Instructor",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Bolian Officer",
+  "power": 0,
+  "toughness": 3,
+  "oracleText": "This creature gets +1/+0 for each Officer token you control.\nWhenever you cast a noncreature spell, create a 1/1 red Officer creature token."
+}

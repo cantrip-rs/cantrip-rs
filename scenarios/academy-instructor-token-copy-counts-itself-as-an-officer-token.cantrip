@@ -1,0 +1,37 @@
+# Three Steps Ahead makes an Officer token copy of Academy Instructor. The copy is itself an Officer token and counts itself (CR 109.2, 611.3a, 707.2).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Academy Instructor
+Black Lotus
+Three Steps Ahead
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Academy Instructor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Three Steps Ahead.Cast
+Bot1.Modes(2)
+Bot1.Target(Academy Instructor)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Academy Instructor#1.Power = 3
+Bot1.Battlefield.Academy Instructor#2.Power = 3
+Bot1.Battlefield.Academy Instructor#2.Token = true

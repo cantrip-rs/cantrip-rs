@@ -1,0 +1,60 @@
+# Each Academy Instructor counts the Officer tokens its own controller controls, each one, and no other token: Bot1's two
+# noncreature spells (Sol Ring, Gold Pan) make two Officer tokens for Bot1, and Gold Pan a Treasure token, which is no
+# Officer; Bot1's Instructor is 2/3. Bot2's Instructor and Officer token add nothing to it, and Bot2's Instructor counts
+# only Bot2's one token, not Bot1's two (CR 109.5: "you" is the Instructor's controller).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Academy Instructor
+Sol Ring
+Gold Pan
+Island x15
+
+[Bot2 Deck]
+Island
+Black Lotus
+Academy Instructor
+Sol Ring
+Island x16
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Academy Instructor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Gold Pan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Academy Instructor.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Academy Instructor.Power = 2
+Bot2.Battlefield.Academy Instructor.Power = 1
+Bot2.Battlefield.Officer Token.Power = 1
