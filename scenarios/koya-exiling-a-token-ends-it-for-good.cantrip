@@ -1,0 +1,49 @@
+# Koya, Death from Above exiling a token: it ceases to exist in exile (CR 111.7), so nothing returns at the end step even
+# though the delayed ability still asks about {3}{B} (declined, no black mana held). On turn 3 Koya (Plains, two Mox Pearls)
+# exiles the Mutant token that Jennika's trigger made on turn 1.
+
+[Bot1 Deck]
+Mox Pearl x2
+Black Lotus
+Jennika, Bad Apple Big Sister
+Koya, Death from Above
+Plains
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Jennika, Bad Apple Big Sister.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mutant Token.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Koya, Death from Above.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Mutant Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Decline
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Exile.Count = 0

@@ -1,0 +1,61 @@
+# Koya, Death from Above exiles Bot2's Action News Crew and the delayed ability is independent of Koya (CR 603.7): Bot2 Bolts
+# Koya with the "exile" trigger on the stack, and it still resolves. At the beginning of the end step Bot1 has no black mana
+# for {3}{B} (`! Bot1.PayCost`: not offered), so the card returns to the battlefield under its owner's control, Bot2's, as a
+# new object (summoning sick, CR 400.7).
+
+[Bot1 Deck]
+Mox Pearl x3
+Koya, Death from Above
+Plains x16
+
+[Bot2 Deck]
+Mox Pearl x2
+Action News Crew
+Mox Ruby
+Lightning Bolt
+Island x15
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Action News Crew.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Koya, Death from Above.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Action News Crew)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Koya, Death from Above)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Koya, Death from Above
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Exile.Action News Crew.Power = 2
+? Bot2.Battlefield.Count = 3
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Decline
+? Bot2.Battlefield.Action News Crew.SummoningSick = true
+? Bot2.Battlefield.Count = 4
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Koya, Death from Above
+Bot2.Battlefield.Action News Crew.Keywords = Vigilance

@@ -1,0 +1,37 @@
+# Koya, Death from Above: "exile up to one other target creature" - with no target chosen nothing is exiled, no delayed
+# ability is created, and the end step asks nothing (Bot2's Ornithopter stays where it is).
+
+[Bot1 Deck]
+Mox Pearl x3
+Koya, Death from Above
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Koya, Death from Above.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile.Count = 0
+[T3 Bot1.End]
+? Stack.Count = 0
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield.Count = 1
+Bot1.Battlefield.Count = 4
