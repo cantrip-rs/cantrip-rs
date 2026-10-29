@@ -1,0 +1,12 @@
+{
+  "name": "Glamermite",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Faerie Rogue",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash\nFlying\nWhen this creature enters, choose one —\n• Tap target creature.\n• Untap target creature.",
+  "keywords": [
+    "Flash",
+    "Flying"
+  ]
+}

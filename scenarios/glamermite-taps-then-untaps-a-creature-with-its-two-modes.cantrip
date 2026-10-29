@@ -1,0 +1,49 @@
+# Glamermite {2}{U}: "When this creature enters, choose one - Tap target creature. / Untap target creature" (CR 603.2, 700.2, 701.26a).
+# On turn 3 three Moxen pay for the first Glamermite, whose first mode taps Bot2's untapped Elvish Mystic; Black Lotus pays for the second,
+# whose second mode untaps it again. Each mode does only its own half: the first leaves a creature tapped, the second cannot leave it tapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Glamermite
+Glamermite
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glamermite.Cast
+Bot1.Modes(Tap target creature)
+Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot1.Pass
+? Bot2.Battlefield.Elvish Mystic.Tapped = true
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Glamermite.Cast
+Bot1.Modes(Untap target creature)
+Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Elvish Mystic.Tapped = false
+Bot1.Battlefield.Glamermite#1.Tapped = false
