@@ -1,0 +1,53 @@
+# Encumbered Reejerey (5/4): "This creature enters with three -1/-1 counters on it" (a 2/1) and "Whenever this creature becomes
+# tapped while it has a -1/-1 counter on it, remove a -1/-1 counter from it". Bot1 attacks with it on turns 3, 5 and 7, each
+# attack removing one counter (3/2, 4/3, 5/4); on turn 9 it has none, so tapping it removes nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Encumbered Reejerey
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Encumbered Reejerey.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Encumbered Reejerey.Counters.MinusOneMinusOne = 3
+? Bot1.Battlefield.Encumbered Reejerey.Power = 2
+? Bot1.Battlefield.Encumbered Reejerey.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Attack(Encumbered Reejerey > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Encumbered Reejerey.Counters.MinusOneMinusOne = 2
+? Bot1.Battlefield.Encumbered Reejerey.Power = 3
+[T5 Bot1.Main1]
+Bot1.Attack(Encumbered Reejerey > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Encumbered Reejerey.Counters.MinusOneMinusOne = 1
+? Bot1.Battlefield.Encumbered Reejerey.Power = 4
+[T7 Bot1.Main1]
+Bot1.Attack(Encumbered Reejerey > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+? Bot1.Battlefield.Encumbered Reejerey.Power = 5
+[T9 Bot1.Main1]
+Bot1.Attack(Encumbered Reejerey > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Encumbered Reejerey.Power = 5
+Bot1.Battlefield.Encumbered Reejerey.Toughness = 4

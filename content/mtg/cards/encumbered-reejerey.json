@@ -1,0 +1,8 @@
+{
+  "name": "Encumbered Reejerey",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Merfolk Soldier",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "This creature enters with three -1/-1 counters on it.\nWhenever this creature becomes tapped while it has a -1/-1 counter on it, remove a -1/-1 counter from it."
+}
