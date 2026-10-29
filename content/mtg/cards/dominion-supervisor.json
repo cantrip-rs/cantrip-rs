@@ -1,0 +1,8 @@
+{
+  "name": "Dominion Supervisor",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Vorta Doctor",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "When this creature enters, put a +1/+1 counter on target creature.\nCreatures you control with counters on them have trample."
+}

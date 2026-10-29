@@ -1,0 +1,58 @@
+# Wurmwall Sweeper's four charge counters alone qualify it for Dominion Supervisor's trample static (CR 613.1f, 702.19).
+# The Supervisor targets itself for its +1/+1 counter, so the Sweeper proves counters of another kind are counted.
+
+[Bot1 Deck]
+Wurmwall Sweeper
+Sunset Saboteur
+Dominion Supervisor
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Wurmwall Sweeper.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island; Island |)
+Bot1.Hand.Sunset Saboteur.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot1.Battlefield.Wurmwall Sweeper.Activate(Ability: Station)
+Bot1.Choose(Sunset Saboteur)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wurmwall Sweeper.Types = Artifact; Creature
+[T3 Bot1.Main1]
+Bot1.Hand.Dominion Supervisor.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Dominion Supervisor)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Wurmwall Sweeper.Counters.Charge = 4
+Bot1.Battlefield.Wurmwall Sweeper.Keywords = Flying; Trample
+Bot1.Battlefield.Dominion Supervisor.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Dominion Supervisor.Keywords = Trample
