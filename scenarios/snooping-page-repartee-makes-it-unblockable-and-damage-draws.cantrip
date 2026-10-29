@@ -1,0 +1,51 @@
+# Snooping Page: Repartee -- casting Silverquill Charm (an instant) that targets a creature makes it unblockable this turn, so
+# Bot2's Ornithopter may not block it (CR 509.1b). It then deals combat damage to Bot2 and its controller draws a card and loses 1
+# life. The Charm's two counters make it 4/5, so Bot2 goes to 16.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Snooping Page
+Silverquill Charm
+Plains x2
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Snooping Page.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill Charm.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Snooping Page)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Snooping Page > Bot2)
+! Bot2.Block(Ornithopter > Snooping Page)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 19
+Bot1.Hand.Count = 4

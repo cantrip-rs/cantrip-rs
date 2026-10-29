@@ -1,0 +1,50 @@
+# Snooping Page: "can't be blocked this turn" only restricts blockers not yet declared (CR 509.1b-c). Ornithopter blocks it first;
+# then Bot1 casts Silverquill Charm on it in the declare blockers step, and the Repartee trigger resolves. Page stays blocked
+# (CR 509.1h), deals its damage to Ornithopter and none to Bot2, so its damage trigger doesn't fire and Bot1 neither draws nor loses life.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Snooping Page
+Silverquill Charm
+Plains x2
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Snooping Page.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Snooping Page > Bot2)
+Bot2.Block(Ornithopter > Snooping Page)
+[T3 Bot1.DeclareBlockers]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill Charm.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Snooping Page)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot2.Graveyard = Ornithopter
