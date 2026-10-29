@@ -1,0 +1,11 @@
+{
+  "name": "DOT-7 Repair Squad",
+  "manaCost": "{3}{W}",
+  "type": "Artifact Creature — Robot",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\n{1}{W}: Untap target creature. Activate only as a sorcery and only once each turn.",
+  "keywords": [
+    "Flying"
+  ]
+}

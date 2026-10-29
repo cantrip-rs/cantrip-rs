@@ -1,0 +1,60 @@
+# DOT-7 can activate only in a main phase with an empty stack; it untaps its own attacker, refuses a noncreature and a
+# second activation that turn, then untaps the opponent's attacker on the next turn (CR 602.5b, 602.5d).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Sapphire
+DOT-7 Repair Squad
+Ornithopter
+Plains
+Plains x15
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.DOT-7 Repair Squad.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.BeginCombat]
+! Bot1.Battlefield.DOT-7 Repair Squad.Activate(Ornithopter; Ability: {1}{W})
+Bot1.Attack(Ornithopter)
+[T3 Bot1.Main2]
+! Bot1.Battlefield.DOT-7 Repair Squad.Activate(Mox Pearl; Ability: {1}{W})
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.DOT-7 Repair Squad.Activate(Ornithopter; Ability: {1}{W})
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Battlefield.DOT-7 Repair Squad.Activate(Ornithopter; Ability: {1}{W})
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears)
+[T5 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.DOT-7 Repair Squad.Activate(Grizzly Bears; Ability: {1}{W})
+
+[Expect]
+Bot1.Battlefield.DOT-7 Repair Squad.Keywords = Flying
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot2.Battlefield.Grizzly Bears.Tapped = false
