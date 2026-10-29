@@ -1,0 +1,44 @@
+# Elemental Mascot: cast with Mox Ruby, Mox Sapphire and Black Lotus mana, its characteristics as printed (power, toughness,
+# keywords, colors, types), then attacking Bot2, who has a ground creature that cannot block it (Flying, CR 702.9b).
+# Vigilance (CR 702.20b): attacking doesn't tap it.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus
+Elemental Mascot
+Island x21
+
+[Bot2 Deck]
+Mox Sapphire
+Delver of Secrets
+Island x21
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Elemental Mascot.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Delver of Secrets.Cast
+[T2 Bot2.End]
+? Bot1.Battlefield.Elemental Mascot.Power = 1
+? Bot1.Battlefield.Elemental Mascot.Toughness = 4
+? Bot1.Battlefield.Elemental Mascot.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Elemental Mascot.Colors = Blue; Red
+? Bot1.Battlefield.Elemental Mascot.Types = Creature
+? Bot1.Battlefield.Elemental Mascot.Subtypes = Bird; Elemental
+[T3 Bot1.Main1]
+Bot1.Attack(Elemental Mascot > Bot2)
+! Bot2.Block(Delver of Secrets > Elemental Mascot)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Elemental Mascot.Tapped = false

@@ -1,0 +1,89 @@
+# Elemental Mascot (1/4 flying, vigilance), Opus: every instant or sorcery gives it +1/+0 until end of turn; five or more
+# mana spent also exiles the top card of its controller's library, which may be played until the end of their next turn.
+# Turn 3: Fireball with X = 3 spends four mana: a 2/4 and nothing exiled. On turn 5 the +1/+0 is gone (1/4); Archaic's Agony
+# paid with five Moxen is countered by Bot2's Counterspell, which resolves first, yet the Opus trigger (put on the stack
+# above the spell) still resolves with the five mana spent it remembers: 2/4, and Ancestral Recall, the top card of Bot1's
+# library, is exiled - Bot2's library is untouched. Turn 7: Bot1 casts Ancestral Recall from exile (draws three).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Elemental Mascot
+Fireball
+Archaic's Agony
+Island
+Ancestral Recall
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Ornithopter
+Counterspell
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elemental Mascot.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Elemental Mascot.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fireball.Cast(X: 3)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elemental Mascot.Power = 2
+? Bot1.Battlefield.Elemental Mascot.Toughness = 4
+? Exile.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Elemental Mascot.Power = 1
+? Bot1.Battlefield.Elemental Mascot.Toughness = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Archaic's Agony.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Counterspell.Cast(Archaic's Agony)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elemental Mascot.Power = 2
+? Exile = Ancestral Recall
+? Bot2.Battlefield.Ornithopter.Damage = 0
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Ancestral Recall; Archaic's Agony; Fireball
+Bot2.Library.Count = 14

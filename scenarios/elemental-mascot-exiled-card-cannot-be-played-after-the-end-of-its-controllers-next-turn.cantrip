@@ -1,0 +1,83 @@
+# Elemental Mascot: the card exiled by its Opus may be played "until the end of your next turn" and no longer. Bot1 exiles
+# Ancestral Recall on turn 5 (Archaic's Agony paid with five mana) and does not cast it on turn 7, its next turn;
+# on turn 9, with {U} available, it is refused, and it stays in exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Elemental Mascot
+Fireball
+Archaic's Agony
+Island
+Ancestral Recall
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Ornithopter
+Counterspell
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elemental Mascot.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Elemental Mascot.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fireball.Cast(X: 3)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elemental Mascot.Power = 2
+? Bot1.Battlefield.Elemental Mascot.Toughness = 4
+? Exile.Count = 0
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Elemental Mascot.Power = 1
+? Bot1.Battlefield.Elemental Mascot.Toughness = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Archaic's Agony.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Counterspell.Cast(Archaic's Agony)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elemental Mascot.Power = 2
+? Exile = Ancestral Recall
+? Bot2.Battlefield.Ornithopter.Damage = 0
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Exile.Ancestral Recall.Cast(Bot1)
+? Bot1.Mana = {U}
+
+[Expect]
+Exile = Ancestral Recall
