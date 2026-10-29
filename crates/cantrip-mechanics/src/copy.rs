@@ -163,3 +163,13 @@ pub fn copy_the_cast_spell(g: &mut dyn Game, item: &StackItem) -> Result<(), Sus
     g.copy_spell(spell, item.controller, true)?;
     Ok(())
 }
+
+/// The delayed ability of "When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets
+/// for the copy" (CR 603.7b, 707.10), for the card's `delayed` list: set up by `delayed::next_this_turn`, it triggers once on the next
+/// instant or sorcery spell its controller casts this turn (the copy is not cast, CR 707.10) and ends with the turn if none is.
+/// Way of the Cryomancer and Striking Palette print it.
+pub const COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST: AbilityDef = triggered(
+    when_asked(EventMask::SPELL_CAST, crate::triggers::you_cast_instant_or_sorcery),
+    copy_the_cast_spell,
+    "When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy.",
+);
