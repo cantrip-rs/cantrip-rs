@@ -1,0 +1,53 @@
+# Render Speechless: Bot2 answers with Teferi's Protection, gaining protection from everything, so "target opponent" is no longer
+# legal. A spell with a legal target left is not countered (CR 608.2b): it does as much as it can, so Bot2's hand is not revealed or
+# taken from (the Lightning Bolt stays) while Ornithopter still gets its two +1/+1 counters.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Ornithopter
+Render Speechless
+Plains x3
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Teferi's Protection
+Lightning Bolt
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Render Speechless.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Teferi's Protection.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Hand = Lightning Bolt; Plains; Plains; Plains
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
