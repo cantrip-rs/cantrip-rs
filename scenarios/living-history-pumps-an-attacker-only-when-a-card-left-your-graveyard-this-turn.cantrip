@@ -1,0 +1,58 @@
+# Living History enters on turn 1 and makes a 2/2 Spirit. Turn 3: Firebolt is cast from the hand, so no card has left Bot1's graveyard
+# and the Spirit's attack is not pumped (2 damage). Turn 5: Firebolt is cast again with flashback {4}{R} from the graveyard - a card left
+# it this turn - so attacking with the Spirit triggers Living History and the Spirit gets +2/+0: 4 damage.
+# Bot2: 20 - 2 (Firebolt) - 2 (Spirit) = 16 after turn 3, then - 2 (Firebolt) - 4 (Spirit) = 10.
+
+[Bot1 Deck]
+Living History
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Firebolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Living History.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Firebolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Spirit Token > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Firebolt.Cast(Bot2; Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Spirit Token > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Spirit Token.Power = 4
+? Bot1.Battlefield.Spirit Token.Toughness = 2
+
+[Expect]
+Bot2.Life = 10
+Bot1.Battlefield = Living History; Mox Ruby; Mox Sapphire; Mox Jet; Mox Pearl; Mox Emerald; Spirit Token
