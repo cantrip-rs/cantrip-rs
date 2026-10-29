@@ -1,0 +1,36 @@
+# Gutsplitter Gang {3}{B} 6/6: "At the beginning of your first main phase, you may blight 2. If you don't, you lose 3 life"
+# (CR 701.68a, 119.3). Cast on turn 1 with Black Lotus (BBB) and Mox Jet. On turn 3 Bot1 blights (the Gang becomes a 4/4) and
+# loses nothing; on turn 5 it declines and loses 3 life (17), the Gang keeping its two counters.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Gutsplitter Gang
+Island x4
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gutsplitter Gang.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Gutsplitter Gang)
+? Bot1.Life = 20
+? Bot1.Battlefield.Gutsplitter Gang.Counters.MinusOneMinusOne = 2
+? Bot1.Battlefield.Gutsplitter Gang.Power = 4
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Gutsplitter Gang.Counters.MinusOneMinusOne = 2
