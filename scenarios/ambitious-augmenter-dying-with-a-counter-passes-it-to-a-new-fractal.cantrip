@@ -1,0 +1,47 @@
+# Ambitious Augmenter ({G}, 1/1): Increment, and "When this creature dies, if it had one or more counters on it, create a 0/0 Fractal
+# token, then put this creature's counters on that token." Bot1 casts a two-mana Lightning Helix: more than its power 1, so
+# increment gives it a +1/+1 counter (2/2). Lightning Bolt (one mana, not more than 2) kills it: the Fractal made as it dies gets
+# the counter, a 1/1.
+
+[Bot1 Deck]
+Ambitious Augmenter
+Mox Emerald
+Mox Ruby
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ambitious Augmenter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ambitious Augmenter.Power = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Ambitious Augmenter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Ambitious Augmenter; Lightning Bolt; Lightning Helix
+Bot1.Battlefield.Fractal Token.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Fractal Token.Power = 1
+Bot1.Battlefield.Fractal Token.Toughness = 1

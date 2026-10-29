@@ -1,0 +1,57 @@
+# Ambitious Augmenter: "put this creature's counters on that token" means every counter, of every kind, in full (CR 608.2h). Bot1's
+# Augmenter gets a +1/+1 counter from increment (the two-mana Cryogen Relic is more than its power 1), then attacks, and the
+# tapped Augmenter takes a stun counter from the Relic. Lightning Bolt kills it with both kinds on it: the Fractal gets a +1/+1
+# counter and a stun counter, not just one of them.
+
+[Bot1 Deck]
+Ambitious Augmenter
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Cryogen Relic
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ambitious Augmenter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cryogen Relic.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ambitious Augmenter.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ambitious Augmenter > Bot2)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Cryogen Relic.Activate(Bot1.Battlefield.Ambitious Augmenter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Ambitious Augmenter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Fractal Token.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Fractal Token.Counters.Stun = 1
+Bot1.Graveyard = Ambitious Augmenter; Lightning Bolt; Cryogen Relic
