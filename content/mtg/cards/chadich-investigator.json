@@ -1,0 +1,8 @@
+{
+  "name": "Cha'DIch Investigator",
+  "manaCost": "{4}{B}",
+  "type": "Creature — Klingon Warrior",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this creature enters, create a 2/1 red Klingon Warrior creature token with haste."
+}
