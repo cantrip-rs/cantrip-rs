@@ -462,6 +462,7 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
     // The cards put into a graveyard, by that graveyard's player, as they arrive: their owner may arrange them (CR 404.3).
     // A token or a copy of a card ceases to exist there (CR 111.7, 704.5d-e), so it is in no order anyone can ask.
     let mut binned: Vec<(PlayerId, ObjectId)> = Vec::new();
+    let mut entered: Vec<ObjectId> = Vec::new();
     for Plan { m, reason, old, from, to, change, madness, entering, mut new, counts, counts_by, last_known, .. } in plans {
         let m = &m;
         let row = cx.st().last_known_push(last_known);
@@ -553,12 +554,21 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
         // The counters it arrived with were put on it (CR 122.6).
         events.extend(put);
         created.push(new_id);
+        if entering {
+            entered.push(new_id);
+        }
         if m.entering.is_some_and(|e| e.prepared) && entering {
             become_prepared(cx, new_id);
         }
     }
     if binned.len() > 1 {
         arrange_graveyards(cx, &binned);
+    }
+    // What each permanent was as it entered (CR 603.6a, 614.12): judged once they are all there, as each one's continuous effects
+    // reach the ones entering with it, and recorded with the moves so the history can say it however they change after.
+    for permanent in entered {
+        let (controller, types) = (cx.controller(permanent), cx.chars(permanent).types);
+        events.push(Event::Entered { permanent, controller, types });
     }
     cx.emit_batch(&events, Some(crate::settle::Before { battlefield: &before, then: &then, seen_by_all: &seen }));
     for player in shuffled {
