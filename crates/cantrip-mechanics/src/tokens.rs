@@ -186,8 +186,18 @@ fn explore_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
+/// A colorless 1/1 Robot artifact creature token. Ravenous Robots, Mouser Attack! and Mouser Foundry create it. It shares its
+/// name with the 2/2 Robot, a definition of its own.
+pub static ROBOT_1_1: CardDef = CardDef {
+    colors: Some(ColorSet::NONE),
+    types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Robot)
+};
+
 /// A colorless 2/2 Robot artifact creature token. Melded Moxite and Pinnacle Starcage create it. It shares its name with
-/// the 1/1 Robot (Ravenous Robots'), a definition of its own.
+/// the 1/1 Robot, a definition of its own.
 pub static ROBOT_2_2: CardDef = CardDef {
     colors: Some(ColorSet::NONE),
     types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),

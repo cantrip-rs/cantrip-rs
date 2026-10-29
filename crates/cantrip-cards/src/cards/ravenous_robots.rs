@@ -2,17 +2,8 @@ use cantrip_api::*;
 use cantrip_mechanics::{haste_until_end_of_turn, tokens};
 use cantrip_oracle as oracle;
 
-/// The 1/1 colorless Robot artifact creature token. It shares its name with the other Robot token (Melded Moxite's).
-pub static ROBOT: CardDef = CardDef {
-    colors: Some(ColorSet::NONE),
-    types: TypeSet::of(&[CardType::Artifact, CardType::Creature]),
-    power: Some(1),
-    toughness: Some(1),
-    ..token!(Robot)
-};
-
 fn make_a_robot(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &ROBOT, 1)?;
+    tokens::create(g, item.controller, &tokens::ROBOT_1_1, 1)?;
     Ok(())
 }
 
@@ -40,4 +31,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::RAVENOUS_ROBOTS
 };
 
-pub static EXTRA: &[&CardDef] = &[&ROBOT];
+pub static EXTRA: &[&CardDef] = &[&tokens::ROBOT_1_1];
