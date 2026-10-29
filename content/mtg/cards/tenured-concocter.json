@@ -1,0 +1,11 @@
+{
+  "name": "Tenured Concocter",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Troll Druid",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Vigilance\nWhenever this creature becomes the target of a spell or ability an opponent controls, you may draw a card.\nInfusion — This creature gets +2/+0 as long as you gained life this turn.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
