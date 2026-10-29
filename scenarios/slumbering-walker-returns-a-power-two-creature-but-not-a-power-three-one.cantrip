@@ -24,10 +24,9 @@ Bot1.Hand.Mox Ruby.Cast
 Bot1.Hand.Mox Jet.Cast
 Bot1.Hand.Mox Pearl.Cast
 Bot1.Battlefield.Black Lotus.Activate(Color: White)
-Bot1.Hand.Bronze Sable.Cast
-Bot1.Battlefield.Mox Ruby.Activate
-Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Accorder Paladin.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Bronze Sable.Cast
 [T2 Bot2.Main1]
 Bot2.Hand.Plains.Play
 Bot2.Hand.Black Lotus.Cast
