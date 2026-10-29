@@ -1,0 +1,47 @@
+# Leonardo's permission has a limit and a place. Faithless Looting discards Grizzly Bears (2/2, one past the limit on both
+# counts) on turn 1; Bot2's graveyard gets a Cathar Commando from its hand-size discard. On turn 3 Bot1, with {1}{G} and the
+# rest, cannot cast the Bears from the graveyard (the refusal) nor Bot2's Commando (the refusal), and a Savannah Lions cast from
+# hand for {W} enters with no finality counter: only a spell cast by Leonardo's permission gets one.
+
+[Bot1 Deck]
+Black Lotus
+Leonardo, Sewer Samurai
+Plains
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Faithless Looting
+Grizzly Bears
+Plains
+Savannah Lions
+Plains x14
+
+[Bot2 Deck]
+Cathar Commando x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Grizzly Bears; Plains)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Leonardo, Sewer Samurai.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Graveyard.Grizzly Bears.Cast
+! Bot2.Graveyard.Cathar Commando.Cast
+
+[Expect]
+Bot1.Battlefield.Savannah Lions.Counters.Finality = (absent)
+Bot1.Graveyard = Black Lotus; Faithless Looting; Plains; Grizzly Bears
+Bot2.Graveyard.Count = 1
