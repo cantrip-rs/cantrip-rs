@@ -1,0 +1,70 @@
+# Lumaret's Favor: Infusion -- the trigger checks life gained as it resolves, not as the spell is cast. Bot1 casts it at its own
+# Grizzly Bears with no life gained, then answers its own trigger with Lightning Helix (3 life). The Helix resolves first, so
+# the trigger copies the Favor, and the copy takes a new target, Bot2's Grizzly Bears. Both are 4/6 until end of turn. The copy
+# is not cast, so nothing else triggers: two Favors resolve, one is a card in the graveyard.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Grizzly Bears
+Lumaret's Favor
+Lightning Helix
+Mountain x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Lumaret's Favor.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+? Stack.Count = 2
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot2.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Toughness = 6
+? Bot2.Battlefield.Grizzly Bears.Power = 4
+? Bot2.Battlefield.Grizzly Bears.Toughness = 6
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Grizzly Bears.Toughness = 2
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+
+[Expect]
+Bot1.Graveyard = Lumaret's Favor; Lightning Helix
