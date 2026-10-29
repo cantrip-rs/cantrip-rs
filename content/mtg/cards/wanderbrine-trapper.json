@@ -1,0 +1,8 @@
+{
+  "name": "Wanderbrine Trapper",
+  "manaCost": "{W}",
+  "type": "Creature — Merfolk Scout",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "{1}, {T}, Tap another untapped creature you control: Tap target creature an opponent controls."
+}
