@@ -1,0 +1,49 @@
+# Splatter Technique, first mode: "Draw four cards." Cast for {1}{U}{U}{R}{R} (Black Lotus for blue, Mox Ruby and a
+# Mountain for red); the controller draws exactly four, the next four of the library in order, and the mode's damage half
+# does not happen: Ornithopter and both life totals are untouched, and the opponent's library and hand stay put.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mountain
+Splatter Technique
+Ornithopter
+Island
+Island
+Mox Jet
+Mox Pearl
+Mox Emerald
+Ancestral Recall
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Splatter Technique.Cast
+Bot1.Modes(Draw four cards)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Mox Jet; Mox Pearl; Mox Emerald; Ancestral Recall
+Bot1.Library.Count = 20
+Bot1.Graveyard = Splatter Technique; Black Lotus
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Life = 20
+Bot2.Life = 20
+Bot2.Hand.Count = 7
+Bot2.Library.Count = 20

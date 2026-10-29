@@ -1,0 +1,6 @@
+{
+  "name": "Splatter Technique",
+  "manaCost": "{1}{U}{U}{R}{R}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• Draw four cards.\n• Splatter Technique deals 4 damage to each creature and planeswalker."
+}

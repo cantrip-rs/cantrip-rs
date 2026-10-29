@@ -1,0 +1,79 @@
+# Splatter Technique, second mode: "Splatter Technique deals 4 damage to each creature and planeswalker." Bot2's Chandra,
+# Torch of Defiance (loyalty 4) and Bot1's Ornithopter (toughness 2) are destroyed, the two Aegis Turtles (toughness 5), one
+# of each player's, survive marked with 4 damage, and neither player is dealt anything (CR 120.3). The damage is dealt to
+# all of them at once, and the controller draws nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mountain
+Splatter Technique
+Ornithopter
+Mox Sapphire
+Aegis Turtle
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Chandra, Torch of Defiance
+Mox Sapphire
+Aegis Turtle
+Mountain x22
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Chandra, Torch of Defiance.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Splatter Technique.Cast
+Bot1.Modes(Splatter Technique deals 4 damage)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Ruby; Mox Sapphire; Aegis Turtle
+Bot1.Battlefield.Aegis Turtle.Damage = 4
+Bot2.Battlefield = Mox Ruby; Mox Sapphire; Aegis Turtle
+Bot2.Battlefield.Aegis Turtle.Damage = 4
+Bot2.Graveyard = Chandra, Torch of Defiance; Black Lotus
+Bot1.Graveyard = Ornithopter; Splatter Technique; Black Lotus
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Hand.Count = 1
