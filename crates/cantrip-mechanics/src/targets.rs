@@ -83,6 +83,15 @@ fn any_other_target_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
 /// "Any other target" (CR 115.1, 115.4): any target but the ability's own source. Screaming Nemesis, Iron Fist, Living Weapon and
 /// Red Hulk print it.
 pub const ANY_OTHER_TARGET: TargetSpec = target(any_other_target_filter);
+
+fn any_target_other_than_those_chosen_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    any_target_filter(q, asker, t) && !q.chosen_targets().contains(&t)
+}
+
+/// "Any other target" after an earlier target of the same spell or ability (CR 115.1, 115.3): any target but those already
+/// chosen for it; the same object can be chosen for two instances of the word "target" unless "other" forbids it. Callous
+/// Sell-Sword (Burn Together) and Boulder Dash print it.
+pub const ANY_TARGET_OTHER_THAN_THOSE_CHOSEN: TargetSpec = target(any_target_other_than_those_chosen_filter);
 pub const CREATURE: TargetSpec = target(creature_filter);
 
 /// "Creature defending player controls" for a trigger about an attacking creature (its subject): the ability refers to the

@@ -10,12 +10,6 @@ fn enters_with_counters(g: &mut dyn Game, entering: &mut Entering) -> Result<(),
     Ok(())
 }
 
-/// "Any other target" (CR 115.1): any target but the one the first slot chose (the same object can be chosen for
-/// two instances of the word "target" unless "other" forbids it, CR 115.3).
-fn any_other_target(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    (targets::ANY.filter)(q, asker, t) && !q.chosen_targets().contains(&t)
-}
-
 /// "Target creature you control deals damage equal to its power to any other target. Then sacrifice it." The damage is
 /// dealt by the creature (CR 120.3), so its keywords (deathtouch, lifelink) count. If the creature is no longer a legal
 /// target nothing happens (CR 608.2b); if only the other target is gone the creature deals no damage but is still
@@ -35,7 +29,7 @@ pub static BURN_TOGETHER: CardDef = CardDef {
     spell: spell(
         &[
             targets::CREATURE_YOU_CONTROL.labelled("Creature you control to deal the damage, then be sacrificed"),
-            target(any_other_target).labelled("Target to be dealt damage equal to that creature's power"),
+            targets::ANY_TARGET_OTHER_THAN_THOSE_CHOSEN.labelled("Target to be dealt damage equal to that creature's power"),
         ],
         burn_together,
     ),
