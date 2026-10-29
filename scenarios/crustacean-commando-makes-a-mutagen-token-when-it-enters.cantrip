@@ -1,0 +1,30 @@
+# Crustacean Commando, a 0/3 for {1}{U}: "When this creature enters, create a Mutagen token." The token arrives once the trigger resolves, and is not made before it.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Crustacean Commando
+Island x4
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Crustacean Commando.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Sapphire; Mox Jet; Crustacean Commando
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Jet; Crustacean Commando; Mutagen Token
+Bot1.Battlefield.Crustacean Commando.Power = 0
+Bot1.Battlefield.Crustacean Commando.Toughness = 3
+Stack.Count = 0
