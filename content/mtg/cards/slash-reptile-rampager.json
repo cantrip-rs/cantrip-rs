@@ -1,0 +1,8 @@
+{
+  "name": "Slash, Reptile Rampager",
+  "manaCost": "{3}{R}{R}",
+  "type": "Legendary Creature — Mutant Berserker Turtle",
+  "power": 7,
+  "toughness": 5,
+  "oracleText": "Alliance — Whenever another creature you control enters, Slash deals 2 damage to each opponent.\nWhenever Slash attacks, create a 2/2 red Mutant creature token."
+}

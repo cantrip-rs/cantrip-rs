@@ -1,0 +1,53 @@
+# Slash, Reptile Rampager: "Alliance — Whenever another creature you control enters, Slash deals 2 damage to each opponent."
+# and "Whenever Slash attacks, create a 2/2 red Mutant creature token." Turn 1: Slash for {3}{R}{R} (his own entering is not
+# "another": Bot2 stays at 20), then an Ornithopter: Bot2 18. Turn 2: Bot2's Ornithopter deals nothing ("you control").
+# Turn 3: Slash attacks, makes the Mutant (not attacking), whose entering is another creature: Bot2 16, then Slash's 7
+# unblocked damage: 9.
+
+[Bot1 Deck]
+Mox Ruby x2
+Black Lotus
+Slash, Reptile Rampager
+Ornithopter
+Mountain x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Slash, Reptile Rampager.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 18
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Slash, Reptile Rampager > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mutant Token.Power = 2
+? Combat.Attackers.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 9
+Combat.Attackers.Count = 0
