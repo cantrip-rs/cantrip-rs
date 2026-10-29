@@ -1,0 +1,45 @@
+# Geometer's Arthropod: Growth Curve has no {X} in its mana cost and Bot2's Pterafractyl is not cast by Bot1 ("you cast"), so
+# neither puts the ability on the stack: only the spell itself is there, and Bot1's hand and library stay as they were.
+
+[Bot1 Deck]
+Geometer's Arthropod
+Growth Curve
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Mox Sapphire
+Lightning Bolt
+Forest
+Island x20
+
+[Bot2 Deck]
+Pterafractyl
+Mox Emerald
+Mox Sapphire
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Geometer's Arthropod.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Growth Curve.Cast(Geometer's Arthropod)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Pterafractyl.Cast(X: 0)
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot1.Library.Count = 21

@@ -1,0 +1,48 @@
+# Geometer's Arthropod: whenever you cast a spell with {X} in its mana cost, look at the top X cards of your library, put one of
+# them into your hand and the rest on the bottom in a random order. Pterafractyl cast for X = 3 looks at exactly the top three
+# (Mountain, Lightning Bolt, Forest); Bot1 takes the Bolt and the other two go to the bottom, so the fourth card, Giant Growth,
+# is now on top and is the card Bot1 draws on turn 3.
+
+[Bot1 Deck]
+Geometer's Arthropod
+Pterafractyl
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Mountain
+Lightning Bolt
+Forest
+Giant Growth
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Geometer's Arthropod.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Pterafractyl.Cast(X: 3)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Lightning Bolt; Mountain | Forest)
+! Bot1.Arrange( | Lightning Bolt; Mountain; Forest)
+Bot1.Arrange(Lightning Bolt | Mountain; Forest)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Giant Growth; Lightning Bolt
+Bot1.Library.Count = 22
+Bot1.Revealed = (absent)

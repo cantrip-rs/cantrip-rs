@@ -1,0 +1,8 @@
+{
+  "name": "Geometer's Arthropod",
+  "manaCost": "{G}{U}",
+  "type": "Creature — Fractal Crab",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Whenever you cast a spell with {X} in its mana cost, look at the top X cards of your library. Put one of them into your hand and the rest on the bottom of your library in a random order."
+}
