@@ -1,0 +1,32 @@
+# "Target" is any controller's: Bot1 casts Make Your Move on its own Ornithopter (an artifact creature of power 0), which is
+# destroyed. Bot2's Plains stays where it is, a land being none of the three kinds.
+
+[Bot1 Deck]
+Plains
+Plains
+Ornithopter
+Make Your Move
+Plains x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+! Bot1.Hand.Make Your Move.Cast(Bot2.Battlefield.Plains)
+Bot1.Hand.Make Your Move.Cast(Bot1.Battlefield.Ornithopter)
+
+[Expect]
+Turn = 5
+Bot1.Graveyard = Make Your Move; Ornithopter
+Bot2.Battlefield = Plains

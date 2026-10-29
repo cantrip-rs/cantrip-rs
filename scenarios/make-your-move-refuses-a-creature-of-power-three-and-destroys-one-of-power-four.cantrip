@@ -1,0 +1,56 @@
+# Make Your Move needs "creature with power 4 or greater" for a creature: Bot2's Iron-Shield Elf (3/1) is not a legal target, so
+# it is not offered on turn 5 (the only permanents Bot2 has are lands and the Elf). Bot2's Sunset Saboteur (4/1) is, and it is
+# destroyed on turn 7 - into the graveyard, not exile - (the positive control: the same spell at the same time, on a creature of
+# power 4) once Bot1 has discarded a Plains for the Saboteur's ward.
+
+[Bot1 Deck]
+Plains
+Plains
+Make Your Move
+Plains x17
+
+[Bot2 Deck]
+Swamp
+Swamp
+Iron-Shield Elf
+Sunset Saboteur
+Swamp x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Hand.Iron-Shield Elf.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+! Bot1.Hand.Make Your Move.Cast
+[T6 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp#1.Activate
+Bot2.Battlefield.Swamp#2.Activate
+Bot2.Hand.Sunset Saboteur.Cast
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Hand.Make Your Move.Cast(Bot2.Battlefield.Sunset Saboteur)
+Bot1.Accept
+
+[Expect]
+Turn = 7
+Exile.Count = 0
+Bot2.Graveyard = Sunset Saboteur
+Bot2.Battlefield.Iron-Shield Elf.Power = 3
+Bot1.Graveyard.Count = 2
