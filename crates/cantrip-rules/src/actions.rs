@@ -3135,6 +3135,12 @@ fn deltas_watched(
                 && whose == player
             {
                 let def = &cx.card(card).lasting_cost_changes[index as usize];
+                // "The next noncreature spell" is none of the others: it changes the spell it would be used up by alone.
+                if let (Some(next), Costed::Spell(spell)) = (def.next, costed)
+                    && !next(q, spell)
+                {
+                    continue;
+                }
                 add((def.change)(q, e.source, player, costed, targets));
             }
         }
@@ -6821,14 +6827,23 @@ pub(crate) fn stack_item(kind: StackKind, object: ObjectId, ability: AbilityRef,
 }
 
 /// "The next spell you cast this turn can't be countered" (CR 611.2c, 601.2, 701.5a): each such effect of `player` marks
-/// this spell as it is cast, before anyone has priority, and is used up; two before one spell both apply to it.
+/// this spell as it is cast, before anyone has priority, and is used up; two before one spell both apply to it. So is each cost
+/// change that says "the next ... spell" (`LastingCostChange::next`) this spell is one of: its cost was determined with them
+/// (CR 601.2f), and they end with the cast (Don & Raph, Hard Science).
 fn apply_next_spell_effects(cx: &mut Cx, player: PlayerId, spell: ObjectId) {
-    let ours = |e: &cantrip_state::ContinuousEffect| e.kind == EffectKind::NextSpellCantBeCountered && e.controller == player;
-    if !cx.s().effects.iter().any(ours) {
+    let uncounterable = |e: &cantrip_state::ContinuousEffect| e.kind == EffectKind::NextSpellCantBeCountered && e.controller == player;
+    let costs_next = |e: &cantrip_state::ContinuousEffect| {
+        matches!(e.kind, EffectKind::SpellCostChange { card, index, player: whose }
+            if whose == player && cx.card(card).lasting_cost_changes[index as usize].next.is_some_and(|next| next(&*cx, spell)))
+    };
+    if !cx.s().effects.iter().any(|e| uncounterable(e) || costs_next(e)) {
         return;
     }
-    cx.st().update_obj(spell, |o| o.marks.cant_be_countered = true);
-    let keep: Vec<bool> = cx.s().effects.iter().map(|e| !ours(e)).collect();
+    let (counter, cost): (Vec<bool>, Vec<bool>) = cx.s().effects.iter().map(|e| (uncounterable(e), costs_next(e))).unzip();
+    if counter.iter().any(|&b| b) {
+        cx.st().update_obj(spell, |o| o.marks.cant_be_countered = true);
+    }
+    let keep: Vec<bool> = counter.iter().zip(&cost).map(|(a, b)| !a && !b).collect();
     let effects_before = cx.s().effects.len();
     cx.st().effects_keep(&keep);
     // An effect that ends changes the game with no event (CR 603.8).

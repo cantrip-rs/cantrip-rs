@@ -448,6 +448,11 @@ pub struct LastingCostChange {
     /// no ability): a `CostChange` whose `source` is the effect's source, which may have left the battlefield, so it is
     /// never asked who controls it.
     pub change: CostChange,
+    /// "The next [kind of] spell you cast this turn ..." (CR 611.2a, 601.2f): the effect works on, and is used up by, the first
+    /// spell of the effect's player this answers true for - asked of the spell, read as it would be on the stack - and on no
+    /// other (Don & Raph, Hard Science's "the next noncreature spell you cast this turn has affinity for artifacts"). A spell
+    /// it answers false for neither changes nor uses it up. `None` is every spell of the turn (Armor Wars).
+    pub next: Option<fn(&dyn Query, ObjectId) -> bool>,
 }
 
 /// A static ability that gives spells a way of paying their total cost besides mana (CR 601.2f-h): "noncreature spells you

@@ -52,6 +52,6 @@ pub static CARD: CardDef = CardDef {
         chapter(3, chapter_three, "III \u{2014} This Saga deals X damage to target opponent, where X is the greatest mana value among artifacts you control.")
             .targets(&[targets::OPPONENT]),
     ],
-    lasting_cost_changes: &[LastingCostChange { text: "Artifact spells you cast this turn cost {1} less to cast.", change: artifact_less }],
+    lasting_cost_changes: &[LastingCostChange { text: "Artifact spells you cast this turn cost {1} less to cast.", change: artifact_less, next: None }],
     ..oracle::ARMOR_WARS
 };

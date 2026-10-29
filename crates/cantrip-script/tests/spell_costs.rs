@@ -46,7 +46,28 @@ static WARS: CardDef = CardDef {
     name: "Probe Wars",
     types: TypeSet::of(&[CardType::Instant]),
     spell: spell(&[], first_change_this_turn),
-    lasting_cost_changes: &[LastingCostChange { text: "Artifact spells you cast this turn cost {1} less to cast.", change: artifacts_less }],
+    lasting_cost_changes: &[LastingCostChange { text: "Artifact spells you cast this turn cost {1} less to cast.", change: artifacts_less, next: None }],
+    ..CardDef::BLANK
+};
+
+/// "The next noncreature spell you cast this turn costs {1} less to cast."
+fn next_noncreature_less(_: &dyn Query, _: ObjectId, _: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
+    match costed {
+        Costed::Spell(_) => CostDelta::less(1),
+        _ => CostDelta::NONE,
+    }
+}
+
+fn noncreature(q: &dyn Query, spell: ObjectId) -> bool {
+    !q.chars(spell).is(CardType::Creature)
+}
+
+/// An instant for {0}: "The next noncreature spell you cast this turn costs {1} less to cast."
+static NEXT: CardDef = CardDef {
+    name: "Probe Next",
+    types: TypeSet::of(&[CardType::Instant]),
+    spell: spell(&[], first_change_this_turn),
+    lasting_cost_changes: &[LastingCostChange { text: "The next noncreature spell you cast this turn costs {1} less to cast.", change: next_noncreature_less, next: Some(noncreature) }],
     ..CardDef::BLANK
 };
 
@@ -55,7 +76,7 @@ static TAX: CardDef = CardDef {
     name: "Probe Tax",
     types: TypeSet::of(&[CardType::Instant]),
     spell: spell(&[], first_change_this_turn),
-    lasting_cost_changes: &[LastingCostChange { text: "Spells you cast this turn cost {1} more to cast.", change: spells_more }],
+    lasting_cost_changes: &[LastingCostChange { text: "Spells you cast this turn cost {1} more to cast.", change: spells_more, next: None }],
     ..CardDef::BLANK
 };
 
@@ -89,7 +110,7 @@ static FILLER: CardDef = CardDef { name: "Filler", has_cost: false, types: TypeS
 
 fn table() -> &'static CardTable {
     static TABLE: OnceLock<CardTable> = OnceLock::new();
-    TABLE.get_or_init(|| CardTable::new([&WARS, &TAX, &HEART, &TRINKET, &BAUBLE, &ROCK, &BEAST, &FILLER]))
+    TABLE.get_or_init(|| CardTable::new([&WARS, &TAX, &NEXT, &HEART, &TRINKET, &BAUBLE, &ROCK, &BEAST, &FILLER]))
 }
 
 /// A two-player game, Bot1 first, each hand the named cards, then Fillers.
@@ -235,4 +256,35 @@ fn a_granted_improvise_pays_for_a_noncreature_spell_and_not_a_creature_spell() {
     let bauble = on_battlefield(&game, "Probe Bauble").unwrap();
     assert!(game.state.obj(bauble).tapped, "the artifact paid for it");
     assert!(game.state.zone(Zone::graveyard(PlayerId(0))).iter().any(|&id| game.name(id) == "Probe Rock"));
+}
+
+/// CR 611.2a/c, 601.2f: "the next noncreature spell you cast this turn costs {1} less" is not used up by a creature spell
+/// cast first, makes the first noncreature spell cost {0}, and is gone for the second, which costs {1}.
+#[test]
+fn a_next_spell_cost_change_waits_through_a_creature_spell_and_is_used_up_by_the_first_noncreature_spell() {
+    let mut game = deal(&["Probe Next", "Probe Beast", "Probe Rock", "Probe Rock"], &[]);
+    let options = main_phase(&mut game, 1);
+    let options = cast(&mut game, &options, "Probe Next");
+    assert_eq!(lasting(&game), 1);
+    // Nothing pays a creature spell's {1}, which the effect leaves alone.
+    let beast = in_hand(&game, PlayerId(0), "Probe Beast");
+    assert_eq!(cast_total(&game, PlayerId(0), &ActionOption::on(ActionKind::CastSpell, beast, 0)), Some((ONE, ONE, 0)));
+    let rock = in_hand(&game, PlayerId(0), "Probe Rock");
+    assert_eq!(cast_total(&game, PlayerId(0), &ActionOption::on(ActionKind::CastSpell, rock, 0)), Some((ONE, ManaCost::ZERO, 0)));
+    assert!(!offered(&game, &options, "Probe Beast"));
+    let options = cast(&mut game, &options, "Probe Rock");
+    assert_eq!(lasting(&game), 0, "the first noncreature spell used it up");
+    assert!(!offered(&game, &options, "Probe Rock"), "the second pays its {{1}}");
+}
+
+/// CR 514.2: unused, it ends with the turn.
+#[test]
+fn a_next_spell_cost_change_not_used_ends_with_the_turn() {
+    let mut game = deal(&["Probe Next", "Probe Rock"], &[]);
+    let options = main_phase(&mut game, 1);
+    cast(&mut game, &options, "Probe Next");
+    assert_eq!(lasting(&game), 1);
+    let options = main_phase(&mut game, 3);
+    assert_eq!(lasting(&game), 0);
+    assert!(!offered(&game, &options, "Probe Rock"));
 }
