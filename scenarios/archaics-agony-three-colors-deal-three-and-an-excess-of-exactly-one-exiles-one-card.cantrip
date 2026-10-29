@@ -1,0 +1,37 @@
+# Converge: a Black Lotus's {R}{R}{R} with a Mox Sapphire and a Mox Jet pays {4}{R} with red, blue and black, so X = 3 (CR 207.2c).
+# Three damage to a 0/2 Ornithopter is one above lethal: the excess damage is exactly 1 (CR 120.10), so exactly one card, the top card of
+# Bot1's library (a Mountain), is exiled and may be played; the Island beneath it stays in the library.
+
+[Bot1 Deck]
+Archaic's Agony
+Black Lotus
+Mox Sapphire
+Mox Jet
+Island
+Island
+Island
+Island
+Mountain
+Island x11
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Archaic's Agony.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Mountain
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Archaic's Agony; Black Lotus
