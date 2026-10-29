@@ -1,0 +1,8 @@
+{
+  "name": "Gutsplitter Gang",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Goblin Berserker",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "At the beginning of your first main phase, you may blight 2. If you don't, you lose 3 life. (To blight 2, put two -1/-1 counters on a creature you control.)"
+}
