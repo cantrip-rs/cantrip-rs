@@ -1,0 +1,6 @@
+{
+  "name": "Boarding Action",
+  "manaCost": "{1}{R}",
+  "type": "Sorcery",
+  "oracleText": "Create a 2/1 red Klingon Warrior creature token with haste.\nBeam me up {2}{R} (You may cast this card from your graveyard for {2}{R} if you also return a creature you control to its owner's hand. Then exile this spell.)"
+}
