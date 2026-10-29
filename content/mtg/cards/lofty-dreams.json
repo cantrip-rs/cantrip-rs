@@ -1,0 +1,7 @@
+{
+  "name": "Lofty Dreams",
+  "manaCost": "{3}{U}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nEnchant creature\nWhen this Aura enters, draw a card.\nEnchanted creature gets +2/+2 and has flying.",
+  "convoke": true
+}

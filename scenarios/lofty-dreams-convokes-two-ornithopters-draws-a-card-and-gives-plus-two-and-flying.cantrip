@@ -1,0 +1,44 @@
+# Lofty Dreams {3}{U}{U}, convoke (CR 702.51a): two Ornithopters and the just-cast Cenote Scout (summoning sick, which does not matter) tapped for convoke pay the {3}
+# generic, two Mox Sapphires pay {U}{U}, and the pool is empty. "Enchant creature" - it goes on Cenote Scout (1/1, no flying): "when this Aura enters, draw a card"
+# (CR 603.6a), and the enchanted creature gets +2/+2 and flying, so Scout is a 3/3 flier (CR 613).
+
+[Bot1 Deck]
+Forest
+Cenote Scout
+Ornithopter
+Ornithopter
+Mox Sapphire
+Mox Sapphire
+Lofty Dreams
+Island
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Cenote Scout.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Lofty Dreams.Cast(Cenote Scout; Convoke: Ornithopter, Ornithopter, Cenote Scout)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Lofty Dreams.AttachedTo = Cenote Scout
+Bot1.Battlefield.Cenote Scout.Power = 3
+Bot1.Battlefield.Cenote Scout.Toughness = 3
+Bot1.Battlefield.Cenote Scout.Keywords = Flying
+Bot1.Battlefield.Cenote Scout.Tapped = true
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#2.Tapped = true
+Bot1.Hand = Island; Island
+Bot1.Mana =
