@@ -1,0 +1,51 @@
+# Conciliator's Duelist: the creature is "up to one", so Bot1 may choose none (an empty slot); nothing is exiled and the Ornithopter
+# stays on the battlefield all turn.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Gleemox
+Plains
+Conciliator's Duelist
+Silverquill Charm
+Plains
+Plains x2
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Conciliator's Duelist.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill Charm.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Conciliator's Duelist)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield = Ornithopter
