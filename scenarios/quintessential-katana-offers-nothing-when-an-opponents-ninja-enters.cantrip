@@ -24,10 +24,9 @@ Bot2.Battlefield.Plains.Activate
 Bot2.Hand.Prehistoric Pet.Cast
 Bot2.Pass
 Bot1.Pass
-! Bot1.Decline
+? Stack.Count = 0
 [T2 Bot2.Main2]
 
 [Expect]
 Bot2.Battlefield = Plains; Prehistoric Pet
 Bot1.Battlefield.Quintessential Katana.AttachedTo = (absent)
-Stack.Count = 0

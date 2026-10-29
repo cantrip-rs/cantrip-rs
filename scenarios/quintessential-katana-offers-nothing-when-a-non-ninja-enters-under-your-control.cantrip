@@ -1,0 +1,29 @@
+# "Whenever a Ninja you control enters": Bot1's own Savannah Lions (not a Ninja) entering puts no trigger on the stack and offers
+# no attach; the Katana stays unattached.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Quintessential Katana
+Savannah Lions
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Quintessential Katana.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Quintessential Katana; Savannah Lions
+Bot1.Battlefield.Quintessential Katana.AttachedTo = (absent)
