@@ -1,0 +1,39 @@
+# Turtle Power!, {2}{G}: "Turtles you control get +2/+2." Bot1 controls Michelangelo, Game Master (a Mutant Ninja Turtle, 3/3) and an Ornithopter (0/2); after it resolves Michelangelo is a
+# 5/5 and the Ornithopter, not a Turtle, is unchanged. Black Lotus pays for it.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Black Lotus
+Michelangelo, Game Master
+Turtle Power!
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Michelangelo, Game Master.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Michelangelo, Game Master.Power = 3
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Turtle Power!.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Michelangelo, Game Master.Power = 5
+Bot1.Battlefield.Michelangelo, Game Master.Toughness = 5
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2

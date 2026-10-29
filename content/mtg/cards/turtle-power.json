@@ -1,0 +1,9 @@
+{
+  "name": "Turtle Power!",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment",
+  "oracleText": "Flash\nTurtles you control get +2/+2.",
+  "keywords": [
+    "Flash"
+  ]
+}
