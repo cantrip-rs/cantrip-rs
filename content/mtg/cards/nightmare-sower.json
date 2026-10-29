@@ -1,0 +1,12 @@
+{
+  "name": "Nightmare Sower",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Faerie Assassin",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying, lifelink\nWhenever you cast a spell during an opponent's turn, put a -1/-1 counter on up to one target creature.",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}
