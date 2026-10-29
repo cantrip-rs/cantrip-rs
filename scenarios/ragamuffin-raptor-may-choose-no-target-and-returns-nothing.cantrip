@@ -1,0 +1,63 @@
+# Ragamuffin Raptor's "up to one target" (CR 601.2c, 115.1): Bot1 has a creature card and a Food card in its graveyard and chooses neither, so nothing is returned.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Nutrient Block
+Ornithopter
+Ragamuffin Raptor
+Black Lotus
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Nutrient Block.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Nutrient Block.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ragamuffin Raptor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Black Lotus; Ornithopter; Nutrient Block
+Bot1.Hand = Island
+Stack.Count = 0
