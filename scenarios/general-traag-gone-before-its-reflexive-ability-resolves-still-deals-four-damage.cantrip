@@ -1,0 +1,56 @@
+# General Traag: "When you do, General Traag deals 4 damage to target creature." The source is judged as it last existed on the
+# battlefield (CR 608.2h), so when Bot2's Lightning Bolt kills the 4/3 Traag with the reflexive ability still on the stack,
+# the ability still deals its 4 damage and Bot2's Memnite dies.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Jet
+Mox Jet
+General Traag, Heart of Stone
+Island x14
+
+[Bot2 Deck]
+Mountain
+Memnite
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.General Traag, Heart of Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Mox Jet#1)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.General Traag, Heart of Stone)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = General Traag, Heart of Stone; Mox Jet
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot2.Graveyard = Memnite; Lightning Bolt
+Bot1.Graveyard = General Traag, Heart of Stone; Mox Jet

@@ -1,0 +1,49 @@
+# Spicy Oatmeal Pizza: "it deals 4 damage to any target and 3 damage to you" is one ability with one target, so when that
+# target is gone as it resolves the ability does not resolve at all (CR 608.2b), and deals none of its damage, the 3 to you
+# included. On turn 3 the Pizza enters aimed at Bot2's Memnite, and Bot2 answers with Lightning Bolt on its own Memnite; the
+# Pizza's ability then does nothing and both players stay at 20.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Spicy Oatmeal Pizza
+Island x17
+
+[Bot2 Deck]
+Mountain
+Memnite
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Spicy Oatmeal Pizza.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Graveyard = Memnite; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Spicy Oatmeal Pizza.Types = Artifact
