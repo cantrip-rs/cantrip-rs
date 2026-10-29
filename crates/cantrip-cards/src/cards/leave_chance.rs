@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::choose;
+use cantrip_mechanics::effects;
 use cantrip_oracle as oracle;
 
 /// "Target permanents you own" (CR 108.3): ownership, not control.
@@ -13,17 +13,9 @@ fn leave(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// Chance: "Discard any number of cards, then draw that many cards." The discard is one event (CR 701.9).
+/// Chance: "Discard any number of cards, then draw that many cards."
 fn chance(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let you = item.controller;
-    let hand: Vec<ObjectId> = g.state().zone(Zone::hand(you)).to_vec();
-    let cards = choose::any_number_of(g, you, item.object, Purpose::Discard, "", hand.clone(), hand)?;
-    if cards.is_empty() {
-        return Ok(());
-    }
-    g.discard_together(&cards);
-    g.draw(you, cards.len() as u32);
-    Ok(())
+    effects::discard_any_number_then_draw(g, item.controller, item.object)
 }
 
 pub static LEAVE: CardDef = CardDef {
