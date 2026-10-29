@@ -1,0 +1,47 @@
+# Masterful Flourish: indestructible (CR 702.12b) keeps a creature with lethal damage on the battlefield (CR 704.5g). Bot2's
+# Lightning Bolt targets Bot1's Burrog Banemaker; Bot1 responds with Flourish. The Bolt deals its 3 damage to the 2/1 and it lives.
+# On the next turn the damage is gone (CR 514.2) and so is the indestructibility, and a second Bolt kills it.
+
+[Bot1 Deck]
+Burrog Banemaker
+Mox Jet
+Mox Jet
+Masterful Flourish
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker)
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Masterful Flourish.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Burrog Banemaker.Damage = 3
+? Bot1.Battlefield.Burrog Banemaker.Keywords = Deathtouch; Indestructible
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Burrog Banemaker.Damage = 0
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Burrog Banemaker; Masterful Flourish
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt
