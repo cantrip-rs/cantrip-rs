@@ -1,0 +1,43 @@
+# Excess damage is measured against the damage already marked (CR 120.10). Shock marks 2 on a 0/3 Phyrexian Walker; Archaic's
+# Agony, paid with Black Lotus's three red mana, a Mox Sapphire and a Mox Jet (red, blue, black: X = 3), then deals 3 where only
+# 1 more is lethal, so the excess is 2 and the top two cards of Bot1's library (Island, Mountain) are exiled.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Shock
+Archaic's Agony
+Island
+Island
+Island
+Mountain
+Island x14
+
+[Bot2 Deck]
+Phyrexian Walker
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Archaic's Agony.Cast(Bot2.Battlefield.Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Island; Mountain
+Bot2.Graveyard = Phyrexian Walker

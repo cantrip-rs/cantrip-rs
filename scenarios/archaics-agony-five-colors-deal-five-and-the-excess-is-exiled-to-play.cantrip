@@ -1,0 +1,49 @@
+# Converge: five Moxen pay {4}{R} with white, blue, black, red and green, so X = 5 (CR 207.2c). Five damage to a 0/2 Ornithopter is
+# three above lethal: excess damage is 3 (CR 120.10), so the top three cards of Bot1's library (Mountain, Lightning Bolt, Island)
+# are exiled and may be played - the exiled Mountain as the land drop and the exiled Bolt, cast for the Mountain's {R}, at Bot2.
+# Bot2's library has the Island it would have drawn and nothing of it is exiled.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Archaic's Agony
+Island
+Island
+Mountain
+Lightning Bolt
+Island
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Archaic's Agony.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+? Exile = Mountain; Lightning Bolt; Island
+Bot1.Exile.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Exile = Island
+Bot2.Life = 17
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Lightning Bolt; Archaic's Agony

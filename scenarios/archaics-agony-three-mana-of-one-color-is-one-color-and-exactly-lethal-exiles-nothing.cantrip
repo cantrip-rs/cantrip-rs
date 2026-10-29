@@ -1,0 +1,36 @@
+# Converge counts colors, not mana: Black Lotus's three red mana and a Mox Sapphire's blue pay {4}{R} with only two colors, so X = 2.
+# Two damage to a 0/2 Ornithopter is exactly lethal, so the excess is 0 (CR 120.10) and nothing is exiled from Bot1's library.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Archaic's Agony
+Island
+Island
+Island
+Island
+Island
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Archaic's Agony.Cast(Bot2.Battlefield.Ornithopter)
+
+[Expect]
+Exile =
+Bot2.Graveyard = Ornithopter
+Bot1.Library.Count = 16
