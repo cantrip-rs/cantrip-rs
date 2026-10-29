@@ -1,0 +1,58 @@
+# Lita's Alliance (CR 700.2, 603.3c): "Whenever another creature you control enters, choose one that hasn't been chosen this
+# turn." Lita comes down on turn 1 and does not trigger for herself ("another"). On turn 3 Bot1 casts Savannah Lions (a +1/+1
+# counter on Lita), a second Lions (the +1/+1 counter is refused: already chosen this turn; a Food token), Elite Vanguard (scry 1:
+# Mountain to the bottom; the last mode needs no choice) and then Ornithopter: all three modes are spent, so that instance is removed from the stack with
+# no effect. Bot2's Elvish Mystic entering on turn 2 triggers nothing ("you control").
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Lita, Little Orphan Amphibian
+Savannah Lions
+Savannah Lions
+Elite Vanguard
+Ornithopter
+Plains
+Mountain
+Island x12
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lita, Little Orphan Amphibian.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Modes(+1/+1 counter)
+Bot1.Pass
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Savannah Lions.Cast
+! Bot1.Modes(+1/+1 counter)
+Bot1.Modes(Food)
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elite Vanguard.Cast
+Bot1.Arrange( | Mountain)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Lita, Little Orphan Amphibian.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Lita, Little Orphan Amphibian.Power = 3
+Bot1.Battlefield.Food Token.Types = Artifact
+Bot1.Library = Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Mountain

@@ -1,0 +1,8 @@
+{
+  "name": "Lita, Little Orphan Amphibian",
+  "manaCost": "{1}{W}",
+  "type": "Legendary Creature — Mutant Ninja Turtle",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Alliance — Whenever another creature you control enters, choose one that hasn't been chosen this turn.\n• Put a +1/+1 counter on Lita.\n• Create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\n• Scry 1."
+}
