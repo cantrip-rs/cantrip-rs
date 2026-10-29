@@ -1,0 +1,6 @@
+{
+  "name": "Riverguard's Reflexes",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +2/+2 and gains first strike until end of turn. Untap it."
+}
