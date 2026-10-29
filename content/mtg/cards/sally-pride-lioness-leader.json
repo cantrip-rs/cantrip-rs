@@ -1,0 +1,8 @@
+{
+  "name": "Sally Pride, Lioness Leader",
+  "manaCost": "{3}{W}{W}",
+  "type": "Legendary Creature — Cat Mutant Rebel",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "When Sally Pride enters, create X 2/2 red Mutant creature tokens, where X is the number of nontoken creatures you control.\nWhenever Sally Pride attacks, put a +1/+1 counter on each creature you control."
+}
