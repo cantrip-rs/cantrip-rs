@@ -1,0 +1,45 @@
+# Rubble Rouser's "{T}, Exile a card from your graveyard: Add {R}. When you do, this creature deals 1 damage to each opponent."
+# Refused the turn it enters (summoning sickness, CR 302.6). Next turn Bot1 taps it, exiling the Memnite, in its own right: the mana ability
+# does not use the stack (CR 605.3b) but its reflexive trigger (CR 603.12) does, and goes on the stack at once, before the Bolt is cast.
+# The Bolt, cast above it, resolves first: Bot2 is at 17 after one round of passes and 16 when the ping has resolved too.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Rubble Rouser
+Lightning Bolt
+Memnite
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rubble Rouser.Cast
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Rubble Rouser.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Rubble Rouser.Activate
+Bot1.Choose(Memnite)
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard = Lightning Bolt
+Bot1.Exile.Memnite.Power = 1

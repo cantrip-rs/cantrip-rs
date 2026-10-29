@@ -1,0 +1,8 @@
+{
+  "name": "Rubble Rouser",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Dwarf Sorcerer",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "When this creature enters, you may discard a card. If you do, draw a card.\n{T}, Exile a card from your graveyard: Add {R}. When you do, this creature deals 1 damage to each opponent."
+}
