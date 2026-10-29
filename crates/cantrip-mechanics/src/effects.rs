@@ -527,7 +527,7 @@ pub fn gain_life(g: &mut dyn Game, item: &StackItem, n: i32) -> Result<(), Suspe
 }
 
 /// "You gain 3 life" as an ability's callback: the Food ability "{2}, {T}, Sacrifice this permanent: You gain 3 life." (CR 111.10b)
-/// of the Food token, Ygra, Eater of All's creatures and Spicy Oatmeal Pizza.
+/// of the Food token, Ygra, Eater of All's creatures, Nutrient Block and Spicy Oatmeal Pizza.
 pub fn gain_three_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     gain_life(g, item, 3)
 }
