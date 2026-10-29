@@ -521,11 +521,11 @@ pub const FETCH_BASIC_TAPPED: Question = Question::new(
 /// counted by a layer 7a ability). "You" is the controller of `source` (CR 108.4: the engine keeps the owner as controller off the
 /// battlefield and stack, CR 108.4a, and the caster on the stack): Lumbering Worldwagon's power and Sandman's power and toughness ("works in all zones")
 /// count lands; `counts` is `|c| c.is(CardType::Land)` for them, and Desert Were-Worm's "for each Mountain you control" counts the permanents with the Mountain
-/// subtype.
+/// subtype. The controller of the source and of each counted permanent is read through the view (`LayerQuery::controller`, CR
+/// 613.1b): in layer 2 as the control-changing effects applied so far leave it, so a control-changing ability may use it too.
 pub fn count_you_control(q: &dyn LayerQuery, source: ObjectId, counts: &dyn Fn(&Chars) -> bool) -> i16 {
-    let state = q.state();
-    let obj = state.obj(source);
-    state.battlefield().iter().filter(|&&id| state.obj(id).controller == obj.controller && counts(&q.chars(id))).count() as i16
+    let controller = q.controller(source);
+    q.state().battlefield().iter().filter(|&&id| q.controller(id) == controller && counts(&q.chars(id))).count() as i16
 }
 
 /// "The number of differently named lands you control" (CR 201.2a-b): count the largest set of lands whose names do not

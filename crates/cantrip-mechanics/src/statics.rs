@@ -4,11 +4,11 @@ use cantrip_api::*;
 
 /// "Creatures you control" (CR 613.1f, layer 6): every creature under the source's controller's control, the source itself
 /// among them ("creatures you control have ..." is not "other"). Judged on what the earlier layers made the object, so a
-/// permanent that became a creature counts, and by control, not ownership. Nadu, Winged Wisdom and Samut, Hazoret's Champion
+/// permanent that became a creature counts, and by control, not ownership. Both controllers are read through the view
+/// (`LayerQuery::controller`, CR 613.1b), so a control-changing ability may use it. Nadu, Winged Wisdom and Samut, Hazoret's Champion
 /// use it as `StaticDef::affects`.
 pub fn your_creatures(q: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
-    let s = q.state();
-    so_far.is(CardType::Creature) && s.obj(affected).controller == s.obj(source).controller
+    so_far.is(CardType::Creature) && q.controller(affected) == q.controller(source)
 }
 
 /// "Creatures you control with +1/+1 counters on them" (CR 613.1f).
