@@ -1,0 +1,43 @@
+# Rubble Rouser paying for a spell: Bot1 casts Lightning Bolt and pays its {R} with the mana ability, exiling the Memnite. The reflexive
+# trigger can't go on the stack while the Bolt is being cast (ruling 2026-03-20); once it is cast the trigger goes above it, so the ping
+# resolves first: Bot2 is at 19 after one round of passes, and at 16 when the Bolt has resolved too.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Rubble Rouser
+Lightning Bolt
+Memnite
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rubble Rouser.Cast
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Rubble Rouser.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Rubble Rouser.Activate
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard = Lightning Bolt
+Bot1.Exile.Memnite.Power = 1

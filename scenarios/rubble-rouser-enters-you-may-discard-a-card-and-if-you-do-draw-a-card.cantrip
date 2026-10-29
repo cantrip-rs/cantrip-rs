@@ -1,0 +1,31 @@
+# Rubble Rouser's enters trigger: "you may discard a card. If you do, draw a card" (CR 701.9, 121.1). Bot1 discards the Memnite it
+# chooses and draws exactly one card (Mountain, 9th of the deck... the hand ends at Lightning Bolt, Mountain and the drawn card).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Rubble Rouser
+Lightning Bolt
+Memnite
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rubble Rouser.Cast
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Memnite
+Bot1.Hand.Count = 3
