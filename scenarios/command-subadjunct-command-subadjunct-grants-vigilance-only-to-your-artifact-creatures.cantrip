@@ -1,0 +1,54 @@
+# Command Subadjunct grants vigilance to itself and your Memnite, not your nonartifact Llanowar Elves, your Mox Pearl, or
+# Bot2's Memnite. On Bot1's turn all three creatures attack: only the two artifact creatures stay untapped (CR 613.1f, 702.20a, 702.20b).
+
+[Bot1 Deck]
+Mox Pearl
+Command Subadjunct
+Memnite
+Forest
+Llanowar Elves
+Plains
+Island
+Island x12
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Command Subadjunct.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Command Subadjunct.Keywords = Vigilance
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Vigilance
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+[T2 Bot2.Main2]
+[T3 Bot1.Main1]
+Bot1.Attack(Command Subadjunct > Bot2; Memnite > Bot2; Llanowar Elves > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Command Subadjunct.Keywords = Vigilance
+Bot1.Battlefield.Command Subadjunct.Tapped = false
+Bot1.Battlefield.Memnite.Keywords = Vigilance
+Bot1.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Mox Pearl.Keywords = (absent)
+Bot2.Battlefield.Memnite.Keywords = (absent)
+Bot2.Life = 16
+Stack.Count = 0

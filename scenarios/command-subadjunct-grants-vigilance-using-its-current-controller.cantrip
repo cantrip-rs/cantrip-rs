@@ -1,0 +1,46 @@
+# Mind Control changes Subadjunct's controller in layer 2. Its layer-6 ability follows that controller: Bot2's artifact
+# creature gains vigilance while Bot1's Memnite loses it (CR 613.1b, 613.1f, 702.20a).
+
+[Bot1 Deck]
+Mox Pearl
+Command Subadjunct
+Memnite
+Island x14
+
+[Bot2 Deck]
+Island
+Mox Ruby
+Mox Pearl
+Ornithopter
+Black Lotus
+Mind Control
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Command Subadjunct.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Mind Control.Cast(Bot1.Battlefield.Command Subadjunct; Spend: R, W, U, U, U)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Mind Control.AttachedTo = Command Subadjunct
+? Bot2.Battlefield.Command Subadjunct.Keywords = Vigilance
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Bot2.Battlefield.Command Subadjunct.Keywords = Vigilance
+Bot2.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+Bot1.Battlefield.Memnite.Keywords = (absent)

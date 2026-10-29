@@ -1,0 +1,8 @@
+{
+  "name": "Command Subadjunct",
+  "manaCost": "{W}",
+  "type": "Artifact Creature — Borg",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Artifact creatures you control have vigilance."
+}
