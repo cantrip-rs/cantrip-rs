@@ -1,0 +1,39 @@
+# Two differently named lands reduce the {6} activation by two; it pumps exactly +2/+2 until the turn ends.
+
+[Bot1 Deck]
+Forest
+Mox Ruby
+Mox Emerald
+Sol Ring
+Astute Terraformer
+Island
+Mountain
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Astute Terraformer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Astute Terraformer.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Astute Terraformer.Power = 4
+Bot1.Battlefield.Astute Terraformer.Toughness = 4

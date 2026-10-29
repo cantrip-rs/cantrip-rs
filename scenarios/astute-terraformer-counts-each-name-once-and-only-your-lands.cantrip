@@ -1,0 +1,52 @@
+# Strange new worlds costs {6} minus the number of differently named lands Bot1 controls (CR 601.2f, 602.2b): two Forests
+# and an Island are two names, and Bot2's Mountain is not Bot1's, so it costs exactly {4} - with the Island tapped in
+# upkeep, Sol Ring and both Forests pay it and nothing is left. It is activated only once each turn (CR 602.5b), and the
+# +2/+2 ends with the turn (CR 611.2a, 514.2).
+
+[Bot1 Deck]
+Forest
+Forest
+Black Lotus
+Astute Terraformer
+Sol Ring
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Astute Terraformer.Cast
+Bot1.Pass
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Upkeep]
+Bot1.Battlefield.Island.Activate
+[T7 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Astute Terraformer.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Astute Terraformer.Power = 4
+? Bot1.Battlefield.Astute Terraformer.Toughness = 4
+! Bot1.Battlefield.Astute Terraformer.Activate
+[T9 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Astute Terraformer.Power = 2
+Bot1.Battlefield.Astute Terraformer.Toughness = 2
+Bot2.Battlefield.Mountain.Tapped = false
