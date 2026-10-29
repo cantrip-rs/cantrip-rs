@@ -1,0 +1,61 @@
+# Bot2's creature is already on the battlefield when Culber's modal trigger is put on the stack; target creatures may be
+# controlled by either player (CR 700.2b, 700.2c).
+
+[Opening]
+Chooser: Bot2
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Grizzly Bears
+Culber and Stamets, Star-Crossed
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot2.PlayFirst
+Bot2.Keep
+Bot1.Keep
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+? Bot2.Mana = {G}
+Bot2.Pass
+Bot1.Pass
+[T2 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+? Bot1.Mana = {G}
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Culber and Stamets, Star-Crossed.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana =
+Bot1.Modes(Put a +1/+1 counter on target creature.)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Grizzly Bears.Power = 3
+Bot2.Battlefield.Grizzly Bears.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = (absent)

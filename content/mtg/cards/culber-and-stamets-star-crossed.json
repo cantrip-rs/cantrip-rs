@@ -1,0 +1,8 @@
+{
+  "name": "Culber and Stamets, Star-Crossed",
+  "manaCost": "{3}{G}",
+  "type": "Legendary Creature — Human Doctor Artificer",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "When Culber and Stamets enter, choose one —\n• Put a +1/+1 counter on target creature.\n• Add two mana of any one color."
+}

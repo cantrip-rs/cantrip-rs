@@ -1,0 +1,39 @@
+# The other enters mode adds two mana of the single color chosen as the trigger resolves (CR 106.1b, 106.4).
+
+[Bot1 Deck]
+Culber and Stamets, Star-Crossed
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Culber and Stamets, Star-Crossed.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana =
+Bot1.Modes(Add two mana of any one color.)
+Bot1.Colors(Green)
+? Bot1.Mana = {G}{G}
+
+[Expect]
+Bot1.Mana = {G}{G}
+Bot1.Battlefield.Culber and Stamets, Star-Crossed.Power = 3
