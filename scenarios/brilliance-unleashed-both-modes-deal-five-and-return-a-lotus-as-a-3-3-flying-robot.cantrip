@@ -1,0 +1,69 @@
+# Brilliance Unleashed, "Choose one or both" (CR 700.2): both modes, in the order printed (CR 608.2c). Mode 1 deals 5 damage to Bot2's Wall of Stone (0/8, so it lives and shows the 5); mode 2
+# returns Bot1's Black Lotus, sacrificed on turn 1 and a noncreature artifact card, to the battlefield as a 3/3 Robot artifact creature with flying (CR 614.12, 205.1a, 613.4b): its Artifact type
+# stays, it is a creature from the moment it enters, and it keeps its own abilities.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Brilliance Unleashed
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Wall of Stone
+Island x16
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Wall of Stone.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brilliance Unleashed.Cast
+! Bot1.Modes(Count: 0)
+Bot1.Modes(1; 2)
+Bot1.Target(Wall of Stone)
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Wall of Stone.Damage = 5
+Bot1.Graveyard = Brilliance Unleashed
+Bot1.Battlefield.Black Lotus.Types = Artifact; Creature
+Bot1.Battlefield.Black Lotus.Subtypes = Robot
+Bot1.Battlefield.Black Lotus.Power = 3
+Bot1.Battlefield.Black Lotus.Toughness = 3
+Bot1.Battlefield.Black Lotus.Keywords = Flying

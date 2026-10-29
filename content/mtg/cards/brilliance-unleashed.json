@@ -1,0 +1,6 @@
+{
+  "name": "Brilliance Unleashed",
+  "manaCost": "{4}{U}{R}",
+  "type": "Sorcery",
+  "oracleText": "Choose one or both —\n• Brilliance Unleashed deals 5 damage to target creature.\n• Choose target artifact card in your graveyard. Return it to the battlefield if it's an artifact creature card. Otherwise, return it to the battlefield and it's a 3/3 Robot artifact creature with flying."
+}

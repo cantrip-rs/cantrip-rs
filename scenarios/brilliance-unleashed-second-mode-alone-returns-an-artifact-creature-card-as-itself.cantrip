@@ -1,0 +1,54 @@
+# Brilliance Unleashed, second mode alone: "Return it to the battlefield if it's an artifact creature card." Bot2 Lightning Bolts Bot1's Ornithopter (a 0/2 flying Thopter artifact creature)
+# on turn 2; on turn 3 Bot1 returns it with only the second mode, and it comes back as itself, a 0/2 Thopter, not a 3/3 Robot. Mode 1 is not chosen, so nothing takes damage.
+
+[Bot1 Deck]
+Ornithopter
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Brilliance Unleashed
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brilliance Unleashed.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Brilliance Unleashed
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Battlefield.Ornithopter.Subtypes = Thopter
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
