@@ -1,0 +1,72 @@
+# Emil, Vastlands Roamer ({2}{G}, 3/3): "Creatures you control with +1/+1 counters on them have trample", and "{4}{G}, {T}: Create a 0/0
+# Fractal token. Put X +1/+1 counters on it, where X is the number of differently named lands you control." Bot1 casts Emil on turn 1
+# with Black Lotus and activates it with five Moxen in turns 3, 5 and 7: one Forest is one differently named land, two Forests are
+# still one, and a Forest, a Forest and an Island are two. Each Fractal has trample.
+
+[Bot1 Deck]
+Emil, Vastlands Roamer
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Forest
+Forest
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Emil, Vastlands Roamer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Emil, Vastlands Roamer.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fractal Token.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Fractal Token.Keywords = Trample
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Emil, Vastlands Roamer.Activate
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Emil, Vastlands Roamer.Activate
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Fractal Token#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Fractal Token#2.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Fractal Token#3.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Fractal Token#3.Keywords = Trample
+Bot1.Battlefield.Emil, Vastlands Roamer.Tapped = true
