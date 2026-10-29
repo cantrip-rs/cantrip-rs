@@ -1,0 +1,8 @@
+{
+  "name": "Dark Leo & Shredder",
+  "manaCost": "{W}{B}",
+  "type": "Legendary Creature — Mutant Ninja Turtle Human",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Sneak {W}{B}\nAttacking Ninjas you control have deathtouch.\nWhenever Dark Leo & Shredder deal combat damage to a player, create a 1/1 black Ninja creature token. Then if you control five or more Ninjas, that player loses half their life, rounded up."
+}

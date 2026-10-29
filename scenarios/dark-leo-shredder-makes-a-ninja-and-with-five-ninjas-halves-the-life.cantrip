@@ -1,0 +1,40 @@
+# Dark Leo & Shredder: "Whenever Dark Leo & Shredder deal combat damage to a player, create a 1/1 black Ninja creature token. Then if you control five or more Ninjas, that player loses half their life,
+# rounded up." Bot1 has Dark Leo and three Prehistoric Pets (Ninjas, paid with Black Lotus' WWW). He hits unblocked on turn 3 for 1 (Bot2 at 19): the token is the fifth Ninja, so Bot2 loses
+# half of 19 rounded up, 10, and is at 9.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Dark Leo & Shredder
+Prehistoric Pet
+Prehistoric Pet
+Prehistoric Pet
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Leo & Shredder.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Prehistoric Pet.Cast
+Bot1.Hand.Prehistoric Pet.Cast
+Bot1.Hand.Prehistoric Pet.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Dark Leo & Shredder > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 9
+
+[Expect]
+Bot1.Battlefield.Ninja Token.Power = 1
+Bot1.Battlefield.Ninja Token.Colors = Black
+Bot1.Battlefield.Ninja Token.Token = true
+Bot2.Life = 9

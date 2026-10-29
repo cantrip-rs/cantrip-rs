@@ -1,0 +1,57 @@
+# "Attacking Ninjas you control have deathtouch" (CR 702.2, 506.4): on turn 3 Bot1 attacks with Dark Leo & Shredder (1/3, a Ninja) and Ornithopter (no Ninja). Bot2's Grizzly Bears blocks Dark Leo
+# and dies to 1 damage, deathtouch; Dark Leo survives its 2. Ornithopter has no deathtouch, and Prehistoric Pet, a Ninja that stays home, has none either; Dark Leo has none outside combat.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Dark Leo & Shredder
+Prehistoric Pet
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Leo & Shredder.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Prehistoric Pet.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dark Leo & Shredder.Keywords = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Dark Leo & Shredder; Ornithopter > Bot2)
+Bot2.Block(Grizzly Bears > Dark Leo & Shredder)
+[T3 Bot1.DeclareBlockers]
+? Bot1.Battlefield.Dark Leo & Shredder.Keywords = Deathtouch
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Prehistoric Pet.Keywords = (absent)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Battlefield.Dark Leo & Shredder.Damage = 2
+Bot1.Battlefield.Dark Leo & Shredder.Keywords = (absent)
+Bot1.Battlefield.Ornithopter.Keywords = Flying

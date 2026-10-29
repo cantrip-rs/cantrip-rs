@@ -1,0 +1,41 @@
+# Sneak {W}{B} (CR 702.190a) and the Ninja count: Bot1 has two Prehistoric Pets and attacks on turn 3 with Ornithopter, then casts Dark Leo & Shredder in the declare blockers step for {W}{B},
+# returning the Ornithopter. He enters attacking, deals 1 combat damage and makes a Ninja token: Dark Leo, two Pets and the token are four Ninjas, not five, so Bot2 only loses the 1 (19).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Dark Leo & Shredder
+Prehistoric Pet
+Prehistoric Pet
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Prehistoric Pet.Cast
+Bot1.Hand.Prehistoric Pet.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Dark Leo & Shredder.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Ninja Token.Token = true
+Bot1.Hand.Count = 2
