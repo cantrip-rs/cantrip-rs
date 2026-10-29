@@ -1,0 +1,11 @@
+{
+  "name": "Squawkroaster",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Elemental",
+  "power": "*",
+  "toughness": 4,
+  "oracleText": "Double strike\nVivid — Squawkroaster's power is equal to the number of colors among permanents you control.",
+  "keywords": [
+    "DoubleStrike"
+  ]
+}

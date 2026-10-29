@@ -1,0 +1,40 @@
+# Squawkroaster: "Double strike. Vivid - Squawkroaster's power is equal to the number of colors among permanents you control."
+# With only itself in play (Black Lotus and the lands are colorless) it is 1/4 (CR 105.2, 604.3); once Bot1 also controls a green
+# Llanowar Elves it is 2/4 - the toughness is printed. It attacks as double strike (CR 702.4): two hits of 2 is 4 damage.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Squawkroaster
+Forest
+Llanowar Elves
+Mountain
+Mountain
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Squawkroaster.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Squawkroaster.Power = 1
+? Bot1.Battlefield.Squawkroaster.Toughness = 4
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Squawkroaster.Power = 2
+? Bot1.Battlefield.Squawkroaster.Toughness = 4
+Bot1.Attack(Squawkroaster > Bot2)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 16
