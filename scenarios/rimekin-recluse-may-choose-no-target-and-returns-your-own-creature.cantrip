@@ -1,0 +1,38 @@
+# Rimekin Recluse "return up to one other target creature": Bot1's first Recluse is cast with no target chosen, so nothing returns and
+# Bot1's Ornithopter stays; the second names that Ornithopter - a creature you control is as legal a target as an opponent's - and it
+# goes to its owner's (Bot1's) hand. Three Moxen pay the first {2}{U}, Black Lotus the second.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Rimekin Recluse
+Rimekin Recluse
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rimekin Recluse.Cast
+Bot1.Target()
+Bot1.Pass
+? Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Rimekin Recluse.Cast
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+
+[Expect]
+Bot1.Hand = Ornithopter
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Rimekin Recluse; Rimekin Recluse

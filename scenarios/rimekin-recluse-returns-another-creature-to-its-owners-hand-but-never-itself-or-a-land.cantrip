@@ -1,0 +1,41 @@
+# Rimekin Recluse {2}{U} (three Moxen): "When this creature enters, return up to one other target creature to its owner's hand" (CR 603.2,
+# 701.1a... 400.7). Bot2's Elvish Mystic is returned to Bot2's hand, not the graveyard. The Recluse itself is not a legal target ("other"),
+# and neither is Bot2's Forest (not a creature): both refused. Bot1's own Mox is not a creature either.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Rimekin Recluse
+Island x3
+Island x13
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rimekin Recluse.Cast
+! Bot1.Target(Bot1.Battlefield.Rimekin Recluse)
+! Bot1.Target(Bot2.Battlefield.Forest)
+Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+
+[Expect]
+Bot2.Hand.Elvish Mystic.Power = 1
+Bot2.Hand.Count = 7
+Bot2.Battlefield = Forest
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Rimekin Recluse
