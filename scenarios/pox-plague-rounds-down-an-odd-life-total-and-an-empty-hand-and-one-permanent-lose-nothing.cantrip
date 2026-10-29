@@ -1,0 +1,56 @@
+# Pox Plague rounds down each time: Bot2 at 17 life loses 8 and keeps 9; a player with no cards in hand discards none (Bot1's hand is empty); a player who controls one permanent sacrifices none (half of 1 is 0, Bot2's lone Mox) while Bot1's six permanents lose three.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Lightning Bolt
+Pox Plague
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Sol Ring
+Tormod's Crypt
+Black Lotus
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+? Bot1.Hand.Count = 1
+Bot1.Hand.Pox Plague.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Ornithopter; Sol Ring; Tormod's Crypt)
+Bot1.Choose(Mox Ruby; Mox Jet#1; Mox Jet#2)
+
+[Expect]
+Bot1.Life = 10
+Bot2.Life = 9
+Bot1.Hand.Count = 0
+Bot2.Hand.Count = 4
+Bot1.Battlefield.Count = 3
+Bot2.Battlefield.Count = 1

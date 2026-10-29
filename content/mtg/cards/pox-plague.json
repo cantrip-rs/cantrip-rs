@@ -1,0 +1,6 @@
+{
+  "name": "Pox Plague",
+  "manaCost": "{B}{B}{B}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Each player loses half their life, then discards half the cards in their hand, then sacrifices half the permanents they control of their choice. Round down each time."
+}

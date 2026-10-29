@@ -1,0 +1,54 @@
+# Pox Plague: "Each player loses half their life, then discards half the cards in their hand, then sacrifices half the permanents they control. Round down each time." Life 20 each goes to 10; Bot1 holds 2 cards (discards 1) and controls 5 Moxen (sacrifices 2); Bot2 holds 5 (discards 2) and controls 3 (sacrifices 1). Each player chooses their own.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Pox Plague
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Ornithopter
+Lightning Bolt
+Sol Ring
+Tormod's Crypt
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Hand.Pox Plague.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+Bot2.Choose(Lightning Bolt; Sol Ring)
+Bot1.Choose(Mox Jet#1; Mox Jet#2)
+Bot2.Choose(Mox Ruby)
+
+[Expect]
+Bot1.Life = 10
+Bot2.Life = 10
+Bot1.Hand.Count = 1
+Bot2.Hand.Count = 3
+Bot1.Battlefield.Count = 3
+Bot2.Battlefield.Count = 2
