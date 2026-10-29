@@ -1,0 +1,8 @@
+{
+  "name": "Daniels, Temporal Agent",
+  "manaCost": "{2}{B/G}{B/G}",
+  "type": "Legendary Creature — Human Advisor",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "When Daniels enters, return target creature card from your graveyard to your hand.\n{2}, Put this card from your graveyard on the bottom of your library: You gain 2 life."
+}

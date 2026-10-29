@@ -1,0 +1,49 @@
+# Daniels' graveyard ability is paid by putting the card itself from the graveyard on the bottom of the library (CR 118.3),
+# so once Tormod's Crypt has exiled it, it can't be activated from exile: the card is no longer where the cost takes it
+# from (CR 113.6m, 602.2b). Bot1 gains no life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Jet
+Daniels, Temporal Agent
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Tormod's Crypt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Daniels, Temporal Agent.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Daniels, Temporal Agent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Daniels, Temporal Agent.Power = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Exile.Daniels, Temporal Agent.Activate
+
+[Expect]
+Bot1.Life = 20
+Bot1.Exile.Daniels, Temporal Agent.Power = 3

@@ -1,0 +1,71 @@
+# Daniels returns a creature card from its controller's graveyard on entry, then its graveyard ability puts Daniels on the
+# library bottom as a cost and gains 2 life (CR 118.3, 401.4, 603.6a).
+# Daniels, Temporal Agent {2}{B/G}{B/G}: Legendary Creature — Human Advisor
+#   When Daniels enters, return target creature card from your graveyard to your hand.
+#   {2}, Put this card from your graveyard on the bottom of your library: You gain 2 life.
+# Bot2's Walking Ballista is in Bot2's graveyard, not Bot1's, so it is no target and stays. The graveyard ability can't be
+# activated while Daniels is on the battlefield (CR 113.6m), only once Daniels is in the graveyard.
+
+[Bot1 Deck]
+Daniels, Temporal Agent
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Llanowar Elves
+Lightning Bolt
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Walking Ballista
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Walking Ballista.Cast(X: 0)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Llanowar Elves; Lightning Bolt
+Bot1.Hand.Daniels, Temporal Agent.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Llanowar Elves = (absent)
+! Bot1.Battlefield.Daniels, Temporal Agent.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Daniels, Temporal Agent)
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Daniels, Temporal Agent.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Graveyard.Daniels, Temporal Agent = (absent)
+Bot1.Library = Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Swamp; Daniels, Temporal Agent
+Bot1.Hand.Llanowar Elves.Colors = Green
+Bot2.Graveyard = Island; Walking Ballista
