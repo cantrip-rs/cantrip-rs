@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::statics::{base_pt, plus_pt};
-use cantrip_mechanics::{ninjutsu::ninjutsu, surveil, targets};
+use cantrip_mechanics::{effects, ninjutsu::ninjutsu, surveil, targets};
 use cantrip_oracle as oracle;
 
 // --- "During your turn, as long as Kaito has one or more loyalty counters on him, he's a 3/4 Ninja creature and has
@@ -41,15 +41,6 @@ fn surveil_then_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     Ok(())
 }
 
-/// -2: tap target creature, then put two stun counters on it (a creature already tapped still gets the counters).
-fn tap_and_stun(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        g.tap(creature);
-        g.add_counters(creature, CounterKind::Stun, 2);
-    }
-    Ok(())
-}
-
 // --- The emblem ---------------------------------------------------------------------------------------------------
 
 /// "Ninjas you control get +1/+1" (layer 7c), from the command zone (CR 114.4): every Ninja creature its owner
@@ -76,7 +67,7 @@ pub static CARD: CardDef = CardDef {
         ),
         ability(loyalty(1), emblem, "+1: You get an emblem with \"Ninjas you control get +1/+1.\""),
         ability(loyalty(0), surveil_then_draw, "0: Surveil 2. Then draw a card for each opponent who lost life this turn."),
-        ability(loyalty(-2), tap_and_stun, "\u{2212}2: Tap target creature. Put two stun counters on it.")
+        ability(loyalty(-2), effects::tap_and_stun::<2>, "\u{2212}2: Tap target creature. Put two stun counters on it.")
             .targets(&[targets::CREATURE]),
     ],
     statics: &[

@@ -1,16 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{effects, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
-
-/// "When this creature enters, tap target creature an opponent controls and put a stun counter on it" (CR 122.1d): a
-/// creature already tapped still gets the counter.
-fn tap_and_stun(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        g.tap(creature);
-        g.add_counters(creature, CounterKind::Stun, 1);
-    }
-    Ok(())
-}
 
 /// "Target creature with a stun counter on it" (CR 115.1, 122.1d).
 fn creature_with_a_stun_counter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
@@ -32,7 +22,7 @@ fn shuffle_away(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(THIS_ENTERS, tap_and_stun, "When Floodpits Drowner enters, tap target creature an opponent controls and put a stun counter on it.")
+        triggered(THIS_ENTERS, effects::tap_and_stun::<1>, "When Floodpits Drowner enters, tap target creature an opponent controls and put a stun counter on it.")
             .targets(&[targets::CREATURE_AN_OPPONENT_CONTROLS]),
         ability(
             cost("{1}{U}").and(TAP),

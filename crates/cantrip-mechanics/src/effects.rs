@@ -863,13 +863,14 @@ pub fn plus_one_counter_on_each_target(g: &mut dyn Game, item: &StackItem) -> Re
     Ok(())
 }
 
-/// "Tap target creature. Put a stun counter on it." (CR 701.26a, 122.1d): the counter goes on whether or not the creature was
-/// untapped, so a tapped one gets it too; an illegal target does nothing (CR 608.2b). Loch Mare's second ability and Sygg's
-/// Command's fourth mode print it.
-pub fn tap_and_stun(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = crate::targets::object(g, item, 0) {
-        g.tap(creature);
-        g.add_counters(creature, CounterKind::Stun, 1);
+/// "Tap target [permanent]. Put `N` stun counters on it." (CR 701.26a, 122.1d): the counter goes on whether or not the
+/// permanent was untapped, so a tapped one gets it too; an illegal target does nothing (CR 608.2b). The target filter stays with
+/// each card ("up to one" included). With 1 counter: Loch Mare's second ability, Sygg's Command's fourth mode, Champions of the
+/// Shoal, Deluge Virtuoso, Floodpits Drowner and Utrom Scientists. With 2: Kaito, Bane of Nightmares and Lodestone Needle.
+pub fn tap_and_stun<const N: i16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(permanent) = crate::targets::object(g, item, 0) {
+        g.tap(permanent);
+        g.add_counters(permanent, CounterKind::Stun, N);
     }
     Ok(())
 }

@@ -8,14 +8,6 @@ fn this_enters_or_becomes_tapped(q: &dyn Query, source: ObjectId, event: &Event)
     this_enters(q, source, event).or_else(|| this_becomes_tapped(q, source, event))
 }
 
-/// "Tap up to one target creature and put a stun counter on it" (CR 122.1d): a creature already tapped still gets the counter.
-fn tap_and_stun(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    g.tap(creature);
-    g.add_counters(creature, CounterKind::Stun, 1);
-    Ok(())
-}
-
 /// "As an additional cost to cast this spell, behold a Merfolk and exile it" (CR 601.2b, 701.4a), exiled with the creature
 /// the spell becomes (CR 607.2q), which returns it when it leaves the battlefield. A spell that is countered leaves it exiled.
 pub static CARD: CardDef = CardDef {
@@ -23,7 +15,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             when(EventMask(EventMask::ZONE_CHANGE.0 | EventMask::TAPPED.0), this_enters_or_becomes_tapped),
-            tap_and_stun,
+            effects::tap_and_stun::<1>,
             "Whenever this creature enters or becomes tapped, tap up to one target creature and put a stun counter on it.",
         )
         .targets(&[up_to_one(targets::CREATURE.filter)]),

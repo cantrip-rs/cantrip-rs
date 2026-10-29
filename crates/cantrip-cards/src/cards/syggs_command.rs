@@ -27,7 +27,7 @@ static MODAL: ModalDef = modes(&[
         .targets(&[target(targets::permanent_of_subtype_you_control::<{ lands::sub(Subtype::Merfolk) }>)]),
     mode(team_lifelink, "Creatures target player controls gain lifelink until end of turn.").targets(&[targets::PLAYER]),
     mode(draw_one, "Target player draws a card.").targets(&[targets::PLAYER]),
-    mode(effects::tap_and_stun, "Tap target creature. Put a stun counter on it.").targets(&[targets::CREATURE]),
+    mode(effects::tap_and_stun::<1>, "Tap target creature. Put a stun counter on it.").targets(&[targets::CREATURE]),
 ])
 .choose(2, 2);
 
