@@ -20,20 +20,21 @@ fn candidates(g: &dyn Game, player: PlayerId) -> Vec<ObjectId> {
 /// "Blight N" as an effect resolves (CR 701.68a, 608.2): `player` chooses a creature they control that can have -1/-1 counters
 /// put on it (CR 101.2: Melira) and the N counters go on it, put by the player whose effect it is (CR 122.6a). Always asked,
 /// even when the choice is forced. A player who controls no such creature can't blight (CR 701.68b): nothing is asked and the
-/// answer is no. Whether they did, for "if you do". Blighted Blackthorn and Dream Seizer print it.
-pub fn in_effect(g: &mut dyn Game, player: PlayerId, source: ObjectId, n: u8) -> Result<bool, Suspend> {
+/// answer is None; otherwise the creature that was blighted, for "if you do" and "the blighted creature". Blighted Blackthorn,
+/// Dream Seizer and Champion of the Weird print it.
+pub fn in_effect(g: &mut dyn Game, player: PlayerId, source: ObjectId, n: u8) -> Result<Option<ObjectId>, Suspend> {
     let eligible = candidates(g, player);
     let chosen = crate::choose::cards_from_kind(g, player, source, Purpose::Blight, "creature", eligible.clone(), eligible, 1, false)?;
-    let Some(&creature) = chosen.first() else { return Ok(false) };
+    let Some(&creature) = chosen.first() else { return Ok(None) };
     g.add_counters(creature, CounterKind::MinusOne, i16::from(n));
-    Ok(true)
+    Ok(Some(creature))
 }
 
 /// "You may blight N" as an effect resolves: `in_effect` after `question` is answered yes. Not offered when the player has no
-/// creature to blight (CR 701.68b). Whether they did.
-pub fn may_in_effect(g: &mut dyn Game, player: PlayerId, source: ObjectId, n: u8, question: &'static Question) -> Result<bool, Suspend> {
+/// creature to blight (CR 701.68b). The creature that was blighted, if they did.
+pub fn may_in_effect(g: &mut dyn Game, player: PlayerId, source: ObjectId, n: u8, question: &'static Question) -> Result<Option<ObjectId>, Suspend> {
     if candidates(g, player).is_empty() || !crate::effects::ask_may(g, player, source, Purpose::Ask(question))? {
-        return Ok(false);
+        return Ok(None);
     }
     in_effect(g, player, source, n)
 }

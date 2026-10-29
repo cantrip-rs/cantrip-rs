@@ -15,7 +15,7 @@ pub static GOBLIN_1_1_BLACK_RED: CardDef = CardDef {
 
 /// "You may blight 1. If you do, create two 1/1 black and red Goblin creature tokens" (CR 701.68a, 111.1).
 fn blight_then_create_two_goblins(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if blight::may_in_effect(g, item.controller, item.object, 1, &BLIGHT_ONE)? {
+    if blight::may_in_effect(g, item.controller, item.object, 1, &BLIGHT_ONE)?.is_some() {
         tokens::create(g, item.controller, &GOBLIN_1_1_BLACK_RED, 2)?;
     }
     Ok(())

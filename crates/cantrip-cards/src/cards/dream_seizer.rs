@@ -6,7 +6,7 @@ const BLIGHT_ONE: Question = Question::new("BlightOne", "blight 1?", "", "Blight
 
 /// "You may blight 1. If you do, each opponent discards a card" (CR 701.68a, 701.9).
 fn blight_then_discard(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if blight::may_in_effect(g, item.controller, item.object, 1, &BLIGHT_ONE)? {
+    if blight::may_in_effect(g, item.controller, item.object, 1, &BLIGHT_ONE)?.is_some() {
         effects::each_opponent_discards_a_card(g, item)?;
     }
     Ok(())
