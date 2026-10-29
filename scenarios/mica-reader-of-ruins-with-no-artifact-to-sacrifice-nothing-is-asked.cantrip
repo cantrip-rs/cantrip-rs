@@ -1,0 +1,35 @@
+# Mica: with no artifact to sacrifice (Black Lotus went to its own ability, and a land is no artifact) the trigger asks nothing and
+# copies nothing: Bot1's turn-3 Bolt resolves alone.
+
+[Bot1 Deck]
+Black Lotus
+Mountain
+Mountain
+Mica, Reader of Ruins
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Mica, Reader of Ruins.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield = Mica, Reader of Ruins; Mountain; Mountain
+Stack.Count = 0

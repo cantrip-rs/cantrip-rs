@@ -1,0 +1,39 @@
+# Mica: the sacrifice is a choice ("you may"), and with none made there is no copy ("if you do"): Bot1 keeps Mox Pearl and only
+# the one Bolt resolves.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mica, Reader of Ruins
+Lightning Bolt
+Island x14
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mica, Reader of Ruins.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17
+Bot1.Battlefield = Mica, Reader of Ruins; Mox Ruby; Mox Jet; Mox Pearl
+Stack.Count = 0

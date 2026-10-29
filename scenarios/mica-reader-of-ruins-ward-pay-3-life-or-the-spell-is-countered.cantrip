@@ -1,0 +1,46 @@
+# Mica's ward (CR 702.21a): "Ward—Pay 3 life." Bot2 casts two Lightning Bolts at the 4/4 Mica. The first: Bot2 declines the cost, so the
+# Bolt is countered, Mica is untouched and Bot2 keeps 20 life. The second: Bot2 pays 3 life (20 to 17) and the Bolt resolves,
+# marking 3 damage on Mica.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mica, Reader of Ruins
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mica, Reader of Ruins.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mica, Reader of Ruins)
+Bot2.Decline
+Bot1.Pass
+? Bot1.Battlefield.Mica, Reader of Ruins.Damage = 0
+? Bot2.Life = 20
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mica, Reader of Ruins)
+Bot2.Accept
+Bot1.Pass
+? Bot1.Battlefield.Mica, Reader of Ruins.Damage = 3
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt
