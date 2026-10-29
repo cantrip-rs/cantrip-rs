@@ -1,0 +1,11 @@
+{
+  "name": "Action News Crew",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Citizen",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Vigilance\nChannel — {6}, Discard this card: Put a +1/+1 counter on each creature you control. Draw a card.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

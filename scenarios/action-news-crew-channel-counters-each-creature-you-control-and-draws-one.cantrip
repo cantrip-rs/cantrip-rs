@@ -1,0 +1,48 @@
+# Action News Crew: "Channel — {6}, Discard this card: Put a +1/+1 counter on each creature you control. Draw a card." On turn
+# 3 Bot1 has Black Lotus and two Mox Pearls: five mana, so the channel is refused; a third Mox Pearl makes exactly {6}, the pool
+# is empty after paying. The ability puts one counter on Bot1's Ornithopter and none on Bot2's, and draws exactly one card
+# (hand 3, library 11). The Crew is in the graveyard.
+
+[Bot1 Deck]
+Mox Pearl x3
+Black Lotus
+Action News Crew
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Action News Crew.Activate(Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Action News Crew.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Action News Crew; Black Lotus
+Bot1.Hand.Count = 3
+Bot1.Library.Count = 11
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
