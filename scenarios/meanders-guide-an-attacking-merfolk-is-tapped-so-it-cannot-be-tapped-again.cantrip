@@ -1,0 +1,50 @@
+# Meanders Guide beside an attacking Merfolk: Merfolk of the Pearl Trident attacks too, so it is tapped and is not an untapped
+# Merfolk to tap (no vigilance): nobody is asked, nothing returns, Ornithopter stays in the graveyard. 3 + 1 damage: Bot2 16.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Meanders Guide
+Merfolk of the Pearl Trident
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Meanders Guide.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Meanders Guide; Merfolk of the Pearl Trident)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Merfolk of the Pearl Trident.Tapped = true
+Bot1.Graveyard = Ornithopter
+Bot2.Life = 16
