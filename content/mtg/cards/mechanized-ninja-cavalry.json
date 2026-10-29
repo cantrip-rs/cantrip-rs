@@ -1,0 +1,8 @@
+{
+  "name": "Mechanized Ninja Cavalry",
+  "manaCost": "{1}{R/W}",
+  "type": "Artifact Creature — Robot Ninja",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, create a 1/1 colorless Robot artifact creature token."
+}

@@ -1,0 +1,34 @@
+# Mechanized Ninja Cavalry costs {1}{R/W}: Bot1 pays it with two Mox Pearls (the hybrid symbol takes white; the generic takes the other), and its enters trigger creates a
+# colorless 1/1 Robot artifact creature token. The Cavalry is a 1/1 Robot Ninja artifact creature, white and red.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mechanized Ninja Cavalry
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Mechanized Ninja Cavalry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mechanized Ninja Cavalry.Power = 1
+Bot1.Battlefield.Mechanized Ninja Cavalry.Subtypes = Ninja; Robot
+Bot1.Battlefield.Robot Token.Power = 1
+Bot1.Battlefield.Robot Token.Toughness = 1
+Bot1.Battlefield.Robot Token.Colors = (absent)
+Bot1.Battlefield.Robot Token.Subtypes = Robot
+Bot1.Battlefield.Robot Token.Types = Artifact; Creature
