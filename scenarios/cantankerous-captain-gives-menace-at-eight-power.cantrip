@@ -1,0 +1,56 @@
+# The combat trigger targets your creature; with total power reaching eight after +1/+0, it gains menace this turn.
+
+[Bot1 Deck]
+Black Lotus
+Cantankerous Captain
+Mox Ruby
+Forest x4
+Hill Giant
+Hill Giant
+Forest x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Cantankerous Captain.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Forest#4.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T11 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Cantankerous Captain)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Cantankerous Captain.Power = 3
+Bot1.Battlefield.Cantankerous Captain.Toughness = 3
+Bot1.Battlefield.Cantankerous Captain.Keywords = Menace

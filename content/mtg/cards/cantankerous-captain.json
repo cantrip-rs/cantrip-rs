@@ -1,0 +1,8 @@
+{
+  "name": "Cantankerous Captain",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Tellarite Officer",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "At the beginning of combat on your turn, target creature you control gets +1/+0 until end of turn. Then that creature gains menace until end of turn if creatures you control have total power 8 or greater. (It can't be blocked except by two or more creatures.)"
+}

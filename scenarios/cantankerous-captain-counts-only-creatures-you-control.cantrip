@@ -1,0 +1,47 @@
+# "Creatures you control": Bot1's creatures total five after the pump (Cantankerous Captain 2, Grizzly Bears 2, +1), and
+# Bot2's Hill Giant would make eight, but it is not Bot1's, so the target gains no menace.
+
+[Bot1 Deck]
+Black Lotus
+Cantankerous Captain
+Mox Ruby
+Forest
+Grizzly Bears
+Forest x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Cantankerous Captain.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Keywords = (absent)

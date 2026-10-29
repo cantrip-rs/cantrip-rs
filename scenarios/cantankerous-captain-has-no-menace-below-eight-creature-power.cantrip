@@ -1,0 +1,34 @@
+# Cantankerous Captain pumps a 0-power Ornithopter to 1/2. Total creature power is only three, so the target does not gain menace.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Cantankerous Captain
+Mox Ruby
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Cantankerous Captain.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T11 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Keywords = Flying

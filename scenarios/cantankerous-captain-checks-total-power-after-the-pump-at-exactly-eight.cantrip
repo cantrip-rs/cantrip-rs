@@ -1,0 +1,47 @@
+# "Then that creature gains menace ... if creatures you control have total power 8 or greater" is checked after the
+# +1/+0: Bot1's creatures total seven (Cantankerous Captain 2, Hill Giant 3, Grizzly Bears 2) until the trigger pumps
+# Grizzly Bears, and eight, exactly the threshold, is enough (CR 608.2c). Only the target gains menace.
+
+[Bot1 Deck]
+Black Lotus
+Cantankerous Captain
+Mox Ruby
+Black Lotus
+Hill Giant
+Grizzly Bears
+Forest x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Cantankerous Captain.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Keywords = Menace
+Bot1.Battlefield.Hill Giant.Keywords = (absent)
+Bot1.Battlefield.Cantankerous Captain.Keywords = (absent)

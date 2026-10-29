@@ -1,0 +1,40 @@
+# Thundering Broodwagon has power six but is not a creature without a crew. Cantankerous Captain targets a 0-power Ornithopter, so total creature power is three after the pump.
+
+[Bot1 Deck]
+Black Lotus
+Cantankerous Captain
+Black Lotus x2
+Thundering Broodwagon
+Ornithopter
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Cantankerous Captain.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thundering Broodwagon.Cast
+[T11 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Thundering Broodwagon.Types = Artifact
+Bot1.Battlefield.Thundering Broodwagon.Power = (absent)
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Keywords = Flying
