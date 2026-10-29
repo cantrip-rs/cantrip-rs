@@ -1,0 +1,42 @@
+# Wildgrowth Archaic ({2/G}{2/G}, 0/0 reach, trample): converge gives it a +1/+1 counter for each color of mana spent to cast it, and
+# "Whenever you cast a creature spell, that creature enters with X additional +1/+1 counters, where X is the number of colors of
+# mana spent to cast it." Bot1 casts it with {G}{G} (one color, so a 1/1; it does not trigger on its own cast), then Grizzly Bears
+# with {G} and {R} (two colors, two additional counters): the Bears are a 4/4.
+
+[Bot1 Deck]
+Wildgrowth Archaic
+Grizzly Bears
+Mox Emerald x3
+Mox Ruby
+Mox Pearl
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Wildgrowth Archaic.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wildgrowth Archaic.Power = 1
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Wildgrowth Archaic.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Wildgrowth Archaic.Power = 1
+Bot1.Battlefield.Wildgrowth Archaic.Keywords = Reach; Trample
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Battlefield.Grizzly Bears.Toughness = 4
