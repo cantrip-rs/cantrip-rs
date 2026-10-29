@@ -1,0 +1,62 @@
+# Biblioplex Tomekeeper, "choose up to one": on turn 3 its first mode targets Bot2's Ornithopter, a creature with no prepare spell, so
+# it stays unprepared (CR 722.3a); on turn 5 the second Tomekeeper's second mode targets that same, unprepared Ornithopter and
+# changes nothing (CR 722.3b); on turn 7 the third chooses no mode at all (CR 700.2) and the trigger leaves the stack with no target.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Biblioplex Tomekeeper
+Biblioplex Tomekeeper
+Biblioplex Tomekeeper
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Biblioplex Tomekeeper.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Prepared = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Biblioplex Tomekeeper.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Prepared = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Biblioplex Tomekeeper.Cast
+! Bot1.Modes(1; 2)
+Bot1.Modes()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Count = 7
+Bot2.Battlefield.Ornithopter.Prepared = (absent)

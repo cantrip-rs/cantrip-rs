@@ -1,0 +1,8 @@
+{
+  "name": "Biblioplex Tomekeeper",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Construct",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "When this creature enters, choose up to one —\n• Target creature becomes prepared. (Only creatures with prepare spells can become prepared.)\n• Target creature becomes unprepared."
+}

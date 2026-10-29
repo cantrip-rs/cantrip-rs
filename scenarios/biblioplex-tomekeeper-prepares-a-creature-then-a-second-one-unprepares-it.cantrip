@@ -1,0 +1,55 @@
+# Biblioplex Tomekeeper: "When this creature enters, choose up to one - Target creature becomes prepared; Target creature becomes
+# unprepared" (CR 722.3a-b). The first Tomekeeper's first mode refuses a Mox Jet (not a creature) as its target and prepares Bloodline
+# Recollector, a copy of Ancestral Craving waiting in exile. The second Tomekeeper's second mode unprepares it: the copy leaves exile.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Bloodline Recollector
+Biblioplex Tomekeeper
+Biblioplex Tomekeeper
+Island x12
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Hand.Bloodline Recollector.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Biblioplex Tomekeeper.Cast
+Bot1.Modes(1)
+! Bot1.Target(Bot1.Battlefield.Mox Jet#1)
+Bot1.Target(Bot1.Battlefield.Bloodline Recollector)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bloodline Recollector.Prepared = true
+? Exile = Ancestral Craving
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Hand.Biblioplex Tomekeeper.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot1.Battlefield.Bloodline Recollector)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Bloodline Recollector.Prepared = (absent)
+Exile.Count = 0
+Bot1.Battlefield.Count = 8
