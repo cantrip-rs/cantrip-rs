@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects::plus_one_counter_on_this;
+use cantrip_mechanics::effects::{self, plus_one_counter_on_this};
 use cantrip_mechanics::statics::itself;
 use cantrip_mechanics::targets;
 use cantrip_mechanics::triggers::{THIS_DIES, YOU_GAIN_LIFE};
@@ -17,23 +17,10 @@ fn flying_and_vigilance(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
     chars.keywords = chars.keywords.with(Keyword::Flying).with(Keyword::Vigilance);
 }
 
-/// "When this creature dies, put its counters on target creature you control": as many of each kind as it had as it died,
-/// read from its last existence on the battlefield (CR 603.10a, 608.2h); the counters are put on, not moved (the rulings),
-/// every kind of them, -1/-1 counters too.
-fn pass_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    // A lone target that is no longer legal stops the whole ability (CR 608.2b), so this always finds one.
-    let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    let counters = g.obj(item.object).counter_array();
-    // Every kind together, one event (CR 608.2, 122.6).
-    let puts: Vec<(ObjectId, CounterKind, i16)> = CounterKind::ALL.into_iter().map(|kind| (creature, kind, counters[kind as usize])).collect();
-    g.add_counters_together(&puts);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(YOU_GAIN_LIFE, plus_one_counter_on_this,"Whenever you gain life, put a +1/+1 counter on this creature."),
-        triggered(THIS_DIES, pass_counters, "When this creature dies, put its counters on target creature you control.")
+        triggered(THIS_DIES, effects::put_its_counters_on_target, "When this creature dies, put its counters on target creature you control.")
             .targets(&[targets::CREATURE_YOU_CONTROL]),
     ],
     statics: &[static_ability(
