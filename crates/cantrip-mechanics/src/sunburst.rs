@@ -9,7 +9,8 @@
 
 use cantrip_api::*;
 
-/// How many colors of mana were spent to cast `object` (CR 702.44a).
+/// How many colors of mana were spent to cast `object` (CR 702.44a, and converge, CR 207.2c: Prismatic Ending, Together as One,
+/// Archaic's Agony and Magmablood Archaic print it).
 pub fn colors_spent(g: &dyn Game, object: ObjectId) -> i16 {
     let spent = g.obj(object).spent;
     [Mana::W, Mana::U, Mana::B, Mana::R, Mana::G].iter().filter(|&&m| spent.get(m) > 0).count() as i16
