@@ -1,0 +1,6 @@
+{
+  "name": "Silverquill Charm",
+  "manaCost": "{W}{B}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Put two +1/+1 counters on target creature.\n• Exile target creature with power 2 or less.\n• Each opponent loses 3 life and you gain 3 life."
+}

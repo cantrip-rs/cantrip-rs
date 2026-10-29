@@ -1,0 +1,47 @@
+# Silverquill Charm, second mode: exile target creature with power 2 or less (CR 406.2). Hill Giant (power 3) is refused as the
+# target; Ornithopter (power 0) is exiled, not put into the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Silverquill Charm
+Plains x4
+Plains x13
+
+[Bot2 Deck]
+Black Lotus
+Hill Giant
+Ornithopter
+Mountain x4
+Mountain x13
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill Charm.Cast
+Bot1.Modes(2)
+! Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Ornithopter
+Bot2.Battlefield = Hill Giant; Mountain
