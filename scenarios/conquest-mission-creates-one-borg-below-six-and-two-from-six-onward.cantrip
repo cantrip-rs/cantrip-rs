@@ -1,0 +1,47 @@
+# Seven of Bot1's nontoken artifacts trigger it after it enters: one Borg token for each of the first five, two at six
+# and at seven quest counters (the counter goes on first), nine in all. Bot2's artifact does not count, and the Borg
+# tokens are not nontoken artifacts (CR 603.6a, 122.1, 608.2c).
+
+[Bot1 Deck]
+Forest
+Forest
+Plains
+Conquest Mission
+Black Lotus x3
+Black Lotus x8
+
+[Bot2 Deck]
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Conquest Mission.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+[T7 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T9 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Conquest Mission.Counters.Quest = 7
+Bot1.Battlefield.Borg Token#9.Power = 1
+Bot1.Battlefield.Borg Token#10 = (absent)
+Bot1.Battlefield.Borg Token#1.Types = Artifact; Creature
+Bot1.Battlefield.Borg Token#1.Subtypes = Borg
+Bot1.Battlefield.Borg Token#1.Toughness = 1
+Bot1.Battlefield.Borg Token#1.Token = True
+Bot1.Battlefield.Borg Token#1.Colors = (absent)

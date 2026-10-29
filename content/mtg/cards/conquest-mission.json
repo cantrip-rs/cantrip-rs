@@ -1,0 +1,6 @@
+{
+  "name": "Conquest Mission",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "Whenever a nontoken artifact you control enters, put a quest counter on this enchantment. Create a 1/1 colorless Borg artifact creature token. If this enchantment has six or more quest counters on it, create two of those tokens instead."
+}
