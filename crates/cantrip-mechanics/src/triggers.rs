@@ -918,6 +918,16 @@ pub fn player_casts_noncreature_spell(q: &dyn Query, _: ObjectId, event: &Event)
     }
 }
 
+/// "Whenever you cast a spell with mana value `N` or greater" (CR 603.2, 601.2i, 202.3): a spell cast, not copied (CR 707.10), by
+/// this ability's controller, with the mana value it has on the stack - the X chosen for it counts (CR 202.3e). Spider Manifestation
+/// and Enraged Flamecaster (4) print it.
+pub fn you_cast_a_spell_with_mana_value_at_least<const N: u32>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, .. } if *player == me.controller && q.mana_value(*spell) >= N => Fired::PLAIN,
+        _ => None,
+    }
+}
+
 /// "Whenever an opponent casts a spell with mana value `N` or less" (CR 601.2i, 603.2, 202.3): a spell cast (not a copy, CR 707.10,
 /// and not an ability) by a player other than the source's controller, with the mana value it has on the stack, where an {X} in
 /// its cost counts as the X chosen for it (CR 202.3e). The ability is about the player who cast it (`StackItem::subject`, "that
