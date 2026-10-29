@@ -1,0 +1,38 @@
+# Dal R'El's landfall offers green as well as red, and only those: blue is not on offer. It adds the selected green
+# mana (CR 106.1b, 608.2d).
+[Bot1 Deck]
+Dal R'El, Augment Orphan
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dal R'El, Augment Orphan.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Mana =
+Bot1.Hand.Forest.Play
+! Bot1.Colors(Blue)
+Bot1.Colors(Green)
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Mana = {G}

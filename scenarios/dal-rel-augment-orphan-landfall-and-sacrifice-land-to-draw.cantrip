@@ -1,0 +1,45 @@
+# A landfall trigger adds a chosen red mana; on the next turn three mana and a sacrificed land pay for Dal's draw ability.
+# Dal R'El, Augment Orphan {1}{R}{G}: Legendary Creature — Human Mutant Rogue
+#   Landfall — Whenever a land you control enters, add {R} or {G}.
+#   {3}, Sacrifice a land: Draw a card.
+# The sacrifice is of a land: a Mox is refused (CR 118.3, 701.21a).
+
+[Bot1 Deck]
+Dal R'El, Augment Orphan
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dal R'El, Augment Orphan.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Colors(Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Dal R'El, Augment Orphan.Activate
+! Bot1.Choose(Mox Pearl)
+Bot1.Choose(Mountain)
+Bot1.Pass
+? Bot1.Mana = {G}
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Mountain
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Dal R'El, Augment Orphan.Power = 3

@@ -1,0 +1,8 @@
+{
+  "name": "Dal R'El, Augment Orphan",
+  "manaCost": "{1}{R}{G}",
+  "type": "Legendary Creature — Human Mutant Rogue",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Landfall — Whenever a land you control enters, add {R} or {G}.\n{3}, Sacrifice a land: Draw a card."
+}
