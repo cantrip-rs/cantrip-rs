@@ -29,6 +29,16 @@ pub fn other_creatures_you_control(q: &dyn LayerQuery, source: ObjectId, affecte
     affected != source && your_creatures(q, source, affected, so_far)
 }
 
+/// "Attacking creatures you control" (CR 506.4, 613.1f): re-asked on every pass, so a creature put onto the battlefield
+/// attacking has what it gives and one removed from combat, or combat ending, loses it. Bow of Nylea and Raphael, the
+/// Nightwatcher use it as `StaticDef::affects`.
+pub fn attacking_creatures_you_control(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId, so_far: &Chars) -> bool {
+    let state = view.state();
+    so_far.is(CardType::Creature)
+        && state.obj(affected).controller == state.obj(source).controller
+        && state.attackers.iter().any(|a| a.id == affected)
+}
+
 /// "Creatures" / "all creatures" (CR 613.1f): every creature on the battlefield, whoever controls it, judged on what the
 /// earlier layers made the object. Intruder Alarm and Lavaleaper ("All creatures have haste") use it as
 /// `StaticDef::affects`.
