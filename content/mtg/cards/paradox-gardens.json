@@ -1,0 +1,5 @@
+{
+  "name": "Paradox Gardens",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {G} or {U}.\n{2}{G}{U}, {T}: Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)"
+}
