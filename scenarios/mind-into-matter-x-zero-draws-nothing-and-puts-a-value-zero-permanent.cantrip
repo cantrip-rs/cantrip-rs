@@ -1,0 +1,31 @@
+# Mind into Matter, X = 0 ({G}{U}): draws no cards, and "mana value 0 or less" takes a Mox (0) but not a one-drop or more
+# (CR 202.3): the Mox Jet in hand enters tapped; Paradox Surveyor (3) is refused.
+
+[Bot1 Deck]
+Mind into Matter
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Paradox Surveyor
+Lightning Bolt
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind into Matter.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Paradox Surveyor)
+Bot1.Choose(Mox Jet)
+
+[Expect]
+Bot1.Hand = Island; Lightning Bolt; Paradox Surveyor
+Bot1.Battlefield.Mox Jet.Tapped = true
+Bot1.Library.Count = 20
