@@ -1,0 +1,56 @@
+# Hard-Won Jitte {1}{R}, Equip {2}: "Equipped creature has double strike." One mana is short of the equip cost (refused); two
+# pay it exactly. The equipped Memnite (1/1) hits Bot2 for 1 in each damage step, 2 in all; the unequipped Ornithopter has no
+# keyword but flying. Moving the Jitte to the Ornithopter takes the double strike off the Memnite.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Memnite
+Hard-Won Jitte
+Ornithopter
+Mountain
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hard-Won Jitte.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Hard-Won Jitte.Activate(Ability: Equip; Memnite; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Battlefield.Hard-Won Jitte.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = DoubleStrike
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Hard-Won Jitte.Activate(Ability: Equip; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hard-Won Jitte.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Keywords = DoubleStrike; Flying
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot2.Life = 18
