@@ -1,0 +1,51 @@
+# Raphael, Tough Turtle: "Alliance — Whenever another creature you control enters, Raphael deals 1 damage to target opponent."
+# On turn 1 Bot1 casts Raphael for {1}{R} (his own entering is not "another": Bot2 stays at 20), then two Ornithopters, each
+# pinging Bot2 (19, then 18). Bot2's Ornithopter entering on turn 2 deals nothing ("you control"), and Bot1's Mox Ruby on
+# turn 3 is not a creature.
+
+[Bot1 Deck]
+Mox Ruby x2
+Raphael, Tough Turtle
+Ornithopter
+Ornithopter
+Mox Ruby
+Mountain x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Raphael, Tough Turtle.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 18
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
