@@ -1,0 +1,56 @@
+# Equip {3} (CR 702.6a), sorcery speed: the Nunchaku enters attached to the first Grizzly Bears (Bot2 has no creature, so there is nothing to fight), then on turn 5
+# Bot1 pays Equip {3} (Sol Ring and a Forest) to move it onto the second Bears: the first is back to 2/2 without trample and the second is
+# 3/3 with trample.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Grizzly Bears
+Grizzly Bears
+Sol Ring
+Novel Nunchaku
+Forest
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Novel Nunchaku.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Novel Nunchaku.Activate(Grizzly Bears#2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Novel Nunchaku.AttachedTo = Grizzly Bears
+Bot1.Battlefield.Grizzly Bears#2.Power = 3
+Bot1.Battlefield.Grizzly Bears#2.Keywords = Trample
+Bot1.Battlefield.Grizzly Bears#1.Power = 2
