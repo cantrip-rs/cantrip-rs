@@ -1,0 +1,8 @@
+{
+  "name": "Excalbian Gamemaster",
+  "manaCost": "{5}{W}",
+  "type": "Creature — Excalbian",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Strange new worlds — When this creature enters, create X 1/1 red Officer creature tokens, where X is the number of differently named lands you control.\nWhenever this creature or another creature you control dies, put a +1/+1 counter on target creature you control."
+}

@@ -1,0 +1,73 @@
+# CR 701.7, 111.3: creates three red 1/1 Officer tokens for three distinct names among four lands; the duplicate Plains and Bot2's Mountain do not increase X.
+[Bot1 Deck]
+Excalbian Gamemaster
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Plains
+Mox Opal
+Gleemox
+Island
+Forest
+Plains
+Mountain x10
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot2.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Hand.Mox Opal.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot1.Pass
+Bot1.Hand.Excalbian Gamemaster.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Opal.Activate(Color: White)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 15
+? Bot1.Battlefield.Officer Token#1.Colors = Red
+? Bot1.Battlefield.Officer Token#1.Power = 1
+? Bot1.Battlefield.Officer Token#1.Toughness = 1
+? Bot1.Battlefield.Officer Token#1.Subtypes = Officer
+? Bot1.Battlefield.Officer Token#1.Types.Count = 1
+
+[Expect]
+Bot2.Battlefield.Mountain.Types = Land
+Bot1.Battlefield.Count = 15
+Bot1.Battlefield.Officer Token#1.Colors = Red
+Bot1.Battlefield.Officer Token#1.Power = 1
+Bot1.Battlefield.Officer Token#1.Toughness = 1
+Bot1.Battlefield.Officer Token#1.Subtypes = Officer

@@ -1,0 +1,67 @@
+# CR 603.10a, 115.1d: Lightning Bolt kills your Ornithopter; the trigger refuses the opponent's Ornithopter and targets your Gamemaster.
+[Bot1 Deck]
+Excalbian Gamemaster
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Gleemox
+Mountain
+Ornithopter
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Excalbian Gamemaster.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Excalbian Gamemaster)
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Types.Count = 2
+Bot1.Battlefield.Excalbian Gamemaster.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Battlefield.Ornithopter = (absent)
