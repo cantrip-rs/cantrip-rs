@@ -1,0 +1,32 @@
+# Sneak {U} (CR 702.190a): Bot1 attacks with an Ornithopter on turn 3, Bot2 does not block, and Donatello's Technique, a sorcery, is cast in the declare blockers step
+# for {U} (Mox Sapphire), returning the Ornithopter to hand. Bot1 draws two. It dealt no damage. Not offered in the main phase, with Mox Sapphire untapped.
+# Hand: 7 - Sapphire - Ornithopter = 5; turn 3 draw = 6; - Technique = 5; + Ornithopter = 6; + 2 drawn = 8.
+
+[Bot1 Deck]
+Mox Sapphire
+Ornithopter
+Donatello's Technique
+Island x4
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Donatello's Technique.Cast(Ability: Sneak)
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Donatello's Technique.Cast(Ability: Sneak)
+Bot1.Choose(Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield = Mox Sapphire
+Bot1.Graveyard = Donatello's Technique
+Bot1.Hand.Count = 8
+Bot1.Mana =
