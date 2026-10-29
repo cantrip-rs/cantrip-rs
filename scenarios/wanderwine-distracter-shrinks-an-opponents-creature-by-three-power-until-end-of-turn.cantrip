@@ -1,0 +1,55 @@
+# Wanderwine Distracter {3}{U} (four Moxen, turn 1): "Whenever this creature becomes tapped, target creature an opponent controls gets -3/-0
+# until end of turn" (CR 603.2, 611.2a). Attacking on turn 3 taps it. Bot1's own Ornithopter is not a legal target (refused); Bot2's
+# Ornithopter is, and becomes -3/2 - the toughness untouched - while its Memnite stays 1/1. On turn 4 (CR 514.2) it is 0/2 again.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Wanderwine Distracter
+Ornithopter
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Memnite
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wanderwine Distracter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Wanderwine Distracter > Bot2)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Power = -3
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Wanderwine Distracter.Tapped = true

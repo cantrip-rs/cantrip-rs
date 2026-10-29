@@ -1,0 +1,8 @@
+{
+  "name": "Wanderwine Distracter",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Merfolk Wizard",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Whenever this creature becomes tapped, target creature an opponent controls gets -3/-0 until end of turn."
+}
