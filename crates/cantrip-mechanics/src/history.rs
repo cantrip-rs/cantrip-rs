@@ -86,7 +86,7 @@ pub fn void(q: &dyn Query) -> bool {
         || crate::warp::spell_was_warped_this_turn(q)
 }
 
-/// Cards (not tokens) that left `player`'s graveyard this turn (Gau, Feral Youth).
+/// Cards (not tokens) that left `player`'s graveyard this turn (Gau, Feral Youth; Wilt in the Heat).
 pub fn cards_left_graveyard_this_turn(q: &dyn Query, player: PlayerId) -> usize {
     q.history()
         .select(EventQuery::kind(EventMask::ZONE_CHANGE).from(ZoneKind::Graveyard).this_turn())
