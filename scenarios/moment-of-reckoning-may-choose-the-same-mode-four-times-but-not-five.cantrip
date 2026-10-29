@@ -1,0 +1,58 @@
+# Moment of Reckoning: "Choose up to four. You may choose the same mode more than once" (CR 700.2d). Bot1 chooses the destroy mode four
+# times, each with a target of its own, and all of Bot2's artifacts are destroyed. A fifth choice is refused: four is the most.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Gleemox
+Mox Ruby
+Plains
+Mox Sapphire
+Moment of Reckoning
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Mox Emerald
+Mox Pearl
+Mox Jet
+Mountain x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Moment of Reckoning.Cast
+! Bot1.Modes(1; 1; 1; 1; 1)
+Bot1.Modes(1; 1; 1; 1)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Mox Emerald)
+Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Mox Jet; Mox Pearl; Mox Emerald; Ornithopter
+Bot1.Graveyard = Moment of Reckoning

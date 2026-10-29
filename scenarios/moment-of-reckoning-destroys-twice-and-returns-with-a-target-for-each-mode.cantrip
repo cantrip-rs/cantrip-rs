@@ -1,0 +1,58 @@
+# Moment of Reckoning: choose three of up to four modes, the destroy mode twice (CR 700.2d), each with its own target -- Bot2's
+# Ornithopter and Mox Emerald -- and the return mode on Black Lotus, which Bot1 sacrificed on turn 1. Both permanents are destroyed and
+# the Lotus is back on the battlefield.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Gleemox
+Mox Ruby
+Plains
+Plains
+Mox Sapphire
+Moment of Reckoning
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Mox Emerald
+Mountain
+Mountain x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Moment of Reckoning.Cast
+Bot1.Modes(1; 1; 2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Mox Emerald)
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Mox Emerald; Ornithopter
+Bot1.Battlefield.Black Lotus.ManaValue = 0
+Bot1.Graveyard = Moment of Reckoning
