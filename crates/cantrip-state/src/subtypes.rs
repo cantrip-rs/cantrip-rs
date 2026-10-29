@@ -8,7 +8,7 @@ use crate::vocab::{CardType, Mana, TypeSet};
 
 pub const SUBTYPE_WORDS: usize = 8;
 
-/// In order of `name()` up to Zubera, then each subtype added since (Borg, Klingon, Andorian, Caitian, Gorn, Vulcan): a subtype's number (`as u16`) is recorded (the AI's
+/// In order of `name()` up to Zubera, then each subtype added since (Borg, Klingon, Andorian, Caitian, Gorn, Vulcan, then the Star Trek set's Aenar to Xindi): a subtype's number (`as u16`) is recorded (the AI's
 /// observations and answers), so a new one is appended at the end, never inserted.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
 #[repr(u16)]
@@ -483,10 +483,42 @@ pub enum Subtype {
     Caitian,
     Gorn,
     Vulcan,
+    Aenar,
+    Android,
+    Bajoran,
+    Betazoid,
+    Bolian,
+    Cardassian,
+    Denobulan,
+    ElAurian,
+    Excalbian,
+    Ferengi,
+    Hirogen,
+    Illyrian,
+    Kelpien,
+    Kwejian,
+    Lanthanite,
+    Medusan,
+    Nakuhl,
+    Ocampa,
+    Officer,
+    Orion,
+    Q,
+    Romulan,
+    Talosian,
+    Tamarian,
+    Tellarite,
+    Tholian,
+    Tosk,
+    Tribble,
+    Trill,
+    VauNAkat,
+    Vorta,
+    Xindi,
 }
 
 impl Subtype {
-    pub const ALL: [Subtype; 470] = [
+    pub const ALL: [Subtype; 502] = [
         Subtype::Adventure,
         Subtype::Advisor,
         Subtype::Aetherborn,
@@ -957,6 +989,38 @@ impl Subtype {
         Subtype::Caitian,
         Subtype::Gorn,
         Subtype::Vulcan,
+        Subtype::Aenar,
+        Subtype::Android,
+        Subtype::Bajoran,
+        Subtype::Betazoid,
+        Subtype::Bolian,
+        Subtype::Cardassian,
+        Subtype::Denobulan,
+        Subtype::ElAurian,
+        Subtype::Excalbian,
+        Subtype::Ferengi,
+        Subtype::Hirogen,
+        Subtype::Illyrian,
+        Subtype::Kelpien,
+        Subtype::Kwejian,
+        Subtype::Lanthanite,
+        Subtype::Medusan,
+        Subtype::Nakuhl,
+        Subtype::Ocampa,
+        Subtype::Officer,
+        Subtype::Orion,
+        Subtype::Q,
+        Subtype::Romulan,
+        Subtype::Talosian,
+        Subtype::Tamarian,
+        Subtype::Tellarite,
+        Subtype::Tholian,
+        Subtype::Tosk,
+        Subtype::Tribble,
+        Subtype::Trill,
+        Subtype::VauNAkat,
+        Subtype::Vorta,
+        Subtype::Xindi,
     ];
 
     pub const fn name(self) -> &'static str {
@@ -1431,6 +1495,38 @@ impl Subtype {
             Subtype::Zariel => "Zariel",
             Subtype::Zombie => "Zombie",
             Subtype::Zubera => "Zubera",
+            Subtype::Aenar => "Aenar",
+            Subtype::Android => "Android",
+            Subtype::Bajoran => "Bajoran",
+            Subtype::Betazoid => "Betazoid",
+            Subtype::Bolian => "Bolian",
+            Subtype::Cardassian => "Cardassian",
+            Subtype::Denobulan => "Denobulan",
+            Subtype::ElAurian => "El-Aurian",
+            Subtype::Excalbian => "Excalbian",
+            Subtype::Ferengi => "Ferengi",
+            Subtype::Hirogen => "Hirogen",
+            Subtype::Illyrian => "Illyrian",
+            Subtype::Kelpien => "Kelpien",
+            Subtype::Kwejian => "Kwejian",
+            Subtype::Lanthanite => "Lanthanite",
+            Subtype::Medusan => "Medusan",
+            Subtype::Nakuhl => "Na'kuhl",
+            Subtype::Ocampa => "Ocampa",
+            Subtype::Officer => "Officer",
+            Subtype::Orion => "Orion",
+            Subtype::Q => "Q",
+            Subtype::Romulan => "Romulan",
+            Subtype::Talosian => "Talosian",
+            Subtype::Tamarian => "Tamarian",
+            Subtype::Tellarite => "Tellarite",
+            Subtype::Tholian => "Tholian",
+            Subtype::Tosk => "Tosk",
+            Subtype::Tribble => "Tribble",
+            Subtype::Trill => "Trill",
+            Subtype::VauNAkat => "Vau-N'Akat",
+            Subtype::Vorta => "Vorta",
+            Subtype::Xindi => "Xindi",
         }
     }
 
@@ -1465,16 +1561,13 @@ impl Subtype {
 
     /// A creature type (CR 205.3m), as opposed to a land, artifact, enchantment, planeswalker or spell type.
     pub fn is_creature_type(self) -> bool {
-        matches!(
-            self,
-            Subtype::Advisor | Subtype::Aetherborn | Subtype::Alien | Subtype::Ally | Subtype::Angel | Subtype::Antelope | Subtype::Ape | Subtype::Archer | Subtype::Archon | Subtype::Armadillo | Subtype::Army | Subtype::Artificer | Subtype::Assassin | Subtype::AssemblyWorker | Subtype::Astartes | Subtype::Atog | Subtype::Aurochs | Subtype::Avatar | Subtype::Azra | Subtype::Badger | Subtype::Balloon | Subtype::Barbarian | Subtype::Bard | Subtype::Basilisk | Subtype::Bat | Subtype::Bear | Subtype::Beast | Subtype::Beaver | Subtype::Beeble | Subtype::Beholder | Subtype::Berserker | Subtype::Bird | Subtype::Bison | Subtype::Blinkmoth | Subtype::Boar | Subtype::Borg | Subtype::Bringer | Subtype::Brushwagg | Subtype::Camarid | Subtype::Camel | Subtype::Capybara | Subtype::Caribou | Subtype::Carrier | Subtype::Cat | Subtype::Centaur | Subtype::Child | Subtype::Chimera | Subtype::Citizen | Subtype::Cleric | Subtype::Clown | Subtype::Cockatrice | Subtype::Construct | Subtype::Coward | Subtype::Coyote | Subtype::Crab | Subtype::Crocodile | Subtype::Custodes | Subtype::Cyberman | Subtype::Cyclops | Subtype::Ctan | Subtype::Dalek | Subtype::Dauthi | Subtype::Demigod | Subtype::Demon | Subtype::Deserter | Subtype::Detective | Subtype::Devil | Subtype::Dinosaur | Subtype::Djinn | Subtype::Doctor | Subtype::Dog | Subtype::Dragon | Subtype::Drake | Subtype::Dreadnought | Subtype::Drix | Subtype::Drone | Subtype::Druid | Subtype::Dryad | Subtype::Dwarf | Subtype::Echidna | Subtype::Efreet | Subtype::Egg | Subtype::Elder | Subtype::Eldrazi | Subtype::Elemental | Subtype::Elephant | Subtype::Elf | Subtype::Elk | Subtype::Employee | Subtype::Eternal | Subtype::Eye | Subtype::Faerie | Subtype::Ferret | Subtype::Fish | Subtype::Flagbearer | Subtype::Fox | Subtype::Fractal | Subtype::Frog | Subtype::Fungus | Subtype::Gamer | Subtype::Gamma | Subtype::Gargoyle | Subtype::Germ | Subtype::Giant | Subtype::Giraffe | Subtype::Gith | Subtype::Glimmer | Subtype::Gnoll | Subtype::Gnome | Subtype::Goat | Subtype::Goblin | Subtype::God | Subtype::Golem | Subtype::Gorgon | Subtype::Graveborn | Subtype::Gremlin | Subtype::Griffin | Subtype::Guest | Subtype::Hag | Subtype::Halfling | Subtype::Hamster | Subtype::Harpy | Subtype::Hedgehog | Subtype::Hellion | Subtype::Hero | Subtype::Hippo | Subtype::Hippogriff | Subtype::Homarid | Subtype::Homunculus | Subtype::Horror | Subtype::Horse | Subtype::Human | Subtype::Hydra | Subtype::Hyena | Subtype::Illusion | Subtype::Imp | Subtype::Incarnation | Subtype::Inhuman | Subtype::Inkling | Subtype::Inquisitor | Subtype::Insect | Subtype::Jackal | Subtype::Jellyfish | Subtype::Juggernaut | Subtype::Kangaroo | Subtype::Kavu | Subtype::Kirin | Subtype::Kithkin | Subtype::Klingon | Subtype::Knight | Subtype::Kobold | Subtype::Kor | Subtype::Kraken | Subtype::Kree | Subtype::Lamia | Subtype::Lammasu | Subtype::Leech | Subtype::Lemur | Subtype::Leviathan | Subtype::Lhurgoyf | Subtype::Licid | Subtype::Lizard | Subtype::Llama | Subtype::Lobster | Subtype::Manticore | Subtype::Masticore | Subtype::Mercenary | Subtype::Merfolk | Subtype::Metathran | Subtype::Minion | Subtype::Minotaur | Subtype::Mite | Subtype::Mole | Subtype::Monger | Subtype::Mongoose | Subtype::Monk | Subtype::Monkey | Subtype::Moogle | Subtype::Moonfolk | Subtype::Mount | Subtype::Mouse | Subtype::Mutant | Subtype::Myr | Subtype::Mystic | Subtype::Nautilus | Subtype::Necron | Subtype::Nephilim | Subtype::Nightmare | Subtype::Nightstalker | Subtype::Ninja | Subtype::Noble | Subtype::Noggle | Subtype::Nomad | Subtype::Nymph | Subtype::Octopus | Subtype::Ogre | Subtype::Ooze | Subtype::Orb | Subtype::Orc | Subtype::Orgg | Subtype::Otter | Subtype::Ouphe | Subtype::Ox | Subtype::Oyster | Subtype::Pangolin | Subtype::Peasant | Subtype::Pegasus | Subtype::Pentavite | Subtype::Performer | Subtype::Pest | Subtype::Phelddagrif | Subtype::Phoenix | Subtype::Phyrexian | Subtype::Pilot | Subtype::Pincher | Subtype::Pirate | Subtype::Plant | Subtype::Platypus | Subtype::Porcupine | Subtype::Possum | Subtype::Praetor | Subtype::Primarch | Subtype::Prism | Subtype::Processor | Subtype::Qu | Subtype::Rabbit | Subtype::Raccoon | Subtype::Ranger | Subtype::Rat | Subtype::Rebel | Subtype::Reflection | Subtype::Rhino | Subtype::Rigger | Subtype::Robot | Subtype::Rogue | Subtype::Sable | Subtype::Salamander | Subtype::Samurai | Subtype::Sand | Subtype::Saproling | Subtype::Satyr | Subtype::Scarecrow | Subtype::Scientist | Subtype::Scion | Subtype::Scorpion | Subtype::Scout | Subtype::Sculpture | Subtype::Seal | Subtype::Serf | Subtype::Serpent | Subtype::Servo | Subtype::Shade | Subtype::Shaman | Subtype::Shapeshifter | Subtype::Shark | Subtype::Sheep | Subtype::Shiar | Subtype::Siren | Subtype::Skeleton | Subtype::Skrull | Subtype::Skunk | Subtype::Slith | Subtype::Sliver | Subtype::Sloth | Subtype::Slug | Subtype::Snail | Subtype::Snake | Subtype::Soldier | Subtype::Soltari | Subtype::Sorcerer | Subtype::Spawn | Subtype::Specter | Subtype::Spellshaper | Subtype::Sphinx | Subtype::Spider | Subtype::Spike | Subtype::Spirit | Subtype::Splinter | Subtype::Sponge | Subtype::Spy | Subtype::Squid | Subtype::Squirrel | Subtype::Starfish | Subtype::Surrakar | Subtype::Survivor | Subtype::Symbiote | Subtype::Synth | Subtype::Tentacle | Subtype::Tetravite | Subtype::Thalakos | Subtype::Thopter | Subtype::Thrull | Subtype::Tiefling | Subtype::TimeLord | Subtype::Toy | Subtype::Treefolk | Subtype::Trilobite | Subtype::Triskelavite | Subtype::Troll | Subtype::Turtle | Subtype::Tyranid | Subtype::Unicorn | Subtype::Utrom | Subtype::Vampire | Subtype::Varmint | Subtype::Vedalken | Subtype::Villain | Subtype::Volver | Subtype::Wall | Subtype::Walrus | Subtype::Warlock | Subtype::Warrior | Subtype::Weasel | Subtype::Weird | Subtype::Werewolf | Subtype::Whale | Subtype::Wizard | Subtype::Wolf | Subtype::Wolverine | Subtype::Wombat | Subtype::Worm | Subtype::Wraith | Subtype::Wurm | Subtype::Yeti | Subtype::Zombie | Subtype::Zubera | Subtype::Andorian | Subtype::Caitian | Subtype::Gorn | Subtype::Vulcan
-        )
+        self.card_types().has(CardType::Creature)
     }
 
     /// Every creature type (CR 205.3m), in the order the removed C# engine offered them for "choose a creature type",
-    /// and after them each one added since (Borg, Klingon, Andorian, Caitian, Gorn, Vulcan). The order is load-bearing: a creature-type question's answer is its
+    /// and after them each one added since (Borg, Klingon, Andorian, Caitian, Gorn, Vulcan, then the Star Trek set's Aenar to Xindi). The order is load-bearing: a creature-type question's answer is its
     /// position here, so a new type is appended, never inserted.
-    pub const CREATURE_TYPES: [Subtype; 330] = [
+    pub const CREATURE_TYPES: [Subtype; 362] = [
         Subtype::Advisor,
         Subtype::Aetherborn,
         Subtype::Alien,
@@ -1805,6 +1898,38 @@ impl Subtype {
         Subtype::Caitian,
         Subtype::Gorn,
         Subtype::Vulcan,
+        Subtype::Aenar,
+        Subtype::Android,
+        Subtype::Bajoran,
+        Subtype::Betazoid,
+        Subtype::Bolian,
+        Subtype::Cardassian,
+        Subtype::Denobulan,
+        Subtype::ElAurian,
+        Subtype::Excalbian,
+        Subtype::Ferengi,
+        Subtype::Hirogen,
+        Subtype::Illyrian,
+        Subtype::Kelpien,
+        Subtype::Kwejian,
+        Subtype::Lanthanite,
+        Subtype::Medusan,
+        Subtype::Nakuhl,
+        Subtype::Ocampa,
+        Subtype::Officer,
+        Subtype::Orion,
+        Subtype::Q,
+        Subtype::Romulan,
+        Subtype::Talosian,
+        Subtype::Tamarian,
+        Subtype::Tellarite,
+        Subtype::Tholian,
+        Subtype::Tosk,
+        Subtype::Tribble,
+        Subtype::Trill,
+        Subtype::VauNAkat,
+        Subtype::Vorta,
+        Subtype::Xindi,
     ];
 
     pub fn named(name: &str) -> Option<Subtype> {
@@ -1869,6 +1994,61 @@ mod card_type_tests {
             assert_eq!(n as u16, id);
             assert_eq!(Subtype::ALL[id as usize], n);
             assert_eq!(Subtype::CREATURE_TYPES[id as usize - 140], n);
+        }
+    }
+
+    /// The Star Trek set's creature types are appended after Vulcan, in this order: the 470 subtypes and 330 creature types
+    /// there were before them hash, in order, as they did then, and each new one has the number and place it was given.
+    #[test]
+    fn star_trek_creature_types_are_appended_after_vulcan_in_order() {
+        let fnv = |names: &[Subtype]| {
+            names.iter().flat_map(|s| s.name().bytes().chain([b'\n'])).fold(0xcbf2_9ce4_8422_2325u64, |h, b| (h ^ b as u64).wrapping_mul(0x0100_0000_01b3))
+        };
+        assert_eq!(fnv(&Subtype::ALL[..470]), 0x1ddf_acbd_8d1c_5223);
+        assert_eq!(fnv(&Subtype::CREATURE_TYPES[..330]), 0xd957_368f_f6a4_d6a7);
+        let appended = [
+            (Subtype::Aenar, "Aenar"),
+            (Subtype::Android, "Android"),
+            (Subtype::Bajoran, "Bajoran"),
+            (Subtype::Betazoid, "Betazoid"),
+            (Subtype::Bolian, "Bolian"),
+            (Subtype::Cardassian, "Cardassian"),
+            (Subtype::Denobulan, "Denobulan"),
+            (Subtype::ElAurian, "El-Aurian"),
+            (Subtype::Excalbian, "Excalbian"),
+            (Subtype::Ferengi, "Ferengi"),
+            (Subtype::Hirogen, "Hirogen"),
+            (Subtype::Illyrian, "Illyrian"),
+            (Subtype::Kelpien, "Kelpien"),
+            (Subtype::Kwejian, "Kwejian"),
+            (Subtype::Lanthanite, "Lanthanite"),
+            (Subtype::Medusan, "Medusan"),
+            (Subtype::Nakuhl, "Na'kuhl"),
+            (Subtype::Ocampa, "Ocampa"),
+            (Subtype::Officer, "Officer"),
+            (Subtype::Orion, "Orion"),
+            (Subtype::Q, "Q"),
+            (Subtype::Romulan, "Romulan"),
+            (Subtype::Talosian, "Talosian"),
+            (Subtype::Tamarian, "Tamarian"),
+            (Subtype::Tellarite, "Tellarite"),
+            (Subtype::Tholian, "Tholian"),
+            (Subtype::Tosk, "Tosk"),
+            (Subtype::Tribble, "Tribble"),
+            (Subtype::Trill, "Trill"),
+            (Subtype::VauNAkat, "Vau-N'Akat"),
+            (Subtype::Vorta, "Vorta"),
+            (Subtype::Xindi, "Xindi"),
+        ];
+        assert_eq!(Subtype::ALL.len(), 470 + appended.len());
+        assert_eq!(Subtype::CREATURE_TYPES.len(), 330 + appended.len());
+        for (i, (n, name)) in appended.into_iter().enumerate() {
+            assert_eq!(Subtype::named(name), Some(n));
+            assert_eq!(n.name(), name);
+            assert!(n.is_creature_type());
+            assert_eq!(n as u16 as usize, 470 + i, "{name}");
+            assert_eq!(Subtype::ALL[470 + i], n);
+            assert_eq!(Subtype::CREATURE_TYPES[330 + i], n);
         }
     }
 
