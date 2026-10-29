@@ -6,8 +6,7 @@ use cantrip_oracle as oracle;
 /// gain 1 life.'" Each opponent chooses their own card, and the Pest is made whether or not anyone had a card to discard.
 fn discard_then_pest(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::each_opponent_discards_a_card(g, item)?;
-    tokens::create(g, item.controller, &tokens::PEST_THAT_GAINS_LIFE_ON_ATTACK, 1)?;
-    Ok(())
+    tokens::create_a_pest_that_gains_life_on_attack(g, item)
 }
 
 pub static CARD: CardDef = CardDef { spell: spell(&[], discard_then_pest), ..oracle::SEND_IN_THE_PEST };
