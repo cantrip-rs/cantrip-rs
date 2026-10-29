@@ -1,0 +1,60 @@
+# Old Hob, Alleycat Blues: "{1}{W}: Target attacking creature token gains indestructible until end of turn." Turn 1: the
+# hasty Mutant attacks and Bot1 pays {1}{W}: a Mutant that is not attacking yet (at the beginning of combat) is refused, so
+# is Old Hob himself when he attacks on turn 3 (a creature but no token). The Mutant survives "destroy it at the beginning
+# of the next end step" (indestructible until end of turn) and is still there on turn 2. The destruction does not trigger
+# again: at turn 3's end step the second Mutant is destroyed and the first one stays.
+
+[Bot1 Deck]
+Mox Ruby x2
+Black Lotus
+Old Hob, Alleycat Blues
+Mox Pearl
+Plains
+Plains
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Old Hob, Alleycat Blues.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Mutant Token > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Old Hob, Alleycat Blues.Activate(Mutant Token)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot2.Life = 18
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Mutant Token.Power = 2
+? Bot1.Battlefield.Count = 6
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Old Hob, Alleycat Blues > Bot2; Mutant Token#2 > Bot2)
+! Bot1.Battlefield.Old Hob, Alleycat Blues.Activate(Old Hob, Alleycat Blues)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Mutant Token.Power = 2
+Bot1.Battlefield.Mutant Token#2 = (absent)
+Bot1.Battlefield.Count = 7

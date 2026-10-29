@@ -1,0 +1,40 @@
+# Old Hob, Alleycat Blues: "At the beginning of combat on your turn, create a 2/2 red Mutant creature token. It gains haste
+# until end of turn. Destroy it at the beginning of the next end step." Turn 1: Old Hob for {4}{R}; at the beginning of
+# combat the Mutant comes and, with haste, attacks (Bot2 at 18). At the end step it is destroyed; Old Hob stays. Bot2's own
+# combat on turn 2 makes nothing ("on your turn").
+
+[Bot1 Deck]
+Mox Ruby x2
+Black Lotus
+Old Hob, Alleycat Blues
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Old Hob, Alleycat Blues.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+[T1 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Count = 4
+Bot1.Attack(Mutant Token > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 18
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Mutant Token = (absent)
+[T2 Bot2.DeclareAttackers]
+
+[Expect]
+Bot1.Battlefield.Mutant Token = (absent)
+Bot1.Battlefield.Old Hob, Alleycat Blues.Power = 4
+Bot2.Life = 18
