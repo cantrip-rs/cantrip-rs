@@ -1,0 +1,53 @@
+# Return to the Sewers: "Target creature's owner puts it on their choice of the top or bottom of their library. You create a
+# Mutagen token." Two Sewers, the second on top, both aimed at Bot2's Llanowar Elves. The second resolves first: Bot2 chooses
+# the bottom (Decline), so the Elves is not drawn again in turn four, and Bot1 creates a Mutagen token. The first Sewers'
+# only target is gone, so it does nothing (CR 608.2b) and makes no token: one Mutagen token.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Jet
+Return to the Sewers
+Return to the Sewers
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Return to the Sewers.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Return to the Sewers.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+? Bot1.Battlefield = Mox Jet; Mox Sapphire; Mutagen Token
+? Bot2.Battlefield = Forest
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield = Mox Jet; Mox Sapphire; Mutagen Token
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Hand.Count = 7
+Bot2.Library.Llanowar Elves.Power = 1
+Bot1.Graveyard = Return to the Sewers; Return to the Sewers; Black Lotus; Black Lotus
