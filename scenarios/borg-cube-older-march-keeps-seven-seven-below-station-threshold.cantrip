@@ -1,0 +1,67 @@
+# An older March animates Cube as 7/7 at eleven counters. The station 6/6 box is still inactive (CR 721.2b, 613.7).
+[Bot1 Deck]
+Forest
+Forest
+Island
+Forest
+Swamp
+Quakestrider Ceratops
+March of the Machines
+Borg Cube
+Toxic Deluge
+Plains x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Quakestrider Ceratops.Cast
+[T13 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.March of the Machines.Cast
+[T15 Bot1.Main1]
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Borg Cube.Cast
+[T17 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Toxic Deluge.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Borg Cube.Activate(Ability: Station)
+Bot1.Choose(Quakestrider Ceratops)
+[T18 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Borg Cube.Counters.Charge = 11
+Bot1.Battlefield.Borg Cube.Power = 7
+Bot1.Battlefield.Borg Cube.Toughness = 7

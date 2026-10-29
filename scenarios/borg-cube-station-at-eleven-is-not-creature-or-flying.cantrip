@@ -1,0 +1,55 @@
+# At eleven charge counters the Spacecraft remains a noncreature artifact; the 12+ type and flying striations are inactive (CR 721.2a-b).
+# Toxic Deluge lowers Quakestrider to 11 power before stationing; Scorn Effigy remains an artifact creature to test Cube's flying filter.
+
+[Bot1 Deck]
+Black Lotus x3
+Quakestrider Ceratops
+Scorn Effigy
+Borg Cube
+Plains
+Black Lotus x2
+Toxic Deluge
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Quakestrider Ceratops.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Scorn Effigy.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T9 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Toxic Deluge.Cast(X: 1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Borg Cube.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Battlefield.Borg Cube.Activate(Ability: Station)
+Bot1.Choose(Quakestrider Ceratops)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Borg Cube.Counters.Charge = 11
+Bot1.Battlefield.Borg Cube.Types = Artifact
+Bot1.Battlefield.Borg Cube.Power = (absent)
+Bot1.Battlefield.Borg Cube.Keywords = (absent)
+Bot1.Battlefield.Scorn Effigy.Keywords = (absent)

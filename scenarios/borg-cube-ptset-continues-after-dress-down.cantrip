@@ -1,0 +1,63 @@
+# Quakestrider stations Cube to 12, then Dress Down removes Cube's abilities. The type-changing and base-P/T parts are
+# one effect across layers, so Cube remains a 6/6 artifact creature even after losing the source ability (CR 613.6, 721.2b).
+
+[Bot1 Deck]
+Black Lotus x2
+Quakestrider Ceratops
+Black Lotus x2
+Memnite
+Borg Cube
+Dress Down
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Memnite
+Gingerbrute
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Quakestrider Ceratops.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Gingerbrute.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Borg Cube.Cast
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Gingerbrute)
+Bot1.Pass
+Bot1.Battlefield.Borg Cube.Activate(Ability: Station)
+Bot1.Choose(Quakestrider Ceratops)
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Dress Down.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Borg Cube.Counters.Charge = 12
+Bot1.Battlefield.Borg Cube.Types = Artifact; Creature
+Bot1.Battlefield.Borg Cube.Power = 6
+Bot1.Battlefield.Borg Cube.Toughness = 6
+Bot1.Battlefield.Borg Cube.Keywords = (absent)
+Bot1.Battlefield.Dress Down.Types = Enchantment

@@ -1,0 +1,70 @@
+# Two own artifact creatures reduce Borg Cube's cost by exactly two; Bot2's artifact creatures do not count (CR 702.41a).
+# The entering trigger exiles one target creature controlled by an opponent and links it for the later assimilation trigger
+# (CR 607.2a). Disenchant removes the source later; the linked card remains exiled independently (CR 607.2a).
+
+[Bot1 Deck]
+Borg Cube
+Ornithopter
+Gingerbrute
+Plains
+Swamp
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Black Lotus
+Ornithopter
+Gingerbrute
+Black Lotus
+Disenchant
+Island
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Gingerbrute.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Gingerbrute.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Borg Cube.Cast
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Gingerbrute)
+Bot1.Pass
+? Bot1.Mana =
+[T10 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Borg Cube)
+Bot2.Pass
+
+[Expect]
+Exile = Gingerbrute
+Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Battlefield.Count = 7
+Bot2.Battlefield.Gingerbrute = (absent)
+Bot1.Graveyard = Borg Cube

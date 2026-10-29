@@ -1,0 +1,7 @@
+{
+  "name": "Borg Cube",
+  "manaCost": "{5}{W}{B}",
+  "type": "Artifact — Spacecraft",
+  "stationPt": "6/6",
+  "oracleText": "Affinity for artifact creatures\nWhenever this Spacecraft enters or attacks, assimilate a creature card exiled with it. If you can't, exile up to one target creature. (To assimilate a card, put it onto the battlefield under your control with a +1/+1 counter. It's a Borg artifact creature and loses all other creature types.)\nStation\n12+ | Artifact creatures you control have flying."
+}

@@ -1,0 +1,67 @@
+# Containment Priest replaces assimilation with exile; Cube's fallback still exiles a new target on each attack (CR 607.2a, 614.12).
+
+[Bot1 Deck]
+Black Lotus x2
+Quakestrider Ceratops
+Black Lotus x2
+Ornithopter
+Borg Cube
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Ornithopter
+Containment Priest
+Gingerbrute
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Quakestrider Ceratops.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Containment Priest.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Pass
+Bot2.Hand.Gingerbrute.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Borg Cube.Cast
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Gingerbrute)
+Bot1.Pass
+Bot1.Battlefield.Borg Cube.Activate(Ability: Station)
+Bot1.Choose(Quakestrider Ceratops)
+Bot1.Pass
+[T5 Bot1.Attackers]
+Bot1.Attack(Borg Cube > Bot2)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+[T7 Bot1.Attackers]
+Bot1.Attack(Borg Cube > Bot2)
+Bot1.Target(Bot2.Battlefield.Containment Priest)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Exile = Gingerbrute; Ornithopter; Containment Priest
+Bot1.Battlefield.Borg Cube.Counters.Charge = 12
+Bot1.Battlefield.Borg Cube.Types = Artifact; Creature

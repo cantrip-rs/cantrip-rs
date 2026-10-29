@@ -1,0 +1,44 @@
+# No creatures exist to target, so Borg Cube's optional fallback exile does nothing (CR 115.1d, 115.5).
+
+[Bot1 Deck]
+Borg Cube
+Plains
+Swamp
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Borg Cube.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Borg Cube.Types = Artifact
+Bot1.Battlefield.Count = 8
