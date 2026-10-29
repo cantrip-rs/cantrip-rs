@@ -496,6 +496,12 @@ pub fn spell_you_cast(view: &dyn LayerQuery, source: ObjectId, affected: ObjectI
         && s.stack.iter().any(|i| i.kind == StackKind::Spell && i.object == affected && i.controller == s.obj(source).controller)
 }
 
+/// "Instant and sorcery spells you cast" (CR 601.2i, 707.10): `spell_you_cast` whose characteristics, as it is on the stack, are
+/// an instant's or a sorcery's. Ral, Crackling Wit's emblem and Prismari, the Inspiration grant storm to such spells.
+pub fn instant_or_sorcery_spell_you_cast(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId, chars: &Chars) -> bool {
+    (chars.is(CardType::Instant) || chars.is(CardType::Sorcery)) && spell_you_cast(view, source, affected)
+}
+
 /// "Activated abilities of sources with the chosen name can't be activated unless they're mana abilities." (CR 602.5, 605.1a) as a
 /// `CardDef::activation_rules` entry: a source is anything with the name (`library::object_has_name`), in any zone it has the
 /// ability in. It binds every player, the permanent's controller too; with no name chosen it stops nothing. Petrified Hamlet (a

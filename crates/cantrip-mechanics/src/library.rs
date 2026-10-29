@@ -559,6 +559,14 @@ pub fn reveal_top_take_one_rest_to_graveyard(
     top_take_one_rest_to_graveyard(g, player, source, count, true, 0, wanted)
 }
 
+/// "Look at the top two cards of your library. Put one of them into your hand and the other on the bottom of your library"
+/// (CR 401.2, 401.4): `look_at_top` for exactly one card, taken whatever it is, the other placed on the bottom; a library of
+/// one card puts it into the hand and one of none does nothing (CR 609.3). Sleight of Hand and Stress Dream print it.
+pub fn look_at_top_two_take_one_other_on_bottom(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<(), Suspend> {
+    look_at_top(g, player, source, 2, (1, 1), false, |_| true, Rest::BottomChosen)?;
+    Ok(())
+}
+
 /// "Look at the top `count` cards of your library. Put one of those cards into your hand and the rest into your graveyard"
 /// (CR 701.20a, 400.3): the card is not revealed and taking it is not optional, so a library with any card shows the player
 /// what it has and one is taken (CR 609.3 for a short library); the rest go together, in the order their owner arranges them

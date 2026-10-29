@@ -24,17 +24,11 @@ fn draw_three_and_emblem(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
 
 // --- The emblem ---------------------------------------------------------------------------------------------------
 
-/// "Instant and sorcery spells you cast" (CR 601.2i, 707.10): a spell on the stack that was cast (not a copy of one)
-/// by the emblem's owner, and is an instant or a sorcery as it is on the stack.
-fn instant_or_sorcery_spell_you_cast(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId, chars: &Chars) -> bool {
-    (chars.is(CardType::Instant) || chars.is(CardType::Sorcery)) && statics::spell_you_cast(view, source, affected)
-}
-
 pub static EMBLEM: CardDef = CardDef {
     name: "Ral, Crackling Wit emblem",
     has_cost: false,
     delayed: &[storm::trigger("Storm (When you cast this spell, copy it for each spell cast before it this turn.)")],
-    statics: &[static_ability(Layer::Ability, instant_or_sorcery_spell_you_cast, statics::grant_delayed_ability, "Instant and sorcery spells you cast have storm.")
+    statics: &[static_ability(Layer::Ability, statics::instant_or_sorcery_spell_you_cast, statics::grant_delayed_ability, "Instant and sorcery spells you cast have storm.")
         .everywhere()],
     text: "Instant and sorcery spells you cast have storm.",
     ..CardDef::BLANK
