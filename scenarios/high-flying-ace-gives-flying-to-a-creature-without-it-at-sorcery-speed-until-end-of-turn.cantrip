@@ -1,0 +1,54 @@
+# High-Flying Ace: "{3}{W}: Target creature without flying gains flying until end of turn. Activate only as a sorcery." On
+# Bot2's turn 2 (not Bot1's) Bot1 has the mana for it but cannot activate. On turn 3 the Ace itself, which has flying, is not
+# a legal target; Bot2's Action News Crew is, and the cost is exactly four mana: the pool is empty after paying. The Crew
+# keeps vigilance and has flying that turn only.
+
+[Bot1 Deck]
+Mox Pearl x4
+High-Flying Ace
+Black Lotus
+Plains
+Island x13
+
+[Bot2 Deck]
+Mox Pearl x2
+Action News Crew
+Plains x4
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.High-Flying Ace.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Action News Crew.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot1.Battlefield.High-Flying Ace.Activate(Bot2.Battlefield.Action News Crew)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.High-Flying Ace.Activate(Bot1.Battlefield.High-Flying Ace)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.High-Flying Ace.Activate(Bot2.Battlefield.Action News Crew)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Action News Crew.Keywords = Flying; Vigilance
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Action News Crew.Keywords = Vigilance
+
+[Expect]
+Bot1.Battlefield.High-Flying Ace.Keywords = Flying
+Bot2.Battlefield.Action News Crew.Keywords = Vigilance
