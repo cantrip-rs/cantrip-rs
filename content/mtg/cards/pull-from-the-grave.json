@@ -1,0 +1,6 @@
+{
+  "name": "Pull from the Grave",
+  "manaCost": "{2}{B}",
+  "type": "Sorcery",
+  "oracleText": "Return up to two target creature cards from your graveyard to your hand. You gain 2 life."
+}

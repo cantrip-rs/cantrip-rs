@@ -1,0 +1,66 @@
+# Pull from the Grave: "up to two target creature cards" (CR 115.1d) is no more than two: with three Banemakers in the graveyard, naming all three is refused, and choosing two returns those and leaves the third.
+
+[Bot1 Deck]
+Burrog Banemaker
+Burrog Banemaker
+Burrog Banemaker
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Pull from the Grave
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker#1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker#1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Pull from the Grave.Cast
+! Bot1.Target(Bot1.Graveyard.Burrog Banemaker#1; Bot1.Graveyard.Burrog Banemaker#2; Bot1.Graveyard.Burrog Banemaker#3)
+Bot1.Target(Bot1.Graveyard.Burrog Banemaker#1; Bot1.Graveyard.Burrog Banemaker#2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Graveyard.Count = 2
+Bot1.Hand.Burrog Banemaker#1.Power = 1
+Bot1.Hand.Burrog Banemaker#2.Power = 1
