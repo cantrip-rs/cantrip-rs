@@ -1,0 +1,30 @@
+# Wander Off: "Exile target creature." (CR 701.13a) Bot1 exiles Bot2's Ornithopter with {3}{B} from Mox Jet and Black Lotus on
+# Bot2's turn; the exiled card is in exile, not the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Wander Off
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Wander Off.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Exile = Ornithopter
+Bot2.Graveyard =
+Bot2.Battlefield.Count = 0
+Bot1.Graveyard = Wander Off; Black Lotus
