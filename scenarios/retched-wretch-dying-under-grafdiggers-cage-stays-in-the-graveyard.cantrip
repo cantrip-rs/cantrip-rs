@@ -1,0 +1,42 @@
+# Retched Wretch under Grafdigger's Cage: "return it to the battlefield under its owner's control and it loses all abilities".
+# The Wretch card in the graveyard is a creature card, which the Cage keeps from entering (CR 101.2, 101.3), so it stays there
+# and "it" - the permanent returned - does not exist to lose abilities. Blight Rot's four counters kill the 4/2 on turn 3 (it had
+# -1/-1 counters, so the trigger is true). Mox Emerald pays the Cage, Mox Jet, Mox Pearl and Mox Ruby the Wretch, and Black
+# Lotus Blight Rot as {B}{B}{B}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Grafdigger's Cage
+Retched Wretch
+Blight Rot
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grafdigger's Cage.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Retched Wretch.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Blight Rot.Cast(Retched Wretch)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Retched Wretch.Power = 4
+Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Count = 5

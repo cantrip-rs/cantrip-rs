@@ -1,0 +1,51 @@
+# Retched Wretch, {2}{B} 4/2: "When this creature dies, if it had a -1/-1 counter on it, return it to the battlefield under
+# its owner's control and it loses all abilities." (CR 603.4, 603.10a, 400.7). Blight Rot puts four -1/-1 counters on it: it
+# dies as a -4/-2... and returns as a new 4/2 with no counters. A second Blight Rot kills it again, and as it lost its ability
+# it stays in the graveyard (had the ability stayed, it would return a second time). Black Lotus pays the first Blight Rot
+# as {B}{B}{B}, Mox Jet, Mox Pearl and Mox Ruby the second.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Retched Wretch
+Blight Rot
+Blight Rot
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Retched Wretch.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Blight Rot.Cast(Retched Wretch)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Retched Wretch.Power = 4
+? Bot1.Battlefield.Retched Wretch.Toughness = 2
+? Bot1.Graveyard.Count = 2
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Blight Rot.Cast(Retched Wretch)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Retched Wretch.Power = 4
+Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Count = 3
