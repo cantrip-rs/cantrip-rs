@@ -1,0 +1,54 @@
+# The Cloning of Shredder ({4}{B}{B} Saga). I: Bot1 exiles Rat King, Verminister (a legendary Rat Avatar) from its graveyard and
+# creates a token copy of it that isn't legendary and is a Mutant in addition (CR 707.9b). II and III each copy a card exiled
+# with the Saga (CR 607.2a) - the same card, still in exile - so Bot1 ends with three Rat King tokens and the card in exile. Legendary copies would die to the legend rule (CR 704.5j), so three of them standing shows each is not; the Saga is sacrificed after III (CR 714.4). The Rat Token is Rat King's own disappear trigger on the Lotus.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+Entomb
+The Cloning of Shredder
+Plains
+Rat King, Verminister
+Plains x13
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Rat King, Verminister)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.The Cloning of Shredder.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+? Exile = Rat King, Verminister
+? Bot1.Battlefield.Rat King, Verminister.Token = true
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Rat King, Verminister.Subtypes = Avatar; Mutant; Rat
+? Bot1.Battlefield.The Cloning of Shredder.Counters.Lore = 1
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 7
+? Exile = Rat King, Verminister
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 7
+? Bot1.Graveyard = The Cloning of Shredder; Black Lotus; Entomb
+? Exile = Rat King, Verminister

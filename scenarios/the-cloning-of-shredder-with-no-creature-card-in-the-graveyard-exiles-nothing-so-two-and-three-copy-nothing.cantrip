@@ -1,0 +1,41 @@
+# The Cloning of Shredder with no creature card in Bot1's graveyard: chapter I has no target and is removed (CR 603.3d), nothing
+# is exiled with the Saga, so II and III have no card to copy and do nothing (CR 608.2b). Bot1 ends with only its Moxes.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Black Lotus
+The Cloning of Shredder
+Plains x15
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.The Cloning of Shredder.Cast
+Bot1.Pass
+Bot1.Pass
+? Stack.Count = 0
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 4
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 3
+? Bot1.Graveyard = The Cloning of Shredder; Black Lotus
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Graveyard = The Cloning of Shredder; Black Lotus

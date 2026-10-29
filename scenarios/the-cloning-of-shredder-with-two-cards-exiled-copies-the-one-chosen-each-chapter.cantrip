@@ -1,0 +1,81 @@
+# The Cloning of Shredder with two cards exiled with it (CR 607.2a). Chapter I on turn 3 exiles Rat King, Verminister (Entombed on
+# turn 1) and makes a token copy of it; Garnet then attacks (a 3/3 from the +1/+1 counter) and takes the Saga's lore counter off
+# (CR 714.2b). Bot2 Lightning Bolts Garnet on turn 4, so when the Saga gets a lore counter again on turn 5 chapter I triggers a second
+# time and exiles Garnet, the only creature card left in the graveyard, with a token copy of her. Chapters II (turn 7) and III (turn
+# 9) each copy a card exiled with the Saga, chosen as they resolve (CR 608.2d) from the two: Bot1 picks Garnet for II and Rat King for
+# III, so the copy is not always the first card exiled.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Garnet, Princess of Alexandria
+Entomb
+Black Lotus
+The Cloning of Shredder
+Rat King, Verminister
+Plains x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Garnet, Princess of Alexandria.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Rat King, Verminister)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.The Cloning of Shredder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Rat King, Verminister
+? Bot1.Battlefield.Rat King, Verminister.Token = true
+? Bot1.Battlefield.The Cloning of Shredder.Counters.Lore = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Garnet, Princess of Alexandria > Bot2)
+Bot1.Accept
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Garnet, Princess of Alexandria.Counters.PlusOnePlusOne = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Garnet, Princess of Alexandria)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Garnet, Princess of Alexandria; Black Lotus; Entomb
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Exile = Garnet, Princess of Alexandria; Rat King, Verminister
+? Bot1.Battlefield.The Cloning of Shredder.Counters.Lore = 1
+[T7 Bot1.Main1]
+Bot1.Choose(Garnet, Princess of Alexandria)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Garnet, Princess of Alexandria#2.Token = true
+? Bot1.Battlefield.Garnet, Princess of Alexandria#2.Subtypes = Cleric; Human; Mutant; Noble
+[T9 Bot1.Main1]
+Bot1.Choose(Rat King, Verminister)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Garnet, Princess of Alexandria; Rat King, Verminister
+Bot1.Graveyard = The Cloning of Shredder; Black Lotus; Entomb
+Bot1.Battlefield = Garnet, Princess of Alexandria; Garnet, Princess of Alexandria; Mox Emerald; Mox Jet; Mox Pearl; Rat King, Verminister; Rat King, Verminister; Rat Token
