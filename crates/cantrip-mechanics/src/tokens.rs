@@ -444,6 +444,13 @@ pub fn create(g: &mut dyn Game, controller: PlayerId, def: &'static CardDef, cou
     g.create_tokens(def, controller, count, false)
 }
 
+/// "Create a Mutagen token" (CR 111.10): as a triggered or spell's effect. Crustacean Commando, Ray Fillet, Michelangelo, Weirdness
+/// to 11 and Michelangelo, Mutant BFF print it.
+pub fn create_mutagen(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &MUTAGEN, 1)?;
+    Ok(())
+}
+
 /// Creates `count` tokens of `def` under `controller`, a token whose characteristics a rule defines and no printed text:
 /// a predefined token (CR 111.10: a Treasure, a Clue, a Heartwood), a keyword's own (job select's Hero, recruit's Human
 /// Soldier, a gift's Fish), or one created by name, whose characteristics are the Oracle card's of that name (CR 111.11:
