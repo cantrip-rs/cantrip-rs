@@ -1,0 +1,74 @@
+# Cleveland Booker, Empath: the fifth landfall creates a red-green Worm token that cannot block (CR 509.1b), and
+# the {8} ability gives Cleveland and the token +2/+0 until end of turn. Bot1 casts Cleveland on turn 7 using four
+# untapped lands, the Worm enters on turn 9, and eight lands pay for the pump on turn 15.
+
+[Bot1 Deck]
+Forest
+Forest
+Mountain
+Forest
+Forest
+Cleveland Booker, Empath
+Forest x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Mana = {R}{G}{G}{G}
+Bot1.Hand.Cleveland Booker, Empath.Cast(Spend: G, G, G, R)
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T10 Bot2.Main1]
+Bot2.Attack(Llanowar Elves > Bot1)
+! Bot1.Block(Worm Token > Llanowar Elves)
+[T11 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T15 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T17 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Cleveland Booker, Empath.Activate(Spend: G, G, G, G, G, G, G, R)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cleveland Booker, Empath.Power = 4
+? Bot1.Battlefield.Worm Token#1.Power = 4
+? Bot2.Battlefield.Llanowar Elves.Power = 1
+
+[Expect]
+Turn = 17
+Bot1.Battlefield = Cleveland Booker, Empath; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Mountain; Worm Token; Worm Token; Worm Token; Worm Token
+Bot1.Battlefield.Cleveland Booker, Empath.Toughness = 2
+Bot1.Battlefield.Worm Token#1.Toughness = 2
+Bot1.Life = 19
+Bot1.Battlefield.Worm Token#1.Colors = Green; Red
+Bot1.Battlefield.Worm Token#1.Subtypes = Worm
+Bot1.Battlefield.Worm Token#1.Token = true

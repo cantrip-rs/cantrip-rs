@@ -1,0 +1,8 @@
+{
+  "name": "Cleveland Booker, Empath",
+  "manaCost": "{2}{R/G}{R/G}",
+  "type": "Legendary Creature — Kwejian Rogue",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Landfall — Whenever a land you control enters, create a 2/2 red and green Worm creature token with \"This token can't block.\"\n{8}: Creatures you control get +2/+0 until end of turn."
+}
