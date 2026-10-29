@@ -1,0 +1,28 @@
+# Old-Growth Educator (4/4 reach, vigilance) with no life gained this turn: its infusion trigger resolves and puts nothing on it
+# (CR 608.2c).
+
+[Dice]
+1; 1; 1; 1; 1; 1
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Old-Growth Educator
+Island x4
+Island x25
+[Bot2 Deck]
+Island x32
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Old-Growth Educator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Old-Growth Educator.Power = 4
+Bot1.Battlefield.Old-Growth Educator.Toughness = 4

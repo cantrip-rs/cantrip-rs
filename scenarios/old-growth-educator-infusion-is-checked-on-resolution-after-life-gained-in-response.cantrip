@@ -1,0 +1,42 @@
+# Infusion is not an intervening "if": Old-Growth Educator's enters trigger goes on the stack although no life has been gained.
+# In response Bot1 casts Healing Salve to gain 3 life (23), and as the trigger resolves life has been gained this turn, so the
+# Educator gets two +1/+1 counters (6/6).
+
+[Dice]
+1; 1; 1; 1; 1; 1
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Old-Growth Educator
+Healing Salve
+Island
+Island
+Island x25
+[Bot2 Deck]
+Island x32
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Old-Growth Educator.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Old-Growth Educator.Power = 6
+Bot1.Battlefield.Old-Growth Educator.Toughness = 6

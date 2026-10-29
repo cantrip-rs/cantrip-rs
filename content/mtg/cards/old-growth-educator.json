@@ -1,0 +1,12 @@
+{
+  "name": "Old-Growth Educator",
+  "manaCost": "{2}{B}{G}",
+  "type": "Creature — Treefolk Druid",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach, vigilance\nInfusion — When this creature enters, put two +1/+1 counters on it if you gained life this turn.",
+  "keywords": [
+    "Reach",
+    "Vigilance"
+  ]
+}
