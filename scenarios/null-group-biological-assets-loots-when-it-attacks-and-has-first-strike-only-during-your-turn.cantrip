@@ -1,0 +1,44 @@
+# Null Group Biological Assets: "During your turn, this creature has first strike." and "Whenever this creature attacks, you
+# may discard a card. If you do, draw a card." Turn 1: cast for {2}{R}, a first striker on Bot1's own turn. Turn 2 (Bot2's):
+# no first strike. Turn 3: it attacks, and Bot1 discards Lightning Bolt to draw (the hand stays at 3, the Bolt in the
+# graveyard); Bot2 takes 3 and is at 17.
+
+[Bot1 Deck]
+Mox Ruby x3
+Null Group Biological Assets
+Lightning Bolt
+Mountain
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Null Group Biological Assets.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Null Group Biological Assets.Keywords = FirstStrike
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Null Group Biological Assets.Keywords = (absent)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Null Group Biological Assets.Keywords = FirstStrike
+? Bot1.Hand.Count = 4
+Bot1.Hand.Mountain.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Null Group Biological Assets > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard.Count = 1
+Bot2.Life = 17

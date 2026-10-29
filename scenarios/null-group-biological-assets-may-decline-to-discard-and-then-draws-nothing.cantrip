@@ -1,0 +1,37 @@
+# Null Group Biological Assets: "Whenever this creature attacks, you may discard a card. If you do, draw a card." Declining
+# the discard when it attacks on turn 3 keeps the hand at 3 with Lightning Bolt in it, and draws nothing.
+
+[Bot1 Deck]
+Mox Ruby x3
+Null Group Biological Assets
+Lightning Bolt
+Mountain
+Mountain
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Null Group Biological Assets.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Null Group Biological Assets > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Graveyard.Count = 0
+Bot2.Life = 17

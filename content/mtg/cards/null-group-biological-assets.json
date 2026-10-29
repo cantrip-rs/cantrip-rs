@@ -1,0 +1,8 @@
+{
+  "name": "Null Group Biological Assets",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Mutant Mercenary",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "During your turn, this creature has first strike.\nWhenever this creature attacks, you may discard a card. If you do, draw a card."
+}
