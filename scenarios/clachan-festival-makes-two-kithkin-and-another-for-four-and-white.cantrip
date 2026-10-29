@@ -1,0 +1,42 @@
+# Clachan Festival ({2}{W}, Kindred Enchantment - Kithkin): "When this enchantment enters, create two 1/1 green and white Kithkin
+# creature tokens" and "{4}{W}: Create a 1/1 green and white Kithkin creature token." Bot1 casts it with Mox Pearl, Mox Ruby
+# and Mox Jet; on turn 3 it pays {4}{W} (Black Lotus's WWW with a Mox Ruby and Mox Jet) for one more token, and tries again
+# with no mana left.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Clachan Festival
+Black Lotus
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Clachan Festival.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Clachan Festival.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Clachan Festival.Activate(Mana: short)
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot1.Graveyard = Black Lotus
