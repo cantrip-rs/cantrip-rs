@@ -1,0 +1,34 @@
+# Seize the Spoils: the discard is a cost (CR 118.3, 601.2b) that can't be paid with the spell itself, which has left the hand
+# (CR 601.2a) - and exactly one card is discarded (ruling 2021-02-05). With only the spell in hand it is refused, though its mana is
+# there to pay; with one card to discard it can be cast and the card is the one discarded.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Seize the Spoils
+Memnite
+Mountain
+Ornithopter
+Mountain x9
+
+[Bot2 Deck]
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Ornithopter.Cast
+? Bot1.Hand = Seize the Spoils
+! Bot1.Hand.Seize the Spoils.Cast
+
+[Expect]
+Bot1.Hand = Seize the Spoils
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Treasure Token = (absent)
