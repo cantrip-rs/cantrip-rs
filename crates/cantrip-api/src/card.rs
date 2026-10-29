@@ -1897,6 +1897,12 @@ pub struct GrantedWay {
     /// (`cantrip_mechanics::escape::granted` for Underworld Breach's escape), so a spell cast by it is known to have been cast
     /// with that keyword whatever gave it (CR 702.138b: "cast from a graveyard with an escape ability").
     pub kind: WayKind,
+    /// As `WayDef::instant_speed`: the way is offered whenever an instant could be cast, whatever the card is (sneak, CR
+    /// 702.190a). The times it may be used at are the cost's: `cost` is `None` outside them.
+    pub instant_speed: bool,
+    /// As `WayDef::enters_attacking`: a permanent spell cast by the way enters tapped and attacking what the creature its cost
+    /// returned to hand was attacking (sneak, CR 702.190b).
+    pub enters_attacking: bool,
 }
 
 impl GrantedWay {
@@ -1910,6 +1916,8 @@ impl GrantedWay {
         flashback: false,
         permission: false,
         kind: WayKind::Other,
+        instant_speed: false,
+        enters_attacking: false,
     };
 }
 

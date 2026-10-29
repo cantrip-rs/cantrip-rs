@@ -1952,6 +1952,7 @@ mod tests {
             spill: 0,
             exile_instead: ExileInstead::Never,
             flashback: false,
+            attacking: false,
             since: 0,
             copied: false,
             cast_known: u32::MAX,

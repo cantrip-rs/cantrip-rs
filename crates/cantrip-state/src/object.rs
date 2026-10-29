@@ -1032,6 +1032,10 @@ pub struct StackItem {
     /// or a permanent's static ability (Iroh, Grand Lotus), or an aftermath half cast from a graveyard (CR 702.127a). It is
     /// exiled instead of put anywhere else any time it would leave the stack.
     pub flashback: bool,
+    /// For a permanent spell cast by a way that has it enter attacking (sneak, CR 702.190b): it enters tapped and attacking
+    /// what `subject` is, as a copy of it does too (CR 707.10). Kept on the item because a way a permanent gave is not in the
+    /// card's `ways`.
+    pub attacking: bool,
     /// The serial of the first event in the history after it was put on the stack (the history's head then), or, for a
     /// delayed triggered ability, after that ability was created (`Delayed::since`): what an instruction to transform its
     /// source asks the history about (CR 701.27f).

@@ -488,7 +488,7 @@ pub fn resolve(cx: &mut Cx) -> R<Flow> {
             } else {
                 // A permanent spell whose sneak cost was paid enters tapped and attacking what the creature returned to
                 // pay it was attacking (CR 702.190b), which the cast kept in `subject`.
-                let attacking = item.way >= 1 && def.ways.get(item.way as usize - 1).is_some_and(|w| w.enters_attacking);
+                let attacking = item.attacking;
                 // A face-down spell (CR 708.4) enters with the same characteristics it had as a spell (CR 702.37c,
                 // 702.168b): it is a face-down permanent as it arrives, so what replaces its entering judges that, and its
                 // card's own "enters" replacements do not apply (CR 708.3), as for a card put onto the battlefield face down.

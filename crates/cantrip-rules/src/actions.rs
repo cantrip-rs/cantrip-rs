@@ -6132,9 +6132,7 @@ impl<'a> Offer<'a> {
         let land = def.is(CardType::Land);
         let speed = self.speed(card);
         for (way_number, face) in faces_to_cast(def).filter(|&(w, _)| !(land && w == 0)) {
-            if speed.of(def, way_number, face) != self.instants {
-                continue;
-            }
+            let at_its_speed = speed.of(def, way_number, face) == self.instants;
             let view = (way_number != 0).then(|| AsFace { cx, spell: card, face: cx.card_id(face) });
             let q: &dyn Query = match &view {
                 Some(view) => view,
@@ -6142,6 +6140,10 @@ impl<'a> Offer<'a> {
             };
             for way in ways {
                 if way.what.permission || way.what.from != zone.kind() {
+                    continue;
+                }
+                // A way for any time an instant could be cast (sneak, CR 702.190a) is offered then, whatever the card is.
+                if !(if way.what.instant_speed { self.instants } else { at_its_speed }) {
                     continue;
                 }
                 // Flashback a permanent gives: only if the resulting spell is an instant or sorcery spell (CR 702.34a).
@@ -6808,6 +6810,7 @@ pub(crate) fn stack_item(kind: StackKind, object: ObjectId, ability: AbilityRef,
         spill: 0,
         exile_instead: ExileInstead::Never,
         flashback: false,
+        attacking: false,
         since: 0,
         copied: false,
         cast_known: u32::MAX,
@@ -7475,17 +7478,18 @@ fn cast(
     };
     // Sneak (CR 702.190b): the permanent the spell becomes attacks what the creature its cost returns to hand is attacking
     // as the cost is paid, kept on the spell for its resolution. An instant or sorcery becomes no permanent, and keeps none.
-    if granted.is_none()
-        && instead.is_none()
-        && way >= 1
-        && whole.ways.get(way as usize - 1).is_some_and(|w| w.enters_attacking)
-        && !cx.chars(spell).is(CardType::Instant)
-        && !cx.chars(spell).is(CardType::Sorcery)
-        && let Some(attack) = chosen.first().and_then(|&c| cx.s().attackers.iter().find(|a| a.id == c)).copied()
-    {
+    // The way is the card's own, or one a permanent gave it (Ninja Teen's).
+    let enters_attacking = match granted {
+        Some(granted) => granted.what.enters_attacking,
+        None => instead.is_none() && way >= 1 && whole.ways.get(way as usize - 1).is_some_and(|w| w.enters_attacking),
+    };
+    if enters_attacking && !cx.chars(spell).is(CardType::Instant) && !cx.chars(spell).is(CardType::Sorcery) {
         let at = cx.s().stack.len() - 1;
         let mut with = cx.s().stack[at];
-        with.subject = attack.target;
+        with.attacking = true;
+        if let Some(attack) = chosen.first().and_then(|&c| cx.s().attackers.iter().find(|a| a.id == c)).copied() {
+            with.subject = attack.target;
+        }
         cx.st().stack_set(at, with);
     }
     cx.st().update_obj(spell, |o| {

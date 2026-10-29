@@ -770,6 +770,7 @@ fn put_trigger_as(cx: &mut Cx, trigger: PendingTrigger, by: Option<Linked>) -> R
         spill: 0,
         exile_instead: ExileInstead::Never,
         flashback: false,
+        attacking: false,
         // Put on the stack now, or, a delayed triggered ability, created when its `Delayed` was (CR 701.27f).
         since: trigger.since.unwrap_or(cx.g.log.len() as u32),
         copied: false,
