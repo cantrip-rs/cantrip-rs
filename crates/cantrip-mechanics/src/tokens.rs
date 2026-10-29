@@ -1053,6 +1053,16 @@ pub static RED_AND_GREEN_WORM: CardDef = CardDef {
     ..token!(Worm)
 };
 
+/// The 2/2 black Romulan creature token (CR 111.1, 111.4). Cloak and Phaser and In the Pale Moonlight make it.
+pub static ROMULAN: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Black)),
+    types: TypeSet::of(&[CardType::Creature]),
+    subtypes: SubtypeSet::of(&[Subtype::Romulan]),
+    power: Some(2),
+    toughness: Some(2),
+    ..token!(Romulan)
+};
+
 /// The 2/2 green Bear creature token (CR 111.1, 111.4). Argoth, Sanctum of Nature, Ayula's Influence, Bearscape, Caller of the
 /// Claw, Dancing from Dark to Dawn, Path to the World Tree and Words of Wilding make it.
 pub static BEAR: CardDef = CardDef {
