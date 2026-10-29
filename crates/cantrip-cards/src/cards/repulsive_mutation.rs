@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{counter_unless_pays, targets};
+use cantrip_mechanics::{counter_unless_pays, greatest_power, targets};
 use cantrip_oracle as oracle;
 
 /// Put X +1/+1 counters on target creature you control. Then counter up to one target spell unless its controller pays
@@ -12,15 +12,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         g.add_counters(creature, CounterKind::PlusOne, item.x as i16);
     }
     if targets::object(g, item, 1).is_some() {
-        let greatest = g
-            .permanents_of(item.controller)
-            .into_iter()
-            .map(|id| g.chars(id))
-            .filter(|c| c.is(CardType::Creature))
-            .filter_map(|c| c.power)
-            .max()
-            .unwrap_or(0)
-            .clamp(0, 255) as u8;
+        let greatest = greatest_power::among_creatures_you_control(g, item.controller).min(255) as u8;
         counter_unless_pays(g, item, 1, generic(greatest))?;
     }
     Ok(())
