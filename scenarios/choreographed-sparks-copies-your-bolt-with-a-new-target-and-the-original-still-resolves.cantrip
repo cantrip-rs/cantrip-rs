@@ -1,0 +1,38 @@
+# Choreographed Sparks, mode 1 only (CR 700.2, 707.10, 707.10c): Bot1's Lightning Bolt is aimed at Bot2; Sparks copies it and the
+# copy is given a new target, Bot1 itself. The copy resolves first (Bot1 17) and then the original (Bot2 17). The copy was not
+# cast, so it does not count as a second spell.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Lightning Bolt
+Choreographed Sparks
+Island x14
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Choreographed Sparks.Cast
+! Bot1.Modes(Count: 0)
+Bot1.Modes(1)
+Bot1.Target(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
+Stack.Count = 0
+Bot1.Graveyard.Count = 3

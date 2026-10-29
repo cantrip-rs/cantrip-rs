@@ -1,0 +1,30 @@
+# Choreographed Sparks' second mode targets a creature spell "you control" (CR 115.1, 109.5): Bot2's Llanowar Elves on the stack is a
+# creature spell, but not Bot1's, so Bot1 has nothing to aim the mode at and can't cast Sparks for it, with the mana to do so.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Choreographed Sparks
+Island x13
+
+[Bot2 Deck]
+Llanowar Elves
+Forest x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+! Bot1.Hand.Choreographed Sparks.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot2.Battlefield = Forest; Llanowar Elves

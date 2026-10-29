@@ -1,0 +1,46 @@
+# "This spell can't be copied" (CR 101.2, 707.10): Bot1 casts Sparks (copying its Bolt, aimed at Bot2) and in response a second
+# Sparks aimed at the first. The second makes no copy; the first still resolves, and its one copy (aimed at Bot1) is the only
+# one: Bot1 17, Bot2 17 and no more.
+
+[Bot1 Deck]
+Black Lotus
+Mountain
+Mox Ruby
+Lightning Bolt
+Choreographed Sparks
+Choreographed Sparks
+Island x13
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Hand.Choreographed Sparks.Cast
+Bot1.Modes(1)
+Bot1.Target(Stack.Lightning Bolt)
+Bot1.Hand.Choreographed Sparks.Cast
+Bot1.Modes(1)
+Bot1.Target(Stack.Choreographed Sparks)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
+Stack.Count = 0
+Bot1.Graveyard.Count = 4
