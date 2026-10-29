@@ -1,0 +1,27 @@
+# The draw mode has no target. The known top card is drawn and Command Decision resolves to the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Command Decision
+Island x4
+Forest
+Mountain
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Command Decision.Cast
+Bot1.Modes(Draw a card)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Command Decision
+Bot1.Hand = Forest; Island; Island; Island; Island

@@ -1,0 +1,6 @@
+{
+  "name": "Command Decision",
+  "manaCost": "{1}{W}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• Destroy target creature with power 4 or greater.\n• Draw a card."
+}

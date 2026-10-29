@@ -1,0 +1,34 @@
+# The destroy mode accepts Alpine Grizzly at exactly four power and refuses Memnite below the limit.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Black Lotus
+Alpine Grizzly
+Memnite
+Command Decision
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Command Decision.Cast
+Bot1.Modes(Destroy target creature with power 4 or greater)
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Alpine Grizzly)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Command Decision; Alpine Grizzly; Black Lotus
+Bot1.Battlefield.Memnite.Power = 1
