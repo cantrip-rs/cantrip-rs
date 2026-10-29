@@ -1,0 +1,8 @@
+{
+  "name": "Mindful Biomancer",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Dryad Druid",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, you gain 1 life.\n{2}{G}: This creature gets +2/+2 until end of turn. Activate only once each turn."
+}
