@@ -1,0 +1,67 @@
+# Quandrix, the Proof: only instant and sorcery spells you cast have cascade. Geometer's Arthropod, a creature spell Bot1 casts
+# from hand, does not; nor does Bot2's Lightning Bolt (Bot2 is not "you"). Neither moves a card from a library or into exile.
+
+[Bot1 Deck]
+Quandrix, the Proof
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Geometer's Arthropod
+Plains
+Mountain
+Lightning Bolt
+Island
+Lightning Bolt
+Island x4
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island
+Island
+Island
+Island
+Island
+Mountain
+Lightning Bolt
+Island x5
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Quandrix, the Proof.Cast
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+! Bot2.Accept
+? Bot2.Library.Count = 6
+? Exile.Count = 0
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Geometer's Arthropod.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Geometer's Arthropod.Power = 1
+Exile.Count = 0
+Bot1.Library.Count = 6
