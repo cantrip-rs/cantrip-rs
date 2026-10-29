@@ -1,0 +1,31 @@
+# Unsubtle Mockery deals exactly 4 damage to Bot2's Ancient Crab (1/5), which survives with 4 damage marked (not 3, not 5), and Bot1 still
+# surveils 1 (the damage dealt does not have to kill): the Mountain on top of the library goes to the graveyard.
+
+[Bot1 Deck]
+Unsubtle Mockery
+Black Lotus
+Island x6
+Mountain
+Island x12
+
+[Bot2 Deck]
+Ancient Crab
+Black Lotus
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Ancient Crab.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Unsubtle Mockery.Cast(Bot2.Battlefield.Ancient Crab)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Mountain)
+
+[Expect]
+Bot2.Battlefield.Ancient Crab.Damage = 4
+Bot1.Graveyard = Unsubtle Mockery; Mountain; Black Lotus

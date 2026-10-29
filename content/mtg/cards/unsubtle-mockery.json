@@ -1,0 +1,6 @@
+{
+  "name": "Unsubtle Mockery",
+  "manaCost": "{2}{R}",
+  "type": "Instant",
+  "oracleText": "Unsubtle Mockery deals 4 damage to target creature. Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)"
+}
