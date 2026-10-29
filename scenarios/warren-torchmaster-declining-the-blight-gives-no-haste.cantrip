@@ -1,0 +1,27 @@
+# Warren Torchmaster: "you may blight 1. When you do, ..." (CR 603.12). Bot1 declines the blight: no -1/-1 counter, no reflexive
+# trigger, so the Torchmaster has no haste (CR 702.10).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Warren Torchmaster
+Mountain x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Warren Torchmaster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Warren Torchmaster.Keywords = (absent)
+? Bot1.Battlefield.Warren Torchmaster.Power = 2
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 20

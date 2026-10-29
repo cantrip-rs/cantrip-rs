@@ -1,0 +1,8 @@
+{
+  "name": "Warren Torchmaster",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "At the beginning of combat on your turn, you may blight 1. When you do, target creature gains haste until end of turn. (To blight 1, put a -1/-1 counter on a creature you control.)"
+}

@@ -1,0 +1,32 @@
+# Warren Torchmaster (2/2): "At the beginning of combat on your turn, you may blight 1. When you do, target creature gains haste
+# until end of turn." Bot1 casts it on turn 1 and blights 1 at the beginning of combat (CR 701.68a): the Torchmaster itself, a
+# 1/1 with a -1/-1 counter. Then (CR 603.12) it targets itself and gains haste: it attacks the turn it came in, for 1.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Warren Torchmaster
+Mountain x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Warren Torchmaster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+Bot1.Choose(Warren Torchmaster)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Warren Torchmaster.Keywords = Haste
+? Bot1.Battlefield.Warren Torchmaster.Power = 1
+Bot1.Attack(Warren Torchmaster > Bot2)
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 19
