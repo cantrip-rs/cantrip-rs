@@ -1,0 +1,28 @@
+# "You may search your library for any number of cards named Andromedan Automatons ... then shuffle": Bot1 declines, so
+# nothing is searched or shuffled (CR 701.23). The Automatons on top of the library, a legal find, stays there in order.
+
+[Bot1 Deck]
+Black Lotus
+Andromedan Automatons
+Andromedan Automatons
+Island x4
+Andromedan Automatons
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Andromedan Automatons.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand.Count = 5
+Bot1.Library = Andromedan Automatons; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island
+Bot1.Revealed = (absent)

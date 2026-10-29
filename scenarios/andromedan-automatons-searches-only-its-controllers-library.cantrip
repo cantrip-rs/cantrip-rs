@@ -1,0 +1,34 @@
+# Its optional search finds every matching Automatons in Bot1's library and reveals them (an Island is refused), while copies in hand and Bot2's library stay put.
+
+[Bot1 Deck]
+Black Lotus
+Andromedan Automatons
+Andromedan Automatons
+Island x4
+Andromedan Automatons
+Andromedan Automatons
+Island x12
+
+[Bot2 Deck]
+Island x7
+Andromedan Automatons
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Andromedan Automatons.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Search(Island)
+Bot1.Search(Andromedan Automatons; Andromedan Automatons)
+
+[Expect]
+Bot1.Battlefield.Count = 1
+Bot1.Hand.Count = 7
+Bot1.Hand.Andromedan Automatons#1.Power = 3
+Bot1.Library.Count = 12
+Bot2.Library.Count = 21
+Bot1.Graveyard = Black Lotus
+Bot1.Revealed = Andromedan Automatons; Andromedan Automatons
