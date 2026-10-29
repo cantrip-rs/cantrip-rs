@@ -871,15 +871,20 @@ pub fn reveal_until_n(
 /// card is exiled one at a time, face up, from the top until one is a nonland card `qualifies` accepts, or the library
 /// is empty. Every card that really reached exile, in order (the qualifying one last), and the qualifying card if there
 /// was one; a card a replacement effect sent elsewhere is neither. Cascade (a lesser mana value than the spell's) and
-/// discover (a mana value of N or less) use it.
+/// discover (a mana value of N or less) use it. With `by` every card exiled is remembered as exiled with that ability
+/// (CR 607.2a), the lands as well.
 pub fn exile_until_nonland(
     g: &mut dyn Game,
     player: PlayerId,
+    by: Option<Linked>,
     qualifies: &dyn Fn(&dyn Query, ObjectId) -> bool,
 ) -> (Vec<ObjectId>, Option<ObjectId>) {
     let mut exiled = Vec::new();
     while let Some(&top) = g.state().zone(Zone::library(player)).first() {
-        let moved = g.exile(top);
+        let moved = match by {
+            Some(by) => g.exile_with(&[top], by, false).first().copied().unwrap_or(top),
+            None => g.exile(top),
+        };
         if !g.obj(moved).zone.is(ZoneKind::Exile) {
             continue;
         }
@@ -889,6 +894,12 @@ pub fn exile_until_nonland(
         }
     }
     (exiled, None)
+}
+
+/// "`player` exiles cards from the top of their library until they exile a nonland card" (CR 701.13a), whichever it is: the
+/// nonland card, if there was one. Etali, Primal Conqueror, Black Widow, Super-Spy and Krang & Shredder print it.
+pub fn exile_until_any_nonland(g: &mut dyn Game, player: PlayerId, by: Option<Linked>) -> Option<ObjectId> {
+    exile_until_nonland(g, player, by, &|_, _| true).1
 }
 
 /// "An instant or sorcery card" as a search finds it (CR 205.2a, 701.23): the card's types as they are in the library, and as a

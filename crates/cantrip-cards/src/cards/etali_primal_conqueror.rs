@@ -2,24 +2,12 @@ use cantrip_api::*;
 use cantrip_mechanics::{choose, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
 
-/// One player's dig: exile from the top, one card at a time, until a nonland card is exiled or the library runs out. A card a
-/// replacement effect sends elsewhere was not exiled, so the dig goes on.
-fn dig(g: &mut dyn Game, player: PlayerId, found: &mut Vec<ObjectId>) {
-    while let Some(&top) = g.state().zone(Zone::library(player)).first() {
-        let exiled = g.exile(top);
-        if cantrip_mechanics::library::is_still_exiled(g, exiled) && !g.chars(exiled).is(CardType::Land) {
-            found.push(exiled);
-            return;
-        }
-    }
-}
-
 /// Each player exiles cards from the top of their library until they exile a nonland card, from the active player on
 /// (CR 101.4). You may cast any number of spells from among the nonland cards exiled this way without paying their mana costs.
 fn exile_and_cast_free(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let mut found: Vec<ObjectId> = Vec::new();
     for player in g.state().apnap().collect::<Vec<_>>() {
-        dig(g, player, &mut found);
+        found.extend(cantrip_mechanics::library::exile_until_any_nonland(g, player, None));
     }
     choose::cast_any_number_free(g, item.controller, item.object, &found)
 }

@@ -275,7 +275,7 @@ fn cascade_resolves(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let def = g.card(g.chars(item.object).card);
     let limit = def.cost.mana_value() + def.cost.x as u32 * g.obj(item.object).x as u32;
 
-    let (exiled, hit) = crate::library::exile_until_nonland(g, player, &|q, card| q.card(q.chars(card).card).cost.mana_value() < limit);
+    let (exiled, hit) = crate::library::exile_until_nonland(g, player, None, &|q, card| q.card(q.chars(card).card).cost.mana_value() < limit);
     // "You may cast it without paying its mana cost if the resulting spell's mana value is less than this spell's": the face
     // cast is the spell, so only a face under the limit may be (CR 702.85a, 709.3b, 715.3b).
     if let Some(card) = hit {

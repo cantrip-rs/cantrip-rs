@@ -16,7 +16,7 @@ use cantrip_api::*;
 /// goes into the player's hand; the other exiled cards go to the bottom of the library in a random order. Nothing is cast or
 /// put into hand if the library ran out first (CR 701.57b: it has still been discovered).
 pub fn discover(g: &mut dyn Game, player: PlayerId, n: u32) -> Result<(), Suspend> {
-    let (exiled, hit) = library::exile_until_nonland(g, player, &|q, card| q.mana_value(card) <= n);
+    let (exiled, hit) = library::exile_until_nonland(g, player, None, &|q, card| q.mana_value(card) <= n);
     if let Some(card) = hit {
         let ways: Vec<CastWay> = g.cast_ways_during_resolution(card).into_iter().filter(|w| u32::from(w.mana_value) <= n).collect();
         let mut cast = false;

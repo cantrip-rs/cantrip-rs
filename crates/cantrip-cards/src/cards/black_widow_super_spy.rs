@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{triggers, effects};
+use cantrip_mechanics::{effects, library, triggers};
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("PutCountersOrCast", "put a +1/+1 counter on Black Widow?", "If you don't, you may cast the exiled nonland card until end of turn, with mana of any type", "Put a counter", "Cast it instead");
@@ -9,15 +9,7 @@ const ASK: Question = Question::new("PutCountersOrCast", "put a +1/+1 counter on
 /// can be spent to cast that spell (CR 118.14).
 fn steal(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Target::Player(victim) = item.subject else { return Ok(()) };
-    let mut nonland = None;
-    while let Some(&top) = g.state().zone(Zone::library(victim)).first() {
-        let is_land = g.chars(top).is(CardType::Land);
-        let exiled = g.exile(top);
-        if !is_land {
-            nonland = Some(exiled);
-            break;
-        }
-    }
+    let nonland = library::exile_until_any_nonland(g, victim, None);
     // CR 608.2d: no choice is offered that cannot be carried out, so Black Widow gone from the battlefield is not asked
     // for a counter; the counter was not put on her, and "if you don't" holds.
     let on_battlefield = is_live(g, item.object) && g.obj(item.object).zone.is(ZoneKind::Battlefield);
