@@ -1,0 +1,58 @@
+# Mouser Foundry's {4}{R}, Sacrifice: 3 damage to target creature, one short of lethal: Bot2's Air Elemental is 4/4, so it
+# keeps 3 damage and lives (CR 704.5g). The sacrifice is a cost, so Mouser Foundry is gone either way and the Robot for it
+# leaving is made.
+
+[Bot1 Deck]
+Mouser Foundry
+Mox Ruby
+Mox Jet
+Black Lotus
+Sol Ring
+Island x15
+
+[Bot2 Deck]
+Air Elemental
+Black Lotus
+Mox Sapphire
+Mox Jet
+Island x16
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mouser Foundry.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Air Elemental.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mouser Foundry.Activate(Bot2.Battlefield.Air Elemental)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Air Elemental.Damage = 3
+Bot2.Graveyard = Black Lotus
+Bot1.Graveyard = Mouser Foundry; Black Lotus
+Bot1.Battlefield.Robot Token#1.Power = 1
+Bot1.Battlefield.Robot Token#2.Power = 1

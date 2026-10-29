@@ -1,0 +1,6 @@
+{
+  "name": "Mouser Foundry",
+  "manaCost": "{1}{R}",
+  "type": "Artifact",
+  "oracleText": "When this artifact enters or leaves the battlefield, create a 1/1 colorless Robot artifact creature token.\n{4}{R}, Sacrifice this artifact: It deals 3 damage to target creature."
+}

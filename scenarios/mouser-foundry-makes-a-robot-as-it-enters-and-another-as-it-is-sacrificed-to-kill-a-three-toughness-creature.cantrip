@@ -1,0 +1,56 @@
+# Mouser Foundry: "When this artifact enters or leaves the battlefield, create a 1/1 colorless Robot artifact creature token."
+# Bot1 casts it on turn 1 with Mox Ruby and Mox Jet (a Robot), then on turn 3 pays {4}{R} (Black Lotus' RRR and Sol Ring's {C}{C})
+# and sacrifices it: it leaves the battlefield (a second Robot) and, its last known information the source, deals 3 damage to
+# Bot2's Hill Giant, exactly lethal for a 3/3.
+
+[Bot1 Deck]
+Mouser Foundry
+Mox Ruby
+Mox Jet
+Black Lotus
+Sol Ring
+Island x15
+
+[Bot2 Deck]
+Hill Giant
+Black Lotus
+Mox Ruby
+Island x17
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mouser Foundry.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Robot Token.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mouser Foundry.Activate(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot1.Graveyard = Mouser Foundry; Black Lotus
+Bot1.Battlefield.Robot Token#1.Power = 1
+Bot1.Battlefield.Robot Token#2.Power = 1
