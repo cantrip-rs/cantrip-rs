@@ -1,0 +1,51 @@
+# Exactly three charge counters meet the 3+ striation, creating a Klingon token at combat (CR 721.2a).
+[Bot1 Deck]
+D-7 Battle Cruiser
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Hill Giant
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.D-7 Battle Cruiser.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Hill Giant.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot1.Battlefield.D-7 Battle Cruiser.Activate(Ability: Station)
+Bot1.Choose(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.D-7 Battle Cruiser.Counters.Charge = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Klingon Warrior Token.Token = true
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.D-7 Battle Cruiser.Counters.Charge = 3
+Bot1.Battlefield.D-7 Battle Cruiser.Types = Artifact
+Bot1.Battlefield.Klingon Warrior Token = (absent)

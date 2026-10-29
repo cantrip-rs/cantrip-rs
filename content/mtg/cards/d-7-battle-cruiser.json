@@ -1,0 +1,7 @@
+{
+  "name": "D-7 Battle Cruiser",
+  "manaCost": "{1}{R}",
+  "type": "Artifact — Spacecraft",
+  "stationPt": "3/3",
+  "oracleText": "Station (Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery. It's an artifact creature at 8+.)\n3+ | At the beginning of combat on your turn, create a 2/1 red Klingon Warrior creature token with haste. Sacrifice it at the beginning of the next end step.\n8+ | Flying"
+}

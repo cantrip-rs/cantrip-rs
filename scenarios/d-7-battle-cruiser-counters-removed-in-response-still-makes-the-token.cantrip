@@ -1,0 +1,59 @@
+# The 3+ striation's trigger is not an intervening "if": once triggered it resolves on its own (CR 113.7a, 721.2a), so
+# Vampire Hexmage removing every charge counter in response still leaves the Klingon Warrior to be made.
+[Bot1 Deck]
+D-7 Battle Cruiser
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Hill Giant
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Vampire Hexmage
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.D-7 Battle Cruiser.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Hill Giant.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot1.Battlefield.D-7 Battle Cruiser.Activate(Ability: Station)
+Bot1.Choose(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.D-7 Battle Cruiser.Counters.Charge = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Vampire Hexmage.Cast
+[T3 Bot1.BeginCombat]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Vampire Hexmage.Activate(Bot1.Battlefield.D-7 Battle Cruiser)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.D-7 Battle Cruiser.Counters.Charge = (absent)
+? Bot1.Battlefield.Klingon Warrior Token.Power = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Klingon Warrior Token.Power = 2

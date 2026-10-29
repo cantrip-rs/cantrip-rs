@@ -1,0 +1,64 @@
+# Stationing with an 8/8 immediately reaches the type, power/toughness, and flying striation; combat creates a Klingon,
+# which the delayed beginning-of-end-step trigger sacrifices (CR 603.7c, 702.184, 721.2a-b).
+# D-7 Battle Cruiser {1}{R}: Artifact — Spacecraft
+#   Station (Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery. It's an artifact creature at 8+.)
+#   3+ | At the beginning of combat on your turn, create a 2/1 red Klingon Warrior creature token with haste. Sacrifice it at the beginning of the next end step.
+#   8+ | Flying
+# Written by new-card.py --scenario: D-7 Battle Cruiser cast on turn 1 off zero-cost mana sources. Grow it a line at a time with
+#   cargo run --profile cards -p cantrip-script --bin corpus -- --scenario d-7-battle-cruiser-thresholds-token-and-station --next --brief
+# and see which keys the card moved with --diff <the line number of its cast>.
+
+[Bot1 Deck]
+D-7 Battle Cruiser
+Phyrexian Soulgorger
+Black Lotus
+Mox Ruby
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.D-7 Battle Cruiser.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Phyrexian Soulgorger.Cast
+Bot1.Pass
+Bot1.Battlefield.D-7 Battle Cruiser.Activate(Ability: Station)
+Bot1.Choose(Phyrexian Soulgorger)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.D-7 Battle Cruiser.Counters.Charge = 8
+? Bot1.Battlefield.D-7 Battle Cruiser.Types = Artifact; Creature
+? Bot1.Battlefield.D-7 Battle Cruiser.Power = 3
+? Bot1.Battlefield.D-7 Battle Cruiser.Toughness = 3
+? Bot1.Battlefield.D-7 Battle Cruiser.Keywords = Flying
+[T3 Bot1.DeclareAttackers]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Klingon Warrior Token.Token = true
+[T3 Bot1.End]
+? Bot1.Battlefield.Klingon Warrior Token.Power = 2
+? Bot1.Battlefield.Klingon Warrior Token.Toughness = 1
+? Bot1.Battlefield.Klingon Warrior Token.Colors = Red
+? Bot1.Battlefield.Klingon Warrior Token.Subtypes = Klingon; Warrior
+? Bot1.Battlefield.Klingon Warrior Token.Keywords = Haste
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.D-7 Battle Cruiser.Counters.Charge = 8
+Bot1.Battlefield.D-7 Battle Cruiser.Types = Artifact; Creature
+Bot1.Battlefield.D-7 Battle Cruiser.Power = 3
+Bot1.Battlefield.D-7 Battle Cruiser.Toughness = 3
+Bot1.Battlefield.D-7 Battle Cruiser.Keywords = Flying
+Bot1.Battlefield.Klingon Warrior Token = (absent)
