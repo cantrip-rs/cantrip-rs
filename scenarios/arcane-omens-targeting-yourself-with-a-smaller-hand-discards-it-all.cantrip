@@ -1,0 +1,40 @@
+# Arcane Omens: it may target its own caster, and with fewer cards in hand than X the player discards the whole hand (CR 701.9b): one Island is left against X = 5.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Arcane Omens
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Lightning Bolt
+Sol Ring
+Tormod's Crypt
+Black Lotus
+Island
+Swamp
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Arcane Omens.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Graveyard = Arcane Omens; Island

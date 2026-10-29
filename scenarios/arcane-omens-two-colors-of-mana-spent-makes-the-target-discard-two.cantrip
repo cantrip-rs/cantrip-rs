@@ -1,0 +1,36 @@
+# Arcane Omens: three mana of black from a Black Lotus and one each of black and red from Moxen are two colors, not five mana: X = 2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Black Lotus
+Arcane Omens
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Lightning Bolt
+Sol Ring
+Tormod's Crypt
+Black Lotus
+Island
+Swamp
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Arcane Omens.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Ornithopter; Lightning Bolt)
+
+[Expect]
+Bot2.Hand.Count = 5

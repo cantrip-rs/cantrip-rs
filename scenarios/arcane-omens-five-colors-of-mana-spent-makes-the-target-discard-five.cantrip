@@ -1,0 +1,40 @@
+# Arcane Omens: "Converge - Target player discards X cards, where X is the number of colors of mana spent to cast this spell." Five Moxen, five colors: X = 5 (CR 700.14).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Arcane Omens
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Lightning Bolt
+Sol Ring
+Tormod's Crypt
+Black Lotus
+Island
+Swamp
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Arcane Omens.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Ornithopter; Lightning Bolt; Sol Ring; Tormod's Crypt; Black Lotus)
+
+[Expect]
+Bot2.Hand.Count = 2
