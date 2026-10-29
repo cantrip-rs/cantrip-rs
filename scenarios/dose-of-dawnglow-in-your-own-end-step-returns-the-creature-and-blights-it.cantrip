@@ -1,0 +1,61 @@
+# Dose of Dawnglow: "Then if it isn't your main phase, blight 2" (CR 505.1, 701.68a) asks for a main phase of the caster's own
+# turn, not merely the caster's turn: cast in Bot1's own end step on turn 3 it returns the Shimmercreep (Bolted twice on turn 2,
+# its drain running again: Bot2 18, Bot1 22) and then blights 2 on it, its only creature, which becomes a 1/3. The twin cast in
+# Bot1's main phase is "...-in-your-main-phase-only-returns-the-creature".
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Shimmercreep
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Dose of Dawnglow
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shimmercreep.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Shimmercreep)
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Shimmercreep)
+[T3 Bot1.End]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dose of Dawnglow.Cast(Bot1.Graveyard.Shimmercreep)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Shimmercreep)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Shimmercreep.Counters.MinusOneMinusOne = 2
+Bot1.Battlefield.Shimmercreep.Tapped = false
+Bot1.Battlefield.Shimmercreep.Power = 1
+Bot1.Battlefield.Shimmercreep.Toughness = 3
+Bot1.Life = 22
+Bot2.Life = 18
