@@ -1,0 +1,6 @@
+{
+  "name": "Broadcast Takeover",
+  "manaCost": "{2}{R}{R}{R}",
+  "type": "Sorcery",
+  "oracleText": "Gain control of all artifacts your opponents control until end of turn. Untap them. They gain haste until end of turn."
+}

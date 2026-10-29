@@ -1,0 +1,58 @@
+# Broadcast Takeover {2}{R}{R}{R}: "Gain control of all artifacts your opponents control until end of turn. Untap them. They
+# gain haste until end of turn." Bot2 has a tapped Mox Pearl, a Sol Ring and a Memnite, and an Island that is no artifact. On
+# turn 3 Bot1 takes the three (CR 613.1b), the Mox untapped, and the Memnite, though it entered under Bot2 only now under Bot1,
+# attacks as it has haste (CR 302.6, 702.10). Bot1's own tapped Moxen are not untapped: they are no opponent's. At the end of
+# the turn the three go back to Bot2 (CR 514.2), the Island never left.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Jet
+Mox Jet
+Broadcast Takeover
+Island x14
+
+[Bot2 Deck]
+Mox Pearl
+Sol Ring
+Memnite
+Island
+Island x16
+
+[Actions]
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Broadcast Takeover.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Memnite; Mox Jet; Mox Jet; Mox Pearl; Mox Ruby; Mox Ruby; Mox Ruby; Sol Ring
+? Bot2.Battlefield = Island
+? Bot1.Battlefield.Mox Pearl.Tapped = false
+? Bot1.Battlefield.Memnite.Keywords = Haste
+Bot1.Attack(Memnite > Bot2)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Bot2.Battlefield = Island; Memnite; Mox Pearl; Sol Ring
+Bot2.Life = 19
+Bot1.Battlefield.Mox Ruby#1.Tapped = true
+Bot1.Graveyard = Broadcast Takeover
