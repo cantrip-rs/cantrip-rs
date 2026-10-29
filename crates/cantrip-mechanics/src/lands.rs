@@ -354,6 +354,13 @@ pub const TRIOME_CYCLING: AbilityDef = triggers::cycling(mana("{3}"), "Cycling {
 /// Archive and Undercity Sewers.
 pub const SURVEIL_LAND: AbilityDef = triggered(triggers::THIS_ENTERS, |g, item| effects::surveil(g, item, 1), "When this land enters, surveil 1.");
 
+/// The Secrets of Strixhaven surveil lands' "{2}{A}{B}, {T}: Surveil 1" (CR 701.25, 602.1): with `enters: Some(mana::enters_tapped)` and
+/// its "{T}: Add {A} or {B}.", Fields of Strife, Forum of Amity, Paradox Gardens, Spectacle Summit and Titan's Grave. `cost` and `text`
+/// are the card's own.
+pub const fn surveil_ability(cost: Cost, text: &'static str) -> AbilityDef {
+    ability(cost, |g, item| effects::surveil(g, item, 1), text)
+}
+
 /// The scry lands' "When this land enters, scry 1" (CR 701.22): Crystal Grotto (untapped) and, with
 /// `enters: Some(mana::enters_tapped)`, Temple of Deceit.
 pub const SCRY_LAND: AbilityDef = triggered(triggers::THIS_ENTERS, |g, item| effects::scry(g, item, 1), "When this land enters, scry 1.");
