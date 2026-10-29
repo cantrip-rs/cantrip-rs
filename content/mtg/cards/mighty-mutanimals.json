@@ -1,0 +1,8 @@
+{
+  "name": "Mighty Mutanimals",
+  "manaCost": "{2}{W}{W}",
+  "type": "Creature — Mutant Rebel",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature enters, create a 2/2 red Mutant creature token.\nAlliance — Whenever another creature you control enters, put a +1/+1 counter on target creature you control."
+}
