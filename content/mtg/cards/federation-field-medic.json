@@ -1,0 +1,11 @@
+{
+  "name": "Federation Field Medic",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Doctor",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Vigilance\nWhen this creature enters, choose one —\n• Put a +1/+1 counter on target creature. It gains vigilance until end of turn.\n• Draw a card if you control a permanent with a counter on it.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

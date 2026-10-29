@@ -1,0 +1,41 @@
+# The draw mode checks for any kind of counter on a permanent you control as the ability resolves; Gemstone Mine's mining counters qualify (CR 608.2h, 121.1, 122.1).
+[Bot1 Deck]
+Federation Field Medic
+Gemstone Mine
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Plains
+Lightning Bolt
+Shock
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gemstone Mine.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Federation Field Medic.Cast
+Bot1.Pass
+Bot1.Modes(2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Plains; Lightning Bolt
+
+[Expect]
+Bot1.Battlefield.Gemstone Mine.Counters.Mining = 3
+Bot1.Hand = Plains; Lightning Bolt
+
