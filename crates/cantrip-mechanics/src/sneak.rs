@@ -31,6 +31,7 @@ pub const fn way(cost: ManaCost, text: &'static str) -> WayDef {
         .condition(your_declare_blockers_step)
         .instant_speed()
         .enters_attacking()
+        .kind(WayKind::Sneak)
 }
 
 /// "If this spell's sneak cost was paid": it was cast for its first alternative cost, which a card with sneak lists first
@@ -38,4 +39,12 @@ pub const fn way(cost: ManaCost, text: &'static str) -> WayDef {
 /// 707.10): its sneak cost was paid too.
 pub fn paid(_: &dyn Query, item: &StackItem) -> bool {
     item.way == 1
+}
+
+/// "If its sneak cost was paid" of a permanent (CR 702.190a): it was cast through the way a card lists as sneak
+/// (`WayKind::Sneak`, set by `way`). Another way, a copy and a permanent that was not cast were not. Leonardo, Leader in Blue
+/// and Turncoat Kunoichi ask it of the creature whose enters ability is on the stack.
+pub fn was_cast_for_sneak(q: &dyn Query, id: ObjectId) -> bool {
+    let object = q.state().obj(id);
+    object.cast_way > 0 && q.card(object.card).ways.get(object.cast_way as usize - 1).is_some_and(|w| w.kind == WayKind::Sneak)
 }
