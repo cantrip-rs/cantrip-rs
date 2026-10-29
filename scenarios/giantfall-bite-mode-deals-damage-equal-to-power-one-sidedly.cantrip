@@ -1,0 +1,53 @@
+# Giantfall, first mode: "Target creature you control deals damage equal to its power to target creature an opponent controls."
+# Its first target must be Bot1's (Bot2's Ornithopter is refused) and its second an opponent's (Bot1's own Ornithopter is refused).
+# Bot1's Alpine Grizzly (power 4) deals 4 to Bot2's Ornithopter (0/2), which dies, and takes none itself (one-sided).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Alpine Grizzly
+Giantfall
+Ornithopter
+Forest x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Giantfall.Cast
+Bot1.Modes(1)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Alpine Grizzly)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter = (absent)
+? Bot1.Battlefield.Alpine Grizzly.Damage = 0
+
+[Expect]
+Bot1.Graveyard = Giantfall; Black Lotus
