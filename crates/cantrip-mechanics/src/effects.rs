@@ -1061,6 +1061,13 @@ pub fn target_creature_cant_be_blocked_this_turn(g: &mut dyn Game, item: &StackI
     Ok(())
 }
 
+/// "This creature can't be blocked this turn" (CR 509.1b, 611.2): an effect on the source creature itself, for as long as it stays the
+/// same permanent (CR 611.2c, 400.7). Matterbending Mage and Snooping Page print it.
+pub fn this_cant_be_blocked_this_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.add_effect(item.object, item.object, EffectKind::CantBeBlocked, Duration::EndOfTurn);
+    Ok(())
+}
+
 /// "`target` gains hexproof until end of turn" (CR 702.11b, 611.2a): a layer 6 keyword for the rest of the turn, from the
 /// effect's source. Liliana the Faultless, Octopus Form, Shore Up and Snakeskin Veil print it.
 pub fn gain_hexproof_until_end_of_turn(g: &mut dyn Game, source: ObjectId, target: ObjectId) {
