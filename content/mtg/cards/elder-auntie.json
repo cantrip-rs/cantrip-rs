@@ -1,0 +1,8 @@
+{
+  "name": "Elder Auntie",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Goblin Warlock",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, create a 1/1 black and red Goblin creature token."
+}

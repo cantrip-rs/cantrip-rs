@@ -1,0 +1,36 @@
+# Elder Auntie: "When this creature enters, create a 1/1 black and red Goblin creature token" (CR 111.4, 603.6a): the
+# token is black and red, a Goblin, 1/1, and the Auntie is 2/2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Elder Auntie
+Forest x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Elder Auntie.Cast
+Bot1.Pass
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Goblin Token.Colors = Black; Red
+? Bot1.Battlefield.Goblin Token.Subtypes = Goblin
+? Bot1.Battlefield.Goblin Token.Power = 1
+? Bot1.Battlefield.Goblin Token.Toughness = 1
+? Bot1.Battlefield.Elder Auntie.Power = 2
+? Bot1.Battlefield.Elder Auntie.Toughness = 2
+
+[Expect]
+Bot1.Battlefield = Elder Auntie; Goblin Token; Mox Jet; Mox Pearl; Mox Ruby
