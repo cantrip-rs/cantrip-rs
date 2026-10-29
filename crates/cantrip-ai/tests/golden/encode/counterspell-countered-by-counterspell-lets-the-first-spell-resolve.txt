@@ -1,7 +1,7 @@
 # counterspell-countered-by-counterspell-lets-the-first-spell-resolve, answer 62
 
 ## Full
-bucket 64 len 36 first_option 35 options 1 cap_hit false compact 1365 bytes dense 13568 bytes
+bucket 64 len 36 first_option 35 options 1 cap_hit false compact 1363 bytes dense 13568 bytes
   0 game      card     0 cats [0, 0, 0, 9, 1, 0, 0, 0, 0] ptrs [1 2 2 -] nums 0:0.1875 1:1 4:1 7:0.015625 8:0.015625 28:0.609375 30:1
   1 player    card     0 cats [0, 2, 2, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 0:1.25 4:1 12:0.5 13:0.1875 19:1 22:1 23:0.25
   2 player    card     0 cats [0, 1, 1, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 0:1.25 4:1 12:0.625 13:0.171875 18:1 20:1 21:1
@@ -29,10 +29,10 @@ bucket 64 len 36 first_option 35 options 1 cap_hit false compact 1365 bytes dens
  24 card      card   314 cats [6, 2, 2, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 1:0.25 2:1 4:1 5:1 21:1 77:1 93:1 94:0.0625
  25 card      card  3821 cats [6, 1, 1, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 8:1 13:1 76:1 93:1 94:0.0625
  26 card      card  1964 cats [6, 1, 1, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 4:1 76:1 93:1 94:0.0625
- 27 event     card     0 cats [3, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [21 - - -] nums 2:1 3:0.875
- 28 event     card     0 cats [3, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [11 - - -] nums 2:1 3:0.75
- 29 event     card     0 cats [0, 0, 0, 0, 0, 22, 0, 0, 0] ptrs [- - - -] nums 2:1 3:0.625
- 30 event     card     0 cats [6, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [24 - - -] nums 2:1 3:0.5
+ 27 event     card     0 cats [3, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [11 - - -] nums 2:1 3:0.875
+ 28 event     card     0 cats [0, 0, 0, 0, 0, 22, 0, 0, 0] ptrs [- - - -] nums 2:1 3:0.75
+ 29 event     card     0 cats [6, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [24 - - -] nums 2:1 3:0.625
+ 30 event     card     0 cats [0, 2, 0, 0, 0, 62, 0, 0, 0] ptrs [- - 1 -] nums 3:0.5
  31 event     card     0 cats [0, 0, 0, 0, 0, 22, 0, 0, 0] ptrs [- - - -] nums 2:1 3:0.375
  32 event     card     0 cats [0, 0, 0, 0, 0, 5, 0, 0, 0] ptrs [- - - -] nums 3:0.25
  33 event     card     0 cats [0, 0, 0, 0, 0, 5, 0, 0, 0] ptrs [- - - -] nums 3:0.125
@@ -40,7 +40,7 @@ bucket 64 len 36 first_option 35 options 1 cap_hit false compact 1365 bytes dens
  35 option    card     0 cats [0, 0, 0, 0, 0, 0, 0, 3, 0] ptrs [- - - -] legal nums 
 
 ## Decklist
-bucket 64 len 37 first_option 36 options 1 cap_hit false compact 1327 bytes dense 13568 bytes
+bucket 64 len 37 first_option 36 options 1 cap_hit false compact 1325 bytes dense 13568 bytes
   0 game      card     0 cats [0, 0, 0, 9, 1, 0, 0, 0, 0] ptrs [1 2 2 -] nums 0:0.1875 2:1 4:1 7:0.015625 8:0.015625 28:0.609375 30:1
   1 player    card     0 cats [0, 2, 2, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 0:1.25 4:1 12:0.5 13:0.1875 19:1 22:1 23:0.25 24:0.25
   2 player    card     0 cats [0, 1, 1, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 0:1.25 4:1 12:0.625 13:0.171875 18:1 20:1 21:1
@@ -69,10 +69,10 @@ bucket 64 len 37 first_option 36 options 1 cap_hit false compact 1327 bytes dens
  25 card      card  3821 cats [6, 1, 1, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 8:1 13:1 76:1 93:1 94:0.0625
  26 card      card  1964 cats [6, 1, 1, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 4:1 76:1 93:1 94:0.0625
  27 pool_card card  3821 cats [0, 2, 0, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 0:4 1:1
- 28 event     card     0 cats [3, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [21 - - -] nums 2:1 3:0.875
- 29 event     card     0 cats [3, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [11 - - -] nums 2:1 3:0.75
- 30 event     card     0 cats [0, 0, 0, 0, 0, 22, 0, 0, 0] ptrs [- - - -] nums 2:1 3:0.625
- 31 event     card     0 cats [6, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [24 - - -] nums 2:1 3:0.5
+ 28 event     card     0 cats [3, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [11 - - -] nums 2:1 3:0.875
+ 29 event     card     0 cats [0, 0, 0, 0, 0, 22, 0, 0, 0] ptrs [- - - -] nums 2:1 3:0.75
+ 30 event     card     0 cats [6, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [24 - - -] nums 2:1 3:0.625
+ 31 event     card     0 cats [0, 2, 0, 0, 0, 62, 0, 0, 0] ptrs [- - 1 -] nums 3:0.5
  32 event     card     0 cats [0, 0, 0, 0, 0, 22, 0, 0, 0] ptrs [- - - -] nums 2:1 3:0.375
  33 event     card     0 cats [0, 0, 0, 0, 0, 5, 0, 0, 0] ptrs [- - - -] nums 3:0.25
  34 event     card     0 cats [0, 0, 0, 0, 0, 5, 0, 0, 0] ptrs [- - - -] nums 3:0.125
@@ -80,7 +80,7 @@ bucket 64 len 37 first_option 36 options 1 cap_hit false compact 1327 bytes dens
  36 option    card     0 cats [0, 0, 0, 0, 0, 0, 0, 3, 0] ptrs [- - - -] legal nums 
 
 ## Hidden
-bucket 64 len 36 first_option 35 options 1 cap_hit false compact 1293 bytes dense 13568 bytes
+bucket 64 len 36 first_option 35 options 1 cap_hit false compact 1291 bytes dense 13568 bytes
   0 game      card     0 cats [0, 0, 0, 9, 1, 0, 0, 0, 0] ptrs [1 2 2 -] nums 0:0.1875 3:1 4:1 7:0.015625 8:0.015625 28:0.609375 30:1
   1 player    card     0 cats [0, 2, 2, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 0:1.25 4:1 12:0.5 13:0.1875 19:1 22:1 23:0.25
   2 player    card     0 cats [0, 1, 1, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 0:1.25 4:1 12:0.625 13:0.171875 18:1 20:1 21:1
@@ -108,10 +108,10 @@ bucket 64 len 36 first_option 35 options 1 cap_hit false compact 1293 bytes dens
  24 card      card   314 cats [6, 2, 2, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 1:0.25 2:1 4:1 5:1 21:1 77:1 93:1 94:0.0625
  25 card      card  3821 cats [6, 1, 1, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 8:1 13:1 76:1 93:1 94:0.0625
  26 card      card  1964 cats [6, 1, 1, 0, 0, 0, 0, 0, 0] ptrs [- - - -] nums 4:1 76:1 93:1 94:0.0625
- 27 event     card     0 cats [3, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [21 - - -] nums 2:1 3:0.875
- 28 event     card     0 cats [3, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [11 - - -] nums 2:1 3:0.75
- 29 event     card     0 cats [0, 0, 0, 0, 0, 22, 0, 0, 0] ptrs [- - - -] nums 2:1 3:0.625
- 30 event     card     0 cats [6, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [24 - - -] nums 2:1 3:0.5
+ 27 event     card     0 cats [3, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [11 - - -] nums 2:1 3:0.875
+ 28 event     card     0 cats [0, 0, 0, 0, 0, 22, 0, 0, 0] ptrs [- - - -] nums 2:1 3:0.75
+ 29 event     card     0 cats [6, 0, 0, 0, 0, 3, 8, 0, 0] ptrs [24 - - -] nums 2:1 3:0.625
+ 30 event     card     0 cats [0, 2, 0, 0, 0, 62, 0, 0, 0] ptrs [- - 1 -] nums 3:0.5
  31 event     card     0 cats [0, 0, 0, 0, 0, 22, 0, 0, 0] ptrs [- - - -] nums 2:1 3:0.375
  32 event     card     0 cats [0, 0, 0, 0, 0, 5, 0, 0, 0] ptrs [- - - -] nums 3:0.25
  33 event     card     0 cats [0, 0, 0, 0, 0, 5, 0, 0, 0] ptrs [- - - -] nums 3:0.125

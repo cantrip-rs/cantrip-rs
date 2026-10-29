@@ -164,6 +164,12 @@ pub enum Event {
     /// entered the battlefield face down under your control this turn" is asked of the history after it has been turned
     /// face up (which ends its face-down status, CR 708.8) or has left, or its control has changed.
     EnteredFaceDown { permanent: ObjectId, controller: PlayerId },
+    /// A permanent entered the battlefield (CR 603.6a), recorded with its `ZoneChange` and after every permanent that entered
+    /// with it is there: `controller` and `types` are what it was as it entered, with the replacement effects and the
+    /// continuous effects of the battlefield applied (CR 614.12, 613). "An artifact entered the battlefield under your
+    /// control this turn" asks that of the history (`History::entered`), however the permanent has changed, left or changed
+    /// controllers since (a Mycosynth Lattice that came and went, a Darksteel Mutation). Only recorded; nothing triggers on it.
+    Entered { permanent: ObjectId, controller: PlayerId, types: TypeSet },
     /// A face-down permanent was turned face up (CR 708.7, 708.8) by `player`: the player who took the special action
     /// (CR 116.2b, 701.40b, 701.58b), or the controller of the spell or ability whose effect turned it up. The same
     /// object, now with its normal characteristics.
@@ -349,7 +355,7 @@ impl Event {
             | Event::PlayerControlled { player, .. } => Some(player),
             Event::Cast(c) => Some(c.player),
             Event::LandPlayed { player, .. } => Some(player),
-            Event::BecameTarget { controller, .. } | Event::EnteredFaceDown { controller, .. } => Some(controller),
+            Event::BecameTarget { controller, .. } | Event::EnteredFaceDown { controller, .. } | Event::Entered { controller, .. } => Some(controller),
             Event::Damage { target: Target::Player(p), .. } | Event::DamagePrevented { target: Target::Player(p), .. } => Some(p),
             _ => None,
         }
@@ -388,6 +394,7 @@ impl Event {
             | Event::Solved { permanent }
             | Event::Suspected { permanent }
             | Event::EnteredFaceDown { permanent, .. }
+            | Event::Entered { permanent, .. }
             | Event::TurnedFaceUp { permanent, .. }
             | Event::PhasedOut { permanent, .. }
             | Event::PhasedIn { permanent }
@@ -481,6 +488,8 @@ impl EventMask {
     pub const PLAYER_CONTROLLED: EventMask = EventMask(1 << 59);
     /// A creature became tapped to pay a spell's teamwork cost (CR 702.194a).
     pub const TAPPED_FOR_TEAMWORK: EventMask = EventMask(1 << 60);
+    /// A permanent entered the battlefield as it was (CR 603.6a): recorded only, for the history.
+    pub const ENTERED: EventMask = EventMask(1 << 61);
 
     /// An event's kind as the history files it: every event has one. `of` is what triggers listen for, which leaves
     /// out the records no ability triggers on.
@@ -504,6 +513,7 @@ impl EventMask {
             Event::GameLost { .. } | Event::GameDrawn { .. } => EventMask::GAME_OVER,
             Event::ManaSpent { .. } => EventMask::MANA_SPENT,
             Event::Convoked { .. } => EventMask::CONVOKED,
+            Event::Entered { .. } => EventMask::ENTERED,
             Event::Shown { .. } => EventMask::SHOWN,
             Event::Shuffled { .. } => EventMask::SHUFFLED,
             Event::Randomized { .. } => EventMask::RANDOMIZED,
@@ -604,6 +614,5 @@ mod tests {
     /// the damage event's other fields could find room for.
     #[test]
     fn an_event_stays_small() {
-        assert!(std::mem::size_of::<Event>() <= 28, "Event is {} bytes", std::mem::size_of::<Event>());
-    }
+        assert!(std::mem::size_of::<Event>() <= 28, "Event is {} bytes", std::mem::size_of::<Event>());    }
 }

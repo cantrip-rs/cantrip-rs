@@ -80,6 +80,22 @@ impl Cast {
     }
 }
 
+/// A permanent as it entered the battlefield (CR 603.6a), as `History::entered` gives it: its `Event::Entered`.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub struct Entered {
+    pub permanent: ObjectId,
+    /// Who controlled it as it entered.
+    pub controller: PlayerId,
+    /// Its card types as it entered, with the replacement effects and the battlefield's continuous effects applied (CR 614.12).
+    pub types: TypeSet,
+}
+
+impl Entered {
+    pub fn is(&self, t: CardType) -> bool {
+        self.types.has(t)
+    }
+}
+
 /// A creature declared as an attacker (CR 508.1; not one put onto the battlefield attacking, CR 508.4): its
 /// `Event::Attacks`, as `History::attacked_with` gives it.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -342,6 +358,15 @@ impl<'a> History<'a> {
     /// The spells `player` has cast this game (CR 601.2i).
     pub fn casts_this_game(&self, player: PlayerId) -> usize {
         self.records.iter().filter(|r| matches!(&r.event, Event::Cast(c) if c.player == player)).count()
+    }
+
+    /// The permanents that entered the battlefield this turn, in order, as each was when it entered (CR 603.6a): the player who
+    /// controlled it and its card types then (`Event::Entered`), whatever has happened to it since.
+    pub fn entered(&self) -> impl Iterator<Item = Entered> + 'a {
+        self.this_turn().iter().filter_map(|r| match r.event {
+            Event::Entered { permanent, controller, types } => Some(Entered { permanent, controller, types }),
+            _ => None,
+        })
     }
 
     /// How the spell on the stack as `spell` was cast, if it was cast this turn.
