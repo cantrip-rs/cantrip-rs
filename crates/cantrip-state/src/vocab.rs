@@ -984,6 +984,8 @@ pub enum Keyword {
     /// if it is phased in, and the permanents that phased out under that player's control phase in (CR 702.26a). The core
     /// plays it (`phasing::untap_step`). Breezekeeper, Merfolk Raiders, Sandbar Crocodile, Teferi's Drake, Tolarian Drake.
     Phasing = 56,
+    /// "This spell can't be copied" (CR 101.2, 707.10): a characteristic of the spell, so no effect copies it. Printed on Choreographed Sparks.
+    CantBeCopied = 57,
 }
 
 impl Keyword {

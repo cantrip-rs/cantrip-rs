@@ -105,6 +105,7 @@ fn keyword_name(k: u8) -> &'static str {
         50 => "LegendaryLandwalk",
         51 => "Wither",
         56 => "Phasing",
+        57 => "CantBeCopied",
         _ => "?",
     }
 }

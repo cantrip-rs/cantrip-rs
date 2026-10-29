@@ -16,13 +16,14 @@ type Card = Map<String, Value>;
 
 const TYPES: [&str; 9] = ["Artifact", "Creature", "Enchantment", "Instant", "Land", "Planeswalker", "Sorcery", "Battle", "Kindred"];
 const BASIC_LAND: [(&str, &str); 5] = [("Plains", "W"), ("Island", "U"), ("Swamp", "B"), ("Mountain", "R"), ("Forest", "G")];
-const KEYWORDS: [&str; 42] = [
+const KEYWORDS: [&str; 43] = [
     "Flying", "Haste", "Vigilance", "Trample", "FirstStrike", "DoubleStrike", "Deathtouch", "Lifelink", "Reach", "Defender",
     "Flash", "Hexproof", "Indestructible", "Menace", "Infect", "Shadow", "Shroud", "CantBeBlocked", "CantBeCountered",
     "CantSpendManaToCast", "CastFromYourGraveyard", "Daybound", "Nightbound", "Changeling", "Decayed",
     "CantBeBlockedByMoreThanOne", "Islandwalk", "Plainswalk", "Swampwalk", "Mountainwalk", "Forestwalk", "Banding",
     "CrewsAsThoughPowerTwoGreater", "SaddlesAsThoughPowerTwoGreater", "Horsemanship", "Fear", "Intimidate", "Skulk",
     "NonbasicLandwalk", "LegendaryLandwalk", "Wither", "Phasing",
+    "CantBeCopied",
 ];
 const COLORS: &str = "WUBRG";
 const COLOR_NAMES: [&str; 5] = ["White", "Blue", "Black", "Red", "Green"];
