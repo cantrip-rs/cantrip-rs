@@ -428,6 +428,10 @@ const INERT: &[(&str, &str)] = &[
         "Wretched Bonemass",
         "its effect gives the keywords of the cards used to craft it, read through the view (`LayerQuery::chars`), a link no synthetic state makes",
     ),
+    (
+        "Kinbinding",
+        "its effect counts the creatures the event history says entered under its controller's control this turn, and a synthetic state has no history; a scenario of the card shows the +X/+X",
+    ),
 ];
 
 /// The contract of every static ability's effect (`StaticApply`), across the whole card table: applied to synthetic objects
