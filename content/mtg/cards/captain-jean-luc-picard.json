@@ -1,0 +1,8 @@
+{
+  "name": "Captain Jean-Luc Picard",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Human Officer",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Other creatures you control get +1/+1.\nWhenever you cast a creature or Spacecraft spell, create a 1/1 red Officer creature token.\nTap seven untapped Officers you control: Search your library for a Spacecraft card, put it onto the battlefield with seven charge counters on it, then shuffle."
+}

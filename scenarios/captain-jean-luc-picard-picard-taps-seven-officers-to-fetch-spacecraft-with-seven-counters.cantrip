@@ -1,0 +1,87 @@
+# Picard must tap seven of its controller's untapped Officers; six of Bot1's and two on Bot2 are still insufficient.
+# It then finds Bot1's Spacecraft and puts it onto the battlefield with seven charge counters before shuffling
+# (CR 118.3, 701.23, 122.6, 608.2c). The library left behind, Mountain on top of eleven Islands, is shuffled after.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Captain Jean-Luc Picard
+Memnite x6
+Wurmwall Sweeper
+Mountain
+Island x11
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Captain Jean-Luc Picard
+Memnite
+Island x2
+Island x3
+Wurmwall Sweeper
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Captain Jean-Luc Picard.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Captain Jean-Luc Picard.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+! Bot1.Battlefield.Captain Jean-Luc Picard.Activate
+[T5 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+! Bot1.Battlefield.Captain Jean-Luc Picard.Activate
+[T7 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Captain Jean-Luc Picard.Activate
+Bot1.Choose(Captain Jean-Luc Picard; Officer Token#1; Officer Token#2; Officer Token#3; Officer Token#4; Officer Token#5; Officer Token#6)
+Bot1.Pass
+Bot1.Search(Wurmwall Sweeper)
+Bot1.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Captain Jean-Luc Picard.Tapped = true
+Bot1.Battlefield.Officer Token#1.Tapped = true
+Bot1.Battlefield.Officer Token#6.Tapped = true
+Bot2.Battlefield.Captain Jean-Luc Picard.Tapped = false
+Bot2.Battlefield.Officer Token.Tapped = false
+Bot1.Battlefield.Wurmwall Sweeper.Counters.Charge = 7
+Bot1.Battlefield.Wurmwall Sweeper.Types = Artifact; Creature
+Bot1.Battlefield.Wurmwall Sweeper.Keywords = Flying
+Bot2.Library = Wurmwall Sweeper; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island
+Bot1.Library != Mountain; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island
+Bot1.Library.Count = 12
