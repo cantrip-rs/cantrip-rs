@@ -1,0 +1,53 @@
+# Run Away Together's ruling (CR 608.2b): if one of the two targets becomes illegal, the spell still returns the other if it is a legal target, the one that
+# left read as it last was to check it was controlled by a different player. On turn 3 Bot1 casts one copy on Ornithopter#1 and Bot2's Elvish Mystic,
+# and in response a second on Ornithopter#2 and the same Mystic. The second resolves first, returning the Mystic and Ornithopter#2; the first then finds the Mystic gone
+# but Ornithopter#1 still legal (Bot1 against the Mystic's last controller, Bot2), so it returns too.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Run Away Together
+Run Away Together
+Ornithopter
+Ornithopter
+Island
+Island x14
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Run Away Together.Cast
+Bot1.Target(Ornithopter#1; Elvish Mystic)
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Run Away Together.Cast
+Bot1.Target(Ornithopter#2; Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Ornithopter; Ornithopter
+Bot2.Hand.Elvish Mystic.Power = 1
+Bot1.Battlefield = Mox Sapphire; Mox Jet; Island; Island
+Bot2.Battlefield = Forest
+Bot1.Graveyard = Run Away Together; Run Away Together

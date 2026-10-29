@@ -1,0 +1,44 @@
+# Run Away Together {1}{U}: "Choose two target creatures controlled by different players. Return those creatures to their owners' hands" (CR 115.1, 400.3).
+# On turn 3 two Ornithopters of Bot1 are refused as the pair (the same controller, though two creatures), and an Ornithopter with Bot2's Forest (not a creature)
+# is refused; Bot1's Ornithopter with Bot2's Elvish Mystic is taken, and each goes to its own owner's hand while the other Ornithopter stays. Mox Sapphire
+# and an Island pay exactly {1}{U}.
+
+[Bot1 Deck]
+Mox Sapphire
+Run Away Together
+Ornithopter
+Ornithopter
+Island x16
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Run Away Together.Cast
+! Bot1.Target(Ornithopter#1; Ornithopter#2)
+! Bot1.Target(Bot2.Battlefield.Forest)
+Bot1.Target(Ornithopter#1; Elvish Mystic)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Ornithopter
+Bot2.Hand.Elvish Mystic.Power = 1
+Bot1.Battlefield = Ornithopter; Mox Sapphire; Island
+Bot2.Battlefield = Forest

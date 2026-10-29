@@ -1,0 +1,51 @@
+# Run Away Together: "two target creatures" is exactly two (CR 115.1), though with three players three creatures can each have a different controller.
+# On Bot1's turn 4 Bot1's Ornithopter, Bot2's Elvish Mystic and Bot3's Llanowar Elves are refused as three targets; two of them (Ornithopter and Elves, Bot1 and Bot3)
+# are taken, and Bot2's Mystic stays.
+
+[Bot1 Deck]
+Mox Sapphire
+Run Away Together
+Ornithopter
+Island x17
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x18
+
+[Bot3 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot3.Pass
+[T3 Bot3.Main1]
+Bot3.Hand.Forest.Play
+Bot3.Battlefield.Forest.Activate
+Bot3.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Run Away Together.Cast
+! Bot1.Target(Ornithopter; Elvish Mystic; Llanowar Elves)
+Bot1.Target(Ornithopter; Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Island; Ornithopter
+Bot3.Hand.Llanowar Elves.Power = 1
+Bot2.Battlefield = Forest; Elvish Mystic

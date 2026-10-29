@@ -1,0 +1,23 @@
+# Run Away Together needs two target creatures (CR 601.2c, 115.1): with only one creature on the battlefield the spell cannot be cast, though that creature is a legal target.
+# On turn 1 Bot1 has an Ornithopter and Mox Sapphire, and Run Away Together is refused for the lack of a second creature.
+
+[Bot1 Deck]
+Mox Sapphire
+Run Away Together
+Ornithopter
+Island x17
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Run Away Together.Cast
+[Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Run Away Together
