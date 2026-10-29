@@ -1,0 +1,8 @@
+{
+  "name": "Raphael, Ninja Destroyer",
+  "manaCost": "{2}{R}{R}",
+  "type": "Legendary Creature — Mutant Ninja Turtle",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Raphael must be blocked if able.\nEnrage — Whenever Raphael is dealt damage, add that much {R}. Until end of turn, you don't lose this mana as steps and phases end."
+}

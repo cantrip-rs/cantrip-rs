@@ -1,0 +1,56 @@
+# Raphael, Ninja Destroyer: "Raphael must be blocked if able." and "Enrage — Whenever Raphael is dealt damage, add that much {R}.
+# Until end of turn, you don't lose this mana as steps and phases end." Turn 1: Raphael for {2}{R}{R}. Turn 2: Bot2 casts a
+# Grizzly Bears. Turn 3: Raphael attacks and Bot2 may not decline to block with its lone Bears; the 2 damage the Bears deal
+# him adds {R}{R}, which outlasts the end of combat and pays in the second main phase for Lightning Bolt ({R}), leaving
+# {R} in the pool for the end step, lost with the turn: the pool is empty on turn 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Raphael, Ninja Destroyer
+Lightning Bolt
+Mountain
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raphael, Ninja Destroyer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Raphael, Ninja Destroyer > Bot2)
+! Bot2.Block(Count: 0)
+Bot2.Block(Grizzly Bears > Raphael, Ninja Destroyer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Mana = {R}{R} lasting {R}{R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Bot1.Mana = {R} lasting {R}
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Mana =
+Bot2.Life = 17
+Bot2.Battlefield.Grizzly Bears = (absent)

@@ -1,0 +1,49 @@
+# Raphael, Ninja Destroyer: a Grizzly Bears blocks him and Bot2 casts Giant Growth on it, so it deals 5, which kills the 4/4
+# Raphael. The enrage trigger still fires for all 5 damage, adding {R}{R}{R}{R}{R} that pays for a second main phase
+# Lightning Bolt even though he is dead.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Raphael, Ninja Destroyer
+Lightning Bolt
+Mountain x16
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Black Lotus
+Grizzly Bears
+Giant Growth
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raphael, Ninja Destroyer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Raphael, Ninja Destroyer > Bot2)
+Bot2.Block(Grizzly Bears > Raphael, Ninja Destroyer)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Giant Growth.Cast(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Mana = {R}{R}{R}{R}{R} lasting {R}{R}{R}{R}{R}
+
+[Expect]
+Bot1.Battlefield.Raphael, Ninja Destroyer = (absent)

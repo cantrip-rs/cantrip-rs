@@ -1,0 +1,31 @@
+# Raphael, Ninja Destroyer: "Raphael must be blocked if able." Bot2 has no creature, so nothing is required and he connects
+# for 4; with no damage dealt to him, no mana is added.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Raphael, Ninja Destroyer
+Mountain x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raphael, Ninja Destroyer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Raphael, Ninja Destroyer > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Mana =
