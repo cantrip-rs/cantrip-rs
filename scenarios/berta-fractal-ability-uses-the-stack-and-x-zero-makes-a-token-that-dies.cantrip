@@ -1,0 +1,37 @@
+# Berta, Wise Extrapolator: "{X}, {T}: Create a 0/0 Fractal creature token and put X +1/+1 counters on it" is not a mana ability
+# (CR 605.1a): it waits on the stack where the opponent may respond (CR 602.2). With X = 0 the token is made with no counters and
+# dies as a state-based action (CR 704.5f); Berta stays tapped.
+
+[Bot1 Deck]
+Berta, Wise Extrapolator
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Berta, Wise Extrapolator.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Berta, Wise Extrapolator.Activate(X: 0)
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Pass
+? Bot1.Battlefield.Berta, Wise Extrapolator.Tapped = true
+
+[Expect]
+Bot1.Battlefield = Berta, Wise Extrapolator; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
+LeftBattlefield.Count = 1

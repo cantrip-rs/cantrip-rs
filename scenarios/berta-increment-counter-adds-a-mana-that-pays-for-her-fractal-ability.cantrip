@@ -1,0 +1,53 @@
+# Berta, Wise Extrapolator ({2}{G}{U}, 1/4): casting Geometer's Arthropod with two mana (more than her power 1) triggers
+# increment, which puts a +1/+1 counter on her; that triggers "whenever one or more +1/+1 counters are put on Berta, add one mana
+# of any color", resolved from the stack before the Arthropod. With the two Moxen still untapped, that mana pays {X} = 3 for
+# her ability, a Fractal with three +1/+1 counters (CR 107.3).
+
+[Bot1 Deck]
+Berta, Wise Extrapolator
+Geometer's Arthropod
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Berta, Wise Extrapolator.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Geometer's Arthropod.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Berta, Wise Extrapolator.Counters.PlusOnePlusOne = 1
+Bot1.Colors(Green)
+? Bot1.Mana = {G}
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Berta, Wise Extrapolator.Activate(X: 3)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Berta, Wise Extrapolator.Tapped = true
+Bot1.Battlefield.Fractal Token.Power = 3
+Bot1.Battlefield.Fractal Token.Counters.PlusOnePlusOne = 3
+Bot1.Mana = 
