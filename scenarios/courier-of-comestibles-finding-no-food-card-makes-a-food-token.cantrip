@@ -1,0 +1,28 @@
+# Courier of Comestibles: Bot1 searches a library that holds a Food card but takes nothing (a search may find nothing,
+# CR 701.23b), so no card went into the hand and a Food token is made.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Courier of Comestibles
+Mountain x4
+Guac & Marshmallow Pizza
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Courier of Comestibles.Cast
+Bot1.Pass
+Bot1.Accept
+Bot1.Search()
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Courier of Comestibles; Food Token; Mox Emerald; Mox Emerald
+Bot1.Hand = Mountain; Mountain; Mountain; Mountain

@@ -1,0 +1,34 @@
+# Courier of Comestibles: "you may search your library for a Food card, reveal it, put it into your hand, then shuffle. If you
+# don't put a card into your hand this way, create a Food token." Bot1 searches and takes Guac & Marshmallow Pizza (an
+# Ornithopter, not Food, is refused, and so are two Food cards: "a Food card"), so it is in hand and no Food token is made.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Courier of Comestibles
+Mountain x4
+Ornithopter
+Guac & Marshmallow Pizza
+Guac & Marshmallow Pizza
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Courier of Comestibles.Cast
+Bot1.Pass
+Bot1.Accept
+! Bot1.Search(Ornithopter)
+! Bot1.Search(Guac & Marshmallow Pizza; Guac & Marshmallow Pizza)
+Bot1.Search(Guac & Marshmallow Pizza)
+? Bot1.Revealed = Guac & Marshmallow Pizza
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Courier of Comestibles; Mox Emerald; Mox Emerald
+Bot1.Hand = Guac & Marshmallow Pizza; Mountain; Mountain; Mountain; Mountain

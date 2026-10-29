@@ -1,0 +1,28 @@
+# Courier of Comestibles: declining the search puts no card into the hand, so a Food token is made; nothing was searched or
+# shuffled (CR 701.23), so the Pizza and the Ornithopter stay in order on top of the library.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Courier of Comestibles
+Mountain x4
+Guac & Marshmallow Pizza
+Ornithopter
+Mountain x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Courier of Comestibles.Cast
+Bot1.Pass
+Bot1.Decline
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Courier of Comestibles; Food Token; Mox Emerald; Mox Emerald
+Bot1.Library = Guac & Marshmallow Pizza; Ornithopter; Mountain; Mountain; Mountain; Mountain; Mountain; Mountain; Mountain; Mountain; Mountain; Mountain; Mountain
