@@ -1,0 +1,48 @@
+# Bot1 controls M'Benga and puts two counters on Bot2's Ornithopter with Angelfire Ignition. The opponent-controlled
+# creature gets exactly two counters and no hexproof: both its controller and the counter putter must be Bot1 (CR 614.5, 702.11b).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Dr. Joseph M'Benga
+Angelfire Ignition
+Island x16
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dr. Joseph M'Benga.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Angelfire Ignition.Cast(Bot2.Battlefield.Ornithopter)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Battlefield.Ornithopter.Damage = 3
+Bot1.Graveyard.Angelfire Ignition.Colors = Red; White
+Bot2.Graveyard.Lightning Bolt.Colors = Red

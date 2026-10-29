@@ -1,0 +1,56 @@
+# M'Benga doubles +1/+1 counters on itself and on another creature. It does not grant hexproof to itself, but does grant it to Ornithopter after that creature gets counters; Bot2's second Bolt is then illegal (CR 613.1f, 614.5, 702.11b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Ruby
+Dr. Joseph M'Benga
+Ornithopter
+Angelfire Ignition
+Angelfire Ignition
+Island x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dr. Joseph M'Benga.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Angelfire Ignition.Cast(Bot1.Battlefield.Dr. Joseph M'Benga)
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Dr. Joseph M'Benga)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Angelfire Ignition.Cast(Bot1.Battlefield.Ornithopter)
+[T6 Bot2.Main1]
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Dr. Joseph M'Benga.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Hexproof
+Bot2.Graveyard.Lightning Bolt.Colors = Red
+Bot2.Hand.Lightning Bolt.Colors = Red

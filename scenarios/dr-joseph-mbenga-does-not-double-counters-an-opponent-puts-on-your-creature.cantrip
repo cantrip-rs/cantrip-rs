@@ -1,0 +1,38 @@
+# "If you would put": Bot2 puts two +1/+1 counters on Bot1's Ornithopter with Angelfire Ignition. The creature is Bot1's,
+# but Bot1 is not the one putting the counters, so M'Benga doesn't double them: two, not four. With counters on it,
+# the Ornithopter then has hexproof from M'Benga (CR 122.6, 614.1a, 702.11b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Ornithopter
+Dr. Joseph M'Benga
+Forest x16
+
+[Bot2 Deck]
+Mountain
+Mox Pearl
+Mox Ruby
+Angelfire Ignition
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dr. Joseph M'Benga.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Angelfire Ignition.Cast(Bot1.Battlefield.Ornithopter)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Haste; Hexproof; Indestructible; Lifelink; Trample; Vigilance

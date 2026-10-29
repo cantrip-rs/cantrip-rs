@@ -1,0 +1,8 @@
+{
+  "name": "Dr. Joseph M'Benga",
+  "manaCost": "{2}{G}{G}",
+  "type": "Legendary Creature — Human Doctor",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Other creatures you control with counters on them have hexproof.\nIf you would put one or more counters on a creature you control, put twice that many of each of those kinds of counters on that creature instead."
+}

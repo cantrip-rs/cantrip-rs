@@ -1,0 +1,43 @@
+# Bot2 puts counters on its Ornithopter while M'Benga is controlled by Bot1. Those counters are not doubled and the
+# opponent's creature does not gain hexproof; Bot1's Bolt is legal and leaves the creature alive (CR 614.5, 702.11b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Dr. Joseph M'Benga
+Lightning Bolt
+Forest x16
+
+[Bot2 Deck]
+Mountain
+Mox Pearl
+Mox Ruby
+Ornithopter
+Angelfire Ignition
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dr. Joseph M'Benga.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Angelfire Ignition.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield.Ornithopter.Damage = 3
+Bot1.Graveyard.Lightning Bolt.Colors = Red

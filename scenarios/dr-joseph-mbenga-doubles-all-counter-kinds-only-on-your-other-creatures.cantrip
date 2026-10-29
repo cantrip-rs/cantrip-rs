@@ -1,0 +1,42 @@
+# Abigale makes Ornithopter lose all abilities and puts flying, first-strike and lifelink counters on it; M'Benga doubles
+# each kind on a creature you control (CR 122.6, 614.1a). Abigale's later effect also removes the hexproof M'Benga's
+# earlier static gives it, while the counters' keywords, newer still, stay (CR 613.1f, 613.7, 122.1b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Mox Jet
+Dr. Joseph M'Benga
+Ornithopter
+Abigale, Eloquent First-Year
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dr. Joseph M'Benga.Cast
+Bot1.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Abigale, Eloquent First-Year.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.Flying = 2
+Bot1.Battlefield.Ornithopter.Counters.FirstStrike = 2
+Bot1.Battlefield.Ornithopter.Counters.Lifelink = 2
+Bot1.Battlefield.Ornithopter.Keywords = FirstStrike; Flying; Lifelink
+
+
+

@@ -1,0 +1,31 @@
+# "On a creature you control": Ashiok, Dream Render enters with its five loyalty counters under Bot1, who controls
+# M'Benga, but it is no creature, so they are not doubled (CR 122.6, 306.5b, 614.1a, 614.12).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Dr. Joseph M'Benga
+Black Lotus
+Ashiok, Dream Render
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Dr. Joseph M'Benga.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ashiok, Dream Render.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ashiok, Dream Render.Counters.Loyalty = 5
