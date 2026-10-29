@@ -1,0 +1,63 @@
+# Quintessential Katana: a non-Ninja entering (Savannah Lions) offers nothing, and a Ninja (Blade-Blizzard Kitsune) may be
+# declined. Bot1 equips the Lions (Equip {2}), a 3/2, and attacks; Bot2 double-blocks with two Elvish Mystics. The Lions deals
+# its combat damage to both at once - one batch (CR 603.2c) - so "untap it and you gain 2 life" triggers once: Bot1 20 + 2 = 22.
+# The Lions dies to the two blockers, so there is nothing to untap.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Savannah Lions
+Quintessential Katana
+Plains
+Plains
+Black Lotus
+Blade-Blizzard Kitsune
+Plains x13
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Elvish Mystic
+Elvish Mystic
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Quintessential Katana.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Blade-Blizzard Kitsune.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Decline
+? Bot1.Battlefield.Quintessential Katana.AttachedTo = (absent)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Quintessential Katana.Activate(Bot1.Battlefield.Savannah Lions; Ability: Equip {2})
+Bot1.Pass
+Bot1.Attack(Savannah Lions > Bot2)
+Bot2.Block(Elvish Mystic#1 > Savannah Lions; Elvish Mystic#2 > Savannah Lions)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot1.Graveyard = Savannah Lions; Black Lotus
+Bot2.Graveyard.Count = 2

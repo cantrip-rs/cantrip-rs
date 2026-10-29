@@ -1,0 +1,32 @@
+# "Whenever a Ninja you control enters": Bot2's Prehistoric Pet (a Dinosaur Ninja) entering is not a Ninja Bot1 controls, so the
+# Katana asks Bot1 nothing and stays unattached, even though the creature is a Ninja.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Quintessential Katana
+Plains x17
+
+[Bot2 Deck]
+Plains
+Prehistoric Pet
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Quintessential Katana.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Prehistoric Pet.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot1.Decline
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield = Plains; Prehistoric Pet
+Bot1.Battlefield.Quintessential Katana.AttachedTo = (absent)

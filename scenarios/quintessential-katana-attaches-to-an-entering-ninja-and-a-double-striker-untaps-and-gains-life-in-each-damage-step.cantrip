@@ -1,0 +1,40 @@
+# Quintessential Katana: "Whenever a Ninja you control enters, you may attach this Equipment to it." Bot1 casts the Katana,
+# then Blade-Blizzard Kitsune (a Fox Ninja, 2/2 double strike) and accepts: it is a 3/3. On T3 it attacks and deals combat
+# damage in both steps (CR 510.4), so the granted "untap it and you gain 2 life" triggers in each: Bot2 20 - 3 - 3 = 14, Bot1
+# 20 + 2 + 2 = 24, and the Kitsune ends untapped.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Quintessential Katana
+Blade-Blizzard Kitsune
+Plains
+Plains
+Plains
+Plains x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Quintessential Katana.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Blade-Blizzard Kitsune.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Accept
+? Bot1.Battlefield.Quintessential Katana.AttachedTo = Blade-Blizzard Kitsune
+? Bot1.Battlefield.Blade-Blizzard Kitsune.Power = 3
+? Bot1.Battlefield.Blade-Blizzard Kitsune.Toughness = 3
+[T3 Bot1.Main1]
+Bot1.Attack(Blade-Blizzard Kitsune > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 24
+Bot1.Battlefield.Blade-Blizzard Kitsune.Tapped = false
