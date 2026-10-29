@@ -18,9 +18,7 @@ fn yours(q: &dyn Query, asker: &Asker, planeswalker: ObjectId) -> bool {
 /// source of the damage, as it last existed if it has left (CR 113.7a), and "you" is the controller of the ability
 /// (CR 109.5).
 fn ping_and_gain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::damage_each_opponent(g, item, 1);
-    g.gain_life(item.controller, 1);
-    Ok(())
+    effects::damage_each_opponent_and_gain_life(g, item, 1)
 }
 
 pub static CARD: CardDef = CardDef {

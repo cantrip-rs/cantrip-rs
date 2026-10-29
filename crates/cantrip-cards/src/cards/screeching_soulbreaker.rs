@@ -6,8 +6,7 @@ use cantrip_oracle as oracle;
 /// opponent and you gain 1 life." One damage event for each opponent still in the game (CR 120.2, 102.2), then the
 /// controller gains 1 life (CR 119.3).
 fn drain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::damage_each_opponent(g, item, 1);
-    effects::gain_life(g, item, 1)
+    effects::damage_each_opponent_and_gain_life(g, item, 1)
 }
 
 pub static CARD: CardDef = CardDef {

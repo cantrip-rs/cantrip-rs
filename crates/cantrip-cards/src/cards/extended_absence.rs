@@ -6,8 +6,7 @@ use cantrip_oracle as oracle;
 /// life."
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     exile_target(g, item, 0);
-    effects::damage_each_opponent(g, item, 1);
-    effects::gain_life(g, item, 1)
+    effects::damage_each_opponent_and_gain_life(g, item, 1)
 }
 
 pub static CARD: CardDef = CardDef {
