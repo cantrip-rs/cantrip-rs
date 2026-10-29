@@ -1,0 +1,53 @@
+# West Wind Avatar: "Whenever this creature enters or attacks, you may sacrifice a token or a land. If you do, you gain 3 life." Bot1 casts it on turn 3 with
+# five Moxen, the Gleemox and a Forest. The Moxen are not a token or a land, so sacrificing one is refused; Bot1 sacrifices the Forest and gains 3 life (23).
+# Disappear: the Forest left the battlefield under Bot1's control this turn, so at the beginning of Bot1's end step it draws a card.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Gleemox
+West Wind Avatar
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.West Wind Avatar.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Choose(Mox Jet)
+! Bot1.Choose(West Wind Avatar)
+Bot1.Choose(Forest)
+? Bot1.Life = 23
+[T3 Bot1.End]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Life = 23
+Bot1.Battlefield = Gleemox; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; West Wind Avatar
+Bot1.Graveyard = Forest
+Bot1.Hand = Island

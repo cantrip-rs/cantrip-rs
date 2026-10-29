@@ -1,0 +1,11 @@
+{
+  "name": "West Wind Avatar",
+  "manaCost": "{5}{G}{G}",
+  "type": "Creature — Cat Spirit Avatar",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Trample\nWhenever this creature enters or attacks, you may sacrifice a token or a land. If you do, you gain 3 life.\nDisappear — At the beginning of your end step, if a permanent left the battlefield under your control this turn, draw a card.",
+  "keywords": [
+    "Trample"
+  ]
+}

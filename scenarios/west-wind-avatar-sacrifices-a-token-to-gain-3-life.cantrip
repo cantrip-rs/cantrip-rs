@@ -1,0 +1,51 @@
+# West Wind Avatar sacrifices "a token or a land" (one of them, not both): Bot1 casts a Gilded Goose on turn 1 (a Food token) and the Avatar on turn 3 with a
+# Forest, Black Lotus and three Moxen. Both the Food token and the Forest qualify, so sacrificing both is refused, and so is a Mox; Bot1 sacrifices the Food and
+# gains 3 life (23), keeping the Forest.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Gilded Goose
+Black Lotus
+West Wind Avatar
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Gilded Goose.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.West Wind Avatar.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+! Bot1.Choose(Mox Jet)
+! Bot1.Choose(Forest; Food Token)
+Bot1.Choose(Food Token)
+? Bot1.Life = 23
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Life = 23
+Bot1.Battlefield = Forest; Gilded Goose; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; West Wind Avatar

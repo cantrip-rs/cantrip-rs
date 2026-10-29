@@ -1,0 +1,59 @@
+# West Wind Avatar: the sacrifice is a choice (CR 608.2d) and the life is gained only "if you do" (CR 608.2c). Bot1 casts it on turn 3 and declines to sacrifice the
+# Forest: no life, nothing left the battlefield, so Disappear draws nothing at the end step. On turn 5 it attacks, the trigger offers the Forest again, and Bot1
+# sacrifices it: 3 life (23), a card at the end step (the Forest left), and Bot2 takes 7 trample damage.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Gleemox
+West Wind Avatar
+Forest
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.West Wind Avatar.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose()
+? Bot1.Life = 20
+[T3 Bot1.End]
+? Bot1.Hand.Count = 0
+[T5 Bot1.Main1]
+Bot1.Attack(West Wind Avatar > Bot2)
+Bot1.Pass
+Bot1.Choose(Forest)
+? Bot1.Life = 23
+[T5 Bot1.CombatDamage]
+? Bot2.Life = 13
+[T5 Bot1.End]
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Life = 23
+Bot2.Life = 13
+Bot1.Graveyard = Forest
