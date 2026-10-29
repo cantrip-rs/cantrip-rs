@@ -1,0 +1,50 @@
+# Captain Pike has a characteristic-defining P/T equal to distinct land names you control; the top land may be played once it enters, repeated Forests count once, and Bot2's Plains does not count.
+# The ability defines its P/T in every zone (CR 604.3): one Forest makes the Pike in hand 1/1, and a second Pike at the
+# bottom of the library is 2/2 at the end.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Jet
+Black Lotus
+Captain Pike, Fullness of Time
+Forest
+Island
+Mountain
+Island
+Plains
+Forest
+Island x10
+Captain Pike, Fullness of Time
+
+[Bot2 Deck]
+Plains
+Island x10
+
+[Actions]
+Bot1.Hand.Forest.Play
+? Bot1.Hand.Captain Pike, Fullness of Time.Power = 1
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Captain Pike, Fullness of Time.Cast
+Bot1.Forest.Activate
+Bot1.Mox Emerald.Activate
+Bot1.Black Lotus.Activate(Color: Green)
+Bot1.Pass
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Library.Island.Play
+? Bot1.Battlefield.Captain Pike, Fullness of Time.Power = 2
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.Captain Pike, Fullness of Time.Power = 2
+
+[Expect]
+Bot1.Battlefield.Captain Pike, Fullness of Time.Power = 2
+Bot1.Battlefield.Captain Pike, Fullness of Time.Toughness = 2
+Bot1.Battlefield.Island.Tapped = false
+Bot1.Battlefield.Forest#1.Tapped = false
+Bot1.Battlefield.Forest#2.Tapped = false
+Bot1.Library.Captain Pike, Fullness of Time.Power = 2
+Bot1.Library.Captain Pike, Fullness of Time.Toughness = 2

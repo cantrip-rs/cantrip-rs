@@ -1,0 +1,8 @@
+{
+  "name": "Captain Pike, Fullness of Time",
+  "manaCost": "{1}{G}{G}",
+  "type": "Legendary Creature — Human Officer Scout",
+  "power": "*",
+  "toughness": "*",
+  "oracleText": "Strange new worlds — Captain Pike's power and toughness are each equal to the number of differently named lands you control.\nYou may look at the top card of your library any time.\nYou may play lands from the top of your library."
+}
