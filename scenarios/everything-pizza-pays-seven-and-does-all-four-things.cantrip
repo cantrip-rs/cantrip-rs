@@ -1,0 +1,59 @@
+# Everything Pizza's ability costs {2}{W}{U}{B}{R}{G}, {T} and a sacrifice: "Target player gains 3 life and draws a card.
+# Each of your opponents discards a card. This artifact deals 3 damage to any target. Put three +1/+1 counters on up to one
+# target creature." Bot1 taps five Moxen and two Plains on turn three, targeting itself, Bot2 and its own Ornithopter:
+# Bot1 gains 3 (20 -> 23) and draws, Bot2 discards a card and takes 3 (20 -> 17), the 0/2 Ornithopter becomes 3/5, and the
+# Pizza is in the graveyard (CR 118.3, 701.9, 120.3, 122.1).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Everything Pizza
+Plains
+Ornithopter
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Everything Pizza.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Everything Pizza.Activate(Ability: gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 17
+Bot2.Hand.Count = 6
+Bot1.Mana = 
+Bot1.Battlefield.Ornithopter.Power = 3
+Bot1.Battlefield.Ornithopter.Toughness = 5
+Bot1.Graveyard = Everything Pizza
+Bot1.Hand.Count = 1

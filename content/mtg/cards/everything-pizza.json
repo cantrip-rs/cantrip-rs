@@ -1,0 +1,6 @@
+{
+  "name": "Everything Pizza",
+  "manaCost": "{2}",
+  "type": "Artifact — Food",
+  "oracleText": "When this artifact enters, search your library for a basic land card, reveal it, put it into your hand, then shuffle.\n{2}{W}{U}{B}{R}{G}, {T}, Sacrifice this artifact: Target player gains 3 life and draws a card. Each of your opponents discards a card. This artifact deals 3 damage to any target. Put three +1/+1 counters on up to one target creature."
+}
