@@ -1,0 +1,6 @@
+{
+  "name": "Anchovy & Banana Pizza",
+  "manaCost": "{2}{B}{B}",
+  "type": "Artifact — Food",
+  "oracleText": "When this artifact enters, destroy target creature.\n{2}, {T}, Sacrifice this artifact: You gain 3 life."
+}

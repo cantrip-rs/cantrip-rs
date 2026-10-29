@@ -1,0 +1,49 @@
+# "When this artifact enters, destroy target creature" (CR 603.6a, 701.8): Bot1 casts the Pizza for {2}{B}{B} (Black Lotus' BBB and Mox Jet), targeting Bot2's
+# Ornithopter on turn 3 (the Pizza itself is no creature to choose; Bot1's own Ornithopter would be a legal target), and it is destroyed. "{2}, {T}, Sacrifice this artifact: You gain 3 life"
+# then costs exactly {2} (Mox Pearl, Mox Emerald): the Pizza is sacrificed and Bot1 gains 3 life, not 2 or 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Emerald
+Anchovy & Banana Pizza
+Ornithopter
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Anchovy & Banana Pizza.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Anchovy & Banana Pizza)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Ornithopter
+? Bot1.Life = 20
+Bot1.Battlefield.Anchovy & Banana Pizza.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Battlefield.Mox Emerald.Tapped = true
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Graveyard = Anchovy & Banana Pizza; Black Lotus
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Ornithopter
+Bot2.Battlefield.Count = 0
