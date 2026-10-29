@@ -1,0 +1,39 @@
+# Ulna Alley Shopkeep: any life gained this turn is enough. Postmortem Professor attacking gains Bot1 exactly 1 life with its trigger, and the Shopkeep
+# (2/3 with menace) becomes 4/3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Ulna Alley Shopkeep
+Postmortem Professor
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ulna Alley Shopkeep.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Postmortem Professor.Cast
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Ulna Alley Shopkeep.Power = 2
+Bot1.Attack(Postmortem Professor > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot1.Battlefield.Ulna Alley Shopkeep.Power = 4
+
+[Expect]
+Bot1.Battlefield.Ulna Alley Shopkeep.Toughness = 3

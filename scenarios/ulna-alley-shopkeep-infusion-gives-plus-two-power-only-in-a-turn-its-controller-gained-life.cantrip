@@ -1,0 +1,40 @@
+# Ulna Alley Shopkeep: a 2/3 with menace; Infusion -- +2/+0 as long as Bot1 gained life this turn. It is 2/3 before Lightning Helix gains
+# Bot1 3 life, 4/3 after (a static ability, not a one-shot: it applies whenever the history says so), and 2/3 again in Bot2's turn.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Ulna Alley Shopkeep
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Swamp x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Ulna Alley Shopkeep.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Battlefield.Ulna Alley Shopkeep.Power = 2
+? Bot1.Battlefield.Ulna Alley Shopkeep.Keywords = Menace
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Ulna Alley Shopkeep.Power = 4
+? Bot1.Battlefield.Ulna Alley Shopkeep.Toughness = 3
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Ulna Alley Shopkeep.Power = 2
+Bot1.Battlefield.Ulna Alley Shopkeep.Toughness = 3

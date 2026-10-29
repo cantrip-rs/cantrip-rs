@@ -1,0 +1,11 @@
+{
+  "name": "Ulna Alley Shopkeep",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Goblin Warlock",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nInfusion — This creature gets +2/+0 as long as you gained life this turn.",
+  "keywords": [
+    "Menace"
+  ]
+}
