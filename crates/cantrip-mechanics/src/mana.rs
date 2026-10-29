@@ -124,8 +124,7 @@ pub fn enters_tapped_unless_two_or_more_other_lands(g: &mut dyn Game, entering: 
 /// not being a color (CR 105.1). An object never cast spent none (CR 400.7). Engineered Explosives and Pentad Prism
 /// print it.
 pub fn sunburst(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    let spent = g.obj(entering.object).spent;
-    let colors = [Mana::W, Mana::U, Mana::B, Mana::R, Mana::G].iter().filter(|&&m| spent.get(m) > 0).count() as i16;
+    let colors = crate::spent::colors_of_mana_spent(g, entering.object) as i16;
     entering.counters[CounterKind::Charge as usize] += colors;
     Ok(())
 }

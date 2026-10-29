@@ -13,6 +13,16 @@ pub fn two<const M: u8>(q: &dyn Query, asker: &Asker) -> bool {
     q.obj(asker.source).spent.get(Mana::ALL[M as usize]) >= 2
 }
 
+/// Converge (an ability word, CR 207.2c) and sunburst (CR 702.44a): the number of colors of mana spent to cast `object`
+/// (CR 601.2h). Colorless is not a color (CR 105.1), and an object that was not cast (a copy of a spell, CR 707.10, or a
+/// permanent put onto the battlefield) had none spent. Read from the object itself, so it still answers once it has left the
+/// stack. Prismatic Ending, Together as One, Archaic's Agony and Magmablood Archaic print converge; Engineered Explosives and
+/// Pentad Prism print sunburst.
+pub fn colors_of_mana_spent(q: &dyn Query, object: ObjectId) -> u32 {
+    let spent = q.obj(object).spent;
+    [Mana::W, Mana::U, Mana::B, Mana::R, Mana::G].into_iter().filter(|&m| spent.get(m) > 0).count() as u32
+}
+
 /// Opus (an ability word, CR 207.2c): "if five or more mana was spent to cast that spell", where the spell is the one the
 /// ability triggered on (`item.subject`). Its mana spent (CR 601.2h) is read from the spell's own object, so it still answers once
 /// the spell has been countered or has left the stack (CR 608.2h); a spell cast without paying its mana cost has had none spent.
