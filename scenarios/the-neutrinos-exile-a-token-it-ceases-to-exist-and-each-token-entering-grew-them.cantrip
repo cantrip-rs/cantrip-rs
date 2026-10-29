@@ -1,0 +1,58 @@
+# The Neutrinos: a token you own is a legal target, but exiled it ceases to exist and does not return (CR 111.7). On turn 3 Bot1 casts Lingering Souls, whose two Spirit tokens entering give
+# The Neutrinos +1/+0 each (Alliance), then attacks and exiles one Spirit: one Spirit is left, nothing came back attacking, and The Neutrinos alone deal 2 + 2 = 4: Bot2 on 16.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+The Neutrinos
+Lingering Souls
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Neutrinos.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Neutrinos.Power = 4
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Neutrinos)
+Bot1.Target(Bot1.Battlefield.Spirit Token#1)
+Bot1.Pass
+Bot2.Pass
+? Combat.Attackers.Count = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Spirit Token; The Neutrinos

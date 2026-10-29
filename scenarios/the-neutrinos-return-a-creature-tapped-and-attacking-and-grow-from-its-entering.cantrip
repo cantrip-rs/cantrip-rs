@@ -1,0 +1,61 @@
+# The Neutrinos: "Alliance - Whenever another creature you control enters, The Neutrinos get +1/+0 until end of turn. Whenever The Neutrinos attack, exile up to one target creature you own,
+# then return it to the battlefield under your control tapped and attacking." On turn 3 Bot1 attacks with The Neutrinos alone and exiles Memnite, which was summoning sick at home: it comes
+# back tapped and attacking (CR 508.4) and, entering, gives The Neutrinos +1/+0. Bot1 may not choose Bot2's Ornithopter ("you own"). The Neutrinos deal 3 flying and Memnite 1: Bot2 on 16.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+The Neutrinos
+Memnite
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Neutrinos.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Neutrinos)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Tapped = true
+? Bot1.Battlefield.Memnite.SummoningSick = true
+? Combat.Attackers.Count = 2
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.The Neutrinos.Power = 3
+Bot1.Battlefield.The Neutrinos.Toughness = 4

@@ -1,0 +1,53 @@
+# The Neutrinos: "exile up to one target creature you own" - The Neutrinos is a creature Bot1 owns, so it may target itself (CR 115.4): it is exiled and returns as a new object, tapped and
+# attacking (CR 508.4), and its entering is not "another creature" so nothing grows. It deals 2 flying: Bot2 on 18. On turn 5 Bot1 chooses no target (an empty answer) and The Neutrinos
+# stay in combat as they were: 2 more, Bot2 on 16.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+The Neutrinos
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Neutrinos.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Neutrinos)
+Bot1.Target(The Neutrinos)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Neutrinos.Tapped = true
+? Combat.Attackers.Count = 1
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(The Neutrinos)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16

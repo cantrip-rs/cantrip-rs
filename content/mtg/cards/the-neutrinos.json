@@ -1,0 +1,11 @@
+{
+  "name": "The Neutrinos",
+  "manaCost": "{2}{R}{W}",
+  "type": "Legendary Creature — Elf Rebel",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Flying\nAlliance — Whenever another creature you control enters, The Neutrinos get +1/+0 until end of turn.\nWhenever The Neutrinos attack, exile up to one target creature you own, then return it to the battlefield under your control tapped and attacking.",
+  "keywords": [
+    "Flying"
+  ]
+}
