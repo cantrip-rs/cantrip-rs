@@ -16,16 +16,11 @@ fn discard_and_search(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     Ok(())
 }
 
-/// "Another target permanent": any permanent but the source.
-fn other_permanent(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    matches!(t, Target::Object(id) if id != asker.source && targets::permanent(q, id))
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(THIS_ENTERS, discard_and_search, "When this creature enters, you may discard a card. If you do, search your library for a creature card, reveal it, put it into your hand, then shuffle."),
         ability(cost("{1}, {T}"), effects::untap_targets, "{1}, {T}: Untap another target permanent.")
-            .targets(&[target(other_permanent)]),
+            .targets(&[targets::OTHER_PERMANENT]),
     ],
     ..oracle::FORMIDABLE_SPEAKER
 };

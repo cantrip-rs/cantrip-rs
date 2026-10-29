@@ -1,0 +1,37 @@
+# "{1}, {T}: Untap another target permanent": Formidable Speaker is a permanent on the battlefield as its own ability asks
+# for a target, but it is not "another" one, so it is not among the candidates (the refusal), while the Mox Jet that paid
+# the {1} is (the activation that follows), and is untapped. Entering, the Speaker's controller declines to discard.
+
+[Bot1 Deck]
+Formidable Speaker
+Gleemox
+Mox Emerald
+Mox Jet
+Island x14
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Formidable Speaker.Cast
+Bot1.Pass
+Bot1.Choose()
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Formidable Speaker.Activate(Ability: Untap another; Bot1.Battlefield.Formidable Speaker)
+Bot1.Battlefield.Formidable Speaker.Activate(Ability: Untap another; Mox Jet)
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard =
+Bot1.Battlefield.Formidable Speaker.Tapped = true
+Bot1.Battlefield.Mox Jet.Tapped = false

@@ -3,11 +3,6 @@ use cantrip_mechanics::targets;
 use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_oracle as oracle;
 
-/// "Another target permanent": any permanent on the battlefield but the source itself.
-fn another_permanent(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    matches!(t, Target::Object(id) if id != asker.source) && (targets::PERMANENT.filter)(q, asker, t)
-}
-
 /// Exile another target permanent. Return that card to the battlefield under its owner's control at the beginning of
 /// the next end step (CR 603.7): a delayed ability about the card exiled, only if it is in exile.
 fn exile(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -17,7 +12,7 @@ fn exile(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(THIS_ENTERS, exile, "When Flickerwisp enters, exile another target permanent. Return that card to the battlefield under its owner's control at the beginning of the next end step.")
-        .targets(&[target(another_permanent)])],
+        .targets(&[targets::OTHER_PERMANENT])],
     delayed: &[delayed_trigger(cantrip_mechanics::delayed::return_subject_to_battlefield, "Return the card exiled with Flickerwisp to the battlefield under its owner's control.")],
     ..oracle::FLICKERWISP
 };

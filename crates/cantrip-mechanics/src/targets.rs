@@ -692,6 +692,14 @@ pub fn artifact_creature_or_enchantment_filter(q: &dyn Query, _: &Asker, t: Targ
 }
 /// "Target permanent". Alpha Deathclaw and Argentum Armor print it.
 pub const PERMANENT: TargetSpec = target(permanent_filter);
+fn other_permanent_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    t != Target::Object(asker.source) && permanent_filter(q, asker, t)
+}
+
+/// "Another target permanent" (CR 115.1, 109.5): any permanent except the source itself.
+/// Flickerwisp, Formidable Speaker and D'Vana Tendi, Optimistic Ensign print it.
+pub const OTHER_PERMANENT: TargetSpec = target(other_permanent_filter);
+
 /// "Target permanent you control". Harmless Offering and Deceiver Exarch print it.
 pub const PERMANENT_YOU_CONTROL: TargetSpec = target(permanent_you_control_filter);
 /// "Target nonland permanent". Banishing Knack and Boomerang Basics print it.
