@@ -1,0 +1,45 @@
+# Forum Necroscribe: only a creature card in Bot1's own graveyard is a legal target. Bot2's dead Ornithopter and Bot1's Lightning Bolt are not, so the
+# second Repartee trigger is removed and both of Bot2's Ornithopters stay in Bot2's graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mountain
+Forum Necroscribe
+Lightning Bolt
+Lightning Bolt
+Mountain x13
+
+[Bot2 Deck]
+Ornithopter x2
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Forum Necroscribe.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter#1.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Jet; Mox Ruby; Forum Necroscribe
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+Bot2.Graveyard = Ornithopter; Ornithopter

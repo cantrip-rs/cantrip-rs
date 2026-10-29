@@ -1,0 +1,46 @@
+# Forum Necroscribe: Repartee returns target creature card from Bot1's graveyard. The first Bolt (at Bot1's own Ornithopter) finds no creature card in
+# the graveyard, so the trigger is removed from the stack; the second Bolt (at Bot2's Ornithopter) returns Bot1's dead Ornithopter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mountain
+Forum Necroscribe
+Lightning Bolt
+Lightning Bolt
+Ornithopter
+Mountain x12
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Forum Necroscribe.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Jet; Mox Ruby; Forum Necroscribe; Ornithopter
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Black Lotus
+Bot2.Graveyard = Ornithopter
