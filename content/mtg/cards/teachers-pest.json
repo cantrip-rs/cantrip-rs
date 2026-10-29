@@ -1,0 +1,11 @@
+{
+  "name": "Teacher's Pest",
+  "manaCost": "{B}{G}",
+  "type": "Creature — Skeleton Pest",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhenever this creature attacks, you gain 1 life.\n{B}{G}: Return this card from your graveyard to the battlefield tapped.",
+  "keywords": [
+    "Menace"
+  ]
+}

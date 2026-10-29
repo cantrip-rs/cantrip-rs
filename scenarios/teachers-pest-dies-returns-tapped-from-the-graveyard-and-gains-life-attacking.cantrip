@@ -1,0 +1,49 @@
+# Bot2's Lightning Bolt kills Teacher's Pest (1/1, menace). On Bot1's turn {B}{G} returns it from the graveyard to the
+# battlefield tapped (CR 113.6m); the ability cannot be activated from the battlefield. On Bot1's next turn it attacks, Bot1
+# gains 1 life (21) and Bot2 takes 1 (19).
+
+[Dice]
+1; 1; 1; 1; 1; 1
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Teacher's Pest
+Island x4
+Island x25
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x31
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Teacher's Pest.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Teacher's Pest)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Teacher's Pest
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Graveyard.Teacher's Pest.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Teacher's Pest.Tapped = True
+! Bot1.Battlefield.Teacher's Pest.Activate
+[T5 Bot1.Main1]
+Bot1.Attack(Teacher's Pest > Bot2)
+[Bot1.Main2]
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
