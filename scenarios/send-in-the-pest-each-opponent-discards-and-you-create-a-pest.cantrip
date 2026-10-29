@@ -1,0 +1,26 @@
+# Send in the Pest: each opponent discards a card (their choice) and Bot1 creates a 1/1 Pest token -- Bot2 goes from 7 cards in hand to 6
+# with one in its graveyard, and Bot1 has a Pest Token.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Send in the Pest
+Swamp x17
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Send in the Pest.Cast
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Hand.Count = 7
+Bot2.Graveyard = Mountain
+Bot1.Battlefield.Pest Token.Power = 1
+Bot1.Battlefield.Pest Token.Toughness = 1
+Bot1.Graveyard = Send in the Pest
