@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{damage_target, exile_and_return, targets};
+use cantrip_mechanics::{damage_target, exile_and_return, greatest_power, targets};
 use cantrip_oracle as oracle;
 
 /// "Exile target creature you control, then return it to the battlefield under its owner's control" (CR 608.2c, 400.7): it comes
@@ -13,15 +13,8 @@ fn blink(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// power is read as this mode is performed (CR 608.2h), after the first mode if both were chosen, so a creature that came back
 /// from it counts as it is now; none (or none above 0) deals no damage (CR 120.8).
 fn damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let greatest = g
-        .permanents_of(item.controller)
-        .into_iter()
-        .filter(|&id| g.chars(id).is(CardType::Creature))
-        .filter_map(|id| g.chars(id).power)
-        .max()
-        .unwrap_or(0)
-        .max(0);
-    damage_target(g, item, 0, greatest as u16);
+    let greatest = greatest_power::among_creatures_you_control(g, item.controller);
+    damage_target(g, item, 0, greatest);
     Ok(())
 }
 
