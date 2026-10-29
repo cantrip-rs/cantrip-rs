@@ -1,0 +1,40 @@
+# Startled Relic Sloth: the target is optional ("up to one"). On turn 1 Bot1 chooses none and its Black Lotus stays in the
+# graveyard; on turn 3 the trigger exiles a Plains Bot2 has discarded, from the opponent's graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Startled Relic Sloth
+Island x4
+Island x13
+
+[Bot2 Deck]
+Faithless Looting
+Mox Ruby
+Plains x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Startled Relic Sloth.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+[Bot1.Main2]
+? Exile.Count = 0
+? Bot1.Graveyard = Black Lotus
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Choose(Plains; Plains)
+[T3 Bot1.Main1]
+Bot1.Target(Bot2.Graveyard.Plains)
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Plains
+Bot1.Graveyard = Black Lotus
+Bot2.Graveyard.Count = 2
