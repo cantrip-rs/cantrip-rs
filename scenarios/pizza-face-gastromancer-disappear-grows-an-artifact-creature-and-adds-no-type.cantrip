@@ -1,0 +1,39 @@
+# Pizza Face, Gastromancer: the Disappear counters on a target that already is a creature (CR 122.1a, 205.1b): Ornithopter, an artifact creature, only gets the three counters, a 3/5 that
+# does not become a Mutant (and keeps its flying). Bot1 pays with Black Lotus' BBB, Mox Jet and Mox Emerald.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Pizza Face, Gastromancer
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Pizza Face, Gastromancer.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Ornithopter.Power = 3
+Bot1.Battlefield.Ornithopter.Toughness = 5
+Bot1.Battlefield.Ornithopter.Subtypes = Thopter
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Food Token.Types = Artifact

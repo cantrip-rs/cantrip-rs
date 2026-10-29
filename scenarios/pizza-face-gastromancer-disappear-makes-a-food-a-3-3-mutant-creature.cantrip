@@ -1,0 +1,45 @@
+# Pizza Face, Gastromancer: "When Pizza Face enters, create a Food token." and "Disappear - At the beginning of your end step, if a permanent left the battlefield under your control this
+# turn, put three +1/+1 counters on up to one other target artifact or creature. If it isn't a creature, it becomes a 0/0 Mutant creature in addition to its other types." Bot1 pays {3}{B}{G}
+# with Black Lotus' BBB (sacrificed, so a permanent left), Mox Jet and Mox Emerald. At the end step the candidates are the Food token and Ornithopter, not Pizza Face itself: three
+# counters on the Food make it a 0/0 Mutant artifact creature, a 3/3 that is still a Food.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Pizza Face, Gastromancer
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Pizza Face, Gastromancer.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Food Token.Types = Artifact
+[T1 Bot1.End]
+! Bot1.Target(Bot1.Battlefield.Pizza Face, Gastromancer)
+Bot1.Target(Bot1.Battlefield.Food Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Food Token.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Food Token.Power = 3
+Bot1.Battlefield.Food Token.Toughness = 3
+Bot1.Battlefield.Food Token.Types = Artifact; Creature
+Bot1.Battlefield.Food Token.Subtypes = Food; Mutant
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Pizza Face, Gastromancer.Power = 2
+Bot1.Battlefield.Pizza Face, Gastromancer.Toughness = 4

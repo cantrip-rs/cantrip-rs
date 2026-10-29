@@ -1,0 +1,8 @@
+{
+  "name": "Pizza Face, Gastromancer",
+  "manaCost": "{3}{B}{G}",
+  "type": "Legendary Artifact Creature — Food Mutant",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "When Pizza Face enters, create a Food token.\nDisappear — At the beginning of your end step, if a permanent left the battlefield under your control this turn, put three +1/+1 counters on up to one other target artifact or creature. If it isn't a creature, it becomes a 0/0 Mutant creature in addition to its other types.\n{10}, {T}, Sacrifice Pizza Face: You gain 15 life."
+}

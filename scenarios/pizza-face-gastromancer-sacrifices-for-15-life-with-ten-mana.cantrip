@@ -1,0 +1,47 @@
+# Pizza Face, Gastromancer: "{10}, {T}, Sacrifice Pizza Face: You gain 15 life." Cast on turn 1 (Black Lotus' BBB, Mox Jet, Mox Emerald), it is no longer summoning sick on turn 3, when three more
+# Black Lotuses and Mox Jet pay the {10}: Pizza Face is sacrificed and Bot1 gains 15 life, not 3 like a Food.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Jet
+Pizza Face, Gastromancer
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Pizza Face, Gastromancer.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Life = 20
+Bot1.Battlefield.Pizza Face, Gastromancer.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 35
+Bot1.Graveyard.Count = 5

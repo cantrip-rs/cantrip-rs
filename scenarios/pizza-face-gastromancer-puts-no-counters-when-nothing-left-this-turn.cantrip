@@ -1,0 +1,37 @@
+# Pizza Face, Gastromancer: the Disappear trigger's intervening "if" (CR 603.4). Bot1 pays {3}{B}{G} with five Moxen, which only tap: no permanent leaves the battlefield under Bot1's control,
+# so at the end step nothing triggers and the Food token is left an ordinary artifact.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Pizza Face, Gastromancer
+Mox Sapphire
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Pizza Face, Gastromancer.Cast(Spend: B, G, R, W, U)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Battlefield.Food Token.Types = Artifact
+Bot1.Battlefield.Pizza Face, Gastromancer.Power = 2
+Bot1.Battlefield.Pizza Face, Gastromancer.Toughness = 4
