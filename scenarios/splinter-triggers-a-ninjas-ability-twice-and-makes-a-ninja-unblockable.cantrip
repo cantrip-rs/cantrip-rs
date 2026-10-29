@@ -1,0 +1,93 @@
+# Splinter, Radical Rat: "If a triggered ability of a Ninja creature you control triggers, that ability triggers an additional time. {1}{U}: Target Ninja can't be blocked this turn."
+# On turn 1 Bot1 casts Splinter and Memnite. On turn 3 Memnite attacks unblocked and Foot Ninjas (a Ninja) is cast for its sneak cost, returning it: its enters trigger
+# "you gain 3 life" triggers twice, 6 life: 26. Foot Ninjas deals 5, Bot2 on 15. On turn 5 Kitchen Finks, not a Ninja, gains only 2: 28. Splinter's ability makes Foot Ninjas
+# unblockable: Bot2's Ornithopter cannot block it (no block can be declared for it), and it deals 5 more: Bot2 on 10.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Splinter, Radical Rat
+Memnite
+Foot Ninjas
+Kitchen Finks
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Splinter, Radical Rat.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Hand.Foot Ninjas.Cast(Ability: Sneak)
+Bot1.Choose(Memnite)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Life = 26
+? Bot2.Life = 15
+[T5 Bot1.Main1]
+Bot1.Hand.Kitchen Finks.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 28
+! Bot1.Battlefield.Splinter, Radical Rat.Activate(Kitchen Finks)
+Bot1.Battlefield.Splinter, Radical Rat.Activate(Foot Ninjas)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Foot Ninjas > Bot2)
+[T5 Bot1.DeclareBlockers]
+! Bot2.Block(Ornithopter > Foot Ninjas)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 28
+Bot2.Life = 10
