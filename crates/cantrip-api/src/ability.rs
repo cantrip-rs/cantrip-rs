@@ -818,7 +818,7 @@ impl ModeDef {
 
 /// "Choose one —" (CR 700.2): the modes, in printed order.
 pub const fn modes(modes: &'static [ModeDef]) -> ModalDef {
-    ModalDef { modes, min: 1, max: 1, escalate: None, repeat: false, allowed: None, when_paid: None, shared: None }
+    ModalDef { modes, min: 1, max: 1, escalate: None, repeat: false, allowed: None, when_paid: None, up_to_if: None, shared: None }
 }
 
 impl ModalDef {
@@ -832,6 +832,13 @@ impl ModalDef {
     /// none chosen it is removed from the stack (CR 603.3c).
     pub const fn up_to_that_many(self) -> ModalDef {
         ModalDef { min: 0, max: ModalDef::COUNTED, ..self }
+    }
+
+    /// When `condition` is true, a modal spell or ability may choose up to `max` modes instead of its usual maximum.
+    /// Its minimum is unchanged: "choose one. If you have no cards in hand, choose one or more instead" (Captain James T.
+    /// Kirk), "you may choose two instead" (Flame of Anor).
+    pub const fn up_to_if(self, condition: crate::card::ModeCondition, max: u8) -> ModalDef {
+        ModalDef { up_to_if: Some((condition, max)), ..self }
     }
 
     /// Escalate (CR 702.120a): each mode beyond the first costs this more.

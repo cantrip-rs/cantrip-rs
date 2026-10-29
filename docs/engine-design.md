@@ -1355,7 +1355,7 @@ the spell's or ability's own - it is judged for each candidate, and only the can
 offered, with what is announced after it that a change may read or that brings targets of its own (a kicker, an optional
 cost, cards spliced onto it). Any other - several slots or a slot of several targets, a modal spell, targets after X or a
 kicker, a gift, a division, a splice - is offered if some legal announcement could be paid for (`actions::some_cast`,
-`some_activation` for abilities): what comes before the targets is walked (each choice of modes, as many as the board allows (`modes_up_to`), X up to what changes the
+`some_activation` for abilities): what comes before the targets is walked (each choice of modes, as many as the board allows (`ModalDef::up_to_if`), X up to what changes the
 targets or what an additional cost that pays X life or sacrifices X permanents allows, kicked or not, the optional cost
 paid or not, the gift promised to each opponent or not, each order of the
 cards with targets that could be spliced on), the card judged as it would then be (`Announcing`: a filter or a change
@@ -1844,8 +1844,8 @@ of a sneak-cast spell had its sneak cost paid). The `Cast`
 record grew from 12 to 16 bytes and the `Event` stayed 20; a card with no fact costs one `Option` test per cast. Steer
 Clear ("if you controlled a Mount"), Flame Discharge ("a modified creature"), Lethal Exploit ("for each modified creature you
 controlled") and Lifestream's Blessing ("the greatest power among creatures you controlled") print the same thing; a
-number goes in the fact as it is. The modes a modal spell may choose by the board as it is cast (Flame of Anor) are
-`CardDef::modes_up_to`, asked as the modes are announced (CR 700.2), which is earlier. Not built: the Dragon cycle's
+number goes in the fact as it is. The modes a modal spell or ability may choose by the board as it is cast or put on the stack (Flame of Anor,
+Captain James T. Kirk) are `ModalDef::up_to_if`, asked as the modes are announced (CR 601.2b, 700.2a-b), which is earlier. Not built: the Dragon cycle's
 "if you revealed a Dragon card or controlled a Dragon", whose reveal is an optional additional cost a copy does copy
 (Draconic Roar, Silumgar's Scorn; none in content). The benchmark measured 6.55, 7.01, 6.75 us against 6.60, 6.68, 7.00 us
 before, alternating the two builds (2026-10-16).

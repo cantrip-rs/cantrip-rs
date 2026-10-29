@@ -20,11 +20,11 @@ fn damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "If you control a Wizard as you cast this spell, you may choose two instead" (CR 700.2): asked once, as the modes
-/// are announced, so a Wizard that leaves in response leaves both modes chosen.
-fn two_with_a_wizard(q: &dyn Query, asker: &Asker) -> u8 {
+/// "If you control a Wizard as you cast this spell, you may choose two instead" (CR 700.2): checked as modes are announced,
+/// so a Wizard that leaves in response leaves both modes chosen.
+fn has_a_wizard(q: &dyn Query, asker: &Asker) -> bool {
     let wizard = q.words(asker.source).subtype(Subtype::Wizard);
-    if q.permanents_of(asker.controller).into_iter().any(|id| q.chars(id).has_subtype(wizard)) { 2 } else { 1 }
+    q.permanents_of(asker.controller).into_iter().any(|id| q.chars(id).has_subtype(wizard))
 }
 
 static MODAL: ModalDef = modes(&[
@@ -34,7 +34,7 @@ static MODAL: ModalDef = modes(&[
         .targets(&[targets::ARTIFACT]),
     mode(damage, "Flame of Anor deals 5 damage to target creature.")
         .targets(&[targets::CREATURE]),
-]);
+])
+    .up_to_if(has_a_wizard, 2);
 
-pub static CARD: CardDef =
-    CardDef { spell: Some(SpellDef::MODAL), modal: Some(&MODAL), modes_up_to: Some(two_with_a_wizard), ..oracle::FLAME_OF_ANOR };
+pub static CARD: CardDef = CardDef { spell: Some(SpellDef::MODAL), modal: Some(&MODAL), ..oracle::FLAME_OF_ANOR };

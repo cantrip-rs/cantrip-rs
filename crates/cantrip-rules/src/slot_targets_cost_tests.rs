@@ -336,15 +336,16 @@ static VOLLEY: CardDef = CardDef {
 
 /// Two modes where the board allows it (as Flame of Anor's "if you control a Wizard"): here, while its caster controls a
 /// creature.
-fn two_with_a_creature(q: &dyn Query, asker: &Asker) -> u8 {
-    if q.state().battlefield().iter().any(|&id| q.obj(id).controller == asker.controller && q.chars(id).is(CardType::Creature)) { 2 } else { 1 }
+fn has_a_creature(q: &dyn Query, asker: &Asker) -> bool {
+    q.state().battlefield().iter().any(|&id| q.obj(id).controller == asker.controller && q.chars(id).is(CardType::Creature))
 }
 
 /// "Choose one. (Two while you control a creature.) - Target player: you gain 3 life. / Target creature: you gain 3 life."
 static PAIRS_MODES: ModalDef = modes(&[
     mode(gain_three, "Target player: you gain 3 life.").targets(&[target(player)]),
     mode(gain_three, "Target creature: you gain 3 life.").targets(&[target(creature)]),
-]);
+])
+    .up_to_if(has_a_creature, 2);
 
 /// {4} sorcery, modal, "This spell costs {4} less to cast if it has two or more targets."
 static PAIRS: CardDef = CardDef {
@@ -354,7 +355,6 @@ static PAIRS: CardDef = CardDef {
     types: TypeSet::of(&[CardType::Sorcery]),
     spell: Some(SpellDef::MODAL),
     modal: Some(&PAIRS_MODES),
-    modes_up_to: Some(two_with_a_creature),
     own_cost_changes: &[less_for_two],
     ..CardDef::BLANK
 };

@@ -2276,11 +2276,9 @@ fn mode_masks(cx: &Cx, asker: &Asker, modal: &ModalDef, range: (u8, u8)) -> Vec<
         }
     }
     let eligible = eligible_modes(cx, asker, modal);
-    // The board may allow more modes than it prints (CR 700.2: Flame of Anor), as `choose_modes` reads it.
+    // A condition on the modal definition may allow more modes than its printed default.
     let (min, mut max) = range;
-    if let Some(up_to) = cx.card(cx.s().obj(asker.source).card).modes_up_to {
-        max = max.max(up_to(cx, asker));
-    }
+    max = max.max(modal.most(cx, asker, 0));
     let mut out = Vec::new();
     go(modal, &eligible, 0, 0, 0, (min, max), &mut out);
     out
@@ -8507,11 +8505,8 @@ fn choose_modes(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, ab
         Vec::new()
     };
     // An escalate cost the player cannot pay narrows the range to one they can.
-    let mut most = max;
-    // CR 700.2: the board as the spell is cast may allow more modes than it prints.
-    if let Some(up_to) = cx.card(cx.s().obj(source).card).modes_up_to {
-        most = most.max(up_to(cx, &asker));
-    }
+    // A condition on the modal definition may allow more modes than its printed default.
+    let mut most = max.max(modal.most(cx, &asker, 0));
     if modal.escalate.is_some() {
         let payable = |cx: &Cx, n: u8| {
             let first_n = (0..usize::from(n)).fold(0u32, |mask, i| modal.with(mask, i));

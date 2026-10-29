@@ -680,7 +680,7 @@ fn put_trigger_as(cx: &mut Cx, trigger: PendingTrigger, by: Option<Linked>) -> R
         // target, in printed order. A mode whose required target has no candidate cannot be chosen (CR 700.2a), and with
         // too few left the ability is removed. As many eligible modes as it chooses is no choice, and is not asked.
         // "Choose up to that many" (`ModalDef::COUNTED`, CR 603.12a): as many as the ability's count, read now.
-        let most = modal.most(trigger_counted(cx, &trigger));
+        let most = modal.most(cx, &asker, trigger_counted(cx, &trigger));
         let eligible = crate::actions::eligible_modes(cx, &asker, modal);
         if eligible.len() < modal.min.max(1) as usize || most == 0 {
             return Ok(());

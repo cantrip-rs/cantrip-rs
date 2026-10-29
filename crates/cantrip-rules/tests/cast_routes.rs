@@ -1148,7 +1148,7 @@ fn every_way_a_permanent_gives_is_a_cast_of_its_own_with_its_own_terms() {
 static FUSED_PLAIN_HALF: CardDef = CardDef { name: "Route Fused Plain Half", ..PROBE_SPELL };
 static FUSED_X_HALF: CardDef = CardDef { name: "Route Fused X Half", cost: ManaCost { x: 1, ..ManaCost::ZERO }, ..PROBE_SPELL };
 static FUSED_MODAL_HALF: CardDef = CardDef { name: "Route Fused Modal Half", modal: Some(&FUSED_MODES), ..PROBE_SPELL };
-static FUSED_MODES: ModalDef = ModalDef { modes: &[], min: 1, max: 1, escalate: None, repeat: false, allowed: None, when_paid: None, shared: None };
+static FUSED_MODES: ModalDef = ModalDef { modes: &[], min: 1, max: 1, escalate: None, repeat: false, allowed: None, when_paid: None, up_to_if: None, shared: None };
 static FUSE_WITH_X: CardDef =
     CardDef { name: "Route Fuse With X", oracle: true, split: Some((&FUSED_X_HALF, &FUSED_PLAIN_HALF)), fuse: true, ..CardDef::BLANK };
 static FUSE_WITH_MODES: CardDef =
