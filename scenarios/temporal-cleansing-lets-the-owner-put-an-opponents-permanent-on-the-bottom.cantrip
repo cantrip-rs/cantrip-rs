@@ -1,0 +1,38 @@
+# Temporal Cleansing: the OWNER of the target puts it into their library, and chooses where (CR 108.3, 701.1). Bot1 casts it on turn 3 on Bot2's Elvish
+# Mystic, Bot2's Forest (a land) being refused; Bot2, not the caster, answers and chooses the bottom of its library (Plains, Swamp after its turn-2 draw
+# of the Mountain, then the Mystic below them). Black Lotus and Mox Sapphire pay the four mana.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Temporal Cleansing
+Island x17
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Forest x5
+Mountain
+Plains
+Swamp
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Hand.Temporal Cleansing.Cast(Bot2.Battlefield.Forest)
+Bot1.Hand.Temporal Cleansing.Cast(Bot2.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Modes(On the bottom)
+[Bot1.Main2]
+
+[Expect]
+Bot2.Library = Plains; Swamp; Elvish Mystic
+Bot2.Battlefield = Forest

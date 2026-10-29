@@ -1,0 +1,36 @@
+# Temporal Cleansing {3}{U} (CR 702.51a, 701.1): three Ornithopters tapped for convoke pay the {3} (colorless, so generic only), Mox Sapphire pays the {U}.
+# "The owner of target nonland permanent puts it into their library second from the top or on the bottom": the Island (a land) is refused; Bot1 owns
+# the target Ornithopter and chooses second from the top, so the library of Plains, Swamp, Mountain becomes Plains, Ornithopter, Swamp, Mountain.
+
+[Bot1 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Temporal Cleansing
+Mox Sapphire
+Island
+Island
+Plains
+Swamp
+Mountain
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Temporal Cleansing.Cast(Island; Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Hand.Temporal Cleansing.Cast(Ornithopter#1; Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Pass
+Bot1.Modes(Second from the top)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Library = Plains; Ornithopter; Swamp; Mountain
+Bot1.Battlefield = Ornithopter; Ornithopter; Mox Sapphire
+Bot1.Graveyard = Temporal Cleansing
+Bot1.Mana =
