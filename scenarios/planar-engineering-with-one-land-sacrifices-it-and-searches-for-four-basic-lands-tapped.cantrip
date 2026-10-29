@@ -1,0 +1,45 @@
+# Planar Engineering with only one land: Bot1 sacrifices that Island ("as many as you have", CR 701.21a) and still searches. The search
+# finds four basic lands (a Temple Garden is refused, and so are five cards), puts them onto the battlefield tapped (CR 701.23)
+# and shuffles.
+
+[Bot1 Deck]
+Planar Engineering
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Island
+Mountain
+Forest
+Island
+Swamp
+Mountain
+Temple Garden
+Forest x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Planar Engineering.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Temple Garden)
+! Bot1.Search(Forest; Island; Swamp; Mountain; Forest)
+Bot1.Search(Forest; Island; Swamp; Mountain)
+
+[Expect]
+Bot1.Graveyard = Planar Engineering; Island
+Bot1.Battlefield.Count = 8
+Bot1.Battlefield.Swamp.Tapped = true
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Hand.Count = 1

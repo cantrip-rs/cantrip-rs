@@ -1,0 +1,6 @@
+{
+  "name": "Planar Engineering",
+  "manaCost": "{3}{G}",
+  "type": "Sorcery",
+  "oracleText": "Sacrifice two lands. Search your library for four basic land cards, put them onto the battlefield tapped, then shuffle."
+}
