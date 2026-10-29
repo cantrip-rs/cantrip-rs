@@ -1,0 +1,68 @@
+# Party Dude, level 3: "Whenever one or more of your opponents are attacked". Only a player, a planeswalker or a battle can be
+# attacked (CR 506.3), so Grizzly Bears attacking Bot2's Ajani Resolute attacks no opponent, and the trigger is not put on the
+# stack: the stack is empty once Bot1 passes, the Bears stay 2/2, kill the planeswalker (2 damage, loyalty 2) and leave Bot2's
+# life at 20.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Party Dude
+Grizzly Bears
+Sol Ring
+Forest
+Forest x15
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Ajani Resolute
+Plains x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Party Dude.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Ajani Resolute.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Party Dude.Activate(Ability: Level 2)
+Bot2.Pass
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Party Dude.Activate(Ability: Level 3)
+Bot1.Battlefield.Sol Ring.Activate
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2.Battlefield.Ajani Resolute)
+Bot1.Pass
+? Stack.Count = 0
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ajani Resolute
+Bot1.Battlefield.Grizzly Bears.Power = 2
