@@ -1,0 +1,55 @@
+# Bow of Nylea's second mode, "deals 2 damage to target creature with flying": exactly two, no more. Bot2's A.I.M. Bot
+# (a 2/3 flier) takes two damage and lives, its damage 2 - a third point would have killed it. Bow is cast on turn 1 with
+# Forest, two Mox Emeralds and a Mox Ruby; the ability is paid on turn 3. Bot2 casts the Bot on turn 2 with an Island and
+# two Mox Sapphires.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Emerald
+Mox Ruby
+Bow of Nylea
+Forest x3
+Forest x10
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Mox Sapphire
+A.I.M. Bot
+Island x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bow of Nylea.Cast
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.A.I.M. Bot.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Bow of Nylea.Activate
+Bot1.Modes(deals 2 damage)
+Bot1.Target(A.I.M. Bot)
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.A.I.M. Bot.Damage = 2
