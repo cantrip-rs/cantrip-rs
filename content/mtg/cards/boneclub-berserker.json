@@ -1,0 +1,8 @@
+{
+  "name": "Boneclub Berserker",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Goblin Berserker",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "This creature gets +2/+0 for each other Goblin you control."
+}

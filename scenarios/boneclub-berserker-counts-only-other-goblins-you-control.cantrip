@@ -1,0 +1,68 @@
+# Boneclub Berserker: "gets +2/+0 for each other Goblin you control" (CR 613.4c). Bot1 has an Elder Auntie and its Goblin
+# token, so the 2/4 Berserker is 6/4 (itself not counted); Bot2's Elder Auntie and token are not "you control". With
+# no other Goblin it is its printed 2/4 (first check).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Elder Auntie
+Boneclub Berserker
+Forest x13
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Elder Auntie
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Boneclub Berserker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Boneclub Berserker.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Elder Auntie.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elder Auntie.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Boneclub Berserker.Power = 6
+? Bot1.Battlefield.Boneclub Berserker.Toughness = 4
+
+[Expect]
+Bot1.Battlefield = Boneclub Berserker; Elder Auntie; Goblin Token; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire
