@@ -21,6 +21,7 @@ pub mod combat;
 pub mod companion;
 pub mod copy;
 pub mod cumulative_upkeep;
+pub mod cost_reduction;
 pub mod channel;
 pub mod class;
 pub mod choose;
