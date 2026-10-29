@@ -1,0 +1,35 @@
+# Pterafractyl ({X}{G}{U}), X = 3: it enters with three +1/+1 counters (CR 122.6, 614.1c) as a 4/3 flier, and its enter trigger
+# gains 2 life (CR 119.1).
+
+[Bot1 Deck]
+Pterafractyl
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Pterafractyl.Cast(X: 3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pterafractyl.Counters.PlusOnePlusOne = 3
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Pterafractyl.Power = 4
+Bot1.Battlefield.Pterafractyl.Toughness = 3
+Bot1.Battlefield.Pterafractyl.Keywords = Flying
+Bot1.Life = 22

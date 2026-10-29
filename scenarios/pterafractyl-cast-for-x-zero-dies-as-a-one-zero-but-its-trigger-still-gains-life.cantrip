@@ -1,0 +1,29 @@
+# Pterafractyl, X = 0 ({G}{U}): it enters with no counters as a 1/0 and dies to state-based actions (CR 704.5f), but "when this
+# creature enters" has triggered (CR 603.6a), so the ability still goes on the stack and gains 2 life.
+
+[Bot1 Deck]
+Pterafractyl
+Mox Emerald
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Pterafractyl.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Pterafractyl
+? Stack.Count = 1
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Graveyard = Pterafractyl
