@@ -1,0 +1,43 @@
+# Raphael, Most Attitude: the card is exiled, not exiled "until" he leaves. Turn 1: Raphael for {3}{R}, then an Ornithopter,
+# whose trigger exiles the top card (Lightning Bolt). Turn 2: Bot2 kills Raphael (4/3) with its own Lightning Bolt. The card
+# stays in exile (it is not returned to the library or hand).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Raphael, Most Attitude
+Ornithopter
+Lightning Bolt
+Mountain x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raphael, Most Attitude.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Exile.Count = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Raphael, Most Attitude)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Raphael, Most Attitude = (absent)
+Exile.Count = 1

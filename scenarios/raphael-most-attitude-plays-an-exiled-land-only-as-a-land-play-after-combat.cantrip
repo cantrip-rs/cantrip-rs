@@ -1,0 +1,47 @@
+# Raphael, Most Attitude: "you may play a card exiled with Raphael" is "play", so a land card exiled with him is a land play
+# (CR 305.1), and the timing rules still apply (his rulings). Turn 1: Raphael, then an Ornithopter whose trigger exiles the top
+# card, a Forest. Turn 3: after he attacks, the Forest still can't be played during combat; in the second main phase it can,
+# as the turn's land play - the Mountain in hand is then refused, since the land play is used.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Raphael, Most Attitude
+Ornithopter
+Mountain
+Mountain
+Mountain
+Forest
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raphael, Most Attitude.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Exile.Count = 1
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Raphael, Most Attitude > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Exile.Forest.Play
+[T3 Bot1.Main2]
+Bot1.Exile.Forest.Play
+! Bot1.Hand.Mountain.Play
+
+[Expect]
+Bot1.Battlefield.Forest.Tapped = false
+Exile.Count = 0
+Bot2.Life = 16

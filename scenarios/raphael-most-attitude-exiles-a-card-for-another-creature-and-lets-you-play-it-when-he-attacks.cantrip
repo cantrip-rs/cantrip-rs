@@ -1,0 +1,60 @@
+# Raphael, Most Attitude: "Alliance — Whenever another creature you control enters, you may exile the top card of your
+# library." and "Whenever Raphael attacks, until end of turn, you may play a card exiled with Raphael." Turn 1: Raphael for
+# {3}{R} (his own entering exiles nothing); the first Ornithopter's trigger exiles the top card, Lightning Bolt; the second
+# declines, so a Mountain stays on top. Turn 3: the Bolt can't be cast before he attacks; once he attacks (menace, no
+# blockers) the Bolt is cast for {R}: Bot2 is at 20 - 3 - 4 = 13.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Raphael, Most Attitude
+Ornithopter
+Ornithopter
+Mountain
+Mountain
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raphael, Most Attitude.Cast
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Exile.Count = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Exile.Count = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Raphael, Most Attitude > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
+Exile.Count = 0

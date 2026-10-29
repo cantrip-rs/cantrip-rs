@@ -1,0 +1,55 @@
+# Raphael, Most Attitude: "Whenever Raphael attacks, until end of turn, you may play a card exiled with Raphael." Turn 1: an
+# Ornithopter's trigger exiles Lightning Bolt. Turn 3: he attacks (Bot2 16) and the Bolt is not cast. Turn 5: before he attacks
+# the Bolt can't be cast - the permission ended with turn 3 (a Ruby's {R} is in the pool, so only the permission refuses it);
+# attacking again grants it afresh and the Bolt kills nothing but hits Bot2: 20 - 4 - 4 - 3 = 9.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Raphael, Most Attitude
+Ornithopter
+Mountain
+Mountain
+Mountain
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raphael, Most Attitude.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Raphael, Most Attitude > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Raphael, Most Attitude > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 9
