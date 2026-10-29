@@ -1,0 +1,49 @@
+# Molten Note: "If the target is illegal, nothing happens" (CR 608.2b). Bot1 taps Llanowar Elves for {G}, then casts the Note on
+# Bot2's Hill Giant and Lightning Bolts the Giant in response. The Note has no legal target and does not resolve: the Elves stay
+# tapped and the Note goes to the graveyard.
+
+[Bot1 Deck]
+Forest
+Llanowar Elves
+Mox Ruby
+Mox Pearl
+Molten Note
+Mountain
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Forest x17
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Molten Note.Cast(Hill Giant; X: 0)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Hill Giant)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Graveyard = Molten Note; Lightning Bolt
