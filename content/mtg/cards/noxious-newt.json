@@ -1,0 +1,11 @@
+{
+  "name": "Noxious Newt",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Salamander",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Deathtouch\n{T}: Add {G}.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}
