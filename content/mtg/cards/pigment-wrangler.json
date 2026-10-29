@@ -1,0 +1,15 @@
+{
+  "name": "Pigment Wrangler",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Orc Sorcerer",
+  "oracleText": "Flying\nThis creature enters prepared. (While it's prepared, you may cast a copy of its spell. Doing so unprepares it.)",
+  "power": 4,
+  "toughness": 4,
+  "keywords": ["Flying"],
+  "prepare": {
+    "name": "Striking Palette",
+    "manaCost": "{R}",
+    "type": "Sorcery",
+    "oracleText": "When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy."
+  }
+}

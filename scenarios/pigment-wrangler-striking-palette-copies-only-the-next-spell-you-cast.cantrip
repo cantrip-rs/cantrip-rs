@@ -1,0 +1,57 @@
+# Pigment Wrangler enters prepared (CR 722.3a). On turn 3 Bot1 casts the copy of Striking Palette from exile: "When you next cast an
+# instant or sorcery spell this turn, copy that spell" (CR 603.7b). The first Bolt, at Bot2, is copied (the copy retargeted at Bot1, CR 707.10c; the
+# copy is not cast): Bot1 17 and Bot2 17. The delayed trigger fired once, so a second Bolt is not copied: Bot2 14.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Jet
+Pigment Wrangler
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain x12
+
+[Bot2 Deck]
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pigment Wrangler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pigment Wrangler.Prepared = true
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Exile.Striking Palette.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pigment Wrangler.Prepared = (absent)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+? Bot2.Life = 17
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 14
+Stack.Count = 0
