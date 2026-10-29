@@ -1,0 +1,8 @@
+{
+  "name": "April O'Neil, Kunoichi Trainee",
+  "manaCost": "{1}{W}",
+  "type": "Legendary Creature — Human Ninja",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When April O'Neil enters, scry 2. (Look at the top two cards of your library, then put any number of them on the bottom and the rest on top in any order.)\nApril O'Neil can't be blocked by creatures with power 3 or greater."
+}

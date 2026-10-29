@@ -1,0 +1,37 @@
+# April O'Neil, Kunoichi Trainee "can't be blocked by creatures with power 3 or greater" (CR 509.1b): the line is exactly at 3.
+# Bot2's Action News Crew (power 2) may block her, and the two deal damage to each other.
+
+[Bot1 Deck]
+Mox Pearl x2
+April O'Neil, Kunoichi Trainee
+Plains x4
+Island
+Lightning Bolt
+
+[Bot2 Deck]
+Black Lotus
+Action News Crew
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.April O'Neil, Kunoichi Trainee.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | Lightning Bolt)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Action News Crew.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(April O'Neil, Kunoichi Trainee > Bot2)
+Bot2.Block(Bot2.Battlefield.Action News Crew > Bot1.Battlefield.April O'Neil, Kunoichi Trainee)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
