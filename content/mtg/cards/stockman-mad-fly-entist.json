@@ -1,0 +1,11 @@
+{
+  "name": "Stockman, Mad Fly-entist",
+  "manaCost": "{4}{U}",
+  "type": "Legendary Creature — Insect Mutant Scientist",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Flying\nWhen Stockman enters, draw a card, then discard a card.\nIslandcycling {2} ({2}, Discard this card: Search your library for an Island card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Flying"
+  ]
+}

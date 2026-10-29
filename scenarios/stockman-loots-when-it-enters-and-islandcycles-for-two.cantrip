@@ -1,0 +1,45 @@
+# Stockman, Mad Fly-entist: "When Stockman enters, draw a card, then discard a card." The draw comes first, so the Swamp just
+# drawn is among the cards Bot1 can discard; Bot1 discards the Swamp. The second Stockman is cycled from the hand instead
+# (Islandcycling {2}, CR 702.29): it goes to the graveyard without entering, so no loot, and the Island is found and put in
+# the hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Stockman, Mad Fly-entist
+Stockman, Mad Fly-entist
+Forest
+Mox Emerald
+Swamp
+Island
+Forest x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stockman, Mad Fly-entist.Cast
+Bot1.Pass
+Bot1.Choose(Swamp)
+? Bot1.Graveyard = Swamp; Black Lotus
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Stockman, Mad Fly-entist.Activate(Ability: Islandcycling)
+Bot1.Pass
+Bot1.Search(Island)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Stockman, Mad Fly-entist; Swamp; Black Lotus
+Bot1.Hand = Island
+Bot1.Battlefield.Stockman, Mad Fly-entist.Power = 3
