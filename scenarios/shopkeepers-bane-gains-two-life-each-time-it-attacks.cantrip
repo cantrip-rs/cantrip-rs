@@ -1,0 +1,33 @@
+# Shopkeeper's Bane (4/2 trample): "Whenever this creature attacks, you gain 2 life."
+# Bot1 casts it on turn 1 with three Moxen and attacks on turn 3: the trigger gains 2 life (20 -> 22) and the unblocked 4/2
+# deals 4 to Bot2. Attacking again on turn 5 gains 2 more.
+
+[Bot1 Deck]
+Shopkeeper's Bane
+Mox Emerald x3
+Forest x20
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Shopkeeper's Bane.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Shopkeeper's Bane > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 22
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+Bot1.Attack(Shopkeeper's Bane > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 12

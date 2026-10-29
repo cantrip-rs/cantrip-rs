@@ -1,0 +1,11 @@
+{
+  "name": "Shopkeeper's Bane",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Badger Pest",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Trample\nWhenever this creature attacks, you gain 2 life.",
+  "keywords": [
+    "Trample"
+  ]
+}
