@@ -1,0 +1,53 @@
+# Don & Leo, Problem Solvers: Ornithopter is an artifact creature, so Bot1 may choose it as both "up to one target artifact you control" and "up to one target creature you
+# control" (each target word is its own, CR 115.3). It is exiled and returned once (CR 608.2c), not twice: one Ornithopter is on the battlefield afterwards.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Emerald
+Ornithopter
+Don & Leo, Problem Solvers
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Don & Leo, Problem Solvers.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Target(Ornithopter)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Battlefield = Don & Leo, Problem Solvers; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter
+Exile =

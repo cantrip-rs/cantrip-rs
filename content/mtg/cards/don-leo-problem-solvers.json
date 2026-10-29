@@ -1,0 +1,11 @@
+{
+  "name": "Don & Leo, Problem Solvers",
+  "manaCost": "{3}{W/U}{W/U}",
+  "type": "Legendary Creature — Mutant Ninja Turtle",
+  "power": 4,
+  "toughness": 6,
+  "oracleText": "Vigilance\nAt the beginning of your end step, exile up to one target artifact you control and up to one target creature you control. Then return them to the battlefield under their owners' control.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

@@ -1,0 +1,76 @@
+# Don & Leo, Problem Solvers: "At the beginning of your end step, exile up to one target artifact you control and up to one target creature you control. Then return
+# them to the battlefield under their owners' control." On turn 3 Don & Leo enters (giving Bot1's EPF Point Squad a +1/+1 counter, a 3/2). At the end step the artifact
+# slot refuses a creature that is not an artifact and Bot2's Mox Jet; the creature slot refuses the Mox. Mox Pearl (tapped for Don & Leo) and the Squad are exiled and
+# return together as new objects (CR 400.7): the Mox untapped, the Squad without its counter (a 2/1).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Emerald
+EPF Point Squad
+Don & Leo, Problem Solvers
+Island x10
+
+[Bot2 Deck]
+Mox Jet
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.EPF Point Squad.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Don & Leo, Problem Solvers.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.EPF Point Squad.Power = 3
+? Bot1.Battlefield.Mox Pearl.Tapped = true
+[T3 Bot1.End]
+! Bot1.Target(EPF Point Squad)
+! Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Target(Mox Pearl)
+! Bot1.Target(Mox Pearl)
+! Bot1.Target(Bot2.Battlefield.Mox Jet)
+Bot1.Target(EPF Point Squad)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Mox Pearl.Tapped = false
+
+[Expect]
+Bot1.Battlefield.EPF Point Squad.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.EPF Point Squad.Power = 2
+Bot1.Battlefield.EPF Point Squad.Toughness = 1
+Bot1.Battlefield.Don & Leo, Problem Solvers.Tapped = false
+Exile =

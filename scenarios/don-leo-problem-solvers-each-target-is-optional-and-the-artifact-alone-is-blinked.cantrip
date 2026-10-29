@@ -1,0 +1,56 @@
+# Don & Leo, Problem Solvers: both targets are "up to one" (CR 601.2c). At Bot1's end step it chooses a tapped Mox as the artifact and no creature (an empty answer); the
+# Mox is exiled and returned untapped (CR 400.7) and Ornithopter, not chosen, stays where it was.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Emerald
+Ornithopter
+Don & Leo, Problem Solvers
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Don & Leo, Problem Solvers.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Emerald.Tapped = true
+[T1 Bot1.End]
+Bot1.Target(Mox Emerald)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+? Bot1.Battlefield.Mox Emerald.Tapped = false
+? Bot1.Battlefield.Mox Pearl.Tapped = true
+
+[Expect]
+Bot1.Battlefield = Don & Leo, Problem Solvers; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter
+Exile =
