@@ -598,6 +598,13 @@ pub static MUTANT: CardDef = CardDef {
     ..token!(Mutant)
 };
 
+/// "Create a 2/2 red Mutant creature token" as an effect (CR 111.1): one `MUTANT` under the controller of the resolving
+/// spell or ability. Jennika, Bad Apple Big Sister and Mighty Mutanimals print it.
+pub fn create_a_mutant(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &MUTANT, 1)?;
+    Ok(())
+}
+
 /// The 4/4 white Angel creature token with flying and vigilance. Resplendent Angel and Parhelion II make it.
 pub static ANGEL: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),
