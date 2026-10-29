@@ -1,0 +1,58 @@
+# East Wind Avatar: "Alliance — Whenever another creature you control enters, this creature gets +1/+0 until end of turn."
+# On turn 1 Bot1 casts the Avatar for {3}{W} (a 2/4 that does not trigger on itself), then two Ornithopters: 3/4, then 4/4,
+# toughness never changed. At the next turn the bonus is gone (2/4), and neither Bot2's Ornithopter entering on turn 2 nor
+# Bot1's own Mox Pearl on turn 3 (not a creature) raises it.
+
+[Bot1 Deck]
+Mox Pearl x4
+East Wind Avatar
+Ornithopter
+Ornithopter
+Mox Pearl
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.East Wind Avatar.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.East Wind Avatar.Power = 2
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.East Wind Avatar.Power = 3
+? Bot1.Battlefield.East Wind Avatar.Toughness = 4
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.East Wind Avatar.Power = 4
+? Bot1.Battlefield.East Wind Avatar.Toughness = 4
+[T2 Bot2.Main1]
+? Bot1.Battlefield.East Wind Avatar.Power = 2
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.East Wind Avatar.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.East Wind Avatar.Power = 2
+Bot1.Battlefield.East Wind Avatar.Toughness = 4
