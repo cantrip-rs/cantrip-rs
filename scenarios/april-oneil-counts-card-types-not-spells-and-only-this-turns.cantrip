@@ -1,0 +1,49 @@
+# April O'Neil, Hacktivist: "At the beginning of your end step, draw a card for each card type among spells you've cast this turn." On turn 1 Bot1 casts four Moxen (artifacts)
+# and April (a creature): two types among five spells, so two cards are drawn, not five. On turn 3 only a Lightning Bolt is cast: one card, though the artifact and creature
+# types were cast on turn 1 (this turn only). Hand: 7 - 5 = 2 (Bolt, Island), +2 = 4, turn-3 draw 5, - Bolt = 4, +1 = 5.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+April O'Neil, Hacktivist
+Lightning Bolt
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.April O'Neil, Hacktivist.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand.Count = 5

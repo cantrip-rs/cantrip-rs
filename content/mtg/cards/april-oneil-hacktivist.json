@@ -1,0 +1,8 @@
+{
+  "name": "April O'Neil, Hacktivist",
+  "manaCost": "{3}{U}",
+  "type": "Legendary Creature — Human Scientist",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": "At the beginning of your end step, draw a card for each card type among spells you've cast this turn."
+}

@@ -1,0 +1,56 @@
+# April O'Neil, Hacktivist: two Ornithopters (artifact creatures) and a Lightning Bolt (an instant) cast on turn 3 are three card types - artifact, creature, instant - so three cards
+# are drawn: an artifact creature gives both of its types, and the second Ornithopter adds none. April resolves on turn 1 (her own trigger then draws for the four Moxen and
+# herself: 2). Hand: 7 - 5 = 2 (the Ornithopters), +2 on turn 1 (Bolt, Island) = 4, turn-3 draw 5, - 3 cast = 2, +3 = 5.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Ruby
+April O'Neil, Hacktivist
+Ornithopter
+Ornithopter
+Lightning Bolt
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.April O'Neil, Hacktivist.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Hand.Count = 5
