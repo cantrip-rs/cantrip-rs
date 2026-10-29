@@ -1,0 +1,53 @@
+# April, Reporter of the Weird: damage dealt to a creature is not combat damage "to a player" (CR 510.2), so nothing is drawn or discarded when a Grizzly Bears blocks her.
+# Both 2/2s die. Hand: 7 - 3 Moxen - April = 3, turn-3 draw 4, unchanged.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+April, Reporter of the Weird
+Plains
+Swamp
+Mountain
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.April, Reporter of the Weird.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(April, Reporter of the Weird > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Grizzly Bears > April, Reporter of the Weird)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Hand.Count = 4
+Bot1.Graveyard = April, Reporter of the Weird
+Bot2.Graveyard = Grizzly Bears

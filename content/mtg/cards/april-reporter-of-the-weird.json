@@ -1,0 +1,8 @@
+{
+  "name": "April, Reporter of the Weird",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Creature — Human Detective",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever April deals combat damage to a player, draw that many cards, then discard a card."
+}
