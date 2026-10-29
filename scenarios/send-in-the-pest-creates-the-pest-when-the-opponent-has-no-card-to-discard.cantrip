@@ -1,0 +1,34 @@
+# Send in the Pest: the Pest is made whether or not the opponent had a card to discard. Bot2 casts all its Moxen on turn 2 (empty hand),
+# so on turn 3 Bot1's Send in the Pest makes it discard nothing and still creates the Pest Token.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Send in the Pest
+Swamp x17
+
+[Bot2 Deck]
+Mox Jet x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Send in the Pest.Cast
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Hand.Count = 0
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Pest Token.Power = 1

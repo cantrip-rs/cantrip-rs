@@ -1,0 +1,6 @@
+{
+  "name": "Send in the Pest",
+  "manaCost": "{1}{B}",
+  "type": "Sorcery",
+  "oracleText": "Each opponent discards a card. You create a 1/1 black and green Pest creature token with \"Whenever this token attacks, you gain 1 life.\""
+}
