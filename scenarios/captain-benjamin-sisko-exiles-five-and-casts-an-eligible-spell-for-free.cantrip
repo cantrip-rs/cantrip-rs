@@ -1,0 +1,53 @@
+# Sisko is the one Officer his controller controls (Bot1's Island is no Officer, and Bot2's Academy Instructor is not
+# Bot1's), so of the five cards he exiles only spells with mana value 1 or less may be cast free: Ponder (mana value 1,
+# at the limit) is, Grizzly Bears (2) is not offered (CR 109.5, 202.3, 608.2g, 118.9).
+
+[Bot1 Deck]
+Black Lotus x6
+Captain Benjamin Sisko
+Island
+Opt
+Ponder
+Grizzly Bears
+Brainstorm
+Island x9
+
+[Bot2 Deck]
+Black Lotus
+Academy Instructor
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Captain Benjamin Sisko.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Academy Instructor.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Captain Benjamin Sisko.Activate(Ability: {2}{W}{U}{B}{R}{G})
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Choose(Grizzly Bears)
+Bot1.Choose(Ponder)
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Ponder.Colors = Blue
+Exile.Count = 4

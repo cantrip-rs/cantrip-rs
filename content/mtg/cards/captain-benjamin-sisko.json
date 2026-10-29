@@ -1,0 +1,8 @@
+{
+  "name": "Captain Benjamin Sisko",
+  "manaCost": "{1}{W}",
+  "type": "Legendary Creature — Human Officer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "At the beginning of your end step, create a 1/1 red Officer creature token for each dilemma you've faced this turn.\n{2}{W}{U}{B}{R}{G}, {T}: Exile the top five cards of your library. You may cast any number of spells with mana value less than or equal to the number of Officers you control from among those cards without paying their mana costs."
+}

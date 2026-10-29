@@ -1,0 +1,59 @@
+# Sisko counts only the dilemmas his controller faced this turn: Bot1's Archdruid's Charm with one mode is one; Bot1's
+# Call Damage Control with no mode chosen is none ("choose up to two", CR 700.2a); Bot2's Archdruid's Charm, cast in
+# Bot1's upkeep, is Bot2's dilemma, not Bot1's. So the end step makes one Officer token.
+
+[Bot1 Deck]
+Black Lotus x3
+Captain Benjamin Sisko
+Call Damage Control
+Archdruid's Charm
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Archdruid's Charm
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Captain Benjamin Sisko.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Archdruid's Charm.Cast
+Bot2.Modes(1)
+Bot2.Search()
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Call Damage Control.Cast
+Bot1.Modes()
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Archdruid's Charm.Cast
+Bot1.Modes(1)
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 2
+Bot1.Battlefield.Officer Token.Power = 1

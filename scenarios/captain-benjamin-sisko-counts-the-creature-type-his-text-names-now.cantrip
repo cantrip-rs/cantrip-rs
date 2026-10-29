@@ -1,0 +1,45 @@
+# "Officers you control" is a creature type word of Sisko's text (CR 612.2): Artificial Evolution replaces Officer with
+# Human, so Sisko is a Human and his ability counts Humans. He is the one Human his controller controls, so Ponder
+# (mana value 1) may be cast free from the five exiled cards; counted as Officers, the limit would be 0 (CR 612.1).
+
+[Bot1 Deck]
+Black Lotus x6
+Captain Benjamin Sisko
+Artificial Evolution
+Ponder
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Captain Benjamin Sisko.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Artificial Evolution.Cast(Bot1.Battlefield.Captain Benjamin Sisko)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Officer)
+Bot1.Modes(Human)
+? Bot1.Battlefield.Captain Benjamin Sisko.Subtypes = Human
+Bot1.Battlefield.Captain Benjamin Sisko.Activate(Ability: {2}{W}{U}{B}{R}{G})
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Choose(Ponder)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Ponder.Colors = Blue
+Exile.Count = 4

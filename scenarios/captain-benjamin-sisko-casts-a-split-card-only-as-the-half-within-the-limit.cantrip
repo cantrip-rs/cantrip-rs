@@ -1,0 +1,52 @@
+# Sisko is the one Officer his controller controls, so a spell cast free from the five exiled cards needs mana value 1 or
+# less, and the mana value is the spell's as cast, not the exiled card's (CR 608.2g, 709.3b). Wear // Tear is mana value 3
+# in exile, yet Tear ({W}) is mana value 1 and may be cast: it destroys Bot2's Weaponize the Monsters. Wear ({1}{R}, mana
+# value 2) is not a way offered, and Grizzly Bears (2) is not offered at all.
+
+[Bot1 Deck]
+Black Lotus x6
+Captain Benjamin Sisko
+Island
+Wear // Tear
+Grizzly Bears
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Weaponize the Monsters
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Captain Benjamin Sisko.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Weaponize the Monsters.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Captain Benjamin Sisko.Activate(Ability: {2}{W}{U}{B}{R}{G})
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Choose(Grizzly Bears)
+Bot1.Choose(Wear // Tear)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Weaponize the Monsters = (absent)
+Bot1.Graveyard = Wear // Tear; Black Lotus; Black Lotus; Black Lotus; Black Lotus; Black Lotus; Black Lotus
+Exile.Count = 4
