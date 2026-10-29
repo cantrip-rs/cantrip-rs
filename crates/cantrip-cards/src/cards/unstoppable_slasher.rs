@@ -1,15 +1,7 @@
 use cantrip_api::*;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::triggers::{DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT, THIS_DIES};
 use cantrip_oracle as oracle;
-
-/// "They lose half their life, rounded up" (CR 107.1a, 119.3): the damaged player's life total as the ability resolves, not
-/// as the damage was dealt. A life total of zero or less has no half to lose.
-fn lose_half_their_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Target::Player(player) = item.subject else { return Ok(()) };
-    let life = g.state().player(player).life;
-    g.lose_life(player, (life.max(0) + 1) / 2);
-    Ok(())
-}
 
 /// "If it had no counters on it" (CR 603.4, 603.10a): the creature as it last was on the battlefield, counters of every kind.
 fn had_no_counters(q: &dyn Query, asker: &Asker) -> bool {
@@ -29,7 +21,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT,
-            lose_half_their_life,
+            effects::subject_player_loses_half_their_life,
             "Whenever this creature deals combat damage to a player, they lose half their life, rounded up.",
         ),
         triggered(
