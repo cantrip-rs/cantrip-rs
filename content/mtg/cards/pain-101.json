@@ -1,0 +1,6 @@
+{
+  "name": "Pain 101",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Until end of turn, target creature gains deathtouch and \"When this creature dies, return it to the battlefield tapped under its owner's control.\""
+}

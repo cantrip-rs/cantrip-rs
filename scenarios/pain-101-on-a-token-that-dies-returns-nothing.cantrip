@@ -1,0 +1,47 @@
+# A token that dies ceases to exist (CR 111.7, 704.5d), so Pain 101's "return it to the battlefield" returns nothing: Bot1 makes a Ninja with Foot Mystic (Black Lotus sacrificed for disappear)
+# on turn 1, then on turn 3 gives it Pain 101 and kills it with Lightning Bolt. The battlefield has no Ninja afterwards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Foot Mystic
+Mox Jet
+Pain 101
+Mox Emerald
+Mox Ruby
+Lightning Bolt
+Island x15
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Foot Mystic.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Pain 101.Cast(Bot1.Battlefield.Ninja Token)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ninja Token.Keywords = Deathtouch
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ninja Token)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Foot Mystic; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Graveyard = Lightning Bolt; Pain 101; Black Lotus

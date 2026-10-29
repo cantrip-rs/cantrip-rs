@@ -1,0 +1,39 @@
+# Pain 101 ({1}{B}): until end of turn the target creature gains deathtouch and "When this creature dies, return it to the battlefield tapped under its owner's control" (CR 700.4, 603.6c).
+# Bot1 targets its own Ornithopter, which then has deathtouch, and Lightning Bolt kills it; it comes back tapped (a new object, so without the granted abilities) and Pain 101 and the Bolt are in the graveyard.
+
+[Bot1 Deck]
+Ornithopter
+Mox Jet
+Mox Pearl
+Pain 101
+Mox Ruby
+Lightning Bolt
+Island
+Island x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Pain 101.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Deathtouch; Flying
+? Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Graveyard = Lightning Bolt; Pain 101
