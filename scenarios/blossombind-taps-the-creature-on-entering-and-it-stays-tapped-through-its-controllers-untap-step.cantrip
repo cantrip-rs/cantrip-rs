@@ -1,0 +1,33 @@
+# Blossombind: "Enchant creature. When this Aura enters, tap enchanted creature. Enchanted creature can't become untapped and can't have counters put on it." Bot1
+# enchants Bot2's untapped Ornithopter on turn 3: the trigger taps it, and in Bot2's untap step on turn 4 it stays tapped (CR 502.3, 101.2).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Blossombind
+Island x17
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Hand.Blossombind.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Blossombind.AttachedTo = Ornithopter

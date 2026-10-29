@@ -1,0 +1,49 @@
+# Blossombind "can't have counters put on it" (CR 122.6, 101.2): Bot1 enchants its own Ornithopter, and Requiting Hex's "you may blight 1" (a -1/-1 counter on a
+# creature you control, CR 701.68a) is offered with the Memnite as the other creature: the Ornithopter is refused, the Memnite takes the counter and dies (a 1/1).
+# The Hex destroys Bot2's Ornithopter (mana value 0), and Bot1 gains 2 life as the cost was paid. The enchanted Ornithopter has no counters, and Blossombind's
+# trigger left it tapped.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Black Lotus
+Ornithopter
+Memnite
+Blossombind
+Requiting Hex
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blossombind.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Requiting Hex.Cast
+Bot1.Modes(Blight 1)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot1.Battlefield.Ornithopter.Counters.MinusOneMinusOne = (absent)
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Graveyard = Requiting Hex; Memnite; Black Lotus
+Bot2.Graveyard = Ornithopter
