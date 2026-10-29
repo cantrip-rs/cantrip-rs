@@ -1,0 +1,22 @@
+# Commander Musiker's first mode may target any card in a graveyard, including its controller's artifact card.
+
+[Bot1 Deck]
+Black Lotus
+Commander Raffi Musiker
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Commander Raffi Musiker.Cast
+Bot1.Modes(Exile up to one target card from a graveyard)
+Bot1.Target(Graveyard.Black Lotus)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Exile = Black Lotus
+Bot1.Graveyard.Count = 0

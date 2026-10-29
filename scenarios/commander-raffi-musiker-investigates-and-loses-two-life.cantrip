@@ -1,0 +1,23 @@
+# The second mode creates a Clue token and makes Commander Musikers controller lose 2 life.
+
+[Bot1 Deck]
+Black Lotus
+Commander Raffi Musiker
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Commander Raffi Musiker.Cast
+Bot1.Modes(Investigate. You lose 2 life)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 18
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield.Clue Token.Types = Artifact
+Bot1.Battlefield.Clue Token.Token = True
+Bot1.Battlefield.Clue Token#2 = (absent)

@@ -1,0 +1,27 @@
+# With no cards in either graveyard, the optional target is omitted and the first mode still gains 2 life.
+
+[Bot1 Deck]
+Swamp x3
+Commander Raffi Musiker
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Commander Raffi Musiker.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Modes(Exile up to one target card from a graveyard)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Exile.Count = 0
+Bot1.Battlefield.Commander Raffi Musiker.Power = 3

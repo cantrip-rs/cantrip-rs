@@ -1,0 +1,36 @@
+# Thoughtseize puts an opponent's creature card in the graveyard; the trigger accepts it and refuses an island still in hand.
+
+[Bot1 Deck]
+Swamp
+Thoughtseize
+Commander Raffi Musiker
+Swamp x2
+Island x12
+
+[Bot2 Deck]
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Thoughtseize.Cast(Bot2)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Choose(Bot2.Hand.Grizzly Bears)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Commander Raffi Musiker.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Modes(Exile up to one target card from a graveyard)
+! Bot1.Target(Bot2.Hand.Island)
+Bot1.Target(Bot2.Graveyard.Grizzly Bears)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Exile = Grizzly Bears
+Bot1.Graveyard = Thoughtseize
+Bot2.Graveyard = Island

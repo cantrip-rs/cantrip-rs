@@ -1,0 +1,8 @@
+{
+  "name": "Commander Raffi Musiker",
+  "manaCost": "{2}{B}",
+  "type": "Legendary Creature — Human Officer",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When Commander Musiker enters, choose one —\n• Exile up to one target card from a graveyard. You gain 2 life.\n• Investigate. You lose 2 life. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"
+}
