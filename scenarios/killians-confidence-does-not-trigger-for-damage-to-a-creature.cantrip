@@ -1,0 +1,48 @@
+# Killian's Confidence: it triggers only for combat damage dealt to a player. Bot2's Ornithopter blocks the Inkmage, takes the damage
+# and dies, so Bot1 is never asked to pay and the Confidence stays in the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Imperious Inkmage
+Killian's Confidence
+Plains x2
+Plains x3
+Island
+Plains x11
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Imperious Inkmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Killian's Confidence.Cast(Bot1.Battlefield.Imperious Inkmage)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Imperious Inkmage > Bot2)
+Bot2.Block(Ornithopter > Imperious Inkmage)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Killian's Confidence
+Stack.Count = 0
