@@ -1,0 +1,32 @@
+# Page, Loose Leaf, Grandeur with no instant or sorcery card in the library: the whole library (12 Islands after the turn 3 draw) is
+# revealed, none goes to hand, and all of it is put back on the bottom, so the library is still 12 cards. The second Page was the
+# cost: hand 7, minus Moxen, Page and the discarded Page, plus the draw is 4.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Page, Loose Leaf
+Page, Loose Leaf
+Plains
+Plains
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Page, Loose Leaf.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Page, Loose Leaf.Activate(Ability: Grandeur)
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Page, Loose Leaf
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 12

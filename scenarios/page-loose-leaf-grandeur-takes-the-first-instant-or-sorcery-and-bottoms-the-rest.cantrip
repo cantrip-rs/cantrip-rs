@@ -1,0 +1,40 @@
+# Page, Loose Leaf, Grandeur: "Discard another card named Page, Loose Leaf: Reveal cards from the top of your library until you
+# reveal an instant or sorcery card. Put that card into your hand and the rest on the bottom of your library in a random order."
+# Bot1 casts one Page on turn 1 and keeps the other in hand. On turn 3, after drawing the Island, the library reads Forest, Grizzly
+# Bears, Lightning Bolt, nine Islands: the Forest and the Bears are revealed and put on the bottom, the Bolt goes to hand, and the
+# second Page is in the graveyard (the cost). The library is 12 cards after the draw and 11 after (the Bolt left it).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Page, Loose Leaf
+Page, Loose Leaf
+Plains
+Plains
+Plains
+Island
+Forest
+Grizzly Bears
+Lightning Bolt
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Page, Loose Leaf.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Page, Loose Leaf.Activate(Ability: Grandeur)
+Bot1.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Page, Loose Leaf
+Bot1.Hand = Lightning Bolt; Island; Island; Plains; Plains; Plains
+Bot1.Library.Count = 10
+Bot1.Battlefield.Page, Loose Leaf.Tapped = false
