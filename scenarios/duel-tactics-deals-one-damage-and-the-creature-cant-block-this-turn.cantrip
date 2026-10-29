@@ -1,0 +1,39 @@
+# Duel Tactics deals 1 damage to Bot2's Ornithopter (0/2, it survives) and it can't block this turn. Bot1 attacks with Grizzly Bears:
+# Ornithopter may not block it, while a Memnite - not hit by the spell - may, and does.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Grizzly Bears
+Duel Tactics
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Duel Tactics.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Attack(Grizzly Bears > Bot2)
+! Bot2.Block(Ornithopter > Grizzly Bears)
+Bot2.Block(Memnite > Grizzly Bears)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot2.Life = 20
