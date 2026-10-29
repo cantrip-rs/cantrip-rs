@@ -1,0 +1,44 @@
+# Potioner's Trove: "{T}: You gain 2 life. Activate only if you've cast an instant or sorcery spell this turn." Refused on turn 1
+# with only the Trove itself cast (an artifact spell is neither), refused on turn 3 until Lightning Bolt (an instant) is cast, then
+# it gains 2 (Bot1 20 to 22, Bot2 20 to 17). On turn 5 the Bolt was cast on an earlier turn, so it is refused again; there the
+# mana ability still taps for one mana of any color (green, here).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Potioner's Trove
+Lightning Bolt
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Potioner's Trove.Cast
+Bot1.Pass
+! Bot1.Battlefield.Potioner's Trove.Activate(Ability: gain)
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Potioner's Trove.Activate(Ability: gain)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Battlefield.Potioner's Trove.Activate(Ability: gain)
+Bot1.Pass
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Potioner's Trove.Activate(Ability: gain)
+Bot1.Battlefield.Potioner's Trove.Activate(Color: Green)
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 17
+Bot1.Mana = {G}
+Bot1.Battlefield.Potioner's Trove.Tapped = true

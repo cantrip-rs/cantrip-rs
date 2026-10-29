@@ -1,0 +1,34 @@
+# Potioner's Trove: "if YOU'VE cast an instant or sorcery spell this turn". On turn 2 Bot2 casts a Shock at Bot1, and with it on the
+# stack Bot1's untapped Trove is still refused: the instant was cast by the other player. Bot1 has cast no instant or sorcery.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Potioner's Trove
+Island x16
+
+[Bot2 Deck]
+Mountain
+Shock
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Potioner's Trove.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+! Bot1.Battlefield.Potioner's Trove.Activate(Ability: gain)
+
+[Expect]
+Bot1.Battlefield.Potioner's Trove.Tapped = false
+Bot1.Life = 18
