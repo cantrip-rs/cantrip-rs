@@ -1,0 +1,39 @@
+# Blighted Blackthorn {4}{B} 3/7: "Whenever this creature enters or attacks, you may blight 2. If you do, you draw a card and lose 1
+# life" (CR 701.68a, 603.2). Cast on turn 1 with Black Lotus (BBB), Mox Jet and Mox Pearl, it blights itself (two -1/-1 counters:
+# 1/5), Bot1 draws (7 - 4 cast + 1 = 4 cards in hand) and loses 1 (19). On turn 3 it attacks and Bot1 declines: no more counters,
+# no draw, no life lost (the turn-3 draw step makes the hand 5). The twin that does the reverse is "...-declines-on-entering-and-blights-on-attacking".
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Blighted Blackthorn
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Blighted Blackthorn.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Blighted Blackthorn)
+? Bot1.Life = 19
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Blighted Blackthorn.Power = 1
+[T3 Bot1.Main1]
+Bot1.Attack(Blighted Blackthorn > Bot2)
+Bot1.Decline
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Blighted Blackthorn.Counters.MinusOneMinusOne = 2
+Bot1.Hand.Count = 5
