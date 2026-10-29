@@ -1,0 +1,62 @@
+# Weather Maker: every land entering under its controller's control puts a charge counter on it (landfall). Turn 3 one
+# counter: neither the {C}{C} ability (two) nor the 3 damage (three) can be paid. Turn 5 two counters: {T}, remove two
+# for {C}{C}, leaving none. Turns 7, 9, 11 three more lands, three counters: {T}, remove three, 3 damage to Bot2.
+# Its first ability, the plain {T}: Add one mana of any color, makes exactly one mana on turn three.
+
+[Bot1 Deck]
+Weather Maker
+Mox Jet
+Mox Pearl
+Mox Ruby
+Plains x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Weather Maker.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Weather Maker.Counters.Charge = 1
+Bot1.Battlefield.Weather Maker.Activate(Ability: any color; Color: Red)
+? Bot1.Mana = {R}
+! Bot1.Battlefield.Weather Maker.Activate(Bot2; Ability: 3 damage)
+! Bot1.Battlefield.Weather Maker.Activate(Ability: Add {C}{C})
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Weather Maker.Counters.Charge = 2
+Bot1.Battlefield.Weather Maker.Activate(Ability: Add {C}{C})
+? Bot1.Mana = {C}{C}
+? Bot1.Battlefield.Weather Maker.Counters.Charge = (absent)
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+[T11 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Weather Maker.Counters.Charge = 3
+Bot1.Battlefield.Weather Maker.Activate(Bot2; Ability: 3 damage)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Weather Maker.Counters.Charge = (absent)
