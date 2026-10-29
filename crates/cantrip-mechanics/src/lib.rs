@@ -653,6 +653,20 @@ pub fn creatures_you_control(q: &dyn Query, player: PlayerId) -> usize {
     q.permanents_of(player).into_iter().filter(|&id| q.chars(id).is(CardType::Creature)).count()
 }
 
+/// "The number of [subtype]s [player] controls" (CR 205.3, 109.4): every permanent of that subtype they control, read through
+/// the layers, so a changeling counts for each creature type. Beorn the Fierce's Bears, The Notary Hobbits' Halflings and Gloom Ripper's Elves
+/// are such counts.
+pub fn permanents_with_subtype_you_control(q: &dyn Query, player: PlayerId, subtype: Subtype) -> usize {
+    q.permanents_of(player).into_iter().filter(|&id| q.chars(id).has_subtype(subtype)).count()
+}
+
+/// "The number of [subtype] cards in [player]'s graveyard" (CR 404.1, 205.3): cards only, never tokens, counted as it is
+/// asked. Dawnhand Eulogist, Creakwood Safewright and Gloom Ripper ask it for Elves; Accumulate Wisdom, Combustion Technique
+/// and Gran-Gran for Lessons.
+pub fn subtype_cards_in_graveyard(q: &dyn Query, player: PlayerId, subtype: Subtype) -> usize {
+    q.state().zone(Zone::graveyard(player)).iter().filter(|&&card| q.chars(card).has_subtype(subtype)).count()
+}
+
 /// "The number of lands [player] controls": every land on the battlefield they control, read through the layers. Beza, the
 /// Bounding Spring, Consult the Star Charts, Fabled Passage, Pillage the Bog and Emeritus of Abundance count it exactly so.
 pub fn lands_you_control(q: &dyn Query, player: PlayerId) -> usize {
