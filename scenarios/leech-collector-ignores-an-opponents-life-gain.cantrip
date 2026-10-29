@@ -1,0 +1,34 @@
+# Leech Collector: it is "you gain life". Bot2's Lightning Helix at Bot1 gains Bot2 3 life, which does not prepare Bot1's Leech Collector.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Leech Collector
+Swamp x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Leech Collector.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Lightning Helix.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Life = 23
+Bot1.Life = 17
+Bot1.Battlefield.Leech Collector.Prepared = (absent)

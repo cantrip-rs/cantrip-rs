@@ -1,0 +1,53 @@
+# Leech Collector: "Whenever you gain life for the first time each turn, this creature becomes prepared." A Lightning Helix gains 3, the first gain of
+# turn 3, so it becomes prepared; Bloodletting (cast from exile, {B}) makes each opponent lose 2 and unprepares it; a second Helix gains 3 more, not the first
+# gain of the turn, so it stays unprepared.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Ruby
+Black Lotus
+Leech Collector
+Lightning Helix
+Lightning Helix
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Leech Collector.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Leech Collector.Prepared = (absent)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Leech Collector.Prepared = true
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Exile.Bloodletting.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Leech Collector.Prepared = (absent)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
+Bot1.Life = 26
+Bot1.Battlefield.Leech Collector.Prepared = (absent)
+Exile.Count = 0
