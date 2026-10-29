@@ -34,6 +34,12 @@ pub fn dragon(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
     q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Dragon))
 }
 
+/// A Merfolk, read through the words of the card whose text says it (CR 612): a permanent or a card in a hand. Silvergill Mentor and
+/// Champions of the Shoal behold one.
+pub fn merfolk(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
+    q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Merfolk))
+}
+
 /// A Jace, a permanent or a card in a hand: a planeswalker type is not a word a text-changing effect changes (CR 612.1,
 /// 205.3j). Theorist's Sanctum and Countersculpt behold one.
 pub fn jace(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
