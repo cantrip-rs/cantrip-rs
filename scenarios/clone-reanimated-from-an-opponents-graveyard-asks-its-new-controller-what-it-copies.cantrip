@@ -1,0 +1,31 @@
+# "You may have this creature enter as a copy": the choice is made by the player who will control it as it enters (CR 614.12,
+# 707.2), not by its owner. Bot2 discards Clone to hand size; Bot1 reanimates it from Bot2's graveyard under Bot1's control.
+# Bot1 is asked and accepts, and with Bot1's Ornithopter the only creature, it enters as an Ornithopter without asking which.
+# Bot1 loses 4 life, Clone's mana value.
+
+[Bot1 Deck]
+Mox Jet
+Ornithopter
+Reanimate
+Island x14
+
+[Bot2 Deck]
+Island x7
+Clone
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot2.Graveyard = Clone
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reanimate.Cast(Bot2.Graveyard.Clone)
+Bot1.Pass
+Bot1.Accept
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 16
+Bot1.Battlefield = Mox Jet; Ornithopter; Ornithopter
+Bot2.Graveyard.Count = 0

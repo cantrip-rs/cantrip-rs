@@ -52,13 +52,32 @@ pub fn enter_as_copy_of_one_of(
     exception: fn(&dyn Query, Copiable) -> Copiable,
     question: &'static Question,
 ) -> Result<(), Suspend> {
+    let Some(chosen) = choose_copy_of_one_of(g, entry, candidates, question)? else { return Ok(()) };
+    // The copied object's copiable values, its own copy effect's exceptions included (CR 707.2, 707.9b), and this copy's
+    // exception on top.
+    let values = g.copiable_values(chosen);
+    entry.copy = Some(exception(g, values));
+    Ok(())
+}
+
+/// Ask whether the entering permanent will copy one of `candidates`, and which one (CR 707.2). The player who will control
+/// it as it enters chooses (CR 614.12), not its owner: a Clone reanimated from an opponent's graveyard is its reanimator's
+/// choice. This shared choice is used by Dominion Saboteur and Superior Spider-Man (Mind Swap) directly, and by Mockingbird
+/// through `enter_as_copy_of_one_of` (as are Clone and other copy permanents). Returns the chosen object so a card that also
+/// refers to the copied permanent as it enters can apply its own additional instructions.
+pub fn choose_copy_of_one_of(
+    g: &mut dyn Game,
+    entry: &Entering,
+    candidates: &[ObjectId],
+    question: &'static Question,
+) -> Result<Option<ObjectId>, Suspend> {
     let entering = entry.object;
     if candidates.is_empty() {
-        return Ok(());
+        return Ok(None);
     }
-    let controller = g.obj(entering).controller;
+    let controller = entry.controller;
     if g.ask(controller, RequestKind::May { source: entering, purpose: Purpose::Ask(question) })? != Answer::Yes {
-        return Ok(());
+        return Ok(None);
     }
     let chosen = if candidates.len() == 1 {
         candidates[0]
@@ -77,11 +96,7 @@ pub fn enter_as_copy_of_one_of(
             _ => candidates[0],
         }
     };
-    // The copied object's copiable values, its own copy effect's exceptions included (CR 707.2, 707.9b), and this copy's
-    // exception on top.
-    let values = g.copiable_values(chosen);
-    entry.copy = Some(exception(g, values));
-    Ok(())
+    Ok(Some(chosen))
 }
 
 /// The intervening "if it isn't a token" of "When this creature dies, if it isn't a token, create a token that's a copy
