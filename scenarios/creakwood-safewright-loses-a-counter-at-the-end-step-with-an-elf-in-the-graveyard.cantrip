@@ -1,0 +1,45 @@
+# Creakwood Safewright {1}{B} 5/5: "This creature enters with three -1/-1 counters on it. At the beginning of your end step, if there is
+# an Elf card in your graveyard and this creature has a -1/-1 counter on it, remove a -1/-1 counter from this creature" (CR 614.1c,
+# 603.4). Bot1 casts Scarblade Scout, whose mill puts Llanowar Elves in the graveyard, then the Safewright: it enters 2/2 with three
+# counters, and each of Bot1's end steps takes one off (3/3, 4/4, then 5/5 with none left). With none left the ability is not put on
+# the stack at the fourth end step. Black Lotus (BBB) and Mox Jet pay for both.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Scarblade Scout
+Creakwood Safewright
+Island x3
+Llanowar Elves
+Island x2
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Hand.Scarblade Scout.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Creakwood Safewright.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Creakwood Safewright.Counters.MinusOneMinusOne = 2
+? Bot1.Battlefield.Creakwood Safewright.Power = 3
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Creakwood Safewright.Counters.MinusOneMinusOne = 1
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Creakwood Safewright.Counters.MinusOneMinusOne = (absent)
+[T7 Bot1.End]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Graveyard = Island; Llanowar Elves; Black Lotus
+Bot1.Battlefield.Creakwood Safewright.Counters.MinusOneMinusOne = (absent)
+Bot1.Battlefield.Creakwood Safewright.Power = 5
+Bot1.Battlefield.Creakwood Safewright.Toughness = 5
