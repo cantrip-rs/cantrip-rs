@@ -1,0 +1,6 @@
+{
+  "name": "Grounded for Life",
+  "manaCost": "{4}{W}",
+  "type": "Instant",
+  "oracleText": "This spell costs {3} less to cast if it targets a tapped creature.\nDestroy target creature."
+}
