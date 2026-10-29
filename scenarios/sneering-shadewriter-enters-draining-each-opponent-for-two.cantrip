@@ -1,0 +1,34 @@
+# Sneering Shadewriter: a 3/3 flyer; when it enters, each opponent loses 2 life and Bot1 gains 2 -- Bot2 18, Bot1 22.
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Sneering Shadewriter
+Swamp x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Hand.Sneering Shadewriter.Cast
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Battlefield.Sneering Shadewriter.Keywords = Flying
+Bot1.Battlefield.Sneering Shadewriter.Power = 3
+Bot1.Battlefield.Sneering Shadewriter.Toughness = 3
