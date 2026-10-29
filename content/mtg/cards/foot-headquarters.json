@@ -1,0 +1,5 @@
+{
+  "name": "Foot Headquarters",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\nWhen this land enters, you gain 1 life.\n{T}: Add {W} or {B}."
+}
