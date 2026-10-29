@@ -1,0 +1,27 @@
+# TCRI Building enters tapped, so it cannot produce mana then. After Bot1's next untap, it taps for exactly one blue mana;
+# its enters trigger gains 1 life (CR 614.1d, 605.1a, 605.3b, 118.3, 106.4, 119.3, 603.6a).
+
+[Bot1 Deck]
+TCRI Building
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.TCRI Building.Play
+? Bot1.Battlefield.TCRI Building.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+! Bot1.Battlefield.TCRI Building.Activate(Color: Blue)
+[T3 Bot1.Main1]
+Bot1.Battlefield.TCRI Building.Activate(Color: Blue)
+? Bot1.Mana = {U}
+? Bot1.Battlefield.TCRI Building.Tapped = true
+
+[Expect]
+Bot1.Life = 21
+Bot1.Mana = {U}
+Bot1.Battlefield.TCRI Building.Tapped = true
+Stack.Count = 0
