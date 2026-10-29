@@ -1,0 +1,33 @@
+# Cowabunga!: a Mutant card (Cloudfin Raptor, a Bird Mutant) and a land (Forest) are both takeable from the top four; Bot1 takes the
+# Forest, and the Raptor goes to the bottom. The Bolt and Giant Growth are refused.
+
+[Bot1 Deck]
+Cowabunga!
+Forest
+Plains
+Plains
+Plains
+Plains
+Plains
+Lightning Bolt
+Cloudfin Raptor
+Giant Growth
+Forest
+Mountain
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Cowabunga!.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Giant Growth | Lightning Bolt; Cloudfin Raptor; Forest)
+Bot1.Arrange(Forest | Lightning Bolt; Cloudfin Raptor; Giant Growth)
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Forest
+Bot1.Library.Count = 14

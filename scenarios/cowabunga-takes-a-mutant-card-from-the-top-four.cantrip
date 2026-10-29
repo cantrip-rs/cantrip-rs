@@ -1,0 +1,32 @@
+# Cowabunga!: each of "Mutant, Ninja, Turtle, or land" is its own way in. The top four are Lightning Bolt, Giant Growth, Cloudfin Raptor and
+# Plains; Bot1 takes the Cloudfin Raptor (a mutant) and the other three go to the bottom.
+
+[Bot1 Deck]
+Cowabunga!
+Forest
+Plains
+Plains
+Plains
+Plains
+Plains
+Lightning Bolt
+Giant Growth
+Cloudfin Raptor
+Plains
+Mountain
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Cowabunga!.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Cloudfin Raptor | Lightning Bolt; Giant Growth; Plains)
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Cloudfin Raptor
+Bot1.Library.Count = 14

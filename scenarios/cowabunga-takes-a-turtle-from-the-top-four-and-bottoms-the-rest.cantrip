@@ -1,0 +1,38 @@
+# Cowabunga!, {G} sorcery: "Look at the top four cards of your library. You may reveal a Mutant, Ninja, Turtle, or land card from
+# among them and put it into your hand. Put the rest on the bottom of your library in a random order." The top four are Lightning
+# Bolt, Giant Growth, Aegis Turtle and Cloudfin Raptor (a Bird Mutant); a Mountain below is not looked at (CR 701.20a). Bot1 may not
+# take the instant or the sorcery, may not take two, takes the Turtle revealing it, and the other three go to the
+# bottom with the Mountain the new top card.
+
+[Bot1 Deck]
+Cowabunga!
+Forest
+Plains
+Plains
+Plains
+Plains
+Plains
+Lightning Bolt
+Giant Growth
+Aegis Turtle
+Cloudfin Raptor
+Mountain
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Cowabunga!.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Lightning Bolt | Giant Growth; Aegis Turtle; Cloudfin Raptor)
+! Bot1.Arrange(Aegis Turtle; Cloudfin Raptor | Lightning Bolt; Giant Growth)
+Bot1.Arrange(Aegis Turtle | Lightning Bolt; Giant Growth; Cloudfin Raptor)
+
+[Expect]
+Bot1.Revealed = Aegis Turtle
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Aegis Turtle
+Bot1.Library.Count = 14
