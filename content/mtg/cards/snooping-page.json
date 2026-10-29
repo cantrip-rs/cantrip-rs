@@ -1,0 +1,8 @@
+{
+  "name": "Snooping Page",
+  "manaCost": "{1}{W}{B}",
+  "type": "Creature — Human Cleric",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Repartee — Whenever you cast an instant or sorcery spell that targets a creature, this creature can't be blocked this turn.\nWhenever this creature deals combat damage to a player, you draw a card and lose 1 life."
+}
