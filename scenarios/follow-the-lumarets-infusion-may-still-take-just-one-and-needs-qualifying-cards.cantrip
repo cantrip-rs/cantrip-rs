@@ -1,0 +1,43 @@
+# Follow the Lumarets: Infusion makes two possible, not required. After Lightning Helix, the top four are Lightning Bolt,
+# Island, Lightning Bolt, Lightning Bolt: only the Island qualifies, so two is refused and Bot1 takes the one. The Bolts and
+# nothing else go to the bottom.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Follow the Lumarets
+Mox Jet
+Lightning Bolt
+Island
+Lightning Bolt
+Lightning Bolt
+Island x12
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Follow the Lumarets.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Island; Lightning Bolt | Lightning Bolt; Lightning Bolt)
+Bot1.Arrange(Island | Lightning Bolt; Lightning Bolt; Lightning Bolt)
+
+[Expect]
+Bot1.Hand = Island; Mox Jet
+Bot1.Library.Count = 15
+Bot1.Revealed = Island

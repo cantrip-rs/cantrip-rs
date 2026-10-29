@@ -1,0 +1,36 @@
+# Follow the Lumarets: Bot1 gained no life, so of the top four (Island, Ornithopter, Lightning Bolt, Grizzly Bears) only one
+# creature or land card may go to the hand: two is refused. Bot1 takes Grizzly Bears; the other three go to the bottom.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Follow the Lumarets
+Island
+Ornithopter
+Lightning Bolt
+Grizzly Bears
+Island x12
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Follow the Lumarets.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Island; Grizzly Bears | Ornithopter; Lightning Bolt)
+Bot1.Arrange(Grizzly Bears | Island; Ornithopter; Lightning Bolt)
+
+[Expect]
+Bot1.Hand = Grizzly Bears; Mox Jet; Mox Jet; Mox Jet; Mox Jet
+Bot1.Graveyard = Follow the Lumarets
+Bot1.Library.Count = 15
+Bot1.Revealed = Grizzly Bears

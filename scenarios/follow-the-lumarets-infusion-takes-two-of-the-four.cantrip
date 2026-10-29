@@ -1,0 +1,45 @@
+# Follow the Lumarets: Infusion -- Bot1 gained 3 life this turn (Lightning Helix), so of the top four (Island, Ornithopter,
+# Lightning Bolt, Grizzly Bears) it may take two creature and/or land cards: here Ornithopter and Grizzly Bears. A third is
+# refused. The Island and the Bolt go to the bottom of the library.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Follow the Lumarets
+Mox Jet
+Island
+Ornithopter
+Lightning Bolt
+Grizzly Bears
+Island x12
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 23
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Follow the Lumarets.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Arrange(Island; Ornithopter; Grizzly Bears | Lightning Bolt)
+Bot1.Arrange(Ornithopter; Grizzly Bears | Island; Lightning Bolt)
+
+[Expect]
+Bot1.Hand = Grizzly Bears; Mox Jet; Ornithopter
+Bot1.Graveyard = Follow the Lumarets; Lightning Helix
+Bot1.Library.Count = 14
+Bot1.Revealed = Ornithopter; Grizzly Bears
