@@ -40,6 +40,11 @@ pub const UNATTACH_THIS: Cost = Cost { unattach_self: true, ..Cost::NONE };
 /// "Return this permanent to its owner's hand".
 pub const RETURN_THIS: Cost = Cost { return_self: true, ..Cost::NONE };
 
+/// Put this card into its owner's library as an activated ability's cost (CR 118.3, 401.4).
+pub const fn put_self_into_library(place: LibraryPlace) -> Cost {
+    Cost { put_self_into_library: Some(place), ..Cost::NONE }
+}
+
 /// "Discard your hand" (CR 701.9).
 pub const DISCARD_HAND: Cost = Cost { discard_hand: true, ..Cost::NONE };
 

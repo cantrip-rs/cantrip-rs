@@ -527,6 +527,17 @@ fn can_pay_other_as(cx: &Cx, source: ObjectId, controller: PlayerId, cost: &Cost
     if cost.return_self && !obj.zone.is(ZoneKind::Battlefield) {
         return false;
     }
+    if cost.put_self_into_library.is_some()
+        && (judged != Judged::Activation
+            || !live(cx.s(), source)
+            || obj.zone.is(ZoneKind::PhasedOut)
+            || cost.sacrifice_self
+            || cost.discard_self
+            || cost.exile_self
+            || cost.return_self)
+    {
+        return false;
+    }
     if let Some(variable) = cost.variable
         && !variable_payable(cx, source, controller, variable, paid)
     {
@@ -9198,6 +9209,9 @@ fn activate(
     if def.cost.return_self {
         ops::move_to_for(cx, source, Zone::hand(cx.s().obj(source).owner), ZoneReason::Other);
     }
+    if let Some(place) = def.cost.put_self_into_library {
+        ops::put_into_library(cx, &[source], place);
+    }
     if def.cost.materials.is_some() {
         assert!(def.cost.exile_self, "craft exiles its source with its materials (CR 702.167a)");
         pay_materials(cx, source, &materials);
@@ -9457,6 +9471,9 @@ fn activate_mana_as(
     pay_life_and_counters(cx, player, source, &def.cost);
     if def.cost.sacrifice_self {
         ops::sacrifice(cx, player, &[source]);
+    }
+    if let Some(place) = def.cost.put_self_into_library {
+        ops::put_into_library(cx, &[source], place);
     }
     // A mana ability is activated (CR 605.3) as any ability is, once its costs are paid (CR 602.2b, 601.2i, 605.3a), and the
     // history says so. It is emitted too: "whenever you activate an ability of a creature" (Elrond, Moon-Reader) triggers on a
@@ -11031,6 +11048,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         tap_permanents: _,
         unattach_self: _,
         return_self: _,
+        put_self_into_library,
         variable: _,
         discard_hand: _,
         collect_evidence: _,
@@ -11041,7 +11059,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         tap_to_reduce,
         materials,
     } = *cost;
-    !sacrifice_granter && loyalty.is_none() && !exert && !emerge && !tap_to_reduce && materials.is_none()
+    !sacrifice_granter && loyalty.is_none() && !exert && !emerge && !tap_to_reduce && materials.is_none() && put_self_into_library.is_none()
 }
 
 /// Whether the parts of a resolution's cost other than mana and life could be paid now (CR 118.3), `x` the X chosen: the

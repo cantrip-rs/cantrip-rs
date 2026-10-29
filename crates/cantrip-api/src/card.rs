@@ -813,6 +813,8 @@ pub struct Cost {
     pub unattach_self: bool,
     /// Return this permanent to its owner's hand (CR 118.3): payable only while it is on the battlefield.
     pub return_self: bool,
+    /// Put this card into its owner's library as a cost (CR 118.3): the source must still be present when the cost is paid.
+    pub put_self_into_library: Option<LibraryPlace>,
     /// A part of the cost whose size the payer decides (CR 601.2b, 601.2h).
     pub variable: Option<VariableCost>,
     /// Discard your hand (CR 701.9): every card in it, with no choice to make and payable with an empty hand.
@@ -1025,6 +1027,7 @@ impl Cost {
             tap_permanents,
             unattach_self,
             return_self,
+            put_self_into_library,
             variable,
             discard_hand,
             collect_evidence,
@@ -1060,6 +1063,7 @@ impl Cost {
             && !tap_permanents
             && !unattach_self
             && !return_self
+            && put_self_into_library.is_none()
             && variable.is_none()
             && !discard_hand
             && collect_evidence == 0
@@ -1143,6 +1147,9 @@ impl Cost {
         c.sacrifice_granter |= other.sacrifice_granter;
         c.discard_self |= other.discard_self;
         c.exile_self |= other.exile_self;
+        if c.put_self_into_library.is_none() {
+            c.put_self_into_library = other.put_self_into_library;
+        }
         c.pay_x_life |= other.pay_x_life;
         c.emerge |= other.emerge;
         c.tap_to_reduce |= other.tap_to_reduce;
@@ -1251,6 +1258,7 @@ impl Cost {
 
             unattach_self: false,
             return_self: false,
+            put_self_into_library: None,
             variable: None,
             discard_hand: false,
             collect_evidence: 0,
