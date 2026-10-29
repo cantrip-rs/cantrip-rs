@@ -1,0 +1,25 @@
+# Scarblade Scout {1}{B} 2/2 lifelink: "When this creature enters, mill two cards" (CR 701.17): exactly two cards go from the top of
+# Bot1's library to its graveyard: the two Islands there (a third milled, or one fewer, would show).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Scarblade Scout
+Island x4
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Scarblade Scout.Cast
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Island; Island
+Bot1.Battlefield.Scarblade Scout.Keywords = Lifelink
+Bot1.Battlefield.Scarblade Scout.Power = 2
