@@ -1,0 +1,46 @@
+# Arnyn, Deathbloom Botanist: Bot1's Omega Myr (1/2: power 1, toughness 2) is Bolted, and its power of exactly 1 is enough, so Bot2 loses 2 and Bot1 gains 2.
+# Swords to Plowshares then exiles Bot1's own Ornithopter (power 0): it did not die, so nothing more is drained.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Arnyn, Deathbloom Botanist
+Omega Myr
+Ornithopter
+Lightning Bolt
+Swords to Plowshares
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Arnyn, Deathbloom Botanist.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Omega Myr.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Omega Myr)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Exile = Ornithopter

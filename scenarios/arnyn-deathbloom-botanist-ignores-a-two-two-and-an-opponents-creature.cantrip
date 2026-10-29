@@ -1,0 +1,43 @@
+# Arnyn, Deathbloom Botanist: only a creature *you control* with power or toughness 1 or less. Bot2's Ornithopter (power 0) dying drains nothing, and
+# neither does Arnyn herself (a 2/2) dying to a second Bolt: both players keep their 20 life.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Arnyn, Deathbloom Botanist
+Lightning Bolt
+Lightning Bolt
+Mountain
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Arnyn, Deathbloom Botanist.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Arnyn, Deathbloom Botanist)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Life = 20
+Bot2.Graveyard = Ornithopter

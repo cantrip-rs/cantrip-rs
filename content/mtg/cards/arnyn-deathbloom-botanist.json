@@ -1,0 +1,11 @@
+{
+  "name": "Arnyn, Deathbloom Botanist",
+  "manaCost": "{2}{B}",
+  "type": "Legendary Creature — Vampire Druid",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Deathtouch\nWhenever a creature you control with power or toughness 1 or less dies, target opponent loses 2 life and you gain 2 life.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

@@ -1,0 +1,46 @@
+# Arnyn, Deathbloom Botanist: a Pyroclasm kills Arnyn (2/2, no trigger of her own), Bot1's Alpha Myr (2/1, toughness 1 or less) and Ornithopter (power 0)
+# together, and Bot2's Ornithopter. She sees the other two die with her, so she triggers twice: Bot2 loses 4 and Bot1 gains 4.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Arnyn, Deathbloom Botanist
+Ornithopter
+Alpha Myr
+Pyroclasm
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Arnyn, Deathbloom Botanist.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Alpha Myr.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pyroclasm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Life = 24

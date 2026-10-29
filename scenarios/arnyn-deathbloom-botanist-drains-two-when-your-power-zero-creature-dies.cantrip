@@ -1,0 +1,36 @@
+# Arnyn, Deathbloom Botanist: "Whenever a creature you control with power or toughness 1 or less dies, target opponent loses 2 life and you gain 2
+# life." Bot1's Ornithopter (power 0) is Bolted by its owner: Bot2 loses 2 (the opponent is the lone target) and Bot1 gains 2.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Arnyn, Deathbloom Botanist
+Ornithopter
+Lightning Bolt
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Arnyn, Deathbloom Botanist.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl; Arnyn, Deathbloom Botanist

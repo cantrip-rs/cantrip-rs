@@ -1,0 +1,47 @@
+# Arnyn, Deathbloom Botanist: "power or toughness 1 or less" is the creature as it last was on the battlefield (CR 603.10a). Bot1's
+# 2/2 Grizzly Bears, given -5/-5 by Dismember, dies as a -3/-3: negative power and toughness are 1 or less, so Arnyn triggers and
+# Bot2 loses 2 life while Bot1 gains 2.
+
+[Bot1 Deck]
+Mox Jet x2
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Arnyn, Deathbloom Botanist
+Grizzly Bears
+Dismember
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Arnyn, Deathbloom Botanist.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dismember.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Grizzly Bears; Dismember
+Bot1.Life = 22
+Bot2.Life = 18
