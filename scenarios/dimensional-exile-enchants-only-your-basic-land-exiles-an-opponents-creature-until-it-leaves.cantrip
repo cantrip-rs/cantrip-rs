@@ -1,0 +1,63 @@
+# Dimensional Exile ("Enchant basic land you control", CR 303.4): Bot1's nonbasic Strip Mine and Bot2's basic Island are not
+# legal to enchant, its Plains is. "When this Aura enters, exile target creature an opponent controls until this Aura leaves the
+# battlefield" (CR 610.3): Bot1's own Featherbrained Filcher is not a legal target, Bot2's Action News Crew is (its Ornithopter
+# is the other candidate). When Bot2's Disenchant destroys the Aura on turn 4, the Crew returns to the battlefield under its
+# owner's control, a new object.
+
+[Bot1 Deck]
+Strip Mine
+Mox Pearl x2
+Dimensional Exile
+Featherbrained Filcher
+Plains
+Plains x14
+
+[Bot2 Deck]
+Mox Pearl x2
+Action News Crew
+Ornithopter
+Disenchant
+Island x2
+Island x14
+
+[Actions]
+Bot1.Hand.Strip Mine.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Featherbrained Filcher.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Action News Crew.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+! Bot1.Hand.Dimensional Exile.Cast(Bot1.Battlefield.Strip Mine)
+! Bot1.Hand.Dimensional Exile.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Dimensional Exile.Cast(Bot1.Battlefield.Plains)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Featherbrained Filcher)
+Bot1.Target(Action News Crew)
+Bot1.Pass
+Bot2.Pass
+? Exile = Action News Crew
+? Bot2.Battlefield.Count = 4
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant.Cast(Dimensional Exile)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile.Count = 0
+Bot1.Graveyard = Dimensional Exile
+Bot2.Battlefield.Action News Crew.Keywords = Vigilance
+Bot2.Battlefield.Count = 5

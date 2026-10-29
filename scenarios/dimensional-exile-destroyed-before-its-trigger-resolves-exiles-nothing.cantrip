@@ -1,0 +1,51 @@
+# Dimensional Exile's enters ability exiles "until this Aura leaves the battlefield": with the Aura already destroyed as the
+# ability resolves (Bot2's Disenchant in response), the duration has ended and nothing is exiled (CR 610.3c), so Bot2's
+# Action News Crew stays on the battlefield.
+
+[Bot1 Deck]
+Mox Pearl x2
+Dimensional Exile
+Plains x3
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl x4
+Action News Crew
+Disenchant
+Island
+Island x13
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Action News Crew.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Dimensional Exile.Cast(Bot1.Battlefield.Plains)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Battlefield.Mox Pearl#4.Activate
+Bot2.Hand.Disenchant.Cast(Dimensional Exile)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Dimensional Exile
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield.Action News Crew.Keywords = Vigilance
+Bot2.Battlefield.Count = 5
