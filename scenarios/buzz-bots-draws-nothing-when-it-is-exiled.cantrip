@@ -1,0 +1,35 @@
+# "When this creature dies" is put into a graveyard from the battlefield (CR 700.4): Bot1's Buzz Bots exiled by Bot2's Swords to Plowshares does not die, so
+# Bot1 draws nothing and its hand stays at 4.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Buzz Bots
+Island x4
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Plains x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Buzz Bots.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Buzz Bots)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.End]
+
+[Expect]
+Exile = Buzz Bots
+Bot1.Graveyard.Count = 0
+Bot1.Hand.Count = 4

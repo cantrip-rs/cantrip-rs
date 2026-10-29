@@ -1,0 +1,12 @@
+{
+  "name": "Buzz Bots",
+  "manaCost": "{1}{U}",
+  "type": "Artifact Creature — Robot Insect",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying, vigilance\nWhen this creature dies, draw a card.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}
