@@ -1,0 +1,11 @@
+{
+  "name": "Charging Strifeknight",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Spirit Knight",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Haste\n{T}, Discard a card: Draw a card.",
+  "keywords": [
+    "Haste"
+  ]
+}

@@ -1,0 +1,33 @@
+# Charging Strifeknight, cast on turn 1 with a Black Lotus's red mana, has haste: it taps at once, discarding an Island as a cost
+# to draw a card (the next card of the library, a Mountain). It can't do it again while it is tapped.
+
+[Bot1 Deck]
+Charging Strifeknight
+Black Lotus
+Island
+Island
+Island
+Island
+Island
+Mountain
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Charging Strifeknight.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Charging Strifeknight.Activate
+Bot1.Choose(Island)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Charging Strifeknight.Activate
+
+[Expect]
+Bot1.Graveyard = Island; Black Lotus
+Bot1.Battlefield.Charging Strifeknight.Tapped = true
+Bot1.Hand.Count = 5
