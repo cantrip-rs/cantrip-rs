@@ -1,0 +1,8 @@
+{
+  "name": "Brambleback Brute",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Giant Warrior",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "This creature enters with two -1/-1 counters on it.\n{1}{R}, Remove a counter from this creature: Target creature can't block this turn. Activate only as a sorcery."
+}

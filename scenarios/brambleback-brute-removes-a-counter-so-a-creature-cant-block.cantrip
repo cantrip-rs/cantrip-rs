@@ -1,0 +1,56 @@
+# Brambleback Brute: enters with two -1/-1 counters (the 4/5 is 2/3); "{1}{R}, Remove a counter from this creature: Target
+# creature can't block this turn. Activate only as a sorcery." On turn 3 Bot1 removes one (3/4), Bot2's Ornithopter can't
+# block the attacking Brute, so it deals 3; the ability can't be activated in the combat phase.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Brambleback Brute
+Mox Sapphire
+Mox Emerald
+Forest
+Forest x13
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Brambleback Brute.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brambleback Brute.Counters.MinusOneMinusOne = 2
+? Bot1.Battlefield.Brambleback Brute.Power = 2
+? Bot1.Battlefield.Brambleback Brute.Toughness = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Brambleback Brute.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Brambleback Brute.Counters.MinusOneMinusOne = 1
+? Bot1.Battlefield.Brambleback Brute.Power = 3
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Brambleback Brute.Activate
+Bot1.Attack(Brambleback Brute > Bot2)
+! Bot2.Block(Ornithopter > Brambleback Brute)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+
+[Expect]
+Bot1.Battlefield = Brambleback Brute; Mox Jet; Mox Pearl; Mox Ruby
