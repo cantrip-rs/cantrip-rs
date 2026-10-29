@@ -1,0 +1,11 @@
+{
+  "name": "Koya, Death from Above",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Mutant Ninja Bird",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nWhen Koya enters, exile up to one other target creature. At the beginning of the next end step, you may pay {3}{B}. If you don't, return that card to the battlefield under its owner's control.",
+  "keywords": [
+    "Flying"
+  ]
+}

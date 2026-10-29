@@ -1,0 +1,48 @@
+# Koya, Death from Above: "When Koya enters, exile up to one other target creature. At the beginning of the next end step,
+# you may pay {3}{B}. If you don't, return that card to the battlefield under its owner's control." Bot1 targets its own
+# Ornithopter (Koya herself is not a legal target: "other") and pays {3}{B} at the end step with Black Lotus and Mox Jet
+# (four black mana, none of it spare): the Ornithopter stays in exile.
+
+[Bot1 Deck]
+Mox Pearl x3
+Koya, Death from Above
+Ornithopter
+Black Lotus
+Mox Jet
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Koya, Death from Above.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Koya, Death from Above)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Exile.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Count = 6
+? Bot1.Battlefield.Koya, Death from Above.Keywords = Flying
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+
+[Expect]
+Bot1.Exile.Ornithopter.Toughness = 2
+Bot1.Mana =
+Bot1.Battlefield.Count = 5
+Bot1.Graveyard = Black Lotus
