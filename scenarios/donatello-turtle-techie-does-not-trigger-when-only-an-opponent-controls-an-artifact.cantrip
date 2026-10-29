@@ -1,0 +1,30 @@
+# "If you control an artifact" (CR 603.4) counts only Bot1's: Bot2 controls a Mox Ruby, but Bot1's Black Lotus is sacrificed for its mana, so Bot1 controls none as
+# Donatello enters and the ability does not trigger (nothing is put on the stack). Hand: 7 - Island - Lotus = 5, turn 3 draw 6, - Donatello = 5.
+
+[Bot1 Deck]
+Island
+Black Lotus
+Donatello, Turtle Techie
+Island x4
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Island x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Donatello, Turtle Techie.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 5
+Bot1.Battlefield = Island; Donatello, Turtle Techie

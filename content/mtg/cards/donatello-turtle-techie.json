@@ -1,0 +1,8 @@
+{
+  "name": "Donatello, Turtle Techie",
+  "manaCost": "{3}{U}",
+  "type": "Legendary Creature — Mutant Ninja Turtle",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "When Donatello enters, if you control an artifact, draw a card."
+}

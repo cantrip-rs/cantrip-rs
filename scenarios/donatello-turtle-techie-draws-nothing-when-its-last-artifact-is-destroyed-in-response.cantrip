@@ -1,0 +1,45 @@
+# The intervening "if" is checked again as the ability resolves (CR 603.4): Bot1's Mox Sapphire is its only artifact once the sacrificed Black Lotus has paid for
+# Donatello, so the ability triggers; Bot2 destroys the Mox with Disenchant in response and Bot1 draws nothing. Hand: 7 - Island - Lotus - Mox = 4, turn 3 draw 5,
+# - Donatello = 4.
+
+[Bot1 Deck]
+Island
+Black Lotus
+Mox Sapphire
+Donatello, Turtle Techie
+Island x3
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Plains
+Disenchant
+Island x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Donatello, Turtle Techie.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Mox Sapphire; Black Lotus
+Bot1.Hand.Count = 4
