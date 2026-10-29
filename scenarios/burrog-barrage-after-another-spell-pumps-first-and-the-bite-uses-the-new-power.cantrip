@@ -1,0 +1,62 @@
+# Burrog Barrage: after Lightning Bolt this turn Grizzly Bears gets +1/+0, reads 3 power as it deals damage, and kills a Hill Giant (CR 608.2c).
+
+[Bot1 Deck]
+Burrog Barrage
+Grizzly Bears
+Lightning Bolt
+Mox Emerald
+Mox Emerald
+Mox Ruby
+Mox Ruby
+Mountain x13
+
+[Bot2 Deck]
+Hill Giant
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Battlefield.Mox Ruby#4.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Burrog Barrage.Cast
+Bot1.Target(Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Graveyard = Hill Giant
