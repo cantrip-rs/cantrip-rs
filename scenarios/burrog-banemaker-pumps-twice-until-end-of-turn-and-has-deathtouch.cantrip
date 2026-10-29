@@ -1,0 +1,38 @@
+# Burrog Banemaker: "Deathtouch" and "{1}{B}: This creature gets +1/+1 until end of turn." Two activations stack (CR 611.2): a 1/1
+# becomes 3/3 until end of turn, and it is a 1/1 again on the next turn. It carries deathtouch (CR 702.2).
+
+[Bot1 Deck]
+Burrog Banemaker
+5 Mox Jet
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Burrog Banemaker.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Battlefield.Mox Jet#5.Activate
+Bot1.Battlefield.Burrog Banemaker.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Burrog Banemaker.Power = 3
+? Bot1.Battlefield.Burrog Banemaker.Toughness = 3
+? Bot1.Battlefield.Burrog Banemaker.Keywords = Deathtouch
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Burrog Banemaker.Power = 1
+Bot1.Battlefield.Burrog Banemaker.Toughness = 1

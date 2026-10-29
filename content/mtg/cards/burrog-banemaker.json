@@ -1,0 +1,11 @@
+{
+  "name": "Burrog Banemaker",
+  "manaCost": "{B}",
+  "type": "Creature — Frog Warlock",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch\n{1}{B}: This creature gets +1/+1 until end of turn.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

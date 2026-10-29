@@ -1,0 +1,33 @@
+# Burrog Banemaker has deathtouch (CR 702.2): a 1/1 that attacks into Bot2's 5/5 Ulvenwald Oddity kills it with 1 damage
+# (CR 704.5h), and dies to the Oddity's damage.
+
+[Bot1 Deck]
+Burrog Banemaker
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Ulvenwald Oddity
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Ulvenwald Oddity.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Burrog Banemaker > Bot2)
+Bot2.Block(Ulvenwald Oddity > Burrog Banemaker)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Burrog Banemaker
+Bot2.Graveyard = Ulvenwald Oddity; Black Lotus
