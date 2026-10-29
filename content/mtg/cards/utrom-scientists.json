@@ -1,0 +1,8 @@
+{
+  "name": "Utrom Scientists",
+  "manaCost": "{2}{U}",
+  "type": "Artifact Creature — Utrom Robot Scientist",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, tap up to one target creature and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}

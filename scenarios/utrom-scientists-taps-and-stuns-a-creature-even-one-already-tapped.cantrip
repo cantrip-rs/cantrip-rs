@@ -1,0 +1,67 @@
+# Utrom Scientists: "When this creature enters, tap up to one target creature and put a stun counter on it." On turn one no
+# other creature is on the battlefield and Bot1 chooses no target (up to one): the first Scientists stays untapped with no
+# counter. On turn three the second Scientists taps Bot2's Llanowar Elves and stuns it once; the third Scientists targets
+# the Elves again, already tapped, and puts a second stun counter on it (CR 122.1d: the counter goes on whether or not
+# it was untapped).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Black Lotus
+Utrom Scientists
+Utrom Scientists
+Utrom Scientists
+Island x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Utrom Scientists.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+? Bot1.Battlefield.Utrom Scientists.Tapped = false
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Utrom Scientists.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+? Bot2.Battlefield.Llanowar Elves.Counters.Stun = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Utrom Scientists.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot2.Battlefield.Llanowar Elves.Counters.Stun = 2
+Bot1.Battlefield.Utrom Scientists#1.Tapped = false
