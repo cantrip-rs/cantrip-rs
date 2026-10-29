@@ -1,0 +1,36 @@
+# Converge: {2/R}{2/R}{2/R} paid with one red mana for the first hybrid symbol and white, blue, black and green for the other two
+# ({2} each) spends five colors, so Magmablood Archaic enters with five +1/+1 counters: a 7/7.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Magmablood Archaic
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Magmablood Archaic.Cast
+Bot1.Modes(1; 2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Magmablood Archaic.Counters.PlusOnePlusOne = 5
+Bot1.Battlefield.Magmablood Archaic.Power = 7
+Bot1.Battlefield.Magmablood Archaic.Toughness = 7
