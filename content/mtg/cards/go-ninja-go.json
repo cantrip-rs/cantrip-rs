@@ -1,0 +1,6 @@
+{
+  "name": "Go Ninja Go",
+  "manaCost": "{R}{W}",
+  "type": "Sorcery",
+  "oracleText": "Choose one or both —\n• Exile target creature you control, then return it to the battlefield under its owner's control.\n• Go Ninja Go deals damage equal to the greatest power among creatures you control to target creature an opponent controls."
+}

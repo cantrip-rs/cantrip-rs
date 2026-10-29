@@ -1,0 +1,63 @@
+# Go Ninja Go, "Choose one or both" (CR 700.2): both modes. Mode 1 exiles Bot1's Memnite and returns it (a new object); mode 2 deals damage equal to the
+# greatest power among Bot1's creatures (Memnite 1, Ornithopter 0, so 1) to Bot2's Coral Merfolk (2/1), which dies. Mode 1 only takes a creature Bot1
+# controls and mode 2 only one an opponent controls.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Memnite
+Ornithopter
+Go Ninja Go
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Coral Merfolk
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Coral Merfolk.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield = Coral Merfolk; Mox Jet; Mox Sapphire
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Go Ninja Go.Cast
+! Bot1.Modes(Count: 0)
+Bot1.Modes(1; 2)
+! Bot1.Target(Coral Merfolk)
+Bot1.Target(Memnite)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Coral Merfolk)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Jet; Mox Sapphire
+Bot2.Graveyard = Coral Merfolk
+Bot1.Battlefield = Memnite; Mox Pearl; Mox Ruby; Ornithopter
+Bot1.Graveyard = Go Ninja Go

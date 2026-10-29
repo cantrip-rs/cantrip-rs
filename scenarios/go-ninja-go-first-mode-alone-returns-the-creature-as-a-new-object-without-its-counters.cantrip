@@ -1,0 +1,69 @@
+# Go Ninja Go, first mode alone: "Exile target creature you control, then return it to the battlefield under its owner's control" (CR 400.7). Bot1's
+# EPF Point Squad (2/1) has grown a +1/+1 counter from Memnite; Go Ninja Go exiles and returns it as a new object, with no counters, a 2/1 again. The
+# second mode was not chosen, so Bot2's Coral Merfolk takes no damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+EPF Point Squad
+Memnite
+Go Ninja Go
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Coral Merfolk
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.EPF Point Squad.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Coral Merfolk.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.EPF Point Squad.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.EPF Point Squad.Power = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Go Ninja Go.Cast
+Bot1.Modes(1)
+Bot1.Target(EPF Point Squad)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.EPF Point Squad.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.EPF Point Squad.Power = 2
+Bot1.Battlefield.EPF Point Squad.Toughness = 1
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield = Coral Merfolk; Mox Jet; Mox Sapphire
