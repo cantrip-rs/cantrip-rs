@@ -1,0 +1,28 @@
+# Scuzzback Scrounger: "At the beginning of your first main phase, you may blight 1. If you do, create a Treasure token." (CR 701.68a,
+# 118.12): on turn three Bot1 declines to blight and gets no Treasure.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Scuzzback Scrounger
+Forest x17
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Scuzzback Scrounger.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Decline
+Bot1.Pass
+? Bot1.Battlefield.Scuzzback Scrounger.Toughness = 2
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Ruby; Scuzzback Scrounger
