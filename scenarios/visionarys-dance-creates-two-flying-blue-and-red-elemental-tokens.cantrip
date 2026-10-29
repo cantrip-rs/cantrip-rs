@@ -1,0 +1,54 @@
+# Visionary's Dance, cast for {5}{U}{R} (Black Lotus, Mox Sapphire, Mox Ruby, Mox Jet and Mox Pearl): "Create two 3/3 blue and red
+# Elemental creature tokens with flying." Both tokens are made by the one spell, and each is a 3/3 blue-and-red Elemental with
+# flying. The card goes to the graveyard; the other player's cards are untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Visionary's Dance
+Island
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Visionary's Dance.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Ruby; Mox Jet; Mox Pearl; Elemental Token; Elemental Token
+Bot1.Battlefield.Elemental Token#1.Power = 3
+Bot1.Battlefield.Elemental Token#1.Toughness = 3
+Bot1.Battlefield.Elemental Token#1.Keywords = Flying
+Bot1.Battlefield.Elemental Token#1.Colors = Blue; Red
+Bot1.Battlefield.Elemental Token#1.Subtypes = Elemental
+Bot1.Battlefield.Elemental Token#2.Power = 3
+Bot1.Battlefield.Elemental Token#2.Keywords = Flying
+Bot1.Graveyard = Visionary's Dance; Black Lotus
+Bot2.Hand.Count = 7
+Bot2.Library.Count = 18

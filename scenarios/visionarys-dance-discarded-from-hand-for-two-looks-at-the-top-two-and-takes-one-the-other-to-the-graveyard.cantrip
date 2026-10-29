@@ -1,0 +1,42 @@
+# Visionary's Dance from hand: "{2}, Discard this card: Look at the top two cards of your library. Put one of them into your hand
+# and the other into your graveyard." With a single Mox Sapphire ({U}) it cannot be activated; with Mox Ruby as well it can. The
+# top two are Ancestral Recall and Mox Jet: Bot1 takes the Recall and the Jet goes to the graveyard, beside the discarded Dance.
+# No token is made, and the other player's cards are untouched.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Visionary's Dance
+Island
+Island
+Island
+Island
+Ancestral Recall
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Visionary's Dance.Activate(Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Visionary's Dance.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ancestral Recall | Mox Jet)
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Ancestral Recall
+Bot1.Graveyard = Mox Jet; Visionary's Dance
+Bot1.Library.Count = 20
+Bot1.Battlefield = Mox Sapphire; Mox Ruby
+Bot2.Hand.Count = 7
+Bot2.Library.Count = 18
