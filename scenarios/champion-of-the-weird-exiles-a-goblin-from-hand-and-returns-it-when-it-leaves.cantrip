@@ -1,0 +1,38 @@
+# Champion of the Weird (CR 601.2b, 701.4a, 607.2q): the additional cost beholds a Goblin - Goblin Grappler, revealed from the
+# hand - and exiles it. The Champion is cast with Black Lotus and Mox Jet for {3}{B}. When Bot2's Swords to Plowshares exiles it, the
+# exiled Boggart returns to its owner's hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Goblin Grappler
+Champion of the Weird
+Island x16
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Champion of the Weird.Cast
+Bot1.Choose(Goblin Grappler)
+[T1 Bot1.Main2]
+? Bot1.Hand.Count = 3
+? Exile.Count = 1
+? Bot1.Battlefield.Champion of the Weird.Power = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Champion of the Weird)
+[T2 Bot2.Main2]
+
+[Expect]
+Exile.Count = 1
+Bot1.Hand.Goblin Grappler.Power = 1
+Bot1.Battlefield.Count = 1
+Bot1.Life = 25

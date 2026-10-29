@@ -1,0 +1,46 @@
+# Champion of the Weird: "Pay 1 life, Blight 2: Target opponent blights 2. Activate only as a sorcery" (CR 602.5d, 701.68a). On
+# turn 2, in Bot2's main phase, Bot1 can't activate it. On turn 3, in its own main phase with an empty stack, it can: Bot1 pays 1 life
+# and blights the Champion, then Bot2 chooses a creature it controls - its Hill Giant, a 3/3 - and puts the two counters on it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Goblin Grappler
+Champion of the Weird
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Champion of the Weird.Cast
+Bot1.Choose(Goblin Grappler)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: R)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot1.Battlefield.Champion of the Weird.Activate(Bot2)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Champion of the Weird.Activate(Bot2)
+Bot1.Choose(Champion of the Weird)
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Hill Giant)
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Champion of the Weird.Power = 3
+Bot2.Battlefield.Hill Giant.Counters.MinusOneMinusOne = 2
+Bot2.Battlefield.Hill Giant.Power = 1
+Bot2.Battlefield.Hill Giant.Toughness = 1

@@ -1,0 +1,37 @@
+# Champion of the Weird beholding a Goblin on the battlefield (CR 701.4a, 607.2q): Bot1's Goblin Grappler, cast on turn 1 with
+# four Moxen, is chosen on turn 3 as the Champion is cast, and is exiled as the cost is paid: it is no longer on the battlefield,
+# and the 5/5 Champion is.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mox Pearl
+Goblin Grappler
+Champion of the Weird
+Island x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Grappler.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Champion of the Weird.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Goblin Grappler)
+[T3 Bot1.Main2]
+
+[Expect]
+Exile.Count = 1
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Champion of the Weird.Power = 5
+Bot1.Battlefield.Champion of the Weird.Toughness = 5

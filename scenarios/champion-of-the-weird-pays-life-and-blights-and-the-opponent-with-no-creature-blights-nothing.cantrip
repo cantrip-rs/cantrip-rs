@@ -1,0 +1,33 @@
+# Champion of the Weird: "Pay 1 life, Blight 2: Target opponent blights 2" (CR 118.4, 701.68a, 701.68b). Bot1 casts the Champion on
+# turn 1 (exiling the Boggart from hand) and activates it in its second main phase: it pays 1 life and puts two -1/-1 counters on a
+# creature it controls - its only one, the Champion, a 3/3 - and Bot2 controls no creature, so it blights nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Goblin Grappler
+Champion of the Weird
+Island x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: B)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Champion of the Weird.Cast
+Bot1.Choose(Goblin Grappler)
+[T1 Bot1.Main2]
+Bot1.Battlefield.Champion of the Weird.Activate(Bot2)
+Bot1.Choose(Champion of the Weird)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Champion of the Weird.Counters.MinusOneMinusOne = 2
+Bot1.Battlefield.Champion of the Weird.Power = 3
+Bot1.Battlefield.Champion of the Weird.Toughness = 3
+Stack.Count = 0
