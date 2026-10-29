@@ -1,0 +1,47 @@
+# Lessons from Life ({2}{G}{U}): "Draw three cards. You may put a land card from your hand onto the battlefield tapped." Bot1 casts it on turn 1 from four Moxen.
+# The three cards drawn are a Forest, an Island and a Lightning Bolt; the hand already holds a Plains. The draw comes first, so the drawn Forest is a legal choice
+# (the Lightning Bolt is refused, not a land card). The Forest enters tapped and putting it is not playing it (CR 305.2): LandsPlayed stays 0, so the Island can
+# still be played afterwards.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Lessons from Life
+Plains
+Lightning Bolt
+Forest
+Island
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lessons from Life.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Forest)
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.LandsPlayed = 0
+Bot1.Hand.Island.Play
+
+[Expect]
+Bot1.Battlefield = Forest; Island; Mox Emerald; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Hand = Lightning Bolt; Lightning Bolt; Plains
+Bot1.Graveyard = Lessons from Life
