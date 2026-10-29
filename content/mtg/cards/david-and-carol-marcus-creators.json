@@ -1,0 +1,8 @@
+{
+  "name": "David and Carol Marcus, Creators",
+  "manaCost": "{2}{G}",
+  "type": "Legendary Creature — Human Scientist",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "When David and Carol Marcus enter, create a tapped Planet land token named New Planet with \"{T}: Add one mana of any color.\""
+}

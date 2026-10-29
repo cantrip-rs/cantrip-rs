@@ -1,0 +1,31 @@
+# The enters trigger creates the shared New Planet token tapped (CR 111.1, 111.4, 603.6a); the fixture has one of each color source for casting.
+[Bot1 Deck]
+David and Carol Marcus, Creators
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.David and Carol Marcus, Creators.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.New Planet.Token = true
+Bot1.Battlefield.New Planet.Types = Land
+Bot1.Battlefield.New Planet.Subtypes = Planet
+Bot1.Battlefield.New Planet.Tapped = true
