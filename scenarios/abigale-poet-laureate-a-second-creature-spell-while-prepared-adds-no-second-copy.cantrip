@@ -1,0 +1,42 @@
+# Abigale, Poet Laureate: while it is already prepared, another creature spell makes it prepared again to no effect -- there is still
+# one Heroic Stanza in exile, not two.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Abigale, Poet Laureate
+Ornithopter
+Ornithopter
+Plains x2
+Plains x14
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Abigale, Poet Laureate.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Heroic Stanza
+Exile.Count = 1
+Bot1.Battlefield.Abigale, Poet Laureate.Prepared = true
