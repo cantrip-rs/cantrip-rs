@@ -1,0 +1,38 @@
+# Foolish Fate: "that creature's controller" loses the 3 life, not the opponent and not the caster as such -- Bot1 destroys its own Ornithopter
+# after Lightning Helix gained 3 (Bot1 23), so Bot1 itself loses 3 (20) while Bot2 is only hit by the Helix (17).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Lightning Helix
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Foolish Fate
+Ornithopter
+Swamp x12
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning Helix.Cast(Bot2)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Foolish Fate.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17
+Bot1.Graveyard = Foolish Fate; Ornithopter; Lightning Helix

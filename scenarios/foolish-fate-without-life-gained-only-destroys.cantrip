@@ -1,0 +1,30 @@
+# Foolish Fate: with no life gained this turn Infusion does nothing -- the Ornithopter is destroyed and Bot2 keeps all 20 life.
+
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Foolish Fate
+Swamp x16
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Foolish Fate.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
