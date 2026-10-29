@@ -1,0 +1,31 @@
+# With no creature to blight (CR 701.68b), Wild Unraveling's additional cost can only be paid as {1}, so it costs {U}{U}{1}: Bot2, with two Mox Sapphires
+# and no creature, is not offered the cast against Bot1's Ornithopter spell. The positive control is
+# "wild-unraveling-blighting-two-puts-both-counters-on-one-creature-and-counters-a-creature-spell": the same two Moxen and an Ornithopter to blight.
+
+[Bot1 Deck]
+Forest
+Ornithopter
+Forest x18
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Wild Unraveling
+Island x17
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+! Bot2.Hand.Wild Unraveling.Cast(Mana: short)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Forest; Ornithopter

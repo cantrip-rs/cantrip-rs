@@ -1,0 +1,45 @@
+# Wild Unraveling: "As an additional cost to cast this spell, blight 2 or pay {1}. Counter target spell." To blight 2 is to put two -1/-1 counters on a
+# creature you control (CR 701.68a), all on one creature (the ruling): Bot2's Centaur Courser (3/3) takes both and survives as a 1/1, and the spell costs
+# only {U}{U}, paid by two Mox Sapphires (the pool is empty after). It counters Bot1's creature spell, an Ornithopter, which never reaches the battlefield.
+
+[Bot1 Deck]
+Forest
+Ornithopter
+Forest x18
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Centaur Courser
+Wild Unraveling
+Island x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Centaur Courser.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Wild Unraveling.Cast(Stack.Ornithopter)
+Bot2.Modes(Blight 2)
+Bot2.Choose(Centaur Courser)
+? Bot2.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield = Forest
+Bot2.Graveyard = Wild Unraveling; Black Lotus
+Bot2.Battlefield = Centaur Courser; Mox Sapphire; Mox Sapphire
+Bot2.Battlefield.Centaur Courser.Counters.MinusOneMinusOne = 2
+Bot2.Battlefield.Centaur Courser.Power = 1
+Bot2.Battlefield.Centaur Courser.Toughness = 1
