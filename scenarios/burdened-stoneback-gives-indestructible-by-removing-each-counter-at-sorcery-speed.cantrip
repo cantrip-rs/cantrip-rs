@@ -1,0 +1,53 @@
+# Burdened Stoneback (4/4 for {2}{W}): "enters with two -1/-1 counters" (2/2) and "{1}{W}, Remove a counter from this creature:
+# Target creature gains indestructible until end of turn. Activate only as a sorcery." Cast on turn 1 with three Moxen. On turn 3
+# it is refused with a spell on the stack (CR 602.5d), then paid with Mox Pearl and Mox Ruby targeting itself: one counter
+# comes off (3/3) and it is indestructible. On turn 5 the second counter goes (4/4); on turn 7 none is left and it is refused.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Burdened Stoneback
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burdened Stoneback.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Burdened Stoneback.Power = 2
+? Bot1.Battlefield.Burdened Stoneback.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Battlefield.Burdened Stoneback.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Burdened Stoneback.Activate(Bot1.Battlefield.Burdened Stoneback)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Burdened Stoneback.Power = 3
+? Bot1.Battlefield.Burdened Stoneback.Keywords = Indestructible
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Burdened Stoneback.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Burdened Stoneback.Power = 4
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Indestructible
+[T7 Bot1.Main1]
+! Bot1.Battlefield.Burdened Stoneback.Activate
+
+[Expect]
+Bot1.Battlefield.Burdened Stoneback.Toughness = 4
