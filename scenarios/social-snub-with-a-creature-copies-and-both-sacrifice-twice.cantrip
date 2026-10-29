@@ -1,0 +1,47 @@
+# Social Snub: cast while Bot1 controls Ornithopter, its trigger lets Bot1 copy it (CR 707.10). The copy resolves first: each
+# player sacrifices an Ornithopter, Bot2 loses 1 and Bot1 gains 1. The original then resolves with no creature left on either side
+# to sacrifice (a player with none sacrifices nothing), and drains once more: Bot2 18, Bot1 22.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Ornithopter
+Social Snub
+Plains x2
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Mountain x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Social Snub.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Graveyard = Social Snub; Ornithopter
+Bot2.Graveyard = Ornithopter
+Stack.Count = 0
