@@ -1,0 +1,8 @@
+{
+  "name": "Venus, Torn Between Worlds",
+  "manaCost": "{4}{G}",
+  "type": "Legendary Creature — Mutant Frog Turtle",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Whenever Venus is dealt damage, put that many +1/+1 counters on her. (She must survive the damage to get the counters.)\nWhenever a creature you control with a counter on it deals combat damage to a player, you may pay {U}. If you do, draw a card."
+}

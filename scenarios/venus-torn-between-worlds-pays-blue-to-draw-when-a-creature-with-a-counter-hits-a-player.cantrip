@@ -1,0 +1,67 @@
+# Venus, Torn Between Worlds: "Whenever a creature you control with a counter on it deals combat damage to a player, you may pay {U}. If
+# you do, draw a card." (CR 510.2, 122.1) Bot2's Lightning Bolt gives Venus three +1/+1 counters; on turn 3 she and a Memnite (no counter)
+# attack. Only Venus triggers: Bot1 pays {U} with Mox Sapphire once and draws the Swamp (the Plains was the turn's draw).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Venus, Torn Between Worlds
+Memnite
+Forest
+Plains
+Swamp
+Forest x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Venus, Torn Between Worlds.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Venus, Torn Between Worlds)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Venus, Torn Between Worlds; Memnite > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Turn = 3
+Bot2.Life = 11
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot1.Hand = Forest; Plains; Swamp

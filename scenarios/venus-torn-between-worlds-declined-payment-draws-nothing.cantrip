@@ -1,0 +1,63 @@
+# The same hit as the paying scenario, but Bot1 declines to pay {U} ("you may pay"): no card is drawn and Mox Sapphire stays untapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Venus, Torn Between Worlds
+Memnite
+Forest
+Plains
+Swamp
+Forest x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Venus, Torn Between Worlds.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Venus, Torn Between Worlds)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Venus, Torn Between Worlds > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot1.Decline
+Bot1.Pass
+
+[Expect]
+Turn = 3
+Bot2.Life = 12
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Hand = Forest; Plains

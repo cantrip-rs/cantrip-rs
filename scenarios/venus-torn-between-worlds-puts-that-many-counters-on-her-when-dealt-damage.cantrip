@@ -1,0 +1,45 @@
+# Venus, Torn Between Worlds: "Whenever Venus is dealt damage, put that many +1/+1 counters on her." (CR 120.2, 122.1) Bot2's Lightning
+# Bolt deals 3 to the 5/5 Venus, which survives it and grows to an 8/8.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Venus, Torn Between Worlds
+Forest x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Venus, Torn Between Worlds.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Venus, Torn Between Worlds)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Venus, Torn Between Worlds.Power = 8
+Bot1.Battlefield.Venus, Torn Between Worlds.Toughness = 8

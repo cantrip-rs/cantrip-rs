@@ -1,0 +1,51 @@
+# Venus, Torn Between Worlds only cares about creatures "with a counter on it": on turn 3 Venus (never damaged, so with no counters) and a Memnite
+# attack, and Bot1, holding an untapped Mox Sapphire, is never asked to pay {U}.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Venus, Torn Between Worlds
+Memnite
+Forest
+Plains
+Swamp
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Venus, Torn Between Worlds.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Venus, Torn Between Worlds; Memnite > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+! Bot1.Accept
+! Bot1.Decline
+
+[Expect]
+Turn = 3
+Bot2.Life = 14
+Bot1.Hand = Forest; Plains
