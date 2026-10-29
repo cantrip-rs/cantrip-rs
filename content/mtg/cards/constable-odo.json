@@ -1,0 +1,8 @@
+{
+  "name": "Constable Odo",
+  "manaCost": "{3}{W/U}{W/U}",
+  "type": "Legendary Creature — Shapeshifter Detective",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "When Constable Odo enters, choose one —\n• Tap target creature an opponent controls. Put two stun counters on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\n• Investigate twice. (To investigate, create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"
+}

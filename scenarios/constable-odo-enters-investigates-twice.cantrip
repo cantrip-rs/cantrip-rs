@@ -1,0 +1,39 @@
+# Constable Odo's second triggered mode investigates twice, creating exactly two Clue artifact tokens under Odo's
+# controller (CR 603.3c, 701.16a, 111.10f).
+
+[Bot1 Deck]
+Constable Odo
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Constable Odo.Cast
+Bot1.Modes(Investigate twice)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Clue Token; Clue Token; Constable Odo; Mox Pearl; Mox Sapphire
+Bot1.Battlefield.Clue Token#1.Token = true
+Bot1.Battlefield.Clue Token#2.Token = true
