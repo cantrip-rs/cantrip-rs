@@ -532,6 +532,15 @@ pub static CITIZEN: CardDef = CardDef {
     ..token!(Citizen)
 };
 
+/// The 1/1 green and white Kithkin creature token. Clachan Festival and Kinbinding make it.
+pub static KITHKIN: CardDef = CardDef {
+    colors: Some(ColorSet(0b10001)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Kithkin)
+};
+
 /// The 3/2 white Hero creature token with vigilance. Pet Avengers and Borough Backup make it.
 pub static HERO_3_2_WHITE_VIGILANCE: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),
