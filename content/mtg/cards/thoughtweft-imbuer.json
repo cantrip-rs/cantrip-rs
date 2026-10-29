@@ -1,0 +1,8 @@
+{
+  "name": "Thoughtweft Imbuer",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Kithkin Advisor",
+  "power": 0,
+  "toughness": 5,
+  "oracleText": "Whenever a creature you control attacks alone, it gets +X/+X until end of turn, where X is the number of Kithkin you control."
+}
