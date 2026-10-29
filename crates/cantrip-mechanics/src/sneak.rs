@@ -44,6 +44,14 @@ pub fn granted_cost(q: &dyn Query, player: PlayerId, mana: ManaCost) -> Option<C
     in_declare_blockers_step_of(q, player).then(|| Cost::mana(mana).and(return_to_hand(1, unblocked_attacker_you_control)))
 }
 
+/// The sneak cost of the card itself, for a permanent that lets it be cast from `from` using the sneak ability it has (CR
+/// 702.190a, 601.3): "you may cast creature spells from your graveyard using their sneak abilities" (Ninja Teen). `None`
+/// outside the declare blockers step of `player`'s turn and for a card with no sneak.
+pub fn own_cost(q: &dyn Query, player: PlayerId, card: ObjectId) -> Option<Cost> {
+    let way = q.card(q.chars(card).card).ways.iter().find(|w| w.kind == WayKind::Sneak)?;
+    in_declare_blockers_step_of(q, player).then_some(way.cost)
+}
+
 /// Sneak a permanent gives to the cards in `from` (CR 702.190a, 113.6): "creature cards in your graveyard have sneak {3}{B}"
 /// (Ninja Teen). `cost` is each card's sneak cost, `granted_cost` of its mana, or none for a card without it. Like a card's own
 /// sneak it is cast whenever an instant could be, and a permanent spell cast so enters tapped and attacking (CR 702.190b).
