@@ -1,0 +1,8 @@
+{
+  "name": "Dr. Beverly Crusher",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Human Doctor",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "If you gaining life causes a triggered ability of a permanent you control to trigger, that ability triggers an additional time.\nWhenever you gain life, put a +1/+1 counter on Dr. Crusher."
+}
