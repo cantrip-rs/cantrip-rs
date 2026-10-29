@@ -1,0 +1,43 @@
+# Fix What's Broken: X is the life paid as an additional cost, here 0, so every artifact and creature card with mana value 0 in the
+# graveyard returns at once (CR 603.6a): Black Lotus and Ornithopter, both put there by Bot1's own Wrath of God. Wrath of God, not
+# an artifact or creature, stays. No life is paid.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Ornithopter
+Wrath of God
+Fix What's Broken
+Plains
+Plains x2
+Plains x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Fix What's Broken.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Mox Jet; Black Lotus; Ornithopter
+Bot1.Graveyard = Fix What's Broken; Wrath of God

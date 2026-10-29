@@ -1,0 +1,54 @@
+# Fix What's Broken: with X = 3 it returns only the artifact and creature cards of mana value 3 -- Imperious Inkmage -- and leaves
+# Ornithopter and Black Lotus (mana value 0) in the graveyard. Bot1 pays 3 life. Everything is put there by its own Wrath of God.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Ornithopter
+Imperious Inkmage
+Wrath of God
+Fix What's Broken
+Plains
+Plains x4
+Plains x13
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Imperious Inkmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Fix What's Broken.Cast(X: 3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Plains; Plains | )
+
+[Expect]
+Bot1.Life = 17
+Bot1.Battlefield.Imperious Inkmage.Power = 3
+Bot1.Battlefield.Imperious Inkmage.Tapped = false
+Bot1.Graveyard = Fix What's Broken; Wrath of God; Ornithopter; Black Lotus
