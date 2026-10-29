@@ -1,0 +1,8 @@
+{
+  "name": "Mage Tower Referee",
+  "manaCost": "{2}",
+  "type": "Artifact Creature — Construct",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Whenever you cast a multicolored spell, put a +1/+1 counter on this creature."
+}
