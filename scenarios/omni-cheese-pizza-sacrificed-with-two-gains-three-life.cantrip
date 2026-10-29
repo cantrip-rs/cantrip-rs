@@ -1,0 +1,37 @@
+# Omni-Cheese Pizza's second ability costs {2}, {T} and a sacrifice and gains exactly 3 life (CR 118.3, 119.3). On turn
+# three Bot1 floats {B}{R}{U} from three Moxen and pays {B}{R}: 20 -> 23, the {U} is still in the pool, so exactly two
+# mana was paid, and the Pizza is in the graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Omni-Cheese Pizza
+Plains x16
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Omni-Cheese Pizza.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Omni-Cheese Pizza.Activate(Ability: gain; Spend: B, R)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Mana = {U}
+Bot1.Graveyard = Omni-Cheese Pizza
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Sapphire

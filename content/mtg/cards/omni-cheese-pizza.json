@@ -1,0 +1,6 @@
+{
+  "name": "Omni-Cheese Pizza",
+  "manaCost": "{2}",
+  "type": "Artifact — Food",
+  "oracleText": "When this artifact enters, draw a card.\n{1}, {T}, Sacrifice this artifact: Add one mana of any color.\n{2}, {T}, Sacrifice this artifact: You gain 3 life."
+}

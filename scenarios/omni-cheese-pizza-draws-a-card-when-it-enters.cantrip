@@ -1,0 +1,29 @@
+# Omni-Cheese Pizza: "When this artifact enters, draw a card." Bot1 pays its {2} with two Moxen on turn one; the hand
+# goes 7 -> 4 (Moxen and Pizza cast) -> 5 once the trigger resolves, and it is a Food artifact (CR 603.6a, 111.10b).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Omni-Cheese Pizza
+Plains x17
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Omni-Cheese Pizza.Cast
+Bot2.Pass
+? Bot1.Hand.Count = 4
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 12
+Bot1.Battlefield = Mox Jet; Mox Ruby; Omni-Cheese Pizza
+Bot1.Battlefield.Omni-Cheese Pizza.Subtypes = Food
+Stack.Count = 0
