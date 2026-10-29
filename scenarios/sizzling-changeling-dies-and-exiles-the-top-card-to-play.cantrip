@@ -1,0 +1,51 @@
+# Sizzling Changeling: changeling (every creature type, CR 702.73a); "When this creature dies, exile the top card of your
+# library. Until the end of your next turn, you may play that card." Bot2's Lightning Bolt kills it on turn 2; the Mountain
+# on top of Bot1's library is exiled and Bot1 plays it from exile as its turn-3 land drop (the Plains it would otherwise
+# have drawn stays on top).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Sizzling Changeling
+Forest
+Forest
+Forest
+Mountain
+Plains x12
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sizzling Changeling.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sizzling Changeling.Subtypes = (every creature type)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Sizzling Changeling)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Mountain
+[T3 Bot1.Main1]
+Bot1.Exile.Mountain.Play
+
+[Expect]
+Bot1.Battlefield = Mountain; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Graveyard = Sizzling Changeling

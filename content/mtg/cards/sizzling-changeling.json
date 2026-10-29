@@ -1,0 +1,11 @@
+{
+  "name": "Sizzling Changeling",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Shapeshifter",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Changeling (This card is every creature type.)\nWhen this creature dies, exile the top card of your library. Until the end of your next turn, you may play that card.",
+  "keywords": [
+    "Changeling"
+  ]
+}
