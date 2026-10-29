@@ -1,0 +1,53 @@
+# Donatello, Way with Machines (a 1/2 flyer): "Whenever an artifact you control enters, put a +1/+1 counter on Donatello." He enters himself without one (not an artifact),
+# an Ornithopter and a Mox Ruby entering under Bot1's control give two counters (a 3/4), a land does not, and Bot2's Mox Pearl entering under Bot2's control gives none.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Donatello, Way with Machines
+Ornithopter
+Mox Ruby
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Donatello, Way with Machines.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Donatello, Way with Machines.Power = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Donatello, Way with Machines.Power = 2
+Bot1.Hand.Island.Play
+? Stack.Count = 0
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Donatello, Way with Machines.Power = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Donatello, Way with Machines.Power = 3
+Bot1.Battlefield.Donatello, Way with Machines.Toughness = 4
+Bot1.Battlefield.Donatello, Way with Machines.Keywords = Flying
