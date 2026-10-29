@@ -1,0 +1,33 @@
+# Imperious Inkmage: when it enters it surveils 2 (CR 701.25) -- of the Island and Swamp on top of the library, Bot1 keeps the
+# Island on top and puts the Swamp into the graveyard.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Plains
+Imperious Inkmage
+Plains x3
+Island
+Swamp
+Plains x12
+
+[Bot2 Deck]
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Imperious Inkmage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | Swamp)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Jet; Plains; Imperious Inkmage
+Bot1.Graveyard = Swamp
+Bot1.Library.Count = 13
