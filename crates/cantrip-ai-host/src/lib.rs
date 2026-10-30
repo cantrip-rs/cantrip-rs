@@ -124,6 +124,9 @@ enum Command {
         /// when the search makes none).
         #[serde(rename = "SearchMs", default)]
         search_ms: Option<u64>,
+        /// The most the seat's search tree may hold, in MiB (`search::Config::memory`); 0, no bound; none, the default.
+        #[serde(rename = "MemoryMb", default)]
+        memory_mb: Option<usize>,
         /// Worlds a Decklist or Hidden search deals (Full plays in one); 8 if none.
         #[serde(rename = "Worlds", default)]
         worlds: Option<usize>,
@@ -485,6 +488,7 @@ impl AiHost {
                 sample_seed,
                 simulations,
                 search_ms,
+                memory_mb,
                 worlds,
                 search_seed,
                 c_puct,
@@ -565,6 +569,11 @@ impl AiHost {
                         (None, None) => None,
                     },
                     network_deadline: deadline,
+                    memory: match memory_mb {
+                        None => defaults.memory,
+                        Some(0) => None,
+                        Some(mb) => Some(mb << 20),
+                    },
                     worlds: worlds.filter(|&w| w > 0).unwrap_or(defaults.worlds),
                     c_puct: c_puct.unwrap_or(defaults.c_puct),
                     prior_temperature: prior_temperature.unwrap_or(defaults.prior_temperature),
@@ -716,6 +725,7 @@ fn answer_job(job: &Job, models: &[Loaded]) -> Value {
                     "GameNodes": s.game_nodes,
                     "TreeBytes": s.tree_bytes,
                     "Counted": s.counted,
+                    "MemoryBound": s.memory_bound,
                     "RootValue": s.root_value,
                     "NetValue": s.net_value,
                     "Worlds": s.worlds,

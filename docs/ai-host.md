@@ -56,7 +56,7 @@ same handle spaces. A view mints handles, so `View` is mirrored too.
 
 - **`Models`** replies `{"Backend": "ort", "Models": ["gen0"]}`.
 - **`AiStart`** asks for an answer to the outstanding request: `{"GameId", "Seat", "Model"?, "Mode"?, "Deadline"?,
-  "Temperature"?, "SampleSeed"?, "Simulations"?, "SearchMs"?, "Worlds"?, "SearchSeed"?, "CPuct"?,
+  "Temperature"?, "SampleSeed"?, "Simulations"?, "SearchMs"?, "MemoryMb"?, "Worlds"?, "SearchSeed"?, "CPuct"?,
   "PriorTemperature"?, "Batch"?, "Prune"?, "PruneBad"?, "PruneMargin"?, "PruneAfter"?, "PruneAfterReplies"?}`.
   - The reply comes at once, `{"Ok": {"Started": {"RequestId", "Mode"}}}`, or a rejection:
     - `NotYourTurnToAnswer`: the request is another seat's.
@@ -73,7 +73,10 @@ same handle spaces. A view mints handles, so `View` is mirrored too.
   - **The search budget.** With `Simulations` (a count) or `SearchMs` (milliseconds), or both (whichever ends
     first), the answer is searched (below). With neither, it is the network's alone, as before.
     - `Deadline` is still the hard limit: the search stops at `SearchMs` or `Deadline`, whichever is sooner, and
-      the network's fallback answer is given until `Deadline`.
+      the network's fallback answer is given until `Deadline`. The deadline is read before each simulation and
+      between the requests a line plays with no choice, so a search ends soon after it however long its lines are.
+    - `MemoryMb` (2048) bounds what the seat's search tree may hold (`search::Config::memory`): reached, the search
+      stops as at its deadline. 0 is no bound.
     - `Worlds` (default 8) is the worlds of a Decklist or Hidden search; Full searches one.
     - `CPuct` (1.5), `PriorTemperature` (1.0) and `Batch` (8, leaves an evaluation) tune it.
     - `Prune` (true), `PruneBad` (-0.80), `PruneMargin` (0.20), `PruneAfter` (2) and `PruneAfterReplies` (1) tune
@@ -92,7 +95,8 @@ same handle spaces. A view mints handles, so `View` is mirrored too.
   - `EncodeUs`, `EvaluateUs`, `QueuedUs` and `TotalUs` (from the command's arrival to the answer).
   - `Search`, for an answer that was searched: `Simulations`, `Evaluations`, `Batches`, `Nodes` (the tree's
     sub-step nodes), `Positions` (requests reached), `GameNodes` (what the forks' game trees grew by), `TreeBytes`
-    (the peak heap the search held, `Counted` when the counting allocator measured it), `RootValue` (the root's
+    (the peak heap the search held, `Counted` when the counting allocator measured it; `MemoryBound` when `MemoryMb`
+    stopped the search), `RootValue` (the root's
     visits' mean for the seat), `NetValue` (the network's value of the root), `Worlds`, `Shortcut` (the priority
     shortcut answered pass), `Refused` (the engine refused the searched answer, so the network's was given),
     `Pruned`, `PrunedImmediate` and `PrunedShallow` (edges branch trimming cut) and `SearchUs`. A request with one legal answer, a payment, and an answer the shortcut gives before any simulation

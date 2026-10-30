@@ -4,7 +4,8 @@
 //! - its answers over a sample of the corpus's requests are the engine validator's to accept, in every mode;
 //! - with nothing from the network to go on, it finds a win in one (the opponent's choices on the way are its own,
 //!   their values backed up from its side), and knows a lost position for lost;
-//! - a budget of simulations is spent exactly, and a deadline is read from the clock it is given;
+//! - a budget of simulations is spent exactly, and a deadline is read from the clock it is given, between the requests
+//!   a line plays with no choice too, so the search stops at it whatever a line costs;
 //! - the same position, seed and budget give the same answer and visits;
 //! - two games a seat cannot tell apart give it, in W worlds, the same answer and visits (Decklist and Hidden);
 //! - branch trimming cuts a move that is clearly worse, keeps the best, and can be turned off.
@@ -12,6 +13,7 @@
 use std::cell::Cell;
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
+use std::sync::atomic::{AtomicUsize, Ordering};
 use std::time::{Duration, Instant};
 
 use cantrip_ai::cancel::CancelGuard;
@@ -407,9 +409,11 @@ fn a_deadline_is_read_from_the_clock_given() {
     let clock = Ticking {
         at: Cell::new(start),
     };
-    // Read once to start, once before each batch: the tenth read is past the deadline.
+    // Read once to start, then before each batch, each simulation and each request a line plays with no choice: the
+    // sixtieth read is past the deadline, and the search stops at it.
+    let deadline = start + Duration::from_millis(60);
     let config = Config {
-        deadline: Some(start + Duration::from_millis(9)),
+        deadline: Some(deadline),
         batch: 4,
         ..Config::default()
     };
@@ -428,10 +432,11 @@ fn a_deadline_is_read_from_the_clock_given() {
     )
     .unwrap();
     let s = d.search.as_ref().unwrap();
-    assert!(s.batches > 0 && s.batches <= 8, "{s:#?}");
+    assert!(s.batches > 0 && s.simulations >= s.batches, "{s:#?}");
     assert!(
-        s.simulations >= s.batches && s.simulations <= 8 * 4 + 8,
-        "{s:#?}"
+        clock.at.get() <= deadline + Duration::from_millis(3),
+        "the search went on past its deadline: {:?}",
+        clock.at.get() - deadline
     );
     // A deadline already past: no simulation, the network's answer, taken in time.
     let late = Config {
@@ -458,6 +463,90 @@ fn a_deadline_is_read_from_the_clock_given() {
     assert_eq!(s.simulations, 0);
     assert!(!d.late && !d.fallback, "{d:?}");
     check_answer(&game, &request, &d.answer).expect("the network's answer is legal");
+}
+
+/// The network, uniform, counting its evaluations.
+struct Counted {
+    evaluations: AtomicUsize,
+}
+
+impl Evaluator for Counted {
+    fn evaluate(&self, b: &FeatureBatch) -> Result<Outputs, EvalError> {
+        self.evaluations.fetch_add(1, Ordering::Relaxed);
+        Uniform(0.0).evaluate(b)
+    }
+}
+
+/// A clock that stands still until the network has been asked once, then passes the deadline at its `after`th read.
+struct AfterEvaluation<'a> {
+    at: Instant,
+    evaluator: &'a Counted,
+    reads: Cell<usize>,
+    after: usize,
+}
+
+impl Clock for AfterEvaluation<'_> {
+    fn now(&self) -> Instant {
+        if self.evaluator.evaluations.load(Ordering::Relaxed) == 0 {
+            return self.at;
+        }
+        self.reads.set(self.reads.get() + 1);
+        if self.reads.get() >= self.after {
+            self.at + Duration::from_secs(3600)
+        } else {
+            self.at
+        }
+    }
+}
+
+/// Bot1's end step with a Lightning Bolt and a Mountain to cast it with; Bot2 holds only Bolts and has no land. Cast or
+/// not, the line runs on through Bot2's turn with no choice for anyone until Bot1's next main phase.
+const FORCED_TURN: &str = "[Bot1 Deck]
+Mountain
+Lightning Bolt
+Mountain x16
+
+[Bot2 Deck]
+Lightning Bolt x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.End]
+[Handover Bot1.Pass]
+
+[Expect]
+Turn = 3
+";
+
+/// A line the search plays out stops between its requests once the deadline has passed (a line can run a turn or more
+/// with no choice on the way, every request observed), and so does the batch it was being chosen for; the edge is left
+/// unplayed.
+#[test]
+fn a_line_stops_between_its_forced_requests_at_the_deadline() {
+    let (game, request) = handed(FORCED_TURN, "deadline in a line");
+    let k = Knowledge::of(&game, request.player);
+    let searched = |config: &Config, evaluator: &Counted, clock: &dyn Clock| {
+        search::search(&game, &request, &k, InfoMode::Full, table(), evaluator, config, prior(), &CancelGuard::default(), clock)
+            .expect("a search answers")
+    };
+    // Played out, a line from the root passes requests with no choice: the forks' game trees grow by them.
+    let free = Counted { evaluations: AtomicUsize::new(0) };
+    let d = searched(&Config { simulations: Some(2), batch: 1, ..Config::default() }, &free, &WallClock);
+    let played = d.search.as_ref().unwrap().game_nodes;
+    assert!(played > 2, "a line from the root plays requests with no choice: {:#?}", d.search);
+    // The deadline passes at the third read after the root's evaluation: the read before the next batch, the read before
+    // its first simulation, and then the first request the line plays with no choice.
+    let start = Instant::now();
+    let evaluator = Counted { evaluations: AtomicUsize::new(0) };
+    let clock = AfterEvaluation { at: start, evaluator: &evaluator, reads: Cell::new(0), after: 3 };
+    let config = Config { deadline: Some(start + Duration::from_secs(1)), batch: 1, ..Config::default() };
+    let d = searched(&config, &evaluator, &clock);
+    let s = d.search.as_ref().unwrap();
+    // The root alone was evaluated by the search; with nothing visited below it, the network answers.
+    assert_eq!((s.evaluations, s.simulations), (1, 1), "{s:#?}");
+    assert_eq!(evaluator.evaluations.load(Ordering::Relaxed), 2, "{s:#?}");
+    assert!(s.game_nodes < played && s.game_nodes <= 2, "the line stopped at its first request with no choice: {s:#?}");
+    check_answer(&game, &request, &d.answer).expect("the answer is legal");
 }
 
 #[test]

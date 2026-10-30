@@ -72,14 +72,24 @@ impl Clock for WallClock {
     }
 }
 
+/// `Config::memory` by default: 2 GiB. A 3 s search holds about 160 MB at the median and 630 MB at the most, so the
+/// bound catches only a runaway: a tree whose worlds' game logs grow past what the machine can hold for every seat.
+pub const DEFAULT_MEMORY: usize = 2 << 30;
+
 /// What a search may spend and how it searches.
 #[derive(Clone, Debug)]
 pub struct Config {
     /// Simulations to run (each a leaf evaluated or a terminal reached). With neither this nor a deadline the request
     /// is the network's alone.
     pub simulations: Option<usize>,
-    /// When to stop: checked before each batch.
+    /// When to stop: checked before each simulation and between the requests a line plays with no choice, so the search
+    /// stops soon after it whatever one line costs.
     pub deadline: Option<Instant>,
+    /// The most the search's tree may hold, in bytes, as the counting allocator counts them (`crate::alloc`; no bound
+    /// where it is not installed). Reached, the search stops as at its deadline. Every position a world reaches keeps
+    /// that world's game log (`Game::goto` moves through it, never forgets it), so without it a search could grow until
+    /// the machine pages.
+    pub memory: Option<usize>,
     /// The limit for the network's answer when the search makes none (`net::answer_by`'s deadline); the search's
     /// own deadline if none.
     pub network_deadline: Option<Instant>,
@@ -120,6 +130,7 @@ impl Default for Config {
         Config {
             simulations: None,
             deadline: None,
+            memory: Some(DEFAULT_MEMORY),
             network_deadline: None,
             worlds: 8,
             c_puct: 1.5,
@@ -204,6 +215,8 @@ pub struct Searched {
     /// otherwise an estimate of the search's own structures (not the forks' trees).
     pub tree_bytes: usize,
     pub counted: bool,
+    /// Whether the search stopped for `Config::memory` before its budget was spent.
+    pub memory_bound: bool,
     /// The root's value for the seat: its visits' mean, over every world.
     pub root_value: f32,
     /// The network's value of the root (the first world's).
@@ -328,6 +341,8 @@ enum Selected {
     Terminal(f32, PlayerId, Vec<(usize, usize)>),
     Collision(Vec<(usize, usize)>),
     Dead(Vec<(usize, usize)>),
+    /// The deadline passed while an edge on the way was being played out: the edge is left as it was, unplayed.
+    OutOfTime(Vec<(usize, usize)>),
 }
 
 enum Forward {
@@ -381,6 +396,9 @@ struct Search<'a> {
     pruned_shallow: usize,
     /// Cut edges restored once their trim no longer held (`Config::prune_reversible`).
     restored: usize,
+    /// The clock and the deadline a line stops at between the requests it plays with no choice; none, a line is played
+    /// out.
+    stop: Option<(&'a dyn Clock, Instant)>,
 }
 
 impl Search<'_> {
@@ -428,16 +446,16 @@ impl Search<'_> {
         self.nodes.len() - 1
     }
 
-    /// What taking edge `e` of node `at` leads to.
-    fn materialize(&mut self, at: usize, e: usize) -> Child {
+    /// What taking edge `e` of node `at` leads to; none if the deadline passed while its line was played out.
+    fn materialize(&mut self, at: usize, e: usize) -> Option<Child> {
         let (world, pos) = (self.nodes[at].world, self.nodes[at].pos);
         let mut m = self.nodes[at].machine.clone();
         m.choose(self.nodes[at].edges[e].index);
         match forward(m) {
-            Forward::Decide(m) => Child::Node(self.node(world, pos, m)),
+            Forward::Decide(m) => Some(Child::Node(self.node(world, pos, m))),
             Forward::Stuck => {
                 self.refused += 1;
-                Child::Dead
+                Some(Child::Dead)
             }
             Forward::Done(factored) => {
                 let seat = self.nodes[at].seat;
@@ -447,14 +465,15 @@ impl Search<'_> {
     }
 
     /// Plays `factored` at position `pos`, then every request after it that needs no choice. Each answer goes through
-    /// its seat's cancel guard, so an action a line gives up is not offered again at the board it returns to.
+    /// its seat's cancel guard, so an action a line gives up is not offered again at the board it returns to. None if the
+    /// deadline passed before the line reached a request with a choice: where it leads is not known yet.
     fn play(
         &mut self,
         world: usize,
         pos: usize,
         factored: FactoredAnswer,
         seat: PlayerId,
-    ) -> Child {
+    ) -> Option<Child> {
         let cap = self.worlds[world].root_turn + self.config.turn_cap;
         let (node, request, answering, mut runs, mut knowledge, mut guards) = {
             let p = &self.worlds[world].positions[pos];
@@ -472,7 +491,7 @@ impl Search<'_> {
         let actor = request.player.index();
         let Ok(answer) = answering.engine(&w.game, &request, &factored) else {
             self.refused += 1;
-            return Child::Dead;
+            return Some(Child::Dead);
         };
         let cancelled = guards[actor].before(&w.game, &request, &answer);
         if w.game
@@ -480,20 +499,25 @@ impl Search<'_> {
             .is_err()
         {
             self.refused += 1;
-            return Child::Dead;
+            return Some(Child::Dead);
         }
         guards[actor].after(&w.game, cancelled);
         runs[actor] = crate::record::run_key(&request).map(|k| (k, factored));
         for forced in 0usize.. {
             let w = &mut self.worlds[world];
             if w.game.is_over() {
-                return Child::Terminal(outcome_for(&w.game, seat));
+                return Some(Child::Terminal(outcome_for(&w.game, seat)));
             }
             if forced >= MAX_FORCED || w.game.state.turn.number > cap {
-                return Child::Terminal(0.0);
+                return Some(Child::Terminal(0.0));
+            }
+            // A line can run to the turn cap with no choice on the way, each request observed: the deadline is read
+            // between them, not only between simulations.
+            if self.stop.is_some_and(|(clock, d)| clock.now() >= d) {
+                return None;
             }
             let Some(request) = w.game.pending().cloned() else {
-                return Child::Terminal(0.0);
+                return Some(Child::Terminal(0.0));
             };
             let i = request.player.index();
             let request = guards[i].filtered(&w.game, &request);
@@ -501,7 +525,7 @@ impl Search<'_> {
             let Some((obs, index)) =
                 observe_indexed(&w.game, &knowledge[i], request.player, self.mode)
             else {
-                return Child::Terminal(0.0);
+                return Some(Child::Terminal(0.0));
             };
             let answering = Answering::new(&w.game, &request, &obs, &index);
             let run = crate::record::run_key(&request);
@@ -521,7 +545,7 @@ impl Search<'_> {
                 Forward::Done(f) => {
                     let Ok(a) = answering.engine(&w.game, &request, &f) else {
                         self.refused += 1;
-                        return Child::Terminal(0.0);
+                        return Some(Child::Terminal(0.0));
                     };
                     let cancelled = guards[i].before(&w.game, &request, &a);
                     if w.game
@@ -529,14 +553,14 @@ impl Search<'_> {
                         .is_err()
                     {
                         self.refused += 1;
-                        return Child::Terminal(0.0);
+                        return Some(Child::Terminal(0.0));
                     }
                     guards[i].after(&w.game, cancelled);
                     runs[i] = run.map(|k| (k, f));
                 }
                 Forward::Stuck => {
                     self.refused += 1;
-                    return Child::Terminal(0.0);
+                    return Some(Child::Terminal(0.0));
                 }
                 Forward::Decide(m) => {
                     w.positions.push(Position {
@@ -549,7 +573,7 @@ impl Search<'_> {
                         guards,
                     });
                     let pos = w.positions.len() - 1;
-                    return Child::Node(self.node(world, pos, m));
+                    return Some(Child::Node(self.node(world, pos, m)));
                 }
             }
         }
@@ -598,7 +622,9 @@ impl Search<'_> {
             self.nodes[at].edges[e].vl += 1;
             path.push((at, e));
             if self.nodes[at].edges[e].child == Child::None {
-                let child = self.materialize(at, e);
+                let Some(child) = self.materialize(at, e) else {
+                    return Selected::OutOfTime(path);
+                };
                 self.nodes[at].edges[e].child = child;
             }
             match self.nodes[at].edges[e].child {
@@ -843,6 +869,7 @@ pub fn search(
         pruned_immediate: 0,
         pruned_shallow: 0,
         restored: 0,
+        stop: config.deadline.map(|d| (clock, d)),
     };
     let count = if mode == InfoMode::Full {
         1
@@ -913,8 +940,16 @@ pub fn search(
     let (mut sims, mut evaluations, mut batches) = (0usize, 0usize, 0usize);
     let (mut encoding, mut evaluating) = (Duration::ZERO, Duration::ZERO);
     let mut next = 0usize;
+    let past = |clock: &dyn Clock| config.deadline.is_some_and(|d| clock.now() >= d);
+    let bound = config.memory.filter(|_| counted);
+    let full = || bound.is_some_and(|m| crate::alloc::live() - base >= m as isize);
+    let mut memory_bound = false;
     while sims < target {
-        if config.deadline.is_some_and(|d| clock.now() >= d) {
+        if past(clock) {
+            break;
+        }
+        if full() {
+            memory_bound = true;
             break;
         }
         let alive: Vec<usize> = (0..s.worlds.len()).filter(|&w| !s.worlds[w].dead).collect();
@@ -928,7 +963,17 @@ pub fn search(
         let mut leaves: Vec<(usize, Vec<(usize, usize)>)> = Vec::new();
         let mut progress = false;
         let mut tries = 0;
+        // Out of time or memory before the batch is made: the leaves chosen so far are let go unevaluated.
+        let mut stopped = false;
         while sims + leaves.len() < target && leaves.len() < batch && tries < 4 * batch {
+            if past(clock) {
+                stopped = true;
+                break;
+            }
+            if full() {
+                (stopped, memory_bound) = (true, true);
+                break;
+            }
             tries += 1;
             let alive: Vec<usize> = (0..s.worlds.len()).filter(|&w| !s.worlds[w].dead).collect();
             let Some(&world) = alive.get(next % alive.len().max(1)) else {
@@ -944,6 +989,11 @@ pub fn search(
                     progress = true;
                 }
                 Selected::Collision(path) => s.unwind(&path),
+                Selected::OutOfTime(path) => {
+                    s.unwind(&path);
+                    stopped = true;
+                    break;
+                }
                 Selected::Dead(path) => {
                     s.unwind(&path);
                     match path.last() {
@@ -953,6 +1003,13 @@ pub fn search(
                     progress = true;
                 }
             }
+        }
+        if stopped {
+            for (n, path) in &leaves {
+                s.unwind(path);
+                s.nodes[*n].queued = false;
+            }
+            break;
         }
         if leaves.is_empty() {
             if progress {
@@ -1031,6 +1088,7 @@ pub fn search(
             .sum(),
         tree_bytes: 0,
         counted,
+        memory_bound,
         root_value: if root_n > 0 {
             (root_w / root_n as f64) as f32
         } else {
