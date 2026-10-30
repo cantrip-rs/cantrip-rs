@@ -1,0 +1,47 @@
+# Bot2 chooses Abrade's artifact mode while Elim is controlled by Bot1. Only the player who chooses modes faces a dilemma, so no trigger is put on the stack (CR 602.2b, 700.2a/e).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Elim Garak, Simple Tailor
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Abrade
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Elim Garak, Simple Tailor.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Abrade.Cast
+Bot2.Modes(Destroy target artifact)
+Bot2.Target(Mox Jet)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Elim Garak, Simple Tailor.Keywords = Menace
+Bot1.Graveyard = Mox Jet
+Bot2.Graveyard = Abrade

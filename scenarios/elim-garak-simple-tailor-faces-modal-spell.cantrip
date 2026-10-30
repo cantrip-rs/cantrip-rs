@@ -1,0 +1,50 @@
+# Elim Garak triggers once when its controller chooses a mode for Abrade; after the trigger resolves, Abrade resolves. This pins the exact two-life change on both players (CR 603.2, 700.2a, 119.3).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Elim Garak, Simple Tailor
+Abrade
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Elim Garak, Simple Tailor.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Abrade.Cast
+Bot1.Modes(Abrade deals 3 damage)
+Bot1.Target(Ornithopter)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot2.Life = 18
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Battlefield.Elim Garak, Simple Tailor.Keywords = Menace
+Bot1.Graveyard = Abrade
+Bot2.Graveyard = Ornithopter
