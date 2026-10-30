@@ -1,0 +1,8 @@
+{
+  "name": "Fugitive Listener",
+  "manaCost": "{2}{B}",
+  "type": "Creature — El-Aurian Scout",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "When this creature enters, each opponent discards a card."
+}

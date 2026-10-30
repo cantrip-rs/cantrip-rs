@@ -1,0 +1,37 @@
+# In a three-player game, each opponent chooses and discards one card when Fugitive Listener enters; both opponents' graveyards show their choices (CR 603.6a, 701.9a, 101.4).
+[Bot1 Deck]
+Swamp
+Mox Jet
+Sol Ring
+Fugitive Listener
+Mountain x16
+
+[Bot2 Deck]
+Island
+Lightning Bolt
+Island x18
+
+[Bot3 Deck]
+Mountain
+Counterspell
+Mountain x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fugitive Listener.Cast
+Bot2.Choose(Lightning Bolt)
+Bot3.Choose(Counterspell)
+
+[Expect]
+Bot1.Battlefield.Fugitive Listener.Power = 3
+Bot1.Battlefield.Fugitive Listener.Toughness = 1
+Bot2.Graveyard = Lightning Bolt
+Bot3.Graveyard = Counterspell
+Bot2.Hand.Count = 6
+Bot3.Hand.Count = 6
+Bot1.Graveyard.Count = 0
