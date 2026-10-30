@@ -1,0 +1,11 @@
+{
+  "name": "Changeling Wayfinder",
+  "manaCost": "{3}",
+  "type": "Creature — Shapeshifter",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Changeling (This card is every creature type.)\nWhen this creature enters, you may search your library for a basic land card, reveal it, put it into your hand, then shuffle.",
+  "keywords": [
+    "Changeling"
+  ]
+}
