@@ -1,0 +1,48 @@
+# Infinite Diversity: X is the creature types among Bot1's non-Borg creatures (Llanowar Elves is an Elf Druid: 2), so the
+# exiled Lightning Bolt is copied twice and both copies are cast free at Bot2 (CR 205.3m, 707.12, 608.2g): 3 + 3 + 3 damage. The
+# Bolt and Infinite Diversity are exiled; the sorcery was cast with nine mana from three Black Lotuses.
+
+[Bot1 Deck]
+Mox Ruby
+Lightning Bolt
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Infinite Diversity
+Llanowar Elves
+Island x12
+
+[Bot2 Deck]
+Grizzly Bears
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Infinite Diversity.Cast(Bot1.Graveyard.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 11
+Bot1.Graveyard.Count = 4
+Exile.Count = 2

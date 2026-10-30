@@ -1,0 +1,6 @@
+{
+  "name": "Infinite Diversity",
+  "manaCost": "{7}{R}{R}",
+  "type": "Sorcery",
+  "oracleText": "Federation — Exile target instant or sorcery card from your graveyard. Copy that card X times, where X is the number of creature types among non-Borg creatures you control. You may cast the copies without paying their mana costs. Exile Infinite Diversity."
+}
