@@ -1,0 +1,43 @@
+# Foraging Wickermaw ({2}, 1/3): "{1}: Add one mana of any color. This creature becomes that color until end of turn. Activate
+# only once each turn." Bot1 pays {1} on turn 1 and names red: the pool holds {R} and the Wickermaw is red (CR 106.1b, 613.1e),
+# a second activation the same turn is refused (CR 602.5b) even with a Mox Sapphire to pay it, the color is gone by turn 3,
+# and on turn 3 the ability can be used again, now naming blue.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Foraging Wickermaw
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Foraging Wickermaw.Cast
+Bot1.Arrange(Island | )
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Foraging Wickermaw.Activate(Color: Red)
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Foraging Wickermaw.Colors = Red
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Foraging Wickermaw.Activate(Color: Green)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Foraging Wickermaw.Colors = (absent)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Foraging Wickermaw.Activate(Color: Blue)
+? Bot1.Mana = {U}
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Foraging Wickermaw.Colors = Blue
+Bot1.Battlefield.Foraging Wickermaw.Power = 1
+Bot1.Battlefield.Foraging Wickermaw.Toughness = 3
+Bot1.Graveyard.Count = 0
