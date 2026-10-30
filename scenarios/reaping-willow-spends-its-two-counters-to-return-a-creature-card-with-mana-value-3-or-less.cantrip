@@ -57,4 +57,5 @@ Bot2.Pass
 
 [Expect]
 Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Battlefield.Elvish Mystic.Tapped = false
 Bot1.Graveyard = Entomb; Stoic Grove-Guide; Faithless Looting; Llanowar Elves

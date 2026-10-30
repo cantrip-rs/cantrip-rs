@@ -42,6 +42,8 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Sapphire.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Sygg's Command.Cast
+! Bot1.Modes(1)
+! Bot1.Modes(1; 2; 3)
 Bot1.Modes(1; 2)
 ! Bot1.Target(Bot2.Battlefield.Coral Merfolk)
 ! Bot1.Target(Bot1.Battlefield.Ornithopter)

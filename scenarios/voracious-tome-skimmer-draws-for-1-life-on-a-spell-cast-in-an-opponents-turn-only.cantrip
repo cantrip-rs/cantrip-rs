@@ -1,6 +1,6 @@
 # Voracious Tome-Skimmer (a 2/3 flyer): "Whenever you cast a spell during an opponent's turn, you may pay 1 life. If you do,
 # draw a card." Turn 2 (Bot2's) Bot1 casts two Lightning Bolts off a Black Lotus: each triggers; Bot1 pays 1 life and draws
-# (Mox Ruby) for one and declines the other (life 19, one card drawn). Turn 3 (its own) it casts the Mox Ruby: no trigger.
+# (Mox Ruby) for one and declines the other (life 19, one card drawn). Bot2 casts a Mox Jet in turn 2: no trigger (not Bot1's spell). Turn 3 (its own) it casts the Mox Ruby: no trigger.
 
 [Bot1 Deck]
 Mox Sapphire
@@ -14,7 +14,8 @@ Mox Ruby
 Island x12
 
 [Bot2 Deck]
-Swamp x20
+Mox Jet
+Swamp x19
 
 [Actions]
 Bot1.Hand.Mox Sapphire.Cast
@@ -29,6 +30,8 @@ Bot1.Pass
 Bot2.Pass
 ? Bot1.Battlefield.Voracious Tome-Skimmer.Keywords = Flying
 [T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+! Bot1.Accept
 Bot2.Pass
 Bot1.Battlefield.Black Lotus.Activate(Color: R)
 Bot1.Hand.Lightning Bolt.Cast(Bot2)
@@ -50,6 +53,7 @@ Bot2.Pass
 ? Bot2.Life = 14
 [T3 Bot1.Main1]
 Bot1.Hand.Mox Ruby.Cast
+! Bot1.Accept
 Bot1.Pass
 Bot2.Pass
 

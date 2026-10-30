@@ -1,0 +1,57 @@
+# Bre of Clan Stoutarm: "if the spell's mana value is less than or equal to the amount of life you gained this turn" - equal is enough.
+# The Bears (lifelink, flying) hit for 2, so Bre's end step trigger exiles down to a Grizzly Bears (mana value 2) and Bot1 casts it free.
+# (The Forest above it stays in exile.)
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Bre of Clan Stoutarm
+Grizzly Bears
+Swamp
+Swamp
+Forest
+Grizzly Bears
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bre of Clan Stoutarm.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Bre of Clan Stoutarm.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Flying; Lifelink
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Exile.Forest.Colors.Count = 0
+Bot1.Battlefield.Grizzly Bears#2.Power = 2

@@ -41,6 +41,8 @@ Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Elvish Mystic.Activate
 Bot1.Hand.Trystan's Command.Cast
+! Bot1.Modes(1)
+! Bot1.Modes(1; 4; 3)
 Bot1.Modes(1; 4)
 ! Bot1.Target(Bot2.Battlefield.Llanowar Elves)
 ! Bot1.Target(Bot1.Battlefield.Ornithopter)

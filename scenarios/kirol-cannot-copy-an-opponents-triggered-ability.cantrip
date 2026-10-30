@@ -1,0 +1,61 @@
+# Kirol, Attentive First-Year: "Copy target triggered ability you control". Turn 3 Bot1's Flametongue Kavu trigger is on the stack when
+# Bot2 flashes in a Deepway Navigator; the Navigator's own trigger is on top of the stack but is Bot2's, so Kirol can't copy it.
+
+[Bot1 Deck]
+Black Lotus
+Kirol, Attentive First-Year
+Ornithopter
+Mox Ruby
+Mox Pearl
+Mox Jet
+Flametongue Kavu
+Mox Sapphire
+Swamp x12
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Deepway Navigator
+Ornithopter
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Kirol, Attentive First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flametongue Kavu.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Deepway Navigator.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot1.Battlefield.Kirol, Attentive First-Year.Activate(Stack.Deepway Navigator)
+Bot1.Pass
+Bot2.Pass

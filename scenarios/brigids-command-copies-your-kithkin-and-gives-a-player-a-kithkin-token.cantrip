@@ -37,6 +37,8 @@ Bot1.Battlefield.Mox Pearl.Activate
 Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Hand.Brigid's Command.Cast
+! Bot1.Modes(1)
+! Bot1.Modes(1; 2; 3)
 Bot1.Modes(1; 2)
 ! Bot1.Target(Bot2.Battlefield.Figure of Fable)
 ! Bot1.Target(Bot1.Battlefield.Ornithopter)

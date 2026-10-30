@@ -25,6 +25,7 @@ Bot1.Battlefield.Mox Emerald.Activate
 Bot1.Hand.Lluwen, Imperfect Naturalist.Cast
 Bot1.Pass
 ! Bot1.Choose(Lightning Bolt)
+! Bot1.Choose(Grizzly Bears; Forest)
 Bot1.Choose(Grizzly Bears)
 ? Bot1.Library.Count = 9
 [T3 Bot1.Main1]

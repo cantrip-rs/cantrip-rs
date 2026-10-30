@@ -43,6 +43,8 @@ Bot1.Battlefield.Black Lotus.Activate(Color: Red)
 Bot1.Battlefield.Mox Jet.Activate
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Grub's Command.Cast
+! Bot1.Modes(1)
+! Bot1.Modes(1; 2; 3)
 Bot1.Modes(1; 2)
 ! Bot1.Target(Bot2.Battlefield.Goblin Piker)
 ! Bot1.Target(Bot1.Battlefield.Ornithopter)
