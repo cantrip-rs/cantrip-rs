@@ -1,0 +1,47 @@
+# Spry and Mighty (ruling): "If you don't control two creatures as Spry and Mighty resolves, the spell won't do anything." Bot1
+# controls only an Elvish Mystic: nothing is chosen, so there is no X to draw or pump by, and Bot1 is not asked. The Mystic stays 1/1
+# and Bot1 draws nothing.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Elvish Mystic
+Forest
+Spry and Mighty
+Forest x13
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Spry and Mighty.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Battlefield.Elvish Mystic.Toughness = 1
+Bot1.Graveyard = Spry and Mighty

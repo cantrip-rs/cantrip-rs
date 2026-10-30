@@ -1,0 +1,70 @@
+# Spry and Mighty: "Choose exactly two creatures you control. You draw X cards and the chosen creatures get +X/+X and gain trample
+# until end of turn, where X is the difference between the chosen creatures' powers." Bot1 controls Ornithopter (0/2), Elvish
+# Mystic (1/1) and Monastery Swiftspear (1/2), and Bot2 a Birds of Paradise: the choice is not targeting (CR 608.2d), but only
+# creatures Bot1 controls may be chosen, so the Birds is refused, and so are three creatures: exactly two. Bot1 chooses the Ornithopter and the Mystic: X is 1, so Bot1 draws a
+# card, those two get +1/+1 and trample (the Mystic 2/2, the Ornithopter 1/3) and the Swiftspear, not chosen, gets only its own prowess +1/+1 for the sorcery (2/3), not Spry and Mighty's.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Ruby
+Elvish Mystic
+Monastery Swiftspear
+Ornithopter
+Spry and Mighty
+Forest x13
+
+[Bot2 Deck]
+Mox Emerald
+Birds of Paradise
+Island x18
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Monastery Swiftspear.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Birds of Paradise.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Elvish Mystic.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Spry and Mighty.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Birds of Paradise)
+! Bot1.Choose(Bot1.Battlefield.Ornithopter; Bot1.Battlefield.Elvish Mystic; Bot1.Battlefield.Monastery Swiftspear)
+Bot1.Choose(Bot1.Battlefield.Ornithopter; Bot1.Battlefield.Elvish Mystic)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 1
+Bot1.Battlefield.Elvish Mystic.Power = 2
+Bot1.Battlefield.Elvish Mystic.Toughness = 2
+Bot1.Battlefield.Elvish Mystic.Keywords = Trample
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Trample
+Bot1.Battlefield.Monastery Swiftspear.Power = 2
+Bot1.Battlefield.Monastery Swiftspear.Toughness = 3
+Bot1.Battlefield.Monastery Swiftspear.Keywords = Haste
+Bot2.Battlefield.Birds of Paradise.Power = 0
+Bot2.Battlefield.Birds of Paradise.Toughness = 1
