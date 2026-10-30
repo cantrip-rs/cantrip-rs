@@ -1,0 +1,64 @@
+# Prismabasher (ruling): "The value of X is calculated when Prismabasher's last ability triggers for the purpose of defining the maximum number
+# of target creatures. It is calculated again when the ability resolves to determine the amount of the power and toughness bonus." Two colors
+# are among Bot1's permanents as the ability triggers, so it targets the Elvish Mystic and the Monastery Swiftspear. In response Bot2
+# Lightning Bolts the Swiftspear: red is gone, X is one as the ability resolves, and the Mystic alone gets +1/+1 (2/2).
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Elvish Mystic
+Monastery Swiftspear
+Prismabasher
+Forest x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Monastery Swiftspear.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Elvish Mystic.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Prismabasher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Elvish Mystic; Bot1.Battlefield.Monastery Swiftspear)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Monastery Swiftspear)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Monastery Swiftspear
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Power = 2
+Bot1.Battlefield.Elvish Mystic.Toughness = 2
+Bot1.Battlefield.Prismabasher.Power = 6

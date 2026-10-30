@@ -1,0 +1,11 @@
+{
+  "name": "Prismabasher",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Elemental",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Trample\nVivid — When this creature enters, up to X target creatures you control get +X/+X until end of turn, where X is the number of colors among permanents you control.",
+  "keywords": [
+    "Trample"
+  ]
+}
