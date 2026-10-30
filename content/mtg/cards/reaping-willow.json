@@ -1,0 +1,11 @@
+{
+  "name": "Reaping Willow",
+  "manaCost": "{1}{W/B}{W/B}{W/B}",
+  "type": "Creature — Treefolk Cleric",
+  "power": 3,
+  "toughness": 6,
+  "oracleText": "Lifelink\nThis creature enters with two -1/-1 counters on it.\n{1}{W/B}, Remove two counters from this creature: Return target creature card with mana value 3 or less from your graveyard to the battlefield. Activate only as a sorcery.",
+  "keywords": [
+    "Lifelink"
+  ]
+}

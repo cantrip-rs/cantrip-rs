@@ -1,0 +1,61 @@
+# Reaping Willow (a 3/6 lifelinker): "This creature enters with two -1/-1 counters on it." and "{1}{W/B}, Remove two counters from
+# this creature: Return target creature card with mana value 3 or less from your graveyard to the battlefield. Activate only as a
+# sorcery." Faithless Looting and Entomb fill Bot1's graveyard with Elvish Mystic and Llanowar Elves (mana value 1) and Stoic
+# Grove-Guide (mana value 5). Turn 3 the Willow arrives as a 1/4; turn 5 it pays {1}{W/B} and its two counters (becoming a 3/6)
+# to return the Mystic: the Guide is no legal target, the Llanowar Elves stays in the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Faithless Looting
+Entomb
+Reaping Willow
+Plains
+Elvish Mystic
+Llanowar Elves
+Swamp
+Swamp
+Stoic Grove-Guide
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Elvish Mystic; Llanowar Elves)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Stoic Grove-Guide)
+? Bot1.Graveyard = Entomb; Stoic Grove-Guide; Faithless Looting; Llanowar Elves; Elvish Mystic
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Reaping Willow.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reaping Willow.Power = 1
+? Bot1.Battlefield.Reaping Willow.Toughness = 4
+? Bot1.Battlefield.Reaping Willow.Keywords = Lifelink
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Reaping Willow.Activate(Bot1.Graveyard.Stoic Grove-Guide)
+Bot1.Battlefield.Reaping Willow.Activate(Bot1.Graveyard.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Reaping Willow.Power = 3
+? Bot1.Battlefield.Reaping Willow.Toughness = 6
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Battlefield.Elvish Mystic.Tapped = false
+Bot1.Graveyard = Entomb; Stoic Grove-Guide; Faithless Looting; Llanowar Elves
