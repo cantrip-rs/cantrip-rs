@@ -2,20 +2,10 @@ use cantrip_api::*;
 use cantrip_mechanics::{affinity, lands, effects::gain_indestructible_until_end_of_turn, tokens, triggers};
 use cantrip_oracle as oracle;
 
-/// The 3/4 green Treefolk creature token with reach that Sapling Nursery makes.
-pub static TREEFOLK: CardDef = CardDef {
-    colors: Some(ColorSet::of(Color::Green)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(3),
-    toughness: Some(4),
-    keywords: Keywords::of(&[Keyword::Reach]),
-    ..token!(Treefolk)
-};
-
 /// "Create a 3/4 green Treefolk creature token with reach" (CR 111.1): one for each land that enters, since each is its own
 /// trigger (CR 603.2).
 fn create_treefolk(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &TREEFOLK, 1)?;
+    tokens::create(g, item.controller, &tokens::TREEFOLK, 1)?;
     Ok(())
 }
 
@@ -51,4 +41,4 @@ pub static CARD: CardDef = CardDef {
     ..oracle::SAPLING_NURSERY
 };
 
-pub static EXTRA: &[&CardDef] = &[&TREEFOLK];
+pub static EXTRA: &[&CardDef] = &[&tokens::TREEFOLK];

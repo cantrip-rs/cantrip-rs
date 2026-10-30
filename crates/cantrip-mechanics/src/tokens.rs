@@ -898,6 +898,16 @@ pub static ELF: CardDef = CardDef {
     ..token!(Elf)
 };
 
+/// The 3/4 green Treefolk creature token with reach (CR 111.1, 111.4). Sapling Nursery and Tend the Sprigs make it.
+pub static TREEFOLK: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(3),
+    toughness: Some(4),
+    keywords: Keywords::of(&[Keyword::Reach]),
+    ..token!(Treefolk)
+};
+
 /// "Create a 1/1 green Elf creature token" as an ability's whole effect (CR 111.1, 701.7a): one, under its controller. Down in the
 /// Valley's Saga ability, Thranduil the Strategist and Thranduil, Sindarin Liege print it.
 pub fn create_an_elf(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
