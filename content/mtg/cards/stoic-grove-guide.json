@@ -1,0 +1,8 @@
+{
+  "name": "Stoic Grove-Guide",
+  "manaCost": "{4}{B/G}",
+  "type": "Creature — Elf Druid",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "{1}{B/G}, Exile this card from your graveyard: Create a 2/2 black and green Elf creature token. Activate only as a sorcery."
+}
