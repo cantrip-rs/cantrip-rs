@@ -699,7 +699,8 @@ impl TargetSpec {
     /// A bound of `COUNTED` is the X announced for the spell or ability, or else the number of times it was kicked:
     /// "X target lands" is `min` and `max` both `COUNTED`, "up to X targets" is `min` 0 and `max` `COUNTED`. For a
     /// reflexive triggered ability given a count (`Game::reflexive_trigger_counted`), it is that count: "up to that
-    /// many target creatures" (CR 603.12).
+    /// many target creatures" (CR 603.12). A triggered ability may read it instead from its trigger event's amount
+    /// (`TriggeredDef::counted_by_amount`) or from the game as it is put on the stack (`TriggeredDef::counted_by`).
     pub const COUNTED: u32 = u32::MAX;
 
     /// "Any number of targets" (CR 115.1d): as many as there are legal ones to choose - no stack item holds fewer.
@@ -1515,6 +1516,7 @@ impl TriggeredDef {
         triggers_each_turn: 0,
         members_of: None,
         counted_by_amount: false,
+        counted_by: None,
         chapter: 0,
         state: None,
         modal: None,
@@ -1624,6 +1626,10 @@ pub struct TriggeredDef {
     /// "Choose up to that many target ...", that many being the amount the trigger event carried (`Fired::data[0]`: the life gained):
     /// a `TargetSpec::COUNTED` bound reads it as the ability is put on the stack (CR 603.3d, 601.2c).
     pub counted_by_amount: bool,
+    /// "Up to X target ..." where X is read from the game as the ability is put on the stack - Prismabasher's number of colors
+    /// among permanents its controller controls (the ruling: it is fixed when the ability triggers, then read again as it
+    /// resolves): a `TargetSpec::COUNTED` bound reads it (CR 603.3d, 601.2c). Asked of the ability's source and controller.
+    pub counted_by: Option<fn(&dyn Query, &Asker) -> u16>,
     /// A Saga's chapter ability (CR 714.2): it triggers when lore counters are put on its source and their number
     /// becomes at least this, having been less. `listens` and `matches` are not used; the core owns the trigger.
     pub chapter: u8,
