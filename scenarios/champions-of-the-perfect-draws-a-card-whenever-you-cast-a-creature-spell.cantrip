@@ -1,0 +1,45 @@
+# Champions of the Perfect: "Whenever you cast a creature spell, draw a card." Turn 1 Bot1 casts it beholding an Elvish Mystic. Turn 3 Bot1 draws
+# Llanowar Elves and casts it with the Forest: the trigger resolves before the Elves do and Bot1 draws a Forest (the Champions' own cast did
+# not trigger itself: it was not on the battlefield). A land cast would not have triggered it.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Elvish Mystic
+Champions of the Perfect
+Mox Emerald
+Llanowar Elves
+Forest x12
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Champions of the Perfect.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Choose(Elvish Mystic)
+[T3 Bot1.Main1]
+? Bot1.Hand = Mox Emerald; Llanowar Elves
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Mox Emerald; Forest
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Mox Emerald; Forest
+Bot1.Battlefield.Llanowar Elves.Power = 1

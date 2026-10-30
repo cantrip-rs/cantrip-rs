@@ -1,0 +1,46 @@
+# Champions of the Perfect (CR 601.2b, 701.4a, 607.2q): the additional cost beholds an Elf - Elvish Mystic, revealed from the hand - and exiles it.
+# The 6/6 is cast with Forest and three Moxen for {3}{G}. When Bot2's Swords to Plowshares exiles it, the exiled Elvish Mystic returns to its
+# owner's hand, and Bot1 gains 6 life from the 6/6.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Elvish Mystic
+Champions of the Perfect
+Mox Emerald
+Forest x13
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Champions of the Perfect.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Choose(Elvish Mystic)
+[T1 Bot1.Main2]
+? Bot1.Hand = Mox Emerald
+? Exile.Count = 1
+? Bot1.Battlefield.Champions of the Perfect.Power = 6
+? Bot1.Battlefield.Champions of the Perfect.Toughness = 6
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Champions of the Perfect)
+[T2 Bot2.Main2]
+
+[Expect]
+Exile.Count = 1
+Bot1.Hand = Mox Emerald; Elvish Mystic
+Bot1.Battlefield.Count = 4
+Bot1.Life = 26
