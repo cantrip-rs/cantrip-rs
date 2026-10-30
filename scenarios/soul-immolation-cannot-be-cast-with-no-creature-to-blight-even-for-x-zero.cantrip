@@ -1,0 +1,27 @@
+# Soul Immolation: "blight X" needs a creature you control to put the counters on (CR 701.68b), so with none it can't be
+# cast even for X = 0. Bot1 has the mana and no creature: the cast is refused and the spell stays in hand.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Black Lotus
+Soul Immolation
+Mountain x15
+
+[Bot2 Deck]
+Grizzly Bears
+Mountain x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Soul Immolation.Cast(X: 0)
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot2.Life = 20
