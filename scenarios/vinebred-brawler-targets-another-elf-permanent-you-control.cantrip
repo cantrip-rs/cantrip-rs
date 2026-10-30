@@ -1,0 +1,50 @@
+# Vinebred Brawler: "another target Elf you control" names no card type, so a permanent you control that is an Elf may be targeted
+# (CR 115.1, 109.2, 205.3m), a noncreature included: Firdoch Core, a Kindred Artifact with changeling (CR 702.73a), is every creature type
+# and so an Elf. Not the Brawler itself ("another"), not Bot1's Ornithopter (no Elf), not Bot2's Elvish Mystic (not Bot1's). Bot2's
+# Mystic, the one creature able to block, must block the Brawler (CR 509.1c) and dies; Bot1's Mystic, not chosen, stays 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Firdoch Core
+Vinebred Brawler
+Ornithopter
+Elvish Mystic
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Elvish Mystic
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Vinebred Brawler.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Firdoch Core.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Vinebred Brawler > Bot2)
+! Bot1.Target(Vinebred Brawler)
+! Bot1.Target(Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Target(Firdoch Core)
+? Stack = Vinebred Brawler
+Bot2.Block(Elvish Mystic > Vinebred Brawler)
+? Bot1.Battlefield.Elvish Mystic.Power = 1
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Elvish Mystic; Black Lotus
+Bot1.Battlefield = Elvish Mystic; Firdoch Core; Mox Emerald; Ornithopter; Vinebred Brawler
