@@ -1,0 +1,76 @@
+# Live Long and Prosper {5}{W}{U}. Bot1 starts at 7 life so the doubling is exact: 14, not 7 more or 21 (CR 701.10d).
+# "Draw cards equal to the number of cards in your hand" counts the hand before drawing (CR 608.2h): 6 cards become 12.
+# "This spell can't be countered": Bot2's Counterspell resolves and does nothing (CR 101.2, 701.6a). "You have no maximum hand
+# size until your next turn" (CR 514.2): the cleanup at the end of turn 5 keeps all 12 cards, and the cleanup at the end
+# of turn 7 discards down to 7 - the effect ended when turn 7 began.
+
+[Life]
+Bot1: 7
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Mox Jet
+Ancestral Recall
+Ancestral Recall
+Live Long and Prosper
+Island
+Island
+Island x11
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Counterspell
+Island
+Island
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 7
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Live Long and Prosper.Cast
+Bot2.Battlefield.Island#1.Activate
+Bot2.Battlefield.Island#2.Activate
+Bot2.Hand.Counterspell.Cast(Live Long and Prosper)
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+? Bot1.Life = 14
+? Bot1.Hand.Count = 12
+[T8 Bot2.Main1]
+
+[Expect]
+Bot1.Hand.Count = 7
+Bot1.Life = 14
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Mox Emerald; Mox Ruby; Mox Jet
+Bot1.Graveyard.Count = 10
+Bot2.Graveyard = Counterspell
