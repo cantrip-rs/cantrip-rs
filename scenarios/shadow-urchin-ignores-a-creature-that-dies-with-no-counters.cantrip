@@ -1,0 +1,31 @@
+# Shadow Urchin's second ability needs "a creature you control with one or more counters on it": an Ornithopter with none that
+# dies to Bot2's Lightning Bolt on turn 2 exiles nothing. Bot1's library is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Shadow Urchin
+Ornithopter
+Swamp x17
+
+[Bot2 Deck]
+Mountain x6
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Shadow Urchin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Ornithopter; Black Lotus
+Exile.Count = 0
