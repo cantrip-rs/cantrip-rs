@@ -1759,8 +1759,9 @@ pub fn turn_over(cx: &mut Cx, id: ObjectId) -> R<bool> {
     Ok(true)
 }
 
-/// Creates an emblem (CR 114.2): an object in the command zone, owned by the player, that nothing moves.
-pub fn create_emblem(cx: &mut Cx, def: CardId, player: PlayerId) -> ObjectId {
+/// Creates an emblem (CR 114.2): an object in the command zone, owned by the player, that nothing moves. `subtype` is the
+/// creature type its text says "chosen" (CR 607.2d), kept as a permanent keeps what it chose as it entered (`Choices`).
+pub fn create_emblem(cx: &mut Cx, def: CardId, player: PlayerId, subtype: Option<Subtype>) -> ObjectId {
     // The emblem's abilities are the creating text's (CR 114.2, 612.4): words that text changed are changed in them.
     let words = match cx.cause() {
         Cause::Spell(source) | Cause::Ability { source, .. } => cantrip_api::words(cx.s(), source),
@@ -1773,6 +1774,9 @@ pub fn create_emblem(cx: &mut Cx, def: CardId, player: PlayerId) -> ObjectId {
     obj.controlled_since = turn;
     obj.timestamp = timestamp;
     obj.copy = copy;
+    if subtype.is_some() {
+        obj.marks.choices = Choices::entered(cx.cards().linked_card(def), Entered { subtype, ..Entered::default() });
+    }
     let id = cx.st().push_obj(obj);
     cx.st().zone_push(Zone::COMMAND, id);
     note_statics(cx, id);

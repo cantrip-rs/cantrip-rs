@@ -486,6 +486,13 @@ pub fn create_emblem(g: &mut dyn Game, player: PlayerId, def: &'static CardDef) 
     g.create_emblem(def, player)
 }
 
+/// `create_emblem` for an emblem whose text says "the chosen type" (CR 607.2d): `subtype`, chosen as the creating ability resolved,
+/// is kept on it for its abilities to read (`chosen_type::creatures_you_control_of_chosen_type`). Oko, Shadowmoor Scion makes it.
+pub fn create_emblem_choosing_subtype(g: &mut dyn Game, player: PlayerId, def: &'static CardDef, subtype: Subtype) -> ObjectId {
+    let def = g.card_id(def);
+    g.create_emblem_choosing_subtype(def, player, subtype)
+}
+
 /// The 1/1 white Ally creature token. Appa, Steadfast Guardian and Iroh, Tea Master make it.
 pub static ALLY: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),
