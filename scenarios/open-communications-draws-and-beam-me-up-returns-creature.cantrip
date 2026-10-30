@@ -1,0 +1,46 @@
+# Cast Open Communications to draw, then cast it from the graveyard with Beam me up; returning Ornithopter is an additional cost and the spell is exiled after resolving (CR 118.9, 601.2h; the exile as flashback does, CR 702.34a; Beam me up is newer than the rules text here).
+
+[Bot1 Deck]
+Open Communications
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Open Communications.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Open Communications
+? Bot1.Hand.Count = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.Open Communications.Cast(Ability: Beam me up)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+
+[Expect]
+Exile.Count = 1
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Battlefield.Count = 4
