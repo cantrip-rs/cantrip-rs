@@ -1,0 +1,44 @@
+# Lt. Cmdr. Geordi La Forge {2}{U}: Legendary Creature — Human Artificer
+#   If you would put one or more charge counters on an artifact you control, put twice that many charge counters on that artifact instead.
+# Turn 1 Geordi is cast off three Moxen. On turn 3 Reckoner Bankbuster enters with three charge counters, which Geordi doubles to six
+# (CR 614.1a, 614.5, 122.6). Only charge counters are doubled, so the Bankbuster's own enters-with counters are the ones it adds.
+
+[Bot1 Deck]
+Lt. Cmdr. Geordi La Forge
+Reckoner Bankbuster
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lt. Cmdr. Geordi La Forge.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Reckoner Bankbuster.Counters.Charge = 6

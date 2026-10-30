@@ -1,0 +1,70 @@
+# Geordi doubles charge counters on your artifact, including counters added after entry (CR 614.1a, 122.6).
+# A nonartifact Planet and the opponent's artifact get the normal number. Removing Geordi ends the replacement.
+[Bot1 Deck]
+Lt. Cmdr. Geordi La Forge
+Weather Maker
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Adagia, Windswept Bastion
+Walking Ballista
+Island x20
+[Bot2 Deck]
+Reckoner Bankbuster
+Mox Ruby
+Sol Ring
+Lightning Bolt
+Tezzeret's Gambit
+Mountain x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lt. Cmdr. Geordi La Forge.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Reckoner Bankbuster.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Adagia, Windswept Bastion.Play
+Bot1.Battlefield.Adagia, Windswept Bastion.Activate(Ability: Station)
+Bot1.Choose(Lt. Cmdr. Geordi La Forge)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Weather Maker.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Weather Maker.Counters.Charge = 2
+[T6 Bot2.Main1]
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Tezzeret's Gambit.Cast
+Bot2.Modes(1)
+Bot2.Pass
+Bot2.Target(Bot1.Battlefield.Weather Maker)
+? Bot1.Battlefield.Weather Maker.Counters.Charge = 3
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Lt. Cmdr. Geordi La Forge)
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Weather Maker.Counters.Charge = 4
+Bot1.Battlefield.Adagia, Windswept Bastion.Counters.Charge = 3
+Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Reckoner Bankbuster.Counters.Charge = 3
+Bot1.Graveyard = Lt. Cmdr. Geordi La Forge
