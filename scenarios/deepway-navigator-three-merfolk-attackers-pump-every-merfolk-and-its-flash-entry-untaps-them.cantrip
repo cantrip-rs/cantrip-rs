@@ -1,0 +1,72 @@
+# Deepway Navigator (a 2/2 Merfolk Wizard, flash): "When this creature enters, untap each other Merfolk you control." and "As long as you
+# attacked with three or more Merfolk this turn, Merfolk you control get +1/+0." Turn 1 Bot1 casts three Coral Merfolk (2/1) and Bot2
+# one of their own on turn 2. On turn 3 all three attack with no Navigator out yet (2/1 each); after combat the flashed-in Navigator is a 3/2,
+# the bonus applies to the Merfolk already there (3/1) since the condition looks back at the turn (the opponent's Coral Merfolk stays a
+# 2/1: only Merfolk "you control") and its entry untaps the three tapped attackers. The Mox Jet tapped before combat stays tapped: only Merfolk untap.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Coral Merfolk
+Coral Merfolk
+Coral Merfolk
+Deepway Navigator
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Island
+Coral Merfolk
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Coral Merfolk.Cast
+Bot1.Hand.Coral Merfolk.Cast
+Bot1.Hand.Coral Merfolk.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Coral Merfolk.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Battlefield.Coral Merfolk#1.Power = 2
+Bot1.Attack(Coral Merfolk#1; Coral Merfolk#2; Coral Merfolk#3 > Bot2)
+? Bot1.Battlefield.Coral Merfolk#1.Power = 2
+? Bot1.Battlefield.Coral Merfolk#3.Power = 2
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Coral Merfolk#1.Tapped = true
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deepway Navigator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Deepway Navigator.Power = 3
+? Bot1.Battlefield.Deepway Navigator.Toughness = 2
+? Bot1.Battlefield.Coral Merfolk#1.Power = 3
+? Bot1.Battlefield.Coral Merfolk#3.Power = 3
+? Bot2.Battlefield.Coral Merfolk.Power = 2
+
+[Expect]
+Bot1.Battlefield.Coral Merfolk#1.Tapped = false
+Bot1.Battlefield.Coral Merfolk#2.Tapped = false
+Bot1.Battlefield.Coral Merfolk#3.Tapped = false
+Bot1.Battlefield.Deepway Navigator.Tapped = false
+Bot1.Battlefield.Mox Jet.Tapped = true

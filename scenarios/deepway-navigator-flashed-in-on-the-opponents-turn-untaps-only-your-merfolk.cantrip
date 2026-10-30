@@ -1,0 +1,53 @@
+# Deepway Navigator: "When this creature enters, untap each other Merfolk you control." Bot1's Coral Merfolk attacked on turn 3 and
+# is still tapped on Bot2's turn 4, when Bot2's own Coral Merfolk attacks too. After combat Bot1 flashes the Navigator in: its
+# trigger untaps Bot1's Merfolk, and Bot2's tapped Merfolk - not one Bot1 controls - stays tapped.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Coral Merfolk
+Mox Pearl
+Deepway Navigator
+Island x15
+
+[Bot2 Deck]
+Mox Sapphire
+Coral Merfolk
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Coral Merfolk.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Coral Merfolk.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Attack(Coral Merfolk > Bot2)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Coral Merfolk.Tapped = true
+Bot2.Attack(Coral Merfolk > Bot1)
+[T4 Bot2.Main2]
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deepway Navigator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Coral Merfolk.Tapped = false
+Bot2.Battlefield.Coral Merfolk.Tapped = true
+Bot1.Battlefield.Deepway Navigator.Tapped = false
