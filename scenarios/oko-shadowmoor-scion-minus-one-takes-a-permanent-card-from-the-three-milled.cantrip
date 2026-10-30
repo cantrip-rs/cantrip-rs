@@ -1,0 +1,53 @@
+# Oko, Shadowmoor Scion: "-1: Mill three cards. You may put a permanent card from among them into your hand." Mox Emerald
+# pays the {G} on turn 3 to turn Oko over (loyalty 3 + 2 = 5), then the -1 mills Lightning Bolt, Ornithopter, Lightning
+# Bolt: only the Ornithopter is a permanent card, and it is put into the hand while both Bolts stay in the graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Oko, Lorwyn Liege
+Mox Emerald
+Island
+Island
+Island
+Lightning Bolt
+Ornithopter
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Oko, Lorwyn Liege.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Oko, Lorwyn Liege.Activate(Ability: all creature types)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+Bot1.Battlefield.Oko, Shadowmoor Scion.Activate(Ability: Mill)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+
+[Expect]
+Bot1.Battlefield.Oko, Shadowmoor Scion.Counters.Loyalty = 4
+Bot1.Hand = Island; Island; Island; Ornithopter
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt
