@@ -1,0 +1,46 @@
+# "Artifact creatures you control get +1/+1": Locutus itself (an artifact creature, 1/1) and Ornithopter (0/2) are both
+# artifact creatures and both grow, while Grizzly Bears - a creature that is no artifact - does not. Bot2's artifact
+# creature would not either ("you control").
+
+[Bot1 Deck]
+Locutus, the One Who Speaks
+Ornithopter
+Grizzly Bears
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Forest x13
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Locutus, the One Who Speaks.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+
+[Expect]
+Bot1.Battlefield.Locutus, the One Who Speaks.Power = 2
+Bot1.Battlefield.Locutus, the One Who Speaks.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2

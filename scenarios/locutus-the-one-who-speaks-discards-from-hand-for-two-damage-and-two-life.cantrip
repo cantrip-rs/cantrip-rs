@@ -1,0 +1,48 @@
+# "{W}{B}, Discard this card: It deals 2 damage to target creature. You gain 2 life." The card is discarded from the
+# hand as the cost is paid (CR 118.3, 701.9), its source as it last existed there (CR 113.7a): exactly 2 damage kills a
+# 2/2 (1 would not), and Bot1 gains exactly 2 life. With only a white source the {W}{B} cost cannot be paid, so the
+# ability is refused then (`Mana: short`); both Moxen on turn 5 pay it exactly.
+
+[Bot1 Deck]
+Locutus, the One Who Speaks
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest
+Grizzly Bears
+Forest x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Locutus, the One Who Speaks.Activate(Bot2.Battlefield.Llanowar Elves; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Locutus, the One Who Speaks.Activate(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears = (absent)
+Bot1.Graveyard = Locutus, the One Who Speaks
+Bot1.Life = 22
+Bot1.Hand.Count = 6
