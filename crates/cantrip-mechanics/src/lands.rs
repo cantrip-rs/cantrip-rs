@@ -170,7 +170,7 @@ pub fn search_basic_land_to_battlefield(g: &mut dyn Game, player: PlayerId, sour
 }
 
 /// "{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then shuffle."
-/// (CR 701.23, 701.21a): the land's own ability, the sacrifice being a cost. Escape Tunnel and Hobbit Hole print it.
+/// (CR 701.23, 701.21a): the land's own ability, the sacrifice being a cost. Escape Tunnel, Evolving Wilds and Hobbit Hole print it.
 pub const SACRIFICE_TO_FETCH_BASIC_TAPPED: AbilityDef = ability(
     TAP.and(SACRIFICE_THIS),
     |g, item| search_basic_land_to_battlefield(g, item.controller, item.object, true),
