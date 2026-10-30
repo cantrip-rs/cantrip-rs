@@ -1,0 +1,8 @@
+{
+  "name": "Noggle Robber",
+  "manaCost": "{1}{R/G}{R/G}",
+  "type": "Creature — Noggle Rogue",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters or dies, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}
