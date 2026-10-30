@@ -1,0 +1,27 @@
+# "entered the battlefield under your control": Bot2's Ornithopter entering under Bot2's control leaves Bot1's Outrider at 3 power.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Bristlebane Outrider
+Island x4
+Swamp x10
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Bristlebane Outrider.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+
+[Expect]
+Bot2.Battlefield.Count = 1
+Bot1.Battlefield.Bristlebane Outrider.Power = 3

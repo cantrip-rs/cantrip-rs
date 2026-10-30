@@ -1,0 +1,41 @@
+# "Another creature entered the battlefield under your control this turn" is judged as it entered (CR 603.6a): Smuggler's Copter
+# enters as a noncreature artifact, and crewing it makes it a creature without it entering, so the Outrider stays at 3 power.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Bristlebane Outrider
+Smuggler's Copter
+Mountain
+Mountain
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Bristlebane Outrider.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Smuggler's Copter.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Bristlebane Outrider)
+Bot1.Pass
+Bot2.Pass
+
+? Bot1.Battlefield.Smuggler's Copter.Types = Artifact; Creature
+
+[Expect]
+Bot1.Battlefield.Bristlebane Outrider.Power = 3
