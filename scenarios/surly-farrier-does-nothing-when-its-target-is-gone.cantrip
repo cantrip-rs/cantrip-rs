@@ -1,0 +1,36 @@
+# Surly Farrier's target is gone as the ability resolves (CR 608.2b): Bot2 answers the activation by killing Bot1's Ornithopter with Lightning Bolt, so nothing is
+# pumped. The Farrier is tapped for the cost all the same.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Surly Farrier
+Ornithopter
+Forest x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Surly Farrier.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Surly Farrier.Activate(Bot1.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Ornithopter
+Bot1.Battlefield.Surly Farrier.Power = 2
+Bot1.Battlefield.Surly Farrier.Tapped = true

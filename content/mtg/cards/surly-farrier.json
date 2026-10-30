@@ -1,0 +1,8 @@
+{
+  "name": "Surly Farrier",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Kithkin Citizen",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{T}: Target creature you control gets +1/+1 and gains vigilance until end of turn. Activate only as a sorcery."
+}
