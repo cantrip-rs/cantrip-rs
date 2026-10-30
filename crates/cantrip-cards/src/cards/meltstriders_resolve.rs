@@ -1,18 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{attach::attached_object, statics::plus_pt, targets, triggers::THIS_ENTERS};
+use cantrip_mechanics::{attach::attached_object, fight, statics::plus_pt, targets, triggers::THIS_ENTERS};
 use cantrip_oracle as oracle;
-
-/// "When this Aura enters, enchanted creature fights up to one target creature an opponent controls" (CR 701.14). The
-/// enchanted creature is the one the Aura is attached to as the ability resolves, or, if the Aura has left the battlefield
-/// by then, the one it was attached to as it left (CR 608.2h). The fight itself does nothing unless both are creatures on
-/// the battlefield (CR 701.14b); with no target chosen, or the target gone, there is nothing to fight.
-fn fight(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(prey) = targets::object(g, item, 0) else { return Ok(()) };
-    if let Some(enchanted) = g.obj(item.object).attached_to {
-        g.fight(enchanted, prey);
-    }
-    Ok(())
-}
 
 /// "Enchanted creature ... can't be blocked by more than one creature" (CR 509.1b): no "has", so a rule of the Aura's, not
 /// an ability the creature gains (CR 113.1a); a creature that loses all its abilities is still under it (CR 613.1f).
@@ -24,7 +12,7 @@ pub static CARD: CardDef = CardDef {
     enchant: Some(targets::CREATURE_YOU_CONTROL),
     abilities: &[triggered(
         THIS_ENTERS,
-        fight,
+        fight::enchanted_creature_fights_first_target,
         "When this Aura enters, enchanted creature fights up to one target creature an opponent controls. (Each deals damage equal to its power to the other.)",
     )
     .targets(&[targets::CREATURE_AN_OPPONENT_CONTROLS.optional()])],

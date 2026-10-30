@@ -15,6 +15,19 @@ pub fn targets_fight(g: &mut dyn Game, item: &StackItem, first: usize, second: u
     }
 }
 
+/// "When this Aura enters, enchanted creature fights up to one target creature an opponent controls" (CR 701.14): the ability's
+/// first target is the one fought, and none or one gone means nothing fights. The enchanted creature is the one the Aura is attached
+/// to as the ability resolves, or, if the Aura has left the battlefield by then, the one it was attached to as it left (CR 608.2h);
+/// the fight itself does nothing unless both are creatures on the battlefield (CR 701.14b). Meltstrider's Resolve and Pitiless Fists
+/// print it.
+pub fn enchanted_creature_fights_first_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(prey) = targets::object(g, item, 0) else { return Ok(()) };
+    if let Some(enchanted) = g.obj(item.object).attached_to {
+        g.fight(enchanted, prey);
+    }
+    Ok(())
+}
+
 /// "[Creature] deals damage equal to its power to [target]" (CR 120.3, 609.7, 120.8): one-sided, the creature being the
 /// source of the damage, so its abilities (lifelink, deathtouch) and colors count. Its power is read now, as the spell or
 /// ability resolves (CR 608.2c); a creature with no power deals none. Hard-Hitting Question and Archdruid's Charm print it.
