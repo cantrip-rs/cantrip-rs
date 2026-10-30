@@ -1,0 +1,34 @@
+# Rooftop Percher with every graveyard empty: "up to two target cards" may be none, so the trigger still goes on the stack and
+# resolves, and Bot1 gains 3 (20 + 3 = 23) - a ruling: choosing no targets is allowed.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Rooftop Percher
+Forest x14
+
+[Bot2 Deck]
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Rooftop Percher.Cast
+Bot1.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot1.Life = 23
+Bot1.Battlefield.Rooftop Percher.Power = 3

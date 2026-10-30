@@ -1,0 +1,49 @@
+# Rooftop Percher's "up to two target cards": one is allowed. Bot1's Bolt (cast on turn 1) is the only card chosen; Bot2's Bolt
+# (cast on turn 2) stays in its graveyard because the second target is declined. Bot1 still gains 3 (20 - 3 + 3 = 20).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Lightning Bolt
+Rooftop Percher
+Forest x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Rooftop Percher.Cast
+Bot1.Target(Bot1.Graveyard.Lightning Bolt)
+Bot1.Target()
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Lightning Bolt
+Exile.Count = 1
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Lightning Bolt
+Bot1.Life = 20
+Bot2.Life = 17

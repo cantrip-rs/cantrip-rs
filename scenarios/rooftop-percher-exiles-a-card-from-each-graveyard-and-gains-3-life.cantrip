@@ -1,0 +1,54 @@
+# Rooftop Percher ({5}): "Changeling", "Flying", and "When this creature enters, exile up to two target
+# cards from graveyards. You gain 3 life." Bot1 Bolts Bot2 on turn 1 (its Bolt in Bot1's graveyard) and Bot2 Bolts Bot1 on turn 2
+# (Bot2's Bolt in Bot2's graveyard); the Percher, cast on turn 3, exiles one of each (the two may be from different graveyards),
+# a card that is not in a graveyard (Bot2's Mountain) is refused, and Bot1 gains exactly 3: 20 - 3 + 3 = 20.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Lightning Bolt
+Rooftop Percher
+Forest x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Rooftop Percher.Cast
+! Bot1.Target(Bot2.Battlefield.Mountain)
+Bot1.Target(Bot1.Graveyard.Lightning Bolt)
+Bot1.Target(Bot2.Graveyard.Lightning Bolt)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Rooftop Percher.Keywords = Changeling; Flying
+? Bot1.Battlefield.Rooftop Percher.Subtypes = (every creature type)
+
+[Expect]
+Exile = Lightning Bolt; Lightning Bolt
+Exile.Count = 2
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard.Count = 0
+Bot1.Life = 20
+Bot2.Life = 17
