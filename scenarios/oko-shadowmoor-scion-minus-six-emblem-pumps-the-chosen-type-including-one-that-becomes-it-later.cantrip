@@ -1,0 +1,90 @@
+# Oko, Shadowmoor Scion: "-6: Choose a creature type. You get an emblem with 'Creatures you control of the chosen type get
+# +3/+3 and have vigilance and hexproof.'" Loyalty: 3, +2 (turn 1) = 5, +2 (turn 3) = 7, the {G} paid at turn 5's first main
+# phase turns it over, and -6 leaves 1. Elf is chosen as the ability resolves. Llanowar Elves (an Elf) is 4/4 with vigilance
+# and hexproof, and so is Bot1's Ornithopter, which Oko's +2 of turn 3 made every creature type (CR 205.3d); an Avian Changeling cast after
+# the emblem exists is 5/5 at once, the emblem applying continuously (CR 113.6, 611.3a). Bot2's own Llanowar Elves, an Elf of
+# another player, is untouched at 1/1.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Oko, Lorwyn Liege
+Mox Emerald
+Llanowar Elves
+Ornithopter
+Mox Pearl
+Avian Changeling
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Oko, Lorwyn Liege.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Oko, Lorwyn Liege.Activate(Ability: all creature types)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Oko, Lorwyn Liege.Activate(Ability: all creature types; Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Oko, Lorwyn Liege.Counters.Loyalty = 7
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+Bot1.Battlefield.Oko, Shadowmoor Scion.Activate(Ability: emblem)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Elf)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Avian Changeling.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Oko, Shadowmoor Scion.Counters.Loyalty = 1
+Bot1.Emblems.Count = 1
+Bot1.Battlefield.Llanowar Elves.Power = 4
+Bot1.Battlefield.Llanowar Elves.Keywords = Hexproof; Vigilance
+Bot1.Battlefield.Ornithopter.Power = 3
+Bot1.Battlefield.Ornithopter.Toughness = 5
+Bot1.Battlefield.Avian Changeling.Power = 5
+Bot1.Battlefield.Avian Changeling.Keywords = Changeling; Flying; Hexproof; Vigilance
+Bot2.Battlefield.Llanowar Elves.Power = 1

@@ -1,0 +1,16 @@
+{
+  "name": "Oko, Lorwyn Liege",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Planeswalker — Oko",
+  "loyalty": 3,
+  "oracleText": "At the beginning of your first main phase, you may pay {G}. If you do, transform Oko.\n+2: Up to one target creature gains all creature types. (This effect doesn't end.)\n+1: Target creature gets -2/-0 until your next turn.",
+  "backFace": {
+    "name": "Oko, Shadowmoor Scion",
+    "colorIndicator": [
+      "Green"
+    ],
+    "type": "Legendary Planeswalker — Oko",
+    "loyalty": 3,
+    "oracleText": "At the beginning of your first main phase, you may pay {U}. If you do, transform Oko.\n−1: Mill three cards. You may put a permanent card from among them into your hand.\n−3: Create two 3/3 green Elk creature tokens.\n−6: Choose a creature type. You get an emblem with \"Creatures you control of the chosen type get +3/+3 and have vigilance and hexproof.\""
+  }
+}

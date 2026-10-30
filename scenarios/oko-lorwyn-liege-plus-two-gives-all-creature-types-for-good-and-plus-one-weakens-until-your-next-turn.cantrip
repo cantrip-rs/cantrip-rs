@@ -1,0 +1,60 @@
+# Oko, Lorwyn Liege: "+2: Up to one target creature gains all creature types. (This effect doesn't end.)" - Bot1's
+# Ornithopter is a Thopter and, once targeted, has every one (CR 205.3d, 613.1d) for the rest of the game
+# (CR 611.2a), not only the turn. "+1: Target creature gets -2/-0 until your next turn" (CR 611.2a): Bot2's Ornithopter
+# (0/2) is -2/2, its toughness untouched, on Bot2's own turn 4 too, and back to 0 only as Bot1's turn 5 begins. The loyalty is 3, 5 then 6.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Oko, Lorwyn Liege
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Oko, Lorwyn Liege.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Oko, Lorwyn Liege.Counters.Loyalty = 3
+? Bot1.Battlefield.Ornithopter.Subtypes = Thopter
+Bot1.Battlefield.Oko, Lorwyn Liege.Activate(Ability: all creature types; Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Subtypes = (every creature type)
+? Bot1.Battlefield.Oko, Lorwyn Liege.Counters.Loyalty = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Oko, Lorwyn Liege.Activate(Ability: -2/-0; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = -2
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Oko, Lorwyn Liege.Counters.Loyalty = 6
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Power = -2
+? Bot1.Battlefield.Ornithopter.Subtypes = (every creature type)
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Subtypes = (every creature type)
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Oko, Lorwyn Liege.Counters.Loyalty = 6

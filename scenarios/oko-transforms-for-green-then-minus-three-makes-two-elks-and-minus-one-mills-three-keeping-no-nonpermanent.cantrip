@@ -1,0 +1,71 @@
+# Oko, Lorwyn Liege and Oko, Shadowmoor Scion: "At the beginning of your first main phase, you may pay {G}. If you do,
+# transform Oko." Turn 3 pays it with Mox Emerald, the +2 of turn 1 having raised the loyalty to 5, and "-3: Create two 3/3
+# green Elk creature tokens" leaves 2 (a transformed permanent keeps its counters, CR 712.18). Turn 5 the back's own trigger
+# is declined ({U} could be paid), so Oko stays Shadowmoor Scion, and "-1: Mill three cards. You may put a permanent card
+# from among them into your hand" mills three Lightning Bolts: none is a permanent card, so nothing is taken.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Oko, Lorwyn Liege
+Mox Emerald
+Island
+Island
+Island
+Island
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Oko, Lorwyn Liege.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Oko, Lorwyn Liege.Activate(Ability: all creature types)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Oko, Lorwyn Liege.Counters.Loyalty = 5
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+? Bot1.Battlefield.Oko, Shadowmoor Scion.Counters.Loyalty = 5
+Bot1.Battlefield.Oko, Shadowmoor Scion.Activate(Ability: Elk)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Oko, Shadowmoor Scion.Counters.Loyalty = 2
+? Bot1.Battlefield.Elk Token#1.Power = 3
+? Bot1.Battlefield.Elk Token#1.Colors = Green
+? Bot1.Battlefield.Elk Token#1.Types = Creature
+? Bot1.Battlefield.Elk Token#1.Subtypes = Elk
+? Bot1.Battlefield.Elk Token#2.Toughness = 3
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Oko, Shadowmoor Scion.Counters.Loyalty = 2
+Bot1.Battlefield.Oko, Shadowmoor Scion.Activate(Ability: Mill)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Oko, Shadowmoor Scion.Counters.Loyalty = 1
+Bot1.Graveyard = Lightning Bolt; Lightning Bolt; Lightning Bolt
+Bot1.Hand = Island; Island; Island; Island
