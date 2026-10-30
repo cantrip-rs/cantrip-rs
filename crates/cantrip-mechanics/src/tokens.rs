@@ -245,6 +245,17 @@ pub static SAMURAI: CardDef = CardDef {
     ..token!(Samurai)
 };
 
+/// A 1/1 colorless Shapeshifter creature token with changeling (CR 702.73a). Personify and Stalactite Dagger make it.
+pub static SHAPESHIFTER: CardDef = CardDef {
+    colors: Some(ColorSet::NONE),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    keywords: Keywords::of(&[Keyword::Changeling]),
+    text: "Changeling (This creature is every creature type.)",
+    ..token!(Shapeshifter)
+};
+
 /// A 1/1 white Monk creature token with prowess. Cori-Steel Cutter's flurry and Monastery Mentor make it.
 pub static MONK: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),
