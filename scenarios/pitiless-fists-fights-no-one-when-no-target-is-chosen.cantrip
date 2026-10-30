@@ -1,0 +1,42 @@
+# Pitiless Fists: "up to one target creature an opponent controls" (CR 115.1, 601.2c): Bot1 chooses no target, so nothing fights - Bot2's Memnite is undamaged and alive -
+# while the Aura's static ability still makes the Ornithopter 2/4.
+
+[Bot1 Deck]
+Ornithopter
+Black Lotus
+Mox Emerald
+Pitiless Fists
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Pitiless Fists.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Battlefield.Ornithopter.Toughness = 4
