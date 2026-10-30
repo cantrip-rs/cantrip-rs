@@ -1,0 +1,37 @@
+# Catharsis cast with Mox Ruby, Mox Pearl, Mox Jet and Black Lotus's {B}{B}{B}: only one {R} and one {W} were spent, so
+# neither trigger happens - no Kithkin, and Ornithopter and Catharsis keep their sizes.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Black Lotus
+Catharsis
+Ornithopter
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Catharsis.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Kithkin Token = (absent)
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Catharsis.Power = 3
+Bot1.Battlefield.Catharsis.Keywords = (absent)
