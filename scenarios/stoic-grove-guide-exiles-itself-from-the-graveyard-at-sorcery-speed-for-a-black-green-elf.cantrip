@@ -1,0 +1,62 @@
+# Stoic Grove-Guide: "{1}{B/G}, Exile this card from your graveyard: Create a 2/2 black and green Elf creature token. Activate only
+# as a sorcery." Entomb puts it in Bot1's graveyard turn 1, where Bot2's own Grove-Guide stays put (Bot2's graveyard is not
+# Bot1's). Red and white mana cannot pay the hybrid {B/G}; on Bot2's turn the ability is a sorcery's, so green and blue mana
+# cannot activate it; on turn 3 black and red mana do: the card is exiled and one 2/2 black and green Elf token arrives.
+
+[Bot1 Deck]
+Swamp
+Entomb
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Stoic Grove-Guide
+Swamp x12
+
+[Bot2 Deck]
+Swamp
+Entomb
+Swamp x8
+Stoic Grove-Guide
+Swamp x9
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Stoic Grove-Guide)
+? Bot1.Graveyard = Entomb; Stoic Grove-Guide
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Graveyard.Stoic Grove-Guide.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Stoic Grove-Guide)
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Graveyard.Stoic Grove-Guide.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Stoic Grove-Guide.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elf Token.Power = 2
+? Bot1.Battlefield.Elf Token.Toughness = 2
+? Bot1.Battlefield.Elf Token.Colors = Black; Green
+? Bot1.Battlefield.Elf Token.Subtypes = Elf
+? Exile = Stoic Grove-Guide
+
+[Expect]
+Bot2.Graveyard = Entomb; Stoic Grove-Guide
+Bot1.Graveyard = Entomb
