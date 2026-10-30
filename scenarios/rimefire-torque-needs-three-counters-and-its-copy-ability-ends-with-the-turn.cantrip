@@ -1,0 +1,60 @@
+# Rimefire Torque: "{T}, Remove three charge counters from this artifact" - with only two charge counters (two Ornithopters,
+# Thopter chosen) it cannot be activated. Once a third Ornithopter makes three, Bot1 activates it on turn 3 and casts no
+# instant or sorcery; the delayed ability ("When you next cast ... this turn", CR 603.7b) is gone when the turn ends, so
+# turn 5's Lightning Bolt is not copied: Bot2 takes 3, not 6.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Rimefire Torque
+Ornithopter
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Island x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Rimefire Torque.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Modes(Thopter)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rimefire Torque.Counters.Charge = 2
+! Bot1.Battlefield.Rimefire Torque.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rimefire Torque.Counters.Charge = 3
+Bot1.Battlefield.Rimefire Torque.Activate
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 1
+[T3 Bot1.Main2]
+? Delayed.Count = 1
+[T4 Bot2.Main1]
+? Delayed.Count = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt
+Delayed.Count = 0

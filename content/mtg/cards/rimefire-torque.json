@@ -1,0 +1,6 @@
+{
+  "name": "Rimefire Torque",
+  "manaCost": "{1}{U}",
+  "type": "Artifact",
+  "oracleText": "As this artifact enters, choose a creature type.\nWhenever a permanent you control of the chosen type enters, put a charge counter on this artifact.\n{T}, Remove three charge counters from this artifact: When you next cast an instant or sorcery spell this turn, copy it. You may choose new targets for the copy."
+}
