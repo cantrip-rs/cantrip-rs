@@ -1357,7 +1357,9 @@ fn types_among(cx: &Cx, cards: &[ObjectId]) -> usize {
 /// Whether a variable cost could be paid at all: X may be zero, "one or more" needs one, and the exile needs enough types.
 fn variable_payable(cx: &Cx, source: ObjectId, player: PlayerId, variable: VariableCost, paid: Option<CostFor>) -> bool {
     match variable {
-        VariableCost::SacrificeX(_) | VariableCost::SacrificeAnyNumber { .. } | VariableCost::BlightX => true,
+        VariableCost::SacrificeX(_) | VariableCost::SacrificeAnyNumber { .. } => true,
+        // Blight X, even X = 0, needs a creature you control to put the counters on (CR 701.68b).
+        VariableCost::BlightX => !blight_candidates(cx, player).is_empty(),
         VariableCost::SacrificeOneOrMore(_) | VariableCost::DiscardOneOrMore(_) => !variable_candidates(cx, source, player, variable, paid, None).is_empty(),
         // Its power is read as the cost is paid (CR 601.2h), after the mana abilities of CR 601.2g, which may change it: any
         // permanent that passes the filter may yet pay.
