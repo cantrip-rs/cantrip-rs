@@ -30,6 +30,19 @@ pub const fn optional(filter: ObjectFilter, quality: &'static str) -> OptionalCo
     OptionalCost { cost: cost(filter, quality) }
 }
 
+/// "As an additional cost to cast this spell, you may choose a creature type and behold `count` creatures of that type"
+/// (CR 601.2b-c, 701.4a): the type is chosen as the cost is announced, from the types enough creatures a player controls or
+/// holds share, and kept on the spell (`StackItem::announced_type`). Only creatures are beheld, not the kindred permanents
+/// and cards a behold otherwise allows (ruling). Celestial Reunion prints it.
+pub const fn optional_of_chosen_type(count: u8) -> OptionalCost {
+    OptionalCost { cost: Cost { behold_type: true, ..cost_of(count, creature, "creature") } }
+}
+
+/// A creature, a permanent or a card in a hand: the quality "of a chosen type" is added by the cost (`Cost::behold_type`).
+pub fn creature(q: &dyn Query, _: &Asker, id: ObjectId) -> bool {
+    q.chars(id).is(CardType::Creature)
+}
+
 /// "If a [quality] was beheld": the spell's optional additional cost was paid. A copy of the spell has it paid when the
 /// original did (CR 707.10).
 pub fn beheld(item: &StackItem) -> bool {

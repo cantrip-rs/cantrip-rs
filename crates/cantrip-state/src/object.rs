@@ -1063,6 +1063,17 @@ impl StackItem {
     /// No shares: every target's is 0.
     pub const NO_SHARES: u32 = u32::MAX;
 
+    /// The creature type chosen as the spell's cost was announced (`Cost::behold_type`, CR 601.2b), kept in `choice` as its place
+    /// among `Subtype::CREATURE_TYPES` plus one. None while none was.
+    pub fn announced_type(&self) -> Option<Subtype> {
+        Subtype::CREATURE_TYPES.get((self.choice as usize).checked_sub(1)?).copied()
+    }
+
+    /// `announced_type`'s value in `choice` for `chosen`, a creature type.
+    pub fn announce_type(chosen: Subtype) -> u32 {
+        Subtype::CREATURE_TYPES.iter().position(|&t| t == chosen).map_or(0, |at| at as u32 + 1)
+    }
+
     /// Target `slot` among the first `INLINE_TARGETS`, which the item holds itself, or `Target::None` past the targets
     /// announced. A later one is read through `GameState::target`.
     pub fn target(&self, slot: usize) -> Target {
