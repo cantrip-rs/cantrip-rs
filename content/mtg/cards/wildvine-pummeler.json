@@ -1,0 +1,12 @@
+{
+  "name": "Wildvine Pummeler",
+  "manaCost": "{6}{G}",
+  "type": "Creature — Giant Berserker",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "Vivid — This spell costs {1} less to cast for each color among permanents you control.\nReach, trample",
+  "keywords": [
+    "Reach",
+    "Trample"
+  ]
+}
