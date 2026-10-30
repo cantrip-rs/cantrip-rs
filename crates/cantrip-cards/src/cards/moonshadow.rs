@@ -13,18 +13,9 @@ fn permanent_card_to_your_graveyard(q: &dyn Query, source: ObjectId, event: &Eve
     if targets::is_permanent_card(&q.chars(*new)) { Fired::about(Target::Object(*new)) } else { None }
 }
 
-/// "Remove a -1/-1 counter from this creature": nothing from one that has left or has none by now.
-fn remove_a_counter(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let source = item.object;
-    if targets::permanent(g, source) && g.obj(source).counters(CounterKind::MinusOne) > 0 {
-        g.remove_counters(source, CounterKind::MinusOne, 1);
-    }
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     enters: Some(cantrip_mechanics::effects::enters_with_minus_one_counters::<6>),
-    abilities: &[triggered(when(EventMask::ZONE_CHANGE, permanent_card_to_your_graveyard), remove_a_counter, "Whenever one or more permanent cards are put into your graveyard from anywhere while this creature has a -1/-1 counter on it, remove a -1/-1 counter from this creature.")
+    abilities: &[triggered(when(EventMask::ZONE_CHANGE, permanent_card_to_your_graveyard), cantrip_mechanics::effects::remove_a_minus_one_counter_from_this, "Whenever one or more permanent cards are put into your graveyard from anywhere while this creature has a -1/-1 counter on it, remove a -1/-1 counter from this creature.")
         .once_per_batch()],
     ..oracle::MOONSHADOW
 };
