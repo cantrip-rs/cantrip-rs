@@ -1,0 +1,34 @@
+# CR 613.1f, 118.12: both artifact creatures get their own trigger; one payment draws exactly one card.
+[Bot1 Deck]
+Swamp
+Black Lotus
+Sol Ring
+Hive Mind Coprocessor
+Memnite
+Grizzly Bears
+Forest
+Island x12
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Hive Mind Coprocessor.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Hive Mind Coprocessor > Bot2; Memnite > Bot2)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+? Stack.Count = 2
+Bot1.Accept
+Bot1.Decline
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 15
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 10

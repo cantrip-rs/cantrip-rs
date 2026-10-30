@@ -1,0 +1,8 @@
+{
+  "name": "Hive Mind Coprocessor",
+  "manaCost": "{4}{B}",
+  "type": "Artifact Creature — Borg",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Artifact creatures you control have \"Whenever this creature deals combat damage to a player, you may pay 1 life. If you do, draw a card.\""
+}

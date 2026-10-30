@@ -1,0 +1,41 @@
+# CR 603.2: opponent's artifact creature gets no ability, and damage to a blocking creature never triggers.
+[Bot1 Deck]
+Swamp
+Black Lotus
+Sol Ring
+Hive Mind Coprocessor
+Swamp x16
+[Bot2 Deck]
+Mountain
+Clockwork Percussionist
+Ornithopter
+Mountain x17
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Hive Mind Coprocessor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Clockwork Percussionist.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Attack(Clockwork Percussionist > Bot1)
+[T2 Bot2.CombatDamage]
+Bot2.Pass
+! Bot2.Accept
+[T3 Bot1.Main1]
+Bot1.Attack(Hive Mind Coprocessor > Bot2)
+Bot2.Block(Ornithopter > Hive Mind Coprocessor)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+! Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot1.Library.Count = 12

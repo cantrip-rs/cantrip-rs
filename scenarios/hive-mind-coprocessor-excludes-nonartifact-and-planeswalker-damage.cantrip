@@ -1,0 +1,50 @@
+# CR 603.2, 510.1: a nonartifact hitting a player and an artifact hitting a planeswalker earn no draw.
+[Bot1 Deck]
+Swamp
+Black Lotus
+Sol Ring
+Hive Mind Coprocessor
+Forest
+Grizzly Bears
+Mox Emerald
+Island x13
+[Bot2 Deck]
+Plains
+Mox Pearl
+Ajani Resolute
+Island x17
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Hive Mind Coprocessor.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ajani Resolute.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Attack(Hive Mind Coprocessor > Bot2.Battlefield.Ajani Resolute)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+! Bot1.Accept
+[T5 Bot1.Main1]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T5 Bot1.CombatDamage]
+Bot1.Pass
+! Bot1.Accept
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot2.Graveyard = Ajani Resolute
+Bot1.Library.Count = 11

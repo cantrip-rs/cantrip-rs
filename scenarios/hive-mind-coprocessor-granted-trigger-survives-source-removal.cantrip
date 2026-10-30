@@ -1,0 +1,38 @@
+# CR 113.7a: remove the granting permanent after combat damage; Memnite's ability still draws for its controller.
+[Bot1 Deck]
+Swamp
+Black Lotus
+Sol Ring
+Hive Mind Coprocessor
+Memnite
+Swamp x15
+[Bot2 Deck]
+Plains
+Disenchant
+Mox Pearl
+Island x17
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Hive Mind Coprocessor.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.CombatDamage]
+Bot2.Hand.Disenchant.Cast(Hive Mind Coprocessor)
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot1.Accept
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Graveyard = Hive Mind Coprocessor; Black Lotus
+Bot1.Library.Count = 11
