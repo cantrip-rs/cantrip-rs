@@ -1,0 +1,12 @@
+{
+  "name": "Pummeler for Hire",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Giant Mercenary",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Reach, vigilance\nWard {2} (Whenever this creature becomes the target of a spell or ability an opponent controls, counter it unless that player pays {2}.)\nWhen this creature enters, you gain X life, where X is the greatest power among Giants you control.",
+  "keywords": [
+    "Reach",
+    "Vigilance"
+  ]
+}
