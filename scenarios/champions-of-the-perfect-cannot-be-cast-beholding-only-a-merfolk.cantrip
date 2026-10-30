@@ -1,0 +1,30 @@
+# Champions of the Perfect (CR 601.2b, 701.4a): the additional cost beholds an Elf, and Coral Merfolk in the hand is not one, nor is a Mox on the
+# battlefield, so with the {3}{G} paid for in full the Champions cannot be cast.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Coral Merfolk
+Champions of the Perfect
+Forest
+Forest x11
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+! Bot1.Hand.Champions of the Perfect.Cast
+
+[Expect]
+Exile.Count = 0
+Bot1.Hand = Coral Merfolk; Champions of the Perfect; Forest
