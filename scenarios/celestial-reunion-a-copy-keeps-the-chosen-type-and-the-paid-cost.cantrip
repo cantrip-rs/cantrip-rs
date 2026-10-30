@@ -1,0 +1,44 @@
+# Celestial Reunion: a copy of a spell copies the choices made as it was cast, the creature type announced with its additional
+# cost and whether that cost was paid (CR 707.10, 601.2b). Bot1 casts it for X = 1 choosing Elf and beholding two Elvish
+# Mystics ({1}{G}: Mox Emerald and Mox Jet), then Narset's Reversal ({U}{U}: Mox Sapphire and an Island) copies it and returns the
+# original to its hand. The copy resolves, finds an Elvish Mystic (mana value 1, exactly X), which is an Elf, the copied type,
+# so it enters the battlefield, not the hand.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Celestial Reunion
+Narset's Reversal
+Elvish Mystic
+Elvish Mystic
+Island
+Elvish Mystic
+Island x11
+
+[Bot2 Deck]
+Island x7
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Celestial Reunion.Cast(X: 1)
+Bot1.Modes(Choose a creature type and behold two creatures of that type)
+Bot1.Modes(Elf)
+Bot1.Choose(Bot1.Hand.Elvish Mystic; Bot1.Hand.Elvish Mystic#2)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Narset's Reversal.Cast(Stack.Celestial Reunion)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Elvish Mystic)
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Hand = Celestial Reunion; Elvish Mystic; Elvish Mystic
+Stack.Count = 0
