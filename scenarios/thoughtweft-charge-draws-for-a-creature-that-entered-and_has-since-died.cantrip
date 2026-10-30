@@ -1,0 +1,39 @@
+# "If a creature entered the battlefield under your control this turn": Bot1's own Ornithopter entered and then died to Lightning Bolt, and it still counts (CR 400.7, 608.2h), so Thoughtweft
+# Charge on Bot2's Ornithopter draws a card. Bot1 holds 8 cards at the turn's start (7 and the draw), plays 5 and draws 1: 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Ornithopter
+Lightning Bolt
+Thoughtweft Charge
+Island x2
+Swamp x10
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Thoughtweft Charge.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 3
+Bot1.Hand.Count = 4
