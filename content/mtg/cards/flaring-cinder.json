@@ -1,0 +1,8 @@
+{
+  "name": "Flaring Cinder",
+  "manaCost": "{1}{U/R}{U/R}",
+  "type": "Creature — Elemental Sorcerer",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters and whenever you cast a spell with mana value 4 or greater, you may discard a card. If you do, draw a card."
+}
