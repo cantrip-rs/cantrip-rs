@@ -46,6 +46,7 @@ fn this_must_be_blocked(_: &dyn Query, source: ObjectId, attacker: ObjectId) -> 
 }
 static PREY: CardDef = CardDef { must_be_blocked: &[this_must_be_blocked], ..creature("Must Block Test Prey", Keywords::NONE) };
 static FLYING_PREY: CardDef = CardDef { must_be_blocked: &[this_must_be_blocked], ..creature("Must Block Test Flying Prey", Keywords::of(&[Keyword::Flying])) };
+static MENACE_PREY: CardDef = CardDef { must_be_blocked: &[this_must_be_blocked], ..creature("Must Block Test Menace Prey", Keywords::of(&[Keyword::Menace])) };
 static UNBLOCKABLE: CardDef = creature("Must Block Test Unblockable", Keywords::of(&[Keyword::CantBeBlocked]));
 static HASTY: CardDef = creature("Must Block Test Hasty", Keywords::of(&[Keyword::Haste]));
 /// "This creature can't be blocked this turn except by creatures with haste": the creature it is on, as an attacker.
@@ -58,7 +59,7 @@ static RESTRICTING: CardDef = CardDef {
 };
 
 fn table() -> &'static CardTable {
-    Box::leak(Box::new(CardTable::new([&FILLER, &PROVOKE, &BEAR, &MENACE, &FLYER, &LONE, &LURE, &PREY, &FLYING_PREY, &UNBLOCKABLE, &HASTY, &RESTRICTING])))
+    Box::leak(Box::new(CardTable::new([&FILLER, &PROVOKE, &BEAR, &MENACE, &FLYER, &LONE, &LURE, &PREY, &FLYING_PREY, &MENACE_PREY, &UNBLOCKABLE, &HASTY, &RESTRICTING])))
 }
 
 /// A game of two on turn 1, P0's deck starting with three Provokes, and `permanents` on the battlefield.
@@ -345,4 +346,20 @@ fn a_resolved_block_restriction_outlasts_losing_all_abilities_and_is_only_on_its
     assert_eq!(pairs, expected);
     assert!(!legal(&g, &ask, &[(x, restricted)]));
     assert!(legal(&g, &ask, &[(y, restricted)]));
+}
+
+/// "Must be blocked if able" with menace (CR 509.1c, 702.110b): the attacker can be blocked only by two creatures, so the requirement is
+/// obeyed by both blocking it and one blocker alone is refused; with a single creature able to block, it can't be blocked and nothing is
+/// required.
+#[test]
+fn a_creature_that_must_be_blocked_with_menace_needs_two_blockers() {
+    let (mut g, ids) = game(&[(&MENACE_PREY, P0), (&BEAR, P1), (&BEAR, P1)]);
+    let (prey, x, y) = (ids[0], ids[1], ids[2]);
+    let ask = declare(&mut g, &[], &[prey]);
+    assert_eq!(rules(&ask).most, 1);
+    assert!(!legal(&g, &ask, &[]) && !legal(&g, &ask, &[(x, prey)]));
+    assert!(legal(&g, &ask, &[(x, prey), (y, prey)]));
+    let (mut g, ids) = game(&[(&MENACE_PREY, P0), (&BEAR, P1)]);
+    assert!(attack(&mut g, &[], &[ids[0]]).is_none());
+    assert!(g.state.blocks.is_empty());
 }
