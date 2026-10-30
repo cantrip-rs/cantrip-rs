@@ -74,6 +74,34 @@ struct Candidate {
 /// An effect already applied to the event (CR 614.5): its source, its index and where it is defined.
 pub(crate) type Applied = (ObjectId, u8, Origin);
 
+/// What was decided about one event that is applied to several groups of it in turn (the tokens one effect creates, a
+/// definition, copy and controller at a time): which effects applied, in what order, and whether each optional one was
+/// taken. The event is one (CR 614.1a, 616.1), so its ordering and each "you may" are decided once and followed in every
+/// group the effect applies to; only an effect no earlier group met is decided afresh.
+#[derive(Default)]
+struct Decisions {
+    steps: Vec<(Applied, bool)>,
+    at: usize,
+}
+
+impl Decisions {
+    /// The next step already decided that applies to this group: its place in `found`, and whether it was taken.
+    fn next(&mut self, found: &[Candidate]) -> Option<(usize, bool)> {
+        while let Some(&(step, took)) = self.steps.get(self.at) {
+            self.at += 1;
+            if let Some(i) = found.iter().position(|c| (c.source, c.index, c.origin) == step) {
+                return Some((i, took));
+            }
+        }
+        None
+    }
+
+    fn record(&mut self, step: Applied, took: bool) {
+        self.steps.push((step, took));
+        self.at = self.steps.len();
+    }
+}
+
 /// What madness's replacement says it does, for the player who orders it with others (CR 616.1).
 const MADNESS_HINT: &str = "madness discards it into exile, then it may be cast for its madness cost";
 
@@ -156,7 +184,7 @@ pub(crate) fn sent_instead(cx: &Cx, mut change: ZoneChange, instead: Zone) -> Zo
 /// `ops::entry_replacements` with the permanent judged as it would exist (`Cx::entering`).
 pub(crate) fn entry(cx: &mut Cx, change: ZoneChange, entering: &mut Entering) -> ZoneChange {
     let mut proposal = Proposal::ZoneChange(change);
-    apply_to(cx, &mut proposal, Some(entering));
+    apply_to(cx, &mut proposal, Some(entering), None);
     match proposal {
         Proposal::ZoneChange(change) => change,
         _ => unreachable!("an effect cannot change the kind of the event"),
@@ -711,11 +739,11 @@ fn damage_recipient(q: &dyn Query, target: Target) -> bool {
 /// event (CR 616.1f), and none applies twice (CR 614.5), nor to an event that is part of what one of them made of an event
 /// it applied to already (`Cx::lineage`).
 fn apply(cx: &mut Cx, proposal: &mut Proposal) {
-    apply_to(cx, proposal, None);
+    apply_to(cx, proposal, None, None);
 }
 
 /// `apply`, to a permanent's entry with its own replacements still to apply (`Entering::own`) where `entry` is given.
-fn apply_to(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Entering>) {
+fn apply_to(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Entering>, mut decided: Option<&mut Decisions>) {
     let mut applied: Vec<Applied> = cx.lineage.clone();
     loop {
         // An entering permanent is judged as it would exist with the changes of the replacements applied so far (CR 614.12).
@@ -726,9 +754,20 @@ fn apply_to(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enterin
         if found.is_empty() {
             return;
         }
-        let pick = if found.len() > 1 && !found.iter().all(|c| prevents_all(cx, c)) { choose(cx, proposal, &found) } else { 0 };
+        let replayed = decided.as_deref_mut().and_then(|d| d.next(&found));
+        let pick = match replayed {
+            Some((i, _)) => i,
+            None if found.len() > 1 && !found.iter().all(|c| prevents_all(cx, c)) => choose(cx, proposal, &found),
+            None => 0,
+        };
         let Candidate { source, index, origin } = found[pick];
         applied.push((source, index, origin));
+        if !matches!(origin, Origin::Printed)
+            && replayed.is_none()
+            && let Some(d) = decided.as_deref_mut()
+        {
+            d.record((source, index, origin), true);
+        }
         let start = *proposal;
         match origin {
             Origin::Printed => {
@@ -736,9 +775,17 @@ fn apply_to(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enterin
                 let (apply, then, optional, in_graveyard) = (def.apply, def.then, def.optional, def.in_graveyard);
                 let controller = if in_graveyard { cx.s().obj(source).owner } else { controller_of(cx, source, proposal) };
                 // Declined, it has had its opportunity, and the event goes on as it was (CR 614.5, 616.1).
-                if let Some(question) = optional
-                    && !takes(cx, controller, source, question)
+                let took = match (optional, replayed) {
+                    (None, _) => true,
+                    (Some(_), Some((_, took))) => took,
+                    (Some(question), None) => takes(cx, controller, source, question),
+                };
+                if replayed.is_none()
+                    && let Some(d) = decided.as_deref_mut()
                 {
+                    d.record((source, index, origin), took);
+                }
+                if !took {
                     continue;
                 }
                 let asker = Asker { source, controller, by: None, spell: false };
@@ -1159,13 +1206,15 @@ pub fn draw_replaced(cx: &mut Cx, player: PlayerId) -> bool {
 }
 
 /// Apply token-creation replacements to each definition, copy and controller group (CR 614.1a). Return the
-/// resulting counts and token types.
+/// resulting counts and token types. The creation is one event: the order its effects apply in and each "you may" are
+/// decided once, at the first group they apply to, and followed in the others (`Decisions`).
 pub fn token_batch(cx: &mut Cx, tokens: &[(CardId, Option<Copiable>, PlayerId)]) -> Option<Vec<(CardId, Option<Copiable>, PlayerId)>> {
     if !possible(cx, None) {
         return None;
     }
     let mut out: Vec<(CardId, Option<Copiable>, PlayerId)> = Vec::with_capacity(tokens.len());
     let mut changed = false;
+    let mut decided = Decisions::default();
     let mut i = 0;
     while i < tokens.len() {
         // The run of one definition, copy and controller, in the order given.
@@ -1176,7 +1225,8 @@ pub fn token_batch(cx: &mut Cx, tokens: &[(CardId, Option<Copiable>, PlayerId)])
             i += 1;
         }
         let mut proposal = Proposal::TokenCreation(TokenCreation { controller, token, copy, count });
-        apply(cx, &mut proposal);
+        decided.at = 0;
+        apply_to(cx, &mut proposal, None, Some(&mut decided));
         let Proposal::TokenCreation(after) = proposal else { unreachable!("an effect cannot change the kind of the event") };
         // Keep the final replacement’s token definition and copy values (CR 614.1a).
         changed |= after.count != count || after.token != token || after.copy != copy;
