@@ -1,0 +1,8 @@
+{
+  "name": "Dundoolin Weaver",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Kithkin Druid",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature enters, if you control three or more creatures, return target permanent card from your graveyard to your hand."
+}

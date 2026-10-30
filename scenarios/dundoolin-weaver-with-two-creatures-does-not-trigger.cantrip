@@ -1,0 +1,40 @@
+# Dundoolin Weaver: "if you control three or more creatures" (CR 603.4) is checked as the ability would trigger. Bot1 has an Elvish Mystic and the Weaver: two creatures, so it
+# does not trigger and the sacrificed Black Lotus stays in the graveyard. Bot2's Memnite is a third creature on the battlefield, but not one Bot1 controls.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Elvish Mystic
+Dundoolin Weaver
+Forest x30
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dundoolin Weaver.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Graveyard = Black Lotus
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Count = 3

@@ -1,0 +1,40 @@
+# Dundoolin Weaver: "When this creature enters, if you control three or more creatures, return target permanent card from your graveyard to your hand." Bot1 sacrifices
+# Black Lotus for GGG, with Mox Emerald's G that pays two Elvish Mystics and the Weaver: three creatures, the Weaver among them, so Black Lotus comes back to hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Elvish Mystic
+Elvish Mystic
+Dundoolin Weaver
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Black Lotus
+Bot1.Hand.Dundoolin Weaver.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard =
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Count = 4
