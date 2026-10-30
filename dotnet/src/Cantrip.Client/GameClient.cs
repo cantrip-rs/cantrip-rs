@@ -673,7 +673,15 @@ public sealed class GameClient
 
             if (verdict.Complete || settling.Picked.Count == 0)
             {
-                // The most that could be added is an answer; or nothing is, and the host is left to refuse what was meant.
+                // The most that could be added is an answer. Or nothing is: a question asked while a spell or ability is
+                // announced is given up with it (a total power to tap out of reach once its mana is paid, CR 601.2h), the
+                // one answer the rules take; any other question's host is left to refuse what was meant.
+                if (!verdict.Complete && settling.Asked.MayCancel)
+                {
+                    Cancel();
+                    return;
+                }
+
                 Send(verdict.Complete ? settling.Picked : settling.Proposal);
                 return;
             }
@@ -697,6 +705,15 @@ public sealed class GameClient
                 ? new TargetsChosenAnswer { Targets = [.. players, .. cards.Select(card => new TargetMessage { Object = card })] }
                 : new CardsChosenAnswer { Cards = [.. cards] };
             _transport.Send(new AnswerMessage { RequestId = asked.RequestId, Answer = sent });
+        }
+
+        void Cancel()
+        {
+            PromptMessage asked = _settling!.Asked;
+            Mended($"request {asked.RequestId} ({asked.Prompt.GetType().Name}): no selection is an answer; proposed {Cards(_settling.Proposal)}, the announcement given up");
+            _settling = null;
+            LastAnswered = asked.RequestId;
+            _transport.Send(new AnswerMessage { RequestId = asked.RequestId, Answer = new CancelAnnouncementAnswer() });
         }
     }
 

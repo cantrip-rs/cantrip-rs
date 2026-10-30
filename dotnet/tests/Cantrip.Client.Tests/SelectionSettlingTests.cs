@@ -244,6 +244,46 @@ public sealed class SelectionSettlingTests
         Assert.Equal([H(1)], Answered(transport));
     }
 
+    /// <summary>
+    /// Teamwork announced, then the creature that could have paid it tapped for the spell's mana: asked for total power 2,
+    /// nothing reaches it - no creature at all, or one of power 1. Mending finds no answer, and a question that may be
+    /// cancelled is: the announcement is given up, rather than sending a choice the rules refuse.
+    /// </summary>
+    [Theory]
+    [InlineData(new int[0])]
+    [InlineData(new[] { 1 })]
+    public void A_total_power_out_of_reach_is_cancelled_where_the_question_may_be(int[] powers)
+    {
+        List<ViewHandle> cards = [.. powers.Select((_, i) => H(i + 1))];
+        SelectionVerdictView Rule(IReadOnlyList<ViewHandle> picked) =>
+            new() { Complete = false, Addable = [.. cards.Where(card => !picked.Contains(card))] };
+        var transport = new Judging(Rule);
+        var client = new GameClient(transport);
+        transport.Inbound.Enqueue(new PromptMessage
+        {
+            RequestId = 11,
+            MayCancel = true,
+            Prompt = new ChooseCardsPromptMessage
+            {
+                Player = 1,
+                Purpose = CardChoicePurposeView.TapToPay,
+                CountKind = CountKindView.AnyNumber,
+                Count = cards.Count,
+                Cards = cards,
+                MinimumPower = 2,
+                Powers = [.. powers],
+                Verdict = Rule([]),
+            },
+        });
+        client.Pump();
+        client.Answer(new CardsChosenAnswer { Cards = [] });
+        for (int i = 0; i < 10 && client.IsSettling; i++) client.Pump();
+
+        Assert.False(client.IsSettling);
+        Assert.IsType<CancelAnnouncementAnswer>(Assert.Single(transport.Sent.OfType<AnswerMessage>()).Answer);
+        Assert.Contains("the announcement given up", client.Mends[^1]);
+    }
+
     [Fact]
     public void A_one_card_answer_the_prompt_calls_complete_alone_is_sent_without_a_check()
     {
