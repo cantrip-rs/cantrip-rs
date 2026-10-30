@@ -364,6 +364,8 @@ pub enum ManaSpendFilterView {
     SubtypeSpellsOrAbilitiesOfPermanents,
     /// Artifact spells, or abilities of any source: "an artifact spell or ... an ability" (`ManaRestriction::AnyOf`).
     ArtifactSpellsOrAnyAbility,
+    /// Artifact spells, or abilities of artifact sources in any zone.
+    ArtifactSpellsOrAbilities,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]

@@ -137,6 +137,7 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
         r if r == ManaRestriction::CREATURE_SPELLS_OR_ABILITIES_OF_CREATURES => ManaSpendFilterView::CreatureSpellsOrAbilitiesOfCreatures,
         r if r == ManaRestriction::CREATURE_SPELLS_OR_ABILITIES => ManaSpendFilterView::CreatureSpellsOrAbilities,
         r if r == ManaRestriction::ARTIFACT_SPELLS_OR_ABILITIES_OF_ARTIFACTS => ManaSpendFilterView::ArtifactSpellsOrAbilitiesOfArtifacts,
+        r if r == ManaRestriction::ARTIFACT_SPELLS_OR_ABILITIES => ManaSpendFilterView::ArtifactSpellsOrAbilities,
         r if r == ManaRestriction::ARTIFACT_SPELLS_OR_ANY_ABILITY => ManaSpendFilterView::ArtifactSpellsOrAnyAbility,
         r => panic!("a mana restriction the wire has no word for: {}", r.name()),
     };

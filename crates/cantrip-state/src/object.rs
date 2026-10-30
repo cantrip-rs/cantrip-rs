@@ -2131,6 +2131,9 @@ impl ManaRestriction {
     /// Architect, Power Depot, Vedalken Engineer, ...): artifact permanents' abilities only (CR 109.2).
     pub const ARTIFACT_SPELLS_OR_ABILITIES_OF_ARTIFACTS: ManaRestriction =
         ManaRestriction::SpellsOrAbilities(TypeSet::of(&[CardType::Artifact]), AbilitiesOf::Permanents);
+    /// "Spend this mana only to cast an artifact spell or activate an ability of an artifact source" (Isolinear Processor).
+    pub const ARTIFACT_SPELLS_OR_ABILITIES: ManaRestriction =
+        ManaRestriction::SpellsOrAbilities(TypeSet::of(&[CardType::Artifact]), AbilitiesOf::Sources);
     pub const SPELLS_FROM_EXILE: ManaRestriction = ManaRestriction::SpellsFrom(ZoneKind::Exile);
     pub const NOT_SPELLS_FROM_HAND: ManaRestriction = ManaRestriction::NotSpellsFrom(ZoneKind::Hand);
     /// "Spend this mana only to cast an artifact spell or to activate an ability" (Purple Dragon Punks): an ability of any
@@ -2155,7 +2158,7 @@ impl ManaRestriction {
     /// of `Subtypes` are named for their subtypes and those of `ManaValue` for their number (`name`). A card naming a
     /// restriction of card types not here fails the build (`Adds::only_for` is checked at compile time), since the host
     /// has no word for it on the wire.
-    pub const NAMED: [(ManaRestriction, &'static str); 18] = [
+    pub const NAMED: [(ManaRestriction, &'static str); 19] = [
         (ManaRestriction::NotNonartifactSpells, "NotNonartifactSpells"),
         (ManaRestriction::GainsHaste, "GainsHaste"),
         (ManaRestriction::LegendaryUncounterable, "LegendarySpells, CantBeCountered"),
@@ -2174,6 +2177,7 @@ impl ManaRestriction {
         (ManaRestriction::CREATURE_SPELLS_OR_ABILITIES_OF_CREATURES, "CreatureSpellsOrAbilitiesOfCreatures"),
         (ManaRestriction::CREATURE_SPELLS_OR_ABILITIES, "CreatureSpellsOrAbilities"),
         (ManaRestriction::ARTIFACT_SPELLS_OR_ABILITIES_OF_ARTIFACTS, "ArtifactSpellsOrAbilitiesOfArtifacts"),
+        (ManaRestriction::ARTIFACT_SPELLS_OR_ABILITIES, "ArtifactSpellsOrAbilities"),
     ];
 
     const fn same(self, other: ManaRestriction) -> bool {
