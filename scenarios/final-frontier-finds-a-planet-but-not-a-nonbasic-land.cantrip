@@ -1,0 +1,34 @@
+# Final Frontier finds "a basic land card or Planet card" (CR 205.4a, 701.23): Tropical Island is a land, but neither basic
+# nor a Planet, so it can't be found; Andoria (Land - Planet) can, and goes onto the battlefield.
+
+[Bot1 Deck]
+Final Frontier
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Island x3
+Tropical Island
+Andoria
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Final Frontier.Cast
+! Bot1.Search(Tropical Island)
+Bot1.Search(Andoria)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Pearl; Mox Sapphire; Andoria
+Bot1.Shuffles = 1

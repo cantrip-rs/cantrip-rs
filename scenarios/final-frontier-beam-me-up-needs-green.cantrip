@@ -1,0 +1,38 @@
+# Beam me up requires a green source even when generic mana is available. The Black Lotus is spent on the original cast, leaving only white and blue sources on turn 3 (CR 118.3, 601.2f).
+
+[Bot1 Deck]
+Final Frontier
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Final Frontier.Cast
+Bot1.Search(Island)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Graveyard.Final Frontier.Cast(Ability: Beam me up {1}{G}; Mana: short)
+
+[Expect]
+Bot1.Graveyard = Final Frontier; Black Lotus
+Bot1.Battlefield = Island; Mox Pearl; Mox Sapphire; Ornithopter
+Bot1.Mana = {W}{U}
+Bot1.Shuffles = 1

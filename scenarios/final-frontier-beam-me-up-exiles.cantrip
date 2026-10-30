@@ -1,0 +1,50 @@
+# Beam me up pays exactly {1}{G}, returns your creature, and exiles this spell. CR 118.9, 601.2h, 702.180a.
+# Final Frontier {2}{G}: Sorcery
+#   Search your library for a basic land card or Planet card, put it onto the battlefield tapped, then shuffle.
+#   Beam me up {1}{G} (You may cast this card from your graveyard for {1}{G} if you also return a creature you control to its owner's hand. Then exile this spell.)
+# Written by new-card.py --scenario: Final Frontier cast on turn 1 off zero-cost mana sources. Grow it a line at a time with
+#   cargo run --profile cards -p cantrip-script --bin corpus -- --scenario final-frontier-basic-land-enters-tapped --next --brief
+# and see which keys the card moved with --diff <the line number of its cast>.
+
+[Bot1 Deck]
+Final Frontier
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Forest x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Final Frontier.Cast
+Bot1.Search(Forest)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Final Frontier.Cast(Ability: Beam me up {1}{G})
+Bot1.Choose(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Exile = Final Frontier
+LeftBattlefield = Ornithopter
+Bot1.Graveyard.Count = 0
+Bot2.Library.Count = 12
+
+

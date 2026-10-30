@@ -1,0 +1,6 @@
+{
+  "name": "Final Frontier",
+  "manaCost": "{2}{G}",
+  "type": "Sorcery",
+  "oracleText": "Search your library for a basic land card or Planet card, put it onto the battlefield tapped, then shuffle.\nBeam me up {1}{G} (You may cast this card from your graveyard for {1}{G} if you also return a creature you control to its owner's hand. Then exile this spell.)"
+}
