@@ -1,0 +1,31 @@
+# Evolving Wilds: "{T}, Sacrifice this land: Search your library for a basic land card, put it onto the battlefield tapped, then
+# shuffle." Bot1 plays it and activates it: the Ketria Triome (a land card, not a basic one) is refused, the Forest comes in tapped,
+# the Wilds is sacrificed, Bot2's library is untouched, and the library, of cards that differ, is shuffled afterwards.
+
+[Bot1 Deck]
+Evolving Wilds
+Island x6
+Ketria Triome
+Forest
+Swamp
+Mountain
+Island
+Island x7
+
+[Bot2 Deck]
+Island x9
+Plains
+Island x8
+
+[Actions]
+Bot1.Hand.Evolving Wilds.Play
+Bot1.Battlefield.Evolving Wilds.Activate
+! Bot1.Search(Ketria Triome)
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Battlefield = Forest
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Graveyard = Evolving Wilds
+Bot2.Library.Count = 11
+Bot1.Library != Ketria Triome; Swamp; Mountain; Island; Island; Island; Island; Island; Island; Island; Island
