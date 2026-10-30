@@ -833,14 +833,13 @@ pub fn destroy_and_its_controller_creates(g: &mut dyn Game, item: &StackItem, to
     Ok(())
 }
 
-/// "{1}, Sacrifice this creature: Destroy target artifact or enchantment." Cathar Commando, Outland Liberator
-/// (and its back face) and Shattered Acolyte print it.
-pub const SACRIFICE_TO_DESTROY_ARTIFACT_OR_ENCHANTMENT: AbilityDef = ability(
-    cost("{1}").and(SACRIFICE_THIS),
-    destroy_first_target,
-    "{1}, Sacrifice this creature: Destroy target artifact or enchantment.",
-)
-.targets(&[crate::targets::ARTIFACT_OR_ENCHANTMENT]);
+/// "{N}, Sacrifice this creature: Destroy target artifact or enchantment" (CR 602.2, 701.8, 118.3): the sacrifice is a
+/// cost paid as the ability is activated and the destroy needs a target. Cathar Commando, Outland Liberator (and its back
+/// face) and Shattered Acolyte print it with {1}, Kirk, Commanding Officer with {2}.
+pub const fn sacrifice_to_destroy_artifact_or_enchantment(generic_mana: u8, text: &'static str) -> AbilityDef {
+    ability(Cost { mana: generic(generic_mana), sacrifice_self: true, ..Cost::NONE }, destroy_first_target, text)
+        .targets(&[crate::targets::ARTIFACT_OR_ENCHANTMENT])
+}
 
 /// "Transform this [permanent]" (CR 701.27a): the ability's source, which does nothing if it has transformed since the
 /// ability was put on the stack or, for a delayed ability, created (CR 701.27f). Aang, Swift Savior, Concealing Curtains,

@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::effects::{destroy_first_target, SACRIFICE_TO_DESTROY_ARTIFACT_OR_ENCHANTMENT};
+use cantrip_mechanics::effects::{destroy_first_target, sacrifice_to_destroy_artifact_or_enchantment};
 use cantrip_mechanics::targets;
 use cantrip_mechanics::triggers;
 use cantrip_oracle as oracle;
@@ -17,7 +17,7 @@ fn defending_players_artifact_or_enchantment(q: &dyn Query, asker: &Asker, t: Ta
 
 pub static BACK: CardDef = CardDef {
     abilities: &[
-        SACRIFICE_TO_DESTROY_ARTIFACT_OR_ENCHANTMENT,
+        sacrifice_to_destroy_artifact_or_enchantment(1, "{1}, Sacrifice this creature: Destroy target artifact or enchantment."),
         triggered(triggers::THIS_ATTACKS, destroy_first_target, "Whenever this creature attacks, destroy target artifact or enchantment defending player controls.")
             .targets(&[target(defending_players_artifact_or_enchantment)]),
     ],
@@ -25,7 +25,7 @@ pub static BACK: CardDef = CardDef {
 };
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[SACRIFICE_TO_DESTROY_ARTIFACT_OR_ENCHANTMENT],
+    abilities: &[sacrifice_to_destroy_artifact_or_enchantment(1, "{1}, Sacrifice this creature: Destroy target artifact or enchantment.")],
     back: Some(&BACK),
     ..oracle::OUTLAND_LIBERATOR
 };
