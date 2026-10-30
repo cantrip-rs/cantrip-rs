@@ -1,0 +1,21 @@
+# CR 115.1a, 202.3: own artifact spell with mana value zero is legal; battlefield artifacts are not spells.
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Pearl
+Highly Illogical
+Island x15
+[Bot2 Deck]
+Island x15
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Highly Illogical.Cast
+! Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Stack.Mox Pearl)
+[Expect]
+Bot1.Graveyard = Highly Illogical; Mox Pearl
+Bot1.Battlefield.Mox Pearl = (absent)

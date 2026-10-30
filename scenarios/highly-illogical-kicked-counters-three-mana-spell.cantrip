@@ -1,0 +1,31 @@
+# CR 702.33g: no two-mana target is needed for a kicked cast; the extra {1}{U} replaces the target restriction.
+[Bot1 Deck]
+Island
+Mox Sapphire
+Sol Ring
+Highly Illogical
+Island x15
+[Bot2 Deck]
+Black Lotus
+Coalition Relic
+Island x15
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Island.Activate
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot2.Hand.Coalition Relic.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Highly Illogical.Cast(Kicked: 1)
+Bot1.Target(Stack.Coalition Relic)
+Bot1.Pass
+? Bot1.Mana =
+[Expect]
+Bot1.Graveyard = Highly Illogical
+Bot2.Graveyard = Coalition Relic; Black Lotus
+Bot2.Hand.Count = 7

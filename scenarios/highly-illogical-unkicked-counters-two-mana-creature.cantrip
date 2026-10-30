@@ -1,0 +1,29 @@
+# CR 202.3, 701.6: an opposing creature spell exactly at mana value two is countered for {1}{U}.
+[Bot1 Deck]
+Island
+Mox Sapphire
+Highly Illogical
+Island x15
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Island x15
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Highly Illogical.Cast
+Bot1.Target(Stack.Grizzly Bears)
+Bot1.Pass
+? Bot1.Mana =
+[Expect]
+Bot2.Graveyard = Grizzly Bears
+Bot1.Graveyard = Highly Illogical
+Bot2.Battlefield.Grizzly Bears = (absent)

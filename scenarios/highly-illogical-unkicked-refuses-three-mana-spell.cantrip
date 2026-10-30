@@ -1,0 +1,27 @@
+# CR 702.33g, 202.3: the unkicked target cannot be a three-mana spell while another legal spell remains on the stack.
+[Bot1 Deck]
+Island
+Mox Sapphire
+Ancestral Recall
+Highly Illogical
+Black Lotus
+Island x15
+[Bot2 Deck]
+Black Lotus
+Coalition Relic
+Island x15
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Coalition Relic.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Highly Illogical.Cast
+! Bot1.Target(Stack.Coalition Relic)
+Bot1.Target(Stack.Ancestral Recall)
+[Expect]
+Bot1.Graveyard = Highly Illogical; Ancestral Recall; Black Lotus
+Bot2.Battlefield.Coalition Relic.ManaValue = 3

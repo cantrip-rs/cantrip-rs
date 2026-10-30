@@ -1,0 +1,29 @@
+# CR 601.2f-h: colorless mana alone cannot pay {1}{U}; adding a blue source makes the counterspell payable.
+[Bot1 Deck]
+Plains
+Mox Pearl
+Sol Ring
+Highly Illogical
+Island x15
+[Bot2 Deck]
+Mox Emerald x2
+Island x15
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Mox Emerald.Cast
+! Bot1.Hand.Highly Illogical.Cast(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot1.Hand.Highly Illogical.Cast
+Bot1.Target(Stack.Mox Emerald)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Plains.Activate
+[Expect]
+Bot1.Graveyard = Highly Illogical
+Bot2.Graveyard = Mox Emerald
+Bot2.Battlefield.Mox Emerald.ManaValue = 0
+Bot1.Mana =
