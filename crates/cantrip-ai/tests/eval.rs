@@ -8,7 +8,8 @@
 //! - the network's answers to a sample of the corpus's requests are the engine validator's to accept.
 //!
 //! `cargo test -p cantrip-ai --test eval -- --ignored` also checks a real model's references (`CANTRIP_MODEL`, default
-//! `../ai-data/models/gen0`), through tract and, with `--features ort`, onnxruntime.
+//! `../ai-data/models/gen0`), through tract, with `--features ort` onnxruntime, and with `CANTRIP_AI_SERVER=HOST:PORT`
+//! the inference server serving it (`cantrip_ai::RemoteEvaluator`).
 
 use std::path::{Path, PathBuf};
 use std::sync::Mutex;
@@ -306,8 +307,9 @@ fn network_answers_are_accepted_over_the_corpus() {
     assert!(t.refused.is_empty(), "{} refused", t.refused.len());
 }
 
-/// A real model's references through tract (and onnxruntime, with `--features ort`): PyTorch's values within 1e-3 and
-/// the same best option on 99.5% of positions.
+/// A real model's references through tract (and onnxruntime, with `--features ort`; the GPU engine, with `--features
+/// gpu`; and the inference server named by `CANTRIP_AI_SERVER`, Python's or the native one): PyTorch's values within
+/// 1e-3 and the same best option on 99.5% of positions.
 #[test]
 #[ignore]
 fn model_parity() {
@@ -328,6 +330,27 @@ fn model_parity() {
         "ort",
         Box::new(cantrip_ai::eval::OrtEvaluator::load(&dir, &own(&dir), 4).unwrap()),
     ));
+    // The GPU engine in this process, at fp32.
+    #[cfg(feature = "gpu")]
+    {
+        let engine = std::sync::Arc::new(
+            cantrip_ai::gpu::Engine::start(&[&dir], cantrip_ai::gpu::Options::default()).unwrap(),
+        );
+        runs.push((
+            "gpu",
+            Box::new(cantrip_ai::gpu::GpuEvaluator::new(engine, 0, &own(&dir)).unwrap()),
+        ));
+    }
+    // The inference server serving this model (`python -m cantrip_ai.serve --model DIR`, or the native one,
+    // `cantrip-infer serve --model DIR`), when one is named. `CANTRIP_AI_SERVER_REDUCED=1`: a server below fp32 (fp16,
+    // tf32), held to the reduced bar on its value and dead-next-turn (1e-2) and its logits (5e-2) instead.
+    let reduced = std::env::var("CANTRIP_AI_SERVER_REDUCED").is_ok_and(|v| v == "1");
+    if let Ok(address) = std::env::var("CANTRIP_AI_SERVER") {
+        runs.push((
+            "remote",
+            Box::new(cantrip_ai::RemoteEvaluator::connect(&address, &dir, &own(&dir)).unwrap()),
+        ));
+    }
     for (name, evaluator) in &runs {
         for batch in [1, 64] {
             let p = parity(evaluator.as_ref(), &r, batch).unwrap();
@@ -335,8 +358,10 @@ fn model_parity() {
                 "{name} batch {batch}: {p:?} ({:.0} positions a second)",
                 p.positions as f64 / p.seconds
             );
+            // Reduced: value 1e-2, aux (the life swing, in life points, which no search reads) half a point, logits 5e-2.
+            let (value, aux, logits) = if reduced && *name == "remote" { (1e-2, 0.5, 5e-2) } else { (1e-3, 1e-3, 1e-3) };
             assert!(
-                p.value < 1e-3 && p.aux < 1e-3 && p.policy < 1e-3,
+                p.value < value && p.aux < aux && p.policy < logits,
                 "{name}: {p:?}"
             );
             assert!(p.same_argmax >= 0.995, "{name}: {p:?}");

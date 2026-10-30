@@ -153,6 +153,12 @@ impl Outputs {
 
 pub trait Evaluator: Send + Sync {
     fn evaluate(&self, batch: &FeatureBatch) -> Result<Outputs, EvalError>;
+
+    /// The positions themselves: what `evaluate` makes of `FeatureBatch::new(positions)`. An evaluator that takes
+    /// each position at its own length (the GPU engine, `gpu::GpuEvaluator`) skips padding them all to one size.
+    fn evaluate_positions(&self, positions: &[&Encoded]) -> Result<Outputs, EvalError> {
+        self.evaluate(&FeatureBatch::new(positions))
+    }
 }
 
 /// `manifest.json`: what `export.py` says of a model.
@@ -231,19 +237,7 @@ pub fn check(
     table: &CardIndex,
     model_cards: impl FnOnce() -> Result<Vec<String>, EvalError>,
 ) -> Result<Vec<u32>, EvalError> {
-    if manifest.schema != SCHEMA_VERSION {
-        return Err(err(format!(
-            "the model is of encoding schema {}, this build {SCHEMA_VERSION}",
-            manifest.schema
-        )));
-    }
-    let ours = format!("{:016x}", encoder_hash());
-    if manifest.encoder_hash != ours {
-        return Err(err(format!(
-            "the model's encoder hash {} is not this build's {ours}",
-            manifest.encoder_hash
-        )));
-    }
+    check_encoding(manifest)?;
     if manifest.text_hash == table.hash {
         return Ok(Vec::new());
     }
@@ -262,12 +256,30 @@ pub fn check(
         .collect())
 }
 
+/// The manifest's encoding against this build's: another schema or encoder hash is refused.
+pub fn check_encoding(manifest: &Manifest) -> Result<(), EvalError> {
+    if manifest.schema != SCHEMA_VERSION {
+        return Err(err(format!(
+            "the model is of encoding schema {}, this build {SCHEMA_VERSION}",
+            manifest.schema
+        )));
+    }
+    let ours = format!("{:016x}", encoder_hash());
+    if manifest.encoder_hash != ours {
+        return Err(err(format!(
+            "the model's encoder hash {} is not this build's {ours}",
+            manifest.encoder_hash
+        )));
+    }
+    Ok(())
+}
+
 /// The batch sizes a plan is made for: a batch is padded up to the next.
 fn batch_size(rows: usize) -> usize {
     rows.max(1).next_power_of_two()
 }
 
-fn outputs(b: &FeatureBatch, value: &[f32], policy: &[f32], aux: &[f32]) -> Outputs {
+pub(crate) fn outputs(b: &FeatureBatch, value: &[f32], policy: &[f32], aux: &[f32]) -> Outputs {
     let t = b.tokens;
     Outputs {
         value: value[..b.rows].to_vec(),
@@ -378,6 +390,45 @@ impl Evaluator for TractEvaluator {
     }
 }
 
+impl TractEvaluator {
+    /// The network's belief head for one position (`belief` [B,T], the fourth output of an exported graph): per token,
+    /// the logit that the card is in an opponent's hand, trained on a pool card's tokens in a mode that hides the hands
+    /// (`ai/cantrip_ai/model.py`). The first `e.len` entries, one per real token. For the advisor, which shows it; play
+    /// never asks it.
+    pub fn belief(&self, e: &Encoded) -> Result<Vec<f32>, EvalError> {
+        let batch = FeatureBatch::new(&[e]);
+        let tokens = *BUCKETS
+            .iter()
+            .find(|&&t| t >= batch.tokens)
+            .ok_or_else(|| err(format!("{} tokens", batch.tokens)))?;
+        let b = if tokens == batch.tokens { batch.clone() } else { rebucket(&batch, tokens) };
+        let rows = batch_size(b.rows);
+        let x = b.padded(rows, &self.model.remap);
+        let plan = self.plan(tokens, rows)?;
+        let t = tokens;
+        let out = (|| -> TractResult<TVec<TValue>> {
+            plan.run(tvec!(
+                Tensor::from_shape(&[rows, t], &x.kind)?.into(),
+                Tensor::from_shape(&[rows, t], &x.card)?.into(),
+                Tensor::from_shape(&[rows, t, CATS], &x.cats)?.into(),
+                Tensor::from_shape(&[rows, t, PTRS], &x.ptrs)?.into(),
+                Tensor::from_shape(&[rows, t, NUMS], &x.nums)?.into(),
+                Tensor::from_shape(&[rows, t], &x.legal)?.into(),
+            ))
+        })()
+        .map_err(|e| err(format!("{e:?}")))?;
+        let belief = out
+            .get(3)
+            .ok_or_else(|| err("the graph has no belief output"))?
+            .try_as_plain_ram()
+            .map_err(|e| err(format!("{e:?}")))?
+            .as_slice::<f32>()
+            .map_err(|e| err(format!("{e:?}")))?
+            .to_vec();
+        Ok(belief.into_iter().take(e.len.min(t)).collect())
+    }
+}
+
 /// A batch padded out to `tokens` tokens.
 fn rebucket(b: &FeatureBatch, tokens: usize) -> FeatureBatch {
     let mut out = FeatureBatch::empty(b.rows, tokens);
@@ -402,6 +453,8 @@ fn rebucket(b: &FeatureBatch, tokens: usize) -> FeatureBatch {
 
 #[cfg(feature = "ort")]
 pub use self::ort_backend::OrtEvaluator;
+#[cfg(feature = "gpu")]
+pub(crate) use self::ort_backend::environment as ort_environment;
 
 #[cfg(feature = "ort")]
 mod ort_backend {
@@ -423,10 +476,13 @@ mod ort_backend {
     }
 
     /// onnxruntime allows one environment a process: every evaluator loaded in it shares this one (self-play loads an
-    /// evaluator a lane).
-    fn environment() -> Result<&'static Environment, EvalError> {
+    /// evaluator a lane), the GPU engine's sessions among them. With the `gpu` feature onnxruntime is loaded at run
+    /// time (`ORT_DYLIB_PATH`), after `CANTRIP_CUDA_LIBS` is put on the library path.
+    pub(crate) fn environment() -> Result<&'static Environment, EvalError> {
         static ENV: std::sync::OnceLock<Result<Environment, String>> = std::sync::OnceLock::new();
         ENV.get_or_init(|| {
+            #[cfg(feature = "gpu")]
+            crate::gpu::prepare_libraries();
             ort::init()
                 .with_name("cantrip")
                 .build()

@@ -4,8 +4,9 @@
 //! step by step (`cantrip_obs::factor`) is turned back into the engine's and checked (`answer`); payment is no policy
 //! step (`pay`). The card index a position's cards are encoded with is `index`, the engine's own cards. A finished game is
 //! made into training samples by `record`, written to and read from zstd shards by `shard`. A trained network is
-//! loaded and run by `eval` (tract by default, onnxruntime behind the `ort` feature), and `net` answers a request with
-//! it alone.
+//! loaded and run by `eval` (tract by default, onnxruntime behind the `ort` feature), or on the inference server by
+//! `remote`, or on the GPU in this process by `gpu` (behind the `gpu` feature, which the native inference server is
+//! built on), and `net` answers a request with it alone.
 
 pub mod alloc;
 pub mod atomic;
@@ -13,11 +14,14 @@ mod answer;
 mod ask;
 pub mod cancel;
 pub mod eval;
+#[cfg(feature = "gpu")]
+pub mod gpu;
 mod knowledge;
 pub mod net;
 mod observe;
 pub mod pay;
 pub mod record;
+pub mod remote;
 pub mod search;
 pub mod shard;
 mod index;
@@ -28,4 +32,5 @@ pub use answer::{Answering, Rejection, factored_name, final_x};
 pub use knowledge::Knowledge;
 pub use observe::{EVENTS, observe, observe_indexed};
 pub use index::{CardIndex, CardRows};
+pub use remote::RemoteEvaluator;
 pub use worlds::{Prior, determinize};

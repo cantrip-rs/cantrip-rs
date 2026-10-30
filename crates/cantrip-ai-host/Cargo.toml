@@ -17,6 +17,11 @@ path = "src/main.rs"
 name = "cantrip-selfplay"
 path = "src/bin/selfplay.rs"
 
+[[bin]]
+name = "cantrip-infer"
+path = "src/bin/infer.rs"
+required-features = ["gpu"]
+
 [dependencies]
 cantrip-ai.workspace = true
 cantrip-engine.workspace = true
@@ -29,3 +34,6 @@ serde_json = "1"
 [features]
 # onnxruntime on the CPU, the faster backend (`cantrip_ai::eval::OrtEvaluator`); tract otherwise.
 ort = ["cantrip-ai/ort"]
+# The GPU engine: cantrip-infer, the native inference server, and self-play's `--backend gpu` (onnxruntime-gpu loaded
+# at run time; docs/ai-host.md).
+gpu = ["ort", "cantrip-ai/gpu"]

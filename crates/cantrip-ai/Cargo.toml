@@ -1,4 +1,4 @@
-[package]
+﻿[package]
 name = "cantrip-ai"
 description = "The AI player's side of the engine: what each seat knows of the hidden game, and its observation of a game."
 version.workspace = true
@@ -18,6 +18,10 @@ tract-onnx = "0.23"
 # onnxruntime on the CPU (`OrtEvaluator`): off by default, since the crate downloads onnxruntime's binaries.
 ort = { version = "=2.0.0-rc.14", default-features = false, features = ["std", "download-binaries", "tls-rustls", "copy-dylibs", "api-24"], optional = true }
 zstd = "0.13"
+# The ONNX graph as protobuf (tract's types), rewritten for fp16 by the GPU engine.
+prost = { version = "0.14", optional = true }
+# CUDA's runtime, loaded at run time by the GPU engine for its copies to and from the device.
+libloading = { version = "0.9", optional = true }
 
 [dev-dependencies]
 cantrip-bench.workspace = true
@@ -25,3 +29,6 @@ cantrip-script.workspace = true
 
 [features]
 ort = ["dep:ort"]
+# The GPU engine (`gpu`: `GpuEvaluator` and the native inference server): onnxruntime-gpu loaded at run time
+# (`ORT_DYLIB_PATH`) with its CUDA provider. Off by default: it needs CUDA's libraries at run time.
+gpu = ["ort", "ort/load-dynamic", "ort/cuda", "dep:prost", "dep:libloading"]
