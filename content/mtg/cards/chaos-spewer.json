@@ -1,0 +1,8 @@
+{
+  "name": "Chaos Spewer",
+  "manaCost": "{2}{B/R}",
+  "type": "Creature — Goblin Warlock",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "When this creature enters, you may pay {2}. If you don't, blight 2. (To blight 2, put two -1/-1 counters on a creature you control.)"
+}
