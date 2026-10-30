@@ -1,0 +1,53 @@
+# Puca's Eye ({2}): "When this artifact enters, draw a card, then choose a color. This artifact becomes the chosen color." and
+# "{3}, {T}: Draw a card. Activate only if there are five colors among permanents you control." Omnath, Locus of Creation is
+# red, green, white and blue (four colors). On turn 3 Bot1 casts the Eye (colorless, so still four colors) and, with {G}{W}{U}
+# in the pool to pay {3}, is refused the draw while the trigger waits; the trigger draws a card, Bot1 names black, and the Eye
+# is black (CR 105.2, 613.1e): five colors, so the same ability now draws a second card and taps the Eye.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Omnath, Locus of Creation
+Puca's Eye
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Omnath, Locus of Creation.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Puca's Eye.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+? Bot1.Mana = {W}{U}{G}
+! Bot1.Battlefield.Puca's Eye.Activate
+Bot1.Pass
+Bot1.Colors(Black)
+? Bot1.Hand.Count = 3
+? Bot1.Battlefield.Puca's Eye.Colors = Black
+Bot1.Battlefield.Puca's Eye.Activate
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Puca's Eye.Tapped = true
+Bot1.Battlefield.Puca's Eye.Colors = Black
+Bot1.Mana =
