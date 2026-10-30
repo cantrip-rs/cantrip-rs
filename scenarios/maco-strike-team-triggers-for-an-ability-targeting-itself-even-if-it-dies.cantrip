@@ -1,0 +1,32 @@
+# CR 603.2,113.7a: an enemy Ballista ability targeting MACO triggers it, and the tapped Officer remains after MACO dies.
+
+[Bot1 Deck]
+MACO Strike Team
+Mox Emerald
+Forest x20
+
+[Bot2 Deck]
+Walking Ballista
+Mox Ruby
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.MACO Strike Team.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+Bot2.Battlefield.Walking Ballista.Activate(Bot1.Battlefield.MACO Strike Team; Ability: Remove)
+[Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Officer Token
+Bot1.Battlefield.Officer Token.Tapped = true
+Bot1.Graveyard = MACO Strike Team
+Bot2.Graveyard = Walking Ballista
+Stack.Count = 0

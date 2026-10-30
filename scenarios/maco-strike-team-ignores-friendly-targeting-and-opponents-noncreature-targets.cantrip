@@ -1,0 +1,57 @@
+# CR 603.2,115: your own spell targeting your creature and an enemy spell targeting an artifact do not trigger MACO; an enemy creature target does.
+
+[Bot1 Deck]
+MACO Strike Team
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Lightning Bolt
+Ornithopter
+Ornithopter
+Forest x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Disenchant
+Lightning Bolt x2
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.MACO Strike Team.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Count = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Pearl)
+[T2 Bot2.Main2]
+? Bot1.Battlefield.Count = 4
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Count = 4
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Ruby; MACO Strike Team; Officer Token
+Bot1.Battlefield.Officer Token.Tapped = true
+Bot1.Battlefield.Officer Token.Power = 1
+Bot1.Battlefield.Officer Token.Toughness = 1
+Bot1.Graveyard = Ornithopter; Mox Pearl; Ornithopter; Lightning Bolt

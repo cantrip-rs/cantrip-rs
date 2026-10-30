@@ -1,0 +1,42 @@
+# MACO Strike Team {G}: Creature — Human Soldier
+#   Whenever a creature you control becomes the target of a spell or ability an opponent controls, create a tapped 1/1 red Officer creature token.
+# Bot2's Lightning Bolt targets Bot1's Llanowar Elves, a creature Bot1 controls, so the Strike Team triggers and Bot1 gets a
+# tapped 1/1 red Officer token. The Elves die to the Bolt, which has no bearing on the trigger.
+
+[Bot1 Deck]
+Forest
+MACO Strike Team
+Forest
+Llanowar Elves
+Forest
+Mountain
+Lightning Bolt
+Forest x13
+
+[Bot2 Deck]
+Mountain
+Forest
+Lightning Bolt
+Llanowar Elves
+Yavimaya Hollow
+Forest x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.MACO Strike Team.Cast
+Bot1.Battlefield.Forest.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Forest.Activate
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+[Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield = Forest; Forest; MACO Strike Team; Officer Token
+Bot1.Battlefield.Officer Token.Tapped = true
+Bot1.Battlefield.Officer Token.Power = 1
+Bot1.Graveyard = Llanowar Elves

@@ -1,0 +1,8 @@
+{
+  "name": "MACO Strike Team",
+  "manaCost": "{G}",
+  "type": "Creature — Human Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Whenever a creature you control becomes the target of a spell or ability an opponent controls, create a tapped 1/1 red Officer creature token."
+}
