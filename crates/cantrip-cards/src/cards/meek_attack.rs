@@ -7,7 +7,7 @@ use cantrip_oracle as oracle;
 /// the card's printed power and toughness in the hand, a creature card with none counting 0 for it. Nobody is asked with no
 /// card that small in hand; nothing follows if the card does not stay on the battlefield.
 fn put_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let small = |c: &Chars| c.is(CardType::Creature) && c.power.unwrap_or(0) as i32 + c.toughness.unwrap_or(0) as i32 <= 5;
+    let small = |c: &Chars| c.is(CardType::Creature) && c.power.into_iter().chain(c.toughness).map(i32::from).sum::<i32>() <= 5;
     let Some(returned) = hand::may_put_onto_battlefield(g, item.controller, item.object, small)? else { return Ok(()) };
     if !g.is_on_battlefield(returned) {
         return Ok(());

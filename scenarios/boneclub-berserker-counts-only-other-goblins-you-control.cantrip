@@ -52,6 +52,7 @@ Bot2.Hand.Elder Auntie.Cast
 Bot2.Pass
 Bot1.Pass
 Bot2.Pass
+? Bot1.Battlefield.Boneclub Berserker.Power = 2
 [T3 Bot1.Main1]
 Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Battlefield.Mox Pearl.Activate

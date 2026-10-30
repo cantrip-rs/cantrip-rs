@@ -1,4 +1,4 @@
-# Cinder Strike blighting 1 onto Bot1's Goblin token (a 1/1, which dies): the additional cost was paid, so it deals 4 damage, killing Bot2's 2/4 Boneclub Berserker (CR 701.68a, 120.3).
+# Cinder Strike blighting 1 onto Bot1's Elder Auntie (a 2/2, which survives as a 1/1: exactly one counter): the additional cost was paid, so it deals 4 damage, killing Bot2's 2/4 Boneclub Berserker (CR 701.68a, 120.3).
 
 
 [Bot1 Deck]
@@ -56,10 +56,10 @@ Bot1.Battlefield.Mox Ruby.Activate
 Bot1.Hand.Cinder Strike.Cast
 Bot1.Modes(Blight 1)
 Bot1.Target(Bot2.Battlefield.Boneclub Berserker)
-Bot1.Choose(Goblin Token)
+Bot1.Choose(Elder Auntie)
 Bot1.Pass
 Bot2.Pass
 
 [Expect]
 Bot2.Graveyard = Boneclub Berserker
-Bot1.Battlefield = Elder Auntie; Mox Jet; Mox Pearl; Mox Ruby; Mox Ruby
+Bot1.Battlefield = Elder Auntie; Goblin Token; Mox Jet; Mox Pearl; Mox Ruby; Mox Ruby
