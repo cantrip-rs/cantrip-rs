@@ -1,0 +1,8 @@
+{
+  "name": "General Chang, Cold Warrior",
+  "manaCost": "{B}",
+  "type": "Legendary Creature — Klingon Warrior Officer",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{1}, Sacrifice a creature: Put a +1/+1 counter on each Klingon you control."
+}

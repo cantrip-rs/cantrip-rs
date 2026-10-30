@@ -1,0 +1,54 @@
+# Pays exactly {1} and sacrifices a creature as activation costs. Chang and its controller's other Klingon each get a counter; the opposing Klingon gets none from Chang (its own death trigger gives it one), and an own non-Klingon gets none; a Mox is no creature to sacrifice (CR 602.1, 603.2, 701.21a, 101.4, 122.1).
+# General Chang, Cold Warrior {B}: Legendary Creature — Klingon Warrior Officer
+#   {1}, Sacrifice a creature: Put a +1/+1 counter on each Klingon you control.
+
+[Bot1 Deck]
+General Chang, Cold Warrior
+Mox Jet
+Mox Pearl
+Swamp
+Island
+Battle-Scarred Survivalist
+Memnite
+Ornithopter
+Swamp x20
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Battle-Scarred Survivalist
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.General Chang, Cold Warrior.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Battle-Scarred Survivalist.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Pass
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Battle-Scarred Survivalist.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Pass
+Bot1.Battlefield.General Chang, Cold Warrior.Activate(Ability: Sacrifice a creature)
+! Bot1.Choose(Mox Pearl)
+Bot1.Choose(Memnite)
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Memnite
+Bot1.Battlefield.General Chang, Cold Warrior.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Battle-Scarred Survivalist.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Battle-Scarred Survivalist.Counters.PlusOnePlusOne = 1
