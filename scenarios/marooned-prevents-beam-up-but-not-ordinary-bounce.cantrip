@@ -1,0 +1,49 @@
+# CR 101.2, 118.3: the enchanted creature cannot pay beam me up, but Unsummon returns it normally. Another creature can pay instead.
+
+[Bot1 Deck]
+Mox Ruby x3
+Mox Sapphire
+Boarding Action
+Ornithopter
+Unsummon
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Marooned
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Boarding Action.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Marooned.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Graveyard.Boarding Action.Cast(Ability: Beam me up)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Klingon Warrior Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Ornithopter.Power = 0
+Bot2.Graveyard = Marooned
+Exile = Boarding Action
+Bot1.Battlefield.Klingon Warrior Token.Power = 2

@@ -1,0 +1,59 @@
+# Marooned: with no other creature to beam up, the cast is refused; destroying the Aura restores payment eligibility (CR 611.3b).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl x2
+Mox Ruby x3
+Ornithopter
+Boarding Action
+Disenchant
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Marooned
+Lightning Bolt
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Boarding Action.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Marooned.Cast(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Klingon Warrior Token)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+! Bot1.Graveyard.Boarding Action.Cast(Ability: Beam me up)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Disenchant.Cast(Marooned)
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Boarding Action.Cast(Ability: Beam me up)
+Bot1.Choose(Ornithopter)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Ornithopter.Power = 0
+Exile = Boarding Action
+Bot2.Graveyard = Marooned; Lightning Bolt

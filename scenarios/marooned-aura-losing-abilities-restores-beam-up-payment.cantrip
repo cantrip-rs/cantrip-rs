@@ -1,0 +1,67 @@
+# CR 613.1d, 613.1f: Mycosynth Lattice lets Oko turn Marooned into an Elk with no abilities.
+# Its beam-up restriction then ceases, even though the former Aura remains on the battlefield.
+
+[Bot1 Deck]
+Black Lotus x3
+Mycosynth Lattice
+Oko, Thief of Crowns
+Mox Ruby
+Ornithopter
+Mox Ruby
+Boarding Action
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Marooned
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Oko, Thief of Crowns.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Mycosynth Lattice.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Boarding Action.Cast
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Marooned.Cast(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Klingon Warrior Token)
+[T7 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+! Bot1.Graveyard.Boarding Action.Cast(Ability: Beam me up)
+Bot1.Battlefield.Oko, Thief of Crowns.Activate(Marooned; Ability: loses all abilities)
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Boarding Action.Cast(Ability: Beam me up)
+Bot1.Choose(Ornithopter)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Marooned.Power = 3
+Bot2.Battlefield.Marooned.Keywords = (absent)
+Bot1.Hand.Ornithopter.Power = 0
+Exile = Boarding Action

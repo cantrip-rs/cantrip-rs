@@ -1,0 +1,41 @@
+# CR 118.12, 502.3: exactly three mana taps the artifact; only its normal untap is stopped and removal restores that untap.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl x3
+Marooned
+Disenchant
+Plains x15
+
+[Bot2 Deck]
+Mox Emerald
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Marooned.Cast(Bot2.Battlefield.Mox Emerald)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Mox Emerald.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Disenchant.Cast(Marooned)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Mox Emerald.Tapped = false
+Bot1.Graveyard = Disenchant; Marooned

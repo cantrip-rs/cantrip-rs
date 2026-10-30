@@ -1,0 +1,51 @@
+# Marooned imposes its restriction from the Aura; the creature losing its own abilities does not remove the beam ban (CR 113.1a).
+
+[Bot1 Deck]
+Mox Ruby x3
+Ornithopter
+Boarding Action
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire x3
+Marooned
+Kasmina's Transmutation
+Lightning Bolt
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Boarding Action.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Hand.Marooned.Cast(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Sapphire#3.Activate
+Bot2.Hand.Kasmina's Transmutation.Cast(Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Klingon Warrior Token)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+! Bot1.Graveyard.Boarding Action.Cast(Ability: Beam me up)
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Keywords = (absent)
+Bot1.Mana = {R}{R}{R}
+Bot1.Graveyard.Boarding Action.Colors = Red
