@@ -1,0 +1,6 @@
+{
+  "name": "Dawn-Blessed Pennant",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "As this artifact enters, choose Elemental, Elf, Faerie, Giant, Goblin, Kithkin, Merfolk, or Treefolk.\nWhenever a permanent you control of the chosen type enters, you gain 1 life.\n{2}, {T}, Sacrifice this artifact: Return target card of the chosen type from your graveyard to your hand."
+}

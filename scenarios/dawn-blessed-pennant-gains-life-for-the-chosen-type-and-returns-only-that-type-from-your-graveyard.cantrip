@@ -1,0 +1,78 @@
+# Dawn-Blessed Pennant ({1}): "As this artifact enters, choose Elemental, Elf, Faerie, Giant, Goblin, Kithkin, Merfolk, or
+# Treefolk" (CR 614.12a; Human is not offered), "Whenever a permanent you control of the chosen type enters, you gain 1
+# life" and "{2}, {T}, Sacrifice this artifact: Return target card of the chosen type from your graveyard to your hand".
+# Turn 1 Elf is chosen: the Pennant itself (an artifact) gains nothing, Llanowar Elves entering gains 1 (21). Bot2's own
+# Elves gain nothing, nor does Grizzly Bears (a Bear). Turn 3 Lightning Bolt kills Bot2's Elves; turn 5 a second Bolt kills
+# mine. The ability then refuses the Bolt (not an Elf) and Bot2's Elves card (not in your graveyard) and returns my Elves.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Dawn-Blessed Pennant
+Llanowar Elves
+Grizzly Bears
+Lightning Bolt
+Lightning Bolt
+Forest x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dawn-Blessed Pennant.Cast
+! Bot1.Modes(Human)
+Bot1.Modes(Elf)
+? Bot1.Battlefield.Dawn-Blessed Pennant.ChosenSubtype = Elf
+? Bot1.Life = 20
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 21
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+! Bot1.Battlefield.Dawn-Blessed Pennant.Activate(Bot1.Graveyard.Lightning Bolt)
+! Bot1.Battlefield.Dawn-Blessed Pennant.Activate(Bot2.Graveyard.Llanowar Elves)
+Bot1.Battlefield.Dawn-Blessed Pennant.Activate(Bot1.Graveyard.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Llanowar Elves.Power = 1
+Bot1.Battlefield.Count = 4
+Bot1.Graveyard.Count = 3
+Bot2.Graveyard.Llanowar Elves.Power = 1
