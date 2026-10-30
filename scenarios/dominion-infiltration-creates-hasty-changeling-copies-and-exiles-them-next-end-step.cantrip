@@ -1,0 +1,48 @@
+# X=2 targets two opposing creatures; their copies have changeling and haste, attack immediately, then are exiled at the next end step (CR 702.73a, 707.2, 603.7c).
+
+[Bot1 Deck]
+Dominion Infiltration
+Mountain x2
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Ornithopter x2
+Island x20
+
+[Actions]
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Dominion Infiltration.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mountain; Mountain; Ornithopter; Ornithopter
+? Bot1.Battlefield.Count = 4
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Keywords = Changeling; Flying; Haste
+? Bot1.Battlefield.Ornithopter#2.Keywords = Changeling; Flying; Haste
+Bot1.Attack(Ornithopter#1 > Bot2; Ornithopter#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 2
+Bot1.Graveyard = Dominion Infiltration; Black Lotus
+Bot2.Life = 20
