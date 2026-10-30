@@ -9,7 +9,8 @@ its official rulings, by name.
                                                          # today's bulk files and rebuild the index
 
     import scryfall
-    scryfall.card("Card Name")   # {"name", "layout", "faces": [{"name", "mana_cost", "type_line", "power", "toughness",
+    scryfall.card("Card Name")   # bulk data, then Scryfall's exact-name API if absent; normalized card or None
+                                 # {"name", "layout", "faces": [{"name", "mana_cost", "type_line", "power", "toughness",
                                  #  "loyalty", "defense", "color_indicator", "oracle_text"}], "rulings": [...]} or None
     scryfall.oracle_cards()      # every Oracle Cards object, for whole-pool reports (ability-index.py rank)
 
@@ -26,6 +27,9 @@ import json
 import os
 import subprocess
 import sys
+import time
+import urllib.error
+import urllib.parse
 import urllib.request
 
 HEADERS = {"User-Agent": "cantrip-maintenance/1.0", "Accept": "application/json"}
@@ -145,14 +149,7 @@ def _load(write=False):
         if d.get("layout") in SKIPPED_LAYOUTS:
             continue
         faces = d.get("card_faces") or [d]
-        card = {
-            "name": d["name"],
-            "layout": d.get("layout", ""),
-            "faces": [{key: f.get(key, d.get(key, "") if key in ("mana_cost", "type_line") and len(faces) == 1 else "")
-                       for key in FACE_KEYS} | {"name": f["name"], "oracle_text": f.get("oracle_text", "")}
-                      for f in faces],
-            "rulings": sorted(by_oracle.get(d.get("oracle_id") or faces[0].get("oracle_id"), []), key=lambda r: r["date"]),
-        }
+        card = _normalize(d, by_oracle.get(d.get("oracle_id") or faces[0].get("oracle_id"), []))
         order = lesser.get(d.get("set_type"), 0)
         for name in {d["name"]} | {f["name"] for f in faces}:
             key = name.lower()
@@ -187,7 +184,42 @@ def refresh():
 
 
 def card(name):
-    return _load().get(name.lower())
+    return _load().get(name.lower()) or _direct_card(name)
+
+
+def _normalize(d, rulings):
+    faces = d.get("card_faces") or [d]
+    return {
+        "name": d["name"],
+        "layout": d.get("layout", ""),
+        "faces": [{key: f.get(key, d.get(key, "") if key in ("mana_cost", "type_line") and len(faces) == 1 else "")
+                   for key in FACE_KEYS} | {"name": f["name"], "oracle_text": f.get("oracle_text", "")}
+                  for f in faces],
+        "rulings": sorted(rulings, key=lambda r: r["date"]),
+    }
+
+
+def _api(url):
+    """One direct Scryfall API request."""
+    time.sleep(0.1)
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers=HEADERS), timeout=30) as response:
+            return json.load(response)
+    except urllib.error.HTTPError as error:
+        if error.code == 404:
+            return None
+        sys.exit(f"Scryfall: {error}")
+    except urllib.error.URLError as error:
+        sys.exit(f"Scryfall: {error}")
+
+
+def _direct_card(name):
+    d = _api("https://api.scryfall.com/cards/named?" + urllib.parse.urlencode({"exact": name}))
+    if d is None:
+        return None
+    rulings = _api(d["rulings_uri"])
+    return _normalize(d, [{"date": r["published_at"], "text": r["comment"]}
+                          for r in rulings["data"]] if rulings else [])
 
 
 def search_text(pattern):
