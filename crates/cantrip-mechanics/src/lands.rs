@@ -246,13 +246,21 @@ pub fn search_basic_land_to_hand(g: &mut dyn Game, player: PlayerId, source: Obj
 
 /// "You may search your library for a basic land card, reveal it, put it into your hand, then shuffle": asked first
 /// whether to, and declining skips the search and the shuffle (CR 701.23). Environmental Scientist's enters trigger
-/// (`search_basic_land_to_hand` is Bushwhack's, which does not say "may").
+/// (`search_basic_land_to_hand` is Bushwhack's, which does not say "may"); `ENTERS_MAY_FETCH_BASIC_TO_HAND` below is its whole ability.
 pub fn may_search_basic_land_to_hand(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<(), Suspend> {
     if !ask_may_search(g, player, source, &FETCH_BASIC_TO_HAND)? {
         return Ok(());
     }
     search_basic_land_to_hand(g, player, source)
 }
+
+/// "When this creature enters, you may search your library for a basic land card, reveal it, put it into your hand, then
+/// shuffle." (CR 603.6a, 701.23): the creature's own trigger. Environmental Scientist and Changeling Wayfinder print it.
+pub const ENTERS_MAY_FETCH_BASIC_TO_HAND: AbilityDef = triggered(
+    triggers::THIS_ENTERS,
+    |g, item| may_search_basic_land_to_hand(g, item.controller, item.object),
+    "When this creature enters, you may search your library for a basic land card, reveal it, put it into your hand, then shuffle.",
+);
 
 /// What "you may search your library for a basic land card, reveal it, then shuffle and put that card on top" asks.
 pub const FETCH_BASIC_TO_TOP: Question = Question::new(
