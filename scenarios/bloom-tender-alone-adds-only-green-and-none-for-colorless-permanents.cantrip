@@ -1,0 +1,30 @@
+# Bloom Tender: "For each color among permanents you control, add one mana of that color." Alone with two colorless Moxen, Bloom Tender is the only colored
+# permanent: the tap on turn 3 adds one {G} (colorless is no color, CR 105.2c).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Bloom Tender
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bloom Tender.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Bloom Tender.Activate
+? Bot1.Mana = {G}
+
+[Expect]
+Bot1.Battlefield.Count = 3

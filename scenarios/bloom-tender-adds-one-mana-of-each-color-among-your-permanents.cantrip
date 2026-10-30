@@ -1,0 +1,39 @@
+# Bloom Tender: "Vivid -- {T}: For each color among permanents you control, add one mana of that color." Bot1 controls Bloom Tender (green) and a Savannah Lions
+# (white); the Moxen are colorless. On turn 3 the tap adds {G}{W}: one of each color, and nothing for the colorless Moxen.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Bloom Tender
+Savannah Lions
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bloom Tender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Bloom Tender.Activate
+? Bot1.Mana = {W}{G}
+
+[Expect]
+Bot1.Battlefield.Count = 5

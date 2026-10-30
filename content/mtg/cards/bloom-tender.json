@@ -1,0 +1,8 @@
+{
+  "name": "Bloom Tender",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Druid",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Vivid — {T}: For each color among permanents you control, add one mana of that color."
+}
