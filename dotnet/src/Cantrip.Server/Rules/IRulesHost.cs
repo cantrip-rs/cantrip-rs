@@ -123,13 +123,34 @@ public interface IRulesHost : IDisposable
 /// </param>
 /// <param name="Sequence">How far through the log every seat has now been brought.</param>
 /// <param name="Finished">Whether the game is over.</param>
+/// <param name="Public">
+/// The position as a viewer who is no player sees it, for in-person play's tablets (docs/in-person.md); null unless the
+/// game was dealt with a public view (<see cref="NativeRulesHostFactory.PublicView"/>). A session ignores it.
+/// </param>
 public sealed record RulesStep(
     IReadOnlyList<RulesRequest> Requests,
     IReadOnlyDictionary<int, PlayerView> Views,
     IReadOnlyDictionary<int, IReadOnlyList<(long Sequence, GameEventView View)>> Events,
     long Sequence,
     bool Finished,
-    ScenarioProgress? Scenario = null);
+    ScenarioProgress? Scenario = null,
+    PublicProjection? Public = null);
+
+/// <summary>
+/// One step of the game as the public sees it: what is on the table for anyone to look at, with no seat's hidden
+/// information, in a handle space of its own (docs/in-person.md).
+/// </summary>
+/// <param name="View">The public view of the position now. It is no seat's, so its <see cref="PlayerView.Viewer"/> is zero.</param>
+/// <param name="Events">What happened since the last step as the public may know it, each with its entry's sequence number.</param>
+/// <param name="Handles">
+/// By seat, the public handle of each object that seat also sees, mapped to that seat's handle for the same object: how a
+/// tap on a public board becomes a seat's answer. An object the seat does not see, or no longer names by the same handle,
+/// has no entry.
+/// </param>
+public sealed record PublicProjection(
+    PlayerView View,
+    IReadOnlyList<(long Sequence, GameEventView View)> Events,
+    IReadOnlyDictionary<int, IReadOnlyDictionary<ViewHandle, ViewHandle>> Handles);
 
 /// <summary>One question outstanding, in the handle space of the seat it is for.</summary>
 /// <param name="RequestId">The host's id for it, echoed back with the answer. Never reused within a game.</param>

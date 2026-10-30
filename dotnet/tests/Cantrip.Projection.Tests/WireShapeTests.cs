@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using Cantrip.Protocol;
+using Cantrip.Protocol.InPerson;
 using MessagePack;
 using Xunit;
 
@@ -30,33 +31,54 @@ public sealed class WireShapeTests
     /// </summary>
     private const string Recorded = "220:15C133FC9817D3E3";
 
+    /// <summary>
+    /// In-person play's own wire (<c>Cantrip.Protocol.InPerson</c>, docs/in-person.md), guarded the same way against its
+    /// own <see cref="InPersonProtocol.Version"/>. The main wire's shape leaves that namespace out; what it wraps of the
+    /// main wire (<see cref="PublicFeedMessage"/>) is still guarded by the main version.
+    /// </summary>
+    private const string RecordedInPerson = "1:34279C9FA9029051";
+
+    private const string InPersonNamespace = "Cantrip.Protocol.InPerson";
+
     [Fact]
     public void The_wire_has_not_changed_without_the_protocol_version_moving()
     {
-        string digest = Digest(Shape());
-        string actual = $"{PlayerView.ProtocolVersion}:{digest}";
-        int recordedVersion = int.Parse(Recorded.Split(':')[0], CultureInfo.InvariantCulture);
+        Check(Recorded, PlayerView.ProtocolVersion, Shape(type => type.Namespace != InPersonNamespace), "PlayerView.ProtocolVersion", "Recorded");
+    }
+
+    [Fact]
+    public void The_in_person_wire_has_not_changed_without_its_version_moving()
+    {
+        Check(RecordedInPerson, InPersonProtocol.Version, Shape(type => type.Namespace == InPersonNamespace), "InPersonProtocol.Version", "RecordedInPerson");
+    }
+
+    private static void Check(string recorded, int version, string shape, string versionName, string recordedName)
+    {
+        string digest = Digest(shape);
+        string actual = $"{version}:{digest}";
+        int recordedVersion = int.Parse(recorded.Split(':')[0], CultureInfo.InvariantCulture);
 
         // The version to suggest: the next one, unless it has already been bumped for this change.
-        int next = recordedVersion == PlayerView.ProtocolVersion ? PlayerView.ProtocolVersion + 1 : PlayerView.ProtocolVersion;
+        int next = recordedVersion == version ? version + 1 : version;
 
         Assert.True(
-            string.Equals(Recorded, actual, StringComparison.Ordinal),
+            string.Equals(recorded, actual, StringComparison.Ordinal),
             $"""
              The messages no longer have the shape protocol {recordedVersion} recorded.
 
-             If that is deliberate, set PlayerView.ProtocolVersion to {next} and Recorded to "{next}:{digest}".
+             If that is deliberate, set {versionName} to {next} and {recordedName} to "{next}:{digest}".
              A client of an older build cannot read the new shape, and only the version tells it so.
              """);
     }
 
     /// <summary>Every message type, its union members and its keyed members, in an order that does not depend on reflection.</summary>
-    private static string Shape()
+    private static string Shape(Func<Type, bool> included)
     {
         var text = new StringBuilder();
 
         IEnumerable<Type> messages = typeof(PlayerView).Assembly
             .GetTypes()
+            .Where(included)
             .Where(type =>
                 type.GetCustomAttribute<MessagePackObjectAttribute>() is not null
                 || type.GetCustomAttributes<UnionAttribute>().Any())
@@ -91,7 +113,7 @@ public sealed class WireShapeTests
 
         // Every enum the messages carry, by member name and value: a member added to one (an action kind, a prompt kind) is
         // as much a change to what the bytes mean as a key, and an older client cannot read it either.
-        foreach (Type enumeration in typeof(PlayerView).Assembly.GetTypes().Where(type => type.IsEnum).OrderBy(type => type.FullName, StringComparer.Ordinal))
+        foreach (Type enumeration in typeof(PlayerView).Assembly.GetTypes().Where(type => type.IsEnum && included(type)).OrderBy(type => type.FullName, StringComparer.Ordinal))
         {
             text.Append(enumeration.FullName).Append('{');
             foreach (object value in Enum.GetValues(enumeration))

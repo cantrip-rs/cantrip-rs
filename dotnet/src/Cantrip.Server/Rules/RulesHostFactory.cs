@@ -98,6 +98,12 @@ public sealed class NativeRulesHostFactory : IRulesHostFactory
         _transport = transport;
     }
 
+    /// <summary>
+    /// Whether each game dealt also projects the position for a viewer who is no player (<see cref="RulesStep.Public"/>),
+    /// for in-person play's tablets (docs/in-person.md). Ignored until the host supports it: no step carries one yet.
+    /// </summary>
+    public bool PublicView { get; init; }
+
     public IRulesHost Create(IReadOnlyList<RulesSeat> seats, ulong seed, RulesGameOptions options) =>
         NativeRulesHost.NewGame(_transport ?? NativeHostProcess.Shared, seats, seed, options);
 
