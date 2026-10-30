@@ -1,0 +1,30 @@
+# Eclipsed Flamekin: "When this creature enters, look at the top four cards of your library. You may reveal an Elemental, Island, or Mountain card from among them and put it into your hand. Put the rest on the bottom of your library in a random order." (CR 701.20a, 401.4) The top four are Flamecore Elemental, Island, Mountain and Forest; the fifth, a Forest, is not looked at.
+# Bot1 takes nothing (it is "may"): all four go to the bottom and the hand does not grow.
+
+[Bot1 Deck]
+Black Lotus
+Eclipsed Flamekin
+Forest x5
+Flamecore Elemental
+Island
+Mountain
+Forest
+Forest
+Forest x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Eclipsed Flamekin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange( | Flamecore Elemental; Island; Mountain; Forest)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Forest; Forest; Forest; Forest; Forest
+Bot1.Library.Count = 16
