@@ -1,0 +1,51 @@
+# Lluwen's ability: {2}{B/G}{B/G}{B/G}, {T}, discard a land card. Bot1 puts the milled Grizzly Bears back on top and draws it on
+# turn three, but the cost can't discard it (not a land card). The Forest milled on turn one and the Island discarded as the cost
+# are the two land cards in Bot1's graveyard, so two Worms are created (1/1 black and green); the Island Bot2 discarded to hand
+# size at its turn 2 cleanup is in Bot2's graveyard, which doesn't count.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Lluwen, Imperfect Naturalist
+Forest
+Island
+Island
+Forest
+Lightning Bolt
+Grizzly Bears
+Giant Growth
+Island x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lluwen, Imperfect Naturalist.Cast
+Bot1.Pass
+Bot1.Choose(Grizzly Bears)
+[T3 Bot1.Main1]
+? Bot2.Graveyard = Island
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Lluwen, Imperfect Naturalist.Activate
+! Bot1.Choose(Grizzly Bears)
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Battlefield.Worm Token#1.Power = 1
+Bot1.Battlefield.Worm Token#1.Colors.Count = 2
+Bot1.Battlefield.Worm Token#2.Toughness = 1
+Bot1.Battlefield.Worm Token#3 = (absent)
+Bot1.Graveyard.Count = 4
+Bot1.Battlefield.Lluwen, Imperfect Naturalist.Tapped = true
