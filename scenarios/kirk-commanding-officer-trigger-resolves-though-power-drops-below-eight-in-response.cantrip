@@ -1,0 +1,53 @@
+# "Whenever you attack while creatures you control have total power 8 or greater" is a condition of the trigger event
+# (CR 508.3d), not an intervening "if" (CR 603.4): it is judged as Bot1 attacks with Kirk (3) and the Rot-Curse Rakshasa
+# (5), and not again as the ability resolves. Bot2's Lightning Bolt kills Kirk in response, leaving 5 power, and the
+# ability still exiles the top card of Bot1's library, the Ornithopter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Kirk, Commanding Officer
+Rot-Curse Rakshasa
+Island
+Island
+Ornithopter
+Island x11
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kirk, Commanding Officer.Cast
+Bot1.Hand.Rot-Curse Rakshasa.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Kirk, Commanding Officer > Bot2; Rot-Curse Rakshasa > Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kirk, Commanding Officer)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Kirk, Commanding Officer; Black Lotus
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+
+[Expect]
+Exile = Ornithopter
+Bot2.Graveyard = Lightning Bolt

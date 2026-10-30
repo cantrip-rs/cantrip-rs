@@ -1,0 +1,41 @@
+# The intervening condition is the total power of the creatures you control as the attack is declared (CR 508.3d, 603.4):
+# Kirk alone is 3, one short of 8, so attacking with him alone exiles nothing even though the library has a card to exile.
+# The scenario with the 5/5 beside him is the positive control.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Kirk, Commanding Officer
+Island
+Island
+Island
+Island
+Ornithopter
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kirk, Commanding Officer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Kirk, Commanding Officer.Power = 3
+Bot1.Attack(Kirk, Commanding Officer > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 0
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Kirk, Commanding Officer.Power = 3

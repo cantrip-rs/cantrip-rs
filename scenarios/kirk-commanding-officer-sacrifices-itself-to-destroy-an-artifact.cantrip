@@ -1,0 +1,48 @@
+# "{2}, Sacrifice Kirk: Destroy target artifact or enchantment." Kirk is cast on turn 1 with a Mox Ruby, a Mox Pearl and a
+# Mox Jet, and Bot2's Mox Sapphire is an artifact: with the pool empty, two Moxen tapped pay the {2} exactly and Kirk is
+# sacrificed as a cost (CR 118.3), and a land is no target (CR 115.1). Bot2's Mox Sapphire is destroyed and Kirk goes to
+# Bot1's graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Kirk, Commanding Officer
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kirk, Commanding Officer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Kirk, Commanding Officer.Activate(Bot2.Battlefield.Island)
+Bot1.Battlefield.Kirk, Commanding Officer.Activate(Bot2.Battlefield.Mox Sapphire)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 3
+Bot1.Graveyard = Kirk, Commanding Officer
+Bot2.Battlefield = Island
+Bot2.Graveyard = Mox Sapphire
