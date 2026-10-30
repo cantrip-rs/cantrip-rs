@@ -64,7 +64,7 @@ pub(crate) enum Origin {
 }
 
 /// One effect that applies to the event: its source, and which of the source's replacements it is.
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 struct Candidate {
     source: ObjectId,
     index: u8,
@@ -756,50 +756,15 @@ fn apply_to(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enterin
         let start = *proposal;
         match origin {
             Origin::Printed => {
-                let def = &cx.cards().get(source_card(cx, source)).replacements[index as usize];
-                let (apply, then, optional, in_graveyard) = (def.apply, def.then, def.optional, def.in_graveyard);
-                let controller = if in_graveyard { cx.s().obj(source).owner } else { controller_of(cx, source, proposal) };
                 // Declined, it has had its opportunity, and the event goes on as it was (CR 614.5, 616.1).
-                if let Some(question) = optional
-                    && !takes(cx, controller, source, question)
-                {
+                if !printed_taken(cx, source, index, proposal) {
                     continue;
                 }
-                let asker = Asker { source, controller, by: None, spell: false };
-                let before = *proposal;
-                if !valid_redirection(&*cx, &before, |after| apply(&*cx, &asker, after)) {
-                    continue;
-                }
-                apply(&*cx, &asker, proposal);
-                note_counters_by(&before, proposal, controller);
-                if let Some(then) = then {
-                    let after = *proposal;
-                    run_then(cx, &applied, controller, |cx| then(cx, &asker, &before, &after));
-                }
+                apply_printed(cx, proposal, source, index, &applied);
             }
             Origin::Granted(timestamp) => {
                 let Some((&e, def)) = granted(cx, timestamp) else { continue };
-                let (apply, then, once) = (def.apply, def.then, def.once);
-                let asker = Asker { source, controller: e.controller, by: None, spell: false };
-                let before = *proposal;
-                if !valid_redirection(&*cx, &before, |after| apply(&*cx, &asker, e.affected, after)) {
-                    continue;
-                }
-                apply(&*cx, &asker, e.affected, proposal);
-                // "The next time": used up by this event (CR 614.1a).
-                if once {
-                    let effects_before = cx.s().effects.len();
-                    cx.st().effects_retain(|f| f.timestamp != timestamp);
-                    // An effect that ends changes the game with no event (CR 603.8).
-                    if cx.s().effects.len() < effects_before {
-                        cx.state_changed();
-                    }
-                }
-                note_counters_by(&before, proposal, e.controller);
-                if let Some(then) = then {
-                    let after = *proposal;
-                    run_then(cx, &applied, e.controller, |cx| then(cx, &asker, e.affected, &before, &after));
-                }
+                apply_granted(cx, proposal, source, e, def, &applied, true);
             }
             // "That player discards it, but exiles it instead of putting it into their graveyard" (CR 702.35a): the
             // graveyard is its owner's (CR 400.3), and so is the exile it goes to.
@@ -931,6 +896,123 @@ fn apply_to(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enterin
             }
         }
         unlink_if_sent_elsewhere(&start, proposal);
+    }
+}
+
+/// The player whose "you" a source's printed effect has: its controller - for the permanent entering, the player it enters
+/// under - or, for one functioning from a graveyard, its owner (CR 108.4a).
+fn printed_controller(cx: &Cx, source: ObjectId, index: u8, proposal: &Proposal) -> PlayerId {
+    let def = &cx.cards().get(source_card(cx, source)).replacements[index as usize];
+    if def.in_graveyard { cx.s().obj(source).owner } else { controller_of(cx, source, proposal) }
+}
+
+/// Whether a source's printed effect is taken as it applies: one that is not optional always is; an optional one ("you
+/// may ... instead", CR 614.1a) is its controller's to take (`takes`).
+fn printed_taken(cx: &mut Cx, source: ObjectId, index: u8, proposal: &Proposal) -> bool {
+    let Some(question) = cx.cards().get(source_card(cx, source)).replacements[index as usize].optional else { return true };
+    let controller = printed_controller(cx, source, index, proposal);
+    takes(cx, controller, source, question)
+}
+
+/// A source's printed effect, taken, applied to the event: what it changes of it, unless that is a redirection that can't be
+/// (CR 614.9), and what it does to the game as it applies (`run_then`).
+fn apply_printed(cx: &mut Cx, proposal: &mut Proposal, source: ObjectId, index: u8, applied: &[Applied]) {
+    let def = &cx.cards().get(source_card(cx, source)).replacements[index as usize];
+    let (apply, then) = (def.apply, def.then);
+    let controller = printed_controller(cx, source, index, proposal);
+    let asker = Asker { source, controller, by: None, spell: false };
+    let before = *proposal;
+    if !valid_redirection(&*cx, &before, |after| apply(&*cx, &asker, after)) {
+        return;
+    }
+    apply(&*cx, &asker, proposal);
+    note_counters_by(&before, proposal, controller);
+    if let Some(then) = then {
+        let after = *proposal;
+        run_then(cx, applied, controller, |cx| then(cx, &asker, &before, &after));
+    }
+}
+
+/// A lasting effect a spell or ability made (CR 611.2), `e` with its definition `def`, applied to the event as a printed one
+/// is (`apply_printed`). One that applies "the next time" is used up by the event (CR 614.1a): here, where `use_up`; by the
+/// caller once it has applied to every part of the event, where not. Whether it applied.
+fn apply_granted(
+    cx: &mut Cx,
+    proposal: &mut Proposal,
+    source: ObjectId,
+    e: ContinuousEffect,
+    def: &'static GrantedReplacementDef,
+    applied: &[Applied],
+    use_up: bool,
+) -> bool {
+    let (apply, then) = (def.apply, def.then);
+    let asker = Asker { source, controller: e.controller, by: None, spell: false };
+    let before = *proposal;
+    if !valid_redirection(&*cx, &before, |after| apply(&*cx, &asker, e.affected, after)) {
+        return false;
+    }
+    apply(&*cx, &asker, e.affected, proposal);
+    if use_up && def.once {
+        used_up(cx, e.timestamp);
+    }
+    note_counters_by(&before, proposal, e.controller);
+    if let Some(then) = then {
+        let after = *proposal;
+        run_then(cx, applied, e.controller, |cx| then(cx, &asker, e.affected, &before, &after));
+    }
+    true
+}
+
+/// A "the next time" effect, used up by the event it applied to (CR 614.1a), ends.
+fn used_up(cx: &mut Cx, timestamp: u32) {
+    let effects_before = cx.s().effects.len();
+    cx.st().effects_retain(|f| f.timestamp != timestamp);
+    // An effect that ends changes the game with no event (CR 603.8).
+    if cx.s().effects.len() < effects_before {
+        cx.state_changed();
+    }
+}
+
+/// Applies the effects to one event that is several proposals - the groups of a token creation under one player, a
+/// definition and copy each (`token_batch`) - as the one event it is (CR 614.1a). At each step the candidates are the effects
+/// that apply to any of the groups and have not yet applied to the event; the affected player, the one whose tokens they
+/// are, chooses one where there are several (CR 616.1); its "you may" is asked once; and it applies to every group it
+/// applies to then, after which it has applied to the whole event and applies to none of it again (CR 614.5).
+fn apply_to_parts(cx: &mut Cx, parts: &mut [Proposal]) {
+    let mut applied: Vec<Applied> = cx.lineage.clone();
+    loop {
+        let found: Vec<Vec<Candidate>> = parts.iter().map(|p| candidates(cx, p, &applied, None)).collect();
+        let mut all: Vec<Candidate> = found.iter().flatten().copied().collect();
+        all.sort_by_key(|c| (c.source, c.index, c.origin));
+        all.dedup();
+        let Some(&first) = all.first() else { return };
+        let Candidate { source, index, origin } =
+            if all.len() > 1 && !all.iter().all(|c| prevents_all(cx, c)) { all[choose(cx, &parts[0], &all)] } else { first };
+        applied.push((source, index, origin));
+        let meets = |j: usize| found[j].iter().any(|c| (c.source, c.index, c.origin) == (source, index, origin));
+        match origin {
+            Origin::Printed => {
+                let Some(at) = (0..parts.len()).find(|&j| meets(j)) else { continue };
+                if !printed_taken(cx, source, index, &parts[at]) {
+                    continue;
+                }
+                for j in (0..parts.len()).filter(|&j| meets(j)) {
+                    apply_printed(cx, &mut parts[j], source, index, &applied);
+                }
+            }
+            Origin::Granted(timestamp) => {
+                let Some((&e, def)) = granted(cx, timestamp) else { continue };
+                let mut took = false;
+                for j in (0..parts.len()).filter(|&j| meets(j)) {
+                    took |= apply_granted(cx, &mut parts[j], source, e, def, &applied, false);
+                }
+                if took && def.once {
+                    used_up(cx, timestamp);
+                }
+            }
+            // Only a printed or a lasting effect replaces anything but a zone change or damage.
+            _ => {}
+        }
     }
 }
 
@@ -1186,29 +1268,46 @@ pub fn draw_replaced(cx: &mut Cx, player: PlayerId) -> bool {
     matches!(proposal, Proposal::Draw(CardDraw { replaced: true, .. }))
 }
 
-/// Apply token-creation replacements to each definition, copy and controller group (CR 614.1a). Return the
-/// resulting counts and token types.
+/// Apply token-creation replacements to a creation, grouped by definition, copy and controller (CR 614.1a). Return the
+/// resulting counts and token types. The creation is one event: the tokens each player would create are replaced together,
+/// that player ordering the effects (CR 616.1), each asked once and applied once to all of them (`apply_to_parts`).
 pub fn token_batch(cx: &mut Cx, tokens: &[(CardId, Option<Copiable>, PlayerId)]) -> Option<Vec<(CardId, Option<Copiable>, PlayerId)>> {
     if !possible(cx, None) {
         return None;
     }
-    let mut out: Vec<(CardId, Option<Copiable>, PlayerId)> = Vec::with_capacity(tokens.len());
-    let mut changed = false;
+    // The runs of one definition, copy and controller, in the order given.
+    let mut groups: Vec<TokenCreation> = Vec::new();
     let mut i = 0;
     while i < tokens.len() {
-        // The run of one definition, copy and controller, in the order given.
         let (token, copy, controller) = tokens[i];
         let mut count = 0u32;
         while i < tokens.len() && tokens[i] == (token, copy, controller) {
             count += 1;
             i += 1;
         }
-        let mut proposal = Proposal::TokenCreation(TokenCreation { controller, token, copy, count });
-        apply(cx, &mut proposal);
-        let Proposal::TokenCreation(after) = proposal else { unreachable!("an effect cannot change the kind of the event") };
-        // Keep the final replacement’s token definition and copy values (CR 614.1a).
-        changed |= after.count != count || after.token != token || after.copy != copy;
-        out.extend(std::iter::repeat((after.token, after.copy, controller)).take(after.count as usize));
+        groups.push(TokenCreation { controller, token, copy, count });
+    }
+    let mut after = groups.clone();
+    // Each player's, the affected player's (CR 616.1), in the order they first appear.
+    let mut done: Vec<PlayerId> = Vec::new();
+    for g in &groups {
+        if done.contains(&g.controller) {
+            continue;
+        }
+        done.push(g.controller);
+        let theirs: Vec<usize> = (0..groups.len()).filter(|&j| groups[j].controller == g.controller).collect();
+        let mut parts: Vec<Proposal> = theirs.iter().map(|&j| Proposal::TokenCreation(groups[j])).collect();
+        apply_to_parts(cx, &mut parts);
+        for (&j, part) in theirs.iter().zip(parts) {
+            let Proposal::TokenCreation(t) = part else { unreachable!("an effect cannot change the kind of the event") };
+            after[j] = t;
+        }
+    }
+    // Keep the final replacement’s token definition and copy values (CR 614.1a).
+    let changed = groups.iter().zip(&after).any(|(b, a)| a.count != b.count || a.token != b.token || a.copy != b.copy);
+    let mut out: Vec<(CardId, Option<Copiable>, PlayerId)> = Vec::with_capacity(tokens.len());
+    for (b, a) in groups.iter().zip(&after) {
+        out.extend(std::iter::repeat((a.token, a.copy, b.controller)).take(a.count as usize));
     }
     changed.then_some(out)
 }
