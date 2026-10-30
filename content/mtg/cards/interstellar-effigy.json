@@ -1,0 +1,8 @@
+{
+  "name": "Interstellar Effigy",
+  "manaCost": "{4}{U}",
+  "type": "Artifact Creature — Construct",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "When this creature enters, return target creature an opponent controls to its owner's hand."
+}
