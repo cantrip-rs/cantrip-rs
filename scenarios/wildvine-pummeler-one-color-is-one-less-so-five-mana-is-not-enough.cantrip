@@ -1,0 +1,46 @@
+# Wildvine Pummeler: "Vivid -- This spell costs {1} less to cast for each color among permanents you control." With one colored permanent (a Savannah Lions) and
+# five colorless Moxen, the reduction is {1}: the Pummeler costs {5}{G}, six mana, and the five Moxen cannot pay it. The neighbouring scenario, with two colors, can.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Savannah Lions
+Wildvine Pummeler
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Wildvine Pummeler.Cast(Mana: short)
+
+[Expect]
+Bot1.Battlefield.Count = 6
