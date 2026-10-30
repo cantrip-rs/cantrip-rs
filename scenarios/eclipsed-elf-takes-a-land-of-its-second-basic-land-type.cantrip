@@ -1,0 +1,31 @@
+# Eclipsed Elf: "When this creature enters, look at the top four cards of your library. You may reveal an Elf, Swamp, or Forest card from among them and put it into your hand. Put the rest on the bottom of your library in a random order." (CR 701.20a, 401.4) The top four are Llanowar Elves, Swamp, Forest and Plains; the fifth, a Plains, is not looked at.
+# Bot1 takes the Forest, a land with the second basic land type.
+
+[Bot1 Deck]
+Black Lotus
+Eclipsed Elf
+Plains x5
+Llanowar Elves
+Swamp
+Forest
+Plains
+Plains
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Eclipsed Elf.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange(Forest | Llanowar Elves; Swamp; Plains)
+? Bot1.Revealed = Forest
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Forest
+Bot1.Library.Count = 15
