@@ -25,10 +25,11 @@ use std::time::{Duration, Instant};
 
 use cantrip_ai::net::{self, Choice, Payment};
 use cantrip_ai::record::{Dealt, Ending, Failures, Root, Roots, record_searched, table};
-use cantrip_ai::search::{self, Config, WallClock};
+use cantrip_ai::search::{self, Config, Fusion, Shape, WallClock};
 use cantrip_ai::shard::{
     GameRecord, Header, ShardWriter, mode_name, read as read_shard, shards as shard_files,
 };
+use cantrip_ai::trace::{Seats, Trace};
 use cantrip_ai::{Evaluator, Knowledge, Prior};
 use cantrip_engine::*;
 use cantrip_obs::InfoMode;
@@ -85,6 +86,18 @@ pub struct Options {
     pub worlds: usize,
     pub max_turns: u32,
     pub max_answers: u32,
+    /// Modes each game is recorded in as well, each into `OUT/<mode>/`: the same game as the seat in that mode would
+    /// have observed it, labels and visit targets included (the true hidden state is a label in every mode).
+    pub also: Vec<InfoMode>,
+    /// Whether each game's trace is written too, a JSON line each into `OUT/traces/`.
+    pub traces: bool,
+    /// Leaves a search sends to the network at once (`search::Config::batch`).
+    pub batch: usize,
+    /// Playout-cap randomisation (KataGo): a share `full_share` of searched decisions get `full_simulations`, and only
+    /// those are policy targets; the rest get `simulations` (the fast budget), and are value targets alone. Off with
+    /// `full_simulations` 0. Tree reuse carries a full search's visits into the fast searches after it.
+    pub full_simulations: usize,
+    pub full_share: f32,
 }
 
 impl Default for Options {
@@ -98,6 +111,11 @@ impl Default for Options {
             worlds: 8,
             max_turns: 60,
             max_answers: 6000,
+            also: Vec::new(),
+            traces: false,
+            batch: 8,
+            full_simulations: 0,
+            full_share: 0.0,
         }
     }
 }
@@ -115,7 +133,46 @@ pub struct Played {
     pub evaluations: u64,
     /// Answers that were the network's alone because the search failed.
     pub network_fallbacks: u32,
+    /// The game as what deals and answers it again (`cantrip_ai::trace`), when `Options::traces` asks for it.
+    pub trace: Option<Trace>,
+    /// The search's tree at each searched request.
+    pub shapes: Vec<Shape>,
+    /// The worlds' agreement at the root of each searched request that dealt two or more.
+    pub fusions: Vec<Fusion>,
     pub elapsed: Duration,
+    /// Where the answering time went (`Timing`).
+    pub timing: Timing,
+    /// Searched decisions given the full budget of playout-cap randomisation.
+    pub full_searched: u32,
+}
+
+/// Where a game's answering time went, in seconds: all answers (searched or not), the searches, and of those the
+/// encoding of leaves and the network's evaluations (from the request sent to the reply received: the inference
+/// server's time and the round trip). A search's time less those two is the engine's and the tree's.
+#[derive(Clone, Copy, Debug, Default)]
+pub struct Timing {
+    pub answering: f64,
+    pub searching: f64,
+    pub encoding: f64,
+    pub evaluating: f64,
+    /// Of the searches' lines (`search::Searched::play_time`): all, copying state, moving, observing.
+    pub play: f64,
+    pub setup: f64,
+    pub goto: f64,
+    pub observe: f64,
+}
+
+impl Timing {
+    fn add(&mut self, o: &Timing) {
+        self.answering += o.answering;
+        self.searching += o.searching;
+        self.encoding += o.encoding;
+        self.evaluating += o.evaluating;
+        self.play += o.play;
+        self.setup += o.setup;
+        self.goto += o.goto;
+        self.observe += o.observe;
+    }
 }
 
 fn splitmix(mut x: u64) -> u64 {
@@ -142,11 +199,18 @@ pub fn play(
         .map(|i| Knowledge::new(PlayerId(i as u8)))
         .collect();
     let mut payments: Vec<Payment> = vec![Payment::default(); seats];
+    // Each seat's search tree, kept for its next request (`search::Config::reuse`, on by default).
+    let mut trees: Vec<Option<search::Kept>> = (0..seats).map(|_| None).collect();
     let mut searched_by = vec![0u32; seats];
     let mut roots = Roots::new();
+    let mut shapes = Vec::new();
+    let mut timing = Timing::default();
+    let mut full_searched = 0u32;
+    let mut fusions = Vec::new();
     let (mut answers, mut searched, mut simulations, mut evaluations, mut network_fallbacks) =
         (0u32, 0u32, 0u64, 0u64, 0u32);
     let mut capped = false;
+    let mut trace = options.traces.then(|| (Trace::new(seed, pairing.names.to_vec(), decks.clone()), Seats::new(&game)));
     while !game.is_over() {
         let Some(request) = game.pending().cloned() else {
             break;
@@ -157,10 +221,14 @@ pub fn play(
         }
         answers += 1;
         if matches!(request.kind, RequestKind::ChooseStartingPlayer { .. }) {
+            let answer = Answer::Player(PlayerId(first as u8));
+            if let Some((t, seats)) = &mut trace {
+                t.keep(seats, &game, &request, &answer, None, None);
+            }
             game.answer(
                 request.id,
                 request.player,
-                Answer::Player(PlayerId(first as u8)),
+                answer,
             )
             .map_err(|Rejected(why)| format!("who goes first: {why}"))?;
             continue;
@@ -176,15 +244,23 @@ pub fn play(
         } else {
             Choice::Best
         };
+        // Playout-cap randomisation: this decision's budget, full or fast, by a draw of its own.
+        let capped_off = options.full_simulations == 0;
+        let full = capped_off
+            || (splitmix(seed ^ ((request.id as u64) << 28) ^ 0xf011) >> 11) as f64 / (1u64 << 53) as f64 <= options.full_share as f64;
+        let budget = if !capped_off && full { options.full_simulations } else { options.simulations };
         let config = Config {
             choice,
             seed: splitmix(seed ^ ((request.id as u64) << 24) ^ 0x5ea2c4),
             worlds: options.worlds,
-            ..Config::simulations(options.simulations)
+            batch: options.batch.max(1),
+            ..Config::simulations(budget)
         };
         let k = &knowledge[p];
+        let tree = &mut trees[p];
+        let asked = Instant::now();
         let decided = payments[p].decide(&game, &request, k, options.mode, |request, guard| {
-            search::search(
+            search::search_keeping(
                 &game,
                 request,
                 k,
@@ -195,6 +271,7 @@ pub fn play(
                 prior,
                 guard,
                 &WallClock,
+                tree,
             )
         });
         let decided = match decided {
@@ -219,21 +296,42 @@ pub fn play(
                 })?
             }
         };
+        timing.answering += asked.elapsed().as_secs_f64();
+        if let Some(s) = &decided.search {
+            timing.searching += s.elapsed.as_secs_f64();
+            timing.encoding += decided.encode.as_secs_f64();
+            timing.evaluating += decided.evaluate.as_secs_f64();
+            timing.play += s.play_time.as_secs_f64();
+            timing.setup += s.setup_time.as_secs_f64();
+            timing.goto += s.goto_time.as_secs_f64();
+            timing.observe += s.observe_time.as_secs_f64();
+        }
         if let Some(s) = &decided.search {
             simulations += s.simulations as u64;
             evaluations += s.evaluations as u64;
             if !s.visits.is_empty() {
                 searched += 1;
                 searched_by[p] += 1;
+                full_searched += u32::from(full && !capped_off);
+                // The tree's shape of the searches that are policy targets.
+                if full {
+                    shapes.push(s.shape);
+                }
+                fusions.extend(s.fusion);
                 roots.insert(
                     at,
                     Root {
                         visits: s.visits.clone(),
                         value: s.root_value,
-                        policy: true,
+                        policy: full,
                     },
                 );
             }
+        }
+        let mut kept = trace.as_ref().map(|(t, _)| (t.steps.len(), t.complete));
+        if let Some((t, seats)) = &mut trace {
+            let searched = decided.search.as_ref().filter(|s| !s.visits.is_empty()).map(|s| (s.root_value, s.net_value));
+            t.keep(seats, &game, &request, &decided.answer, Some(&decided.factored), searched);
         }
         // Noted before it is given, while the objects it names stand; taken back if the engine refuses it.
         let board = cantrip_ai::cancel::board_hash(&game.state);
@@ -242,6 +340,11 @@ pub fn play(
         if let Err(Rejected(why)) = game.answer(request.id, request.player, decided.answer.clone())
         {
             payments[p] = before;
+            // The answer kept was not given: the network's is.
+            if let (Some((t, _)), Some((n, complete))) = (&mut trace, kept.take()) {
+                t.steps.truncate(n);
+                t.complete = complete;
+            }
             // The search's answers are the engine's to accept (tests/search.rs); one refused is the network's turn.
             network_fallbacks += 1;
             roots.remove(&at);
@@ -256,8 +359,11 @@ pub fn play(
                 Choice::Best,
             )
             .map_err(|e| format!("refused ({why}), and the network: {}", e.0))?;
+            if let Some((t, seats)) = &mut trace {
+                t.keep(seats, &game, &request, &d.answer, Some(&d.factored), None);
+            }
             payments[p].played(&game, board, &request, &d.answer);
-            game.answer(request.id, request.player, d.answer)
+            game.answer(request.id, request.player, d.answer.clone())
                 .map_err(|Rejected(why2)| format!("refused twice: {why}; {why2}"))?;
         }
     }
@@ -268,9 +374,20 @@ pub fn play(
             .collect(),
         decks: pairing.names.to_vec(),
         auto_start: true,
-        heuristics: Default::default(),
+        ..Dealt::default()
     };
     let ending = Ending::of(&game, capped || !game.is_over());
+    let trace = trace.map(|(mut t, _)| {
+        t.outcome = (0..seats)
+            .map(|p| match ending.outcome {
+                _ if ending.capped => 0,
+                Outcome::Won(w) if w.index() == p => 1,
+                Outcome::Won(_) => -1,
+                _ => 0,
+            })
+            .collect();
+        t
+    });
     Ok(Played {
         game,
         dealt,
@@ -281,8 +398,40 @@ pub fn play(
         simulations,
         evaluations,
         network_fallbacks,
+        trace,
+        shapes,
+        fusions,
         elapsed: started.elapsed(),
+        timing,
+        full_searched,
     })
+}
+
+/// A `Shape`'s measures, by the names the report gives them.
+fn shape_measures(s: &Shape) -> [(&'static str, u64); 8] {
+    [
+        ("RootOptions", s.root_options as u64),
+        ("RootVisited", s.root_visited as u64),
+        ("DeepestSteps", s.deepest_steps as u64),
+        ("DeepestDecisions", s.deepest_decisions as u64),
+        ("DeepestTurns", u64::from(s.deepest_turns)),
+        ("LineSteps", s.line_steps as u64),
+        ("LineDecisions", s.line_decisions as u64),
+        ("LineTurns", u64::from(s.line_turns)),
+    ]
+}
+
+/// The value at quantile `q` of a histogram.
+fn quantile(h: &BTreeMap<u64, u64>, q: f64) -> u64 {
+    let total: u64 = h.values().sum();
+    let mut seen = 0;
+    for (v, n) in h {
+        seen += n;
+        if seen as f64 >= q * total as f64 {
+            return *v;
+        }
+    }
+    0
 }
 
 /// The record of a game played.
@@ -357,6 +506,16 @@ struct Totals {
     game_seconds: f64,
     failures: Failures,
     errors: BTreeMap<String, u64>,
+    /// Each `Shape` measure's histogram over the searched requests.
+    shape: BTreeMap<&'static str, BTreeMap<u64, u64>>,
+    /// Searched requests over two or more worlds, those whose worlds' most visited root options differed, the worlds
+    /// over them, and the worlds that went with the plurality.
+    fusion_roots: u64,
+    fusion_split: u64,
+    fusion_worlds: u64,
+    fusion_plurality: u64,
+    timing: Timing,
+    full_searched: u64,
     /// Wins by deck name, and games by deck name.
     wins: BTreeMap<String, u64>,
     seats: BTreeMap<String, u64>,
@@ -469,6 +628,8 @@ where
         "worlds": options.worlds,
         "max_turns": options.max_turns,
         "max_answers": options.max_answers,
+        "also": options.also.iter().map(|&m| mode_name(m)).collect::<Vec<_>>(),
+        "traces": options.traces,
         "pairings": run.pairings.iter().map(|p| format!("{}/{}", p.names[0], p.names[1])).collect::<Vec<_>>(),
     });
     let manifest = run.out.join("selfplay-run.json");
@@ -518,7 +679,25 @@ where
             let (next, totals, load, completed) = (&next, &totals, Arc::clone(&load), &completed);
             let worker = std::thread::Builder::new().name(format!("selfplay-{lane}")).stack_size(STACK_SIZE).spawn_scoped(scope, move || -> Result<(), String> {
                 let evaluator = load()?;
-                let mut writer = ShardWriter::new(&run.out, &format!("selfplay-l{lane}"), header, run.shard_mb << 20, run.shard_games).map_err(|e| e.to_string())?;
+                let mut writer = ShardWriter::new(&run.out, &format!("selfplay-l{lane}"), header.clone(), run.shard_mb << 20, run.shard_games).map_err(|e| e.to_string())?;
+                let mut also = options
+                    .also
+                    .iter()
+                    .map(|&mode| {
+                        let header = Header { mode: mode_name(mode).to_string(), ..header.clone() };
+                        ShardWriter::new(&run.out.join(mode_name(mode)), &format!("selfplay-l{lane}"), header, run.shard_mb << 20, run.shard_games).map(|w| (mode, w))
+                    })
+                    .collect::<std::io::Result<Vec<_>>>()
+                    .map_err(|e| e.to_string())?;
+                // A JSON line a game; a resumed run appends, and a reader keeps the last line of a seed.
+                let mut traces = if options.traces {
+                    let dir = run.out.join("traces");
+                    std::fs::create_dir_all(&dir).map_err(|e| format!("{}: {e}", dir.display()))?;
+                    let path = dir.join(format!("selfplay-l{lane}-{}.jsonl", std::process::id()));
+                    Some(std::io::BufWriter::new(std::fs::OpenOptions::new().create(true).append(true).open(&path).map_err(|e| format!("{}: {e}", path.display()))?))
+                } else {
+                    None
+                };
                 loop {
                     if run.limit.is_some_and(|l| started.elapsed() >= l) {
                         break;
@@ -538,14 +717,26 @@ where
                     }
                     let seed = run.seed + i as u64;
                     match play(evaluator.as_ref(), &pairing, seed, first, options, prior) {
-                        Ok(played) => {
+                        Ok(mut played) => {
                             let (answers, searched, sims, evals, fallbacks, secs) =
                                 (played.answers, played.searched, played.simulations, played.evaluations, played.network_fallbacks, played.elapsed.as_secs_f64());
                             let (turns, capped) = (played.game.state.turn.number, played.ending.capped);
+                            if let (Some(w), Some(t)) = (&mut traces, played.trace.take()) {
+                                let line = serde_json::to_string(&t).map_err(|e| e.to_string())?;
+                                writeln!(w, "{line}").and_then(|_| w.flush()).map_err(|e| e.to_string())?;
+                            }
+                            let shapes = std::mem::take(&mut played.shapes);
+                            let timing = played.timing;
+                            let full_searched = played.full_searched;
+                            let fusions = std::mem::take(&mut played.fusions);
                             let winner = match played.ending.outcome {
                                 Outcome::Won(w) if !capped => Some(w.index()),
                                 _ => None,
                             };
+                            for (mode, w) in &mut also {
+                                let (rec, _) = record_searched(played.game.clone(), &played.dealt, &played.ending, *mode, table(), Some(&played.roots));
+                                w.write(&rec).map_err(|e| e.to_string())?;
+                            }
                             let (rec, failures) = record(played, options.mode);
                             let samples = rec.samples.len() as u64;
                             let visited = rec.samples.iter().filter(|s| s.visits.len() > 1).count() as u64;
@@ -562,6 +753,19 @@ where
                             t.network_fallbacks += fallbacks as u64;
                             t.turns += turns as u64;
                             t.game_seconds += secs;
+                            t.timing.add(&timing);
+                            t.full_searched += full_searched as u64;
+                            for shape in &shapes {
+                                for (name, v) in shape_measures(shape) {
+                                    *t.shape.entry(name).or_default().entry(v).or_default() += 1;
+                                }
+                            }
+                            for f in &fusions {
+                                t.fusion_roots += 1;
+                                t.fusion_split += (f.distinct > 1) as u64;
+                                t.fusion_worlds += f.worlds as u64;
+                                t.fusion_plurality += f.plurality as u64;
+                            }
                             for n in &pairing.names {
                                 *t.seats.entry(n.clone()).or_default() += 1;
                             }
@@ -615,6 +819,9 @@ where
                         }
                     }
                 }
+                for (_, w) in &mut also {
+                    w.close().map_err(|e| e.to_string())?;
+                }
                 writer.close().map_err(|e| e.to_string())
             });
             lanes.push(worker.map_err(|e| e.to_string())?);
@@ -636,6 +843,46 @@ where
     let seconds = started.elapsed().as_secs_f64();
     let this_games = t.games.saturating_sub(resumed_games) as f64;
     let this_samples = t.samples.saturating_sub(resumed_samples) as f64;
+    let shape: serde_json::Map<String, Value> = t
+        .shape
+        .iter()
+        .map(|(name, h)| {
+            let mean = h.iter().map(|(v, n)| v * n).sum::<u64>() as f64 / h.values().sum::<u64>().max(1) as f64;
+            let histogram: BTreeMap<String, u64> = h.iter().map(|(v, n)| (v.to_string(), *n)).collect();
+            let summary = json!({
+                "Median": quantile(h, 0.5),
+                "P90": quantile(h, 0.9),
+                "Max": h.keys().last(),
+                "Mean": mean,
+                "Histogram": histogram,
+            });
+            (name.to_string(), summary)
+        })
+        .collect();
+    let fusion = json!({
+        "Roots": t.fusion_roots,
+        "SplitRate": if t.fusion_roots > 0 { t.fusion_split as f64 / t.fusion_roots as f64 } else { 0.0 },
+        "PluralityShare": if t.fusion_worlds > 0 { t.fusion_plurality as f64 / t.fusion_worlds as f64 } else { 0.0 },
+    });
+    let timing = json!({
+            "AnsweringSeconds": t.timing.answering,
+            "SearchingSeconds": t.timing.searching,
+            "EncodingSeconds": t.timing.encoding,
+            "EvaluatingSeconds": t.timing.evaluating,
+            "EngineAndTreeSeconds": t.timing.searching - t.timing.encoding - t.timing.evaluating,
+            "OutsideSearchSeconds": t.timing.answering - t.timing.searching,
+            "GameSeconds": t.game_seconds,
+            "LinesSeconds": t.timing.play,
+            "LinesSetupSeconds": t.timing.setup,
+            "LinesGotoSeconds": t.timing.goto,
+            "LinesObserveSeconds": t.timing.observe,
+        });
+    let budget = json!({
+        "Batch": options.batch,
+        "FullSimulations": options.full_simulations,
+        "FullShare": options.full_share,
+        "FullSearched": t.full_searched,
+    });
     let report = json!({
         "Dir": run.out.display().to_string(),
         "Producer": run.producer,
@@ -674,6 +921,10 @@ where
         "SeatsByDeck": t.seats,
         "FirstPlayerWinRate": if t.decided > 0 { t.first_wins as f64 / t.decided as f64 } else { 0.0 },
         "Failures": t.failures,
+        "Shape": shape,
+        "Budget": budget,
+        "Timing": timing,
+        "Fusion": fusion,
     });
     let _ = std::fs::write(
         run.out.join("selfplay-report.json"),

@@ -167,3 +167,30 @@ fn a_run_writes_shards_and_resumes_where_it_stopped() {
         let _ = std::fs::remove_dir_all(&out);
     });
 }
+
+/// A traced game (`cantrip_ai::trace`) dealt and answered again from its trace is the game played: every answer is
+/// kept, the replay asks each of them of the same seat, and it ends where the game did. A searched answer keeps its
+/// root value.
+#[test]
+fn a_trace_replays_the_game_it_was_made_of() {
+    on_big_stack(|| {
+        let prior = Prior::from_decks(&root().join("decks")).unwrap();
+        let evaluator = TractEvaluator::load(&tiny(), table()).unwrap();
+        let options = Options {
+            traces: true,
+            ..options()
+        };
+        let played = selfplay::play(&evaluator, &pairing(), 12, 1, &options, &prior).unwrap();
+        let trace = played.trace.clone().expect("a trace");
+        assert!(trace.complete, "every answer is kept");
+        assert_eq!(trace.steps.len(), played.answers as usize);
+        assert!(trace.steps.iter().any(|s| s.searched.is_some()), "a searched answer keeps its root value");
+        let (game, _) = trace.replay(trace.steps.len()).unwrap();
+        assert_eq!(game.log, played.game.log, "the replay is the game played");
+        assert_eq!(game.state.turn.number, played.game.state.turn.number);
+        // Halfway, the same request waits.
+        let half = trace.steps.len() / 2;
+        let (game, _) = trace.replay(half).unwrap();
+        assert_eq!(game.pending().map(|r| r.player.0), Some(trace.steps[half].seat));
+    });
+}

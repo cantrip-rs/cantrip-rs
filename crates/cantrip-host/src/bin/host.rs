@@ -145,6 +145,18 @@ enum Request {
         #[serde(rename = "GameId")]
         game_id: u32,
     },
+    /// A recording host only: a heuristic's value of the outstanding request's position for its seat (`Heuristic`, the
+    /// tactical bot's model in log-odds), recorded with the game (`cantrip_ai::record::Dealt::heuristics`). Changes
+    /// nothing in the game.
+    #[cfg(feature = "ai-record")]
+    Note {
+        #[serde(rename = "GameId")]
+        game_id: u32,
+        #[serde(rename = "RequestId")]
+        request_id: u32,
+        #[serde(rename = "Heuristic")]
+        heuristic: f32,
+    },
 }
 
 fn yes() -> bool {
@@ -206,7 +218,7 @@ impl Host {
                     names: seats.iter().map(|s| s.name.clone()).collect(),
                     decks: seats.iter().map(|s| s.deck_name.clone().unwrap_or_default()).collect(),
                     auto_start: scenario.is_none() && first_player.is_some() && chooser.is_none(),
-                    heuristics: Default::default(),
+                    ..Dealt::default()
                 });
                 let made = match scenario {
                     Some(spec) => Session::scenario(&spec.text, &spec.name, seats.into_iter().map(|s| s.name).collect(), &spec.driven),
@@ -267,6 +279,16 @@ impl Host {
                 Ok(checks) => ok(json!({ "Companions": checks })),
                 Err(r) => rejected(r),
             },
+            #[cfg(feature = "ai-record")]
+            Request::Note { game_id, request_id, heuristic } => {
+                if let (Some(session), Some(recorder)) = (self.games.get(&game_id), self.recorder.as_mut())
+                    && let Some(dealt) = recorder.dealt.get_mut(&game_id)
+                    && session.pending_request().is_some_and(|r| r.id == request_id)
+                {
+                    dealt.heuristics.insert(session.game().at, heuristic);
+                }
+                ok(json!({}))
+            }
             Request::Close { game_id } => {
                 let session = self.games.remove(&game_id);
                 #[cfg(not(feature = "ai-record"))]
@@ -332,11 +354,17 @@ struct RecordConfig {
     shard_games: usize,
     shard_mb: u64,
     threads: usize,
+    /// Modes each game is recorded in as well, each into `DIR/<mode>/`: the same game as its seats would have observed it
+    /// in that mode (`--ai-record-also full`: the perfect-information positions beside the Decklist ones).
+    also: Vec<InfoMode>,
+    /// A perfect-information value to distil into the main mode's games (`cantrip_ai::distill`): its model directory,
+    /// the inference server it is served by, and how many worlds a decision.
+    distill: Option<(PathBuf, String, usize)>,
 }
 
 #[cfg(feature = "ai-record")]
 const USAGE: &str = "usage: cantrip-native-host [--ai-record DIR [--ai-record-mode full|decklist|hidden] [--ai-record-producer NAME] \
-[--ai-record-seeds TEXT] [--ai-record-games N] [--ai-record-mb N] [--ai-record-threads N]]";
+[--ai-record-seeds TEXT] [--ai-record-games N] [--ai-record-mb N] [--ai-record-threads N] [--ai-record-also MODE ...] [--ai-record-distill MODEL_DIR --ai-record-distill-server HOST:PORT [--ai-record-distill-worlds N]]]";
 
 #[cfg(feature = "ai-record")]
 fn config(args: &[String]) -> Result<Option<RecordConfig>, String> {
@@ -345,6 +373,8 @@ fn config(args: &[String]) -> Result<Option<RecordConfig>, String> {
     let mut producer = "unknown".to_string();
     let mut seeds = String::new();
     let (mut shard_games, mut shard_mb, mut threads) = (0usize, 64u64, 2usize);
+    let mut also = Vec::new();
+    let (mut distill_model, mut distill_server, mut distill_worlds) = (None, None, 8usize);
     let mut i = 0;
     while i < args.len() {
         let value = args.get(i + 1).cloned().ok_or(format!("{} needs a value", args[i]))?;
@@ -357,11 +387,20 @@ fn config(args: &[String]) -> Result<Option<RecordConfig>, String> {
             "--ai-record-games" => shard_games = number(&value)? as usize,
             "--ai-record-mb" => shard_mb = number(&value)?,
             "--ai-record-threads" => threads = (number(&value)? as usize).max(1),
+            "--ai-record-also" => also.push(parse_mode(&value).ok_or(format!("no information mode {value}"))?),
+            "--ai-record-distill" => distill_model = Some(PathBuf::from(value)),
+            "--ai-record-distill-server" => distill_server = Some(value),
+            "--ai-record-distill-worlds" => distill_worlds = (number(&value)? as usize).max(1),
             other => return Err(format!("unknown argument {other}")),
         }
         i += 2;
     }
-    Ok(dir.map(|dir| RecordConfig { dir, mode, producer, seeds, shard_games, shard_mb, threads }))
+    let distill = match (distill_model, distill_server) {
+        (Some(m), Some(s)) => Some((m, s, distill_worlds)),
+        (None, None) => None,
+        _ => return Err("--ai-record-distill needs --ai-record-distill-server, and the other way round".into()),
+    };
+    Ok(dir.map(|dir| RecordConfig { dir, mode, producer, seeds, shard_games, shard_mb, threads, also, distill }))
 }
 
 /// Built without the recorder, the host takes no arguments: `--ai-record` asks for a build with it.
@@ -438,12 +477,26 @@ impl Recorder {
         let mut workers = Vec::new();
         for i in 0..config.threads {
             let mut writer = ShardWriter::new(&config.dir, &format!("cantrip-w{i}"), header.clone(), config.shard_mb << 20, config.shard_games)?;
+            let mut also = Vec::new();
+            for &m in &config.also {
+                let dir = config.dir.join(mode_name(m));
+                std::fs::create_dir_all(&dir)?;
+                let h = Header::new(table(), &config.producer, &config.seeds, m);
+                also.push((m, ShardWriter::new(&dir, &format!("cantrip-w{i}"), h, config.shard_mb << 20, config.shard_games)?));
+            }
             let receive = Arc::clone(&receive);
             let mode = config.mode;
+            let distill = config.distill.clone();
             let worker = std::thread::Builder::new()
                 .name(format!("cantrip-recorder-{i}"))
                 .stack_size(STACK_SIZE)
-                .spawn(move || work(&receive, &mut writer, mode))
+                .spawn(move || {
+                    // The distilling value's evaluator, a connection of this worker's own.
+                    let evaluator = distill.as_ref().map(|(model, server, worlds)| {
+                        (cantrip_ai::RemoteEvaluator::connect(server, model, table()).expect("the distilling model's server answers"), *worlds)
+                    });
+                    work(&receive, &mut writer, mode, &mut also, evaluator.as_ref().map(|(e, w)| (e as &dyn cantrip_ai::Evaluator, *w)))
+                })
                 .expect("a recorder thread starts");
             workers.push(worker);
         }
@@ -498,12 +551,42 @@ impl Recorder {
 }
 
 #[cfg(feature = "ai-record")]
-fn work(receive: &Mutex<Receiver<Job>>, writer: &mut ShardWriter, mode: InfoMode) -> Totals {
+fn work(
+    receive: &Mutex<Receiver<Job>>,
+    writer: &mut ShardWriter,
+    mode: InfoMode,
+    also: &mut [(InfoMode, ShardWriter)],
+    distill: Option<(&dyn cantrip_ai::Evaluator, usize)>,
+) -> Totals {
+    let prior = cantrip_ai::Prior::new();
     let mut totals = Totals::default();
     loop {
         let job = receive.lock().map(|r| r.recv());
         let Ok(Ok((game, dealt, ending))) = job else { break };
-        let made = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| record(game, &dealt, &ending, mode, table())));
+        // The other modes first, from copies: the main record walks the game itself.
+        for (m, w) in also.iter_mut() {
+            let copy = game.clone();
+            let made = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| record(copy, &dealt, &ending, *m, table())));
+            match made {
+                Ok((g, _)) => {
+                    if w.write(&g).is_err() {
+                        *totals.failures.entry(format!("recorder/{} shard write failed", mode_name(*m))).or_default() += 1;
+                    }
+                }
+                Err(_) => *totals.failures.entry(format!("recorder/{} game walk panicked", mode_name(*m))).or_default() += 1,
+            }
+        }
+        let made = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| match distill {
+            Some((evaluator, worlds)) => {
+                let seed = dealt.seed;
+                let d = |g: &Game, seat: cantrip_engine::PlayerId, k: &cantrip_ai::Knowledge| {
+                    let at = g.state.mark().0 as u64;
+                    cantrip_ai::distill::world_mean(g, seat, k, table(), evaluator, &prior, worlds, seed ^ (at << 20))
+                };
+                cantrip_ai::record::record_distilled(game, &dealt, &ending, mode, table(), None, Some(&d))
+            }
+            None => record(game, &dealt, &ending, mode, table()),
+        }));
         match made {
             Ok((game, failures)) => {
                 for (k, n) in failures {
@@ -518,6 +601,11 @@ fn work(receive: &Mutex<Receiver<Job>>, writer: &mut ShardWriter, mode: InfoMode
     }
     if writer.close().is_err() {
         *totals.failures.entry("recorder/shard close failed".into()).or_default() += 1;
+    }
+    for (_, w) in also.iter_mut() {
+        if w.close().is_err() {
+            *totals.failures.entry("recorder/shard close failed".into()).or_default() += 1;
+        }
     }
     totals.games = writer.games;
     totals.samples = writer.samples;

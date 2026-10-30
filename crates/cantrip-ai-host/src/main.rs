@@ -10,7 +10,7 @@ use cantrip_ai::Evaluator;
 use cantrip_ai::record::table;
 use cantrip_ai_host::{AiHost, Loaded, STACK_SIZE, Sink};
 
-const USAGE: &str = "usage: cantrip-ai-host --model DIR [--model DIR ...] [--backend ort|tract] [--threads N] [--workers N] [--prior DIR]";
+const USAGE: &str = "usage: cantrip-ai-host --model DIR [--model DIR ...] [--backend ort|tract|remote] [--server HOST:PORT] [--threads N] [--workers N] [--prior DIR]";
 
 /// What a search holds is counted (`cantrip_ai::alloc`, `AiResult.Search.TreeBytes`).
 #[global_allocator]
@@ -19,6 +19,7 @@ static ALLOCATOR: cantrip_ai::alloc::Counting = cantrip_ai::alloc::Counting;
 struct Config {
     models: Vec<PathBuf>,
     backend: String,
+    server: Option<String>,
     threads: usize,
     workers: usize,
     prior: Option<PathBuf>,
@@ -33,6 +34,7 @@ fn config(args: &[String]) -> Result<Config, String> {
     let mut c = Config {
         models: Vec::new(),
         backend: default_backend.into(),
+        server: None,
         threads: 1,
         workers: 1,
         prior: None,
@@ -50,6 +52,7 @@ fn config(args: &[String]) -> Result<Config, String> {
         match args[i].as_str() {
             "--model" => c.models.push(PathBuf::from(value)),
             "--backend" => c.backend = value,
+            "--server" => c.server = Some(value),
             "--threads" => c.threads = number(&value)?.max(1),
             "--workers" => c.workers = number(&value)?.max(1),
             "--prior" => c.prior = Some(PathBuf::from(value)),
@@ -60,6 +63,12 @@ fn config(args: &[String]) -> Result<Config, String> {
     if c.models.is_empty() {
         return Err("no --model".into());
     }
+    if c.server.is_some() {
+        c.backend = "remote".into();
+    }
+    if c.backend == "remote" && c.server.is_none() {
+        return Err("--backend remote needs --server HOST:PORT".into());
+    }
     Ok(c)
 }
 
@@ -68,6 +77,15 @@ fn load(c: &Config) -> Result<Vec<Loaded>, String> {
     for dir in &c.models {
         let started = Instant::now();
         let evaluator: Arc<dyn Evaluator> = match c.backend.as_str() {
+            // The workers share the evaluator, each on a connection of its own while it evaluates.
+            "remote" => Arc::new(
+                cantrip_ai::RemoteEvaluator::connect(
+                    c.server.as_deref().unwrap_or_default(),
+                    dir,
+                    table(),
+                )
+                .map_err(|e| format!("{}: {e}", dir.display()))?,
+            ),
             "tract" => Arc::new(
                 cantrip_ai::TractEvaluator::load(dir, table())
                     .map_err(|e| format!("{}: {e}", dir.display()))?,

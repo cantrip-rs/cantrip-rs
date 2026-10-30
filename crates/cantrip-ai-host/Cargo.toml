@@ -37,3 +37,6 @@ ort = ["cantrip-ai/ort"]
 # The GPU engine: cantrip-infer, the native inference server, and self-play's `--backend gpu` (onnxruntime-gpu loaded
 # at run time; docs/ai-host.md).
 gpu = ["ort", "cantrip-ai/gpu"]
+
+[target.'cfg(windows)'.dependencies]
+mimalloc = { version = "0.1", default-features = false }

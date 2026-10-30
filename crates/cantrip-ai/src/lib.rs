@@ -13,6 +13,7 @@ pub mod atomic;
 mod answer;
 mod ask;
 pub mod cancel;
+pub mod distill;
 pub mod eval;
 #[cfg(feature = "gpu")]
 pub mod gpu;
@@ -24,6 +25,7 @@ pub mod record;
 pub mod remote;
 pub mod search;
 pub mod shard;
+pub mod trace;
 mod index;
 pub mod issearch;
 mod worlds;
