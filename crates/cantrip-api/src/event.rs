@@ -180,7 +180,9 @@ pub enum Event {
     /// read the event, never the permanent as it is later. `by` is the player who put them (CR 122.6a), always one: the
     /// controller of the spell or ability whose effect did it, the player whose action or cost it was, the controller of
     /// the source whose damage did it (CR 120.3d), or the controller of a permanent that enters with them.
-    CountersPut { object: ObjectId, kind: CounterKind, amount: i16, total: i16, by: PlayerId },
+    /// `types` are its card types as it had them as they were put (CR 205.2): "if you put a counter on a creature this turn"
+    /// asks what it was then, whatever it has become since (Song of the Dryads makes it a land, CR 613.1d) and wherever it has gone.
+    CountersPut { object: ObjectId, kind: CounterKind, amount: i16, total: i16, by: PlayerId, types: TypeSet },
     /// A permanent transformed (CR 701.27a): its other face is up now.
     Transformed { object: ObjectId },
     /// `player` gave a gift (CR 702.174c) to `to`: an instant or sorcery spell they control whose gift cost was paid
