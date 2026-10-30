@@ -1,0 +1,49 @@
+# CR 608.2b: one illegal target does not prevent the legal target player drawing two.
+# Disenchant destroys the targeted Mox in response. Bot2 still draws two cards.
+
+[Bot1 Deck]
+Make It So
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Make It So.Cast
+Bot1.Modes(1)
+! Bot1.Target(Bot2.Battlefield.Mox Sapphire)
+Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot2)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Sapphire)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Make It So; Mox Sapphire
+Bot1.Battlefield.Mox Pearl.Tapped = true
+Bot2.Library.Count = 13
+Stack.Count = 0

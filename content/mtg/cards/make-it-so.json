@@ -1,0 +1,6 @@
+{
+  "name": "Make It So",
+  "manaCost": "{3}{U}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• Untap target permanent you control. Target player draws two cards.\n• Create a 1/1 red Officer creature token and draw two cards."
+}

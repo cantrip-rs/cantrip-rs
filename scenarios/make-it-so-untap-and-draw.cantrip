@@ -1,0 +1,39 @@
+# Make It So {3}{U}: Sorcery, mode 1: "Untap target permanent you control. Target player draws two cards." Bot1 taps its
+# four moxes for the {3}{U}, then targets its own tapped Mox Sapphire and Bot2 as the player who draws two. Both happen as
+# it resolves: the Mox untaps and Bot2 draws from its 13-card library down to 11.
+
+[Bot1 Deck]
+Make It So
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Make It So.Cast
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot2)
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = true
+Bot2.Library.Count = 11
+Stack.Count = 0
