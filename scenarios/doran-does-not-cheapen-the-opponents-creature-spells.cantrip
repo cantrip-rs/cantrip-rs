@@ -1,0 +1,39 @@
+# Doran, Besieged by Time's reduction is for creature spells "you cast": Bot2, with only Mox Emerald's {G}, cannot cast Sylvan
+# Caryatid (0/3, {1}{G}) while Bot1 controls Doran - it still costs two.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Doran, Besieged by Time
+Island x2
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Sylvan Caryatid
+Island x5
+Island x13
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Doran, Besieged by Time.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+! Bot2.Hand.Sylvan Caryatid.Cast(Mana: short)
+
+[Expect]
+Bot1.Battlefield.Doran, Besieged by Time.Toughness = 5
+Bot2.Hand.Sylvan Caryatid.Colors.Count = 1

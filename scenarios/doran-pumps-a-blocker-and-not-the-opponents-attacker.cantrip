@@ -1,0 +1,49 @@
+# Doran, Besieged by Time blocks Bot2's Savannah Lions (2/1): Doran 0/5 gets +5/+5 as it blocks, so it kills the Lions, and
+# the Lions, an opponent's creature, get nothing from the trigger (they would be 3/2 and leave 3 damage on Doran).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Doran, Besieged by Time
+Island x2
+Island x14
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x5
+Island x13
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Doran, Besieged by Time.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Savannah Lions > Bot1)
+Bot2.Pass
+Bot1.Block(Doran, Besieged by Time > Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield.Savannah Lions = (absent)
+Bot2.Graveyard.Savannah Lions.Colors.Count = 1
+Bot1.Battlefield.Doran, Besieged by Time.Damage = 2
+Bot1.Life = 20
