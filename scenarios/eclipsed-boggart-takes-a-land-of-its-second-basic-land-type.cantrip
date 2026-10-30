@@ -1,0 +1,31 @@
+# Eclipsed Boggart: "When this creature enters, look at the top four cards of your library. You may reveal a Goblin, Swamp, or Mountain card from among them and put it into your hand. Put the rest on the bottom of your library in a random order." (CR 701.20a, 401.4) The top four are Goblin Champion, Swamp, Mountain and Island; the fifth, a Island, is not looked at.
+# Bot1 takes the Mountain, a land with the second basic land type.
+
+[Bot1 Deck]
+Black Lotus
+Eclipsed Boggart
+Island x5
+Goblin Champion
+Swamp
+Mountain
+Island
+Island
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Eclipsed Boggart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange(Mountain | Goblin Champion; Swamp; Island)
+? Bot1.Revealed = Mountain
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Island; Mountain
+Bot1.Library.Count = 15
