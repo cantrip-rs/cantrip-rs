@@ -1,0 +1,74 @@
+# The two play rules Nog's {3} gives him are abilities he gained (CR 613.1f): a "loses all abilities" effect with a later
+# timestamp takes them (CR 613.7). Bot1 makes Nog a Ferengi Officer on turn 1, with Fabled Passage in the graveyard. In
+# Bot1's turn-3 upkeep Bot2 casts Turn to Frog on him: that turn Fabled Passage is not offered from the graveyard, and after
+# one Island the second is not offered. Turn to Frog ends with the turn, and the gained abilities with it don't: on turn 5
+# Bot1 plays an Island and then Fabled Passage from the graveyard as the extra land.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Black Lotus
+Fabled Passage
+Nog, Ambitious Cadet
+Island
+Island x20
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Turn to Frog
+Island x20
+
+[Actions]
+Bot1.Hand.Fabled Passage.Play
+Bot1.Battlefield.Fabled Passage.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Island)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Nog, Ambitious Cadet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Nog, Ambitious Cadet.Activate(Ability: If Nog is a Rogue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Nog, Ambitious Cadet.Activate(Ability: If Nog is a Scout)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nog, Ambitious Cadet.Subtypes = Ferengi; Officer
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Turn to Frog.Cast(Bot1.Battlefield.Nog, Ambitious Cadet)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Nog, Ambitious Cadet.Subtypes = Frog
+! Bot1.Graveyard.Fabled Passage.Play
+Bot1.Hand.Island.Play
+? Bot1.LandsPlayed = 1
+! Bot1.Hand.Island.Play
+! Bot1.Graveyard.Fabled Passage.Play
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Nog, Ambitious Cadet.Subtypes = Ferengi; Officer
+Bot1.Hand.Island.Play
+Bot1.Graveyard.Fabled Passage.Play
+
+[Expect]
+Bot1.LandsPlayed = 2
+Bot1.Battlefield.Fabled Passage.Types = Land
+Bot1.Hand = Island

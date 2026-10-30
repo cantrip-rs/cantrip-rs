@@ -1,0 +1,51 @@
+# Transform Nog from Rogue to Scout, then attack: the granted tap trigger surveils two, putting the known top cards into the graveyard (CR 603.2, 701.25a, 613.4b).
+
+[Bot1 Deck]
+Nog, Ambitious Cadet
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Island
+Mountain
+Swamp
+Forest
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Nog, Ambitious Cadet.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Nog, Ambitious Cadet.Activate(Ability: If Nog is a Rogue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nog, Ambitious Cadet.Subtypes = Ferengi; Scout
+? Bot1.Battlefield.Nog, Ambitious Cadet.Power = 3
+? Bot1.Battlefield.Nog, Ambitious Cadet.Toughness = 4
+Bot1.Attack(Nog, Ambitious Cadet > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Forest; Plains)
+
+[Expect]
+Bot1.Battlefield.Nog, Ambitious Cadet.Subtypes = Ferengi; Scout
+Bot1.Battlefield.Nog, Ambitious Cadet.Power = 3
+Bot1.Battlefield.Nog, Ambitious Cadet.Toughness = 4
+Bot1.Graveyard = Plains; Forest
+Bot1.Surveilled = 2 requested, 2 looked

@@ -1,0 +1,64 @@
+# Nog gains "You may play lands from your graveyard" and "You may play an additional land on each of your turns" from his
+# {3} ability's effect (CR 613.1f), not from being an Officer. Arcane Adaptation naming Officer makes the Rogue Nog an
+# Officer too (CR 205.1b), but he has neither ability: on turn 3, with no land played yet, Fabled Passage in the graveyard
+# is not offered, and once an Island is played a second one is not. Then {1} makes him a Ferengi Scout and {3} an Officer
+# that gains both: the second Island stays in hand and Fabled Passage is played from the graveyard as the extra land.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Fabled Passage
+Nog, Ambitious Cadet
+Arcane Adaptation
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Fabled Passage.Play
+Bot1.Battlefield.Fabled Passage.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Island)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Nog, Ambitious Cadet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Arcane Adaptation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Officer)
+? Bot1.Battlefield.Nog, Ambitious Cadet.Subtypes = Ferengi; Officer; Rogue
+[T3 Bot1.Main1]
+! Bot1.Graveyard.Fabled Passage.Play
+Bot1.Hand.Island.Play
+? Bot1.LandsPlayed = 1
+! Bot1.Hand.Island.Play
+Bot1.Battlefield.Nog, Ambitious Cadet.Activate(Ability: If Nog is a Rogue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nog, Ambitious Cadet.Subtypes = Ferengi; Scout
+Bot1.Battlefield.Nog, Ambitious Cadet.Activate(Ability: If Nog is a Scout)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Nog, Ambitious Cadet.Subtypes = Ferengi; Officer
+Bot1.Graveyard.Fabled Passage.Play
+
+[Expect]
+Bot1.LandsPlayed = 2
+Bot1.Battlefield.Fabled Passage.Types = Land
+Bot1.Hand = Island

@@ -1,0 +1,11 @@
+{
+  "name": "Nog, Ambitious Cadet",
+  "manaCost": "{B}{G}",
+  "type": "Legendary Creature — Ferengi Rogue",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Menace\n{1}: If Nog is a Rogue, he becomes a Ferengi Scout with base power and toughness 3/4 and gains \"Whenever Nog becomes tapped, surveil 2.\"\n{3}: If Nog is a Scout, he becomes a Ferengi Officer and gains \"You may play lands from your graveyard\" and \"You may play an additional land on each of your turns.\"",
+  "keywords": [
+    "Menace"
+  ]
+}
