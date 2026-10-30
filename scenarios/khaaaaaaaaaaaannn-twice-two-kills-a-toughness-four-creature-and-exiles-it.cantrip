@@ -1,0 +1,45 @@
+# Khaaaaaaaaaaaannn! with X = 2 deals twice 2 = 4 damage: Bot2's 0/4 Kraken Hatchling survives 2 or 3 damage and dies
+# to exactly 4 ("twice X", CR 107.3a, 120.3). "If that creature would die this turn, exile it instead" (CR 611.2c,
+# 614.1a): it goes to exile, and Bot2's graveyard stays empty. The target is an opponent's creature.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mountain
+Khaaaaaaaaaaaannn!
+Mountain x11
+
+[Bot2 Deck]
+Island
+Kraken Hatchling
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Kraken Hatchling.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Khaaaaaaaaaaaannn!.Cast(Bot2.Battlefield.Kraken Hatchling; X: 2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Kraken Hatchling = (absent)
+Bot2.Graveyard.Count = 0
+Exile = Kraken Hatchling
+Bot1.Graveyard = Khaaaaaaaaaaaannn!

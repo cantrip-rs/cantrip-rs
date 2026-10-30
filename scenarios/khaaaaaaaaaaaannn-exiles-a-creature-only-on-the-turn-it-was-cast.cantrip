@@ -1,0 +1,58 @@
+# "If that creature would die this turn, exile it instead" (CR 611.2c, 614.1a): the replacement lasts only until the turn
+# ends (CR 514.2). Bot1's Ornithopter is the target of a Khaaaaaaaaaaaannn! with X = 0 on turn 1 - no damage, only the
+# replacement - and on turn 5 a Fatal Push kills it: it goes to the graveyard, the replacement long gone. On turn 3 the
+# same spell targets a creature, resolves, and a Fatal Push in the same turn kills it: it is exiled, so the death from
+# another source is replaced and the graveyard never gets it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Ornithopter
+Khaaaaaaaaaaaannn!
+Fatal Push
+Khaaaaaaaaaaaannn!
+Fatal Push
+Swamp x11
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Khaaaaaaaaaaaannn!.Cast(Ornithopter; X: 0)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Khaaaaaaaaaaaannn!.Cast(Bot2.Battlefield.Llanowar Elves; X: 0)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Fatal Push.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Fatal Push.Cast(Ornithopter)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot2.Battlefield.Llanowar Elves = (absent)
+Exile = Llanowar Elves
+Bot2.Graveyard.Count = 0
+Bot1.Graveyard = Fatal Push; Ornithopter; Fatal Push; Khaaaaaaaaaaaannn!; Khaaaaaaaaaaaannn!
