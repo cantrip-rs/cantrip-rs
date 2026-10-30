@@ -1,0 +1,8 @@
+{
+  "name": "La'An Noonien-Singh, Security",
+  "manaCost": "{2}{R}{R}",
+  "type": "Legendary Creature — Human Soldier",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "Whenever you attack while creatures you control have total power 8 or greater, target creature can't block this turn."
+}

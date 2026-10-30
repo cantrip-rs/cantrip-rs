@@ -1,0 +1,69 @@
+# La'An Noonien-Singh, Security's "Whenever you attack while creatures you control have total power 8 or greater, target
+# creature can't block this turn" (CR 508.3d, 603.4, 509.1b). On turn 5 La'An (4) and Bonebreaker Giant (4) attack for
+# exactly 8 power, so the trigger happens; Bot2's Llanowar Elves, chosen, may not block the Giant (8 damage: Bot2 at 12).
+# On turn 7 only the Giant attacks, but La'An still counts - it is the creatures you control, attacking or not, that total
+# 8 - so it triggers again; Bot1 targets La'An herself, and the same Elves block the Giant: the turn-5 effect has ended
+# (CR 514.2), and the 1/1 dies to the 4/4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Mox Pearl
+La'An Noonien-Singh, Security
+Bonebreaker Giant
+Mountain x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.La'An Noonien-Singh, Security.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bonebreaker Giant.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Attack(La'An Noonien-Singh, Security; Bonebreaker Giant > Bot2)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+! Bot2.Block(Llanowar Elves > Bonebreaker Giant)
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T7 Bot1.Main1]
+? Bot2.Life = 12
+Bot1.Attack(Bonebreaker Giant > Bot2)
+Bot1.Target(Bot1.Battlefield.La'An Noonien-Singh, Security)
+Bot2.Block(Llanowar Elves > Bonebreaker Giant)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves = (absent)
+Bot2.Graveyard = Llanowar Elves
+Bot1.Battlefield.Bonebreaker Giant.Damage = 1
+Bot2.Life = 12
