@@ -1,0 +1,34 @@
+# The death trigger also accepts a player as its any target; this control pins the one damage event (CR 115.1a, 603.3d).
+
+[Bot1 Deck]
+Munitions Enthusiast
+Mox Ruby
+Mox Pearl
+Mountain
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Munitions Enthusiast.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Munitions Enthusiast)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Munitions Enthusiast; Lightning Bolt
+Bot2.Life = 19

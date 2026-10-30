@@ -1,0 +1,11 @@
+{
+  "name": "Munitions Enthusiast",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Klingon Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Trample\nWhen this creature dies, it deals 1 damage to any target.",
+  "keywords": [
+    "Trample"
+  ]
+}

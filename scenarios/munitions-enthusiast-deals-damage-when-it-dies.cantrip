@@ -1,0 +1,40 @@
+# Lightning Bolt kills Munitions Enthusiast; its death trigger still deals exactly 1 damage to an opposing creature (CR 603.3d, 113.7a).
+
+[Bot1 Deck]
+Munitions Enthusiast
+Mox Ruby
+Mox Pearl
+Mountain
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Munitions Enthusiast.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Munitions Enthusiast)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Munitions Enthusiast; Lightning Bolt
+Bot2.Battlefield.Ornithopter.Damage = 1
