@@ -1,0 +1,53 @@
+# Soul Immolation: "X can't be greater than the greatest toughness among creatures you control". With only Gau (2/2) out, X = 3 is refused with the mana there to pay it, X = 2 is allowed: Gau takes two -1/-1 counters and dies, Bot2 loses 2 (18), its Elves and Bears both die.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Black Lotus
+Gau, Feral Youth
+Soul Immolation
+Mountain x14
+
+[Bot2 Deck]
+Black Lotus
+Llanowar Elves
+Grizzly Bears
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gau, Feral Youth.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Soul Immolation.Cast(X: 2)
+! Bot1.Hand.Soul Immolation.Cast(X: 3)
+Bot1.Choose(Gau, Feral Youth)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield = 
+Bot2.Graveyard = Grizzly Bears; Llanowar Elves; Black Lotus
+Bot1.Graveyard = Soul Immolation; Gau, Feral Youth; Black Lotus

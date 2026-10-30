@@ -1,0 +1,55 @@
+# Soul Immolation: "blight X ... deals X damage to each opponent and each creature they control". Bot1 announces X = 1 with
+# Gau (2/2) out, which takes one -1/-1 counter (a 1/1, still alive: its own creatures are not hit). Bot2 loses 1 life (19), its
+# Llanowar Elves (1/1) die and its Grizzly Bears (2/2) live with 1 damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Black Lotus
+Gau, Feral Youth
+Soul Immolation
+Mountain x14
+
+[Bot2 Deck]
+Black Lotus
+Llanowar Elves
+Grizzly Bears
+Mountain x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gau, Feral Youth.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Soul Immolation.Cast(X: 1)
+Bot1.Choose(Gau, Feral Youth)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Grizzly Bears.Damage = 1
+Bot2.Graveyard = Llanowar Elves; Black Lotus
+Bot1.Battlefield.Gau, Feral Youth.Counters.MinusOneMinusOne = 1
+Bot1.Battlefield.Gau, Feral Youth.Power = 1
