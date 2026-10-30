@@ -624,7 +624,7 @@ pub fn player_counters_banned(q: &dyn Query, cards: &'static CardTable, player: 
 
 /// Whether a static ability forbids `player` to make `payment` for a cost paid for `paid_for` (CR 101.2, 118.3, 601.2h,
 /// 602.2b, `CardDef::cost_bans`): Yasharn, Implacable Earth's "players can't pay life or sacrifice nonland permanents to cast
-/// spells or activate abilities". Asked only of a cost that pays life or sacrifices a permanent, as it is cast or activated.
+/// spells or activate abilities". Asked of life, sacrifice and beam-up payments as a spell is cast or an ability activated.
 pub fn cost_banned(q: &dyn Query, cards: &'static CardTable, player: PlayerId, paid_for: CostFor, payment: CostPayment) -> bool {
     any_static(q, cards, |d| d.cost_bans, |rule, asker| rule(q, asker, player, paid_for, payment))
 }

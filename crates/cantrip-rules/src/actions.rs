@@ -1185,7 +1185,14 @@ fn pays_permanents(cx: &Cx, cost: &Cost, p: &PermanentCost, asker: &Asker, id: O
 /// payments go (CR 101.2, `CardDef::cost_bans`): a sacrifice one forbids can't be made (CR 701.21a), and tapping, returning
 /// or exiling a permanent is no sacrifice.
 fn permanent_allowed(cx: &Cx, cost: &Cost, p: &PermanentCost, player: PlayerId, id: ObjectId, paid: Option<CostFor>) -> bool {
-    cost.tap_permanents || p.action != PermanentAction::Sacrifice || may_sacrifice_for(cx, player, id, paid)
+    if cost.tap_permanents {
+        return true;
+    }
+    match p.action {
+        PermanentAction::Sacrifice => may_sacrifice_for(cx, player, id, paid),
+        PermanentAction::BeamUp => !paid.is_some_and(|f| static_rules::cost_banned(cx, cx.cards(), player, f, CostPayment::BeamUp(id))),
+        _ => true,
+    }
 }
 
 /// The untapped permanents `player`'s mana abilities could tap as they are activated now (CR 601.2g, 605.3a): each one
@@ -1229,7 +1236,7 @@ fn choose_permanents(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cos
     }
     let purpose = match p.action {
         _ if cost.tap_permanents => Purpose::TapToPay,
-        PermanentAction::ReturnToHand => Purpose::ReturnToHand,
+        PermanentAction::ReturnToHand | PermanentAction::BeamUp => Purpose::ReturnToHand,
         PermanentAction::Exile => Purpose::ExileToPay,
         PermanentAction::Sacrifice => Purpose::SacrificeCost,
     };
@@ -1513,7 +1520,7 @@ fn pay_permanents(cx: &mut Cx, player: PlayerId, cost: &Cost, chosen: &[ObjectId
         return;
     }
     match cost.permanents.map(|p| p.action) {
-        Some(PermanentAction::ReturnToHand) => {
+        Some(PermanentAction::ReturnToHand | PermanentAction::BeamUp) => {
             ops::return_to_hand(cx, chosen);
         }
         Some(PermanentAction::Sacrifice) => {

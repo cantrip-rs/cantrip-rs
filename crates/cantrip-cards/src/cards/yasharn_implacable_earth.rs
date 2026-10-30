@@ -54,6 +54,7 @@ fn no_life_or_nonland_sacrifices(q: &dyn Query, _: &Asker, _: PlayerId, _: CostF
     match payment {
         CostPayment::Life => true,
         CostPayment::Sacrifice(permanent) => !q.chars(permanent).is(CardType::Land),
+        CostPayment::BeamUp(_) => false,
     }
 }
 

@@ -111,7 +111,7 @@ fn cost_text_of(cost: &Cost, name: &str) -> String {
         let verb = match p.action {
             _ if cost.tap_permanents => "Tap",
             PermanentAction::Sacrifice => "Sacrifice",
-            PermanentAction::ReturnToHand => "Return",
+            PermanentAction::ReturnToHand | PermanentAction::BeamUp => "Return",
             PermanentAction::Exile => "Exile",
         };
         let what = if p.count == 1 { "a permanent".to_string() } else { format!("{} permanents", p.count) };

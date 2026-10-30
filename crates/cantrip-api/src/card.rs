@@ -968,6 +968,9 @@ pub enum PermanentAction {
     Sacrifice,
     /// "Return N [permanents] you control to their owner's hand".
     ReturnToHand,
+    /// Return a creature to its owner's hand to pay a beam me up cost. A restriction on being beamed up
+    /// forbids this payment (CR 101.2, 118.3), without forbidding other returns to hand.
+    BeamUp,
     /// "Exile N [permanents] you control" (CR 118.3): The Soul Stone's and Food Chain's "Exile a creature you control",
     /// Soul Exchange's additional cost. An activated ability's exiles are linked to its source (CR 607.2a: cards "exiled
     /// with" it); an ability's are its cost objects for "the exiled creature" (`Query::cost_objects`, CR 608.2h).
@@ -2623,6 +2626,8 @@ pub enum CostPayment {
     Life,
     /// Sacrificing this permanent (CR 701.21a), judged as it is now.
     Sacrifice(ObjectId),
+    /// Returning this permanent to its owner's hand to pay a beam me up cost.
+    BeamUp(ObjectId),
 }
 
 /// A static ability that forbids some payments of the costs to cast spells and activate abilities (CR 101.2, 118.3, 601.2h,
