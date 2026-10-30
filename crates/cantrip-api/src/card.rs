@@ -882,6 +882,10 @@ pub enum VariableCost {
     /// Loamcrafter Faun's "you may discard one or more land cards" (`Game::may_pay_counted`, which says how many). The
     /// filter names a characteristic of the cards (CR 701.9c), so none of them is put into a hidden zone unrevealed.
     DiscardOneOrMore(ObjectFilter),
+    /// Blight X (CR 701.68a), X announced with the spell though its mana cost has no {X} (CR 107.3a, 601.2b), "X can't be greater
+    /// than the greatest toughness among creatures you control": Soul Immolation. X is the spell's X (CR 107.3i, its `x`), the
+    /// -1/-1 counters it puts on the one creature chosen as the cost is chosen (`Cost::blight` is the fixed N of "blight N").
+    BlightX,
 }
 
 impl VariableCost {
@@ -891,6 +895,7 @@ impl VariableCost {
     pub const fn governs(&self) -> &'static str {
         match self {
             VariableCost::SacrificeWithPowerX(_) => "the least power of the creature you sacrifice",
+            VariableCost::BlightX => "the number of -1/-1 counters you put on a creature you control",
             _ => "",
         }
     }
