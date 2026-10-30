@@ -7,7 +7,9 @@ use cantrip_oracle as oracle;
 /// the Goat check (read through the words of this card's text, CR 612), made as the spell resolves, on the creature as it is then; nothing if the target is no longer legal.
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let goat = g.words(item.object).subtype(Subtype::Goat);
-    if let Some(creature) = gain_control_untap_haste(g, item)
+    let creature = gain_control_untap_haste(g, item);
+    g.end_sentence();
+    if let Some(creature) = creature
         && g.chars(creature).has_subtype(goat)
     {
         pump(g, item.object, creature, 3, 0);
