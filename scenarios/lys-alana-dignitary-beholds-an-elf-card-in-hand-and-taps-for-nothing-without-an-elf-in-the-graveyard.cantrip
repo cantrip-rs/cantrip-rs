@@ -1,0 +1,35 @@
+# Lys Alana Dignitary: "As an additional cost to cast this spell, behold an Elf or pay {2}" (CR 601.2b, 701.4a). Bot1 has an Elvish Mystic in hand
+# and only Forest and Mox Jet, {G}{1}: beholding the Mystic reveals it and is the whole extra cost, and it stays in the hand. "{T}: Add {G}{G}.
+# Activate only if there is an Elf card in your graveyard" (CR 602.5b): the Mystic is in the hand, so on turn 3 the Dignitary, no longer
+# summoning sick, cannot be tapped for mana.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Lys Alana Dignitary
+Elvish Mystic
+Forest x3
+Forest x12
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lys Alana Dignitary.Cast
+Bot1.Modes(Behold an Elf)
+Bot1.Choose(Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Lys Alana Dignitary.Activate
+
+[Expect]
+Bot1.Revealed = Elvish Mystic
+Bot1.Battlefield.Lys Alana Dignitary.Power = 2
+Bot1.Battlefield.Lys Alana Dignitary.Tapped = false

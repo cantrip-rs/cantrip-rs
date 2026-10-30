@@ -1,0 +1,28 @@
+# Lys Alana Dignitary, "behold an Elf or pay {2}": with an Elvish Mystic in hand Bot1 may still pay {2} instead (CR 601.2b), and then nothing is
+# beheld or revealed. Bot1 floats exactly {G}{G}{G}{G} from Black Lotus and a Forest, which pays {1}{G} and the {2}, and the pool is empty.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Lys Alana Dignitary
+Elvish Mystic
+Forest x3
+Forest x12
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Lys Alana Dignitary.Cast
+Bot1.Modes(Pay {2})
+! Bot1.Choose
+? Bot1.Mana =
+
+[Expect]
+Bot1.Hand.Count = 4
