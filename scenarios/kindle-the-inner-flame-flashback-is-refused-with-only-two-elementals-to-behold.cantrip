@@ -1,0 +1,33 @@
+# Kindle the Inner Flame's flashback cost is {1}{R} and beholding three Elementals (CR 702.34a, 118.8, 701.4a). Bot1 casts the
+# Firecat and then Kindle from hand, making a token copy: two Elementals on the battlefield, none in hand, and RR floating
+# that pays the {1}{R}. The flashback is refused, for want of a third Elemental to behold.
+[Bot1 Deck]
+Black Lotus x3
+Regathan Firecat
+Kindle the Inner Flame
+Mountain x2
+Mountain x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Regathan Firecat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Kindle the Inner Flame.Cast(Bot1.Battlefield.Regathan Firecat)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}
+! Bot1.Graveyard.Kindle the Inner Flame.Cast(Ability: Flashback)
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Graveyard = Kindle the Inner Flame; Black Lotus; Black Lotus; Black Lotus

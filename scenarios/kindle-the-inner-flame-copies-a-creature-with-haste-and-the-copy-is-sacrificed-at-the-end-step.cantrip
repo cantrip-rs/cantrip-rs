@@ -1,0 +1,39 @@
+# Kindle the Inner Flame (CR 707.2, 707.9a, 603.2): Bot1 casts Regathan Firecat (4/1) and then Kindle targeting it. The
+# token copy has haste, so it attacks the turn it is made and Bot2 takes 4; it is sacrificed at the beginning of the end step
+# by the ability the copy's exception gives it. The Firecat stays and Kindle is in the graveyard.
+[Bot1 Deck]
+Black Lotus x3
+Regathan Firecat
+Kindle the Inner Flame
+Mountain x2
+Mountain x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Regathan Firecat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Kindle the Inner Flame.Cast(Bot1.Battlefield.Regathan Firecat)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Regathan Firecat#2.Token = true
+? Bot1.Battlefield.Regathan Firecat#2.Keywords = Haste
+! Bot1.Attack(Regathan Firecat#1 > Bot2)
+Bot1.Attack(Regathan Firecat#2 > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 16
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield = Regathan Firecat
+Bot1.Graveyard = Kindle the Inner Flame; Black Lotus; Black Lotus; Black Lotus

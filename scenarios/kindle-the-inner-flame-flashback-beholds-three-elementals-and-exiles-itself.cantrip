@@ -1,0 +1,43 @@
+# Kindle the Inner Flame's flashback (CR 702.34a, 118.8, 701.4a): {1}{R} and beholding three Elementals. After Kindle from hand
+# the Firecat and the token are two Elementals; a second Firecat in Bot1's hand is the third (an Elemental card in hand can be
+# beheld). Paying the {1}{R} with the RR left over makes another haste token, beholding exiles and taps nothing, and Kindle
+# is exiled, not put back in the graveyard.
+[Bot1 Deck]
+Black Lotus x3
+Regathan Firecat x2
+Kindle the Inner Flame
+Mountain
+Mountain x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Regathan Firecat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Kindle the Inner Flame.Cast(Bot1.Battlefield.Regathan Firecat)
+Bot1.Pass
+Bot2.Pass
+Bot1.Graveyard.Kindle the Inner Flame.Cast(Bot1.Battlefield.Regathan Firecat; Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+? Bot1.Battlefield.Count = 3
+Bot1.Attack(Regathan Firecat#2; Regathan Firecat#3 > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 12
+[T2 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 12
+Exile.Count = 1
+Bot1.Hand = Regathan Firecat; Mountain
+Bot1.Battlefield = Regathan Firecat
