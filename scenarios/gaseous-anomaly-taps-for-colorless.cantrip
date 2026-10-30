@@ -1,0 +1,17 @@
+# Its first ability is a mana ability and taps the land for one colorless mana (CR 605.1a).
+
+[Bot1 Deck]
+Gaseous Anomaly
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gaseous Anomaly.Play
+Bot1.Battlefield.Gaseous Anomaly.Activate(Ability: {T}: Add {C}.)
+? Bot1.Mana = {C}
+? Bot1.Battlefield.Gaseous Anomaly.Tapped = true
+
+[Expect]
+Bot1.Battlefield.Gaseous Anomaly.Types = Land

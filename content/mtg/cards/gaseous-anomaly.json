@@ -1,0 +1,5 @@
+{
+  "name": "Gaseous Anomaly",
+  "type": "Land",
+  "oracleText": "{T}: Add {C}.\n{5}{U}, {T}, Sacrifice this land: Draw two cards. Create a tapped Planet land token named New Planet with \"{T}: Add one mana of any color.\""
+}
