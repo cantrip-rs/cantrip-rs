@@ -1,0 +1,42 @@
+# Doran, Besieged by Time ({1}{W}{B}{G}) makes a creature spell with toughness greater than its power cost {1} less, and only
+# that: Black Lotus's {G}{G}{G} pays Sylvan Caryatid (0/3, {1}{G} -> {G}), leaving exactly {G}{G} in the pool (one less, not
+# two), and then exactly Grizzly Bears (2/2, still {1}{G}), leaving nothing.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Doran, Besieged by Time
+Black Lotus
+Sylvan Caryatid
+Grizzly Bears
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Doran, Besieged by Time.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Sylvan Caryatid.Cast
+? Bot1.Mana = {G}{G}
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Sylvan Caryatid.Toughness = 3
+Bot1.Battlefield.Grizzly Bears.Power = 2

@@ -1,0 +1,44 @@
+# Doran, Besieged by Time attacks with Savannah Lions: each creature you control that attacks gets +X/+X for the difference
+# between its power and toughness, whichever is larger. Doran 0/5 becomes 5/10 and Savannah Lions 2/1 becomes 3/2, so the
+# attack deals 5 + 3 and Bot2 is left on 12; the two triggers are separate, one per attacker.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Black Lotus
+Doran, Besieged by Time
+Savannah Lions
+Island x2
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Doran, Besieged by Time.Cast
+Bot1.Pass
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Attack(Doran, Besieged by Time; Savannah Lions > Bot2)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot2.Life = 12
+Bot1.Battlefield.Doran, Besieged by Time.Power = 5
+Bot1.Battlefield.Doran, Besieged by Time.Toughness = 10
+Bot1.Battlefield.Savannah Lions.Power = 3
+Bot1.Battlefield.Savannah Lions.Toughness = 2

@@ -1,0 +1,8 @@
+{
+  "name": "Doran, Besieged by Time",
+  "manaCost": "{1}{W}{B}{G}",
+  "type": "Legendary Creature — Treefolk Druid",
+  "power": 0,
+  "toughness": 5,
+  "oracleText": "Each creature spell you cast with toughness greater than its power costs {1} less to cast.\nWhenever a creature you control attacks or blocks, it gets +X/+X until end of turn, where X is the difference between its power and toughness."
+}
