@@ -1,0 +1,44 @@
+# Spock replaces the normal draw and Opt's draw separately, drawing two for each event (CR 121.6, 614.1a, 614.5).
+
+[Bot1 Deck]
+Mr. Spock, Science Officer
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Island
+Opt
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Mr. Spock, Science Officer.Cast(Spend: U, U, W, B)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Opt.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | )
+? Bot1.Library.Count = 16
+
+[Expect]
+Bot1.Battlefield.Mr. Spock, Science Officer.Types = Creature
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 16

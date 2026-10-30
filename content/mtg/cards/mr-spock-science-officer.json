@@ -1,0 +1,8 @@
+{
+  "name": "Mr. Spock, Science Officer",
+  "manaCost": "{2}{U}{U}",
+  "type": "Legendary Creature — Vulcan Human Scientist",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "If you would draw a card, draw two cards instead."
+}
