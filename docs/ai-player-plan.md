@@ -21,7 +21,7 @@ Two requirements beyond the design:
 | --- | --- | --- |
 | Training framework | **PyTorch**, run from containers: the official CUDA images and AMD's `rocm/pytorch` | The one framework with maintained builds for both CUDA and ROCm. The containers make NVIDIA and AMD the same command and keep the GPU stack off the NixOS host, which has no Python. |
 | Model exchange format | **ONNX**, the exporter and the opset both pinned | Every inference target below reads it. |
-| GPU inference for self-play and server seats | **A batched inference server in the same container as training** (PyTorch, CUDA or ROCm), fed by the Rust actors over a Unix socket with shared-memory batches | The one GPU path that is equally real on both vendors today: onnxruntime's ROCm provider is gone (removed around 1.23) and MIGraphX has no prebuilt `ort` binaries. |
+| GPU inference for self-play and server seats | **A batched inference server in the same container as training** (PyTorch, CUDA or ROCm), fed by the Rust actors (built over TCP on localhost, the same on Linux and Windows; see Phase 4) | The one GPU path that is equally real on both vendors today: onnxruntime's ROCm provider is gone (removed around 1.23) and MIGraphX has no prebuilt `ort` binaries. |
 | Native in-process inference | **ONNX Runtime through `ort`**: CPU always; CUDA as an option; MIGraphX on AMD as an option, **unverified** until built and run on AMD hardware | In-process CPU is the default for a server seat; the GPU providers are a speed-up, not a requirement. |
 | Browser inference | **onnxruntime-web**: WebAssembly on the CPU (the tested path), WebGPU where the browser has it (NVIDIA and AMD alike) | The same model file and operators as native. |
 | Pure-Rust fallback | **tract**, CPU, for `cargo test` with no native library and as a second parity reference | Checked in phase 0 to run the exported graph (LayerNormalization, masks); if it cannot, the model is changed to what it can run, or tract is dropped from the matrix. |
@@ -38,7 +38,7 @@ Two requirements beyond the design:
           container (Linux, CUDA or ROCm)                              play
   ┌────────────────────────────────────────────┐
   │ ai/ : model, trainer, ONNX export, parity, │
-  │       card-text embedder, inference server │◀───────── batches (Unix socket + shm)
+  │       card-text embedder, inference server │◀───────── batches (TCP, localhost)
   └──────────▲─────────────────────┬───────────┘                  │
      shards  │                     │ model.onnx, vocab, manifest  │
   ┌──────────┴─────────────────────▼───────────────────────────── ┴─┐
@@ -405,9 +405,10 @@ at that node, so every node trims moves bad for itself, and an opponent's good r
   recorded visit target cannot choose one.
 - **A cut holds only while the trim does** (`prune_reversible`, on by default). A cut edge keeps the value it had when
   it was cut, a shallow estimate, while its siblings' values keep moving as the search finds the replies to them; each
-  later path restores the cut edges at its nodes that the rule would no longer cut. Cut for good, an edge measured
-  against a sibling's early, optimistic value was never looked at again once that sibling's value fell below it, and
-  the search could settle on a worse move than the untrimmed search makes.
+  later path restores the cut edges at its nodes that the rule would no longer cut. Cut for good (the search before
+  2026-10-27), an edge measured against a sibling's early, optimistic value was never looked at again once that
+  sibling fell below it: in the advisor, a trained network at 2,608 simulations cut "Cast Carnivorous Cultivator" in 6 of 8 worlds
+  after 8-18 visits and tapped a Forest instead, where the untrimmed search, and the reversible one, cast it.
 
 `Prune`, `PruneBad`, `PruneMargin`, `PruneAfter`, `PruneAfterReplies` and `PruneReversible` are `Config` fields and
 `AiStart` settings; `Searched` reports `pruned`, `pruned_immediate`, `pruned_shallow` and `restored`.
@@ -421,8 +422,8 @@ at that node, so every node trims moves bad for itself, and an opponent's good r
 3. Sum the root visits across worlds; play the most visited (sampled proportionally for self-play's opening moves).
 
 **A world is a game the seat could be in.** Its root observation for the seat must be the real one
-(`Config::check_worlds` compares them; `every_world_dealt_shows_the_seat_the_game_it_is_in` requires it over whole
-games, mulligans included). A card the seat saw is that card in every zone, wherever the knowledge has lost track of
+(`Config::reuse_check` compares each world dealt fresh with it, `Searched::fresh_checked` and `fresh_mismatched`;
+`every_world_dealt_shows_the_seat_the_game_it_is_in` requires it over whole games, mulligans included). A card the seat saw is that card in every zone, wherever the knowledge has lost track of
 which copy is which object (a hand shuffled back by a mulligan, a revealed card put into a library); a library the
 seat is searching keeps its order; and a request whose waiting run drew on the generator before it (the opening after
 a mulligan: shuffle and redraw) is answered by the network alone, since every world would re-run that run on its own
@@ -465,9 +466,9 @@ pub trait Evaluator: Send + Sync {
 
 | Backend | Where | Role | Status (Phase 2) |
 | --- | --- | --- | --- |
-| `RemoteEvaluator` → the container's PyTorch server | NVIDIA (CUDA), AMD (ROCm) | the GPU path for self-play and server seats on both vendors | not built (Phase 3) |
+| `RemoteEvaluator` → the PyTorch inference server (`ai/cantrip_ai/serve.py`) | NVIDIA (CUDA), AMD (ROCm), or the CPU | the GPU path for self-play and server seats on both vendors | **built** (Phase 4, `cantrip_ai::remote`); parity passes on CUDA (an RTX 4080, Windows); ROCm not yet run |
 | `OrtEvaluator` CPU | any machine | the default in-process path once a server seat needs speed | **built** (`cantrip_ai::eval`, `--features ort`, off in the workspace's default build because `ort` downloads its binaries); parity passes |
-| `OrtEvaluator` CUDA | NVIDIA | optional speed-up | not built; **CUDA parity cannot run on the development machine** (no NVIDIA device) |
+| `RemoteEvaluator` → the native inference server (`cantrip-infer`), or `GpuEvaluator` in process (`cantrip_ai::gpu`) | NVIDIA (onnxruntime's CUDA provider) | the GPU path without Python on the request path: same protocol, batching and reproducibility as serve.py; one CUDA graph launch a batch | **built** (`--features gpu`, onnxruntime-gpu loaded at run time; docs/ai-host.md, "The native inference server"); parity passes at fp32, tf32 and fp16 on an RTX 4080 (Windows); AMD stays on serve.py |
 | `OrtEvaluator` MIGraphX | AMD, Linux | optional, unverified until it is built and run on AMD | not built |
 | `TractEvaluator` | pure Rust, CPU | tests; parity reference; the workspace's default | **built** (`cantrip_ai::eval`, tract-onnx 0.23); parity passes |
 | onnxruntime-web WASM / WebGPU | the browser | WASM tested; WebGPU where the browser has it | spike only (Phase 0) |
@@ -515,9 +516,11 @@ A shard's layout and the flags that write one are in `docs/host-protocol.md` ("R
 `ai/shards.py` reads them (`--check` checks each step's chosen option is legal).
 Shards are kept for the last eight generations, and older ones are deleted unless pinned.
 
-**Reproducibility.** The engine is deterministic and self-play's seeds are recorded. Batched asynchronous inference
-is not deterministic across runs, so a self-play run is reproducible in its seeds and its model, not bit for bit.
-That is stated, not hidden.
+**Reproducibility.** The engine is deterministic and self-play's seeds are recorded. The inference server keeps it so:
+a row's outputs never depend on what it was batched with (one padded shape per bucket, deterministic kernels), so a
+self-play run through the same server configuration (batch sizes, precision, GPU and PyTorch) plays the same games,
+bit for bit, whatever the lanes and timing. A run through another configuration, or the CPU backends, differs within
+parity's tolerance.
 
 ### Compatibility
 
@@ -647,7 +650,7 @@ argmax on 99.5%.
 | PyTorch on CUDA; `ort` CUDA (`--features cuda`) | **blocked**: no NVIDIA device | - | - |
 | PyTorch on ROCm; `ort` MIGraphX | **blocked**: no AMD GPU | - | - |
 
-- **What unblocks NVIDIA:** the user's NixOS config with `hardware.nvidia` (the driver) and
+- **What unblocks NVIDIA:** the NixOS host's config with `hardware.nvidia` (the driver) and
   `hardware.nvidia-container-toolkit.enable = true` plus docker or podman, then `docker build -f ai/Dockerfile.cuda`
   and `docker run --device nvidia.com/gpu=all`. For native `ort` CUDA, CUDA 12 and cuDNN 9 from Nix on the library
   path and `cargo run --release --features cuda` in `ai/spike/rs`.
@@ -850,11 +853,11 @@ parity and gate runs.
   - searched answers over a sample of the scenario corpus (one file in 90) are taken by the engine.
 
   In `crates/cantrip-ai-host/tests/ai_host.rs`, a searched answer carries its stats and the table takes it.
-- **Not built: batching across games.** BotLab runs one AI host a lane (`--workers 1 --threads 1`), and each has its
-  own evaluator. Inside a 16-lane run, batch 8 gives no more evaluations a second than batch 1 (about 190-290 a second
-  a lane at full load, against 870 a second for a lone batch-1 run). The CPU is saturated by sixteen batch-1
-  evaluators, so a shared queue would buy nothing here. On a GPU it is the whole point: one evaluator taking every
-  lane's leaves at batch 64-512. That is the `RemoteEvaluator`, and it comes with the GPU.
+- **Batching across games** was not built in Phase 3. BotLab runs one AI host a lane (`--workers 1 --threads 1`), and
+  each has its own evaluator. Inside a 16-lane run, batch 8 gives no more evaluations a second than batch 1 (about
+  190-290 a second a lane at full load, against 870 a second for a lone batch-1 run). The CPU is saturated by sixteen
+  batch-1 evaluators, so a shared queue would buy nothing here. On a GPU it is the whole point: one evaluator taking
+  every lane's leaves in batches. That is the `RemoteEvaluator`, built in Phase 4 (below).
 - **Throughput** (2026-10-19). Generation 0, Full mode, ort CPU, 16 games in parallel on 16 cores, against the
   tactical bot, 32 games each, rw-aggro against ub-reanimator (shuffles from 3001). A searched decision is one that ran
   the budget; the rest were forced, a payment, or passed by the shortcut.
@@ -908,7 +911,7 @@ parity and gate runs.
   retention.
 - **Gate:** five accepted generations, and the hidden-mode seat scores 60%+ against the tactical bot on its decks,
   significant under SPRT.
-- **Step A: the loop, in Full mode** (the user's decision: every seat Full; the mode stays a parameter).
+- **Step A: the loop, in Full mode** (every seat Full; the mode stays a parameter).
 - Done: self-play, `cantrip-selfplay` (`cantrip_ai_host::selfplay`; `docs/ai-host.md`, "Self-play"):
   - both seats search with one model at a fixed simulation count, never a deadline;
   - a seat's first 20 searched decisions are sampled from the root's visits at temperature 1, the rest most visited;
@@ -1016,6 +1019,63 @@ parity and gate runs.
   - The curriculum needs authored problems on the slice's decks ("win this turn", "this combat"), each with its
     answer. A `# Problem` scenario with its goal and a corpus of those is the next step, after the loop shows it
     improves on self-play alone.
+
+- Done (2026-10-26): **the GPU inference server and `RemoteEvaluator`** (the Decisions table's GPU path), on a Windows 11
+  machine with 32 threads (a Ryzen 9 7950X) and an RTX 4080. `docs/ai-training.md` ("The GPU inference server") is the
+  runbook, `docs/ai-host.md` the backend.
+  - **The client**, `cantrip_ai::remote::RemoteEvaluator`, an `Evaluator` like the others. Self-play
+    (`cantrip-selfplay --backend remote --server ADDR`, a connection a lane) and the AI host (`--backend remote`, a pool
+    of connections its workers share) use it; BotLab's `--ai-server ADDR` gives it to every AI host. The model
+    directory is read and checked as `Model::load` checks it (the card rows are mapped to the model's on the client),
+    and the hello names the model by its manifest's hash with this build's schema and encoder hash, which the server
+    must match.
+  - **The transport is TCP on localhost**, one for both OSes, not a Unix socket with shared memory. A batch is about
+    2 KB a position on the wire (each row's real tokens only, as bytes and u16 card rows, the numbers sparse as a count,
+    feature bytes and f16 values), against 12 KB dense in f16 and 41 KB as the graphs' tensors. At 20 k positions a
+    second that is 40 MB a second, which loopback carries without notice. The rows go grouped by bucket, so the server
+    takes each bucket's rows as one run. The reply is the value, aux and the legal tokens' logits.
+  - **The server**, `python -m cantrip_ai.serve`: the network in PyTorch from the model directory's `model.pt` (export
+    writes it; `--weights-only` adds it to an older directory). Every connection's rows are queued per model and
+    bucket and run in fixed-size batches (32 tokens: 256 rows, 64: 128, 128: 64) on two pipelines, each with its own
+    stream, pinned buffers and captured CUDA graph. It checks the model's references at start, and refuses a model that
+    fails them.
+  - **Reproducibility.** Every call of a bucket has one shape, the kernels are deterministic
+    (`use_deterministic_algorithms`, `CUBLAS_WORKSPACE_CONFIG=:4096:8`), and no operation of the network mixes rows, so
+    a row's bits never depend on its companions or its slot (`ai/tests/test_serve.py`). Self-play at seed 1 through the
+    server played the same games (every game's bytes hashed, `examples/shard_games`) over 16, 32, 64 and 128 lanes,
+    two or three pipelines and separate server runs. Another batch size for a bucket changes the bits (another shape),
+    so the batch sizes are part of the configuration.
+  - **Precision: fp32.** Against the references at export's tolerance (1e-3), fp32 is within 1e-7. TF32 (value 1e-4,
+    aux 4.3e-3) and fp16 (aux 4.4e-3) fail on the life-swing output, which is in life points; bf16 fails everything
+    (value 1.2e-3, aux 3.4e-2, 98.4% the same best option). TF32 and fp16 would be 1.3-1.6x faster.
+  - **Throughput**, the production-size network (width 144, 4 layers, 1.24 M parameters, untrained, so every game runs
+    to the 60-turn cap and the games are long), self-play at 64 simulations from seed 1. Evaluations a second is the
+    number that carries over to a trained network.
+
+    | Backend | Lanes, games | Seconds | µs a simulation a lane | Games an hour | Evaluations a second | GPU busy |
+    | --- | --- | --- | --- | --- | --- | --- |
+    | ort CPU, a thread a lane | 16, 16 | 294 | 4,785 | 196 | 3,343 | |
+    | ort CPU, with mimalloc | 16, 16 | 264 | 4,296 | 218 | 3,724 | |
+    | remote GPU | 16, 16 | 84 | 1,359 | 690 | 11,773 | 82% |
+    | remote GPU | 32, 32 | 111 | 1,794 | 1,035 | 17,836 | 64% |
+    | remote GPU, the default (two lanes a thread) | 64, 64 | 194 | 3,146 | 1,187 | 20,343 | 76% |
+    | remote GPU | 128, 128 | 374 | 6,056 | 1,232 | 21,136 | 70% |
+
+    - The GPU alone, fp32 with CUDA graphs: about 95 k rows a second at 32 tokens, 54 k at 64 and 22 k at 128 (flat from
+      32 rows a batch up). Self-play's leaves were about half 64 and half 128 tokens, so about 29 k a second is the GPU's
+      ceiling for them.
+    - Where the time goes at 64 lanes: a lane's request cycle is 20 ms, of which 15 ms is waiting on the server and
+      0.13 ms encoding the batch for the wire. The server holds a request about 14 ms (6 ms of it queued). The server is
+      now the limit: its Python threads (decoding about 60 µs a request, assembling batches, replying) share one
+      interpreter lock, and the GPU is 70-76% busy.
+    - **The allocator.** On Windows the lanes' allocations contend for the system heap: with it, 32 lanes made 7.9 k
+      evaluations a second at 16% of the CPU. `cantrip-selfplay` uses mimalloc on Windows (the Linux build is
+      unchanged), which doubled the remote rate and made ort self-play 10% faster; the games are the same.
+- Done: `cantrip_ai.train --workers N` on Windows (its batch function is a module-level class, so a worker process can
+  be handed it), and the generation driver on Windows: `champions/current` falls back to a directory junction where
+  Windows makes no symlink, logs and records are read as UTF-8, `tools\bot-duel.cmd` builds the AI host with ONNX
+  Runtime for a neural seat, and `--gpu-server` (on by default when the training device is a GPU) runs self-play,
+  parity and the gate through the server.
 
 **Phase 5: hidden information and the browser (3 weeks).**
 - The belief head reweighting worlds; ISMCTS, kept if it wins.

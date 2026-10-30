@@ -5,20 +5,83 @@ a **mirror** of each game the table hosts. When asked, it answers a seat's reque
 search over it (`cantrip_ai::search`). A search never holds the rules host's lock. The plan it serves is `docs/ai-player-plan.md` ("Serving and measuring").
 
 ```
-cantrip-ai-host --model DIR [--model DIR ...] [--backend ort|tract] [--threads N] [--workers N] [--prior DIR]
+cantrip-ai-host --model DIR [--model DIR ...] [--backend ort|tract|remote] [--server HOST:PORT] [--threads N] [--workers N]
+    [--prior DIR]
 ```
 
 - **`--model DIR`** is a model directory: `manifest.json` and `model-t*.onnx`, as `ai/cantrip_ai/export` writes it.
   Each model is loaded once, at start. `Model::load` checks each one against this build's encoding, so a mismatched
   schema or encoder hash is refused. A model is named by its directory's name (`gen0`).
 - **`--backend`**: `ort` is ONNX Runtime on the CPU, and is the default of a build with `--features ort`. `tract`
-  is pure Rust, and is the only backend of a plain build.
+  is pure Rust, and is the only backend of a plain build. `remote` evaluates on the inference server (below), in any
+  build.
+- **`--server HOST:PORT`** is the inference server `remote` evaluates on; giving it implies `--backend remote`.
 - **`--threads`** is the evaluator's intra-op threads.
 - **`--workers`** is the answering threads. The default for both is 1.
 - **`--prior DIR`** is the metagame's decklists (`decks/`, every `.txt` under it, each weighed alike;
   `Prior::from_decks`): what a Decklist or Hidden search deals the opponent's unknown cards from (`determinize`).
   A Hidden search needs it; without it such an `AiStart` is refused, since an empty prior would deal the
   opponent's own library and leak it.
+
+### The inference server
+
+`--backend remote` sends every evaluation to `python -m cantrip_ai.serve` (`ai/cantrip_ai/serve.py`), which holds the
+networks on the GPU and runs the rows of every connection together in batches (docs/ai-player-plan.md, "Decisions";
+how to run it is docs/ai-training.md, "The GPU inference server"). The client is `cantrip_ai::RemoteEvaluator`
+(`crates/cantrip-ai/src/remote.rs`, which documents the wire protocol):
+
+- **The transport** is TCP, on `127.0.0.1` when the server is on the same machine, on Windows and Linux alike. Frames
+  are a u32 length and the bytes.
+- **The hello** names the model by its `manifest.json` (FNV-1a 64 of the file) and carries this build's encoding schema
+  and encoder hash. The server refuses a model it does not serve, and an encoding that is not its own, so a
+  mismatched model is refused at start, as `Model::load` refuses it locally. The model directory is still read here:
+  its card index maps the runtime's card rows to the model's, as the local backends map them, before they are sent.
+- **A batch on the wire** is each row's real tokens only (the padding after its last real token is the server's to
+  fill in), in narrow types: kind, categoricals and pointers as bytes, card rows as u16 (u32 past 65,535), the legal
+  bits packed, and the numbers sparse: each token's count of non-zero numbers, their features and their values as f16,
+  which is exact for an encoded position (a number f16 cannot hold makes the batch go dense in f32 instead). A
+  position is about 2 KB, against 12 KB dense in f16 and 41 KB as the graphs' i64 and f32 tensors (measured on 64
+  held-out positions). The rows go grouped by bucket, so the server takes each bucket's rows as one run. The reply is
+  the value, aux and the logits of the legal tokens only, all f32; every other token's logit is `MASKED` in every
+  backend, so the policy is rebuilt exactly.
+- **Each row runs at its own bucket**, the smallest that holds its real tokens, padded to a fixed batch size per
+  bucket with deterministic kernels, so its outputs never depend on what it was batched with. (The local backends run
+  a batch at its largest row's bucket.) The same game played twice through the same server is the same game.
+- The evaluator keeps a pool of connections, so each of the host's workers has its own while it evaluates.
+
+### The native inference server
+
+`cantrip-infer` (`crates/cantrip-ai-host/src/bin/infer.rs`, built with `--features gpu`) serves the same protocol as
+serve.py, so `--backend remote --server`, BotLab's `--ai-server` and `CANTRIP_AI_SERVER` use either. It is
+`cantrip_ai::gpu` (`crates/cantrip-ai/src/gpu.rs`) behind a TCP front: onnxruntime's CUDA provider, no Python on the
+request path. A connection is a thread that decodes its frames straight into the engine's rows and waits on them.
+
+```
+cantrip-infer serve --model DIR [--model DIR ...] [--port 7710] [--precision fp32|tf32|fp16]
+    [--batch N | 32:N,64:N,128:N] [--flush-ms 2] [--pipelines 2] [--device 0] [--no-check] [--ready-file PATH]
+cantrip-infer bench --model DIR [--clients 64] [--rows 8] [--seconds 20]     # the engine alone, on the references
+cantrip-infer compare --model DIR --a HOST:PORT --b HOST:PORT [--shards DIR] # two servers on the same positions
+```
+
+- **Libraries.** onnxruntime is loaded at run time: `ORT_DYLIB_PATH` (or `--ort-dylib`) names an `onnxruntime.dll` built
+  with the CUDA provider, `CANTRIP_CUDA_LIBS` (or `--cuda-libs`) the directory of CUDA 12's and cuDNN 9's libraries.
+  onnxruntime-gpu 1.24.4 from PyPI is built for CUDA 12 (1.25 on are built for CUDA 13); unpack its wheel and take
+  `onnxruntime/capi/onnxruntime.dll`. PyTorch's `torch/lib` has CUDA 12's and cuDNN 9's libraries. The ROCm path stays
+  serve.py's: the engine is the CUDA provider only.
+- **Batching** is serve.py's: a queue per model and bucket, a GPU call padded to the bucket's fixed batch size, run
+  when full, when every client is waiting and nothing runs, or after `--flush-ms`; `--pipelines` workers, each with its
+  own sessions and CUDA stream. A row's outputs never depend on its companions (one shape per bucket, deterministic
+  compute); the tests check it bitwise.
+- **One launch a batch.** Each session's inputs and outputs are bound to device buffers, so it replays a captured CUDA
+  graph instead of launching ~190 kernels; the batch is written into pinned host buffers and copied on a stream of the
+  worker's own. The graph takes kind, categoricals and pointers as bytes and the card row as i32 (widened on the
+  device, the same values).
+- **Precision.** `fp16` casts every MatMul and Gemm to half precision (inputs to half, output back to float), what
+  PyTorch's autocast does to them; everything else stays fp32. The graph is rewritten in memory; the model directory is
+  never written. At start the references are held to export's 1e-3 at fp32 and to serve.py's reduced bar below it.
+- **Self-play in one process.** `cantrip-selfplay --backend gpu [--precision fp16] [--gpu-batch ...] [--pipelines N]`
+  (built with `--features gpu`) runs the same engine inside self-play, every lane an evaluator: no sockets, and each
+  position goes to the engine at its own length (`Evaluator::evaluate_positions`) instead of padded to a batch.
 
 The binary installs a counting allocator (`cantrip_ai::alloc`), so a search's `TreeBytes` is measured, not estimated.
 
@@ -75,8 +138,9 @@ same handle spaces. A view mints handles, so `View` is mirrored too.
     - `Deadline` is still the hard limit: the search stops at `SearchMs` or `Deadline`, whichever is sooner, and
       the network's fallback answer is given until `Deadline`. The deadline is read before each simulation and
       between the requests a line plays with no choice, so a search ends soon after it however long its lines are.
-    - `MemoryMb` (2048) bounds what the seat's search tree may hold (`search::Config::memory`): reached, the search
-      stops as at its deadline. 0 is no bound.
+    - `MemoryMb` (2048) bounds what the seat's tree may hold, its part kept from the seat's last search included
+      (`search::Config::memory`): reached, the search stops as at its deadline, and a kept tree holding more than
+      half of it is let go and the search begins afresh. 0 is no bound.
     - `Worlds` (default 8) is the worlds of a Decklist or Hidden search; Full searches one.
     - `CPuct` (1.5), `PriorTemperature` (1.0) and `Batch` (8, leaves an evaluation) tune it.
     - `Prune` (true), `PruneBad` (-0.80), `PruneMargin` (0.20), `PruneAfter` (2) and `PruneAfterReplies` (1) tune
@@ -96,7 +160,7 @@ same handle spaces. A view mints handles, so `View` is mirrored too.
   - `Search`, for an answer that was searched: `Simulations`, `Evaluations`, `Batches`, `Nodes` (the tree's
     sub-step nodes), `Positions` (requests reached), `GameNodes` (what the forks' game trees grew by), `TreeBytes`
     (the peak heap the search held, `Counted` when the counting allocator measured it; `MemoryBound` when `MemoryMb`
-    stopped the search), `RootValue` (the root's
+    stopped the search, `KeptDropped` when the kept tree was let go for it), `RootValue` (the root's
     visits' mean for the seat), `NetValue` (the network's value of the root), `Worlds`, `Shortcut` (the priority
     shortcut answered pass), `Refused` (the engine refused the searched answer, so the network's was given),
     `Pruned`, `PrunedImmediate` and `PrunedShallow` (edges branch trimming cut) and `SearchUs`. A request with one legal answer, a payment, and an answer the shortcut gives before any simulation
@@ -160,6 +224,9 @@ same handle spaces. A view mints handles, so `View` is mirrored too.
   and `--game`, it replays one game of a duel.
 - Options:
   - `--model DIR` (the default is `../ai-data/models/gen0`) and `--ai-backend ort|tract`.
+  - `--ai-server HOST:PORT` has every AI host evaluate on the inference server there (`--backend remote`), which
+    must serve every model the run names (`--model` and `--model-b`). The AI hosts then wait on the GPU, not the CPU,
+    so `--parallel` can be more than the cores.
   - `--model-b DIR` plays the b seat's neural seats with a second model, so `--a neural@64 --b neural@64 --model
     models/gen1 --model-b champions/gen0` is a generation's gate. Both models are loaded by one AI host and named by
     their directories, which must differ.
@@ -182,8 +249,9 @@ written to shards with the search's root visits as the policy target.
 ```
 cantrip-selfplay --model DIR --out DIR [--games N] [--hours H] [--simulations N] [--lanes N] [--seed N]
     [--pairing DECK:DECK ...] [--decks DIR] [--sampled N] [--temperature T] [--mode full|decklist|hidden] [--worlds N]
-    [--max-turns N] [--max-answers N] [--backend ort|tract] [--threads N] [--prior DIR] [--resume]
-    [--shard-games N]
+    [--max-turns N] [--max-answers N] [--backend ort|tract|remote|gpu] [--server HOST:PORT] [--threads N] [--prior DIR]
+    [--resume] [--shard-games N] [--precision fp32|tf32|fp16] [--gpu-batch N|32:N,64:N,128:N] [--pipelines N]
+    [--flush-ms MS] [--device N]
 ```
 
 - It runs in process, not as a table with an AI host beside it. Each lane is a thread with its own evaluator and
@@ -208,6 +276,17 @@ cantrip-selfplay --model DIR --out DIR [--games N] [--hours H] [--simulations N]
 - The report, printed and written to `OUT/selfplay-report.json`, has the games, samples, visit samples, caps, drops,
   errors, searched decisions, simulations, evaluations, network fallbacks, games and samples an hour, wins by seat and
   deck, the answers that made no sample, and on a resumed run `Resumed` and `GamesThisRun`.
+- `--backend remote --server HOST:PORT` has every lane evaluate on the inference server, each lane a connection; the
+  server batches the leaves of all of them. A lane then spends most of its time waiting on the GPU, so more lanes than
+  cores keep it busy (docs/ai-training.md has the measured defaults). At a seed, a run through the same server plays
+  the same games, whatever the lanes: `cargo run --release -p cantrip-ai --example shard_games -- DIR` prints each
+  game's seed and a hash of its bytes, so two runs are compared with `diff`.
+- `--backend gpu` (a build with `--features gpu`) runs the native server's engine in the self-play process itself
+  (above, "The native inference server"): every lane an evaluator of one engine, no sockets. The engine's options are
+  cantrip-infer's (`--precision`, `--gpu-batch`, `--pipelines`, `--flush-ms`, `--device`); its references are checked
+  at start as the server checks them, and its throughput is printed at the end.
+- On Windows it allocates with mimalloc: the system heap serialised the lanes' allocations (32 lanes made half the
+  evaluations a second with it). The Linux build keeps the system allocator.
 - Build it with `cargo build --release -p cantrip-ai-host --features ort`.
 
 ## Tests
@@ -226,6 +305,13 @@ cantrip-selfplay --model DIR --out DIR [--games N] [--hours H] [--simulations N]
 - that every sample's visits sum to 1, every visited option is legal, and the root values lie in [-1, 1];
 - that a run of two capped games writes shards that read back, with `selfplay:tiny@8` and `full` in the header, and
   a report.
+
+`crates/cantrip-ai/tests/remote.rs` checks the remote evaluator against a server written in the test (tract, each row
+at its own bucket): a batch arrives as the same tensors (mapped card rows, wide card rows, numbers f16 cannot hold, and
+a cut-short frame refused), the references come back within export's tolerances and bitwise what tract makes of each
+position alone, threads share an evaluator, and another model or encoder is refused at the hello.
+`ai/tests/test_serve.py` checks the server itself; `model_parity` (`crates/cantrip-ai/tests/eval.rs`) runs a real
+model's references through a running server when `CANTRIP_AI_SERVER` names it.
 
 `crates/cantrip-ai/tests/search.rs` checks the search itself (docs/ai-player-plan.md, Phase 3).
 
