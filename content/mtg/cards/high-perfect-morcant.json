@@ -1,0 +1,8 @@
+{
+  "name": "High Perfect Morcant",
+  "manaCost": "{2}{B}{G}",
+  "type": "Legendary Creature — Elf Noble",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Whenever High Perfect Morcant or another Elf you control enters, each opponent blights 1. (They each put a -1/-1 counter on a creature they control.)\nTap three untapped Elves you control: Proliferate. Activate only as a sorcery. (Choose any number of permanents and/or players, then give each another counter of each kind already there.)"
+}

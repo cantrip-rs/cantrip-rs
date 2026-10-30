@@ -1,0 +1,64 @@
+# High Perfect Morcant, Llanowar Elves and Elvish Mystic make Bot2 blight three times: Sylvan Caryatid (0/3) twice and Ornithopter
+# (0/2) once. Tapping the three untapped Elves (Morcant, the Elves and the Mystic, summoning sick as the cost does not care)
+# proliferates: Bot1 chooses only Ornithopter, which gets a second -1/-1 counter and dies, while Caryatid stays at two counters.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+High Perfect Morcant
+Black Lotus
+Llanowar Elves
+Elvish Mystic
+Island x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Sylvan Caryatid
+Ornithopter
+Island x3
+Island x13
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Sylvan Caryatid.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.High Perfect Morcant.Cast
+Bot1.Pass
+Bot2.Choose(Sylvan Caryatid)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Choose(Sylvan Caryatid)
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Choose(Ornithopter)
+Bot1.Battlefield.High Perfect Morcant.Activate
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Battlefield.Sylvan Caryatid.Counters.MinusOneMinusOne = 2
+Bot2.Battlefield.Sylvan Caryatid.Toughness = 1
+Bot1.Battlefield.High Perfect Morcant.Tapped = true
+Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Elvish Mystic.Tapped = true
