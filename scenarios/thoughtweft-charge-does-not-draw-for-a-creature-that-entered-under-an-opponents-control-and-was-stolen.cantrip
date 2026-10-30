@@ -1,0 +1,50 @@
+# "If a creature entered the battlefield under your control this turn" is judged as it entered (CR 603.6a): Bot2 flashes in Cathar
+# Commando during Bot1's turn, so it enters under Bot2's control; Bot1 steals it with Act of Treason and pumps it with Thoughtweft
+# Charge, which does not draw: the Commando is a creature Bot1 controls now, but it did not enter under Bot1's control.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Act of Treason
+Thoughtweft Charge
+Black Lotus
+Swamp x14
+
+[Bot2 Deck]
+Mox Pearl
+Plains
+Cathar Commando
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Hand.Cathar Commando.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Act of Treason.Cast(Cathar Commando)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thoughtweft Charge.Cast(Cathar Commando)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Cathar Commando.Power = 6
+Bot1.Hand.Count = 2
