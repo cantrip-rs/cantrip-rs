@@ -20,6 +20,7 @@ header; most pass every argument on to the script behind them.
 | `play-vs-bot.cmd` | you against the tactical bot, which your own browser tab plays (`docs/tactical-bot.md`) |
 | `play-vs-llm.cmd` | you against a language model (OpenRouter) |
 | `play-release-build.cmd` | you against a bot in the shipping Release build of the web client |
+| `in-person.cmd` | two players at one table: a phone each and one or two tablets for the board, over the local network; opens the setup page, which starts a grid draft and shows a QR code per device (`docs/in-person.md`) |
 
 ## Draft against bots
 

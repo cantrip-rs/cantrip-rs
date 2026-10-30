@@ -17,8 +17,15 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
+  <!-- The setup page, one file of HTML, CSS and script, served from the assembly to this computer alone. -->
+  <ItemGroup>
+    <EmbeddedResource Include="setup.html" LogicalName="Cantrip.Server.InPerson.setup.html" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="MessagePack" />
+    <!-- The setup page's QR codes, drawn on this side as SVG (MIT). -->
+    <PackageReference Include="QRCoder" />
     <ProjectReference Include="..\Cantrip.Art\Cantrip.Art.csproj" />
     <ProjectReference Include="..\Cantrip.Protocol\Cantrip.Protocol.csproj" />
     <ProjectReference Include="..\Cantrip.Server\Cantrip.Server.csproj" />

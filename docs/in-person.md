@@ -46,6 +46,65 @@ phone; a tablet never shows anything of a private prompt.
 - **Strict tablets.** A tablet shows nothing of a private prompt: no highlighted candidates, no tap accepted or
   refused, no hint of what is being chosen.
 
+## Running a table
+
+`tools\in-person.cmd` builds the shipping web client if it is out of date (the publish of
+`play-release-build.ps1 -BuildOnly`), builds `dotnet/src/Cantrip.Server.InPerson` (`cantrip-in-person`), starts it and
+opens its setup page, `http://localhost:5200/setup`. `-Event ID` hosts an event made before, with fresh codes for every
+device; `-Address IP` names the address the devices reach this computer at; `-NoBuild` and `-Fast` are as
+`play-release-build.cmd`'s. The event is kept in a data directory (`-Data`, else `CANTRIP_DATA`, else `.cantrip-data`).
+
+One machine serves three ports, all on every interface, so Windows asks once for each to be let through its firewall:
+
+| Port | What |
+| --- | --- |
+| 5200 (`--port`) | the site: the published web client at `/`, the relay's socket at `/inperson`, and the setup page at `/setup`, to loopback alone |
+| 7790 (`--table-port`) | the table: an ordinary `GameServer` hosting the event (`/game`) |
+| 7791 | card art (`Cantrip.Art.ArtServer`), which the table tells its clients by the chosen address |
+
+The setup page takes the two players' names, the cube (any list in `docs/cube-lists`), the number of grids, the layout
+(three devices or four) and the address the devices use: its choices are this computer's private IPv4 addresses, those
+on a network with a gateway first and virtual adapters (Hyper-V, WSL, VPNs) last (`LanAddress`), or `--address`. Start
+makes the grid draft (`DraftPod.CreateGrid`), issues each player a ticket, mints a token per tablet, and starts the art
+server and the table; the page then shows each device's link as a QR code (QRCoder, drawn as SVG on the server) and
+whether that device is connected. The layout and the clocks are kept with the event (`EventRecord.HostData`), so hosting
+it again lays out the same devices.
+
+- A phone's link: `http://LAN:5200/?inperson=phone&server=ws%3A%2F%2FLAN%3A7790%2Fgame#ticket=T`. The phone plays the
+  draft, deck building and its games through `/game` with that ticket, as any seat of an event does, and opens
+  `/inperson` with the same ticket for the taps routed to it.
+- A tablet's link: `http://LAN:5200/?inperson=tablet&side=N#device=D`. A tablet only ever opens `/inperson`.
+
+**Clocks.** Off by default: no pick clock in the draft (`DraftTiming.GridPick` zero), no match clock carried by the
+event, and a table clock of a week (`GameServerOptions.PlayerClock` must be more than nothing, so off is one no game
+runs out), with deck building given four hours and the absences that forfeit a remote player (`NoShow`, `Away`) twelve,
+since a phone asleep on the table is not a player gone. The checkbox gives the event's usual clocks instead.
+
+## The relay
+
+`InPersonRelay` sits between the table's game and the devices, with no socket of its own (`InPersonSite` serves it at
+`/inperson`) and a `TimeProvider` for its one timeout. The table deals each game through
+`ObservedRulesFactory(new NativeRulesHostFactory { PublicView = true }, relay)`; the `ObservedRulesHost` it wraps each
+game in forwards every member of `IRulesHost` - a reflection test holds it to that - and hands every step to the relay
+on the table's thread, where the relay only takes a snapshot and queues messages.
+
+- **Tablets** are welcomed with their side, then sent the public feed: a `WelcomeMessage` for seat zero when a game
+  starts, a `StateMessage` per step (the view, which the host has stamped with `ObjectFingerprint`, and the cards the public sees for the
+  first time - `PrintedCards`, the bookkeeping a `GameSession` keeps for each seat), an `EventsMessage` when the public
+  saw something happen, and the `GameOverMessage`. A tablet that joins late gets the game as it stands with every card
+  so far. Before the first game, and whenever who is connected changes, it gets a `DevicePhaseMessage`: the event's
+  stage and a line of where it stands, read from `EventStatusBoard` once a second, never from the `DraftPod`.
+- **Taps.** A `TableTapMessage` goes to the earliest outstanding request (by request id) whose seat has a phone
+  connected and names the object tapped - through that step's handle map - as a `SeatTapMessage` in the seat's own
+  handles. The phone answers `TapResultMessage`; unused, or unanswered within three seconds, the tap goes to the next
+  request it has not been offered to, and with none left it goes nowhere. A tap before a game, after it ends, or with
+  nothing outstanding does nothing. Nothing about a tap is ever sent back to a tablet.
+- **Credentials.** A phone's hello carries its seat ticket, judged by the event (`DraftPod.SeatFor`); a tablet's its
+  token, kept as a SHA-256 hash and compared against every minted one in constant time. A welcome carries a fresh resume
+  id and 32-byte proof; a later hello with them takes the place back (constant-time compare). A ticket or token hello
+  takes a place over from the device holding it, which is told so and closed, and the old proof stops working.
+  Anything before a hello, or a hello in another protocol version, is refused and the connection closed.
+
 `InPersonConfig` (`dotnet/src/Cantrip.Client.Web/InPerson`) reads what a page is: `?inperson=phone|tablet`, `?side=N`
 (zero or absent for the shared board), and the tablet's `#device=` token.
 

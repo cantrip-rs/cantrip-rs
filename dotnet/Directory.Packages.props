@@ -9,6 +9,8 @@
     <!-- The Discord bot's gateway and REST client. Only Cantrip.Discord references it. -->
     <PackageVersion Include="Discord.Net.WebSocket" Version="3.20.1" />
     <PackageVersion Include="MessagePack" Version="3.1.9" />
+    <!-- The in-person setup page's QR codes (MIT). Only Cantrip.Server.InPerson references it. -->
+    <PackageVersion Include="QRCoder" Version="1.6.0" />
     <!-- Resizing and encoding card art to serve. Only Cantrip.Art references it; the version matches the one the
          browser client decodes with, through Uno. -->
     <PackageVersion Include="SkiaSharp" Version="3.119.2" />

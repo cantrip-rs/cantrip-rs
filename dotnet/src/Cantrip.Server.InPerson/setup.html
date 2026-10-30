@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cantrip in person</title>
+<style>
+  :root { --bg: #f6f4ef; --fg: #1d1b18; --muted: #6d675e; --card: #fffdf8; --line: #ddd6c9; --accent: #2f5d8a; --ok: #2e7d4f; --off: #9a8f80; --bad: #a33a2a; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #171614; --fg: #ece8e1; --muted: #a59e93; --card: #211f1c; --line: #3a362f; --accent: #7fb0e0; --ok: #6cc28f; --off: #7d756a; --bad: #e07a68; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  p.lede { color: var(--muted); margin: 0 0 20px; }
+  form { display: grid; gap: 14px; max-width: 520px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+  label { display: grid; gap: 4px; font-weight: 600; }
+  label span.hint { font-weight: 400; color: var(--muted); font-size: 13px; }
+  input[type=text], input[type=number], select { font: inherit; padding: 7px 9px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--fg); }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  fieldset { border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px 10px; margin: 0; }
+  fieldset label { display: flex; gap: 8px; align-items: center; font-weight: 400; }
+  .check { display: flex; gap: 8px; align-items: center; font-weight: 400; }
+  button { font: inherit; font-weight: 600; padding: 9px 16px; border: 0; border-radius: 6px; background: var(--accent); color: #fff; cursor: pointer; justify-self: start; }
+  button:disabled { opacity: .6; cursor: default; }
+  .error { color: var(--bad); white-space: pre-wrap; }
+  .event { margin: 0 0 16px; color: var(--muted); }
+  .event b { color: var(--fg); }
+  .devices { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; }
+  .device { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px; display: grid; gap: 8px; justify-items: center; text-align: center; }
+  .device h2 { font-size: 16px; margin: 0; }
+  .device .qr { width: 100%; max-width: 220px; aspect-ratio: 1; background: #fff; border-radius: 6px; padding: 6px; }
+  .device .qr svg { width: 100%; height: 100%; display: block; }
+  .device a { color: var(--accent); font-size: 12px; word-break: break-all; }
+  .status { font-size: 13px; font-weight: 600; }
+  .status.on { color: var(--ok); }
+  .status.off { color: var(--off); }
+  .note { color: var(--muted); font-size: 13px; margin-top: 20px; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Cantrip in person</h1>
+  <p class="lede">Two players at one table: a phone each for hands and prompts, a tablet or two for the board.
+    This page is only served to this computer, since its codes seat whoever scans them.</p>
+
+  <form id="setup" hidden>
+    <div class="row">
+      <label>Seat 1 <input type="text" id="name1" maxlength="32" value="Player 1" required></label>
+      <label>Seat 2 <input type="text" id="name2" maxlength="32" value="Player 2" required></label>
+    </div>
+    <div class="row">
+      <label>Cube <select id="cube"></select></label>
+      <label>Grids <input type="number" id="packs" min="1" max="60" value="18"></label>
+    </div>
+    <fieldset>
+      <legend>Devices</legend>
+      <label><input type="radio" name="layout" value="3" checked> Three: one shared tablet between the players</label>
+      <label><input type="radio" name="layout" value="4"> Four: a tablet for each player</label>
+    </fieldset>
+    <label>Address the devices use
+      <select id="address"></select>
+      <span class="hint">This computer on the network the phones and tablets share.</span>
+    </label>
+    <label class="check"><input type="checkbox" id="clocks"> Clocks: a pick clock in the draft and a chess clock in the games</label>
+    <button type="submit" id="start">Start the draft</button>
+    <div class="error" id="error"></div>
+  </form>
+
+  <section id="table" hidden>
+    <p class="event" id="event"></p>
+    <div class="devices" id="devices"></div>
+    <p class="note">Scan each code with the device it names. A device that reloads takes its place back; scanning a code
+      again moves that place to the new device. Allow the server through the firewall if the devices cannot reach it.</p>
+  </section>
+</main>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+let shown = "";
+
+function text(tag, value, cls) {
+  const element = document.createElement(tag);
+  element.textContent = value;
+  if (cls) element.className = cls;
+  return element;
+}
+
+function fill(state) {
+  if (!state.started) {
+    if ($("setup").hidden) {
+      $("cube").replaceChildren(...state.cubes.map(name => new Option(name, name, false, name === state.cube)));
+      $("address").replaceChildren(...state.addresses.map(each => new Option(`${each.address} (${each.name})`, each.address, false, each.address === state.address)));
+      $("setup").hidden = false;
+    }
+    return;
+  }
+
+  $("setup").hidden = true;
+  $("table").hidden = false;
+  $("event").replaceChildren(text("b", state.event.name), document.createTextNode(` - ${state.event.detail || state.event.stage}`));
+
+  // The codes are drawn once; only whether each device is here changes after that.
+  const key = state.devices.map(device => device.url).join("|");
+  if (key !== shown) {
+    shown = key;
+    $("devices").replaceChildren(...state.devices.map(device => {
+      const card = document.createElement("div");
+      card.className = "device";
+      const qr = document.createElement("div");
+      qr.className = "qr";
+      qr.innerHTML = device.qr;
+      const link = text("a", device.url);
+      link.href = device.url;
+      link.target = "_blank";
+      card.append(text("h2", device.name), qr, text("div", "", "status"), link);
+      return card;
+    }));
+  }
+
+  [...$("devices").children].forEach((card, i) => {
+    const status = card.querySelector(".status");
+    const on = state.devices[i].connected;
+    status.textContent = on ? "Connected" : "Not connected";
+    status.className = "status " + (on ? "on" : "off");
+  });
+}
+
+async function refresh() {
+  try {
+    const answer = await fetch("setup/api/state", { cache: "no-store" });
+    if (answer.ok) fill(await answer.json());
+  } catch (_) {
+    // The server stopped; the page says what it last knew.
+  }
+}
+
+$("setup").addEventListener("submit", async event => {
+  event.preventDefault();
+  $("start").disabled = true;
+  $("error").textContent = "";
+  const body = {
+    names: [$("name1").value.trim(), $("name2").value.trim()],
+    cube: $("cube").value,
+    packs: Number($("packs").value),
+    layout: Number(document.querySelector("input[name=layout]:checked").value),
+    clocks: $("clocks").checked,
+    address: $("address").value,
+  };
+  try {
+    const answer = await fetch("setup/api/start", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const result = await answer.json();
+    if (!answer.ok) $("error").textContent = result.error || "The draft could not be started.";
+    else fill(result);
+  } catch (error) {
+    $("error").textContent = String(error);
+  }
+  $("start").disabled = false;
+});
+
+refresh();
+setInterval(refresh, 1000);
+</script>
+</body>
+</html>

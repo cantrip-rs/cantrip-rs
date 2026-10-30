@@ -284,8 +284,8 @@ public sealed class InPersonRelay : IStepObserver
                 return;
             }
 
+            // Stamped with each object's fingerprint already, as the host stamps every view it parses.
             PlayerView view = projection.View;
-            ObjectFingerprint.Stamp(view);
             List<ObjectView> fresh;
             try
             {

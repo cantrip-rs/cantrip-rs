@@ -83,7 +83,15 @@ internal sealed class PublicHost : IRulesHost
                 handles.ToDictionary(each => each.Key, each => (IReadOnlyDictionary<ViewHandle, ViewHandle>)each.Value)));
     }
 
-    public static PlayerView PublicView() => new()
+    /// <summary>The public view, stamped with each object's fingerprint as <c>NativeRulesHost</c> stamps the views it parses.</summary>
+    public static PlayerView PublicView()
+    {
+        PlayerView view = Unstamped();
+        ObjectFingerprint.Stamp(view);
+        return view;
+    }
+
+    private static PlayerView Unstamped() => new()
     {
         Viewer = 0,
         Turn = 1,
