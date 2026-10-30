@@ -1,0 +1,27 @@
+# CR 609.3: no land among the five means all five enter the graveyard, no land from below them is taken.
+[Bot1 Deck]
+Hit It!
+Black Lotus
+Mountain
+Forest x4
+Memnite
+Ornithopter
+Shock
+Grizzly Bears
+Sol Ring
+Island x8
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hit It!.Cast
+Bot1.Battlefield.Mountain.Activate
+[Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Sol Ring; Grizzly Bears; Shock; Ornithopter; Memnite; Black Lotus
+Bot1.Revealed.Count = 5
+Bot1.Battlefield = Mountain; Hit It!
+Bot1.Library.Count = 8
+Bot2.Library.Count = 13

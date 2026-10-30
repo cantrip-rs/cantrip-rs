@@ -1,0 +1,6 @@
+{
+  "name": "Hit It!",
+  "manaCost": "{1}{R}{G}",
+  "type": "Enchantment",
+  "oracleText": "Creatures you control have haste.\nWhen this enchantment enters, reveal the top five cards of your library. Put a land card from among them onto the battlefield tapped and the rest into your graveyard."
+}

@@ -1,0 +1,56 @@
+# CR 701.20, 702.10: exactly five revealed; one land mandatory, enters tapped; own new creature can attack.
+# The opponent's creature gets no haste, and removing the enchantment removes the grant.
+[Bot1 Deck]
+Hit It!
+Black Lotus
+Mountain
+Memnite
+Ornithopter
+Forest x2
+Island
+Plains
+Grizzly Bears
+Shock
+Sol Ring
+Mountain x8
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Memnite
+Island x16
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hit It!.Cast
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Choose()
+! Bot1.Choose(Grizzly Bears)
+Bot1.Choose(Plains)
+? Bot1.Battlefield.Plains.Tapped = true
+Bot1.Attack(Memnite > Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+Bot2.Hand.Disenchant.Cast(Hit It!)
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Attack(Ornithopter > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Hit It!; Sol Ring; Shock; Grizzly Bears; Island; Black Lotus
+Bot1.Revealed.Count = 5
+Bot1.Battlefield.Plains.Tapped = false
+Bot1.Battlefield.Memnite.Keywords = (absent)
+Bot1.Library.Count = 7
+Bot2.Library.Count = 12
+Bot2.Life = 18

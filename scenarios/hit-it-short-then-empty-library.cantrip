@@ -1,0 +1,30 @@
+# CR 609.3: the only library card is put onto the battlefield tapped; a second trigger on an empty library does nothing.
+[Bot1 Deck]
+Hit It! x2
+Black Lotus x2
+Mox Emerald
+Memnite
+Forest
+Plains
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hit It!.Cast
+Bot1.Choose(Plains)
+? Bot1.Battlefield.Plains.Tapped = true
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hit It!.Cast
+Bot1.Pass
+[Expect]
+Bot1.Library.Count = 0
+Bot1.Battlefield.Plains.Tapped = true
+Bot1.Battlefield.Hit It!#1.ManaValue = 3
+Bot1.Battlefield.Hit It!#2.ManaValue = 3
+Bot1.Graveyard = Black Lotus; Black Lotus
+Result = InProgress
