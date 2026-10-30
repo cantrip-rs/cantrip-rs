@@ -1,0 +1,62 @@
+# Bre of Clan Stoutarm (a 4/4): "{1}{W}, {T}: Another target creature you control gains flying and lifelink until end of turn." and "At
+# the beginning of your end step, if you gained life this turn, exile cards from the top of your library until you exile a nonland card.
+# You may cast that card without paying its mana cost if the spell's mana value is less than or equal to the amount of life you gained
+# this turn. Otherwise, put it into your hand." Turn 1 Bot1 casts Bre and Grizzly Bears. Turn 3 Bre gives the Bears flying and lifelink,
+# they hit for 2, and at the end step the library is exiled down to a nonland card: the Forest on top stays in exile, the Lightning Bolt
+# (mana value 1, at most 2) is cast free at Bot2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Bre of Clan Stoutarm
+Grizzly Bears
+Swamp
+Swamp
+Forest
+Lightning Bolt
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bre of Clan Stoutarm.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Bre of Clan Stoutarm.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Flying; Lifelink
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 15
+Bot1.Exile.Forest.Colors.Count = 0
+Bot1.Graveyard.Lightning Bolt.Colors.Count = 1

@@ -1,0 +1,65 @@
+# Bre of Clan Stoutarm: the card exiled is put into hand when its mana value is more than the life gained. Turn 3 the Bears hit for 2 with
+# lifelink; at the end step the Forest is exiled and stays there, and Serra Angel (mana value 5, more than 2) goes into Bot1's hand with no
+# cast offered. Turn 5 nothing gains life, so the ability does not trigger and the Lightning Bolt below stays in the library.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Bre of Clan Stoutarm
+Grizzly Bears
+Swamp
+Swamp
+Forest
+Serra Angel
+Swamp
+Lightning Bolt
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Bre of Clan Stoutarm.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Bre of Clan Stoutarm.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Flying; Lifelink
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Serra Angel.Colors.Count = 1
+Bot1.Library.Count = 11
+Bot1.Life = 22
