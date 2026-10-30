@@ -1,0 +1,49 @@
+# CR 603.2, 603.10a: returning an artifact triggers; further departures that turn do not.
+# Opponent's graveyard is excluded, and two cards (including an instant) leaving ours next turn make just one more token.
+[Bot1 Deck]
+Hologram Stalker
+Black Lotus x2
+Tormod's Crypt
+Mountain
+Shock
+Forest
+Forest x13
+[Bot2 Deck]
+Tormod's Crypt x2
+Black Lotus
+Island x17
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hologram Stalker.Cast
+Bot1.Target(Graveyard.Black Lotus)
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Shock.Cast(Bot2)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Illusion Token#2 = (absent)
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot2)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Illusion Token#2 = (absent)
+Bot2.Hand.Tormod's Crypt.Cast
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Illusion Token#1.Power = 3
+Bot1.Battlefield.Illusion Token#1.Toughness = 3
+Bot1.Battlefield.Illusion Token#1.Types = Artifact; Creature
+Bot1.Battlefield.Illusion Token#1.Subtypes = Illusion
+Bot1.Battlefield.Illusion Token#1.Colors = (absent)
+Bot1.Battlefield.Illusion Token#2.Power = 3
+Bot1.Battlefield.Illusion Token#3 = (absent)
+Bot1.Graveyard.Count = 0
+Bot2.Life = 18

@@ -1,0 +1,43 @@
+# CR 110.4a, 608.2b, 113.7a: land is a valid return target, but exile in response makes it illegal.
+# Exiling that land still triggers the token ability, which resolves after Stalker is removed.
+[Bot1 Deck]
+Hologram Stalker
+Black Lotus x2
+Entomb
+Swamp
+Forest x2
+Plains
+Forest x12
+[Bot2 Deck]
+Tormod's Crypt
+Swords to Plowshares
+Plains
+Island x17
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Entomb.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Search(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Tormod's Crypt.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hologram Stalker.Cast
+Bot1.Target(Graveyard.Plains)
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Swords to Plowshares.Cast(Hologram Stalker)
+Bot2.Battlefield.Plains.Activate
+[Bot1.Main2]
+[Expect]
+Bot1.Hand.Plains = (absent)
+Bot1.Battlefield.Hologram Stalker = (absent)
+Bot1.Battlefield.Illusion Token.Power = 3
+Bot1.Battlefield.Illusion Token#2 = (absent)
+Bot1.Life = 22
+Bot1.Graveyard.Count = 0

@@ -1,0 +1,35 @@
+# CR 110.4a, 115.1: creature cards qualify; instants and an opponent's permanent card do not.
+[Bot1 Deck]
+Hologram Stalker
+Black Lotus x2
+Entomb
+Swamp
+Forest x2
+Grizzly Bears
+Forest x12
+[Bot2 Deck]
+Black Lotus
+Island x19
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Entomb.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Search(Grizzly Bears)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Hologram Stalker.Cast
+! Bot1.Target(Graveyard.Entomb)
+! Bot1.Target(Bot2.Graveyard.Black Lotus)
+Bot1.Target(Graveyard.Grizzly Bears)
+[Bot1.Main2]
+[Expect]
+Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Battlefield.Illusion Token.Power = 3
+Bot2.Graveyard = Black Lotus
+Bot1.Graveyard = Black Lotus; Black Lotus; Entomb

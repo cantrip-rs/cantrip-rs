@@ -1,0 +1,8 @@
+{
+  "name": "Hologram Stalker",
+  "manaCost": "{4}{G}{G}",
+  "type": "Creature — Hirogen Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, return target permanent card from your graveyard to your hand.\nWhenever a card leaves your graveyard, create a 3/3 colorless Illusion artifact creature token. This ability triggers only once each turn."
+}
