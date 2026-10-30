@@ -1,0 +1,32 @@
+# "Vivid - When this creature enters, you gain life equal to the number of colors among permanents you control": the green Luminollusk and the red Goblin Grappler make two colors; the colorless
+# Moxen and Black Lotus (sacrificed anyway) add none, so Bot1 goes from 20 to 22.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Goblin Grappler
+Luminollusk
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Grappler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Luminollusk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22

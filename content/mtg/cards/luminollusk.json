@@ -1,0 +1,11 @@
+{
+  "name": "Luminollusk",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Elemental",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Deathtouch\nVivid — When this creature enters, you gain life equal to the number of colors among permanents you control.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}
