@@ -1,0 +1,34 @@
+# Midnight Tilling: "Mill four cards, then you may return a permanent card from among them to your hand." The four milled are Lightning Bolt (an instant, not a permanent
+# card: refused), Forest (a land card is a permanent card, CR 110.4a), Ornithopter and Counterspell. Bot1 takes the Forest; the other three stay in the graveyard
+# (CR 701.17a) and the library keeps the rest.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Midnight Tilling
+Island x4
+Lightning Bolt
+Forest
+Ornithopter
+Counterspell
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Midnight Tilling.Cast
+Bot1.Pass
+! Bot1.Choose(Lightning Bolt)
+! Bot1.Choose(Counterspell)
+Bot1.Choose(Forest)
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Forest
+Bot1.Graveyard = Midnight Tilling; Counterspell; Ornithopter; Lightning Bolt
+Bot1.Library.Count = 10

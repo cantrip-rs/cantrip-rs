@@ -1,0 +1,30 @@
+# Midnight Tilling: "you may return a permanent card" - Bot1 chooses none although an Ornithopter was milled: it stays in the graveyard with the other three and the hand
+# is unchanged.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Midnight Tilling
+Island x4
+Ornithopter
+Lightning Bolt
+Counterspell
+Brainstorm
+Island x10
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Midnight Tilling.Cast
+Bot1.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island
+Bot1.Graveyard.Count = 5

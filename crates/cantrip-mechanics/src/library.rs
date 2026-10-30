@@ -588,7 +588,7 @@ pub fn reveal_top_take_one_rest_to_graveyard(
 /// declines. The card put into the hand, as it is there (a replacement may send it elsewhere), is returned for a card that
 /// asks what it was. Six and Town Greeter (a land), Tetzin, Gnome Champion (an artifact), Eerie Gravestone and Barrowgoyf
 /// (a creature, the latter after its own "you may mill"), Dredger's Insight (an artifact, creature, or land) and Rick Jones, Destined
-/// Sidekick (a Hero or enchantment, `wanted` capturing the Hero word of its text, CR 612) print it.
+/// Sidekick (a Hero or enchantment, `wanted` capturing the Hero word of its text, CR 612) and Midnight Tilling (a permanent) print it.
 pub fn mill_then_may_take_into_hand(
     g: &mut dyn Game,
     player: PlayerId,
