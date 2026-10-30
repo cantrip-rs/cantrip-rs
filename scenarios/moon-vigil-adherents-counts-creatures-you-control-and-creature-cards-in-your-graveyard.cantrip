@@ -1,0 +1,59 @@
+# "This creature gets +1/+1 for each creature you control and each creature card in your graveyard": a 0/0 alone it is 1/1 (itself); with Ornithopter beside it 2/2; once Lightning Bolt kills
+# the Ornithopter the creature card in the graveyard counts in its place, still 2/2, while the Black Lotus there (an artifact) does not. Bot2's Memnite on the battlefield and
+# the Memnite in Bot2's graveyard (its own second Bolt) are not Bot1's, and count for nothing.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Moon-Vigil Adherents
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Memnite
+Memnite
+Mountain x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Moon-Vigil Adherents.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Moon-Vigil Adherents.Power = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Moon-Vigil Adherents.Power = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite#2)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Ornithopter; Black Lotus
+? Bot2.Graveyard = Memnite; Lightning Bolt; Lightning Bolt
+
+[Expect]
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Moon-Vigil Adherents.Power = 2
+Bot1.Battlefield.Moon-Vigil Adherents.Toughness = 2

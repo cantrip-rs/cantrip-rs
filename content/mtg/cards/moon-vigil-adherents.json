@@ -1,0 +1,11 @@
+{
+  "name": "Moon-Vigil Adherents",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Elf Druid",
+  "power": 0,
+  "toughness": 0,
+  "oracleText": "Trample\nThis creature gets +1/+1 for each creature you control and each creature card in your graveyard.",
+  "keywords": [
+    "Trample"
+  ]
+}
