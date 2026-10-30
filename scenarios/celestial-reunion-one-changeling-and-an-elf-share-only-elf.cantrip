@@ -1,0 +1,39 @@
+# Celestial Reunion: a Chomping Changeling is every creature type but only one creature, so beside an Elvish Mystic in Bot1's
+# hand it shares just Elf with it (CR 702.73a): Bird is refused, with a Changeling the only creature that is one, and Elf is
+# chosen. Bot1 beholds the two; the Elvish Mystic it finds is an Elf and enters the battlefield.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Celestial Reunion
+Chomping Changeling
+Elvish Mystic
+Forest
+Forest
+Birds of Paradise
+Elvish Mystic
+Forest x11
+
+[Bot2 Deck]
+Island x7
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Celestial Reunion.Cast(X: 1)
+Bot1.Modes(Choose a creature type and behold two creatures of that type)
+! Bot1.Modes(Bird)
+Bot1.Modes(Elf)
+Bot1.Choose(Bot1.Hand.Chomping Changeling; Bot1.Hand.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Elvish Mystic)
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Hand = Chomping Changeling; Elvish Mystic; Forest; Forest
+Bot1.Graveyard = Celestial Reunion
