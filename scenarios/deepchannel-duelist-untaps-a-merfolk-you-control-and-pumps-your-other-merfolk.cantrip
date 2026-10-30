@@ -1,0 +1,59 @@
+# Deepchannel Duelist (a 2/2): "At the beginning of your end step, untap target Merfolk you control." and "Other Merfolk you
+# control get +1/+1." Bot1 casts the Duelist and a Coral Merfolk (2/1, a 3/2 with the Duelist's bonus); the Duelist alone gets
+# nothing from itself. Turn 3 the Duelist attacks and is tapped; at the end step the target may be the Duelist or the other
+# Merfolk, never Bot2's Coral Merfolk, and untapping the Duelist leaves it untapped. The bonus is for Merfolk you control only: Bot2's
+# Coral Merfolk stays 2/1.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Deepchannel Duelist
+Coral Merfolk
+Forest x15
+
+[Bot2 Deck]
+Mox Sapphire
+Coral Merfolk
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deepchannel Duelist.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Deepchannel Duelist.Power = 2
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Coral Merfolk.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Coral Merfolk.Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Coral Merfolk.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Coral Merfolk.Power = 3
+? Bot1.Battlefield.Coral Merfolk.Toughness = 2
+? Bot1.Battlefield.Deepchannel Duelist.Power = 2
+Bot1.Attack(Deepchannel Duelist > Bot2)
+[T3 Bot1.End]
+! Bot1.Target(Bot2.Battlefield.Coral Merfolk)
+? Bot1.Battlefield.Deepchannel Duelist.Tapped = true
+Bot1.Target(Deepchannel Duelist)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Deepchannel Duelist.Tapped = false
+? Bot2.Battlefield.Coral Merfolk.Power = 2
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Deepchannel Duelist.Tapped = false

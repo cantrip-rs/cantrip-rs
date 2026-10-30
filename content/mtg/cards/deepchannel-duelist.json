@@ -1,0 +1,8 @@
+{
+  "name": "Deepchannel Duelist",
+  "manaCost": "{W}{U}",
+  "type": "Creature — Merfolk Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "At the beginning of your end step, untap target Merfolk you control.\nOther Merfolk you control get +1/+1."
+}
