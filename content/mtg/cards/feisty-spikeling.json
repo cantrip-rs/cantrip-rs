@@ -1,0 +1,11 @@
+{
+  "name": "Feisty Spikeling",
+  "manaCost": "{1}{R/W}",
+  "type": "Creature — Shapeshifter",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Changeling (This card is every creature type.)\nDuring your turn, this creature has first strike.",
+  "keywords": [
+    "Changeling"
+  ]
+}
