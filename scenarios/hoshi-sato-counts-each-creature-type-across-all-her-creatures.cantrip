@@ -1,0 +1,40 @@
+# X counts every creature type among Bot1's non-Borg creatures, not one per creature: Hoshi Sato (Human, Scientist) and a
+# Grizzly Bears (Bear) make three, so three cards are looked at (CR 205.3m, 608.2h).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Hoshi Sato, Exolinguist
+Grizzly Bears
+Forest
+Island
+Forest
+Grizzly Bears
+Island
+Mountain
+Island x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Hoshi Sato, Exolinguist.Cast
+Bot1.Arrange(Grizzly Bears | Island; Mountain)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Library.Count = 11
+Bot1.Battlefield.Hoshi Sato, Exolinguist.Power = 3
+Bot1.Battlefield.Grizzly Bears.Power = 2

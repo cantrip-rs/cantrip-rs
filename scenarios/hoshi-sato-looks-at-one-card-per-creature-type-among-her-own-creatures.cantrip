@@ -1,0 +1,44 @@
+# X is the number of creature types among non-Borg creatures Bot1 controls: Hoshi Sato herself is a Human Scientist (2),
+# and Bot2's Bear is not counted (CR 205.3m, 608.2h). Looking at exactly two cards is pinned by the arrangement having to
+# place every card looked at.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Hoshi Sato, Exolinguist
+Island
+Island
+Island
+Island
+Forest
+Grizzly Bears
+Island
+Mountain
+Island x9
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x18
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Hoshi Sato, Exolinguist.Cast
+Bot1.Arrange(Grizzly Bears | Island)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Library.Count = 11
+Bot1.Battlefield.Hoshi Sato, Exolinguist.Power = 3
+Bot1.Graveyard = Black Lotus; Black Lotus
