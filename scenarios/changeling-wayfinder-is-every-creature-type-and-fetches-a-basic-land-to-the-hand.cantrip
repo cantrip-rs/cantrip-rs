@@ -1,0 +1,46 @@
+# Changeling Wayfinder (a 1/2 for {3}): "Changeling" - every creature type, shown on the battlefield - and "When this creature enters, you
+# may search your library for a basic land card, reveal it, put it into your hand, then shuffle." Bot1 casts it, accepts, is refused
+# the Taiga (a land card, not basic) and the Llanowar Elves (not a land), takes the Swamp, which is revealed and goes to the hand,
+# and the library is shuffled afterwards (it is no longer in the decklist's order).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Forest
+Changeling Wayfinder
+Island
+Plains
+Mountain
+Forest
+Taiga
+Llanowar Elves
+Swamp
+Mountain
+Plains x6
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Changeling Wayfinder.Cast
+Bot1.Accept
+! Bot1.Search(Taiga)
+! Bot1.Search(Llanowar Elves)
+Bot1.Search(Swamp)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Changeling Wayfinder.Power = 1
+? Bot1.Battlefield.Changeling Wayfinder.Toughness = 2
+? Bot1.Battlefield.Changeling Wayfinder.Keywords = Changeling
+? Bot1.Battlefield.Changeling Wayfinder.Subtypes = (every creature type)
+
+[Expect]
+Bot1.Hand = Island; Plains; Mountain; Swamp
+Bot1.Revealed = Swamp
+Bot1.Battlefield = Mox Emerald; Mox Jet; Forest; Changeling Wayfinder
+Bot1.Library != Forest; Taiga; Llanowar Elves; Mountain; Plains; Plains; Plains; Plains; Plains; Plains

@@ -1,0 +1,34 @@
+# Changeling Wayfinder's "you may search": Bot1 declines, so nothing is revealed, no card moves, and - the search being what shuffles
+# (CR 701.23) - the library stays in the order the decklist gave, a Swamp (a legal find) in it. The Wayfinder still enters.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Forest
+Changeling Wayfinder
+Island
+Plains
+Mountain
+Forest
+Swamp
+Mountain
+Plains x6
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Changeling Wayfinder.Cast
+Bot1.Decline
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Plains; Mountain
+Bot1.Battlefield = Mox Emerald; Mox Jet; Forest; Changeling Wayfinder
+Bot1.Library = Forest; Swamp; Mountain; Plains; Plains; Plains; Plains; Plains; Plains
