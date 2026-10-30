@@ -21,12 +21,15 @@ fn main() {
         .map(|p| p.file_stem().unwrap().to_string_lossy().to_string())
         .collect();
     names.sort();
+    // Keep module paths usable by IDEs too: canonicalize() adds Windows' verbatim (\\?\) prefix.
+    let manifest_dir = std::path::PathBuf::from(std::env::var_os("CARGO_MANIFEST_DIR").unwrap());
     let mut out = String::new();
     for name in &names {
         let path = dir.join(format!("{name}.rs"));
         println!("cargo:rerun-if-changed={}", path.display());
         let m = module(name);
-        writeln!(out, "#[path = {:?}]\nmod {m};", std::fs::canonicalize(&path).unwrap().display().to_string()).unwrap();
+        let module_path = manifest_dir.join(&path).to_string_lossy().replace('\\', "/");
+        writeln!(out, "#[path = {module_path:?}]\nmod {m};").unwrap();
     }
     out.push_str("\n/// Every card definition the crate has.\npub fn all() -> Vec<&'static CardDef> {\n    let mut cards: Vec<&'static CardDef> = Vec::new();\n");
     for name in &names {
