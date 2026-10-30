@@ -1,0 +1,30 @@
+# Eclipsed Merrow: "When this creature enters, look at the top four cards of your library. You may reveal a Merfolk, Plains, or Island card from among them and put it into your hand. Put the rest on the bottom of your library in a random order." (CR 701.20a, 401.4) The top four are Sandbar Merfolk, Plains, Island and Swamp; the fifth, a Swamp, is not looked at.
+# Bot1 takes nothing (it is "may"): all four go to the bottom and the hand does not grow.
+
+[Bot1 Deck]
+Black Lotus
+Eclipsed Merrow
+Swamp x5
+Sandbar Merfolk
+Plains
+Island
+Swamp
+Swamp
+Swamp x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Eclipsed Merrow.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Arrange( | Sandbar Merfolk; Plains; Island; Swamp)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Swamp; Swamp; Swamp; Swamp; Swamp
+Bot1.Library.Count = 16
