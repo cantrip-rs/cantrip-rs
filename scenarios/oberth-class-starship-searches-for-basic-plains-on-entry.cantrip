@@ -1,0 +1,32 @@
+# Oberth searches only its controller's library for a basic Plains, reveals it, puts it into hand, then shuffles; Savannah is a nonbasic Plains and is refused (CR 701.23b, 701.20, 701.24).
+
+[Bot1 Deck]
+Oberth-Class Starship
+Black Lotus
+Island x5
+Savannah
+Plains
+Island x20
+
+[Bot2 Deck]
+Plains
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Oberth-Class Starship.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Savannah)
+Bot1.Search(Plains)
+? Bot1.Shuffles = 1
+? Bot1.Hand.Count = 6
+
+[Expect]
+Bot1.Shuffles = 1
+Bot1.Hand.Count = 6
+Bot2.Hand.Count = 7
+Bot2.Library.Count = 14

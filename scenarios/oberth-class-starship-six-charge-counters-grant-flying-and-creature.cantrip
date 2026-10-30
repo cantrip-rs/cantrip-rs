@@ -1,0 +1,55 @@
+# Station with a 6-power creature; at six charge counters Oberth becomes a 2/2 artifact creature with flying (CR 702.184a, 721.2a-b).
+
+[Bot1 Deck]
+Oberth-Class Starship
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Colossal Dreadmaw
+Island x20
+Plains
+
+[Bot2 Deck]
+Ornithopter x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Colossal Dreadmaw.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Oberth-Class Starship.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Plains)
+Bot1.Battlefield.Oberth-Class Starship.Activate(Ability: Station)
+Bot1.Choose(Colossal Dreadmaw)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Oberth-Class Starship.Counters.Charge = 6
+? Bot1.Battlefield.Oberth-Class Starship.Types = Artifact; Creature
+? Bot1.Battlefield.Oberth-Class Starship.Power = 2
+? Bot1.Battlefield.Oberth-Class Starship.Toughness = 2
+? Bot1.Battlefield.Oberth-Class Starship.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Oberth-Class Starship.Counters.Charge = 6
+Bot1.Battlefield.Oberth-Class Starship.Types = Artifact; Creature
+Bot1.Battlefield.Oberth-Class Starship.Power = 2
+Bot1.Battlefield.Oberth-Class Starship.Toughness = 2
+Bot1.Battlefield.Oberth-Class Starship.Keywords = Flying
