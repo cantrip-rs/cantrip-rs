@@ -1007,6 +1007,15 @@ pub static ELF: CardDef = CardDef {
     ..token!(Elf)
 };
 
+/// The 2/2 black and green Elf creature token (CR 111.1, 111.4). Morcant's Eyes and Unforgiving Aim make it.
+pub static ELF_BLACK_GREEN: CardDef = CardDef {
+    colors: Some(ColorSet(0b10100)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    ..token!(Elf)
+};
+
 /// The 3/4 green Treefolk creature token with reach (CR 111.1, 111.4). Sapling Nursery and Tend the Sprigs make it.
 pub static TREEFOLK: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Green)),
