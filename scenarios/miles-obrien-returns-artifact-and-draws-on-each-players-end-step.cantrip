@@ -1,0 +1,39 @@
+# CR 603.4: returning an artifact triggers exactly one end-step draw; the opponent turn has its own return and its own draw.
+
+[Bot1 Deck]
+Mox Pearl x3
+Mox Sapphire
+Ornithopter
+Miles O'Brien, Transporter Ops
+Unsummon
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Miles O'Brien, Transporter Ops.Cast
+! Bot1.Target(Miles O'Brien, Transporter Ops)
+Bot1.Target(Mox Sapphire)
+Bot1.Hand.Mox Sapphire.Cast
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Ornithopter)
+[T3 Bot1.Upkeep]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Miles O'Brien, Transporter Ops.Power = 3
+Bot1.Hand.Ornithopter.Power = 0

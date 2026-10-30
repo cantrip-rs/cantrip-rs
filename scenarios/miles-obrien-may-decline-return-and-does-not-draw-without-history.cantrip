@@ -1,0 +1,33 @@
+# CR 603.4: up to one means none, and absent a return there is no end-step draw; opponents and lands are ineligible targets.
+
+[Bot1 Deck]
+Mox Pearl x3
+Miles O'Brien, Transporter Ops
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Miles O'Brien, Transporter Ops.Cast
+! Bot1.Target(Miles O'Brien, Transporter Ops)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Bot1.Battlefield.Plains)
+Bot1.Target()
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot2.Battlefield.Ornithopter.Power = 0

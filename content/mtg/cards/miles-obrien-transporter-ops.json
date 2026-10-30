@@ -1,0 +1,8 @@
+{
+  "name": "Miles O'Brien, Transporter Ops",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Human Artificer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When Miles O'Brien enters, return up to one other target creature or artifact you control to its owner's hand.\nAt the beginning of each end step, if a permanent was returned to your hand from the battlefield this turn, draw a card."
+}

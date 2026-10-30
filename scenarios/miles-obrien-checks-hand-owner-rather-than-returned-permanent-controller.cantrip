@@ -1,0 +1,42 @@
+# CR 400.3, 603.4: returning a stolen creature to its owner hand does not count for the controller of Miles; then returning a creature you own does.
+
+[Bot1 Deck]
+Black Lotus x3
+Miles O'Brien, Transporter Ops
+Act of Treason
+Unsummon
+Ornithopter
+Mox Sapphire
+Unsummon
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Miles O'Brien, Transporter Ops.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Act of Treason.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Ornithopter)
+[T4 Bot2.Upkeep]
+? Bot1.Hand.Count = 2
+? Bot2.Hand.Ornithopter.Power = 0
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Ornithopter)
+[T6 Bot2.Upkeep]
+
+[Expect]
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Hand.Count = 2

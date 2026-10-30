@@ -1,0 +1,28 @@
+# The creature return draws once on its turn; history from that turn does not trigger on the following turn (CR 603.4).
+
+[Bot1 Deck]
+Mox Pearl x3
+Ornithopter
+Miles O'Brien, Transporter Ops
+Plains x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Miles O'Brien, Transporter Ops.Cast
+Bot1.Target(Ornithopter)
+[T2 Bot2.Upkeep]
+? Bot1.Hand.Count = 4
+[T3 Bot1.Upkeep]
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Hand.Ornithopter.Power = 0
