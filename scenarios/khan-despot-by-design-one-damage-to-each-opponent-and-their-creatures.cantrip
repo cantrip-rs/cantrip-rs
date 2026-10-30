@@ -1,0 +1,58 @@
+# "When Khan enters, he deals 1 damage to each opponent and each creature your opponents control" (CR 120.2, 608.2c):
+# exactly one damage each, dealt together as one event. Bot2's 1/1 Llanowar Elves dies, its 2/2 Grizzly Bears carries 1
+# damage and lives, and Bot2 itself loses exactly 1 life. Bot1's own Llanowar Elves - "your opponents control" - is not
+# dealt any, and Khan is not either. The five Moxen pay {4}{R} on turn 5; Bot2's creatures are cast on its first two turns.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Emerald
+Khan, Despot by Design
+Llanowar Elves
+Forest x13
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest
+Grizzly Bears
+Forest x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Khan, Despot by Design.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot2.Battlefield.Llanowar Elves = (absent)
+Bot2.Graveyard = Llanowar Elves
+Bot2.Battlefield.Grizzly Bears.Damage = 1
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Battlefield.Llanowar Elves.Damage = 0
+Bot1.Battlefield.Khan, Despot by Design.Damage = 0
+Bot1.Life = 20

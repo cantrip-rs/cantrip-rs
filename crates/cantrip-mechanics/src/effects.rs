@@ -1197,7 +1197,7 @@ pub fn damage_each_creature_opponents_control(g: &mut dyn Game, item: &StackItem
 
 /// "[This spell] deals `n` damage to each opponent and each creature they control" (CR 608.2c, 120.2): one damage event for
 /// each opponent of the resolving item's controller and each creature one controls, all dealt together. Delayed Blast
-/// Fireball and Soul Immolation print it.
+/// Fireball, Soul Immolation and Khan, Despot by Design print it.
 pub fn damage_each_opponent_and_each_creature_they_control(g: &mut dyn Game, item: &StackItem, n: u16) {
     let opponents: Vec<PlayerId> = g.state().opponents(item.controller).collect();
     let creatures: Vec<ObjectId> = g

@@ -1,0 +1,11 @@
+{
+  "name": "Khan, Despot by Design",
+  "manaCost": "{4}{R}",
+  "type": "Legendary Creature — Human Rogue",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Trample\nWhen Khan enters, he deals 1 damage to each opponent and each creature your opponents control.",
+  "keywords": [
+    "Trample"
+  ]
+}
