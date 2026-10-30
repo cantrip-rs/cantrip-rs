@@ -1,0 +1,56 @@
+# Puca's Eye: "Activate only if there are five colors among permanents you control" (CR 105.2): only Bot1's own permanents
+# count. Bot1 controls Omnath (red, green, white, blue) and names red for the Eye, so it has four colors; Bot2 controls a
+# black Dark Confidant, which makes five in all but not five among Bot1's, so the draw is refused even with {G}{W}{U} in the pool.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Omnath, Locus of Creation
+Puca's Eye
+Island x13
+
+[Bot2 Deck]
+Mox Jet
+Mox Jet
+Dark Confidant
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Omnath, Locus of Creation.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Hand.Dark Confidant.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Puca's Eye.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot1.Pass
+Bot1.Colors(Red)
+? Bot1.Battlefield.Puca's Eye.Colors = Red
+? Bot2.Battlefield.Dark Confidant.Colors = Black
+? Bot1.Mana = {W}{U}{G}
+! Bot1.Battlefield.Puca's Eye.Activate
+
+[Expect]
+Bot1.Battlefield.Puca's Eye.Tapped = false
+Bot1.Hand.Count = 3

@@ -1,0 +1,33 @@
+# Puca's Eye "becomes the chosen color": the color is chosen, not a color word in its text, so a text-changing effect does not
+# touch it (CR 612.2, 612.1). With the enters trigger waiting, Bot1's Sleight of Mind changes "black" to "green" in the Eye's
+# text, which has no color word; Bot1 then names black, and the Eye is black.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Puca's Eye
+Sleight of Mind
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Puca's Eye.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Puca's Eye)
+Bot1.Pass
+Bot1.Colors(Black)
+Bot1.Colors(Green)
+Bot1.Pass
+Bot1.Colors(Black)
+
+[Expect]
+Bot1.Battlefield.Puca's Eye.Colors = Black
