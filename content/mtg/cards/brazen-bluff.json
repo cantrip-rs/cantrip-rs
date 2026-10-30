@@ -1,0 +1,6 @@
+{
+  "name": "Brazen Bluff",
+  "manaCost": "{R}{R}",
+  "type": "Instant",
+  "oracleText": "Choose target noncreature spell an opponent controls. That player may exile it. If they don't, you may cast a noncreature spell from your hand without paying its mana cost."
+}

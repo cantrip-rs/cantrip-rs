@@ -1,0 +1,46 @@
+# Declining exile permits Brazen Bluff's controller to cast a noncreature from hand for free (CR 608.2g, 118.9); X is zero and the spell resolves first.
+# A creature card in hand (Grizzly Bears) is not offered.
+
+[Bot1 Deck]
+Brazen Bluff
+Mox Ruby
+Gleemox
+Shock
+Grizzly Bears
+Mountain x20
+
+[Bot2 Deck]
+Black Lotus
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Hand.Brazen Bluff.Cast(Shock)
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+! Bot1.Choose(Grizzly Bears)
+Bot1.Choose(Shock)
+Bot1.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 18
+Exile.Count = 0
+Bot2.Graveyard = Shock; Black Lotus
+Bot1.Graveyard = Shock; Brazen Bluff
+Bot1.Hand.Grizzly Bears.Power = 2
