@@ -4,7 +4,7 @@ use cantrip_mechanics::{land_until_cast, targets};
 use cantrip_oracle as oracle;
 
 /// "When this creature enters, target creature an opponent controls can't attack or block until your next turn" (CR
-/// 508.1c, 509.1b, 611.2b): both restrictions end as the ability's controller's next turn begins.
+/// 508.1c, 509.1b, 611.2a): both restrictions end as the ability's controller's next turn begins.
 fn restrain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(creature) = targets::object(g, item, 0) {
         let until = Duration::UntilNextTurnOf(item.controller);

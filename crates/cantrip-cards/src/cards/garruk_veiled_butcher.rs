@@ -3,7 +3,7 @@ use cantrip_mechanics::replacements::OPPONENTS_CREATURES_EXILED_INSTEAD_OF_DYING
 use cantrip_mechanics::{choose_from_hand, each_player_sacrifices, hand, targets, tokens};
 use cantrip_oracle as oracle;
 
-/// +2: Up to one target creature gets -4/-1 until your next turn (CR 611.2b).
+/// +2: Up to one target creature gets -4/-1 until your next turn (CR 611.2a).
 fn plus_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(creature) = targets::object(g, item, 0)
         && g.is_on_battlefield(creature)

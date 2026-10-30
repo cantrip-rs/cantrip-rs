@@ -13,7 +13,7 @@ fn grant_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Target creature you control gains protection from each color until your next turn" (CR 702.16a, 611.2b).
+/// "Target creature you control gains protection from each color until your next turn" (CR 702.16a, 611.2a).
 fn grant_protection(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if let Some(creature) = targets::object(g, item, 0) {
         let colors = Color::ALL.into_iter().fold(ColorSet::NONE, ColorSet::with);

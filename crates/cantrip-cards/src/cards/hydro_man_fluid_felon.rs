@@ -23,7 +23,7 @@ fn is_a_creature(q: &dyn Query, asker: &Asker) -> bool {
 
 /// "Untap Hydro-Man. Until your next turn, he becomes a land and gains '{T}: Add {U}.'" The land is exactly a land
 /// (CR 205.1a, 613.1d): it is no longer a creature and loses its creature types, and keeps Legendary. The effect ends as
-/// its controller's next turn begins (CR 611.2b), so he is never a land and a creature at once.
+/// its controller's next turn begins (CR 611.2a), so he is never a land and a creature at once.
 fn become_a_land(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let me = item.object;
     if !is_live(g, me) || !g.is_on_battlefield(me) {

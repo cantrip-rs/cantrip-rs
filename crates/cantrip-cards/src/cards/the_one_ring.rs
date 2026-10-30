@@ -1,7 +1,7 @@
 use cantrip_api::*;
 use cantrip_oracle as oracle;
 
-/// "You gain protection from everything until your next turn" (CR 702.16j, 611.2b).
+/// "You gain protection from everything until your next turn" (CR 702.16j, 611.2a).
 fn protect_you(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.add_effect(item.object, item.object, EffectKind::PlayerProtectionFromEverything, Duration::UntilNextTurnOf(item.controller));
     Ok(())

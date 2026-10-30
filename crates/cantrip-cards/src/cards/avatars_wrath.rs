@@ -8,7 +8,7 @@ use cantrip_oracle as oracle;
 /// owner from exile for {2}.
 ///
 /// "Until your next turn, your opponents can't cast spells from anywhere other than their hands." A rule about each player
-/// who is an opponent as it resolves (CR 611.2c), lasting until the beginning of the caster's next turn (CR 611.2b): it
+/// who is an opponent as it resolves (CR 611.2c), lasting until the beginning of the caster's next turn (CR 611.2a): it
 /// stops casting from exile, a graveyard, a library or the command zone, the cards just airbended included, and neither
 /// activated abilities nor copies of spells, which are not cast (CR 101.2, 707.10).
 ///

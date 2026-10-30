@@ -37,7 +37,7 @@ fn create_beast(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// −4: Until your next turn (CR 611.2b), the delayed ability watches every attack on your opponents.
+/// −4: Until your next turn (CR 611.2a), the delayed ability watches every attack on your opponents.
 fn minus_four(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let o = g.obj(item.object);
     let this = o.copied_card().unwrap_or(o.card);
