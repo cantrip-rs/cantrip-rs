@@ -1,0 +1,26 @@
+# CR 702.12b, 608.2b: an indestructible target is legal; failure to destroy does not prevent surveil.
+[Bot1 Deck]
+Swamp
+Black Lotus x2
+Darksteel Myr
+He's Dead, Jim
+Island x2
+Mountain
+Island x10
+[Bot2 Deck]
+Island x15
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Darksteel Myr.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.He's Dead, Jim.Cast(Darksteel Myr)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Arrange(Mountain | )
+[Expect]
+Bot1.Battlefield.Darksteel Myr.Keywords = Indestructible
+Bot1.Graveyard = He's Dead, Jim; Black Lotus; Black Lotus
+Bot1.Surveilled = 1 requested, 1 looked
+Bot1.Library.Count = 11

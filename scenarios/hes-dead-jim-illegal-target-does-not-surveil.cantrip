@@ -1,0 +1,29 @@
+# CR 608.2b: removal in response makes the only target illegal; no surveil occurs.
+[Bot1 Deck]
+Swamp
+Black Lotus
+He's Dead, Jim
+Island x15
+[Bot2 Deck]
+Ornithopter
+Mox Sapphire
+Unsummon
+Island x15
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main2]
+Bot1.Hand.He's Dead, Jim.Cast(Ornithopter)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Unsummon.Cast(Ornithopter)
+Bot2.Battlefield.Mox Sapphire.Activate
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Graveyard = He's Dead, Jim; Black Lotus
+Bot1.Surveilled = (absent)
+Bot1.Library.Count = 11
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Hand.Count = 6

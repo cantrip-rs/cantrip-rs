@@ -1,0 +1,29 @@
+# CR 701.8, 701.25: destroy an opposing creature then surveil exactly one; artifacts are not legal targets.
+[Bot1 Deck]
+Swamp
+Black Lotus
+He's Dead, Jim
+Island x4
+Forest
+Mountain
+Island x10
+[Bot2 Deck]
+Ornithopter
+Mox Pearl
+Island x15
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.He's Dead, Jim.Cast(Mox Pearl)
+Bot1.Hand.He's Dead, Jim.Cast(Ornithopter)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Arrange( | Mountain)
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = He's Dead, Jim; Mountain; Black Lotus
+Bot1.Surveilled = 1 requested, 1 looked
+Bot1.Library.Count = 10
