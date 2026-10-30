@@ -1,0 +1,75 @@
+# Flaring Cinder: "When this creature enters and whenever you cast a spell with mana value 4 or greater, you may discard a card.
+# If you do, draw a card." Turn 1 Bot1 casts it and loots a Swamp away for a Mind Twist. Turn 2 Bot2 casts a Fireball with X=3
+# (mana value 5) and Bot1 is not asked: only its own spells count. Turn 3 Bot1's Mind Twist with X=2 (mana value 3, X counted
+# on the stack, CR 202.3e) is not asked either. Turn 5 a Mind Twist with X=3 (mana value 4, exactly the limit) asks: Bot1
+# accepts and discards an Island for a Plains.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Mox Jet
+Flaring Cinder
+Mind Twist
+Black Lotus
+Swamp
+Mind Twist
+Island
+Island
+Plains
+Island x9
+
+[Bot2 Deck]
+Black Lotus
+Fireball
+Swamp x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Flaring Cinder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Swamp)
+? Bot1.Hand = Mind Twist; Mind Twist
+? Bot1.Graveyard = Swamp
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Fireball.Cast(X: 3)
+Bot2.Target(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+? Bot1.Hand.Count = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mind Twist.Cast(Bot2; X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Mind Twist.Cast(Bot2; X: 3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+? Bot1.Graveyard = Island; Mind Twist; Black Lotus; Swamp
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Plains
+Bot1.Graveyard = Mind Twist; Island; Mind Twist; Black Lotus; Swamp
