@@ -1,0 +1,27 @@
+# Foraging Wickermaw: "When this creature enters, surveil 1" (CR 701.25a). Only the top card is looked at: the Mountain on top
+# goes to the graveyard, and the Island below it stays in the library (a surveil 2 would have shown it).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Foraging Wickermaw
+Island x4
+Mountain
+Island
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Foraging Wickermaw.Cast
+Bot1.Arrange( | Mountain)
+
+[Expect]
+Bot1.Graveyard = Mountain
+Bot1.Library.Count = 12
+Bot1.Battlefield.Foraging Wickermaw.Toughness = 3
