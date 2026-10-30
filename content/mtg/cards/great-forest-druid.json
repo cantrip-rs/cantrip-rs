@@ -1,0 +1,8 @@
+{
+  "name": "Great Forest Druid",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Treefolk Druid",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "{T}: Add one mana of any color."
+}
