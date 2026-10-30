@@ -1,0 +1,72 @@
+# Glen Elendra's Answer: "Counter all spells your opponents control and all abilities your opponents control. Create a
+# 1/1 blue and black Faerie creature token with flying for each spell and ability countered this way." On turn 2 Bot2
+# casts Baleful Strix (its enters trigger goes on the stack), then Lightning Bolt at Bot1 and Mishra's Bauble's ability: a
+# triggered ability, a spell and an activated ability. Bot1 answers with its own Bauble ability (an ability Bot1 controls)
+# and then the Answer: the three of Bot2's are countered - Bot1 keeps 20 life, Bot2 draws no card from the Strix - and
+# three Faeries come, while Bot1's own Bauble ability stays and resolves.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Glen Elendra's Answer
+Mishra's Bauble
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Baleful Strix
+Lightning Bolt
+Mishra's Bauble
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mishra's Bauble.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mishra's Bauble.Cast
+Bot2.Hand.Baleful Strix.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mishra's Bauble.Activate(Bot1)
+? Stack.Count = 3
+Bot2.Pass
+Bot1.Battlefield.Mishra's Bauble.Activate(Bot2)
+Bot1.Hand.Glen Elendra's Answer.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Stack = Mishra's Bauble
+? Bot1.Battlefield.Count = 7
+? Bot2.Graveyard = Lightning Bolt; Mishra's Bauble
+? Bot2.Hand.Count = 2
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Hand.Count = 2
+Bot1.Battlefield.Faerie Token#3.Power = 1
+Bot1.Battlefield.Faerie Token#3.Keywords = Flying
+Bot1.Battlefield.Faerie Token#3.Colors = Black; Blue
+Bot1.Graveyard = Glen Elendra's Answer; Mishra's Bauble

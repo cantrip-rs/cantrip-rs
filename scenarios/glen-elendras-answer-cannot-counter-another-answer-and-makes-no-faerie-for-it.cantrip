@@ -1,0 +1,61 @@
+# Glen Elendra's Answer can't be countered, so another Answer is not countered by it (CR 701.6a) and makes no Faerie: Bot2
+# casts Lightning Bolt at Bot1 and, over it, its own Answer; Bot1 responds with its Answer. Bot1's resolves first, counters
+# the Bolt (one Faerie, not two) and leaves Bot2's Answer on the stack, which then resolves and counters nothing of Bot1's
+# (Bot1's Answer is no longer on the stack).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Glen Elendra's Answer
+Island x12
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Black Lotus
+Lightning Bolt
+Glen Elendra's Answer
+Island
+Island x10
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Glen Elendra's Answer.Cast
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Hand.Glen Elendra's Answer.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Lightning Bolt; Black Lotus
+? Stack = Glen Elendra's Answer
+? Bot1.Battlefield.Count = 5
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Count = 5
+Bot2.Graveyard = Glen Elendra's Answer; Lightning Bolt; Black Lotus
+Bot1.Graveyard = Glen Elendra's Answer
