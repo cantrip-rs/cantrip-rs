@@ -1,0 +1,46 @@
+# Champion of the Path (CR 120.3, 608.2h, 113.7a): in response to the trigger of the second Firecat entering, Bot2 casts Dismember on
+# it, paying {1} and 4 life: the Firecat, 4 power as it entered, is -1 power as it last existed. A power below zero deals no
+# damage, not 1 and not a wrapped-around number, so Bot2 is at 16 from the life paid alone.
+[Bot1 Deck]
+Black Lotus x2
+Mox Ruby
+Regathan Firecat x2
+Champion of the Path
+Mountain
+Mountain x10
+[Bot2 Deck]
+Mountain
+Dismember
+Mountain x10
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Champion of the Path.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Regathan Firecat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Dismember.Cast(Bot1.Battlefield.Regathan Firecat)
+Bot2.Modes(1; 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Dismember
+Bot1.Graveyard = Regathan Firecat; Black Lotus; Black Lotus
