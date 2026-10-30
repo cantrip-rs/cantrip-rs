@@ -795,9 +795,14 @@ fn put_trigger_as(cx: &mut Cx, trigger: PendingTrigger, by: Option<Linked>) -> R
     Ok(())
 }
 
-/// The static abilities that made one triggering trigger additional times (CR 603.2d): each the permanent and the index of its
-/// `CardDef::additional_triggers` entry, so the same one met again among a batch's events adds nothing more.
-pub(crate) type Again = Vec<(ObjectId, u8)>;
+/// Effects that made one triggering trigger additional times (CR 603.2d), identified independently so each counts once
+/// even when met again among a batch's events: a static ability's permanent and slot, or a resolved effect's timestamp.
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub(crate) enum AdditionalTrigger {
+    Static(ObjectId, u8),
+    Resolved(u32),
+}
+pub(crate) type Again = Vec<AdditionalTrigger>;
 
 type Found = Vec<(PendingTrigger, &'static TriggeredDef, Again)>;
 
@@ -1065,11 +1070,12 @@ pub(crate) struct TriggerStatics<'a> {
     before: Option<&'a [ObjectId]>,
     now: Option<Vec<ObjectId>>,
     then: Option<Vec<ObjectId>>,
+    before_effects: Option<&'a [ContinuousEffect]>,
 }
 
 impl<'a> TriggerStatics<'a> {
     pub(crate) fn new(before: Option<&'a [ObjectId]>) -> Self {
-        TriggerStatics { before, now: None, then: None }
+        TriggerStatics { before, now: None, then: None, before_effects: None }
     }
 
     /// The permanents whose rules apply to this triggering (CR 603.10).
@@ -1098,8 +1104,21 @@ impl<'a> TriggerStatics<'a> {
             let obj = cx.s().obj(id);
             let asker = Asker { source: id, controller: obj.controller, by: None, spell: false };
             for (n, rule) in cx.card(cx.cards().current(obj)).additional_triggers.iter().enumerate() {
-                if rule(cx, &asker, event, triggering) && !again.contains(&(id, n as u8)) {
-                    again.push((id, n as u8));
+                if rule(cx, &asker, event, triggering) && !again.contains(&AdditionalTrigger::Static(id, n as u8)) {
+                    again.push(AdditionalTrigger::Static(id, n as u8));
+                }
+            }
+        }
+        // A resolved effect works after its source loses its abilities (CR 611.2a). Each activation is independent;
+        // a look-back trigger uses the continuous effects before the event (CR 603.10a).
+        if triggering.permanent {
+            let effects = if triggering.looks_back { self.before_effects.unwrap_or(&cx.s().effects) } else { &cx.s().effects };
+            for e in effects {
+                if e.affected == triggering.source && e.kind == EffectKind::TriggersAgainWhileSourceTapped {
+                    let key = AdditionalTrigger::Resolved(e.timestamp);
+                    if !again.contains(&key) {
+                        again.push(key);
+                    }
                 }
             }
         }
@@ -1134,6 +1153,8 @@ pub struct Before<'a> {
 /// with. `Then::none` takes nothing, and the look-back pass then judges each permanent as it is now.
 pub struct Then {
     taken: bool,
+    /// Resolved trigger multipliers before the event, including ones whose source leaves with it (CR 603.10a).
+    trigger_effects: Vec<ContinuousEffect>,
     /// By object, for `of`.
     objects: Vec<(ObjectId, Chars, PlayerId)>,
     /// By object, parallel to `objects`: how it had acquired its abilities then (CR 607.5; `layers::acquisitions`), the text
@@ -1167,7 +1188,7 @@ impl Then {
 
     /// Nothing taken: the look-back pass judges the permanents as they are now.
     pub(crate) fn none() -> Then {
-        Then { taken: false, objects: Vec::new(), acquired: Vec::new() }
+        Then { taken: false, trigger_effects: Vec::new(), objects: Vec::new(), acquired: Vec::new() }
     }
 
     /// The permanents on the battlefield now that could look back, as they are now: called just before the events.
@@ -1200,7 +1221,7 @@ impl Then {
         } else {
             Vec::new()
         };
-        Then { taken: true, objects, acquired }
+        Then { taken: true, trigger_effects: s.effects.iter().filter(|e| e.kind == EffectKind::TriggersAgainWhileSourceTapped).copied().collect(), objects, acquired }
     }
 }
 
@@ -1308,6 +1329,7 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
     let looked = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
         let mut found: Found = Vec::new();
         let mut statics = TriggerStatics::new(before);
+        statics.before_effects = then.filter(|t| t.taken).map(|t| t.trigger_effects.as_slice());
         for event in events {
             let mask = EventMask::of(event);
             if mask.0 == 0 {

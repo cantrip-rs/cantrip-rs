@@ -864,6 +864,15 @@ delayed triggered ability is no ability of the object (CR 603.2d, 603.7) and is 
 card in another zone or of an emblem (CR 114.4) is not "of a permanent". Triggered mana abilities (CR 605.1b) are asked too, each
 triggering resolving at once.
 
+A resolved effect that makes a chosen permanent's abilities trigger again (Lwaxana Troi, Charming Guest) is read from
+the active continuous effects, independently of its source's abilities (CR 611.2a). Each effect adds one triggering;
+the existing `Then` snapshot preserves these effects for look-back events (CR 603.10a). Its "for as long as" duration
+ends permanently when its condition fails (CR 611.2b).
+
+Beam me up uses a distinct permanent payment (`PermanentAction::BeamUp`), returning its creature through the ordinary
+return-to-hand procedure. `CostPayment::BeamUp` lets an active static restriction forbid that payment (Marooned,
+CR 101.2, 118.3), while other effects and costs can still return the same permanent to hand.
+
 A trigger event is asked of the ability's source and controller (`TriggeredDef::fires`, an `Asker`): a matcher that says
 "you" is written `when_asked` and reads the controller it is given. For an ability of a permanent that is the permanent's
 controller; for a delayed triggered ability it is the delayed ability's own controller, the player who controlled the spell
