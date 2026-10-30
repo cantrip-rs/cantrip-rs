@@ -24,10 +24,12 @@ finite f16, or with zero for a NaN, so a corrupt position cannot turn a batch's 
 
 from __future__ import annotations
 
+import atexit
 import json
 import math
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from multiprocessing import shared_memory
 from pathlib import Path
 
 import numpy as np
@@ -70,6 +72,9 @@ class Data:
     swing: np.ndarray  # f32 [N]
     dead: np.ndarray  # f32 [N]
     game: np.ndarray  # i32 [N]
+    seat: np.ndarray  # u8 [N], the answering seat
+    decision: np.ndarray  # u32 [N], the answer's place on the game's line (a decision's sub-steps share it)
+    turn: np.ndarray  # u16 [N]
     hand_offset: np.ndarray  # i64 [N + 1]
     hand: np.ndarray  # u32, the opponents' hands' card rows, end to end
     games: int
@@ -77,14 +82,80 @@ class Data:
     visit_token: np.ndarray  # u8, each visited option's token, end to end
     visit_prob: np.ndarray  # f32, its share of the visits
     root: np.ndarray  # f32 [N], the search's root value for the seat, NaN where none
+    heuristic: np.ndarray  # f32 [N], a noted heuristic's log-odds of winning for the seat (the tactical model), NaN where none
+    policy: np.ndarray  # u8 [N], whether the sample's visits are a policy target (0: a fast search of playout-cap randomisation)
+    distill: np.ndarray  # f32 [N], a perfect-information value's mean over the seat's worlds (`distill_values`), NaN where none
     repeat: np.ndarray  # f32 [N], how many times a sample is dealt an epoch (its directory's weight, when above 1)
     directories: list  # (directory, weight, games, samples, nonfinite_roots)
     names: list  # the training index: names[i] is row i + 1 (`base` first, then each name new to it as the shards name it)
     index_of: np.ndarray  # u16 [N], the shard index each sample's position rows are of: `luts[index_of[r]]` maps them
     luts: list  # each shard index's rows to the training index's (u32, row 0 to 0)
+    blocks: dict = field(default_factory=dict)  # field: the shared memory its array is in, once `share`d
 
     def __len__(self):
         return len(self.length)
+
+    def __getstate__(self):
+        # Shared, each array goes by its block's name, shape and type: a spawned worker attaches to it, never copies it.
+        state = dict(self.__dict__)
+        for k, block in self.blocks.items():
+            state[k] = _Block(block.name, state[k].dtype.str, state[k].shape)
+        state["blocks"] = {}
+        return state
+
+    def __setstate__(self, state):
+        blocks = {}
+        for k, v in state.items():
+            if isinstance(v, _Block):
+                blocks[k] = _attach(v.name)
+                state[k] = np.ndarray(v.shape, np.dtype(v.dtype), blocks[k].buf)
+        state["blocks"] = blocks
+        self.__dict__.update(state)
+
+
+@dataclass(frozen=True)
+class _Block:
+    name: str
+    dtype: str
+    shape: tuple
+
+
+def share(data: Data) -> Data:
+    """`data`'s arrays moved into named shared memory, for DataLoader workers that are spawned rather than forked
+    (Windows, macOS): a spawned worker is handed `data` by pickling, which then carries each block's name instead of
+    its bytes, so every worker reads the one copy rather than holding its own (generation 0's is 14 GB). A forked
+    worker shares the parent's memory already, and needs none of this. Each array is copied once and the original
+    dropped; the blocks live while this process holds them, and are released at its exit."""
+    for k in list(data.__dict__):
+        v = getattr(data, k)
+        if k in data.blocks or not isinstance(v, np.ndarray) or not v.nbytes:
+            continue
+        block = shared_memory.SharedMemory(create=True, size=v.nbytes)
+        view = np.ndarray(v.shape, v.dtype, block.buf)
+        view[...] = v
+        data.blocks[k] = block
+        setattr(data, k, view)
+        del v, view
+    atexit.register(_release, list(data.blocks.values()))
+    return data
+
+
+def _attach(name: str) -> shared_memory.SharedMemory:
+    block = shared_memory.SharedMemory(name=name)
+    if sys.platform != "win32":
+        # Python before 3.13 has an attaching process's resource tracker unlink the block when that process exits,
+        # which would take it from the trainer and the other workers: only `share`'s process releases it.
+        from multiprocessing import resource_tracker
+        resource_tracker.unregister(block._name, "shared_memory")
+    return block
+
+
+def _release(blocks):
+    for b in blocks:
+        try:
+            b.unlink()  # POSIX; on Windows a block goes when its last handle closes
+        except (FileNotFoundError, OSError):
+            pass
 
 
 # What every shard of a training set must share; the producer and the commit may differ (a window of generations),
@@ -174,6 +245,20 @@ def _keep(seed: int, directory: int, game: int, weight: float) -> bool:
     return (h & 0xFFFFFFFF) / 2**32 < weight
 
 
+def _noted(meta: dict) -> dict[int, float]:
+    """A game's noted heuristic values by decision (`heuristic_values`: the tactical model's log-odds of winning for
+    the seat answering, where a recording table noted them); empty for a game with none."""
+    out = {}
+    for pair in meta.get("heuristic_values") or []:
+        try:
+            decision, value = int(pair[0]), float(pair[1])
+        except (TypeError, ValueError, IndexError):
+            continue
+        if math.isfinite(value):
+            out[decision] = value
+    return out
+
+
 def _roots(meta: dict) -> tuple[dict[int, float], int]:
     """A game's root values by decision, and how many were absent: null (as serde_json writes a non-finite f32) or
     otherwise not a finite number, from a shard recorded before the encoder stopped overflowing f16."""
@@ -192,12 +277,36 @@ def _roots(meta: dict) -> tuple[dict[int, float], int]:
     return roots, dropped
 
 
-def load(directories: list[str | Path], max_games: int | None = None, log=print, seed: int = 0, base: list = ()) -> Data:
+def chunk_paths(directories: list[str | Path], part: int, parts: int) -> set[Path]:
+    """The shard files of chunk `part` of `parts`: every `parts`-th of all the directories' shards, in order."""
+    every = [p for spec in directories for p in shards.shards(parse_directory(spec)[0])]
+    return {p for i, p in enumerate(every) if i % parts == part}
+
+
+def load(directories: list[str | Path], max_games: int | None = None, log=print, seed: int = 0, base: list = (),
+         chunk: tuple[int, int] | None = None, trivial: float = 1.0, decks: set[str] | None = None) -> Data:
     """Every sample of every shard in `directories` (`DIR` or `DIR:WEIGHT`; at most `max_games` games from each), its
     card rows onto the training index: `base` (a checkpoint's names, whose rows it keeps), then each name the shards
-    name that it lacks, in the order they first name it."""
+    name that it lacks, in the order they first name it.
+
+    `chunk=(part, parts)`: only the shards of that chunk (`chunk_paths`), for a training set larger than memory; the
+    training index is still every shard's names, read from their headers, so it is the same in every chunk.
+    `trivial`: the rate a single-option position is kept at (by a hash of its game and place, so a chunk loads the same
+    positions each time); training keeps them at a rate in any case (`batches`), and dropping them here saves memory.
+    `decks`: only the games whose decks (`GameMeta::decks`) are all among these names, a subset of a corpus recorded
+    over more decks; a game it passes over does not count towards `max_games` or a directory's weight.
+    Games are numbered within what is loaded."""
     names = list(base)
     row_of = {n: i + 1 for i, n in enumerate(names)}
+    picked = chunk_paths(directories, *chunk) if chunk is not None else None
+    if picked is not None:
+        for spec in directories:
+            for path in shards.shards(parse_directory(spec)[0]):
+                h, _ = shards.read(path)
+                for n in shard_cards(path, h):
+                    if n not in row_of:
+                        names.append(n)
+                        row_of[n] = len(names)
     luts: list[np.ndarray] = []
     lut_of: dict[str, int] = {}
     index_of: list[int] = []
@@ -208,12 +317,15 @@ def load(directories: list[str | Path], max_games: int | None = None, log=print,
     visit_token: list[int] = []
     visit_prob: list[float] = []
     root: list[float] = []
+    heuristic: list[float] = []
+    policy: list[int] = []
+    distill: list[float] = []
     repeat: list[float] = []
     summary = []
     seeds = []
     blob = bytearray()
     offset = [0]
-    cols = {k: [] for k in ("length", "legal", "target", "outcome", "swing", "dead", "game")}
+    cols = {k: [] for k in ("length", "legal", "target", "outcome", "swing", "dead", "game", "seat", "decision", "turn")}
     hand_offset = [0]
     hand: list[int] = []
     games = 0
@@ -226,6 +338,8 @@ def load(directories: list[str | Path], max_games: int | None = None, log=print,
         for path in shards.shards(directory):
             if max_games is not None and taken >= max_games:
                 break
+            if picked is not None and path not in picked:
+                continue
             h, gs = shards.read(path)
             theirs = shard_cards(path, h)
             key = index_hash(theirs)
@@ -250,16 +364,24 @@ def load(directories: list[str | Path], max_games: int | None = None, log=print,
             for g in gs:
                 if max_games is not None and taken >= max_games:
                     break
+                if decks is not None and not set(g.meta.get("decks") or ["?"]) <= decks:
+                    continue
                 taken += 1
                 seen += 1
                 if not _keep(seed, d, seen, weight):
                     continue
                 roots, dropped = _roots(g.meta)
+                noted = _noted(g.meta)
+                # Playout-cap randomisation's fast searches: value targets, no policy target (`GameMeta::fast_decisions`).
+                fast = set(int(d) for d in (g.meta.get("fast_decisions") or []))
+                distilled = {int(d): float(v) for d, v in (g.meta.get("distill_values") or [])}
                 dropped_roots += dropped
-                for s in g.samples:
+                for place, s in enumerate(g.samples):
                     p = s.position
                     options = p[4]
                     bits = int.from_bytes(p[6 : 6 + (options + 7) // 8], "little")
+                    if trivial < 1.0 and bits.bit_count() <= 1 and not _keep(seed + 0x5EED, games, place, trivial):
+                        continue
                     blob += p
                     offset.append(len(blob))
                     cols["length"].append(p[2])
@@ -269,6 +391,9 @@ def load(directories: list[str | Path], max_games: int | None = None, log=print,
                     cols["swing"].append(s.life_swing)
                     cols["dead"].append(s.dead_next_turn)
                     cols["game"].append(games)
+                    cols["seat"].append(s.seat)
+                    cols["decision"].append(s.decision)
+                    cols["turn"].append(s.turn)
                     hand.extend(int(lut[c]) if c < len(lut) else 0 for c in s.opponent_hand)
                     index_of.append(which)
                     hand_offset.append(len(hand))
@@ -277,6 +402,9 @@ def load(directories: list[str | Path], max_games: int | None = None, log=print,
                     visit_prob.extend(v for _, v in visits)
                     visit_offset.append(len(visit_token))
                     root.append(roots.get(s.decision, float("nan")))
+                    heuristic.append(noted.get(s.decision, float("nan")))
+                    policy.append(0 if s.decision in fast else 1)
+                    distill.append(distilled.get(s.decision, float("nan")))
                     repeat.append(max(weight, 1.0))
                 games += 1
             log(f"  {path}: {games} games, {len(offset) - 1} samples")
@@ -301,6 +429,9 @@ def load(directories: list[str | Path], max_games: int | None = None, log=print,
         swing=np.array(cols["swing"], np.float32),
         dead=np.array(cols["dead"], np.float32),
         game=np.array(cols["game"], np.int32),
+        seat=np.array(cols["seat"], np.uint8),
+        decision=np.array(cols["decision"], np.uint32),
+        turn=np.array(cols["turn"], np.uint16),
         hand_offset=np.array(hand_offset, np.int64),
         hand=np.array(hand, np.uint32),
         games=games,
@@ -308,6 +439,9 @@ def load(directories: list[str | Path], max_games: int | None = None, log=print,
         visit_token=np.array(visit_token, np.uint8),
         visit_prob=np.array(visit_prob, np.float32),
         root=np.array(root, np.float32),
+        heuristic=np.array(heuristic, np.float32),
+        policy=np.array(policy, np.uint8),
+        distill=np.array(distill, np.float32),
         repeat=np.array(repeat, np.float32),
         directories=summary,
         names=names,
@@ -412,14 +546,20 @@ def labels(data: Data, rows: np.ndarray, inputs: dict[str, np.ndarray]) -> dict[
     for i, r in enumerate(rows):
         a, b = data.visit_offset[r], data.visit_offset[r + 1]
         visits[i, data.visit_token[a:b]] = data.visit_prob[a:b]
+    extra = {"heuristic": data.heuristic[rows], "distill": data.distill[rows]}
+    if getattr(data, "td", None) is not None:
+        extra["td"] = data.td[rows]
+    if getattr(data, "future", None) is not None:
+        extra["future"] = data.future[rows]
     return dict(
+        **extra,
         target=data.target[rows].astype(np.int64),
         visits=visits,
         root=data.root[rows],
         outcome=data.outcome[rows],
         swing=data.swing[rows],
         dead=data.dead[rows],
-        choice=(data.legal[rows] > 1),
+        choice=(data.legal[rows] > 1) & (data.policy[rows] > 0),
         in_hand=hand_card,
         pool=(inputs["kind"] == POOL_CARD),
     )

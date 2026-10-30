@@ -11,7 +11,10 @@
 - `export`: an ONNX graph per token bucket (32, 64, 128; opset 17, TorchScript exporter, checked against an operator
   allow-list), `cards.json` (the card names the model's table rows are), `manifest.json` (schema, encoder and
   card index hashes, metrics), and `reference/` (positions with PyTorch's outputs, checked through onnxruntime here
-  and through tract and `ort` in Rust: `cargo test -p cantrip-ai --test eval -- --ignored`).
+  and through tract and `ort` in Rust: `cargo test -p cantrip-ai --test eval -- --ignored`), and `model.pt`, the
+  weights the inference server runs.
+- `serve`: the inference server, the network on the GPU for every self-play lane and AI host at once
+  (`cantrip_ai::remote::RemoteEvaluator`; docs/ai-training.md, "The GPU inference server").
 
 Run from `ai/`, in a Python environment with PyTorch (docs/ai-training.md sets one up for CUDA, ROCm or the CPU):
 

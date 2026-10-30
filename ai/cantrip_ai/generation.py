@@ -2,7 +2,7 @@
 promote, retire.
 
     python -m cantrip_ai.generation --root ../../ai-data [--generation N] [--games 5000] [--simulations 64]
-        [--decks-dir decks/standard] [--device auto] [--train-hours 0.65] [--gate-games 1200] [--dry-run] [--tiny]
+        [--decks-dir decks/standard] [--device auto] [--train-hours 0.65] [--gate-games 6000] [--gate-h1 0.52] [--dry-run] [--tiny]
 
 Self-play draws its pairings from `--decks-dir` by metagame share (the player count in each decklist's header), and
 the gate plays a pool of those decks as mirrors. `--decks-dir ''` keeps the fixed rw-aggro/ub-reanimator slice.
@@ -12,7 +12,7 @@ The champion (`ROOT/champions/current`, a frozen model directory with its `train
 visits as the policy targets. The network is fine-tuned from the champion's checkpoint on the window of generations
 (the newest weighted 1, older self-play `--older-weight`, the imitation data gen0 `--imitation-weight`), exported to
 `ROOT/models/genN`, checked for parity against PyTorch, and gated: the candidate against the champion in BotLab, both
-searching at the same budget, the SPRT (H0 50%, H1 55%, alpha = beta = 0.05) over the two decks with `--mirrors`,
+searching at the same budget, the SPRT (H0 50%, H1 `--gate-h1` 52%, alpha = beta = 0.05) over the decks as mirrors,
 seats swapped. Accepted, the candidate is copied to `ROOT/champions/genN` and becomes `current`; rejected, it is
 recorded and the champion stays. Either way `champions/history.json` gets a line, and the generation's data stays in
 the window (a rejected generation's games are still the champion's search). Then retention (`retention.py`).
@@ -30,6 +30,15 @@ go to `attempts` in `generation.json` (and a line of the README), its logs to `l
 beside them, and its model is deleted; the new attempt's settings (`--value-mix`, `--train-steps`, `--lr`) are the
 command line's.
 
+With `--gpu-server` (on by default when `--device` resolves to an NVIDIA GPU), self-play, parity and the gate evaluate
+on the inference server (`serve.py`, docs/ai-training.md "The GPU inference server") instead of ONNX Runtime on the
+CPU: the driver starts it for the stage on a free port, serving the stage's models, passes `--backend remote --server`
+(BotLab: `--ai-server`), and stops it when the stage ends. Its log is `genN/logs/server-<stage>.log`. A model exported
+before export wrote `model.pt` gets one from its checkpoint first. With the server, `--lanes` and `--gate-parallel`
+default to more than the cores, since the games wait on the GPU. `--server-impl native` serves with `cantrip-infer`
+instead (docs/ai-host.md, "The native inference server": the same protocol, no Python on the request path; built with
+`--features gpu`, onnxruntime-gpu named by `--ort-dylib` or `ORT_DYLIB_PATH`, CUDA's libraries from PyTorch's).
+
 `--dry-run` prints the stages' commands and the window and runs nothing. `--tiny` sets a toy scale (a handful of
 games at 8 simulations, a few training steps, a gate of 4 games, no SPRT stop) for testing the driver end to end.
 """
@@ -37,6 +46,7 @@ games at 8 simulations, a few training steps, a gate of 4 games, no SPRT stop) f
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
 import os
 import random
@@ -57,6 +67,11 @@ BOTLAB = REPO / "dotnet/tools/Cantrip.BotLab/bin/Release/net8.0/cantrip-botlab.d
 NATIVE = REPO / f"target/cards/cantrip-native-host{EXE}"
 AI_HOST = REPO / f"target/release/cantrip-ai-host{EXE}"
 SELFPLAY = REPO / f"target/release/cantrip-selfplay{EXE}"
+INFER = REPO / f"target/release/cantrip-infer{EXE}"
+# With the GPU server, lanes and gate games a CPU thread: they wait on the server, so more than the cores keep the GPU
+# fed (measured on 32 threads and an RTX 4080; docs/ai-training.md).
+SERVER_LANES = 2
+SERVER_GATE = 1
 
 
 def dotnet() -> list[str]:
@@ -82,7 +97,7 @@ def champion(root: Path) -> Path | None:
 def completed(root: Path, gen: int) -> bool:
     """Whether the driver wrote the generation's record all the way to the end."""
     try:
-        return bool(json.loads((root / f"gen{gen}" / "generation.json").read_text()).get("finished"))
+        return bool(json.loads((root / f"gen{gen}" / "generation.json").read_text(encoding="utf-8")).get("finished"))
     except (FileNotFoundError, json.JSONDecodeError):
         return False
 
@@ -160,20 +175,46 @@ def bootstrap(root: Path, log=print) -> Path:
     return dest.resolve()
 
 
+def _unlink(path: Path):
+    """Removes a symlink or a directory junction (never what it points to)."""
+    if path.is_symlink() or path.is_file():
+        path.unlink()
+    elif path.exists() or os.path.lexists(path):
+        os.rmdir(path)  # a junction: rmdir removes the link, never the directory it points at
+
+
 def set_current(root: Path, name: str):
+    """`champions/current` to `champions/NAME`: a relative symlink, replaced atomically. Windows makes a symlink only in
+    Developer Mode or as an administrator; without one, a directory junction (absolute, made by any user) stands in,
+    and it is swapped by removing the old one first."""
     link = root / "champions" / "current"
     tmp = link.with_name("current.tmp")
-    if tmp.is_symlink() or tmp.exists():
-        tmp.unlink()
-    tmp.symlink_to(name)
-    os.replace(tmp, link)
+    _unlink(tmp)
+    try:
+        tmp.symlink_to(name, target_is_directory=True)
+    except OSError:
+        if os.name != "nt":
+            raise
+        import _winapi  # noqa: PLC0415 (Windows only)
+
+        _winapi.CreateJunction(str((root / "champions" / name).resolve()), str(tmp))
+        _unlink(link)
+        os.rename(tmp, link)
+        return
+    try:
+        os.replace(tmp, link)
+    except OSError:
+        if os.name != "nt":
+            raise
+        _unlink(link)  # Windows cannot replace a directory link in one step
+        os.rename(tmp, link)
 
 
 def history(root: Path, entry: dict):
     path = root / "champions" / "history.json"
-    rows = json.loads(path.read_text()) if path.exists() else []
+    rows = json.loads(path.read_text(encoding="utf-8")) if path.exists() else []
     rows.append(entry)
-    path.write_text(json.dumps(rows, indent=1))
+    path.write_text(json.dumps(rows, indent=1), encoding="utf-8")
 
 
 def now() -> str:
@@ -220,7 +261,7 @@ class Record:
     def __init__(self, gen_dir: Path, gen: int, dry_run: bool):
         self.dir, self.gen, self.dry_run = gen_dir, gen, dry_run
         self.path = gen_dir / "generation.json"
-        self.data = json.loads(self.path.read_text()) if self.path.exists() else dict(generation=gen, started=now(), stages={})
+        self.data = json.loads(self.path.read_text(encoding="utf-8")) if self.path.exists() else dict(generation=gen, started=now(), stages={})
 
     def done(self, stage: str) -> bool:
         return self.data["stages"].get(stage, {}).get("done", False)
@@ -233,8 +274,8 @@ class Record:
         if self.dry_run:
             return
         self.dir.mkdir(parents=True, exist_ok=True)
-        self.path.write_text(json.dumps(self.data, indent=1))
-        (self.dir / "README.md").write_text(readme(self.data))
+        self.path.write_text(json.dumps(self.data, indent=1), encoding="utf-8")
+        (self.dir / "README.md").write_text(readme(self.data), encoding="utf-8")
 
 
 def _f(v, fmt="{:.3f}"):
@@ -353,10 +394,95 @@ def run(cmd: list[str], log_path: Path, dry_run: bool, env: dict | None = None, 
         with log_path.open("w") as f:
             p = subprocess.run([str(c) for c in cmd], cwd=REPO, env=environment, stdout=f, stderr=subprocess.STDOUT)
         code = p.returncode
-    text = log_path.read_text()
+    text = log_path.read_text(encoding="utf-8", errors="replace")
     if code != 0:
         raise SystemExit(f"failed ({code}): {shown}\n--- {log_path} ---\n{text[-3000:]}")
     return text
+
+
+class InferenceServer:
+    """`python -m cantrip_ai.serve` for a stage (docs/ai-training.md, "The GPU inference server"): started serving
+    `models` on a free port, its address read from its ready file, stopped when the stage is done. Its output is the
+    stage's `server-<stage>.log`."""
+
+    def __init__(self, models: list[Path], log_path: Path, device: str, extra: list[str], dry_run: bool, log=print,
+                 native: bool = False, ort_dylib: str | None = None):
+        self.models, self.log_path, self.device, self.extra, self.dry_run, self.log = models, log_path, device, extra, dry_run, log
+        self.native, self.ort_dylib = native, ort_dylib
+        self.process = None
+        self.address = "127.0.0.1:PORT"
+
+    def command(self, ready: Path) -> tuple[list, dict]:
+        """serve.py, or with `native` cantrip-infer (`--device` as a CUDA index; onnxruntime-gpu and CUDA's libraries
+        named in its environment, CUDA's from this PyTorch's when not set)."""
+        models = [x for m in self.models for x in ("--model", m)]
+        env = {"PYTHONPATH": str(REPO / "ai")}
+        if not self.native:
+            return [sys.executable, "-m", "cantrip_ai.serve", *models, "--port", 0, "--ready-file", ready, "--device",
+                    self.device, *self.extra], env
+        device = self.device.split(":", 1)[1] if ":" in self.device else "0"
+        if self.ort_dylib:
+            env["ORT_DYLIB_PATH"] = self.ort_dylib
+        if "CANTRIP_CUDA_LIBS" not in os.environ:
+            with contextlib.suppress(ImportError):
+                import torch  # noqa: PLC0415
+
+                env["CANTRIP_CUDA_LIBS"] = str(Path(torch.__file__).parent / "lib")
+        return [INFER, "serve", *models, "--port", 0, "--ready-file", ready, "--device", device, *self.extra], env
+
+    def __enter__(self):
+        ready = self.log_path.with_suffix(".ready")
+        cmd, env = self.command(ready)
+        self.log(f"$ {' '.join(str(c) for c in cmd)} &")
+        if self.dry_run:
+            return self
+        self.log_path.parent.mkdir(parents=True, exist_ok=True)
+        if ready.exists():
+            ready.unlink()
+        self.file = self.log_path.open("wb")
+        self.process = subprocess.Popen([str(c) for c in cmd], cwd=REPO / "ai", stdout=self.file, stderr=subprocess.STDOUT,
+                                        env={**os.environ, **env})
+        deadline = time.time() + 600
+        while not ready.exists():
+            if self.process.poll() is not None or time.time() > deadline:
+                self.stop()
+                text = self.log_path.read_text(encoding="utf-8", errors="replace")
+                raise SystemExit(f"the inference server did not start\n--- {self.log_path} ---\n{text[-3000:]}")
+            time.sleep(0.2)
+        self.address = ready.read_text().strip()
+        ready.unlink()
+        self.log(f"  inference server at {self.address} (log {self.log_path})")
+        return self
+
+    def stop(self):
+        if self.process is not None and self.process.poll() is None:
+            self.process.terminate()
+            try:
+                self.process.wait(30)
+            except subprocess.TimeoutExpired:
+                self.process.kill()
+                self.process.wait()
+        if self.process is not None:
+            self.file.close()
+        self.process = None
+
+    def __exit__(self, *_):
+        self.stop()
+
+
+def wants_server(choice: str, device: str) -> bool:
+    """`--gpu-server`: on, off, or auto: on when the training device is an NVIDIA GPU. A ROCm build of PyTorch also
+    calls its GPU `cuda`, but the server has not been run on AMD hardware yet, so there auto keeps ONNX Runtime on the
+    CPU, as before, and `--gpu-server on` asks for the server."""
+    if choice != "auto":
+        return choice == "on"
+    if device != "auto" and not device.startswith("cuda"):
+        return False
+    try:
+        import torch  # noqa: PLC0415
+    except ImportError:
+        return False
+    return torch.cuda.is_available() and torch.version.hip is None
 
 
 def main(argv=None):
@@ -371,7 +497,22 @@ def main(argv=None):
                    help="show the running stage's output (and its bar) in this terminal; auto is on only on a tty")
     a.add_argument("--games", type=int, default=5000, help="self-play games")
     a.add_argument("--simulations", type=int, default=64, help="the search budget of self-play and the gate")
-    a.add_argument("--lanes", type=int, default=os.cpu_count() or 4, help="self-play games at once (default: one a CPU thread)")
+    a.add_argument("--full-simulations", type=int, default=0,
+                   help="playout-cap randomisation in self-play: this budget for a share --full-share of searched decisions, "
+                        "the only policy targets; the rest search with --simulations (0: off, every search --simulations)")
+    a.add_argument("--full-share", type=float, default=0.25, help="the share of searched decisions given --full-simulations")
+    a.add_argument("--search-batch", type=int, default=8, help="leaves a self-play search sends to the network at once")
+    a.add_argument("--lanes", type=int, help="self-play games at once (default: one a CPU thread; with the GPU server, "
+                                              f"{SERVER_LANES} a CPU thread)")
+    a.add_argument("--gpu-server", choices=["auto", "on", "off"], default="auto",
+                   help="self-play, parity and the gate evaluate on one batched inference server (serve.py) instead of "
+                        "ONNX Runtime on the CPU; auto is on when --device is an NVIDIA GPU (on ROCm, ask with on)")
+    a.add_argument("--server-device", help="the inference server's device (default: --device)")
+    a.add_argument("--server-args", default="", help="more arguments for serve.py, one string")
+    a.add_argument("--server-impl", choices=["python", "native"], default="python",
+                   help="the inference server: serve.py, or cantrip-infer (native, built with --features gpu; NVIDIA only)")
+    a.add_argument("--ort-dylib", default=os.environ.get("ORT_DYLIB_PATH"),
+                   help="onnxruntime-gpu's onnxruntime library for --server-impl native (default: ORT_DYLIB_PATH)")
     a.add_argument("--selfplay-shard-games", type=int, default=100,
                    help="games a self-play shard holds (a smaller shard loses less to an interruption)")
     a.add_argument("--sampled", type=int, default=20, help="decisions sampled at the temperature before the most visited is played")
@@ -386,8 +527,12 @@ def main(argv=None):
     a.add_argument("--warmup", type=int, default=200)
     a.add_argument("--value-mix", type=float, default=0.5, help="the root value's share of the value target on searched positions")
     a.add_argument("--train-args", default="", help="more arguments for train.py, one string")
-    a.add_argument("--gate-games", type=int, default=1200, help="the most games the gate's SPRT may take")
-    a.add_argument("--gate-parallel", type=int, default=os.cpu_count() or 4, help="gate games at once (default: one a CPU thread)")
+    a.add_argument("--gate-games", type=int, default=6000, help="the most games the gate's SPRT may take")
+    a.add_argument("--gate-h1", type=float, default=0.52,
+                   help="the SPRT's H1, the candidate's share: Magic's variance hides a 55%% step, so a smaller one "
+                        "(about 3,700 games to a verdict at 50%% or 52%%, up to ~5,400 between)")
+    a.add_argument("--gate-parallel", type=int, help="gate games at once (default: one a CPU thread; with the GPU server, "
+                                                      f"{SERVER_GATE} a CPU thread)")
     a.add_argument("--accept", choices=["sprt", "ahead"], default="sprt")
     a.add_argument("--keep", type=int, default=8)
     a.add_argument("--no-build", action="store_true")
@@ -396,6 +541,12 @@ def main(argv=None):
     a.add_argument("--tiny", action="store_true", help="a toy scale, for testing the driver")
     args = a.parse_args(argv)
     show_progress = args.progress == "on" or (args.progress == "auto" and sys.stderr.isatty())
+    server = wants_server(args.gpu_server, args.device)
+    cpus = os.cpu_count() or 4
+    if args.lanes is None:
+        args.lanes = max(1, round(cpus * (SERVER_LANES if server else 1)))
+    if args.gate_parallel is None:
+        args.gate_parallel = max(1, round(cpus * (SERVER_GATE if server else 1)))
     if args.tiny:
         args.games, args.simulations, args.train_steps, args.gate_games, args.warmup = 4, 8, 4, 4, 1
         args.accept = "ahead" if args.accept == "sprt" else args.accept
@@ -433,9 +584,27 @@ def main(argv=None):
         if not args.dry_run:
             rec.put(name, time.time() - t, **(numbers or {}))
 
+    def server_for(models: list[Path], stage_name: str):
+        """The inference server for a stage, or nothing (a stand-in whose address is unused) when it is off."""
+        if not server:
+            return contextlib.nullcontext(None)
+        for m in models:
+            # A model exported before export wrote the server's weights: write them from its checkpoint.
+            if (m / "manifest.json").exists() and not (m / "model.pt").exists() and (m / "train" / "checkpoint.pt").exists():
+                run([sys.executable, "-m", "cantrip_ai.export", "--checkpoint", m / "train" / "checkpoint.pt", "--out", m,
+                     "--weights-only"], gen_dir / "logs" / f"weights-{m.name}.log", args.dry_run,
+                    env=dict(PYTHONPATH=str(REPO / "ai")))
+        return InferenceServer(models, gen_dir / "logs" / f"server-{stage_name}.log", args.server_device or args.device,
+                               args.server_args.split(), args.dry_run, log, native=args.server_impl == "native",
+                               ort_dylib=args.ort_dylib)
+
     def build():
         run(["cargo", "build", "--release", "-p", "cantrip-ai-host", "--features", "ort"], gen_dir / "logs/build-release.log",
             args.dry_run, stream=show_progress)
+        if server and args.server_impl == "native":
+            # On its own: the gpu feature loads onnxruntime at run time, which the other binaries are not built to.
+            run(["cargo", "build", "--release", "-p", "cantrip-ai-host", "--features", "gpu", "--bin", "cantrip-infer"],
+                gen_dir / "logs/build-infer.log", args.dry_run, stream=show_progress)
         run(["cargo", "build", "--profile", "cards", "-p", "cantrip-host", "--bin", "cantrip-native-host"],
             gen_dir / "logs/build-native.log", args.dry_run, stream=show_progress)
         run([*dotnet(), "build", "dotnet/tools/Cantrip.BotLab/Cantrip.BotLab.csproj", "-c", "Release", "-v", "q", "--nologo"],
@@ -448,18 +617,26 @@ def main(argv=None):
             shutil.rmtree(out)
         cmd = [SELFPLAY, "--model", champ, "--out", out, "--games", args.games, "--simulations", args.simulations,
                "--lanes", args.lanes, "--seed", seed, "--sampled", args.sampled, "--temperature", args.temperature,
-               "--mode", args.mode, "--shard-games", args.selfplay_shard_games]
+               "--mode", args.mode, "--shard-games", args.selfplay_shard_games, "--batch", args.search_batch]
+        if args.full_simulations:
+            cmd += ["--full-simulations", args.full_simulations, "--full-share", args.full_share]
         if resume:
             cmd.append("--resume")
         if decks_dir is not None:
-            cmd += ["--decks", decks_dir, "--prior", decks_dir]
-            for pairing in metagame_pairings(pool, args.games, seed):
-                cmd += ["--pairing", pairing]
-        run(cmd, gen_dir / "logs/selfplay.log", args.dry_run, env=dict(CANTRIP_PROGRESS="1") if show_progress else None,
-            stream=show_progress)
+            # A pairing a game, in a file: as arguments they pass Windows' 32K command line.
+            listed = gen_dir / "selfplay-pairings.txt"
+            if not args.dry_run:
+                gen_dir.mkdir(parents=True, exist_ok=True)
+                listed.write_text("".join(p + "\n" for p in metagame_pairings(pool, args.games, seed)), encoding="utf-8")
+            cmd += ["--decks", decks_dir, "--prior", decks_dir, "--pairings", listed]
+        with server_for([champ], "selfplay") as gpu:
+            if gpu is not None:
+                cmd += ["--backend", "remote", "--server", gpu.address]
+            run(cmd, gen_dir / "logs/selfplay.log", args.dry_run, env=dict(CANTRIP_PROGRESS="1") if show_progress else None,
+                stream=show_progress)
         if args.dry_run:
             return
-        r = json.loads((out / "selfplay-report.json").read_text())
+        r = json.loads((out / "selfplay-report.json").read_text(encoding="utf-8"))
         numbers = dict(games=r["Games"], resumed=r.get("Resumed", 0), games_this_run=r.get("GamesThisRun", r["Games"]),
                        samples=r["Samples"], visit_samples=r["VisitSamples"], capped=r["Capped"], dropped=r["Dropped"],
                        fallbacks=r["NetworkFallbacks"], simulations=r["Simulations"], lanes=r["Lanes"], games_per_hour=r["GamesPerHour"],
@@ -493,7 +670,7 @@ def main(argv=None):
         run(cmd, gen_dir / "logs/train.log", args.dry_run, env=dict(PYTHONPATH=str(REPO / "ai")), stream=show_progress)
         if args.dry_run:
             return
-        m = json.loads((out / "metrics.json").read_text())["history"][-1]
+        m = json.loads((out / "metrics.json").read_text(encoding="utf-8"))["history"][-1]
         import torch  # the checkpoint's data record: what each window directory gave
 
         ck = torch.load(out / "checkpoint.pt", map_location="cpu", weights_only=False)
@@ -507,9 +684,15 @@ def main(argv=None):
         return dict(model=str(model_dir))
 
     def parity():
-        text = run(["cargo", "test", "--profile", "cards", "-p", "cantrip-ai", "--features", "ort", "--test", "eval", "model_parity",
-                    "--", "--ignored", "--nocapture"], gen_dir / "logs/parity.log", args.dry_run, env=dict(CANTRIP_MODEL=str(model_dir)),
-                   stream=show_progress)
+        # With the GPU server, the server checks the references itself as it starts, and the Rust side runs them
+        # through it too (`RemoteEvaluator`), beside tract and ort.
+        with server_for([model_dir], "parity") as gpu:
+            env = dict(CANTRIP_MODEL=str(model_dir))
+            if gpu is not None:
+                env["CANTRIP_AI_SERVER"] = gpu.address
+            text = run(["cargo", "test", "--profile", "cards", "-p", "cantrip-ai", "--features", "ort", "--test", "eval",
+                        "model_parity", "--", "--ignored", "--nocapture"], gen_dir / "logs/parity.log", args.dry_run,
+                       env=env, stream=show_progress)
         said = [l for l in text.splitlines() if "parity" in l.lower() or "max" in l.lower()]
         return dict(summary=(said[-1].strip() if said else "passed").replace("|", "/"))
 
@@ -524,7 +707,7 @@ def main(argv=None):
             # A gate that finished but that the driver never recorded (it stopped between BotLab exiting and the
             # stage being written) is final: read it back instead of rolling a fresh one. The per-network summary
             # names the champion it played, so a log from a different champion (or budget) is not reused.
-            text = gate_log.read_text()
+            text = gate_log.read_text(encoding="utf-8", errors="replace")
             if f"/{champ.name}:" in text and f"neural@{args.simulations} against" in text:
                 try:
                     recovered = parse_gate(text)
@@ -542,12 +725,15 @@ def main(argv=None):
             cmd += ["--deck", "rw-aggro", "--deck", "ub-reanimator", "--mirrors"]
         cmd += ["--games", args.gate_games, "--parallel", args.gate_parallel, "--seed", seed + 5_000_000]
         if args.accept == "sprt":
-            cmd.append("--sprt")
+            cmd += ["--sprt", "--sprt-h1", args.gate_h1]
         env = {"DOTNET_ROLL_FORWARD": "Major", "CANTRIP_NATIVE_HOST": str(NATIVE), "CANTRIP_AI_HOST": str(AI_HOST)}
-        text = run(cmd, gen_dir / "logs/gate.log", args.dry_run, env=env, stream=show_progress)
+        with server_for([model_dir, champ], "gate") as gpu:
+            if gpu is not None:
+                cmd += ["--ai-server", gpu.address]
+            text = run(cmd, gen_dir / "logs/gate.log", args.dry_run, env=env, stream=show_progress)
         if args.dry_run:
             return
-        return dict(parse_gate(text), champion=champ.name, simulations=args.simulations, decks=decks)
+        return dict(parse_gate(text), champion=champ.name, simulations=args.simulations, decks=decks, h1=args.gate_h1)
 
     def promote():
         if args.dry_run:

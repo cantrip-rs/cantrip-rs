@@ -52,6 +52,12 @@ class Config:
     layers: int = 4
     heads: int = 4
     ffn: int = 576
+    # Training-only auxiliary outputs (targets.future): a head the search never reads and export leaves out. 0, none.
+    future: int = 0
+    # The value as a residual on a heuristic: win logit = heuristic head + residual head, value = tanh(logit / 2)
+    # = 2 P(win) - 1. The heuristic head is trained towards a noted heuristic's log-odds (the tactical model's), the
+    # sum towards the outcomes, the residual held towards zero (`train.py --residual`). False: the value head alone.
+    residual: bool = False
 
 
 def checkpoint_cards(checkpoint: dict, path: str | Path) -> list:
@@ -119,6 +125,8 @@ class Net(nn.Module):
         self.aux = nn.Sequential(nn.Linear(2 * w, w), nn.GELU(), nn.Linear(w, 2))
         self.policy = nn.Sequential(nn.Linear(w, w), nn.GELU(), nn.Linear(w, 1))
         self.belief = nn.Linear(w, 1)
+        self.future = nn.Sequential(nn.Linear(2 * w, w), nn.GELU(), nn.Linear(w, c.future)) if c.future else None
+        self.heuristic = nn.Sequential(nn.Linear(2 * w, w), nn.GELU(), nn.Linear(w, 1)) if c.residual else None
         self.register_buffer("masked", torch.tensor(MASKED), persistent=False)
         # Set for export: a constant token count keeps Shape ops out of the graph; the batch stays free.
         self.tokens = 0
@@ -134,6 +142,34 @@ class Net(nn.Module):
     def heads(self, kind, card, cats, ptrs, nums, legal):
         """kind [B,T] i64, card [B,T] i64 (card index rows), cats [B,T,9] i64, ptrs [B,T,4] i64 (255 = none), nums
         [B,T,96] f32, legal [B,T] bool. Returns value [B], policy [B,T], the life swing / SWING_SCALE [B], the dead-next-turn logit [B], belief [B,T]."""
+        x, summary = self.body(kind, card, cats, ptrs, nums)
+        value, _ = self.value_parts(summary)
+        swing, dead = self.aux(summary).unbind(-1)
+        logits = self.policy(x).squeeze(-1)
+        belief = self.belief(x).squeeze(-1)
+        return value, torch.where(legal, logits, self.masked), swing, dead, belief
+
+    def value_parts(self, summary):
+        """The value [B], and with `Config.residual` the heuristic head's and the residual head's logits [B] each."""
+        if self.heuristic is None:
+            return torch.tanh(self.value(summary)).squeeze(-1), None
+        h = self.heuristic(summary).squeeze(-1)
+        r = self.value(summary).squeeze(-1)
+        return torch.tanh(0.5 * (h + r)), (h, r)
+
+    def heads_and_future(self, kind, card, cats, ptrs, nums, legal):
+        """`heads`, and the training-only future head's outputs [B, future] (None without one)."""
+        x, summary = self.body(kind, card, cats, ptrs, nums)
+        value, parts = self.value_parts(summary)
+        swing, dead = self.aux(summary).unbind(-1)
+        logits = self.policy(x).squeeze(-1)
+        belief = self.belief(x).squeeze(-1)
+        future = self.future(summary) if self.future is not None else None
+        return value, torch.where(legal, logits, self.masked), swing, dead, belief, future, parts
+
+    def body(self, kind, card, cats, ptrs, nums):
+        """The encoder: each token's output [B,T,W], and the summary the value and auxiliary heads read [B,2W] (the game
+        token's output beside the mean of the tokens')."""
         tokens = self.tokens or kind.shape[1]
         w = self.config.width
         card_x = self.folded[card] if self.folded is not None else self.card(self.table[card])
@@ -151,12 +187,7 @@ class Net(nn.Module):
             x = block(x, bias, tokens)
         x = self.norm(x)
         pooled = (x * keep.unsqueeze(-1)).sum(1) / keep.sum(1, keepdim=True).clamp(min=1.0)
-        summary = torch.cat([x[:, 0], pooled], dim=-1)
-        value = torch.tanh(self.value(summary)).squeeze(-1)
-        swing, dead = self.aux(summary).unbind(-1)
-        logits = self.policy(x).squeeze(-1)
-        belief = self.belief(x).squeeze(-1)
-        return value, torch.where(legal, logits, self.masked), swing, dead, belief
+        return x, torch.cat([x[:, 0], pooled], dim=-1)
 
 
 @torch.no_grad()

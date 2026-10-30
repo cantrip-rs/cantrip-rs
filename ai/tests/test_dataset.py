@@ -6,6 +6,8 @@
 from __future__ import annotations
 
 import json
+import multiprocessing
+import pickle
 import struct
 import sys
 import tempfile
@@ -142,6 +144,22 @@ class DatasetTest(unittest.TestCase):
         self.assertTrue(np.isnan(data.root[3]))
         self.assertEqual(data.directories[0]["nonfinite_roots"], 2)
 
+    def test_only_the_games_among_the_decks(self):
+        root = Path(self.tmp.name) / "decks"
+        root.mkdir()
+        write_shard(root / "a.shard.zst", "tactical:x", [
+            (dict(seed=1, decks=["dimir", "izzet"]), [sample(0, 0, [(0, 1.0)])]),
+            (dict(seed=2, decks=["dimir", "azorius"]), [sample(0, 0, [(0, 1.0)]), sample(1, 0, [(0, 1.0)])]),
+            (dict(seed=3, decks=["izzet", "izzet"]), [sample(0, 0, [(0, 1.0)])]),
+            (dict(seed=4), [sample(0, 0, [(0, 1.0)])]),
+        ])
+        data = dataset.load([root], log=lambda *_: None, decks={"dimir", "izzet"})
+        self.assertEqual((data.games, len(data)), (2, 2))
+        # A game passed over does not count towards the directory's cap.
+        data = dataset.load([root], max_games=2, log=lambda *_: None, decks={"izzet", "dimir"})
+        self.assertEqual(data.games, 2)
+        self.assertEqual(dataset.load([root], log=lambda *_: None).games, 4)
+
     def test_card_indexes_are_mapped_onto_one(self):
         root = Path(self.tmp.name) / "indexes"
         (root / "a").mkdir(parents=True)
@@ -192,6 +210,26 @@ class DatasetTest(unittest.TestCase):
         self.assertEqual(float(safe["nums"][0, 0, 1]), -dataset.F16_MAX)
         self.assertEqual(float(safe["nums"][0, 0, 2]), 0.0)
         self.assertTrue(np.isfinite(safe["nums"]).all())
+
+    def test_shared_data_reaches_a_spawned_process_by_name(self):
+        data = dataset.load([self.selfplay, self.imitation], log=lambda *_: None)
+        before = {k: v.copy() for k, v in data.__dict__.items() if isinstance(v, np.ndarray)}
+        copied = len(pickle.dumps(data))
+        dataset.share(data)
+        self.assertIn("blob", data.blocks)
+        for k, v in before.items():
+            np.testing.assert_array_equal(getattr(data, k), v)
+        # Pickled, the arrays are block names: the blob's bytes are not in it.
+        shared = pickle.dumps(data)
+        self.assertLess(len(shared), copied - data.blob.nbytes)
+        with multiprocessing.get_context("spawn").Pool(1) as pool:
+            sums = pool.apply(_sums, (data,))
+        self.assertEqual(sums, _sums(data))
+
+
+def _sums(data) -> dict:
+    """What a worker reads of each array (module level, so a spawned process can be handed it)."""
+    return {k: float(np.nansum(v.astype(np.float64))) for k, v in data.__dict__.items() if isinstance(v, np.ndarray)}
 
 
 if __name__ == "__main__":

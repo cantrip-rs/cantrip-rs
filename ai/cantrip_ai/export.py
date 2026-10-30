@@ -18,6 +18,12 @@ Writes into DIR:
   `from_compact` to show the two decoders agree.
 - `manifest.json`: schema, encoder hash, card index hash, engine commit, the training data's header, the buckets'
   files, the parameter count, the configuration and the held-out metrics.
+- `model.pt`: what the inference server (`serve.py`) runs, so a model directory serves itself: the configuration, the
+  weights (the card table included) and whether the table is folded, as the ONNX graphs were made. Only tensors and
+  plain values, so it loads with `torch.load(weights_only=True)`.
+
+`--weights-only` writes `model.pt` alone into a model directory exported before export wrote it, and changes nothing
+else there.
 
 The positions are `--positions` (that format), else the `reference.bin` train.py wrote beside the checkpoint (held-out
 positions).
@@ -162,11 +168,24 @@ def references(net, positions: list[bytes], out: Path, paths: dict[int, Path]) -
     return dict(positions=n, ort_python=dict(**drift, same_argmax=same / max(n, 1)))
 
 
+def write_weights(net, checkpoint: dict, path: Path):
+    """`model.pt`: the network's configuration and weights for the inference server, with the folded card table the
+    graphs were made with (`model.fold`) when it is folded, so the server runs what the graphs run."""
+    folded = net.folded is not None
+    weights = dict(format=1, config=dict(checkpoint["config"]), folded=folded,
+                   state={k: v.detach().cpu().contiguous() for k, v in checkpoint["state"].items()},
+                   table=net.folded.detach().cpu().contiguous() if folded else None)
+    tmp = path.with_name(path.name + ".tmp")
+    torch.save(weights, tmp)
+    os.replace(tmp, path)
+
+
 def main(argv=None):
     a = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     a.add_argument("--checkpoint", required=True)
     a.add_argument("--out", required=True)
     a.add_argument("--positions", help="reference positions (default: reference.bin beside the checkpoint)")
+    a.add_argument("--weights-only", action="store_true", help="write model.pt alone into an exported model directory")
     args = a.parse_args(argv)
     torch.set_num_threads(os.cpu_count() or 4)
 
@@ -186,6 +205,12 @@ def main(argv=None):
         model.fold(net)
 
     out = Path(args.out)
+    if args.weights_only:
+        if not (out / "manifest.json").exists():
+            raise SystemExit(f"{out} is not an exported model directory (no manifest.json)")
+        write_weights(net, checkpoint, out / "model.pt")
+        print(f"wrote {out / 'model.pt'}")
+        return
     out.mkdir(parents=True, exist_ok=True)
     files, ops = {}, set()
     for tokens in BUCKETS:
@@ -233,6 +258,7 @@ def main(argv=None):
         reference=ref,
     )
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1))
+    write_weights(net, checkpoint, out / "model.pt")
     print(f"{manifest['parameters']} parameters, ops {', '.join(sorted(ops))}")
 
 

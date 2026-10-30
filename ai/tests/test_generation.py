@@ -8,6 +8,7 @@ import json
 import sys
 import tempfile
 import unittest
+import unittest.mock
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -103,6 +104,34 @@ class GenerationTest(unittest.TestCase):
             self.assertEqual((root / "champions" / "current").resolve().name, "gen2")
             self.assertTrue((root / "champions" / "gen2" / "CHAMPION.json").exists())
 
+    def test_current_moves_from_champion_to_champion(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for name in ("gen0", "gen1"):
+                (root / "champions" / name).mkdir(parents=True)
+                (root / "champions" / name / "manifest.json").write_text(name)
+            generation.set_current(root, "gen0")
+            generation.set_current(root, "gen1")
+            self.assertEqual(generation.champion(root).name, "gen1")
+            self.assertEqual((root / "champions" / "current" / "manifest.json").read_text(), "gen1")
+            self.assertEqual((root / "champions" / "gen0" / "manifest.json").read_text(), "gen0", "the old champion stays")
+
+    @unittest.skipUnless(sys.platform == "win32", "a junction stands in for a symlink on Windows only")
+    def test_current_is_a_junction_where_windows_makes_no_symlink(self):
+        def refuse(*_, **__):
+            raise OSError("A required privilege is not held by the client")
+
+        with tempfile.TemporaryDirectory() as tmp, unittest.mock.patch.object(Path, "symlink_to", refuse):
+            root = Path(tmp)
+            for name in ("gen0", "gen1"):
+                (root / "champions" / name).mkdir(parents=True)
+                (root / "champions" / name / "manifest.json").write_text(name)
+            generation.set_current(root, "gen0")
+            self.assertEqual(generation.champion(root).name, "gen0")
+            generation.set_current(root, "gen1")
+            self.assertEqual(generation.champion(root).name, "gen1")
+            self.assertEqual((root / "champions" / "gen0" / "manifest.json").read_text(), "gen0", "the old champion stays")
+
     def test_a_dry_run_plans_every_stage_and_writes_nothing(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = root_with(Path(tmp), gens=(1,))
@@ -113,11 +142,11 @@ class GenerationTest(unittest.TestCase):
             text = out.getvalue()
             self.assertEqual(sorted(p for p in root.rglob("*")), before, "a dry run writes nothing")
             self.assertIn("generation 2", text)
-            self.assertRegex(text, r"cantrip-selfplay --model \S+champions/gen0 --out \S+gen2/selfplay --games 100 --simulations 32")
-            self.assertRegex(text, r"gen2/selfplay:1 \S+gen1/selfplay:0.5 \S+matchup:0.2 \S+rw-mirror:0.2")
+            self.assertRegex(text, r"cantrip-selfplay(\.exe)? --model \S+champions[/\\]gen0 --out \S+gen2[/\\]selfplay --games 100 --simulations 32")
+            self.assertRegex(text, r"gen2[/\\]selfplay:1 \S+gen1[/\\]selfplay:0.5 \S+matchup:0.2 \S+rw-mirror:0.2")
             self.assertIn("--init " + str(root / "champions" / "gen0" / "train" / "checkpoint.pt"), text)
             self.assertIn("model_parity", text)
-            self.assertRegex(text, r"duel --a neural@32 --b neural@32 --model \S+models/gen2 --model-b \S+champions/gen0 .*--mirrors .*--sprt")
+            self.assertRegex(text, r"duel --a neural@32 --b neural@32 --model \S+models[/\\]gen2 --model-b \S+champions[/\\]gen0 .*--mirrors .*--sprt")
 
     def test_a_dry_run_resumes_partial_selfplay_and_training(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -130,7 +159,7 @@ class GenerationTest(unittest.TestCase):
             with contextlib.redirect_stdout(out):
                 generation.main(["--root", str(root), "--generation", "2", "--dry-run", "--games", "100", "--simulations", "32", "--decks-dir", ""])
             text = out.getvalue()
-            self.assertRegex(text, r"cantrip-selfplay .*--shard-games 100.*--resume")
+            self.assertRegex(text, r"cantrip-selfplay(\.exe)? .*--shard-games 100.*--resume")
             self.assertRegex(text, r"cantrip_ai.train .*--resume")
             self.assertNotRegex(text, r"cantrip_ai.train .*--init ")
 
