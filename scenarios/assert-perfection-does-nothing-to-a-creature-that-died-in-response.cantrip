@@ -1,0 +1,42 @@
+# Bot2 answers Assert Perfection by killing Bot1's Alpine Grizzly with Lightning Bolt: the creature you control is an illegal target, so nothing deals damage and Bot2's
+# Ornithopter (its other target, still legal) is unhurt.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Alpine Grizzly
+Assert Perfection
+Island x2
+Swamp x10
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Assert Perfection.Cast
+Bot1.Target(Bot1.Battlefield.Alpine Grizzly)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Alpine Grizzly)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Assert Perfection; Alpine Grizzly; Black Lotus
+Bot2.Battlefield.Ornithopter.Damage = 0
