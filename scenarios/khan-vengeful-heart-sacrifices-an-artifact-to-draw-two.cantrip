@@ -1,0 +1,42 @@
+# "When Khan enters, you may sacrifice another creature or artifact. If you do, draw two cards." Khan costs {2}{B}{B}:
+# a Black Lotus (three black) and a Mox Jet pay it exactly. The only other permanents are a Mox Jet (an artifact, a legal
+# sacrifice), an Island (a land: neither a creature nor an artifact, so not offered) and Khan himself ("another"), and both
+# refusals are checked before the Mox Pearl is sacrificed: exactly two cards are drawn, and both the sacrificed Pearl and
+# the sacrificed Lotus are in the graveyard (CR 701.21a, 603.6a, 608.2c, 608.2d).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Khan, Vengeful Heart
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Khan, Vengeful Heart.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Island#1)
+! Bot1.Choose(Khan, Vengeful Heart)
+Bot1.Choose(Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Battlefield = Mox Jet; Island; Khan, Vengeful Heart
+Bot1.Battlefield.Khan, Vengeful Heart.Power = 5
+Bot1.Battlefield.Khan, Vengeful Heart.Toughness = 3
+Bot1.Graveyard = Mox Pearl; Black Lotus

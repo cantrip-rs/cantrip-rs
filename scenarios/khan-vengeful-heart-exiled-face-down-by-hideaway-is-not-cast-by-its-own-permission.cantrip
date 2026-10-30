@@ -1,0 +1,30 @@
+# Khan, Vengeful Heart's "You may cast this card from exile" is an ability of the card, and a card exiled face down has no
+# abilities (CR 406.3a, 708.2): exiled face down by Windbrisk Heights' hideaway, Khan is not offered to its owner by its own
+# permission, with any amount of mana (only Windbrisk Heights' own condition would let it be played).
+
+[Bot1 Deck]
+Windbrisk Heights
+Black Lotus
+Mox Jet
+Island
+Island
+Island
+Island
+Khan, Vengeful Heart
+Island x2
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Windbrisk Heights.Play
+Bot1.Arrange(Khan, Vengeful Heart | Island; Island; Island)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+! Bot1.Exile.Khan, Vengeful Heart.Cast
+[T3 Bot1.Main2]
+
+[Expect]
+Exile.Count = 1

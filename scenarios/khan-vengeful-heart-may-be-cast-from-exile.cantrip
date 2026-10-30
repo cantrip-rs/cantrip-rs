@@ -1,0 +1,61 @@
+# Khan, Vengeful Heart: "You may cast this card from exile" (CR 113.6e, 601.3), a static ability that functions while the
+# card is in exile, so the card itself offers the cast there. Bot1 casts Khan on turn 1 (Lotus for three black, a Mox Jet
+# for the fourth) and declines the enters sacrifice, keeping the Moxen. Bot2's Swords to Plowshares exiles him on turn 2 and
+# Bot1 gains 5 life (CR 119.3). On turn 3 four untapped Moxen pay {2}{B}{B} exactly, so Khan must be castable from exile and
+# returns to the battlefield, where his enters ability is offered again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Emerald
+Khan, Vengeful Heart
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Plains x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Khan, Vengeful Heart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Khan, Vengeful Heart)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 25
+? Exile = Khan, Vengeful Heart
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Exile.Khan, Vengeful Heart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 25
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Khan, Vengeful Heart.Power = 5
+Exile.Count = 0

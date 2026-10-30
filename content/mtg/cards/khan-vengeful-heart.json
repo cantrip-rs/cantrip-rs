@@ -1,0 +1,8 @@
+{
+  "name": "Khan, Vengeful Heart",
+  "manaCost": "{2}{B}{B}",
+  "type": "Legendary Creature — Human Warrior",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "When Khan enters, you may sacrifice another creature or artifact. If you do, draw two cards.\nYou may cast this card from exile."
+}

@@ -1,0 +1,36 @@
+# "You may sacrifice ... If you do, draw two cards": the sacrifice is the effect resolving, not a cost, so it is asked of
+# Khan's controller and may be declined (CR 608.2d, 701.21a). Declining the choice of a legal artifact (the Mox Pearl) is
+# nothing done: no card is drawn, and the Pearl stays on the battlefield beside Khan (CR 608.2c).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Khan, Vengeful Heart
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Khan, Vengeful Heart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Battlefield = Mox Jet; Mox Pearl; Island; Khan, Vengeful Heart
+Bot1.Graveyard = Black Lotus
+Bot1.Battlefield.Khan, Vengeful Heart.Power = 5
