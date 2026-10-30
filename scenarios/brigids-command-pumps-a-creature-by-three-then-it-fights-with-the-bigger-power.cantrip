@@ -1,0 +1,59 @@
+# Brigid's Command, modes 3 and 4: "Target creature you control gets +3/+3 until end of turn" and "Target creature you control fights
+# target creature an opponent controls." Bot1's Grizzly Bears (2/2) is chosen for both: modes are carried out in printed order (CR 700.2d),
+# so it is a 5/5 when it fights Bot2's Centaur Courser (3/3): the Courser dies and the Bears live with 3 damage (a 2/2 would have died and
+# dealt only 2). The pump can't target Bot2's Courser ("you control"), the fight's second target can't be Bot1's own creature.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Grizzly Bears
+Brigid's Command
+Island x16
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Mox Pearl
+Centaur Courser
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Brigid's Command.Cast
+Bot1.Modes(3; 4)
+! Bot1.Target(Bot2.Battlefield.Centaur Courser)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Target(Bot2.Battlefield.Centaur Courser)
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 5
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 5
+Bot1.Battlefield.Grizzly Bears.Toughness = 5
+Bot1.Battlefield.Grizzly Bears.Damage = 3
+Bot2.Battlefield.Centaur Courser = (absent)
+Bot2.Graveyard.Centaur Courser.Colors.Count = 1

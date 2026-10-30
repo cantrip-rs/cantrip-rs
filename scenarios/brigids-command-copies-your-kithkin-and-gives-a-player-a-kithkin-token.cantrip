@@ -1,0 +1,55 @@
+# Brigid's Command, modes 1 and 2: "Create a token that's a copy of target Kithkin you control" and "Target player creates a 1/1 green and
+# white Kithkin creature token". Bot1 controls a Figure of Fable (a Kithkin Scout) and an Ornithopter; Bot2 controls its own Figure of Fable.
+# Refused for the copy: Bot2's Kithkin (not "you control") and Bot1's Ornithopter (not a Kithkin). Bot1 copies its own Figure and has Bot2
+# create the 1/1 Kithkin token: Bot1 ends with two Figures of Fable, the second a token, and Bot2 with its Figure and a green and white token.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Ornithopter
+Figure of Fable
+Brigid's Command
+Island x15
+
+[Bot2 Deck]
+Mox Pearl
+Figure of Fable
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Figure of Fable.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Figure of Fable.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Brigid's Command.Cast
+! Bot1.Modes(1)
+! Bot1.Modes(1; 2; 3)
+Bot1.Modes(1; 2)
+! Bot1.Target(Bot2.Battlefield.Figure of Fable)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Figure of Fable)
+Bot1.Target(Bot2)
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Figure of Fable#1.Token = (absent)
+Bot1.Battlefield.Figure of Fable#2.Token = true
+Bot2.Battlefield.Kithkin Token.Power = 1
+Bot2.Battlefield.Kithkin Token.Toughness = 1
+Bot2.Battlefield.Kithkin Token.Colors.Count = 2
+Bot2.Battlefield.Figure of Fable.Token = (absent)
