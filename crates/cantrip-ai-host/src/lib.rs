@@ -12,6 +12,7 @@
 //! `AiHost::handle` is one command.
 
 pub mod advisor;
+pub mod regret;
 pub mod selfplay;
 
 use std::collections::HashMap;

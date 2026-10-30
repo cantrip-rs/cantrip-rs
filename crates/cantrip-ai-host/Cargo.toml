@@ -18,6 +18,10 @@ name = "cantrip-selfplay"
 path = "src/bin/selfplay.rs"
 
 [[bin]]
+name = "cantrip-regret"
+path = "src/bin/regret.rs"
+
+[[bin]]
 name = "cantrip-infer"
 path = "src/bin/infer.rs"
 required-features = ["gpu"]
