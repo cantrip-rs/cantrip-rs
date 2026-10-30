@@ -830,6 +830,11 @@ pub struct Cost {
     /// is paid (CR 601.2h), a permanent from the battlefield and a card from the hand, linked to the spell and so to the
     /// permanent it becomes (CR 607.2q). Only with `behold`. A spell that is countered leaves the card exiled.
     pub behold_exile: bool,
+    /// "Choose a creature type and behold [N] creatures of that type" (CR 601.2b-c): the creature type is chosen as the cost is
+    /// announced, from the types enough creatures the payer controls or holds share, and each beheld is a permanent or card that
+    /// passes the filter and has it. Only with `behold`, paid when a spell is cast. The type is kept on the spell
+    /// (`StackItem::choice`, read with `StackItem::announced_type`) for its resolution. Celestial Reunion.
+    pub behold_type: bool,
     /// Blight N (CR 701.68a): put this many -1/-1 counters on a creature you control, chosen as the cost is chosen and
     /// put as it is paid. Payable only with a creature to put them on (CR 701.68b). A spell's (Requiting Hex, Cinder
     /// Strike) or an activated ability's (Dawnhand Dissident, Gristle Glutton, Sting-Slinger).
@@ -1025,6 +1030,7 @@ impl Cost {
             collect_evidence,
             behold,
             behold_exile,
+            behold_type,
             blight,
             tap_to_reduce,
             materials,
@@ -1059,6 +1065,7 @@ impl Cost {
             && collect_evidence == 0
             && behold.is_none()
             && !behold_exile
+            && !behold_type
             && blight == 0
             && !tap_to_reduce
             && materials.is_none()
@@ -1207,6 +1214,7 @@ impl Cost {
             (a, None) => a,
         };
         c.behold_exile |= other.behold_exile;
+        c.behold_type |= other.behold_type;
         c.blight += other.blight;
         if c.materials.is_none() {
             c.materials = other.materials;
@@ -1248,6 +1256,7 @@ impl Cost {
             collect_evidence: 0,
             behold: None,
             behold_exile: false,
+            behold_type: false,
             blight: 0,
             tap_to_reduce: false,
             materials: None,

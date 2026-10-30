@@ -1187,6 +1187,11 @@ impl<'a> Projector<'a> {
             let value = game.cards.get(shown.card).name.to_string();
             choices.push(ChoiceView { key: key.into(), value, object: handles.handle(chosen) });
         }
+        // The creature type chosen as the spell's cost was announced (`Cost::behold_type`, CR 601.2b) is public: it decides what
+        // the spell does, and the creatures beheld may be of several types.
+        if let Some(sub) = item.as_ref().and_then(StackItem::announced_type) {
+            choices.push(ChoiceView { key: "creature type".into(), value: sub.name().to_string(), ..Default::default() });
+        }
         choices.sort_by(|a, b| a.key.cmp(&b.key));
 
         let effect = |kind: EffectKind| s.effects.iter().any(|e| e.affected == id && e.kind == kind);
@@ -1594,5 +1599,53 @@ mod tests {
         assert!(text.contains("Dragons") && text.contains("Elves") && text.ends_with("and from mana value 3 or greater"), "{text}");
         c.protection_subtypes = SubtypeSet::NONE;
         assert_eq!(protection_words(&c, &[]).as_deref(), Some("Protection from mana value 3 or greater"));
+    }
+
+    /// The creature type chosen at cast (Celestial Reunion's behold) is shown on the spell on the stack, so the opponent can
+    /// tell which of a beheld creature's types was chosen (CR 601.2b).
+    #[test]
+    fn a_creature_type_chosen_at_cast_is_shown_on_the_spell() {
+        let cards = cantrip_engine::cards();
+        let deck = vec![cards.find("Celestial Reunion").expect("the card"); 20];
+        let game = cantrip_engine::Game::new(cards, &Setup { decks: vec![deck.clone(), deck], ..Default::default() });
+        let id = game.state.zone(Zone::library(PlayerId(0)))[0];
+        let item = StackItem {
+            kind: StackKind::Spell,
+            object: id,
+            ability: AbilityRef { card: game.chars(id).card, index: 0 },
+            controller: PlayerId(0),
+            inline_targets: [Target::None; 16],
+            target_count: 0,
+            inline_spec_of: [0; 16],
+            x: 0,
+            kicked: 0,
+            counted: 0,
+            paid: 0,
+            way: 0,
+            modes: 0,
+            choice: StackItem::announce_type(Subtype::Druid),
+            subject: Target::None,
+            data: [0; 2],
+            members: Default::default(),
+            serial: 0,
+            gift: None,
+            shares: StackItem::NO_SHARES,
+            spill: 0,
+            exile_instead: ExileInstead::Never,
+            flashback: false,
+            attacking: false,
+            since: 0,
+            copied: false,
+            cast_known: u32::MAX,
+            acquired: Acquired::OWN,
+        };
+        let names = vec!["A".to_string(), "B".to_string()];
+        let faces = HashSet::new();
+        let projector = Projector { game: &game, viewer: PlayerId(1), names: &names, conceded: &[false, false], faces: &faces };
+        let mut handles = HandleSpace::new();
+        let handle = handles.handle(id);
+        let view = projector.describe(id, handle, Some(item), &mut handles);
+        let chosen: Vec<_> = view.choices.iter().map(|c| (c.key.as_str(), c.value.as_str())).collect();
+        assert_eq!(chosen, [("creature type", "Druid")]);
     }
 }

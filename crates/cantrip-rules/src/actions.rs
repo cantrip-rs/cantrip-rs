@@ -591,10 +591,12 @@ fn can_pay_other_as(cx: &Cx, source: ObjectId, controller: PlayerId, cost: &Cost
         }
     }
     let except = if judged == Judged::Cast { Some(source) } else { None };
-    if let Some((n, _, _)) = cost.behold
-        && behold_candidates(cx, except, controller, cost, source, by).len() < n as usize
-    {
-        return false;
+    if let Some((n, _, _)) = cost.behold {
+        let have = behold_candidates(cx, except, controller, cost, source, by);
+        let enough = if cost.behold_type { !behold_types(cx, &have, n).is_empty() } else { have.len() >= n as usize };
+        if !enough {
+            return false;
+        }
     }
     // CR 701.68b: a player who controls no creature can't choose to blight.
     if cost.blight > 0 && blight_candidates(cx, controller).is_empty() {
@@ -728,13 +730,34 @@ fn behold_candidates(cx: &Cx, except: Option<ObjectId>, controller: PlayerId, co
     out
 }
 
+/// The creature types that `n` of `have`, the cards a cost may behold, share (`Cost::behold_type`): the ones the cost can be
+/// announced with (CR 601.2b-c), in `Subtype::CREATURE_TYPES` order.
+fn behold_types(cx: &Cx, have: &[ObjectId], n: u8) -> Vec<Subtype> {
+    let chars: Vec<Chars> = have.iter().map(|&id| cx.chars(id)).collect();
+    Subtype::CREATURE_TYPES.into_iter().filter(|&t| chars.iter().filter(|c| c.has_subtype(t)).count() >= n as usize).collect()
+}
+
 /// Chooses what a cost beholds (CR 701.4a, 601.2h), always asked, even when the choice is forced.
 fn choose_behold(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost) -> R<Vec<ObjectId>> {
-    let Some((n, _, _)) = cost.behold else { return Ok(Vec::new()) };
-    let eligible = behold_candidates(cx, None, player, cost, source, None);
+    Ok(choose_behold_of(cx, player, source, cost)?.0)
+}
+
+/// `choose_behold`, and the creature type chosen first where the cost names one (`Cost::behold_type`, CR 601.2b-c): of the
+/// types `n` of the cards it may behold share, always asked. The cards beheld all have it.
+fn choose_behold_of(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost) -> R<(Vec<ObjectId>, Option<Subtype>)> {
+    let Some((n, _, _)) = cost.behold else { return Ok((Vec::new(), None)) };
+    let mut eligible = behold_candidates(cx, None, player, cost, source, None);
+    let mut announced = None;
+    if cost.behold_type {
+        let choices = behold_types(cx, &eligible, n);
+        let ask = RequestKind::ChooseSubtype { source, choices, purpose: WordUse::Chosen };
+        let Answer::Subtype(chosen) = cx.ask_core(player, ask, true)? else { return Err(Stop::Cancel) };
+        eligible.retain(|&id| cx.chars(id).has_subtype(chosen));
+        announced = Some(chosen);
+    }
     let ask = RequestKind::choose_cards(source, Purpose::Behold, eligible.clone(), eligible, u32::from(n), false, "");
     match cx.ask_core(player, ask, true)? {
-        Answer::Cards(cards) => Ok(cards),
+        Answer::Cards(cards) => Ok((cards, announced)),
         _ => Err(Stop::Cancel),
     }
 }
@@ -7606,7 +7629,15 @@ fn cast(
     }
     let extra_chosen = choose_permanents(cx, player, spell, &extra, Some(CostFor::Spell), None)?;
     let beheld = choose_behold(cx, player, spell, &cost)?;
-    let extra_beheld = choose_behold(cx, player, spell, &extra)?;
+    let (extra_beheld, announced) = choose_behold_of(cx, player, spell, &extra)?;
+    if let Some(chosen) = announced {
+        // CR 601.2b: the type chosen as the cost was announced is kept on the spell, and on a copy of it (CR 707.10).
+        item.choice = StackItem::announce_type(chosen);
+        let at = cx.s().stack.len() - 1;
+        let mut with = cx.s().stack[at];
+        with.choice = item.choice;
+        cx.st().stack_set(at, with);
+    }
     let blighted = choose_blight(cx, player, spell, &cost, u32::from(item.x))?;
     let extra_blighted = choose_blight(cx, player, spell, &extra, u32::from(item.x))?;
     let removed = choose_counters_among(cx, player, spell, &cost)?;
@@ -11028,6 +11059,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         collect_evidence: _,
         behold: _,
         behold_exile: _,
+        behold_type: _,
         blight: _,
         tap_to_reduce,
         materials,
