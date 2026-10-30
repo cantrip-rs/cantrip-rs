@@ -1,0 +1,53 @@
+# Bot1 accepts the optional search and finds a Whale. Bot2 also has Whales in hand and library, which must remain there.
+# The reveal and shuffle assertions expose the search's result and completion (CR 701.20, 701.23).
+
+[Bot1 Deck]
+H.M.S. Bounty, Unlikely Timeship
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Island
+Flying Dolphin-Fish
+Narwhal
+Plains
+Island
+Swamp
+Forest
+Mountain
+Plains x20
+
+[Bot2 Deck]
+Horned Loch-Whale
+Island x5
+Flying Dolphin-Fish
+Narwhal
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.H.M.S. Bounty, Unlikely Timeship.Cast
+Bot1.Pass
+Bot1.Accept
+! Bot1.Search(Flying Dolphin-Fish; Narwhal)
+Bot1.Search(Flying Dolphin-Fish)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Mox Emerald; H.M.S. Bounty, Unlikely Timeship
+Bot1.Hand = Island; Flying Dolphin-Fish
+Bot1.Revealed = Flying Dolphin-Fish
+Bot1.Shuffles = 1
+Bot1.Library != Narwhal; Plains; Island; Swamp; Forest; Mountain; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains
+Bot2.Hand = Horned Loch-Whale; Island; Island; Island; Island; Island; Flying Dolphin-Fish
+Bot2.Library = Narwhal; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island

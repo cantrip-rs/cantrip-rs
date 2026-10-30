@@ -1,0 +1,79 @@
+# Even with a Whale controlled, Bounty's combat damage to Jace is not damage to a player: no card draw and no extra turn (CR 603.2g).
+
+[Bot1 Deck]
+H.M.S. Bounty, Unlikely Timeship
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Flying Dolphin-Fish
+Yargle, Glutton of Urborg
+Island
+Island x20
+
+[Bot2 Deck]
+Jace, the Mind Sculptor
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Flying Dolphin-Fish.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Jace, the Mind Sculptor.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.H.M.S. Bounty, Unlikely Timeship.Cast
+Bot1.Pass
+Bot1.Decline
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Yargle, Glutton of Urborg.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Activate(Ability: Station)
+Bot1.Choose(Yargle, Glutton of Urborg)
+Bot1.Attack(H.M.S. Bounty, Unlikely Timeship > Jace, the Mind Sculptor)
+[T7 Bot1.Main2]
+? Bot1.Hand.Count = 0
+[T8 Bot2.Main1]
+
+[Expect]
+Turn = 8
+Bot1.Hand.Count = 0
+Bot2.Graveyard = Jace, the Mind Sculptor
+Bot1.Battlefield.Flying Dolphin-Fish.Subtypes = Fish; Whale
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Counters.Charge = 9

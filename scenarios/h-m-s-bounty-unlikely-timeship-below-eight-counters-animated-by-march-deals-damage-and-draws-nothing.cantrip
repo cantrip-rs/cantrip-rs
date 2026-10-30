@@ -1,0 +1,50 @@
+# The combat-damage trigger is printed in the 8+ striation (CR 721.2a-b), so under March of the Machines Bounty, an
+# artifact creature the size of its mana value with no charge counters, deals combat damage and nothing triggers: no card
+# is drawn and no extra turn is taken.
+
+[Bot1 Deck]
+H.M.S. Bounty, Unlikely Timeship
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Mox Jet
+Island
+March of the Machines
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.H.M.S. Bounty, Unlikely Timeship.Cast
+Bot1.Pass
+Bot1.Decline
+[T1 Bot1.Main2]
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.March of the Machines.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Power = 5
+? Bot1.Hand.Count = 1
+Bot1.Attack(H.M.S. Bounty, Unlikely Timeship > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot1.Hand.Count = 1
+Bot2.Life = 15
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Types = Artifact; Creature

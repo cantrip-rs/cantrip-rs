@@ -1,0 +1,43 @@
+# Bot1 declines the optional search. A legal Whale remains in its library and the order proves no shuffle occurred (CR 701.23).
+
+[Bot1 Deck]
+H.M.S. Bounty, Unlikely Timeship
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Island
+Horned Loch-Whale
+Island
+Flying Dolphin-Fish
+Narwhal
+Island x20
+
+[Bot2 Deck]
+Horned Loch-Whale
+Island x5
+Flying Dolphin-Fish
+Narwhal
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.H.M.S. Bounty, Unlikely Timeship.Cast
+Bot1.Pass
+Bot1.Decline
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Mox Sapphire; Mox Pearl; Mox Jet; Mox Ruby; Mox Emerald; H.M.S. Bounty, Unlikely Timeship
+Bot1.Hand = Island
+Bot1.Library = Horned Loch-Whale; Island; Flying Dolphin-Fish; Narwhal; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island

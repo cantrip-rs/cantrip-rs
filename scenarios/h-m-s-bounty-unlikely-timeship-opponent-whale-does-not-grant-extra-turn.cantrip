@@ -1,0 +1,63 @@
+# Only Bot2 controls a Whale when Bounty hits that player. The hit still draws one card, but does not grant a turn (CR 500.7).
+
+[Bot1 Deck]
+H.M.S. Bounty, Unlikely Timeship
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Mox Jet
+Island
+Yargle, Glutton of Urborg
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Island
+Flying Dolphin-Fish
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.H.M.S. Bounty, Unlikely Timeship.Cast
+Bot1.Pass
+Bot1.Decline
+[T1 Bot1.Main2]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Flying Dolphin-Fish.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Yargle, Glutton of Urborg.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Activate(Ability: Station)
+Bot1.Choose(Yargle, Glutton of Urborg)
+Bot1.Attack(H.M.S. Bounty, Unlikely Timeship > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Hand.Count = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Turn = 4
+Bot1.Hand.Count = 1
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Counters.Charge = 9
+Bot2.Battlefield.Flying Dolphin-Fish.Subtypes = Fish; Whale

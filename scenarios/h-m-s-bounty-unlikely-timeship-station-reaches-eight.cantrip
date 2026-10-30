@@ -1,0 +1,87 @@
+# Station Bounty with power 5, then 2. At seven counters it is still only an artifact; one more station counter gives its 3/4
+# artifact creature and Flying striation at eight (CR 702.184, 721.2b).
+
+[Bot1 Deck]
+H.M.S. Bounty, Unlikely Timeship
+Mox Sapphire
+Mox Pearl
+Lodestone Golem
+Narwhal
+Flying Dolphin-Fish
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Island#3.Activate
+Bot1.Hand.H.M.S. Bounty, Unlikely Timeship.Cast
+Bot1.Pass
+Bot1.Decline
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Lodestone Golem.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Activate(Ability: Station)
+Bot1.Choose(Lodestone Golem)
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Island#3.Activate
+Bot1.Hand.Narwhal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Activate(Ability: Station)
+Bot1.Choose(Narwhal)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Counters.Charge = 7
+? Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Types = Artifact
+? Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Keywords = (absent)
+? Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Power = (absent)
+[T11 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Flying Dolphin-Fish.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Activate(Ability: Station)
+Bot1.Choose(Flying Dolphin-Fish)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Counters.Charge = 8
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Types = Artifact; Creature
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Power = 3
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Toughness = 4
+Bot1.Battlefield.H.M.S. Bounty, Unlikely Timeship.Keywords = Flying

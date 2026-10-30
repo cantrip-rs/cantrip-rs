@@ -1,0 +1,7 @@
+{
+  "name": "H.M.S. Bounty, Unlikely Timeship",
+  "manaCost": "{4}{U}",
+  "type": "Legendary Artifact — Spacecraft",
+  "stationPt": "3/4",
+  "oracleText": "When H.M.S. Bounty enters, you may search your library for a Whale card, reveal it, put it into your hand, then shuffle.\nStation\n8+ | Flying\nWhenever H.M.S. Bounty deals combat damage to a player, draw a card. If you control a Whale and haven't begun an extra turn this game, take an extra turn after this one."
+}
