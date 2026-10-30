@@ -1,0 +1,41 @@
+# Dream Harvest ({5}{U/B}{U/B}, paid with five Moxen and Black Lotus) exiles Bot2's top cards until their total mana value is
+# 5 or more: Llanowar Elves (1), Grizzly Bears (2), Lightning Bolt (1) and another Lightning Bolt (1) make exactly 5, so the
+# Island below them is left in the library (a total of five is enough, not "more than five").
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Black Lotus
+Dream Harvest
+Island x13
+
+[Bot2 Deck]
+Island x8
+Llanowar Elves
+Grizzly Bears
+Lightning Bolt
+Lightning Bolt
+Island x8
+
+[Actions]
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Dream Harvest.Cast
+Bot1.Pass
+
+[Expect]
+Bot2.Library.Count = 8

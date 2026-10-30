@@ -1,0 +1,52 @@
+# Dream Harvest ({5}{U/B}{U/B}, paid with five Moxen and Black Lotus) exiles Bot2's top cards one at a time until their total
+# mana value is 5: Island (0), Llanowar Elves (1), Grizzly Bears (2), Lightning Bolt (1) and Counterspell (2) make 6, and the
+# last Island is left in the library. Bot1 casts Lightning Bolt and Grizzly Bears for free; the exiled Island is not a spell,
+# so it cannot be cast.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Black Lotus
+Dream Harvest
+Island x13
+
+[Bot2 Deck]
+Island x8
+Island
+Llanowar Elves
+Grizzly Bears
+Lightning Bolt
+Counterspell
+Island x7
+
+[Actions]
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Dream Harvest.Cast
+Bot1.Pass
+[Bot1.Main2]
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Exile.Grizzly Bears.Cast
+Bot1.Pass
+! Bot1.Exile.Island.Play
+! Bot1.Exile.Island.Cast
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot2.Library.Count = 7
