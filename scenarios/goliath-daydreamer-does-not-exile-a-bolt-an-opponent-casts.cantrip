@@ -1,0 +1,43 @@
+# Goliath Daydreamer: "Whenever you cast an instant or sorcery spell from your hand" -- only its controller's. Bot1 has Goliath on
+# the battlefield; Bot2 casts a Lightning Bolt from its own hand on turn 2, and it goes to Bot2's graveyard, not exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mountain
+Goliath Daydreamer
+Lightning Bolt
+Lightning Bolt
+Mountain x10
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goliath Daydreamer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt
+Exile.Count = 0

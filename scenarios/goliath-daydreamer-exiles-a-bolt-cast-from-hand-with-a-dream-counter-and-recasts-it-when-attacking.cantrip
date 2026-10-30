@@ -1,0 +1,53 @@
+# Goliath Daydreamer: "Whenever you cast an instant or sorcery spell from your hand, exile that card with a dream counter on it
+# instead of putting it into your graveyard as it resolves." Bot1 casts Goliath on turn 1 and on turn 3 a Lightning Bolt from
+# the hand: the Bolt does its damage, then is exiled with a dream counter (the graveyard stays empty). "Whenever this creature
+# attacks, you may cast a spell from among cards you own in exile with dream counters on them without paying its mana cost":
+# the attack casts that Bolt again for nothing; cast from exile it is not cast from the hand, so it goes to the graveyard.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mountain
+Goliath Daydreamer
+Lightning Bolt
+Lightning Bolt
+Mountain x10
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goliath Daydreamer.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack = Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot1.Graveyard.Count = 0
+? Bot1.Exile.Lightning Bolt.Counters.Dream = 1
+Bot1.Attack(Goliath Daydreamer)
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 10
+Bot1.Graveyard = Lightning Bolt
+Exile.Count = 0
