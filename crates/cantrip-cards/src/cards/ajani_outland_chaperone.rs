@@ -3,19 +3,9 @@ use cantrip_mechanics::targets::{self, is_nonland_permanent_card};
 use cantrip_mechanics::{choose, damage_target, tokens, top_of_library};
 use cantrip_oracle as oracle;
 
-/// The 1/1 green and white Kithkin creature token (CR 111.4).
-pub static KITHKIN: CardDef = CardDef {
-    // White (bit 0) and green (bit 4).
-    colors: Some(ColorSet(0b10001)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(1),
-    toughness: Some(1),
-    ..token!(Kithkin)
-};
-
 /// +1: "Create a 1/1 green and white Kithkin creature token."
 fn plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &KITHKIN, 1)?;
+    tokens::create(g, item.controller, &tokens::KITHKIN, 1)?;
     Ok(())
 }
 
@@ -54,7 +44,7 @@ fn minus_eight(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-pub static EXTRA: &[&CardDef] = &[&KITHKIN];
+pub static EXTRA: &[&CardDef] = &[&tokens::KITHKIN];
 
 pub static CARD: CardDef = CardDef {
     abilities: &[

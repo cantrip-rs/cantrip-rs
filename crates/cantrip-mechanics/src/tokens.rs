@@ -856,6 +856,16 @@ pub fn target_player_creates_treasures(g: &mut dyn Game, item: &StackItem, slot:
     Ok(())
 }
 
+/// The 1/1 green and white Kithkin creature token (CR 111.4). Ajani, Outland Chaperone's +1 and Brigid's Command make it.
+pub static KITHKIN: CardDef = CardDef {
+    // White (bit 0) and green (bit 4).
+    colors: Some(ColorSet(0b10001)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Kithkin)
+};
+
 /// The 0/0 black Goblin Army creature token amass Goblins makes when its controller has no Army (CR 701.47a). Down, Down to
 /// Goblin Town and Azog, Moria's Ruin amass Goblins.
 pub static GOBLIN_ARMY: CardDef = CardDef {
