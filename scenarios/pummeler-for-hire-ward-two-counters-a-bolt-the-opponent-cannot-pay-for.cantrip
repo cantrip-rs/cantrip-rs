@@ -1,0 +1,60 @@
+# Pummeler for Hire, "Ward {2}": Bot1 casts the Pummeler on turn 3. On turn 4 Bot2 has two Moxen: one pays for a Lightning Bolt, and the single one left cannot pay
+# the ward {2}, so the Bolt is countered and the Pummeler is undamaged. The neighbouring scenario, with a third Mox, lets the Bolt through.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Pummeler for Hire
+Forest x30
+
+[Bot2 Deck]
+Lightning Bolt
+Mox Ruby
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Pummeler for Hire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Pummeler for Hire)
+! Bot2.PayCost
+? Bot1.Battlefield.Pummeler for Hire.Damage = 0
+
+[Expect]
+Bot2.Graveyard = Lightning Bolt; Island
