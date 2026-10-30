@@ -919,6 +919,10 @@ pub enum VariableCost {
     /// announced as the ability is activated, up to the counters there are, and is the ability's X (`StackItem::x`), which
     /// its effect reads as "that many" (CR 107.3). The Astonishing Ant-Man.
     RemoveAnyNumberOfCounters(CounterKind),
+    /// Blight X (CR 701.68a), X announced with the spell though its mana cost has no {X} (CR 107.3a, 601.2b), "X can't be greater
+    /// than the greatest toughness among creatures you control": Soul Immolation. X is the spell's X (CR 107.3i, its `x`), the
+    /// -1/-1 counters it puts on the one creature chosen as the cost is chosen (`Cost::blight` is the fixed N of "blight N").
+    BlightX,
 }
 
 impl VariableCost {
@@ -929,6 +933,7 @@ impl VariableCost {
         match self {
             VariableCost::SacrificeWithPowerX(_) => "the least power of the creature you sacrifice",
             VariableCost::RemoveAnyNumberOfCounters(_) => "the number of counters you remove",
+            VariableCost::BlightX => "the number of -1/-1 counters you put on a creature you control",
             _ => "",
         }
     }

@@ -780,12 +780,20 @@ fn blight_candidates(cx: &Cx, controller: PlayerId) -> Vec<ObjectId> {
         .collect()
 }
 
+/// How many -1/-1 counters a cost blights for: its fixed N, and X where it is a blight X (`VariableCost::BlightX`, the X announced).
+fn blight_count(cost: &Cost, x: u32) -> u32 {
+    u32::from(cost.blight) + if matches!(cost.variable, Some(VariableCost::BlightX)) { x } else { 0 }
+}
+
 /// Chooses the creature a cost blights (CR 701.68a, 601.2h), always asked, even when the choice is forced.
-fn choose_blight(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost) -> R<Option<ObjectId>> {
-    if cost.blight == 0 {
+fn choose_blight(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, x: u32) -> R<Option<ObjectId>> {
+    if blight_count(cost, x) == 0 {
         return Ok(None);
     }
     let eligible = blight_candidates(cx, player);
+    if eligible.is_empty() {
+        return Err(Stop::Cancel);
+    }
     let ask = RequestKind::choose_cards(source, Purpose::Blight, eligible.clone(), eligible, 1, false, "");
     match cx.ask_core(player, ask, true)? {
         Answer::Cards(cards) => cards.first().copied().map(Some).ok_or(Stop::Cancel),
@@ -795,9 +803,9 @@ fn choose_blight(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost) -
 
 /// Pays the blight part of a cost (CR 701.68a): the -1/-1 counters go on the creature chosen, put by the player paying
 /// (CR 118.3, 122.6a).
-fn pay_blight(cx: &mut Cx, player: PlayerId, cost: &Cost, chosen: Option<ObjectId>) {
+fn pay_blight(cx: &mut Cx, player: PlayerId, cost: &Cost, chosen: Option<ObjectId>, x: u32) {
     if let Some(creature) = chosen {
-        counters::put(cx, creature, CounterKind::MinusOne, cost.blight as i16, player, counters::How::Cost);
+        counters::put(cx, creature, CounterKind::MinusOne, blight_count(cost, x) as i16, player, counters::How::Cost);
     }
 }
 
@@ -1334,7 +1342,23 @@ fn variable_candidates(cx: &Cx, source: ObjectId, player: PlayerId, variable: Va
             let asker = Asker { source, controller: player, by, spell: false };
             cx.s().zone(Zone::hand(player)).iter().copied().filter(|&c| c != source && filter(cx, &asker, c)).collect()
         }
+        VariableCost::BlightX => blight_candidates(cx, player),
     }
+}
+
+/// The most a blight X may be announced as (CR 701.68a, 601.2b): the greatest toughness among the creatures its payer controls,
+/// and 0 with none to put the counters on (CR 701.68b) - never more than a toughness can be (`i16::MAX`).
+fn blight_x_most(cx: &Cx, player: PlayerId) -> u32 {
+    if blight_candidates(cx, player).is_empty() {
+        return 0;
+    }
+    cx.permanents_of(player)
+        .into_iter()
+        .filter(|&id| cx.chars(id).is(CardType::Creature))
+        .filter_map(|id| cx.chars(id).toughness)
+        .map(|t| i32::from(t).clamp(0, i32::from(i16::MAX)) as u32)
+        .max()
+        .unwrap_or(0)
 }
 
 /// Whether a permanent's power is `x` or greater ("a creature with power X or greater", CR 702.153a): one with no power
@@ -1358,6 +1382,8 @@ fn types_among(cx: &Cx, cards: &[ObjectId]) -> usize {
 fn variable_payable(cx: &Cx, source: ObjectId, player: PlayerId, variable: VariableCost, paid: Option<CostFor>) -> bool {
     match variable {
         VariableCost::SacrificeX(_) | VariableCost::SacrificeAnyNumber { .. } | VariableCost::RemoveAnyNumberOfCounters(_) => true,
+        // Blight X, even X = 0, needs a creature you control to put the counters on (CR 701.68b).
+        VariableCost::BlightX => !blight_candidates(cx, player).is_empty(),
         VariableCost::SacrificeOneOrMore(_) | VariableCost::DiscardOneOrMore(_) => !variable_candidates(cx, source, player, variable, paid, None).is_empty(),
         // Its power is read as the cost is paid (CR 601.2h), after the mana abilities of CR 601.2g, which may change it: any
         // permanent that passes the filter may yet pay.
@@ -1404,7 +1430,8 @@ fn choose_variable(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost,
 /// `choose_variable`'s sacrifices and exiles.
 fn choose_variable_permanents(cx: &mut Cx, player: PlayerId, source: ObjectId, variable: VariableCost, candidates: Vec<ObjectId>, x: u32) -> R<(Vec<ObjectId>, Vec<ObjectId>)> {
     match variable {
-        VariableCost::DiscardOneOrMore(_) | VariableCost::RemoveAnyNumberOfCounters(_) => Ok((Vec::new(), Vec::new())),
+        // The counters are put by `pay_blight`, on the creature `choose_blight` chose.
+        VariableCost::DiscardOneOrMore(_) | VariableCost::RemoveAnyNumberOfCounters(_) | VariableCost::BlightX => Ok((Vec::new(), Vec::new())),
         VariableCost::SacrificeX(_) | VariableCost::SacrificeAnyNumber { .. } => {
             if x == 0 {
                 return Ok((Vec::new(), Vec::new()));
@@ -2321,9 +2348,11 @@ fn some_cast(
     let least = least_x(def.x_cant_be_zero);
     let variable = def.additional_cost.and_then(|c| c.variable);
     let x_life = def.additional_cost.is_some_and(|c| c.pay_x_life);
-    let x_sacrifices = matches!(variable, Some(VariableCost::SacrificeX(_) | VariableCost::SacrificeWithPowerX(_)));
+    let x_sacrifices = matches!(variable, Some(VariableCost::SacrificeX(_) | VariableCost::SacrificeWithPowerX(_) | VariableCost::BlightX));
     let cap = if x_life {
         payable_life_for(cx, player, Some(CostFor::Spell)).clamp(0, 1000) as u32
+    } else if matches!(variable, Some(VariableCost::BlightX)) {
+        blight_x_most(cx, player)
     } else if let Some(v @ VariableCost::SacrificeX(_)) = variable {
         cantrip_state::count_u32(variable_candidates(cx, card, player, v, Some(CostFor::Spell), None).len())
     } else {
@@ -7240,7 +7269,7 @@ fn cast(
         (None, Some(x)) => x,
         (None, None) => way_x,
     };
-    let sacrifices_x = matches!(extra.variable, Some(VariableCost::SacrificeX(_) | VariableCost::SacrificeAnyNumber { .. } | VariableCost::SacrificeWithPowerX(_)));
+    let sacrifices_x = matches!(extra.variable, Some(VariableCost::SacrificeX(_) | VariableCost::SacrificeAnyNumber { .. } | VariableCost::SacrificeWithPowerX(_) | VariableCost::BlightX));
     // "This spell costs {1} less to cast for each permanent sacrificed this way": generic mana off for each one announced.
     let less_each = match extra.variable {
         Some(VariableCost::SacrificeAnyNumber { less_each, .. }) => less_each,
@@ -7277,6 +7306,9 @@ fn cast(
             // A power read as the cost is paid (CR 601.2h), after the mana abilities that may change it (CR 601.2g): X up
             // to the most a power can be, the payment refusing one nothing has.
             i16::MAX as u32
+        } else if matches!(extra.variable, Some(VariableCost::BlightX)) {
+            // The greatest toughness among the creatures you control (Soul Immolation), judged as X is announced (CR 601.2b).
+            blight_x_most(cx, player)
         } else if let Some(variable) = extra.variable.filter(|_| sacrifices_x) {
             let there = u32::try_from(variable_candidates(cx, spell, player, variable, Some(CostFor::Spell), None).len()).unwrap_or(u32::MAX);
             // An X ("sacrifice X creatures") is a u16 (`StackItem::x`); the number "any number" announces is not.
@@ -7575,8 +7607,8 @@ fn cast(
     let extra_chosen = choose_permanents(cx, player, spell, &extra, Some(CostFor::Spell), None)?;
     let beheld = choose_behold(cx, player, spell, &cost)?;
     let extra_beheld = choose_behold(cx, player, spell, &extra)?;
-    let blighted = choose_blight(cx, player, spell, &cost)?;
-    let extra_blighted = choose_blight(cx, player, spell, &extra)?;
+    let blighted = choose_blight(cx, player, spell, &cost, u32::from(item.x))?;
+    let extra_blighted = choose_blight(cx, player, spell, &extra, u32::from(item.x))?;
     let removed = choose_counters_among(cx, player, spell, &cost)?;
     let extra_removed = choose_counters_among(cx, player, spell, &extra)?;
     let (extra_sacrifices, extra_exiles, extra_variable_discards) = choose_variable(cx, player, spell, &extra, variable_n(&extra, &item), Some(CostFor::Spell))?;
@@ -7625,8 +7657,8 @@ fn cast(
     }
     // Counters put on and taken off permanents are paid first (CR 601.2h: in any order), so a permanent the cost also
     // sacrifices leaves with them as the payment left it.
-    pay_blight(cx, player, &cost, blighted);
-    pay_blight(cx, player, &extra, extra_blighted);
+    pay_blight(cx, player, &cost, blighted, u32::from(item.x));
+    pay_blight(cx, player, &extra, extra_blighted, u32::from(item.x));
     pay_counters_among(cx, &removed);
     pay_counters_among(cx, &extra_removed);
     pay_permanents(cx, player, &cost, &chosen, None, &mut Vec::new());
@@ -9070,7 +9102,7 @@ fn activate(
     if def.cost.blight > 0 && blight_candidates(cx, player).is_empty() {
         return Err(Stop::Cancel);
     }
-    let blighted = choose_blight(cx, player, source, &def.cost)?;
+    let blighted = choose_blight(cx, player, source, &def.cost, 0)?;
     let removed = choose_counters_among(cx, player, source, &def.cost)?;
     // What a behold chooses (CR 701.4a), as a spell's is chosen: once the mana is paid (CR 601.2g-h by way of 602.2b), from
     // what is still there - a permanent a mana ability sacrificed while paying is not. None left is a cost that can't be
@@ -9097,7 +9129,7 @@ fn activate(
     // Tapped quietly, and announced in the batch of the cost's other taps if it has any (CR 603.2c).
     let mut tapped = tap_source(cx, source, &def.cost, !tappers.is_empty());
     // Counters put on and taken off permanents next, so a permanent the cost also sacrifices leaves with them.
-    pay_blight(cx, player, &def.cost, blighted);
+    pay_blight(cx, player, &def.cost, blighted, 0);
     pay_counters_among(cx, &removed);
     pay_permanents(cx, player, &def.cost, &chosen, Some(cx.linked(&item)), &mut tapped);
     let revealed = pay_behold(cx, player, source, false, &beheld);
@@ -9287,7 +9319,7 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     if whole.blight > 0 && blight_candidates(cx, player).is_empty() {
         return Err(Stop::Cancel);
     }
-    let blighted = choose_blight(cx, player, source, &whole)?;
+    let blighted = choose_blight(cx, player, source, &whole, 0)?;
     let removed = choose_counters_among(cx, player, source, &whole)?;
     if whole.behold.is_some_and(|(n, _, _)| behold_candidates(cx, None, player, &whole, source, None).len() < n as usize) {
         return Err(Stop::Cancel);
@@ -9301,7 +9333,7 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
         ops::change_life(cx, player, -life_paid(life));
     }
     let mut tapped = tap_source(cx, source, &whole, !tappers.is_empty());
-    pay_blight(cx, player, &whole, blighted);
+    pay_blight(cx, player, &whole, blighted, 0);
     pay_counters_among(cx, &removed);
     pay_permanents(cx, player, &whole, &chosen, None, &mut tapped);
     pay_behold(cx, player, source, false, &beheld);
@@ -10914,7 +10946,7 @@ fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Co
     let tappers = choose_tappers(cx, payer, source, cost)?;
     let counter = choose_counter_kind(cx, payer, source, cost)?;
     let beheld = choose_behold(cx, payer, source, cost)?;
-    let blighted = choose_blight(cx, payer, source, cost)?;
+    let blighted = choose_blight(cx, payer, source, cost, 0)?;
     let removed = choose_counters_among(cx, payer, source, cost)?;
     if total != ManaCost::ZERO {
         pay_mana(cx, payer, source, total)?;
@@ -10924,7 +10956,7 @@ fn pay_resolution_cost(cx: &mut Cx, payer: PlayerId, source: ObjectId, cost: &Co
     }
     // {T} first, so a permanent the cost also moves was tapped as it left (CR 118.3), as `activate` pays it.
     let mut tapped = tap_source(cx, source, cost, !tappers.is_empty());
-    pay_blight(cx, payer, cost, blighted);
+    pay_blight(cx, payer, cost, blighted, 0);
     pay_counters_among(cx, &removed);
     pay_permanents(cx, payer, cost, &chosen, None, &mut tapped);
     // Revealed for the effect paying it, as part of that effect (CR 701.20a): no reveal of the effect's own lasts past the
