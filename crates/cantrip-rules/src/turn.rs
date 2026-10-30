@@ -390,7 +390,8 @@ pub fn begin_step(cx: &mut Cx) -> R<Flow> {
                 p.lands_played = 0;
             });
             // How many turns a player has taken is asked of the history (`cantrip_mechanics::history::in_your_first_turns`).
-            cx.record(Event::TurnBegan { player: active });
+            // Whether it is an extra turn is part of its beginning (CR 500.7: "haven't begun an extra turn this game").
+            cx.record(Event::TurnBegan { player: active, extra: turn.extra != 0 });
             // CR 502.1: first, the active player's phased-out permanents phase in.
             crate::phasing::untap_step(cx, active);
             // CR 502.2: the untap step's second turn-based action reads what the previous turn's active player cast,
@@ -1096,7 +1097,7 @@ fn in_force(cx: &Cx, e: &ContinuousEffect) -> bool {
         .rev()
         .skip_while(|r| r.turn >= now)
         .take_while(|r| r.turn > since)
-        .any(|r| r.event == Event::TurnBegan { player: controller })
+        .any(|r| matches!(r.event, Event::TurnBegan { player, .. } if player == controller))
 }
 
 /// "During its controller's next turn" is this turn for each such effect in force now (`in_force`): from here it lasts until

@@ -266,8 +266,9 @@ pub enum Event {
     /// An effect ended the turn (CR 724.1) of `player`, the player whose turn it was: recorded as the stack is exiled.
     TurnEnded { player: PlayerId },
     /// `player`'s turn began (CR 500.1, 502): recorded only, as its untap step starts. A turn skipped (CR 614.10) never
-    /// begins and has none.
-    TurnBegan { player: PlayerId },
+    /// begins and has none. `extra` is whether it is an extra turn (CR 500.7), as "haven't begun an extra turn this game"
+    /// asks.
+    TurnBegan { player: PlayerId, extra: bool },
     /// `player` completed a dungeon (CR 309.7): their venture marker left its bottommost room, by the state-based action
     /// (CR 704.5t) or by venturing on from it (CR 701.49c). Recorded only.
     DungeonCompleted { player: PlayerId },
@@ -367,7 +368,7 @@ impl Event {
             | Event::DieRolled { player, .. }
             | Event::Done { player, .. }
             | Event::TurnEnded { player }
-            | Event::TurnBegan { player }
+            | Event::TurnBegan { player, .. }
             | Event::DungeonCompleted { player }
             | Event::Scried { player, .. }
             | Event::Surveilled { player, .. }
