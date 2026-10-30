@@ -1,0 +1,71 @@
+# Morcant's Loyalist (a 3/2): "Other Elves you control get +1/+1." and "When this creature dies, return another target Elf card
+# from your graveyard to your hand." Bot1 casts it turn 1 and an Elvish Mystic (1/1, a 2/2 with the bonus) turn 3; Bot2's
+# Llanowar Elves stays 1/1 and the Loyalist itself stays 3/2. Bot2 Bolts the Mystic, then the Loyalist: the Loyalist's own card
+# is in the graveyard with the Mystic but "another" excludes it, and the Bolts (not Elves) are no targets either; the Mystic
+# returns to Bot1's hand with no choice to make: it is the only legal target.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Pearl
+Morcant's Loyalist
+Elvish Mystic
+Forest
+Forest
+Forest x13
+
+[Bot2 Deck]
+Mox Ruby
+Forest
+Llanowar Elves
+Lightning Bolt
+Lightning Bolt
+Forest
+Forest
+Forest x13
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Morcant's Loyalist.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Morcant's Loyalist.Power = 3
+? Bot1.Battlefield.Morcant's Loyalist.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Llanowar Elves.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Mystic.Power = 2
+? Bot1.Battlefield.Elvish Mystic.Toughness = 2
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Elvish Mystic)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Elvish Mystic
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Morcant's Loyalist)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Elvish Mystic; Forest; Forest
+Bot1.Graveyard = Morcant's Loyalist
