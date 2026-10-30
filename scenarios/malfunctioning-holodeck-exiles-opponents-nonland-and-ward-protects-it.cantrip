@@ -1,0 +1,60 @@
+# CR 610.3 and 702.21: exile only an opposing nonland, ward counters unpaid Disenchant; paid ward lets it leave and return the card.
+
+[Bot1 Deck]
+Mox Pearl x3
+Ornithopter
+Malfunctioning Holodeck
+Plains x15
+
+[Bot2 Deck]
+Plains
+Mox Pearl x3
+Disenchant x2
+Ornithopter
+Plains x15
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Malfunctioning Holodeck.Cast
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+? Exile = Ornithopter
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Hand.Disenchant.Cast(Malfunctioning Holodeck)
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Malfunctioning Holodeck.ManaValue = 3
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Hand.Disenchant.Cast(Malfunctioning Holodeck)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.PayCost
+? Bot2.Mana =
+[T4 Bot2.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot2.Battlefield.Ornithopter.SummoningSick = true
+Bot1.Graveyard = Malfunctioning Holodeck
+Bot2.Graveyard = Disenchant; Disenchant
