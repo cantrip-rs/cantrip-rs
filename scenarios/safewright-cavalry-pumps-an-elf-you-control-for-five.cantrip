@@ -1,0 +1,44 @@
+# Safewright Cavalry: "{5}: Target Elf you control gets +2/+2 until end of turn." The Cavalry is an Elf Warrior; Bot2's Ornithopter is not an Elf and not Bot1's (the
+# refusal, with the five mana in the pool). Paying {5} leaves the pool empty, and the Cavalry (4/4) becomes 6/6.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Safewright Cavalry
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Safewright Cavalry.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Safewright Cavalry.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Safewright Cavalry.Activate(Bot1.Battlefield.Safewright Cavalry)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Safewright Cavalry.Power = 6
+Bot1.Battlefield.Safewright Cavalry.Toughness = 6

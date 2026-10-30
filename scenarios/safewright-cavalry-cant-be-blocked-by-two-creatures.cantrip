@@ -1,0 +1,33 @@
+# Safewright Cavalry: "This creature can't be blocked by more than one creature" (CR 509.1b). Bot1's Cavalry (4/4) attacks on turn 3 and Bot2's two Ornithopters
+# may not both block it (the refusal) while one may; the Ornithopter that does dies (it deals no damage), and the Cavalry takes none.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Safewright Cavalry
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Safewright Cavalry.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Safewright Cavalry > Bot2)
+! Bot2.Block(Ornithopter#1 > Safewright Cavalry; Ornithopter#2 > Safewright Cavalry)
+Bot2.Block(Ornithopter#1 > Safewright Cavalry)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield.Count = 1
+Bot1.Battlefield.Safewright Cavalry.Damage = 0
