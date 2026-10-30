@@ -897,6 +897,31 @@ impl<'s> Run<'s> {
         let Some((request, decision)) = self.asked.take() else {
             return fail("an answer came with nothing asked");
         };
+        // The web client pays floating mana as soon as it can, before tapping the next land it planned for X. That is a
+        // legal ordering within this payment prompt; keep the activation line under the cursor so the next question can
+        // still ask the page to tap that planned source.
+        if let (
+            Intent::Answer(Answer::Act(expected)),
+            Intent::Answer(Answer::Act(actual)),
+            RequestKind::PayCosts { options, .. },
+        ) = (&decision.intent, &given, &request.kind)
+            && expected.kind == ActionKind::ActivateAbility
+            && actual.kind == ActionKind::AssignMana
+            && options.iter().any(|option| {
+                option.kind == actual.kind
+                    && option.source == actual.source
+                    && option.index == actual.index
+                    && option.mana == actual.mana
+                    && option.restriction == actual.restriction
+            })
+            && options.iter().any(|option| {
+                option.kind == expected.kind
+                    && option.source == expected.source
+                    && option.index == expected.index
+            })
+        {
+            return self.deliver(&request, Answer::Act(actual.clone()), None);
+        }
         if !self.same_but_for_interchangeable(&given, &decision.intent) {
             let what = match decision.line {
                 Some(step) => format!("line {}: {}", step.line, step.text),

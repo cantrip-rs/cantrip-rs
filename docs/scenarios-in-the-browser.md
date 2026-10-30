@@ -70,6 +70,12 @@ Objects nobody could tell apart count as one (`Run::same_but_for_interchangeable
 untapped Forests answers what the script means by "a Forest", and the script's own answer is the one given, so later
 checks of `Forest#1` mean what they say.
 
+Tapping the sources planned for X (`MainPage.TapPlanned`), the page spends plain mana already in the pool before it taps
+the next one, while the pool alone does not cover the rest - though the script names the next tap first (Fireball's
+planned Mountains). The runner accepts that `AssignMana` only when the same `PayCosts` question offers both it and the
+named activation, gives it, and leaves the activation line for the next question (`Run::answered`). `ScenarioPlayer`
+needs no step for it: the page sends it unasked.
+
 `ScenarioInBrowserTests` plays every scenario marked `# Browser`, or `CANTRIP_SCENARIO=name` alone (with
 `CANTRIP_WEB_HEADED=1`, to watch: `tools\scenario-in-browser.cmd`). `ScenarioTableTests` (Cantrip.Server.Tests) plays
 scenarios with Bot1 a protocol client sending the expected answers themselves: the table's half, so a browser run that

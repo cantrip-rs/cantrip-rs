@@ -162,3 +162,40 @@ fn a_creature_blocking_a_band_blocks_each_member() {
         .collect();
     assert_eq!(blocks, vec![("Smuggler's Copter", "Benalish Hero", true), ("Smuggler's Copter", "Guerrilla Gorilla", false)]);
 }
+
+/// A driven seat paying for Fireball may spend the {R} its first scripted Mountain made before it taps the next Mountain
+/// the script names (the page pays floating mana as soon as it can): that is accepted, the named activation stays the
+/// next line, and the game ends as the script means.
+#[test]
+fn a_driven_seat_may_spend_floating_mana_before_the_next_scripted_mana_activation() {
+    use cantrip_engine::{Action, ActionKind, Answer, PlayerId, RequestKind};
+    use cantrip_script::{Advance, Intent, Scripted};
+    let name = "fireball-x-announced-on-the-page-and-paid-with-the-lands-planned-for-it-in-the-browser";
+    let script = GameScript::load(&scripts().join(format!("{name}.cantrip"))).unwrap();
+    let alone = run(&script).map(|r| r.dump.render()).unwrap();
+    let mut table = Scripted::deal(script).unwrap();
+    let mut early = 0;
+    let through = loop {
+        match table.advance(&[PlayerId(0), PlayerId(1)]).unwrap() {
+            Advance::Ask(expected) => {
+                let floating = match (&expected.request.kind, &expected.intent) {
+                    (RequestKind::PayCosts { options, .. }, Intent::Answer(Answer::Act(meant))) if meant.kind == ActionKind::ActivateAbility => {
+                        options.iter().find(|o| o.kind == ActionKind::AssignMana).cloned()
+                    }
+                    _ => None,
+                };
+                match floating {
+                    Some(option) => {
+                        early += 1;
+                        table.answered(Intent::Answer(Answer::Act(Action::of(&option)))).unwrap();
+                    }
+                    None => table.answered(expected.intent).unwrap(),
+                }
+            }
+            Advance::Check(_) => {}
+            Advance::Done => break table.verdict().unwrap().render(),
+        }
+    };
+    assert!(early > 0, "no floating mana was ever spent ahead of a scripted activation");
+    assert_eq!(through, alone);
+}
