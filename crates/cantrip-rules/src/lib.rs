@@ -948,6 +948,16 @@ impl Game {
         static_rules::cant_gain_life(self, self.cards, player)
     }
 
+    /// Whether a tapped permanent would stay tapped through its controller's next untap step as things stand: it doesn't
+    /// untap during its controller's untap step (its own `Keyword::DoesNotUntap`, or another permanent's
+    /// `CardDef::untap_bans`, CR 502.3), or a stun counter would replace its untap (CR 122.1d). Reads only: for a player
+    /// choosing what to tap (`cantrip_ai::pay`); the untap step itself decides (`turn::untap_step`).
+    pub fn stays_tapped(&self, id: ObjectId) -> bool {
+        self.chars(id).has(Keyword::DoesNotUntap)
+            || static_rules::untap_banned(self, self.cards, id)
+            || self.state.obj(id).counters(CounterKind::Stun) > 0
+    }
+
     /// Whether a static ability on the battlefield gives `player` the keyword ability `keyword` right now (CR 702.18a: "You
     /// have shroud").
     pub fn player_has(&self, player: PlayerId, keyword: Keyword) -> bool {

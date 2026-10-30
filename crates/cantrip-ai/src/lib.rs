@@ -8,6 +8,7 @@
 //! it alone.
 
 pub mod alloc;
+pub mod atomic;
 mod answer;
 mod ask;
 pub mod cancel;
