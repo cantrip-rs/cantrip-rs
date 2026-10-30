@@ -1465,6 +1465,18 @@ pub fn another_creature_you_control_dies(q: &dyn Query, me: &Asker, event: &Even
     }
 }
 
+/// "Whenever you cast a spell during an opponent's turn" (CR 603.2, 601.2i): a spell cast (not copied, CR 707.10) by this
+/// permanent's controller while the active player is another player. Unwelcome Sprite and Voracious Tome-Skimmer print it.
+pub fn spell_you_cast_during_an_opponents_turn(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { player, .. } if *player == me.controller && q.state().turn.active != me.controller => Fired::PLAIN,
+        _ => None,
+    }
+}
+
+/// The trigger event of `spell_you_cast_during_an_opponents_turn`.
+pub const SPELL_YOU_CAST_DURING_AN_OPPONENTS_TURN: Trigger = when_asked(EventMask::SPELL_CAST, spell_you_cast_during_an_opponents_turn);
+
 /// "Whenever you cast a creature spell" (CR 603.2): its controller's spells only, judged on the spell as it is on the stack
 /// (CR 601.2i), so a card that is a creature only there counts. The spell rides along as the trigger's subject ("that spell":
 /// Dancing from Dark to Dawn's mana value). Bontu's Monument, Glimpse of Nature, Silk, Web Weaver and Spider-Man India print it.
