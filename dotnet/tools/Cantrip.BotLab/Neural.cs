@@ -61,6 +61,15 @@ internal sealed class AiHostProcess : IDisposable
     /// <summary>Whether each mirrored reply is the table's whole reply, compared with it; else only Ok against Ok.</summary>
     public bool Echo { get; }
 
+    /// <summary>Which lane the host serves, for its failures (set by <see cref="Lane"/>).</summary>
+    public int LaneNumber { get; set; }
+
+    /// <summary>
+    /// Whether the host once gave no answer in time: it may still be busy with that request, and whatever is asked of it
+    /// next waits behind it, so a lane whose host stalled is not used again (<see cref="Lane.Usable"/>).
+    /// </summary>
+    public bool Stalled { get; private set; }
+
     /// <summary>The first mirrored reply that was not the table's, or null: a mirror out of step is a bug.</summary>
     public string? Divergence => _divergence;
 
@@ -118,16 +127,47 @@ internal sealed class AiHostProcess : IDisposable
     {
         var reply = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
         Write(new Pending { Command = command, Reply = reply });
-        return reply.Task.Wait(wait)
-            ? reply.Task.Result
-            : throw new TimeoutException($"{BinaryName} did not reply to {command} in {wait.TotalSeconds:N0}s.");
+        if (reply.Task.Wait(wait))
+        {
+            return reply.Task.Result;
+        }
+
+        Stalled = true;
+        throw new TimeoutException($"{BinaryName} did not reply to {command} in {wait.TotalSeconds:N0}s ({Where()}).");
     }
 
     /// <summary>The next <c>AiResult</c> line.</summary>
-    public string Result(TimeSpan wait) =>
-        _results.TryTake(out string? line, wait)
-            ? line
-            : throw new TimeoutException($"{BinaryName} made no answer in {wait.TotalSeconds:N0}s" + (_process.HasExited ? $" (it exited with {_process.ExitCode})." : "."));
+    public string Result(TimeSpan wait)
+    {
+        if (_results.TryTake(out string? line, wait))
+        {
+            return line;
+        }
+
+        Stalled = true;
+        throw new TimeoutException($"{BinaryName} made no answer in {wait.TotalSeconds:N0}s ({Where()}).");
+    }
+
+    /// <summary>The host as a failure names it: its lane, its process, the time, and what it held then.</summary>
+    private string Where()
+    {
+        string at = $"lane {LaneNumber}, pid {_process.Id}, at {DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+        try
+        {
+            if (_process.HasExited)
+            {
+                return $"{at}; it exited with {_process.ExitCode}";
+            }
+
+            _process.Refresh();
+            return $"{at}; private {_process.PrivateMemorySize64 >> 20:N0} MB, working set {_process.WorkingSet64 >> 20:N0} MB, "
+                + $"CPU {_process.TotalProcessorTime.TotalSeconds:N0} s";
+        }
+        catch (Exception error) when (error is InvalidOperationException or System.ComponentModel.Win32Exception)
+        {
+            return at;
+        }
+    }
 
     private void Write(Pending pending)
     {
@@ -286,10 +326,13 @@ internal sealed class TeeTransport : IHostTransport
 /// <summary>One worker's pair of hosts: a native host and an AI host beside it, and the transport that joins them.</summary>
 internal sealed class Lane : IDisposable
 {
+    private static int _made;
+
     public Lane(string root, IReadOnlyList<string> aiArguments, bool echo)
     {
         Native = NativeHostProcess.Start(arguments: NativeHostProcess.SharedArguments);
         Ai = AiHostProcess.Start(root, aiArguments, echo);
+        Ai.LaneNumber = Interlocked.Increment(ref _made);
         Tee = new TeeTransport(Native, Ai);
         Rules = new NativeRulesHostFactory(Tee);
     }
@@ -301,6 +344,12 @@ internal sealed class Lane : IDisposable
     public TeeTransport Tee { get; }
 
     public IRulesHostFactory Rules { get; }
+
+    /// <summary>
+    /// Whether the lane can play another game: not once its AI host has stalled (<see cref="AiHostProcess.Stalled"/>),
+    /// which would leave the next game asking a host still busy with the last one's request.
+    /// </summary>
+    public bool Usable => !Ai.Stalled;
 
     public void Dispose()
     {

@@ -907,9 +907,15 @@ public static class Program
             }
             finally
             {
-                if (lane is not null)
+                // A lane whose AI host stalled is let go (its hosts stopped) rather than handed to the next game, which
+                // would wait behind the request it is still busy with; the next game makes a fresh lane.
+                if (lane is not null && lane.Usable)
                 {
                     lanes.Add(lane);
+                }
+                else
+                {
+                    lane?.Dispose();
                 }
             }
 
