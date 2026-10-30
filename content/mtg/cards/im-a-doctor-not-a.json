@@ -1,0 +1,6 @@
+{
+  "name": "I'm a Doctor, Not a . . .",
+  "manaCost": "{G}",
+  "type": "Instant",
+  "oracleText": "Put a +1/+1 counter on target creature you control. Untap it. Until end of turn, it gets +1/+1 and becomes a Doctor. (It loses all other creature types.)"
+}

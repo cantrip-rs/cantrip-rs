@@ -1,0 +1,34 @@
+# "Target creature you control": an opponent's creature is not a candidate (CR 109.5, 115.1).
+
+[Bot1 Deck]
+Forest
+Llanowar Elves
+I'm a Doctor, Not a . . .
+Forest x17
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x18
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.I'm a Doctor, Not a . . ..Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.I'm a Doctor, Not a . . ..Cast(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Battlefield.Grizzly Bears.Subtypes = Bear
+Bot1.Battlefield.Llanowar Elves.Subtypes = Doctor

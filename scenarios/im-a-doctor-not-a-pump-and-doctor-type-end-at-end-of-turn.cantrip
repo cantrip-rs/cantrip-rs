@@ -1,0 +1,28 @@
+# "Until end of turn" ends at cleanup: the counter stays, the +1/+1 and the Doctor type do not (CR 611.2a, 514.2).
+
+[Bot1 Deck]
+Forest
+Llanowar Elves
+I'm a Doctor, Not a . . .
+Forest x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Hand.I'm a Doctor, Not a . . ..Cast(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 2
+Bot1.Battlefield.Llanowar Elves.Toughness = 2
+Bot1.Battlefield.Llanowar Elves.Subtypes = Druid; Elf
+Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 1

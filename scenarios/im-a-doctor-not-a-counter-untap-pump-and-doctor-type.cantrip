@@ -1,0 +1,31 @@
+# A +1/+1 counter, the untap, +1/+1 until end of turn, and the Doctor type, on a tapped Llanowar Elves (CR 122.1,
+# 611.2a, 205.1a).
+
+[Bot1 Deck]
+Forest
+Llanowar Elves
+I'm a Doctor, Not a . . .
+Grizzly Bears
+Forest x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Hand.I'm a Doctor, Not a . . ..Cast(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Tapped = false
+Bot1.Battlefield.Llanowar Elves.Power = 3
+Bot1.Battlefield.Llanowar Elves.Toughness = 3
+Bot1.Battlefield.Llanowar Elves.Subtypes = Doctor
+Bot1.Battlefield.Llanowar Elves.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = I'm a Doctor, Not a . . .
