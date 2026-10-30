@@ -1,0 +1,78 @@
+# Mirrormind Crown: "the first time you would create one or more tokens each turn, you may instead create that many tokens
+# that are copies of equipped creature." Reckoner Bankbuster's third draw makes a Treasure and a Pilot together, which is
+# one event (CR 614.1a): the Crown is asked once, not once for each kind of token, and one answer turns both into copies - two
+# Llanowar Elves tokens, the count kept, with no Treasure and no Pilot. (Turns 3 and 5 make no tokens, the Crown's first
+# time that turn being a creation, not a draw.)
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mox Pearl
+Reckoner Bankbuster
+Llanowar Elves
+Plains
+Mirrormind Crown
+Plains
+Plains
+Plains x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Mirrormind Crown.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mirrormind Crown.Activate(Ability: Equip; Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mirrormind Crown.AttachedTo = Llanowar Elves
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield = Llanowar Elves; Llanowar Elves; Llanowar Elves; Mirrormind Crown; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Plains; Plains; Reckoner Bankbuster
+Bot1.Battlefield.Llanowar Elves#2.Power = 1
+Bot1.Battlefield.Llanowar Elves#3.Power = 1

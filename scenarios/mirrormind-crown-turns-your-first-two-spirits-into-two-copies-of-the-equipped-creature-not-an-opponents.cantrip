@@ -1,0 +1,73 @@
+# Mirrormind Crown ({4}, Equip {2}): "As long as this Equipment is attached to a creature, the first time you would create one
+# or more tokens each turn, you may instead create that many tokens that are copies of equipped creature." Turn 1: Llanowar
+# Elves and the Crown. Turn 2: Bot2's own Lingering Souls makes its two Spirits as written - they are not Bot1's tokens. Turn
+# 3: Bot1 equips the Elves and casts Lingering Souls; asked, it takes the copies: exactly two Llanowar Elves tokens (the count
+# is kept), and no Spirit is made.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mirrormind Crown
+Llanowar Elves
+Lingering Souls
+Plains x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Lingering Souls
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mirrormind Crown.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Lingering Souls.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Spirit Token#1.Keywords = Flying
+? Bot2.Battlefield.Count = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mirrormind Crown.Activate(Ability: Equip; Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mirrormind Crown.AttachedTo = Llanowar Elves
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.Count = 9
+Bot1.Battlefield.Llanowar Elves#1.Power = 1
+Bot1.Battlefield.Llanowar Elves#2.Power = 1
+Bot1.Battlefield.Llanowar Elves#3.Power = 1

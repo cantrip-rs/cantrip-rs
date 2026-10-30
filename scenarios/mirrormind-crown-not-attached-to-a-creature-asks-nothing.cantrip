@@ -1,0 +1,50 @@
+# Mirrormind Crown: "As long as this Equipment is attached to a creature, the first time you would create one or more tokens
+# each turn, you may instead create that many tokens that are copies of equipped creature." Turn 1: the Crown and Llanowar
+# Elves, the Crown left unattached. Turn 3: Bot1's Lingering Souls makes the turn's first tokens, but the Crown is attached to
+# nothing, so its effect does not apply (CR 614.1a): Bot1 is asked nothing and the two Spirits are made as written.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mirrormind Crown
+Llanowar Elves
+Lingering Souls
+Plains x12
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mirrormind Crown.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Mirrormind Crown.AttachedTo = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.Spirit Token#1.Keywords = Flying
+Bot1.Battlefield.Spirit Token#2.Keywords = Flying
+Bot1.Battlefield.Count = 9

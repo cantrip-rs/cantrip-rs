@@ -1,0 +1,83 @@
+# Reckoner Bankbuster's third draw makes a Treasure and a Pilot, one event (CR 614.1a). Mirrormind Crown is on Ornithopter (an
+# artifact creature) and Draconic Visitor is out. Bot1 applies the Visitor first: the artifact part, the Treasure, would be a
+# Dragon; then the Crown, taken, makes the event two copies of Ornithopter. The Visitor has already applied to this event, so
+# it does not apply again to the copies though they are artifacts (CR 614.5): two Ornithopter tokens, no Dragon.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Reckoner Bankbuster
+Ornithopter
+Mountain
+Mirrormind Crown
+Draconic Visitor
+Mountain
+Mountain
+Island x5
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reckoner Bankbuster.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mirrormind Crown.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Draconic Visitor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mirrormind Crown.Activate(Ability: Equip; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mirrormind Crown.AttachedTo = Ornithopter
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Reckoner Bankbuster.Activate(Ability: Draw a card)
+Bot1.Pass
+Bot2.Pass
+Bot1.Replace(Draconic Visitor)
+Bot1.Accept
+
+[Expect]
+Bot1.Battlefield = Draconic Visitor; Mirrormind Crown; Mountain; Mountain; Mox Emerald; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Ornithopter; Ornithopter; Ornithopter; Reckoner Bankbuster
