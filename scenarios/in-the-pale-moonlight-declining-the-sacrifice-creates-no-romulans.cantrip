@@ -1,0 +1,46 @@
+# Chapter III's sacrifice is a "may": declining creates no Romulans, and the Clue stays. Bot2's only creature is a Warrior
+# token from Secure the Wastes, and chapter I asks for a nontoken creature, so Bot2 sacrifices nothing (CR 608.2c, 701.21a).
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Black Lotus
+In the Pale Moonlight
+Swamp x16
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Secure the Wastes
+Island x17
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Secure the Wastes.Cast(X: 1)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.In the Pale Moonlight.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Jet; Clue Token
+Bot2.Battlefield = Mox Pearl; Mox Pearl; Warrior Token
+Bot1.Graveyard = In the Pale Moonlight; Black Lotus

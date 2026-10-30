@@ -1,0 +1,53 @@
+# Chapters I-III of the Saga: each opponent sacrifices a nontoken creature, investigate, and the artifact sacrificed for
+# two 2/2 black Romulans; the Saga is sacrificed after III (CR 714.3c, 714.4).
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Black Lotus
+In the Pale Moonlight
+Swamp x16
+
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Grizzly Bears
+Runeclaw Bear
+Island x16
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Runeclaw Bear.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.In the Pale Moonlight.Cast
+Bot2.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Choose(Clue Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears; Black Lotus; Black Lotus
+Bot2.Battlefield = Runeclaw Bear
+Bot1.Battlefield = Mox Jet; Mox Jet; Romulan Token; Romulan Token
+Bot1.Battlefield.Romulan Token#1.Power = 2
+Bot1.Battlefield.Romulan Token#1.Toughness = 2
+Bot1.Battlefield.Romulan Token#1.Colors = Black
+Bot1.Graveyard = In the Pale Moonlight; Black Lotus
