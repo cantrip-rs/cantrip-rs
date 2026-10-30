@@ -1,0 +1,58 @@
+# Tam, Mindful First-Year (a 2/2): "Each other creature you control has hexproof from each of its colors." and "{T}: Target
+# creature you control becomes all colors until end of turn." Turn 1 Bot1 casts Elvish Mystic (green) and Tam. Turn 2 Bot2's
+# green Giant Growth can't target the Mystic (hexproof from green, from an opponent's source) but can target Tam itself, which the
+# static says nothing of. Turn 3 Tam taps to make the Mystic all colors: Bot2's red Lightning Bolt can't target it either
+# that turn, and on turn 4, the effect over, the Mystic is green alone and the Bolt kills it.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Elvish Mystic
+Tam, Mindful First-Year
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Giant Growth
+Giant Growth
+Lightning Bolt
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tam, Mindful First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+! Bot2.Hand.Giant Growth.Cast(Bot1.Battlefield.Elvish Mystic)
+Bot2.Hand.Giant Growth.Cast(Bot1.Battlefield.Tam, Mindful First-Year)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Tam, Mindful First-Year.Power = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Tam, Mindful First-Year.Activate(Bot1.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Elvish Mystic)
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic = (absent)
+Bot1.Graveyard.Elvish Mystic.Power = 1

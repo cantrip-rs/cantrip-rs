@@ -1,0 +1,43 @@
+# Tam, Mindful First-Year: "{T}: Target creature you control becomes all colors until end of turn." "All colors" names no color
+# word (CR 105.1, 612.2): Bot1's Sleight of Mind changes "white" to "blue" in Tam's text - there is no "white" to change - and the
+# Mystic Tam then targets still becomes all five colors.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Elvish Mystic
+Tam, Mindful First-Year
+Sleight of Mind
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Tam, Mindful First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Tam, Mindful First-Year)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(White)
+Bot1.Colors(Blue)
+Bot1.Battlefield.Tam, Mindful First-Year.Activate(Bot1.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Mystic.Colors = Black; Blue; Green; Red; White
+
+[Expect]
+Bot1.Graveyard = Sleight of Mind
