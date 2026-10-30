@@ -415,6 +415,13 @@ pub fn creature_cards_in_graveyard(q: &dyn Query, player: PlayerId) -> usize {
     q.state().zone(Zone::graveyard(player)).iter().filter(|&&card| q.chars(card).is(CardType::Creature)).count()
 }
 
+/// How many cards of `subtype` are in `player`'s graveyard (CR 205.3d, 404.1): cards only, never tokens, and any card type, a
+/// Kindred noncreature card included, counted as it is asked. Morcant's Eyes counts the Elf cards for a number; Lys Alana
+/// Dignitary and Trystan, Callous Cultivator ask whether there is one.
+pub fn subtype_cards_in_graveyard(q: &dyn Query, player: PlayerId, subtype: Subtype) -> usize {
+    q.state().zone(Zone::graveyard(player)).iter().filter(|&&card| q.chars(card).has_subtype(subtype)).count()
+}
+
 /// How many card types are among the cards in `player`'s graveyard (CR 205.2a, 702.138a): each type counted once however many
 /// cards have it, a card with several types giving each of them. Delirium reads it against four; Omnivorous Flytrap's "six or
 /// more card types among cards in your graveyard" reads it again against six as its ability resolves.
