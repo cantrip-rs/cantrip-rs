@@ -1,0 +1,59 @@
+# Champion of the Path (CR 601.2b, 701.4a, 603.2, 120.3, 607.2q): the additional cost beholds a Regathan Firecat from the hand and
+# exiles it. The Champion itself entering triggers nothing ("another"), but the second Firecat Bot1 casts does: it deals 4, its
+# power, to Bot2 (20 -> 16). Bot2's own Firecat entering does not trigger it ("you control"). When Bot2's Swords to Plowshares
+# exiles the Champion the beheld Firecat returns to Bot1's hand.
+[Bot1 Deck]
+Black Lotus x2
+Mox Ruby
+Regathan Firecat x2
+Champion of the Path
+Mountain
+Mountain x10
+[Bot2 Deck]
+Black Lotus
+Regathan Firecat
+Swords to Plowshares
+Plains
+Plains x10
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Champion of the Path.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+? Exile.Count = 1
+Bot1.Hand.Regathan Firecat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Regathan Firecat.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Champion of the Path)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Life = 16
+Exile.Count = 1
+Bot1.Hand = Regathan Firecat; Mountain
+Bot1.Life = 27
+Bot1.Battlefield = Mox Ruby; Regathan Firecat

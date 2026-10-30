@@ -1,0 +1,24 @@
+# Champion of the Path (CR 601.2b, 701.4a): with {3}{R} floating (Black Lotus and Mox Ruby) but no Elemental on the battlefield
+# or in hand - only a Mountain - the Champion cannot be cast: the additional cost cannot be paid.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Champion of the Path
+Mountain x4
+Mountain x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {R}{R}{R}{R}
+! Bot1.Hand.Champion of the Path.Cast
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Hand.Count = 5
+Exile.Count = 0

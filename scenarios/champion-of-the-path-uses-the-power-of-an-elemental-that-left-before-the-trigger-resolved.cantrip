@@ -1,0 +1,46 @@
+# Champion of the Path (CR 603.2, 608.2h, 113.7a, ruling 2025-11-17): in response to the trigger of the second Firecat entering,
+# Bot2 kills that Firecat with Lightning Bolt. The trigger still resolves with the Firecat's power as it last existed, 4, so
+# Bot2 takes 4 (20 -> 16).
+[Bot1 Deck]
+Black Lotus x2
+Mox Ruby
+Regathan Firecat x2
+Champion of the Path
+Mountain
+Mountain x10
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x10
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Champion of the Path.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Regathan Firecat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Regathan Firecat)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Regathan Firecat; Black Lotus; Black Lotus

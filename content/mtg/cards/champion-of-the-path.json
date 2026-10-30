@@ -1,0 +1,8 @@
+{
+  "name": "Champion of the Path",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Elemental Sorcerer",
+  "power": 7,
+  "toughness": 3,
+  "oracleText": "As an additional cost to cast this spell, behold an Elemental and exile it. (Exile an Elemental you control or an Elemental card from your hand.)\nWhenever another Elemental you control enters, it deals damage equal to its power to each opponent.\nWhen this creature leaves the battlefield, return the exiled card to its owner's hand."
+}
