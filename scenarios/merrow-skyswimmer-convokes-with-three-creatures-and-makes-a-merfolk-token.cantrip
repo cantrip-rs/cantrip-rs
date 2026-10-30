@@ -1,0 +1,44 @@
+# Merrow Skyswimmer (a 2/2 flying vigilance Merfolk with convoke): "When this creature enters, create a 1/1 white and blue Merfolk
+# creature token." Bot1 casts three Ornithopters for nothing and then the Skyswimmer for {3}{W/U}{W/U}: the three Ornithopters
+# are tapped for the generic {3}, Mox Pearl and Mox Sapphire pay the two hybrid symbols. The Merfolk token arrives 1/1, white
+# and blue. On turn 3 the Skyswimmer attacks and, with vigilance, stays untapped.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Ornithopter
+Ornithopter
+Merrow Skyswimmer
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merrow Skyswimmer.Cast(Convoke: Ornithopter, Ornithopter, Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merfolk Token.Power = 1
+? Bot1.Battlefield.Merfolk Token.Toughness = 1
+? Bot1.Battlefield.Merfolk Token.Colors = Blue; White
+? Bot1.Battlefield.Merfolk Token.Subtypes = Merfolk
+? Bot1.Battlefield.Merrow Skyswimmer.Keywords = Flying; Vigilance
+[T3 Bot1.Main1]
+Bot1.Attack(Merrow Skyswimmer > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Merrow Skyswimmer.Tapped = false

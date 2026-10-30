@@ -1,0 +1,13 @@
+{
+  "name": "Merrow Skyswimmer",
+  "manaCost": "{3}{W/U}{W/U}",
+  "type": "Creature — Merfolk Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Convoke (Your creatures can help cast this spell. Each creature you tap while casting this spell pays for {1} or one mana of that creature's color.)\nFlying, vigilance\nWhen this creature enters, create a 1/1 white and blue Merfolk creature token.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ],
+  "convoke": true
+}
