@@ -1,0 +1,6 @@
+{
+  "name": "Mirrorform",
+  "manaCost": "{4}{U}{U}",
+  "type": "Instant",
+  "oracleText": "Each nonland permanent you control becomes a copy of target non-Aura permanent."
+}

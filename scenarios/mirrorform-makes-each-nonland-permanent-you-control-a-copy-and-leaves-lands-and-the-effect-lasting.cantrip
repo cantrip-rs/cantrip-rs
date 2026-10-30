@@ -1,0 +1,38 @@
+# Mirrorform: "Each nonland permanent you control becomes a copy of target non-Aura permanent." Bot1 targets its own
+# Ornithopter: Mox Sapphire and Mox Jet, nonland artifacts, become copies of it (CR 707.2), a 0/2 Ornithopter with flying each,
+# while the Island, a land, is untouched. The effect states no duration, so it lasts (CR 611.2a): on turn 3 they are
+# still Ornithopters.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Ornithopter
+Mirrorform
+Island
+Island x10
+
+[Bot2 Deck]
+Island x12
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Black Lotus; Island; Mox Jet; Mox Sapphire; Ornithopter
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Mirrorform.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Island; Ornithopter; Ornithopter; Ornithopter
+Bot1.Graveyard = Mirrorform; Black Lotus
