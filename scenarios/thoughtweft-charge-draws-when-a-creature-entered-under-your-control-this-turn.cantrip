@@ -1,0 +1,27 @@
+# "Target creature gets +3/+3 until end of turn. If a creature entered the battlefield under your control this turn, draw a card.": Ornithopter (0/2) enters under Bot1's control and
+# Thoughtweft Charge makes it 3/5 and draws a card, four Islands staying in hand plus the drawn one.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Thoughtweft Charge
+Island x4
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Thoughtweft Charge.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 3
+Bot1.Battlefield.Ornithopter.Toughness = 5
+Bot1.Hand.Count = 5
