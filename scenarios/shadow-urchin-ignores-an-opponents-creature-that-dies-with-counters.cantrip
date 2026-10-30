@@ -1,0 +1,41 @@
+# Shadow Urchin's trigger is for "a creature you control": Bot2's Ornithopter blighted to death by its own Chaos Spewer (two -1/-1
+# counters) exiles nothing from Bot1's library.
+
+[Bot1 Deck]
+Black Lotus
+Shadow Urchin
+Swamp x18
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Ornithopter
+Chaos Spewer
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Shadow Urchin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Chaos Spewer.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot2.Choose(Ornithopter)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Graveyard.Ornithopter.Colors.Count = 0
+Exile.Count = 0
