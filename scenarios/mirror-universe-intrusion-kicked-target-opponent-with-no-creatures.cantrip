@@ -1,0 +1,26 @@
+# CR 702.33g: kicking needs a legal opponent, even with no creatures; own creatures are not copied.
+
+[Bot1 Deck]
+Black Lotus x3
+Mirror Universe Intrusion
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Mirror Universe Intrusion.Cast(Kicked: 1)
+Bot1.Target(Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Ornithopter
+Bot1.Graveyard = Mirror Universe Intrusion; Black Lotus; Black Lotus; Black Lotus

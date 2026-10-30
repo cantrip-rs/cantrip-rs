@@ -1,0 +1,43 @@
+# CR 707.9a: the copy gains menace; opponent-only targeting excludes your own creature. A later copy copies the menace too.
+
+[Bot1 Deck]
+Black Lotus x2
+Mirror Universe Intrusion
+Ornithopter
+Clone
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Mirror Universe Intrusion.Cast
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Menace
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Clone.Cast
+Bot1.Accept
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears#1.Keywords = Menace
+Bot1.Battlefield.Grizzly Bears#2.Keywords = Menace
+Bot1.Battlefield.Grizzly Bears#1.Power = 2
+Bot2.Battlefield.Grizzly Bears.Power = 2

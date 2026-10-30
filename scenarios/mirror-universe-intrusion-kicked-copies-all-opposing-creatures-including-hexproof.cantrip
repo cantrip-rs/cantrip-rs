@@ -1,0 +1,40 @@
+# CR 702.33g: kicked targets a player rather than creatures; hexproof does not prevent copying and all creatures are copied.
+
+[Bot1 Deck]
+Black Lotus x3
+Mirror Universe Intrusion
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Slippery Bogle
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Slippery Bogle.Cast
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Mirror Universe Intrusion.Cast(Kicked: 1)
+! Bot1.Target(Bot1)
+Bot1.Target(Bot2)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Ornithopter; Slippery Bogle; Grizzly Bears
+Bot1.Battlefield.Slippery Bogle.Keywords = Hexproof; Menace
+Bot1.Battlefield.Grizzly Bears.Keywords = Menace
+Bot1.Battlefield.Grizzly Bears.Power = 2

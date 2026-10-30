@@ -1,0 +1,6 @@
+{
+  "name": "Mirror Universe Intrusion",
+  "manaCost": "{1}{U}{B}",
+  "type": "Sorcery",
+  "oracleText": "Kicker {4}{U}{B} (You may pay an additional 4 as you cast this spell.)\nCreate a token that's a copy of target creature an opponent controls, except it has menace. If this spell was kicked, instead for each creature target opponent controls, create a token that's a copy of that creature, except it has menace."
+}

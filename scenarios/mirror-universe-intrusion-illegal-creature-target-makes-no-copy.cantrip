@@ -1,0 +1,32 @@
+# CR 608.2b: removing the nonkicked creature target counters the spell by the rules, with no token made.
+
+[Bot1 Deck]
+Black Lotus x2
+Mirror Universe Intrusion
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Sapphire
+Unsummon
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Mirror Universe Intrusion.Cast
+Bot1.Target(Ornithopter)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Unsummon.Cast(Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 0
+Bot2.Hand.Ornithopter.Power = 0
+Bot1.Graveyard = Mirror Universe Intrusion; Black Lotus; Black Lotus

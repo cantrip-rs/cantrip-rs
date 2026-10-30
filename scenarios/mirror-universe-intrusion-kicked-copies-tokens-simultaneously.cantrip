@@ -1,0 +1,47 @@
+# CR 707.2 and 603.6a: copying the three Rabbit tokens preserves their original characteristics.
+# All five copies enter together: the copied Hinterland Sanctifier sees the Bear that precedes it and all three Rabbits.
+
+[Bot1 Deck]
+Black Lotus x3
+Mirror Universe Intrusion
+Island x20
+
+[Bot2 Deck]
+Black Lotus x3
+Grizzly Bears
+Hinterland Sanctifier
+Hop to It
+Plains x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Hand.Hinterland Sanctifier.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Hand.Hop to It.Cast
+[T3 Bot1.Main1]
+? Bot2.Life = 23
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Mirror Universe Intrusion.Cast(Kicked: 1)
+Bot1.Target(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Rabbit Token#1.Power = 1
+Bot1.Battlefield.Rabbit Token#2.Power = 1
+Bot1.Battlefield.Rabbit Token#3.Power = 1
+Bot1.Battlefield.Rabbit Token#1.Keywords = Menace
+Bot1.Battlefield.Grizzly Bears.Keywords = Menace
+Bot1.Life = 24
+Bot2.Life = 23
