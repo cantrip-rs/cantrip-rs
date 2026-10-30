@@ -25,7 +25,7 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
             or CardChoicePurposeView.Tap or CardChoicePurposeView.Destroy or CardChoicePurposeView.Attach or CardChoicePurposeView.Encode
             or CardChoicePurposeView.Blight or CardChoicePurposeView.TapToReduce or CardChoicePurposeView.PutCounters
             or CardChoicePurposeView.PreventDamageFrom or CardChoicePurposeView.Band or CardChoicePurposeView.Enlist
-            or CardChoicePurposeView.ChooseAsEnters;
+            or CardChoicePurposeView.ChooseAsEnters or CardChoicePurposeView.Choose;
         // Banding (CR 702.22c): at most one creature without banding in a band.
         int withoutBanding = picked.Count(h => prompt.WithoutBanding.Exists(w => w.Value == h));
         // A mulligan's bottoming is asked by the rules and has no source; an effect's (Valakut Awakening) names its own.
@@ -119,6 +119,9 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
             // creature" from then on (CR 607.2d). Not a target, and nothing happens to it now.
             : prompt.Purpose == CardChoicePurposeView.ChooseAsEnters && prompt.Count == 1
                 ? $"{source}: {(prompt.UpTo ? "you may choose" : "choose")} {article} {kind} as it enters"
+            // An effect's own choice as it resolves (CR 608.2d): not a target, and nothing happens to the objects chosen yet.
+            : prompt.Purpose == CardChoicePurposeView.Choose
+                ? $"{source}: choose {(prompt.UpTo ? "up to " : "")}{(prompt.Count == 1 ? article + " " + kind : prompt.Count + " " + many)}{from}"
             // A prevention shield two or more sources would deal damage to at once (CR 615.7): whose damage it prevents first.
             : prompt.Purpose == CardChoicePurposeView.PreventDamageFrom
                 ? $"{source}: choose the source whose damage the shield prevents first"
@@ -211,6 +214,7 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
             CardChoicePurposeView.Band => picked.Count == 0 ? "No band" : picked.Count == 1 ? "Band with it" : $"Band with {picked.Count}",
             CardChoicePurposeView.PayLifeOrPutOnTop => picked.Count == 1 ? "Choose it" : "Choose them",
             CardChoicePurposeView.ChooseAsEnters => picked.Count == 0 && prompt.UpTo ? "Choose nothing" : "Choose it",
+            CardChoicePurposeView.Choose => picked.Count == 0 && prompt.UpTo ? "Choose nothing" : picked.Count == 1 ? "Choose it" : $"Choose {picked.Count}",
             // "Discard nothing" only where declining is an answer; a mandatory discard still counts down to its number.
             _ => picked.Count == 0 && prompt.UpTo ? "Discard nothing"
                 : picked.Count == 1 ? "Discard it" : $"Discard {picked.Count}",

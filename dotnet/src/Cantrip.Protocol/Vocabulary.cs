@@ -353,6 +353,12 @@ public enum CardChoicePurposeView
     /// 607.2d): Dauntless Bodyguard's "another creature you control". Chosen, not targeted; nothing happens to it now.
     /// </summary>
     ChooseAsEnters = 36,
+
+    /// <summary>
+    /// Objects chosen as an effect resolves, not targeted, that nothing happens to yet (CR 608.2d): Spry and Mighty's two
+    /// creatures.
+    /// </summary>
+    Choose = 37,
 }
 
 /// <summary>Where cards found by a library search go (CR 701.23).</summary>

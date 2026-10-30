@@ -208,6 +208,10 @@ beside `Multikicker`: `Kicker` is then the whole cost in words, the mana and the
 graveyard"), and the number of times it can be paid is `MostAnnounced`, set by the cards there are, not by mana. A client
 says "pay squad for [Spell]", never "kick", and does not speak of mana for it. Version 219.
 
+**A choice that is nothing yet.** `CardChoicePurposeView.Choose` is a card choice an effect asks as it resolves, without
+targeting (CR 608.2d), that nothing happens to when it is made ("choose exactly two creatures you control"): the client says
+"choose two creatures" and "Choose 2", not a verb of what is done. Version 220.
+
 A draw the players agree to (`docs/rules-exceptions.md`, RX-4) is not a request of the host's: the offer and the answers to it
 are the server's (`GameSession.OfferDraw`, `AnswerDraw`, over the C# protocol's `OfferDrawMessage`, `AnswerDrawMessage` and
 `DrawOfferMessage`, version 201). Offering passes the offerer's priority, which the host is sent as any `PassAnswer`; once

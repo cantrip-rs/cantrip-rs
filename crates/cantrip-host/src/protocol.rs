@@ -280,6 +280,9 @@ pub enum CardChoicePurposeView {
     /// A permanent chosen as `Source` enters, which its text then refers to as "the chosen [`Kind`]" (CR 614.12a, 607.2d):
     /// Dauntless Bodyguard's "another creature you control". Chosen, not targeted; nothing happens to it now.
     ChooseAsEnters,
+    /// Objects chosen as an effect resolves, not targeted, that nothing happens to yet (CR 608.2d): Spry and Mighty's two
+    /// creatures.
+    Choose,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]

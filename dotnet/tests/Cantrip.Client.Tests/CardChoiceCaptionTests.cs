@@ -142,6 +142,24 @@ public sealed class CardChoiceCaptionTests
     }
 
     /// <summary>
+    /// An effect's own choice as it resolves (CR 608.2d), with nothing yet done to what is chosen: Spry and Mighty's "choose
+    /// exactly two creatures you control". The caption names what is chosen and no verb, and the button says how many.
+    /// </summary>
+    [Fact]
+    public void A_choice_that_does_nothing_yet_names_what_is_chosen_and_no_verb()
+    {
+        ObjectView elves = Card(3, "Llanowar Elves", ZoneKindView.Battlefield, Me);
+        ObjectView bear = Card(4, "Grizzly Bears", ZoneKindView.Battlefield, Me);
+        GameClient client = Seated([Spell(), elves, bear]);
+        ChooseCardsPromptMessage prompt = Choice(CardChoicePurposeView.Choose, 2, false, elves, bear);
+        prompt.Kind = "creature";
+
+        Assert.Equal("Strategic Betrayal: choose 2 creatures", CardChoicePresentation.Describe(client, prompt, []).Title);
+        Assert.Equal("Choose it", CardChoicePresentation.Describe(client, prompt, [3]).Confirm);
+        Assert.Equal("Choose 2", CardChoicePresentation.Describe(client, prompt, [3, 4]).Confirm);
+    }
+
+    /// <summary>
     /// Craft's materials (CR 702.167a) are permanents you control and cards in your graveyard, exiled with the crafting
     /// permanent: the caption says both zones and the quality, "one or more" is said as such, and fewer than that is no answer.
     /// </summary>
