@@ -1,0 +1,8 @@
+{
+  "name": "Hologram Janeway",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Artifact Creature — Illusion Officer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever you attack while creatures you control have total power 8 or greater, put a +1/+1 counter on target creature."
+}

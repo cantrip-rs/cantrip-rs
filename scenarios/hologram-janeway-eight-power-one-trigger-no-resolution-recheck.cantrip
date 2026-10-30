@@ -1,0 +1,40 @@
+# CR 508.3d, 603.4: exactly eight total power, Janeway stays home; two attackers trigger once.
+# Removing four power in response does not undo the trigger's "while" condition.
+[Bot1 Deck]
+Hologram Janeway
+Leatherback Baloth
+Black Lotus x2
+Forest
+Memnite
+Ornithopter
+Forest x13
+[Bot2 Deck]
+Island
+Unsummon
+Island x18
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Hologram Janeway.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Leatherback Baloth.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Attack(Leatherback Baloth > Bot2; Memnite > Bot2)
+! Bot1.Target(Forest)
+Bot1.Target(Hologram Janeway)
+? Stack.Count = 1
+Bot2.Hand.Unsummon.Cast(Leatherback Baloth)
+Bot2.Battlefield.Island.Activate
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Hologram Janeway.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Hologram Janeway.Power = 4
+Bot1.Battlefield.Hologram Janeway.Tapped = false
+Bot1.Hand.Leatherback Baloth.Power = 4
+Bot2.Life = 19

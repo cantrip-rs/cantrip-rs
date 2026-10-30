@@ -1,0 +1,37 @@
+# CR 508.3d: seven of our power plus the opponent's Memnite does not qualify; our added Memnite reaches eight.
+# "Target creature" can put the counter on an opponent's creature.
+[Bot1 Deck]
+Hologram Janeway
+Leatherback Baloth
+Black Lotus x2
+Forest x3
+Memnite
+Forest x12
+[Bot2 Deck]
+Memnite
+Island x19
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Hologram Janeway.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Leatherback Baloth.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Hologram Janeway > Bot2)
+! Bot1.Target
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Hologram Janeway.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Memnite.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Target(Bot2.Battlefield.Memnite)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = (absent)
+Bot2.Life = 16
