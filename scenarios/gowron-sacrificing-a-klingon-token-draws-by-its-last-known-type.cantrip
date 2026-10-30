@@ -1,0 +1,47 @@
+# "If you sacrificed a Klingon this way" reads the sacrificed creature as it last existed on the battlefield (CR 608.2h):
+# L'Rell, Fierce Visionary's 2/1 Klingon Warrior token, sacrificed to Gowron's ability, has ceased to exist by the time the
+# ability resolves (CR 111.7, 704.5d), and Bot1 still draws a card and loses 1 life. Each token dying puts a +1/+1 counter
+# on Gowron (another creature died): turn 1's, sacrificed by L'Rell's delayed trigger at that end step, and this one.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Pearl
+L'Rell, Fierce Visionary
+Gowron, Eager for Battle
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.L'Rell, Fierce Visionary.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gowron, Eager for Battle.Cast
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Klingon Warrior Token.Power = 2
+Bot1.Battlefield.Gowron, Eager for Battle.Activate
+Bot1.Choose(Klingon Warrior Token)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Bot1.Battlefield.Gowron, Eager for Battle.Counters.PlusOnePlusOne = 2
+[T3 Bot1.End]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Hand = Island; Island
+Bot1.Battlefield.Gowron, Eager for Battle.Counters.PlusOnePlusOne = 2

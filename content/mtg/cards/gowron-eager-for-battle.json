@@ -1,0 +1,8 @@
+{
+  "name": "Gowron, Eager for Battle",
+  "manaCost": "{2}{B}{R}",
+  "type": "Legendary Creature — Klingon Warrior",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever another creature dies, put a +1/+1 counter on Gowron.\nSacrifice another creature: Gowron gains trample until end of turn. If you sacrificed a Klingon this way, you draw a card and lose 1 life."
+}

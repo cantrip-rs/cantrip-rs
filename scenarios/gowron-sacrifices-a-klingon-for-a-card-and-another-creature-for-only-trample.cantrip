@@ -1,0 +1,83 @@
+# The sacrificed permanent's last-known type is the one checked for "this way" (CR 602.2b, 608.2h). A Changeling is a
+# Klingon, so sacrificing it draws and costs 1 life; a later Memnite does neither, despite that earlier sacrifice. Gowron
+# still gains trample from both activations, and the keyword expires at the end of the turn (CR 611.2).
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Jet
+Mox Ruby
+Gowron, Eager for Battle
+Memnite
+Ornithopter
+Universal Automaton
+Swamp
+Island
+Plains
+Island x10
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gowron, Eager for Battle.Cast
+! Bot1.Battlefield.Gowron, Eager for Battle.Activate
+Bot1.Pass
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Gowron, Eager for Battle.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Universal Automaton.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Gowron, Eager for Battle.Activate
+Bot1.Choose(Universal Automaton)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Gowron, Eager for Battle.Counters.PlusOnePlusOne = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Bot1.Hand = Island; Ornithopter; Swamp
+? Bot1.Battlefield.Gowron, Eager for Battle.Keywords = Trample
+Bot1.Battlefield.Gowron, Eager for Battle.Activate
+Bot1.Choose(Memnite)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Gowron, Eager for Battle.Counters.PlusOnePlusOne = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Bot1.Hand = Island; Ornithopter; Swamp
+? Bot1.Battlefield.Gowron, Eager for Battle.Keywords = Trample
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Gowron, Eager for Battle.Keywords = (absent)
+
+[Expect]
+Bot1.Life = 19
+Bot1.Hand = Island; Ornithopter; Swamp
+Bot1.Battlefield.Gowron, Eager for Battle.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Gowron, Eager for Battle.Keywords = (absent)
+Bot1.Graveyard = Memnite; Universal Automaton; Black Lotus
+Bot2.Life = 20
+Bot2.Battlefield = Island; Ornithopter
+Stack.Count = 0

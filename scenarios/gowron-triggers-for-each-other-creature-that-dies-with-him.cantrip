@@ -1,0 +1,61 @@
+# Wrath of God kills Gowron and three other creatures together. His last-known ability triggers for each of those other
+# creatures and not for himself (CR 603.2c, 603.10a), so exactly three triggers are on the stack after the event.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Jet
+Mox Ruby
+Gowron, Eager for Battle
+Mox Pearl
+Memnite
+Swamp
+Wrath of God
+Plains x10
+
+[Bot2 Deck]
+Island
+Memnite
+Ornithopter
+Island x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gowron, Eager for Battle.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Triggers(Gowron, Eager for Battle; Gowron, Eager for Battle; Gowron, Eager for Battle)
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Wrath of God; Memnite; Gowron, Eager for Battle; Black Lotus
+Bot2.Graveyard = Ornithopter; Memnite
