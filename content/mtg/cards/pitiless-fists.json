@@ -1,0 +1,6 @@
+{
+  "name": "Pitiless Fists",
+  "manaCost": "{3}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature you control\nWhen this Aura enters, enchanted creature fights up to one target creature an opponent controls. (Each deals damage equal to its power to the other.)\nEnchanted creature gets +2/+2."
+}

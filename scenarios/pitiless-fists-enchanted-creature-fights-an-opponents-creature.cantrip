@@ -1,0 +1,46 @@
+# Pitiless Fists: "Enchant creature you control. When this Aura enters, enchanted creature fights up to one target creature an opponent controls. Enchanted creature gets
+# +2/+2." Bot1's Ornithopter (0/2) is enchanted on turn 3, so it is a 2/4 as the trigger resolves, and fights Bot2's Memnite (1/1): the Memnite dies and the Ornithopter
+# keeps 1 damage. The Fists cannot enchant Bot2's creature.
+
+[Bot1 Deck]
+Ornithopter
+Black Lotus
+Mox Emerald
+Pitiless Fists
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Pitiless Fists.Cast(Memnite)
+Bot1.Hand.Pitiless Fists.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Pitiless Fists.AttachedTo = Ornithopter
