@@ -1,0 +1,36 @@
+# Casting Archdruid's Charm with one mode chosen is facing a dilemma (CR 700.2), so Jett Reno gets a +1/+1 counter.
+
+[Bot1 Deck]
+Jett Reno, Problem Solver
+Mox Sapphire
+Mox Pearl
+Black Lotus
+Archdruid's Charm
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jett Reno, Problem Solver.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Archdruid's Charm.Cast
+Bot1.Modes(1)
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Jett Reno, Problem Solver.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Jett Reno, Problem Solver.Power = 2

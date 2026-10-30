@@ -1,0 +1,38 @@
+# Choosing Encounter the Unknown's mode is a dilemma; Jett's trigger resolves above the spell and her counter lets her survive its 2 damage (CR 700.2b, 603.2).
+[Bot1 Deck]
+Jett Reno, Problem Solver
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Mountain
+Encounter the Unknown
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jett Reno, Problem Solver.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Encounter the Unknown.Cast
+Bot1.Modes(Shoot to Kill)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Battlefield.Jett Reno, Problem Solver.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Jett Reno, Problem Solver.Damage = 2

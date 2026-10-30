@@ -1,0 +1,35 @@
+# Jett's noncombat tap ability causes her first mode's surveil trigger while she has less than four power (CR 701.25, 603.2).
+# Jett Reno, Problem Solver {1}{U}: Legendary Creature — Human Artificer
+#   Whenever Jett Reno becomes tapped, surveil 1. If her power is 4 or greater, instead draw a card.
+#   Whenever you face a dilemma, put a +1/1 counter on Jett Reno. (You face a dilemma as you choose one or more modes for a spell or ability.)
+# Springleaf Drum taps Jett to pay its ability's cost; the surveil puts the top card into the graveyard, and nothing is drawn.
+
+[Bot1 Deck]
+Jett Reno, Problem Solver
+Mox Sapphire
+Mox Pearl
+Island
+Springleaf Drum
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Jett Reno, Problem Solver.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Springleaf Drum.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Springleaf Drum.Activate(Tap: Jett Reno, Problem Solver; Color: Blue)
+Bot1.Pass
+Bot1.Arrange( | Island)
+
+[Expect]
+Bot1.Graveyard = Island
+Bot1.Library.Count = 17
+Bot1.Battlefield.Jett Reno, Problem Solver.Tapped = true
+Bot1.Battlefield.Jett Reno, Problem Solver.Counters.PlusOnePlusOne = (absent)

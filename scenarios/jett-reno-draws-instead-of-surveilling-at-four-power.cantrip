@@ -1,0 +1,31 @@
+# The replacement branch checks her power as the tap trigger resolves; Giant Growth makes her power 4 before Drum taps her (CR 613.1, 701.25).
+[Bot1 Deck]
+Jett Reno, Problem Solver
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Forest
+Springleaf Drum
+Giant Growth
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jett Reno, Problem Solver.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Springleaf Drum.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Jett Reno, Problem Solver)
+Bot1.Battlefield.Springleaf Drum.Activate(Tap: Jett Reno, Problem Solver; Color: Blue)
+
+[Expect]
+Bot1.Library.Count = 19
+Bot1.Battlefield.Jett Reno, Problem Solver.Tapped = true

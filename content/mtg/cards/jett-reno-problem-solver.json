@@ -1,0 +1,8 @@
+{
+  "name": "Jett Reno, Problem Solver",
+  "manaCost": "{1}{U}",
+  "type": "Legendary Creature — Human Artificer",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Whenever Jett Reno becomes tapped, surveil 1. If her power is 4 or greater, instead draw a card.\nWhenever you face a dilemma, put a +1/1 counter on Jett Reno. (You face a dilemma as you choose one or more modes for a spell or ability.)"
+}
