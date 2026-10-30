@@ -1,0 +1,6 @@
+{
+  "name": "Unforgiving Aim",
+  "manaCost": "{2}{G}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Destroy target creature with flying.\n• Destroy target enchantment.\n• Create a 2/2 black and green Elf creature token."
+}

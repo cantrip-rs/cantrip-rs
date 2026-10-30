@@ -1,0 +1,37 @@
+# Unforgiving Aim, second mode: "Destroy target enchantment." Memnite is no legal target (CR 115.1); Rancor, an Aura on Memnite, is
+# destroyed (and returns to its owner's hand by its own trigger, so it ends the scenario in hand, not in the graveyard). Black
+# Lotus (three green) pays {G} for Rancor and {2}{G} for the Aim, with Mox Emerald.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Memnite
+Rancor
+Unforgiving Aim
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rancor.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Unforgiving Aim.Cast
+Bot1.Modes(Destroy target enchantment)
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Rancor)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Forest; Forest; Rancor
+Bot1.Graveyard = Unforgiving Aim; Black Lotus
+Bot1.Battlefield = Memnite; Mox Emerald
