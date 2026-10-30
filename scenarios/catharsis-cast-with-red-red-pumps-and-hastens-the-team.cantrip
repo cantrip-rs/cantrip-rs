@@ -1,0 +1,39 @@
+# Catharsis cast with Black Lotus's {R}{R}{R} plus Mox Ruby, Mox Jet and Mox Emerald: {R}{R} was spent, so creatures you control
+# get +1/+1 and haste - Ornithopter (0/2 -> 1/3) and Catharsis itself (3/4 -> 4/5) - and no Kithkin token appears.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Black Lotus
+Catharsis
+Ornithopter
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Catharsis.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Kithkin Token = (absent)
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Catharsis.Power = 4
+Bot1.Battlefield.Catharsis.Toughness = 5
+Bot1.Battlefield.Catharsis.Keywords = Haste

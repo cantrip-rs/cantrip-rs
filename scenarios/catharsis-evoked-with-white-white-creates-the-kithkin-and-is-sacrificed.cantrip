@@ -1,0 +1,28 @@
+# Catharsis evoked ({R/W}{R/W}) with Black Lotus's {W}{W}{W}: {W}{W} was spent on the evoke cost, so the Kithkin tokens are
+# created beside the evoke sacrifice trigger; Catharsis ends in the graveyard and the two tokens stay.
+
+[Bot1 Deck]
+Black Lotus
+Catharsis
+Island x5
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Catharsis.Cast(Ability: Evoke)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Kithkin Token#1.Power = 1
+Bot1.Battlefield.Kithkin Token#2.Power = 1
+Bot1.Battlefield.Kithkin Token#3 = (absent)
+Bot1.Battlefield.Catharsis = (absent)
+Bot1.Graveyard.Catharsis.Colors.Count = 2

@@ -1,0 +1,37 @@
+# Catharsis cast with Black Lotus's {W}{W}{W} plus Mox Pearl, Mox Jet and Mox Emerald ({4}{R/W}{R/W}): {W}{W} was spent, so its
+# first trigger creates two 1/1 Kithkin; no {R}{R} was spent, so Catharsis stays 3/4 and gains no haste.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Emerald
+Black Lotus
+Catharsis
+Island x2
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Catharsis.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Kithkin Token#1.Power = 1
+Bot1.Battlefield.Kithkin Token#2.Power = 1
+Bot1.Battlefield.Kithkin Token#3 = (absent)
+Bot1.Battlefield.Catharsis.Power = 3
+Bot1.Battlefield.Catharsis.Toughness = 4
+Bot1.Battlefield.Catharsis.Keywords = (absent)
