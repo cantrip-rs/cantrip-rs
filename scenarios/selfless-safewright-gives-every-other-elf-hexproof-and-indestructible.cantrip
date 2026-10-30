@@ -1,0 +1,48 @@
+# Selfless Safewright with two other Elves: both gain hexproof and indestructible, from one instruction.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Elvish Mystic
+Llanowar Elves
+Mox Emerald
+Mox Ruby
+Selfless Safewright
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Selfless Safewright.Cast(Convoke: Elvish Mystic, Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Elf)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Keywords = Hexproof; Indestructible
+Bot1.Battlefield.Llanowar Elves.Keywords = Hexproof; Indestructible
