@@ -1,0 +1,6 @@
+{
+  "name": "Trystan's Command",
+  "manaCost": "{4}{B}{G}",
+  "type": "Kindred Sorcery — Elf",
+  "oracleText": "Choose two —\n• Create a token that's a copy of target Elf you control.\n• Return one or two target permanent cards from your graveyard to your hand.\n• Destroy target creature or enchantment.\n• Creatures target player controls get +3/+3 until end of turn. Untap them."
+}

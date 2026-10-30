@@ -1,0 +1,58 @@
+# Trystan's Command, modes 1 and 4: "Create a token that's a copy of target Elf you control" and "Creatures target player controls get
+# +3/+3 until end of turn. Untap them." Bot1 controls an Elvish Mystic (an Elf, tapped for mana to pay for the Command) and an Ornithopter,
+# Bot2 its own Llanowar Elves. Refused for the copy: Bot2's Elf (not "you control") and Bot1's Ornithopter (not an Elf). Modes happen in
+# printed order (CR 700.2d) and the pump takes the creatures there are as it resolves (CR 611.2c), so the token copy is a 4/4 too, and
+# "them" is those creatures: the Mystic is untapped again. Bot2's Elf stays 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Elvish Mystic
+Ornithopter
+Island
+Island
+Trystan's Command
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Elvish Mystic.Activate
+Bot1.Hand.Trystan's Command.Cast
+Bot1.Modes(1; 4)
+! Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Elvish Mystic)
+Bot1.Target(Bot1)
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic#1.Tapped = false
+Bot1.Battlefield.Elvish Mystic#1.Power = 4
+Bot1.Battlefield.Elvish Mystic#2.Token = true
+Bot1.Battlefield.Elvish Mystic#2.Power = 4
+Bot1.Battlefield.Elvish Mystic#2.Toughness = 4
+Bot1.Battlefield.Ornithopter.Power = 3
+Bot2.Battlefield.Llanowar Elves.Power = 1
