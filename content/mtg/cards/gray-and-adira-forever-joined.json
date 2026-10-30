@@ -1,0 +1,8 @@
+{
+  "name": "Gray and Adira, Forever Joined",
+  "manaCost": "{2}{U/R}{U/R}",
+  "type": "Legendary Creature — Trill Human Officer",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "At the beginning of combat on your turn, if you've cast a noncreature spell this turn, create a token that's a copy of target creature you control, except it isn't legendary. It gains haste until end of turn. Sacrifice it at the beginning of the next end step."
+}

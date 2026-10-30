@@ -1,0 +1,56 @@
+# Moxes cast on turn 1 let Gray enter on turn 3. On turn 5 Opt satisfies the intervening condition and Gray copies itself;
+# Bot2 Stifles the delayed sacrifice at turn 5's end step, leaving the token into turn 7, where its end-of-turn haste is gone
+# (CR 603.4, 603.7b, 702.10b, 611.2a).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Gray and Adira, Forever Joined
+Opt
+Island x15
+
+[Bot2 Deck]
+Island
+Stifle
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Gray and Adira, Forever Joined.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+[T3 Bot1.BeginCombat]
+! Bot1.Target
+[T5 Bot1.Main1]
+Bot1.Hand.Opt.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+[T5 Bot1.BeginCombat]
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Gray and Adira, Forever Joined#2.Token = true
+? Bot1.Battlefield.Gray and Adira, Forever Joined#2.Supertypes = (absent)
+? Bot1.Battlefield.Gray and Adira, Forever Joined#2.Keywords = Haste
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Stifle.Cast(Stack.Gray and Adira, Forever Joined)
+[T7 Bot1.Main1]
+
+[Expect]
+Turn = 7
+Delayed.Count = 0
+Bot1.Battlefield.Gray and Adira, Forever Joined#2.Token = true
+Bot1.Battlefield.Gray and Adira, Forever Joined#1.Supertypes = Legendary
+Bot1.Battlefield.Gray and Adira, Forever Joined#2.Supertypes = (absent)
+Bot1.Battlefield.Gray and Adira, Forever Joined#2.Keywords = (absent)
+Bot2.Graveyard.Stifle.Colors = Blue

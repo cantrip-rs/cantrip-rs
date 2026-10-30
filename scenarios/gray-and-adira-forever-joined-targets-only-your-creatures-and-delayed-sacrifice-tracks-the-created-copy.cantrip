@@ -1,0 +1,66 @@
+# Bot1 has Gray and Adira, a Grizzly Bear, and a land; Bot2 has its own Grizzly Bear. At combat the target choice refuses the
+# opponent's creature and Bot1's land, then copies Bot1's Bear. Unsummon makes that token leave before the delayed sacrifice;
+# its stale object ID must not cause the original Bear to be sacrificed (CR 603.7c, 400.7).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Island
+Gray and Adira, Forever Joined
+Grizzly Bears
+Opt
+Unsummon
+Island
+Island
+Mox Emerald
+Island x12
+
+[Bot2 Deck]
+Forest
+Grizzly Bears
+Forest x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Gray and Adira, Forever Joined.Cast(Spend: U, R)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+[T5 Bot1.BeginCombat]
+! Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+! Bot1.Target(Bot1.Battlefield.Island#1)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Grizzly Bears#2.Token = true
+? Bot1.Battlefield.Grizzly Bears#2.Power = 2
+? Bot1.Battlefield.Grizzly Bears#2.Toughness = 2
+? Bot1.Battlefield.Grizzly Bears#2.Keywords = Haste
+Bot1.Hand.Unsummon.Cast(Bot1.Battlefield.Grizzly Bears#2)
+Bot1.Battlefield.Island#1.Activate
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Gray and Adira, Forever Joined#2 = (absent)
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot1.Graveyard = Unsummon; Opt; Black Lotus

@@ -1,0 +1,41 @@
+# Bot1 casts noncreature spells on turn 1, but on turn 3 casts only Gray and Adira (a creature). Bot2 then casts Opt during
+# Bot1's turn. Neither the earlier turn's spells nor an opponent's current-turn spell satisfies "you've cast ... this turn"
+# (CR 601.2i, 603.4).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Opt
+Gray and Adira, Forever Joined
+Island x14
+
+[Bot2 Deck]
+Island
+Opt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Gray and Adira, Forever Joined.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Opt.Cast
+Bot2.Battlefield.Island.Activate
+[T3 Bot1.BeginCombat]
+! Bot1.Target
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Gray and Adira, Forever Joined#2 = (absent)

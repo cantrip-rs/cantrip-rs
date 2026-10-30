@@ -1,0 +1,44 @@
+# The four Moxen are cast earlier this turn, so they satisfy Gray and Adira's condition at the beginning of combat (CR 601.2i, 603.4).
+# At the beginning of combat Gray copies itself. The token is not legendary, has haste now, and is sacrificed at the next
+# end step; the original remains (CR 707.2, 707.9b, 702.10b, 603.7c, 400.7).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Island
+Gray and Adira, Forever Joined
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Gray and Adira, Forever Joined.Cast(Spend: U, R)
+Bot1.Hand.Ornithopter.Cast
+[T1 Bot1.BeginCombat]
+Bot1.Target(Bot1.Battlefield.Gray and Adira, Forever Joined)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Gray and Adira, Forever Joined#1.Supertypes = Legendary
+? Bot1.Battlefield.Gray and Adira, Forever Joined#2.Token = true
+? Bot1.Battlefield.Gray and Adira, Forever Joined#2.Supertypes = (absent)
+? Bot1.Battlefield.Gray and Adira, Forever Joined#2.Power = 2
+? Bot1.Battlefield.Gray and Adira, Forever Joined#2.Toughness = 3
+? Bot1.Battlefield.Gray and Adira, Forever Joined#2.Keywords = Haste
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Gray and Adira, Forever Joined.Supertypes = Legendary
+Bot1.Battlefield.Gray and Adira, Forever Joined#2 = (absent)
