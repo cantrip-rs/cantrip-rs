@@ -2,17 +2,12 @@ use cantrip_api::*;
 use cantrip_mechanics::{behold, lands};
 use cantrip_oracle as oracle;
 
-/// An Elf, a permanent you control or a card in your hand, read through the words of the card whose text says it (CR 612).
-fn elf(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
-    q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Elf))
-}
-
 /// "Search your library for a basic land card, put it onto the battlefield tapped, then shuffle. You may behold an Elf. If you
 /// do, untap that land." (CR 701.4a, 701.23.) The beholding is asked whether or not a land was found; there is only a land
 /// to untap if one arrived.
 fn fetch_and_maybe_untap(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let arrived = lands::fetch_basic_land_to_battlefield(g, item.controller, item.object, true)?;
-    if behold::on_resolution(g, item.controller, item.object, elf, "Elf")? {
+    if behold::on_resolution(g, item.controller, item.object, behold::elf, "Elf")? {
         for land in arrived {
             g.untap(land);
         }
