@@ -1,0 +1,48 @@
+# Chaos Spewer (a 5/4): "When this creature enters, you may pay {2}. If you don't, blight 2." Turn 1 Bot1 casts it off Black Lotus (it
+# is the only creature, so the two -1/-1 counters go on it: a 3/2) and declines to pay. Turn 3 a second copy is cast with a Swamp and four Moxen
+# in play: Bot1 pays {2} and nothing is blighted (a 5/4).
+
+[Bot1 Deck]
+Black Lotus
+Chaos Spewer
+Chaos Spewer
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Swamp x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Chaos Spewer.Cast
+Bot1.Pass
+Bot1.Decline
+Bot1.Choose(Chaos Spewer)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Chaos Spewer.Power = 3
+? Bot1.Battlefield.Chaos Spewer.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Chaos Spewer.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.PayCost
+? Bot1.Mana = 
+
+[Expect]
+Bot1.Battlefield.Chaos Spewer#1.Power = 3
+Bot1.Battlefield.Chaos Spewer#2.Power = 5
+Bot1.Battlefield.Chaos Spewer#2.Counters.MinusOneMinusOne = (absent)
