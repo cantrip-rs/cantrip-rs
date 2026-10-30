@@ -459,6 +459,41 @@ pub trait Query {
         self.state().attackers.iter().any(|a| a.id == id)
     }
 
+    /// Whether a creature `attacking` controls can be attacking `defender` as it is put onto the battlefield attacking or
+    /// stated to be attacking (CR 508.4, 508.4a, 506.3c): a defending player still in the game, a planeswalker a defending
+    /// player controls, or a battle a defending player protects (CR 310.9b: a Siege its own controller may attack). The
+    /// defending players are the attacking player's opponents still in the game (CR 506.2, 800.4a, 802.1). Restrictions on
+    /// declaring attackers - "can't be attacked" among them - don't apply (CR 508.4c). The core asks it as such a creature
+    /// arrives; a card asks `enter_attacking_targets`.
+    fn could_enter_attacking(&self, attacking: PlayerId, defender: Target) -> bool {
+        let s = self.state();
+        let defending = |p: PlayerId| s.opponents(attacking).any(|o| o == p);
+        match defender {
+            Target::Player(p) => defending(p),
+            Target::Object(id) => {
+                let o = self.obj(id);
+                if o.became.is_some() || !o.zone.is(ZoneKind::Battlefield) {
+                    return false;
+                }
+                let chars = self.chars(id);
+                (chars.is(CardType::Planeswalker) && defending(o.controller))
+                    || (chars.is(CardType::Battle) && o.marks.protector.is_some_and(defending))
+            }
+            _ => false,
+        }
+    }
+
+    /// Everything a creature `player` controls could attack as it enters attacking, or is stated to be attacking, with
+    /// nothing named (CR 508.4): each defending player, then the planeswalkers and battles on the battlefield that
+    /// `could_enter_attacking` allows. What its controller chooses among (`cantrip_mechanics::combat::choose_attack_target`,
+    /// and the core's own arrivals a replacement makes attack).
+    fn enter_attacking_targets(&self, player: PlayerId) -> Vec<Target> {
+        let s = self.state();
+        let mut out: Vec<Target> = s.opponents(player).map(Target::Player).collect();
+        out.extend(s.battlefield().iter().copied().map(Target::Object).filter(|&t| self.could_enter_attacking(player, t)));
+        out
+    }
+
     /// Whether a creature that has left the battlefield was attacking as it last was there (CR 506.3, 603.10a), from its
     /// last-known information: combat forgets it the moment it leaves (CR 506.4), so `is_attacking` no longer says.
     fn was_attacking(&self, id: ObjectId) -> bool {

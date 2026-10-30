@@ -100,6 +100,8 @@ mod suspend_haste_tests;
 #[cfg(test)]
 mod entering_judged_tests;
 #[cfg(test)]
+mod enters_attacking_tests;
+#[cfg(test)]
 mod enter_rules_tests;
 #[cfg(test)]
 mod land_play_rules_tests;

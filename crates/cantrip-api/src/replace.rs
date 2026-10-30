@@ -24,6 +24,12 @@ pub struct ZoneChange {
     pub controller: PlayerId,
     /// It enters the battlefield tapped (CR 614.1c).
     pub tapped: bool,
+    /// It is put onto the battlefield attacking (CR 614.1c, 508.4), as "instead it enters tapped and attacking" says. Such
+    /// an effect names no defender, so its controller chooses what it attacks as it arrives
+    /// (`ops::enter_attacking_by_choice`, CR 508.4), if it is a creature the rules let attack at all (CR 506.3b). Read only
+    /// of an arrival on the battlefield, by the move that puts it there (`ops::move_together`) and by a token's creation: a
+    /// move to any other zone ignores it.
+    pub attacking: bool,
     /// The counters an effect gives it as it arrives, whatever the zone (CR 122.6, 614.1c): the void counter a card
     /// exiled in place of a graveyard carries. Not those a permanent enters with of its own (`Entering`).
     pub counters: [i16; CounterKind::COUNT],

@@ -229,6 +229,7 @@ fn it_is_judged_again_after_a_replacement_changes_how_it_enters() {
         reason: ZoneReason::Other,
         controller,
         tapped: false,
+        attacking: false,
         counters: [0; CounterKind::COUNT],
         counters_by: controller,
         reveal: false,

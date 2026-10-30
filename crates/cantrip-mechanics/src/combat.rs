@@ -19,34 +19,11 @@ pub fn unblocked_attacker_you_control(q: &dyn Query, asker: &Asker, id: ObjectId
     q.controller(id) == asker.controller && q.is_attacking(id) && !q.is_blocked(id)
 }
 
-/// Everything `you` could attack as a creature enters attacking with nothing named (CR 508.4): every defending player,
-/// and the planeswalkers and battles they control or protect.
-pub fn attack_targets(g: &dyn Game, you: PlayerId) -> Vec<Target> {
-    let state = g.state();
-    let defenders: Vec<PlayerId> = state.opponents(you).collect();
-    let mut out: Vec<Target> = defenders.iter().map(|&p| Target::Player(p)).collect();
-    for &id in state.battlefield() {
-        let obj = state.obj(id);
-        let chars = g.chars(id);
-        let attackable = if chars.is(CardType::Planeswalker) {
-            defenders.contains(&obj.controller)
-        } else if chars.is(CardType::Battle) {
-            obj.marks.protector.is_some_and(|p| defenders.contains(&p))
-        } else {
-            false
-        };
-        if attackable {
-            out.push(Target::Object(id));
-        }
-    }
-    out
-}
-
 /// What a creature that enters attacking attacks when its effect names nothing (CR 508.4): its controller chooses among
-/// `attack_targets`, and a lone candidate is taken without asking. None when there is nothing to attack. Raph & Mikey,
+/// `Query::enter_attacking_targets`, and a lone candidate is taken without asking. None when there is nothing to attack. Raph & Mikey,
 /// Troublemakers and Gut, True-Soul Zealot print it.
 pub fn choose_attack_target(g: &mut dyn Game, you: PlayerId, source: ObjectId) -> Result<Option<Target>, Suspend> {
-    let candidates = attack_targets(g, you);
+    let candidates = g.enter_attacking_targets(you);
     choose_among(g, you, source, &candidates)
 }
 
