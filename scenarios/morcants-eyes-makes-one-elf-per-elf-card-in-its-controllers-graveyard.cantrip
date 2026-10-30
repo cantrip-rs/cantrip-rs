@@ -1,0 +1,56 @@
+# Morcant's Eyes: "{4}{G}{G}, Sacrifice this enchantment: Create X 2/2 black and green Elf creature tokens, where X is the number of Elf
+# cards in your graveyard." Upkeep surveils (turns 3 and 5) put two Elvish Mystics into Bot1's graveyard; Black Lotus, spent for the
+# mana, is a non-Elf card there. X is counted as the ability resolves, with the sacrificed Morcant's Eyes (a Kindred Elf card, CR 205.3d)
+# in the graveyard too: 2 + 1 = 3 tokens. Bot2's graveyard holds Elvish Mystics it discarded to hand size, which are not Bot1's.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Ruby
+Mox Jet
+Morcant's Eyes
+Black Lotus
+Forest
+Forest
+Elvish Mystic
+Forest
+Elvish Mystic
+Forest x30
+
+[Bot2 Deck]
+Elvish Mystic x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Morcant's Eyes.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Arrange( | Elvish Mystic)
+[T5 Bot1.Upkeep]
+Bot1.Arrange( | Elvish Mystic)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Morcant's Eyes.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Morcant's Eyes; Black Lotus; Elvish Mystic; Elvish Mystic
+Bot1.Battlefield = Mox Emerald; Mox Ruby; Mox Jet; Elf Token; Elf Token; Elf Token
