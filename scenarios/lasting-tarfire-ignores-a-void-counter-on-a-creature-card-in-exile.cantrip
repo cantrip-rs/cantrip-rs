@@ -1,0 +1,54 @@
+# Lasting Tarfire: "if you put a counter on a creature this turn" - a creature is a creature permanent (CR 109.2); a creature
+# card in exile is not one. Bot1 controls Dauthi Voidwalker and Tarfire and bolts Bot2's Llanowar Elves on turn 3: the Elves
+# are exiled instead with a void counter Bot1 puts on them (Dauthi's effect, CR 609.1), on a creature card, not a creature, so
+# no damage at the end step: Bot2 stays at 20.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Dauthi Voidwalker
+Mox Ruby
+Sol Ring
+Lasting Tarfire
+Lightning Bolt
+Mountain x13
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Dauthi Voidwalker.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Lasting Tarfire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Exile.Llanowar Elves.Counters.Void = 1
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Exile.Llanowar Elves.Counters.Void = 1

@@ -1,0 +1,36 @@
+# Lasting Tarfire: "a counter on a creature". Bot1 casts Tarfire on turn 1, then Chandra, Torch of Defiance on turn 3, which
+# enters with four loyalty counters Bot1 puts on it - on a planeswalker, not a creature, so no damage at the end step (Bot2
+# stays at 20, Chandra at 4).
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Sol Ring
+Lasting Tarfire
+Chandra, Torch of Defiance
+Mountain
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lasting Tarfire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Chandra, Torch of Defiance.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Chandra, Torch of Defiance.Counters.Loyalty = 4

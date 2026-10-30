@@ -1,0 +1,23 @@
+# Lasting Tarfire: with no counter put on a creature this turn the ability does not trigger. Bot1 casts it and passes through
+# turns 1 to 4 with no counters anywhere: Bot2 stays at 20.
+
+[Bot1 Deck]
+Mountain
+Sol Ring
+Black Lotus
+Lasting Tarfire
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lasting Tarfire.Cast
+[T5 Bot1.Upkeep]
+
+[Expect]
+Bot2.Life = 20

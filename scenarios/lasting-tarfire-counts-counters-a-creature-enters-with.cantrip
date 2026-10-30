@@ -1,0 +1,32 @@
+# Lasting Tarfire: a creature that enters with counters had them put on it (CR 122.6). Bot1 casts Tarfire, then Walking Ballista
+# for X = 1: it enters with a +1/+1 counter Bot1 puts on it, and Tarfire deals 2 at the end step (Bot2 at 18).
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Sol Ring
+Lasting Tarfire
+Walking Ballista
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lasting Tarfire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot2.Life = 18

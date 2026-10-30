@@ -1,0 +1,37 @@
+# Lasting Tarfire: "if you put a counter". Bot2 puts the +1/+1 counter, Gau's attack trigger on turn 4, on its own creature,
+# so Bot1's Tarfire (Bot1 has no creature) does not trigger at that end step: Bot2 stays at 20.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Lasting Tarfire
+Mountain x20
+
+[Bot2 Deck]
+Mountain
+Sol Ring
+Black Lotus
+Gau, Feral Youth
+Faithless Looting
+Mountain x15
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lasting Tarfire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Gau, Feral Youth.Cast
+Bot2.Hand.Faithless Looting.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Gau, Feral Youth)
+[T5 Bot1.Upkeep]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Gau, Feral Youth.Counters.PlusOnePlusOne = 1
