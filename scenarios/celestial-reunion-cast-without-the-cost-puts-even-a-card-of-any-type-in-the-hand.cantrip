@@ -1,0 +1,34 @@
+# Celestial Reunion without its additional cost ("you may"): no type is chosen (a refused type question) and nothing is beheld
+# (an empty Revealed key), so an Elvish Mystic found while the hand holds two Elves goes to the hand, never the battlefield:
+# only a paid cost makes a type to match.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Celestial Reunion
+Elvish Mystic
+Elvish Mystic
+Forest
+Forest
+Elvish Mystic
+Forest x11
+
+[Bot2 Deck]
+Island x7
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Celestial Reunion.Cast(X: 1)
+Bot1.Modes(Cast without choosing a type)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Elvish Mystic)
+
+[Expect]
+Bot1.Hand = Elvish Mystic; Elvish Mystic; Forest; Forest; Elvish Mystic
+Bot1.Graveyard = Celestial Reunion

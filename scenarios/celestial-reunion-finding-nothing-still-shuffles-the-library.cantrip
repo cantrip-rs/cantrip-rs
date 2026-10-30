@@ -1,0 +1,37 @@
+# Celestial Reunion with X = 0 and no creature card in the library finds nothing (CR 701.23b: a player may search for a card
+# they cannot find) and still shuffles the library (CR 701.23, 701.24a): the library, a run of different cards, is no longer
+# in its decklist order. The spell resolves to the graveyard and the hand gains nothing.
+
+[Bot1 Deck]
+Mox Emerald
+Celestial Reunion
+Forest
+Forest
+Forest
+Forest
+Forest
+Island
+Swamp
+Mountain
+Plains
+Lightning Bolt
+Giant Growth
+Forest x11
+
+[Bot2 Deck]
+Island x7
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Celestial Reunion.Cast(X: 0)
+Bot1.Modes(Cast without choosing a type)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Forest; Forest; Forest; Forest; Forest
+Bot1.Graveyard = Celestial Reunion
+Bot1.Library != Island; Swamp; Mountain; Plains; Lightning Bolt; Giant Growth; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest; Forest

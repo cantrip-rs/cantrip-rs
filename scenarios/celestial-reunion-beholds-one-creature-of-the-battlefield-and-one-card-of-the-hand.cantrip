@@ -1,0 +1,45 @@
+# Celestial Reunion's behold of two creatures of a type is any mix of creatures you control and creature cards in your hand
+# (a ruling). Bot1 beholds the Elvish Mystic on its battlefield and the one in its hand (only the card in the hand is
+# revealed). The type question offers only the types two beholdable creatures share: with one Birds of Paradise, Bird is not
+# offered (the refusal), and a Bird and a Mystic are not two of a type (the refused pair). The Mystic found is an Elf, so it enters the battlefield.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Celestial Reunion
+Elvish Mystic
+Elvish Mystic
+Birds of Paradise
+Forest
+Elvish Mystic
+Forest x11
+
+[Bot2 Deck]
+Island x7
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Celestial Reunion.Cast(X: 1)
+Bot1.Modes(Choose a creature type and behold two creatures of that type)
+! Bot1.Modes(Bird)
+Bot1.Modes(Elf)
+! Bot1.Choose(Bot1.Hand.Birds of Paradise)
+Bot1.Choose(Bot1.Battlefield.Elvish Mystic; Bot1.Hand.Elvish Mystic)
+? Bot1.Revealed = Elvish Mystic
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Elvish Mystic)
+
+[Expect]
+Bot1.Battlefield.Count = 5
+Bot1.Hand = Elvish Mystic; Birds of Paradise
+Bot1.Graveyard = Celestial Reunion

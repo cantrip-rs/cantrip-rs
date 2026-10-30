@@ -1,0 +1,34 @@
+# Celestial Reunion with X = 0 costs only {G} and finds a creature card with mana value 0: the Walking Ballista has {X}{X} in its
+# cost, and an {X} in a library is 0 (CR 202.3e), so it is offered; the Elvish Mystic (mana value 1) is past X and is not.
+# The cost is not paid, so the Ballista goes to the hand.
+
+[Bot1 Deck]
+Mox Emerald
+Celestial Reunion
+Forest
+Forest
+Forest
+Forest
+Forest
+Elvish Mystic
+Walking Ballista
+Forest x11
+
+[Bot2 Deck]
+Island x7
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Celestial Reunion.Cast(X: 0)
+Bot1.Modes(Cast without choosing a type)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Elvish Mystic)
+Bot1.Search(Walking Ballista)
+
+[Expect]
+Bot1.Hand = Forest; Forest; Forest; Forest; Forest; Walking Ballista
+Bot1.Graveyard = Celestial Reunion
