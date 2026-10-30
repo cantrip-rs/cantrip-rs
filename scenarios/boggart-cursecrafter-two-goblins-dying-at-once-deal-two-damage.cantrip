@@ -1,0 +1,61 @@
+# Boggart Cursecrafter: two Goblins you control dying together trigger it once for each (CR 603.2c, 700.4), 2 damage in all. Bot1
+# has the Cursecrafter (a 2/3, which survives) and two Feisty Spikelings (Goblins, 2/1); Bot2's Pyroclasm (2 damage to each
+# creature) kills the Spikelings.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Boggart Cursecrafter
+Feisty Spikeling
+Feisty Spikeling
+Mountain
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Mox Ruby
+Pyroclasm
+Mountain
+Mountain
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Boggart Cursecrafter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Feisty Spikeling.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Feisty Spikeling.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Pyroclasm.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Feisty Spikeling; Feisty Spikeling
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mountain; Mountain; Boggart Cursecrafter

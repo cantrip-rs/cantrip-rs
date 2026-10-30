@@ -1,0 +1,51 @@
+# Boggart Cursecrafter: "another Goblin you control". Bot2's Feisty Spikeling (a Goblin) dies to Bot1's Lightning Bolt: it is not
+# Bot1's, so nothing happens. Then Bot2's Lightning Bolt kills the Cursecrafter itself: it is not "another" Goblin, and nothing
+# happens either.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Boggart Cursecrafter
+Lightning Bolt
+Mountain
+Mountain x14
+
+[Bot2 Deck]
+Mox Ruby
+Feisty Spikeling
+Lightning Bolt
+Mountain x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Boggart Cursecrafter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Feisty Spikeling.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Feisty Spikeling)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Feisty Spikeling
+? Bot2.Life = 20
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Boggart Cursecrafter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Boggart Cursecrafter; Lightning Bolt
+
+[Expect]
+Bot2.Life = 20
