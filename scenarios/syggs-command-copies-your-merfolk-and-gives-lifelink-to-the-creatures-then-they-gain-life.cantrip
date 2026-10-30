@@ -1,0 +1,65 @@
+# Sygg's Command, modes 1 and 2: "Create a token that's a copy of target Merfolk you control" and "Creatures target player controls gain
+# lifelink until end of turn". Bot1 controls a Coral Merfolk and an Ornithopter, Bot2 its own Coral Merfolk. Refused for the copy: Bot2's
+# Merfolk (not "you control") and Bot1's Ornithopter (not a Merfolk). Modes happen in printed order (CR 700.2d) and the lifelink takes the
+# creatures there are as it resolves (CR 611.2c), so the token copy has it too, as do the Merfolk and the Ornithopter; Bot2's Merfolk does
+# not. Bot1's Merfolk attacks for 2 and gains 2 life.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Coral Merfolk
+Sygg's Command
+Island x15
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Coral Merfolk
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Coral Merfolk.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Coral Merfolk.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sygg's Command.Cast
+Bot1.Modes(1; 2)
+! Bot1.Target(Bot2.Battlefield.Coral Merfolk)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Coral Merfolk)
+Bot1.Target(Bot1)
+Bot2.Pass
+? Bot1.Battlefield.Coral Merfolk#2.Token = true
+? Bot1.Battlefield.Coral Merfolk#2.Keywords = Lifelink
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Lifelink
+? Bot2.Battlefield.Coral Merfolk.Keywords = (absent)
+Bot1.Attack(Coral Merfolk#1 > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
