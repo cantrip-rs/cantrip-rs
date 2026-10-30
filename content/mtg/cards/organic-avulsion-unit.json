@@ -1,0 +1,8 @@
+{
+  "name": "Organic Avulsion Unit",
+  "manaCost": "{2}{B}",
+  "type": "Artifact Creature — Borg",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "{2}: Artifact creatures you control gain menace until end of turn. (A creature with menace can't be blocked except by two or more creatures.)"
+}

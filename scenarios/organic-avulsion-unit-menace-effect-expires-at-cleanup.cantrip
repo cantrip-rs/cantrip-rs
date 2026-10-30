@@ -1,0 +1,41 @@
+# A second turn after the temporary menace effect proves it ends at cleanup and is not baked into the artifact creature's characteristics (CR 611.2a, 702.111).
+
+[Bot1 Deck]
+Organic Avulsion Unit
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Island
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Organic Avulsion Unit.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Organic Avulsion Unit.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Keywords = Flying

@@ -1,0 +1,57 @@
+# The ability grants menace to your artifact creatures present as it resolves; your nonartifact and an opponent's artifact creature do not gain it (CR 611.2c, 702.111).
+
+[Bot1 Deck]
+Organic Avulsion Unit
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Forest
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Organic Avulsion Unit.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Organic Avulsion Unit.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Organic Avulsion Unit.Keywords = Menace
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Organic Avulsion Unit.Keywords = Menace
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace
+Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+Bot2.Battlefield.Ornithopter.Keywords = Flying
