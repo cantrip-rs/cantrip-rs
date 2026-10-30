@@ -1,0 +1,11 @@
+{
+  "name": "Moopsy",
+  "manaCost": "{G}",
+  "type": "Creature — Beast",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Deathtouch\n{2}: This creature gains reach until end of turn.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}

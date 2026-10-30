@@ -1,0 +1,34 @@
+# Moopsy gains reach only through the current turn after {2} is paid; its printed deathtouch remains (CR 611.2a).
+
+[Bot1 Deck]
+Moopsy
+Mox Emerald
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Moopsy.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Moopsy.Keywords = Deathtouch
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Moopsy.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Moopsy.Keywords = Deathtouch; Reach
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Moopsy.Keywords = Deathtouch
+
+[Expect]
+Bot1.Battlefield.Moopsy.Types = Creature
+Bot1.Battlefield.Moopsy.Tapped = false
