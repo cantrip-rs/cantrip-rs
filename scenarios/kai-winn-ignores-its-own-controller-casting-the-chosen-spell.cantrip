@@ -1,0 +1,34 @@
+# Kai Winn names a nonland card (a land name is refused, CR 201.3) and punishes only an opponent: Bot1 names Opt and casts
+# Opt itself, and nobody loses life (CR 603.2).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Kai Winn, Faithless Leader
+Mox Sapphire
+Opt
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kai Winn, Faithless Leader.Cast
+! Bot1.Name(Island)
+Bot1.Name(Opt)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Opt.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Opt

@@ -1,0 +1,30 @@
+# Kai triggers once for the named Sol Ring spell and again when its controller activates the mana ability before passing (CR 601.2, 602.2, 605.3, 603.2).
+[Bot1 Deck]
+Kai Winn, Faithless Leader
+Mox Jet
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Mox Sapphire
+Island
+Sol Ring
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kai Winn, Faithless Leader.Cast
+Bot1.Name(Sol Ring)
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14

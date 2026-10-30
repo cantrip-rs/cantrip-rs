@@ -1,0 +1,8 @@
+{
+  "name": "Kai Winn, Faithless Leader",
+  "manaCost": "{1}{B}",
+  "type": "Legendary Creature — Bajoran Cleric",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "As Kai Winn enters, choose a nonland card name.\nWhenever an opponent casts a spell with the chosen name or activates an ability of a source with the chosen name, that player loses 3 life."
+}

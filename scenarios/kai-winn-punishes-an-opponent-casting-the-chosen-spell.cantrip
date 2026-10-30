@@ -1,0 +1,38 @@
+# Kai's chosen nonland name matches an opponent's spell and makes that opponent lose 3 life (CR 201.3, 603.2, 119.3).
+# Kai Winn, Faithless Leader {1}{B}: Legendary Creature — Bajoran Cleric
+#   As Kai Winn enters, choose a nonland card name.
+#   Whenever an opponent casts a spell with the chosen name or activates an ability of a source with the chosen name, that player loses 3 life.
+# Bot2 casts Opt; the chosen name is made explicitly as Kai enters.
+
+[Bot1 Deck]
+Kai Winn, Faithless Leader
+Mox Jet
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Mox Sapphire
+Island
+Opt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kai Winn, Faithless Leader.Cast
+Bot1.Name(Opt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Opt.Cast
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
