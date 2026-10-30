@@ -1,0 +1,25 @@
+# Ferenginar's same {T} ability can choose green instead; it enters tapped and gains 1 life before it untaps (CR 614.1d, 603.6a, 119.3, 602.2b, 605.1a, 605.3b, 106.4).
+
+[Bot1 Deck]
+Ferenginar
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ferenginar.Play
+? Bot1.Battlefield.Ferenginar.Tapped = true
+! Bot1.Battlefield.Ferenginar.Activate(Color: Green)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ferenginar.Activate(Color: Green)
+? Bot1.Mana = {G}
+? Bot1.Battlefield.Ferenginar.Tapped = true
+
+[Expect]
+Bot1.Life = 21
+Bot1.Mana = {G}
+Bot1.Battlefield.Ferenginar.Tapped = true

@@ -1,0 +1,25 @@
+# Ferenginar enters tapped, its trigger gains exactly 1 life, and after its controller untaps it, its mana ability produces one black mana. The tapped-state refusal and later activation prove the {T} cost (CR 614.1d, 603.6a, 119.3, 602.2b, 605.1a, 605.3b, 106.4).
+
+[Bot1 Deck]
+Ferenginar
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ferenginar.Play
+? Bot1.Battlefield.Ferenginar.Tapped = true
+! Bot1.Battlefield.Ferenginar.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ferenginar.Activate(Color: Black)
+? Bot1.Mana = {B}
+? Bot1.Battlefield.Ferenginar.Tapped = true
+
+[Expect]
+Bot1.Life = 21
+Bot1.Mana = {B}
+Bot1.Battlefield.Ferenginar.Tapped = true
