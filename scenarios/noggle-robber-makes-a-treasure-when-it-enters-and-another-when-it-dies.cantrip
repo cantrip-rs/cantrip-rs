@@ -1,0 +1,40 @@
+# Noggle Robber: "When this creature enters or dies, create a Treasure token." It enters (a Treasure) and dies to Bot2's Lightning Bolt
+# (a second Treasure, CR 603.10a). Its {R/G}{R/G} hybrid is paid with Mox Ruby and Mox Emerald, the generic with Mox Jet.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Noggle Robber
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Noggle Robber.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Noggle Robber; Treasure Token
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Noggle Robber)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Jet; Mox Ruby; Treasure Token; Treasure Token
+Bot1.Graveyard = Noggle Robber
