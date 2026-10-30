@@ -1,0 +1,27 @@
+# The second mode surveils one card when Ni'Var enters untapped with two other lands (CR 603.6d, 701.25a).
+
+[Bot1 Deck]
+Island x2
+Ni'Var Science Academy
+Island x6
+Forest
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Ni'Var Science Academy.Play
+Bot1.Modes(Surveil 1)
+Bot1.Arrange(| Forest)
+? Bot1.Graveyard = Forest
+
+[Expect]
+Bot1.Graveyard = Forest
+Bot1.Library.Count = 20

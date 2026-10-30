@@ -1,0 +1,27 @@
+# With one other land Ni'Var enters tapped and its enters-untapped trigger does not fire; it later taps for {U} (CR 614.1d, 603.6d, 605.1a).
+
+[Bot1 Deck]
+Island
+Ni'Var Science Academy
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Ni'Var Science Academy.Play
+? Bot1.Battlefield.Ni'Var Science Academy.Tapped = true
+! Bot1.Modes
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Ni'Var Science Academy.Activate
+? Bot1.Mana = {U}
+
+[Expect]
+Bot1.Battlefield.Ni'Var Science Academy.Tapped = true
+Bot1.Surveilled = (absent)
+Bot1.Graveyard.Count = 0

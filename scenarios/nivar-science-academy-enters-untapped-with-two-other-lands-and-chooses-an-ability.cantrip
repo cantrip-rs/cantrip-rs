@@ -1,0 +1,40 @@
+# With two other lands Ni'Var enters untapped and its modal trigger gives a target creature flying through this turn (CR 614.1d, 603.6d, 611.2c). A land is refused as the target (CR 115.1d).
+
+[Bot1 Deck]
+Island x2
+Ni'Var Science Academy
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Ni'Var Science Academy.Play
+? Bot1.Battlefield.Ni'Var Science Academy.Tapped = false
+Bot1.Modes(Target creature gains flying until end of turn.)
+! Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Keywords = Flying
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+[T7 Bot1.Main1]
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+
+[Expect]
+Bot1.Battlefield.Ni'Var Science Academy.Tapped = false
+Bot2.Battlefield.Memnite.Keywords = (absent)
+Bot2.Battlefield.Ornithopter.Keywords = Flying
