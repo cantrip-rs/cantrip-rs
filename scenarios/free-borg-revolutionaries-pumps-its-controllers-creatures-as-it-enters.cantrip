@@ -1,0 +1,66 @@
+# When Free Borg Revolutionaries enters, it and the creatures its controller controls get +1/+1 until end of turn;
+# an opponent's creature does not, and the bonus expires at the next turn (CR 611.2c).
+
+[Bot1 Deck]
+Plains
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Ruby
+Elvish Mystic
+Free Borg Revolutionaries
+Mox Sapphire
+Plains x8
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Island x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Free Borg Revolutionaries.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Free Borg Revolutionaries.Power = 5
+? Bot1.Battlefield.Free Borg Revolutionaries.Toughness = 6
+? Bot1.Battlefield.Elvish Mystic.Power = 2
+? Bot1.Battlefield.Elvish Mystic.Toughness = 2
+? Bot2.Battlefield.Elvish Mystic.Power = 1
+? Bot2.Battlefield.Elvish Mystic.Toughness = 1
+Bot2.Pass
+Bot2.Pass
+
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Free Borg Revolutionaries.Power = 4
+Bot1.Battlefield.Free Borg Revolutionaries.Toughness = 5
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Battlefield.Elvish Mystic.Toughness = 1
+Bot2.Battlefield.Elvish Mystic.Power = 1
+Bot2.Battlefield.Elvish Mystic.Toughness = 1

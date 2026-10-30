@@ -1,0 +1,8 @@
+{
+  "name": "Free Borg Revolutionaries",
+  "manaCost": "{3}{W}{W}",
+  "type": "Artifact Creature — Borg Rebel",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "When this creature enters, creatures you control get +1/+1 until end of turn.\nBasic landcycling {2} ({2}, Discard this card: Search your library for a basic land card, reveal it, put it into your hand, then shuffle.)"
+}

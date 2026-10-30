@@ -1,0 +1,33 @@
+# Basic landcycling {2} pays exactly two generic mana, discards Free Borg Revolutionaries, and finds a basic land;
+# the one-mana attempt is unavailable (CR 702.29e).
+
+[Bot1 Deck]
+Blasted Landscape
+Mana Crypt
+Free Borg Revolutionaries
+Plains x4
+Tropical Island
+Forest
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Blasted Landscape.Play
+! Bot1.Hand.Free Borg Revolutionaries.Activate(Ability: Basic landcycling; Mana: short)
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Free Borg Revolutionaries.Activate(Ability: Basic landcycling)
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Search(Tropical Island)
+Bot1.Search(Forest)
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard.Free Borg Revolutionaries.Colors = White
+Bot1.Hand = Forest; Plains; Plains; Plains; Plains
+Bot1.Library.Count = 13
