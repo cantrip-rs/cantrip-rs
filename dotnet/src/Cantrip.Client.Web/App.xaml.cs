@@ -28,6 +28,15 @@ public partial class App : Application
             return;
         }
 
+        // A public board at an in-person table (docs/in-person.md): a page of its own, never the remote client's.
+        if (InPerson.InPersonConfig.Role == InPerson.InPersonRole.Tablet)
+        {
+            MainWindow.Content = new InPerson.TabletPage();
+            MainWindow.SetWindowIcon();
+            MainWindow.Activate();
+            return;
+        }
+
         // Do not repeat app initialization when the Window already has content,
         // just ensure that the window is active
         if (MainWindow.Content is not Frame rootFrame)

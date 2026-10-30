@@ -1,0 +1,36 @@
+# In-person play (docs/in-person.md): Bot1 taps its Mountain for mana and casts Lightning Bolt at Bot2's Tarmogoyf. At a
+# table it is the position the in-person browser tests play - the Bolt cast from Bot1's phone, the Mountain tapped on
+# Bot1's half of a tablet and the Tarmogoyf on Bot2's - and the script checks that each tap made the answer it means.
+#
+# Tarmogoyf is 0/1 while both graveyards are empty. Bolt resolves and goes to the graveyard (CR 608.2n) before
+# state-based actions are checked, so Tarmogoyf is 1/2 with 3 damage marked and dies (CR 704.5g).
+
+[Bot1 Deck]
+Mountain
+Lightning Bolt
+Mountain x25
+
+[Bot2 Deck]
+Forest
+Tarmogoyf
+Forest x25
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Hand.Tarmogoyf.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Tarmogoyf)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Bot2.Graveyard = Tarmogoyf
+Bot2.Battlefield.Tarmogoyf = (absent)
+Bot2.Life = 20
