@@ -1,0 +1,57 @@
+# Choosing Encounter the Unknown's mode is facing a dilemma: Obsidian drains every opponent and gains life before the mode resolves (CR 603.2, 700.2, 119.3).
+
+[Bot1 Deck]
+Obsidian Order Operative
+Encounter the Unknown
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Mountain
+Island x20
+
+[Bot2 Deck]
+Opt
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Obsidian Order Operative.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Encounter the Unknown.Cast
+Bot1.Modes(Shoot to Kill)
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Life = 21
+? Bot2.Life = 19
+? Bot3.Life = 19
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Life = 19
+? Bot2.Life = 17
+? Bot3.Life = 17
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 17
+Bot3.Life = 17
