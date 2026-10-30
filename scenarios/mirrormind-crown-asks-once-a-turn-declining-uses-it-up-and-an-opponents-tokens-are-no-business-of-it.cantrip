@@ -1,0 +1,89 @@
+# Mirrormind Crown: "the first time you would create one or more tokens each turn, you may instead create that many tokens
+# that are copies of equipped creature." Turn 3: the Crown is on Llanowar Elves; Obsessive Pursuit enters and makes a Clue,
+# the turn's first creation - Bot1 declines, so the Clue is made, and that used the turn's first time up. Turn 4: Bot2's
+# Lingering Souls makes Spirits - not Bot1's tokens, so Bot1 is asked nothing. Turn 5: at upkeep Pursuit's Clue is the first
+# creation and Bot1 takes the copy (an Elves token in place of the Clue, one for one); then Bot1's Lingering Souls, the turn's
+# second creation, makes its two Spirits as written with no question.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mirrormind Crown
+Llanowar Elves
+Obsessive Pursuit
+Lingering Souls
+Plains x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Lingering Souls
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mirrormind Crown.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mirrormind Crown.Activate(Ability: Equip; Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Obsessive Pursuit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Clue Token.Types = Artifact
+? Bot1.Life = 19
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Lingering Souls.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Spirit Token#1.Keywords = Flying
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Battlefield.Llanowar Elves#2.Power = 1
+? Bot1.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+
+[Expect]
+Bot1.Battlefield.Spirit Token#1.Keywords = Flying
+Bot1.Battlefield.Spirit Token#2.Keywords = Flying
+Bot1.Battlefield.Clue Token.Types = Artifact
