@@ -537,6 +537,19 @@ pub fn look_at_top_onto_battlefield_then(
     Ok(arrived)
 }
 
+/// The Eclipsed scouts' enters ability: "look at the top four cards of your library. You may reveal a [`creature`] card, or a
+/// [`land_a`] or [`land_b`] card, from among them and put it into your hand. Put the rest on the bottom of your library in a
+/// random order." The three types are read through the source's words (CR 612): a creature type and two basic land types are
+/// all text a text-changing effect can change. Eclipsed Boggart (Goblin, Swamp, Mountain), Eclipsed Elf (Elf, Swamp, Forest),
+/// Eclipsed Flamekin (Elemental, Island, Mountain), Eclipsed Kithkin (Kithkin, Forest, Plains) and Eclipsed Merrow (Merfolk,
+/// Plains, Island) print it.
+pub fn look_for_type_or_two_basic_land_types(g: &mut dyn Game, item: &StackItem, creature: Subtype, land_a: Subtype, land_b: Subtype) -> Result<(), Suspend> {
+    let words = g.words(item.object);
+    let (creature, land_a, land_b) = (words.subtype(creature), words.subtype(land_a), words.subtype(land_b));
+    look_at_top(g, item.controller, item.object, 4, (0, 1), true, |c| c.has_subtype(creature) || c.has_subtype(land_a) || c.has_subtype(land_b), Rest::BottomRandom)?;
+    Ok(())
+}
+
 /// "Put the rest on the bottom of your library in a random order" (CR 401.4) after looking at `looked`, cards of `player`'s
 /// library: those still in it, a card taken having left. Narset, Parter of Veils, Once Upon a Time and United Battlefront print it.
 pub fn rest_to_bottom_in_random_order(g: &mut dyn Game, player: PlayerId, looked: &[ObjectId]) {
