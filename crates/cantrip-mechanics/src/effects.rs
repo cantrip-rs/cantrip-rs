@@ -863,6 +863,17 @@ pub fn plus_one_counter_on_each_target(g: &mut dyn Game, item: &StackItem) -> Re
     Ok(())
 }
 
+/// "Tap target creature. Put a stun counter on it." (CR 701.26a, 122.1d): the counter goes on whether or not the creature was
+/// untapped, so a tapped one gets it too; an illegal target does nothing (CR 608.2b). Loch Mare's second ability and Sygg's
+/// Command's fourth mode print it.
+pub fn tap_and_stun(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        g.tap(creature);
+        g.add_counters(creature, CounterKind::Stun, 1);
+    }
+    Ok(())
+}
+
 /// "Tap [N] target [permanents]" (CR 701.26a, 608.2b): each target that is still legal as the ability resolves. Divining
 /// Duelist (as a mode), Quake, Agent of S.H.I.E.L.D. and Raft Security Officer print it.
 pub fn tap_targets(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
