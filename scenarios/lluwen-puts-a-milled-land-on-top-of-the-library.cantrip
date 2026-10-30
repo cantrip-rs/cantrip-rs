@@ -1,0 +1,31 @@
+# Lluwen's mill finds a land and a creature; Bot1 puts the Forest back on top, so it is drawn on turn three and the creature stays in the
+# graveyard.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Lluwen, Imperfect Naturalist
+Island x4
+Lightning Bolt
+Grizzly Bears
+Forest
+Giant Growth
+Island
+Island x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lluwen, Imperfect Naturalist.Cast
+Bot1.Pass
+Bot1.Choose(Forest)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Forest.Colors.Count = 0
+Bot1.Graveyard = Giant Growth; Grizzly Bears; Lightning Bolt

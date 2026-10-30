@@ -1,0 +1,32 @@
+# Lluwen's "you may": Bot1 declines to put a creature or land back, so all four milled cards stay in the graveyard and turn three
+# draws the card below them, the Island.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Lluwen, Imperfect Naturalist
+Island x4
+Lightning Bolt
+Grizzly Bears
+Forest
+Giant Growth
+Island
+Island x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lluwen, Imperfect Naturalist.Cast
+Bot1.Pass
+Bot1.Choose()
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Giant Growth; Forest; Grizzly Bears; Lightning Bolt
+Bot1.Library.Count = 7
+Bot1.Hand.Count = 5

@@ -1,0 +1,36 @@
+# Lluwen, Imperfect Naturalist cast turn one (Mox Jet and Mox Emerald): she mills four (Lightning Bolt, Grizzly Bears, Forest, Giant
+# Growth) and Bot1 puts Grizzly Bears on top of the library - a card that does not qualify can't be chosen - so the other three
+# stay in the graveyard and the Bears is drawn on turn three. Bot2's library is untouched.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Lluwen, Imperfect Naturalist
+Island x4
+Lightning Bolt
+Grizzly Bears
+Forest
+Giant Growth
+Island
+Island x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lluwen, Imperfect Naturalist.Cast
+Bot1.Pass
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Grizzly Bears)
+? Bot1.Library.Count = 9
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Hand.Grizzly Bears.Colors.Count = 1
+Bot1.Graveyard = Giant Growth; Forest; Lightning Bolt
+Bot1.Library.Count = 8
+Bot2.Library.Count = 12
