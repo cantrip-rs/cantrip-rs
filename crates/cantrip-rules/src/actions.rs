@@ -5353,6 +5353,12 @@ fn land_plays(cx: &Cx, player: PlayerId, options: &mut Vec<ActionOption>) {
                     offer(id, Some(c.grant), options);
                 }
             }
+            // A card in exile its own static ability lets be played there (CR 113.6e, 305.1), as Valgavoth's lets a land card.
+            for c in own_exile_casts(cx.cards(), cx.s(), &cx.g.log, id, player).iter() {
+                if c.what.lands && (c.what.allows)(cx, &c.asker(), id, player) {
+                    offer(id, Some(c.grant), options);
+                }
+            }
         }
     }
     // The land cards in the graveyard that a way a permanent gives lets the player play (CR 305.1, 604): once during each of
@@ -5507,6 +5513,30 @@ fn exile_casts_of(cards: &CardTable, s: &GameState, log: &[Record]) -> Vec<Given
     given(cards, s, log, |d| d.exile_casts, AbilityRef::exile_cast)
 }
 
+/// The permission a card in exile gives itself, "you may cast this card from exile" (CR 113.6e, 601.3): a static ability that
+/// functions while the card is in exile, so it is read off the card there, where `given` reads only the battlefield's and the
+/// emblems' - with the card's controller (its owner, CR 108.4a) as "you" and the card as the object the grant is made by, so
+/// the permission is the card's own and not another card's in exile (`named_exile_cast` reads it back off the same card). A
+/// card exiled face down (hideaway, foretell) has no characteristics and so no abilities while it is (CR 406.3a, 708.2):
+/// it gives itself none (`cards.current` reads only a face-down permanent's face-down values). A copy of a card is cast only as the prepare spell it is, never by a permission of the card it copies.
+/// `player` is who would cast it: "you" on the card is its controller (CR 109.5), so no other player is offered it.
+fn own_exile_casts(cards: &CardTable, s: &GameState, log: &[Record], card: ObjectId, player: PlayerId) -> Vec<Given<ExileCast>> {
+    let obj = s.obj(card);
+    if obj.card_copy || obj.face_down_card() || !obj.zone.is(ZoneKind::Exile) || obj.controller != player {
+        return Vec::new();
+    }
+    let printed = cards.current(obj);
+    let items = cards.get(printed).exile_casts;
+    if items.is_empty() || crate::layers::lost_all_abilities(cards, s, log, card) {
+        return Vec::new();
+    }
+    items
+        .iter()
+        .enumerate()
+        .map(|(k, what)| Given { source: card, controller: obj.controller, grant: Grant { object: card, ability: AbilityRef::exile_cast(printed, k) }, what })
+        .collect()
+}
+
 /// The alternative costs the permanents on the battlefield give the spells players cast (CR 118.9, 601.2b).
 fn spell_alternatives_of(cards: &CardTable, s: &GameState, log: &[Record]) -> Vec<Given<SpellAlternative>> {
     given(cards, s, log, |d| d.spell_alternatives, AbilityRef::spell_alternative)
@@ -5531,8 +5561,8 @@ fn named_alternative(s: &GameState, cards: &CardTable, g: Grant) -> Option<Given
     named(s, cards, g, |d| d.spell_alternatives, g.ability.as_spell_alternative())
 }
 
-/// The permissions permanents give now to cast `card`, a card in exile, as itself (CR 601.3): each with the player it lets
-/// cast it and what it is called, for the card's face to say.
+/// The permissions that let `card`, a card in exile, be cast as itself right now (CR 601.3): a permanent's, and the card's
+/// own (CR 113.6e); each with the player it lets cast it and what it is called, for the card's face to say.
 pub fn exile_cast_texts(game: &crate::Game, card: ObjectId) -> Vec<(PlayerId, &'static str)> {
     let (q, cards, log): (&dyn Query, &CardTable, &[Record]) = (game, game.cards, &game.log);
     let s = q.state();
@@ -5540,8 +5570,10 @@ pub fn exile_cast_texts(game: &crate::Game, card: ObjectId) -> Vec<(PlayerId, &'
         return Vec::new();
     }
     let _face_up = layers::judged_face_up(s, card);
+    // The permanents' permissions, and the card's own (CR 113.6e), with its controller as "you".
     exile_casts_of(cards, s, log)
         .into_iter()
+        .chain(own_exile_casts(cards, s, log, card, s.obj(card).controller))
         .filter(|c| (c.what.allows)(q, &c.asker(), card, c.controller))
         .map(|c| (c.controller, c.what.text))
         .collect()
@@ -6164,6 +6196,8 @@ impl<'a> Offer<'a> {
                 // with every cast by it (CR 118.8), and it may let mana of any type pay (CR 609.4b).
                 if !obj.card_copy {
                     routes.extend(self.exile_casts().iter().map(Route::exile_cast));
+                    // A card's own permission, which functions where it is (CR 113.6e): "you may cast this card from exile".
+                    routes.extend(own_exile_casts(cx.cards(), cx.s(), &cx.g.log, card, player).iter().map(Route::exile_cast));
                 }
             }
             _ => {}

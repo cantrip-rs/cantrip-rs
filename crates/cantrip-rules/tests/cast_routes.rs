@@ -176,6 +176,25 @@ static EXILE_PERMISSION: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// "You may cast this card from exile" (CR 113.6e): its own static ability, for itself alone.
+fn this_card_only(_: &dyn Query, asker: &Asker, card: ObjectId, _: PlayerId) -> bool {
+    card == asker.source
+}
+
+static SELF_EXILE_PROBE: CardDef = CardDef {
+    name: "Route Self Exile Probe",
+    cost: ManaCost { generic: 1, ..ManaCost::ZERO },
+    exile_casts: &[ExileCast {
+        text: "Cast from exile",
+        allows: this_card_only,
+        additional: Cost::NONE,
+        any_type: false,
+        lands: false,
+        life_for_mana_value: false,
+    }],
+    ..PROBE_SPELL
+};
+
 static FREE_ALTERNATIVE: CardDef = CardDef {
     name: "Route Free Alternative",
     types: TypeSet::of(&[CardType::Artifact]),
@@ -405,6 +424,7 @@ fn table() -> &'static CardTable {
             &GRANTOR_7,
             &GRANTOR_8,
             &EXILE_PERMISSION,
+            &SELF_EXILE_PROBE,
             &FREE_ALTERNATIVE,
             &FREE_EMBLEM,
             &SUSPEND_PROBE,
@@ -1121,6 +1141,26 @@ fn a_permission_and_another_objects_alternative_cost_compose() {
     game.state.update_player(ME, |p| p.pool.0[Mana::C as usize] = 1);
     game.run();
     assert!(casts_of(&game, spell).iter().all(|o| o.paid_by.is_none()));
+}
+
+/// CR 113.6e, 601.3: a card's own "you may cast this card from exile" functions where the card is, so the card offers that
+/// cast itself rather than a permanent offering it, it offers no other card in exile, and the cast is recorded as made by the
+/// card. Its controller is "you" (CR 109.5).
+#[test]
+fn a_card_in_exile_offers_its_own_cast_there() {
+    let (mut game, spell) = game_with("Route Self Exile Probe", Zone::exile, 1);
+    let other = game.state.zone(Zone::hand(ME))[0];
+    move_to(&mut game, other, Zone::exile(ME));
+    game.run();
+    let own = casts_of(&game, spell).into_iter().find(|o| by(o) == Some(spell)).expect("the card offers its own cast");
+    assert!(casts_of(&game, other).is_empty(), "a card's permission is its own, not another card's in exile");
+    take(&mut game, &own);
+    resolve(&mut game);
+    assert!(
+        game.log
+            .iter()
+            .any(|r| matches!(r.event, Event::Cast(c) if c.from == ZoneKind::Exile && c.granted_by().is_some_and(|g| g.object == spell)))
+    );
 }
 
 /// Nine permanents giving ways: each is a cast of its own (no slot limit), the last one's cast is for its own cost (nothing)

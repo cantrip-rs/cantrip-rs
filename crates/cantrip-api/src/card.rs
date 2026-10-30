@@ -2098,16 +2098,19 @@ pub struct SpellAlternative {
 /// paying their other costs" (Dawnhand Dissident). It is a permission, not a way of paying: the card is cast for its mana
 /// cost or any alternative cost it has (CR 601.2b, 118.9), as its own Adventure or Omen too where `allows` says so, at the
 /// time its type allows (Dawnhand Dissident's ruling: "normally ... only during your main phase while the stack is empty"),
-/// and `additional` is owed on top of whatever it is cast for (CR 118.8, 601.2f). It functions while the permanent is on the
+/// and `additional` is owed on top of whatever it is cast for (CR 118.8, 601.2f). A permanent's functions while it is on the
 /// battlefield and has its abilities; a cast begun by it goes on if the permanent leaves while it is paid for (the same
-/// card's ruling: sacrificed to pay an additional cost, or destroyed in response).
+/// card's ruling: sacrificed to pay an additional cost, or destroyed in response). A card may also list one for itself - "you
+/// may cast this card from exile" - which functions while the card is in exile (CR 113.6e), read off the card there
+/// (`cantrip-rules`' `own_exile_casts`) with the card's controller, its owner, as "you".
 #[derive(Clone, Copy)]
 pub struct ExileCast {
     /// What a cast by it is called on the menu, and on the card in exile it may cast.
     pub text: &'static str,
-    /// Whether `player` may cast `card`, a card in exile, by it now: asked of the permanent (`Asker`, its controller "you"),
-    /// with the card as the spell it would be (its Adventure or Omen through a view of that face, CR 715.3a, 720.3a), so
-    /// "creature spells" refuses a creature card's instant Adventure.
+    /// Whether `player` may cast `card`, a card in exile, by it now: asked of what the permission belongs to (`Asker`, its
+    /// controller "you" - the permanent's, or for a card's own permission the card itself, in exile), with the card as the
+    /// spell it would be (its Adventure or Omen through a view of that face, CR 715.3a, 720.3a), so "creature spells" refuses
+    /// a creature card's instant Adventure.
     pub allows: fn(&dyn Query, &Asker, ObjectId, PlayerId) -> bool,
     /// The additional cost owed on each cast by it (CR 118.8); `Cost::NONE` for none.
     pub additional: Cost,
