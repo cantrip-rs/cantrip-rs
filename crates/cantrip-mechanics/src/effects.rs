@@ -1159,6 +1159,27 @@ pub fn damage_each_creature_opponents_control(g: &mut dyn Game, item: &StackItem
     g.damage_together(&hits);
 }
 
+/// "[This spell] deals `n` damage to each opponent and each creature they control" (CR 608.2c, 120.2): one damage event for
+/// each opponent of the resolving item's controller and each creature one controls, all dealt together. Delayed Blast
+/// Fireball and Soul Immolation print it.
+pub fn damage_each_opponent_and_each_creature_they_control(g: &mut dyn Game, item: &StackItem, n: u16) {
+    let opponents: Vec<PlayerId> = g.state().opponents(item.controller).collect();
+    let creatures: Vec<ObjectId> = g
+        .state()
+        .battlefield()
+        .iter()
+        .copied()
+        .filter(|&id| g.chars(id).is(CardType::Creature) && opponents.contains(&g.controller(id)))
+        .collect();
+    let hits: Vec<(ObjectId, Target, u16)> = opponents
+        .iter()
+        .map(|&p| Target::Player(p))
+        .chain(creatures.into_iter().map(Target::Object))
+        .map(|target| (item.object, target, n))
+        .collect();
+    g.damage_together(&hits);
+}
+
 /// "[This spell] deals `n` damage to each non-[subtype] creature" (CR 608.2c, 120.2): one damage event for every creature on
 /// the battlefield without `subtype` as the effect is carried out, all dealt together. The caller reads the subtype through
 /// the words of the object whose text names it (`g.words(item.object).subtype(..)`, CR 612). Desolation of Smaug (non-Dragon)
