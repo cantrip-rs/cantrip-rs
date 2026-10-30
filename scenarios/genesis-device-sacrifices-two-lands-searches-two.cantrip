@@ -1,0 +1,69 @@
+# The ability sacrifices both of Bot1's lands as it resolves, then searches for at most two lands. Bot2's Mountain is not a
+# legal sacrifice; choosing two of the many Forests exposes the exact "that many" ceiling and both arrive tapped (CR 608.2c-d,
+# 701.21a, 701.23b). Two Bot1 Forests supply {G}{G} and three Pearls supply {3} exactly.
+
+[Bot1 Deck]
+Genesis Device
+Black Lotus
+Mox Pearl x4
+Forest
+Forest x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: G)
+Bot1.Hand.Genesis Device.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Search(Forest)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+? Bot1.Mana = {W}{W}{W}{W}{G}
+! Bot1.Battlefield.Genesis Device.Activate(Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+? Bot1.Mana = {W}{W}{W}{G}{G}
+Bot1.Battlefield.Genesis Device.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Bot2.Battlefield.Mountain)
+Bot1.Choose(Forest#1; Forest#2)
+! Bot1.Search(Forest#1; Forest#2; Forest#3)
+Bot1.Search(Forest#1; Forest#2)
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield = Forest; Forest; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Forest#1.Tapped = true
+Bot1.Battlefield.Forest#2.Tapped = true
+Bot1.Graveyard = Forest; Forest; Genesis Device; Black Lotus
+Bot1.Library.Count = 16
+Bot1.Shuffles = 2
+Bot2.Battlefield = Mountain
+Bot2.Shuffles = 0

@@ -1,0 +1,39 @@
+# The "or Planet card" alternative permits an Adagia from Bot1's library; Bot2 has identical Planet cards in its library,
+# which are outside this search (CR 701.23a, 205.3i). The land enters tapped.
+
+[Bot1 Deck]
+Genesis Device
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest x3
+Adagia, Windswept Bastion
+Forest x20
+
+[Bot2 Deck]
+Adagia, Windswept Bastion x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Genesis Device.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Search(Adagia, Windswept Bastion)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Battlefield = Adagia, Windswept Bastion; Genesis Device; Mox Emerald; Mox Pearl; Mox Sapphire
+Bot1.Battlefield.Adagia, Windswept Bastion.Tapped = true
+Bot1.Library.Count = 20
+Bot1.Shuffles = 1
+Bot2.Library.Count = 13
+Bot2.Shuffles = 0

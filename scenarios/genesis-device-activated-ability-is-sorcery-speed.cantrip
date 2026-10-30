@@ -1,0 +1,51 @@
+# The activated ability cannot be used on Bot2's turn, even with the full {3}{G}{G} available; it is offered in Bot1's main
+# phase only (CR 602.5d). The five untapped Moxen make the timing restriction observable independently of mana.
+
+[Bot1 Deck]
+Genesis Device
+Black Lotus
+Mox Emerald x2
+Mox Pearl x3
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: G)
+Bot1.Hand.Genesis Device.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Search(Forest)
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+? Bot1.Mana = {W}{W}{W}{G}{G}
+! Bot1.Battlefield.Genesis Device.Activate
+
+[Expect]
+Turn = 2
+Stack.Count = 0
+Bot1.Battlefield = Forest; Genesis Device; Mox Emerald; Mox Emerald; Mox Pearl; Mox Pearl; Mox Pearl
+Bot1.Battlefield.Genesis Device.Tapped = false
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Mana = {W}{W}{W}{G}{G}
+Bot1.Shuffles = 1
+Bot2.Library.Count = 12
+Bot2.Shuffles = 0

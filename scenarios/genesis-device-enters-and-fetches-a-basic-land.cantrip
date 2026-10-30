@@ -1,0 +1,39 @@
+# The enters trigger searches Bot1's library for one basic land, not the matching Forests in Bot2's library; it may not find
+# the nonland Mox Sapphire (CR 701.23a-b, 205.4c). The found Forest enters tapped before the library is shuffled.
+
+[Bot1 Deck]
+Genesis Device
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest x23
+Mox Sapphire
+
+[Bot2 Deck]
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Genesis Device.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Search(Mox Sapphire)
+Bot1.Search(Forest)
+
+[Expect]
+Turn = 1
+Stack.Count = 0
+Bot1.Battlefield = Forest; Genesis Device; Mox Emerald; Mox Pearl; Mox Sapphire
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Library.Count = 20
+Bot1.Shuffles = 1
+Bot2.Library.Count = 13
+Bot2.Shuffles = 0
