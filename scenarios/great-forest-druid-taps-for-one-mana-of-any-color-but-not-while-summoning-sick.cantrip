@@ -1,0 +1,31 @@
+# "{T}: Add one mana of any color." is a {T} cost on a creature (CR 302.6): the turn Great Forest Druid is cast it cannot be tapped (refusal). Two turns later it can, and the one red mana it adds
+# casts Lightning Bolt with no land tapped (its pool is empty afterwards: a second Bolt cannot be cast from it).
+
+[Bot1 Deck]
+Forest
+Forest
+Great Forest Druid
+Lightning Bolt
+Lightning Bolt
+Forest x11
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Great Forest Druid.Cast
+! Bot1.Battlefield.Great Forest Druid.Activate
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Great Forest Druid.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+
+[Expect]
+Bot2.Life = 17
