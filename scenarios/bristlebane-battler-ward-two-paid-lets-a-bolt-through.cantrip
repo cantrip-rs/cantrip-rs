@@ -1,0 +1,42 @@
+# Bristlebane Battler, "Ward {2}": Bot1 casts the 1/1 Battler. On turn 2 Bot2's three Moxen pay for a Lightning Bolt ({R}) and the ward {2} when asked, so the Bolt
+# resolves and kills it. The neighbouring scenario has one Mox too few.
+
+[Bot1 Deck]
+Black Lotus
+Bristlebane Battler
+Forest x30
+
+[Bot2 Deck]
+Lightning Bolt
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Bristlebane Battler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Bristlebane Battler)
+Bot2.PayCost
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Bristlebane Battler; Black Lotus
+Bot2.Graveyard = Lightning Bolt

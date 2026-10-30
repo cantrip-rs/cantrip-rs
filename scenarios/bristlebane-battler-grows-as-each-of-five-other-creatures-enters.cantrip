@@ -1,0 +1,69 @@
+# Bristlebane Battler (6/6 trample): "This creature enters with five -1/-1 counters on it" (CR 614.1c), so it is a 1/1. "Whenever another creature you control
+# enters while this creature has a -1/-1 counter on it, remove a -1/-1 counter": it entering is not "another" (it stays a 1/1), and each Memnite that enters
+# afterwards takes one counter off, 2/2, 3/3, 4/4, 5/5, 6/6; the sixth Memnite finds no counter on it and the Battler stays 6/6. Bot2's creature entering is not
+# one Bot1 controls: it leaves the Battler as it is. Black Lotus pays {1}{G}.
+
+[Bot1 Deck]
+Black Lotus
+Bristlebane Battler
+Memnite
+Memnite
+Memnite
+Memnite
+Memnite
+Memnite
+Forest x30
+
+[Bot2 Deck]
+Memnite x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Bristlebane Battler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bristlebane Battler.Power = 1
+? Bot1.Battlefield.Bristlebane Battler.Toughness = 1
+? Bot1.Battlefield.Bristlebane Battler.Counters.MinusOneMinusOne = 5
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bristlebane Battler.Power = 2
+? Bot1.Battlefield.Bristlebane Battler.Counters.MinusOneMinusOne = 4
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bristlebane Battler.Power = 3
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bristlebane Battler.Power = 4
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bristlebane Battler.Power = 5
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bristlebane Battler.Power = 6
+? Bot1.Battlefield.Bristlebane Battler.Toughness = 6
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield.Bristlebane Battler.Power = 6
+Bot1.Battlefield.Bristlebane Battler.Toughness = 6
