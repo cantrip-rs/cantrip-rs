@@ -34,3 +34,4 @@ Stack.Count = 0
 Bot1.Battlefield = Forest; Tundra
 Bot1.Battlefield.Tundra.Tapped = true
 Bot1.Graveyard = Scapeshift; Forest; Black Lotus
+Bot1.Shuffles = 1

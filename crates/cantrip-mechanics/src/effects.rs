@@ -492,6 +492,19 @@ pub fn may_discard_a_card(g: &mut dyn Game, item: &StackItem) -> Result<bool, Su
     Ok(!g.discard_together(&[card]).is_empty())
 }
 
+/// "Sacrifice any number of lands, then search your library for up to that many land cards, put them onto the battlefield
+/// tapped, then shuffle" (CR 701.21a, 608.2c-d, 701.23b). The number found is the number actually sacrificed; the search and
+/// shuffle still happen when the player sacrifices none. Scapeshift and Genesis Device print it.
+pub fn sacrifice_any_number_of_lands_for_lands(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let you = item.controller;
+    let lands: Vec<ObjectId> = g.permanents_of(you).into_iter().filter(|&p| g.chars(p).is(CardType::Land)).collect();
+    let chosen = crate::choose::select(g, you, item.object, Purpose::Sacrifice, lands, crate::select::land_cards(crate::select::ANY_NUMBER))?;
+    let sacrificed = g.sacrifice(you, &chosen).len();
+    g.end_sentence();
+    crate::library::find_to_battlefield(g, you, item.object, crate::select::land_cards(crate::select::up_to(sacrificed as u32)), true)?;
+    Ok(())
+}
+
 /// "You may sacrifice a [quality]" (CR 701.21a): the player chooses, as the effect resolves and not as a cost (CR 608.2d), up to
 /// what `rule` allows of their permanents, or none. The engine offers only what the player controls and can sacrifice (CR 101.2),
 /// and nothing is asked when none qualifies. Returns what was actually sacrificed, so "if you do" and "when you do" (CR 608.2c,

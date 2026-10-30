@@ -33,3 +33,4 @@ Stack.Count = 0
 Bot1.Battlefield = Forest; Forest
 Bot1.Graveyard = Scapeshift; Black Lotus
 Bot1.Library.Count = 11
+Bot1.Shuffles = 1

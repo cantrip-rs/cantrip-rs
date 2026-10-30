@@ -55,3 +55,4 @@ Bot1.Battlefield.Plains.Tapped = true
 Bot1.Battlefield.Tundra.Tapped = true
 Bot1.Graveyard = Scapeshift; Forest; Forest
 Bot2.Battlefield = Mountain
+Bot1.Shuffles = 1
