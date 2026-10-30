@@ -850,6 +850,16 @@ pub fn you_cast_a_spell(_: &dyn Query, me: &Asker, event: &Event) -> Option<Fire
     }
 }
 
+/// "Whenever you cast a spell with mana value 4 or greater" (CR 603.2, 601.2i, 202.3): a spell cast, not copied (CR 707.10), by this
+/// permanent's controller, with the mana value it has on the stack - the X chosen for it counts (CR 202.3e). Spider Manifestation,
+/// Kulrath Mystic and Tanufel Rimespeaker print it.
+pub fn you_cast_a_spell_with_mana_value_4_or_greater(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, .. } if *player == me.controller && q.mana_value(*spell) >= 4 => Fired::PLAIN,
+        _ => None,
+    }
+}
+
 /// "Whenever you cast a noncreature spell" (CR 603.2): prowess, Displacer Kitten and Dragon's Rage Channeler print it.
 pub fn noncreature_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
@@ -914,16 +924,6 @@ pub const REPARTEE: Trigger = when_asked(EventMask::SPELL_CAST, repartee);
 pub fn player_casts_noncreature_spell(q: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
     match event {
         Event::SpellCast { spell, player, .. } if !q.chars(*spell).is(CardType::Creature) => Fired::about(Target::Player(*player)),
-        _ => None,
-    }
-}
-
-/// "Whenever you cast a spell with mana value `N` or greater" (CR 603.2, 601.2i, 202.3): a spell cast, not copied (CR 707.10), by
-/// this ability's controller, with the mana value it has on the stack - the X chosen for it counts (CR 202.3e). Spider Manifestation
-/// and Enraged Flamecaster (4) print it.
-pub fn you_cast_a_spell_with_mana_value_at_least<const N: u32>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    match event {
-        Event::SpellCast { spell, player, .. } if *player == me.controller && q.mana_value(*spell) >= N => Fired::PLAIN,
         _ => None,
     }
 }
@@ -1612,6 +1612,8 @@ pub const ENCHANTED_PLAYER_ATTACKED: Trigger = when(EventMask::ATTACKS, enchante
 pub const YOU_ATTACK: Trigger = when_asked(EventMask::ATTACKERS_DECLARED, you_attack);
 pub const INSTANT_OR_SORCERY_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_instant_or_sorcery);
 pub const YOU_CAST_A_SPELL: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_a_spell);
+pub const YOU_CAST_A_SPELL_WITH_MANA_VALUE_4_OR_GREATER: Trigger =
+    when_asked(EventMask::SPELL_CAST, you_cast_a_spell_with_mana_value_4_or_greater);
 pub const NONCREATURE_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, noncreature_spell_you_cast);
 pub const YOU_CAST_A_SPELL_FROM_EXILE: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_a_spell_from_exile);
 pub const THIS_DIES: Trigger = when(EventMask::ZONE_CHANGE, this_dies);
