@@ -1,0 +1,60 @@
+# Hovel Hurler (a 6/7): "This creature enters with two -1/-1 counters on it." and "{R/W}{R/W}, Remove a counter from this creature:
+# Another target creature you control gets +1/+0 and gains flying until end of turn. Activate only as a sorcery." Turn 1 Bot1 casts
+# it (a 4/5) off a Black Lotus and two Moxen. Turns 3 and 5 it pays {R/W}{R/W} and a counter each time to give its Elvish Mystic
+# +1/+0 and flying until end of turn (a 2/1 flyer that turn, a 1/1 again the next), growing to 5/6 and then 6/7. It cannot target itself.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Hovel Hurler
+Elvish Mystic
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hovel Hurler.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hovel Hurler.Power = 4
+? Bot1.Battlefield.Hovel Hurler.Toughness = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hovel Hurler.Power = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Hovel Hurler.Activate(Bot1.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hovel Hurler.Power = 5
+? Bot1.Battlefield.Hovel Hurler.Toughness = 6
+? Bot1.Battlefield.Elvish Mystic.Power = 2
+? Bot1.Battlefield.Elvish Mystic.Toughness = 1
+? Bot1.Battlefield.Elvish Mystic.Keywords = Flying
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Elvish Mystic.Power = 1
+? Bot1.Battlefield.Elvish Mystic.Keywords = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Hovel Hurler.Activate(Bot1.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hovel Hurler.Power = 6
+Bot1.Battlefield.Hovel Hurler.Toughness = 7
+Bot1.Battlefield.Elvish Mystic.Power = 2
