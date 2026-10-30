@@ -373,37 +373,48 @@ impl Query for Reader<'_> {
 /// exile (CR 715.3d), an Omen's shuffle into its owner's library (CR 720.3d) and rebound's exile (CR 702.88a). Each is a
 /// replacement effect (CR 614.1a), ordered by the spell's controller with the others that would change the move (CR 616.1,
 /// `replace`); what follows one - the card on an Adventure, rebound's delayed trigger - follows only if it applied.
-fn leave_stack(cx: &mut Cx, item: &StackItem, reason: ZoneReason) {
-    if item.kind != StackKind::Spell {
-        return;
-    }
-    let obj = *cx.s().obj(item.object);
+///
+/// `items` leave together, as one instruction makes them (CR 608.2c: "counter all spells", `counter_items`): their moves are one
+/// batch, so an ability that triggers on "one or more" of them triggers once (CR 603.2c), and the copies among them cease to
+/// exist at once. Abilities among them are already gone.
+fn leave_stack(cx: &mut Cx, items: &[StackItem], reason: ZoneReason) {
     let resolving = reason == ZoneReason::Resolve;
-    // A copy of a card leaves the stack for nowhere: it ceases to exist (CR 707.10a, 722.3c). A copy of an Omen is an Omen too
-    // (CR 720.3c): resolving, its owner's library is still shuffled, though the copy, in no zone it can be in, is not put there
-    // (CR 707.10a, 704.5e).
-    if obj.card_copy {
-        ops::cease_to_exist(cx, Zone::STACK, item.object);
-        if item.way == WAY_OMEN && resolving {
-            crate::turn::shuffle_library(cx, obj.owner);
+    let mut ceasing = Vec::new();
+    let mut moves = Vec::new();
+    for item in items.iter().filter(|i| i.kind == StackKind::Spell) {
+        let obj = *cx.s().obj(item.object);
+        // A copy of a card leaves the stack for nowhere: it ceases to exist (CR 707.10a, 722.3c). A copy of an Omen is an Omen
+        // too (CR 720.3c): resolving, its owner's library is still shuffled, though the copy, in no zone it can be in, is not
+        // put there (CR 707.10a, 704.5e).
+        if obj.card_copy {
+            ceasing.push((Zone::STACK, item.object));
+            if item.way == WAY_OMEN && resolving {
+                crate::turn::shuffle_library(cx, obj.owner);
+            }
+            continue;
         }
-        return;
+        let def = cx.card(obj.card);
+        // Paradigm (CR 702.192a): "exile this spell" as it resolves, an instruction of the spell; a spell that is countered or
+        // fizzles is not exiled.
+        if def.paradigm.is_some() && resolving {
+            ops::move_to_for(cx, item.object, Zone::exile(obj.owner), reason);
+            continue;
+        }
+        let moving = ops::Moving {
+            adventure: resolving && item.way == WAY_ADVENTURE,
+            omen: resolving && item.way == WAY_OMEN,
+            // "If this spell was cast from your hand" (CR 702.88a).
+            rebound: resolving && def.rebound && obj.cast_from == Some(ZoneKind::Hand),
+            ..ops::Moving::to(item.object, Zone::graveyard(obj.owner))
+        };
+        moves.push(its_own_exile(cx, item, moving, reason));
     }
-    let def = cx.card(obj.card);
-    // Paradigm (CR 702.192a): "exile this spell" as it resolves, an instruction of the spell; a spell that is countered or
-    // fizzles is not exiled.
-    if def.paradigm.is_some() && resolving {
-        ops::move_to_for(cx, item.object, Zone::exile(obj.owner), reason);
-        return;
+    if !ceasing.is_empty() {
+        ops::cease_together(cx, &ceasing);
     }
-    let moving = ops::Moving {
-        adventure: resolving && item.way == WAY_ADVENTURE,
-        omen: resolving && item.way == WAY_OMEN,
-        // "If this spell was cast from your hand" (CR 702.88a).
-        rebound: resolving && def.rebound && obj.cast_from == Some(ZoneKind::Hand),
-        ..ops::Moving::to(item.object, Zone::graveyard(obj.owner))
-    };
-    ops::move_together(cx, &[its_own_exile(cx, item, moving, reason)], reason);
+    if !moves.is_empty() {
+        ops::move_together(cx, &moves, reason);
+    }
 }
 
 /// `moving`, the spell `item`'s move off the stack, with the spell's own replacement effects of that move (CR 614.1a), which
@@ -444,7 +455,7 @@ pub fn resolve(cx: &mut Cx) -> R<Flow> {
                 if let Some(at) = on_stack(cx) {
                     cx.st().stack_remove(at);
                 }
-                leave_stack(cx, &item, ZoneReason::Counter);
+                leave_stack(cx, std::slice::from_ref(&item), ZoneReason::Counter);
                 return Ok(Flow::Done);
             }
             // Gift (CR 702.174b, 702.174j): the chosen opponent gets it before any of the spell's other effects, and
@@ -481,7 +492,7 @@ pub fn resolve(cx: &mut Cx) -> R<Flow> {
                 // Zenith shuffles itself into its library) has left the stack already, and goes nowhere more.
                 if let Some(at) = cx.s().stack.iter().position(|i| i.kind == StackKind::Spell && i.object == item.object) {
                     cx.st().stack_remove(at);
-                    leave_stack(cx, &item, ZoneReason::Resolve);
+                    leave_stack(cx, std::slice::from_ref(&item), ZoneReason::Resolve);
                 }
             } else if cx.s().obj(item.object).card_copy {
                 // A copy of a permanent spell becomes a token as it resolves (CR 707.10f).
@@ -535,7 +546,7 @@ pub fn resolve(cx: &mut Cx) -> R<Flow> {
                 // daybound at night (CR 702.145b) - doesn't enter, and is put into its owner's graveyard instead (CR 304.4,
                 // 307.4).
                 if ops::instant_or_sorcery_entering(cx, item.object, entering.transformed) {
-                    leave_stack(cx, &item, ZoneReason::Resolve);
+                    leave_stack(cx, std::slice::from_ref(&item), ZoneReason::Resolve);
                     let card = cx.s().obj(item.object).card;
                     cx.record(Event::Resolved { source: item.object, ability: AbilityRef::spell(card) });
                     return Ok(Flow::Done);
@@ -626,7 +637,7 @@ pub fn counter_to(cx: &mut Cx, spell: ObjectId, to: CounterTo) {
     let Some(at) = cx.s().stack.iter().position(|i| i.kind == StackKind::Spell && i.object == spell) else {
         return;
     };
-    if cx.chars(spell).keywords.has(Keyword::CantBeCountered) {
+    if !can_be_countered(cx, spell) {
         return;
     }
     cx.emit(Event::Countered { spell });
@@ -666,36 +677,65 @@ fn send_spell(cx: &mut Cx, at: usize, to: CounterTo, reason: ZoneReason) {
 }
 
 pub fn counter(cx: &mut Cx, spell: ObjectId) {
-    let Some(at) = cx.s().stack.iter().position(|i| i.kind == StackKind::Spell && i.object == spell) else {
-        return;
-    };
-    // A spell that can't be countered stays on the stack (CR 101.2, 701.6a).
-    if cx.chars(spell).keywords.has(Keyword::CantBeCountered) || cx.s().obj(spell).marks.cant_be_countered {
-        return;
+    if let Some(at) = cx.s().stack.iter().position(|i| i.kind == StackKind::Spell && i.object == spell) {
+        counter_at(cx, &[at]);
     }
-    // Announced before it leaves the stack: what triggers on a spell being countered looks back on the game as it was just
-    // before (CR 603.10e), the spell still on the stack.
-    cx.emit(Event::Countered { spell });
-    let item = cx.st().stack_remove(at);
-    leave_stack(cx, &item, ZoneReason::Counter);
 }
 
 /// Counters a spell or an ability on the stack (CR 701.6): `hint` is where the item was when it was announced, tried
 /// first so that two items of one source are told apart; a countered ability just ceases to exist.
 pub fn counter_item(cx: &mut Cx, object: ObjectId, hint: usize) {
+    counter_items(cx, &[(object, hint)]);
+}
+
+/// Counters spells and abilities on the stack with one instruction (CR 701.6, 608.2c), each found as `counter_item` finds it:
+/// "counter all spells your opponents control and all abilities your opponents control" (Glen Elendra's Answer), Counterflux's
+/// overloaded "counter each spell you don't control". Returns how many were countered.
+pub fn counter_items(cx: &mut Cx, items: &[(ObjectId, usize)]) -> u32 {
     let stack = &cx.s().stack;
-    let at = if stack.get(hint).is_some_and(|i| i.object == object) {
-        hint
-    } else if let Some(at) = stack.iter().rposition(|i| i.object == object) {
-        at
-    } else {
-        return;
-    };
-    if cx.s().stack[at].kind == StackKind::Spell {
-        counter(cx, object);
-    } else {
-        cx.st().stack_remove(at);
+    let mut at: Vec<usize> = Vec::with_capacity(items.len());
+    for &(object, hint) in items {
+        let found = if stack.get(hint).is_some_and(|i| i.object == object) { Some(hint) } else { stack.iter().rposition(|i| i.object == object) };
+        if let Some(found) = found.filter(|f| !at.contains(f)) {
+            at.push(found);
+        }
     }
+    counter_at(cx, &at)
+}
+
+/// Whether a spell can be countered (CR 101.2, 701.6a): not one that "can't be countered", printed or given (Frenzied Baloth),
+/// nor the one a "the next spell you cast this turn can't be countered" effect marked as it was cast (Mistrise Village).
+fn can_be_countered(cx: &Cx, spell: ObjectId) -> bool {
+    !cx.chars(spell).keywords.has(Keyword::CantBeCountered) && !cx.s().obj(spell).marks.cant_be_countered
+}
+
+/// Counters the items at `at` on the stack together (CR 701.6, 608.2c): what can't be countered stays (CR 101.2, 701.6a); a
+/// countered ability ceases to exist; the countered spells are announced as one batch and leave the stack for their owners'
+/// graveyards in one move (`leave_stack`), so an ability that triggers on "one or more" of either triggers once (CR 603.2c).
+/// Returns how many were countered.
+fn counter_at(cx: &mut Cx, at: &[usize]) -> u32 {
+    let mut at: Vec<usize> = at
+        .iter()
+        .copied()
+        .filter(|&a| {
+            let item = cx.s().stack[a];
+            item.kind != StackKind::Spell || can_be_countered(cx, item.object)
+        })
+        .collect();
+    // Announced before they leave the stack: what triggers on a spell being countered looks back on the game as it was just
+    // before (CR 603.10e), the spells still on the stack.
+    let countered: Vec<Event> =
+        at.iter().map(|&a| cx.s().stack[a]).filter(|i| i.kind == StackKind::Spell).map(|i| Event::Countered { spell: i.object }).collect();
+    match countered.len() {
+        0 => {}
+        1 => cx.emit(countered[0]),
+        _ => cx.emit_batch(&countered, None),
+    }
+    // Taken off from the top down, so the places below stay where they were found.
+    at.sort_unstable_by(|a, b| b.cmp(a));
+    let leaving: Vec<StackItem> = at.iter().map(|&a| cx.st().stack_remove(a)).collect();
+    leave_stack(cx, &leaving, ZoneReason::Counter);
+    leaving.len() as u32
 }
 
 #[cfg(test)]

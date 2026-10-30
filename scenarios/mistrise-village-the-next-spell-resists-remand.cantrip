@@ -1,0 +1,47 @@
+# Bot1 activates Mistrise Village ("The next spell you cast this turn can't be countered") and casts Lightning Bolt at Bot2,
+# who answers with Remand. The Bolt can't be countered (CR 101.2), so it is neither countered nor returned to Bot1's hand
+# (CR 701.6a: the move is part of the countering): it resolves and deals 3. Remand still draws Bot2 a card.
+
+[Bot1 Deck]
+Forest
+Mox Sapphire
+Mox Ruby
+Mistrise Village
+Lightning Bolt
+Forest x10
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Remand
+Island x12
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mistrise Village.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mistrise Village.Activate(Ability: next spell)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Remand.Cast(Stack.Lightning Bolt)
+? Stack = Remand; Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt
+Bot2.Graveyard = Remand
+Bot2.Hand.Count = 6

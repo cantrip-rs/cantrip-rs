@@ -1172,6 +1172,12 @@ pub trait Game: Query {
     fn remove_spell(&mut self, spell: ObjectId, to: CounterTo);
     /// Counters whatever spell or ability of `object` is on the stack (CR 701.6), at `hint` if it is still there.
     fn counter_item(&mut self, object: ObjectId, hint: usize);
+    /// Counters several spells and abilities with one instruction (CR 701.6, 608.2c), each `(object, hint)` found as
+    /// [`Game::counter_item`] finds it: the spells go to their owners' graveyards together, so an ability that triggers on "one
+    /// or more" of them triggers once (CR 603.2c). Glen Elendra's Answer ("counter all spells your opponents control and all
+    /// abilities your opponents control"), Counterflux overloaded ("counter each spell you don't control"). What can't be
+    /// countered stays (CR 101.2); returns how many were countered.
+    fn counter_items(&mut self, items: &[(ObjectId, usize)]) -> u32;
     fn reveal(&mut self, player: PlayerId, cards: &[ObjectId]);
     /// Whether target `slot` of the resolving item is still legal (CR 608.2b).
     fn target_legal(&self, item: &StackItem, slot: usize) -> bool;

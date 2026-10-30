@@ -2414,6 +2414,10 @@ impl cantrip_api::Game for Cx<'_> {
         resolve::counter_item(self, object, hint);
     }
 
+    fn counter_items(&mut self, items: &[(ObjectId, usize)]) -> u32 {
+        resolve::counter_items(self, items)
+    }
+
     fn reveal(&mut self, player: PlayerId, cards: &[ObjectId]) {
         for &card in cards {
             self.emit(Event::Revealed { player, card });
