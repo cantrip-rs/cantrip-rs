@@ -1,0 +1,39 @@
+# Bot1's earlier Memnite means First Contact gains no life; declining leaves the milled permanent in the graveyard.
+[Bot1 Deck]
+Memnite
+First Contact
+Forest
+Forest
+Island x3
+Mountain
+Lightning Bolt
+Plains
+Counterspell
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.First Contact.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Life = 20
+Bot1.Hand = Island; Island; Island; Lightning Bolt; Mountain
+Bot1.Graveyard = First Contact; Island; Ornithopter; Counterspell; Plains
+Bot1.Library.Count = 9
+
+

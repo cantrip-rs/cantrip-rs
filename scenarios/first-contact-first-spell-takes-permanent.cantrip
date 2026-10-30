@@ -1,0 +1,42 @@
+# Bot2's earlier spell doesn't count for Bot1. Bot1's first spell mills four, takes a permanent, and gains 2 life.
+[Bot1 Deck]
+First Contact
+Forest
+Forest
+Island x4
+Mountain
+Lightning Bolt
+Plains
+Counterspell
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Memnite
+Island x6
+Plains
+Plains
+Island x10
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.First Contact.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+
+[Expect]
+Bot1.Life = 22
+Bot1.Hand = Island; Island; Island; Island; Mountain; Plains
+Bot1.Graveyard = First Contact; Ornithopter; Counterspell; Lightning Bolt
+Bot1.Library.Count = 10
+Bot2.Library.Count = 11
+
+

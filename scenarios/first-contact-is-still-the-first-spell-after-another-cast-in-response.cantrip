@@ -1,0 +1,37 @@
+# "If this spell is the first spell you've cast this game, you gain 2 life": Bot1's First Contact is its first spell, and
+# Bot1 then casts Lightning Bolt in response. The Bolt is the second spell; when First Contact resolves it is still the
+# first spell Bot1 cast this game (CR 601.2i), so Bot1 gains 2 life.
+
+[Bot1 Deck]
+First Contact
+Forest
+Forest
+Mountain
+Lightning Bolt
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.First Contact.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 22
