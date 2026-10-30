@@ -1,0 +1,11 @@
+{
+  "name": "Aurora Awakener",
+  "manaCost": "{6}{G}",
+  "type": "Creature — Giant Druid",
+  "power": 7,
+  "toughness": 7,
+  "oracleText": "Trample\nVivid — When this creature enters, reveal cards from the top of your library until you reveal X permanent cards, where X is the number of colors among permanents you control. Put any number of those permanent cards onto the battlefield, then put the rest of the revealed cards on the bottom of your library in a random order.",
+  "keywords": [
+    "Trample"
+  ]
+}

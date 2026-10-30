@@ -1,0 +1,59 @@
+# Aurora Awakener: "Vivid -- When this creature enters, reveal cards from the top of your library until you reveal X permanent cards, where X is the number of colors among
+# permanents you control. Put any number of those permanent cards onto the battlefield, then put the rest [...] on the bottom." Bot1 pays {6}{G} with Black Lotus and four
+# Moxen; the green Awakener is the only colored permanent, so X is 1. The top of the library is a Lightning Bolt (revealed, not a permanent card) and a Mox Sapphire, the
+# first permanent card: the reveal stops there, and Bot1 puts the Sapphire onto the battlefield (the Bolt, not a permanent card, cannot go with it). The revealed Bolt went to the bottom, so the Memnite under them is what Bot1
+# draws on turn 3 and casts.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Aurora Awakener
+Lightning Bolt
+Lightning Bolt
+Mox Sapphire
+Memnite
+Island x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aurora Awakener.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Lightning Bolt)
+Bot1.Choose(Mox Sapphire)
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Revealed = Lightning Bolt; Mox Sapphire
+Bot1.Battlefield.Count = 7
+Bot1.Hand.Count = 1

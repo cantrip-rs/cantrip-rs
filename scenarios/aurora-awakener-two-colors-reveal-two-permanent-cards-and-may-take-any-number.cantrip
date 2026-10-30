@@ -1,0 +1,61 @@
+# Aurora Awakener: "reveal cards from the top of your library until you reveal X permanent cards [...] Put any number of those permanent cards onto the battlefield." With a white Savannah
+# Lions and the green Awakener, X is 2. Bot1 pays {6}{G} on turn 3 with Black Lotus and Moxen. The library: a Lightning Bolt (revealed, not a permanent card), a Memnite, a Bolt, an Island
+# (the second permanent card, where the reveal stops). Of the two permanent cards, Bot1 takes both: Memnite and Island enter together.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Mox Pearl
+Savannah Lions
+Aurora Awakener
+Mox Sapphire
+Lightning Bolt
+Memnite
+Lightning Bolt
+Island
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aurora Awakener.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite; Island)
+
+[Expect]
+Bot1.Revealed = Lightning Bolt; Memnite; Lightning Bolt; Island
+Bot1.Battlefield.Count = 9
