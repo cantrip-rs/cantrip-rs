@@ -1,0 +1,32 @@
+# Kirol, Attentive First-Year: "Copy target triggered ability you control." Bot1's own Mishra's Bauble ability is on the stack, but it
+# is an activated ability, not a triggered one (CR 113.3b-c), so Kirol can't target it although Bot1 has the two untapped creatures
+# (Kirol and an Ornithopter) to pay with.
+
+[Bot1 Deck]
+Black Lotus
+Kirol, Attentive First-Year
+Ornithopter
+Mishra's Bauble
+Swamp x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mishra's Bauble.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Kirol, Attentive First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mishra's Bauble.Activate(Bot2)
+! Bot1.Battlefield.Kirol, Attentive First-Year.Activate(Stack.Mishra's Bauble)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Mishra's Bauble; Black Lotus
+Bot1.Battlefield.Kirol, Attentive First-Year.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = false

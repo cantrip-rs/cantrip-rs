@@ -1,0 +1,58 @@
+# Kirol, Attentive First-Year (a 3/3): "Tap two untapped creatures you control: Copy target triggered ability you control. You may choose
+# new targets for the copy. Activate only once each turn." Turn 1 Bot1 casts Kirol and an Ornithopter; Bot2 casts two Ornithopters on
+# turn 2. On turn 3 Bot1 casts Flametongue Kavu (its enters trigger aims 4 damage at one of Bot2's Ornithopters), taps the Ornithopter and
+# the summoning-sick Kavu to pay for Kirol's ability and copies the trigger with the other Ornithopter as its target: both die.
+
+[Bot1 Deck]
+Black Lotus
+Kirol, Attentive First-Year
+Ornithopter
+Mox Ruby
+Mox Pearl
+Mox Jet
+Flametongue Kavu
+Mox Sapphire
+Swamp x12
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Kirol, Attentive First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flametongue Kavu.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter#1)
+Bot1.Battlefield.Kirol, Attentive First-Year.Activate(Stack.Flametongue Kavu)
+Bot1.Choose(Ornithopter; Flametongue Kavu)
+Bot1.Target(Bot2.Battlefield.Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = 
+Bot2.Graveyard = Ornithopter; Ornithopter
+Bot1.Battlefield.Kirol, Attentive First-Year.Tapped = false

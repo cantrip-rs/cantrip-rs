@@ -1,0 +1,8 @@
+{
+  "name": "Kirol, Attentive First-Year",
+  "manaCost": "{1}{R/W}{R/W}",
+  "type": "Legendary Creature — Vampire Cleric",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Tap two untapped creatures you control: Copy target triggered ability you control. You may choose new targets for the copy. Activate only once each turn."
+}

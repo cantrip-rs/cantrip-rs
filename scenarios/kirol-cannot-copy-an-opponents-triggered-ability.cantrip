@@ -1,0 +1,68 @@
+# Kirol, Attentive First-Year: "Copy target triggered ability you control". Turn 3 Bot1's Flametongue Kavu kills one of Bot2's
+# Ornithopters. Turn 4 Bot2 casts Deepway Navigator: its enters trigger is on the stack, but it is Bot2's, so Kirol can't copy it
+# although Bot1 has the untapped creatures to pay with (Kirol, its Ornithopter and the Kavu) and hasn't used Kirol this turn.
+
+[Bot1 Deck]
+Black Lotus
+Kirol, Attentive First-Year
+Ornithopter
+Mox Ruby
+Mox Pearl
+Mox Jet
+Flametongue Kavu
+Mox Sapphire
+Swamp x12
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Deepway Navigator
+Ornithopter
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Kirol, Attentive First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flametongue Kavu.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Deepway Navigator.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot1.Battlefield.Kirol, Attentive First-Year.Activate(Stack.Deepway Navigator)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Flametongue Kavu.Tapped = false
+Bot1.Battlefield.Kirol, Attentive First-Year.Tapped = false
