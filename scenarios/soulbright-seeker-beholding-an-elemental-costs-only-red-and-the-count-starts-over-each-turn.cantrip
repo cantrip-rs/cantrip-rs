@@ -1,0 +1,43 @@
+# Soulbright Seeker (CR 601.2b, 701.4a, 608.2m): cast beholding the Regathan Firecat on the battlefield instead of paying {2}, so
+# it costs only {R} (3 + 1 of the 6 mana: RR is left). Two activations this turn; next turn the count starts again
+# from none - the two of last turn do not make this turn's first the third, so no mana is added.
+[Bot1 Deck]
+Black Lotus x2
+Regathan Firecat
+Soulbright Seeker
+Mountain x2
+Mountain x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Regathan Firecat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Soulbright Seeker.Cast
+Bot1.Modes(Behold an Elemental)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}
+Bot1.Battlefield.Soulbright Seeker.Activate(Bot1.Battlefield.Regathan Firecat)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Regathan Firecat.Keywords = Trample
+Bot1.Battlefield.Soulbright Seeker.Activate(Bot1.Battlefield.Soulbright Seeker)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Soulbright Seeker.Activate(Bot1.Battlefield.Soulbright Seeker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield = Soulbright Seeker; Regathan Firecat; Mountain

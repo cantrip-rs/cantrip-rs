@@ -1,0 +1,42 @@
+# Soulbright Seeker (CR 601.2b, 608.2m, 611.2a, 106.4): cast paying {2} instead of beholding an Elemental. Its {R} ability gives a
+# creature trample until end of turn; the third time it has resolved this turn it also adds {R}{R}{R}{R}. The first two add
+# nothing (the pool is empty after each), the third leaves RRRR, and the fourth - paid from those - leaves RRR and adds nothing.
+[Bot1 Deck]
+Black Lotus x2
+Soulbright Seeker
+Mountain x3
+Mountain x10
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Soulbright Seeker.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}{R}
+Bot1.Battlefield.Soulbright Seeker.Activate(Bot1.Battlefield.Soulbright Seeker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Soulbright Seeker.Keywords = Trample
+? Bot1.Mana = {R}{R}
+Bot1.Battlefield.Soulbright Seeker.Activate(Bot1.Battlefield.Soulbright Seeker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}
+Bot1.Battlefield.Soulbright Seeker.Activate(Bot1.Battlefield.Soulbright Seeker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}{R}{R}
+Bot1.Battlefield.Soulbright Seeker.Activate(Bot1.Battlefield.Soulbright Seeker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}{R}{R}
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield = Soulbright Seeker
