@@ -65,6 +65,16 @@ pub struct Session {
     undoable: Undo<Told>,
     /// A scenario being played at this table (`Session::scenario`), or none for a game dealt from decks.
     scenario: Option<Scenario>,
+    /// The game as a viewer who is no player sees it (`PUBLIC`), for an in-person table's shared boards
+    /// (docs/in-person.md), or none: nothing of it is worked out unless the game was dealt with it (`Session::show_public`).
+    public: Option<PublicSide>,
+}
+
+/// The public's side of a game: its own handle space, and the view it was last sent, which it keeps while any seat's run is
+/// in progress (`deferred`), since no run is ever its to see.
+struct PublicSide {
+    handles: HandleSpace,
+    sent: Option<PlayerView>,
 }
 
 /// A `.cantrip` scenario played at a table (docs/scenarios-in-the-browser.md): the script answers for every seat but the
@@ -88,6 +98,8 @@ struct Told {
     /// Each seat's handles: a sacrificed permanent's handle moved to the card in the graveyard, which taking it back
     /// unmakes.
     handles: Vec<HandleSpace>,
+    /// The public's handles, when the game has a public view.
+    public: Option<HandleSpace>,
     published: usize,
     /// The sequences of the entries told of it.
     told: std::ops::Range<u64>,
@@ -221,6 +233,7 @@ impl Session {
             sent: vec![None; seats],
             undoable: Undo::default(),
             scenario: None,
+            public: None,
             game,
         };
         // A first player named outright is not asked: the question is answered as it is posed.
@@ -273,10 +286,17 @@ impl Session {
                 checks: Vec::new(),
                 verdict: None,
             }),
+            public: None,
             game,
         };
         session.play_scenario();
         Ok(session)
+    }
+
+    /// The game is projected for the public too (`PUBLIC`) from its first step on: each step carries `Public`, its view,
+    /// events and the map from its handles to each seat's (docs/host-protocol.md). Said as the game is dealt, before it starts.
+    pub fn show_public(&mut self) {
+        self.public = Some(PublicSide { handles: HandleSpace::new(), sent: None });
     }
 
     /// A table for a game already under way: a test's way into a position over cards no deal holds (test cards beside the
@@ -298,6 +318,7 @@ impl Session {
             sent: vec![None; seats],
             undoable: Undo::default(),
             scenario: None,
+            public: None,
             game,
         }
     }
@@ -375,7 +396,7 @@ impl Session {
             Intent::Answer(a) => Some(Undo::<Told>::before(&self.game, request.player, a)),
             Intent::Undo => None,
         };
-        let kept = noted.as_ref().filter(|n| n.is_mana()).map(|_| (self.tracker.clone(), self.handles.clone(), self.published));
+        let kept = noted.as_ref().filter(|n| n.is_mana()).map(|_| self.kept());
         let scenario = self.scenario.as_mut().expect("a scenario");
         std::mem::swap(&mut self.game, scenario.scripted.game());
         let given = scenario.scripted.answered(intent);
@@ -389,21 +410,15 @@ impl Session {
         if undo {
             // The script's game went back already; the table's handles, tracking and told events follow it.
             if let Some(told) = self.undoable.take_back(&mut self.game, request.player) {
-                self.tracker = told.tracker;
-                for (space, earlier) in self.handles.iter_mut().zip(told.handles) {
-                    space.restore(earlier);
-                }
-                self.published = told.published;
-                if !told.told.is_empty() {
-                    self.told.push(Proto::Retracted { sequences: told.told.collect() });
-                }
+                self.taken_back(told);
             }
         } else if let Some(noted) = noted
             && self.undoable.may_take_back(&self.game, &noted)
-            && let Some((tracker, handles, published)) = kept
+            && let Some(mut kept) = kept
         {
             let first = self.sequence + 1 + self.told.len() as u64;
-            self.undoable.push(noted, Told { tracker, handles, published, told: first..first });
+            kept.told = first..first;
+            self.undoable.push(noted, kept);
             pushed = true;
         }
         self.play_scenario();
@@ -537,6 +552,7 @@ impl Session {
             seat_events.insert(seat(p).to_string(), numbered);
             views.insert(seat(p).to_string(), self.view_for(p, &mentioned));
         }
+        let public = self.public_step(&protos, &revealed, base);
         self.sequence = base + protos.len() as u64;
 
         let mut requests = Vec::new();
@@ -581,7 +597,57 @@ impl Session {
         if let Some(scenario) = self.scenario_step() {
             step["Scenario"] = scenario;
         }
+        if let Some(public) = public {
+            step["Public"] = public;
+        }
         step
+    }
+
+    /// The public's part of a step, when the game has a public view: what it is told of `protos` (numbered from `base` as
+    /// every seat's copy is), its view - the one it was last sent while any seat's run is in progress, as no run is its to
+    /// see - and, by seat, each of its handles for an object that seat names by a handle of its own now, with that handle.
+    /// It is shown what was revealed (`revealed`) and nothing else: no look, no request names anything to it.
+    fn public_step(&mut self, protos: &[Proto], revealed: &HashSet<ObjectId>, base: u64) -> Option<Value> {
+        let side = self.public.as_mut()?;
+        let mut teller = Teller { game: &self.game, viewer: PUBLIC, handles: &mut side.handles, extra: revealed, mentioned: HashSet::new() };
+        let mut events = Vec::new();
+        for (i, proto) in protos.iter().enumerate() {
+            if let Some(event) = teller.tell(proto) {
+                let mut value = serde_json::to_value(&event).expect("an event serialises");
+                if let Value::Object(map) = &mut value {
+                    map.insert("Sequence".into(), json!(base + 1 + i as u64));
+                }
+                events.push(value);
+            }
+        }
+        let mentioned = teller.mentioned;
+        let view = match &side.sent {
+            Some(sent) if deferred(&self.game, PUBLIC) => sent.clone(),
+            _ => {
+                let view = player_view(&self.game, PUBLIC, &mut side.handles, &self.names, &self.conceded, revealed, revealed, &mentioned);
+                side.sent = Some(view.clone());
+                view
+            }
+        };
+        let s = &self.game.state;
+        let entries = stack_entries(s);
+        let named = side.handles.named();
+        let mut map = serde_json::Map::new();
+        for p in s.seats() {
+            let space = &self.handles[p.index()];
+            let pairs: Vec<Value> = named
+                .iter()
+                .filter(|&&(_, id)| {
+                    if is_ability_key(id) { entries.iter().any(|e| e.key() == id) } else { id.index() < s.objects.len() && live(s, id) }
+                })
+                .filter_map(|&(public, id)| {
+                    let theirs = space.existing(id);
+                    (!theirs.is_none() && space.object(theirs) == Some(id)).then(|| json!([public.0, theirs.0]))
+                })
+                .collect();
+            map.insert(seat(p).to_string(), Value::Array(pairs));
+        }
+        Some(json!({ "View": view, "Events": events, "Handles": map }))
     }
 
     pub fn answer(&mut self, request_id: u32, seat_number: i32, payload: &AnswerPayload) -> Result<Value, Rejection> {
@@ -606,7 +672,7 @@ impl Session {
         })?;
 
         let noted = Undo::<Told>::before(&self.game, request.player, &answer);
-        let kept = noted.is_mana().then(|| (self.tracker.clone(), self.handles.clone(), self.published));
+        let kept = noted.is_mana().then(|| self.kept());
         let before = self.game.clone();
         let outcome = std::panic::catch_unwind(AssertUnwindSafe(|| self.game.answer(request.id, request.player, answer.clone())));
         match outcome {
@@ -619,10 +685,11 @@ impl Session {
             }
         }
         if self.undoable.may_take_back(&self.game, &noted)
-            && let Some((tracker, handles, published)) = kept
+            && let Some(mut kept) = kept
         {
             let first = self.sequence + 1 + self.told.len() as u64;
-            self.undoable.push(noted, Told { tracker, handles, published, told: first..first });
+            kept.told = first..first;
+            self.undoable.push(noted, kept);
             let step = self.step();
             if let Some(told) = self.undoable.last_kept() {
                 told.told.end = self.sequence + 1;
@@ -740,15 +807,36 @@ impl Session {
         let Some(told) = self.undoable.take_back(&mut self.game, player) else {
             return Err(Rejection::new("IllegalAnswer", "there is no mana ability to take back"));
         };
+        self.taken_back(told);
+        Ok(self.step())
+    }
+
+    /// What a mana ability that can be taken back keeps of the table as it was before it (`Told`), its told entries still
+    /// to be counted.
+    fn kept(&self) -> Told {
+        Told {
+            tracker: self.tracker.clone(),
+            handles: self.handles.clone(),
+            public: self.public.as_ref().map(|p| p.handles.clone()),
+            published: self.published,
+            told: 0..0,
+        }
+    }
+
+    /// The table goes back to what a mana ability taken back kept of it: the tracking, every seat's handles and the public's,
+    /// and how far the log was published; what was told of it is retracted.
+    fn taken_back(&mut self, told: Told) {
         self.tracker = told.tracker;
         for (space, earlier) in self.handles.iter_mut().zip(told.handles) {
             space.restore(earlier);
+        }
+        if let (Some(public), Some(earlier)) = (self.public.as_mut(), told.public) {
+            public.handles.restore(earlier);
         }
         self.published = told.published;
         if !told.told.is_empty() {
             self.told.push(Proto::Retracted { sequences: told.told.collect() });
         }
-        Ok(self.step())
     }
 
     /// The game ends from outside its rules (`Game::end`): won by the seat `winner`, or a draw for none - a draw the players

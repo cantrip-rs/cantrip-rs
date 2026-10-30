@@ -15,6 +15,7 @@ Requests and replies (a reply is `{"Ok": {...}}` or `{"Rejected": {"Code": "..."
 | --- | --- |
 | `{"Cmd":"NewGame","Seats":[{"Name":"Alice","Deck":["Island", ...],"Sideboard":["Negate", ...],"Companion":"Lurrus of the Dream-Den"}, ...],"Seed":123,"Shuffle":true,"FirstPlayer":1,"Chooser":null,"BasicLandsOutside":[],"MinimumDeckSize":60}` | `{"GameId":1,"Decklists":{"1":[ObjectView, ...], ...}}` - decks are card names, top first when unshuffled; `Sideboard` is the cards the seat owns outside the game (CR 100.4, 400.11a), which only that seat sees (`ZoneKindView.Sideboard`, a zone per seat in each view) and which a card that brings one into the game chooses among (North Wind Avatar); `Companion` (or null) is the seat's companion chosen at deck building, dealt into its sideboard and revealed before the game (below); `BasicLandsOutside` gives a Limited game's sideboards any number of those basic lands; `MinimumDeckSize` is the format's minimum deck size, which the server says from the table's format (CR 100.2a-b) and a deal without is `Rejected` with `InvalidSetup`; `FirstPlayer` fixes who goes first, `Chooser` asks that seat instead (CR 103.1); a printed `ObjectView` per deck card, in deck order, for the welcome. A card the engine has not ported, in a deck or a sideboard, is `Rejected` with `InvalidSetup`, naming it, as is a deal of fewer than two seats or more than eight (`MAX_SEATS`) |
 | `{"Cmd":"NewGame","Seats":[{"Name":"You","Deck":[]}, ...],"Seed":1,"Scenario":{"Name":"...","Text":"...","Driven":[1]}}` | the same: a table playing a `.cantrip` scenario, its decks, order and dice the scenario's; the `Driven` seats are answered by the table and every other by the script, and each step carries a `Scenario` object (`docs/scenarios-in-the-browser.md`) |
+| `{"Cmd":"NewGame", ..., "Public":true}` | the same, either kind of deal: every step also carries a `Public` object, the game as a viewer who is no player sees it ("The public view", below). Without it, or with `false`, nothing of that is worked out |
 | `{"Cmd":"Start","GameId":1}` | a step |
 | `{"Cmd":"Answer","GameId":1,"RequestId":7,"Seat":1,"Answer":{AnswerPayload}}` | a step, or `Rejected` with `IllegalAnswer`, `StaleReply`, `UnknownHandle` or `NotYourTurnToAnswer`, after which the request is still outstanding |
 | `{"Cmd":"Check","GameId":1,"RequestId":7,"Seat":1,"Selected":[12, 15]}` | `{"Complete":true,"Addable":[18, 21]}` - what the rule of the outstanding choice of cards says of a partial selection (below); nothing advances. `Rejected` with `StaleReply`, `NotYourTurnToAnswer`, `UnknownHandle`, or `IllegalAnswer` for a question that picks no cards |
@@ -47,6 +48,28 @@ request may carry a `"Presentation"` (`PromptPresentationContext`); without one 
 prompt and the seat's view. Seats are numbered from one. A game is resumed the way it always was: a fresh `NewGame` with
 the same seed and decks, `Start`, and the recorded answers sent again in order, so the host is deterministic for a seed
 and nothing in it is a snapshot.
+
+**The public view.** A game dealt with `"Public":true` (`NativeRulesHostFactory.PublicView`, for in-person play's tablets:
+`docs/in-person.md`) is projected each step for a viewer who is no player, `PUBLIC` in `cantrip-engine`'s `visibility.rs`,
+with a handle space of its own:
+
+```
+"Public":{"View":{PlayerView},"Events":[GameEventView, ...],"Handles":{"1":[[5,12],[6,3], ...],"2":[...]}}
+```
+
+The public sees as no player (`GameState::sees_as` is false for it): what every player may see and nothing any one of them
+alone may. Its `View` has `Viewer` 0 and holds no hand, no sideboard and no library card - not the top a player may look at
+(CR 401.2), not a hand a player controlling another sees (CR 723.4) - and no question names anything to it. A face-down
+permanent or spell is a nameless 2/2 to it while its controller knows it, until the game is over (CR 708.5, 708.9); a face-down
+card elsewhere is known to it only once every player still in the game has seen it (CR 406.3). A card revealed (CR 701.20a) is
+shown to it the step it is revealed; a card looked at (CR 701.20e) is not: it hears that the look happened, naming nothing. While
+any seat's run is in progress the public keeps the view it was last sent, as an opponent does, and hears nothing of the run.
+Its `Events` carry the same `Sequence` numbers as every seat's copy, and a mana ability taken back restores its handles as it
+does a seat's, the retraction told to it too. `Handles` is, by seat, each public handle of an object that seat names by a
+handle of its own now, with that handle: `[public, seat]`. An object that no longer exists, has become another (CR 400.7), or
+that the seat does not see or names by another handle has no pair. `NativeRulesHost` reads it into `RulesStep.Public`
+(`PublicProjection`), the view's objects stamped with their fingerprints as a seat's view is before it is sent, and a resumed
+game's public part holds every event of the replay as each seat's does; `GameSession` ignores it.
 
 Each option of a priority, pay-costs or unless-pays prompt carries an `OptionId`, its place among the question's options
 from 1, and a `TakeActionAnswer` echoes it. Two options may be alike in `Kind`, `Source` and `AbilityIndex` - a card two

@@ -54,6 +54,13 @@ impl HandleSpace {
         self.by_handle.get(&handle).copied()
     }
 
+    /// Every handle the viewer holds, with the object it names now, in handle order.
+    pub fn named(&self) -> Vec<(ViewHandle, ObjectId)> {
+        let mut out: Vec<(ViewHandle, ObjectId)> = self.by_handle.iter().map(|(&h, &o)| (h, o)).collect();
+        out.sort_by_key(|&(h, _)| h.0);
+        out
+    }
+
     /// The viewer's handle for `old` now names `new`, the object it became.
     pub fn rebind(&mut self, old: ObjectId, new: ObjectId) {
         if let Some(&h) = self.by_object.get(&old) {

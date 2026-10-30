@@ -210,6 +210,72 @@ public sealed class NativeHostGameTests
         }
     }
 
+    /// <summary>
+    /// A game dealt with a public view (<see cref="NativeRulesHostFactory.PublicView"/>) through the real host, played to the
+    /// end by seats that play a land when they may and otherwise give the simplest answer: every step carries the public part,
+    /// a view that is no seat's and shows no hand or library, each object stamped; its events are numbered as the seats' are;
+    /// and each pair of its handle map names, for that seat, the same card in the same zone.
+    /// </summary>
+    [Fact]
+    public void A_public_view_comes_with_every_step_of_a_whole_game_through_the_real_host()
+    {
+        string binary = NativeHostProcess.Locate();
+        if (!File.Exists(binary))
+        {
+            _output.WriteLine($"Skipped: no cantrip-native-host at {binary}.");
+            return;
+        }
+
+        using var process = NativeHostProcess.Start(binary);
+        RulesSeat[] seats =
+        [
+            new("Alice", [.. Copies("Mountain", 20), .. Copies("Lightning Bolt", 10), .. Copies("Llanowar Elves", 10)]),
+            new("Bob", [.. Copies("Forest", 20), .. Copies("Goblin Engineer", 20)]),
+        ];
+        using IRulesHost game = new NativeRulesHostFactory(process) { PublicView = true }
+            .Create(seats, 20261030, new RulesGameOptions { MinimumDeckSize = 40, FirstPlayer = 1 });
+
+        RulesStep step = game.Start();
+        int steps = 0;
+        int paired = 0;
+        while (true)
+        {
+            PublicProjection shown = Assert.IsType<PublicProjection>(step.Public);
+            Assert.Equal(0, shown.View.Viewer);
+            Assert.All(shown.View.Zones.Where(zone => zone.Kind is ZoneKindView.Hand or ZoneKindView.Library), zone => Assert.Empty(zone.Contents));
+            Assert.All(shown.View.Objects, item => Assert.NotEqual(0, item.Fingerprint));
+            HashSet<long> told = [.. step.Events.Values.SelectMany(events => events.Select(e => e.Sequence))];
+            Assert.All(shown.Events, e => Assert.Contains(e.Sequence, told));
+            foreach ((int seat, IReadOnlyDictionary<ViewHandle, ViewHandle> map) in shown.Handles)
+            {
+                foreach ((ViewHandle mine, ViewHandle theirs) in map)
+                {
+                    if (shown.View.Objects.FirstOrDefault(o => o.Handle == mine) is { } a
+                        && step.Views[seat].Objects.FirstOrDefault(o => o.Handle == theirs) is { } b)
+                    {
+                        Assert.Equal((a.Name, a.Zone, a.Controller), (b.Name, b.Zone, b.Controller));
+                        paired++;
+                    }
+                }
+            }
+
+            if (step.Finished)
+            {
+                break;
+            }
+
+            Assert.True(++steps < 20_000, "The game did not end.");
+            RulesRequest request = step.Requests[0];
+            AnswerPayload answer = request.Prompt is PriorityPromptMessage priority
+                && priority.Options.FirstOrDefault(option => option.Kind == ActionKindView.PlayLand) is { } land
+                ? TakeActionAnswer.Take(land)
+                : request.Prompt.Default();
+            step = game.Answer(request.RequestId, request.Seat, answer);
+        }
+
+        Assert.True(paired > 0, "No public object was ever paired with a seat's.");
+    }
+
     private static IEnumerable<string> Copies(string card, int count) => Enumerable.Repeat(card, count);
 
     /// <summary>

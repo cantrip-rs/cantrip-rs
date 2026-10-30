@@ -12,6 +12,13 @@ use std::collections::HashSet;
 
 use crate::*;
 
+/// The viewer who is no player: the public, as an in-person table's shared board shows the game (docs/in-person.md). It
+/// sees what every player may see and nothing any one of them alone may: it sees as no player (`GameState::sees_as` is
+/// false for it), so it looks into no hand and no library, and a run in progress is never its to see (`deferred`). No
+/// per-player structure is ever indexed by it: a seat's handles, events and views are kept by seat, and the public's
+/// beside them.
+pub const PUBLIC: PlayerId = PlayerId(u8::MAX);
+
 /// The key an ability on the stack has in a handle space: abilities are no objects of the engine, but a client points
 /// at one (to target it, to order it), so each is named by the serial it was put on the stack with.
 pub fn ability_key(serial: u32) -> ObjectId {
@@ -121,7 +128,20 @@ pub fn observable(game: &Game, viewer: PlayerId, extra: &HashSet<ObjectId>) -> H
 /// the stack (a face-down spell, CR 708.4), those who saw it go there anywhere else - and the player controlling any of them (CR 723.4). True of an object that is
 /// face up. Every seat once the game is over, which reveals every face-down permanent and spell (CR 708.9, `ops::end_game`);
 /// one revealed as its owner left the game was seen by every seat as it ceased to exist (`ops::leave_game`).
+///
+/// The public (`PUBLIC`) knows a face-down permanent or spell only once the game is over, and a face-down card elsewhere
+/// only when every player still in the game saw it (CR 406.3): what no player is hiding.
 pub fn knows_face(state: &GameState, viewer: PlayerId, id: ObjectId) -> bool {
+    if viewer == PUBLIC {
+        let obj = state.obj(id);
+        if !obj.face_down {
+            return true;
+        }
+        if obj.zone.is(ZoneKind::Battlefield) || obj.zone.is(ZoneKind::PhasedOut) || obj.zone.is(ZoneKind::Stack) {
+            return state.is_over();
+        }
+        return state.apnap().all(|p| obj.seen_by & (1 << p.0) != 0);
+    }
     knows_face_as(state, id, |p| state.sees_as(viewer, p))
 }
 

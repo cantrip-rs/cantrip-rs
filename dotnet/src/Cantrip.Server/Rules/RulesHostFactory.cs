@@ -100,12 +100,13 @@ public sealed class NativeRulesHostFactory : IRulesHostFactory
 
     /// <summary>
     /// Whether each game dealt also projects the position for a viewer who is no player (<see cref="RulesStep.Public"/>),
-    /// for in-person play's tablets (docs/in-person.md). Ignored until the host supports it: no step carries one yet.
+    /// for in-person play's tablets (docs/in-person.md): the host is told <c>"Public": true</c> as each game is dealt. Off, it
+    /// works none of that out.
     /// </summary>
     public bool PublicView { get; init; }
 
     public IRulesHost Create(IReadOnlyList<RulesSeat> seats, ulong seed, RulesGameOptions options) =>
-        NativeRulesHost.NewGame(_transport ?? NativeHostProcess.Shared, seats, seed, options);
+        NativeRulesHost.NewGame(_transport ?? NativeHostProcess.Shared, seats, seed, options, publicView: PublicView);
 
     public bool CompanionFulfilled(IReadOnlyList<string> deck, string companion, int minimumDeckSize) =>
         NativeRulesHost.Companions(_transport ?? NativeHostProcess.Shared, deck, [companion], minimumDeckSize) is [{ Fulfilled: true }];

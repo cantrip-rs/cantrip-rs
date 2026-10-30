@@ -24,9 +24,9 @@ pub use cantrip_engine::visibility::*;
 use crate::handles::HandleSpace;
 use crate::protocol::*;
 
-/// Seat number of a player: one-based.
+/// Seat number of a player: one-based. The public (`PUBLIC`) is no seat: zero, as a view's `Viewer` that is no player's.
 pub fn seat(player: PlayerId) -> i32 {
-    i32::from(player.0) + 1
+    if player == PUBLIC { 0 } else { i32::from(player.0) + 1 }
 }
 
 /// The player at a seat number, or none for zero.

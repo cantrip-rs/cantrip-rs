@@ -58,6 +58,10 @@ enum Request {
         /// seats named in `Driven` are answered by the table, every other by the script (docs/scenarios-in-the-browser.md).
         #[serde(rename = "Scenario", default)]
         scenario: Option<ScenarioSpec>,
+        /// Whether each step also projects the game for a viewer who is no player (`Public`), for an in-person table's
+        /// shared boards (docs/host-protocol.md, "The public view"). Off, nothing of it is worked out.
+        #[serde(rename = "Public", default)]
+        public: bool,
     },
     Start {
         #[serde(rename = "GameId")]
@@ -211,7 +215,7 @@ fn ok(value: Value) -> Value {
 impl Host {
     fn handle(&mut self, request: Request) -> Value {
         match request {
-            Request::NewGame { seats, seed, shuffle, first_player, chooser, basic_lands_outside, minimum_deck_size, scenario } => {
+            Request::NewGame { seats, seed, shuffle, first_player, chooser, basic_lands_outside, minimum_deck_size, scenario, public } => {
                 #[cfg(feature = "ai-record")]
                 let dealt = self.recorder.as_ref().map(|_| Dealt {
                     seed: if scenario.is_some() { 0 } else { seed },
@@ -241,7 +245,10 @@ impl Host {
                     }
                 };
                 match made {
-                    Ok(session) => {
+                    Ok(mut session) => {
+                        if public {
+                            session.show_public();
+                        }
                         let id = self.next_game;
                         self.next_game += 1;
                         let decklists = session.decklists();

@@ -286,5 +286,52 @@ public sealed class NativeRulesHostTests
 
         Assert.IsType<NativeRulesHost>(rules);
         Assert.Contains("\"Seed\":9,\"Shuffle\":false,\"FirstPlayer\":2", Assert.Single(host.Requests), StringComparison.Ordinal);
+        Assert.DoesNotContain("Public", host.Requests[0], StringComparison.Ordinal);
+        Assert.Null(rules.Start().Public);
+    }
+
+    [Fact]
+    public void A_factory_with_a_public_view_tells_the_host_so_as_it_deals()
+    {
+        var host = new ScriptedHost();
+        new NativeRulesHostFactory(host) { PublicView = true }.Create(Seats, 9, new RulesGameOptions { MinimumDeckSize = 60 });
+
+        Assert.Equal(
+            """{"Cmd":"NewGame","Seats":[{"Name":"Alice","Deck":["Island","Island","Lightning Bolt"],"Sideboard":["Counterspell"],"Companion":null},{"Name":"Bob","Deck":["Swamp"],"Sideboard":[],"Companion":null}],"Seed":9,"Shuffle":true,"FirstPlayer":null,"Chooser":null,"BasicLandsOutside":[],"MinimumDeckSize":60,"Public":true}""",
+            Assert.Single(host.Requests));
+    }
+
+    [Fact]
+    public void A_steps_public_part_is_read_with_its_view_stamped_its_events_numbered_and_each_seats_handle_map()
+    {
+        var host = new ScriptedHost { Numbered = true, Public = true };
+        RulesStep step = NativeRulesHost.NewGame(host, Seats, 1, new RulesGameOptions { MinimumDeckSize = 60 }, publicView: true).Start();
+
+        PublicProjection shown = Assert.IsType<PublicProjection>(step.Public);
+        Assert.Equal(0, shown.View.Viewer);
+        ObjectView island = Assert.Single(shown.View.Objects);
+        Assert.Equal((new ViewHandle(5), "Island"), (island.Handle, island.Name));
+        Assert.Equal(ObjectFingerprint.Of(island), island.Fingerprint);
+        Assert.NotEqual(0, island.Fingerprint);
+        (long sequence, GameEventView began) = Assert.Single(shown.Events);
+        Assert.Equal(40, sequence);
+        Assert.IsType<StepBeganEvent>(began);
+        Assert.Empty(shown.Handles[1]);
+        Assert.Equal(new ViewHandle(1), Assert.Single(shown.Handles[2]).Value);
+        Assert.Equal(new ViewHandle(5), Assert.Single(shown.Handles[2]).Key);
+    }
+
+    [Fact]
+    public void A_resumed_games_public_part_tells_everything_that_happened_on_the_way()
+    {
+        var host = new ScriptedHost { Numbered = true, Public = true };
+        NativeRulesHost rules = NativeRulesHost.NewGame(
+            host, Seats, 123, new RulesGameOptions { MinimumDeckSize = 60 }, history: [new RulesAnswer(1, new PassAnswer())], publicView: true);
+
+        RulesStep step = rules.Start();
+
+        PublicProjection shown = Assert.IsType<PublicProjection>(step.Public);
+        Assert.Equal(2, shown.Events.Count);
+        Assert.Equal(step.Events[2].Select(e => e.Sequence), shown.Events.Select(e => e.Sequence));
     }
 }

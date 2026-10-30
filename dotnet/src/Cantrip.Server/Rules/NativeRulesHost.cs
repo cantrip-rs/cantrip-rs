@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Cantrip.Protocol;
 
 namespace Cantrip.Server.Rules;
@@ -59,7 +60,9 @@ public sealed class NativeRulesHost : IRulesHost
 
     /// <summary>
     /// Deals a new game in the host, or deals one again and gives it <paramref name="history"/>'s answers once more
-    /// when <see cref="Start"/> is called: a game is resumed the way it always was.
+    /// when <see cref="Start"/> is called: a game is resumed the way it always was. With <paramref name="publicView"/>, every
+    /// step also carries the game as a viewer who is no player sees it (<see cref="RulesStep.Public"/>); without it the host
+    /// works none of that out.
     /// </summary>
     /// <exception cref="RulesRejectedException">The host would not deal it: a deck names a card it does not know.</exception>
     public static NativeRulesHost NewGame(
@@ -67,7 +70,8 @@ public sealed class NativeRulesHost : IRulesHost
         IReadOnlyList<RulesSeat> seats,
         ulong seed,
         RulesGameOptions options,
-        IReadOnlyList<RulesAnswer>? history = null)
+        IReadOnlyList<RulesAnswer>? history = null,
+        bool publicView = false)
     {
         ArgumentNullException.ThrowIfNull(transport);
         ArgumentNullException.ThrowIfNull(seats);
@@ -82,7 +86,7 @@ public sealed class NativeRulesHost : IRulesHost
         List<object> named = [.. seats.Select(seat => seat.DeckName is { } deckName
             ? (object)new { seat.Name, seat.Deck, seat.Sideboard, seat.Companion, DeckName = deckName }
             : new { seat.Name, seat.Deck, seat.Sideboard, seat.Companion })];
-        NewGameReply dealt = host.Send<NewGameReply>(options.Scenario is { } scenario
+        object deal = options.Scenario is { } scenario
             ? new
             {
                 Cmd = "NewGame",
@@ -100,7 +104,8 @@ public sealed class NativeRulesHost : IRulesHost
                 options.Chooser,
                 options.BasicLandsOutside,
                 options.MinimumDeckSize,
-            });
+            };
+        NewGameReply dealt = host.Send<NewGameReply>(publicView ? WithPublic(deal) : deal);
 
         host.GameId = dealt.GameId;
         foreach (int seat in host._seatNumbers)
@@ -109,6 +114,14 @@ public sealed class NativeRulesHost : IRulesHost
         }
 
         return host;
+    }
+
+    /// <summary>The request <paramref name="deal"/> with <c>"Public": true</c> beside what it says.</summary>
+    private static JsonObject WithPublic(object deal)
+    {
+        JsonObject request = JsonSerializer.SerializeToNode(deal, ProtocolJson.Options)!.AsObject();
+        request["Public"] = true;
+        return request;
     }
 
     /// <summary>
@@ -157,7 +170,8 @@ public sealed class NativeRulesHost : IRulesHost
         // happened along the way is published together with the position reached, as a live game
         // publishes it: a seat joining a resumed game reads the whole log, not just the last move.
         Dictionary<int, List<(long Sequence, GameEventView View)>> replayed = [];
-        Gather(replayed, step);
+        List<(long Sequence, GameEventView View)> replayedPublic = [];
+        Gather(replayed, replayedPublic, step);
         foreach (RulesAnswer recorded in _resume)
         {
             RulesRequest asked = step.Requests.FirstOrDefault(request => request.Seat == recorded.Seat)
@@ -173,7 +187,7 @@ public sealed class NativeRulesHost : IRulesHost
                 throw new InvalidOperationException($"The history does not replay: {refused.Code}, {refused.Detail}");
             }
 
-            Gather(replayed, step);
+            Gather(replayed, replayedPublic, step);
         }
 
         return step with
@@ -181,14 +195,23 @@ public sealed class NativeRulesHost : IRulesHost
             Events = replayed.ToDictionary(
                 seat => seat.Key,
                 seat => (IReadOnlyList<(long Sequence, GameEventView View)>)seat.Value),
+            Public = step.Public is { } reached ? reached with { Events = replayedPublic } : null,
         };
     }
 
-    private static void Gather(Dictionary<int, List<(long Sequence, GameEventView View)>> into, RulesStep step)
+    private static void Gather(
+        Dictionary<int, List<(long Sequence, GameEventView View)>> into,
+        List<(long Sequence, GameEventView View)> intoPublic,
+        RulesStep step)
     {
         foreach ((int seat, IReadOnlyList<(long Sequence, GameEventView View)> events) in step.Events)
         {
             (into.TryGetValue(seat, out List<(long Sequence, GameEventView View)>? gathered) ? gathered : into[seat] = []).AddRange(events);
+        }
+
+        if (step.Public is { } shown)
+        {
+            intoPublic.AddRange(shown.Events);
         }
     }
 
@@ -332,31 +355,7 @@ public sealed class NativeRulesHost : IRulesHost
         Dictionary<int, IReadOnlyList<(long Sequence, GameEventView View)>> events = [];
         foreach (int seat in _seatNumbers)
         {
-            List<(long Sequence, GameEventView View)> numbered = [];
-            foreach (JsonElement element in reply.Events.TryGetValue(seat, out List<JsonElement>? batch) ? batch : [])
-            {
-                // The host's own number when it gives one, so the same event is the same log line for every seat and
-                // a retraction can name it; else counted here, which keeps the log in order and nothing more.
-                long sequence;
-                if (element.ValueKind == JsonValueKind.Object
-                    && element.TryGetProperty("Sequence", out JsonElement given)
-                    && given.ValueKind == JsonValueKind.Number)
-                {
-                    sequence = given.GetInt64();
-                    _sequence = Math.Max(_sequence, sequence);
-                }
-                else
-                {
-                    sequence = ++_sequence;
-                }
-
-                GameEventView view = ProtocolJson.Deserialize<GameEventView>(element)
-                    ?? throw new InvalidOperationException("The host sent a null event.");
-
-                numbered.Add((sequence, view));
-            }
-
-            events[seat] = numbered;
+            events[seat] = Numbered(reply.Events.TryGetValue(seat, out List<JsonElement>? batch) ? batch : []);
         }
 
         List<RulesRequest> requests = [];
@@ -374,7 +373,68 @@ public sealed class NativeRulesHost : IRulesHost
                 request.ForSeat == request.Seat ? 0 : request.ForSeat));
         }
 
-        return new RulesStep(requests, reply.Views, events, _sequence, reply.Finished, Progress(reply.Scenario));
+        PublicProjection? shown = reply.Public is { } projected ? Projection(projected) : null;
+        return new RulesStep(requests, reply.Views, events, _sequence, reply.Finished, Progress(reply.Scenario), shown);
+    }
+
+    /// <summary>
+    /// A batch of events as the host sent it, each with its number: the host's own when it gives one, so the same event is
+    /// the same log line for every seat and for the public, and a retraction can name it; else counted here, which keeps the
+    /// log in order and nothing more.
+    /// </summary>
+    private List<(long Sequence, GameEventView View)> Numbered(List<JsonElement> batch)
+    {
+        List<(long Sequence, GameEventView View)> numbered = [];
+        foreach (JsonElement element in batch)
+        {
+            long sequence;
+            if (element.ValueKind == JsonValueKind.Object
+                && element.TryGetProperty("Sequence", out JsonElement given)
+                && given.ValueKind == JsonValueKind.Number)
+            {
+                sequence = given.GetInt64();
+                _sequence = Math.Max(_sequence, sequence);
+            }
+            else
+            {
+                sequence = ++_sequence;
+            }
+
+            GameEventView view = ProtocolJson.Deserialize<GameEventView>(element)
+                ?? throw new InvalidOperationException("The host sent a null event.");
+
+            numbered.Add((sequence, view));
+        }
+
+        return numbered;
+    }
+
+    /// <summary>
+    /// A step's public part as the server keeps it: the view stamped with each object's fingerprint, as a seat's view is
+    /// stamped before it is sent (<see cref="ObjectFingerprint"/>), its events numbered, and each seat's handle map.
+    /// </summary>
+    private PublicProjection Projection(PublicReply reply)
+    {
+        PlayerView view = reply.View ?? throw new InvalidOperationException("The host sent a public part with no view.");
+        ObjectFingerprint.Stamp(view);
+        Dictionary<int, IReadOnlyDictionary<ViewHandle, ViewHandle>> handles = [];
+        foreach ((int seat, List<List<ViewHandle>> pairs) in reply.Handles)
+        {
+            Dictionary<ViewHandle, ViewHandle> map = [];
+            foreach (List<ViewHandle> pair in pairs)
+            {
+                if (pair is not [ViewHandle shown, ViewHandle theirs])
+                {
+                    throw new InvalidOperationException($"The host sent a public handle pair of {pair.Count} for seat {seat}.");
+                }
+
+                map.Add(shown, theirs);
+            }
+
+            handles[seat] = map;
+        }
+
+        return new PublicProjection(view, Numbered(reply.Events), handles);
     }
 
     /// <summary>A step's scenario part as the server keeps it, or null for a dealt game.</summary>
@@ -451,7 +511,7 @@ public sealed class NativeRulesHost : IRulesHost
     }
 
     private static string Describe(object request) =>
-        request.GetType().GetProperty("Cmd")?.GetValue(request)?.ToString() ?? "a request";
+        (request is JsonObject node ? node["Cmd"]?.ToString() : request.GetType().GetProperty("Cmd")?.GetValue(request)?.ToString()) ?? "a request";
 
     // --- The replies, as the host writes them. Settable, as everything ProtocolJson reads is. ---
 
@@ -479,6 +539,19 @@ public sealed class NativeRulesHost : IRulesHost
 
         /// <summary>A scenario's part of the step (docs/scenarios-in-the-browser.md), absent for a dealt game.</summary>
         public ScenarioReply? Scenario { get; set; }
+
+        /// <summary>The public's part of the step (docs/host-protocol.md, "The public view"), absent unless dealt with one.</summary>
+        public PublicReply? Public { get; set; }
+    }
+
+    private sealed class PublicReply
+    {
+        public PlayerView? View { get; set; }
+
+        public List<JsonElement> Events { get; set; } = [];
+
+        /// <summary>By seat, each pair of a public handle and that seat's handle for the same object.</summary>
+        public Dictionary<int, List<List<ViewHandle>>> Handles { get; set; } = [];
     }
 
     private sealed class ScenarioReply
