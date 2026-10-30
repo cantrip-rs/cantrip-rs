@@ -1,0 +1,47 @@
+# CR 707.10,603.2d: copying the activated ability creates two independent resolved multipliers, giving three Aunt May triggers.
+
+[Bot1 Deck]
+Lwaxana Troi, Charming Guest
+Aunt May
+Mox Ruby
+Mox Pearl
+Sol Ring
+Black Lotus
+Echo, Perceptive Prodigy
+Ornithopter
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Echo, Perceptive Prodigy.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lwaxana Troi, Charming Guest.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aunt May.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Lwaxana Troi, Charming Guest.Activate(Aunt May)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Echo, Perceptive Prodigy.Activate(Stack.Lwaxana Troi, Charming Guest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Aunt May)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+[Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Stack.Count = 0

@@ -1,0 +1,8 @@
+{
+  "name": "Lwaxana Troi, Charming Guest",
+  "manaCost": "{1}{R}",
+  "type": "Legendary Creature — Betazoid Advisor",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "You may choose not to untap Lwaxana Troi during your untap step.\n{2}, {T}: Choose another target creature you control. For as long as Lwaxana Troi remains tapped, if a triggered ability of that creature triggers, that ability triggers an additional time."
+}

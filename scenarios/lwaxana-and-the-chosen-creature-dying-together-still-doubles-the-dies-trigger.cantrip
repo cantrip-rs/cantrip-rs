@@ -1,0 +1,49 @@
+# CR 603.10a: the continuous multiplier exists immediately before simultaneous deaths, even though its source leaves with Blood Artist.
+
+[Bot1 Deck]
+Lwaxana Troi, Charming Guest
+Blood Artist
+Mox Ruby
+Mox Jet
+Sol Ring
+Mox Pearl
+Plains
+Wrath of God
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lwaxana Troi, Charming Guest.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Blood Artist.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Lwaxana Troi, Charming Guest.Activate(Blood Artist)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot2)
+Bot1.Target(Bot2)
+Bot1.Target(Bot2)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 16
+Bot1.Graveyard = Wrath of God; Blood Artist; Lwaxana Troi, Charming Guest
+Stack.Count = 0

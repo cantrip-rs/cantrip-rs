@@ -1,0 +1,50 @@
+# CR 608.2b: bouncing the selected creature makes the only target illegal; no multiplier is established.
+[Bot1 Deck]
+Lwaxana Troi, Charming Guest
+Aunt May
+Mox Ruby
+Mox Pearl
+Sol Ring
+Ornithopter
+Plains
+Ornithopter
+Ornithopter
+Ornithopter
+Plains x15
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Turn to Frog
+Unsummon
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Aunt May.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lwaxana Troi, Charming Guest.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+? Bot1.Life = 21
+! Bot1.Battlefield.Lwaxana Troi, Charming Guest.Activate(Lwaxana Troi, Charming Guest)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Lwaxana Troi, Charming Guest.Activate(Aunt May)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Unsummon.Cast(Aunt May)
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot1.Battlefield = Lwaxana Troi, Charming Guest; Mox Ruby; Mox Pearl; Sol Ring; Ornithopter; Plains
+Bot1.Hand.Aunt May.Colors = White
+Stack.Count = 0
