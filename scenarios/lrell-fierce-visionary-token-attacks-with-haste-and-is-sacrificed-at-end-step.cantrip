@@ -1,0 +1,28 @@
+# L'Rell's beginning-of-combat trigger creates a hasty 2/1 and its delayed trigger sacrifices that token (CR 603.7c).
+# No extra token is created during the opponent's combat.
+[Bot1 Deck]
+L'Rell, Fierce Visionary
+Mox Jet
+Mox Ruby
+Mox Pearl
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.L'Rell, Fierce Visionary.Cast
+Bot1.Attack(Klingon Warrior Token > Bot2)
+[Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Battlefield.Klingon Warrior Token.Power = 2
+? Bot1.Battlefield.Klingon Warrior Token.Toughness = 1
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield = L'Rell, Fierce Visionary; Mox Jet; Mox Ruby; Mox Pearl
+Bot2.Life = 18

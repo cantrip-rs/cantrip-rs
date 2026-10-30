@@ -1,0 +1,8 @@
+{
+  "name": "L'Rell, Fierce Visionary",
+  "manaCost": "{1}{B}{R}",
+  "type": "Legendary Creature — Klingon Warrior",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "At the beginning of combat on your turn, create a 2/1 red Klingon Warrior creature token with haste. Sacrifice it at the beginning of the next end step.\n{2}, Sacrifice another creature or artifact: Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)"
+}

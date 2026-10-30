@@ -1,0 +1,32 @@
+# "Another creature or artifact" excludes L'Rell herself and ordinary lands (CR 602.2b, 118.3).
+# After the refusal, a newly cast Memnite supplies a legal sacrifice for the same ability.
+[Bot1 Deck]
+L'Rell, Fierce Visionary
+Badlands x3
+Memnite
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Badlands.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Badlands.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Badlands.Play
+Bot1.Battlefield.Badlands.Activate(Ability: {B})
+Bot1.Battlefield.Badlands.Activate(Ability: {R})
+Bot1.Battlefield.Badlands.Activate(Ability: {B})
+Bot1.Hand.L'Rell, Fierce Visionary.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Badlands.Activate(Ability: {B})
+Bot1.Battlefield.Badlands.Activate(Ability: {R})
+! Bot1.Battlefield.L'Rell, Fierce Visionary.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.L'Rell, Fierce Visionary.Activate
+Bot1.Choose(Memnite)
+Bot1.Arrange(Swamp |)
+[Expect]
+Bot1.Graveyard = Memnite
+Bot1.Surveilled = 1 requested, 1 looked

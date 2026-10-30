@@ -1,0 +1,41 @@
+# L'Rell leaving in response to her combat trigger cannot remove that ability (CR 113.7a).
+# It still makes the token, and the delayed sacrifice still works without L'Rell (CR 603.7).
+[Bot1 Deck]
+L'Rell, Fierce Visionary
+Mox Jet
+Mox Ruby
+Mox Pearl
+Swamp x20
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Go for the Throat
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.L'Rell, Fierce Visionary.Cast
+[Bot1.BeginCombat]
+? Stack.Count = 1
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Go for the Throat.Cast(Bot1.Battlefield.L'Rell, Fierce Visionary)
+Bot1.Attack(Klingon Warrior Token > Bot2)
+[Bot1.Main2]
+? Bot1.Battlefield.Klingon Warrior Token.Power = 2
+? Bot2.Life = 18
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Ruby; Mox Pearl
+Bot1.Graveyard = L'Rell, Fierce Visionary
+Bot2.Graveyard = Go for the Throat
+Bot2.Life = 18

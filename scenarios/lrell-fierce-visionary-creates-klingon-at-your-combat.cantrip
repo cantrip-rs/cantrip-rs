@@ -1,0 +1,32 @@
+# L'Rell, Fierce Visionary {1}{B}{R}: Legendary Creature — Klingon Warrior. At the beginning of combat on your turn, create a
+# 2/1 red Klingon Warrior creature token with haste; sacrifice it at the beginning of the next end step (CR 603.7c, 400.7).
+# Cast on turn 1 off three Moxen, then the beginning-of-combat trigger makes the Klingon token, which is still on the battlefield.
+
+[Bot1 Deck]
+L'Rell, Fierce Visionary
+Mox Jet
+Mox Ruby
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.L'Rell, Fierce Visionary.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Klingon Warrior Token; L'Rell, Fierce Visionary; Mox Jet; Mox Pearl; Mox Ruby
