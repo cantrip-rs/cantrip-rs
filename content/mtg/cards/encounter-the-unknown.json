@@ -1,0 +1,6 @@
+{
+  "name": "Encounter the Unknown",
+  "manaCost": "{1}{R}{R}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Come in Peace — Exile the top two cards of your library. Until the end of your next turn, you may play those cards.\n• Shoot to Kill — Encounter the Unknown deals 2 damage to each creature and each player."
+}

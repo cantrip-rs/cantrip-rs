@@ -1,0 +1,31 @@
+# This mode exiles the top two cards and grants play permission through Bot1's next turn; a land uses its normal land play (CR 305.1).
+
+[Bot1 Deck]
+Encounter the Unknown
+Black Lotus
+Mountain x5
+Ornithopter
+Island
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Encounter the Unknown.Cast
+Bot1.Modes(1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Exile.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Exile.Island.Play
+
+[Expect]
+Bot1.Battlefield = Ornithopter; Island
+Exile.Count = 0

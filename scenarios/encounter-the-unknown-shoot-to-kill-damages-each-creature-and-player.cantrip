@@ -1,0 +1,33 @@
+# The chosen burn mode hits both players and creatures on both sides (Bot1's Memnite and Bot2's Ornithopter) in one simultaneous event (CR 608.2c, 120.2).
+
+[Bot1 Deck]
+Encounter the Unknown
+Black Lotus
+Memnite
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Encounter the Unknown.Cast
+Bot1.Modes(2)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Memnite; Encounter the Unknown; Black Lotus
