@@ -1,0 +1,8 @@
+{
+  "name": "Thoughtweft Lieutenant",
+  "manaCost": "{G}{W}",
+  "type": "Creature — Kithkin Soldier",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature or another Kithkin you control enters, target creature you control gets +1/+1 and gains trample until end of turn."
+}

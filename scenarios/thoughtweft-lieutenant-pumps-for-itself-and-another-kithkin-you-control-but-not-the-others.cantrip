@@ -1,0 +1,64 @@
+# Thoughtweft Lieutenant (a 2/2): "Whenever this creature or another Kithkin you control enters, target creature you control gets
+# +1/+1 and gains trample until end of turn." It enters and targets itself (3/3 with trample); Figure of Fable, another Kithkin,
+# enters on turn 3 and targets the Lieutenant again (4/4); Elvish Mystic, an Elf, and Bot2's Figure of Fable trigger nothing.
+# The pumps end with the turn (CR 611.2).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Thoughtweft Lieutenant
+Forest
+Plains
+Figure of Fable
+Elvish Mystic
+Forest x12
+
+[Bot2 Deck]
+Mox Pearl
+Figure of Fable
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Thoughtweft Lieutenant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thoughtweft Lieutenant.Power = 3
+? Bot1.Battlefield.Thoughtweft Lieutenant.Toughness = 3
+? Bot1.Battlefield.Thoughtweft Lieutenant.Keywords = Trample
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Thoughtweft Lieutenant.Power = 2
+? Bot1.Battlefield.Thoughtweft Lieutenant.Keywords = (absent)
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Figure of Fable.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Thoughtweft Lieutenant.Power = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Figure of Fable.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Figure of Fable)
+Bot1.Target(Thoughtweft Lieutenant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thoughtweft Lieutenant.Power = 3
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Thoughtweft Lieutenant.Power = 3
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Thoughtweft Lieutenant.Power = 2
+
+[Expect]
+Bot1.Battlefield.Thoughtweft Lieutenant.Toughness = 2
