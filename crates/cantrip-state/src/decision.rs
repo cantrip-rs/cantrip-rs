@@ -1406,6 +1406,10 @@ pub enum Purpose {
     /// A permanent chosen as the source enters, which its text then refers to as "the chosen [permanent]" (CR 614.12a,
     /// 607.2d): Dauntless Bodyguard's "choose another creature you control". Chosen, not targeted; nothing happens to it.
     ChooseAsEnters,
+    /// Objects chosen as an effect resolves, without targeting, that nothing happens to yet: the effect's later words refer to
+    /// them as "the chosen" ones (CR 608.2d, 608.2c). Spry and Mighty's "choose exactly two creatures you control" and
+    /// Tragic Arrogance's "choose from among the permanents that player controls" print it.
+    Choose,
     /// The creature a cost blights (CR 701.68a).
     Blight,
     /// The permanent that gets this many counters of this kind, chosen without targeting (CR 122.1, 608.2d): which Jace
