@@ -1,0 +1,86 @@
+# Gathering Stone ({4}): "As this artifact enters, choose a creature type", "Spells you cast of the chosen type cost {1} less
+# to cast" and "When this artifact enters and at the beginning of your upkeep, look at the top card of your library. If it's
+# a card of the chosen type, you may reveal it and put it into your hand. If you don't put the card into your hand, you may
+# put it into your graveyard." Turn 1 Griffin is chosen; the top card, an Abbey Griffin, is looked at and revealed into the
+# hand. Bot2's own Abbey Griffin ({3}{W}) is not reduced (three Moxen cannot pay it). Turn 3 upkeep: the top card, a Forest,
+# is looked at; it is no Griffin so nothing may be revealed, and it goes to the graveyard. Then Abbey Griffin is cast with
+# exactly three Moxen ({3}{W} less {1} generic, never the {W}), and Sol Ring ({1}, no Griffin) is not reduced. Turn 5 upkeep:
+# a Griffin on top, left unrevealed (the ruling), then left on top too, and drawn.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Gathering Stone
+Abbey Griffin
+Abbey Griffin
+Forest
+Sol Ring
+Abbey Griffin
+Island x11
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Abbey Griffin
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gathering Stone.Cast
+Bot1.Modes(Griffin)
+? Bot1.Battlefield.Gathering Stone.ChosenSubtype = Griffin
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Abbey Griffin
+Bot1.Accept
+? Bot1.Hand.Count = 2
+? Bot1.Revealed = Abbey Griffin
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+! Bot2.Hand.Abbey Griffin.Cast(Mana: short)
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Abbey Griffin; Forest
+Bot1.Accept
+? Bot1.Graveyard.Count = 1
+? Bot2.Graveyard.Count = 0
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Abbey Griffin.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Abbey Griffin.Power = 2
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sol Ring.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Decline
+
+[Expect]
+Bot1.Graveyard.Count = 1

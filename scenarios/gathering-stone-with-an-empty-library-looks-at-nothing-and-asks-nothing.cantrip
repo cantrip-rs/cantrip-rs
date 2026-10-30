@@ -1,0 +1,38 @@
+# Gathering Stone with an empty library (CR 609.3): its enters ability still triggers and resolves, but there is no top card
+# to look at, so Bot1 is asked nothing (the refusal of a "you may" question) and nothing is looked at. Bot1's deck is its
+# seven-card opening hand.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Gathering Stone
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gathering Stone.Cast
+Bot1.Modes(Griffin)
+? Stack = Gathering Stone
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+
+[Expect]
+Stack.Count = 0
+Bot1.Looked = (absent)
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Gathering Stone.ChosenSubtype = Griffin
