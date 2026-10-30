@@ -1,0 +1,63 @@
+# High Perfect Morcant makes each opponent blight 1 whenever it or another Elf you control enters: Morcant's own entering
+# (Bot2 puts the counter on Grizzly Bears, 2/2 -> 1/1) and then Bot1's Llanowar Elves (Bot2 picks Ornithopter, 0/2 -> -1/1). Bot2's
+# own Llanowar Elves entering later triggers nothing - the counters stay at one each - and does not count towards the
+# three untapped Elves of Morcant's ability, which Bot1 (Morcant and one Elf) can't pay, and again can't with Bot2's Elves out.
+
+[Bot1 Deck]
+Mox Jet
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+High Perfect Morcant
+Black Lotus
+Llanowar Elves
+Island x13
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Ornithopter
+Llanowar Elves
+Island x2
+Island x13
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.High Perfect Morcant.Cast
+Bot1.Pass
+Bot2.Choose(Grizzly Bears)
+? Bot2.Battlefield.Grizzly Bears.Toughness = 1
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Choose(Ornithopter)
+! Bot1.Battlefield.High Perfect Morcant.Activate
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+! Bot1.Battlefield.High Perfect Morcant.Activate
+
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Counters.MinusOneMinusOne = 1
+Bot2.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+Bot2.Battlefield.Grizzly Bears.Toughness = 1
+Bot2.Battlefield.Ornithopter.Toughness = 1
