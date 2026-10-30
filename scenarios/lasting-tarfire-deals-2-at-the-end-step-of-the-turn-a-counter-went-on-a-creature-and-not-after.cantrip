@@ -1,0 +1,41 @@
+# Lasting Tarfire: "At the beginning of each end step, if you put a counter on a creature this turn, this enchantment deals 2
+# damage to each opponent." Bot1 casts Tarfire on turn 3 and attacks with Gau, which puts a +1/+1 counter on itself: Gau
+# deals 3 in combat (Bot2 at 17) and Tarfire 2 more at the end step (15). The counter was put on turn 3 only, so Bot2's own
+# end step on turn 4 does not trigger it again (still 15, not 13).
+
+[Bot1 Deck]
+Mountain
+Sol Ring
+Black Lotus
+Gau, Feral Youth
+Faithless Looting
+Mountain
+Mountain
+Lasting Tarfire
+Mountain x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gau, Feral Youth.Cast
+Bot1.Hand.Faithless Looting.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Lasting Tarfire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Gau, Feral Youth)
+[T3 Bot1.Main2]
+[T5 Bot1.Upkeep]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Gau, Feral Youth.Counters.PlusOnePlusOne = 1
