@@ -1,0 +1,39 @@
+# Unforgiving Aim, first mode: "Destroy target creature with flying." Memnite has no flying, so it is no legal target (CR 115.1, 702.9);
+# Angelic Curator flies and is destroyed. Mox Pearl and Mox Ruby pay {1}{W} for the Curator; once it and Memnite have resolved, Black
+# Lotus (green) pays {2}{G} for the Aim.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Angelic Curator
+Memnite
+Unforgiving Aim
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Angelic Curator.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Unforgiving Aim.Cast
+Bot1.Modes(Destroy target creature with flying)
+! Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Angelic Curator)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Unforgiving Aim; Angelic Curator; Black Lotus
+Bot1.Battlefield = Mox Pearl; Mox Ruby; Memnite

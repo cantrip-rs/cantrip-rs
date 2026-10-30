@@ -1,0 +1,24 @@
+# Unforgiving Aim, third mode: "Create a 2/2 black and green Elf creature token." The mode has no target. Black Lotus pays {2}{G}.
+
+[Bot1 Deck]
+Black Lotus
+Unforgiving Aim
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Unforgiving Aim.Cast
+Bot1.Modes(Create a 2/2 black and green Elf)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Elf Token
+? Bot1.Battlefield.Elf Token.Power = 2
+? Bot1.Battlefield.Elf Token.Toughness = 2
+? Bot1.Battlefield.Elf Token.Colors = Black; Green
+? Bot1.Battlefield.Elf Token.Subtypes = Elf
