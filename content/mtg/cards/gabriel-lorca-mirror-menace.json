@@ -1,0 +1,11 @@
+{
+  "name": "Gabriel Lorca, Mirror Menace",
+  "manaCost": "{4}{B}",
+  "type": "Legendary Creature — Human Rogue Officer",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Menace\nWhenever you face a dilemma, you may pay {B}. If you do, return this card from your graveyard to your hand. (You face a dilemma as you choose one or more modes for a spell or ability.)",
+  "keywords": [
+    "Menace"
+  ]
+}

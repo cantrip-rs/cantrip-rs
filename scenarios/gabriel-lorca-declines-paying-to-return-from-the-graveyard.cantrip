@@ -1,0 +1,47 @@
+# "You may pay {B}": Bone Shards puts Gabriel Lorca into Bot1's graveyard, Boros Charm's mode choice triggers it, and Bot1
+# declines to pay. Gabriel stays in the graveyard and Mox Jet stays untapped.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Black Lotus
+Bone Shards
+Gabriel Lorca, Mirror Menace
+Boros Charm
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Bone Shards.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Gabriel Lorca, Mirror Menace)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Boros Charm.Cast
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+
+[Expect]
+Bot1.Hand = Island
+Bot1.Graveyard = Boros Charm; Bone Shards; Gabriel Lorca, Mirror Menace; Black Lotus
+Bot1.Battlefield.Mox Jet.Tapped = false

@@ -1,0 +1,26 @@
+# Two Dark Rituals pay exactly {4}{B}; the resolved creature has the printed menace keyword.
+
+[Bot1 Deck]
+Swamp
+Dark Ritual
+Dark Ritual
+Gabriel Lorca, Mirror Menace
+Island x12
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot1.Hand.Gabriel Lorca, Mirror Menace.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Gabriel Lorca, Mirror Menace.Keywords = Menace
+Bot1.Mana =

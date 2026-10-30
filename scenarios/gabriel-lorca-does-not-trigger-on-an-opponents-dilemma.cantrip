@@ -1,0 +1,43 @@
+# "Whenever you face a dilemma": only its owner's mode choices count. With Gabriel Lorca in Bot1's graveyard, Bot2's
+# Boros Charm is Bot2's dilemma, so nothing triggers and only the Charm is on the stack (CR 700.2, 603.2).
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Bone Shards
+Gabriel Lorca, Mirror Menace
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Mox Pearl
+Boros Charm
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Bone Shards.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Gabriel Lorca, Mirror Menace)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Boros Charm.Cast
+Bot2.Modes(1)
+Bot2.Pass
+? Stack = Boros Charm
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 16
+Bot1.Graveyard = Bone Shards; Gabriel Lorca, Mirror Menace; Black Lotus
