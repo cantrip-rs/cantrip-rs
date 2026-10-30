@@ -1,0 +1,47 @@
+# "Whenever another creature you control enters, it gets +1/+1 until end of turn." (CR 603.6a, 611.2). Kira is cast on turn
+# 1 with a Mox Ruby, a Mox Pearl and a Mox Jet ({1}{R}{W}), and her own arrival does not pump her ("another"): she is 4/3.
+# On turn 3 an Ornithopter enters, so it is 1/3 (it is 0/2) until the turn ends - the pump stays in the cleanup of turn 3, which it
+# does not survive (CR 514.2): on turn 5 it is 0/2 again. No creature of Bot1's is attacking as it
+# enters, so Kira's replacement does not apply and it enters untapped.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Kira Nerys, Firebrand
+Ornithopter
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kira Nerys, Firebrand.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Kira Nerys, Firebrand.Power = 4
+? Bot1.Battlefield.Kira Nerys, Firebrand.Toughness = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Battlefield.Ornithopter.Tapped = false
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Kira Nerys, Firebrand.Power = 4
+Bot1.Battlefield.Kira Nerys, Firebrand.Keywords = Trample

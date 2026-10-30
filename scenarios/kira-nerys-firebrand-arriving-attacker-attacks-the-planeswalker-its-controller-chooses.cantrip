@@ -1,0 +1,53 @@
+# Kira Nerys, Firebrand's "instead it enters tapped and attacking" names nothing to attack, so the entering creature's
+# controller chooses as it arrives among what it could attack (CR 508.4): here Bot2 or Bot2's Liliana of the Veil. The
+# Warrior token from Secure the Wastes, put into the combat beside the attacking Ornithopter, attacks Liliana, and Kira's
+# own trigger makes it 2/2 (CR 603.6a), so Liliana goes from 3 loyalty to 1 while Bot2 takes nothing.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Kira Nerys, Firebrand
+Ornithopter
+Secure the Wastes
+Island x14
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Mox Jet
+Liliana of the Veil
+Swamp x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kira Nerys, Firebrand.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Hand.Liliana of the Veil.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Secure the Wastes.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Liliana of the Veil)
+? Combat.Attackers.Count = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Liliana of the Veil.Counters.Loyalty = 1
+Bot2.Life = 20
+Bot1.Battlefield.Warrior Token.Tapped = true

@@ -1,0 +1,49 @@
+# Kira Nerys, Firebrand: "If a creature you control would enter while you control an attacking creature, instead it
+# enters tapped and attacking" (CR 614.1d, 508.4). The token is put into the combat as it arrives, attacking what its
+# controller chooses (here the only thing it could attack), so the combat holds two attackers.
+# Kira is cast on turn 1 with a Mox Ruby, a Mox Pearl and a Mox Jet ({1}{R}{W}) beside an Ornithopter, which attacks on turn
+# 3. In the declare attackers step, while it is attacking, Secure the Wastes makes one Warrior token: it is a creature Bot1
+# controls, so Kira's replacement makes it enter tapped and attacking (never declared, so nothing that watches attackers
+# being declared sees it).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Kira Nerys, Firebrand
+Ornithopter
+Secure the Wastes
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kira Nerys, Firebrand.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+? Combat.Attackers.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Secure the Wastes.Cast(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Warrior Token.Tapped = true
+? Combat.Attackers.Count = 2
+
+[Expect]
+Combat.Attackers.Count = 2
+Bot1.Battlefield.Warrior Token.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = true
