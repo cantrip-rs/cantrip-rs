@@ -1,0 +1,51 @@
+# Boggart Cursecrafter: "Whenever another Goblin you control dies". Dying is a creature going from the battlefield to a graveyard
+# (CR 700.4). Bot1's Firdoch Core is a Goblin (changeling, CR 702.73a) but a Kindred artifact, not a creature; Bot2's Disenchant
+# destroys it and nothing triggers: Bot2 stays at 20.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Boggart Cursecrafter
+Firdoch Core
+Mountain
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Disenchant
+Plains
+Plains
+Plains x14
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Boggart Cursecrafter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Firdoch Core.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Hand.Disenchant.Cast(Firdoch Core)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Firdoch Core
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 20

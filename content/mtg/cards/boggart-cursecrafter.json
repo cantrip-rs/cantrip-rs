@@ -1,0 +1,11 @@
+{
+  "name": "Boggart Cursecrafter",
+  "manaCost": "{B}{R}",
+  "type": "Creature — Goblin Warlock",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Deathtouch\nWhenever another Goblin you control dies, this creature deals 1 damage to each opponent.",
+  "keywords": [
+    "Deathtouch"
+  ]
+}
