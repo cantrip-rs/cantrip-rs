@@ -1,0 +1,6 @@
+{
+  "name": "Brigid's Command",
+  "manaCost": "{1}{G}{W}",
+  "type": "Kindred Sorcery — Kithkin",
+  "oracleText": "Choose two —\n• Create a token that's a copy of target Kithkin you control.\n• Target player creates a 1/1 green and white Kithkin creature token.\n• Target creature you control gets +3/+3 until end of turn.\n• Target creature you control fights target creature an opponent controls."
+}
