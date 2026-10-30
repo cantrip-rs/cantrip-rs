@@ -1,0 +1,50 @@
+# Morcant's Eyes: "Activate only as a sorcery" (CR 602.5d) - with a spell on the stack Bot1 can't activate it though the pool holds all
+# {4}{G}{G}. Once the spell has resolved the activation works: the graveyard holds the sacrificed Eyes (an Elf card) and Black Lotus
+# (not one), so X = 1 and one token is made. Bot1 casts Mox Sapphire, a free spell, to put something on the stack.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+Morcant's Eyes
+Mox Sapphire
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Morcant's Eyes.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Sapphire.Cast
+! Bot1.Battlefield.Morcant's Eyes.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Morcant's Eyes.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Morcant's Eyes; Black Lotus
+Bot1.Battlefield = Mox Emerald; Mox Ruby; Mox Jet; Mox Sapphire; Elf Token
