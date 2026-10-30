@@ -706,6 +706,13 @@ impl AbilityDef {
         AbilityDef::Triggered(TriggeredDef { counted_by_amount: true, ..triggered_def(self, "only a triggered ability is counted by an event's amount") })
     }
 
+    /// "Up to X target ..." where X is read from the game as the ability is put on the stack (CR 603.3d, 601.2c): a
+    /// `TargetSpec::COUNTED` bound reads `count`, asked of the ability's source and controller. It is fixed there; the ability's
+    /// own text reads the game again as it resolves.
+    pub const fn counted_by(self, count: fn(&dyn crate::Query, &Asker) -> u16) -> AbilityDef {
+        AbilityDef::Triggered(TriggeredDef { counted_by: Some(count), ..triggered_def(self, "only a triggered ability is counted by the game") })
+    }
+
     /// Its first target slot divides a total among its targets (CR 601.2d).
     pub const fn divide(self, divide: Divide) -> AbilityDef {
         AbilityDef::Triggered(TriggeredDef { divide: Some(divide), ..triggered_def(self, "only a triggered ability divides this way") })

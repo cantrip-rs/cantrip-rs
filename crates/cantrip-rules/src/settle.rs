@@ -640,12 +640,18 @@ fn left_the_game(cx: &mut Cx, player: PlayerId) -> bool {
 }
 
 /// What a triggered ability's target slots' `TargetSpec::COUNTED` read (`StackItem::counted`): the "that many" of a reflexive
-/// ability (CR 603.12), the amount of the event that triggered it (`TriggeredDef::counted_by_amount`), or else its source's X, or the
+/// ability (CR 603.12), the amount of the event that triggered it (`TriggeredDef::counted_by_amount`), a number read from the game
+/// as it goes on the stack (`TriggeredDef::counted_by`), or else its source's X, or the
 /// number of times the source was kicked (CR 702.33d, 107.3m).
 fn trigger_counted(cx: &Cx, trigger: &PendingTrigger) -> u16 {
     // "Up to that many target ...", that many being the event's amount (the life gained): no creature count comes near a u16.
     if triggered(cx, trigger.ability).counted_by_amount {
         return u16::try_from(trigger.data[0]).unwrap_or(u16::MAX);
+    }
+    // "Up to X target ...", X read from the game now, as the ability goes on the stack (CR 603.3d, 601.2c).
+    if let Some(count) = triggered(cx, trigger.ability).counted_by {
+        let by = layers::given_link(cx.cards(), cx.s(), trigger.source, trigger.ability, trigger.acquired);
+        return count(cx, &Asker { source: trigger.source, controller: trigger.controller, by, spell: false });
     }
     let source = cx.s().obj(trigger.source);
     trigger.count.unwrap_or(if source.x > 0 { source.x } else { u16::from(source.kicked) })
