@@ -1,0 +1,44 @@
+# Sygg's Command, modes 3 and 4: "Target player draws a card" and "Tap target creature. Put a stun counter on it." Bot1 draws a card
+# (the Island on top of its library) and taps and stuns Bot2's Ornithopter. On Bot2's next turn the stun counter is removed instead of
+# the Ornithopter untapping (CR 122.1d), so it is still tapped with no counter left.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Sygg's Command
+Island x5
+Plains
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sygg's Command.Cast
+Bot1.Modes(3; 4)
+Bot1.Target(Bot1)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+? Bot1.Hand.Count = 5
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
