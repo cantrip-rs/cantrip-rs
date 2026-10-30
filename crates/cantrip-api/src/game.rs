@@ -1119,6 +1119,10 @@ pub trait Game: Query {
     /// A spell on the stack changes controllers (CR 112.2): it resolves for `player`, and "you" in it means them. Its
     /// targets, modes and X stay as they were chosen.
     fn change_controller(&mut self, spell: ObjectId, player: PlayerId);
+    /// A spell on the stack is exiled instead of put into its owner's graveyard as it leaves the stack (CR 614.1a): the effect
+    /// that has it so applies as the spell resolves (CR 608.2n), set after the cast - a spell that is countered still goes to
+    /// the graveyard, as it does not resolve (CR 701.6a). A spell no longer on the stack is left alone.
+    fn exile_spell_instead(&mut self, spell: ObjectId, instead: ExileInstead);
     /// `chooser` may choose new targets for a spell on the stack (CR 115.7d): each slot is offered every legal target it
     /// has now, its current one among them; a slot with no other choice is not asked.
     fn choose_new_targets(&mut self, spell: ObjectId, chooser: PlayerId) -> Result<(), Suspend>;

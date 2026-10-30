@@ -200,7 +200,7 @@ fn exile_instead_applies(cx: &Cx, z: &ZoneChange) -> bool {
     }
     match z.exile_instead {
         ExileInstead::Never => false,
-        ExileInstead::Spell => true,
+        ExileInstead::Spell | ExileInstead::Dream => true,
         ExileInstead::InstantOrSorcery => {
             let chars = cx.chars(z.object);
             chars.is(CardType::Instant) || chars.is(CardType::Sorcery)
@@ -806,6 +806,12 @@ fn apply_to(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enterin
             Origin::Flashback | Origin::ExileInstead | Origin::Unearth | Origin::Finality => {
                 if let Proposal::ZoneChange(z) = proposal {
                     z.to = Zone::exile(cx.s().obj(z.object).owner);
+                    // The dream counter goes on as the card arrives (CR 122.2: counters do not survive a zone change), put by the
+                    // spell's controller whose ability had it exiled (CR 609.1).
+                    if matches!(origin, Origin::ExileInstead) && z.exile_instead == ExileInstead::Dream {
+                        z.counters[CounterKind::Dream as usize] += 1;
+                        z.counters_by = cx.s().obj(z.object).controller;
+                    }
                 }
             }
             // CR 715.3d: its controller exiles it, in its owner's exile, and may play the card from there.

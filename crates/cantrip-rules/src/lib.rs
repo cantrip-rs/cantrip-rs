@@ -2313,6 +2313,10 @@ impl cantrip_api::Game for Cx<'_> {
         self.instruction(|cx| ops::change_spell_controller(cx, spell, player), |_| true);
     }
 
+    fn exile_spell_instead(&mut self, spell: ObjectId, instead: ExileInstead) {
+        self.instruction(|cx| ops::set_spell_exile_instead(cx, spell, instead), |_| true);
+    }
+
     fn change_target(&mut self, of: Target, chooser: PlayerId) -> Result<(), Suspend> {
         ops::change_target(self, of, chooser).map_err(|_| Suspend)
     }
