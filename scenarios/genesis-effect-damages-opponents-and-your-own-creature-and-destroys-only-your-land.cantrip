@@ -1,0 +1,77 @@
+# Genesis Effect may target a creature on either side, but its land target must be one you control. Six damage leaves
+# each 0/7 Wall alive; each spell destroys one of Bot1's Islands, and makes exactly one tapped New Planet. The first
+# Planet untaps on Bot1's next turn and pays blue toward the second Genesis Effect's generic cost (CR 608.2b-c, 111.3, 111.4, 106.1).
+
+[Bot1 Deck]
+Genesis Effect
+Genesis Effect
+Glacial Wall
+Mountain
+Island x3
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Wall of Granite
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Wall of Granite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Glacial Wall.Cast
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Island#3.Activate
+Bot1.Battlefield.Island#4.Activate
+Bot1.Hand.Genesis Effect.Cast
+Bot1.Target(Bot2.Battlefield.Wall of Granite)
+! Bot1.Target(Bot2.Battlefield.Mountain)
+Bot1.Target(Bot1.Battlefield.Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Wall of Granite.Damage = 6
+? Bot1.Graveyard = Genesis Effect; Island
+? Bot1.Battlefield.New Planet.Tapped = true
+[T11 Bot1.Main1]
+Bot1.Hand.Island.Play
+? Bot1.Battlefield.New Planet.Tapped = false
+Bot1.Battlefield.New Planet.Activate(Color: Blue)
+? Bot1.Mana = {U}
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Island#3.Activate
+Bot1.Hand.Genesis Effect.Cast
+Bot1.Target(Bot1.Battlefield.Glacial Wall)
+Bot1.Target(Bot1.Battlefield.Island)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Glacial Wall.Damage = 6
+Bot2.Battlefield.Mountain.Tapped = false
+Bot1.Battlefield.New Planet#1.Tapped = true
+Bot1.Battlefield.New Planet#2.Tapped = true
+Bot1.Battlefield.New Planet#3 = (absent)
+Bot1.Battlefield.New Planet#2.Subtypes = Planet
+Bot1.Battlefield.New Planet#2.Types = Land
+Bot1.Battlefield.New Planet#2.Token = true

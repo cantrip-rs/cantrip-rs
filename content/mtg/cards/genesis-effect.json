@@ -1,0 +1,6 @@
+{
+  "name": "Genesis Effect",
+  "manaCost": "{4}{R}",
+  "type": "Instant",
+  "oracleText": "Genesis Effect deals 6 damage to target creature. Destroy target land you control. Create a tapped Planet land token named New Planet with \"{T}: Add one mana of any color.\""
+}
