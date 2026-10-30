@@ -58,6 +58,12 @@ public sealed partial class MainPage
         Windows.Foundation.Point at = e.GetCurrentPoint(Root).Position;
         _mouse = at;
 
+        // A press on the advisor's panel, over the battlefield at the advisor's table, is the panel's (MainPage.Advisor.cs).
+        if (AdvisorCovers(at))
+        {
+            return;
+        }
+
         ScrollViewer? scroll = BattlefieldScrolls.FirstOrDefault(candidate => Covers(candidate, at));
         bool inHand = Covers(_handScroll, at);
         if (scroll is null && !inHand)

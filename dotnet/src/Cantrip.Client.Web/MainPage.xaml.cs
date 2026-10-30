@@ -236,6 +236,12 @@ public sealed partial class MainPage : Page
             Root.Children.Add(_deckPanel);
         }
 
+        // The advisor's panel, for a page at the advisor's table (?advisor=) and no other (MainPage.Advisor.cs).
+        if (ClientConfig.Advisor is not null)
+        {
+            BuildAdvisor();
+        }
+
         // A card held up to be read, a card's tooltip, and a card being carried, over everything but the lobby.
         foreach (FrameworkElement layer in (FrameworkElement[])[_flights, _inspector, _tooltip, _carryLayer])
         {
@@ -2198,6 +2204,12 @@ public sealed partial class MainPage : Page
         }
 
         if (client.Prompt?.Prompt is not PriorityPromptMessage priority)
+        {
+            return;
+        }
+
+        // At the advisor's table the advisor answers what this page would pass by itself (MainPage.Advisor.cs).
+        if (AdvisorHoldsPriority())
         {
             return;
         }

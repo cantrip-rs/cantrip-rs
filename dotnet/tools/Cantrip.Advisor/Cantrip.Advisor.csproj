@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- The advisor's table: a person plays the AI's seat against a bot, the AI says what it would do at every decision,
+       and every decision is recorded. A process of its own, beside no real table: its own GameServer, its own AI host,
+       its own page mode (?advisor). It needs a trained model, which is not in the repository. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>cantrip-advisor</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Cantrip.Server.Host\Cantrip.Server.Host.csproj" />
+    <ProjectReference Include="..\..\src\Cantrip.Client\Cantrip.Client.csproj" />
+  </ItemGroup>
+
+</Project>

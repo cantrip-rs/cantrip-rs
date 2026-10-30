@@ -37,6 +37,8 @@ public static class ClientConfig
         Test = query.ContainsKey("test");
         CardSheet = query.ContainsKey("cardsheet");
         Decks = query.ContainsKey("decks");
+        // The advisor's table (MainPage.Advisor.cs): its API, beside a table of its own; never a real table's page.
+        Advisor = query.GetValueOrDefault("advisor") is { Length: > 0 } advisor && Uri.TryCreate(advisor, UriKind.Absolute, out Uri? api) ? api : null;
         DeckId = query.GetValueOrDefault("deck") is { Length: > 0 } deck ? deck : null;
         DeckFormatKey = query.GetValueOrDefault("format") is { Length: > 0 } format ? format : null;
         Auto = query.ContainsKey("auto");
@@ -110,6 +112,12 @@ public static class ClientConfig
     /// deck editor).
     /// </summary>
     public static bool Decks { get; }
+
+    /// <summary>
+    /// The advisor's API (<c>?advisor=http://localhost:5390/advisor</c>), for a page at the advisor's own table
+    /// (dotnet/tools/Cantrip.Advisor): the table as ever, and beside it what the AI would do. Null for every other page.
+    /// </summary>
+    public static Uri? Advisor { get; }
 
     /// <summary>
     /// The saved deck the deck editor opens with (<c>?decks&amp;deck=ID</c>, as the site's deck library links it), or

@@ -22,9 +22,17 @@ name = "cantrip-regret"
 path = "src/bin/regret.rs"
 
 [[bin]]
+name = "cantrip-advisor-host"
+path = "src/bin/advisor.rs"
+
+[[bin]]
 name = "cantrip-infer"
 path = "src/bin/infer.rs"
 required-features = ["gpu"]
+
+[[bin]]
+name = "cantrip-probe"
+path = "src/bin/probe.rs"
 
 [dependencies]
 cantrip-ai.workspace = true
