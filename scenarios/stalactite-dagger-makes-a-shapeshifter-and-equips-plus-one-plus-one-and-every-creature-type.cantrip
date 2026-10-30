@@ -1,0 +1,59 @@
+# Stalactite Dagger ({2}): "When this Equipment enters, create a 1/1 colorless Shapeshifter creature token with changeling.",
+# "Equipped creature gets +1/+1 and is all creature types." and "Equip {2}". Turn 1: the Dagger makes the token (1/1), then
+# Equip {2} puts it on Llanowar Elves, which become a 2/2 that is every creature type (CR 205.3m, 613.1d). Turn 3: Equip {2} onto
+# the Shapeshifter token moves it (CR 702.6a): the Elves are an ordinary 1/1 Elf Druid again and the token is a 2/2.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Llanowar Elves
+Stalactite Dagger
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stalactite Dagger.Cast
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Shapeshifter Token.Power = 1
+? Bot1.Battlefield.Shapeshifter Token.Toughness = 1
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Stalactite Dagger.Activate(Ability: Equip; Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Power = 2
+? Bot1.Battlefield.Llanowar Elves.Toughness = 2
+? Bot1.Battlefield.Llanowar Elves.Subtypes = (every creature type)
+? Bot1.Battlefield.Shapeshifter Token.Power = 1
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Stalactite Dagger.Activate(Ability: Equip; Shapeshifter Token)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Llanowar Elves.Power = 1
+? Bot1.Battlefield.Llanowar Elves.Toughness = 1
+? Bot1.Battlefield.Llanowar Elves.Subtypes = Druid; Elf
+
+[Expect]
+Bot1.Battlefield.Shapeshifter Token.Power = 2
+Bot1.Battlefield.Shapeshifter Token.Toughness = 2
+Bot1.Battlefield.Count = 8
