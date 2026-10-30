@@ -1,4 +1,4 @@
-﻿[package]
+[package]
 name = "cantrip-ai"
 description = "The AI player's side of the engine: what each seat knows of the hidden game, and its observation of a game."
 version.workspace = true
