@@ -1,0 +1,35 @@
+# Shimmerwilds Growth: "Enchant land", "As this Aura enters, choose a color" (CR 614.12a): Bot1 chooses red. "Enchanted land is the chosen color": the
+# Forest, colorless before, is red afterwards. "Whenever enchanted land is tapped for mana, its controller adds an additional one mana of the chosen color":
+# a triggered mana ability (CR 605.1b) that resolves at once, so on turn 3 the Forest taps for {G} and the additional {R}.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Shimmerwilds Growth
+Plains x4
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Shimmerwilds Growth.Cast(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red)
+? Bot1.Battlefield.Forest.Colors = Red
+[T3 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+? Bot1.Mana = {R}{G}
+
+[Expect]
+Bot1.Battlefield.Shimmerwilds Growth.AttachedTo = Forest
+Bot1.Battlefield.Shimmerwilds Growth.ChosenColor = Red
+Bot1.Battlefield.Forest.Colors = Red
+Bot1.Mana = {R}{G}
