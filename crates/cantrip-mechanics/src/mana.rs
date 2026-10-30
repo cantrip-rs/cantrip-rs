@@ -23,6 +23,15 @@ pub fn add_green_for_each_creature(g: &mut dyn Game, asker: &Asker, _: Option<Co
     Ok(())
 }
 
+/// "For each color among permanents you control, add one mana of that color" (CR 106.5, 105.2): the colors counted as the ability
+/// resolves, possibly none. A mana ability's `add_by`: Bloom Tender (Vivid) and Faeburrow Elder.
+pub fn add_one_of_each_color_among_your_permanents(g: &mut dyn Game, asker: &Asker, _: Option<Color>) -> Result<(), Suspend> {
+    for color in crate::vivid::colors(g, asker.controller).iter() {
+        g.add_mana(asker.controller, color.mana(), 1);
+    }
+    Ok(())
+}
+
 /// "Add one mana of any of the exiled cards' colors" (CR 106.5, 607.2a): the colors the cards exiled with the source have now, for a
 /// mana ability's `colors_from`. With no exiled card, or only colorless ones, there is no color to choose: the ability is still
 /// offered and adds no mana (CR 106.5). Chrome Mox ("the exiled card") and Pit of Offerings read it.
