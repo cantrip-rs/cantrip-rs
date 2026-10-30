@@ -1,0 +1,52 @@
+# Lieutenant Commander Data: "Whenever a player casts a noncreature spell, put a +1/+1 counter on Lieutenant Commander
+# Data" (CR 603.2) - Bot1's two Moxen and then Bot2's Lightning Bolt are three noncreature spells, whoever casts them.
+# "{1}, Remove three counters from among creatures you control: Draw a card" (CR 118.3, 602.2b): the three +1/+1 counters
+# come off Data, exactly three (two would leave one and be refused by the removal, which asks for three), one mana is paid
+# from an untapped Mox Ruby with nothing left over, and Bot1 draws a card.
+
+[Bot1 Deck]
+Black Lotus
+Lieutenant Commander Data
+Mox Ruby
+Mox Emerald
+Mox Jet
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Lieutenant Commander Data.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lieutenant Commander Data.Counters.PlusOnePlusOne = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Life = 17
+? Bot1.Battlefield.Lieutenant Commander Data.Counters.PlusOnePlusOne = 3
+? Bot1.Hand.Count = 4
+Bot1.Battlefield.Lieutenant Commander Data.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.RemoveCounters(Lieutenant Commander Data: 3)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Lieutenant Commander Data.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Count = 5
+Bot1.Battlefield.Lieutenant Commander Data.Toughness = 2

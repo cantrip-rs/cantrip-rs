@@ -1,0 +1,59 @@
+# "{1}, Remove three counters from among creatures you control" (CR 118.3): Bot1's Lieutenant Commander Data has two
+# +1/+1 counters and Bot2's Walking Ballista one, so on turn 3 the ability is not offered - two of Bot1's own is short,
+# and the Ballista's counter is not Bot1's. On turn 5 a third Mox gives Data its third counter and the ability is
+# activated: the counters come off Data, one mana is paid, and a card is drawn. The Ballista keeps its counter.
+
+[Bot1 Deck]
+Black Lotus
+Lieutenant Commander Data
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island
+Island
+Walking Ballista
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Lieutenant Commander Data.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Lieutenant Commander Data.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Count = 3
+! Bot1.Battlefield.Lieutenant Commander Data.Activate
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island#1.Activate
+Bot2.Battlefield.Island#2.Activate
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Lieutenant Commander Data.Counters.PlusOnePlusOne = 2
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lieutenant Commander Data.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Lieutenant Commander Data.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.RemoveCounters(Lieutenant Commander Data: 3)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Lieutenant Commander Data.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Count = 5

@@ -1,0 +1,8 @@
+{
+  "name": "Lieutenant Commander Data",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Artifact Creature — Android Scientist",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever a player casts a noncreature spell, put a +1/+1 counter on Lieutenant Commander Data.\n{1}, Remove three counters from among creatures you control: Draw a card."
+}
