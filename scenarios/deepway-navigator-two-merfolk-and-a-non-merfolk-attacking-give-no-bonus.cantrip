@@ -1,0 +1,44 @@
+# Deepway Navigator's "As long as you attacked with three or more Merfolk this turn": two Coral Merfolk attack beside an Ornithopter (three
+# attackers, but only two Merfolk), then the Navigator is flashed in: the Corals stay 2/1 and the Navigator a 2/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Coral Merfolk
+Coral Merfolk
+Ornithopter
+Mox Pearl
+Mox Jet
+Deepway Navigator
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Coral Merfolk.Cast
+Bot1.Hand.Coral Merfolk.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Attack(Coral Merfolk#1; Coral Merfolk#2; Ornithopter > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deepway Navigator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Coral Merfolk#1.Power = 2
+Bot1.Battlefield.Coral Merfolk#2.Power = 2
+Bot1.Battlefield.Deepway Navigator.Power = 2
+Bot1.Battlefield.Coral Merfolk#1.Tapped = false

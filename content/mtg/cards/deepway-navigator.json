@@ -1,0 +1,11 @@
+{
+  "name": "Deepway Navigator",
+  "manaCost": "{W}{U}",
+  "type": "Creature — Merfolk Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash\nWhen this creature enters, untap each other Merfolk you control.\nAs long as you attacked with three or more Merfolk this turn, Merfolk you control get +1/+0.",
+  "keywords": [
+    "Flash"
+  ]
+}
