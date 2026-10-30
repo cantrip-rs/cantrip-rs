@@ -1,0 +1,57 @@
+# Guidance Failure can target a Spacecraft even when it is not a creature (CR 205.3g); because that Wurmwall Sweeper is not an attacking creature, it gets no {1} reduction. With three mana the full {3}{U} cost is refused; the fourth mana enables the cast, and the pool empties. Bot1 refuses a land as an illegal target, then targets its own Spacecraft. Its owner chooses the top, and draws it on the next turn.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Wurmwall Sweeper
+Guidance Failure
+Island
+Mountain
+Forest
+Plains
+Swamp
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Wurmwall Sweeper.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Forest; Plains |)
+? Bot1.Battlefield.Wurmwall Sweeper.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = {U}{B}{R}
+! Bot1.Hand.Guidance Failure.Cast(Bot1.Battlefield.Wurmwall Sweeper; Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {U}{U}{B}{R}
+! Bot1.Hand.Guidance Failure.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Guidance Failure.Cast(Bot1.Battlefield.Wurmwall Sweeper)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Mountain; Forest; Wurmwall Sweeper
+Bot1.Library.Count = 22
+Bot1.Graveyard = Guidance Failure
+
