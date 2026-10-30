@@ -22,15 +22,28 @@ public sealed class TablePage : IAsyncDisposable
     private readonly string _pictures;
     private int _pictured;
 
-    private TablePage(IBrowserContext context, IPage page, string pictures)
+    private TablePage(IBrowserContext context, IPage page, string pictures, bool phone)
     {
         _context = context;
         Page = page;
         _pictures = pictures;
+        Phone = phone;
         page.PageError += (_, error) => _errors.Add(error);
     }
 
     public IPage Page { get; }
+
+    /// <summary>
+    /// Whether the page is a phone's: opened upright at a phone's size, on a touch screen (<see cref="PhoneViewport"/>), and
+    /// tapped rather than clicked.
+    /// </summary>
+    public bool Phone { get; }
+
+    /// <summary>A phone held upright, as the in-person tests open one: a common handset's size in CSS pixels.</summary>
+    public static readonly ViewportSize PhoneViewport = new() { Width = 390, Height = 844 };
+
+    /// <summary>A click at a point, as a person makes it: a tap with a finger on a phone's page, the mouse's left button elsewhere.</summary>
+    public Task TapAsync(float x, float y) => Phone ? Page.Touchscreen.TapAsync(x, y) : Page.Mouse.ClickAsync(x, y);
 
     /// <summary>Uncaught errors the page has thrown, which a test fails on.</summary>
     public IReadOnlyList<string> Errors => _errors;
@@ -47,8 +60,9 @@ public sealed class TablePage : IAsyncDisposable
         string query,
         string pictures,
         IReadOnlyDictionary<string, string>? settings = null,
-        IReadOnlyDictionary<string, string>? storage = null) =>
-        OpenAsync(web.Browser, web.Site, query, pictures, settings, storage);
+        IReadOnlyDictionary<string, string>? storage = null,
+        bool phone = false) =>
+        OpenAsync(web.Browser, web.Site, query, pictures, settings, storage, phone: phone);
 
     /// <summary>
     /// Opens the client served from another site than the suite's own - one with more behind it, as the deck editor's
@@ -61,11 +75,17 @@ public sealed class TablePage : IAsyncDisposable
         string pictures,
         IReadOnlyDictionary<string, string>? settings = null,
         IReadOnlyDictionary<string, string>? storage = null,
-        IEnumerable<KeyValuePair<string, string>>? headers = null)
+        IEnumerable<KeyValuePair<string, string>>? headers = null,
+        bool phone = false)
     {
+        // A phone's page is a phone's size even headed, on a touch screen, as a phone's browser lays it out.
         IBrowserContext context = await browser.NewContextAsync(new BrowserNewContextOptions
         {
-            ViewportSize = WebClient.Headed ? ViewportSize.NoViewport : new ViewportSize { Width = WebClient.Width, Height = WebClient.Height },
+            ViewportSize = phone ? PhoneViewport
+                : WebClient.Headed ? ViewportSize.NoViewport : new ViewportSize { Width = WebClient.Width, Height = WebClient.Height },
+            HasTouch = phone,
+            IsMobile = phone,
+            DeviceScaleFactor = phone ? 2 : null,
             ExtraHTTPHeaders = headers,
         });
 
@@ -80,7 +100,7 @@ public sealed class TablePage : IAsyncDisposable
         }
 
         IPage page = await context.NewPageAsync();
-        var table = new TablePage(context, page, pictures);
+        var table = new TablePage(context, page, pictures, phone);
         // Into the query, before any fragment the caller gave (a ticket after the hash).
         int hash = query.IndexOf('#', StringComparison.Ordinal);
         string address = hash < 0 ? $"{site}?{query}&test" : $"{site}?{query[..hash]}&test{query[hash..]}";
@@ -219,7 +239,7 @@ public sealed class TablePage : IAsyncDisposable
         ControlState control = state.Controls.FirstOrDefault(c => (kind is null || c.Kind == kind) && c.Label == label)
             ?? state.Controls.FirstOrDefault(c => (kind is null || c.Kind == kind) && c.Label.Contains(label, StringComparison.Ordinal))
             ?? throw new Xunit.Sdk.XunitException($"No control saying '{label}'. There are: {string.Join(", ", state.Controls.Select(c => $"{c.Kind} '{c.Label}'"))}");
-        await Page.Mouse.ClickAsync(control.X, control.Y);
+        await TapAsync(control.X, control.Y);
     }
 
     /// <summary>Clicks into a box by its placeholder and types into it, key by key, as a person does.</summary>
@@ -307,7 +327,17 @@ public sealed record TableState(
     IReadOnlyList<string>? Combat = null,
     DeckEditorState? DeckEditor = null,
     IReadOnlyList<string>? TargetLabels = null,
-    IReadOnlyList<CompanionWindowState>? Companions = null);
+    IReadOnlyList<CompanionWindowState>? Companions = null,
+    InPersonState? InPerson = null);
+
+/// <summary>
+/// A phone at an in-person table (MainPage.InPerson.cs): whether its Board is shown, how many taps from the tablets wait,
+/// each tap it settled, and the line saying a tap did nothing while it is up. Null for any other page.
+/// </summary>
+public sealed record InPersonState(string Role, bool Board, int Waiting, IReadOnlyList<TableTapState> Taps, string Refusal);
+
+/// <summary>One tap from a tablet a phone settled: the seat's object tapped or the player, the request it was for, whether it was used and had to wait for its prompt.</summary>
+public sealed record TableTapState(int TapId, int RequestId, int Handle, int Player, bool Used, bool Held);
 
 /// <summary>A companion window over a half of the table: whose it is ("mine" or "opponent") and which corner it stands in.</summary>
 public sealed record CompanionWindowState(string Whose, string Corner);

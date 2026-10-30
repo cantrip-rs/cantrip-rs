@@ -412,6 +412,36 @@ take their seat - is a page of its own where the lobby is (`LobbyPanel.RenderOve
 given up at a table still filling - left, or not ready in time - has the same button back to the draft queues.
 `GoingBackTests` drops a player from a draft and goes back from the other's page.
 
+## In-person play
+
+At an in-person table (`docs/in-person.md`) each player's phone is this page, opened from its QR code with
+`?inperson=phone` and its seat's ticket, playing through the ordinary `/game` socket; the public board lies on tablets.
+Everything the phone adds is in `MainPage.InPerson.cs` and `InPerson/PhoneLink.cs`, reached from one line in the
+constructor (`AttachPhone`), and does nothing on any other page: the remote client is unchanged by it.
+
+- **Layout.** Upright: the dock across the phone's width over the hand, a bar over them with the **Board** button, and
+  above them this player's rail (life, mana pool, piles) with the stack and any choice window floating beside it. The
+  whole board, both halves as the remote client draws them, is behind **Board**: the tablets show the public board, and
+  only the phone can show its owner what they alone may see there, such as their face-down cards. The side panel starts
+  closed, without touching the remote client's setting, and opens over the table. The draft and deck building are the
+  page's own, at a phone's size (`DraftTests.A_grid_draft_is_drafted_on_an_in_person_phone`).
+- **Taps on the tablets.** The relay hands the phone a tap on a tablet routed to its seat (`SeatTapMessage`, already in
+  this seat's handles), and the page does exactly what a click on that card, or that player's box (`PlayerClick`), does
+  here: a land tapped at priority, while a cost is paid or while X is announced; a target; an attacker's or a blocker's
+  pick. It acts only on the request the tap was routed to, once that prompt has been drawn; a tap that beats its prompt
+  waits about a second for it, and taps are taken in the order they came. A menu the click opens (a land's colours) opens
+  in the middle of the phone. The phone says whether the tap was used (`TapResultMessage`); one it could not use - its
+  prompt past, or the thing tapped no choice now - is said on the phone with a short line over the dock and a buzz where
+  the browser can vibrate (`Phone.js`), and never on the tablet.
+- **Testing.** Under `?test`, the test state's `inPerson` is the phone's Board, the taps waiting, every tap settled (used,
+  held for its prompt) and the line up now; a test stands in for the relay by queueing taps on
+  `globalThis.cantripTableTaps` (`o12@34;` the seat's object 12 for request 34, `p2@34;` player 2), since `cantripTest`
+  itself is a string. `ScenarioPlayer.PlayAsync(..., phone: true)` plays a scenario on a phone-sized touch page, tapping
+  the hand and the dock with a finger and tapping every permanent and player on the "tablet" through that queue, the table
+  judging each answer against the script (`PhoneTests`: Bolt at a Tarmogoyf with the Mountain tapped at priority, Fireball
+  at a player paid with lands tapped during the payment, Engineered Explosives' X planned with a land tapped as it is
+  announced, and the taps the phone must not use).
+
 ## Open
 
 - The emblem pile beside a player's graveyard.

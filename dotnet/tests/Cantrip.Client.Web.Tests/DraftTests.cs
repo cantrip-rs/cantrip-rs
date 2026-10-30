@@ -47,10 +47,28 @@ public sealed class DraftTests(WebClient web)
     }
 
     /// <summary>
+    /// The same grid draft on a player's phone at an in-person table (<c>?inperson=phone</c>, PhoneTests): the draft and deck
+    /// building are the page's own, at a phone's size and tapped with a finger.
+    /// </summary>
+    [Fact]
+    public async Task A_grid_draft_is_drafted_on_an_in_person_phone()
+    {
+        string data = Path.Combine(Path.GetTempPath(), "cantrip-grid-phone-test-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            await Grid(data, phone: true);
+        }
+        finally
+        {
+            Directory.Delete(data, recursive: true);
+        }
+    }
+
+    /// <summary>
     /// A grid draft of three grids against a bot: on each of this seat's picks a line with cards left in it is chosen
     /// by its button, lighting it, and taken with Take; the cards fly into the pool, and the draft ends in deck building.
     /// </summary>
-    private async Task Grid(string data)
+    private async Task Grid(string data, bool phone = false)
     {
         var store = new EventStore(data);
         CreatedEvent created = DraftPod.CreateGrid(store, ContentCache.Get(WebClient.Content), new GridDraftSetup
@@ -91,7 +109,10 @@ public sealed class DraftTests(WebClient web)
         });
 
         await using TablePage page = await TablePage.OpenAsync(
-            web, $"server={Uri.EscapeDataString(address.AbsoluteUri)}#ticket={created.Tickets["you"]}", WebClient.Pictures(nameof(DraftTests)));
+            web,
+            $"server={Uri.EscapeDataString(address.AbsoluteUri)}{(phone ? "&inperson=phone" : string.Empty)}#ticket={created.Tickets["you"]}",
+            WebClient.Pictures(nameof(DraftTests) + (phone ? "-phone" : string.Empty)),
+            phone: phone);
 
         TableState state = await page.SettledAsync(state => state.Phase == "Drafting");
         Assert.Equal($"Cantrip - Grid Draft ({created.Record.Id})", await page.Page.TitleAsync());
@@ -140,7 +161,7 @@ public sealed class DraftTests(WebClient web)
                 int pooled = state.Cards.Count(card => card.Row is "pool" or "sideboard");
 
                 ControlState take = state.Controls.First(control => control.Label.StartsWith("Take ", StringComparison.Ordinal));
-                await page.Page.Mouse.ClickAsync(take.X, take.Y);
+                await page.TapAsync(take.X, take.Y);
                 pickedFor = draft.Decision;
                 picks++;
 

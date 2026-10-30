@@ -127,6 +127,7 @@ public sealed partial class MainPage : Page
     {
         this.InitializeComponent();
         BuildUi();
+        AttachPhone();
 
         // Not a reimplementation of the wire protocol - this is Cantrip.Client/Cantrip.Protocol
         // themselves, compiled into this browser-wasm build and talking to a real Cantrip.Server.Host
@@ -1544,32 +1545,10 @@ public sealed partial class MainPage : Page
         _opponentHalf.Panel.Background = Theme.Brush(opponentActive ? Theme.HalfActive : Theme.HalfIdle);
         _myHalf.Panel.Background = Theme.Brush(!client.IsOver && myTurn ? Theme.HalfActive : Theme.HalfIdle);
 
-        // A player is aimed at by clicking their box, while they are among the candidates.
         void Aimable(PlayerRail rail, int seat)
         {
-            TargetMessage? candidate = AimCandidates(client)?.FirstOrDefault(c => c.IsPlayer && c.Player == seat);
-
-            // Or attacked, by the creatures picked up to attack.
-            if (candidate is null && client.Prompt?.Prompt is DeclareAttackersPromptMessage attacking
-                && _pending.Any(creature => MayAttack(attacking, creature, new AttackChoice(seat, ViewHandle.None))))
-            {
-                rail.SetTarget(
-                    () =>
-                    {
-                        AssignAttack(client, attacking, new AttackChoice(seat, ViewHandle.None));
-                        RedrawNow();
-                    },
-                    chosen: false);
-                return;
-            }
-
-            rail.SetTarget(
-                candidate is null ? null : () =>
-                {
-                    Aim(client, candidate);
-                    RedrawNow();
-                },
-                candidate is not null && IsPickedTarget(candidate));
+            (Action? click, bool chosen) = PlayerClick(client, seat);
+            rail.SetTarget(click, chosen);
         }
 
         Aimable(_myHalf.Rail, client.Seat);
@@ -1656,6 +1635,36 @@ public sealed partial class MainPage : Page
         RememberPlaces();
         PaintTargetArrows(client);
         PaintSelection(client);
+    }
+
+    /// <summary>
+    /// What a click on a player's box does now, and whether they are a target already picked: a player is aimed at by
+    /// clicking their box while they are among the candidates, or attacked, by the creatures picked up to attack. No click
+    /// while they are neither. The box on the rail, and a player tapped on an in-person table's tablet (MainPage.InPerson.cs).
+    /// </summary>
+    private (Action? Click, bool Chosen) PlayerClick(GameClient client, int seat)
+    {
+        TargetMessage? candidate = AimCandidates(client)?.FirstOrDefault(c => c.IsPlayer && c.Player == seat);
+
+        if (candidate is null && client.Prompt?.Prompt is DeclareAttackersPromptMessage attacking
+            && _pending.Any(creature => MayAttack(attacking, creature, new AttackChoice(seat, ViewHandle.None))))
+        {
+            return (
+                () =>
+                {
+                    AssignAttack(client, attacking, new AttackChoice(seat, ViewHandle.None));
+                    RedrawNow();
+                },
+                false);
+        }
+
+        return (
+            candidate is null ? null : () =>
+            {
+                Aim(client, candidate);
+                RedrawNow();
+            },
+            candidate is not null && IsPickedTarget(candidate));
     }
 
     /// <summary>The width a companion is drawn at in its window: small, beside the battlefield's cards.</summary>

@@ -60,8 +60,29 @@ public sealed class ScenarioPlayer
     /// </summary>
     private readonly (string Name, int Count)? _planX;
 
-    private ScenarioPlayer(TablePage page, ScenarioTable table, bool hold, (GameClient Client, TimeSpan Thinks)? opponent, (string Name, int Count)? planX)
+    /// <summary>
+    /// Whether Bot1's page is a phone at an in-person table (<c>?inperson=phone</c>, docs/in-person.md): tapped rather than
+    /// clicked, and every card it does not show - the battlefield, which lies on the tablets - and every player tapped on a
+    /// tablet instead, through the page's stand-in for the relay (<c>globalThis.cantripTableTaps</c>, MainPage.Test.cs).
+    /// </summary>
+    private readonly bool _phone;
+
+    /// <summary>The request the table asks Bot1 now: the one a tap on a tablet is routed to.</summary>
+    private int _asking;
+
+    /// <summary>The taps made on the tablets so far, which the phone numbers as it takes them.</summary>
+    private int _tableTaps;
+
+    /// <summary>
+    /// Whether the phone's first tap on a tablet is preceded by taps it must not use (<see cref="ProbeRefusalsAsync"/>); set
+    /// until they have been made.
+    /// </summary>
+    private bool _probeRefusals;
+
+    private ScenarioPlayer(TablePage page, ScenarioTable table, bool hold, (GameClient Client, TimeSpan Thinks)? opponent, (string Name, int Count)? planX, bool phone, bool probeRefusals)
     {
+        _phone = phone;
+        _probeRefusals = probeRefusals;
         _planX = planX;
         _page = page;
         _table = table;
@@ -77,7 +98,9 @@ public sealed class ScenarioPlayer
     /// priority, and the page passes by itself everywhere else, the table judging each such pass as it judges a click.
     /// With <paramref name="opponentThinks"/>, Bot2 is a client at the table too, as an opponent at a real table is, and
     /// answers each of its questions as the script means that long after it is asked. With <paramref name="planX"/>, an X is
-    /// raised by planning that many of the named mana source for it, and the page pays with them by itself.
+    /// raised by planning that many of the named mana source for it, and the page pays with them by itself. With
+    /// <paramref name="phone"/>, Bot1's page is a phone at an in-person table (<see cref="_phone"/>); with
+    /// <paramref name="probeRefusals"/> too, its first tap on a tablet follows three it must not use (<see cref="ProbeRefusalsAsync"/>).
     /// </summary>
     public static async Task<string?> PlayAsync(
         WebClient web,
@@ -85,7 +108,9 @@ public sealed class ScenarioPlayer
         IReadOnlyList<TurnStepView>? stopsMine = null,
         IReadOnlyList<TurnStepView>? stopsTheirs = null,
         TimeSpan? opponentThinks = null,
-        (string Name, int Count)? planX = null)
+        (string Name, int Count)? planX = null,
+        bool phone = false,
+        bool probeRefusals = false)
     {
         ScenarioSpec scenario = ScenarioSpec.Load(path, opponentThinks is null ? [1] : [1, 2]);
         await using ScenarioTable table = await ScenarioTable.StartAsync(scenario, WebClient.Content);
@@ -93,14 +118,15 @@ public sealed class ScenarioPlayer
             new ArtStore(new ArtStoreOptions { ContentRoot = WebClient.Content, CacheDirectory = WebClient.ArtCache }), "127.0.0.1", 0);
         await using TablePage page = await TablePage.OpenAsync(
             web,
-            $"server={Uri.EscapeDataString(table.Address.AbsoluteUri)}&art={Uri.EscapeDataString(art.Urls.First())}&seat=1&name=Bot1",
-            WebClient.Pictures(Path.Combine(nameof(ScenarioPlayer), scenario.Name)),
+            $"server={Uri.EscapeDataString(table.Address.AbsoluteUri)}&art={Uri.EscapeDataString(art.Urls.First())}&seat=1&name=Bot1{(phone ? "&inperson=phone" : string.Empty)}",
+            WebClient.Pictures(Path.Combine(nameof(ScenarioPlayer), scenario.Name + (phone ? (planX is null ? "-phone" : "-phone-planned") : string.Empty))),
             settings: new Dictionary<string, string> { ["auto-mana"] = "false" },
             storage: new Dictionary<string, string>
             {
                 ["cantrip-stops-mine"] = stopsMine is null ? EveryStep : string.Join(",", stopsMine),
                 ["cantrip-stops-theirs"] = stopsTheirs is null ? EveryStep : string.Join(",", stopsTheirs),
-            });
+            },
+            phone: phone);
 
         GameClient? opponent = null;
         if (opponentThinks is not null)
@@ -114,7 +140,9 @@ public sealed class ScenarioPlayer
             table,
             hold: stopsMine is null && stopsTheirs is null,
             opponent is null ? null : (opponent, opponentThinks!.Value),
-            planX);
+            planX,
+            phone,
+            probeRefusals);
         try
         {
             return await player.PlayAsync();
@@ -234,6 +262,14 @@ public sealed class ScenarioPlayer
             {
                 _trace.Add($"{expected.Line ?? "(default)"}: {Describe(expected)}");
                 _clicked.Add(expected.RequestId);
+                _asking = expected.RequestId;
+
+                // A phone's layout is pictured at every question it answers, since no other test shows it.
+                if (_phone)
+                {
+                    await _page.PictureAsync($"phone-request-{expected.RequestId}");
+                }
+
                 await AnswerAsync(expected, state);
             }
         }
@@ -278,13 +314,22 @@ public sealed class ScenarioPlayer
 
             // X, or the times kicked, stepped up from the 0 it is asked at on the dock's plus, which sends nothing, and announced
             // with Okay (CR 601.2b).
+            case AnnounceAnswer when _planX is { } plan && _phone:
+                foreach (int source in await PhoneBoardHandlesAsync(card => card.Place == "battlefield" && card.Name == plan.Name && !card.Tapped && card.Annotation != "For X", plan.Count))
+                {
+                    await TableTapAsync($"o{source}");
+                }
+
+                await _page.ClickAsync("Okay", "button");
+                return;
+
             case AnnounceAnswer announced when _planX is { } plan:
                 for (int i = 0; i < plan.Count; i++)
                 {
                     TableState now = await _page.SettledAsync();
                     CardState source = now.Cards.FirstOrDefault(card => card.Place == "battlefield" && card.Name == plan.Name && !card.Tapped && card.Annotation != "For X")
                         ?? throw new NotDrivenException($"No {plan.Name} left to plan for X", now);
-                    await _page.Page.Mouse.ClickAsync(source.X, source.Y);
+                    await _page.TapAsync(source.X, source.Y);
                 }
 
                 await _page.ClickAsync("Okay", "button");
@@ -373,7 +418,7 @@ public sealed class ScenarioPlayer
                     if (confirm is not null)
                     {
                         _lastConfirm = confirm.Label;
-                        await _page.Page.Mouse.ClickAsync(confirm.X, confirm.Y);
+                        await _page.TapAsync(confirm.X, confirm.Y);
                     }
                     else
                     {
@@ -438,7 +483,7 @@ public sealed class ScenarioPlayer
                         && (c.Label.StartsWith("No target", StringComparison.Ordinal) || c.Label.StartsWith("No choice", StringComparison.Ordinal)
                             || c.Label.StartsWith("Choose none", StringComparison.Ordinal)))
                         ?? throw new NotDrivenException("a choice of no target at all", state);
-                    await _page.Page.Mouse.ClickAsync(none.X, none.Y);
+                    await _page.TapAsync(none.X, none.Y);
                 }
 
                 return;
@@ -476,7 +521,7 @@ public sealed class ScenarioPlayer
                 // with the button the typing settles on ("Name Wasteland"). Only names the question allows are matched.
                 ControlState box = state.Controls.FirstOrDefault(c => c.Kind == "textbox")
                     ?? throw new NotDrivenException($"the name {named.Name}, with no box to type it in", state);
-                await _page.Page.Mouse.ClickAsync(box.X, box.Y);
+                await _page.TapAsync(box.X, box.Y);
                 await _page.Page.Keyboard.TypeAsync(named.Name);
                 await ClickButtonNamedAsync($"Name {named.Name}");
                 return;
@@ -550,7 +595,7 @@ public sealed class ScenarioPlayer
                             break;
                         }
 
-                        await _page.Page.Mouse.ClickAsync(step.X, step.Y);
+                        await _page.TapAsync(step.X, step.Y);
                     }
                 }
 
@@ -613,7 +658,7 @@ public sealed class ScenarioPlayer
                 TableState now = await _page.SettledAsync();
                 ControlState button = ButtonsUnder(now, card.Value, placed).FirstOrDefault(b => b.Label == piles[i])
                     ?? throw new NotDrivenException($"a \"{piles[i]}\" button under card #{card.Value}", now);
-                await _page.Page.Mouse.ClickAsync(button.X, button.Y);
+                await _page.TapAsync(button.X, button.Y);
             }
         }
 
@@ -713,7 +758,7 @@ public sealed class ScenarioPlayer
                     ?? throw new Xunit.Sdk.XunitException(
                         $"No {(sourced ? "source's" : restricted ? "restricted" : "plain")} {action.Mana} in the pool to click: "
                         + string.Join(", ", me.Mana.Select(c => $"{c.Count} {c.Type}{(c.Caption.Length > 0 ? $" ({c.Caption})" : string.Empty)}")));
-                await _page.Page.Mouse.ClickAsync(chip.X, chip.Y);
+                await _page.TapAsync(chip.X, chip.Y);
                 return;
             }
 
@@ -733,7 +778,7 @@ public sealed class ScenarioPlayer
                     && after.Cards.FirstOrDefault(c => c.Visible && c.Handle == action.Source.Value && c.Place == "choice") is { } inPane)
                 {
                     (float x, float y) = ClickPoint(after, inPane);
-                    await _page.Page.Mouse.ClickAsync(x, y);
+                    await _page.TapAsync(x, y);
                     after = await _page.SettledAsync();
                 }
 
@@ -803,7 +848,7 @@ public sealed class ScenarioPlayer
             throw new NotDrivenException($"which row of the menu is {action.Kind}{(action.Color is { } c ? " " + c : string.Empty)}", state);
         }
 
-        await _page.Page.Mouse.ClickAsync(row.X, row.Y);
+        await _page.TapAsync(row.X, row.Y);
         if (_zoneToClose is { } open)
         {
             _zoneToClose = null;
@@ -859,10 +904,16 @@ public sealed class ScenarioPlayer
             return;
         }
 
+        if (_phone)
+        {
+            await TableTapAsync($"p{target.Player}");
+            return;
+        }
+
         TableState state = await _page.SettledAsync();
         PlayerState box = state.Players?.FirstOrDefault(p => p.Seat == target.Player)
             ?? throw new Xunit.Sdk.XunitException($"Seat {target.Player} is not shown to click.");
-        await _page.Page.Mouse.ClickAsync(box.X, box.Y);
+        await _page.TapAsync(box.X, box.Y);
     }
 
     /// <summary>
@@ -886,7 +937,7 @@ public sealed class ScenarioPlayer
 
         foreach ((int seat, bool graveyard, float x, float y) in openers)
         {
-            await _page.Page.Mouse.ClickAsync(x, y);
+            await _page.TapAsync(x, y);
             TableState open = await _page.SettledAsync();
             if (open.Cards.Where(c => c.Visible && c.Handle == handle).MaxBy(c => c.W) is { } found)
             {
@@ -894,7 +945,7 @@ public sealed class ScenarioPlayer
             }
 
             // Not in this one: shut it, where its opener is now (the board moves over when a graveyard opens).
-            await _page.Page.Mouse.ClickAsync(x, y);
+            await _page.TapAsync(x, y);
             await _page.SettledAsync();
         }
 
@@ -945,7 +996,7 @@ public sealed class ScenarioPlayer
         {
             if (state.GraveyardsOpen && player is { GraveyardX: > 0 })
             {
-                await _page.Page.Mouse.ClickAsync(player.GraveyardX, player.GraveyardY);
+                await _page.TapAsync(player.GraveyardX, player.GraveyardY);
                 await _page.SettledAsync();
             }
 
@@ -954,7 +1005,7 @@ public sealed class ScenarioPlayer
 
         if (player?.Zones?.FirstOrDefault(z => OutsideOrExile(z.Text) && z.Open) is { } button)
         {
-            await _page.Page.Mouse.ClickAsync(button.X, button.Y);
+            await _page.TapAsync(button.X, button.Y);
             await _page.SettledAsync();
         }
     }
@@ -966,6 +1017,13 @@ public sealed class ScenarioPlayer
     private async Task ClickHandleAsync(int handle)
     {
         TableState state = await _page.SettledAsync();
+
+        // A phone shows the hand, the stack and its choices; a card it does not show is on the battlefield, on a tablet.
+        if (_phone && !state.Cards.Any(c => c.Visible && c.Handle == handle))
+        {
+            await TableTapAsync($"o{handle}");
+            return;
+        }
         // A card in a graveyard is drawn twice while the graveyards are open (the pile, and the list a player reads it in) and only
         // as the pile's top card while they are shut: a click on the pile opens or shuts the list and acts on nothing, so the card
         // is clicked in the list, which is opened as a person opens it.
@@ -1001,7 +1059,7 @@ public sealed class ScenarioPlayer
         // The stack fans its cards, each covering most of the one beneath: the strip of the card's left edge is the part of
         // it that is always in view.
         (float x, float y) = ClickPoint(opened is null ? state : await _page.SettledAsync(), card);
-        await _page.Page.Mouse.ClickAsync(x, y);
+        await _page.TapAsync(x, y);
         // A click that opened a menu is not left: closing the zone would dismiss the menu whose row is about to be chosen.
         if (opened is { } zone)
         {
@@ -1014,6 +1072,89 @@ public sealed class ScenarioPlayer
                 await CloseZoneAsync(zone.Seat, zone.Graveyard);
             }
         }
+    }
+
+    /// <summary>
+    /// A tap on a tablet, routed to Bot1's phone for the request the table asks now, as the relay routes it: <c>o12</c> the
+    /// object the seat knows as 12, <c>p2</c> player 2. The phone must use it - act on it exactly as a click there would.
+    /// </summary>
+    private async Task TableTapAsync(string what)
+    {
+        if (_probeRefusals)
+        {
+            _probeRefusals = false;
+            await ProbeRefusalsAsync();
+        }
+
+        (TableTapState tap, TableState state) = await InjectTapAsync(what, _asking);
+        if (!tap.Used)
+        {
+            throw new Xunit.Sdk.XunitException($"The phone did not use a tap on the table ({what}) for request {_asking}: \"{state.InPerson?.Refusal}\"");
+        }
+    }
+
+    /// <summary>A tap on a tablet routed to Bot1's phone for <paramref name="request"/>, and what the phone made of it once settled.</summary>
+    private async Task<(TableTapState Tap, TableState State)> InjectTapAsync(string what, int request)
+    {
+        int id = ++_tableTaps;
+        await _page.Page.EvaluateAsync(
+            "tap => { globalThis.cantripTableTaps = (globalThis.cantripTableTaps ?? '') + tap + ';'; }",
+            $"{what}@{request}");
+        TableState state = await _page.SettledAsync(s => s.InPerson?.Taps.Any(t => t.TapId == id) == true);
+        TableTapState tap = state.InPerson!.Taps.First(t => t.TapId == id);
+        _trace.Add($"table tap {what} for request {request}: {(tap.Used ? "used" : "unused")}{(tap.Held ? ", held for its prompt" : string.Empty)}");
+        return (tap, state);
+    }
+
+    /// <summary>
+    /// Three taps on the tablets the phone must not use, made before its first real one, each leaving the question where it
+    /// was and saying so on the phone: a player who is no choice now; a tap routed to a request already past, let go at
+    /// once; and one routed to a request that never comes, held for its prompt about a second and then let go.
+    /// </summary>
+    private async Task ProbeRefusalsAsync()
+    {
+        int asking = _asking;
+        TableState before = await _page.SettledAsync();
+
+        (TableTapState player, TableState afterPlayer) = await InjectTapAsync($"p{before.Seat}", asking);
+        Assert(!player.Used && !player.Held && afterPlayer.InPerson!.Refusal.Length > 0, $"a tap on player {before.Seat}, no choice now, was {Describe(player, afterPlayer)}");
+
+        (TableTapState past, TableState afterPast) = await InjectTapAsync($"p{before.Seat}", asking - 1);
+        Assert(!past.Used && !past.Held, $"a tap for a request already past was {Describe(past, afterPast)}");
+
+        System.Diagnostics.Stopwatch waited = System.Diagnostics.Stopwatch.StartNew();
+        (TableTapState early, TableState afterEarly) = await InjectTapAsync($"p{before.Seat}", asking + 1000);
+        Assert(!early.Used && early.Held && waited.Elapsed >= TimeSpan.FromSeconds(0.9),
+            $"a tap for a request still to come was {Describe(early, afterEarly)} after {waited.Elapsed.TotalSeconds:0.0} s");
+
+        Assert(afterEarly.RequestId == before.RequestId && afterEarly.AnsweredRequest == before.AnsweredRequest,
+            $"the question moved under taps the phone did not use: request {before.RequestId} -> {afterEarly.RequestId}");
+
+        static string Describe(TableTapState tap, TableState state) =>
+            $"{(tap.Used ? "used" : "unused")}, {(tap.Held ? "held" : "not held")}, the phone saying \"{state.InPerson?.Refusal}\"";
+
+        static void Assert(bool holds, string otherwise)
+        {
+            if (!holds)
+            {
+                throw new Xunit.Sdk.XunitException(otherwise);
+            }
+        }
+    }
+
+    /// <summary>
+    /// The handles of cards on the battlefield that a person at the table would find on a tablet: read from the phone's own
+    /// Board, opened and shut again for it, since the phone does not publish the board it keeps hidden.
+    /// </summary>
+    private async Task<List<int>> PhoneBoardHandlesAsync(Func<CardState, bool> which, int count)
+    {
+        await _page.ClickAsync("Board", "button");
+        TableState shown = await _page.SettledAsync(s => s.InPerson?.Board == true);
+        await _page.PictureAsync($"phone-board-request-{_asking}");
+        List<int> handles = [.. shown.Cards.Where(c => c.Visible).Where(which).Select(c => c.Handle).Distinct().Take(count)];
+        await _page.ClickAsync("Board", "button");
+        await _page.SettledAsync(s => s.InPerson?.Board == false);
+        return handles.Count == count ? handles : throw new NotDrivenException($"{count} such cards on the board, with {handles.Count}", shown);
     }
 
     /// <summary>
@@ -1060,7 +1201,7 @@ public sealed class ScenarioPlayer
         int same = (state.Dock ?? []).Take(index).Count(b => b.Label == dock.Label);
         ControlState button = state.Controls.Where(c => c.Kind == "button" && c.Label == dock.Label).ElementAtOrDefault(same)
             ?? throw new Xunit.Sdk.XunitException($"The dock's button '{dock.Label}' is not a control in view.");
-        await _page.Page.Mouse.ClickAsync(button.X, button.Y);
+        await _page.TapAsync(button.X, button.Y);
     }
 
     private async Task ClickButtonNamedAsync(string label)
@@ -1068,7 +1209,7 @@ public sealed class ScenarioPlayer
         TableState state = await _page.SettledAsync();
         ControlState button = state.Controls.FirstOrDefault(c => c.Kind == "button" && c.Label == label)
             ?? throw new Xunit.Sdk.XunitException($"No button '{label}'. There are: {string.Join(", ", state.Controls.Where(c => c.Kind == "button").Select(c => c.Label))}");
-        await _page.Page.Mouse.ClickAsync(button.X, button.Y);
+        await _page.TapAsync(button.X, button.Y);
     }
 
     private async Task ClickButtonStartingAsync(string start)
@@ -1076,7 +1217,7 @@ public sealed class ScenarioPlayer
         TableState state = await _page.SettledAsync();
         ControlState button = state.Controls.FirstOrDefault(c => c.Kind == "button" && c.Label.StartsWith(start, StringComparison.Ordinal))
             ?? throw new Xunit.Sdk.XunitException($"No button starting '{start}'. There are: {string.Join(", ", state.Controls.Where(c => c.Kind == "button").Select(c => c.Label))}");
-        await _page.Page.Mouse.ClickAsync(button.X, button.Y);
+        await _page.TapAsync(button.X, button.Y);
     }
 
     // --- What the client shows ---
@@ -1178,7 +1319,7 @@ public sealed class ScenarioPlayer
             return $"(no {zone} to open)";
         }
 
-        await _page.Page.Mouse.ClickAsync(opener.Value.X, opener.Value.Y);
+        await _page.TapAsync(opener.Value.X, opener.Value.Y);
         TableState open = await _page.SettledAsync();
         // A face-down card the page may look at (CR 406.3) is found by what it really is, as the script names it.
         CardState? found = open.Cards.FirstOrDefault(c => c.Place == place && c.Visible
@@ -1191,7 +1332,7 @@ public sealed class ScenarioPlayer
         (float X, float Y)? closer = ZoneOpener(open, zone);
         if (closer is not null)
         {
-            await _page.Page.Mouse.ClickAsync(closer.Value.X, closer.Value.Y);
+            await _page.TapAsync(closer.Value.X, closer.Value.Y);
             await _page.SettledAsync();
         }
 

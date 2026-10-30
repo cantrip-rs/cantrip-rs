@@ -5,6 +5,7 @@ using Cantrip.Client;
 using Cantrip.Decks;
 using Cantrip.Client.Presentation;
 using Cantrip.Protocol;
+using Cantrip.Protocol.InPerson;
 using Microsoft.UI.Xaml.Media;
 using Windows.Foundation;
 
@@ -59,7 +60,11 @@ public sealed partial class MainPage
         }
 
         _testTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
-        _testTimer.Tick += (_, _) => JSHost.GlobalThis.SetProperty("cantripTest", TestState());
+        _testTimer.Tick += (_, _) =>
+        {
+            InjectTableTaps();
+            JSHost.GlobalThis.SetProperty("cantripTest", TestState());
+        };
         _testTimer.Start();
     }
 
@@ -137,6 +142,12 @@ public sealed partial class MainPage
             if (_planned.Count > 0 && client?.Prompt?.Prompt is PayCostsPromptMessage { AnnouncesXOrKicks: false } paying && paying.Spell == _plannedFor)
             {
                 busy.Add("planned");
+            }
+
+            // Taps from an in-person table's tablets a phone holds for their prompt (MainPage.InPerson.cs).
+            if (_tableTaps.Count > 0)
+            {
+                busy.Add("taps");
             }
 
             json.WriteStartObject();
@@ -473,11 +484,82 @@ public sealed partial class MainPage
             }
 
             json.WriteEndArray();
+            WriteInPerson(json);
             json.WriteEndObject();
         }
 
         return Encoding.UTF8.GetString(buffer.ToArray());
     }
+
+    /// <summary>
+    /// What a phone at an in-person table has made of the taps on the tablets (MainPage.InPerson.cs), under <c>inPerson</c>:
+    /// whether it is one, whether its Board is shown, each tap settled - the seat's handle tapped or the player, the request it
+    /// was routed to, whether it was used and whether it waited for its prompt - and the line saying a tap did nothing while
+    /// it is up. Nothing for any other page.
+    /// </summary>
+    private void WriteInPerson(Utf8JsonWriter json)
+    {
+        if (!IsPhone)
+        {
+            return;
+        }
+
+        json.WriteStartObject("inPerson");
+        json.WriteString("role", "phone");
+        json.WriteBoolean("board", _boardShown);
+        json.WriteNumber("waiting", _tableTaps.Count);
+        json.WriteStartArray("taps");
+        foreach ((SeatTapMessage tap, bool used, bool held) in _tableTapsSettled)
+        {
+            json.WriteStartObject();
+            json.WriteNumber("tapId", tap.TapId);
+            json.WriteNumber("requestId", tap.RequestId);
+            json.WriteNumber("handle", tap.Object.Value);
+            json.WriteNumber("player", tap.Player);
+            json.WriteBoolean("used", used);
+            json.WriteBoolean("held", held);
+            json.WriteEndObject();
+        }
+
+        json.WriteEndArray();
+        json.WriteString("refusal", _refusal.Visibility == Visibility.Visible ? _refusalText.Text : string.Empty);
+        json.WriteEndObject();
+    }
+
+    /// <summary>
+    /// The test-only stand-in for the relay (MainPage.InPerson.cs): taps a test made on a tablet that is not there, queued
+    /// on <c>globalThis.cantripTableTaps</c> as <c>o12@34;</c> (the seat's object 12, routed to request 34) or <c>p2@34;</c>
+    /// (player 2), each handed to the page as the relay hands a <see cref="SeatTapMessage"/>. The test state is a string
+    /// republished ten times a second, so the queue is a global of its own rather than a function on it. A phone's only.
+    /// </summary>
+    private void InjectTableTaps()
+    {
+        if (!IsPhone || JSHost.GlobalThis.GetPropertyAsString("cantripTableTaps") is not { Length: > 0 } queued)
+        {
+            return;
+        }
+
+        JSHost.GlobalThis.SetProperty("cantripTableTaps", string.Empty);
+        foreach (string entry in queued.Split(';', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+        {
+            int at = entry.IndexOf('@', StringComparison.Ordinal);
+            if (entry.Length < 2 || at < 2 || !int.TryParse(entry[1..at], out int value) || !int.TryParse(entry[(at + 1)..], out int request))
+            {
+                continue;
+            }
+
+            var tap = new SeatTapMessage
+            {
+                TapId = ++_injectedTaps,
+                RequestId = request,
+                Object = entry[0] == 'o' ? new ViewHandle(value) : ViewHandle.None,
+                Player = entry[0] == 'p' ? value : 0,
+            };
+            TakeTableTap(tap, _ => { });
+        }
+    }
+
+    private int _injectedTaps;
 
     /// <summary>
     /// The last answer a gallery fixture's dock sent, which nothing receives: its kind, and for a choice of modes or

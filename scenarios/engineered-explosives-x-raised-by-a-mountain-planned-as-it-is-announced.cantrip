@@ -1,0 +1,23 @@
+# Engineered Explosives cast for X = 1 (CR 601.2b) and paid by the one Mountain (CR 601.2g): red mana spent, so it enters
+# with one charge counter (sunburst, CR 702.44a). In the browser the Mountain is planned for X as X is announced, which
+# raises X to 1, and the page taps it itself once the payment is asked; at an in-person table the Mountain is tapped on the
+# tablet while X is announced (Cantrip.Client.Web.Tests PhoneTests).
+
+[Bot1 Deck]
+Engineered Explosives
+Mountain x16
+
+[Bot2 Deck]
+Island x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Engineered Explosives.Cast(X: 1)
+Bot1.Battlefield.Mountain.Activate
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Engineered Explosives.Counters.Charge = 1
+Bot1.Battlefield.Mountain.Tapped = true

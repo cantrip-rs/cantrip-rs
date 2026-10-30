@@ -1,0 +1,34 @@
+# The Mountain tapped for {R} at priority, then Lightning Bolt cast at Tarmogoyf and paid from the pool. Bolt deals 3; the
+# state-based actions are checked once it has resolved and is in its owner's graveyard (CR 608.2n, 704.3), so Tarmogoyf is
+# 1/2 with 3 damage marked then and dies (CR 704.5g). Played at an in-person table, the Mountain and the Goyf are tapped on
+# the tablets rather than on the phone (Cantrip.Client.Web.Tests PhoneTests).
+
+[Bot1 Deck]
+Lightning Bolt
+Mountain x16
+
+[Bot2 Deck]
+Tarmogoyf
+Forest x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot2.Hand.Forest.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Tarmogoyf.Cast
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Mana = {R}
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Tarmogoyf)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 5
+Stack.Count = 0
+Bot1.Graveyard = Lightning Bolt
+Bot2.Graveyard = Tarmogoyf
+Bot2.Battlefield.Count = 2
