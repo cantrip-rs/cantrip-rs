@@ -1,0 +1,8 @@
+{
+  "name": "Nyota Uhura, Communications",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Creature — Human Officer",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Hailing Frequencies — As Nyota Uhura enters, choose a number between 0 and 10.\nOpen a Channel — Whenever an opponent casts a spell with mana value equal to the chosen number, you draw a card."
+}

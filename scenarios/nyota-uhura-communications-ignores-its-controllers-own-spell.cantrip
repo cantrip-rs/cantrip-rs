@@ -1,0 +1,35 @@
+# "Whenever an opponent casts a spell with mana value equal to the chosen number": Bot1 chooses 0 and then casts its own
+# Ornithopter (mana value 0), and draws nothing - only an opponent's spell counts (CR 603.2).
+
+[Bot1 Deck]
+Nyota Uhura, Communications
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nyota Uhura, Communications.Cast
+Bot1.Number(0)
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Hand.Count = 2

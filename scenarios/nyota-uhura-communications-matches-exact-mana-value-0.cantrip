@@ -1,0 +1,36 @@
+# Choose 0 to prove the inclusive lower endpoint and exact mana-value equality: the opponent's Ornithopter matches and draws one card (CR 107.1, 603.2, 607.2d).
+
+[Bot1 Deck]
+Nyota Uhura, Communications
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nyota Uhura, Communications.Cast
+Bot1.Number(0)
+? Bot1.Battlefield.Nyota Uhura, Communications.ChosenNumber = 0
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+
+[Expect]
+Bot1.Battlefield.Nyota Uhura, Communications.ChosenNumber = 0
+Bot1.Hand.Count = 4

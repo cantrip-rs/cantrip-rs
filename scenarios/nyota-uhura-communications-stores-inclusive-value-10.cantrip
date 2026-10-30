@@ -1,0 +1,36 @@
+# Choose 10, the inclusive upper endpoint; an opponent's mana-value-0 Ornithopter does not match and causes no draw (CR 107.1, 603.2, 607.2d).
+
+[Bot1 Deck]
+Nyota Uhura, Communications
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Nyota Uhura, Communications.Cast
+Bot1.Number(10)
+? Bot1.Battlefield.Nyota Uhura, Communications.ChosenNumber = 10
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+
+[Expect]
+Bot1.Battlefield.Nyota Uhura, Communications.ChosenNumber = 10
+Bot1.Hand.Count = 3
