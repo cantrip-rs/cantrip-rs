@@ -1,0 +1,28 @@
+# Feisty Spikeling: changeling (CR 702.73a) makes it every creature type; "During your turn, this creature has first strike"
+# gives it first strike on Bot1's own turn and not on Bot2's (CR 500.1, layer 6). Its {R/W} hybrid is paid with red mana.
+
+[Bot1 Deck]
+Mountain
+Feisty Spikeling
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Island x14
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Feisty Spikeling.Cast
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Feisty Spikeling.Keywords = Changeling; FirstStrike
+? Bot1.Battlefield.Feisty Spikeling.Subtypes = (every creature type)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Feisty Spikeling.Keywords = Changeling
+
+[Expect]
+Bot1.Battlefield.Feisty Spikeling.Power = 2
+Bot1.Battlefield.Feisty Spikeling.Toughness = 1
