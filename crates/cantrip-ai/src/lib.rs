@@ -25,12 +25,13 @@ pub mod remote;
 pub mod search;
 pub mod shard;
 mod index;
+pub mod issearch;
 mod worlds;
 
 pub use eval::{EvalError, Evaluator, FeatureBatch, Manifest, Model, Outputs, TractEvaluator};
 pub use answer::{Answering, Rejection, factored_name, final_x};
 pub use knowledge::Knowledge;
-pub use observe::{EVENTS, observe, observe_indexed};
+pub use observe::{EVENTS, kind_name, observe, observe_indexed};
 pub use index::{CardIndex, CardRows};
 pub use remote::RemoteEvaluator;
-pub use worlds::{Prior, determinize};
+pub use worlds::{Prior, determinize, determinize_owned};

@@ -95,9 +95,17 @@ enum Origin {
 /// deck drawn from `prior` that holds every card the seat has seen them with (cards that began outside the game keep
 /// what they are there: the prior has no sideboards).
 pub fn determinize(game: &mut Game, k: &Knowledge, seat: PlayerId, mode: InfoMode, prior: &Prior, rng: &mut Rng) {
+    determinize_owned(game, k, seat, mode, prior, rng, None);
+}
+
+/// `determinize`, dealing again only the cards `owner` owns where it names one: the rest of the world stays as it was
+/// dealt. An information-set search deals each player's hidden cards with a generator of their own (`crate::issearch`),
+/// so that worlds can share one player's deal and differ in the other's.
+pub fn determinize_owned(game: &mut Game, k: &Knowledge, seat: PlayerId, mode: InfoMode, prior: &Prior, rng: &mut Rng, owner: Option<PlayerId>) {
     if mode == InfoMode::Full {
         return;
     }
+    let dealt = |p: PlayerId| owner.is_none_or(|o| o == p);
     debug_assert_eq!(k.seat(), seat, "a world is dealt from the seat's own knowledge");
     // Another seat's companion, chosen at deck building, is theirs alone until it is revealed (CR 103.2b): a world neither
     // reveals it nor keeps it, and the card is a sideboard card like any other of theirs.
@@ -188,6 +196,9 @@ pub fn determinize(game: &mut Game, k: &Knowledge, seat: PlayerId, mode: InfoMod
                 }
                 continue;
             }
+            if !dealt(o.owner) {
+                continue;
+            }
             if library {
                 unplaced.push(id);
             }
@@ -243,6 +254,9 @@ pub fn determinize(game: &mut Game, k: &Knowledge, seat: PlayerId, mode: InfoMod
     let mut changed = false;
     let unplaced: HashSet<ObjectId> = unplaced.into_iter().collect();
     for p in game.state.seats() {
+        if !dealt(p) {
+            continue;
+        }
         let slot = Zone::library(p).slot(players);
         let zone = &game.state.zones[slot];
         // What a resolution in progress put into it keeps its place (`zone_order_fixed`): a rollback inside the fork takes

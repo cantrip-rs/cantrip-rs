@@ -206,6 +206,7 @@ impl Host {
                     names: seats.iter().map(|s| s.name.clone()).collect(),
                     decks: seats.iter().map(|s| s.deck_name.clone().unwrap_or_default()).collect(),
                     auto_start: scenario.is_none() && first_player.is_some() && chooser.is_none(),
+                    heuristics: Default::default(),
                 });
                 let made = match scenario {
                     Some(spec) => Session::scenario(&spec.text, &spec.name, seats.into_iter().map(|s| s.name).collect(), &spec.driven),

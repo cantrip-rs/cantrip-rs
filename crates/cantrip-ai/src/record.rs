@@ -39,6 +39,10 @@ pub struct Dealt {
     pub decks: Vec<String>,
     /// The first player was named in the deal, so the host answered who goes first itself: no seat's decision.
     pub auto_start: bool,
+    /// A heuristic's value of the position for the seat asked, by the game node the request was asked at, where a
+    /// table noted one (the tactical bot's `TacticalModel`, in log-odds of winning: `cantrip-native-host`'s `Note`).
+    /// Recorded in the game's meta by decision (`GameMeta::heuristic_values`).
+    pub heuristics: HashMap<tree::NodeId, f32>,
 }
 
 /// How the game ended: read off the game played, since a concession is not in its tree.
@@ -92,6 +96,9 @@ fn swing(lives: &[i64], seat: usize) -> i64 {
 pub struct Root {
     pub visits: Vec<RootStep>,
     pub value: f32,
+    /// Whether its visits are a policy target: a fast search of playout-cap randomisation (`selfplay::Options::full_share`)
+    /// is not, and its decision is listed in the game's `GameMeta::fast_decisions`; its position is still a value target.
+    pub policy: bool,
 }
 
 /// The searched requests of a game, by the game node the request was asked at (`game.at` before it was answered).
@@ -147,12 +154,29 @@ fn visit_target(
 /// labelled with its visit distribution (summing to 1 over the legal options), any other with the option chosen; each
 /// searched decision's root value goes in the game's meta.
 pub fn record_searched(
+    game: Game,
+    dealt: &Dealt,
+    ending: &Ending,
+    mode: InfoMode,
+    table: &CardIndex,
+    roots: Option<&Roots>,
+) -> (GameRecord, Failures) {
+    record_distilled(game, dealt, ending, mode, table, roots, None)
+}
+
+/// A value distilled at a position the seat is asked: the game there, the seat, its knowledge (`distill::world_mean`).
+pub type Distiller<'a> = &'a dyn Fn(&Game, PlayerId, &Knowledge) -> Option<f32>;
+
+/// `record_searched`, and where `distill` is given, its value at each decision recorded in the game's meta
+/// (`GameMeta::distill_values`).
+pub fn record_distilled(
     mut game: Game,
     dealt: &Dealt,
     ending: &Ending,
     mode: InfoMode,
     table: &CardIndex,
     roots: Option<&Roots>,
+    distill: Option<Distiller>,
 ) -> (GameRecord, Failures) {
     let mut failures = Failures::new();
     let mut fail =
@@ -207,6 +231,9 @@ pub fn record_searched(
         .collect();
     let mut samples = Vec::new();
     let mut root_values = Vec::new();
+    let mut heuristic_values = Vec::new();
+    let mut fast_decisions = Vec::new();
+    let mut distill_values: Vec<(u32, f32)> = Vec::new();
     let mut k = 0;
     while k < answers.len() {
         let (node, player, _) = &answers[k];
@@ -238,14 +265,28 @@ pub fn record_searched(
             continue;
         };
         let root = roots.and_then(|r| r.get(&parent));
+        if let Some(&h) = dealt.heuristics.get(&parent)
+            && heuristic_values.last().is_none_or(|&(d, _)| d != start as u32)
+        {
+            heuristic_values.push((start as u32, h));
+        }
         if let Some(r) = root
             && !r.visits.is_empty()
         {
             root_values.push((start as u32, r.value));
+            if !r.policy && fast_decisions.last() != Some(&(start as u32)) {
+                fast_decisions.push(start as u32);
+            }
         }
         game.goto(parent);
         let seat = player.index();
         knowledge[seat].update(&game);
+        if let Some(d) = distill
+            && distill_values.last().is_none_or(|&(at, _)| at != start as u32)
+            && let Some(v) = d(&game, *player, &knowledge[seat])
+        {
+            distill_values.push((start as u32, v));
+        }
         let Some((obs, index)) = observe_indexed(&game, &knowledge[seat], *player, mode) else {
             fail(&kind, "deferred");
             continue;
@@ -358,6 +399,9 @@ pub fn record_searched(
         turns: final_turn,
         answers: answers.len() as u32,
         root_values,
+        heuristic_values,
+        fast_decisions,
+        distill_values,
     };
     (GameRecord { meta, samples }, failures)
 }

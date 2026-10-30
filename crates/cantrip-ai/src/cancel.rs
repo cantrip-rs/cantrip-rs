@@ -98,7 +98,7 @@ fn cancels(answer: &Answer) -> bool {
 
 /// A seat's cancelled actions and what it is in the middle of (docs/ai-player-plan.md, "Answers"). The network keeps
 /// one around each answer (`crate::net::Payment`); the search keeps one per line and per seat (`crate::search`).
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct CancelGuard {
     /// Each board a cancelled action was given up on, and the cards whose casts or activations were cancelled there. A
     /// staged cast can be cancelled at more than one request, so one board does not replace another.
@@ -115,6 +115,16 @@ pub struct CancelGuard {
     /// Actions an unpayable payment cancelled this turn, by card name: not offered again until the turn changes or
     /// a land is played.
     pub(crate) turn_cancelled: Option<(u32, Vec<&'static str>)>,
+}
+
+/// A guard with its boards named by place (`CancelGuard::canonical`).
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub(crate) struct Canonical {
+    cancelled: Vec<(usize, Vec<&'static str>)>,
+    pending: Option<(Option<usize>, Option<ObjectId>, &'static str)>,
+    resolution: Option<(ObjectId, Vec<&'static str>, u32)>,
+    casting: Option<&'static str>,
+    turn_cancelled: Option<(u32, Vec<&'static str>)>,
 }
 
 /// A cancel a search is about to play: what to record once the game has undone the action.
@@ -316,6 +326,25 @@ impl CancelGuard {
             && let Some(&(_, to)) = boards.iter().find(|(from, _)| *from == *hash)
         {
             *hash = to;
+        }
+    }
+
+    /// The guard as it acts in a game whose boards a line can return to are `boards` (`search::world_boards`, one
+    /// game's side): each board hash by its place there, and any other hash as `None`, a board the game cannot come
+    /// back to, which the guard then never matches. Two guards with the same canonical form act the same in their
+    /// games (`search::ReuseCheck`): a hash only ever meets the board the game is on.
+    pub(crate) fn canonical(&self, boards: &[u64]) -> Canonical {
+        let place = |hash: u64| boards.iter().position(|b| *b == hash);
+        Canonical {
+            cancelled: self
+                .cancelled
+                .iter()
+                .filter_map(|(hash, names)| place(*hash).map(|at| (at, names.clone())))
+                .collect(),
+            pending: self.pending.map(|(hash, source, name)| (place(hash), source, name)),
+            resolution: self.resolution.clone(),
+            casting: self.casting,
+            turn_cancelled: self.turn_cancelled.clone(),
         }
     }
 

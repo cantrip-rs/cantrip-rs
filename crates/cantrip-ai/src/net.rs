@@ -63,13 +63,30 @@ pub struct Decision {
 /// not offered again while the board it was given up on stands. The guard learns only the answers actually given
 /// (`played`), never what was decided: a decision the table answers differently (a person, or another player for the
 /// seat), or one decided again before any answer, is not a play.
-#[derive(Clone, Debug, Default)]
+#[derive(Clone, Debug)]
 pub struct Payment {
     run: Option<(PlayerId, u8, ObjectId, ObjectId, bool)>,
     decided: Option<(FactoredAnswer, f32)>,
     guard: CancelGuard,
     /// The request last decided and the answer decided: a payment run is kept to only if that is the answer given.
     proposed: Option<(u32, Answer)>,
+    /// Whether the seat's requests are made atomic before it decides (`crate::atomic`); the caller sets it.
+    pub atomic: bool,
+    /// What the seat's last searched priority wanted to do besides what it did (`pay::FollowUps`): its other options that
+    /// cost mana, by their share of the root's visits. The autotapper keeps open for them as it pays (`pay::tap`).
+    follow: crate::pay::FollowUps,
+    /// The sources the seat's last searched priority chose to leave untapped where it split its cast by class of payment
+    /// (`search::Config::pay_split`): the class its payment keeps to.
+    keep: Vec<ObjectId>,
+    /// The autotapper before it was told the plan (`pay::with_classic`); the caller sets it, for measuring the new one.
+    pub classic: bool,
+}
+
+impl Default for Payment {
+    /// Atomic, as the AI plays (`crate::atomic`).
+    fn default() -> Payment {
+        Payment { run: None, decided: None, guard: CancelGuard::default(), proposed: None, atomic: true, follow: Vec::new(), keep: Vec::new(), classic: false }
+    }
 }
 
 impl Payment {
@@ -106,13 +123,15 @@ impl Payment {
     ) -> Result<Decision, EvalError> {
         let board = board_hash(&game.state);
         let request = &self.guard.filtered_on(game, board, request);
+        let request = &if self.atomic { crate::atomic::filter(game, request) } else { request.clone() };
         let run = crate::record::run_key(request);
         if run.is_some()
             && run == self.run
             && let Some((factored, value)) = self.decided.clone()
             && let Some((obs, index)) = observe_indexed(game, knowledge, request.player, mode)
-            && let Ok(answer) =
+            && let Ok(answer) = self.paying(request.player, || {
                 Answering::new(game, request, &obs, &index).engine(game, request, &factored)
+            })
         {
             self.proposed = Some((request.id, answer.clone()));
             return Ok(Decision {
@@ -129,7 +148,14 @@ impl Payment {
                 search: None,
             });
         }
-        let mut decided = fresh(request, &self.guard);
+        let guard = self.guard.clone();
+        let mut decided = self.paying(request.player, || fresh(request, &guard));
+        if matches!(request.kind, RequestKind::Priority { .. }) {
+            (self.follow, self.keep) = match &decided {
+                Ok(d) => (follow_ups(game, request, knowledge, mode, d), kept_open(game, request, knowledge, mode, d)),
+                Err(_) => (Vec::new(), Vec::new()),
+            };
+        }
         // The filter takes the card's actions out of the request; this keeps a request kind it does not cover from
         // still choosing the same action (as the old guard did at priority).
         if let Ok(d) = &mut decided
@@ -149,6 +175,13 @@ impl Payment {
         decided
     }
 
+    /// `run` with this seat's payments told the plan: the follow-ups, the class kept to, the autotapper's version.
+    fn paying<T>(&self, player: PlayerId, run: impl FnOnce() -> T) -> T {
+        crate::pay::with_classic(self.classic, || {
+            crate::pay::with_payment_keep(player, &self.keep, || crate::pay::with_follow_ups(player, &self.follow, run))
+        })
+    }
+
     /// Notes the answer the seat actually gave to `request`, `board` the board before it (`cancel::board_hash`): what
     /// the cancel guard learns from. A payment run decided for another answer is not kept to.
     pub fn played(&mut self, game: &Game, board: u64, request: &Request, answer: &Answer) {
@@ -162,9 +195,56 @@ impl Payment {
     /// `request` with the actions cancelled on this board filtered out, for a caller answering outside `decide` (a
     /// fallback when a search fails, say) still to respect the guard.
     pub fn filtered(&self, game: &Game, request: &Request) -> Request {
-        self.guard
-            .filtered_at(game, request, board_hash(&game.state))
+        let request = self.guard.filtered_at(game, request, board_hash(&game.state));
+        if self.atomic { crate::atomic::filter(game, &request) } else { request }
     }
+}
+
+/// What a searched priority wanted to do besides what it did (`pay::FollowUps`): the root's other first-step options that
+/// cost mana, each by its share of the root's visits. Empty for a priority the network answered alone.
+fn follow_ups(game: &Game, request: &Request, knowledge: &Knowledge, mode: InfoMode, d: &Decision) -> crate::pay::FollowUps {
+    let Some(step) = d.search.as_ref().and_then(|s| s.visits.iter().find(|v| v.prefix.is_empty())) else {
+        return Vec::new();
+    };
+    let Some((obs, index)) = observe_indexed(game, knowledge, request.player, mode) else {
+        return Vec::new();
+    };
+    let answering = Answering::new(game, request, &obs, &index);
+    let total: u32 = step.visits.iter().sum();
+    if total == 0 {
+        return Vec::new();
+    }
+    step.tokens
+        .iter()
+        .zip(&step.visits)
+        .filter(|(t, n)| **n > 0 && **t != step.chosen && t.kind == cantrip_obs::factor::Tok::Option)
+        .filter_map(|(t, &n)| {
+            let option = answering.priority_option(request, t.n)?;
+            Some((crate::pay::option_cost(game, option)?, n as f32 / total as f32))
+        })
+        .collect()
+}
+
+/// The sources a searched priority's chosen cast leaves untapped, where the search split it by class of payment
+/// (`search::Searched::pay_keeps`): of the split edges for the answer chosen, the most visited. Empty otherwise.
+fn kept_open(game: &Game, request: &Request, knowledge: &Knowledge, mode: InfoMode, d: &Decision) -> Vec<ObjectId> {
+    let Some(s) = d.search.as_ref().filter(|s| !s.pay_keeps.is_empty()) else {
+        return Vec::new();
+    };
+    let Some((obs, index)) = observe_indexed(game, knowledge, request.player, mode) else {
+        return Vec::new();
+    };
+    let answering = Answering::new(game, request, &obs, &index);
+    let names = cantrip_obs::factor::Machine::new(&answering.ask, &[]).names();
+    let Ok(tokens) = answering.decompose(&names, &d.factored) else {
+        return Vec::new();
+    };
+    s.pay_keeps
+        .iter()
+        .filter(|(path, _, _)| tokens.starts_with(path))
+        .max_by_key(|(_, _, n)| *n)
+        .map(|(_, keep, _)| keep.clone())
+        .unwrap_or_default()
 }
 
 /// The walks the network makes before falling back.

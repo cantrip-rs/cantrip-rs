@@ -37,6 +37,31 @@ pub struct Knowledge {
 }
 
 impl Knowledge {
+    /// Whether `self` (of `game`) and `other` (of `other_game`) are the same knowledge but for which of two alike
+    /// cards is which object: the hidden cards known, and whether their place is, as cards rather than ids; the
+    /// opponents' cards traced, likewise; the counts seen; and which players the seat controls (CR 723). How far each
+    /// has folded its own game's history is left out, as two games' histories may be told in different records. For
+    /// the tree-reuse check: a kept world can hold the seat's other copy of a card where the real game holds this one
+    /// (`search::ReuseCheck`).
+    pub(crate) fn alike(&self, game: &Game, other: &Knowledge, other_game: &Game) -> bool {
+        let cards = |k: &Knowledge, g: &Game| {
+            let mut known: BTreeMap<(CardId, bool), usize> = BTreeMap::new();
+            for (&id, &placed) in &k.known {
+                *known.entry((g.state.obj(id).card, placed)).or_default() += 1;
+            }
+            let mut traced: BTreeMap<CardId, usize> = BTreeMap::new();
+            for &id in &k.traced {
+                *traced.entry(g.state.obj(id).card).or_default() += 1;
+            }
+            (known, traced)
+        };
+        self.seat == other.seat
+            && self.seen == other.seen
+            && self.floating == other.floating
+            && self.controllers == other.controllers
+            && cards(self, game) == cards(other, other_game)
+    }
+
     /// What `seat` knows at the deal: nothing hidden.
     pub fn new(seat: PlayerId) -> Knowledge {
         Knowledge { seat, folded: 0, last: None, known: BTreeMap::new(), traced: BTreeSet::new(), seen: BTreeMap::new(), floating: BTreeMap::new(), controllers: BTreeMap::new() }

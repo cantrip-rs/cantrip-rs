@@ -230,6 +230,7 @@ pub fn play(
                     Root {
                         visits: s.visits.clone(),
                         value: s.root_value,
+                        policy: true,
                     },
                 );
             }
@@ -267,6 +268,7 @@ pub fn play(
             .collect(),
         decks: pairing.names.to_vec(),
         auto_start: true,
+        heuristics: Default::default(),
     };
     let ending = Ending::of(&game, capped || !game.is_over());
     Ok(Played {

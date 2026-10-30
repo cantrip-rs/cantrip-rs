@@ -444,7 +444,7 @@ fn identity(game: &Game, id: ObjectId) -> &'static str {
 }
 
 /// A request's kind by name: its variant.
-pub(crate) fn kind_name(kind: &RequestKind) -> String {
+pub fn kind_name(kind: &RequestKind) -> String {
     let debug = format!("{kind:?}");
     let end = debug.find(['{', '(', ' ']).unwrap_or(debug.len());
     debug[..end].to_string()

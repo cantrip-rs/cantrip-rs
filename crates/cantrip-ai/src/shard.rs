@@ -94,6 +94,14 @@ pub fn parse_mode(text: &str) -> Option<InfoMode> {
     }
 }
 
+/// A game's per-decision values as written, a value JSON's `null` read as a NaN: serde_json writes a non-finite f32 so,
+/// and a self-play game written before the encoder held its numbers to the f16's range (2026-10-28,
+/// `cantrip_obs::encode::f16_bits`) can hold one. The Python reader (`ai/cantrip_ai/dataset.py`) ignores them the same way.
+fn values_or_null<'de, D: serde::Deserializer<'de>>(d: D) -> Result<Vec<(u32, f32)>, D::Error> {
+    let raw: Vec<(u32, Option<f32>)> = serde::Deserialize::deserialize(d)?;
+    Ok(raw.into_iter().map(|(at, v)| (at, v.unwrap_or(f32::NAN))).collect())
+}
+
 /// One game: who played it, with what, and how it ended.
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 pub struct GameMeta {
@@ -113,8 +121,23 @@ pub struct GameMeta {
     pub answers: u32,
     /// For a searched game (self-play): each searched decision's root value for the answering seat, by the decision's
     /// place (`Sample::decision`). Absent from a game no search played.
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    #[serde(default, skip_serializing_if = "Vec::is_empty", deserialize_with = "values_or_null")]
     pub root_values: Vec<(u32, f32)>,
+    /// Where a table noted one (`Dealt::heuristics`): a heuristic's value of each noted decision's position for the
+    /// answering seat, in log-odds of winning (the tactical bot's `TacticalModel`), by the decision's place. Absent from
+    /// a game none was noted in: a shard without it reads as before.
+    #[serde(default, skip_serializing_if = "Vec::is_empty", deserialize_with = "values_or_null")]
+    pub heuristic_values: Vec<(u32, f32)>,
+    /// The decisions (by place) a fast search of playout-cap randomisation answered: their visits are no policy target,
+    /// their positions still value targets (`record::Root::policy`). Absent from a game with none: a shard without it
+    /// reads as before.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub fast_decisions: Vec<u32>,
+    /// Where a recorder distilled one (`distill::world_mean`): a perfect-information value's mean over worlds dealt from
+    /// the answering seat's knowledge, by the decision's place: a Decklist value's distillation target. Absent from a
+    /// game with none.
+    #[serde(default, skip_serializing_if = "Vec::is_empty", deserialize_with = "values_or_null")]
+    pub distill_values: Vec<(u32, f32)>,
 }
 
 /// One sub-step a seat answered.

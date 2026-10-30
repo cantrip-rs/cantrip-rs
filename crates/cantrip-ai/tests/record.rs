@@ -49,6 +49,7 @@ fn recorded(path: &Path, mode: InfoMode) -> Option<(GameRecord, Failures)> {
         names,
         decks: Vec::new(),
         auto_start: false,
+        ..Dealt::default()
     };
     let ending = Ending::of(&game, !game.is_over());
     Some(record(game, &dealt, &ending, mode, table()))
@@ -193,6 +194,7 @@ fn recording_is_deterministic_and_leaves_the_game() {
         names: vec!["A".into(), "B".into()],
         decks: vec!["x".into(), "y".into()],
         auto_start: false,
+        ..Dealt::default()
     };
     let ending = Ending::of(&game, !game.is_over());
     let (a, _) = record(game.clone(), &dealt, &ending, InfoMode::Full, table());

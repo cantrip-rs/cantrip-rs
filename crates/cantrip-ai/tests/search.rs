@@ -237,6 +237,9 @@ fn play_out(text: &str, name: &str, sims: usize, evaluator: &dyn Evaluator) -> (
             )
             .unwrap()
         };
+        if std::env::var_os("SEARCH_TEST_DEBUG").is_some() {
+            eprintln!("{:?} {:?} -> {:?}", r.player, cantrip_ai::kind_name(&r.kind), d.answer);
+        }
         game.answer(r.id, r.player, d.answer)
             .expect("the answer is taken");
     }
@@ -299,12 +302,13 @@ fn a_guarded_action_is_not_offered_in_the_search() {
 #[test]
 fn a_very_bad_move_is_pruned_and_the_winning_move_kept() {
     let (game, request) = handed(BOLT_EITHER_WAY, "prune bad");
+    // Searched in steps (the target a node of its own), where the losing target is descended again and cut.
     let d = run(
         &game,
         &request,
         InfoMode::Full,
         &Uniform(0.0),
-        &Config::simulations(200),
+        &Config { flatten: 0, ..Config::simulations(200) },
     );
     let s = d.search.as_ref().expect("searched");
     assert!(s.pruned > 0, "something was cut: {s:#?}");
@@ -327,6 +331,24 @@ fn a_very_bad_move_is_pruned_and_the_winning_move_kept() {
     }
 }
 
+/// A priority searched as whole answers: the Bolt at each target its own option, the right one taken.
+#[test]
+fn a_spell_and_its_target_are_one_option() {
+    let (game, request) = handed(BOLT_EITHER_WAY, "whole");
+    let d = run(&game, &request, InfoMode::Full, &Uniform(0.0), &Config::simulations(200));
+    let s = d.search.as_ref().expect("searched");
+    assert!(s.flattened > 0, "the priority was searched as whole answers: {s:#?}");
+    assert!(s.root_edges >= 3, "the Bolt at each player, and passing: {s:#?}");
+    match &d.answer {
+        Answer::Act(a) => {
+            assert_eq!(game.name(a.source.unwrap()), "Lightning Bolt");
+            assert_eq!(a.targets, [Target::Player(PlayerId(1))], "{s:#?}");
+        }
+        other => panic!("the Bolt is cast, not {other:?}: {s:#?}"),
+    }
+    assert_eq!(s.waste_leaves, 0, "nothing below a cancel or a mana ability: {s:#?}");
+}
+
 #[test]
 fn branch_trimming_can_be_turned_off() {
     let (game, request) = handed(BOLT_EITHER_WAY, "no prune");
@@ -343,12 +365,14 @@ fn branch_trimming_can_be_turned_off() {
 fn a_lost_position_is_lost_from_the_seats_side() {
     let (game, request) = handed(LOST, "lost");
     assert_eq!(request.player, PlayerId(0));
+    // Bot1's only option besides passing is tapping a Mountain for mana, which atomic play does not offer on its own:
+    // searched as the factoring offers it.
     let d = run(
         &game,
         &request,
         InfoMode::Full,
         &Uniform(0.0),
-        &Config::simulations(64),
+        &Config { atomic: false, ..Config::simulations(64) },
     );
     let s = d.search.as_ref().expect("searched");
     assert!(s.simulations > 0, "{s:#?}");
@@ -750,7 +774,7 @@ fn searched_answers_are_accepted() {
     assert!(t.refused.is_empty(), "{:#?}", t.refused);
 }
 
-/// A decklist of `decks/standard`, its main deck only.
+/// A deck file's main deck, a card a line ("4 Name").
 fn deck(name: &str) -> Vec<String> {
     let text = std::fs::read_to_string(root().join("decks/standard").join(name)).expect("the decklist");
     let mut out = Vec::new();
@@ -761,20 +785,20 @@ fn deck(name: &str) -> Vec<String> {
         if line.eq_ignore_ascii_case("sideboard") || line.eq_ignore_ascii_case("companion") {
             break;
         }
-        if let Some((n, card)) = line.split_once(' ')
-            && let Ok(n) = n.parse::<usize>()
-        {
-            out.extend(std::iter::repeat_n(card.trim().to_string(), n));
+        match line.split_once(' ') {
+            Some((n, card)) if n.parse::<usize>().is_ok() => out.extend(std::iter::repeat_n(card.to_string(), n.parse().unwrap())),
+            _ => out.push(line.to_string()),
         }
     }
     out
 }
 
-/// Every world a search deals shows the seat the game it is in: over whole games of both seats searching, mulligans
-/// included (the tiny network mulligans often: hands shuffled back, cards bottomed), each world's root observation is
-/// the real one. A hand card a mulligan shuffled back, or a revealed card put into a library, is that card in every
-/// world; a library the seat is searching keeps its order; and a run that drew on the generator before its request (a
-/// mulligan's shuffle and redraw) is answered without worlds, since every world would deal it again.
+/// Every world a search deals shows the seat the game it is in: over whole games of both seats searching afresh at each
+/// request (no tree kept, so every world is dealt fresh), mulligans included (the tiny network mulligans often: hands
+/// shuffled back, cards bottomed), each world's root observation is the real one (`Config::reuse_check` on fresh
+/// worlds). A hand card a mulligan shuffled back, or a revealed card put into a library, is that card in every world; a
+/// library the seat is searching keeps its order; and a run that drew on the generator before its request (a mulligan's
+/// shuffle and redraw) is answered without worlds, since every world would deal it again.
 #[test]
 fn every_world_dealt_shows_the_seat_the_game_it_is_in() {
     let evaluator = TractEvaluator::load(&tiny(), table()).unwrap();
@@ -794,7 +818,8 @@ fn every_world_dealt_shows_the_seat_the_game_it_is_in() {
             let config = Config {
                 worlds: 4,
                 seed: request.id as u64,
-                check_worlds: true,
+                reuse: search::Reuse::None,
+                reuse_check: true,
                 ..Config::simulations(16)
             };
             let k = &ks[p];
@@ -803,10 +828,11 @@ fn every_world_dealt_shows_the_seat_the_game_it_is_in() {
                     search::search(&game, request, k, InfoMode::Decklist, table(), &evaluator, &config, prior(), guard, &WallClock)
                 })
                 .unwrap();
-            if let Some(s) = d.search.as_ref().filter(|s| s.worlds_checked > 0) {
+            if let Some(s) = d.search.as_ref().filter(|s| s.fresh_checked > 0) {
+                assert!(s.reused.is_none(), "no tree is kept: {s:#?}");
                 searched += 1;
-                checked += s.worlds_checked;
-                mismatched += s.worlds_mismatched;
+                checked += s.fresh_checked;
+                mismatched += s.fresh_mismatched;
             }
             let board = cantrip_ai::cancel::board_hash(&game.state);
             payments[p].played(&game, board, &request, &d.answer);
@@ -816,4 +842,146 @@ fn every_world_dealt_shows_the_seat_the_game_it_is_in() {
     println!("{searched} searches, {checked} worlds dealt, {mismatched} unlike the game");
     assert!(searched > 20 && checked > 100, "too few worlds dealt to check: {searched} searches, {checked} worlds");
     assert_eq!(mismatched, 0, "worlds the seat could tell from its game, of {checked} over {searched} searches");
+}
+
+/// Tree reuse is checked, not assumed (`search::ReuseCheck`): over whole games of both seats searching with their trees
+/// kept (atomic, `Reuse::Add`, every answer followed, as self-play plays), each re-rooted world's root is built fresh in
+/// it and must be the same - the request, the seat's knowledge and guard, no payment run, every other seat's knowledge
+/// and guard, the observation, the network's input, the options, their priors and the value - and no cut at the root
+/// may outlive its trim. And every world dealt fresh shows the seat the game it is in: its root observation is the real
+/// one, mulligans included (the tiny network mulligans often: hands shuffled back, cards bottomed).
+#[test]
+fn a_kept_tree_is_the_tree_a_fresh_search_would_grow() {
+    let evaluator = TractEvaluator::load(&tiny(), table()).unwrap();
+    let decks = [deck("dimir-midrange.txt"), deck("boros-dragons.txt")];
+    let (mut rerooted, mut checked, mut fresh, mut fresh_mismatched) = (0usize, 0usize, 0usize, 0usize);
+    let mut mismatches = std::collections::BTreeMap::<String, usize>::new();
+    for seed in 0..2u64 {
+        let mut game = deal(&[decks[0].clone(), decks[1].clone()], 77_000 + seed, true, None).unwrap();
+        let mut ks: Vec<Knowledge> = game.state.seats().map(Knowledge::new).collect();
+        let mut payments = vec![cantrip_ai::net::Payment::default(); 2];
+        let mut kept: Vec<Option<search::Kept>> = vec![None, None];
+        for _ in 0..1500 {
+            if game.is_over() || game.state.turn.number > 12 {
+                break;
+            }
+            let Some(request) = game.pending().cloned() else { break };
+            let p = request.player.index();
+            ks[p].update(&game);
+            let config = Config {
+                worlds: 4,
+                seed: request.id as u64,
+                reuse: search::Reuse::Add,
+                reuse_follow: search::Follow::All,
+                reuse_check: true,
+                ..Config::simulations(96)
+            };
+            let k = &ks[p];
+            let keep = &mut kept[p];
+            let d = payments[p]
+                .decide(&game, &request, k, InfoMode::Decklist, |request, guard| {
+                    search::search_keeping(&game, request, k, InfoMode::Decklist, table(), &evaluator, &config, prior(), guard, &WallClock, keep)
+                })
+                .unwrap();
+            if let Some(s) = d.search.as_ref() {
+                fresh += s.fresh_checked;
+                fresh_mismatched += s.fresh_mismatched;
+            }
+            if let Some(r) = d.search.as_ref().and_then(|s| s.reused.as_ref()) {
+                rerooted += 1;
+                let c = r.check.as_ref().expect("the check ran");
+                checked += c.worlds;
+                for (what, n) in &c.mismatches {
+                    *mismatches.entry(what.clone()).or_default() += n;
+                }
+            }
+            let board = cantrip_ai::cancel::board_hash(&game.state);
+            payments[p].played(&game, board, &request, &d.answer);
+            game.answer(request.id, request.player, d.answer).expect("the answer is taken");
+        }
+    }
+    assert!(rerooted > 20 && checked > 50, "too few trees re-rooted to check: {rerooted} searches, {checked} worlds");
+    assert!(mismatches.is_empty(), "kept trees differ from fresh ones: {mismatches:?} over {checked} worlds");
+    assert!(fresh > 100, "too few fresh worlds dealt to check: {fresh}");
+    assert_eq!(fresh_mismatched, 0, "fresh worlds the seat could tell from its game, of {fresh}");
+}
+
+
+/// Bot1 at its fourth main phase (turn 7) with Island, Island, Mountain, Mountain in play and Lightning Strike ({1}{R}), Shock
+/// ({R}) and blue cards in hand.
+const STRIKE_THEN_SHOCK: &str = "\
+[Bot1 Deck]
+Island
+Mountain
+Island
+Mountain
+Lightning Strike
+Shock
+Counterspell
+Negate
+Opt
+Island x12
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[Handover Bot1.Pass]
+
+[Expect]
+Turn = 7
+";
+
+/// Casts Lightning Strike at Bot2 with `follow` as the plan (`pay::FollowUps`), the old autotapper if `classic`: the
+/// Mountains left untapped.
+fn strike_leaves(follow: &[(ManaCost, f32)], classic: bool) -> usize {
+    let (mut game, request) = handed(STRIKE_THEN_SHOCK, "strike then shock");
+    let RequestKind::Priority { options } = &request.kind else { panic!("a priority") };
+    let strike = options
+        .iter()
+        .find(|o| o.kind == ActionKind::CastSpell && o.source.is_some_and(|s| game.name(s) == "Lightning Strike"))
+        .expect("Lightning Strike is castable");
+    let mut cast = Action::of(strike);
+    cast.targets = vec![Target::Player(PlayerId(1))];
+    game.answer(request.id, request.player, Answer::Act(cast)).expect("the cast is taken");
+    let me = PlayerId(0);
+    cantrip_ai::pay::with_classic(classic, || {
+        cantrip_ai::pay::with_follow_ups(me, follow, || {
+            for _ in 0..20 {
+                let Some(r) = game.pending().cloned() else { break };
+                if r.player != me || !matches!(r.kind, RequestKind::PayCosts { .. } | RequestKind::ChooseTarget { .. }) {
+                    break;
+                }
+                let a = match &r.kind {
+                    RequestKind::ChooseTarget { .. } => Answer::Targets(vec![Target::Player(PlayerId(1))]),
+                    _ => cantrip_ai::pay::pay(&game, &r, None).expect("the autotapper pays"),
+                };
+                game.answer(r.id, r.player, a).expect("the payment is taken");
+            }
+        })
+    });
+    game.state
+        .battlefield()
+        .iter()
+        .filter(|&&id| game.name(id) == "Mountain" && !game.state.obj(id).tapped)
+        .count()
+}
+
+/// The autotapper keeps open what the plan wants next: told Shock is wanted after Lightning
+/// Strike, it pays {1}{R} with a Mountain and an Island and leaves a Mountain for Shock, where the hand's blue symbols
+/// alone (the old autotapper) would keep both Islands; told Counterspell is wanted, it keeps both Islands.
+#[test]
+fn the_autotapper_keeps_open_what_the_plan_wants_next() {
+    let shock = ManaCost { symbols: [0, 0, 0, 1, 0, 0], ..ManaCost::ZERO };
+    let counterspell = ManaCost { symbols: [0, 2, 0, 0, 0, 0], ..ManaCost::ZERO };
+    assert_eq!(strike_leaves(&[], true), 0, "the old autotapper keeps the Islands for the hand's blue cards");
+    assert_eq!(strike_leaves(&[(shock, 0.8), (counterspell, 0.1)], false), 1, "Shock wanted: a Mountain stays open");
+    assert_eq!(strike_leaves(&[(shock, 0.1), (counterspell, 0.8)], false), 0, "Counterspell wanted: both Islands stay open");
 }

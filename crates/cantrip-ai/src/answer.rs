@@ -65,6 +65,15 @@ fn has_color_step(o: &OptionObs) -> bool {
 }
 
 impl Answering {
+    /// The engine's priority option that the factoring's option `n` is (a `Tok::Option` token's number), where `request`
+    /// is a priority.
+    pub fn priority_option<'a>(&self, request: &'a Request, n: u16) -> Option<&'a ActionOption> {
+        match &request.kind {
+            RequestKind::Priority { options } => self.perms.options.get(n as usize).and_then(|&i| options.get(i)),
+            _ => None,
+        }
+    }
+
     /// For `request`, asked of the seat `observation` is of, with `index` the engine id of each canonical index (as
     /// `observe_indexed` gives them).
     pub fn new(

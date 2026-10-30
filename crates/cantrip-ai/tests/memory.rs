@@ -1,5 +1,6 @@
 //! The search's memory bound (`search::Config::memory`), with the counting allocator installed as the AI host installs
-//! it: a search stops once its tree holds the bound, as at its deadline.
+//! it: a search stops once its tree holds the bound, as at its deadline, and a kept tree holding more than half of it is
+//! let go rather than searched on.
 
 use std::path::Path;
 use std::time::{Duration, Instant};
@@ -7,7 +8,7 @@ use std::time::{Duration, Instant};
 use cantrip_ai::cancel::CancelGuard;
 use cantrip_ai::eval::{Evaluator, FeatureBatch, Outputs};
 use cantrip_ai::record::table;
-use cantrip_ai::search::{self, Config, WallClock};
+use cantrip_ai::search::{self, Config, Kept, Reuse, WallClock};
 use cantrip_ai::{EvalError, Knowledge, Prior};
 use cantrip_obs::InfoMode;
 use cantrip_script::GameScript;
@@ -51,7 +52,7 @@ Turn = 3
 ";
 
 #[test]
-fn a_search_stops_at_its_memory_bound() {
+fn a_search_stops_at_its_memory_bound_and_a_kept_tree_past_half_of_it_is_let_go() {
     let script = GameScript::parse(POSITION, "memory").expect("the script parses");
     let result = cantrip_script::run(&script).unwrap_or_else(|f| panic!("{}\n{}", f.message, f.report));
     let game = result.game;
@@ -63,21 +64,31 @@ fn a_search_stops_at_its_memory_bound() {
         simulations: Some(1_000_000),
         deadline: Some(Instant::now() + Duration::from_secs(600)),
         memory: Some(bound),
+        reuse: Reuse::Add,
         ..Config::default()
     };
-    let search = |config: &Config| {
-        search::search(&game, &request, &k, InfoMode::Decklist, table(), &Uniform, config, &prior, &CancelGuard::default(), &WallClock)
+    let mut kept: Option<Kept> = None;
+    let search = |kept: &mut Option<Kept>| {
+        search::search_keeping(&game, &request, &k, InfoMode::Decklist, table(), &Uniform, &config, &prior, &CancelGuard::default(), &WallClock, kept)
             .expect("a search answers")
             .search
             .expect("searched")
     };
-    let s = search(&config);
+    let s = search(&mut kept);
     assert!(s.counted, "the counting allocator is installed");
-    assert!(s.memory_bound, "{s:#?}");
+    assert!(s.memory_bound && !s.kept_dropped, "{s:#?}");
     assert!(s.simulations > 0 && s.simulations < 1_000_000, "{s:#?}");
     // It stops at the first check past the bound: within one simulation's growth of it.
     assert!(s.tree_bytes < 2 * bound, "the tree went well past its bound: {} bytes", s.tree_bytes);
+    // The tree it keeps holds more than half the bound: the next search lets it go and begins afresh.
+    assert!(kept.is_some());
+    let again = search(&mut kept);
+    assert!(again.kept_dropped && again.reused.is_none(), "{again:#?}");
+    assert!(again.memory_bound && again.simulations > 0, "{again:#?}");
     // Without a bound the same search runs on past it.
-    let u = search(&Config { simulations: Some(s.simulations * 4), memory: None, ..config.clone() });
+    let unbounded = Config { simulations: Some(s.simulations * 4), memory: None, reuse: Reuse::None, ..config.clone() };
+    let d = search::search(&game, &request, &k, InfoMode::Decklist, table(), &Uniform, &unbounded, &prior, &CancelGuard::default(), &WallClock)
+        .expect("a search answers");
+    let u = d.search.expect("searched");
     assert!(!u.memory_bound && u.simulations == s.simulations * 4 && u.tree_bytes > bound, "{u:#?}");
 }

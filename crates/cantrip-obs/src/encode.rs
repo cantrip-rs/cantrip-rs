@@ -1443,7 +1443,11 @@ const ZONE_OF: [ZoneObs; 9] = [
     ZoneObs::Command,
 ];
 
-/// An f32 as the nearest f16 (round to nearest, ties to even), as bits.
+/// An f32 as the nearest f16 (round to nearest, ties to even), as bits; a finite number beyond the f16's range is held at
+/// the largest finite f16 (65504), never made an infinity. An encoded number has no bound of its own (an event's amount:
+/// damage, life, counters put); written as an infinity it reached the network as one and came back a NaN value (a search
+/// root value of null in self-play shards, 2026-10-28). Only the network's input is held there: the game's numbers are the
+/// engine's, exact. `decode`'s sanitising in `ai/cantrip_ai/dataset.py` reads an old shard's infinity the same way.
 pub fn f16_bits(x: f32) -> u16 {
     let b = x.to_bits();
     let sign = ((b >> 16) & 0x8000) as u16;
@@ -1454,7 +1458,7 @@ pub fn f16_bits(x: f32) -> u16 {
     }
     let e = exp - 127 + 15;
     if e >= 0x1f {
-        return sign | 0x7c00;
+        return sign | 0x7bff;
     }
     if e <= 0 {
         if e < -10 {
@@ -1475,7 +1479,8 @@ pub fn f16_bits(x: f32) -> u16 {
     if rest > 0x1000 || (rest == 0x1000 && h & 1 == 1) {
         h += 1;
     }
-    sign | h as u16
+    // Rounded up past the largest finite f16: held there.
+    sign | h.min(0x7bff) as u16
 }
 
 pub fn f16_value(h: u16) -> f32 {
@@ -1810,6 +1815,17 @@ mod tests {
             assert_eq!(*t as usize, i);
         }
         assert_eq!(cat::NAMES.len(), CATS);
+    }
+
+    #[test]
+    fn a_finite_number_beyond_f16_is_held_at_its_largest_never_an_infinity() {
+        for x in [65520.0f32, 1.0e6, 3.0e38, -1.0e6] {
+            let h = f16_bits(x);
+            assert_eq!(h & 0x7fff, 0x7bff, "{x}");
+            assert_eq!(f16_value(h).abs(), 65504.0, "{x}");
+        }
+        // Rounding up into the overflow is held too.
+        assert_eq!(f16_bits(65519.0) & 0x7fff, 0x7bff);
     }
 
     #[test]

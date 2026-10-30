@@ -45,6 +45,7 @@ fn main() {
                     names,
                     decks: Vec::new(),
                     auto_start: false,
+                    ..Dealt::default()
                 };
                 let ending = Ending::of(&game, !game.is_over());
                 let (rec, _) = record(game, &dealt, &ending, InfoMode::Full, table());
