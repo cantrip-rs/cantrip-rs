@@ -1,0 +1,66 @@
+# Prismabasher: "Vivid — When this creature enters, up to X target creatures you control get +X/+X until end of turn, where X is the number of
+# colors among permanents you control." Bot1 controls a green Elvish Mystic, a red Monastery Swiftspear and the green Prismabasher itself, and the
+# artifact Moxen and Forest are colorless: X is two (Bot2's white Savannah Lions is not "you control"). A third target is refused, and the
+# two chosen get +2/+2: Elvish Mystic 3/3, Monastery Swiftspear 3/4, while Prismabasher stays 6/6.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Elvish Mystic
+Monastery Swiftspear
+Prismabasher
+Forest x13
+
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Island x18
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Monastery Swiftspear.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Elvish Mystic.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Prismabasher.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Elvish Mystic; Bot1.Battlefield.Monastery Swiftspear; Bot1.Battlefield.Prismabasher)
+Bot1.Target(Bot1.Battlefield.Elvish Mystic; Bot1.Battlefield.Monastery Swiftspear)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Elvish Mystic.Power = 3
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Power = 3
+Bot1.Battlefield.Elvish Mystic.Toughness = 3
+Bot1.Battlefield.Monastery Swiftspear.Power = 3
+Bot1.Battlefield.Monastery Swiftspear.Toughness = 4
+Bot1.Battlefield.Prismabasher.Power = 6
+Bot1.Battlefield.Prismabasher.Toughness = 6

@@ -1,0 +1,49 @@
+# Prismabasher: "up to X target creatures" is up to, so none is a legal choice (CR 115.1d, 601.2c): Bot1 chooses no creature and nothing gets
+# the bonus; the Elvish Mystic stays 1/1.
+
+[Bot1 Deck]
+Gleemox
+Mox Emerald
+Mox Ruby
+Mox Sapphire
+Elvish Mystic
+Monastery Swiftspear
+Prismabasher
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Monastery Swiftspear.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Elvish Mystic.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Prismabasher.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Battlefield.Monastery Swiftspear.Power = 1
+Bot1.Battlefield.Prismabasher.Power = 6
