@@ -1135,3 +1135,18 @@ pub fn create_a_kithkin(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     create(g, item.controller, &KITHKIN, 1)?;
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn officer_is_a_red_one_one_creature_token() {
+        assert_eq!(OFFICER.name, "Officer Token");
+        assert_eq!(OFFICER.token_words, &[Subtype::Officer]);
+        assert_eq!(OFFICER.colors, Some(ColorSet::of(Color::Red)));
+        assert_eq!(OFFICER.types, TypeSet::of(&[CardType::Creature]));
+        assert_eq!(OFFICER.power, Some(1));
+        assert_eq!(OFFICER.toughness, Some(1));
+    }
+}

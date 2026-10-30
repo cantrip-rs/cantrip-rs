@@ -471,6 +471,13 @@ pub fn you_cant_lose_the_game(_: &dyn Query, asker: &Asker, player: PlayerId, _:
     player == asker.controller
 }
 
+/// "You don't lose the game for having 0 or less life" (CR 104.3b, 704.5a) as a `CardDef::loss_rules` entry: only that
+/// loss reason is prevented; drawing from an empty library or having ten poison counters still causes a loss. Phyrexian Unlife
+/// and Georgiou, Terran Emperor print it.
+pub fn you_cant_lose_from_life(_: &dyn Query, asker: &Asker, player: PlayerId, reason: LossReason) -> bool {
+    player == asker.controller && reason == LossReason::Life
+}
+
 /// "Your opponents can't win the game" (CR 104.2b, 102.2) as a `CardDef::win_rules` entry: an effect that says an opponent wins
 /// does nothing. Platinum Angel and Herald of Eternal Dawn print it.
 pub fn your_opponents_cant_win_the_game(_: &dyn Query, asker: &Asker, player: PlayerId) -> bool {
