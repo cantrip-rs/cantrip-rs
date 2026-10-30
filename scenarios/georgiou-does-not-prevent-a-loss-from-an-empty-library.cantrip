@@ -1,0 +1,33 @@
+# Georgiou exempts only life-total loss. At positive life, its end step trigger draws from Bot1's empty library, so that
+# player still loses for failing to draw (CR 104.3c, 121.4), despite Georgiou's static ability.
+
+[Life]
+Bot1: 20
+
+[Bot1 Deck]
+Island
+Black Lotus
+Show and Tell
+Georgiou, Terran Emperor
+Ancestral Recall
+Opt
+Opt
+
+[Bot2 Deck]
+Ancestral Recall x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Georgiou, Terran Emperor)
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Status = Lost
+Bot1.LostTo = EmptyLibrary
+Bot1.Life = 17

@@ -1,0 +1,37 @@
+# Beginning at 2 life, Georgiou's end step trigger leaves Bot1 at -1, draws a card, then creates ten Officers. The card's
+# loss rule stops the life-total state-based action while allowing the player to remain at a negative total (CR 104.3b,
+# 704.5a, 608.2c, 701.7).
+
+[Life]
+Bot1: 2
+
+[Bot1 Deck]
+Island
+Black Lotus
+Show and Tell
+Georgiou, Terran Emperor
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Ancestral Recall x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Georgiou, Terran Emperor)
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+
+[Expect]
+Bot1.Life = -1
+Bot1.Library.Count = 12
+Bot1.Battlefield = Island; Georgiou, Terran Emperor; Officer Token; Officer Token; Officer Token; Officer Token; Officer Token; Officer Token; Officer Token; Officer Token; Officer Token; Officer Token
+Bot1.Battlefield.Count = 12

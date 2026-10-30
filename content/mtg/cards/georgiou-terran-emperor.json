@@ -1,0 +1,8 @@
+{
+  "name": "Georgiou, Terran Emperor",
+  "manaCost": "{4}{B}{B}",
+  "type": "Legendary Creature — Human Rogue Noble",
+  "power": 4,
+  "toughness": 6,
+  "oracleText": "You don't lose the game for having 0 or less life.\nAt the beginning of your end step, you lose 3 life and draw a card. Then if your life total is 0 or less, create ten 1/1 red Officer creature tokens."
+}
