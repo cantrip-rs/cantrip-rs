@@ -1,0 +1,44 @@
+# Isolinear Processor's {C} may be spent only to cast an artifact spell or activate an ability of an artifact source (CR
+# 106.6). On turn 3, with the Processor's {C} in the pool, an untapped Mox Pearl and Mind Stone, three mana would cast the
+# colorless creature Changeling Wayfinder ({3}) if the {C} could pay for it: it cannot, so the Wayfinder is not offered
+# (the refusal). Mind Stone's "{1}, {T}, Sacrifice this artifact: Draw a card" is an ability of an artifact source, so the
+# {C} pays its {1}: the pool is empty after it and the Mox Pearl is still untapped. (The Processor's own "{2}, {T}" can't
+# use its own mana: it is tapped once it has made it.)
+
+[Bot1 Deck]
+Mox Pearl
+Isolinear Processor
+Mind Stone
+Changeling Wayfinder
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Isolinear Processor.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot1.Battlefield.Isolinear Processor.Activate(Ability: {T}: Add)
+? Bot1.Mana = {C} (ArtifactSpellsOrAbilities)
+! Bot1.Hand.Changeling Wayfinder.Cast(Mana: short)
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw a card)
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Mox Pearl.Tapped = false
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Mind Stone
+Bot1.Hand = Changeling Wayfinder; Island; Island; Island

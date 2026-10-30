@@ -1,0 +1,29 @@
+# The second ability taps the Processor, draws first, then discards one card (CR 608.2c).
+[Bot1 Deck]
+Isolinear Processor
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Isolinear Processor.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Isolinear Processor.Activate(Ability: Draw a card)
+
+[Expect]
+Bot1.Battlefield.Isolinear Processor.Tapped = true
+Bot1.Library.Count = 14
+Bot1.Hand.Count = 3

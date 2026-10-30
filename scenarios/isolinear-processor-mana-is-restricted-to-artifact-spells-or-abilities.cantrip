@@ -1,0 +1,31 @@
+# Isolinear Processor's mana ability adds {C} that may be spent only to cast an artifact spell or activate an ability of an
+# artifact source (CR 106.6): the pool shows it so restricted, and it pays for Sol Ring, an artifact spell.
+# (isolinear-processor-mana-pays-another-artifacts-ability-but-not-a-creature-spell shows the ability half and the refusal.)
+
+[Bot1 Deck]
+Isolinear Processor
+Mox Pearl
+Mox Sapphire
+Sol Ring
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Isolinear Processor.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Isolinear Processor.Activate(Ability: {T})
+? Bot1.Mana = {C} (ArtifactSpellsOrAbilities)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Isolinear Processor.Tapped = true
+Bot1.Battlefield.Sol Ring.Types = Artifact

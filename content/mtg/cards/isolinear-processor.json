@@ -1,0 +1,6 @@
+{
+  "name": "Isolinear Processor",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{T}: Add {C}. Spend this mana only to cast an artifact spell or activate an ability of an artifact source.\n{2}, {T}: Draw a card, then discard a card."
+}
