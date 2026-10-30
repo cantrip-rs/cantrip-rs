@@ -17,6 +17,13 @@ pub fn this_enters(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fir
     }
 }
 
+/// "When this land enters untapped" (CR 603.6a, 603.6d): the land's own zone change to the battlefield, provided its
+/// entering replacement effects left it untapped. Dwarven Mine, Gingerbread Cabin, Idyllic Grange and Federation Outpost
+/// print this trigger.
+pub fn this_enters_untapped(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    if this_enters(q, source, event).is_some() && !q.obj(source).tapped { Fired::PLAIN } else { None }
+}
+
 /// "Whenever this creature becomes tapped" (CR 701.26a, 603.2): by any path that taps it, a tap for mana or a cost included.
 /// Gran-Gran and Hawkeye, Master Marksman print it.
 pub fn this_becomes_tapped(_: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
@@ -1747,6 +1754,7 @@ fn plus_one_counters_put_on_this(_: &dyn Query, source: ObjectId, event: &Event)
 
 pub const PLUS_ONE_COUNTERS_PUT_ON_THIS: Trigger = when(EventMask::COUNTERS, plus_one_counters_put_on_this);
 pub const THIS_ENTERS: Trigger = when(EventMask::ZONE_CHANGE, this_enters);
+pub const THIS_ENTERS_UNTAPPED: Trigger = when(EventMask::ZONE_CHANGE, this_enters_untapped);
 pub const THIS_BECOMES_TAPPED: Trigger = when(EventMask::TAPPED, this_becomes_tapped);
 pub const THIS_ENTERS_IF_CAST: Trigger = when(EventMask::ZONE_CHANGE, this_enters_if_cast);
 pub const LANDFALL: Trigger = when_asked(EventMask::ZONE_CHANGE, landfall);
