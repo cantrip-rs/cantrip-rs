@@ -17,6 +17,7 @@
     <ProjectReference Include="..\..\src\Cantrip.Client.Llm\Cantrip.Client.Llm.csproj" />
     <ProjectReference Include="..\..\src\Cantrip.Server\Cantrip.Server.csproj" />
     <ProjectReference Include="..\..\src\Cantrip.Server.Host\Cantrip.Server.Host.csproj" />
+    <ProjectReference Include="..\..\src\Cantrip.Server.InPerson\Cantrip.Server.InPerson.csproj" />
     <ProjectReference Include="..\Cantrip.TestKit\Cantrip.TestKit.csproj" />
   </ItemGroup>
 

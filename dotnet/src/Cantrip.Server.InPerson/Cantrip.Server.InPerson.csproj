@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- In-person play (docs/in-person.md): two players at one physical table, a phone each and a tablet or two between
+       them. This process runs the table on the ordinary GameServer, relays the public board to the tablets and routes
+       their taps to the phones, and serves the setup page. Nothing in the remote client's path references it. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <AssemblyName>cantrip-in-person</AssemblyName>
+    <RootNamespace>Cantrip.Server.InPerson</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Cantrip.Server.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MessagePack" />
+    <ProjectReference Include="..\Cantrip.Art\Cantrip.Art.csproj" />
+    <ProjectReference Include="..\Cantrip.Protocol\Cantrip.Protocol.csproj" />
+    <ProjectReference Include="..\Cantrip.Server\Cantrip.Server.csproj" />
+    <ProjectReference Include="..\Cantrip.Server.Host\Cantrip.Server.Host.csproj" />
+  </ItemGroup>
+
+</Project>

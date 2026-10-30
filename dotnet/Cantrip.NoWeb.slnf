@@ -15,6 +15,7 @@
       "src\\Cantrip.Projection\\Cantrip.Projection.csproj",
       "src\\Cantrip.Protocol\\Cantrip.Protocol.csproj",
       "src\\Cantrip.Server.Host\\Cantrip.Server.Host.csproj",
+      "src\\Cantrip.Server.InPerson\\Cantrip.Server.InPerson.csproj",
       "src\\Cantrip.Server\\Cantrip.Server.csproj",
       "tests\\Cantrip.Art.Tests\\Cantrip.Art.Tests.csproj",
       "tests\\Cantrip.Cards.Tests\\Cantrip.Cards.Tests.csproj",

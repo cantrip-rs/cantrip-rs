@@ -71,6 +71,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cantrip.Cards.Tests", "test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cantrip.ArtWarm", "tools\Cantrip.ArtWarm\Cantrip.ArtWarm.csproj", "{1F362C1A-2A4A-4AD0-B1E4-5FABA7BDC172}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cantrip.Server.InPerson", "src\Cantrip.Server.InPerson\Cantrip.Server.InPerson.csproj", "{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -453,6 +455,18 @@ Global
 		{1F362C1A-2A4A-4AD0-B1E4-5FABA7BDC172}.Release|x64.Build.0 = Release|Any CPU
 		{1F362C1A-2A4A-4AD0-B1E4-5FABA7BDC172}.Release|x86.ActiveCfg = Release|Any CPU
 		{1F362C1A-2A4A-4AD0-B1E4-5FABA7BDC172}.Release|x86.Build.0 = Release|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Debug|x64.Build.0 = Debug|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Debug|x86.Build.0 = Debug|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Release|x64.ActiveCfg = Release|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Release|x64.Build.0 = Release|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Release|x86.ActiveCfg = Release|Any CPU
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -489,5 +503,6 @@ Global
 		{21D63057-B4FA-4058-BBB6-CC74A3E7EFA2} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
 		{BDB7D70F-B888-4331-A58F-DEFD2BCCC8EE} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{1F362C1A-2A4A-4AD0-B1E4-5FABA7BDC172} = {07C2787E-EAC7-C090-1BA3-A61EC2A24D84}
+		{EC4C17CD-1157-443E-AD6F-2F4CDC9E90C3} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal

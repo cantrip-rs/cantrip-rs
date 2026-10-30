@@ -53,7 +53,7 @@ public sealed class GameSession : IDisposable
     /// The cards each seat has been sent as printed, in the order sent: its deck with its welcome, and every other card
     /// the first time it could see it. Sent again whole when the seat is brought back up to date.
     /// </summary>
-    private readonly Dictionary<PlayerId, (HashSet<string> Ids, List<ObjectView> Cards)> _printed = [];
+    private readonly Dictionary<PlayerId, PrintedCards> _printed = [];
 
     /// <summary>
     /// A scenario's part of each step, for whatever drives the seats (docs/scenarios-in-the-browser.md); never sent to a
@@ -74,29 +74,15 @@ public sealed class GameSession : IDisposable
             _decklists[id] = [.. rules.Decklist(id.Value)];
 
             // A seat's own deck comes with its welcome, so it is never sent again as newly seen.
-            _printed[id] = ([.. _decklists[id].Select(entry => entry.Card.CardId)], [.. _decklists[id].Select(entry => entry.Card)]);
+            _printed[id] = new PrintedCards(_decklists[id].Select(entry => entry.Card));
         }
     }
 
     /// <summary>
-    /// The oracle of each card in a view that the seat is seeing for the first time this game, noted as sent. A card is
-    /// one the seat may identify: a face-down card it may not look at carries no card id, and is not in it.
+    /// The oracle of each card in a view that the seat is seeing for the first time this game, noted as sent
+    /// (<see cref="PrintedCards.NewlySeen"/>).
     /// </summary>
-    private List<ObjectView> NewlySeen(PlayerId seat, PlayerView view)
-    {
-        (HashSet<string> ids, List<ObjectView> cards) = _printed[seat];
-        List<ObjectView> fresh = [];
-        foreach (ObjectView seen in view.Objects)
-        {
-            if (seen.CardId.Length > 0 && ids.Add(seen.CardId) && _rules.Oracle(seen.CardId) is { } printed)
-            {
-                fresh.Add(printed);
-                cards.Add(printed);
-            }
-        }
-
-        return fresh;
-    }
+    private List<ObjectView> NewlySeen(PlayerId seat, PlayerView view) => _printed[seat].NewlySeen(view, _rules.Oracle);
 
     private WelcomeMessage Welcome(PlayerId seat) => new()
     {
