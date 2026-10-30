@@ -1,0 +1,47 @@
+# Gilt-Leaf's Embrace: "Flash. Enchant creature. When this Aura enters, enchanted creature gains trample and indestructible until end of turn. Enchanted creature gets +2/+0."
+# Bot1 casts a Memnite and a Black Lotus on turn 1, and on Bot2's upkeep (flash) casts the Embrace onto the Memnite: 3/1 with trample and indestructible that turn
+# only. On turn 3 it is still 3/1 under the Aura, and on turn 4 Bot2's Lightning Bolt kills it: the keywords ended with turn 2.
+
+[Bot1 Deck]
+Memnite
+Black Lotus
+Gilt-Leaf's Embrace
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x30
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gilt-Leaf's Embrace.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = Indestructible; Trample
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Memnite)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Gilt-Leaf's Embrace; Memnite; Black Lotus
+Bot2.Graveyard = Lightning Bolt; Island

@@ -1,0 +1,43 @@
+# Gilt-Leaf's Embrace: "indestructible until end of turn" (CR 702.12b). Bot1's Memnite is 3/1 under the Embrace cast on Bot2's upkeep; Bot2's Lightning Bolt deals it 3
+# damage, lethal, and it is not destroyed. The damage wears off at cleanup (CR 514.2).
+
+[Bot1 Deck]
+Memnite
+Black Lotus
+Gilt-Leaf's Embrace
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x30
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gilt-Leaf's Embrace.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Memnite.Damage = 3
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Damage = 3
+Bot1.Battlefield.Memnite.Keywords = Indestructible; Trample
+Bot2.Graveyard = Lightning Bolt

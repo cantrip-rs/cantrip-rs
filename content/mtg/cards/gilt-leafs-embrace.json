@@ -1,0 +1,9 @@
+{
+  "name": "Gilt-Leaf's Embrace",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nWhen this Aura enters, enchanted creature gains trample and indestructible until end of turn. (Damage and effects that say \"destroy\" don't destroy it. If its toughness is 0 or less, it still dies.)\nEnchanted creature gets +2/+0.",
+  "keywords": [
+    "Flash"
+  ]
+}
