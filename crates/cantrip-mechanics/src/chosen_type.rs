@@ -18,6 +18,21 @@ pub fn choose_type_among(g: &mut dyn Game, entering: &mut Entering, choices: Vec
     Ok(Some(chosen))
 }
 
+/// The eight creature types of "choose Elemental, Elf, Faerie, Giant, Goblin, Kithkin, Merfolk, or Treefolk", words of the
+/// card's text (CR 612: a text-changing effect changes what is offered).
+const ELEMENTAL_ELF_FAERIE_GIANT_GOBLIN_KITHKIN_MERFOLK_TREEFOLK: [Subtype; 8] =
+    [Subtype::Elemental, Subtype::Elf, Subtype::Faerie, Subtype::Giant, Subtype::Goblin, Subtype::Kithkin, Subtype::Merfolk, Subtype::Treefolk];
+
+/// "As this enters, choose Elemental, Elf, Faerie, Giant, Goblin, Kithkin, Merfolk, or Treefolk" (CR 614.12a) as a card's
+/// `enters`: one of the eight, asked of its controller as it enters and kept on it (CR 607.2a). Eclipsed Realms and
+/// Dawn-Blessed Pennant print it.
+pub fn enters_choosing_elemental_elf_faerie_giant_goblin_kithkin_merfolk_or_treefolk(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
+    let words = g.words(entering.object);
+    let choices = ELEMENTAL_ELF_FAERIE_GIANT_GOBLIN_KITHKIN_MERFOLK_TREEFOLK.iter().map(|&t| words.subtype(t)).collect();
+    choose_type_among(g, entering, choices)?;
+    Ok(())
+}
+
 /// "Choose a creature type" as a spell or ability resolves (CR 608.2d): asked of `player`, any creature type, and kept
 /// nowhere - the effect uses it at once. Kindred Judgment, Harmonized Crescendo and Orcrist, Goblin-cleaver ask it.
 pub fn creature_type_now(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<Subtype, Suspend> {
