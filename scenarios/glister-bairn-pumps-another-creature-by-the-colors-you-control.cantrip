@@ -1,0 +1,50 @@
+# Glister Bairn (a green-blue 1/4): "Vivid — At the beginning of combat on your turn, another target creature you control gets +X/+X
+# until end of turn, where X is the number of colors among permanents you control." Bot1 casts it on turn 1 off Black Lotus and two
+# Moxen beside an Ornithopter (0/2). On turn 3 a red Dragon's Rage Channeler joins: the permanents are green and blue (the Bairn), red
+# (the Channeler) and colorless (Ornithopter, artifacts), so X is 3 and the Ornithopter, chosen over the Channeler, is a 3/5 that
+# turn (the Bairn stays a 1/4) and a 0/2 again on turn 5.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Glister Bairn
+Ornithopter
+Mox Ruby
+Dragon's Rage Channeler
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glister Bairn.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dragon's Rage Channeler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+[T3 Bot1.BeginCombat]
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 3
+? Bot1.Battlefield.Ornithopter.Toughness = 5
+? Bot1.Battlefield.Glister Bairn.Power = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+
+[Expect]
+Bot2.Life = 20
