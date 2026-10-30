@@ -1,0 +1,6 @@
+{
+  "name": "Assert Perfection",
+  "manaCost": "{1}{G}",
+  "type": "Sorcery",
+  "oracleText": "Target creature you control gets +1/+0 until end of turn. It deals damage equal to its power to up to one target creature an opponent controls."
+}

@@ -1,0 +1,47 @@
+# Assert Perfection: "Target creature you control gets +1/+0 until end of turn. It deals damage equal to its power to up to one target creature an opponent controls."
+# Bot1's Alpine Grizzly (4/2) becomes 5/2 and then deals 5 (not 4) to Bot2's Wall of Stone (0/8), which takes it without dying and deals none back. The first target
+# must be Bot1's own (the refusal).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Alpine Grizzly
+Assert Perfection
+Island x2
+Swamp x10
+
+[Bot2 Deck]
+Black Lotus
+Wall of Stone
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Wall of Stone.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Assert Perfection.Cast
+! Bot1.Target(Bot2.Battlefield.Wall of Stone)
+Bot1.Target(Bot1.Battlefield.Alpine Grizzly)
+Bot1.Target(Bot2.Battlefield.Wall of Stone)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Alpine Grizzly.Power = 5
+Bot1.Battlefield.Alpine Grizzly.Toughness = 2
+Bot1.Battlefield.Alpine Grizzly.Damage = 0
+Bot2.Battlefield.Wall of Stone.Damage = 5

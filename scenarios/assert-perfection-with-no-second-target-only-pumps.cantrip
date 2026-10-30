@@ -1,0 +1,42 @@
+# "up to one target creature an opponent controls": Bot1 chooses none, so Assert Perfection only gives Alpine Grizzly +1/+0 and Bot2's Wall of Stone takes no damage.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Alpine Grizzly
+Assert Perfection
+Island x2
+Swamp x10
+
+[Bot2 Deck]
+Black Lotus
+Wall of Stone
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Wall of Stone.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Assert Perfection.Cast
+Bot1.Target(Bot1.Battlefield.Alpine Grizzly)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Alpine Grizzly.Power = 5
+Bot2.Battlefield.Wall of Stone.Damage = 0
