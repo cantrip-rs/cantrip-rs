@@ -369,9 +369,12 @@ internal sealed class Lane : IDisposable
 /// <param name="Simulations">The search's simulations, zero for an answer of the network alone (docs/ai-host.md, "Search").</param>
 /// <param name="TreeBytes">What the search's tree held at its peak, in bytes.</param>
 /// <param name="Nodes">The search's tree nodes.</param>
+/// <param name="LineDepth">The decisions along the search's most visited line, the root's counted.</param>
+/// <param name="DeepestDepth">The decisions along its deepest visited line.</param>
 internal sealed record NeuralAnswer(
     double Decide, double Total, double Encode, double Evaluate, int Steps, int Evaluations, bool Fallback, bool Late, string Error,
-    string Seat = "", int Simulations = 0, long TreeBytes = 0, int Nodes = 0, bool Searched = false, bool Shortcut = false, int Pruned = 0);
+    string Seat = "", int Simulations = 0, long TreeBytes = 0, int Nodes = 0, bool Searched = false, bool Shortcut = false, int Pruned = 0,
+    int LineDepth = 0, int DeepestDepth = 0);
 
 /// <summary>
 /// A seat played by the network: each question is asked of the AI host beside the table, whose mirror of the game
@@ -381,6 +384,16 @@ internal sealed record NeuralAnswer(
 internal sealed class NeuralPlay : IAutoPlayer
 {
     private static readonly TimeSpan Patience = TimeSpan.FromSeconds(120);
+
+    private static long _stale;
+
+    /// <summary>Results passed over for being an earlier request's, across the run.</summary>
+    public static long StaleResults => Interlocked.Read(ref _stale);
+
+    /// <summary>Whether <paramref name="r"/> answers another game's request, or an earlier request of this game's.</summary>
+    private static bool Stale(JsonElement r, long id, int game) =>
+        (r.TryGetProperty("GameId", out JsonElement g) && g.GetInt32() != game)
+        || (r.TryGetProperty("RequestId", out JsonElement q) && q.GetInt64() < id);
 
     /// <summary><c>CANTRIP_AI_TRACE=FILE</c>: every question asked and the answer the network made, a line each.</summary>
     private static readonly TextWriter? Trace =
@@ -461,6 +474,12 @@ internal sealed class NeuralPlay : IAutoPlayer
             {
                 start[key] = value?.DeepClone();
             }
+
+            // The seat's own settings (neural...+cut), over the run's: two seats of one run searching differently.
+            foreach ((string key, JsonNode? value) in Seat.Settings)
+            {
+                start[key] = value?.DeepClone();
+            }
         }
 
         JsonNode? started = JsonNode.Parse(lane.Ai.Call(start.ToJsonString(), Patience));
@@ -474,7 +493,17 @@ internal sealed class NeuralPlay : IAutoPlayer
             throw new InvalidOperationException($"The AI host's mirror is at request {id}, the seat was asked {asked.RequestId}.");
         }
 
-        using JsonDocument result = JsonDocument.Parse(lane.Ai.Result(Patience));
+        // A result for an earlier request (one whose game stopped before it was read) is passed over, so one game's
+        // failure is not read into every later game of the lane.
+        JsonDocument result = JsonDocument.Parse(lane.Ai.Result(Patience));
+        while (Stale(result.RootElement.GetProperty("AiResult"), id, lane.Tee.GameId))
+        {
+            Interlocked.Increment(ref _stale);
+            result.Dispose();
+            result = JsonDocument.Parse(lane.Ai.Result(Patience));
+        }
+
+        using JsonDocument owned = result;
         double decide = watch.Elapsed.TotalMilliseconds;
         JsonElement r = result.RootElement.GetProperty("AiResult");
         if (r.GetProperty("RequestId").GetInt64() != id || !r.TryGetProperty("Answer", out JsonElement answer))
@@ -502,7 +531,9 @@ internal sealed class NeuralPlay : IAutoPlayer
             r.TryGetProperty("Search", out JsonElement tree) ? Count(tree, "Nodes") : 0,
             r.TryGetProperty("Search", out _),
             r.TryGetProperty("Search", out JsonElement cut) && Flag(cut, "Shortcut"),
-            r.TryGetProperty("Search", out JsonElement trimmed) ? Count(trimmed, "Pruned") : 0));
+            r.TryGetProperty("Search", out JsonElement trimmed) ? Count(trimmed, "Pruned") : 0,
+            r.TryGetProperty("Search", out JsonElement line) ? Count(line, "LineDecisions") : 0,
+            r.TryGetProperty("Search", out JsonElement deepest) ? Count(deepest, "DeepestDecisions") : 0));
 
         if (Trace is { } trace)
         {
@@ -520,19 +551,57 @@ internal sealed class NeuralPlay : IAutoPlayer
 }
 
 /// <summary>
-/// A neural seat by name: <c>neural[:full|:decklist|:hidden][@N|@Nms]</c>, the information mode it plays in (Full
-/// by default) and its search budget, <c>N</c> simulations an answer or <c>N</c> milliseconds of searching; with no
+/// A neural seat by name: <c>neural[:full|:decklist|:hidden][@N|@Nms][+SETTING...]</c>, the information mode it plays in
+/// (Full by default) and its search budget, <c>N</c> simulations an answer or <c>N</c> milliseconds of searching; with no
 /// budget the network answers alone. <c>neural@64</c> against <c>neural</c> is search against the same network alone.
+/// Each <c>+SETTING</c> is a search setting of this seat's alone, over the run's (<c>--ai-...</c>): <c>+cut</c> (a
+/// trimmed edge is cut for good, the search before 2026-10-27) or <c>+reversible</c>, or any <c>AiStart</c> field as
+/// <c>+Key=value</c> (a number, true or false).
 /// </summary>
 internal sealed record NeuralSeat(string Name, string Mode, int Simulations, int SearchMs)
 {
     public bool Searches => Simulations > 0 || SearchMs > 0;
+
+    /// <summary>The seat's own search settings, sent with each of its <c>AiStart</c>s.</summary>
+    public JsonObject Settings { get; init; } = [];
 
     public static NeuralSeat? Parse(string name)
     {
         if (!name.StartsWith("neural", StringComparison.Ordinal))
         {
             return null;
+        }
+
+        string[] plus = name.Split('+');
+        if (plus.Length > 1)
+        {
+            NeuralSeat seat = Parse(plus[0]) ?? throw new ArgumentException($"No neural seat '{name}'.");
+            var settings = new JsonObject();
+            foreach (string setting in plus.Skip(1))
+            {
+                switch (setting)
+                {
+                    case "cut":
+                        settings["PruneReversible"] = false;
+                        break;
+                    case "reversible":
+                        settings["PruneReversible"] = true;
+                        break;
+                    default:
+                        string[] pair = setting.Split('=', 2);
+                        if (pair.Length != 2 || pair[0].Length == 0)
+                        {
+                            throw new ArgumentException($"No search setting '{setting}' in '{name}': +cut, +reversible or +Key=value.");
+                        }
+
+                        settings[pair[0]] = bool.TryParse(pair[1], out bool flag) ? flag
+                            : double.TryParse(pair[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double number) ? number
+                            : pair[1];
+                        break;
+                }
+            }
+
+            return seat with { Name = name, Settings = settings };
         }
 
         string[] parts = name.Split('@', 2);
@@ -566,8 +635,10 @@ internal sealed record NeuralSeat(string Name, string Mode, int Simulations, int
 /// <c>--ai-prune-after N</c> and <c>--ai-prune-after-replies N</c>; <c>--model-b DIR</c> plays the b seat's neural seats with a second model (a
 /// generation's gate: the candidate against the champion, docs/ai-player-plan.md "Phase 4"). The AI host is given
 /// <c>--ai-prior DIR</c> (the metagame's decks, <c>decks/</c> by default) as its prior, which a Hidden search needs.
+/// <c>--ai-server HOST:PORT</c> evaluates on the inference server there (<c>python -m cantrip_ai.serve</c>, serving
+/// every model the run names) instead of in each AI host: the AI host is given <c>--backend remote --server</c>.
 /// </summary>
-internal sealed record NeuralOptions(string Model, string Backend, int Deadline, bool Echo, string Prior, string ModelB = "")
+internal sealed record NeuralOptions(string Model, string Backend, int Deadline, bool Echo, string Prior, string ModelB = "", string Server = "", string ModelC = "")
 {
     /// <summary>The model's name, as the AI host knows it: its directory's.</summary>
     public string Name => Path.GetFileName(Path.TrimEndingDirectorySeparator(Model));
@@ -581,7 +652,9 @@ internal sealed record NeuralOptions(string Model, string Backend, int Deadline,
 
     /// <summary>The AI host's command line: the model (and <c>--model-b</c>'s), one worker, one inference thread (a game a core).</summary>
     public IReadOnlyList<string> Arguments =>
-        ["--model", Model, .. ModelB.Length > 0 ? (string[])["--model", ModelB] : [], .. Backend.Length > 0 ? (string[])["--backend", Backend] : [], "--threads", "1", "--workers", "1",
+        ["--model", Model, .. ModelB.Length > 0 ? (string[])["--model", ModelB] : [], .. ModelC.Length > 0 ? (string[])["--model", ModelC] : [],
+            .. Server.Length > 0 ? (string[])["--backend", "remote", "--server", Server] : Backend.Length > 0 ? (string[])["--backend", Backend] : [],
+            "--threads", "1", "--workers", "1",
             .. Prior.Length > 0 ? (string[])["--prior", Prior] : []];
 
     public static NeuralOptions From(string root, IReadOnlyList<string> args)
@@ -625,12 +698,16 @@ internal sealed record NeuralOptions(string Model, string Backend, int Deadline,
 
         NeuralPlay.SearchSettings = settings;
         string modelB = Program.Text(args, "--model-b", string.Empty);
+        // --model-c DIR: a third model loaded beside them, named by a seat's own setting (+Model=, +ValueModel=).
+        string modelC = Program.Text(args, "--model-c", string.Empty);
         return new(
             Path.GetFullPath(Program.Text(args, "--model", Path.Combine(root, "..", "ai-data", "models", "gen0"))),
             Program.Text(args, "--ai-backend", string.Empty),
             Program.Number(args, "--ai-deadline", 0),
             args.Contains("--ai-echo"),
             Path.GetFullPath(Program.Text(args, "--ai-prior", Path.Combine(root, "decks"))),
-            modelB.Length > 0 ? Path.GetFullPath(modelB) : string.Empty);
+            modelB.Length > 0 ? Path.GetFullPath(modelB) : string.Empty,
+            Program.Text(args, "--ai-server", string.Empty),
+            modelC.Length > 0 ? Path.GetFullPath(modelC) : string.Empty);
     }
 }

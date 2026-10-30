@@ -51,6 +51,23 @@ public sealed record MatchResult(int Winner, int Starter, int Turns, string Fail
 internal static class Match
 {
     /// <summary>
+    /// <c>--note-heuristic</c>: before a tactical seat answers, the recording host is told what its model makes of the
+    /// position (<see cref="TacticalModel.Evaluate"/>, log-odds of winning for the seat), kept with the game's samples.
+    /// </summary>
+    public static bool NoteHeuristics { get; set; }
+
+    /// <summary>A factory that hands on what it makes, keeping the last: how a game's host, and its id, is found.</summary>
+    private sealed class CatchingFactory(IRulesHostFactory inner) : IRulesHostFactory
+    {
+        public IRulesHost? Made { get; private set; }
+
+        public IRulesHost Create(IReadOnlyList<RulesSeat> seats, ulong seed, RulesGameOptions options) => Made = inner.Create(seats, seed, options);
+
+        public bool CompanionFulfilled(IReadOnlyList<string> deck, string companion, int minimumDeckSize) =>
+            inner.CompanionFulfilled(deck, companion, minimumDeckSize);
+    }
+
+    /// <summary>
     /// The native hosts games are dealt among (<c>--hosts N</c>), a game to each by its shuffle; empty for the one shared host.
     /// A host answers one request at a time, so on a machine with cores to spare one host is what a run waits on.
     /// </summary>
@@ -120,7 +137,10 @@ internal static class Match
         }
 
         IRulesHostFactory rules = lane?.Rules ?? (Hosts.Count > 0 ? Hosts[(int)(seed % (ulong)Hosts.Count)] : RulesHostFactory.Native);
-        using HostedGame hosted = HostAndPlay.StartTable(rules, decks, format, seed, [.. decks.Select((_, seat) => $"Bot {seat + 1}")]);
+        // Noting the tactical model's worth of each position a tactical seat answers (--note-heuristic): the game's host
+        // is caught as it is made, for its id.
+        var noting = NoteHeuristics && lane is null ? new CatchingFactory(rules) : null;
+        using HostedGame hosted = HostAndPlay.StartTable(noting ?? rules, decks, format, seed, [.. decks.Select((_, seat) => $"Bot {seat + 1}")]);
 
         List<(GameClient Client, IAutoPlayer Bot)> seats = [];
         foreach (int seat in hosted.Seats)
@@ -259,6 +279,19 @@ internal static class Match
                 bool acted;
                 try
                 {
+                    if (noting?.Made is NativeRulesHost made && client.Prompt is { } noted && client.View is { } position
+                        && (bot as LoopGuard)?.Inner is TacticalPlay)
+                    {
+                        // The recording host keeps it beside the sample of this request (cantrip_ai::record, Dealt::heuristics).
+                        NativeHostProcess.Shared.Exchange(System.Text.Json.JsonSerializer.Serialize(new
+                        {
+                            Cmd = "Note",
+                            made.GameId,
+                            noted.RequestId,
+                            Heuristic = TacticalModel.Default.Evaluate(position),
+                        }));
+                    }
+
                     acted = bot.Act(client);
                 }
                 catch (Exception error) when (story)

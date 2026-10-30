@@ -48,6 +48,9 @@ public static class Program
             return 2;
         }
         EachShuffle = args.Contains("--each-shuffle");
+        Match.NoteHeuristics = args.Contains("--note-heuristic");
+        ExploreDuel = Real(args, "--explore", 0);
+        PairingsFile = Text(args, "--pairings", string.Empty);
 
         // --hosts N: games dealt among N native hosts of their own rather than all sent to the one shared host. Not with
         // --ai-record, whose recording is the shared host's.
@@ -99,6 +102,18 @@ public static class Program
 
     /// <summary>The decks the --b seat plays against the --a seat's, for <c>--versus</c>; empty for mirrors.</summary>
     private static List<DeckList> Versus { get; set; } = [];
+
+    /// <summary>
+    /// <c>--pairings FILE</c>: a matchup a line, <c>first:second</c> by deck name among <c>--decks</c> (as the generation
+    /// driver writes them, by metagame share); each pair of games the next line, its decks swapping seats with the
+    /// players.
+    /// </summary>
+    private static string PairingsFile { get; set; } = string.Empty;
+
+    private static List<(DeckList, DeckList)> Pairings { get; set; } = [];
+
+    /// <summary><c>--explore P</c> in a duel: a tactical seat's share of decisions drawn at random, so its games differ.</summary>
+    private static double ExploreDuel { get; set; }
 
     /// <summary>
     /// <c>--each-shuffle</c>: every game its own shuffle, rather than each pair of games (seats swapped) one. Two seats
@@ -160,6 +175,13 @@ public static class Program
         var clock = Stopwatch.StartNew();
         // --sprt: stop once the sequential test has its verdict, --games the most it may take (docs/ai-player-plan.md, "Serving and measuring").
         bool sprt = args.Contains("--sprt");
+        Tally.SprtH1 = Real(args, "--sprt-h1", Tally.SprtH1);
+        if (!(Tally.SprtH1 > Tally.SprtH0 && Tally.SprtH1 < 1))
+        {
+            Console.Error.WriteLine($"--sprt-h1 is A's share under H1, above {Tally.SprtH0} and below 1.");
+            return 2;
+        }
+
         Tally tally = Play(root, decks, games, seed, Maker(root, a), Maker(root, b, b: true), sample: false, out _, hands: cards > 0, sprt: sprt);
         tally.Write(a, b, clock.Elapsed);
         if (sprt)
@@ -203,7 +225,8 @@ public static class Program
 
         List<string> host = ["--ai-record", Path.GetFullPath(directory), "--ai-record-mode", Text(args, "--ai-record-mode", "full"),
             "--ai-record-producer", producer];
-        foreach (string option in (string[])["--ai-record-threads", "--ai-record-games", "--ai-record-mb"])
+        foreach (string option in (string[])["--ai-record-threads", "--ai-record-games", "--ai-record-mb", "--ai-record-also", "--ai-record-distill",
+            "--ai-record-distill-server", "--ai-record-distill-worlds"])
         {
             if (Text(args, option, string.Empty) is { Length: > 0 } value)
             {
@@ -615,7 +638,7 @@ public static class Program
         /// </summary>
         public Dictionary<string, int[]> Cards { get; } = new(StringComparer.Ordinal);
 
-        public ConcurrentBag<string> Failures { get; } = [];
+        public ConcurrentQueue<string> Failures { get; } = [];
 
         public int Finished => WinsA + WinsB + Draws;
 
@@ -635,7 +658,8 @@ public static class Program
         }
 
         public const double SprtH0 = 0.5;
-        public const double SprtH1 = 0.55;
+        /// <summary>A's share under H1: 55% unless --sprt-h1 says otherwise.</summary>
+        public static double SprtH1 = 0.55;
 
         /// <summary>Wald's bound for alpha = beta = 0.05: ln((1 - beta) / alpha) = ln 19.</summary>
         public static readonly double SprtBound = Math.Log(19);
@@ -651,7 +675,7 @@ public static class Program
         public string SprtLine(string a, string b) =>
             $"SPRT (H0 {SprtH0:P0}, H1 {SprtH1:P0}, alpha = beta = 0.05, bounds +/-{SprtBound:N3}): LLR {Llr:N3} after {Finished} games; " +
             (StoppedAt > 0
-                ? $"{(StoppedLlr > 0 ? $"H1 accepted, {a} is the better" : $"H0 accepted, {a} is not the better by 55%")} at game {StoppedAt} (LLR {StoppedLlr:N3}; games already in play finished after)."
+                ? $"{(StoppedLlr > 0 ? $"H1 accepted, {a} is the better" : $"H0 accepted, {a} is not the better by {SprtH1:P0}")} at game {StoppedAt} (LLR {StoppedLlr:N3}; games already in play finished after)."
                 : Verdict != 0 ? $"{(Verdict > 0 ? "H1" : "H0")} by the end." : "no verdict within the games played.");
 
         /// <summary>
@@ -745,6 +769,9 @@ public static class Program
                         $"simulations {Spread(searched.Select(n => (double)n.Simulations), "N0")}, nodes {Spread(searched.Select(n => (double)n.Nodes), "N0")}, " +
                         $"pruned {Spread(searched.Select(n => (double)n.Pruned), "N0")}, tree KB {Spread(searched.Select(n => n.TreeBytes / 1024.0), "N0")}");
                     Console.WriteLine(
+                        $"  depth in decisions (the root's counted): the most visited line {Spread(searched.Select(n => (double)n.LineDepth), "N0")}, " +
+                        $"the deepest {Spread(searched.Select(n => (double)n.DeepestDepth), "N0")}");
+                    Console.WriteLine(
                         $"  {searched.Count / Math.Max(seconds, 1e-9):N1} searched decisions a second of a seat's time, " +
                         $"{searched.Sum(n => (long)n.Evaluations) / Math.Max(seconds, 1e-9):N0} evaluations a second; " +
                         $"{neural.Count / Math.Max(neural.Sum(n => n.Total) / 1000, 1e-9):N1} decisions a second in all");
@@ -780,11 +807,16 @@ public static class Program
             if (!Failures.IsEmpty)
             {
                 Console.WriteLine();
-                Console.WriteLine($"{Failures.Count} game(s) did not finish:");
+                Console.WriteLine($"{Failures.Count} game(s) did not finish; the first: {(Failures.TryPeek(out string? first) ? first : string.Empty)}");
                 foreach (IGrouping<string, string> group in Failures.GroupBy(failure => failure).OrderByDescending(group => group.Count()).Take(8))
                 {
                     Console.WriteLine($"  {group.Count()}x {group.Key}");
                 }
+            }
+
+            if (NeuralPlay.StaleResults > 0)
+            {
+                Console.WriteLine($"{NeuralPlay.StaleResults} AI result(s) of an earlier request passed over.");
             }
         }
 
@@ -922,7 +954,7 @@ public static class Program
             if (!result.Finished)
             {
                 // The game's number in the run, with the run's own seed, is what plays it again: watch --game.
-                tally.Failures.Add($"{result.Failure} [game {game}: {seated[0].Name} / {seated[1].Name}]");
+                tally.Failures.Enqueue($"{result.Failure} [game {game}: {seated[0].Name} / {seated[1].Name}]");
                 return;
             }
 
@@ -1036,7 +1068,7 @@ public static class Program
         {
             if (lane.Ai.Divergence is { } divergence)
             {
-                tally.Failures.Add($"an AI host's mirror left its game: {divergence}");
+                tally.Failures.Enqueue($"an AI host's mirror left its game: {divergence}");
             }
 
             lane.Dispose();
@@ -1053,6 +1085,26 @@ public static class Program
         IReadOnlyList<DeckList> decks, int game, Func<int, int, IAutoPlayer> a, Func<int, int, IAutoPlayer> b)
     {
         bool swapped = game % 2 == 1;
+
+        if (PairingsFile.Length > 0 && Pairings.Count == 0)
+        {
+            lock (decks)
+            {
+                if (Pairings.Count == 0)
+                {
+                    DeckList Named(string name) => decks.FirstOrDefault(d => d.Name == name)
+                        ?? throw new ArgumentException($"--pairings names {name}, which --decks does not hold.");
+                    Pairings = [.. File.ReadAllLines(PairingsFile).Where(l => l.Contains(':', StringComparison.Ordinal))
+                        .Select(l => l.Trim().Split(':', 2)).Select(p => (Named(p[0]), Named(p[1])))];
+                }
+            }
+        }
+
+        if (Pairings.Count > 0)
+        {
+            (DeckList first, DeckList second) = Pairings[game / 2 % Pairings.Count];
+            return (swapped ? [second, first] : [first, second], swapped ? [b(game, 1), a(game, 2)] : [a(game, 1), b(game, 2)]);
+        }
 
         if (Versus.Count > 0 && decks.Count > 0)
         {
@@ -1099,7 +1151,9 @@ public static class Program
                 }
 
                 TacticalModel model = Named(root, name);
-                return (_, _) => new TacticalPlay(model);
+                return ExploreDuel > 0
+                    ? (game, seat) => new TacticalPlay(model, Draws(game, seat, 0)) { Explore = ExploreDuel }
+                    : (_, _) => new TacticalPlay(model);
         }
     }
 
@@ -1242,13 +1296,15 @@ public static class Program
                                 (docs/ai-player-plan.md, "Data"); --ai-record-mode full|decklist|hidden (default full),
                                 --ai-record-threads N, --ai-record-games N and --ai-record-mb N are passed on to it
             --sprt              stop once the sequential test says: H0 A wins 50%, H1 55%, alpha = beta = 0.05, a draw
-                                half a game each way; --games is then the most it may take
+                                half a game each way; --games is then the most it may take; --sprt-h1 P another H1
+                                (0.52: about 3,700 games to a verdict at 50% or 52%, more between)
             a neural seat       from cantrip-ai-host beside each worker's own native host (docs/ai-host.md):
                                 neural[:full|:decklist|:hidden][@N|@Nms] - the mode (Full by default), and a search of N
                                 simulations or N ms an answer (none: the network alone), so --a neural@64 --b neural is
                                 search against the same network alone; --model DIR (default ../ai-data/models/gen0),
                                 --model-b DIR (the b seat's neural seats play this model instead: a generation's gate),
-                                --ai-backend ort|tract (default: the build's), --ai-deadline MS (default none),
+                                --ai-backend ort|tract (default: the build's), --ai-server HOST:PORT (evaluate on
+                                the inference server there, python -m cantrip_ai.serve), --ai-deadline MS (default none),
                                 --ai-echo (check every mirrored reply whole); a searching seat's --ai-worlds N,
                                 --ai-batch N, --ai-cpuct X, --ai-prior-temperature X, --ai-prune true|false,
                                 --ai-prune-bad X, --ai-prune-margin X, --ai-prune-after N,
