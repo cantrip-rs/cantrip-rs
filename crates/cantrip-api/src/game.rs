@@ -741,6 +741,11 @@ pub trait Game: Query {
     /// The player gets an emblem (CR 114.2): a new object in the command zone, owned by them, with the abilities
     /// of this definition. It never leaves.
     fn create_emblem(&mut self, def: CardId, player: PlayerId) -> ObjectId;
+    /// `create_emblem` for an emblem whose text says "the chosen type" (CR 114.2, 607.2d): the creature type chosen as the
+    /// ability that makes it resolves is kept on the emblem as a permanent keeps what it chose as it entered, so its
+    /// abilities read it with `GameState::chosen_subtype` (`Query::linked_to` of the emblem). Oko, Shadowmoor
+    /// Scion's -6 makes one.
+    fn create_emblem_choosing_subtype(&mut self, def: CardId, player: PlayerId, subtype: Subtype) -> ObjectId;
     /// Creates `count` tokens of a definition (CR 111.2), under `controller`.
     /// Creates tokens of several definitions as one instruction (CR 111.1, 101.4): they enter together, so a "one or
     /// more" ability sees one event. Each is a definition and who controls it.

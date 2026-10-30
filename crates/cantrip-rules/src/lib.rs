@@ -2014,7 +2014,11 @@ impl cantrip_api::Game for Cx<'_> {
     }
 
     fn create_emblem(&mut self, def: CardId, player: PlayerId) -> ObjectId {
-        ops::create_emblem(self, def, player)
+        ops::create_emblem(self, def, player, None)
+    }
+
+    fn create_emblem_choosing_subtype(&mut self, def: CardId, player: PlayerId, subtype: Subtype) -> ObjectId {
+        ops::create_emblem(self, def, player, Some(subtype))
     }
 
     fn create_tokens(&mut self, def: CardId, controller: PlayerId, count: u32, tapped: bool) -> Result<Vec<ObjectId>, Suspend> {
