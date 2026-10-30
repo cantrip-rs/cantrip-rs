@@ -1,0 +1,8 @@
+{
+  "name": "Morcant's Loyalist",
+  "manaCost": "{1}{B}{G}",
+  "type": "Creature — Elf Warrior",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Other Elves you control get +1/+1.\nWhen this creature dies, return another target Elf card from your graveyard to your hand."
+}
