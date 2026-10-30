@@ -1,0 +1,25 @@
+# At exactly two other lands the Outpost enters untapped. Choose Surveil 1, sending the known top card (after Bot1's turn-3 and turn-5 draws) to the graveyard; this exercises the second modal branch (CR 603.6a, 700.2b, 701.25a).
+[Bot1 Deck]
+Federation Outpost
+Island x8
+Lightning Bolt
+Counterspell
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot2.Hand.Mountain.Play
+Bot1.Hand.Island.Play
+Bot2.Hand.Mountain.Play
+Bot1.Hand.Federation Outpost.Play
+Bot1.Modes(Surveil 1)
+Bot1.Arrange( | Lightning Bolt)
+
+[Expect]
+Bot1.Battlefield.Federation Outpost.Tapped = false
+Bot1.Graveyard = Lightning Bolt
+Bot1.Surveilled = 1 requested, 1 looked
+Bot1.Life = 20

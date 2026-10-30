@@ -1,0 +1,21 @@
+# The Outpost has two other lands under Bot1's control and enters untapped. After its entry trigger resolves, its {T} mana ability taps it and adds exactly one white mana (CR 603.6a, 605.1a).
+[Bot1 Deck]
+Federation Outpost
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot2.Hand.Mountain.Play
+Bot1.Hand.Island.Play
+Bot2.Hand.Mountain.Play
+Bot1.Hand.Federation Outpost.Play
+Bot1.Modes(You gain 2 life)
+Bot1.Battlefield.Federation Outpost.Activate(Ability: Add {W})
+
+[Expect]
+Bot1.Battlefield.Federation Outpost.Tapped = true
+Bot1.Mana = {W}
+Bot1.Life = 22

@@ -1,0 +1,5 @@
+{
+  "name": "Federation Outpost",
+  "type": "Land",
+  "oracleText": "This land enters tapped unless you control two or more other lands.\nWhen this land enters untapped, choose one —\n• You gain 2 life.\n• Surveil 1.\n{T}: Add {W}."
+}

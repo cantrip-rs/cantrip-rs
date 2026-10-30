@@ -1,0 +1,21 @@
+# Bot1 controls exactly two other lands when the Outpost enters on turn 5; the opponent's two lands are additional and irrelevant. The threshold is met, so the untapped-entry trigger offers its 2-life mode (CR 614.1d, 603.6a, 700.2b).
+[Bot1 Deck]
+Federation Outpost
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot2.Hand.Mountain.Play
+Bot1.Hand.Island.Play
+Bot2.Hand.Mountain.Play
+Bot1.Hand.Federation Outpost.Play
+Bot1.Modes(You gain 2 life)
+
+[Expect]
+Bot1.Battlefield = Island; Island; Federation Outpost
+Bot1.Battlefield.Federation Outpost.Tapped = false
+Bot1.Life = 22
+Bot2.Life = 20

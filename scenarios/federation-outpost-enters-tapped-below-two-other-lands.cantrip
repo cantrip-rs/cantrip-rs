@@ -1,0 +1,19 @@
+# One Island is the only other land Bot1 controls when the Outpost enters. Bot2 has a Mountain, but it does not count, and the Outpost itself is not an "other" land; it enters tapped and no choice triggers (CR 614.1d, 603.6a).
+[Bot1 Deck]
+Federation Outpost
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot2.Hand.Mountain.Play
+Bot1.Hand.Federation Outpost.Play
+
+[Expect]
+Bot1.Battlefield = Island; Federation Outpost
+Bot2.Battlefield.Mountain.Tapped = false
+Bot1.Battlefield.Federation Outpost.Tapped = true
+Bot1.Life = 20
+Bot2.Life = 20
