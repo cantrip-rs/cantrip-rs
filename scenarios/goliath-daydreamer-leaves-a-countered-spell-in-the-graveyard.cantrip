@@ -1,0 +1,57 @@
+# Goliath Daydreamer: "...instead of putting it into your graveyard as it resolves" -- a spell that is countered does not
+# resolve (CR 701.6a), so it goes to the graveyard as usual and is not exiled with a dream counter. Bot1 casts a Lightning Bolt
+# from its hand on turn 3; the trigger resolves, and Bot2 counters the Bolt with a Counterspell.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mountain
+Goliath Daydreamer
+Lightning Bolt
+Lightning Bolt
+Mountain x10
+
+[Bot2 Deck]
+Island
+Mox Sapphire
+Counterspell
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goliath Daydreamer.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Stack = Lightning Bolt
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Counterspell.Cast(Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Lightning Bolt
+Exile.Count = 0
+Bot2.Graveyard = Counterspell

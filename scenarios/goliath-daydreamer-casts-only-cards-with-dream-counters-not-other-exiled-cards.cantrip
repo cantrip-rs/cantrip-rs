@@ -1,0 +1,56 @@
+# Goliath Daydreamer: "cast a spell from among cards you own in exile with dream counters on them" -- another card of Bot1's in
+# exile without a counter is not among them. Bot1 bolts Bot2 from the hand on turn 3 (the Bolt is exiled with a dream counter)
+# and imprints a Burst Lightning on a Chrome Mox (exiled with no counter). Attacking, the trigger offers only the Bolt: the
+# Burst Lightning cannot be chosen, and stays in exile.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Emerald
+Mountain
+Goliath Daydreamer
+Lightning Bolt
+Chrome Mox
+Burst Lightning
+Mountain x10
+
+[Bot2 Deck]
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goliath Daydreamer.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Chrome Mox.Cast
+Bot1.Choose(Burst Lightning)
+Bot1.Pass
+Bot2.Pass
+? Exile = Burst Lightning; Lightning Bolt
+Bot1.Attack(Goliath Daydreamer)
+! Bot1.Choose(Burst Lightning)
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 10
+Exile = Burst Lightning
+Bot1.Exile.Burst Lightning.Counters.Dream = (absent)
+Bot1.Graveyard = Lightning Bolt

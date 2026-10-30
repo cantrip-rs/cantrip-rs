@@ -1,0 +1,40 @@
+# Goliath Daydreamer with a rebound spell: Ephemerate cast from the hand as it resolves would go to the graveyard, and both
+# Daydreamer's "exile it with a dream counter instead" and rebound's "exile it" replace that (CR 614.1a). Its controller orders
+# them (CR 616.1): with the dream exile first, the card is exiled with a dream counter and rebound, with no graveyard move left
+# to replace, does not apply - nothing is cast again at the upkeep. Bot1 casts Daydreamer on turn 1, Ephemerate on it on turn 3.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Goliath Daydreamer
+Plains
+Ephemerate
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goliath Daydreamer.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Ephemerate.Cast(Goliath Daydreamer)
+Bot1.Replace(exile it with a dream counter on it)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Exile.Ephemerate.Counters.Dream = 1
+Delayed.Count = 0
+Stack.Count = 0

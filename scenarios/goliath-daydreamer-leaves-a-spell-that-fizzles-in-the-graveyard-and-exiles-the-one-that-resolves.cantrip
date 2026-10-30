@@ -1,0 +1,58 @@
+# Goliath Daydreamer: "...instead of putting it into your graveyard as it resolves" -- a spell with all its targets illegal does
+# not resolve (CR 608.2b) and goes to the graveyard as usual. Bot1 casts a Lightning Bolt at Bot2's Llanowar Elves and, with it
+# on the stack, a second Bolt at the same Elves: the second resolves and kills them and is exiled with a dream counter, the
+# first has no target left and is put into the graveyard without one.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Goliath Daydreamer
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Mountain x13
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goliath Daydreamer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot1.Exile.Lightning Bolt.Counters.Dream = 1
+Bot2.Graveyard = Llanowar Elves
+Stack.Count = 0
