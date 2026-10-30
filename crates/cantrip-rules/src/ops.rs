@@ -273,7 +273,7 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
         if from.is(ZoneKind::Stack)
             && let Some(item) = cx.s().stack.iter().find(|i| i.kind == StackKind::Spell && i.object == m.id).copied()
         {
-            m = crate::resolve::its_own_exile(cx, &item, m);
+            m = crate::resolve::its_own_exile(cx, &item, m, reason);
         }
         // A card goes to its owner's own hand, library or graveyard, whoever puts it there (CR 400.3).
         let to = match to.kind() {
@@ -2673,6 +2673,17 @@ pub fn change_spell_controller(cx: &mut Cx, spell: ObjectId, player: PlayerId) {
     // only when the state-based actions are next checked.
     settle_at_once(cx);
     cx.state_changed();
+}
+
+/// A spell on the stack is exiled instead of put into its owner's graveyard as it leaves the stack (CR 614.1a): the
+/// replacement of that move is set on its stack item (`StackItem::exile_instead`), as when the effect that had it cast set it.
+pub fn set_spell_exile_instead(cx: &mut Cx, spell: ObjectId, instead: ExileInstead) {
+    let Some(at) = cx.s().stack.iter().position(|i| i.kind == StackKind::Spell && i.object == spell) else {
+        return;
+    };
+    let mut item = cx.s().stack[at];
+    item.exile_instead = instead;
+    cx.st().stack_set(at, item);
 }
 
 /// A copy of a permanent spell resolves (CR 707.10f): the copy is put onto the battlefield as a token that is a copy of

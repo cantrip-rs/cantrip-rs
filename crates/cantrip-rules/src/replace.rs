@@ -83,6 +83,9 @@ const FLASHBACK_HINT: &str = "exile it instead of putting it anywhere else, as i
 /// What the "exile it instead" of the effect a spell was cast by says it does, for the player who orders it (CR 616.1).
 const EXILE_INSTEAD_HINT: &str = "exile it instead of putting it into the graveyard, as the effect it was cast by says";
 
+/// What the dream-counter exile of a spell says it does (Goliath Daydreamer's trigger; CR 616.1).
+const DREAM_EXILE_HINT: &str = "exile it with a dream counter on it instead of putting it into the graveyard";
+
 /// What the rules' replacements of a spell resolving, a permanent leaving and a destruction say they do, for the player who
 /// orders them with others (CR 616.1).
 const ADVENTURE_HINT: &str = "exile it on an Adventure, to be cast later as itself";
@@ -200,7 +203,7 @@ fn exile_instead_applies(cx: &Cx, z: &ZoneChange) -> bool {
     }
     match z.exile_instead {
         ExileInstead::Never => false,
-        ExileInstead::Spell => true,
+        ExileInstead::Spell | ExileInstead::Dream => true,
         ExileInstead::InstantOrSorcery => {
             let chars = cx.chars(z.object);
             chars.is(CardType::Instant) || chars.is(CardType::Sorcery)
@@ -610,7 +613,10 @@ fn hint_of(cx: &Cx, proposal: &Proposal, c: &Candidate) -> &'static str {
         Origin::Granted(timestamp) => granted(cx, timestamp).map_or("", |(_, def)| def.hint),
         Origin::Madness => MADNESS_HINT,
         Origin::Flashback => FLASHBACK_HINT,
-        Origin::ExileInstead => EXILE_INSTEAD_HINT,
+        Origin::ExileInstead => match proposal {
+            Proposal::ZoneChange(z) if z.exile_instead == ExileInstead::Dream => DREAM_EXILE_HINT,
+            _ => EXILE_INSTEAD_HINT,
+        },
         Origin::Adventure => ADVENTURE_HINT,
         Origin::Omen => OMEN_HINT,
         Origin::Rebound => REBOUND_HINT,
@@ -823,6 +829,12 @@ fn apply_to(cx: &mut Cx, proposal: &mut Proposal, mut entry: Option<&mut Enterin
             Origin::Flashback | Origin::ExileInstead | Origin::Unearth | Origin::Finality => {
                 if let Proposal::ZoneChange(z) = proposal {
                     z.to = Zone::exile(cx.s().obj(z.object).owner);
+                    // The dream counter goes on as the card arrives (CR 122.2: counters do not survive a zone change), put by the
+                    // spell's controller whose ability had it exiled (CR 609.1).
+                    if matches!(origin, Origin::ExileInstead) && z.exile_instead == ExileInstead::Dream {
+                        z.counters[CounterKind::Dream as usize] += 1;
+                        z.counters_by = cx.s().obj(z.object).controller;
+                    }
                 }
             }
             // CR 715.3d: its controller exiles it, in its owner's exile, and may play the card from there.

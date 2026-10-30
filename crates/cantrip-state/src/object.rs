@@ -1575,6 +1575,10 @@ pub enum ExileInstead {
     /// spell is an instant or a sorcery, judged as it would be put there (Bilbo, Thief in the Night, whose cast may be an
     /// artifact spell).
     InstantOrSorcery,
+    /// "Exile that card with a dream counter on it instead of putting it into your graveyard as it resolves", whatever the
+    /// spell is (Goliath Daydreamer): the counter is put on the card as it arrives in exile (CR 122.1, 614.1a), by the
+    /// spell's controller. Set after the cast, by the effect that has the spell go to exile (`Game::exile_spell_instead`).
+    Dream,
 }
 
 /// A condition on a standing permission to play a card, worked out whenever the permission is asked.
