@@ -1,0 +1,30 @@
+# Jadzia gets the first-main-phase counter before the equal amount of green mana is produced (CR 505.1a, 106.1, 122.1).
+# Jadzia Dax, Living Legacy {1}{G}: Legendary Creature — Trill Scientist
+#   At the beginning of your first main phase, put a +1/+1 counter on Jadzia Dax, then add an amount of {G} equal to the number of counters on her.
+#   Transfer Symbiont — {2}{G}, Discard this card: Put two +1/+1 counters on target creature.
+# Turn 3 is its controller's first main phase after Jadzia entered on turn 1.
+
+[Bot1 Deck]
+Jadzia Dax, Living Legacy
+Mox Emerald
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jadzia Dax, Living Legacy.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Jadzia Dax, Living Legacy.Counters.PlusOnePlusOne = 1
+Bot1.Mana = {G}

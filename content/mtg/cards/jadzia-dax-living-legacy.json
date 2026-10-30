@@ -1,0 +1,8 @@
+{
+  "name": "Jadzia Dax, Living Legacy",
+  "manaCost": "{1}{G}",
+  "type": "Legendary Creature — Trill Scientist",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "At the beginning of your first main phase, put a +1/+1 counter on Jadzia Dax, then add an amount of {G} equal to the number of counters on her.\nTransfer Symbiont — {2}{G}, Discard this card: Put two +1/+1 counters on target creature."
+}

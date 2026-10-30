@@ -3,6 +3,15 @@
 
 use cantrip_api::*;
 
+/// "The number of counters on" an object (CR 122.1): counters of every kind, a +1/+1 and a -1/-1 counter both counted while
+/// state-based actions have not yet removed the pair (CR 704.5q). Read from the object as it last existed if it has left the
+/// battlefield (CR 608.2h). Jadzia Dax, Living Legacy and Savanti Romero, Time's Exile ask it of themselves. A count of one
+/// kind is never below zero (`Obj::remove_counters` takes none past what is there), so each is taken as it is.
+pub fn counters_on(q: &dyn Query, object: ObjectId) -> u32 {
+    let o = q.obj(object);
+    CounterKind::ALL.iter().map(|&kind| o.counters(kind) as u32).sum()
+}
+
 /// "This creature enters with X +1/+1 counters on it" (CR 614.1c), for the X it was cast with; put onto the battlefield
 /// without being cast, X is 0. Walking Ballista, Guiding Hydra and the ravenous creatures print it.
 pub fn enters_with_x_counters(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {

@@ -1,0 +1,31 @@
+# Transfer Symbiont is activated from hand, discards Jadzia as a cost, and puts both counters on the chosen creature (CR 602.2a, 122.1).
+[Bot1 Deck]
+Jadzia Dax, Living Legacy
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Forest
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Jadzia Dax, Living Legacy.Activate(Bot1.Battlefield.Grizzly Bears)
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Counters.PlusOnePlusOne = 2
+Bot1.Graveyard = Jadzia Dax, Living Legacy

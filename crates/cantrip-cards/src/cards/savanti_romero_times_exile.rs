@@ -1,4 +1,5 @@
 use cantrip_api::*;
+use cantrip_mechanics::effects;
 use cantrip_mechanics::triggers::BEGINNING_OF_YOUR_COMBAT;
 use cantrip_oracle as oracle;
 
@@ -8,10 +9,9 @@ use cantrip_oracle as oracle;
 fn grow_then_draw_and_lose(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.add_counters(item.object, CounterKind::PlusOne, 1);
     g.end_sentence();
-    let object = g.obj(item.object);
-    let x: i32 = CounterKind::ALL.iter().map(|&kind| i32::from(object.counters(kind))).sum();
-    g.draw(item.controller, u32::try_from(x).unwrap_or_default());
-    g.lose_life(item.controller, x);
+    let x = effects::counters_on(g, item.object);
+    g.draw(item.controller, x);
+    g.lose_life(item.controller, x as i32);
     Ok(())
 }
 
