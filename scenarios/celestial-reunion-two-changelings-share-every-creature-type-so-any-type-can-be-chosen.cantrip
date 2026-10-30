@@ -1,0 +1,39 @@
+# Celestial Reunion: "choose a creature type and behold two creatures of that type" (CR 601.2b-c, 701.4a). A Chomping
+# Changeling is every creature type (CR 702.73a, in a hand too), so two of them in Bot1's hand share any type at all: Bird is
+# offered though neither is a Bird by its printed types. Bot1 chooses Bird and beholds both; the Birds of Paradise it finds
+# (mana value 1, exactly X) is a Bird, so it enters the battlefield.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Celestial Reunion
+Chomping Changeling
+Chomping Changeling
+Forest
+Forest
+Birds of Paradise
+Elvish Mystic
+Forest x11
+
+[Bot2 Deck]
+Island x7
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Celestial Reunion.Cast(X: 1)
+Bot1.Modes(Choose a creature type and behold two creatures of that type)
+Bot1.Modes(Bird)
+Bot1.Choose(Bot1.Hand.Chomping Changeling; Bot1.Hand.Chomping Changeling#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Birds of Paradise)
+
+[Expect]
+Bot1.Battlefield.Birds of Paradise.Power = 0
+Bot1.Hand = Chomping Changeling; Chomping Changeling; Forest; Forest
+Bot1.Graveyard = Celestial Reunion

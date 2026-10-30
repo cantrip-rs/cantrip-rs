@@ -1,0 +1,44 @@
+# Celestial Reunion: "As an additional cost to cast this spell, you may choose a creature type and behold two creatures of that
+# type" (CR 601.2b, 701.4a). Bot1 chooses Elf and beholds the two Elvish Mystics in its hand (both stay there, revealed: the
+# Revealed key while the spell is on the stack). X = 1 costs {1}{G}. The Elvish Mystic it finds (mana value 1, exactly X) is the
+# chosen type, so it enters the battlefield instead of the hand.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Celestial Reunion
+Elvish Mystic
+Elvish Mystic
+Forest
+Forest
+Birds of Paradise
+Elvish Mystic
+Forest x11
+
+[Bot2 Deck]
+Island x7
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Celestial Reunion.Cast(X: 1)
+Bot1.Modes(Choose a creature type and behold two creatures of that type)
+Bot1.Modes(Elf)
+Bot1.Choose(Bot1.Hand.Elvish Mystic; Bot1.Hand.Elvish Mystic#2)
+? Bot1.Revealed = Elvish Mystic; Elvish Mystic
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Elvish Mystic; Birds of Paradise)
+Bot1.Search(Elvish Mystic)
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Battlefield.Elvish Mystic.Tapped = false
+Bot1.Revealed = Elvish Mystic; Elvish Mystic; Elvish Mystic
+Bot1.Hand = Elvish Mystic; Elvish Mystic; Forest; Forest
+Bot1.Graveyard = Celestial Reunion

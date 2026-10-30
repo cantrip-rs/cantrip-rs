@@ -1,0 +1,40 @@
+# Celestial Reunion with its cost paid (type Elf, the two Elvish Mystics of the hand beheld) still puts a found card that is not
+# the chosen type into the hand: the Birds of Paradise (a Bird) is revealed and goes to the hand, not the battlefield. X = 1:
+# the Tarmogoyf (mana value 2) is past X and is not offered (the refusal is made with the Birds still in the library, so it
+# is the mana value that refuses it).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Jet
+Celestial Reunion
+Elvish Mystic
+Elvish Mystic
+Forest
+Forest
+Tarmogoyf
+Birds of Paradise
+Forest x11
+
+[Bot2 Deck]
+Island x7
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Celestial Reunion.Cast(X: 1)
+Bot1.Modes(Choose a creature type and behold two creatures of that type)
+Bot1.Modes(Elf)
+Bot1.Choose(Bot1.Hand.Elvish Mystic; Bot1.Hand.Elvish Mystic#2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Tarmogoyf)
+Bot1.Search(Birds of Paradise)
+
+[Expect]
+Bot1.Hand = Elvish Mystic; Elvish Mystic; Forest; Forest; Birds of Paradise
+Bot1.Graveyard = Celestial Reunion
+Bot1.Revealed = Elvish Mystic; Elvish Mystic; Birds of Paradise
