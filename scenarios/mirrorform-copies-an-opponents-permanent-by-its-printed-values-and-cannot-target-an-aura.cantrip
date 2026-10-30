@@ -1,0 +1,55 @@
+# Mirrorform targets Bot2's Llanowar Elves, which carries Bot2's Rancor (+2/+0 and trample): Bot1's Ornithopter becomes a copy
+# of the Elves' copiable values, a 1/1 Llanowar Elves, with none of the Rancor's bonus (CR 707.2: a copy copies no effects
+# or Auras), and Bot2's own permanents are untouched (it is Bot1's "each ... you control"). The Rancor is an Aura, so the cast
+# at it is refused (the refusal; the cast at the Elves is its control).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Ornithopter
+Mirrorform
+Island
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Rancor
+Forest x10
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Hand.Rancor.Cast(Llanowar Elves)
+Bot2.Battlefield.Forest.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Llanowar Elves.Power = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Mirrorform.Cast(Bot2.Battlefield.Rancor)
+Bot1.Hand.Mirrorform.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Island; Llanowar Elves; Llanowar Elves; Llanowar Elves
+Bot1.Battlefield.Llanowar Elves#1.Power = 1
+Bot2.Battlefield = Forest; Llanowar Elves; Mox Emerald; Rancor
+Bot2.Battlefield.Llanowar Elves.Power = 3
