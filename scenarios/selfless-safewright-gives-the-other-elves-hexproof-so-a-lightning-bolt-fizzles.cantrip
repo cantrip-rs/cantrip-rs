@@ -1,0 +1,58 @@
+# Selfless Safewright's hexproof half, apart from indestructible: Bot2 casts Lightning Bolt at Bot1's Elvish Mystic on turn 2, and in response Bot1
+# flashes in the Safewright (Mox Emerald {G}, Mox Ruby {1}, Mox Pearl {1}, and the Mystic itself tapped to convoke {G}, Memnite {1}),
+# choosing Elf. The Mystic has hexproof when the Bolt resolves, so its target is illegal and the Bolt does nothing (CR 608.2b): the Mystic has no
+# damage marked. Bot1's Safewright is not the target and is untouched.
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Mox Pearl
+Elvish Mystic
+Memnite
+Selfless Safewright
+Forest x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Elvish Mystic)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Selfless Safewright.Cast(Convoke: Elvish Mystic, Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Elf)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Elvish Mystic.Damage = 0
+Bot1.Battlefield.Selfless Safewright.Damage = 0
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard.Count = 0
