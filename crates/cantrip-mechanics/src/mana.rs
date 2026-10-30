@@ -233,6 +233,23 @@ fn you_tap_for_mana(q: &dyn Query, source: ObjectId, event: &Event, kind: CardTy
     }
 }
 
+/// "As this Aura enters, choose a color" (CR 614.12a), kept on the permanent (CR 607.2d). Shimmerwilds Growth and Utopia Sprawl
+/// print it.
+pub fn aura_enters_choosing_a_color(g: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
+    entering.chosen_color = Some(crate::choose_color_for(g, entering.controller, entering.object, ColorUse::Benefit)?);
+    Ok(())
+}
+
+/// "Whenever enchanted [permanent] is tapped for mana" (CR 106.12, 106.12a: a mana ability of it with {T} in its cost resolved
+/// and produced mana, which `Event::TappedForMana` is only then followed by triggers for), about that permanent. The
+/// trigger's `when(EventMask::TAPPED, ..)` for Shimmerwilds Growth and Utopia Sprawl.
+pub fn enchanted_permanent_tapped_for_mana(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
+    match *event {
+        Event::TappedForMana { permanent, .. } if q.obj(source).attached_to == Some(permanent) => Fired::about(Target::Object(permanent)),
+        _ => None,
+    }
+}
+
 /// "Whenever you tap a creature for mana" (CR 605.1b), the player in `data[0]` for `that_player_adds_an_additional`. Badgermole
 /// Cub prints it.
 pub fn you_tap_a_creature_for_mana(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
@@ -242,4 +259,15 @@ pub fn you_tap_a_creature_for_mana(q: &dyn Query, source: ObjectId, event: &Even
 /// "Whenever you tap a land for mana" (CR 605.1b), as `you_tap_a_creature_for_mana`. Groundchuck & Dirtbag prints it.
 pub fn you_tap_a_land_for_mana(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
     you_tap_for_mana(q, source, event, CardType::Land)
+}
+
+/// "... its controller adds an additional one mana of the chosen color." A triggered mana ability (CR 605.1b), resolving at
+/// once (CR 605.4a): the enchanted permanent's controller adds it, whoever controls the Aura. The color was chosen as the Aura
+/// entered; "the chosen color" is no color word (CR 612.2). An Aura that entered without choosing (none does) adds nothing.
+/// The effect of Shimmerwilds Growth and Utopia Sprawl, with `TriggeredMana::ChosenColor`.
+pub fn enchanted_permanents_controller_adds_the_chosen_color(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let (Some(color), Target::Object(permanent)) = (g.state().chosen_color(g.linked(item)), item.subject) else { return Ok(()) };
+    let controller = g.controller(permanent);
+    g.add_mana(controller, color.mana(), 1);
+    Ok(())
 }
