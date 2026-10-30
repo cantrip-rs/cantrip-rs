@@ -1,0 +1,37 @@
+# CR 603.2e, 113.7a: station's loot survives removal and can discard the card just drawn.
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Hemmer, Fixing What Is Broken
+Class-F Shuttlecraft
+Island x2
+Plains
+Forest
+Island x10
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Plains x15
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Hemmer, Fixing What Is Broken.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Class-F Shuttlecraft.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Class-F Shuttlecraft.Activate(Ability: Station)
+Bot1.Choose(Hemmer, Fixing What Is Broken)
+Bot2.Hand.Swords to Plowshares.Cast(Hemmer, Fixing What Is Broken)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot1.Choose(Forest)
+[Expect]
+Bot1.Life = 22
+Exile = Hemmer, Fixing What Is Broken
+Bot1.Battlefield.Class-F Shuttlecraft.Counters.Charge = 2
+Bot1.Graveyard = Forest; Black Lotus
+Bot1.Hand = Island; Island; Plains

@@ -1,0 +1,51 @@
+# CR 702.11b, 611.3a: your noncreature Spacecraft gains hexproof only on your turn; neither Hemmer nor opposing ships do.
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Hemmer, Fixing What Is Broken
+Class-F Shuttlecraft
+Voltaic Key
+Island
+Island x10
+[Bot2 Deck]
+Black Lotus
+Class-F Shuttlecraft
+Island
+Voltaic Key
+Island x12
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Hemmer, Fixing What Is Broken.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Class-F Shuttlecraft.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Island.Play
+Bot1.Hand.Voltaic Key.Cast
+Bot1.Battlefield.Island.Activate
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Class-F Shuttlecraft.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Voltaic Key.Cast
+Bot2.Battlefield.Island.Activate
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Class-F Shuttlecraft.Keywords = Hexproof
+? Bot2.Battlefield.Class-F Shuttlecraft.Keywords = (absent)
+? Bot1.Battlefield.Hemmer, Fixing What Is Broken.Keywords = (absent)
+Bot2.Battlefield.Class-F Shuttlecraft.Activate(Color: Blue)
+! Bot2.Battlefield.Voltaic Key.Activate(Bot1.Battlefield.Class-F Shuttlecraft)
+Bot2.Battlefield.Voltaic Key.Activate(Bot2.Battlefield.Class-F Shuttlecraft)
+Bot1.Battlefield.Class-F Shuttlecraft.Activate(Color: Blue)
+Bot1.Battlefield.Voltaic Key.Activate(Bot1.Battlefield.Class-F Shuttlecraft)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Class-F Shuttlecraft.Keywords = (absent)
+Bot2.Battlefield.Voltaic Key.Activate(Bot1.Battlefield.Class-F Shuttlecraft)
+Bot2.Battlefield.Island.Activate
+[Expect]
+Bot1.Battlefield.Class-F Shuttlecraft.Tapped = false
+Bot2.Battlefield.Class-F Shuttlecraft.Tapped = false
+Bot2.Battlefield.Voltaic Key.Tapped = true
