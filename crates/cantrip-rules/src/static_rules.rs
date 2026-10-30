@@ -502,14 +502,26 @@ pub fn attack_rules_allow(q: &dyn Query, cards: &CardTable, creature: ObjectId) 
 /// The requirements to block that the static abilities of the permanents on the battlefield with their abilities (CR 613.1f)
 /// put on the blocks among `allowed` (CR 509.1c, `CardDef::block_requirements`: Lure's "all creatures able to block enchanted
 /// creature do so"): one for each permanent and each block it requires, so two Lures on a creature make two of each creature
-/// able to block it. A board with no such permanent, nearly every board, makes none.
+/// able to block it. A permanent that says an attacker "must be blocked if able" (`CardDef::must_be_blocked`) makes one
+/// requirement for each such attacker that some block among `allowed` would block, whichever creature blocks it. A board with no
+/// such permanent, nearly every board, makes none.
 pub fn block_requirements(cx: &Cx, allowed: &[(ObjectId, ObjectId)]) -> Vec<RequiredBlock> {
-    let rules: Vec<(ObjectId, PlayerId, &'static CardDef)> = sources(cx, |d| !d.block_requirements.is_empty()).collect();
+    let rules: Vec<(ObjectId, PlayerId, &'static CardDef)> = sources(cx, |d| !d.block_requirements.is_empty() || !d.must_be_blocked.is_empty()).collect();
     let mut required = Vec::new();
     for &(id, _, def) in &rules {
         for &(blocker, attacker) in allowed {
             if def.block_requirements.iter().any(|rule| rule(cx, id, blocker, attacker)) {
                 required.push(RequiredBlock { blocker: Some(blocker), attacker: Some(attacker) });
+            }
+        }
+        if !def.must_be_blocked.is_empty() {
+            let mut attackers: Vec<ObjectId> = allowed.iter().map(|&(_, attacker)| attacker).collect();
+            attackers.sort_unstable();
+            attackers.dedup();
+            for attacker in attackers {
+                if def.must_be_blocked.iter().any(|rule| rule(cx, id, attacker)) {
+                    required.push(RequiredBlock { blocker: None, attacker: Some(attacker) });
+                }
             }
         }
     }

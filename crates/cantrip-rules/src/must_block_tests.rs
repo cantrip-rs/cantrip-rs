@@ -40,6 +40,12 @@ static MENACE: CardDef = creature("Must Block Test Menace", Keywords::of(&[Keywo
 static FLYER: CardDef = creature("Must Block Test Flyer", Keywords::of(&[Keyword::Flying]));
 static LONE: CardDef = creature("Must Block Test Lone", Keywords::of(&[Keyword::CantBeBlockedByMoreThanOne]));
 static LURE: CardDef = CardDef { block_requirements: &[lures], ..creature("Must Block Test Lure", Keywords::NONE) };
+/// This creature must be blocked if able.
+fn this_must_be_blocked(_: &dyn Query, source: ObjectId, attacker: ObjectId) -> bool {
+    attacker == source
+}
+static PREY: CardDef = CardDef { must_be_blocked: &[this_must_be_blocked], ..creature("Must Block Test Prey", Keywords::NONE) };
+static FLYING_PREY: CardDef = CardDef { must_be_blocked: &[this_must_be_blocked], ..creature("Must Block Test Flying Prey", Keywords::of(&[Keyword::Flying])) };
 static UNBLOCKABLE: CardDef = creature("Must Block Test Unblockable", Keywords::of(&[Keyword::CantBeBlocked]));
 static HASTY: CardDef = creature("Must Block Test Hasty", Keywords::of(&[Keyword::Haste]));
 /// "This creature can't be blocked this turn except by creatures with haste": the creature it is on, as an attacker.
@@ -52,7 +58,7 @@ static RESTRICTING: CardDef = CardDef {
 };
 
 fn table() -> &'static CardTable {
-    Box::leak(Box::new(CardTable::new([&FILLER, &PROVOKE, &BEAR, &MENACE, &FLYER, &LONE, &LURE, &UNBLOCKABLE, &HASTY, &RESTRICTING])))
+    Box::leak(Box::new(CardTable::new([&FILLER, &PROVOKE, &BEAR, &MENACE, &FLYER, &LONE, &LURE, &PREY, &FLYING_PREY, &UNBLOCKABLE, &HASTY, &RESTRICTING])))
 }
 
 /// A game of two on turn 1, P0's deck starting with three Provokes, and `permanents` on the battlefield.
@@ -242,6 +248,36 @@ fn a_requirement_to_block_counts_with_lure_requirements() {
     assert!(legal(&g, &ask, &[(x, l), (y, l)]));
     assert!(!legal(&g, &ask, &[(x, a), (y, l)]));
     assert!(!legal(&g, &ask, &[(y, l)]));
+}
+
+/// "This creature must be blocked if able" (CR 509.1c): one requirement on the attacker, obeyed by any creature blocking it. Blocking
+/// only the other attacker, or nothing, is refused; one blocker, either one, on the creature obeys it. Two such attackers are two
+/// requirements, and blocking one of them obeys one.
+#[test]
+fn a_creature_that_must_be_blocked_is_blocked_by_any_creature_able() {
+    let (mut g, ids) = game(&[(&PREY, P0), (&BEAR, P0), (&BEAR, P1), (&BEAR, P1)]);
+    let (prey, a, x, y) = (ids[0], ids[1], ids[2], ids[3]);
+    let ask = declare(&mut g, &[], &[prey, a]);
+    assert_eq!(rules(&ask).required, vec![RequiredBlock { blocker: None, attacker: Some(prey) }]);
+    assert_eq!(rules(&ask).most, 1);
+    assert!(!legal(&g, &ask, &[]) && !legal(&g, &ask, &[(x, a)]) && !legal(&g, &ask, &[(x, a), (y, a)]));
+    assert!(legal(&g, &ask, &[(x, prey)]) && legal(&g, &ask, &[(y, prey), (x, a)]));
+    let (mut g, ids) = game(&[(&PREY, P0), (&PREY, P0), (&BEAR, P1), (&BEAR, P1)]);
+    let (p, q, x, y) = (ids[0], ids[1], ids[2], ids[3]);
+    let ask = declare(&mut g, &[], &[p, q]);
+    assert_eq!(rules(&ask).required.len(), 2);
+    assert_eq!(rules(&ask).most, 2);
+    assert!(!legal(&g, &ask, &[(x, p)]) && !legal(&g, &ask, &[(x, p), (y, p)]));
+    assert!(legal(&g, &ask, &[(x, p), (y, q)]));
+}
+
+/// The requirement is obeyed only as far as the restrictions allow (CR 509.1c): an attacker with flying that nothing able to block
+/// it can be blocked by needs no block: the defending player has none to declare and is not asked.
+#[test]
+fn a_creature_that_must_be_blocked_but_cannot_be_is_not_required_a_block() {
+    let (mut g, ids) = game(&[(&FLYING_PREY, P0), (&BEAR, P1)]);
+    assert!(attack(&mut g, &[], &[ids[0]]).is_none());
+    assert!(g.state.blocks.is_empty());
 }
 
 /// Two provoked creatures and two attackers: each creature is a requirement of its own, obeyed only where both block.
