@@ -1,17 +1,7 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, tokens};
+use cantrip_mechanics::tokens::{self, SHAPESHIFTER};
+use cantrip_mechanics::targets;
 use cantrip_oracle as oracle;
-
-/// The 1/1 colorless Shapeshifter creature token with changeling (CR 702.73a) that Personify makes.
-static SHAPESHIFTER: CardDef = CardDef {
-    colors: Some(ColorSet::NONE),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(1),
-    toughness: Some(1),
-    keywords: Keywords::of(&[Keyword::Changeling]),
-    text: "Changeling (This creature is every creature type.)",
-    ..token!(Shapeshifter)
-};
 
 /// "Exile target creature you control, then return that card to the battlefield under its owner's control. Create a 1/1
 /// colorless Shapeshifter creature token with changeling." The creature returns as a new object (CR 400.7); a token

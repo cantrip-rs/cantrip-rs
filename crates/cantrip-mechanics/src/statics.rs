@@ -141,6 +141,15 @@ pub fn attacks_each_combat_if_able(_: &dyn LayerQuery, _: ObjectId, chars: &mut 
     chars.must_attack += 1;
 }
 
+/// "... is all creature types" (CR 205.3m, 613.1d, layer 4) as a static ability's `StaticDef::apply`: every creature type in
+/// addition to the types it has. "All creature types" names no creature type, so no text-changing effect changes it
+/// (CR 612.2). Undercover Skrull and Stalactite Dagger print it.
+pub fn all_creature_types(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
+    if chars.is(CardType::Creature) {
+        chars.subtypes = chars.subtypes.union(SubtypeSet::CREATURE_TYPES);
+    }
+}
+
 /// "... has haste" (CR 702.10, layer 6) as a static ability's `StaticDef::apply`. Anger, Samut, Lavaspur Boots, Skateboard
 /// and dash's haste print it.
 pub fn have_haste(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars) {
