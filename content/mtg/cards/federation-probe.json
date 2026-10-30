@@ -1,0 +1,11 @@
+{
+  "name": "Federation Probe",
+  "manaCost": "{U}",
+  "type": "Artifact Creature — Construct",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\nWhen this creature enters, choose one —\n• Target creature gets +1/+1 until end of turn.\n• Surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "keywords": [
+    "Flying"
+  ]
+}

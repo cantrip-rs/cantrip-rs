@@ -1,0 +1,29 @@
+# The second enter mode surveils exactly one card and moves the looked-at Lightning Bolt to the graveyard (CR 700.2b, 701.25a).
+
+[Bot1 Deck]
+Federation Probe
+Island
+Mountain x5
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Federation Probe.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Surveil 1)
+! Bot1.Target
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Lightning Bolt)
+
+[Expect]
+Bot1.Graveyard = Lightning Bolt
+Bot1.Library.Count = 20
+Bot1.Surveilled = 1 requested, 1 looked
+Bot1.Battlefield.Federation Probe.Keywords = Flying

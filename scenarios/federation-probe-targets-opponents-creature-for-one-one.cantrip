@@ -1,0 +1,47 @@
+# The target mode can choose an opponent's creature when two are legal; Mox Pearl is rejected because it is not a creature (CR 700.2b, 115.1d, 611.2a).
+
+[Bot1 Deck]
+Federation Probe
+Island
+Mox Pearl
+Island x4
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Federation Probe.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Target creature gets +1/+1 until end of turn)
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 2
+? Bot2.Battlefield.Memnite.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+
+[Expect]
+Bot2.Battlefield.Memnite.Power = 2
+Bot2.Battlefield.Memnite.Toughness = 2
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Federation Probe.Keywords = Flying
+

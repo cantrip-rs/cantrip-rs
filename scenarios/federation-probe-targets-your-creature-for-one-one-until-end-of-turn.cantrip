@@ -1,0 +1,46 @@
+# The target mode accepts your own creature and rejects the noncreature Mox Pearl; the known Memnite grows by exactly one, then the temporary bonus ends before turn 2 (CR 700.2b, 115.1d, 611.2a).
+
+[Bot1 Deck]
+Federation Probe
+Island
+Ornithopter
+Memnite
+Mox Pearl
+Island x2
+Mountain x20
+
+[Bot2 Deck]
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Federation Probe.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Target creature gets +1/+1 until end of turn)
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 2
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Federation Probe.Keywords = Flying
+
+
