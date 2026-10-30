@@ -16,5 +16,9 @@ use crate::targets::filters::creature;
 /// graveyard and exiled as it leaves the stack. `text` is the way's text ("Beam me up {3}{G}"), which a scenario's
 /// `Ability:` matches and the client shows.
 pub const fn way(cost: ManaCost, text: &'static str) -> WayDef {
-    cantrip_api::way(Cost::mana(cost).and(return_to_hand(1, creature)), ZoneKind::Graveyard, text).exile_after()
+    let returning = Cost {
+        permanents: Some(PermanentCost { count: 1, filter: creature, action: PermanentAction::BeamUp, tapped: false }),
+        ..Cost::NONE
+    };
+    cantrip_api::way(Cost::mana(cost).and(returning), ZoneKind::Graveyard, text).exile_after()
 }
