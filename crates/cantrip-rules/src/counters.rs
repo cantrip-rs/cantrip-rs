@@ -111,7 +111,8 @@ pub fn place_together(cx: &mut Cx, placements: &[Placement], how: How) -> Vec<Ev
             let amount = counts[kind as usize];
             if amount > 0 {
                 let total = cx.s().obj(id).counters(kind);
-                events.push(Event::CountersPut { object: id, kind, amount, total, by: m.by });
+                let types = if cx.s().obj(id).zone.is(ZoneKind::Battlefield) { cx.chars(id).types } else { TypeSet::default() };
+                events.push(Event::CountersPut { object: id, kind, amount, total, by: m.by, types });
             }
         }
     }
@@ -286,7 +287,8 @@ pub fn place_arrived(cx: &mut Cx, id: ObjectId, counts: [i16; CounterKind::COUNT
         let amount = counts[kind as usize];
         if amount > 0 {
             let total = cx.s().obj(id).counters(kind);
-            events.push(Event::CountersPut { object: id, kind, amount, total, by });
+            let types = if cx.s().obj(id).zone.is(ZoneKind::Battlefield) { cx.chars(id).types } else { TypeSet::default() };
+            events.push(Event::CountersPut { object: id, kind, amount, total, by, types });
         }
     }
 }
