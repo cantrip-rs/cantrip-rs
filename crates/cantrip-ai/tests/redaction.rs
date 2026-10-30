@@ -706,6 +706,77 @@ fn world_for_bot2(game: &Game) -> Game {
     world
 }
 
+/// Bot1's Kaito, Bane of Nightmares's ninjutsu on the stack, activated from Bot1's hand in place of the unblocked Guerrilla
+/// Gorilla, Bot2 to answer it; the rest of Bot1's hand and library are Forests.
+const NINJUTSU_ON_THE_STACK: &str = "
+[Bot1 Deck]
+Forest
+Mox Emerald
+Guerrilla Gorilla
+Mox Sapphire
+Mox Jet
+Kaito, Bane of Nightmares
+Forest x2
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Guerrilla Gorilla)
+[T3 Bot1.Blockers]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kaito, Bane of Nightmares.Activate(Ability: Ninjutsu)
+Bot1.Choose(Guerrilla Gorilla)
+Bot1.Pass
+[Handover Bot2.Pass]
+";
+
+/// A card an ability on the stack was activated from in a hand is revealed (CR 602.2a): Bot2 sees Kaito in Bot1's hand
+/// while the ninjutsu waits, knows it from then on, and no world dealt for Bot2 makes it another card. One did (the AI
+/// host's search panicked resolving the ninjutsu as an ability of the Forest dealt in Kaito's place, CardTable::ability
+/// out of range): the deal took the card for unseen and gave the ability on the stack to the card dealt.
+#[test]
+fn a_card_an_ability_was_activated_from_in_a_hand_is_seen_and_kept_in_every_world() {
+    let game = handed_over(NINJUTSU_ON_THE_STACK);
+    let (bot1, bot2) = (PlayerId(0), PlayerId(1));
+    let item = *game.state.stack.last().expect("the ninjutsu on the stack");
+    let kaito = item.object;
+    let name = |g: &Game, id: ObjectId| g.cards.get(g.state.obj(id).card).name;
+    assert_eq!(game.state.obj(kaito).zone, Zone::hand(bot1));
+    assert_eq!(name(&game, kaito), "Kaito, Bane of Nightmares");
+    assert!(observable(&game, bot2, &std::collections::HashSet::new()).contains(&kaito), "Bot2 sees the card the ninjutsu revealed");
+    let knowledge = Knowledge::of(&game, bot2);
+    assert_eq!(knowledge.knows(kaito), Some(false), "Bot2 knows the card in Bot1's hand");
+    for seed in 0..32 {
+        let mut world = game.fork_for_search();
+        world.reseed(seed);
+        determinize(&mut world, &knowledge, bot2, InfoMode::Decklist, prior(), &mut Rng::new(seed));
+        assert_eq!(name(&world, kaito), "Kaito, Bane of Nightmares", "world {seed} keeps the revealed card");
+        assert_eq!(world.state.stack.last().map(|i| i.ability), Some(item.ability), "world {seed} keeps the ability on the stack");
+        let request = world.pending().cloned().expect("Bot2's priority");
+        world.answer(request.id, request.player, Answer::Pass).expect("legal");
+        assert!(
+            world.state.battlefield().iter().any(|&id| name(&world, id) == "Kaito, Bane of Nightmares"),
+            "world {seed}: the ninjutsu resolves, Kaito onto the battlefield"
+        );
+    }
+}
+
 /// Faithless Looting resolving, its two cards drawn, Bot1 to choose the two it discards: the draws are in the journal's
 /// tail the fork keeps, and choosing re-runs the resolution from before them.
 const LOOTING_CHOOSES: &str = "

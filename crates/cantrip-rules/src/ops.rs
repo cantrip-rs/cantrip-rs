@@ -125,7 +125,34 @@ struct Plan {
 /// has keeps a card revealed by a continuous effect ("play with the top card of your library revealed"): the first that
 /// does adds that here.
 pub(crate) fn seen_by_all(cx: &Cx, id: ObjectId, revealed_by_move: bool) -> bool {
-    let s = cx.s();
+    seen_by_all_in(cx.g, id, revealed_by_move)
+}
+
+/// The cards in a hand or a library that a reveal in effect shows every player now (`seen_by_all`): those a spell or an
+/// activated ability still on the stack revealed - the card an ability was activated from in its hidden zone among them
+/// (CR 602.2a) - and those whose revealing triggered an ability not yet off the stack (CR 701.20a). What a seat may see
+/// (`cantrip_engine::visibility::observable`) holds them.
+pub(crate) fn revealed_in_hidden_zones(g: &crate::Game) -> Vec<ObjectId> {
+    let s = &g.state;
+    let mut candidates: Vec<ObjectId> = Vec::new();
+    for item in &s.stack {
+        candidates.push(item.object);
+        candidates.extend_from_slice(s.members(item.members));
+    }
+    candidates.extend(s.triggers.iter().map(|t| t.source));
+    let mut out: Vec<ObjectId> = Vec::new();
+    for id in candidates {
+        let zone = s.obj(id).zone;
+        if (zone.is(ZoneKind::Hand) || zone.is(ZoneKind::Library)) && !out.contains(&id) && seen_by_all_in(g, id, false) {
+            out.push(id);
+        }
+    }
+    out
+}
+
+/// `seen_by_all`, of a game not running a frame (`revealed_in_hidden_zones`).
+fn seen_by_all_in(g: &crate::Game, id: ObjectId, revealed_by_move: bool) -> bool {
+    let s = &g.state;
     let o = s.obj(id);
     match o.zone.kind() {
         ZoneKind::Battlefield | ZoneKind::Graveyard | ZoneKind::Stack | ZoneKind::Command => true,
@@ -139,7 +166,7 @@ pub(crate) fn seen_by_all(cx: &Cx, id: ObjectId, revealed_by_move: bool) -> bool
                     // cast (`cast_known`, CR 601.2i). A copy of a spell or an ability was neither (CR 707.10), so it revealed
                     // nothing; a cast copy of a card was cast (CR 707.12). An activated ability's item is put on the stack
                     // as it is announced (CR 602.2a), and only a copy of one is `copied`.
-                    StackKind::Spell => s.members(i.members).contains(&id) && (i.cast_known != u32::MAX || being_cast(cx, i)),
+                    StackKind::Spell => s.members(i.members).contains(&id) && (i.cast_known != u32::MAX || being_cast(g, i)),
                     StackKind::Activated => !i.copied && (i.object == id || s.members(i.members).contains(&id)),
                     // A copy (Strionic Resonator) was never triggered by the reveal (CR 707.10): only "that triggered
                     // ability" keeps the card revealed.
@@ -156,8 +183,8 @@ pub(crate) fn seen_by_all(cx: &Cx, id: ObjectId, revealed_by_move: bool) -> bool
 /// Whether the spell `item` is being cast now, announced (CR 601.2a) and not yet cast (CR 601.2i): its card was moved to
 /// the stack to be cast (`ZoneReason::Cast`) in the run of records just before the item was put there (`StackItem::since`),
 /// which a copy of a spell, created on the stack (CR 707.10), never was. A cast given up is undone, item and all (CR 733.1).
-fn being_cast(cx: &Cx, item: &StackItem) -> bool {
-    let log = &cx.g.log;
+fn being_cast(g: &crate::Game, item: &StackItem) -> bool {
+    let log = &g.log;
     let end = (item.since as usize).min(log.len());
     let Some(last) = end.checked_sub(1) else { return false };
     let cause = log[last].cause;

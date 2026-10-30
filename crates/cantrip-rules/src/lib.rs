@@ -1009,6 +1009,13 @@ impl Game {
     pub fn may_look_at_library_top(&self, player: PlayerId) -> bool {
         actions::may_look_at_library_top(self, self.cards, player)
     }
+
+    /// The cards in a hand or a library that every player sees now, a reveal of them in effect (CR 701.20a): the card an
+    /// ability on the stack was activated from there (CR 602.2a), the cards a spell or ability on the stack revealed as
+    /// it was announced or paid for, and a card whose revealing triggered an ability not yet off the stack (miracle).
+    pub fn revealed_in_hidden_zones(&self) -> Vec<ObjectId> {
+        ops::revealed_in_hidden_zones(self)
+    }
 }
 
 /// The view of the game a frame's run has: what card code is handed as `&mut dyn Game`.

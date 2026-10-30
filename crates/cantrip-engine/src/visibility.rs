@@ -1,7 +1,8 @@
 //! What a seat may see (CR 400.2, 401.2, 402.3, 406.3, 708.5): the one rule the host's views and the AI's observations
 //! both follow, so neither can see more than the other.
 //!
-//! A seat sees the zones it may look into, every spell and ability on the stack, and what is being shown to it right now
+//! A seat sees the zones it may look into, every spell and ability on the stack, the hidden cards a reveal in effect shows
+//! everyone (the card an ability on the stack was activated from, CR 602.2a), and what is being shown to it right now
 //! (`extra`: a reveal, a look, the objects its own outstanding request names). A face-down object's face goes to its
 //! controller on the battlefield and to those who saw it go there in exile. While the asked player is part way through
 //! announcing or paying, the log past the frame's start can still be cut back; it is theirs alone until then
@@ -77,7 +78,8 @@ pub fn stack_entries(state: &GameState) -> Vec<StackEntry> {
 }
 
 /// Every object this viewer can observe: the contents of the zones they may look into, every spell and ability on the
-/// stack, and what is being shown to them right now (`extra`).
+/// stack, the hidden cards a reveal in effect shows everyone (`Game::revealed_in_hidden_zones`), and what is being shown
+/// to them right now (`extra`).
 pub fn observable(game: &Game, viewer: PlayerId, extra: &HashSet<ObjectId>) -> HashSet<ObjectId> {
     let s = &game.state;
     let mut visible = HashSet::new();
@@ -104,6 +106,9 @@ pub fn observable(game: &Game, viewer: PlayerId, extra: &HashSet<ObjectId>) -> H
     visible.extend(s.zone(Zone::PHASED_OUT).iter().copied());
     visible.extend(s.zone(Zone::COMMAND).iter().copied());
     visible.extend(stack_entries(s).iter().map(StackEntry::key));
+    // A card in a hand or a library while a reveal of it is in effect: the card an ability on the stack was activated
+    // from there (ninjutsu, CR 602.2a), what a spell's announcement revealed, a miracle card (CR 701.20a).
+    visible.extend(game.revealed_in_hidden_zones());
     for &id in extra {
         if !is_ability_key(id) && (id.index() < s.objects.len()) && live(s, id) {
             visible.insert(id);

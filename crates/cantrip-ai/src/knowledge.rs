@@ -140,6 +140,11 @@ impl Knowledge {
         let s = &game.state;
         match *event {
             Event::Revealed { card, .. } => self.learn(game, card),
+            // An ability activated from a hand or a library reveals its card (CR 602.2a: ninjutsu, cycling), which the
+            // history records as the activation itself.
+            Event::AbilityActivated { source, .. } if matches!(s.obj(source).zone.kind(), ZoneKind::Hand | ZoneKind::Library) => {
+                self.learn(game, source)
+            }
             // What a player looks at, the player controlling them sees too (CR 723.4).
             Event::Looked { player, card } | Event::Shown { player, card } if self.sees_as(player) => self.learn(game, card),
             // Another player looked at it, and may have put it anywhere among what they looked at.
