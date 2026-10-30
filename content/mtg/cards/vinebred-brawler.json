@@ -1,0 +1,8 @@
+{
+  "name": "Vinebred Brawler",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Berserker",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "This creature must be blocked if able.\nWhenever this creature attacks, another target Elf you control gets +2/+1 until end of turn."
+}

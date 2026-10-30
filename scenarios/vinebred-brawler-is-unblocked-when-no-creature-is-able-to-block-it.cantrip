@@ -1,0 +1,30 @@
+# Vinebred Brawler: "must be blocked if able" asks nothing of a creature that can't block (CR 509.1c, 509.1b, the rulings). Bot2's only creature is
+# Forsaken Miner ("can't block"), so Bot2 has no block to declare and the Brawler, attacking alone with no other Elf to pump (the trigger has
+# no target and is removed, CR 603.3d), deals its 4 damage.
+
+[Bot1 Deck]
+Black Lotus
+Vinebred Brawler
+Island x5
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Forsaken Miner
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Vinebred Brawler.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Forsaken Miner.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Vinebred Brawler > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot2.Battlefield = Forsaken Miner

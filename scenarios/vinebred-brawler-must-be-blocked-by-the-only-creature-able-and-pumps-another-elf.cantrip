@@ -1,0 +1,39 @@
+# Vinebred Brawler: "This creature must be blocked if able." (CR 509.1c) Bot1 attacks with Vinebred Brawler and Elvish Mystic into Bot2's lone
+# Ornithopter. Declaring no blockers is refused, and so is blocking the Mystic: the one creature able to block must block the Brawler. "Whenever
+# this creature attacks, another target Elf you control gets +2/+1 until end of turn": the Mystic is the only other Elf, a 3/2 for the turn. The
+# Brawler (4/2) kills the Ornithopter (0/2); the Mystic hits for 3 (CR 510.1).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Elvish Mystic
+Vinebred Brawler
+Island x3
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Vinebred Brawler.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Vinebred Brawler > Bot2; Elvish Mystic > Bot2)
+! Bot2.Block(Count: 0)
+! Bot2.Block(Ornithopter > Elvish Mystic)
+Bot2.Block(Ornithopter > Vinebred Brawler)
+? Bot1.Battlefield.Elvish Mystic.Power = 3
+? Bot1.Battlefield.Elvish Mystic.Toughness = 2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Count = 3
