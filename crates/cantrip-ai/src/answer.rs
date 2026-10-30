@@ -257,6 +257,12 @@ impl Answering {
                     .collect::<Result<_, _>>()?,
             ),
             (_, F::Refs(refs)) => Answer::Cards(ids(refs)?),
+            (RequestKind::ChooseNumber { least, most, .. }, F::Modes(m)) => {
+                if m.len() != 1 { return Err("choose exactly one number".into()); }
+                let value = least.checked_add(u32::from(m[0])).ok_or("number is outside the offered range")?;
+                if value > *most { return Err("number is outside the offered range".into()); }
+                Answer::Announce(value)
+            }
             (_, F::Modes(m)) => Answer::Modes(m.clone()),
             (_, F::Colors(c)) => {
                 Answer::Colors(c.iter().map(|&c| Color::ALL[c as usize]).collect())
@@ -424,6 +430,9 @@ impl Answering {
             },
             (_, Answer::Cards(ids), _) => F::Refs(all(ids.iter().map(|&id| self.r(id)).collect())?),
             (_, Answer::Targets(ts), _) => F::Refs(all(ts.iter().map(|&t| self.t(t)).collect())?),
+            (RequestKind::ChooseNumber { least, most, .. }, Answer::Announce(n), _) if (*least..=*most).contains(n) => {
+                F::Modes(vec![u8::try_from(n - least).expect("ChooseNumber range is bounded by the mechanic")])
+            }
             (_, Answer::Modes(m), _) => F::Modes(m.clone()),
             (_, Answer::Colors(c), _) => F::Colors(c.iter().map(|&c| c as u8).collect()),
             (_, Answer::Yes, _) => F::Yes,

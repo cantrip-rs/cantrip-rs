@@ -175,6 +175,7 @@ fn an_own_enters_out_of_its_tier_stops_a_verifying_run() {
             chosen_player: None,
             chosen_card: None,
             chosen_option: None,
+            chosen_number: None,
             chosen_object: None,
             attach: None,
             attach_player: None,

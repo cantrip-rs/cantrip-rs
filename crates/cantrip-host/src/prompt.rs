@@ -1136,6 +1136,22 @@ pub fn prompt(game: &Game, request: &Request, handles: &mut HandleSpace) -> Resu
             },
             ..Default::default()
         }),
+        RequestKind::ChooseNumber { source, least, most, heading } => {
+            if most < least || most - least > 255 {
+                return Err("ChooseNumber ranges must contain between 1 and 256 values".into());
+            }
+            let modes: Vec<String> = (*least..=*most).map(|n| n.to_string()).collect();
+            PromptPayload::ChooseModesPromptMessage(ChooseModesPrompt {
+                player,
+                source: source_handle(game, handles, *source),
+                eligible: (0..modes.len() as i32).collect(),
+                count: 1,
+                at_most: 1,
+                heading: (*heading).to_string(),
+                modes,
+                ..Default::default()
+            })
+        }
         RequestKind::ChooseColors { source, choices, count, purpose } => PromptPayload::ChooseColorsPromptMessage(ChooseColorsPrompt {
             player,
             source: source_handle(game, handles, *source),

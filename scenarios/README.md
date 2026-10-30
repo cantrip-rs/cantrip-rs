@@ -258,6 +258,7 @@ default declines, so a scenario that does not care about such a card need say no
 | `Bot1.Modes(1; 4)` · `Bot1.Modes(Destroy target artifact)` | a modal spell's modes as it is cast, or a modal triggered ability's as it goes on the stack, by number from 1 or part of their text (default: the first eligible); also the next room of a dungeon when there are two, `Bot1.Modes(Lost Well)` |
 | `Bot1.Name(Lightning Bolt)` | a card name, chosen as a permanent enters (Anointed Peacekeeper) or as a spell or ability resolves (Petrified Hamlet's land card name); any card the game knows of the kind asked for (default: the name the card suggests, such as the costliest nonland card in the hand looked at) |
 | `Bot1.Colors(Red; Green)` | colors chosen as a spell or ability resolves (CR 202.2b), by name and in the order asked for; a color repeats where the ability allows it, as Coalition Relic's one mana per charge counter does (default: the first on offer) |
+| `Bot1.Number(7)` | a number chosen between the least and the most offered, both included (CR 107.1, 614.12a: Nyota Uhura's "choose a number between 0 and 10"); `! Bot1.Number`, bare, says the player is not asked a number (default: the least) |
 | `Bot1.Replace(Archon of Emeria)` | which of two applicable replacement effects applies first (CR 616.1), by its source card's name or part of its hint (default: the first offered) |
 | `Bot1.ChoosePlayer(Bot2)` | a player chosen without targeting (CR 608.2d, 614.12a), as True-Name Nemesis asks as it enters (default: the first in turn order) |
 
@@ -604,7 +605,7 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
 - `BotN.Battlefield.<Name>.Chosen<Key>`, one per quality chosen about a permanent and kept on it (CR 614.12a, 607.2d), as an
   ability of the text it has now reads it: a choice made by a text it no longer has as its own (it has since become a copy
   of something else, CR 607.5) is not dumped, and `ChosenPlayer` and `ChosenObject` are the player and the object chosen:
-  `ChosenName` for a card name (chosen as it entered, or for it as its ability resolved: Petrified Hamlet), `ChosenOption` for the word chosen as it entered (CR 607.2f: Gollum's `Odd` or `Even`, a Siege's `Khans`), `ChosenColor` for a chosen colour,
+  `ChosenName` for a card name (chosen as it entered, or for it as its ability resolved: Petrified Hamlet), `ChosenOption` for the word chosen as it entered (CR 607.2f: Gollum's `Odd` or `Even`, a Siege's `Khans`), `ChosenNumber` for a chosen number (Nyota Uhura), `ChosenColor` for a chosen colour,
   `ChosenSubtype` for a chosen creature type (Three Tree City), `ChosenObject` for the permanent chosen as it entered
   (Dauntless Bodyguard's creature), while that permanent is still on the battlefield (CR 400.7); and `ChosenModes`, the modes its modal abilities have
   chosen, numbered from 1 and read from the history (`1, 3` for Gollum's counter and draw)

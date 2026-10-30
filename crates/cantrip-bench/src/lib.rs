@@ -318,6 +318,9 @@ pub fn decide(game: &Game, random: &mut Random, request: &Request) -> Answer {
         RequestKind::ChooseReplacement { sources, .. } => Answer::Index(random.below(sources.len()) as u8),
         RequestKind::ChooseName { suggestion, kind, .. } => Answer::Name(default_name(game.cards, *kind, *suggestion)),
         RequestKind::ChooseSubtype { choices, .. } => Answer::Subtype(choices[random.below(choices.len())]),
+        RequestKind::ChooseNumber { least, most, .. } => {
+            Answer::Announce(least + random.below((most - least + 1) as usize) as u32)
+        }
     }
 }
 

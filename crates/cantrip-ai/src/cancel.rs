@@ -79,6 +79,7 @@ fn request_source(request: &Request) -> Option<ObjectId> {
         | RequestKind::ChooseColors { source, .. }
         | RequestKind::ChooseName { source, .. }
         | RequestKind::ChooseSubtype { source, .. }
+        | RequestKind::ChooseNumber { source, .. }
         | RequestKind::May { source, .. }
         | RequestKind::ChoosePlayer { source, .. }
         | RequestKind::TapForPower { source, .. }

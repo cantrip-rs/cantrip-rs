@@ -9825,6 +9825,7 @@ fn answers_to_try(kind: &RequestKind) -> Result<Vec<Answer>, String> {
             Ok(out)
         }
         RequestKind::May { .. } => Ok(vec![Answer::Yes, Answer::No]),
+        RequestKind::ChooseNumber { least, most, .. } => Ok((*least..=*most).map(Answer::Announce).collect()),
         RequestKind::ChooseModes { eligible, count: 1, at_most: 0, .. } => Ok(eligible.iter().map(|&i| Answer::Modes(vec![i])).collect()),
         RequestKind::ChoosePlayer { candidates, .. } => Ok(candidates.iter().map(|&p| Answer::Player(p)).collect()),
         other => {

@@ -392,6 +392,19 @@ pub(crate) fn ask_of(
                 purpose: *purpose as u8,
             }
         }
+        RequestKind::ChooseNumber { source: s, least, most, .. } => {
+            source = r(*s);
+            let max_index = u8::try_from(most - least).expect("ChooseNumber range is bounded by the mechanic");
+            AskKind::ChooseModes {
+                labels: (*least..=*most).map(|n| n.to_string()).collect(),
+                eligible: (0..=max_index).collect(),
+                count: 1,
+                at_most: 1,
+                affordable: Vec::new(),
+                additional_cost: false,
+                repeat: false,
+            }
+        }
         RequestKind::May { source: s, purpose } => {
             source = r(*s);
             let verb = match purpose {

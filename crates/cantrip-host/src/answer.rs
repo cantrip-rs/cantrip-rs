@@ -214,6 +214,12 @@ pub fn translate(
                 let i = a.modes.first().copied().unwrap_or(-1);
                 let subtype = usize::try_from(i).ok().and_then(|i| choices.get(i)).copied();
                 Answer::Subtype(subtype.ok_or_else(|| Untranslatable::Illegal("not one of the types offered".into()))?)
+            } else if let RequestKind::ChooseNumber { least, most, .. } = &request.kind {
+                if a.modes.len() != 1 { return Err(Untranslatable::Illegal("choose exactly one number".into())); }
+                let index = u32::try_from(a.modes[0]).map_err(|_| Untranslatable::Illegal("not a number offered".into()))?;
+                let value = least.saturating_add(index);
+                if value > *most { return Err(Untranslatable::Illegal("not a number offered".into())); }
+                Answer::Announce(value)
             } else {
                 Answer::Modes(a.modes.iter().map(|&m| m.clamp(0, 255) as u8).collect())
             }

@@ -1177,6 +1177,9 @@ impl<'a> Projector<'a> {
         if let Some(chosen) = s.chosen_option(text) {
             choices.push(ChoiceView { key: "option".into(), value: label_text(&Label::Option(chosen.card, chosen.index)).to_string(), ..Default::default() });
         }
+        if let Some(chosen) = s.chosen_number(text) {
+            choices.push(ChoiceView { key: "number".into(), value: chosen.to_string(), ..Default::default() });
+        }
         // The permanent chosen as it entered (CR 614.12a, 607.2d), while it is still that permanent on the battlefield: one that
         // left, or came back as a new object (CR 400.7), is chosen no longer. Named as it shows there, and pointed at.
         if let Some(chosen) = s.chosen_object(text)

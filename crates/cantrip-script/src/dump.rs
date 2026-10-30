@@ -659,6 +659,9 @@ impl StateDump {
                     if let Some(chosen) = s.chosen_option(own) {
                         d.set(format!("{key}.ChosenOption"), label_text(&Label::Option(chosen.card, chosen.index)));
                     }
+                    if let Some(chosen) = s.chosen_number(own) {
+                        d.set(format!("{key}.ChosenNumber"), chosen);
+                    }
                     // The permanent chosen as it entered (CR 614.12a, 607.2d), while it is still that permanent on the
                     // battlefield: one that left, or came back as a new object (CR 400.7), is chosen no longer.
                     if let Some(chosen) = s.chosen_object(own)
@@ -886,7 +889,7 @@ const PLAYER_KEYS: &[&str] = &[
 /// The keys the dump writes of a permanent, after `BotN.Battlefield.<name>.` (or `.PhasedOut.`), beside `Counters.<Kind>`.
 const PERMANENT_KEYS: &[&str] = &[
     "Tapped", "Toxic", "FaceDown", "FaceDownName", "Token", "Prototyped", "Transformed", "ManaValue", "X", "Doors", "Prepared", "AttachedTo", "Monstrous",
-    "Solved", "Suspected", "Saddled", "Exerted", "GoadedBy", "MustAttack", "CantBeBlocked", "BlockRestriction", "ChosenPlayer", "ChosenOption", "ChosenObject",
+    "Solved", "Suspected", "Saddled", "Exerted", "GoadedBy", "MustAttack", "CantBeBlocked", "BlockRestriction", "ChosenPlayer", "ChosenOption", "ChosenNumber", "ChosenObject",
     "ChosenModes", "ChosenName", "ClassLevel", "Types", "Supertypes", "Subtypes", "Colors", "Keywords", "HexproofFrom",
     "ProtectionFrom", "ProtectionFromSubtypes", "ProtectionFromManaValue", "Power", "Toughness", "Damage", "SummoningSick", "ChosenColor", "ChosenSubtype",
 ];

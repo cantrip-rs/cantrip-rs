@@ -230,6 +230,7 @@ pub enum ScriptVerb {
     Triggers,
     Name,
     Colors,
+    Number,
     ChoosePlayer,
     PlayFirst,
     DrawFirst,
@@ -249,13 +250,14 @@ impl ScriptVerb {
                 | ScriptVerb::Discard
                 | ScriptVerb::Choose
                 | ScriptVerb::Colors
+                | ScriptVerb::Number
                 | ScriptVerb::Name
                 | ScriptVerb::Arrange
                 | ScriptVerb::ChoosePlayer
         )
     }
 
-    pub const ALL: [ScriptVerb; 33] = [
+    pub const ALL: [ScriptVerb; 34] = [
         ScriptVerb::Play,
         ScriptVerb::Cast,
         ScriptVerb::Activate,
@@ -283,6 +285,7 @@ impl ScriptVerb {
         ScriptVerb::Triggers,
         ScriptVerb::Name,
         ScriptVerb::Colors,
+        ScriptVerb::Number,
         ScriptVerb::ChoosePlayer,
         ScriptVerb::PlayFirst,
         ScriptVerb::DrawFirst,
@@ -320,6 +323,7 @@ impl ScriptVerb {
             ScriptVerb::Triggers => "Triggers",
             ScriptVerb::Name => "Name",
             ScriptVerb::Colors => "Colors",
+            ScriptVerb::Number => "Number",
             ScriptVerb::ChoosePlayer => "ChoosePlayer",
             ScriptVerb::PlayFirst => "PlayFirst",
             ScriptVerb::DrawFirst => "DrawFirst",
@@ -532,7 +536,7 @@ impl ScriptStep {
         if let Some(rest) = line.strip_prefix('!') {
             let action = ActionStep::parse(rest.trim(), number)?;
             if !matches!(action.verb, ScriptVerb::Play | ScriptVerb::Cast | ScriptVerb::Activate | ScriptVerb::Foretell | ScriptVerb::Suspend | ScriptVerb::TakeCompanion | ScriptVerb::Block | ScriptVerb::Attack | ScriptVerb::Search | ScriptVerb::Accept | ScriptVerb::Modes | ScriptVerb::Target | ScriptVerb::Undo | ScriptVerb::PayCost | ScriptVerb::RemoveCounters) && !action.verb.is_question() {
-                return Err(ParseError("a refusal (!) names a Play, Cast, Activate, Foretell, Suspend, TakeCompanion, Block, Attack, Search, Accept, Modes, Target, Undo or PayCost that must not be offered, as ! Bot1.Hand.Island.Play, ! Bot2.Block(Bear > Ox), ! Bot1.Search(Plains), ! Bot1.Accept, ! Bot1.Modes(1; 2), ! Bot1.Target(Island), ! Bot1.Undo or ! Bot1.PayCost".into()));
+                return Err(ParseError("a refusal (!) names a Play, Cast, Activate, Foretell, Suspend, TakeCompanion, Block, Attack, Search, Accept, Modes, Number, Target, Undo or PayCost that must not be offered".into()));
             }
             return Ok(ScriptStep::Refused { line: number, text: line.to_string(), action });
         }
@@ -838,6 +842,13 @@ mod tests {
     fn a_concession_is_a_line_of_its_player() {
         let step = ActionStep::parse("Bot3.Concede", 1).unwrap();
         assert_eq!((step.verb, step.bot), (ScriptVerb::Concede, 3));
+    }
+
+    #[test]
+    fn parses_a_number_choice_and_its_refusal() {
+        let script = GameScript::parse("[Bot1 Deck]\nIsland\n[Bot2 Deck]\nIsland\n[Actions]\nBot1.Number(10)\n! Bot1.Number\n", "x").unwrap();
+        assert!(matches!(&script.steps[0], ScriptStep::Action(a) if a.verb == ScriptVerb::Number && a.positional().next() == Some("10")));
+        assert!(matches!(&script.steps[1], ScriptStep::Refused { action, .. } if action.verb == ScriptVerb::Number));
     }
 
     #[test]

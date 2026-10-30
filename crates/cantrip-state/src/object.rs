@@ -188,6 +188,7 @@ pub struct Choices {
     subtype: Option<Subtype>,
     player: Option<PlayerId>,
     option: Option<ChosenOption>,
+    number: Option<u32>,
     object: Option<ObjectId>,
     /// Card names, each with the ability that chose it: one chosen as it entered is its entering text's.
     names: [Option<Chosen<CardId>>; CHOSEN_NAMES],
@@ -201,6 +202,8 @@ pub struct Entered {
     pub player: Option<PlayerId>,
     pub card: Option<CardId>,
     pub option: Option<ChosenOption>,
+    /// The number chosen as this permanent entered (CR 614.12a, 607.2d).
+    pub number: Option<u32>,
     pub object: Option<ObjectId>,
 }
 
@@ -237,6 +240,7 @@ impl ChoiceRecord for Choices {
             subtype: made.subtype,
             player: made.player,
             option: made.option,
+            number: made.number,
             object: made.object,
             names: [made.card.map(own), None],
         }
@@ -257,7 +261,7 @@ impl ChoiceRecord for Choices {
 
     fn entered_raw(&self) -> (Option<CardId>, Entered) {
         let card = self.names.iter().flatten().find(|c| Some(c.text) == self.by && c.acquired == Acquired::OWN).map(|c| c.value);
-        (self.by, Entered { color: self.color, subtype: self.subtype, player: self.player, card, option: self.option, object: self.object })
+        (self.by, Entered { color: self.color, subtype: self.subtype, player: self.player, card, option: self.option, number: self.number, object: self.object })
     }
 
     fn names_raw(&self) -> [Option<Chosen<CardId>>; CHOSEN_NAMES] {
@@ -294,6 +298,11 @@ impl Choices {
     /// The word chosen, to `by`.
     pub fn option(&self, by: Linked) -> Option<ChosenOption> {
         self.entered_to(by)?.option
+    }
+
+    /// The number chosen as this permanent entered, to the linked ability.
+    pub fn number(&self, by: Linked) -> Option<u32> {
+        self.entered_to(by)?.number
     }
 
     /// The object chosen, to `by`, wherever it is now.

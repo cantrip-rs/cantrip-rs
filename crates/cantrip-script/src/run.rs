@@ -380,6 +380,7 @@ fn answers(verb: ScriptVerb, kind: &RequestKind) -> bool {
         V::Divide => matches!(kind, RequestKind::ChooseDividedTargets { .. }),
         V::RemoveCounters => matches!(kind, RequestKind::RemoveCounters { .. }),
         V::Colors => matches!(kind, RequestKind::ChooseColors { .. }),
+        V::Number => matches!(kind, RequestKind::ChooseNumber { .. }),
         V::PlayFirst | V::DrawFirst => matches!(kind, RequestKind::ChooseStartingPlayer { .. }),
         V::Mulligan | V::Keep => matches!(kind, RequestKind::Mulligan { .. }),
         V::Triggers => matches!(kind, RequestKind::OrderTriggers { .. }),
@@ -418,6 +419,7 @@ fn kind_name(kind: &RequestKind) -> &'static str {
         RequestKind::ChooseReplacement { .. } => "ChooseReplacement",
         RequestKind::ChooseName { .. } => "ChooseName",
         RequestKind::ChooseSubtype { .. } => "ChooseSubtype",
+        RequestKind::ChooseNumber { .. } => "ChooseNumber",
         RequestKind::ChooseDividedTargets { .. } => "ChooseDividedTargets",
     }
 }
@@ -1222,6 +1224,7 @@ impl<'s> Run<'s> {
                 }
                 Answer::Modes(modes.into_iter().take(*count as usize).collect())
             }
+            RequestKind::ChooseNumber { least, .. } => Answer::Announce(*least),
             // The fewest it takes; for a slot whose targets together are judged ("with total mana value X or less"), the first
             // of them that its rule allows together.
             RequestKind::ChooseTarget { source, candidates, least, together, .. } if together.is_some() => Answer::Targets(
@@ -1342,6 +1345,13 @@ impl<'s> Run<'s> {
             // "Choose odd or even" is a name in the C# engine's scripts: `Name(Odd)`.
             (V::Modes | V::Name, RequestKind::ChooseModes { modes, eligible, count, at_most, .. }) => {
                 Some(self.modes(step, modes, eligible, *count, (*at_most).max(*count))?)
+            }
+            (V::Number, RequestKind::ChooseNumber { least, most, .. }) => {
+                let spec = step.positional().next().unwrap_or("").trim();
+                let Some(value) = spec.parse::<u32>().ok().filter(|n| (*least..=*most).contains(n)) else {
+                    return fail(format!("line {}: {spec} is not a number between {least} and {most}", step.line));
+                };
+                Some(Answer::Announce(value))
             }
             (V::Target, RequestKind::ChooseTarget { candidates, least, count, .. }) => {
                 self.choose_target(step, candidates, *least, *count)?

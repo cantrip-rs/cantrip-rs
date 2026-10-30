@@ -407,6 +407,9 @@ pub fn check(game: &Game, request: &Request, answer: &Answer) -> Result<(), Reje
         (RequestKind::ChooseSubtype { choices, .. }, Answer::Subtype(s)) => {
             if choices.contains(s) { Ok(()) } else { no("not one of the types offered") }
         }
+        (RequestKind::ChooseNumber { least, most, .. }, Answer::Announce(n)) => {
+            if (*least..=*most).contains(n) { Ok(()) } else { no("not a number offered") }
+        }
         (RequestKind::ChooseStartingPlayer { candidates }, Answer::Player(p)) => {
             if candidates.contains(p) { Ok(()) } else { no("not a player who may go first") }
         }

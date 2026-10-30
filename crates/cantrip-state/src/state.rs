@@ -1032,6 +1032,11 @@ impl GameState {
         self.obj(by.object).marks.choices.option(by)
     }
 
+    /// The number chosen as this permanent entered (CR 614.12a, 607.2d), to the linked ability.
+    pub fn chosen_number(&self, by: Linked) -> Option<u32> {
+        self.obj(by.object).marks.choices.number(by)
+    }
+
     /// The object chosen for `by`'s object, to `by` (`chosen_color`), wherever it is now.
     pub fn chosen_object(&self, by: Linked) -> Option<ObjectId> {
         self.obj(by.object).marks.choices.object(by)

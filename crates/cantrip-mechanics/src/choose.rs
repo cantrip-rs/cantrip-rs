@@ -326,6 +326,29 @@ pub fn option_as_enters(g: &mut dyn Game, entering: &mut Entering, def: &'static
     Ok(())
 }
 
+/// "Choose a number between `least` and `most`" (CR 107.1, 614.12a): endpoints are included, and the choice is asked even
+/// when only one value is legal. `heading` is the card's named ability or instruction. Expel the Interlopers and Nyota
+/// Uhura, Communications print this choice.
+pub fn number(g: &mut dyn Game, player: PlayerId, source: ObjectId, least: u32, most: u32, heading: &'static str) -> Result<u32, Suspend> {
+    assert!(least <= most && most - least <= u8::MAX.into(), "a number choice must contain between 1 and 256 values");
+    match g.ask(player, RequestKind::ChooseNumber { source, least, most, heading })? {
+        Answer::Announce(value) => Ok(value),
+        _ => unreachable!("the core validates answers to ChooseNumber"),
+    }
+}
+
+/// "As [this] enters, choose a number between `least` and `most" (CR 614.12a, 607.2d): the permanent keeps the chosen
+/// value for its own linked abilities, including when the same card name is a different object after changing zones.
+pub fn number_as_enters(g: &mut dyn Game, entering: &mut Entering, least: u32, most: u32, heading: &'static str) -> Result<(), Suspend> {
+    entering.chosen_number = Some(number(g, entering.controller, entering.object, least, most, heading)?);
+    Ok(())
+}
+
+/// The number chosen as this permanent entered, read by an ability of the text that chose it (CR 607.2d, 607.5).
+pub fn chosen_number(q: &dyn Query, asker: &Asker) -> Option<u32> {
+    q.state().chosen_number(q.linked_to(asker))
+}
+
 /// The word chosen as `asker`'s source entered (`option_as_enters`), by index into `def`'s `labels`, for "the chosen [word]" or
 /// "• Jeskai — ..." of `def`'s text, read by the ability that asks (`Query::linked_to`): none if no choice was made, or if it
 /// was made by an ability that one is not linked to (CR 607.2f, 607.5) - another card's, its own before a copy effect gave

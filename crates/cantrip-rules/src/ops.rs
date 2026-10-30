@@ -1179,6 +1179,7 @@ fn keep_chosen(cx: &Cx, entering: &Entering) -> impl Fn(&mut Obj) + use<> {
         player: e.chosen_player,
         card: e.chosen_card,
         option: e.chosen_option,
+        number: e.chosen_number,
         object: e.chosen_object,
     };
     let text = if made.any() { cx.cards().linked_card(entering_card(cx, entering)) } else { CardId(0) };
@@ -1540,7 +1541,7 @@ fn prepare_entries(cx: &mut Cx, moves: &mut Vec<Moving>, objects: &[(ObjectId, P
             continue;
         }
         let mut entering =
-            Entering { object: id, controller, tapped, counters: entry_counters(with), copy: None, prepared: false, chosen_color: None, chosen_subtype: None, chosen_player: None, chosen_card: None, chosen_option: None, chosen_object: None, attach: None, attach_player: None, x: 0 , transformed: false, protector: None, instead: None, becomes, own: None };
+            Entering { object: id, controller, tapped, counters: entry_counters(with), copy: None, prepared: false, chosen_color: None, chosen_subtype: None, chosen_player: None, chosen_card: None, chosen_option: None, chosen_number: None, chosen_object: None, attach: None, attach_player: None, x: 0 , transformed: false, protector: None, instead: None, becomes, own: None };
         prepare_entry(cx, &mut entering)?;
         // One its own daybound turned over as it would enter (CR 702.145b) is judged as that face (CR 304.4, 307.4).
         if entering.transformed && instant_or_sorcery_entering(cx, id, true) {
@@ -1600,6 +1601,7 @@ pub fn put_onto_battlefield_as(
         chosen_player: None,
         chosen_card: None,
         chosen_option: None,
+        chosen_number: None,
         chosen_object: None,
         attach: None, attach_player: None,
         x: 0,
@@ -1720,6 +1722,7 @@ pub fn put_onto_battlefield_attached(cx: &mut Cx, id: ObjectId, controller: Play
         chosen_player: None,
         chosen_card: None,
         chosen_option: None,
+        chosen_number: None,
         chosen_object: None,
         attach: None,
         attach_player: None,
@@ -2119,7 +2122,7 @@ fn create_tokens_onto(
         token.gift = spell.and_then(|s| s.gift);
         let id = cx.st().push_obj(token);
         let aura = spell.filter(|_| cx.card(card).enchant.is_some());
-        let mut entering = Entering { object: id, controller, tapped, counters: entry_counters(with), copy, prepared: false, chosen_color: None, chosen_subtype: None, chosen_player: None, chosen_card: None, chosen_option: None, chosen_object: None, attach: aura.and_then(|i| i.target(0).object()), attach_player: aura.and_then(|i| i.target(0).player()), x: 0 , transformed: back_up, protector: None, instead: None, becomes: None, own: None };
+        let mut entering = Entering { object: id, controller, tapped, counters: entry_counters(with), copy, prepared: false, chosen_color: None, chosen_subtype: None, chosen_player: None, chosen_card: None, chosen_option: None, chosen_number: None, chosen_object: None, attach: aura.and_then(|i| i.target(0).object()), attach_player: aura.and_then(|i| i.target(0).player()), x: 0 , transformed: back_up, protector: None, instead: None, becomes: None, own: None };
         prepare_entry(cx, &mut entering)?;
         // A token that would be a copy of an instant or sorcery card is not created (CR 111.5), nor one with such a face up
         // (CR 712.13a: a copy of a double-faced permanent spell turned over as it would enter).
@@ -4689,6 +4692,7 @@ mod tests {
             chosen_player: None,
             chosen_card: None,
             chosen_option: None,
+            chosen_number: None,
             chosen_object: None,
             attach: None,
             attach_player: None,

@@ -451,6 +451,9 @@ pub enum RequestKind {
     /// One subtype of `choices`, in order ("choose a creature type", CR 205.3m: the C# engine asks it as a modes
     /// question over every creature type, more than a mode index holds).
     ChooseSubtype { source: ObjectId, choices: Vec<Subtype>, purpose: WordUse },
+    /// Choose a whole number in the inclusive range (CR 107.1), as "choose a number between 0 and 10". `heading` is the
+    /// card's text for this choice.
+    ChooseNumber { source: ObjectId, least: u32, most: u32, heading: &'static str },
     /// "You may".
     May { source: ObjectId, purpose: Purpose },
     /// A player chosen without targeting (CR 608.2d, 614.12a): True-Name Nemesis's "as this enters, choose a player",
@@ -567,6 +570,7 @@ impl RequestKind {
             | K::ChooseColors { source, .. }
             | K::ChooseName { source, .. }
             | K::ChooseSubtype { source, .. }
+            | K::ChooseNumber { source, .. }
             | K::May { source, .. }
             | K::ChoosePlayer { source, .. }
             | K::TapForPower { source, .. }
@@ -644,6 +648,7 @@ impl RequestKind {
             }
             RequestKind::ChooseColors { source, .. }
             | RequestKind::ChooseSubtype { source, .. }
+            | RequestKind::ChooseNumber { source, .. }
             | RequestKind::May { source, .. } => add(&[*source]),
             RequestKind::ChoosePlayer { source, subject, .. } => {
                 add(&[*source]);
