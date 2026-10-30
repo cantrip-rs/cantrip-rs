@@ -1,0 +1,64 @@
+# Trystan's Command, the return mode: "Return one or two target permanent cards from your graveyard to your hand" takes one target (the
+# Black Lotus alone returns, the other cards stay), but not three. Bot1's graveyard holds a Black Lotus (sacrificed for
+# mana), and a Llanowar Elves and an Elvish Mystic (killed by Bot2's two Lightning Bolts); the second mode destroys Bot2's Ornithopter.
+
+[Bot1 Deck]
+Black Lotus
+Llanowar Elves
+Elvish Mystic
+Trystan's Command
+Mox Jet
+Mox Emerald
+Sol Ring
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Mountain
+Lightning Bolt
+Lightning Bolt
+Ornithopter
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt#1.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Trystan's Command.Cast
+Bot1.Modes(2; 3)
+! Bot1.Target(Bot1.Graveyard.Black Lotus; Bot1.Graveyard.Llanowar Elves; Bot1.Graveyard.Elvish Mystic)
+Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot1.Graveyard.Count = 3
+Bot1.Graveyard.Black Lotus = (absent)

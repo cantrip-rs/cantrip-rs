@@ -1,0 +1,57 @@
+# Trystan's Command, modes 2 and 3: "Return one or two target permanent cards from your graveyard to your hand" and "Destroy target
+# creature or enchantment." Bot1's graveyard holds a Black Lotus (sacrificed for mana on turn 1) and a Llanowar Elves (killed by Bot2's
+# Lightning Bolt), both permanent cards; Bot2's Lightning Bolt in its own graveyard is not a legal target (not "your graveyard", and no
+# permanent card). Bot1 returns the Lotus and the Elves to its hand and destroys Bot2's Ornithopter.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Mox Ruby
+Llanowar Elves
+Sol Ring
+Mox Pearl
+Trystan's Command
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Trystan's Command.Cast
+Bot1.Modes(2; 3)
+! Bot1.Target(Bot2.Graveyard.Lightning Bolt)
+Bot1.Target(Bot1.Graveyard.Black Lotus; Bot1.Graveyard.Llanowar Elves)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot1.Hand.Black Lotus.Colors.Count = 0
+Bot1.Hand.Llanowar Elves.Colors.Count = 1
