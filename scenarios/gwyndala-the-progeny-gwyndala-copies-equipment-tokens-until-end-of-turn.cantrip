@@ -1,0 +1,53 @@
+# Gwyndala's Equipment token copies Basilisk Collar through end of turn. Cranial Plating is a second non-token Equipment with different copiable values and stays unchanged (CR 707.2, 611.2c). At the next turn the token is Neuroflux Heirloom again, still on Gwyndala (CR 514.2).
+
+[Bot1 Deck]
+Gwyndala, the Progeny
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Basilisk Collar
+Island
+Cranial Plating
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gwyndala, the Progeny.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Cranial Plating.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gwyndala, the Progeny.Activate(Ability: {2}: Each Equipment token you control becomes a copy of target Equipment you control until end of turn.; Bot1.Battlefield.Basilisk Collar)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gwyndala, the Progeny.Power = 1
+? Bot1.Battlefield.Gwyndala, the Progeny.Keywords = Deathtouch; Lifelink
+? Bot1.Battlefield.Cranial Plating.ManaValue = 2
+? Bot1.Battlefield.Cranial Plating.Subtypes = Equipment
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Neuroflux Heirloom.AttachedTo = Gwyndala, the Progeny
+Bot1.Battlefield.Gwyndala, the Progeny.Power = 2
+Bot1.Battlefield.Gwyndala, the Progeny.Keywords = (absent)

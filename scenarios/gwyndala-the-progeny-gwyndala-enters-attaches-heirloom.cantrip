@@ -1,0 +1,51 @@
+# The colorless Neuroflux Heirloom token is attached to Gwyndala and gives +1/+1; equipping Ornithopter with it moves the bonus (CR 111.1, 301.5e, 701.3b, 702.6a).
+
+[Bot1 Deck]
+Gwyndala, the Progeny
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Gwyndala, the Progeny.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Neuroflux Heirloom.Token = true
+? Bot1.Battlefield.Neuroflux Heirloom.Colors = (absent)
+? Bot1.Battlefield.Neuroflux Heirloom.Types = Artifact
+? Bot1.Battlefield.Neuroflux Heirloom.Subtypes = Equipment
+? Bot1.Battlefield.Neuroflux Heirloom.AttachedTo = Gwyndala, the Progeny
+? Bot1.Battlefield.Gwyndala, the Progeny.Power = 2
+? Bot1.Battlefield.Gwyndala, the Progeny.Toughness = 2
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Neuroflux Heirloom.Activate(Ability: Equip {2}; Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Neuroflux Heirloom.Token = true
+Bot1.Battlefield.Neuroflux Heirloom.Colors = (absent)
+Bot1.Battlefield.Neuroflux Heirloom.Subtypes = Equipment
+Bot1.Battlefield.Neuroflux Heirloom.AttachedTo = Ornithopter
+Bot1.Battlefield.Gwyndala, the Progeny.Power = 1
+Bot1.Battlefield.Gwyndala, the Progeny.Toughness = 1
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Mana =
+
+
+
