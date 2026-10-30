@@ -1,0 +1,52 @@
+# Dundoolin Weaver: the condition is checked again as the ability resolves (CR 603.4). Bot1 has two Elvish Mystics, and on turn 3 casts the Weaver, a third creature; with the
+# trigger on the stack Bot2 kills a Mystic with Lightning Bolt, so the ability does nothing and Black Lotus stays in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Elvish Mystic
+Elvish Mystic
+Dundoolin Weaver
+Forest x30
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Elvish Mystic#1.Activate
+Bot1.Battlefield.Elvish Mystic#2.Activate
+Bot1.Hand.Dundoolin Weaver.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Elvish Mystic#1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Elvish Mystic; Black Lotus
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Count = 3
