@@ -1,0 +1,48 @@
+# Enterprise NX-01's 6+ striation is one static ability with effects in layers 4, 6 and 7b (CR 613.6): once it is a
+# creature, Dress Down's "creatures lose all abilities" doesn't take away its 4/3 base power and toughness, so it lives.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Enterprise NX-01
+Glass Golem
+Dress Down
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Enterprise NX-01.Cast
+Bot1.Pass
+Bot1.Hand.Glass Golem.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Enterprise NX-01.Activate(Ability: Station)
+Bot1.Choose(Glass Golem)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Enterprise NX-01.Power = 4
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Dress Down.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Enterprise NX-01.Power = 4
+Bot1.Battlefield.Enterprise NX-01.Toughness = 3

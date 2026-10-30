@@ -1,0 +1,7 @@
+{
+  "name": "Enterprise NX-01",
+  "manaCost": "{3}{U}",
+  "type": "Legendary Artifact — Spacecraft",
+  "stationPt": "4/3",
+  "oracleText": "When Enterprise NX-01 enters, tap target creature an opponent controls and put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nStation (Tap another creature you control: Put charge counters equal to its power on this Spacecraft. Station only as a sorcery. It's an artifact creature at 6+.)\n6+ | Flying, vigilance"
+}
