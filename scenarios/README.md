@@ -546,6 +546,8 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
 - `BotN.Dungeon` (`Undercity: Forge`) while in a dungeon, and `BotN.DungeonsCompleted` once one is completed (CR 309.7)
 - `BotN.Looked`, the cards the player has looked at, in the order they looked (a look at one card of a hand, Urza's Bauble),
   once they have looked at any and absent until then
+- `BotN.Surveilled`, each completed surveil in order as `<count> requested, <looked> looked` (CR 701.25a, 701.25d),
+  absent until the player surveils
 - `BotN.Hand`, `.Library`, `.Graveyard`, `.Battlefield`, `.Emblems` (CR 114, from the command zone), each with `.Count`
 - `BotN.Companion`: the card the player revealed as their companion before the game (CR 103.2b), wherever it has gone since;
   empty for a player who revealed none.

@@ -335,6 +335,18 @@ impl StateDump {
             if !looked.is_empty() {
                 d.list(&format!("{b}.Looked"), looked, true);
             }
+            // A completed surveil (CR 701.25d): both the number instructed and how many cards were actually looked at.
+            let surveilled: Vec<String> = game
+                .history()
+                .select(EventQuery::kind(EventMask::SURVEILLED).player(p))
+                .filter_map(|r| match r.event {
+                    Event::Surveilled { count, looked, .. } => Some(format!("{count} requested, {looked} looked")),
+                    _ => None,
+                })
+                .collect();
+            if !surveilled.is_empty() {
+                d.list(&format!("{b}.Surveilled"), surveilled, false);
+            }
             if player.room != 0
                 && let Some(dungeon) = game.cards.undercity
             {
@@ -866,7 +878,7 @@ const GAME_KEYS: &[&str] = &[
 /// The keys the dump writes of a player, after `BotN.`.
 const PLAYER_KEYS: &[&str] = &[
     "Life", "Poison", "Energy", "Experience", "Status", "CantWin", "LostTo", "Mana", "ManaFrom", "LandsPlayed", "CitysBlessing",
-    "EnduringStory", "Speed", "Dungeon", "DungeonsCompleted", "TurnsToSkip", "ControlledBy", "NextTurnControlledBy", "Looked",
+    "EnduringStory", "Speed", "Dungeon", "DungeonsCompleted", "TurnsToSkip", "ControlledBy", "NextTurnControlledBy", "Looked", "Surveilled",
     "Hand", "Revealed", "Crimes", "Library", "Companion", "Sideboard", "Graveyard", "Emblems", "Battlefield", "PhasedOut",
 ];
 
