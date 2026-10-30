@@ -1,0 +1,37 @@
+# "Whenever another creature you control enters, this creature gets +1/+0 until end of turn": the Watcher entering is not "another" (still 3/3), then each Ornithopter entering gives
+# +1/+0, the two stacking (CR 611.2c) for 5/3.
+
+[Bot1 Deck]
+Black Lotus
+Crossroads Watcher
+Ornithopter
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Crossroads Watcher.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Crossroads Watcher.Power = 3
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Crossroads Watcher.Power = 4
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Crossroads Watcher.Power = 5
+Bot1.Battlefield.Crossroads Watcher.Toughness = 3
