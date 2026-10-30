@@ -1,0 +1,31 @@
+# Lore, Positronic Provocateur {1}{U/B}{U/B}: Legendary Artifact Creature — Android Rogue
+#   When Lore enters, choose one —
+#   • Target creature gets +1/+0 until end of turn and can't be blocked this turn.
+#   • Surveil 2.
+# Cast on turn 1 off Black Lotus. Its enter trigger takes the surveil 2 mode; one Island stays on top and one goes to the graveyard
+# (CR 603.6a, 700.2b, 701.25a).
+
+[Bot1 Deck]
+Lore, Positronic Provocateur
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Lore, Positronic Provocateur.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Surveil 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | Island)
+
+[Expect]
+Bot1.Surveilled = 2 requested, 2 looked
+Bot1.Graveyard.Count = 2

@@ -1,0 +1,8 @@
+{
+  "name": "Lore, Positronic Provocateur",
+  "manaCost": "{1}{U/B}{U/B}",
+  "type": "Legendary Artifact Creature — Android Rogue",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "When Lore enters, choose one —\n• Target creature gets +1/+0 until end of turn and can't be blocked this turn.\n• Surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)"
+}

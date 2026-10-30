@@ -1,0 +1,31 @@
+# Lore's targeted mode does nothing if its sole target leaves before resolution (CR 608.2b).
+[Bot1 Deck]
+Lore, Positronic Provocateur
+Black Lotus
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Lore, Positronic Provocateur.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+[Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Ornithopter; Black Lotus
+Bot1.Battlefield = Lore, Positronic Provocateur
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0

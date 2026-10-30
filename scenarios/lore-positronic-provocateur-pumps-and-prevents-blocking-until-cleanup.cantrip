@@ -1,0 +1,38 @@
+# Lore's first mode gives +1/+0 and prevents blocking through combat, then both effects end at cleanup (CR 611.2a).
+# An opposing Ornithopter could normally block our flying Ornithopter.
+[Bot1 Deck]
+Lore, Positronic Provocateur
+Black Lotus
+Ornithopter
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Lore, Positronic Provocateur.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+[Bot1.BeginCombat]
+? Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Attack(Ornithopter > Bot2)
+! Bot2.Block(Ornithopter > Ornithopter)
+[Bot1.Main2]
+? Bot2.Life = 19
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T5 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot2.Block(Ornithopter > Ornithopter)
+[Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Life = 19
