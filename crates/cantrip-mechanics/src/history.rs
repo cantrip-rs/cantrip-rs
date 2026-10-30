@@ -120,6 +120,27 @@ pub fn entered_this_turn(history: History<'_>, permanent: ObjectId) -> bool {
         .any(|r| matches!(r.event, Event::ZoneChange { new, .. } if new == permanent))
 }
 
+/// "A creature entered the battlefield under your control this turn" (CR 400.7, 603.6a): whether a creature `player` controlled
+/// entered this turn, `except` apart ("another"), one that has since left the battlefield and any token that has since ceased to
+/// exist included, by its last known information then (CR 608.2h). A creature still on the battlefield is asked of `is_creature`
+/// (the layers' answer, which a static ability's condition gets from its `LayerQuery`) and of its controller now. Asked of a history
+/// so that a static ability's condition reads it too. Thoughtweft Charge's draw and Bristlebane Outrider's +2/+0 print it.
+pub fn creature_entered_under_control_this_turn(
+    history: History<'_>,
+    state: &GameState,
+    player: PlayerId,
+    except: Option<ObjectId>,
+    is_creature: &dyn Fn(ObjectId) -> bool,
+) -> bool {
+    history.select(EventQuery::kind(EventMask::ZONE_CHANGE).to(ZoneKind::Battlefield).this_turn()).any(|r| {
+        matches!(r.event, Event::ZoneChange { new, .. } if Some(new) != except
+            && match state.last_known(new) {
+                Some(known) => known.controller == player && known.types.has(CardType::Creature),
+                None => state.obj(new).controller == player && is_creature(new),
+            })
+    })
+}
+
 /// How many of `player`'s opponents have lost life this turn (spectacle's "an opponent lost life this turn", Drill
 /// Bit; Kaito, Bane of Nightmares counts them).
 pub fn opponents_who_lost_life_this_turn(q: &dyn Query, player: PlayerId) -> usize {
