@@ -1,0 +1,8 @@
+{
+  "name": "Jake Sisko, War Correspondent",
+  "manaCost": "{1}{G}",
+  "type": "Legendary Creature — Human Citizen",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Landfall — Whenever a land you control enters, you gain 1 life. If this is the second time this ability has resolved this turn, investigate. (Create a Clue token. It's an artifact with \"{2}, Sacrifice this token: Draw a card.\")"
+}

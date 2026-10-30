@@ -1,0 +1,49 @@
+# Jake gains life for each landfall trigger; only the second resolution that turn investigates (CR 701.16).
+# A Fabled Passage fetches a Forest after entering, so landfall resolves twice; then Arboreal Grazer puts a third land onto
+# the battlefield, and that third resolution gains life but does not investigate again.
+
+[Bot1 Deck]
+Jake Sisko, War Correspondent
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Fabled Passage
+Forest
+Arboreal Grazer
+Forest x19
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jake Sisko, War Correspondent.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Fabled Passage.Play
+Bot1.Battlefield.Fabled Passage.Activate
+Bot1.Search(Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Arboreal Grazer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot1.Battlefield.Clue Token.Token = true
+Bot1.Battlefield.Clue Token#2 = (absent)
