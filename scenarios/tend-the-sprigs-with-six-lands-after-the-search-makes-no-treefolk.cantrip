@@ -1,0 +1,41 @@
+# Tend the Sprigs: "Search your library for a basic land card, put it onto the battlefield tapped, then shuffle. Then if you control seven or more lands and/or Treefolk, create a 3/4
+# green Treefolk creature token with reach." On turn 9 Bot1 has five Forests, and the one the search finds is a sixth: not seven, so no token. The new Forest comes in tapped.
+# Bot2's four Islands are lands, but not ones Bot1 controls.
+
+[Bot1 Deck]
+Tend the Sprigs
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T6 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T8 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Hand.Tend the Sprigs.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot2.Battlefield.Count = 4
+Bot1.Battlefield.Forest#6.Tapped = true

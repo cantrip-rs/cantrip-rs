@@ -1,0 +1,39 @@
+# Tend the Sprigs: "if you control seven or more lands and/or Treefolk" is asked after the search (CR 608.2c). On turn 9 Bot1 has five Forests and a Great Forest Druid (a Treefolk): the
+# land the search finds makes seven, and the 3/4 Treefolk token with reach comes. Without the Druid, or counting before the search, it would be six.
+
+[Bot1 Deck]
+Tend the Sprigs
+Great Forest Druid
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Hand.Great Forest Druid.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest#3.Activate
+Bot1.Battlefield.Forest#4.Activate
+Bot1.Battlefield.Forest#5.Activate
+Bot1.Hand.Tend the Sprigs.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Forest)
+
+[Expect]
+Bot1.Battlefield.Count = 8
+Bot1.Battlefield.Treefolk Token.Power = 3
+Bot1.Battlefield.Treefolk Token.Toughness = 4
+Bot1.Battlefield.Treefolk Token.Keywords = Reach
