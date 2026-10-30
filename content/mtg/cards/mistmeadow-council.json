@@ -1,0 +1,8 @@
+{
+  "name": "Mistmeadow Council",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Kithkin Advisor",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "This spell costs {1} less to cast if you control a Kithkin.\nWhen this creature enters, draw a card."
+}
