@@ -417,6 +417,10 @@ const INERT: &[(&str, &str)] = &[
         "its effect counts the Mountains its controller controls, and the synthetic boards hold none; a scenario of the card shows the +2/+0 for each",
     ),
     (
+        "Grand Nagus Zek",
+        "its effect counts Treasures its controller controls, and the synthetic boards hold none; a scenario of the card shows the +1/+1 for each",
+    ),
+    (
         "Agatha's Soul Cauldron",
         "its effect gives the abilities of the creature cards exiled with it (`Obj::exiled`), a link no synthetic state makes; it reads them through the view and writes abilities only",
     ),

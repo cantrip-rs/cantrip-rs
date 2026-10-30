@@ -1,0 +1,93 @@
+# Bot2 controls a Treasure from Gold Pan but Zek is still 1/1. A creature from each player's side dies this turn, but Zek makes
+# only one Treasure; a further death next turn makes a second and Zek becomes 3/3, counting only Bot1's Treasures (CR 613.4c, 603.2h).
+
+[Bot1 Deck]
+Grand Nagus Zek
+Mox Jet
+Mox Pearl
+Swamp
+Ornithopter
+Fatal Push x2
+Fatal Push
+Fatal Push
+Swamp x12
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Gold Pan
+Ornithopter
+Island
+Island
+Island
+Ornithopter
+Island x12
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Grand Nagus Zek.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Gold Pan.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Grand Nagus Zek.Power = 1
+? Bot2.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fatal Push.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grand Nagus Zek.Power = 2
+? Bot1.Battlefield.Grand Nagus Zek.Toughness = 2
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Fatal Push.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Grand Nagus Zek.Power = 2
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Fatal Push.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Grand Nagus Zek.Power = 3
+Bot1.Battlefield.Grand Nagus Zek.Toughness = 3
+Bot1.Battlefield = Mox Jet; Mox Pearl; Swamp; Grand Nagus Zek; Treasure Token; Treasure Token
+Bot2.Battlefield = Mox Jet; Mox Ruby; Gold Pan; Treasure Token
+Bot1.Graveyard = Fatal Push; Fatal Push; Ornithopter; Fatal Push
+Bot2.Graveyard = Ornithopter; Ornithopter

@@ -1,0 +1,39 @@
+# A creature is not "another creature": when Zek alone dies, the last-known trigger does not create a Treasure (CR 700.4,
+# 603.10a).
+
+[Bot1 Deck]
+Grand Nagus Zek
+Mox Jet
+Mox Pearl
+Swamp
+Go for the Throat
+Swamp x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Grand Nagus Zek.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Go for the Throat.Cast(Bot1.Battlefield.Grand Nagus Zek)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Bot1.Graveyard = Go for the Throat; Grand Nagus Zek
+Bot1.Battlefield = Mox Jet; Mox Pearl; Swamp

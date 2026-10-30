@@ -1,0 +1,59 @@
+# Zek and three other creatures die together. Its last-known ability still sees the others die, but triggers only once for the
+# whole turn, leaving one Treasure (CR 603.2c, 603.2h, 603.10a, 700.4).
+
+[Bot1 Deck]
+Grand Nagus Zek
+Mox Jet
+Mox Pearl
+Swamp
+Ornithopter
+Black Lotus
+Wrath of God
+Swamp x12
+
+[Bot2 Deck]
+Ornithopter x3
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Grand Nagus Zek.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Mox Pearl; Swamp; Treasure Token
+Bot1.Graveyard = Wrath of God; Grand Nagus Zek; Ornithopter; Black Lotus
+Bot2.Graveyard = Ornithopter; Ornithopter; Ornithopter

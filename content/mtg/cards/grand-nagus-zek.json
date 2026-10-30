@@ -1,0 +1,8 @@
+{
+  "name": "Grand Nagus Zek",
+  "manaCost": "{2}{B}",
+  "type": "Legendary Creature — Ferengi Noble",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Grand Nagus Zek gets +1/+1 for each Treasure you control.\nWhenever another creature dies, create a Treasure token. This ability triggers only once each turn. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}
