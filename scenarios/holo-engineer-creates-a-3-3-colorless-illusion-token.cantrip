@@ -1,0 +1,27 @@
+# Holo-Engineer's enters trigger creates one 3/3 colorless Illusion artifact creature token (CR 603.6a, 111.1).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Holo-Engineer
+Forest x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Holo-Engineer.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Holo-Engineer; Illusion Token
+Bot1.Battlefield.Illusion Token.Power = 3
+Bot1.Battlefield.Illusion Token.Toughness = 3
+Bot1.Battlefield.Illusion Token.Types = Artifact; Creature
+Bot1.Battlefield.Illusion Token.Subtypes = Illusion

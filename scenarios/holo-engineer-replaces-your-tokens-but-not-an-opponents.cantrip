@@ -1,0 +1,47 @@
+# "If one or more tokens would be created under your control, that many 3/3 colorless Illusion artifact creature tokens
+# are created instead" (CR 614.1a, 111.1): Lingering Souls' two Spirits become two Illusions, and Bot2's own two stay
+# Spirits.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Holo-Engineer
+Lingering Souls
+Plains x15
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Lingering Souls
+Plains x17
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Holo-Engineer.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lingering Souls.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Lingering Souls.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Holo-Engineer; Illusion Token; Illusion Token; Illusion Token; Mox Pearl
+Bot1.Battlefield.Illusion Token#1.Power = 3
+Bot1.Battlefield.Illusion Token#1.Toughness = 3
+Bot1.Battlefield.Illusion Token#1.Types = Artifact; Creature
+Bot1.Battlefield.Spirit Token = (absent)
+Bot2.Battlefield = Mox Pearl; Spirit Token; Spirit Token
+Bot2.Battlefield.Spirit Token#1.Power = 1
+Bot2.Battlefield.Spirit Token#1.Subtypes = Spirit

@@ -1,0 +1,36 @@
+# A token that would be a copy is replaced too: Three Steps Ahead's "create a token that's a copy of target artifact or
+# creature you control" on Holo-Engineer makes a 3/3 Illusion, no copy of Holo-Engineer (CR 614.1a, 707.2, 111.1).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Holo-Engineer
+Three Steps Ahead
+Forest x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Holo-Engineer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Three Steps Ahead.Cast
+Bot1.Modes(2)
+Bot1.Target(Holo-Engineer)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Holo-Engineer; Illusion Token; Illusion Token
+Bot1.Battlefield.Illusion Token#2.Power = 3
+Bot1.Battlefield.Illusion Token#2.Types = Artifact; Creature

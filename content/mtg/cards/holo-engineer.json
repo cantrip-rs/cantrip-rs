@@ -1,0 +1,8 @@
+{
+  "name": "Holo-Engineer",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Human Artificer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, create a 3/3 colorless Illusion artifact creature token.\nIf one or more tokens would be created under your control, that many 3/3 colorless Illusion artifact creature tokens are created instead."
+}
