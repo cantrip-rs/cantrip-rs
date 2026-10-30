@@ -1,0 +1,45 @@
+# Bristlebane Battler: an opponent's creature entering is not "another creature you control", so the Battler keeps its five -1/-1 counters (a 1/1). "Ward {2}": on
+# turn 2 Bot2 has two Moxen: one pays for a Lightning Bolt ({R}), and the single one left cannot pay the ward {2}, so the Bolt is countered and the 1/1 Battler lives,
+# undamaged. The neighbouring scenario, with a third Mox, lets the Bolt through.
+
+[Bot1 Deck]
+Black Lotus
+Bristlebane Battler
+Forest x30
+
+[Bot2 Deck]
+Memnite
+Lightning Bolt
+Mox Ruby
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Bristlebane Battler.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Bristlebane Battler.Counters.MinusOneMinusOne = 5
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Bristlebane Battler)
+! Bot2.PayCost
+? Bot1.Battlefield.Bristlebane Battler.Damage = 0
+
+[Expect]
+Bot1.Battlefield.Bristlebane Battler.Power = 1
+Bot1.Battlefield.Bristlebane Battler.Counters.MinusOneMinusOne = 5
+Bot2.Graveyard = Lightning Bolt
