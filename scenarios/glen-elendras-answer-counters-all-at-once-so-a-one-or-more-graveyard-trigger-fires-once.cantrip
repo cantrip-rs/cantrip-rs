@@ -1,0 +1,60 @@
+# Glen Elendra's Answer counters all of the opponents' spells at once (CR 608.2c, 603.2c): Bot2's Elvish Mystic and
+# Snapcaster Mage, both on the stack, go to Bot2's graveyard together, so Bot2's Moonshadow ("Whenever one or more permanent
+# cards are put into your graveyard from anywhere ...") triggers once, not once per spell: it keeps five -1/-1 counters.
+# Two spells were countered, so Bot1 gets two Faeries.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Glen Elendra's Answer
+Island x12
+
+[Bot2 Deck]
+Swamp
+Moonshadow
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Elvish Mystic
+Snapcaster Mage
+Swamp x10
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Moonshadow.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Moonshadow.Counters.MinusOneMinusOne = 6
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Snapcaster Mage.Cast
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Hand.Glen Elendra's Answer.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Count = 2
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot2.Battlefield.Moonshadow.Counters.MinusOneMinusOne = 5

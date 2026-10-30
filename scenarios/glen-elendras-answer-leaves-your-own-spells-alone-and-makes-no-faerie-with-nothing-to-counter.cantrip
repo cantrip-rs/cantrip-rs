@@ -1,0 +1,41 @@
+# Glen Elendra's Answer counters what "your opponents control" only: Bot1 casts Ancestral Recall on itself and, over it,
+# the Answer with nothing of Bot2's on the stack. Nothing is countered, so no Faerie is made (zero tokens), and Bot1's own
+# Ancestral Recall resolves: it draws three cards.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Ancestral Recall
+Glen Elendra's Answer
+Island
+Island
+Island x12
+
+[Bot2 Deck]
+Island x17
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Glen Elendra's Answer.Cast
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Stack = Ancestral Recall
+? Bot1.Battlefield.Count = 2
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Battlefield.Count = 2
+Bot1.Graveyard = Ancestral Recall; Glen Elendra's Answer; Black Lotus
