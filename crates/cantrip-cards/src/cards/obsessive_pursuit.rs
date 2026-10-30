@@ -3,11 +3,6 @@ use cantrip_mechanics::history::permanents_sacrificed_this_turn;
 use cantrip_mechanics::{effects, targets, tokens, triggers};
 use cantrip_oracle as oracle;
 
-/// "When this enchantment enters and at the beginning of your upkeep" (CR 603.2, 603.6a): one ability with two events.
-fn enters_or_your_upkeep(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
-    triggers::this_enters(q, me.source, event).or_else(|| triggers::your_upkeep(q, me, event))
-}
-
 /// "You lose 1 life and create a Clue token." (CR 119.3, 111.10f.) Creating a Clue is not investigating (the ruling), so
 /// nothing that triggers on investigating sees it.
 fn lose_life_and_create_a_clue(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -32,7 +27,7 @@ fn counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
-            when_asked(EventMask(EventMask::ZONE_CHANGE.0 | EventMask::STEP_BEGAN.0), enters_or_your_upkeep),
+            triggers::THIS_ENTERS_OR_YOUR_UPKEEP,
             lose_life_and_create_a_clue,
             "When this enchantment enters and at the beginning of your upkeep, you lose 1 life and create a Clue token.",
         ),

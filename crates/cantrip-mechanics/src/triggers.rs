@@ -1153,6 +1153,12 @@ pub fn your_upkeep(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     your_step(q, me, event, Step::Upkeep)
 }
 
+/// "When this enters and at the beginning of your upkeep" (CR 603.2, 603.6a): one ability with two events. Obsessive Pursuit
+/// and Gathering Stone print it.
+pub fn this_enters_or_your_upkeep(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    this_enters(q, me.source, event).or_else(|| your_upkeep(q, me, event))
+}
+
 /// "At the beginning of your draw step" (CR 504.1, 603.2). Mana Vault and Bandit's Talent print it.
 pub fn your_draw_step(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     your_step(q, me, event, Step::Draw)
@@ -1782,6 +1788,7 @@ pub const THIS_LEAVES: Trigger = when(EventMask::ZONE_CHANGE, this_leaves);
 pub const AN_OPPONENT_DRAWS_THEIR_SECOND_CARD: Trigger = when_asked(EventMask::DREW, an_opponent_draws_their_second_card);
 pub const YOU_DRAW_YOUR_SECOND_CARD: Trigger = when_asked(EventMask::DREW, you_draw_your_second_card);
 pub const YOUR_UPKEEP: Trigger = when_asked(EventMask::STEP_BEGAN, your_upkeep);
+pub const THIS_ENTERS_OR_YOUR_UPKEEP: Trigger = when_asked(EventMask(EventMask::ZONE_CHANGE.0 | EventMask::STEP_BEGAN.0), this_enters_or_your_upkeep);
 pub const YOUR_DRAW_STEP: Trigger = when_asked(EventMask::STEP_BEGAN, your_draw_step);
 pub const YOUR_FIRST_MAIN_PHASE: Trigger = when_asked(EventMask::STEP_BEGAN, your_first_main_phase);
 pub const YOUR_SECOND_MAIN_PHASE: Trigger = when_asked(EventMask::STEP_BEGAN, your_second_main_phase);
