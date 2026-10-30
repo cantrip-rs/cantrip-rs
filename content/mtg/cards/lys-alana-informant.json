@@ -1,0 +1,8 @@
+{
+  "name": "Lys Alana Informant",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Elf Scout",
+  "power": 3,
+  "toughness": 1,
+  "oracleText": "When this creature enters or dies, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)"
+}
