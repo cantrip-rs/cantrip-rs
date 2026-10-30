@@ -1,0 +1,54 @@
+# Trystan. Turn 1: Black Lotus casts Trystan; the Elvish Mystic milled gains Bot1 2 life. Turn 3: "at the beginning of your first main phase, you may
+# pay {B}. If you do, transform Trystan" - Mox Jet pays, and Trystan, Penitent Culler's "whenever this creature transforms into Trystan,
+# Penitent Culler, mill three cards, then you may exile an Elf card from your graveyard. If you do, each opponent loses 2 life" mills a second
+# Elvish Mystic, exiles one of them and Bot2 loses 2. The other Mystic stays in the graveyard. Deathtouch and the 3/4 body are the same object's.
+
+[Bot1 Deck]
+Black Lotus
+Trystan, Callous Cultivator
+Mox Jet
+Forest x4
+Elvish Mystic
+Forest x2
+Forest
+Elvish Mystic
+Forest x2
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Trystan, Callous Cultivator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+[T3 Bot1.Main1]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Elvish Mystic)
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Battlefield = Mox Jet; Trystan, Penitent Culler
+Bot1.Battlefield.Trystan, Penitent Culler.Power = 3
+Bot1.Battlefield.Trystan, Penitent Culler.Toughness = 4
+Bot1.Battlefield.Trystan, Penitent Culler.Colors = Black
+Bot1.Graveyard.Count = 6
+Exile.Count = 1

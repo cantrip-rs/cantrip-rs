@@ -1,0 +1,59 @@
+# Trystan, Penitent Culler. Turn 3: Trystan transforms (Mox Jet pays {B}) and the three cards milled hold no Elf, so there is nothing to exile and
+# Bot2 loses no life. Turn 5: "you may pay {G}" - the Forest pays, Trystan transforms back (CR 701.27), and "whenever this creature enters or
+# transforms into Trystan, Callous Cultivator" mills an Elvish Mystic and gains Bot1 2 life.
+
+[Bot1 Deck]
+Black Lotus
+Trystan, Callous Cultivator
+Mox Jet
+Forest x4
+Forest x3
+Forest
+Forest x3
+Forest
+Elvish Mystic
+Forest x2
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Trystan, Callous Cultivator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+? Bot1.Battlefield.Trystan, Penitent Culler.Colors = Black
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot2.Life = 20
+Bot1.Battlefield = Mox Jet; Forest; Trystan, Callous Cultivator
+Bot1.Graveyard.Count = 10
+Exile.Count = 0

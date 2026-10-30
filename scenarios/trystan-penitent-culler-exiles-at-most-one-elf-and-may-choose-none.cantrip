@@ -1,0 +1,47 @@
+# Trystan, Penitent Culler: "then you may exile an Elf card from your graveyard" - one card, and it is a choice. The three cards milled include an
+# Elvish Mystic and a Llanowar Elves; exiling both is refused (an Elf card, not two), and Bot1 chooses none, so nothing is exiled and Bot2 loses
+# no life ("if you do", CR 608.2c).
+
+[Bot1 Deck]
+Black Lotus
+Trystan, Callous Cultivator
+Mox Jet
+Forest x4
+Forest x3
+Forest
+Elvish Mystic
+Llanowar Elves
+Forest
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Trystan, Callous Cultivator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Elvish Mystic; Llanowar Elves)
+Bot1.Choose()
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 20
+Exile.Count = 0
+Bot1.Graveyard.Count = 7

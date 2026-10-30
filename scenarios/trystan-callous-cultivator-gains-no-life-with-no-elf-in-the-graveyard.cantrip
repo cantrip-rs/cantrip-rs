@@ -1,0 +1,28 @@
+# Trystan, Callous Cultivator: the three cards milled are all Forests and the graveyard held no Elf before, so "then if there is an Elf card in
+# your graveyard" is false and Bot1 gains no life.
+
+[Bot1 Deck]
+Black Lotus
+Trystan, Callous Cultivator
+Forest x5
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Trystan, Callous Cultivator.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Graveyard.Count = 4
+Bot1.Library.Count = 10
