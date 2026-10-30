@@ -1,0 +1,51 @@
+# Hail's limit is mana value 3 or less (CR 202.3): Bot2's Centaur Courser, at exactly 3, is a legal target and returns to
+# Bot2's hand, while Bot2's She-Hulk, Jade Defender, at 4, is refused.
+
+[Bot1 Deck]
+Black Lotus
+Kobayashi Maru Scenario
+Island x18
+
+[Bot2 Deck]
+Forest
+Black Lotus
+She-Hulk, Jade Defender
+Forest
+Mox Emerald
+Centaur Courser
+Forest x14
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.She-Hulk, Jade Defender.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Kobayashi Maru Scenario.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Centaur Courser.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Upkeep]
+Bot1.Modes(Hail)
+! Bot1.Target(Bot2.Battlefield.She-Hulk, Jade Defender)
+Bot1.Target(Bot2.Battlefield.Centaur Courser)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Centaur Courser = (absent)
+Bot2.Hand.Centaur Courser.Power = 3
+Bot2.Battlefield.She-Hulk, Jade Defender.Power = 4

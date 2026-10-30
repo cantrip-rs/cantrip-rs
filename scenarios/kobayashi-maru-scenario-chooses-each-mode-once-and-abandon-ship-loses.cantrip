@@ -1,0 +1,49 @@
+# "At the beginning of your upkeep, choose one that hasn't been chosen" (CR 700.2, 603.3c). Kobayashi Maru Scenario is cast
+# on turn 1 for {1}{U}{U} off a Black Lotus. Turn 3: Hail returns Bot2's Llanowar Elves (mana value 1, an opponent's
+# creature) to its hand (CR 400.7, 608.2b). Turn 5: Sensors draws two cards. Turn 7: Transport creates two 1/1 red Officer
+# creatures at once (CR 101.4). Turn 9: Hail, Sensors and Transport are spent, so only "Abandon Ship — You lose the game"
+# is left and it is chosen without asking (CR 104.3a): Bot1 loses, and Bot2 has won.
+
+[Bot1 Deck]
+Black Lotus
+Kobayashi Maru Scenario
+Island x18
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Kobayashi Maru Scenario.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Upkeep]
+Bot1.Modes(Hail)
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Count = 1
+? Bot2.Hand.Count = 7
+[T5 Bot1.Upkeep]
+! Bot1.Modes(Hail)
+Bot1.Modes(Sensors)
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 9
+[T7 Bot1.Upkeep]
+Bot1.Modes(Transport)
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Officer Token#1.Power = 1
+? Bot1.Battlefield.Officer Token#2.Power = 1
+? Bot1.Battlefield.Officer Token#1.Colors = Red
+[T9 Bot1.Upkeep]
+! Bot1.Modes
+
+[Expect]
+Result = Bot2 won
+Bot1.Status = Lost

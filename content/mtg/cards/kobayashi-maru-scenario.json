@@ -1,0 +1,6 @@
+{
+  "name": "Kobayashi Maru Scenario",
+  "manaCost": "{1}{U}{U}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, choose one that hasn't been chosen —\n• Hail — Return up to one target creature an opponent controls with mana value 3 or less to its owner's hand.\n• Sensors — Draw two cards.\n• Transport — Create two 1/1 red Officer creature tokens.\n• Abandon Ship — You lose the game."
+}

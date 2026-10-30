@@ -1,0 +1,43 @@
+# "Hail — Return up to one target creature an opponent controls with mana value 3 or less to its owner's hand"
+# (CR 115.1, 202.3, 608.2b). Bot2's She-Hulk, Jade Defender is {3}{G}, mana value 4, one above the limit, so it is no target
+# at all; Bot1's own Ornithopter is no target either, whatever its mana value, because Hail wants a creature an opponent
+# controls. Hail is still a mode that can be chosen, since "up to one" may be answered with none (CR 115.1c): with no legal
+# target no question is asked at all, nothing returns, and both creatures stay on the battlefield.
+
+[Bot1 Deck]
+Black Lotus
+Kobayashi Maru Scenario
+Ornithopter
+Island x17
+
+[Bot2 Deck]
+Forest
+Black Lotus
+She-Hulk, Jade Defender
+Forest x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Kobayashi Maru Scenario.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest#1.Activate
+Bot2.Hand.She-Hulk, Jade Defender.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Modes(Hail)
+[T3 Bot1.Main1]
+? Bot2.Battlefield.She-Hulk, Jade Defender.Power = 4
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+
+[Expect]
+Bot2.Battlefield.She-Hulk, Jade Defender.Power = 4
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Hand.Count = 5
