@@ -1,0 +1,49 @@
+# Lys Alana Dignitary: "{T}: Add {G}{G}. Activate only if there is an Elf card in your graveyard" (CR 602.5b). Bot1 casts the Dignitary beholding an Elvish Mystic, then
+# casts the Mystic, and Bot2 kills it with Lightning Bolt on turn 2. On turn 3 there is an Elf card in Bot1's graveyard, so the Dignitary taps for {G}{G}.
+
+[Bot1 Deck]
+Forest
+Mox Jet
+Mox Emerald
+Lys Alana Dignitary
+Elvish Mystic
+Forest x2
+Forest x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lys Alana Dignitary.Cast
+Bot1.Modes(Behold an Elf)
+Bot1.Choose(Elvish Mystic)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Elvish Mystic)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Lys Alana Dignitary.Activate
+? Bot1.Mana = {G}{G}
+
+[Expect]
+Bot1.Graveyard = Elvish Mystic
+Bot1.Battlefield.Lys Alana Dignitary.Tapped = true
