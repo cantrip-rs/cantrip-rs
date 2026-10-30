@@ -1,0 +1,28 @@
+# Federation Resupply can find an Aura, reveal it, put it into hand, then shuffle.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Federation Resupply
+Lightning Bolt
+Island x20
+All That Glitters
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Federation Resupply.Cast
+Bot1.Search(All That Glitters)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 18

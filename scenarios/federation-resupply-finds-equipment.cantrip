@@ -1,0 +1,31 @@
+# Federation Resupply can find an Equipment, and refuses a creature during the search.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Federation Resupply
+Island x3
+Adaptive Omnitool
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Federation Resupply.Cast
+! Bot1.Search(Ornithopter)
+Bot1.Search(Adaptive Omnitool)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 21
+Bot1.Revealed = Adaptive Omnitool

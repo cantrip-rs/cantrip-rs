@@ -1,0 +1,53 @@
+# Beam me up costs {3}{W} (CR 118.9, 601.2f): on turn 3, with Mox Pearl tapped in upkeep, the four other Moxen
+# can't cast it from the graveyard. On turn 5 Mox Pearl and three Moxen pay it exactly, Ornithopter returns to Bot1's hand,
+# the search finds Rescue Skiff (a Spacecraft), and the spell is exiled. Two Rescue Skiffs keep one in the library
+# whatever the turn-1 search's shuffle puts on top for the draws.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Federation Resupply
+Ornithopter
+Mox Jet
+Rescue Skiff x2
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Federation Resupply.Cast
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+! Bot1.Graveyard.Federation Resupply.Cast(Ability: Beam me up; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Federation Resupply.Cast(Ability: Beam me up)
+Bot1.Choose(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Rescue Skiff)
+
+[Expect]
+Exile = Federation Resupply
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Revealed = Rescue Skiff
