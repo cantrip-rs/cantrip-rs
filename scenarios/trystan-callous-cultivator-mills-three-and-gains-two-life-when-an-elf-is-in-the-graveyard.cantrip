@@ -1,0 +1,34 @@
+# Trystan, Callous Cultivator: "Whenever this creature enters or transforms into Trystan, Callous Cultivator, mill three cards. Then if there is
+# an Elf card in your graveyard, you gain 2 life." The three cards are milled first, so the Elvish Mystic milled with them is the Elf that
+# is checked (CR 608.2c): Bot1 gains 2 life. Black Lotus pays {2}{G}.
+
+[Bot1 Deck]
+Black Lotus
+Trystan, Callous Cultivator
+Forest x5
+Elvish Mystic
+Forest x2
+Forest x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Trystan, Callous Cultivator.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot1.Graveyard = Forest; Forest; Elvish Mystic; Black Lotus
+Bot1.Battlefield = Trystan, Callous Cultivator
+Bot1.Battlefield.Trystan, Callous Cultivator.Power = 3
+Bot1.Battlefield.Trystan, Callous Cultivator.Toughness = 4
