@@ -1,0 +1,32 @@
+# The destroy mode takes only a creature: a land on the battlefield is not offered (CR 115.1).
+
+[Bot1 Deck]
+Black Lotus
+Impossible Choice
+Swamp x18
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x18
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Impossible Choice.Cast
+Bot1.Modes(Destroy target creature)
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Island; Officer Token; Officer Token
+Bot2.Graveyard = Grizzly Bears; Black Lotus

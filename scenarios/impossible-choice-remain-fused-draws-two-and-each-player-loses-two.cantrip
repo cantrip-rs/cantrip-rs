@@ -1,0 +1,30 @@
+# Remain Fused: you draw two cards and each player loses 2 life (CR 121.1, 119.3).
+
+[Bot1 Deck]
+Black Lotus
+Impossible Choice
+Island
+Island
+Swamp
+Swamp
+Forest
+Mountain
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Impossible Choice.Cast
+Bot1.Modes(You draw two cards)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Hand.Count = 7
+Bot1.Graveyard = Impossible Choice; Black Lotus

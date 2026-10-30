@@ -1,0 +1,35 @@
+# Surgical Separation: destroy target creature, and its controller creates two 1/1 red Officer tokens (CR 700.2, 701.8).
+
+[Bot1 Deck]
+Black Lotus
+Impossible Choice
+Swamp x18
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x18
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Impossible Choice.Cast
+Bot1.Modes(Destroy target creature)
+Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Impossible Choice; Black Lotus
+Bot2.Graveyard = Grizzly Bears; Black Lotus
+Bot2.Battlefield.Count = 2
+Bot2.Battlefield.Officer Token#1.Power = 1
+Bot2.Battlefield.Officer Token#2.Power = 1
+Bot2.Battlefield.Officer Token#1.Colors = Red
+Bot2.Battlefield.Officer Token#1.Subtypes = Officer

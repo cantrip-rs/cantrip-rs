@@ -1,0 +1,6 @@
+{
+  "name": "Impossible Choice",
+  "manaCost": "{2}{B}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Surgical Separation — Destroy target creature. Its controller creates two 1/1 red Officer creature tokens.\n• Remain Fused — You draw two cards and each player loses 2 life."
+}
