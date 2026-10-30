@@ -1,0 +1,62 @@
+# Grub's Command, modes 1 and 2: "Create a token that's a copy of target Goblin you control" and "Creatures target player controls get +1/+1
+# and gain haste until end of turn". Bot1 controls a Goblin Piker (2/1) and an Ornithopter, Bot2 its own Goblin Piker. Refused for the copy:
+# Bot2's Goblin (not "you control") and Bot1's Ornithopter (not a Goblin). Modes happen in printed order (CR 700.2d) and the pump takes the
+# creatures there are as it resolves (CR 611.2c), so the token copy is a 3/2 with haste too, as are the Piker and the Ornithopter (1/3);
+# Bot2's Goblin Piker, whose controller is not the target player, stays 2/1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Goblin Piker
+Grub's Command
+Ornithopter
+Island
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Goblin Piker
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Goblin Piker.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Goblin Piker.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grub's Command.Cast
+Bot1.Modes(1; 2)
+! Bot1.Target(Bot2.Battlefield.Goblin Piker)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Goblin Piker)
+Bot1.Target(Bot1)
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Goblin Piker#1.Power = 3
+Bot1.Battlefield.Goblin Piker#1.Toughness = 2
+Bot1.Battlefield.Goblin Piker#2.Token = true
+Bot1.Battlefield.Goblin Piker#2.Power = 3
+Bot1.Battlefield.Goblin Piker#2.Keywords = Haste
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Haste
+Bot2.Battlefield.Goblin Piker.Power = 2
+Bot2.Battlefield.Goblin Piker.Keywords = (absent)

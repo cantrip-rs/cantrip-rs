@@ -1,0 +1,6 @@
+{
+  "name": "Grub's Command",
+  "manaCost": "{3}{B}{R}",
+  "type": "Kindred Sorcery — Goblin",
+  "oracleText": "Choose two —\n• Create a token that's a copy of target Goblin you control.\n• Creatures target player controls get +1/+1 and gain haste until end of turn.\n• Destroy target artifact or creature.\n• Target player mills five cards, then puts each Goblin card milled this way into their hand."
+}

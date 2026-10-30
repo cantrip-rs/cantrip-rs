@@ -1,0 +1,51 @@
+# Grub's Command, modes 3 and 4: "Destroy target artifact or creature" and "Target player mills five cards, then puts each Goblin card
+# milled this way into their hand." Bot1 destroys Bot2's Ornithopter and mills itself: the five cards are Goblin Piker, Island, Goblin
+# Piker, Ornithopter, Island, and only the two Goblins come back to its hand (the Ornithopter is no Goblin) while the other three stay in
+# the graveyard beside the Command and the Black Lotus (five cards in all).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Grub's Command
+Island
+Island
+Island
+Island
+Goblin Piker
+Island
+Goblin Piker
+Ornithopter
+Island
+Island x10
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Grub's Command.Cast
+Bot1.Modes(3; 4)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1)
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Graveyard.Ornithopter.Colors.Count = 0
+Bot1.Hand.Count = 6
+Bot1.Graveyard.Count = 5
+Bot1.Graveyard.Ornithopter.Colors.Count = 0
