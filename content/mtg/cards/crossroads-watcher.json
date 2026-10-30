@@ -1,0 +1,11 @@
+{
+  "name": "Crossroads Watcher",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Kithkin Ranger",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Trample\nWhenever another creature you control enters, this creature gets +1/+0 until end of turn.",
+  "keywords": [
+    "Trample"
+  ]
+}
