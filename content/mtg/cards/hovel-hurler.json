@@ -1,0 +1,8 @@
+{
+  "name": "Hovel Hurler",
+  "manaCost": "{3}{R/W}{R/W}",
+  "type": "Creature — Giant Warrior",
+  "power": 6,
+  "toughness": 7,
+  "oracleText": "This creature enters with two -1/-1 counters on it.\n{R/W}{R/W}, Remove a counter from this creature: Another target creature you control gets +1/+0 and gains flying until end of turn. Activate only as a sorcery."
+}
