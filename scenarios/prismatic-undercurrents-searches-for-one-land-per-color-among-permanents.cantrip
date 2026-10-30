@@ -1,0 +1,51 @@
+# Prismatic Undercurrents: "search your library for up to X basic land cards, where X is the number of colors among permanents you control." Bot1 controls a white Savannah Lions
+# and the green enchantment, beside colorless Moxen: X is 2. A search for three Forests is refused, and two are found into an empty hand.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Savannah Lions
+Prismatic Undercurrents
+Forest x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Prismatic Undercurrents.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Forest; Forest; Forest)
+Bot1.Search(Forest; Forest)
+
+[Expect]
+Bot1.Revealed = Forest; Forest
+Bot1.Hand.Count = 2

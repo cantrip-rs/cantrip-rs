@@ -1,0 +1,6 @@
+{
+  "name": "Prismatic Undercurrents",
+  "manaCost": "{3}{G}",
+  "type": "Enchantment",
+  "oracleText": "Vivid — When this enchantment enters, search your library for up to X basic land cards, where X is the number of colors among permanents you control. Reveal those cards, put them into your hand, then shuffle.\nYou may play an additional land on each of your turns."
+}
