@@ -1,0 +1,8 @@
+{
+  "name": "Tam, Mindful First-Year",
+  "manaCost": "{1}{G/U}",
+  "type": "Legendary Creature — Gorgon Wizard",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Each other creature you control has hexproof from each of its colors.\n{T}: Target creature you control becomes all colors until end of turn."
+}
