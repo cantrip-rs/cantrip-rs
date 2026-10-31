@@ -81,8 +81,28 @@ own judgement is pri-3: the engine is right, and the bot only plays less well.
 | [KI-142](#ki-142-the-ai-encoder-cannot-tell-apart-options-that-differ-only-by-their-grant-or-a-companion-from-exiling-to-pay) | The AI encoder cannot tell apart options that differ only by their grant, or a companion from exiling to pay | Pri-3 | Open |
 | [KI-143](#ki-143-a-scenario-check-right-after-an-activation-can-read-the-pool-before-its-payment-finishes) | A scenario check right after an activation can read the pool before its payment finishes | Pri-2 | Open |
 | [KI-144](#ki-144-mathemagics-with-an-x-of-32-or-more-draws-at-most-4294967295-cards) | Mathemagics with an X of 32 or more draws at most 4,294,967,295 cards | Pri-3 | Won't fix: beyond practical scale |
+| [KI-146](#ki-146-the-booster-drafts-dragged-pick-test-once-saw-the-pick-fly-from-the-pack) | The booster draft's dragged-pick test once saw the pick fly from the pack | Pri-3 | Suspected |
 
 ## Issues
+
+### KI-146: The booster draft's dragged-pick test once saw the pick fly from the pack
+
+| Priority | Status | Area | Found |
+| --- | --- | --- | --- |
+| Pri-3 | Suspected | client | 2026-10-30, the in-person phone work, on origin/main |
+
+**Notes.** `BoosterDraftTests.A_pick_is_double_clicked_from_the_pack_and_the_round_is_paired_once_decks_are_in` failed
+once at "The dragged pick flew from ..., not from where it was let go": the card dragged out of the pack onto the pool
+flew into its column from somewhere other than the drop point. It has passed in four runs since (2026-10-30), alone and
+beside the other draft tests, so it is timing. The likeliest path is in `MainPage.Event.cs`/`MainPage.Pool.cs`: the
+pool lays a card dragged in where it was put and tosses it from `_pickInto.From` only when the pool that holds it comes
+while `_pickInto` is still set; a booster `DraftMessage` that reaches the page between the drop and the pick's answer
+(a pack passed by a bot, `_packSentFor != draft.Decision`) unparks the pick, and if the next view no longer pairs the
+handle with `_pickInto` the card is laid by default and flies from its place in the pack. Needs a failing run's
+`TestResults\web\BoosterDraftTests` pictures and trace to confirm; a fake clock for the bots' picks would make it
+reproducible.
+
+**Scenarios.** None: the browser test named above.
 
 ### KI-114: The web client cannot name colorless mana for a sacrificed land that could also produce a color
 
