@@ -370,6 +370,7 @@ impl StateDump {
             }
             d.set(format!("{b}.Life"), player.life);
             d.set(format!("{b}.Poison"), player.poison());
+            d.set(format!("{b}.Shuffles"), game.history().count(EventQuery::kind(EventMask::SHUFFLED).player(p)));
             if player.lost {
                 d.set(format!("{b}.Status"), "Lost");
             }
@@ -878,7 +879,7 @@ const GAME_KEYS: &[&str] = &[
 /// The keys the dump writes of a player, after `BotN.`.
 const PLAYER_KEYS: &[&str] = &[
     "Life", "Poison", "Energy", "Experience", "Status", "CantWin", "LostTo", "Mana", "ManaFrom", "LandsPlayed", "CitysBlessing",
-    "EnduringStory", "Speed", "Dungeon", "DungeonsCompleted", "TurnsToSkip", "ControlledBy", "NextTurnControlledBy", "Looked", "Surveilled",
+    "EnduringStory", "Speed", "Dungeon", "DungeonsCompleted", "TurnsToSkip", "ControlledBy", "NextTurnControlledBy", "Looked", "Surveilled", "Shuffles",
     "Hand", "Revealed", "Crimes", "Library", "Companion", "Sideboard", "Graveyard", "Emblems", "Battlefield", "PhasedOut",
 ];
 
