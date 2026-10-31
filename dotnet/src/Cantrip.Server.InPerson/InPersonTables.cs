@@ -379,6 +379,9 @@ public sealed class InPersonTables : IAsyncDisposable
     /// <summary>Opens the event's table on the first port of the pool that will have it, or null when every one is held.</summary>
     private async Task<GameServer?> OpenAsync(DraftPod pod, InPersonRelay relay, bool clocks)
     {
+        // The tablets are shown the grid draft as both players see it, from the event on the table's thread.
+        var observed = new ObservedTableEvent(pod, relay);
+        observed.Publish();
         foreach (int port in _options.Ports)
         {
             try
@@ -389,7 +392,7 @@ public sealed class InPersonTables : IAsyncDisposable
                     Port = port,
                     Players = pod.Seats,
                     ContentRoot = _options.ContentRoot,
-                    Event = pod,
+                    Event = observed,
                     ListenAddress = _options.ListenAddress,
                     Rules = new ObservedRulesFactory(_options.Rules, relay),
                     Art = _options.Art,

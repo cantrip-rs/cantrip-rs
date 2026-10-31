@@ -10,7 +10,7 @@ namespace Cantrip.Protocol.InPerson;
 public static class InPersonProtocol
 {
     /// <summary>The in-person wire's version, sent in every <see cref="DeviceHelloMessage"/>; a mismatch is refused.</summary>
-    public const int Version = 2;
+    public const int Version = 3;
 }
 
 /// <summary>What a device is at the table.</summary>
@@ -29,6 +29,7 @@ public enum DeviceRole
 [Union(0, typeof(DeviceHelloMessage))]
 [Union(1, typeof(TableTapMessage))]
 [Union(2, typeof(TapResultMessage))]
+[Union(3, typeof(TableLineMessage))]
 [Union(8, typeof(ReentryRequestMessage))]
 public abstract class DeviceClientMessage
 {
@@ -122,6 +123,28 @@ public sealed class ReentryRequestMessage : DeviceClientMessage
 }
 
 /// <summary>
+/// A pick made on a tablet's grid during a grid draft: a row (0 to 2, from the top) or a column (3 to 5, from the left),
+/// for the pick <see cref="Decision"/> names. <see cref="Take"/> false only chooses it - the first tap, which lights the
+/// line - and true takes it, the second. The relay hands it to the phone of the seat whose pick it is
+/// (<see cref="SeatLineMessage"/>), which sends the pick to the table as its own; the table judges it.
+/// </summary>
+[MessagePackObject]
+public sealed class TableLineMessage : DeviceClientMessage
+{
+    /// <summary>The pick of the draft the line is for (<see cref="PublicGridMessage.Decision"/>), so a stale tap is let go.</summary>
+    [Key(0)]
+    public int Decision { get; set; }
+
+    [Key(1)]
+    public int Line { get; set; }
+
+    [Key(2)]
+    public bool Take { get; set; }
+
+    public override string Describe() => $"table line {Line} for pick {Decision}{(Take ? ", take" : ", choose")}";
+}
+
+/// <summary>
 /// Anything the relay sends a device. A MessagePack union with explicit keys, as <see cref="ServerMessage"/> is.
 /// </summary>
 [Union(0, typeof(DeviceWelcomeMessage))]
@@ -129,6 +152,8 @@ public sealed class ReentryRequestMessage : DeviceClientMessage
 [Union(2, typeof(SeatTapMessage))]
 [Union(3, typeof(DevicePhaseMessage))]
 [Union(4, typeof(DeviceErrorMessage))]
+[Union(5, typeof(PublicGridMessage))]
+[Union(6, typeof(SeatLineMessage))]
 [Union(8, typeof(ReentryCodeMessage))]
 public abstract class DeviceServerMessage
 {
@@ -257,4 +282,80 @@ public sealed class ReentryCodeMessage : DeviceServerMessage
     public string Code { get; set; } = string.Empty;
 
     public override string Describe() => "re-entry code";
+}
+
+/// <summary>
+/// A grid draft as both players see it (docs/events.md, "A grid draft"), for a tablet: the grid face up, a place whose card
+/// has been taken an unknown card; which grid and which pick of it; whose pick it is; how many cards each player has
+/// drafted; and the last picks in words, each naming the cards taken. Exactly what the remote client shows both seats
+/// of a grid draft, less each seat's own pool: nothing private. Sent whenever the draft moves on, and once with
+/// <see cref="Grid"/> zero and no places when the draft is over.
+/// </summary>
+[MessagePackObject]
+public sealed class PublicGridMessage : DeviceServerMessage
+{
+    /// <summary>The pick being made, counted from zero over the whole draft: what a <see cref="TableLineMessage"/> names.</summary>
+    [Key(0)]
+    public int Decision { get; set; }
+
+    /// <summary>The grid being picked from, from 1; zero once the draft is over.</summary>
+    [Key(1)]
+    public int Grid { get; set; }
+
+    /// <summary>How many grids the draft lays out.</summary>
+    [Key(2)]
+    public int Grids { get; set; }
+
+    /// <summary>1 for the first pick from this grid, 2 for the second, from what is left; zero once the draft is over.</summary>
+    [Key(3)]
+    public int Pick { get; set; }
+
+    /// <summary>The seat whose pick it is; zero once the draft is over.</summary>
+    [Key(4)]
+    public int Active { get; set; }
+
+    /// <summary>The grid's nine places, row by row from the top left, each as printed; a place taken is an unknown card.</summary>
+    [Key(5)]
+    public List<ObjectView> Places { get; set; } = [];
+
+    /// <summary>How many cards each seat has drafted, seat 1's first: public, as at a real table.</summary>
+    [Key(6)]
+    public List<int> Drafted { get; set; } = [];
+
+    /// <summary>The last picks in words, newest last, naming each player: "Ann took row 2 of grid 3: [A], [B] and [C]."</summary>
+    [Key(7)]
+    public List<string> Recent { get; set; } = [];
+
+    /// <summary>The cards each line of <see cref="Recent"/> names, in the order its brackets name them.</summary>
+    [Key(8)]
+    public List<List<LogReferenceView>> RecentCards { get; set; } = [];
+
+    /// <summary>The line the last pick took, from the grid as it was then; -1 before any.</summary>
+    [Key(9)]
+    public int LastLine { get; set; } = -1;
+
+    /// <summary>How long the pick has left, in milliseconds, when this was sent; zero with no clock.</summary>
+    [Key(10)]
+    public int PickLeftMs { get; set; }
+
+    public override string Describe() => Grid == 0 ? "public grid: the draft is over" : $"public grid {Grid}/{Grids}, pick {Decision}, seat {Active}";
+}
+
+/// <summary>
+/// A line picked on a tablet, for the phone of the seat whose pick it is: the phone chooses or takes it as a tap on the
+/// remote client's grid would (<c>GameClient.ChooseLine</c>, <c>GameClient.PickLine</c>), if the pick is still its own.
+/// </summary>
+[MessagePackObject]
+public sealed class SeatLineMessage : DeviceServerMessage
+{
+    [Key(0)]
+    public int Decision { get; set; }
+
+    [Key(1)]
+    public int Line { get; set; }
+
+    [Key(2)]
+    public bool Take { get; set; }
+
+    public override string Describe() => $"seat line {Line} for pick {Decision}{(Take ? ", take" : ", choose")}";
 }

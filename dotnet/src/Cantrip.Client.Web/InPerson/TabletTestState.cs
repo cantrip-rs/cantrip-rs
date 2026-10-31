@@ -17,7 +17,9 @@ namespace Cantrip.Client.Web.InPerson;
 /// the page, and each player's box - so the same helpers find and tap a card. A card's <c>place</c> is <c>battlefield</c>
 /// for the half at the tablet's bottom edge, <c>opponent-battlefield</c> for the turned one, or <c>stack</c>, and its
 /// <c>seat</c> says whose half it is in. A tablet adds <c>layout</c>, <c>screen</c> (<c>phase</c> before the game,
-/// <c>board</c> after), <c>phaseLine</c>, <c>held</c> (the faces of a card held up) and <c>taps</c>, the taps it has sent.
+/// <c>grid</c> while the grid draft is drafted, <c>board</c> after), <c>phaseLine</c>, <c>held</c> (the faces of a card held
+/// up), <c>taps</c>, the taps it has sent, <c>lines</c>, the grid's lines it has sent, and <c>grid</c> (TabletDraft.cs); the
+/// grid's cards are under <c>cards</c> with the place <c>grid</c>, or <c>opponent-grid</c> on the turned face.
 /// </para>
 /// <para>
 /// A tablet opened with <c>?test</c> and no device token reads its device messages from the test instead of a relay:
@@ -34,6 +36,9 @@ public sealed partial class TabletPage
 
     /// <summary>The taps sent, newest last, for a test to read.</summary>
     private readonly List<TableTapMessage> _sent = [];
+
+    /// <summary>The grid's lines picked and sent, newest last, for a test to read.</summary>
+    private readonly List<TableLineMessage> _lines = [];
 
     /// <summary>Whether this tablet is fed by a test rather than a relay.</summary>
     private static bool FedByTest => ClientConfig.Test && InPersonConfig.Device is null;
@@ -91,13 +96,20 @@ public sealed partial class TabletPage
                 busy.Add("redraw");
             }
 
+            if (_draft.Busy)
+            {
+                busy.Add("grid");
+            }
+
+            bool drafting = !board && _draft.Drafting;
+
             json.WriteStartObject();
-            json.WriteBoolean("ready", _phaseScreen.Visibility == Visibility.Visible || board);
+            json.WriteBoolean("ready", _phaseScreen.Visibility == Visibility.Visible || board || drafting);
             json.WriteBoolean("busy", busy.Count > 0);
             json.WriteString("doing", string.Join(" ", busy));
             json.WriteBoolean("over", _client.IsOver);
             json.WriteString("layout", _side == 0 ? "shared" : $"side {_side}");
-            json.WriteString("screen", board ? "board" : "phase");
+            json.WriteString("screen", board ? "board" : drafting ? "grid" : "phase");
             json.WriteString("phase", _phase?.Phase.ToString() ?? string.Empty);
             json.WriteString("phaseLine", _phaseTexts[^1].Line.Text);
             json.WriteNumber("seat", _client.Seat);
@@ -148,6 +160,34 @@ public sealed partial class TabletPage
                 }
             }
 
+            // The draft's grid, once on each face: "grid" upright at the tablet's bottom edge, "opponent-grid" turned.
+            if (drafting)
+            {
+                foreach ((CardBoardElement row, bool turned) in _draft.Boards)
+                {
+                    if (row.XamlRoot is null || row.ActualWidth <= 0)
+                    {
+                        continue;
+                    }
+
+                    GeneralTransform toPage = row.TransformToVisual(_root);
+                    foreach ((ObjectView card, Rect box, bool visible, _, _) in row.Targets())
+                    {
+                        json.WriteStartObject();
+                        json.WriteString("name", card.Known ? card.Name : string.Empty);
+                        json.WriteString("faceDownName", string.Empty);
+                        json.WriteBoolean("visible", visible);
+                        json.WriteString("row", "grid");
+                        json.WriteString("place", turned ? "opponent-grid" : "grid");
+                        json.WriteNumber("seat", 0);
+                        json.WriteNumber("handle", card.Handle.Value);
+                        json.WriteBoolean("tapped", false);
+                        WriteBox(json, toPage.TransformBounds(box));
+                        json.WriteEndObject();
+                    }
+                }
+            }
+
             json.WriteEndArray();
 
             json.WriteStartArray("players");
@@ -193,6 +233,18 @@ public sealed partial class TabletPage
 
             json.WriteEndArray();
 
+            json.WriteStartArray("lines");
+            foreach (TableLineMessage line in _lines)
+            {
+                json.WriteStartObject();
+                json.WriteNumber("decision", line.Decision);
+                json.WriteNumber("line", line.Line);
+                json.WriteBoolean("take", line.Take);
+                json.WriteEndObject();
+            }
+
+            json.WriteEndArray();
+
             json.WriteStartArray("taps");
             foreach (TableTapMessage tap in _sent)
             {
@@ -204,6 +256,7 @@ public sealed partial class TabletPage
             }
 
             json.WriteEndArray();
+            _draft.WriteTest(json, _root);
             json.WriteEndObject();
         }
 

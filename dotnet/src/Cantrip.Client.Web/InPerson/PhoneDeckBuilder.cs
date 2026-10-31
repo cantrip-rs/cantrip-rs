@@ -573,8 +573,15 @@ public sealed class PhoneDeckBuilder : Grid
             : card.CardTypes.Contains(CardTypeView.Instant) || card.CardTypes.Contains(CardTypeView.Sorcery) ? (2, "Instants and sorceries")
             : IsLand(card) ? (4, "Lands")
             : (3, "Other permanents"),
-        _ => IsLand(card) ? (100, "Lands") : (Math.Min(7, card.ManaValue), card.ManaValue >= 7 ? "7+ mana" : $"{card.ManaValue} mana"),
+        _ => ByManaValue(card),
     };
+
+    /// <summary>
+    /// A card's group by mana value - "2 mana", "7+ mana", the lands last - as the deck's list groups it first, and as the
+    /// pool is shown on the phone during the draft (<see cref="PhonePickScreen"/>).
+    /// </summary>
+    internal static (int Order, string Name) ByManaValue(ObjectView card) =>
+        IsLand(card) ? (100, "Lands") : (Math.Min(7, card.ManaValue), card.ManaValue >= 7 ? "7+ mana" : $"{card.ManaValue} mana");
 
     private static bool IsLand(ObjectView card) => card.CardTypes.Contains(CardTypeView.Land);
 
@@ -632,7 +639,7 @@ public sealed class PhoneDeckBuilder : Grid
         Content = content,
     };
 
-    private static TextBlock Text(string text, double size, Windows.UI.Color color, bool semibold = false, bool wrap = false, bool centred = false) => new()
+    internal static TextBlock Text(string text, double size, Windows.UI.Color color, bool semibold = false, bool wrap = false, bool centred = false) => new()
     {
         Text = text,
         FontSize = size,

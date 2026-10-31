@@ -425,8 +425,14 @@ constructor (`AttachPhone`), and does nothing on any other page: the remote clie
   only the phone can show its owner what they alone may see there, such as their face-down cards. The side panel starts
   closed, without touching the remote client's setting, and opens over the table. A clock with more than a day left is not
   shown (`PlayerRail.HideClockOver` for the match clocks, the draft's, deck building's and the round's lines blanked):
-  an in-person table's clocks are "off" as clocks of days and hours, not as none. The draft is the page's own, at a
-  phone's size.
+  an in-person table's clocks are "off" as clocks of days and hours, not as none.
+- **The grid draft** is picked on the tablets (docs/in-person.md, "The grid draft"). The phone shows **Pick on the
+  table** over the page meanwhile (`InPerson/PhonePickScreen.cs`): whose pick it is, how many cards each player has, and
+  its pool so far as rows grouped by mana value, a tap on one showing the card whole. A row or a column picked on a
+  tablet for this seat comes from the relay (`SeatLineMessage`) and is chosen or taken as the grid's own buttons would
+  (`GameClient.ChooseLine`, `GameClient.PickLine`), once the draft shown here is at the pick it names and it is this
+  seat's: one for a pick not shown yet waits about a second for it, one for a pick past is let go. The test state's
+  `inPerson` has `draft` (the screen) and `lines` (each line acted on).
 - **Deck building** on the phone is its own (`InPerson/PhoneDeckBuilder.cs`), over the page while the table builds decks,
   rather than the pool's columns squeezed to a phone: one list at a time - **Deck**, **Sideboard**, **Basics** - its cards
   as rows a finger's height tall (name and cost over the type line), grouped by mana value, colour or type and narrowed
@@ -435,8 +441,8 @@ constructor (`AttachPhone`), and does nothing on any other page: the remote clie
   curve of the deck's spells, how many creatures, other spells and lands, and **Submit**. It sends what the pool sends
   (`GameClient.BuildDeck`, every change as it is made) and shows the server's deck once it has caught up with the changes
   sent (`DeckCaughtUp`); a companion stays one only while in the sideboard. The remote client's pool is untouched: the
-  builder is made only on a phone's page. `DraftTests.A_grid_draft_is_drafted_on_an_in_person_phone` drafts a grid on a
-  phone and builds the deck there with a finger, the event's record checked after each change.
+  builder is made only on a phone's page. `InPersonDraftTests` drafts a grid on the tablets and builds the deck on a
+  phone with a finger (`DraftTests.BuildOnThePhoneAsync`), the event's record checked after each change.
 - **Taps on the tablets.** The relay hands the phone a tap on a tablet routed to its seat (`SeatTapMessage`, already in
   this seat's handles), and the page does exactly what a click on that card, or that player's box (`PlayerClick`), does
   here: a land tapped at priority, while a cost is paid or while X is announced; a target; an attacker's or a blocker's

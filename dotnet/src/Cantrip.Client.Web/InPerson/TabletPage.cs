@@ -93,6 +93,7 @@ public sealed partial class TabletPage : UserControl
         BuildBoard();
         _phaseScreen = BuildPhaseScreen();
         _root.Children.Add(_phaseScreen);
+        AttachDraft();
         ShowPhase(null, "Connecting to the table…", []);
 
         _frame.Tick += (_, _) => Frame();
@@ -268,7 +269,7 @@ public sealed partial class TabletPage : UserControl
 
     /// <summary>Whether a row of cards on this tablet is turned to face seat 2 across the shared board.</summary>
     private bool IsTurned(CardBoardElement board) =>
-        board == _turnedStack?.Board || _halves.Any(half => half.Turned && (half.Board == board || half.Pile.Board == board));
+        board == _turnedStack?.Board || _draft.IsTurned(board) || _halves.Any(half => half.Turned && (half.Board == board || half.Pile.Board == board));
 
     /// <summary>The cards held up are not drawn where they lie meanwhile.</summary>
     private void Conceal()
@@ -339,6 +340,11 @@ public sealed partial class TabletPage : UserControl
                 _feed.Feed(feed.Message);
                 break;
 
+            case PublicGridMessage grid:
+                _draft.Take(grid);
+                _needsRedraw = true;
+                break;
+
             case DeviceErrorMessage error:
                 _error = error.Detail.Length > 0 ? error.Detail : error.Code.ToString();
                 _needsRedraw = true;
@@ -374,6 +380,11 @@ public sealed partial class TabletPage : UserControl
     {
         if (_client.View is not { } view)
         {
+            if (ShowingDraft())
+            {
+                return;
+            }
+
             string line = _error is { } error ? $"The table refused this board: {error}"
                 : _unreachable ? "The table cannot be reached. Scan this board's code again once its server is running."
                 : !Connected && _welcomed ? "The connection to the table was lost."
@@ -806,8 +817,14 @@ public sealed partial class TabletPage : UserControl
     }
 
     /// <summary>A permanent or a spell tapped: its public handle, for the relay to give whoever is being asked.</summary>
-    private void TapCard(ViewHandle handle) =>
-        Send(new TableTapMessage { Sequence = _client.EventSequence, Object = handle, Player = 0 });
+    private void TapCard(ViewHandle handle)
+    {
+        // A card of the draft's grid is only held up to read: its row or column is picked with the line's button.
+        if (_client.View is not null)
+        {
+            Send(new TableTapMessage { Sequence = _client.EventSequence, Object = handle, Player = 0 });
+        }
+    }
 
     /// <summary>A player tapped, by their box on their rail.</summary>
     private void TapPlayer(int seat) =>

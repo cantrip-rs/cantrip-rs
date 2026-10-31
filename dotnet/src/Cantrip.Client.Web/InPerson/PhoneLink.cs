@@ -6,7 +6,8 @@ namespace Cantrip.Client.Web.InPerson;
 
 /// <summary>
 /// A phone's line to the in-person relay (docs/in-person.md), beside its ordinary seat at the table: the taps made on the
-/// tablets that were routed to this seat come in on it, and whether each was used goes back. The game itself - the view,
+/// tablets that were routed to this seat come in on it, and whether each was used goes back; so do the rows and columns
+/// of the grid draft picked on a tablet for this seat. The game itself - the view,
 /// every prompt and answer - goes over the page's ordinary connection, as the remote client's does.
 /// <para>
 /// The line is the relay's <c>/inperson/socket</c> beside the page (<see cref="DeviceConnection"/>), opened with the
@@ -21,6 +22,7 @@ public sealed class PhoneLink
     private const string ProofKey = "cantrip-inperson-proof";
 
     private readonly Action<SeatTapMessage, Action<bool>> _tapped;
+    private readonly Action<SeatLineMessage> _lined;
     private DeviceConnection? _connection;
     private bool _connecting;
     private DateTime _nextTry = DateTime.MinValue;
@@ -32,9 +34,11 @@ public sealed class PhoneLink
     private bool _displaced;
 
     /// <param name="tapped">Hands the page a tap routed to this seat, with what to call once it is settled: used or not.</param>
-    public PhoneLink(Action<SeatTapMessage, Action<bool>> tapped)
+    /// <param name="lined">Hands the page a row or a column of the grid draft picked on a tablet for this seat.</param>
+    public PhoneLink(Action<SeatTapMessage, Action<bool>> tapped, Action<SeatLineMessage> lined)
     {
         _tapped = tapped;
+        _lined = lined;
     }
 
     /// <summary>Why the relay last refused this phone, or null.</summary>
@@ -145,6 +149,10 @@ public sealed class PhoneLink
             case SeatTapMessage tap:
                 DeviceConnection? to = _connection;
                 _tapped(tap, used => to?.Send(new TapResultMessage { TapId = tap.TapId, Used = used }));
+                break;
+
+            case SeatLineMessage line:
+                _lined(line);
                 break;
 
             case DeviceErrorMessage error:

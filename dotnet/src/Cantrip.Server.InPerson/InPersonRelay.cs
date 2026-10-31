@@ -137,6 +137,10 @@ public sealed class InPersonRelay : IStepObserver
     private TablePhase _phase = TablePhase.Setup;
     private string _line = string.Empty;
 
+    // The grid draft as both players see it, while one is being drafted; and that view as last sent, but for its clock.
+    private PublicGridMessage? _grid;
+    private byte[] _gridSent = [];
+
     public InPersonRelay(InPersonRelayOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -287,6 +291,9 @@ public sealed class InPersonRelay : IStepObserver
                 case ReentryRequestMessage when device.As is { Role: DeviceRole.Phone } phone && _options.IssueTicket is not null:
                     device.Send(new ReentryCodeMessage { Code = MintReentry(phone) });
                     break;
+                case TableLineMessage line when device.As is { Role: DeviceRole.Tablet } tablet:
+                    TableLine(tablet, line);
+                    break;
                 case { } when device.As is null:
                     Refuse(device, ErrorCode.MembershipRequired, "A device says who it is first.");
                     break;
@@ -311,6 +318,55 @@ public sealed class InPersonRelay : IStepObserver
             PhaseChanged();
         }
     }
+
+    /// <summary>
+    /// The grid draft as the event shows it to nobody's seat - both players' view of it, with no pool (<c>ViewFor(0)</c>,
+    /// through <see cref="ObservedTableEvent"/>) - or null once no grid is being drafted. On the table's thread. The
+    /// tablets are sent what both players see and nothing else (<see cref="PublicGrid"/>), whenever it changes.
+    /// </summary>
+    public void Drafted(DraftMessage? draft)
+    {
+        lock (_gate)
+        {
+            PublicGridMessage? grid = draft is { Format: "grid", PackNumber: > 0 } ? PublicGrid(draft) : null;
+            if (grid is null && _grid is null) return;
+            grid ??= new PublicGridMessage { Decision = _grid!.Decision, Grids = _grid.Grids, Drafted = _grid.Drafted, LastLine = -1 };
+
+            // The clock counts down on its own between picks: a view that differs only in what is left on it is not news.
+            int left = grid.PickLeftMs;
+            grid.PickLeftMs = 0;
+            byte[] key = MessagePack.MessagePackSerializer.Serialize<DeviceServerMessage>(grid);
+            grid.PickLeftMs = left;
+            if (key.AsSpan().SequenceEqual(_gridSent)) return;
+
+            _gridSent = key;
+            _grid = grid.Grid > 0 ? grid : null;
+            foreach (RelayDevice tablet in Tablets())
+            {
+                tablet.Send(grid);
+            }
+        }
+    }
+
+    /// <summary>
+    /// What a tablet is shown of a grid draft: exactly what the remote client shows both seats - the grid, whose pick of
+    /// which grid it is, how many cards each has, the last picks in words and the clock - and nothing of either pool, nor
+    /// the cube's pick order the draft tells each seat for its bots.
+    /// </summary>
+    internal PublicGridMessage PublicGrid(DraftMessage draft) => new()
+    {
+        Decision = draft.Decision,
+        Grid = draft.PackNumber,
+        Grids = draft.Packs,
+        Pick = draft.PickNumber,
+        Active = draft.Active,
+        Places = [.. draft.Pile],
+        Drafted = [.. Enumerable.Range(1, _phones.Count).Select(seat => draft.Seats.FirstOrDefault(each => each.Seat == seat)?.Drafted ?? 0)],
+        Recent = [.. draft.Recent],
+        RecentCards = [.. draft.RecentCards],
+        LastLine = draft.LastLine,
+        PickLeftMs = draft.PickLeftMs,
+    };
 
     /// <summary>Lets a tap go on to the next request once its phone has had too long to say what it made of it.</summary>
     public void Tick()
@@ -540,6 +596,7 @@ public sealed class InPersonRelay : IStepObserver
         if (_view is null)
         {
             tablet.Send(PhaseMessage());
+            if (_grid is not null) tablet.Send(_grid);
             return;
         }
 
@@ -560,6 +617,27 @@ public sealed class InPersonRelay : IStepObserver
         _taps.Add(pending);
         Route(pending);
     }
+
+    /// <summary>
+    /// A row or a column picked on a tablet's grid: handed to the phone of the seat whose pick it is, which picks it as its
+    /// own, while the pick it names is the one being made and the line has a card in it. A player's own board picks only
+    /// for that player. The table is the judge of the pick; the relay only keeps a tap meant for nobody from going anywhere.
+    /// </summary>
+    private void TableLine(Identity tablet, TableLineMessage line)
+    {
+        if (_grid is not { } grid || line.Decision != grid.Decision || line.Line is < 0 or > 5) return;
+        int seat = grid.Active;
+        if (seat < 1 || seat > _phones.Count || (tablet.Side != 0 && tablet.Side != seat)) return;
+        if (!GridPlaces(line.Line).Any(place => place < grid.Places.Count && grid.Places[place].Known)) return;
+        if (_phones[seat - 1].Device is not { } phone) return;
+
+        phone.Send(new SeatLineMessage { Decision = line.Decision, Line = line.Line, Take = line.Take });
+    }
+
+    /// <summary>The places in the grid of a line: a row, 0 to 2, or a column, 3 to 5.</summary>
+    private static IEnumerable<int> GridPlaces(int line) => line < 3
+        ? Enumerable.Range(0, 3).Select(column => (line * 3) + column)
+        : Enumerable.Range(0, 3).Select(row => (row * 3) + (line - 3));
 
     private void TapResult(int seat, TapResultMessage result)
     {

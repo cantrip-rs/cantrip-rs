@@ -36,7 +36,7 @@ public sealed class WireShapeTests
     /// own <see cref="InPersonProtocol.Version"/>. The main wire's shape leaves that namespace out; what it wraps of the
     /// main wire (<see cref="PublicFeedMessage"/>) is still guarded by the main version.
     /// </summary>
-    private const string RecordedInPerson = "2:F18DFBD1C839E643";
+    private const string RecordedInPerson = "3:CAFFB01C1A69545B";
 
     private const string InPersonNamespace = "Cantrip.Protocol.InPerson";
 

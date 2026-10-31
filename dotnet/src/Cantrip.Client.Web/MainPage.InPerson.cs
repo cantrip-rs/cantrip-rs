@@ -44,6 +44,18 @@ public sealed partial class MainPage
 
     /// <summary>Deck building made for a phone, over the page while the table builds decks (InPerson/PhoneDeckBuilder.cs).</summary>
     private PhoneDeckBuilder? _phoneDeck;
+
+    /// <summary>"Pick on the table", over the page while the grid draft is drafted on the tablets (InPerson/PhonePickScreen.cs).</summary>
+    private PhonePickScreen? _phonePick;
+
+    /// <summary>How long a line picked on a tablet waits for the draft message that makes the pick this seat's.</summary>
+    private static readonly TimeSpan TableLineHold = TimeSpan.FromSeconds(1);
+
+    /// <summary>A row or a column picked on a tablet for this seat, waiting for the pick it names to be shown here.</summary>
+    private (SeatLineMessage Line, DateTime Until)? _tableLine;
+
+    /// <summary>Every line from a tablet this page acted on, newest last, for the page's test state.</summary>
+    private readonly List<SeatLineMessage> _tableLinesDone = [];
     private DockButton _boardButton = null!;
     private bool _boardShown;
     private Border _refusal = null!;
@@ -65,13 +77,19 @@ public sealed partial class MainPage
         }
 
         ApplyPhoneLayout();
-        _phoneLink = new PhoneLink(TakeTableTap);
+        _phoneLink = new PhoneLink(TakeTableTap, TakeTableLine);
 
         // Over the event's own deck building, which a phone's width squeezes, and over everything else of the page.
         _phoneDeck = new PhoneDeckBuilder();
         Grid.SetRowSpan(_phoneDeck, 3);
         Grid.SetColumnSpan(_phoneDeck, 2);
         Root.Children.Add(_phoneDeck);
+
+        // Over the event's own grid: the grid draft is drafted on the tablets.
+        _phonePick = new PhonePickScreen();
+        Grid.SetRowSpan(_phonePick, 3);
+        Grid.SetColumnSpan(_phonePick, 2);
+        Root.Children.Add(_phonePick);
 
         // At the top, right of the middle: clear of the player's rail on the left and the side panel's corner on the right.
         _fullScreen = new FullScreenButton(landscape: false, (HorizontalAlignment.Center, VerticalAlignment.Top, new Thickness(100, 4, 4, 4)), insets => Root.Padding = insets, _phoneLink.AskReentry);
@@ -87,7 +105,9 @@ public sealed partial class MainPage
     {
         _phoneLink?.Pump();
         SettleTableTaps();
+        SettleTableLine();
         _phoneDeck?.Follow(_gameClient);
+        _phonePick?.Follow(_gameClient);
 
         if (_refusal.Visibility == Visibility.Visible && DateTime.UtcNow >= _refusalUntil)
         {
@@ -315,6 +335,69 @@ public sealed partial class MainPage
         click();
         RedrawNow();
         return TableTapOutcome.Used;
+    }
+
+    // --- The grid draft, picked on the tablets ---
+
+    /// <summary>
+    /// A row or a column of the grid picked on a tablet and routed to this seat (<see cref="SeatLineMessage"/>): chosen or
+    /// taken here as the grid's own buttons would, once the draft shown here is at the pick it names.
+    /// </summary>
+    private void TakeTableLine(SeatLineMessage line)
+    {
+        _tableLine = (line, DateTime.UtcNow + TableLineHold);
+        SettleTableLine();
+    }
+
+    /// <summary>
+    /// The line from a tablet acted on, if the pick it names is this seat's and the one being made: chosen (its cards lit for
+    /// the pick clock to take) or taken, sent to the table as the page's own pick, which the table judges. A line for a pick
+    /// this page has not been shown yet waits <see cref="TableLineHold"/> for it; one for a pick already past is let go.
+    /// </summary>
+    private void SettleTableLine()
+    {
+        if (_tableLine is not { } waiting)
+        {
+            return;
+        }
+
+        if (_gameClient is not { Draft: { Format: "grid" } draft } client || client.Table?.Phase != TablePhase.Drafting || draft.Decision > waiting.Line.Decision)
+        {
+            _tableLine = null;
+            return;
+        }
+
+        if (draft.Decision < waiting.Line.Decision || draft.Active != client.Seat)
+        {
+            if (DateTime.UtcNow >= waiting.Until)
+            {
+                _tableLine = null;
+            }
+
+            return;
+        }
+
+        _tableLine = null;
+        SeatLineMessage line = waiting.Line;
+        if (!line.Take)
+        {
+            _gridLine = line.Line;
+            _gridLineFor = draft.Decision;
+            client.ChooseLine(line.Line);
+        }
+        else if (_gridSentFor != draft.Decision)
+        {
+            _gridLine = line.Line;
+            _gridLineFor = draft.Decision;
+            _gridSentFor = draft.Decision;
+            client.PickLine(line.Line);
+        }
+
+        _tableLinesDone.Add(line);
+        if (_tableLinesDone.Count > 64)
+        {
+            _tableLinesDone.RemoveAt(0);
+        }
     }
 
     /// <summary>The phone's word that a tap on the table did nothing: a line over the dock, and a buzz where the phone can.</summary>

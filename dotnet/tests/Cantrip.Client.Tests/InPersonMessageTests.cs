@@ -121,4 +121,41 @@ public sealed class InPersonMessageTests
 
         Assert.Equal((ErrorCode.ProtocolMismatch, "v2"), (error.Code, error.Detail));
     }
+
+    [Fact]
+    public void A_table_line_round_trips()
+    {
+        TableLineMessage line = Device<TableLineMessage>(new TableLineMessage { Decision = 7, Line = 4, Take = true });
+
+        Assert.Equal((7, 4, true), (line.Decision, line.Line, line.Take));
+    }
+
+    [Fact]
+    public void A_seat_line_round_trips()
+    {
+        SeatLineMessage line = Server<SeatLineMessage>(new SeatLineMessage { Decision = 7, Line = 2, Take = false });
+
+        Assert.Equal((7, 2, false), (line.Decision, line.Line, line.Take));
+    }
+
+    [Fact]
+    public void A_public_grid_round_trips()
+    {
+        PublicGridMessage grid = Server<PublicGridMessage>(new PublicGridMessage
+        {
+            Decision = 5, Grid = 3, Grids = 18, Pick = 2, Active = 1,
+            Places = [new ObjectView { Name = "Lightning Bolt", Known = true }, new ObjectView { Known = false }],
+            Drafted = [6, 3],
+            Recent = ["Bo took row 2 of grid 3: [Lightning Bolt]."],
+            RecentCards = [[new LogReferenceView { Name = "Lightning Bolt" }]],
+            LastLine = 1,
+            PickLeftMs = 30_000,
+        });
+
+        Assert.Equal((5, 3, 18, 2, 1, 1, 30_000), (grid.Decision, grid.Grid, grid.Grids, grid.Pick, grid.Active, grid.LastLine, grid.PickLeftMs));
+        Assert.Equal([("Lightning Bolt", true), (string.Empty, false)], grid.Places.Select(place => (place.Name, place.Known)));
+        Assert.Equal([6, 3], grid.Drafted);
+        Assert.Equal("Lightning Bolt", Assert.Single(Assert.Single(grid.RecentCards)).Name);
+        Assert.Single(grid.Recent);
+    }
 }

@@ -334,7 +334,27 @@ public sealed record TableState(
 /// A phone at an in-person table (MainPage.InPerson.cs): whether its Board is shown, how many taps from the tablets wait,
 /// each tap it settled, and the line saying a tap did nothing while it is up. Null for any other page.
 /// </summary>
-public sealed record InPersonState(string Role, bool Board, int Waiting, IReadOnlyList<TableTapState> Taps, string Refusal, PhoneDeckState? Deck = null);
+public sealed record InPersonState(
+    string Role,
+    bool Board,
+    int Waiting,
+    IReadOnlyList<TableTapState> Taps,
+    string Refusal,
+    PhoneDeckState? Deck = null,
+    PhoneDraftState? Draft = null,
+    IReadOnlyList<PhoneLineState>? Lines = null);
+
+/// <summary>
+/// A phone's screen during the grid draft (InPerson/PhonePickScreen.cs): whether it is up, whether the pick is this seat's,
+/// what it says, how many cards the pool has, whether a card is shown whole, and the pool's rows with their groups.
+/// </summary>
+public sealed record PhoneDraftState(bool Shown, bool Mine, string Title, string Grid, string Status, int Pool, bool Preview, IReadOnlyList<PhoneDraftRow> Rows);
+
+/// <summary>A card of the pool on the pick screen: its name, the group it is under, whether it is in view, and its box.</summary>
+public sealed record PhoneDraftRow(string Name, string Group, bool InView, float X, float Y, float W, float H);
+
+/// <summary>A line of the grid picked on a tablet that the phone acted on: chosen, or taken.</summary>
+public sealed record PhoneLineState(int Decision, int Line, bool Take);
 
 /// <summary>
 /// A phone's deck building (InPerson/PhoneDeckBuilder.cs): whether it is up, the list shown (<c>Deck</c>, <c>Sideboard</c>,

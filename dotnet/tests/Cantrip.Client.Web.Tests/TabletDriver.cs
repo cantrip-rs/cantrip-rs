@@ -198,7 +198,25 @@ public sealed record TabletState(
     string Lives,
     IReadOnlyList<TabletCard> Cards,
     IReadOnlyList<TabletPlayer> Players,
-    IReadOnlyList<TabletTap> Taps);
+    IReadOnlyList<TabletTap> Taps,
+    TabletGridState? Grid = null,
+    IReadOnlyList<TabletLine>? Lines = null);
+
+/// <summary>
+/// A tablet's grid draft (InPerson/TabletDraft.cs): whether it is up, the grid of how many, the pick being made and whose,
+/// whether the pick just made is being shown, and each face - the seat it is upright for, whether it is turned, what it says
+/// and its buttons.
+/// </summary>
+public sealed record TabletGridState(bool Shown, int Grid, int Grids, int Decision, int Active, int Pick, bool Held, IReadOnlyList<TabletFace> Faces);
+
+/// <summary>One face of a tablet's grid draft, upright for <c>Seat</c>.</summary>
+public sealed record TabletFace(int Seat, bool Turned, string Status, string Seats, IReadOnlyList<string> Recent, IReadOnlyList<TabletGridButton> Buttons);
+
+/// <summary>A button of the grid: a line's ("Row 1", "Column 3", <c>Line</c> 0 to 5) or Take (<c>Line</c> -1).</summary>
+public sealed record TabletGridButton(string Label, int Line, bool Enabled, bool Chosen, float X, float Y, float W, float H);
+
+/// <summary>A line of the grid a tablet sent the relay: chosen, or taken.</summary>
+public sealed record TabletLine(int Decision, int Line, bool Take);
 
 /// <summary>
 /// A card on a tablet: its name (empty for one nobody at the table may see), the middle and size of its box on the page,

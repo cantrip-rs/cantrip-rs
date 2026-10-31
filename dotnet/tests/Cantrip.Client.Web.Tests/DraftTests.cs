@@ -47,28 +47,10 @@ public sealed class DraftTests(WebClient web)
     }
 
     /// <summary>
-    /// The same grid draft on a player's phone at an in-person table (<c>?inperson=phone</c>, PhoneTests): the draft and deck
-    /// building are the page's own, at a phone's size and tapped with a finger.
-    /// </summary>
-    [Fact]
-    public async Task A_grid_draft_is_drafted_on_an_in_person_phone()
-    {
-        string data = Path.Combine(Path.GetTempPath(), "cantrip-grid-phone-test-" + Guid.NewGuid().ToString("N"));
-        try
-        {
-            await Grid(data, phone: true);
-        }
-        finally
-        {
-            Directory.Delete(data, recursive: true);
-        }
-    }
-
-    /// <summary>
     /// A grid draft of three grids against a bot: on each of this seat's picks a line with cards left in it is chosen
     /// by its button, lighting it, and taken with Take; the cards fly into the pool, and the draft ends in deck building.
     /// </summary>
-    private async Task Grid(string data, bool phone = false)
+    private async Task Grid(string data)
     {
         var store = new EventStore(data);
         CreatedEvent created = DraftPod.CreateGrid(store, ContentCache.Get(WebClient.Content), new GridDraftSetup
@@ -110,9 +92,8 @@ public sealed class DraftTests(WebClient web)
 
         await using TablePage page = await TablePage.OpenAsync(
             web,
-            $"server={Uri.EscapeDataString(address.AbsoluteUri)}{(phone ? "&inperson=phone" : string.Empty)}#ticket={created.Tickets["you"]}",
-            WebClient.Pictures(nameof(DraftTests) + (phone ? "-phone" : string.Empty)),
-            phone: phone);
+            $"server={Uri.EscapeDataString(address.AbsoluteUri)}#ticket={created.Tickets["you"]}",
+            WebClient.Pictures(nameof(DraftTests)));
 
         TableState state = await page.SettledAsync(state => state.Phase == "Drafting");
         Assert.Equal($"Cantrip - Grid Draft ({created.Record.Id})", await page.Page.TitleAsync());
@@ -198,11 +179,6 @@ public sealed class DraftTests(WebClient web)
         Assert.Equal(27, drafted.PoolOf(1).Count + drafted.PoolOf(2).Count + drafted.Discarded.Count);
         Assert.Equal(drafted.PoolOf(1), record.Participant("you")!.Pool);
 
-        if (phone)
-        {
-            await BuildOnThePhoneAsync(page, store, created.Record.Id);
-        }
-
         await playing.CancelAsync();
         await botPlays;
         bot.Disconnect();
@@ -214,12 +190,12 @@ public sealed class DraftTests(WebClient web)
     }
 
     /// <summary>
-    /// The deck built on the phone (InPerson/PhoneDeckBuilder.cs), tapped with a finger at a phone's size: a card tapped out
-    /// of the deck and another after it, the first tapped back from the sideboard, the list narrowed to a colour and grouped
-    /// by type, a card shown whole, three Mountains added with the stepper, and Submit - each change the server's, as the
-    /// event's record says.
+    /// The deck built on an in-person phone (InPerson/PhoneDeckBuilder.cs) after its grid draft (InPersonDraftTests), tapped
+    /// with a finger at a phone's size: a card tapped out of the deck and another after it, the first tapped back from the
+    /// sideboard, the list narrowed to a colour and grouped by type, a card shown whole, three Mountains added with the
+    /// stepper, and Submit - each change the server's, as the event's record of <paramref name="playerId"/> says.
     /// </summary>
-    private static async Task BuildOnThePhoneAsync(TablePage page, EventStore store, string eventId)
+    internal static async Task BuildOnThePhoneAsync(TablePage page, EventStore store, string eventId, string playerId)
     {
         TableState state = await page.SettledAsync(state => state.InPerson?.Deck is { Shown: true, Rows.Count: > 1 });
         PhoneDeckState deck = state.InPerson!.Deck!;
@@ -243,7 +219,7 @@ public sealed class DraftTests(WebClient web)
         Assert.False(back.InDeck);
         await page.TapAsync(back.X, back.Y);
         await page.SettledAsync(state => state.InPerson!.Deck!.Rows.All(row => row.Place != first.Place));
-        await ServerHasAsync(store, eventId, deck => deck.Main.Contains(first.Place) && !deck.Main.Contains(second.Place), "the deck without the second card and with the first back");
+        await ServerHasAsync(store, eventId, playerId, deck => deck.Main.Contains(first.Place) && !deck.Main.Contains(second.Place), "the deck without the second card and with the first back");
 
         // Narrowed to a colour, grouped by type, a card shown whole.
         await TapDeckButtonAsync(page, "Tab Deck");
@@ -271,11 +247,11 @@ public sealed class DraftTests(WebClient web)
         }
 
         await page.PictureAsync("phone-deck-lands");
-        await ServerHasAsync(store, eventId, deck => deck.Basics.GetValueOrDefault("Mountain") == 3, "three Mountains");
+        await ServerHasAsync(store, eventId, playerId, deck => deck.Basics.GetValueOrDefault("Mountain") == 3, "three Mountains");
         state = await page.SettledAsync();
         Assert.True(state.InPerson!.Deck!.Buttons.Single(button => button.Label == "Submit deck").Enabled, "Submit is not offered for a deck big enough.");
         await TapDeckButtonAsync(page, "Submit deck");
-        await ServerHasAsync(store, eventId, deck => deck.Submitted, "the deck submitted");
+        await ServerHasAsync(store, eventId, playerId, deck => deck.Submitted, "the deck submitted");
         await page.PictureAsync("phone-deck-submitted");
     }
 
@@ -286,10 +262,10 @@ public sealed class DraftTests(WebClient web)
         await page.TapAsync(button.X, button.Y);
     }
 
-    private static async Task ServerHasAsync(EventStore store, string eventId, Func<EventDeck, bool> holds, string what)
+    private static async Task ServerHasAsync(EventStore store, string eventId, string playerId, Func<EventDeck, bool> holds, string what)
     {
         DateTime giveUp = DateTime.UtcNow + TimeSpan.FromSeconds(20);
-        while (!holds(store.LoadEvent(eventId)!.Participant("you")!.Deck))
+        while (!holds(store.LoadEvent(eventId)!.Participant(playerId)!.Deck))
         {
             Assert.True(DateTime.UtcNow < giveUp, $"The server never had {what}.");
             await Task.Delay(100);

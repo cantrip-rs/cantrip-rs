@@ -242,13 +242,17 @@ public sealed class InPersonHost : IAsyncDisposable
         try
         {
             int servedArt = art.Urls.Select(each => new Uri(each).Port).First(port => port != 0);
+
+            // The tablets are shown the grid draft as both players see it, from the event on the table's thread.
+            var observed = new ObservedTableEvent(pod, relay);
+            observed.Publish();
             server = await GameServer.StartAsync(new GameServerOptions
             {
                 Format = DeckFormat.Limited(),
                 Port = _options.TablePort,
                 Players = pod.Seats,
                 ContentRoot = _options.ContentRoot,
-                Event = pod,
+                Event = observed,
                 ListenAddress = _options.ListenAddress,
                 Rules = new ObservedRulesFactory(_options.Rules, relay),
                 Art = new Uri($"http://{lan}:{servedArt}/"),

@@ -32,6 +32,43 @@ Lightning Bolt from their phone taps a Mountain on their own tablet to pay, then
 opponent's tablet to target it. All feedback - which taps were taken, what is still asked - is on the acting player's
 phone; a tablet never shows anything of a private prompt.
 
+## The grid draft
+
+The draft is played on the tablets, not the phones. A tablet shows the grid face up, a button beside each row and over
+each column, and beside it exactly what the remote client shows both players of a grid draft: which grid of how many,
+whose pick it is and whether it is the first or the second from this grid, how many cards each player has drafted, the
+last picks in words (each naming the cards it took) and the pick clock, when there is one. Nothing more: no pool, and
+not the cube's pick order the draft tells each seat for its bots (`PublicGridMessage`). A pick just made is shown for a
+moment - its line lit on the grid it was taken from - before the grid moves on. A card is held up to read with a long
+press; a tap on a card picks nothing.
+
+- **Two taps.** A row or a column is picked in two taps, so a stray touch takes nothing: the first lights the line and
+  chooses it (the line the pick clock would take, as the remote client's choice is), the second on the same button - or
+  **Take** - takes it.
+- **Only the picker.** Only the face in front of the player whose pick it is has its buttons live. The relay hands a line
+  picked on a tablet (`TableLineMessage`) to the phone of the seat whose pick it is (`SeatLineMessage`), and the phone
+  sends the table the very pick its own grid would (`GameClient.ChooseLine`, `GameClient.PickLine`), if the draft it has
+  been shown is at that pick and it is its own; so the table, judging every pick as it judges a remote seat's, stays the
+  only authority, and nothing new is trusted. A player's own tablet picks only for that player; a line for a pick already
+  past, or one with no card left, goes nowhere; and with the picker's phone away it goes nowhere either, the tablet's
+  buttons coming back after a few seconds.
+- **The shared tablet** shows the draft twice, as its stack band shows the stack: one face upright for seat 1 at the
+  tablet's bottom edge, one turned to face seat 2. Each player reads the grid upright on the face in front of them and
+  picks there. A grid cannot read upright for two people facing each other, and one turned sideways reads well for
+  neither.
+- **Four devices.** Each player's tablet shows the grid, upright for its player, its buttons live on that player's pick:
+  each picks on the board in front of them, and either can read the grid while the other picks.
+
+The phone shows **Pick on the table** meanwhile: whose pick it is, how many cards each has, and its own pool so far as
+readable rows grouped by mana value, as the deck builder groups them; a tap on a row shows the card whole
+(`InPerson/PhonePickScreen.cs`). Deck building then follows on the phone (docs/web-client.md, "In-person play").
+
+The relay learns where the draft stands from the event itself, on the table's thread: the table is given an
+`ObservedTableEvent` wrapping the `DraftPod`, which forwards every member of `ITableEvent` (a reflection test holds it to
+that) and, whenever the table shows a seat the event, shows the relay what the event shows nobody's seat
+(`ViewFor(0)`): the grid draft with no pool, both players named. The relay sends the tablets that whenever it changes
+other than in the time left, and once more when the draft is over (`Grid` zero), and catches a late tablet up with it.
+
 ## Architecture
 
 - **The public viewer.** The engine's host projects the game for a viewer who is no player, in a handle space of its
@@ -211,7 +248,7 @@ on the table's thread, where the relay only takes a snapshot and queues messages
 ## The wire
 
 The relay and its devices speak MessagePack, in `Cantrip.Protocol.InPerson`, with unions and a version of their own
-(`InPersonProtocol.Version`, now 2). A device's hello also carries `PlayerView.ProtocolVersion`, since the public feed
+(`InPersonProtocol.Version`, now 3). A device's hello also carries `PlayerView.ProtocolVersion`, since the public feed
 wraps the ordinary server messages.
 
 A device sends a `DeviceClientMessage`:
@@ -221,6 +258,7 @@ A device sends a `DeviceClientMessage`:
 | 0 | `DeviceHelloMessage` | `InPersonVersion`, `ProtocolVersion`, `Ticket?` (a phone's), `Device?` (a tablet's), `ResumeId?`, `Proof?`, `Reentry?` (a home-screen app's first launch) |
 | 1 | `TableTapMessage` | `Sequence` (how far the tablet has been brought), `Object` (a public handle, or none), `Player` (a seat, or zero) |
 | 2 | `TapResultMessage` | `TapId`, `Used` |
+| 3 | `TableLineMessage` | `Decision` (the pick of the grid draft), `Line` (a row 0-2 or a column 3-5), `Take` (false chooses it) |
 | 8 | `ReentryRequestMessage` | none: a welcomed phone asks for a re-entry code |
 
 The relay sends a `DeviceServerMessage`:
@@ -232,9 +270,11 @@ The relay sends a `DeviceServerMessage`:
 | 2 | `SeatTapMessage` | `TapId`, `RequestId` (the request it was routed to), `Object` (in the seat's handle space, or none), `Player` |
 | 3 | `DevicePhaseMessage` | `Phase`, `Line` (where the draft or deck building stands), `Connected` |
 | 4 | `DeviceErrorMessage` | `Code`, `Detail` |
+| 5 | `PublicGridMessage` | `Decision`, `Grid` (zero once the draft is over), `Grids`, `Pick`, `Active`, `Places` (the grid row by row, a place taken an unknown card), `Drafted` (each seat's count), `Recent`, `RecentCards`, `LastLine`, `PickLeftMs` |
+| 6 | `SeatLineMessage` | `Decision`, `Line`, `Take`: a line picked on a tablet, for the picker's phone |
 | 8 | `ReentryCodeMessage` | `Code` (good once, for the home-screen app the phone is being added as) |
 
-The public feed never holds a prompt, a request id or a seat's handle. A phone acts on a `SeatTapMessage` only while
+The public feed never holds a prompt, a request id or a seat's handle, and the grid nothing a seat alone is shown. A phone acts on a `SeatTapMessage` only while
 its `RequestId` is the phone's prompt.
 
 On the host's side, a step with a public view carries:
@@ -258,3 +298,11 @@ minted tokens - one shared board, or one for each player. Every permanent, playe
 tapped with a finger on whichever tablet shows it, found by the public handle the step's map pairs with the seat's; the
 relay routes the tap to the phone and the table judges each answer against the script. The tablets are checked never to
 name a card in the phone's hand.
+
+`InPersonDraftTests` (browser, wall clock: `test.cmd /filter "FullyQualifiedName~InPersonDraftTests"`) drafts a short grid
+draft end to end on a real `InPersonHost`: both phones opened from their links, showing **Pick on the table**, and the
+tablets - one shared board, or one for each player - where every pick is made with a finger, chosen with one tap and
+taken with a second or with **Take**; the face of the player not picking is checked dead, each pick checked in the
+event's own record, and deck building follows on the phones. `InPersonGridTests` (Server.Tests) drives the relay and a
+real `DraftPod` through `ObservedTableEvent` with no socket: what the tablets are sent of the grid, and that a line goes
+to the picker's phone alone.

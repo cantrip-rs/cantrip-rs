@@ -127,6 +127,12 @@ public sealed partial class MainPage
                 busy.Add("phone-deck");
             }
 
+            // The phone's pick screen, while the grid draft is drafted on the tablets, its rows not laid out yet.
+            if (_phonePick?.Laying == true)
+            {
+                busy.Add("phone-pick");
+            }
+
             // Creatures on their way to the attacker clicked, one block at a time as the host's verdicts allow.
             if (_blockQueue.Count > 0)
             {
@@ -531,6 +537,18 @@ public sealed partial class MainPage
         json.WriteString("refusal", _refusal.Visibility == Visibility.Visible ? _refusalText.Text : string.Empty);
         _phoneDeck?.WriteTest(json, Root);
         _fullScreen?.WriteTest(json, Root);
+        _phonePick?.WriteTest(json, Root);
+        json.WriteStartArray("lines");
+        foreach (SeatLineMessage line in _tableLinesDone)
+        {
+            json.WriteStartObject();
+            json.WriteNumber("decision", line.Decision);
+            json.WriteNumber("line", line.Line);
+            json.WriteBoolean("take", line.Take);
+            json.WriteEndObject();
+        }
+
+        json.WriteEndArray();
         json.WriteEndObject();
     }
 
