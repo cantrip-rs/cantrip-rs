@@ -96,6 +96,18 @@ fn basic_land_or_subtype_rule(q: &dyn Query, choice: &Choice, word: u32) -> Verd
     Verdict::each(choice, |card| crate::lands::is_basic_land_card(q, card) || q.chars(card).has_subtype(wanted))
 }
 
+/// Whether `card` is a basic `wanted` card: a card with the basic supertype and the subtype `wanted` (CR 205.4a, 305.6). The
+/// subtype is already read through the words of the asking text (`Words::subtype`, CR 612.2).
+pub fn is_basic_of_type(q: &dyn Query, card: ObjectId, wanted: Subtype) -> bool {
+    let chars = q.chars(card);
+    chars.supertypes.basic && chars.has_subtype(wanted)
+}
+
+fn basic_land_of_type_rule(q: &dyn Query, choice: &Choice, word: u32) -> Verdict {
+    let wanted = crate::lands::word(q, choice.source, u16::try_from(word).unwrap_or(u16::MAX));
+    Verdict::each(choice, |card| is_basic_of_type(q, card, wanted))
+}
+
 fn mana_value(q: &dyn Query, choice: &Choice, most: u32) -> Verdict {
     Verdict::each(choice, |card| q.mana_value(card) <= most)
 }
@@ -126,6 +138,14 @@ pub const FOREST: Part = part(&(forest as SelectFn), crate::lands::sub(Subtype::
 /// the same shape; `BASIC_LAND_OR_PLANET` is Final Frontier's and Genesis Device's.
 pub const fn basic_land_or_subtype(subtype: Subtype) -> Part {
     part(&(basic_land_or_subtype_rule as SelectFn), crate::lands::sub(subtype) as u32, "")
+}
+
+/// "A basic [subtype] card" (CR 205.4a, 205.3i, 305.6): a card with the basic supertype and `subtype`, the type read through the
+/// words of the text of the card that asks (CR 612.2) and a card as it is where it is; a nonbasic land of the type is not one.
+/// Clay-Fired Bricks and Oberth-Class Starship search for a basic Plains card (`BASIC_PLAINS_CARD`); Starfield Shepherd and
+/// Yasharn test it by hand with `is_basic_of_type`.
+pub const fn basic_land_of_type(subtype: Subtype) -> Part {
+    part(&(basic_land_of_type_rule as SelectFn), crate::lands::sub(subtype) as u32, "")
 }
 
 /// "A basic land card or Planet card": Final Frontier and Genesis Device search for it.
@@ -388,6 +408,9 @@ pub const fn basic_land_cards(count: Count) -> Selection {
 
 /// "A basic land card or Planet card", which may be left unfound (CR 701.23b): Final Frontier and Genesis Device.
 pub const BASIC_LAND_OR_PLANET_CARD: Selection = Selection::of(up_to(1), &[BASIC_LAND_OR_PLANET]).called("basic land or Planet");
+
+/// "A basic Plains card", which may be left unfound (CR 701.23b): Clay-Fired Bricks and Oberth-Class Starship.
+pub const BASIC_PLAINS_CARD: Selection = Selection::of(up_to(1), &[basic_land_of_type(Subtype::Plains)]).called("basic Plains");
 
 /// `count` Forest cards: Wood Elves's one (`FOREST_CARD`), which may be left unfound (CR 701.23b).
 pub const fn forest_cards(count: Count) -> Selection {

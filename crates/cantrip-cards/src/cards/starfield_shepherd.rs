@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::library::{search_to_hand, Find};
-use cantrip_mechanics::{triggers::THIS_ENTERS, warp};
+use cantrip_mechanics::{select, triggers::THIS_ENTERS, warp};
 use cantrip_oracle as oracle;
 
 /// "When this creature enters, search your library for a basic Plains card or a creature card with mana value 1 or
@@ -11,8 +11,7 @@ fn search(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     // "Plains" is a word of this card's text (CR 612): read it through the words the Shepherd has now.
     let plains = g.words(item.object).subtype(Subtype::Plains);
     search_to_hand(g, item.controller, item.object, Find::ONE.revealed(), |q, c| {
-        let chars = q.chars(c);
-        (chars.supertypes.basic && chars.has_subtype(plains)) || (chars.is(CardType::Creature) && q.mana_value(c) <= 1)
+        select::is_basic_of_type(q, c, plains) || (q.chars(c).is(CardType::Creature) && q.mana_value(c) <= 1)
     })?;
     Ok(())
 }

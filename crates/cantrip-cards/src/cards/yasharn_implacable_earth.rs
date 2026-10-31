@@ -1,14 +1,8 @@
 use cantrip_api::*;
 use cantrip_mechanics::library;
-use cantrip_mechanics::select::{part, up_to};
+use cantrip_mechanics::select::{self, part, up_to};
 use cantrip_mechanics::triggers::THIS_ENTERS;
 use cantrip_oracle as oracle;
-
-/// Whether `card` is a basic `kind` card: a card with the basic supertype and that basic land type (CR 205.4a, 305.6).
-fn basic_of(q: &dyn Query, card: ObjectId, kind: Subtype) -> bool {
-    let chars = q.chars(card);
-    chars.supertypes.basic && chars.has_subtype(kind)
-}
 
 /// Whether `cards` can be "a basic Forest card and a basic Plains card", or some of that (CR 701.23b: either may be left
 /// unfound): none, one that is either, or two that are one each. Forest and Plains are read through Yasharn's words (CR 612).
@@ -17,8 +11,8 @@ fn one_of_each(q: &dyn Query, source: ObjectId, cards: &[ObjectId]) -> bool {
     let (forest, plains) = (words.subtype(Subtype::Forest), words.subtype(Subtype::Plains));
     match cards {
         [] => true,
-        [a] => basic_of(q, *a, forest) || basic_of(q, *a, plains),
-        [a, b] => basic_of(q, *a, forest) && basic_of(q, *b, plains) || basic_of(q, *a, plains) && basic_of(q, *b, forest),
+        [a] => select::is_basic_of_type(q, *a, forest) || select::is_basic_of_type(q, *a, plains),
+        [a, b] => select::is_basic_of_type(q, *a, forest) && select::is_basic_of_type(q, *b, plains) || select::is_basic_of_type(q, *a, plains) && select::is_basic_of_type(q, *b, forest),
         _ => false,
     }
 }

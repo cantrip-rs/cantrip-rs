@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::library::{self, Find};
+use cantrip_mechanics::{library, select};
 use cantrip_mechanics::statics::CREATURES_YOU_CONTROL_GET_PLUS_ONE;
 use cantrip_mechanics::tokens::{self, GNOME};
 use cantrip_mechanics::triggers::THIS_ENTERS;
@@ -10,11 +10,7 @@ use cantrip_oracle as oracle;
 /// Plains is a basic land type read through the Bricks' words (CR 612); a search for a quality may find nothing (CR
 /// 701.23b), and the life is gained either way.
 fn fetch_plains(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let plains = g.words(item.object).subtype(Subtype::Plains);
-    library::search_to_hand(g, item.controller, item.object, Find::ONE.revealed(), move |q, card| {
-        let chars = q.chars(card);
-        chars.supertypes.basic && chars.has_subtype(plains)
-    })?;
+    library::find_to_hand(g, item.controller, item.object, select::BASIC_PLAINS_CARD, true)?;
     g.gain_life(item.controller, 2);
     Ok(())
 }
