@@ -1,0 +1,46 @@
+# Artificial Evolution changes Bones's Doctor word to Wizard before its enters ability resolves. The Doctor card in
+# Bot1's graveyard is therefore a legal non-Wizard target (CR 612.1).
+
+[Bot1 Deck]
+Island
+Mox Emerald
+Mox Pearl
+Black Lotus
+Artificial Evolution
+Faithless Looting
+Dr. Beverly Crusher
+Dr. Leonard "Bones" McCoy
+Island
+Forest x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Dr. Beverly Crusher; Island)
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Dr. Leonard "Bones" McCoy.Cast
+Bot1.Hand.Artificial Evolution.Cast(Stack.Dr. Leonard "Bones" McCoy)
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Doctor)
+Bot1.Modes(Wizard)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Return target non-Doctor permanent card from your graveyard to your hand.)
+Bot1.Target(Bot1.Graveyard.Dr. Beverly Crusher)
+
+[Expect]
+Bot1.Hand.Dr. Beverly Crusher.Colors = White
+Bot1.Graveyard.Dr. Beverly Crusher = (absent)
