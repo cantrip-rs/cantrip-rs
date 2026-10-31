@@ -68,7 +68,11 @@ public sealed class SitePagesTests(WebClient web) : IAsyncLifetime
         {
             ContentRoot = WebClient.Content,
             Deck = rwAggro,
-            Formats = new Dictionary<string, IReadOnlyList<DeckList>> { ["standard"] = [rwAggro, DeckList.Load(DeckList.Find(decks, "ub-reanimator"))] },
+            // Decks from the Standard gauntlet, as the bot's site offers Standard: the server deals only a deck legal in it.
+            Formats = new Dictionary<string, IReadOnlyList<DeckList>>
+            {
+                ["standard"] = [DeckList.Load(DeckList.Find(Path.Combine(decks, "standard"), "boros-aggro")), DeckList.Load(DeckList.Find(Path.Combine(decks, "standard"), "dimir-midrange"))],
+            },
             Ports = ports[4..],
             Portraits = portraits.PathFor,
         });
@@ -126,7 +130,7 @@ public sealed class SitePagesTests(WebClient web) : IAsyncLifetime
         Assert.Null((await _drafts.JoinAsync(live.Draft!.Id, new DiscordPlayer(1003, "Carol"))).Refusal);
         _live = live.Draft.Id;
         Assert.Null((await _queues.CreateTableAsync(new QueueSettings { Format = "grid", Cube = "LSVCube", MinimumDeck = 40 }, new DiscordPlayer(1004, "Dana"))).Refusal);
-        Assert.Null((await _games.HostAsync(new DiscordPlayer(1005, "Erin"), "standard", "rw-aggro")).Refusal);
+        Assert.Null((await _games.HostAsync(new DiscordPlayer(1005, "Erin"), "standard", "boros-aggro")).Refusal);
     }
 
     public async Task DisposeAsync()

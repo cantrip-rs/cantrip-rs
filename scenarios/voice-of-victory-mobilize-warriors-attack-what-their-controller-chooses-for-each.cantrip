@@ -37,7 +37,7 @@ Bot2.Pass
 Bot1.Target(Bot2.Battlefield.Liliana of the Veil)
 Bot1.Target(Bot2)
 ? Combat.Attackers = Voice of Victory > Bot2; Warrior Token > Liliana of the Veil; Warrior Token > Bot2
-? Client.Bot1.Combat = Attacking Bot2: Voice of Victory, Warrior; Attacking Liliana of the Veil: Warrior Token
+? Client.Bot1.Combat = Attacking Bot2: Voice of Victory, Warrior Token; Attacking Liliana of the Veil: Warrior Token
 [T3 Bot1.Main2]
 
 [Expect]
