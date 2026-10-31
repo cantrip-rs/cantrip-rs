@@ -162,6 +162,13 @@ pub fn equipped_creature_cant_be_blocked(q: &dyn Query, source: ObjectId, _: Obj
     q.obj(source).attached_to != Some(attacker)
 }
 
+/// "Enchanted creature can't block" (CR 509.1b) as a `CardDef::block_rules` entry: no "has", so a rule of the Aura's, not an
+/// ability the creature gains (CR 113.1a). A creature that loses all its abilities is still under it (CR 613.1f). De-evolve,
+/// Convulsing Licid, Sluggishness and Visions of Brutality print it.
+pub fn enchanted_creature_cant_block(q: &dyn Query, source: ObjectId, blocker: ObjectId, _: ObjectId) -> bool {
+    q.obj(source).attached_to != Some(blocker)
+}
+
 /// "Enchanted creature" / "equipped creature" as a rule of the source's own that is no ability of the creature (CR 113.1a,
 /// 301.5, 303.4): the `CardDef::untap_bans`, `cant_become_untapped` and `sacrifice_bans` of an Aura or Equipment, true of
 /// exactly the permanent the source is attached to. It is no ability of that permanent, so the permanent losing all its
