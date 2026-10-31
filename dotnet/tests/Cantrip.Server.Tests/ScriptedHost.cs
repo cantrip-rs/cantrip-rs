@@ -62,6 +62,13 @@ internal sealed class ScriptedHost : IHostTransport
             case "Concede":
                 return Ok(PriorityStep(0, 0, finished: true));
 
+            // A game ended from outside its rules - a clock run out, a draw agreed - ends the rules' game too.
+            // A game ended from outside its rules - a clock run out, a draw agreed - ends the rules' game too: the seat
+            // named wins (its own team, at a table of two), or nobody, for a draw.
+            case "End":
+                JsonElement winner = root.GetProperty("Winner");
+                return Ok(PriorityStep(0, 0, finished: true, winningTeam: winner.ValueKind == JsonValueKind.Number ? winner.GetInt32() : 0));
+
             case "View":
                 return Ok($$"""{"View":{{View(root.GetProperty("Seat").GetInt32())}}}""");
 
@@ -87,13 +94,15 @@ internal sealed class ScriptedHost : IHostTransport
 
     private static string Ok(string body) => $$"""{"Ok":{{body}}}""";
 
-    private string PriorityStep(int requestId, int seat, bool finished)
+    private string PriorityStep(int requestId, int seat, bool finished, int winningTeam = 1)
     {
         string requests = requestId == 0
             ? "[]"
             : $$"""[{"RequestId":{{requestId}},"Seat":{{seat}},"Prompt":{"$type":"PriorityPromptMessage","Player":{{seat}},"Options":[]},"MayCancel":false}]""";
         string sequence = Numbered ? "\"Sequence\":40," : string.Empty;
-        string outcome = finished ? "\"Finished\":true,\"Outcome\":\"TeamWon\",\"WinningTeam\":1" : "\"Finished\":false,\"Outcome\":\"InProgress\",\"WinningTeam\":0";
+        string outcome = finished
+            ? winningTeam == 0 ? "\"Finished\":true,\"Outcome\":\"Draw\",\"WinningTeam\":0" : $"\"Finished\":true,\"Outcome\":\"TeamWon\",\"WinningTeam\":{winningTeam}"
+            : "\"Finished\":false,\"Outcome\":\"InProgress\",\"WinningTeam\":0";
         string shown = Public
             ? $$"""
                 "Public":{"View":{{View(0)}},
