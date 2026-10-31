@@ -117,8 +117,10 @@ public sealed partial class TabletPage
                         continue;
                     }
 
-                    TabletHalf? half = _halves.FirstOrDefault(each => each.Board == row);
-                    string place = half is null ? "stack" : half.Turned ? "opponent-battlefield" : "battlefield";
+                    TabletHalf? half = _halves.FirstOrDefault(each => each.Board == row || each.Pile.Board == row);
+                    string place = half is null ? (row == _stack.Board ? "stack" : "opponent-stack")
+                        : half.Pile.Board == row ? (half.Turned ? "opponent-" : string.Empty) + (half.Pile.Open?.Zone == ZoneKindView.Exile ? "exile" : "graveyard")
+                        : half.Turned ? "opponent-battlefield" : "battlefield";
                     GeneralTransform toPage = row.TransformToVisual(_root);
                     foreach ((ObjectView card, Rect box, bool visible, _, _) in row.Targets())
                     {
@@ -164,6 +166,24 @@ public sealed partial class TabletPage
                     json.WriteNumber("life", _client.View!.Players.FirstOrDefault(player => player.Seat == half.Seat)?.Life ?? 0);
                     json.WriteBoolean("turned", half.Turned);
                     WriteBox(json, avatar.TransformToVisual(_root).TransformBounds(new Rect(0, 0, avatar.ActualWidth, avatar.ActualHeight)));
+
+                    // The piles a finger opens: the graveyard, and the exile button while the seat has cards in exile.
+                    json.WriteStartArray("piles");
+                    FrameworkElement graveyard = half.Rail.GraveyardPile;
+                    if (graveyard.ActualWidth > 0)
+                    {
+                        WritePile(json, "graveyard", graveyard, half.Pile.Open?.Zone == ZoneKindView.Graveyard);
+                    }
+
+                    foreach ((string text, _, _, DockButton button) in half.Rail.ZoneButtonsShown())
+                    {
+                        if (text.StartsWith("Exile", StringComparison.Ordinal) && button.ActualWidth > 0)
+                        {
+                            WritePile(json, "exile", button, half.Pile.Open?.Zone == ZoneKindView.Exile);
+                        }
+                    }
+
+                    json.WriteEndArray();
                     json.WriteStartArray("mana");
                     json.WriteEndArray();
                     json.WriteEndObject();
@@ -187,6 +207,15 @@ public sealed partial class TabletPage
         }
 
         return System.Text.Encoding.UTF8.GetString(buffer.ToArray());
+    }
+
+    private void WritePile(Utf8JsonWriter json, string kind, FrameworkElement element, bool open)
+    {
+        json.WriteStartObject();
+        json.WriteString("kind", kind);
+        json.WriteBoolean("open", open);
+        WriteBox(json, element.TransformToVisual(_root).TransformBounds(new Rect(0, 0, element.ActualWidth, element.ActualHeight)));
+        json.WriteEndObject();
     }
 
     private static void WriteBox(Utf8JsonWriter json, Rect box)

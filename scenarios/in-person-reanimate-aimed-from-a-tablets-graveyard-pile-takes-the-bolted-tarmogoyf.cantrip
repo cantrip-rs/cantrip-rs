@@ -1,0 +1,45 @@
+# In-person play (docs/in-person.md): a target in a graveyard is tapped on a tablet, in the list its graveyard pile opens.
+# Bot1 Bolts Bot2's Tarmogoyf as in in-person-lightning-bolt-aimed-from-the-tablets-kills-tarmogoyf, then casts Reanimate
+# at the Goyf in Bot2's graveyard - the pile tapped on Bot2's half of a tablet, the Goyf tapped in it. At a table it is
+# the position the in-person browser tests play, and the script checks that each tap made the answer it means.
+#
+# Reanimate puts the Goyf onto the battlefield under Bot1's control and Bot1 loses life equal to its mana value, 2. With
+# Lightning Bolt (an instant) and Reanimate (a sorcery) in the graveyards, Tarmogoyf is 2/3 (CR 604.3).
+
+[Bot1 Deck]
+Mountain
+Swamp
+Lightning Bolt
+Reanimate
+Mountain x23
+
+[Bot2 Deck]
+Forest
+Tarmogoyf
+Forest x25
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Forest#2.Activate
+Bot2.Hand.Tarmogoyf.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Tarmogoyf)
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Reanimate.Cast(Bot2.Graveyard.Tarmogoyf)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard = Reanimate; Lightning Bolt
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Tarmogoyf.Power = 2
+Bot1.Battlefield.Tarmogoyf.Toughness = 3

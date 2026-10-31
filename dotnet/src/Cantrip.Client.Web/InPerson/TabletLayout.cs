@@ -51,6 +51,11 @@ public sealed class TabletHalf : Grid
         Grid.SetColumn(Area, 1);
         Children.Add(Area);
 
+        // A graveyard or exile opened from the rail lies over the battlefield, turned with the half.
+        Pile = new TabletPile();
+        Grid.SetColumn(Pile, 1);
+        Children.Add(Pile);
+
         if (turned)
         {
             RenderTransformOrigin = new Windows.Foundation.Point(0.5, 0.5);
@@ -73,6 +78,9 @@ public sealed class TabletHalf : Grid
 
     /// <summary>The battlefield's part of the half, which the rows are fitted to.</summary>
     public Grid Area { get; }
+
+    /// <summary>The seat's graveyard or exile, opened from its rail over the battlefield.</summary>
+    public TabletPile Pile { get; }
 
     /// <summary>Lays the battlefield's rows out at a card width, as <see cref="BoardRows.Lay"/> places them.</summary>
     public void Show(BoardRows.Laid laid, float cardWidth)

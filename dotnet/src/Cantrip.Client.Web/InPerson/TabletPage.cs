@@ -35,6 +35,12 @@ public sealed partial class TabletPage : UserControl
     /// <summary>The share of the page's height the stack band takes.</summary>
     private const double StackShare = 0.2;
 
+    /// <summary>
+    /// The share the shared board's band takes: two strips, the stack once facing each player, so each strip is near what a
+    /// player's own board gives the stack whole.
+    /// </summary>
+    private const double SharedStackShare = 0.28;
+
     private readonly Grid _root = new();
     private readonly FeedTransport _feed = new();
     private readonly GameClient _client;
@@ -45,6 +51,12 @@ public sealed partial class TabletPage : UserControl
     /// <summary>The halves shown: on the shared board the bottom one first.</summary>
     private readonly List<TabletHalf> _halves = [];
     private readonly TabletStack _stack = new();
+
+    /// <summary>
+    /// On the shared board, the stack again, turned to face seat 2: the band is mirrored, each player reading every spell
+    /// and ability on it upright on the strip nearest them, in the same order, the top of the stack at their right.
+    /// </summary>
+    private readonly TabletStack? _turnedStack;
     private readonly TargetArrowsElement _arrows = new();
     private readonly CardFlights _flights = new();
 
@@ -72,6 +84,7 @@ public sealed partial class TabletPage : UserControl
     public TabletPage()
     {
         _client = new GameClient(_feed);
+        _turnedStack = _side == 0 ? new TabletStack() : null;
         Content = _root;
         _root.Background = Theme.Brush(Theme.Window);
 
@@ -111,15 +124,23 @@ public sealed partial class TabletPage : UserControl
         if (_side == 0)
         {
             board.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            board.RowDefinitions.Add(new RowDefinition { Height = new GridLength(StackShare / (1 - StackShare) * 2, GridUnitType.Star) });
+            board.RowDefinitions.Add(new RowDefinition { Height = new GridLength(SharedStackShare / (1 - SharedStackShare) * 2, GridUnitType.Star) });
             board.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
 
             var top = new TabletHalf(seat: 2, turned: true);
             var bottom = new TabletHalf(seat: 1, turned: false);
+            var band = new Grid();
+            band.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            band.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            _turnedStack!.RenderTransformOrigin = new Point(0.5, 0.5);
+            _turnedStack.RenderTransform = new RotateTransform { Angle = 180 };
             Grid.SetRow(_stack, 1);
+            band.Children.Add(_turnedStack);
+            band.Children.Add(_stack);
+            Grid.SetRow(band, 1);
             Grid.SetRow(bottom, 2);
             board.Children.Add(top);
-            board.Children.Add(_stack);
+            board.Children.Add(band);
             board.Children.Add(bottom);
             _halves.Add(bottom);
             _halves.Add(top);
@@ -149,6 +170,9 @@ public sealed partial class TabletPage : UserControl
         foreach (TabletHalf half in _halves)
         {
             MakeTappable(half.Board, half.Turned);
+            MakeTappable(half.Pile.Board, half.Turned);
+            TabletHalf shutting = half;
+            half.Pile.Close.Clicked += () => ShowPile(shutting, null);
             int seat = half.Seat;
             half.Rail.Avatar.Tapped += (_, e) =>
             {
@@ -158,6 +182,10 @@ public sealed partial class TabletPage : UserControl
         }
 
         MakeTappable(_stack.Board, turned: false);
+        if (_turnedStack is not null)
+        {
+            MakeTappable(_turnedStack.Board, turned: true);
+        }
 
         _turnedInspector.RenderTransformOrigin = new Point(0.5, 0.5);
         _turnedInspector.RenderTransform = new RotateTransform { Angle = 180 };
@@ -229,7 +257,12 @@ public sealed partial class TabletPage : UserControl
     }
 
     /// <summary>Every row of cards on this tablet.</summary>
-    private IEnumerable<CardBoardElement> Boards() => [.. _halves.Select(half => half.Board), _stack.Board];
+    private IEnumerable<CardBoardElement> Boards() =>
+        [.. _halves.Select(half => half.Board), _stack.Board, .. _turnedStack is null ? [] : (CardBoardElement[])[_turnedStack.Board], .. _halves.Select(half => half.Pile.Board)];
+
+    /// <summary>Whether a row of cards on this tablet is turned to face seat 2 across the shared board.</summary>
+    private bool IsTurned(CardBoardElement board) =>
+        board == _turnedStack?.Board || _halves.Any(half => half.Turned && (half.Board == board || half.Pile.Board == board));
 
     /// <summary>The cards held up are not drawn where they lie meanwhile.</summary>
     private void Conceal()
@@ -237,9 +270,14 @@ public sealed partial class TabletPage : UserControl
         foreach (TabletHalf half in _halves)
         {
             half.Board.Concealed = (half.Turned ? _turnedInspector : _inspector).Concealed;
+            half.Pile.Board.Concealed = half.Board.Concealed;
         }
 
         _stack.Board.Concealed = _inspector.Concealed;
+        if (_turnedStack is not null)
+        {
+            _turnedStack.Board.Concealed = _turnedInspector.Concealed;
+        }
     }
 
     /// <summary>Takes in whatever the relay has sent, and draws the board again when anything changed.</summary>
@@ -344,6 +382,7 @@ public sealed partial class TabletPage : UserControl
         _root.UpdateLayout();
         LayOutHalves();
         _stack.Show(_client.Zone(ZoneKindView.Stack, 0), TurnLine(view));
+        _turnedStack?.Show(_client.Zone(ZoneKindView.Stack, 0), TurnLine(view));
 
         foreach (TabletHalf half in _halves)
         {
@@ -353,6 +392,7 @@ public sealed partial class TabletPage : UserControl
             }
 
             half.Background = Theme.Brush(view.ActivePlayer == half.Seat ? Theme.HalfActive : Theme.HalfIdle);
+            LayOutPile(half);
         }
 
         _lives.Text = string.Join("     ", view.Players.OrderBy(player => player.Seat).Select(player => $"{player.Name}  {player.Life}"));
@@ -484,12 +524,60 @@ public sealed partial class TabletPage : UserControl
             view.ActivePlayer == seat,
             view.PriorityPlayer == seat,
             new PlayerRail.PileSpec(_client.ZoneCount(ZoneKindView.Library, seat), null, null, false, null),
-            new PlayerRail.PileSpec(_client.ZoneCount(ZoneKindView.Graveyard, seat), graveyard.Count > 0 ? graveyard[^1] : null, null, false, null),
+            new PlayerRail.PileSpec(
+                _client.ZoneCount(ZoneKindView.Graveyard, seat),
+                graveyard.Count > 0 ? graveyard[^1] : null,
+                graveyard.Count > 0 ? () => TogglePile(half, ZoneKindView.Graveyard) : null,
+                false,
+                null),
             mana,
-            [],
+            ExileOf(seat) is { Count: > 0 } exiled
+                ? [new PlayerRail.ZoneButtonSpec(
+                    $"Exile  {exiled.Count}",
+                    $"The cards {TabletLayout.NameOf(_client, seat)} owns in exile",
+                    half.Pile.Open == (ZoneKindView.Exile, seat),
+                    () => TogglePile(half, ZoneKindView.Exile))]
+                : [],
             // A card in a hand that everyone at the table has been shown is face up in the fan.
             _client.NamedIn(ZoneKindView.Hand, seat),
             null);
+    }
+
+    /// <summary>The cards a seat owns in exile, as the public sees them: a card exiled face down is a back.</summary>
+    private List<ObjectView> ExileOf(int seat) => [.. _client.Zone(ZoneKindView.Exile, 0).Where(card => card.Owner == seat)];
+
+    /// <summary>What a pile holds now: a graveyard's cards bottom first, or a seat's cards in exile.</summary>
+    private IReadOnlyList<ObjectView> PileCards(ZoneKindView zone, int owner) =>
+        zone == ZoneKindView.Graveyard ? _client.Zone(ZoneKindView.Graveyard, owner) : ExileOf(owner);
+
+    /// <summary>A tap on a seat's graveyard pile or exile button: its list opened over the half, or shut if it was open.</summary>
+    private void TogglePile(TabletHalf half, ZoneKindView zone) =>
+        ShowPile(half, half.Pile.Open == (zone, half.Seat) ? null : (zone, half.Seat));
+
+    private void ShowPile(TabletHalf half, (ZoneKindView Zone, int Owner)? pile)
+    {
+        PutDown();
+        half.Pile.Show(pile);
+        _needsRedraw = true;
+    }
+
+    /// <summary>The open pile's cards laid out again, and the list shut once the pile is empty.</summary>
+    private void LayOutPile(TabletHalf half)
+    {
+        if (half.Pile.Open is not { } open)
+        {
+            return;
+        }
+
+        IReadOnlyList<ObjectView> cards = PileCards(open.Zone, open.Owner);
+        if (cards.Count == 0)
+        {
+            half.Pile.Show(null);
+            return;
+        }
+
+        string whose = TabletLayout.NameOf(_client, open.Owner);
+        half.Pile.Lay(open.Zone == ZoneKindView.Graveyard ? $"{whose}'s graveyard" : $"{whose}'s exile", cards);
     }
 
     /// <summary>Hands every card laid out now to the flight layer, which flies whatever the game moved.</summary>
@@ -550,21 +638,27 @@ public sealed partial class TabletPage : UserControl
     private void PaintArrows()
     {
         IReadOnlyList<ObjectView> stack = _client.Zone(ZoneKindView.Stack, 0);
-        if (stack.Count == 0 || stack[^1].Targets.Count == 0 || Box(_stack.Board, stack[^1].Handle) is not { } source)
+        if (stack.Count == 0 || stack[^1].Targets.Count == 0 || Box(_stack.Board, stack[^1].Handle) is not { } upright)
         {
             _arrows.Show([]);
             return;
         }
 
-        var from = new SKPoint(source.MidX, source.MidY);
+        // On the shared board an arrow starts from the strip of the stack nearest what it points at.
+        SKRect? turnedSource = _turnedStack is null ? null : Box(_turnedStack.Board, stack[^1].Handle);
         List<(SKPoint From, SKPoint To)> arrows = [];
         foreach (SpellTargetView target in stack[^1].Targets)
         {
+            TabletHalf? playerHalf = target.IsPlayer ? _halves.FirstOrDefault(half => half.Seat == target.Player) : null;
+            CardBoardElement? holder = target.IsPlayer ? null : Boards().Where(board => board != _stack.Board && board != _turnedStack?.Board)
+                .FirstOrDefault(board => Box(board, target.Object) is not null);
             SKRect? box = !target.StillLegal ? null
-                : target.IsPlayer ? _halves.FirstOrDefault(half => half.Seat == target.Player) is { } half
-                    ? BoxOf(half.Rail.Avatar, new Rect(0, 0, half.Rail.Avatar.ActualWidth, half.Rail.Avatar.ActualHeight))
-                    : null
-                : Boards().Select(board => Box(board, target.Object)).FirstOrDefault(found => found is not null);
+                : playerHalf is { } half ? BoxOf(half.Rail.Avatar, new Rect(0, 0, half.Rail.Avatar.ActualWidth, half.Rail.Avatar.ActualHeight))
+                : target.IsPlayer ? null
+                : holder is not null ? Box(holder, target.Object) : Box(_stack.Board, target.Object);
+            bool towardsTop = target.IsPlayer ? playerHalf?.Turned == true : holder is not null && IsTurned(holder);
+            SKRect source = towardsTop && turnedSource is { } turned ? turned : upright;
+            var from = new SKPoint(source.MidX, source.MidY);
             if (box is { } to)
             {
                 arrows.Add((from, TargetArrowsElement.Edge(to, from)));
@@ -676,7 +770,7 @@ public sealed partial class TabletPage : UserControl
         }
 
         _press = press with { Held = true };
-        bool turned = _halves.Any(half => half.Turned && half.Board == press.Board);
+        bool turned = IsTurned(press.Board);
         Inspect(press.Board, turned, press.Handle, box, placed.Angle, press.At);
     }
 
