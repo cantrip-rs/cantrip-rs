@@ -129,7 +129,40 @@ public sealed partial class MainPage
 
         BuildRefusal();
         ShowBoard(false);
+        HideLongClocks();
     }
+
+    /// <summary>
+    /// A clock with more than this left is not shown on the phone: an in-person table plays with its clocks "off", which
+    /// the server keeps as clocks too long to matter (days for the table, hours for deck building), not as none.
+    /// </summary>
+    private static readonly TimeSpan LongestClockShown = TimeSpan.FromDays(1);
+
+    /// <summary>
+    /// Hides every clock with more than <see cref="LongestClockShown"/> left: the match clocks on the rails, and the
+    /// draft's, deck building's and the next round's lines, blanked as they are written.
+    /// </summary>
+    private void HideLongClocks()
+    {
+        _myHalf.Rail.HideClockOver = LongestClockShown;
+        _opponentHalf.Rail.HideClockOver = LongestClockShown;
+
+        foreach (TextBlock clock in (TextBlock[])[_eventClock, _gridClock, _deckClock])
+        {
+            BlankWhenLong(clock, () => _clockBy);
+        }
+
+        BlankWhenLong(_roundClock, () => _roundBy);
+    }
+
+    private static void BlankWhenLong(TextBlock clock, Func<DateTime?> by) =>
+        clock.RegisterPropertyChangedCallback(TextBlock.TextProperty, (_, _) =>
+        {
+            if (clock.Text.Length > 0 && by() is { } until && until - DateTime.UtcNow > LongestClockShown)
+            {
+                clock.Text = string.Empty;
+            }
+        });
 
     /// <summary>The dock across the phone's whole width, whatever width the remote client's dock would take.</summary>
     private void FitDock(double width)

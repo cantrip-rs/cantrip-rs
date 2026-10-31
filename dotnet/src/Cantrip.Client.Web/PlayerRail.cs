@@ -226,6 +226,13 @@ public sealed class PlayerRail : Border
     /// </summary>
     public void ShowClock((TimeSpan Left, bool Running)? clock)
     {
+        // A clock with more time on it than this is no clock to the player: shown as none (an in-person phone's, whose
+        // table's clocks are off).
+        if (clock is { } far && HideClockOver is { } over && far.Left > over)
+        {
+            clock = null;
+        }
+
         _clockLeft = clock?.Left;
         _clockRunning = clock?.Running ?? false;
         if (clock is not { } shown)
@@ -244,6 +251,12 @@ public sealed class PlayerRail : Border
             : "Match clock: time left for the whole match. It runs while the game waits on this player.");
         PaintClock();
     }
+
+    /// <summary>
+    /// A match clock with more left than this is not shown, as for a game with none; null (every page but an in-person
+    /// phone, MainPage.InPerson.cs) shows every clock.
+    /// </summary>
+    public TimeSpan? HideClockOver { get; set; }
 
     /// <summary>Under this much left on the match clock, it and the PRIORITY badge turn red.</summary>
     private static readonly TimeSpan ClockLow = TimeSpan.FromMinutes(5);

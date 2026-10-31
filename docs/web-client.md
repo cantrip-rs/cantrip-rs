@@ -423,7 +423,9 @@ constructor (`AttachPhone`), and does nothing on any other page: the remote clie
   above them this player's rail (life, mana pool, piles) with the stack and any choice window floating beside it. The
   whole board, both halves as the remote client draws them, is behind **Board**: the tablets show the public board, and
   only the phone can show its owner what they alone may see there, such as their face-down cards. The side panel starts
-  closed, without touching the remote client's setting, and opens over the table. The draft and deck building are the
+  closed, without touching the remote client's setting, and opens over the table. A clock with more than a day left is not
+  shown (`PlayerRail.HideClockOver` for the match clocks, the draft's, deck building's and the round's lines blanked):
+  an in-person table's clocks are "off" as clocks of days and hours, not as none. The draft and deck building are the
   page's own, at a phone's size (`DraftTests.A_grid_draft_is_drafted_on_an_in_person_phone`).
 - **Taps on the tablets.** The relay hands the phone a tap on a tablet routed to its seat (`SeatTapMessage`, already in
   this seat's handles), and the page does exactly what a click on that card, or that player's box (`PlayerClick`), does
