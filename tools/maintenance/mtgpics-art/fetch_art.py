@@ -5,8 +5,9 @@
 
 Writes <out-dir>/<slug>.jpg (the client's CardArt.Slug: lower case, hyphens, no apostrophes) and prints one line a card:
 `OK`, `OK SCRYFALL` (Scryfall's crop: mtgpics has no copy of the original), `OK PROMO-ONLY` (mtgpics holds no regular
-printing's art), `NOART` or `ERR`. With --install <out-dir> is
-content/mtg/images, and a file that exists is replaced only by a larger picture.
+printing's art), `NOART` or `ERR`. A card whose file is already in <out-dir> is skipped unfetched (`SKIP`), so an
+interrupted run is resumed by running it again. With --install <out-dir> is content/mtg/images, every card is fetched,
+and a file that exists is replaced only by a larger picture.
 
 How mtgpics is laid out (found by hand, no API):
   POST results?zbob=1  cardtitle_search=<name>   one hit answers `<script>location="card?ref=<ref>"`, several a list page
@@ -231,6 +232,9 @@ def main():
     SETS.update(load_sets())
     os.makedirs(out, exist_ok=True)
     for name in names:
+        if not install and os.path.exists(os.path.join(out, slug(name) + ".jpg")):
+            print("SKIP " + name, flush=True)
+            continue
         try:
             print(fetch(name, out, install), flush=True)
         except Exception as e:
