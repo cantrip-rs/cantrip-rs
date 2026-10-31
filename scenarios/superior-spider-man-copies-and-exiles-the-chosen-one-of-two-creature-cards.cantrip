@@ -1,0 +1,42 @@
+# Mind Swap with two creature cards to choose from: Bot2 discards Ornithopter and then Memnite to hand size. Bot1 chooses
+# Memnite, the second card offered, so Superior Spider-Man enters as a 4/4 Memnite copy, and "When you do, exile that card"
+# exiles Memnite, the card chosen, leaving the Ornithopter in Bot2's graveyard (CR 707.2, 603.12).
+
+[Bot1 Deck]
+Sol Ring
+Superior Spider-Man
+Swamp
+Swamp
+Island
+Swamp x15
+
+[Bot2 Deck]
+Island x7
+Ornithopter
+Memnite
+Island x11
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Swamp.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T5 Bot1.Main1]
+? Bot2.Graveyard = Memnite; Ornithopter
+Bot1.Hand.Island.Play
+Bot1.Hand.Superior Spider-Man.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Accept
+Bot1.Target(Bot2.Graveyard.Memnite)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Exile = Memnite
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Superior Spider-Man.Power = 4
+Bot1.Battlefield.Superior Spider-Man.Toughness = 4
+Bot1.Battlefield.Superior Spider-Man.Subtypes = Construct; Hero; Human; Spider

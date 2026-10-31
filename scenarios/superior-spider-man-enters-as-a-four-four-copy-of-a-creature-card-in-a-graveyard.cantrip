@@ -32,7 +32,6 @@ Bot1.Battlefield.Island.Activate
 Bot1.Battlefield.Swamp.Activate
 Bot1.Battlefield.Sol Ring.Activate
 Bot1.Accept
-Bot1.Target(Bot2.Graveyard.Ornithopter)
 [T5 Bot1.Main2]
 
 [Expect]

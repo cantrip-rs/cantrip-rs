@@ -1,4 +1,5 @@
 use cantrip_api::*;
+use cantrip_mechanics::copy;
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new(
@@ -26,27 +27,9 @@ fn copyable(g: &dyn Game) -> Vec<ObjectId> {
 /// creature card. "When you do" is a reflexive trigger (CR 603.12) that exile that card.
 fn mind_swap(g: &mut dyn Game, entry: &mut Entering) -> Result<(), Suspend> {
     let entering = entry.object;
-    let cards = copyable(g);
-    if cards.is_empty() {
-        return Ok(());
-    }
     let controller = entry.controller;
-    if g.ask(controller, RequestKind::May { source: entering, purpose: Purpose::Ask(&ASK) })? != Answer::Yes {
-        return Ok(());
-    }
-    let ask = RequestKind::ChooseTarget { label: "", slot_player: None, together: None,
-        source: entering,
-        purpose: Purpose::CopyWhich,
-        candidates: cards.iter().map(|&id| Target::Object(id)).collect(),
-        optional: false,
-        least: 1,
-        count: 1,
-        any_number: false,
-    };
-    let chosen = match g.ask(controller, ask)? {
-        Answer::Targets(t) => t.first().and_then(|t| t.object()).unwrap_or(cards[0]),
-        _ => cards[0],
-    };
+    let cards = copyable(g);
+    let Some(chosen) = copy::choose_copy_of_one_of(g, entry, &cards, &ASK)? else { return Ok(()) };
     let words = g.words(entering);
     entry.copy = Some(
         g.copiable_values(chosen)

@@ -46,7 +46,6 @@ Bot1.Modes(Goblin)
 Bot1.Pass
 Bot2.Pass
 Bot1.Accept
-Bot1.Target(Bot2.Graveyard.Ornithopter)
 [T5 Bot1.Main2]
 
 [Expect]
