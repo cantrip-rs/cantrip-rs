@@ -50,6 +50,17 @@ pub fn plus_one_counters_apply(proposal: &mut Proposal) {
     }
 }
 
+/// "... that many plus one of each of those kinds of counters": one more of each kind being put, and none of a kind that
+/// wasn't (CR 122.6, 614.1a). Each such effect applies once (CR 614.5), so a second adds another. Doc Samson, Super
+/// Psychiatrist and Brad Boimler, Eager Ensign print it.
+pub fn plus_one_of_each_kind_apply(proposal: &mut Proposal) {
+    if let Proposal::Counters(c) = proposal {
+        for n in c.counts.iter_mut().filter(|n| **n > 0) {
+            *n += 1;
+        }
+    }
+}
+
 /// "If one or more tokens would be created under your control" (CR 111.1, 614.1a): whose they would be, not who makes
 /// them.
 fn tokens_under_your_control(_: &dyn Query, asker: &Asker, proposal: &Proposal) -> bool {

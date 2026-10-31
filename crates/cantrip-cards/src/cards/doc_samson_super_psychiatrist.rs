@@ -1,4 +1,5 @@
 use cantrip_api::*;
+use cantrip_mechanics::replacements;
 use cantrip_oracle as oracle;
 
 /// "If you would put one or more counters on a permanent you control" (CR 122.6, 614.1a): the counters of any kinds that its
@@ -10,13 +11,9 @@ fn you_put_counters_on_your_permanent(q: &dyn Query, asker: &Asker, proposal: &P
     c.putter == asker.controller && c.controller == asker.controller && (c.entering || q.is_on_battlefield(c.object)) && c.counts.iter().any(|&n| n > 0)
 }
 
-/// "... put that many plus one of each of those kinds of counters on that permanent instead": one more of each kind that would be
-/// put, and none of a kind that wasn't. Each such effect applies once (CR 614.5), so a second Doc Samson adds another.
+/// "... put that many plus one of each of those kinds of counters on that permanent instead" (CR 122.6, 614.1a).
 fn that_many_plus_one(_: &dyn Query, _: &Asker, proposal: &mut Proposal) {
-    let Proposal::Counters(c) = proposal else { return };
-    for n in c.counts.iter_mut().filter(|n| **n > 0) {
-        *n += 1;
-    }
+    replacements::plus_one_of_each_kind_apply(proposal);
 }
 
 /// "{T}: Add X mana of any one color, where X is Doc Samson's power." (CR 106.5, 605.1a): his power as the ability resolves, the
