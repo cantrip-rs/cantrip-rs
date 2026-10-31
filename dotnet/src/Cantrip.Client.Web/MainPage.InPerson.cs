@@ -38,6 +38,9 @@ public sealed partial class MainPage
     private readonly List<(SeatTapMessage Tap, bool Used, bool Held)> _tableTapsSettled = [];
 
     private PhoneLink? _phoneLink;
+
+    /// <summary>Deck building made for a phone, over the page while the table builds decks (InPerson/PhoneDeckBuilder.cs).</summary>
+    private PhoneDeckBuilder? _phoneDeck;
     private DockButton _boardButton = null!;
     private bool _boardShown;
     private Border _refusal = null!;
@@ -61,6 +64,12 @@ public sealed partial class MainPage
         ApplyPhoneLayout();
         _phoneLink = new PhoneLink(TakeTableTap);
 
+        // Over the event's own deck building, which a phone's width squeezes, and over everything else of the page.
+        _phoneDeck = new PhoneDeckBuilder();
+        Grid.SetRowSpan(_phoneDeck, 3);
+        Grid.SetColumnSpan(_phoneDeck, 2);
+        Root.Children.Add(_phoneDeck);
+
         var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(30) };
         timer.Tick += (_, _) => TickPhone();
         timer.Start();
@@ -70,6 +79,7 @@ public sealed partial class MainPage
     {
         _phoneLink?.Pump();
         SettleTableTaps();
+        _phoneDeck?.Follow(_gameClient);
 
         if (_refusal.Visibility == Visibility.Visible && DateTime.UtcNow >= _refusalUntil)
         {

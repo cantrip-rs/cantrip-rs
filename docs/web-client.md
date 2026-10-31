@@ -425,8 +425,18 @@ constructor (`AttachPhone`), and does nothing on any other page: the remote clie
   only the phone can show its owner what they alone may see there, such as their face-down cards. The side panel starts
   closed, without touching the remote client's setting, and opens over the table. A clock with more than a day left is not
   shown (`PlayerRail.HideClockOver` for the match clocks, the draft's, deck building's and the round's lines blanked):
-  an in-person table's clocks are "off" as clocks of days and hours, not as none. The draft and deck building are the
-  page's own, at a phone's size (`DraftTests.A_grid_draft_is_drafted_on_an_in_person_phone`).
+  an in-person table's clocks are "off" as clocks of days and hours, not as none. The draft is the page's own, at a
+  phone's size.
+- **Deck building** on the phone is its own (`InPerson/PhoneDeckBuilder.cs`), over the page while the table builds decks,
+  rather than the pool's columns squeezed to a phone: one list at a time - **Deck**, **Sideboard**, **Basics** - its cards
+  as rows a finger's height tall (name and cost over the type line), grouped by mana value, colour or type and narrowed
+  by colour chips. A tap on a row moves the card between the deck and the sideboard, and its **View** shows the card
+  whole; basic lands have steppers. Over the lists: the count against the least with a bar, what is still needed, the
+  curve of the deck's spells, how many creatures, other spells and lands, and **Submit**. It sends what the pool sends
+  (`GameClient.BuildDeck`, every change as it is made) and shows the server's deck once it has caught up with the changes
+  sent (`DeckCaughtUp`); a companion stays one only while in the sideboard. The remote client's pool is untouched: the
+  builder is made only on a phone's page. `DraftTests.A_grid_draft_is_drafted_on_an_in_person_phone` drafts a grid on a
+  phone and builds the deck there with a finger, the event's record checked after each change.
 - **Taps on the tablets.** The relay hands the phone a tap on a tablet routed to its seat (`SeatTapMessage`, already in
   this seat's handles), and the page does exactly what a click on that card, or that player's box (`PlayerClick`), does
   here: a land tapped at priority, while a cost is paid or while X is announced; a target; an attacker's or a blocker's

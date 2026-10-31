@@ -121,6 +121,12 @@ public sealed partial class MainPage
                 busy.Add("redraw");
             }
 
+            // A phone's deck building whose list was just made again and is not laid out yet (MainPage.InPerson.cs).
+            if (_phoneDeck?.Laying == true)
+            {
+                busy.Add("phone-deck");
+            }
+
             // Creatures on their way to the attacker clicked, one block at a time as the host's verdicts allow.
             if (_blockQueue.Count > 0)
             {
@@ -523,6 +529,7 @@ public sealed partial class MainPage
 
         json.WriteEndArray();
         json.WriteString("refusal", _refusal.Visibility == Visibility.Visible ? _refusalText.Text : string.Empty);
+        _phoneDeck?.WriteTest(json, Root);
         json.WriteEndObject();
     }
 

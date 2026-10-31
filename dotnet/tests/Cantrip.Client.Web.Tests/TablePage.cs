@@ -334,7 +334,32 @@ public sealed record TableState(
 /// A phone at an in-person table (MainPage.InPerson.cs): whether its Board is shown, how many taps from the tablets wait,
 /// each tap it settled, and the line saying a tap did nothing while it is up. Null for any other page.
 /// </summary>
-public sealed record InPersonState(string Role, bool Board, int Waiting, IReadOnlyList<TableTapState> Taps, string Refusal);
+public sealed record InPersonState(string Role, bool Board, int Waiting, IReadOnlyList<TableTapState> Taps, string Refusal, PhoneDeckState? Deck = null);
+
+/// <summary>
+/// A phone's deck building (InPerson/PhoneDeckBuilder.cs): whether it is up, the list shown (<c>Deck</c>, <c>Sideboard</c>,
+/// <c>Lands</c>), the deck's size against the least, whether it is submitted or a card is shown whole, the rows and buttons
+/// in view, and the basic lands.
+/// </summary>
+public sealed record PhoneDeckState(
+    bool Shown,
+    string Tab,
+    int Size,
+    int Minimum,
+    bool Submitted,
+    bool Preview,
+    IReadOnlyList<PhoneDeckRow> Rows,
+    IReadOnlyList<PhoneDeckButton> Buttons,
+    IReadOnlyList<PhoneDeckBasic> Basics);
+
+/// <summary>A card's row: its name, its place in the pool, whether it is in the deck, and its box on the page.</summary>
+public sealed record PhoneDeckRow(string Name, int Place, bool InDeck, float X, float Y, float W, float H);
+
+/// <summary>A button of the phone's deck building: "Submit deck", "Tab Lands", "Add Mountain", "Colour red", "By type", "Show Name".</summary>
+public sealed record PhoneDeckButton(string Label, bool Enabled, float X, float Y, float W, float H);
+
+/// <summary>A basic land and how many are in the deck.</summary>
+public sealed record PhoneDeckBasic(string Name, int Count);
 
 /// <summary>One tap from a tablet a phone settled: the seat's object tapped or the player, the request it was for, whether it was used and had to wait for its prompt.</summary>
 public sealed record TableTapState(int TapId, int RequestId, int Handle, int Player, bool Used, bool Held);

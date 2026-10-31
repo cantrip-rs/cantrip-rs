@@ -198,6 +198,11 @@ public sealed class DraftTests(WebClient web)
         Assert.Equal(27, drafted.PoolOf(1).Count + drafted.PoolOf(2).Count + drafted.Discarded.Count);
         Assert.Equal(drafted.PoolOf(1), record.Participant("you")!.Pool);
 
+        if (phone)
+        {
+            await BuildOnThePhoneAsync(page, store, created.Record.Id);
+        }
+
         await playing.CancelAsync();
         await botPlays;
         bot.Disconnect();
@@ -206,6 +211,89 @@ public sealed class DraftTests(WebClient web)
         static IEnumerable<int> GridLine(int line) => line < 3
             ? Enumerable.Range(0, 3).Select(column => (line * 3) + column)
             : Enumerable.Range(0, 3).Select(row => (row * 3) + (line - 3));
+    }
+
+    /// <summary>
+    /// The deck built on the phone (InPerson/PhoneDeckBuilder.cs), tapped with a finger at a phone's size: a card tapped out
+    /// of the deck and another after it, the first tapped back from the sideboard, the list narrowed to a colour and grouped
+    /// by type, a card shown whole, three Mountains added with the stepper, and Submit - each change the server's, as the
+    /// event's record says.
+    /// </summary>
+    private static async Task BuildOnThePhoneAsync(TablePage page, EventStore store, string eventId)
+    {
+        TableState state = await page.SettledAsync(state => state.InPerson?.Deck is { Shown: true, Rows.Count: > 1 });
+        PhoneDeckState deck = state.InPerson!.Deck!;
+        await page.PictureAsync("phone-deck");
+        Assert.Equal("Deck", deck.Tab);
+        Assert.All(deck.Rows, row => Assert.True(row.H >= 44, $"{row.Name}'s row is {row.H} px tall, too small to tap."));
+        Assert.All(deck.Rows, row => Assert.True(row.X - (row.W / 2) >= 0 && row.X + (row.W / 2) <= TablePage.PhoneViewport.Width, $"{row.Name}'s row runs off the phone."));
+
+        // Out of the deck with a tap, and another; the first back from the sideboard.
+        PhoneDeckRow first = deck.Rows[0];
+        PhoneDeckRow second = deck.Rows[1];
+        await page.TapAsync(first.X, first.Y);
+        state = await page.SettledAsync(state => state.InPerson!.Deck!.Rows.Any(row => row.Place == second.Place) && !state.InPerson.Deck.Rows.Any(row => row.Place == first.Place));
+        PhoneDeckRow again = state.InPerson!.Deck!.Rows.First(row => row.Place == second.Place);
+        await page.TapAsync(again.X, again.Y);
+        await page.SettledAsync(state => state.InPerson!.Deck!.Rows.Count > 0 && !state.InPerson.Deck.Rows.Any(row => row.Place == second.Place));
+        await TapDeckButtonAsync(page, "Tab Sideboard");
+        state = await page.SettledAsync(state => state.InPerson!.Deck!.Tab == "Sideboard" && state.InPerson.Deck.Rows.Any(row => row.Place == first.Place));
+        await page.PictureAsync("phone-deck-sideboard");
+        PhoneDeckRow back = state.InPerson!.Deck!.Rows.Single(row => row.Place == first.Place);
+        Assert.False(back.InDeck);
+        await page.TapAsync(back.X, back.Y);
+        await page.SettledAsync(state => state.InPerson!.Deck!.Rows.All(row => row.Place != first.Place));
+        await ServerHasAsync(store, eventId, deck => deck.Main.Contains(first.Place) && !deck.Main.Contains(second.Place), "the deck without the second card and with the first back");
+
+        // Narrowed to a colour, grouped by type, a card shown whole.
+        await TapDeckButtonAsync(page, "Tab Deck");
+        await TapDeckButtonAsync(page, "Colour red");
+        await page.SettledAsync();
+        await page.PictureAsync("phone-deck-red");
+        await TapDeckButtonAsync(page, "Colour red");
+        await TapDeckButtonAsync(page, "By type");
+        state = await page.SettledAsync();
+        await page.PictureAsync("phone-deck-by-type");
+        PhoneDeckButton show = state.InPerson!.Deck!.Buttons.First(button => button.Label.StartsWith("Show ", StringComparison.Ordinal));
+        await page.TapAsync(show.X, show.Y);
+        await page.SettledAsync(state => state.InPerson!.Deck!.Preview);
+        await page.PictureAsync("phone-deck-card-shown");
+        await page.TapAsync(TablePage.PhoneViewport.Width / 2f, 40);
+        await page.SettledAsync(state => !state.InPerson!.Deck!.Preview);
+
+        // Three Mountains with the stepper, then Submit.
+        await TapDeckButtonAsync(page, "Tab Lands");
+        for (int i = 0; i < 3; i++)
+        {
+            await TapDeckButtonAsync(page, "Add Mountain");
+            int added = i + 1;
+            await page.SettledAsync(state => state.InPerson!.Deck!.Basics.Any(land => land.Name == "Mountain" && land.Count == added));
+        }
+
+        await page.PictureAsync("phone-deck-lands");
+        await ServerHasAsync(store, eventId, deck => deck.Basics.GetValueOrDefault("Mountain") == 3, "three Mountains");
+        state = await page.SettledAsync();
+        Assert.True(state.InPerson!.Deck!.Buttons.Single(button => button.Label == "Submit deck").Enabled, "Submit is not offered for a deck big enough.");
+        await TapDeckButtonAsync(page, "Submit deck");
+        await ServerHasAsync(store, eventId, deck => deck.Submitted, "the deck submitted");
+        await page.PictureAsync("phone-deck-submitted");
+    }
+
+    private static async Task TapDeckButtonAsync(TablePage page, string label)
+    {
+        TableState state = await page.SettledAsync(state => state.InPerson?.Deck?.Buttons.Any(button => button.Label == label) == true);
+        PhoneDeckButton button = state.InPerson!.Deck!.Buttons.First(each => each.Label == label);
+        await page.TapAsync(button.X, button.Y);
+    }
+
+    private static async Task ServerHasAsync(EventStore store, string eventId, Func<EventDeck, bool> holds, string what)
+    {
+        DateTime giveUp = DateTime.UtcNow + TimeSpan.FromSeconds(20);
+        while (!holds(store.LoadEvent(eventId)!.Participant("you")!.Deck))
+        {
+            Assert.True(DateTime.UtcNow < giveUp, $"The server never had {what}.");
+            await Task.Delay(100);
+        }
     }
 
     private async Task Draft(string data)
