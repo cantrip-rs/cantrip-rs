@@ -288,12 +288,14 @@ public sealed class InPersonHost : IAsyncDisposable
 
         int sitePort = Site.Port;
         string game = Uri.EscapeDataString($"ws://{lan}:{server.Port}/game");
+        // A tablet is sent no TableMessage, which tells a seat's page where art is: its link says.
+        string tabletArt = Uri.EscapeDataString($"http://{lan}:{art.Urls.Select(each => new Uri(each).Port).First(port => port != 0)}/");
         List<Device> links =
         [
             .. players.Select(player => new Device($"{player.Name}'s phone",
                 $"http://{lan}:{sitePort}/?inperson=phone&server={game}#ticket={tickets[player.Seat]}")),
             .. tablets.Select(tablet => new Device(tablet.Side == 0 ? "The shared tablet" : $"{players[tablet.Side - 1].Name}'s tablet",
-                $"http://{lan}:{sitePort}/?inperson=tablet&side={tablet.Side}#device={tablet.Token}")),
+                $"http://{lan}:{sitePort}/?inperson=tablet&side={tablet.Side}&art={tabletArt}#device={tablet.Token}")),
         ];
         _site.Logger.LogInformation("In person: event {Event} at ws://{Address}:{Port}/game; devices at http://{Address}:{Site}/.", pod.EventId, lan, server.Port, lan, sitePort);
         return new Table(pod, relay, server, art, links, lan);
