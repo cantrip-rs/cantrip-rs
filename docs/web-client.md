@@ -432,9 +432,11 @@ constructor (`AttachPhone`), and does nothing on any other page: the remote clie
   here: a land tapped at priority, while a cost is paid or while X is announced; a target; an attacker's or a blocker's
   pick. It acts only on the request the tap was routed to, once that prompt has been drawn; a tap that beats its prompt
   waits about a second for it, and taps are taken in the order they came. A menu the click opens (a land's colours) opens
-  in the middle of the phone. The phone says whether the tap was used (`TapResultMessage`); one it could not use - its
-  prompt past, or the thing tapped no choice now - is said on the phone with a short line over the dock and a buzz where
-  the browser can vibrate (`Phone.js`), and never on the tablet.
+  in the middle of the phone. The phone says whether the tap was used (`TapResultMessage`). One its question on screen
+  could not take - the thing tapped no choice in it - is said on the phone with a short line over the dock and a buzz
+  where the browser can vibrate (`Phone.js`), and never on the tablet. One routed to a question already past, or to one
+  that never reached the page, is let go without a word: the relay passes it on, perhaps to the other seat, which may use
+  it (the host asks one question at a time, so the question on screen is the only one a tap could be meant for here).
 - **Testing.** Under `?test`, the test state's `inPerson` is the phone's Board, the taps waiting, every tap settled (used,
   held for its prompt) and the line up now; a test stands in for the relay by queueing taps on
   `globalThis.cantripTableTaps` (`o12@34;` the seat's object 12 for request 34, `p2@34;` player 2), since `cantripTest`

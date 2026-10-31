@@ -212,22 +212,25 @@ public sealed partial class MainPage
         while (_tableTaps.Count > 0)
         {
             TableTap first = _tableTaps[0];
-            bool? used = TryTableTap(first.Tap);
-            if (used is null && DateTime.UtcNow < first.Until)
+            TableTapOutcome outcome = TryTableTap(first.Tap);
+            if (outcome == TableTapOutcome.Waiting && DateTime.UtcNow < first.Until)
             {
                 first.Held = true;
                 return;
             }
 
             _tableTaps.RemoveAt(0);
-            bool taken = used ?? false;
+            bool taken = outcome == TableTapOutcome.Used;
             _tableTapsSettled.Add((first.Tap, taken, first.Held));
             if (_tableTapsSettled.Count > 64)
             {
                 _tableTapsSettled.RemoveAt(0);
             }
 
-            if (!taken)
+            // Said only for a tap this phone's own question was asking about and could not take. A tap routed to a question
+            // already answered, or to one that never reached the page, is the relay's to pass on - to this seat's next
+            // question or the other seat's, which may well use it - so the phone says nothing of it.
+            if (outcome == TableTapOutcome.NoChoice)
             {
                 Refuse();
             }
@@ -236,34 +239,47 @@ public sealed partial class MainPage
         }
     }
 
-    /// <summary>
-    /// A tap from a tablet acted on as a click on this page: true when it did something, false when it could not (its
-    /// prompt is past, or the card or player tapped is no choice now), null while its prompt has not been drawn yet.
-    /// </summary>
-    private bool? TryTableTap(SeatTapMessage tap)
+    /// <summary>What a tap from a tablet came to on this page.</summary>
+    private enum TableTapOutcome
+    {
+        /// <summary>Its question has not been drawn here yet.</summary>
+        Waiting,
+
+        /// <summary>Acted on, as a click on the card or the player would be.</summary>
+        Used,
+
+        /// <summary>Its question is past, or the game is: not this phone's to use any more.</summary>
+        Past,
+
+        /// <summary>Its question is the one on screen, and what was tapped is no choice in it.</summary>
+        NoChoice,
+    }
+
+    /// <summary>A tap from a tablet acted on as a click on this page, if its question is the one on screen.</summary>
+    private TableTapOutcome TryTableTap(SeatTapMessage tap)
     {
         if (_gameClient is not { } client || client.IsOver)
         {
-            return false;
+            return TableTapOutcome.Past;
         }
 
         // Answered, and the next question - perhaps this one asked again, as a payment is after each mana ability - is
         // on its way.
         if (client.Prompt is not { } prompt || prompt.RequestId < tap.RequestId)
         {
-            return null;
+            return TableTapOutcome.Waiting;
         }
 
         if (prompt.RequestId > tap.RequestId)
         {
-            return false;
+            return TableTapOutcome.Past;
         }
 
         // Only a prompt this page has read and drawn, so the tap does what a click on what is drawn would.
         RedrawNow();
         if (_needsRedraw)
         {
-            return null;
+            return TableTapOutcome.Waiting;
         }
 
         Action? click = tap.Object.IsNone
@@ -271,7 +287,7 @@ public sealed partial class MainPage
             : client.Object(tap.Object) is { } card ? LookOf(client, card).Clicked : null;
         if (click is null)
         {
-            return false;
+            return TableTapOutcome.NoChoice;
         }
 
         // A menu the click opens - a land's colours, a card's abilities - opens in the middle of the phone, where the
@@ -280,7 +296,7 @@ public sealed partial class MainPage
         _autoManaHeld = false;
         click();
         RedrawNow();
-        return true;
+        return TableTapOutcome.Used;
     }
 
     /// <summary>The phone's word that a tap on the table did nothing: a line over the dock, and a buzz where the phone can.</summary>

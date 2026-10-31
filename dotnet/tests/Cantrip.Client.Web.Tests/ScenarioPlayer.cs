@@ -1108,27 +1108,30 @@ public sealed class ScenarioPlayer
 
     /// <summary>
     /// Three taps on the tablets the phone must not use, made before its first real one, each leaving the question where it
-    /// was and saying so on the phone: a player who is no choice now; a tap routed to a request already past, let go at
-    /// once; and one routed to a request that never comes, held for its prompt about a second and then let go.
+    /// was: a tap routed to a request already past, let go at once, and one routed to a request that never comes, held for
+    /// its prompt about a second and then let go - neither said on the phone, since the relay passes such a tap on and the
+    /// other seat may use it; then a player who is no choice in the question on screen, which the phone does say.
     /// </summary>
     private async Task ProbeRefusalsAsync()
     {
         int asking = _asking;
         TableState before = await _page.SettledAsync();
 
-        (TableTapState player, TableState afterPlayer) = await InjectTapAsync($"p{before.Seat}", asking);
-        Assert(!player.Used && !player.Held && afterPlayer.InPerson!.Refusal.Length > 0, $"a tap on player {before.Seat}, no choice now, was {Describe(player, afterPlayer)}");
-
+        // A tap routed to a question already past, or to one that never reaches the page, is the relay's to pass on - the
+        // other seat may use it - so the phone says nothing of it.
         (TableTapState past, TableState afterPast) = await InjectTapAsync($"p{before.Seat}", asking - 1);
-        Assert(!past.Used && !past.Held, $"a tap for a request already past was {Describe(past, afterPast)}");
+        Assert(!past.Used && !past.Held && afterPast.InPerson!.Refusal.Length == 0, $"a tap for a request already past was {Describe(past, afterPast)}");
 
         System.Diagnostics.Stopwatch waited = System.Diagnostics.Stopwatch.StartNew();
         (TableTapState early, TableState afterEarly) = await InjectTapAsync($"p{before.Seat}", asking + 1000);
-        Assert(!early.Used && early.Held && waited.Elapsed >= TimeSpan.FromSeconds(0.9),
+        Assert(!early.Used && early.Held && waited.Elapsed >= TimeSpan.FromSeconds(0.9) && afterEarly.InPerson!.Refusal.Length == 0,
             $"a tap for a request still to come was {Describe(early, afterEarly)} after {waited.Elapsed.TotalSeconds:0.0} s");
 
-        Assert(afterEarly.RequestId == before.RequestId && afterEarly.AnsweredRequest == before.AnsweredRequest,
-            $"the question moved under taps the phone did not use: request {before.RequestId} -> {afterEarly.RequestId}");
+        (TableTapState player, TableState afterPlayer) = await InjectTapAsync($"p{before.Seat}", asking);
+        Assert(!player.Used && !player.Held && afterPlayer.InPerson!.Refusal.Length > 0, $"a tap on player {before.Seat}, no choice now, was {Describe(player, afterPlayer)}");
+
+        Assert(afterPlayer.RequestId == before.RequestId && afterPlayer.AnsweredRequest == before.AnsweredRequest,
+            $"the question moved under taps the phone did not use: request {before.RequestId} -> {afterPlayer.RequestId}");
 
         static string Describe(TableTapState tap, TableState state) =>
             $"{(tap.Used ? "used" : "unused")}, {(tap.Held ? "held" : "not held")}, the phone saying \"{state.InPerson?.Refusal}\"";
