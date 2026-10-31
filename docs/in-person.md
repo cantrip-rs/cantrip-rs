@@ -58,6 +58,54 @@ phone; a tablet never shows anything of a private prompt.
 - **Strict tablets.** A tablet shows nothing of a private prompt: no highlighted candidates, no tap accepted or
   refused, no hint of what is being chosen.
 
+## Full screen
+
+Every in-person screen - the phone's game, draft and deck building, a tablet's board and its screen before the game -
+has a **Fullscreen** button, a small square of four corner marks over the page (`InPerson/FullScreen.cs`): at the top of a
+phone, right of the middle, and at a tablet's top right corner. Its script is `FullScreen.js`, loaded with the page as
+`Keys.js` is, and it touches only a page opened with `?inperson=`: the remote client gains no manifest, no meta tag and
+no change to its viewport (`FullScreenTests` checks that).
+
+- **Android, iPad and desktop browsers** have the Fullscreen API. A tap asks for the whole screen
+  (`requestFullscreen`, which a browser grants only from a tap), then locks a tablet to landscape and a phone upright
+  with `screen.orientation.lock` where the browser allows one (Android's, once full screen; iPadOS and desktops have
+  none, and the page lays itself out for whichever way it is held). The corners turn inward while the page is full screen
+  (**Exit full screen**), and the button follows the browser however full screen was left (`fullscreenchange`). It is
+  not shown where the browser has no Fullscreen API, nor in an app opened from the Home Screen, which has the screen
+  already.
+- **An iPhone** has no Fullscreen API outside video; its full screen is the page added to the Home Screen and opened as a
+  web app. An in-person page gives iOS what it reads for that, added to the page's head by the script: a manifest of its
+  own, `inperson.webmanifest` (never Uno's PWA manifest, which installs a service worker; see `Cantrip.Client.Web.csproj`),
+  `"display": "fullscreen"` with icons from `cantrip.png`, `apple-mobile-web-app-capable`, a black-translucent status bar,
+  an `apple-touch-icon`, and `viewport-fit=cover`. The button explains Add to Home Screen (Share, then Add to Home
+  Screen) instead of doing nothing.
+- **The notch and the home indicator.** With `viewport-fit=cover` the page lies under them; the script reads
+  `env(safe-area-inset-*)` from an element padded by them, and each in-person page pads itself by those insets, following
+  them as the device turns.
+- **Coming back from the icon.** A home-screen app has storage of its own, apart from Safari's, and the page's ticket
+  was taken out of the address as it loaded, so the app would know no seat. Before explaining, the button asks the relay
+  for a **re-entry code** (`ReentryRequestMessage`): 256 bits, kept by the relay only as a SHA-256 hash, good once, and
+  revoked when a newer one is asked for, when the seat's ticket takes the phone's place anew, when the host revokes it
+  (`InPersonRelay.RevokeReentry`) or when the table closes. The page puts it after its address's `#` (`#reenter=...`);
+  the manifest names no `start_url`, so the icon opens that address whether iOS takes it from the page or from the
+  manifest. The app's first launch (`navigator.standalone`) brings the code in its hello; the relay compares it against
+  every phone's in constant time, takes the phone's place for the app (the Safari tab is told so, and does not open its
+  line again to take the place back) and welcomes it with a fresh seat ticket (`DraftPod.IssueTicket`). The app keeps
+  that ticket in its own `localStorage` and loads again with it, taking its seat at the table as a scanned code would;
+  every later launch brings the kept ticket, the spent code in its address ignored. Re-entry is for phones: tablets are
+  iPads or Android, which have the Fullscreen API.
+
+  Until it is used, the code is in the Safari tab's address and history on the player's own phone; that is what the
+  icon is made of. A tab reloaded with it does not spend it: only an app opened from the Home Screen does. The app's first
+  launch meets the table's refusal of a seat without a ticket for the moment before it has traded its code.
+
+What needs a real iPhone to confirm, since no desktop browser behaves as iOS does: that Add to Home Screen honours the
+manifest and the meta tags the script adds after the page has loaded, and makes the icon of the address with its
+`#reenter=` code; that the app opens with `navigator.standalone` and its own storage, under a black-translucent status
+bar; and that the safe-area insets pad the page clear of the notch and the home indicator. `FullScreenTests` plays the
+iPhone's side in Chromium with the Fullscreen API taken away, an iPhone's user agent, and `navigator.standalone` for the
+app, in a context of its own for the app's separate storage.
+
 ## Running a table
 
 `tools\in-person.cmd` builds the shipping web client if it is out of date (the publish of
@@ -154,7 +202,8 @@ on the table's thread, where the relay only takes a snapshot and queues messages
   token, kept as a SHA-256 hash and compared against every minted one in constant time. A welcome carries a fresh resume
   id and 32-byte proof; a later hello with them takes the place back (constant-time compare). A ticket or token hello
   takes a place over from the device holding it, which is told so and closed, and the old proof stops working.
-  Anything before a hello, or a hello in another protocol version, is refused and the connection closed.
+  A welcomed phone may ask for a re-entry code, and a hello bringing it takes the phone's place once, welcomed with a
+  fresh seat ticket ("Full screen", above). Anything before a hello, or a hello in another protocol version, is refused and the connection closed.
 
 `InPersonConfig` (`dotnet/src/Cantrip.Client.Web/InPerson`) reads what a page is: `?inperson=phone|tablet`, `?side=N`
 (zero or absent for the shared board), and the tablet's `#device=` token.
@@ -162,26 +211,28 @@ on the table's thread, where the relay only takes a snapshot and queues messages
 ## The wire
 
 The relay and its devices speak MessagePack, in `Cantrip.Protocol.InPerson`, with unions and a version of their own
-(`InPersonProtocol.Version`, now 1). A device's hello also carries `PlayerView.ProtocolVersion`, since the public feed
+(`InPersonProtocol.Version`, now 2). A device's hello also carries `PlayerView.ProtocolVersion`, since the public feed
 wraps the ordinary server messages.
 
 A device sends a `DeviceClientMessage`:
 
 | Key | Message | Fields |
 | --- | --- | --- |
-| 0 | `DeviceHelloMessage` | `InPersonVersion`, `ProtocolVersion`, `Ticket?` (a phone's), `Device?` (a tablet's), `ResumeId?`, `Proof?` |
+| 0 | `DeviceHelloMessage` | `InPersonVersion`, `ProtocolVersion`, `Ticket?` (a phone's), `Device?` (a tablet's), `ResumeId?`, `Proof?`, `Reentry?` (a home-screen app's first launch) |
 | 1 | `TableTapMessage` | `Sequence` (how far the tablet has been brought), `Object` (a public handle, or none), `Player` (a seat, or zero) |
 | 2 | `TapResultMessage` | `TapId`, `Used` |
+| 8 | `ReentryRequestMessage` | none: a welcomed phone asks for a re-entry code |
 
 The relay sends a `DeviceServerMessage`:
 
 | Key | Message | Fields |
 | --- | --- | --- |
-| 0 | `DeviceWelcomeMessage` | `Role` (`Phone` or `Tablet`), `Seat` (zero for a tablet), `Side` (zero for the shared board, or the seat whose half it is), `ResumeId`, `Proof`, `PlayerNames` |
+| 0 | `DeviceWelcomeMessage` | `Role` (`Phone` or `Tablet`), `Seat` (zero for a tablet), `Side` (zero for the shared board, or the seat whose half it is), `ResumeId`, `Proof`, `PlayerNames`, `Ticket?` (a fresh seat ticket, for a phone welcomed by its re-entry code) |
 | 1 | `PublicFeedMessage` | `Message`: a `WelcomeMessage` for seat zero, a `StateMessage`, an `EventsMessage` or a `GameOverMessage`, in the public handle space |
 | 2 | `SeatTapMessage` | `TapId`, `RequestId` (the request it was routed to), `Object` (in the seat's handle space, or none), `Player` |
 | 3 | `DevicePhaseMessage` | `Phase`, `Line` (where the draft or deck building stands), `Connected` |
 | 4 | `DeviceErrorMessage` | `Code`, `Detail` |
+| 8 | `ReentryCodeMessage` | `Code` (good once, for the home-screen app the phone is being added as) |
 
 The public feed never holds a prompt, a request id or a seat's handle. A phone acts on a `SeatTapMessage` only while
 its `RequestId` is the phone's prompt.

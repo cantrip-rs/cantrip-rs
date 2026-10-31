@@ -39,6 +39,9 @@ public sealed partial class MainPage
 
     private PhoneLink? _phoneLink;
 
+    /// <summary>The Fullscreen button, over everything of the page (InPerson/FullScreen.cs).</summary>
+    private FullScreenButton? _fullScreen;
+
     /// <summary>Deck building made for a phone, over the page while the table builds decks (InPerson/PhoneDeckBuilder.cs).</summary>
     private PhoneDeckBuilder? _phoneDeck;
     private DockButton _boardButton = null!;
@@ -69,6 +72,11 @@ public sealed partial class MainPage
         Grid.SetRowSpan(_phoneDeck, 3);
         Grid.SetColumnSpan(_phoneDeck, 2);
         Root.Children.Add(_phoneDeck);
+
+        // At the top, right of the middle: clear of the player's rail on the left and the side panel's corner on the right.
+        _fullScreen = new FullScreenButton(landscape: false, (HorizontalAlignment.Center, VerticalAlignment.Top, new Thickness(100, 4, 4, 4)), insets => Root.Padding = insets, _phoneLink.AskReentry);
+        _phoneLink.ReentryCode += _fullScreen.Reentry;
+        Root.Children.Add(_fullScreen);
 
         var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(30) };
         timer.Tick += (_, _) => TickPhone();

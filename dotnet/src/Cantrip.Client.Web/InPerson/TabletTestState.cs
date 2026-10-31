@@ -106,6 +106,7 @@ public sealed partial class TabletPage
             json.WriteNumber("flown", _flights.Launched);
             json.WriteString("lives", _lives.Text);
             json.WriteString("art", ClientConfig.ArtTemplate);
+            _fullScreen.WriteTest(json, _root);
 
             json.WriteStartArray("cards");
             if (board)

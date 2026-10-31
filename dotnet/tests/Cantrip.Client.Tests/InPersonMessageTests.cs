@@ -19,12 +19,13 @@ public sealed class InPersonMessageTests
     {
         DeviceHelloMessage hello = Device<DeviceHelloMessage>(new DeviceHelloMessage
         {
-            Ticket = "ticket", Device = "device", ResumeId = "resume", Proof = [1, 2, 3],
+            Ticket = "ticket", Device = "device", ResumeId = "resume", Proof = [1, 2, 3], Reentry = "reentry",
         });
 
         Assert.Equal((InPersonProtocol.Version, PlayerView.ProtocolVersion), (hello.InPersonVersion, hello.ProtocolVersion));
         Assert.Equal(("ticket", "device", "resume"), (hello.Ticket, hello.Device, hello.ResumeId));
         Assert.Equal([1, 2, 3], hello.Proof);
+        Assert.Equal("reentry", hello.Reentry);
     }
 
     [Fact]
@@ -36,6 +37,7 @@ public sealed class InPersonMessageTests
         Assert.Null(hello.Device);
         Assert.Null(hello.ResumeId);
         Assert.Null(hello.Proof);
+        Assert.Null(hello.Reentry);
     }
 
     [Fact]
@@ -59,12 +61,21 @@ public sealed class InPersonMessageTests
     {
         DeviceWelcomeMessage welcome = Server<DeviceWelcomeMessage>(new DeviceWelcomeMessage
         {
-            Role = DeviceRole.Tablet, Seat = 0, Side = 2, ResumeId = "resume", Proof = [4, 5], PlayerNames = ["Ann", "Bo"],
+            Role = DeviceRole.Tablet, Seat = 0, Side = 2, ResumeId = "resume", Proof = [4, 5], PlayerNames = ["Ann", "Bo"], Ticket = "ticket",
         });
 
         Assert.Equal((DeviceRole.Tablet, 0, 2, "resume"), (welcome.Role, welcome.Seat, welcome.Side, welcome.ResumeId));
         Assert.Equal([4, 5], welcome.Proof);
         Assert.Equal(["Ann", "Bo"], welcome.PlayerNames);
+        Assert.Equal("ticket", welcome.Ticket);
+        Assert.Null(Server<DeviceWelcomeMessage>(new DeviceWelcomeMessage()).Ticket);
+    }
+
+    [Fact]
+    public void A_re_entry_request_and_its_code_round_trip()
+    {
+        Device<ReentryRequestMessage>(new ReentryRequestMessage());
+        Assert.Equal("code", Server<ReentryCodeMessage>(new ReentryCodeMessage { Code = "code" }).Code);
     }
 
     [Fact]

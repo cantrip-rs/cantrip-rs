@@ -48,7 +48,9 @@
   </PropertyGroup>
 
   <!-- Loaded with the page, as Uno loads its own AppManifest.js: one clears away a service worker an earlier build left,
-       another hears keys on the window for the hotkeys (KeyboardBridge), and one names the tab (BrowserTitle). -->
+       another hears keys on the window for the hotkeys (KeyboardBridge), and one names the tab (BrowserTitle).
+       FullScreen.js gives in-person pages alone their full screen: the Fullscreen API, and for an iPhone's Home Screen a
+       manifest of their own (Platforms/WebAssembly/wwwroot/inperson.webmanifest, which installs no service worker). -->
   <ItemGroup>
     <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\NoServiceWorker.js" />
     <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\Keys.js" />
@@ -58,6 +60,7 @@
     <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\DeckEditor.js" />
     <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\Links.js" />
     <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\Phone.js" />
+    <EmbeddedResource Include="Platforms\WebAssembly\WasmScripts\FullScreen.js" />
   </ItemGroup>
 
   <!-- Card frames, icons, fonts and the frame template, from the tracked content files. -->

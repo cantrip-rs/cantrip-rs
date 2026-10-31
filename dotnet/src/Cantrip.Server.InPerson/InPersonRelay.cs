@@ -19,6 +19,13 @@ public sealed class InPersonRelayOptions
     /// </summary>
     public required Func<string, int> SeatForTicket { get; init; }
 
+    /// <summary>
+    /// A fresh ticket for a seat (<c>DraftPod.IssueTicket</c>), for a phone come back as a home-screen app by its re-entry
+    /// code: the app has storage of its own, so it holds no ticket for the table's connection until it is given one. Null
+    /// for a relay that mints no re-entry codes. Safe from any thread.
+    /// </summary>
+    public Func<int, string>? IssueTicket { get; init; }
+
     public TimeProvider TimeProvider { get; init; } = TimeProvider.System;
 
     /// <summary>How long a phone has to say what it made of a tap before the tap goes to the next request.</summary>
@@ -79,6 +86,9 @@ internal sealed class Identity(DeviceRole role, int seat, int side, string name)
     public string? ResumeId { get; set; }
 
     public byte[] Proof { get; set; } = [];
+
+    /// <summary>The hash of the phone's live re-entry code, or null for none: good once.</summary>
+    public byte[]? ReentryHash { get; set; }
 
     /// <summary>The device holding this place now, or null.</summary>
     public RelayDevice? Device { get; set; }
@@ -194,7 +204,7 @@ public sealed class InPersonRelay : IStepObserver
     public bool Recognizes(DeviceHelloMessage hello)
     {
         ArgumentNullException.ThrowIfNull(hello);
-        lock (_gate) return !_shut && Recognize(hello, out _) is not null;
+        lock (_gate) return !_shut && Recognize(hello, out _, out _) is not null;
     }
 
     /// <summary>The table is closed: every device is told so and let go, and none is let in again.</summary>
@@ -203,12 +213,29 @@ public sealed class InPersonRelay : IStepObserver
         lock (_gate)
         {
             _shut = true;
+            foreach (Identity phone in _phones)
+            {
+                phone.ReentryHash = null;
+            }
+
             foreach (RelayDevice device in _devices.ToList())
             {
                 Refuse(device, ErrorCode.TableClosed, detail);
                 if (device.As is { } identity && identity.Device == device) identity.Device = null;
                 device.As = null;
             }
+        }
+    }
+
+    /// <summary>
+    /// Revokes a seat's phone's re-entry code, if it has one that has not been used: a home-screen app added with it opens
+    /// to a refusal, and its player scans the setup page's code again.
+    /// </summary>
+    public void RevokeReentry(int seat)
+    {
+        lock (_gate)
+        {
+            if (seat >= 1 && seat <= _phones.Count) _phones[seat - 1].ReentryHash = null;
         }
     }
 
@@ -256,6 +283,9 @@ public sealed class InPersonRelay : IStepObserver
                     break;
                 case TapResultMessage result when device.As is { Role: DeviceRole.Phone } phone:
                     TapResult(phone.Seat, result);
+                    break;
+                case ReentryRequestMessage when device.As is { Role: DeviceRole.Phone } phone && _options.IssueTicket is not null:
+                    device.Send(new ReentryCodeMessage { Code = MintReentry(phone) });
                     break;
                 case { } when device.As is null:
                     Refuse(device, ErrorCode.MembershipRequired, "A device says who it is first.");
@@ -401,7 +431,7 @@ public sealed class InPersonRelay : IStepObserver
             return;
         }
 
-        Identity? identity = Recognize(hello, out bool fresh);
+        Identity? identity = Recognize(hello, out bool fresh, out bool reentry);
         if (identity is null)
         {
             Refuse(device, ErrorCode.MembershipRefused, "That code is not for this table, or no longer works: scan the setup page's again.");
@@ -419,6 +449,9 @@ public sealed class InPersonRelay : IStepObserver
         {
             identity.ResumeId = Convert.ToHexString(RandomNumberGenerator.GetBytes(16));
             identity.Proof = RandomNumberGenerator.GetBytes(32);
+
+            // A re-entry code is good once; and a place taken anew by its ticket leaves no older credential working.
+            identity.ReentryHash = null;
         }
 
         identity.Device = device;
@@ -432,6 +465,7 @@ public sealed class InPersonRelay : IStepObserver
             ResumeId = identity.ResumeId!,
             Proof = identity.Proof,
             PlayerNames = [.. _options.PlayerNames],
+            Ticket = reentry ? _options.IssueTicket!(identity.Seat) : null,
         });
 
         if (identity.Role == DeviceRole.Tablet)
@@ -443,19 +477,33 @@ public sealed class InPersonRelay : IStepObserver
     }
 
     /// <summary>
-    /// Whose place a hello names - by its resume id and proof, else a phone's seat ticket, else a tablet's token - or null
-    /// for none of this table's. <paramref name="fresh"/> says the place is taken anew, not resumed. Called under the lock.
+    /// Whose place a hello names - by its resume id and proof, else a phone's re-entry code, else its seat ticket, else a
+    /// tablet's token - or null for none of this table's. <paramref name="fresh"/> says the place is taken anew, not
+    /// resumed; <paramref name="reentry"/> that a re-entry code took it. Changes nothing. Called under the lock.
     /// </summary>
-    private Identity? Recognize(DeviceHelloMessage hello, out bool fresh)
+    private Identity? Recognize(DeviceHelloMessage hello, out bool fresh, out bool reentry)
     {
         Identity? identity = null;
         fresh = true;
+        reentry = false;
         if (hello.ResumeId is { Length: > 0 } resumeId && hello.Proof is { } proof)
         {
             identity = _phones.Concat(_tablets.Select(each => each.Tablet))
                 .FirstOrDefault(each => each.ResumeId is { } id && string.Equals(id, resumeId, StringComparison.Ordinal)
                     && CryptographicOperations.FixedTimeEquals(each.Proof, proof));
             fresh = identity is null;
+        }
+
+        if (identity is null && _options.IssueTicket is not null && hello.Reentry is { Length: > 0 } code)
+        {
+            byte[] presented = Hash(code);
+            foreach (Identity phone in _phones)
+            {
+                // Every phone's compared, so how long the look takes says nothing of which matched, or whether one did.
+                if (CryptographicOperations.FixedTimeEquals(phone.ReentryHash ?? Unset, presented)) identity = phone;
+            }
+
+            reentry = identity is not null;
         }
 
         if (identity is null && hello.Ticket is { Length: > 0 } ticket)
@@ -581,6 +629,20 @@ public sealed class InPersonRelay : IStepObserver
     }
 
     private static byte[] Hash(string token) => SHA256.HashData(Encoding.UTF8.GetBytes(token));
+
+    /// <summary>What a phone with no live re-entry code is compared against: no hash, and as long as one.</summary>
+    private static readonly byte[] Unset = new byte[SHA256.HashSizeInBytes];
+
+    /// <summary>
+    /// A fresh re-entry code for a seat's phone, for the home-screen app it is about to be added as: 256 bits, kept only as
+    /// its hash, replacing any code minted before.
+    /// </summary>
+    private static string MintReentry(Identity phone)
+    {
+        string code = Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
+        phone.ReentryHash = Hash(code);
+        return code;
+    }
 
     private sealed class PendingTap(int tapId, ViewHandle @object, int player)
     {

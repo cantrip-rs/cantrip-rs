@@ -10,7 +10,7 @@ namespace Cantrip.Protocol.InPerson;
 public static class InPersonProtocol
 {
     /// <summary>The in-person wire's version, sent in every <see cref="DeviceHelloMessage"/>; a mismatch is refused.</summary>
-    public const int Version = 1;
+    public const int Version = 2;
 }
 
 /// <summary>What a device is at the table.</summary>
@@ -29,6 +29,7 @@ public enum DeviceRole
 [Union(0, typeof(DeviceHelloMessage))]
 [Union(1, typeof(TableTapMessage))]
 [Union(2, typeof(TapResultMessage))]
+[Union(8, typeof(ReentryRequestMessage))]
 public abstract class DeviceClientMessage
 {
     public abstract string Describe();
@@ -63,8 +64,15 @@ public sealed class DeviceHelloMessage : DeviceClientMessage
     [Key(5)]
     public byte[]? Proof { get; set; }
 
+    /// <summary>
+    /// A phone's re-entry code (<see cref="ReentryCodeMessage"/>), brought by the home-screen app it was minted for on its
+    /// first launch, to take the seat's phone over. A bearer credential: never logged or described. Null otherwise.
+    /// </summary>
+    [Key(6)]
+    public string? Reentry { get; set; }
+
     public override string Describe() =>
-        $"hello v{InPersonVersion}/{ProtocolVersion}{(Ticket is null ? "" : ", ticket")}{(Device is null ? "" : ", device")}{(ResumeId is null ? "" : ", resume")}";
+        $"hello v{InPersonVersion}/{ProtocolVersion}{(Ticket is null ? "" : ", ticket")}{(Device is null ? "" : ", device")}{(ResumeId is null ? "" : ", resume")}{(Reentry is null ? "" : ", re-entry")}";
 }
 
 /// <summary>
@@ -104,6 +112,16 @@ public sealed class TapResultMessage : DeviceClientMessage
 }
 
 /// <summary>
+/// A welcomed phone asks for a re-entry code (<see cref="ReentryCodeMessage"/>), for the home-screen app it is about to be
+/// added as: an app with storage of its own, which knows nothing of the browser tab's ticket or welcome.
+/// </summary>
+[MessagePackObject]
+public sealed class ReentryRequestMessage : DeviceClientMessage
+{
+    public override string Describe() => "re-entry asked for";
+}
+
+/// <summary>
 /// Anything the relay sends a device. A MessagePack union with explicit keys, as <see cref="ServerMessage"/> is.
 /// </summary>
 [Union(0, typeof(DeviceWelcomeMessage))]
@@ -111,6 +129,7 @@ public sealed class TapResultMessage : DeviceClientMessage
 [Union(2, typeof(SeatTapMessage))]
 [Union(3, typeof(DevicePhaseMessage))]
 [Union(4, typeof(DeviceErrorMessage))]
+[Union(8, typeof(ReentryCodeMessage))]
 public abstract class DeviceServerMessage
 {
     public abstract string Describe();
@@ -142,6 +161,13 @@ public sealed class DeviceWelcomeMessage : DeviceServerMessage
     /// <summary>The players' names, by seat from one.</summary>
     [Key(5)]
     public List<string> PlayerNames { get; set; } = [];
+
+    /// <summary>
+    /// For a phone welcomed by its re-entry code, a fresh seat ticket for the table's own connection, which the home-screen
+    /// app keeps in its storage; null for every other welcome. A bearer credential: never logged or described.
+    /// </summary>
+    [Key(6)]
+    public string? Ticket { get; set; }
 
     public override string Describe() => $"device welcome, {Role}, seat {Seat}, side {Side}";
 }
@@ -217,4 +243,18 @@ public sealed class DeviceErrorMessage : DeviceServerMessage
     public string Detail { get; set; } = string.Empty;
 
     public override string Describe() => $"device error {Code}: {Detail}";
+}
+
+/// <summary>
+/// A phone's re-entry code, for the home-screen app it is being added as (docs/in-person.md, "Full screen"): good once,
+/// for the seat's phone, until it is used, a newer one is asked for, the seat's ticket takes the phone's place anew or the
+/// table closes. A bearer credential: never logged or described.
+/// </summary>
+[MessagePackObject]
+public sealed class ReentryCodeMessage : DeviceServerMessage
+{
+    [Key(0)]
+    public string Code { get; set; } = string.Empty;
+
+    public override string Describe() => "re-entry code";
 }

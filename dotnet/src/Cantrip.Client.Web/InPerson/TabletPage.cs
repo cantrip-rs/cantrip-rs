@@ -74,6 +74,8 @@ public sealed partial class TabletPage : UserControl
     /// <summary>What the phase screen says - its title, the line, who is connected - once for each way it is read.</summary>
     private readonly List<(TextBlock Title, TextBlock Line, TextBlock Connected)> _phaseTexts = [];
 
+    private readonly FullScreenButton _fullScreen;
+
     private readonly DispatcherTimer _frame = new() { Interval = TimeSpan.FromMilliseconds(30) };
     private readonly DispatcherTimer _hold = new() { Interval = HoldAfter };
     private bool _needsRedraw = true;
@@ -110,6 +112,10 @@ public sealed partial class TabletPage : UserControl
                 PutDown();
             }
         }), handledEventsToo: true);
+
+        // Over every screen of the tablet, and the tablet clear of the notch and the home indicator.
+        _fullScreen = new FullScreenButton(landscape: true, (HorizontalAlignment.Right, VerticalAlignment.Top, new Thickness(4)), insets => _root.Padding = insets);
+        _root.Children.Add(_fullScreen);
 
         Connect();
         StartTestState();

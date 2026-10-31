@@ -447,6 +447,13 @@ constructor (`AttachPhone`), and does nothing on any other page: the remote clie
   where the browser can vibrate (`Phone.js`), and never on the tablet. One routed to a question already past, or to one
   that never reached the page, is let go without a word: the relay passes it on, perhaps to the other seat, which may use
   it (the host asks one question at a time, so the question on screen is the only one a tap could be meant for here).
+- **Full screen.** A Fullscreen button at the top of every phone screen and every tablet screen
+  (`InPerson/FullScreen.cs`, `FullScreen.js`): the Fullscreen API where the browser has it, with a tablet locked to
+  landscape and a phone upright where allowed, and on an iPhone the way to Add to Home Screen, with a re-entry code that
+  brings the app back to its seat; the page padded clear of the notch and the home indicator. docs/in-person.md, "Full
+  screen". The test state's `fullScreen` (under `inPerson` on a phone) is what the button does (`enter`, `exit`,
+  `homescreen`, `none`), its box and whether the explanation is up; `FullScreenTests` enters and leaves full screen on both
+  pages in Chromium, plays the iPhone's Home Screen round trip, and checks the remote client has none of it.
 - **Testing.** Under `?test`, the test state's `inPerson` is the phone's Board, the taps waiting, every tap settled (used,
   held for its prompt) and the line up now; a test stands in for the relay by queueing taps on
   `globalThis.cantripTableTaps` (`o12@34;` the seat's object 12 for request 34, `p2@34;` player 2), since `cantripTest`

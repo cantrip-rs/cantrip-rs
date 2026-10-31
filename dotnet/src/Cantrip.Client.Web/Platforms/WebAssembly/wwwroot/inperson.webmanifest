@@ -1,0 +1,12 @@
+{
+  "name": "Cantrip in person",
+  "short_name": "Cantrip",
+  "description": "A phone or a tablet at an in-person Cantrip table.",
+  "display": "fullscreen",
+  "background_color": "#111318",
+  "theme_color": "#111318",
+  "icons": [
+    { "src": "inperson-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "inperson-icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -530,6 +530,7 @@ public sealed partial class MainPage
         json.WriteEndArray();
         json.WriteString("refusal", _refusal.Visibility == Visibility.Visible ? _refusalText.Text : string.Empty);
         _phoneDeck?.WriteTest(json, Root);
+        _fullScreen?.WriteTest(json, Root);
         json.WriteEndObject();
     }
 

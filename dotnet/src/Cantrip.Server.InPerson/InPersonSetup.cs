@@ -72,6 +72,7 @@ public static class InPersonSetup
         {
             PlayerNames = [.. players.Select(player => player.Name)],
             SeatForTicket = pod.SeatFor,
+            IssueTicket = seat => pod.IssueTicket(players.Single(player => player.Seat == seat).PlayerId),
             TimeProvider = time,
             Log = log,
         });

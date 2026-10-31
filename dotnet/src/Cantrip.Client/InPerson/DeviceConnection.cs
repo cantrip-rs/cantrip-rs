@@ -85,14 +85,16 @@ public sealed class DeviceConnection : IDisposable
 
     /// <summary>
     /// The hello a device opens with: a phone's seat <paramref name="ticket"/>, a tablet's <paramref name="device"/>
-    /// token, or the resume id and proof of an earlier welcome, which the relay prefers when it still knows them.
+    /// token, or the resume id and proof of an earlier welcome, which the relay prefers when it still knows them; or a
+    /// home-screen app's first-launch <paramref name="reentry"/> code.
     /// </summary>
-    public static DeviceHelloMessage Hello(string? ticket = null, string? device = null, string? resumeId = null, byte[]? proof = null) => new()
+    public static DeviceHelloMessage Hello(string? ticket = null, string? device = null, string? resumeId = null, byte[]? proof = null, string? reentry = null) => new()
     {
         Ticket = ticket,
         Device = device,
         ResumeId = resumeId,
         Proof = proof,
+        Reentry = reentry,
     };
 
     public void Send(DeviceClientMessage message)
