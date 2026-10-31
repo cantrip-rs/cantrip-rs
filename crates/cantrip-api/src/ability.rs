@@ -516,7 +516,7 @@ pub fn add_listed(g: &mut dyn Game, controller: PlayerId, def: &ActivatedDef, ch
 const fn activated(a: AbilityDef, method: &str) -> ActivatedDef {
     match a {
         AbilityDef::Activated(d) => d,
-        AbilityDef::Triggered(_) | AbilityDef::Static(_) => panic!("{}", method),
+        AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("{}", method),
     }
 }
 
@@ -526,7 +526,7 @@ impl AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { targets, ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { targets, ..t }),
-            AbilityDef::Static(_) => panic!("a static ability has no targets"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("a static ability has no targets"),
         }
     }
 
@@ -587,7 +587,7 @@ impl AbilityDef {
         match self {
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { condition: Some(condition), ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { condition: Some(condition), ..t }),
-            AbilityDef::Static(_) => panic!("a static ability has no condition"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("a static ability has no condition"),
         }
     }
 
@@ -595,7 +595,7 @@ impl AbilityDef {
     pub const fn only_if(self, only_if: Condition) -> AbilityDef {
         match self {
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { only_if: Some(only_if), ..t }),
-            AbilityDef::Activated(_) | AbilityDef::Static(_) => panic!("only a triggered ability triggers only if"),
+            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("only a triggered ability triggers only if"),
         }
     }
 
@@ -605,7 +605,7 @@ impl AbilityDef {
             AbilityDef::Activated(_) if modal.max == ModalDef::COUNTED => panic!("an activated ability has no count for \"that many\" modes"),
             AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { modal: Some(modal), ..d }),
             AbilityDef::Triggered(t) => AbilityDef::Triggered(TriggeredDef { modal: Some(modal), ..t }),
-            AbilityDef::Static(_) => panic!("a static ability has no modes"),
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("a static ability has no modes"),
         }
     }
 
@@ -662,7 +662,7 @@ impl AbilityDef {
 const fn triggered_def(a: AbilityDef, method: &str) -> TriggeredDef {
     match a {
         AbilityDef::Triggered(t) => t,
-        AbilityDef::Activated(_) | AbilityDef::Static(_) => panic!("{}", method),
+        AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("{}", method),
     }
 }
 
@@ -962,6 +962,17 @@ pub const fn control_changing(affects: StaticAffects, text: &'static str) -> Sta
 /// gives a creature a quoted static ability about its characteristics can.
 pub const fn granted_static(layer: Layer, apply: StaticApply, text: &'static str) -> AbilityDef {
     AbilityDef::Static(StaticDef { text, layer, apply, own: true, ..StaticDef::BLANK })
+}
+
+/// A play rule an effect or a static ability gives an object (CR 613.1f, layer 6), to be granted with `EffectKind::AddAbility`
+/// from the card's `delayed` list (`AbilityDef::PlayRule`): while the object has it on the battlefield, the rule applies to the
+/// object's controller as one a card prints in `play_rules` does, named by its `AbilityRef::delayed`. A later "loses all
+/// abilities" takes it (CR 613.7), and it ends with the effect that gave it. Nog, Ambitious Cadet gains "You may play lands
+/// from your graveyard" and "You may play an additional land on each of your turns"; Glowcap Lantern's "Equipped creature has
+/// 'You may look at the top card of your library any time'" and Nerd Rage's "Enchanted creature has 'You have no maximum hand
+/// size'" give the same kind of ability by a static ability. One rule, never a `PlayRule::While`.
+pub const fn granted_play_rule(rule: PlayRule, text: &'static str) -> AbilityDef {
+    AbilityDef::PlayRule(PlayRuleDef { rule, text })
 }
 
 /// A static ability an effect gives an object (CR 613.1f) that affects the objects `affects` accepts, the object that

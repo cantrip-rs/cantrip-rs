@@ -1693,6 +1693,19 @@ pub enum AbilityDef {
     /// It affects only the object that has it, with that object as its source (its "you" is the object's controller), in a
     /// layer after the abilities are settled (`Layer::PtDefine` on): see `StaticDef`.
     Static(StaticDef),
+    /// A play rule given to an object (CR 613.1f, layer 6): a static ability of the kind a card prints in its `play_rules`,
+    /// one of a card's `delayed` list (`granted_play_rule`). An effect gives it with `EffectKind::AddAbility`, or a static
+    /// ability gives it as it gives any ability; the object has it among its abilities from layer 6 on, so a later "loses all
+    /// abilities" takes it (CR 613.7) and it ends with the effect. While the object has it on the battlefield, the rule applies
+    /// to its controller as a printed one would (`actions::each_play_rule`), named by this `AbilityRef::delayed` (`Grant`).
+    PlayRule(PlayRuleDef),
+}
+
+/// A play rule as an ability an object is given (`AbilityDef::PlayRule`): the rule, and the quoted text that gives it.
+#[derive(Clone, Copy)]
+pub struct PlayRuleDef {
+    pub rule: PlayRule,
+    pub text: &'static str,
 }
 
 impl AbilityDef {
@@ -1701,6 +1714,7 @@ impl AbilityDef {
             AbilityDef::Activated(a) => a.text,
             AbilityDef::Triggered(t) => t.text,
             AbilityDef::Static(s) => s.text,
+            AbilityDef::PlayRule(p) => p.text,
         }
     }
 }
@@ -3695,6 +3709,10 @@ pub struct CardTable {
     /// Which cards have play rules, and whether any does: land plays look for them only when one might.
     pub play_rules: Vec<bool>,
     pub any_play_rules: bool,
+    /// Which cards list a play rule to give (`AbilityDef::PlayRule` in `delayed`), and whether any does: what objects were
+    /// given is looked for only when one might have been.
+    pub grants_play_rules: Vec<bool>,
+    pub any_granted_play_rules: bool,
     /// Which cards have replacement or prevention effects of static abilities (CR 614, 615), and whether any does: events
     /// look for sources only when one might be.
     pub replaces: Vec<bool>,
@@ -3945,6 +3963,14 @@ impl CardTable {
                     assert!(s.layer >= Layer::Ability, "{}: a granted static ability applies in layer 6 or later (CR 613.1f)", card.name);
                 }
             }
+            // A play rule given to an object is one ability, named by its place in `delayed`: never printed among its
+            // abilities (a card prints its own in `play_rules`), and never an "as long as" holding others.
+            assert!(!card.abilities.iter().any(|a| matches!(a, AbilityDef::PlayRule(_))), "{}: a play rule a card prints is in its play_rules", card.name);
+            assert!(
+                !card.delayed.iter().any(|a| matches!(a, AbilityDef::PlayRule(PlayRuleDef { rule: PlayRule::While(..), .. }))),
+                "{}: a given play rule is one rule",
+                card.name
+            );
             // The layers find what a "loses all abilities" static took from among the permanents
             // (`layers::lost_to_statics`), and a characteristic-defining ability is no such ability (CR 604.3).
             for s in card.statics.iter().filter(|s| s.loses_all) {
@@ -4043,6 +4069,8 @@ impl CardTable {
         let exile_statics = cards.iter().any(|c| c.statics.iter().any(|s| s.from == ZoneKind::Exile));
         let play_rules: Vec<bool> = cards.iter().map(|c| !c.play_rules.is_empty()).collect();
         let any_play_rules = play_rules.iter().any(|&s| s);
+        let grants_play_rules: Vec<bool> = cards.iter().map(|c| c.delayed.iter().any(|a| matches!(a, AbilityDef::PlayRule(_)))).collect();
+        let any_granted_play_rules = grants_play_rules.iter().any(|&g| g);
         let replaces: Vec<bool> = cards.iter().map(|c| !c.replacements.is_empty() || !c.preventions.is_empty()).collect();
         let any_replaces = replaces.iter().any(|&r| r);
         let mana_replaces: Vec<bool> =
@@ -4127,6 +4155,8 @@ impl CardTable {
             exile_statics,
             play_rules,
             any_play_rules,
+            grants_play_rules,
+            any_granted_play_rules,
             replaces,
             any_replaces,
             mana_replaces,
@@ -4329,7 +4359,7 @@ impl CardTable {
         match self.ability(ability) {
             AbilityDef::Activated(a) => a.modal,
             AbilityDef::Triggered(t) => t.modal,
-            AbilityDef::Static(_) => None,
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) => None,
         }
     }
 

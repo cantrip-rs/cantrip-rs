@@ -450,7 +450,7 @@ fn has_split_second(cx: &Cx, spell: ObjectId) -> bool {
 fn activated(cx: &Cx, ability: AbilityRef) -> Option<&'static ActivatedDef> {
     match cx.cards().ability(ability) {
         AbilityDef::Activated(a) => Some(a),
-        AbilityDef::Triggered(_) | AbilityDef::Static(_) => None,
+        AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => None,
     }
 }
 
@@ -5145,14 +5145,17 @@ fn graveyard_play(cx: &Cx, player: PlayerId) -> Vec<Grant> {
 /// permanents they control, and with `command` of the emblems they have (CR 114.4), that have not lost their abilities (CR
 /// 613.1f). A rule under "as long as" (`PlayRule::While`) applies only while its condition holds for its permanent: a
 /// Case's "Solved - [static ability]" (CR 702.169b). A Room's are those of its unlocked doors: a locked door has no rules
-/// text (CR 709.5).
+/// text (CR 709.5). Then the play rules the permanents they control were given (`AbilityDef::PlayRule`, CR 613.1f): each
+/// one the permanent has among its abilities once layer 6 is done, so one a later "loses all abilities" took is gone (CR
+/// 613.7) and one given after it stays; looked for only while one might have been given
+/// (`layers::play_rules_given_possible`).
 pub fn each_play_rule(q: &dyn Query, cards: &CardTable, player: PlayerId, command: bool, mut f: impl FnMut(ObjectId, &'static PlayRule)) {
     each_play_rule_named(q, cards, player, command, |source, _, rule| f(source, rule));
 }
 
 /// `each_play_rule`, each rule with the `AbilityRef` that names it (`AbilityRef::play_rule`: the card that has it, a Room's
-/// door for a door's, and its place among that card's rules, those under a `While` counted whether or not it holds), which a
-/// `Grant` names it by.
+/// door for a door's, and its place among that card's rules, those under a `While` counted whether or not it holds; a given
+/// one by its `AbilityRef::delayed`, as it is among the permanent's abilities), which a `Grant` names it by.
 pub fn each_play_rule_named(q: &dyn Query, cards: &CardTable, player: PlayerId, command: bool, mut f: impl FnMut(ObjectId, AbilityRef, &'static PlayRule)) {
     fn walk(q: &dyn Query, asker: &Asker, card: CardId, rules: &'static [PlayRule], k: &mut usize, holds: bool, f: &mut impl FnMut(ObjectId, AbilityRef, &'static PlayRule)) {
         for rule in rules {
@@ -5170,30 +5173,69 @@ pub fn each_play_rule_named(q: &dyn Query, cards: &CardTable, player: PlayerId, 
             }
         }
     }
-    if !cards.any_play_rules {
-        return;
-    }
     let s = q.state();
-    let emblems: &[ObjectId] = if command { s.zone(Zone::COMMAND) } else { &[] };
-    for &id in s.battlefield().iter().chain(emblems) {
-        let obj = s.obj(id);
-        let card = cards.current(obj);
-        if obj.controller != player || !cards.play_rules[card.0 as usize] || q.lost_all_abilities(id) {
-            continue;
-        }
-        let def = cards.get(card);
-        let asker = Asker { source: id, controller: player, by: None, spell: false };
-        if def.is_room() {
-            for door in def.unlocked_doors(obj.marks.doors) {
-                walk(q, &asker, cards.id_of(door), door.play_rules, &mut 0, true, &mut f);
+    if cards.any_play_rules {
+        let emblems: &[ObjectId] = if command { s.zone(Zone::COMMAND) } else { &[] };
+        for &id in s.battlefield().iter().chain(emblems) {
+            let obj = s.obj(id);
+            let card = cards.current(obj);
+            if obj.controller != player || !cards.play_rules[card.0 as usize] || q.lost_all_abilities(id) {
+                continue;
             }
-        } else {
-            walk(q, &asker, card, def.play_rules, &mut 0, true, &mut f);
+            let def = cards.get(card);
+            let asker = Asker { source: id, controller: player, by: None, spell: false };
+            if def.is_room() {
+                for door in def.unlocked_doors(obj.marks.doors) {
+                    walk(q, &asker, cards.id_of(door), door.play_rules, &mut 0, true, &mut f);
+                }
+            } else {
+                walk(q, &asker, card, def.play_rules, &mut 0, true, &mut f);
+            }
+        }
+    }
+    if layers::play_rules_given_possible(cards, s) {
+        for &id in s.battlefield() {
+            if s.obj(id).controller != player {
+                continue;
+            }
+            for ability in q.chars(id).abilities.into_iter().flatten().filter(|a| a.is_delayed()) {
+                if let AbilityDef::PlayRule(given) = cards.ability(ability) {
+                    f(id, ability, &given.rule);
+                }
+            }
         }
     }
 }
 
-/// The play rule an `AbilityRef::play_rule` names, read from its card whatever holds now.
+/// The timestamp of the effect of `source`'s play rule `ability` (CR 613.7a): its permanent's, or for one it was given
+/// (`AbilityDef::PlayRule`), the later of that and the timestamp of what gave it - the latest, where it was given twice. A
+/// resolved effect's grant is the layers' (`layers::effect_grants`), those a later "loses all abilities" effect took left out
+/// (CR 613.7): the giver linked abilities know (`layers::ability_givers`) is none for a grant by the permanent's
+/// own effect printed in its own text (CR 607.1a, Nog's), whose timestamp is still the effect's. A static ability's grant
+/// is its giver's.
+fn play_rule_timestamp(cx: &Cx, source: ObjectId, ability: AbilityRef) -> u32 {
+    let own = cx.s().obj(source).timestamp;
+    if !ability.is_delayed() {
+        return own;
+    }
+    let granted = layers::effect_grants(own, cx.s().effects.iter().filter(|e| e.affected == source), |a| a == ability);
+    if let Some(stamp) = granted.iter().map(|&(stamp, _, _)| stamp).max() {
+        return stamp;
+    }
+    let chars = cx.chars(source);
+    let givers = layers::ability_givers(cx.cards(), cx.s(), &cx.g.log, source);
+    chars
+        .abilities
+        .iter()
+        .zip(givers)
+        .filter(|(a, _)| **a == Some(ability))
+        .map(|(_, giver)| own.max(giver.acquired.stamp))
+        .max()
+        .unwrap_or(own)
+}
+
+/// The play rule an `AbilityRef::play_rule` names, or the given one an `AbilityRef::delayed` names (`AbilityDef::PlayRule`),
+/// read from its card whatever holds now.
 fn play_rule_at(cards: &CardTable, ability: AbilityRef) -> Option<&'static PlayRule> {
     fn find(rules: &'static [PlayRule], k: &mut usize, want: usize) -> Option<&'static PlayRule> {
         for rule in rules {
@@ -5212,6 +5254,12 @@ fn play_rule_at(cards: &CardTable, ability: AbilityRef) -> Option<&'static PlayR
             }
         }
         None
+    }
+    if ability.is_delayed() {
+        return match cards.ability(ability) {
+            AbilityDef::PlayRule(given) => Some(&given.rule),
+            _ => None,
+        };
     }
     find(cards.get(ability.card).play_rules, &mut 0, ability.as_play_rule()?)
 }
@@ -5274,9 +5322,9 @@ pub fn maximum_hand_size(cx: &Cx, player: PlayerId) -> Option<u32> {
             says(e.timestamp, maximum);
         }
     }
-    each_play_rule(cx, cx.cards(), player, true, |source, rule| {
+    each_play_rule_named(cx, cx.cards(), player, true, |source, ability, rule| {
         if let PlayRule::MaximumHandSize(maximum) = rule {
-            says(cx.s().obj(source).timestamp, *maximum);
+            says(play_rule_timestamp(cx, source, ability), *maximum);
         }
     });
     newest.map_or(Some(7), |(_, maximum)| maximum)
@@ -6677,7 +6725,7 @@ pub fn describe(cards: &CardTable, state: &GameState, log: &[Record], option: &A
             let printed = describe_way(cards, state, log, option, source);
             match option.granted_by {
                 Some(g) if let Some(way) = named_way(state, cards, g) => way.what.text.into(),
-                Some(g) if permission_named(state, source, g) => match printed {
+                Some(g) if permission_named(cards, state, source, g) => match printed {
                     "" => permission_name(cards, state, g).into(),
                     printed => format!("{printed} ({})", permission_name(cards, state, g)).into(),
                 },
@@ -6713,8 +6761,8 @@ fn permission_name(cards: &CardTable, state: &GameState, g: Grant) -> String {
 /// Whether a menu row names what made it possible: always a rule of a permanent's, a way it gives, retrace or an effect's
 /// say-so (Yawgmoth's Will); a play permission an effect gave only where another permission for the card would let it be
 /// played or cast too, so the rows read apart.
-fn permission_named(state: &GameState, source: ObjectId, g: Grant) -> bool {
-    g.ability.as_play_rule().is_some()
+fn permission_named(cards: &CardTable, state: &GameState, source: ObjectId, g: Grant) -> bool {
+    play_rule_at(cards, g.ability).is_some()
         || g.ability.as_granted_way().is_some()
         || g.ability.is_retrace()
         || !state.permissions.iter().any(|p| p.by == g && state.permission_covers(p, source))
@@ -6789,7 +6837,7 @@ fn describe_cast(cards: &CardTable, state: &GameState, log: &[Record], option: &
                 return of_way(way.text);
             }
             // A play permission an effect gave names its source only where another one would let the card be cast too.
-            let named = permission_named(state, source, g);
+            let named = permission_named(cards, state, source, g);
             match (printed.is_empty(), named) {
                 (_, false) => printed.into(),
                 (true, true) => permission(g).into(),

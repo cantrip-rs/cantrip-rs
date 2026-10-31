@@ -371,6 +371,15 @@ only the candidates the host's verdict on those picked says may be added.
   order takes them) - to it alone, with it as their source, or to what they affect (`granted_static_ability`, The Irencrag's
   "Equipped creature gets +3/+3") - each at the later of its object's timestamp and its giver's. One of an earlier layer is
   refused at table construction: it would come into being after its layer was done.
+- **Play rules given to objects (613.1f)** are `granted_play_rule` entries (`AbilityDef::PlayRule`) of a card's `delayed`
+  list: one rule of the kind a card prints in `play_rules` ("You may play lands from your graveyard"), given with
+  `EffectKind::AddAbility` (Nog, Ambitious Cadet) or by a static ability that gives abilities (Glowcap Lantern's "Equipped
+  creature has 'You may look at the top card of your library any time'", Nerd Rage's "You have no maximum hand size"). It is
+  one of the object's abilities from layer 6 on, so a later "loses all abilities" takes it and one given after that stays
+  (613.7), and it ends with its effect. `actions::each_play_rule` reads it off the abilities of each permanent the player
+  controls, after the printed ones, only while one might have been given (`layers::play_rules_given_possible`: an effect
+  gave one, or a source whose card lists one to give functions), and names it by its `AbilityRef::delayed` (`Grant`,
+  `play_rule_at`); a maximum hand size it sets has the later of its permanent's timestamp and its giver's (613.7a).
 - **"Loses all abilities" (613.1f)** comes from a resolved effect (`EffectKind::LoseAllAbilities`: Oko's Elk, The Wondrous
   Wasp) or a static ability (`loses_all_abilities(affects, text)`, a `StaticDef` with `loses_all`: Eaten by Piranhas; Darksteel
   Mutation, Kenrith's Transformation, Frogify and Humility print the same; `loses_all_abilities_except_mana_abilities` keeps

@@ -106,6 +106,8 @@ mod enter_rules_tests;
 #[cfg(test)]
 mod land_play_rules_tests;
 #[cfg(test)]
+mod given_play_rule_tests;
+#[cfg(test)]
 mod exiled_with_permission_tests;
 #[cfg(test)]
 mod instant_sorcery_entering_tests;

@@ -27,7 +27,7 @@ fn target_specs(cards: &CardTable, state: &GameState, item: &StackItem) -> &'sta
         _ => match cards.ability(item.ability) {
             AbilityDef::Activated(a) => a.targets,
             AbilityDef::Triggered(t) => t.targets,
-            AbilityDef::Static(_) => &[],
+            AbilityDef::Static(_) | AbilityDef::PlayRule(_) => &[],
         },
     }
 }
@@ -38,11 +38,11 @@ pub fn modal_of(cards: &CardTable, state: &GameState, item: &StackItem) -> Optio
         StackKind::Spell => cards.get(face(state, item.object)).modal,
         StackKind::Activated => match cards.ability(item.ability) {
             AbilityDef::Activated(a) => a.modal,
-            AbilityDef::Triggered(_) | AbilityDef::Static(_) => None,
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => None,
         },
         StackKind::Triggered => match cards.ability(item.ability) {
             AbilityDef::Triggered(t) => t.modal,
-            AbilityDef::Activated(_) | AbilityDef::Static(_) => None,
+            AbilityDef::Activated(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => None,
         },
     }
 }
@@ -615,7 +615,7 @@ pub fn resolve(cx: &mut Cx) -> R<Flow> {
                     AbilityDef::Activated(a) => (a.effect)(cx, &item)?,
                     AbilityDef::Triggered(TriggeredDef { modal: Some(modal), .. }) => run_modes(cx, &item, modal)?,
                     AbilityDef::Triggered(t) => (t.effect)(cx, &item)?,
-                    AbilityDef::Static(_) => unreachable!("a static ability is never on the stack"),
+                    AbilityDef::Static(_) | AbilityDef::PlayRule(_) => unreachable!("a static ability is never on the stack"),
                 }
                 // It has resolved (CR 608.2m: "the first time this ability has resolved this turn").
                 cx.record(Event::Resolved { source: item.object, ability: item.ability });

@@ -1005,18 +1005,8 @@ fn turn_face_up_actions(cards: &CardTable, obj: &Obj, chars: &mut Chars) {
 /// twice is two effects, each with its own timestamp. Guarded on the object's own effects, so an object nothing granted
 /// anything to costs nothing here.
 fn granted_statics(cards: &CardTable, object_timestamp: u32, fx: &[ContinuousEffect], chars: &Chars) -> Vec<(u32, &'static StaticDef, AbilityRef, Giver)> {
-    let mut granted: Vec<(u32, AbilityRef, Giver)> = Vec::new();
-    for e in fx {
-        match e.kind {
-            // Its own: one that affects other objects applies from it as a source (`granted_to_others`).
-            EffectKind::AddAbility(ability) if matches!(cards.ability(ability), AbilityDef::Static(s) if s.own) => {
-                granted.push((e.timestamp.max(object_timestamp), ability, Giver::of_effect(e)));
-            }
-            EffectKind::LoseAllAbilities => granted.clear(),
-            _ => {}
-        }
-    }
-    granted
+    // Its own: one that affects other objects applies from it as a source (`granted_to_others`).
+    effect_grants(object_timestamp, fx.iter(), |ability| matches!(cards.ability(ability), AbilityDef::Static(s) if s.own))
         .into_iter()
         .filter(|(_, ability, _)| chars.abilities.contains(&Some(*ability)))
         .filter_map(|(timestamp, ability, giver)| match cards.ability(ability) {
@@ -1024,6 +1014,28 @@ fn granted_statics(cards: &CardTable, object_timestamp: u32, fx: &[ContinuousEff
             _ => None,
         })
         .collect()
+}
+
+/// The abilities `fx`, an object's own effects in timestamp order, granted it (`EffectKind::AddAbility`, CR 613.1f) that a
+/// later "loses all abilities" effect has not taken (CR 613.7), of those `wanted` accepts, oldest first: each with the
+/// timestamp its effect has (CR 613.7a: the later of the object's, `object_timestamp`, and the granting effect's) and the
+/// effect as its giver. A grant of the same ability twice is two. What a static ability took is not looked at: the caller
+/// asks the object's abilities for that. The granted static abilities the layers apply (`granted_statics`,
+/// `granted_to_others`) and a given play rule's timestamp (`actions::play_rule_timestamp`) are read from here.
+pub(crate) fn effect_grants<'a>(
+    object_timestamp: u32,
+    fx: impl Iterator<Item = &'a ContinuousEffect>,
+    mut wanted: impl FnMut(AbilityRef) -> bool,
+) -> Vec<(u32, AbilityRef, Giver)> {
+    let mut granted: Vec<(u32, AbilityRef, Giver)> = Vec::new();
+    for e in fx {
+        match e.kind {
+            EffectKind::AddAbility(ability) if wanted(ability) => granted.push((e.timestamp.max(object_timestamp), ability, Giver::of_effect(e))),
+            EffectKind::LoseAllAbilities => granted.clear(),
+            _ => {}
+        }
+    }
+    granted
 }
 
 /// The permanents (and graveyard cards) whose static abilities could apply to anything, for the state's current epoch:
@@ -2504,6 +2516,22 @@ pub fn apply_contract_check(cards: &'static CardTable) -> ApplyContract {
     ApplyContract { breaches, inert }
 }
 
+/// Whether an object could now have a play rule it was given (`AbilityDef::PlayRule`, CR 613.1f): a resolved effect gave one,
+/// or a static ability whose card lists one to give functions (or a granted static ability could give one). The guard of
+/// `actions::each_play_rule`'s look at what each permanent has: with none, only printed play rules are read.
+pub(crate) fn play_rules_given_possible(cards: &CardTable, state: &GameState) -> bool {
+    cards.any_granted_play_rules
+        && (state.effects.iter().any(|e| matches!(e.kind, EffectKind::AddAbility(a) if a.is_delayed() && matches!(cards.ability(a), AbilityDef::PlayRule(_))))
+            || (state.statics_seen && {
+                let found = static_sources(cards, state);
+                !found.granted.is_empty()
+                    || found.list.iter().any(|&(source, _, _)| {
+                        let card = cards.current(state.obj(source)).0 as usize;
+                        cards.ability_statics[card] && cards.grants_play_rules[card]
+                    })
+            }))
+}
+
 /// Whether a static ability that could give an object an ability functions anywhere now (CR 613.1f): one of layer 6 that
 /// affects other objects, of a permanent, an emblem or a card in a graveyard or exile, or one an effect gave a permanent.
 pub fn ability_granting_present(cards: &CardTable, state: &GameState) -> bool {
@@ -2682,21 +2710,17 @@ fn granted_to_others(cx: &Ctx, holder: ObjectId, layer: Layer) -> Vec<(u32, Obje
         return Vec::new();
     }
     let object_timestamp = state.obj(holder).timestamp;
-    let mut found: Vec<(u32, AbilityRef, &'static StaticDef, Linked)> = Vec::new();
-    for e in state.effects.iter().filter(|e| e.affected == holder) {
-        match e.kind {
-            EffectKind::AddAbility(ability) => {
-                if let AbilityDef::Static(s) = cards.ability(ability)
-                    && !s.own
-                {
-                    found.push((e.timestamp.max(object_timestamp), ability, s, given_ability(cards, state, holder, ability, Giver::of_effect(e))));
-                }
-            }
-            EffectKind::LoseAllAbilities => found.clear(),
-            _ => {}
-        }
-    }
-    found.retain(|(_, _, s, _)| s.layer == layer);
+    let found: Vec<(u32, AbilityRef, &'static StaticDef, Linked)> = effect_grants(
+        object_timestamp,
+        state.effects.iter().filter(|e| e.affected == holder),
+        |ability| matches!(cards.ability(ability), AbilityDef::Static(s) if !s.own && s.layer == layer),
+    )
+    .into_iter()
+    .filter_map(|(timestamp, ability, giver)| match cards.ability(ability) {
+        AbilityDef::Static(s) => Some((timestamp, ability, s, given_ability(cards, state, holder, ability, giver))),
+        _ => None,
+    })
+    .collect();
     if found.is_empty() {
         return Vec::new();
     }
