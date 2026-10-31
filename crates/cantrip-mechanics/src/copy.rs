@@ -165,6 +165,23 @@ pub fn create_hasty_token_copy_sacrificed_at_end_step(g: &mut dyn Game, item: &S
     Ok(())
 }
 
+/// "Create a token that's a copy of [it]. That token gains haste. Sacrifice it at the beginning of the next end step." (CR 707.2,
+/// 613.1f, 603.7c): the token copies `of` as it is now, and its haste is a separate effect on the token (CR 611.2a), not a copiable
+/// value, so a copy of the token doesn't have it (unlike `create_hasty_token_copy_sacrificed_at_end_step`'s exception). Each
+/// sentence ends where the text's does (CR 608.2c). The delayed ability is the `delayed` list's ability number `ability` of the
+/// resolving ability's card, `SACRIFICE_IT_AT_END_STEP`, about every token made (CR 603.7c). Chrome Dome and Blastoneuron
+/// print it.
+pub fn create_token_copy_with_haste_sacrificed_at_end_step(g: &mut dyn Game, item: &StackItem, of: ObjectId, ability: u8) -> Result<(), Suspend> {
+    let tokens = g.create_token_copies(of, item.controller, 1)?;
+    g.end_sentence();
+    for &token in &tokens {
+        crate::effects::gain_haste(g, item.object, token);
+    }
+    g.end_sentence();
+    crate::delayed::at_next_end_step_about(g, item, ability, &tokens);
+    Ok(())
+}
+
 /// The delayed ability of `create_hasty_token_copy_sacrificed_at_end_step`, for the card's `delayed` list: "Sacrifice it",
 /// each token it carries that is still on the battlefield under its controller (`delayed::sacrifice_created`).
 pub const SACRIFICE_IT_AT_END_STEP: AbilityDef =

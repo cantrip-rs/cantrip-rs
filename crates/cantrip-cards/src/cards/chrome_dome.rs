@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{copy, effects, statics, targets};
+use cantrip_mechanics::{copy, statics, targets};
 use cantrip_oracle as oracle;
 
 /// "Another target artifact you control" (CR 115.1, 109.1): an artifact on the battlefield under the ability's controller,
@@ -14,20 +14,7 @@ fn another_artifact_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool
 /// copied X is 0.
 fn copy_with_haste(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Some(target) = targets::object(g, item, 0) else { return Ok(()) };
-    let tokens = g.create_token_copies(target, item.controller, 1)?;
-    g.end_sentence();
-    for &token in &tokens {
-        effects::gain_haste(g, item.object, token);
-    }
-    g.end_sentence();
-    g.delayed_trigger_about(
-        DelayedWhen::Step { step: Step::End, on_turn_of: None },
-        item.object,
-        item.controller,
-        AbilityRef::delayed(g.card_id(&CARD), 0),
-        &tokens,
-    );
-    Ok(())
+    copy::create_token_copy_with_haste_sacrificed_at_end_step(g, item, target, 0)
 }
 
 pub static CARD: CardDef = CardDef {
