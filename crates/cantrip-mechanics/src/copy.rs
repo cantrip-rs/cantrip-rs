@@ -174,9 +174,13 @@ pub fn create_hasty_token_copy_sacrificed_at_end_step(g: &mut dyn Game, item: &S
 pub fn create_token_copy_with_haste_sacrificed_at_end_step(g: &mut dyn Game, item: &StackItem, of: ObjectId, ability: u8) -> Result<(), Suspend> {
     let tokens = g.create_token_copies(of, item.controller, 1)?;
     g.end_sentence();
-    for &token in &tokens {
-        crate::effects::gain_haste(g, item.object, token);
-    }
+    // "That token gains haste" is one instruction, applying to every token made (CR 608.2c).
+    g.one_instruction(&mut |g| {
+        for &token in &tokens {
+            crate::effects::gain_haste(g, item.object, token);
+        }
+        Ok(())
+    })?;
     g.end_sentence();
     crate::delayed::at_next_end_step_about(g, item, ability, &tokens);
     Ok(())
