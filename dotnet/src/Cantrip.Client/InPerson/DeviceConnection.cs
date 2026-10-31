@@ -7,7 +7,7 @@ using MessagePack;
 namespace Cantrip.Client.InPerson;
 
 /// <summary>
-/// An in-person device's line to the relay (docs/in-person.md): the <c>/inperson</c> WebSocket, which a tablet takes its
+/// An in-person device's line to the relay (docs/in-person.md): the <c>/inperson/socket</c> WebSocket, which a tablet takes its
 /// public feed from and sends its taps down, and which a phone takes the taps routed to it from. The same shape as
 /// <see cref="WebSocketTransport"/>, and for the same reason: a reader task fills a queue that <see cref="Receive"/>
 /// drains and a writer task empties a channel that <see cref="Send"/> fills, so the page above it polls on a timer and

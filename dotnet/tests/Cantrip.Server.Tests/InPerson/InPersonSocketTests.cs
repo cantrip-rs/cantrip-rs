@@ -10,7 +10,7 @@ using Xunit;
 namespace Cantrip.Server.Tests.InPerson;
 
 /// <summary>
-/// The relay's socket, <c>/inperson</c>, over real sockets: a phone and a tablet connect with <see cref="DeviceConnection"/>,
+/// The relay's socket, <c>/inperson/socket</c>, over real sockets: a phone and a tablet connect with <see cref="DeviceConnection"/>,
 /// the client the in-person pages use, and a tap made on the tablet reaches the phone. On the wall clock because it is a
 /// real server.
 /// </summary>
