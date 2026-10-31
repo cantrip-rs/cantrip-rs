@@ -2,14 +2,8 @@ use cantrip_api::*;
 use cantrip_mechanics::{library, targets};
 use cantrip_oracle as oracle;
 
-/// "This spell costs {1} less to cast if it targets an attacking creature" (CR 601.2c, 601.2f): the target as the total cost
-/// is determined, once it is announced; generic mana only (CR 118.7a).
-fn less_for_an_attacking_creature(q: &dyn Query, _: ObjectId, _: PlayerId, _: Costed, targets: &[Target]) -> CostDelta {
-    if targets.iter().filter_map(|t| t.object()).any(|creature| q.is_attacking(creature)) { CostDelta::less(1) } else { CostDelta::NONE }
-}
-
 pub static CARD: CardDef = CardDef {
     spell: spell(&[targets::CREATURE], library::owner_puts_first_target_on_top_or_bottom),
-    own_cost_changes: &[less_for_an_attacking_creature],
+    own_cost_changes: &[targets::costs_less_if_it_targets_an_attacking_creature::<1>],
     ..oracle::RUN_BEHIND
 };

@@ -171,6 +171,13 @@ pub fn costs_less_if_it_targets_a_tapped_creature<const N: u8>(q: &dyn Query, _:
     let tapped = targets.iter().filter_map(|t| t.object()).any(|creature| q.obj(creature).tapped);
     if tapped { CostDelta::less(N) } else { CostDelta::NONE }
 }
+/// "This spell costs {`N`} less to cast if it targets an attacking creature" (CR 601.2c, 601.2f): the target as the total cost
+/// is determined, once it is announced; generic mana only (CR 118.7a). Only a creature can be attacking. Depower, Guidance
+/// Failure and Run Behind print it (`CardDef::own_cost_changes`).
+pub fn costs_less_if_it_targets_an_attacking_creature<const N: u8>(q: &dyn Query, _: ObjectId, _: PlayerId, _: Costed, targets: &[Target]) -> CostDelta {
+    let attacking = targets.iter().filter_map(|t| t.object()).any(|creature| q.is_attacking(creature));
+    if attacking { CostDelta::less(N) } else { CostDelta::NONE }
+}
 pub fn attacking_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.is_attacking(id))
 }
