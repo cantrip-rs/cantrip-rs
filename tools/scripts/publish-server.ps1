@@ -174,7 +174,8 @@ Invoke-Remote $config "echo '$note' > ~/cantrip/DEPLOYED" | Out-Null
 if ($config.Url) {
     Write-Step "Checking $($config.Url)"
     $slug = Get-ChildItem (Join-Path $env:LOCALAPPDATA 'Cantrip\art-cache\512') -Filter *.webp | Select-Object -First 1
-    $paths = @('/', '/status', '/art/artists.json')
+    # /inperson is in-person play's setup page (docs/in-person.md, "Hosted in person"): on whenever the bot has a data directory.
+    $paths = @('/', '/status', '/inperson', '/inperson/api/choices', '/art/artists.json')
     if ($slug) { $paths += "/art/512/$($slug.Name)" }
     foreach ($path in $paths) {
         try {

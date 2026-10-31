@@ -42,6 +42,8 @@
     <ProjectReference Include="..\Cantrip.Client\Cantrip.Client.csproj" />
     <ProjectReference Include="..\Cantrip.Server\Cantrip.Server.csproj" />
     <ProjectReference Include="..\Cantrip.Server.Host\Cantrip.Server.Host.csproj" />
+    <!-- In-person tables on the bot's own site (/inperson; docs/in-person.md, "Hosted in person"). -->
+    <ProjectReference Include="..\Cantrip.Server.InPerson\Cantrip.Server.InPerson.csproj" />
   </ItemGroup>
 
 </Project>

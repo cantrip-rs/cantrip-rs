@@ -65,10 +65,9 @@ public sealed class InPersonHost : IAsyncDisposable
 {
     public const string SetupRoute = "/setup";
 
-    /// <summary>A layout's key in the event's host data, so hosting it again lays out the same devices.</summary>
-    private const string LayoutKey = "inperson.layout";
+    private const string LayoutKey = InPersonSetup.LayoutKey;
 
-    private const string ClocksKey = "inperson.clocks";
+    private const string ClocksKey = InPersonSetup.ClocksKey;
 
     private static readonly Lazy<string> Page = new(() =>
     {
@@ -177,31 +176,17 @@ public sealed class InPersonHost : IAsyncDisposable
     /// <summary>Makes the grid draft the setup page asked for and hosts it.</summary>
     public async Task StartTableAsync(SetupRequest request)
     {
-        ArgumentNullException.ThrowIfNull(request);
-        if (request.Names is not { Count: 2 } || request.Names.Any(name => !ValidName(name)))
-            throw new ArgumentException("Each seat needs a name of 1-32 printable characters.");
-        if (request.Layout is not (3 or 4)) throw new ArgumentException("The devices are three or four.");
-        if (request.Packs is < 1 or > 60) throw new ArgumentException("A grid draft lays out 1-60 grids.");
-        if (!Cubes().Contains(request.Cube, StringComparer.Ordinal)) throw new ArgumentException($"There is no cube '{request.Cube}'.");
+        InPersonSetup.Validate(request, Cubes());
 
         await _starting.WaitAsync().ConfigureAwait(false);
         try
         {
             if (_table is not null) throw new InvalidOperationException("A table is already being played here.");
-            string cube = CubeList.Find(request.Cube, [.. _options.CubeDirectories]);
             string first = EventStore.ToId(request.Names[0]);
             string second = EventStore.ToId(request.Names[1]);
             if (second == first) second += "-2";
-            CreatedEvent created = DraftPod.CreateGrid(_options.Store, _library, new GridDraftSetup
-            {
-                Name = $"In person: {request.Cube}",
-                Cube = request.Cube,
-                CubeCards = CubeList.Load(cube),
-                PickOrder = CubeList.PickOrder(cube),
-                Packs = request.Packs,
-                Players = [(first, request.Names[0].Trim()), (second, request.Names[1].Trim())],
-            }, _options.TimeProvider);
-            _table = await OpenAsync(created.Record.Id, request.Address ?? _options.Address, request.Layout, request.Clocks).ConfigureAwait(false);
+            string created = InPersonSetup.CreateEvent(_options.Store, _library, _options.CubeDirectories, request, (first, second), _options.TimeProvider);
+            _table = await OpenAsync(created, request.Address ?? _options.Address, request.Layout, request.Clocks).ConfigureAwait(false);
         }
         finally
         {
@@ -246,17 +231,8 @@ public sealed class InPersonHost : IAsyncDisposable
         string lan = address is { Length: > 0 } given && IPAddress.TryParse(given, out _) ? given
             : LanAddress.Candidates().FirstOrDefault()?.Address.ToString() ?? "127.0.0.1";
 
-        List<(string PlayerId, string Name, int Seat)> players = [.. pod.Players.OrderBy(player => player.Seat)];
-        Dictionary<int, string> tickets = players.ToDictionary(player => player.Seat, player => pod.IssueTicket(player.PlayerId));
-        var relay = new InPersonRelay(new InPersonRelayOptions
-        {
-            PlayerNames = [.. players.Select(player => player.Name)],
-            SeatForTicket = pod.SeatFor,
-            TimeProvider = _options.TimeProvider,
-            Log = line => _site.Logger.LogWarning("In-person relay: {Line}", line),
-        });
-        List<int> sides = devices == 4 ? [1, 2] : [0];
-        List<(int Side, string Token)> tablets = [.. sides.Select(side => (side, relay.MintTablet(side)))];
+        InPersonSetup.Seating seating = InPersonSetup.Seat(pod, devices, _options.TimeProvider, line => _site.Logger.LogWarning("In-person relay: {Line}", line));
+        InPersonRelay relay = seating.Relay;
 
         int artPort = _options.TablePort == 0 ? 0 : _options.TablePort + 1;
         string artCache = _options.ArtCache ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Cantrip", "art-cache");
@@ -287,16 +263,9 @@ public sealed class InPersonHost : IAsyncDisposable
         }
 
         int sitePort = Site.Port;
-        string game = Uri.EscapeDataString($"ws://{lan}:{server.Port}/game");
         // A tablet is sent no TableMessage, which tells a seat's page where art is: its link says.
-        string tabletArt = Uri.EscapeDataString($"http://{lan}:{art.Urls.Select(each => new Uri(each).Port).First(port => port != 0)}/");
-        List<Device> links =
-        [
-            .. players.Select(player => new Device($"{player.Name}'s phone",
-                $"http://{lan}:{sitePort}/?inperson=phone&server={game}#ticket={tickets[player.Seat]}")),
-            .. tablets.Select(tablet => new Device(tablet.Side == 0 ? "The shared tablet" : $"{players[tablet.Side - 1].Name}'s tablet",
-                $"http://{lan}:{sitePort}/?inperson=tablet&side={tablet.Side}&art={tabletArt}#device={tablet.Token}")),
-        ];
+        List<DeviceLink> links = InPersonSetup.Links(seating, new Uri($"http://{lan}:{sitePort}/"), new Uri($"ws://{lan}:{server.Port}/game"),
+            new Uri($"http://{lan}:{art.Urls.Select(each => new Uri(each).Port).First(port => port != 0)}/"));
         _site.Logger.LogInformation("In person: event {Event} at ws://{Address}:{Port}/game; devices at http://{Address}:{Site}/.", pod.EventId, lan, server.Port, lan, sitePort);
         return new Table(pod, relay, server, art, links, lan);
     }
@@ -339,11 +308,7 @@ public sealed class InPersonHost : IAsyncDisposable
         };
     }
 
-    private List<string> Cubes() =>
-        [.. _options.CubeDirectories.Where(Directory.Exists)
-            .SelectMany(directory => Directory.EnumerateFiles(directory, "*.txt"))
-            .Select(Path.GetFileNameWithoutExtension).OfType<string>()
-            .Distinct(StringComparer.Ordinal).Order(StringComparer.OrdinalIgnoreCase)];
+    private List<string> Cubes() => InPersonSetup.Cubes(_options.CubeDirectories);
 
     /// <summary>Keeps the relay's taps moving and tells the tablets where the event stands, until the host is stopped.</summary>
     private async Task RunAsync()
@@ -414,9 +379,6 @@ public sealed class InPersonHost : IAsyncDisposable
         }
     }
 
-    private static bool ValidName(string? name) =>
-        name is not null && name.Trim().Length is >= 1 and <= 32 && !name.Any(char.IsControl);
-
     private static IResult Fresh(HttpContext context, object value)
     {
         context.Response.Headers.CacheControl = "no-store";
@@ -446,10 +408,5 @@ public sealed class InPersonHost : IAsyncDisposable
         return new SvgQRCode(data).GetGraphic(4);
     }
 
-    private sealed record Device(string Name, string Url)
-    {
-        public string Qr { get; } = QrSvg(Url);
-    }
-
-    private sealed record Table(DraftPod Pod, InPersonRelay Relay, GameServer Server, WebApplication Art, IReadOnlyList<Device> Devices, string Address);
+    private sealed record Table(DraftPod Pod, InPersonRelay Relay, GameServer Server, WebApplication Art, IReadOnlyList<DeviceLink> Devices, string Address);
 }

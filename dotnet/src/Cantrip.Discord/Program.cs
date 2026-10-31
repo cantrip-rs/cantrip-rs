@@ -41,6 +41,11 @@ using Cantrip.Server.Events;
 // site, where a signed-in player enters one, drafts against bots, and plays their deck against other players' a match at
 // a time. Its tables are on the draft ports.
 //
+// With a data directory and the bot serving the client, /inperson is in-person play (docs/in-person.md, "Hosted in
+// person"): anyone, signed in or not, sets up a grid draft for two players at one physical table - a phone each and a
+// tablet or two - and is shown a code for each device. Its tables are on the draft ports and open on their tickets alone.
+// --in-person-games N (2) is how many may be played at once; 0 turns it off.
+//
 // --bot-narration DIR (or CANTRIP_BOT_NARRATION) has every bot seat write down each decision it makes and what it
 // weighed - its picks and deck, then its games - a file a seat in DIR, so a draft or a game lost to a person can be read
 // afterwards. Off by default.
@@ -193,9 +198,17 @@ DraftHost? drafts = null;
 DraftQueues? queues = null;
 PodHosts? pods = null;
 LeagueHosts? leagues = null;
+Cantrip.Server.InPerson.InPersonTables? inPerson = null;
 string? cubeName = null;
 PortraitStore? portraits = null;
 EventStore? store = null;
+if (!int.TryParse(StringArg(args, "--in-person-games") ?? Cantrip.Server.InPerson.InPersonTables.DefaultMostGames.ToString(System.Globalization.CultureInfo.InvariantCulture),
+        System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out int inPersonGames) || inPersonGames > 100)
+{
+    Console.Error.WriteLine("--in-person-games takes how many in-person tables may be played at once, 0 for none.");
+    return 1;
+}
+
 if (EventStore.Configured(args) is { } data)
 {
     if (!TryPorts(StringArg(args, "--draft-ports") ?? "7790-7799", out List<int> draftPorts) || draftPorts.Intersect(ports).Any() || draftPorts.Contains(webPort))
@@ -259,6 +272,27 @@ if (EventStore.Configured(args) is { } data)
         });
         Console.WriteLine($"{await pods.ResumeAsync()} booster draft(s) taken up again.");
 
+        // In person, on the bot's own site: its tables on the draft ports, its art the site's.
+        if (inPersonGames > 0 && pages is not null && art is not null && cubes is not null)
+        {
+            inPerson = new Cantrip.Server.InPerson.InPersonTables(new Cantrip.Server.InPerson.InPersonTablesOptions
+            {
+                ContentRoot = content,
+                Store = store,
+                CubeDirectories = [cubes],
+                Ports = draftPorts,
+                Site = pages,
+                Art = art,
+                ListenAddress = listen,
+                PublicHost = publicHost,
+                TableAddress = tableAddress,
+                MostGames = inPersonGames,
+                Log = Console.WriteLine,
+            });
+            int leftOver = inPerson.CancelLeftOver();
+            Console.WriteLine($"In person: up to {inPersonGames} table(s) at once{(leftOver == 0 ? string.Empty : $"; {leftOver} left from before called off")}.");
+        }
+
         // Draft queues, one to a channel, set up there with /cantrip queue and kept in the same directory.
         queues = new DraftQueues(new DraftQueuesOptions
         {
@@ -313,6 +347,7 @@ await using DraftHost? draftHost = drafts;
 await using DraftQueues? draftQueues = queues;
 await using PodHosts? podHosts = pods;
 await using LeagueHosts? leagueHosts = leagues;
+await using Cantrip.Server.InPerson.InPersonTables? inPersonTables = inPerson;
 
 await using var matchmaker = new Matchmaker(new MatchmakerOptions
 {
@@ -371,7 +406,9 @@ if (client is null)
     };
     // Behind sign-in, every table is for the Discord accounts it has a seat for: the links go by the enter page and the
     // table proxy asks who is signed in. Without sign-in set up, or the proxy, a ticket opens a seat as it always has.
-    access = signIn.Enabled && publicUrl is not null ? new TableAccess() : null;
+    // In-person tables are the one exemption: their phones belong to no Discord account, so their tables open on the
+    // ticket alone, for as long as an in-person table holds the port.
+    access = signIn.Enabled && publicUrl is not null ? new TableAccess { TicketOnly = inPerson is null ? null : inPerson.Holds } : null;
     QueueSiteOptions? queueSite = null;
     if (queues is not null && drafts is not null && store is not null)
     {
@@ -403,13 +440,14 @@ if (client is null)
         publicUrl is null ? null : tablePorts, portraits, status, signIn, queueSite, playSite, access,
         new HomeSiteOptions { SignIn = signIn, Drafts = queueSite, Constructed = playSite, Leagues = leagueSite, HasDecks = deckSite is not null, Store = store,
             Portraits = portraits is null ? null : portraits.PathFor }, deckSite,
-        leagues: leagueSite);
+        leagues: leagueSite, inPerson: inPerson);
     client = siteAddress;
     Console.WriteLine($"Serving the web client from {root}; the server's status at {new Uri(client, Cantrip.Server.Host.StatusSite.Route)}.");
     if (queueSite is not null) Console.WriteLine($"The draft queue page at {queuePage}.");
     if (playSite is not null) Console.WriteLine($"Constructed play at {new Uri(siteAddress, PlaySite.Route)}.");
     if (deckSite is not null) Console.WriteLine($"The deck editor at {new Uri(siteAddress, DeckSite.Route)}.");
     if (leagueSite is not null) Console.WriteLine($"The leagues at {new Uri(siteAddress, LeagueSite.Route)}.");
+    if (inPerson is not null) Console.WriteLine($"In-person play at {new Uri(siteAddress, Cantrip.Server.InPerson.InPersonTables.Route.TrimStart('/'))}.");
     Console.WriteLine(signIn.Enabled
         ? $"Players sign in with Discord, which sends them back to {SiteSignIn.Callback(siteAddress)}: register it as the application's redirect."
         : "Nobody can sign in to take a seat from the site: give --oauth-client-id and CANTRIP_DISCORD_SECRET.");

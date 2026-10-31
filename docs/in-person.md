@@ -47,9 +47,9 @@ phone; a tablet never shows anything of a private prompt.
   request outstanding does nothing.
 - **Credentials.** A phone joins its seat with the seat ticket from its QR code (`?inperson=phone&server=...#ticket=T`)
   and plays through the ordinary `/game` socket, in a phone layout of the ordinary client. A tablet's QR code holds a
-  device token the relay minted (`?inperson=tablet&side=N#device=D`); tablets talk only to the relay's `/inperson`
-  socket. A welcomed device keeps a resume id and a 256-bit proof for its tab, compared in constant time; scanning a QR
-  code again takes the device's place over.
+  device token the relay minted (`?inperson=tablet&side=N&art=...#device=D`); tablets talk only to the relay's
+  `/inperson/socket`. A welcomed device keeps a resume id and a 256-bit proof for its tab, compared in constant time;
+  scanning a QR code again takes the device's place over.
 - **Setup.** A setup page, served on loopback only since its QR codes hold credentials, takes the players' names, the
   cube, the packs and the layout, starts the draft and shows a QR code for each device and which are connected. Match
   and pick clocks are off by default, since the players are at the same table; a checkbox on the page turns them on.
@@ -70,7 +70,7 @@ One machine serves three ports, all on every interface, so Windows asks once for
 
 | Port | What |
 | --- | --- |
-| 5200 (`--port`) | the site: the published web client at `/`, the relay's socket at `/inperson`, and the setup page at `/setup`, to loopback alone |
+| 5200 (`--port`) | the site: the published web client at `/`, the relay's socket at `/inperson/socket`, and the setup page at `/setup`, to loopback alone |
 | 7790 (`--table-port`) | the table: an ordinary `GameServer` hosting the event (`/game`) |
 | 7791 | card art (`Cantrip.Art.ArtServer`), which the table tells its clients by the chosen address |
 
@@ -84,18 +84,57 @@ it again lays out the same devices.
 
 - A phone's link: `http://LAN:5200/?inperson=phone&server=ws%3A%2F%2FLAN%3A7790%2Fgame#ticket=T`. The phone plays the
   draft, deck building and its games through `/game` with that ticket, as any seat of an event does, and opens
-  `/inperson` with the same ticket for the taps routed to it.
-- A tablet's link: `http://LAN:5200/?inperson=tablet&side=N#device=D`. A tablet only ever opens `/inperson`.
+  `/inperson/socket` with the same ticket for the taps routed to it.
+- A tablet's link: `http://LAN:5200/?inperson=tablet&side=N&art=...#device=D`, `art` being where card art is, since a
+  tablet is sent no table message to say so. A tablet only ever opens `/inperson/socket`.
+
+Either device finds the relay beside the page that served it (`DeviceConnection.AddressFor`: `inperson/socket` in the
+page's own folder, `wss://` for an `https://` page), so the same links work on the standalone server and on the bot's
+site.
 
 **Clocks.** Off by default: no pick clock in the draft (`DraftTiming.GridPick` zero), no match clock carried by the
 event, and a table clock of a week (`GameServerOptions.PlayerClock` must be more than nothing, so off is one no game
 runs out), with deck building given four hours and the absences that forfeit a remote player (`NoShow`, `Away`) twelve,
 since a phone asleep on the table is not a player gone. The checkbox gives the event's usual clocks instead.
 
+## Hosted in person
+
+The Discord bot's site hosts in-person tables too, on the cloud server behind its Cloudflare tunnel: anyone opens
+`https://<public-url>/inperson`, with no Discord sign-in, and sets up a table there. It is the same code, kept in
+`Cantrip.Server.InPerson` and mounted by one call in the bot's `ClientSite` (`InPersonTables.Map`); docs/discord-bot.md,
+"In person", has the bot's side.
+
+- **The page.** `/inperson` (`hosted.html`, in the site's look) takes the two names, the cube, the grids, the layout and
+  the clocks; there is no address to pick, since the devices reach the public URL. Its API is
+  `/inperson/api/choices`, `/inperson/api/start` and `/inperson/api/table`; the relay's socket is
+  `/inperson/socket`.
+- **Links.** A phone's: `https://<public>/?inperson=phone&server=wss%3A%2F%2F<public>%2Ftable%2F{port}%2Fgame#ticket=T`;
+  a tablet's: `https://<public>/?inperson=tablet&side=N&art=https%3A%2F%2F<public>%2F#device=D`. Without `--public-url`
+  they use the bot's `--public-host` and web port, and the table's own port.
+- **Tables** take a port from the bot's draft ports by the same rule as its other draft tables (a port another table
+  holds refuses, and the next is tried), and tell their seats the bot's art service, whose cache is the bot's.
+- **Sign-in.** The table proxy lets a WebSocket through to a port an in-person table holds with no Discord sign-in,
+  for as long as it holds it (`TableAccess.TicketOnly`); the table checks the ticket itself. Every other table behind
+  sign-in wants a signed-in account with a seat, as before.
+- **Who sees the codes.** Making a table is open to anyone, but its codes seat whoever scans them, so they are shown only
+  to its creator. Start answers the table's id and a 256-bit creator key; the page puts both after the `#` of its own
+  address (`/inperson#table=ID&key=K`), which no request carries, and asks for the codes with them in a POST body, so
+  neither is in an address a log keeps. The server keeps the key only as its SHA-256 hash, compared in constant time.
+  The page's address is the only way back to the codes.
+- **Limits.** At most `--in-person-games` tables at once (2); another is refused with "All in-person tables are busy".
+  A table no device has come to within 15 minutes, or that every device has left for 30, is closed, its devices told
+  and its event called off; so is one whose event has been over for 10 minutes, and, when the bot starts, any event it
+  left live. Names are 1-32 printable characters, the cube is one of `docs/cube-lists` by name, the grids 1-60 and no
+  more than the cube holds, the layout three or four devices, and a form's body at most 4 KB. The players are given ids
+  of their own (`inperson-...`), never one a typed name would make. The relay's socket takes at most twelve
+  connections a table.
+
+The standalone `cantrip-in-person` keeps its loopback-only setup page; the bot's site has no `/setup`.
+
 ## The relay
 
 `InPersonRelay` sits between the table's game and the devices, with no socket of its own (`InPersonSite` serves it at
-`/inperson`) and a `TimeProvider` for its one timeout. The table deals each game through
+`/inperson/socket`, a connection going to the relay whose place its hello names) and a `TimeProvider` for its one timeout. The table deals each game through
 `ObservedRulesFactory(new NativeRulesHostFactory { PublicView = true }, relay)`; the `ObservedRulesHost` it wraps each
 game in forwards every member of `IRulesHost` - a reflection test holds it to that - and hands every step to the relay
 on the table's thread, where the relay only takes a snapshot and queues messages.

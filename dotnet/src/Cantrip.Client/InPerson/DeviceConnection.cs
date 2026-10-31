@@ -41,16 +41,18 @@ public sealed class DeviceConnection : IDisposable
     public string? LastError => _lastError;
 
     /// <summary>
-    /// The relay's address for a page served by the in-person server: the <c>/inperson</c> socket on the page's own host and
-    /// port (<c>ws://</c> for an <c>http://</c> page, <c>wss://</c> for an <c>https://</c> one).
+    /// The relay's address for a page served by an in-person server - the standalone one, or the bot's site behind its public
+    /// URL: the <c>inperson/socket</c> beside the page, on its own host and port (<c>ws://</c> for an <c>http://</c> page,
+    /// <c>wss://</c> for an <c>https://</c> one).
     /// </summary>
     public static Uri AddressFor(Uri page)
     {
         ArgumentNullException.ThrowIfNull(page);
+        string path = page.AbsolutePath;
         var address = new UriBuilder(page)
         {
             Scheme = page.Scheme == Uri.UriSchemeHttps ? "wss" : "ws",
-            Path = "/inperson",
+            Path = path[..(path.LastIndexOf('/') + 1)] + "inperson/socket",
             Query = string.Empty,
             Fragment = string.Empty,
         };

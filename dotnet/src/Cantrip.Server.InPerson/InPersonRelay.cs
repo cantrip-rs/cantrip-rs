@@ -112,6 +112,7 @@ public sealed class InPersonRelay : IStepObserver
     private readonly List<RelayDevice> _devices = [];
     private readonly List<PendingTap> _taps = [];
     private int _nextTap = 1;
+    private bool _shut;
 
     // The game being played, as the public sees it.
     private IRulesHost? _game;
@@ -170,6 +171,43 @@ public sealed class InPersonRelay : IStepObserver
             {
                 return [.. _phones.Concat(_tablets.Select(each => each.Tablet))
                     .Select(identity => new DeviceStatus(identity.Name, identity.Role, identity.Seat, identity.Side, identity.Device is not null))];
+            }
+        }
+    }
+
+    /// <summary>Whether any device has ever been welcomed here: a table nobody has come to is one a host may close.</summary>
+    public bool Welcomed { get; private set; }
+
+    /// <summary>Whether any device is connected now.</summary>
+    public bool AnyConnected
+    {
+        get
+        {
+            lock (_gate) return _phones.Concat(_tablets.Select(each => each.Tablet)).Any(each => each.Device is not null);
+        }
+    }
+
+    /// <summary>
+    /// Whether <paramref name="hello"/> names a place at this table - what a site hosting several tables asks of each, to
+    /// know which relay a new connection is for. Nothing changes.
+    /// </summary>
+    public bool Recognizes(DeviceHelloMessage hello)
+    {
+        ArgumentNullException.ThrowIfNull(hello);
+        lock (_gate) return !_shut && Recognize(hello, out _) is not null;
+    }
+
+    /// <summary>The table is closed: every device is told so and let go, and none is let in again.</summary>
+    public void CloseAll(string detail)
+    {
+        lock (_gate)
+        {
+            _shut = true;
+            foreach (RelayDevice device in _devices.ToList())
+            {
+                Refuse(device, ErrorCode.TableClosed, detail);
+                if (device.As is { } identity && identity.Device == device) identity.Device = null;
+                device.As = null;
             }
         }
     }
@@ -350,6 +388,12 @@ public sealed class InPersonRelay : IStepObserver
             return;
         }
 
+        if (_shut)
+        {
+            Refuse(device, ErrorCode.TableClosed, "This table has closed.");
+            return;
+        }
+
         if (hello.InPersonVersion != InPersonProtocol.Version || hello.ProtocolVersion != PlayerView.ProtocolVersion)
         {
             Refuse(device, ErrorCode.ProtocolMismatch,
@@ -357,8 +401,55 @@ public sealed class InPersonRelay : IStepObserver
             return;
         }
 
+        Identity? identity = Recognize(hello, out bool fresh);
+        if (identity is null)
+        {
+            Refuse(device, ErrorCode.MembershipRefused, "That code is not for this table, or no longer works: scan the setup page's again.");
+            return;
+        }
+
+        // A newer device takes the place over: the one there is told so and let go.
+        if (identity.Device is { } older && older != device)
+        {
+            Refuse(older, ErrorCode.MembershipRefused, "Another device has taken this one's place at the table.");
+            older.As = null;
+        }
+
+        if (fresh)
+        {
+            identity.ResumeId = Convert.ToHexString(RandomNumberGenerator.GetBytes(16));
+            identity.Proof = RandomNumberGenerator.GetBytes(32);
+        }
+
+        identity.Device = device;
+        device.As = identity;
+        Welcomed = true;
+        device.Send(new DeviceWelcomeMessage
+        {
+            Role = identity.Role,
+            Seat = identity.Seat,
+            Side = identity.Side,
+            ResumeId = identity.ResumeId!,
+            Proof = identity.Proof,
+            PlayerNames = [.. _options.PlayerNames],
+        });
+
+        if (identity.Role == DeviceRole.Tablet)
+        {
+            CatchUp(device);
+        }
+
+        PhaseChanged();
+    }
+
+    /// <summary>
+    /// Whose place a hello names - by its resume id and proof, else a phone's seat ticket, else a tablet's token - or null
+    /// for none of this table's. <paramref name="fresh"/> says the place is taken anew, not resumed. Called under the lock.
+    /// </summary>
+    private Identity? Recognize(DeviceHelloMessage hello, out bool fresh)
+    {
         Identity? identity = null;
-        bool fresh = true;
+        fresh = true;
         if (hello.ResumeId is { Length: > 0 } resumeId && hello.Proof is { } proof)
         {
             identity = _phones.Concat(_tablets.Select(each => each.Tablet))
@@ -392,43 +483,7 @@ public sealed class InPersonRelay : IStepObserver
             }
         }
 
-        if (identity is null)
-        {
-            Refuse(device, ErrorCode.MembershipRefused, "That code is not for this table, or no longer works: scan the setup page's again.");
-            return;
-        }
-
-        // A newer device takes the place over: the one there is told so and let go.
-        if (identity.Device is { } older && older != device)
-        {
-            Refuse(older, ErrorCode.MembershipRefused, "Another device has taken this one's place at the table.");
-            older.As = null;
-        }
-
-        if (fresh)
-        {
-            identity.ResumeId = Convert.ToHexString(RandomNumberGenerator.GetBytes(16));
-            identity.Proof = RandomNumberGenerator.GetBytes(32);
-        }
-
-        identity.Device = device;
-        device.As = identity;
-        device.Send(new DeviceWelcomeMessage
-        {
-            Role = identity.Role,
-            Seat = identity.Seat,
-            Side = identity.Side,
-            ResumeId = identity.ResumeId!,
-            Proof = identity.Proof,
-            PlayerNames = [.. _options.PlayerNames],
-        });
-
-        if (identity.Role == DeviceRole.Tablet)
-        {
-            CatchUp(device);
-        }
-
-        PhaseChanged();
+        return identity;
     }
 
     /// <summary>A tablet just welcomed is brought up to date: the game as it stands, or where the event stands before it.</summary>

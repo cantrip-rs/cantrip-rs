@@ -31,6 +31,16 @@ public sealed partial class TableAccess(TimeProvider? clock = null)
     private readonly TimeProvider _clock = clock ?? TimeProvider.System;
     private readonly ConcurrentDictionary<(int Port, ulong Player), DateTimeOffset> _seats = new();
 
+    /// <summary>
+    /// The one exemption: the ports of tables that open on their ticket alone, with no sign-in - the in-person tables the
+    /// bot's site hosts (<c>InPersonTables.Holds</c>), whose phones belong to no Discord account. True for a port only while
+    /// such a table holds it; the table still checks every ticket itself. Null exempts nothing.
+    /// </summary>
+    public Func<int, bool>? TicketOnly { get; init; }
+
+    /// <summary>Whether the table on <paramref name="port"/> opens on its ticket alone (<see cref="TicketOnly"/>).</summary>
+    public bool OpensOnTicket(int port) => TicketOnly?.Invoke(port) == true;
+
     /// <summary>Lets <paramref name="player"/> open the table at <paramref name="address"/>.</summary>
     public void Allow(Uri address, ulong player)
     {

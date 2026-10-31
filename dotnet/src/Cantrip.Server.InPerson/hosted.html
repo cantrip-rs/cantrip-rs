@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Cantrip - In person</title>
+<!--site:head-->
+<style>
+  .ip-form { display: grid; gap: 14px; max-width: 560px; }
+  .ip-form label { display: grid; gap: 5px; font-weight: 500; }
+  .ip-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ip-form fieldset { border: 1px solid var(--line, #8884); border-radius: 8px; padding: 8px 12px 10px; margin: 0; }
+  .ip-form fieldset label, .ip-check { display: flex; gap: 8px; align-items: center; font-weight: 400; }
+  .ip-devices { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 16px; }
+  .ip-device { border: 1px solid var(--line, #8884); border-radius: 10px; padding: 14px; display: grid; gap: 8px; justify-items: center; text-align: center; }
+  .ip-device h2 { font-size: 16px; margin: 0; }
+  .ip-qr { width: 100%; max-width: 220px; aspect-ratio: 1; background: #fff; border-radius: 6px; padding: 6px; }
+  .ip-qr svg { width: 100%; height: 100%; display: block; }
+  .ip-device a { font-size: 12px; word-break: break-all; }
+  .ip-on { color: var(--ready, #2e7d4f); font-weight: 600; }
+  .ip-off { color: var(--fg-muted, #888); font-weight: 600; }
+  @media (max-width: 520px) { .ip-two { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body data-page="inperson">
+<!--site:header-->
+<main id="main">
+  <div class="page-head">
+    <div class="titles">
+      <h1>In person</h1>
+      <p class="lead">Two players at one table: a phone each for hands and prompts, and a tablet or two for the board.
+        A grid draft, then the games. No sign-in needed.</p>
+    </div>
+  </div>
+
+  <p class="notice" id="busy" role="status" hidden></p>
+
+  <form class="ip-form" id="setup" hidden>
+    <div class="ip-two">
+      <label>Seat 1 <input type="text" id="name1" maxlength="32" value="Player 1" required></label>
+      <label>Seat 2 <input type="text" id="name2" maxlength="32" value="Player 2" required></label>
+    </div>
+    <div class="ip-two">
+      <label>Cube <select id="cube"></select></label>
+      <label>Grids <input type="number" id="packs" min="1" max="60" value="18"></label>
+    </div>
+    <fieldset>
+      <legend>Devices</legend>
+      <label><input type="radio" name="layout" value="3" checked> Three: one shared tablet between the players</label>
+      <label><input type="radio" name="layout" value="4"> Four: a tablet for each player</label>
+    </fieldset>
+    <label class="ip-check"><input type="checkbox" id="clocks"> Clocks: a pick clock in the draft and a chess clock in the games</label>
+    <div><button type="submit" class="button primary" id="start">Start the draft</button></div>
+    <p class="form-error" id="error" role="alert"></p>
+    <p class="hint" id="rules"></p>
+  </form>
+
+  <section id="table" hidden>
+    <p id="event"></p>
+    <p class="hint">Scan each code with the device it names. These codes seat whoever scans them, and this page's address is the
+      only way to see them again: keep it to yourself. A device that reloads takes its place back; scanning a code again
+      moves that place to the new device.</p>
+    <div class="ip-devices" id="devices"></div>
+  </section>
+
+  <p class="notice" id="closed" hidden>This table has closed, or this link is not for one here. <a href="inperson">Start another</a>.</p>
+</main>
+<!--site:footer-->
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  let shown = "";
+  let timer = 0;
+
+  function text(tag, value, cls) {
+    const element = document.createElement(tag);
+    element.textContent = value;
+    if (cls) element.className = cls;
+    return element;
+  }
+
+  // The table and its creator's key are after the #, which no request carries: they go to the server in a request's body.
+  function held() {
+    const hash = new URLSearchParams(location.hash.slice(1));
+    const id = hash.get("table"), key = hash.get("key");
+    return id && key ? { id, key } : null;
+  }
+
+  async function choices() {
+    try {
+      const answer = await fetch("inperson/api/choices", { cache: "no-store" });
+      if (!answer.ok) return;
+      const state = await answer.json();
+      if ($("setup").hidden) {
+        $("cube").replaceChildren(...state.cubes.map(name => new Option(name, name, false, name === state.cube)));
+        $("packs").max = state.mostPacks;
+        $("rules").textContent = `A table nobody joins within ${state.unclaimedMinutes} minutes is closed. At most ${state.mostGames} in-person tables are played at once.`;
+        $("setup").hidden = false;
+      }
+      busy(state.busy);
+    } catch (_) {
+    }
+  }
+
+  function busy(on) {
+    $("busy").hidden = !on;
+    $("busy").textContent = on ? "All in-person tables are busy. Try again when one finishes." : "";
+    $("start").disabled = on;
+  }
+
+  function fill(state) {
+    $("setup").hidden = true;
+    $("busy").hidden = true;
+    $("table").hidden = false;
+    $("event").replaceChildren(text("b", state.event.name), document.createTextNode(` - ${state.event.detail || state.event.stage}`));
+
+    // The codes are drawn once; only whether each device is here changes after that.
+    const key = state.devices.map(device => device.url).join("|");
+    if (key !== shown) {
+      shown = key;
+      $("devices").replaceChildren(...state.devices.map(device => {
+        const card = document.createElement("div");
+        card.className = "ip-device";
+        const qr = document.createElement("div");
+        qr.className = "ip-qr";
+        qr.innerHTML = device.qr;
+        const link = text("a", device.url);
+        link.href = device.url;
+        link.target = "_blank";
+        link.rel = "noreferrer";
+        card.append(text("h2", device.name), qr, text("div", ""), link);
+        return card;
+      }));
+    }
+
+    [...$("devices").children].forEach((card, i) => {
+      const status = card.children[2];
+      const on = state.devices[i].connected;
+      status.textContent = on ? "Connected" : "Not connected";
+      status.className = on ? "ip-on" : "ip-off";
+    });
+  }
+
+  async function table() {
+    const mine = held();
+    if (!mine) return;
+    try {
+      const answer = await fetch("inperson/api/table", { method: "POST", cache: "no-store", headers: { "Content-Type": "application/json" }, body: JSON.stringify(mine) });
+      if (answer.status === 404) {
+        clearInterval(timer);
+        $("table").hidden = true;
+        $("closed").hidden = false;
+        return;
+      }
+      if (answer.ok) fill(await answer.json());
+    } catch (_) {
+      // The server is away; the page says what it last knew.
+    }
+  }
+
+  $("setup").addEventListener("submit", async event => {
+    event.preventDefault();
+    $("start").disabled = true;
+    $("error").textContent = "";
+    const body = {
+      names: [$("name1").value.trim(), $("name2").value.trim()],
+      cube: $("cube").value,
+      packs: Number($("packs").value),
+      layout: Number(document.querySelector("input[name=layout]:checked").value),
+      clocks: $("clocks").checked,
+    };
+    try {
+      const answer = await fetch("inperson/api/start", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const result = await answer.json();
+      if (!answer.ok) {
+        $("error").textContent = result.error || "The draft could not be started.";
+        if (result.busy) busy(true);
+        $("start").disabled = !!result.busy;
+        return;
+      }
+      history.replaceState(null, "", `inperson#table=${encodeURIComponent(result.id)}&key=${encodeURIComponent(result.key)}`);
+      start();
+    } catch (error) {
+      $("error").textContent = String(error);
+      $("start").disabled = false;
+    }
+  });
+
+  function start() {
+    clearInterval(timer);
+    if (held()) {
+      table();
+      timer = setInterval(table, 1500);
+    } else {
+      choices();
+      timer = setInterval(choices, 10000);
+    }
+  }
+
+  window.addEventListener("hashchange", start);
+  start();
+})();
+</script>
+</body>
+</html>

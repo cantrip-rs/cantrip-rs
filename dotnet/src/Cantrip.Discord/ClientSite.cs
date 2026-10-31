@@ -43,13 +43,14 @@ internal static class ClientSite
     /// <paramref name="play"/>, the constructed play page at <c>/constructed</c> (<see cref="PlaySite"/>); and, given
     /// <paramref name="home"/>, a player's own page at <c>/home</c> (<see cref="HomeSite"/>); and, given <paramref name="decks"/>,
     /// the deck editor's catalog and each player's saved decks at <c>/decks</c> (<see cref="DeckSite"/>); and, given
-    /// <paramref name="leagues"/>, the leagues at <c>/leagues</c> (<see cref="LeagueSite"/>) - each signing players in
+    /// <paramref name="leagues"/>, the leagues at <c>/leagues</c> (<see cref="LeagueSite"/>); and, given <paramref name="inPerson"/>,
+    /// in-person tables at <c>/inperson</c>, open to anyone with no sign-in (docs/in-person.md, "Hosted in person") - each signing players in
     /// with <paramref name="signIn"/> (<see cref="SiteSignIn"/>). The bare address is the home page (<see cref="HomeSite.LandingPage"/>).
     /// </summary>
     /// <param name="before">For a test: run first on every request - to sign a test player in, say. Null for nothing.</param>
     public static async Task<WebApplication> StartAsync(string listen, int port, string root, ArtStore art, IReadOnlySet<int>? tables = null, PortraitStore? portraits = null,
         EventStatusBoard? status = null, SiteSignInOptions? signIn = null, QueueSiteOptions? queues = null, PlaySiteOptions? play = null, TableAccess? access = null, HomeSiteOptions? home = null, DeckSiteOptions? decks = null,
-        Func<HttpContext, Func<Task>, Task>? before = null, LeagueSiteOptions? leagues = null)
+        Func<HttpContext, Func<Task>, Task>? before = null, LeagueSiteOptions? leagues = null, Cantrip.Server.InPerson.InPersonTables? inPerson = null)
     {
         WebApplicationBuilder builder = WebApplication.CreateBuilder();
         builder.WebHost.UseUrls($"http://{listen}:{port}");
@@ -166,6 +167,9 @@ internal static class ClientSite
         {
             TableAccess.MapEnter(app);
         }
+
+        // In person: the setup page in the site's look, its API, and the devices' relay socket beside the client.
+        inPerson?.Map(app, (context, page) => chrome.Page(context, page, SiteSection.None));
 
         if (tables is not null)
         {

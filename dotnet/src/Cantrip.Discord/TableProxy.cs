@@ -49,8 +49,9 @@ internal static class TableProxy
                 return;
             }
 
-            // Behind sign-in, a table is for the Discord accounts it has seats for, ticket or not.
-            if (access is not null)
+            // Behind sign-in, a table is for the Discord accounts it has seats for, ticket or not - but for an in-person
+            // table, which its ticket alone opens (TableAccess.TicketOnly).
+            if (access is not null && !access.OpensOnTicket(port))
             {
                 if (SiteSignIn.Account(context) is not { } account)
                 {

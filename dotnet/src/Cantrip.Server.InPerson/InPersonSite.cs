@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.WebSockets;
+using Cantrip.Protocol;
 using Cantrip.Protocol.InPerson;
 using MessagePack;
 using Microsoft.AspNetCore.Builder;
@@ -11,49 +12,56 @@ using Microsoft.Extensions.Hosting;
 namespace Cantrip.Server.InPerson;
 
 /// <summary>
-/// The relay's socket, <c>/inperson</c> (docs/in-person.md): every device's line to an <see cref="InPersonRelay"/>, open
-/// to the local network. Each connection's first message is its hello; the relay says what is sent back.
+/// The relay's socket, <c>/inperson/socket</c> (docs/in-person.md): every device's line to an <see cref="InPersonRelay"/>,
+/// open to the network. Each connection's first message is its hello, which says which table's relay it is for - a site
+/// may host several (<see cref="InPersonTables"/>); the relay says what is sent back.
 /// </summary>
 public static class InPersonSite
 {
-    public const string Route = "/inperson";
+    /// <summary>Where the relay's socket is: beside the page, as <c>DeviceConnection.AddressFor</c> finds it.</summary>
+    public const string SocketRoute = "/inperson/socket";
 
     /// <summary>The largest message a device is believed: a tap or a hello is a few bytes.</summary>
     private const int MaxMessage = 16 * 1024;
 
-    /// <summary>How many devices may be connected at once: a table's phones and tablets, and room for reloads.</summary>
-    private const int MostConnections = 16;
+    /// <summary>How long a new connection has to say who it is.</summary>
+    private static readonly TimeSpan HelloPatience = TimeSpan.FromSeconds(30);
 
-    /// <summary>Serves <paramref name="relay"/> at <see cref="Route"/>. The app must already use WebSockets.</summary>
+    /// <summary>Serves <paramref name="relay"/> at <see cref="SocketRoute"/>. The app must already use WebSockets.</summary>
     public static IEndpointRouteBuilder MapInPerson(this IEndpointRouteBuilder app, InPersonRelay relay)
     {
         ArgumentNullException.ThrowIfNull(relay);
-        return app.MapInPerson(() => relay);
+        return app.MapInPerson(_ => relay);
     }
 
     /// <summary>
-    /// Serves whichever relay <paramref name="relay"/> says at <see cref="Route"/>: none - before a table is started - turns
-    /// a device away to try again. The app must already use WebSockets.
+    /// Serves whichever relay <paramref name="relay"/> says at <see cref="SocketRoute"/>: none - before a table is started -
+    /// turns a device away to try again. The app must already use WebSockets.
     /// </summary>
     public static IEndpointRouteBuilder MapInPerson(this IEndpointRouteBuilder app, Func<InPersonRelay?> relay)
     {
-        ArgumentNullException.ThrowIfNull(app);
         ArgumentNullException.ThrowIfNull(relay);
-        var slots = new SemaphoreSlim(MostConnections, MostConnections);
+        return app.MapInPerson(_ => relay());
+    }
+
+    /// <summary>
+    /// Serves the relay each connection's hello names (<paramref name="relayFor"/>, null for none) at
+    /// <see cref="SocketRoute"/>, to at most <paramref name="mostConnections"/> connections at once - the tables' phones and
+    /// tablets, and room for reloads. The app must already use WebSockets.
+    /// </summary>
+    public static IEndpointRouteBuilder MapInPerson(this IEndpointRouteBuilder app, Func<DeviceHelloMessage, InPersonRelay?> relayFor, int mostConnections = 16)
+    {
+        ArgumentNullException.ThrowIfNull(app);
+        ArgumentNullException.ThrowIfNull(relayFor);
+        var slots = new SemaphoreSlim(mostConnections, mostConnections);
 
         // A device's line ends as the server stops, rather than holding its shutdown until the device goes.
         CancellationToken stopping = app.ServiceProvider.GetRequiredService<IHostApplicationLifetime>().ApplicationStopping;
-        app.Map(Route, async context =>
+        app.Map(SocketRoute, async context =>
         {
             if (!context.WebSockets.IsWebSocketRequest)
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                return;
-            }
-
-            if (relay() is not { } serving)
-            {
-                context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
                 return;
             }
 
@@ -67,7 +75,7 @@ public static class InPersonSite
             {
                 using WebSocket socket = await context.WebSockets.AcceptWebSocketAsync().ConfigureAwait(false);
                 using var ended = CancellationTokenSource.CreateLinkedTokenSource(context.RequestAborted, stopping);
-                await ServeAsync(serving, socket, ended.Token).ConfigureAwait(false);
+                await ServeAsync(relayFor, socket, ended.Token).ConfigureAwait(false);
             }
             finally
             {
@@ -84,14 +92,38 @@ public static class InPersonSite
         return context.Connection.RemoteIpAddress is { } address && IPAddress.IsLoopback(address);
     }
 
-    /// <summary>Serves one accepted socket until either side ends it.</summary>
-    internal static async Task ServeAsync(InPersonRelay relay, WebSocket socket, CancellationToken aborted)
+    /// <summary>Serves one accepted socket until either side ends it, for the relay its hello names.</summary>
+    internal static async Task ServeAsync(Func<DeviceHelloMessage, InPersonRelay?> relayFor, WebSocket socket, CancellationToken aborted)
+    {
+        DeviceClientMessage? first;
+        using (var patience = CancellationTokenSource.CreateLinkedTokenSource(aborted))
+        {
+            patience.CancelAfter(HelloPatience);
+            first = await ReceiveAsync(socket, new byte[4 * 1024], patience.Token).ConfigureAwait(false);
+        }
+
+        if (first is null) return;
+        InPersonRelay? relay = first is DeviceHelloMessage hello ? relayFor(hello) : null;
+        if (relay is null)
+        {
+            await RefuseAsync(socket, first is DeviceHelloMessage
+                ? new DeviceErrorMessage { Code = ErrorCode.MembershipRefused, Detail = "That code is not for a table here, or no longer works: scan the setup page's again." }
+                : new DeviceErrorMessage { Code = ErrorCode.MembershipRequired, Detail = "A device says who it is first." }).ConfigureAwait(false);
+            return;
+        }
+
+        await ServeAsync(relay, socket, aborted, first).ConfigureAwait(false);
+    }
+
+    /// <summary>Serves one accepted socket until either side ends it; <paramref name="first"/> is a message already read.</summary>
+    internal static async Task ServeAsync(InPersonRelay relay, WebSocket socket, CancellationToken aborted, DeviceClientMessage? first = null)
     {
         RelayDevice device = relay.Attach();
         using var stop = CancellationTokenSource.CreateLinkedTokenSource(aborted);
         Task writer = WriteAsync(device, socket, stop.Token);
         try
         {
+            if (first is not null) relay.Receive(device, first);
             await ReadAsync(relay, device, socket, stop.Token).ConfigureAwait(false);
         }
         finally
@@ -108,40 +140,51 @@ public static class InPersonSite
         }
     }
 
+    /// <summary>Tells a connection no relay here is for it, and closes it.</summary>
+    private static async Task RefuseAsync(WebSocket socket, DeviceErrorMessage error)
+    {
+        try
+        {
+            using var patience = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+            await socket.SendAsync(MessagePackSerializer.Serialize<DeviceServerMessage>(error), WebSocketMessageType.Binary, endOfMessage: true, patience.Token).ConfigureAwait(false);
+            await socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "refused", patience.Token).ConfigureAwait(false);
+        }
+        catch (Exception failure) when (failure is OperationCanceledException or WebSocketException)
+        {
+        }
+    }
+
+    /// <summary>The next message on the socket, or null once it closes, fails or sends what is no message.</summary>
+    private static async Task<DeviceClientMessage?> ReceiveAsync(WebSocket socket, byte[] buffer, CancellationToken stop)
+    {
+        try
+        {
+            using var frame = new MemoryStream();
+            WebSocketReceiveResult result;
+            do
+            {
+                result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), stop).ConfigureAwait(false);
+                if (result.MessageType == WebSocketMessageType.Close) return null;
+                if (result.MessageType != WebSocketMessageType.Binary || frame.Length + result.Count > MaxMessage) return null;
+                frame.Write(buffer, 0, result.Count);
+            }
+            while (!result.EndOfMessage);
+
+            return MessagePackSerializer.Deserialize<DeviceClientMessage>(frame.ToArray());
+        }
+        catch (Exception error) when (error is OperationCanceledException or WebSocketException or MessagePackSerializationException)
+        {
+            return null;
+        }
+    }
+
     private static async Task ReadAsync(InPersonRelay relay, RelayDevice device, WebSocket socket, CancellationToken stop)
     {
         var buffer = new byte[4 * 1024];
-        try
+        while (socket.State == WebSocketState.Open && !stop.IsCancellationRequested)
         {
-            while (socket.State == WebSocketState.Open && !stop.IsCancellationRequested)
-            {
-                using var frame = new MemoryStream();
-                WebSocketReceiveResult result;
-                do
-                {
-                    result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer), stop).ConfigureAwait(false);
-                    if (result.MessageType == WebSocketMessageType.Close) return;
-                    if (result.MessageType != WebSocketMessageType.Binary || frame.Length + result.Count > MaxMessage) return;
-                    frame.Write(buffer, 0, result.Count);
-                }
-                while (!result.EndOfMessage);
-
-                DeviceClientMessage message;
-                try
-                {
-                    message = MessagePackSerializer.Deserialize<DeviceClientMessage>(frame.ToArray());
-                }
-                catch (MessagePackSerializationException)
-                {
-                    return;
-                }
-
-                relay.Receive(device, message);
-            }
-        }
-        catch (Exception error) when (error is OperationCanceledException or WebSocketException)
-        {
-            // The device went, or the server is stopping.
+            if (await ReceiveAsync(socket, buffer, stop).ConfigureAwait(false) is not { } message) return;
+            relay.Receive(device, message);
         }
     }
 

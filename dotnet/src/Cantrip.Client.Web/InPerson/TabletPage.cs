@@ -807,7 +807,7 @@ public sealed partial class TabletPage : UserControl
     private void TapPlayer(int seat) =>
         Send(new TableTapMessage { Sequence = _client.EventSequence, Object = ViewHandle.None, Player = seat });
 
-    // --- The device's wire: the relay's /inperson socket, or a test's feed. ---
+    // --- The device's wire: the relay's /inperson/socket, or a test's feed. ---
 
     private Func<IReadOnlyList<DeviceServerMessage>>? _receive;
     private Action<DeviceClientMessage>? _send;
@@ -857,7 +857,7 @@ public sealed partial class TabletPage : UserControl
     private bool _unreachable;
 
     /// <summary>
-    /// Connects to the relay's <c>/inperson</c> socket on the server that served this page, and says who this tablet is:
+    /// Connects to the relay's <c>/inperson/socket</c> beside this page, and says who this tablet is:
     /// the token from its QR code, and the resume id and proof of an earlier welcome in this tab, which the relay prefers
     /// while it still knows them - a reload, whose address no longer holds the token, comes back on those alone. A lost
     /// connection is tried again a few times; the relay sends the board whole again on a welcome.

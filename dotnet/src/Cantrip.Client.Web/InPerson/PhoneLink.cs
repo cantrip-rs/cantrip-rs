@@ -9,7 +9,7 @@ namespace Cantrip.Client.Web.InPerson;
 /// tablets that were routed to this seat come in on it, and whether each was used goes back. The game itself - the view,
 /// every prompt and answer - goes over the page's ordinary connection, as the remote client's does.
 /// <para>
-/// The line is the relay's <c>/inperson</c> socket on the page's own host (<see cref="DeviceConnection"/>), opened with the
+/// The line is the relay's <c>/inperson/socket</c> beside the page (<see cref="DeviceConnection"/>), opened with the
 /// seat's ticket, or with the resume id and proof of the welcome this tab had before, kept in the tab's session storage
 /// so a reload takes the phone's place back. A dropped line is opened again every few seconds.
 /// </para>

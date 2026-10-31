@@ -2,7 +2,8 @@
 
   <!-- In-person play (docs/in-person.md): two players at one physical table, a phone each and a tablet or two between
        them. This process runs the table on the ordinary GameServer, relays the public board to the tablets and routes
-       their taps to the phones, and serves the setup page. Nothing in the remote client's path references it. -->
+       their taps to the phones, and serves the setup page. The Discord bot references it too, to host tables on its own
+       site (InPersonTables). Nothing in the remote client's path references it. -->
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <AssemblyName>cantrip-in-person</AssemblyName>
@@ -11,15 +12,18 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="Cantrip.Server.Tests" />
+    <InternalsVisibleTo Include="Cantrip.Discord.Tests" />
   </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
-  <!-- The setup page, one file of HTML, CSS and script, served from the assembly to this computer alone. -->
+  <!-- The setup pages, each one file of HTML, CSS and script, served from the assembly: the standalone server's to this
+       computer alone, and the hosted one (InPersonTables) on a public site, in that site's look. -->
   <ItemGroup>
     <EmbeddedResource Include="setup.html" LogicalName="Cantrip.Server.InPerson.setup.html" />
+    <EmbeddedResource Include="hosted.html" LogicalName="Cantrip.Server.InPerson.hosted.html" />
   </ItemGroup>
 
   <ItemGroup>

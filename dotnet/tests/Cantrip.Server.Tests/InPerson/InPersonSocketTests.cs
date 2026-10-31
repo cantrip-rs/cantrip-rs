@@ -51,7 +51,7 @@ public sealed class InPersonSocketTests
         app.MapInPerson(relay);
         await app.StartAsync();
         Uri address = DeviceConnection.AddressFor(new Uri(app.Urls.First() + "/?inperson=tablet"));
-        Assert.Equal("/inperson", address.AbsolutePath);
+        Assert.Equal("/inperson/socket", address.AbsolutePath);
         Assert.Equal("ws", address.Scheme);
 
         using DeviceConnection phone = await DeviceConnection.ConnectAsync(address);

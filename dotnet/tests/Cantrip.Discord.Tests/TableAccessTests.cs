@@ -144,6 +144,90 @@ public sealed class TableAccessTests
         }
     }
 
+    [Fact]
+    public void Only_the_ports_it_is_told_of_open_on_a_ticket_alone()
+    {
+        Assert.False(new TableAccess().OpensOnTicket(7790));
+        var access = new TableAccess { TicketOnly = port => port == 7790 };
+        Assert.True(access.OpensOnTicket(7790));
+        Assert.False(access.OpensOnTicket(7791));
+    }
+
+    [Fact]
+    public async Task An_in_person_table_opens_on_its_ticket_alone_and_every_other_table_still_wants_a_seat()
+    {
+        List<int> free = FreePorts(3);
+        (int web, int inPerson, int other) = (free[0], free[1], free[2]);
+        var site = new Uri($"http://127.0.0.1:{web}/");
+        bool held = true;
+        var access = new TableAccess { TicketOnly = port => held && port == inPerson };
+
+        DeckList deck = DeckList.Load(DeckList.Find(Path.Combine(RepoRoot.Path, "decks"), "rw-aggro"));
+        await using var matchmaker = new Matchmaker(new MatchmakerOptions
+        {
+            ContentRoot = RepoRoot.ContentRoot,
+            Deck = deck,
+            Ports = [inPerson, other],
+            TableAddress = port => TableProxy.Address(site, port),
+        });
+
+        WebApplicationBuilder builder = WebApplication.CreateBuilder();
+        builder.WebHost.UseUrls(site.AbsoluteUri);
+        builder.Logging.SetMinimumLevel(LogLevel.Warning);
+        builder.Services.AddRouting();
+        WebApplication app = builder.Build();
+        app.UseWebSockets();
+        app.UseRouting();
+        app.Use((context, next) =>
+        {
+            if (context.Request.Headers.TryGetValue(AsHeader, out var id))
+            {
+                var identity = new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, id.ToString()), new Claim(ClaimTypes.Name, "Tester")], "test");
+                context.User = new ClaimsPrincipal(identity);
+            }
+
+            return next(context);
+        });
+        app.MapTables("127.0.0.1", new HashSet<int> { inPerson, other }, access);
+        await app.StartAsync();
+        try
+        {
+            Uri first = (await matchmaker.HostAsync(new DiscordPlayer(7, "Alice"))).Game!.Address;
+            Uri second = (await matchmaker.HostAsync(new DiscordPlayer(9, "Carol"))).Game!.Address;
+            Uri exempt = TableAccess.PortOf(first) == inPerson ? first : second;
+            Uri guarded = exempt == first ? second : first;
+            Assert.Equal(inPerson, TableAccess.PortOf(exempt));
+
+            // The in-person table: through with nobody signed in, and with an account it has no seat for.
+            using (var nobody = new ClientWebSocket())
+            {
+                await nobody.ConnectAsync(exempt, CancellationToken.None);
+                Assert.Equal(WebSocketState.Open, nobody.State);
+            }
+
+            using (var stranger = new ClientWebSocket())
+            {
+                stranger.Options.SetRequestHeader(AsHeader, "8");
+                await stranger.ConnectAsync(exempt, CancellationToken.None);
+                Assert.Equal(WebSocketState.Open, stranger.State);
+            }
+
+            // Every other table, exactly as before.
+            Assert.Equal(HttpStatusCode.Unauthorized, await Refusal(guarded, null));
+            Assert.Equal(HttpStatusCode.Forbidden, await Refusal(guarded, 8));
+
+            // Once the in-person table gives its port back, the port wants a seat like any other.
+            held = false;
+            Assert.Equal(HttpStatusCode.Unauthorized, await Refusal(exempt, null));
+            Assert.Equal(HttpStatusCode.Forbidden, await Refusal(exempt, 8));
+        }
+        finally
+        {
+            await app.StopAsync();
+            await app.DisposeAsync();
+        }
+    }
+
     private static async Task<HttpStatusCode?> Refusal(Uri socket, int? account)
     {
         using var probe = new ClientWebSocket();

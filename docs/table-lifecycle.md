@@ -18,7 +18,7 @@ deployment hardening; these credentials do not make plaintext remote WebSockets 
 only, not server process loss. Reconnect does not replay or relabel a historical game.
 
 In-person play ([in-person.md](in-person.md)) is the one host that listens on the local network over plain WebSocket by
-design: its table, its art and its relay (`/inperson`) are on every interface, for phones and tablets in the same room.
+design: its table, its art and its relay (`/inperson/socket`) are on every interface, for phones and tablets in the same room.
 That is accepted for one room's network and nothing wider. The seats are still taken only by the event's tickets,
 which travel in the QR codes of a setup page served to loopback alone, and a tablet only by a token the relay minted.
 

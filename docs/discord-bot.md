@@ -332,6 +332,7 @@ and `tools\test.cmd` with it, for as long as it ran.
 | `--min-deck N` | `40` | The fewest cards a main deck may have. |
 | `--draft-ports FIRST-LAST` | `7790-7799` | One draft table to a port, held from the first player joining to the game's end; shared by queues, the queue page's tables and `/cantrip draft`. |
 | `--oauth-client-id ID` | `CANTRIP_DISCORD_CLIENT_ID`, else none | The application's OAuth2 client id, for signing in on the draft queue and constructed play pages; with `CANTRIP_DISCORD_SECRET`. |
+| `--in-person-games N` | `2` | How many in-person tables (`/inperson`, below) may be played at once; `0` turns in-person play off. It needs `--data` and the bot serving the client. |
 
 The token is read from the environment only, so it never appears in a command line or a shell history; so is the
 OAuth2 secret, `CANTRIP_DISCORD_SECRET`.
@@ -374,6 +375,20 @@ sign-in is refused with 401, a signed-in account with no seat there with 403. Th
 so both are needed. A seat is kept for its account twelve hours.
 
 Without sign-in or without `--public-url` (tables on their own ports) a ticket opens a seat as it always has.
+
+The one exemption is an in-person table (below): its phones belong to nobody's Discord account, so the proxy lets a
+WebSocket through to a port while, and only while, an in-person table holds it (`TableAccess.TicketOnly`, asked of
+`InPersonTables.Holds`). The table checks the ticket as every table does. Every other table is as above.
+
+## In person
+
+With a data directory and the bot serving the client, `/inperson` on its site is in-person play (docs/in-person.md,
+"Hosted in person"): anyone, signed in or not, sets up a grid draft for two players at one physical table and is shown a
+QR code for each phone and tablet. Its tables take the draft ports, as every other draft table does, and tell their
+devices the bot's own art; the devices open the client at the site's address, their tables at
+`wss://.../table/{port}/game` through the proxy and the relay at `wss://.../inperson/socket`. At most
+`--in-person-games` (2) are played at once; a table no device comes to within 15 minutes, or every device has left for
+30, is closed and its event called off, as is one left live when the bot stopped.
 
 ## How it is built
 
