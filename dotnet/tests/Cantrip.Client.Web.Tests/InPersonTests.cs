@@ -72,7 +72,11 @@ public sealed class InPersonTests(WebClient web)
             tapped = await shared.SettledAsync(state => state.Taps.Count == 3);
             Assert.Equal((0, 2), (tapped.Taps[2].Object, tapped.Taps[2].Player));
 
-            TabletCard bolt = tapped.Cards.Single(card => card.Name == "Lightning Bolt");
+            // The shared board's band shows the stack once facing each player; either Bolt is the one spell.
+            TabletCard[] bolts = [.. tapped.Cards.Where(card => card.Name == "Lightning Bolt")];
+            Assert.Equal(["opponent-stack", "stack"], bolts.Select(card => card.Place).Order());
+            Assert.Single(bolts.Select(card => card.Handle).Distinct());
+            TabletCard bolt = bolts.Single(card => card.Place == "opponent-stack");
             await shared.TapCardAsync(bolt);
             tapped = await shared.SettledAsync(state => state.Taps.Count == 4);
             Assert.Equal(bolt.Handle, tapped.Taps[3].Object);
@@ -109,6 +113,50 @@ public sealed class InPersonTests(WebClient web)
             Assert.Empty(own.Errors);
         }
     }
+
+    /// <summary>
+    /// The whole table, end to end: Bot1's phone and one shared tablet at a relay, beside a table playing the Bolt-the-Goyf
+    /// scenario. Bolt is tapped in the phone's hand, the Mountain and the Goyf with a finger on the tablet - the Goyf on
+    /// seat 2's turned half - and each tap goes through the relay to the phone, which answers the table; the table judges
+    /// every answer against the script. No tablet ever names a card in the phone's hand.
+    /// </summary>
+    [Fact]
+    public async Task Bolt_is_aimed_from_a_phone_and_a_shared_tablet_through_the_relay()
+    {
+        await using var table = new InPersonTable(web, "shared", 0);
+        string? failure = await ScenarioPlayer.PlayAsync(web, ScenarioPath(Scenario), atTable: table);
+        Assert.True(failure is null, $"{Scenario}:\n{failure}");
+        await table.Tablets[0].PictureAsync("over");
+    }
+
+    /// <summary>
+    /// The same with a tablet for each player: the Mountain tapped on Bot1's own board, the Goyf on Bot2's.
+    /// </summary>
+    [Fact]
+    public async Task Bolt_is_aimed_from_a_phone_and_each_players_own_tablet_through_the_relay()
+    {
+        await using var table = new InPersonTable(web, "own-boards", 1, 2);
+        string? failure = await ScenarioPlayer.PlayAsync(web, ScenarioPath(Scenario), atTable: table);
+        Assert.True(failure is null, $"{Scenario}:\n{failure}");
+        await table.Tablets[0].PictureAsync("over");
+        await table.Tablets[1].PictureAsync("over");
+    }
+
+    /// <summary>
+    /// A target in a graveyard, tapped on the shared tablet: Reanimate cast from the phone at the Goyf just Bolted, Bot2's
+    /// graveyard pile tapped on the turned half to open its list, and the Goyf tapped in it.
+    /// </summary>
+    [Fact]
+    public async Task A_graveyard_target_is_tapped_in_the_list_its_pile_opens_on_the_tablet()
+    {
+        const string reanimate = "in-person-reanimate-aimed-from-a-tablets-graveyard-pile-takes-the-bolted-tarmogoyf";
+        await using var table = new InPersonTable(web, "graveyard", 0);
+        string? failure = await ScenarioPlayer.PlayAsync(web, ScenarioPath(reanimate), atTable: table);
+        Assert.True(failure is null, $"{reanimate}:\n{failure}");
+        await table.Tablets[0].PictureAsync("over");
+    }
+
+    private static string ScenarioPath(string name) => Path.Combine(WebClient.Root, "scenarios", name + ".cantrip");
 
     /// <summary>Hands a tablet the game as the public feed would, and waits for Lightning Bolt on its stack.</summary>
     private static async Task<TabletState> FeedGameAsync(TabletDriver tablet, IReadOnlyList<ServerMessage> feed)

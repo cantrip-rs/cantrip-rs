@@ -15,6 +15,18 @@ has its own entry point, its own server process and its own wire, and nothing in
 - **Four devices.** Each player has a tablet of their own: that seat's half of the board, the stack, and both players'
   life totals.
 
+On the shared tablet the stack band is mirrored: the stack is drawn twice, one strip facing each player, so both read
+every spell and ability upright on the strip nearest them, in the same order, with the top of the stack at their right
+and a target arrow drawn from the strip nearer what it points at. A card can't read upright for two people facing each
+other, and one strip turned sideways reads well for neither; two strips cost the halves a little height, and a card held
+up to read is larger anyway. Either strip's cards are tapped as the battlefield's are.
+
+A seat's graveyard pile and, while it has cards in exile, its **Exile** button on a tablet's rail open a list of that
+pile over the seat's battlefield, turned with the half: every card as the public sees it (a card exiled face down is a
+back), the latest first, at the largest size that fits. A card in it is tapped as a permanent is - a creature card in a
+graveyard as a spell's target - and held up to read with a long press; **Close**, or the pile again, shuts it, and it
+shuts itself once the pile is empty.
+
 A target or a mana source on the battlefield is picked by tapping it on whichever tablet shows it. A player casting
 Lightning Bolt from their phone taps a Mountain on their own tablet to pay, then the opponent's Tarmogoyf on the
 opponent's tablet to target it. All feedback - which taps were taken, what is still asked - is on the acting player's
@@ -145,3 +157,14 @@ public sealed record PublicProjection(
 ```
 
 A handle pair is there only while the object is live and the seat's handle names the same object.
+
+## Testing
+
+`InPersonTests` (browser, wall clock: `test.cmd /filter "FullyQualifiedName~InPersonTests"`) draws the tablets fed by the
+test, and plays whole tables end to end through `InPersonTable`: a scenario's table dealt through
+`ObservedRulesFactory(new NativeRulesHostFactory { PublicView = true }, relay)`, the relay served at its socket beside the
+built client, Bot1's phone (`ScenarioPlayer` with `atTable`) seated with a reserved ticket, and real tablets joined with
+minted tokens - one shared board, or one for each player. Every permanent, player or graveyard card the phone means is
+tapped with a finger on whichever tablet shows it, found by the public handle the step's map pairs with the seat's; the
+relay routes the tap to the phone and the table judges each answer against the script. The tablets are checked never to
+name a card in the phone's hand.

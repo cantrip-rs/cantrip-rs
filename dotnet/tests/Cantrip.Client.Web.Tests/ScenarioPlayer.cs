@@ -79,8 +79,15 @@ public sealed class ScenarioPlayer
     /// </summary>
     private bool _probeRefusals;
 
-    private ScenarioPlayer(TablePage page, ScenarioTable table, bool hold, (GameClient Client, TimeSpan Thinks)? opponent, (string Name, int Count)? planX, bool phone, bool probeRefusals)
+    /// <summary>
+    /// The in-person table Bot1's phone plays at for real, or null: its taps on the tablets made by a real finger on a real
+    /// tablet, through the relay, rather than queued on the phone (<see cref="InPersonTable"/>).
+    /// </summary>
+    private readonly InPersonTable? _atTable;
+
+    private ScenarioPlayer(TablePage page, ScenarioTable table, bool hold, (GameClient Client, TimeSpan Thinks)? opponent, (string Name, int Count)? planX, bool phone, bool probeRefusals, InPersonTable? atTable = null)
     {
+        _atTable = atTable;
         _phone = phone;
         _probeRefusals = probeRefusals;
         _planX = planX;
@@ -110,16 +117,23 @@ public sealed class ScenarioPlayer
         TimeSpan? opponentThinks = null,
         (string Name, int Count)? planX = null,
         bool phone = false,
-        bool probeRefusals = false)
+        bool probeRefusals = false,
+        InPersonTable? atTable = null)
     {
+        phone |= atTable is not null;
         ScenarioSpec scenario = ScenarioSpec.Load(path, opponentThinks is null ? [1] : [1, 2]);
-        await using ScenarioTable table = await ScenarioTable.StartAsync(scenario, WebClient.Content);
+        await using ScenarioTable table = await ScenarioTable.StartAsync(scenario, WebClient.Content, rules: atTable?.Rules, decks: atTable?.Decks);
         await using Microsoft.AspNetCore.Builder.WebApplication art = await ArtServer.StartAsync(
             new ArtStore(new ArtStoreOptions { ContentRoot = WebClient.Content, CacheDirectory = WebClient.ArtCache }), "127.0.0.1", 0);
+
+        // At a real in-person table the phone is served by the table's own site, beside its relay, and takes its seat - at
+        // the table and at the relay - with the seat's ticket, as its QR code would give it.
+        (Uri site, string seat) = atTable is null ? (web.Site, "&seat=1&name=Bot1") : await atTable.SeatAsync(table, art.Urls.First());
         await using TablePage page = await TablePage.OpenAsync(
-            web,
-            $"server={Uri.EscapeDataString(table.Address.AbsoluteUri)}&art={Uri.EscapeDataString(art.Urls.First())}&seat=1&name=Bot1{(phone ? "&inperson=phone" : string.Empty)}",
-            WebClient.Pictures(Path.Combine(nameof(ScenarioPlayer), scenario.Name + (phone ? (planX is null ? "-phone" : "-phone-planned") : string.Empty))),
+            web.Browser,
+            site,
+            $"server={Uri.EscapeDataString(table.Address.AbsoluteUri)}&art={Uri.EscapeDataString(art.Urls.First())}{(phone ? "&inperson=phone" : string.Empty)}{seat}",
+            WebClient.Pictures(Path.Combine(nameof(ScenarioPlayer), scenario.Name + (atTable is not null ? $"-{atTable.Name}" : phone ? (planX is null ? "-phone" : "-phone-planned") : string.Empty))),
             settings: new Dictionary<string, string> { ["auto-mana"] = "false" },
             storage: new Dictionary<string, string>
             {
@@ -142,7 +156,8 @@ public sealed class ScenarioPlayer
             opponent is null ? null : (opponent, opponentThinks!.Value),
             planX,
             phone,
-            probeRefusals);
+            probeRefusals,
+            atTable);
         try
         {
             return await player.PlayAsync();
@@ -268,6 +283,11 @@ public sealed class ScenarioPlayer
                 if (_phone)
                 {
                     await _page.PictureAsync($"phone-request-{expected.RequestId}");
+                }
+
+                if (_atTable is not null)
+                {
+                    await _atTable.CheckAsync(state);
                 }
 
                 await AnswerAsync(expected, state);
@@ -1086,11 +1106,38 @@ public sealed class ScenarioPlayer
             await ProbeRefusalsAsync();
         }
 
+        if (_atTable is not null)
+        {
+            await TapOnTabletAsync(what);
+            return;
+        }
+
         (TableTapState tap, TableState state) = await InjectTapAsync(what, _asking);
         if (!tap.Used)
         {
             throw new Xunit.Sdk.XunitException($"The phone did not use a tap on the table ({what}) for request {_asking}: \"{state.InPerson?.Refusal}\"");
         }
+    }
+
+    /// <summary>
+    /// A tap made with a finger on a real tablet at the in-person table (<see cref="InPersonTable.TapAsync"/>), which the relay
+    /// routes to Bot1's phone: the phone must use it. It may first be handed a tap for a question just answered, which it
+    /// lets go and the relay passes on.
+    /// </summary>
+    private async Task TapOnTabletAsync(string what)
+    {
+        TableState before = await _page.SettledAsync();
+        int settled = before.InPerson!.Taps.Count;
+        await _atTable!.TapAsync(what, before);
+        TableState state = await _page.SettledAsync(s => s.InPerson!.Taps.Skip(settled).Any(t => t.Used) || s.InPerson.Taps.Count >= settled + 4);
+        List<TableTapState> taken = [.. state.InPerson!.Taps.Skip(settled)];
+        _trace.Add($"tablet tap {what} for request {_asking}: {string.Join(", ", taken.Select(t => $"request {t.RequestId} {(t.Used ? "used" : "unused")}"))}");
+        if (!taken.Any(t => t.Used))
+        {
+            throw new Xunit.Sdk.XunitException($"The phone did not use a tap on the tablet ({what}) for request {_asking}: \"{state.InPerson.Refusal}\"");
+        }
+
+        await _atTable.CheckAsync(state);
     }
 
     /// <summary>A tap on a tablet routed to Bot1's phone for <paramref name="request"/>, and what the phone made of it once settled.</summary>

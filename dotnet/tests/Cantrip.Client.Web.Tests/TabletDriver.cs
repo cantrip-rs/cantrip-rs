@@ -47,7 +47,7 @@ public sealed class TabletDriver : IAsyncDisposable
     /// art is - and <c>inperson=tablet&amp;test</c>; a <c>#device=</c> fragment connects it to a relay instead of the test.
     /// <paramref name="name"/> prefixes its pictures under <paramref name="pictures"/>.
     /// </summary>
-    public static async Task<TabletDriver> OpenAsync(WebClient web, string query, string pictures, string name)
+    public static async Task<TabletDriver> OpenAsync(WebClient web, string query, string pictures, string name, Uri? site = null)
     {
         IBrowserContext context = await web.Browser.NewContextAsync(new BrowserNewContextOptions
         {
@@ -60,7 +60,7 @@ public sealed class TabletDriver : IAsyncDisposable
         int hash = query.IndexOf('#', StringComparison.Ordinal);
         string head = hash < 0 ? query : query[..hash];
         string fragment = hash < 0 ? string.Empty : query[hash..];
-        await page.GotoAsync($"{web.Site}?inperson=tablet{(head.Length > 0 ? "&" + head : string.Empty)}&test{fragment}");
+        await page.GotoAsync($"{site ?? web.Site}?inperson=tablet{(head.Length > 0 ? "&" + head : string.Empty)}&test{fragment}");
 
         // The page's scripts are loaded with the runtime, after the document itself.
         await page.WaitForFunctionAsync("() => typeof globalThis.cantripTabletFeed === 'function'", null, new PageWaitForFunctionOptions { Timeout = (float)Patience.TotalMilliseconds });
@@ -114,6 +114,15 @@ public sealed class TabletDriver : IAsyncDisposable
 
     /// <summary>Taps a card in view, as a finger taps it.</summary>
     public async Task TapCardAsync(TabletCard card) => await TapAsync(card.X, card.Y);
+
+    /// <summary>Taps a player's graveyard pile, or their exile button, which opens or shuts its list over their half.</summary>
+    public async Task TapPileAsync(int seat, string kind)
+    {
+        TabletState state = await SettledAsync();
+        TabletPileSpot pile = state.Players.FirstOrDefault(each => each.Seat == seat)?.Piles?.FirstOrDefault(each => each.Kind == kind)
+            ?? throw new Xunit.Sdk.XunitException($"No {kind} pile for player {seat} on this tablet.");
+        await TapAsync(pile.X, pile.Y);
+    }
 
     /// <summary>Taps a player's box.</summary>
     public async Task TapPlayerAsync(int seat)
@@ -194,12 +203,16 @@ public sealed record TabletState(
 /// <summary>
 /// A card on a tablet: its name (empty for one nobody at the table may see), the middle and size of its box on the page,
 /// and where it is - <c>battlefield</c> on the half at the tablet's bottom edge, <c>opponent-battlefield</c> on the turned
-/// one, <c>stack</c> - and whose half that is.
+/// one, <c>stack</c> and <c>opponent-stack</c> (the shared board's band, once facing each player), <c>graveyard</c> or
+/// <c>exile</c> in a pile's open list (<c>opponent-</c> on the turned half) - and whose half that is.
 /// </summary>
 public sealed record TabletCard(string Name, bool Visible, string Place, int Seat, int Handle, bool Tapped, float X, float Y, float W, float H);
 
 /// <summary>A player's box on a tablet, which a tap picks them with.</summary>
-public sealed record TabletPlayer(int Seat, string Name, int Life, bool Turned, float X, float Y, float W, float H);
+public sealed record TabletPlayer(int Seat, string Name, int Life, bool Turned, float X, float Y, float W, float H, IReadOnlyList<TabletPileSpot>? Piles = null);
+
+/// <summary>A pile on a player's rail a finger opens: <c>graveyard</c>, or <c>exile</c> while they have cards there; and whether its list is open.</summary>
+public sealed record TabletPileSpot(string Kind, bool Open, float X, float Y, float W, float H);
 
 /// <summary>A tap the tablet sent: an object by its public handle (zero for a player), or a player by seat.</summary>
 public sealed record TabletTap(int Object, int Player, long Sequence);

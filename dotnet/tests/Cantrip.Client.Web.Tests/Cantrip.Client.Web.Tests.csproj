@@ -27,6 +27,8 @@
     <ProjectReference Include="..\..\src\Cantrip.Server\Cantrip.Server.csproj" />
     <ProjectReference Include="..\..\src\Cantrip.Server.Host\Cantrip.Server.Host.csproj" />
     <ProjectReference Include="..\..\src\Cantrip.Discord\Cantrip.Discord.csproj" />
+    <!-- In-person play's relay, which the end-to-end in-person tests host beside a table. -->
+    <ProjectReference Include="..\..\src\Cantrip.Server.InPerson\Cantrip.Server.InPerson.csproj" />
     <!-- The advisor's table (?advisor): its tests skip on a machine without a trained model. -->
     <ProjectReference Include="..\..\tools\Cantrip.Advisor\Cantrip.Advisor.csproj" />
   </ItemGroup>

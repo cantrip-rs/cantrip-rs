@@ -29,9 +29,17 @@ public sealed partial class ScenarioTable : IAsyncDisposable
     /// <summary>
     /// Starts a table playing <paramref name="scenario"/>. It deals once the driven seats are seated and ready, each
     /// joining as a client would. Its clocks - every table's (docs/events.md, "Clocks") - run on <paramref name="time"/>,
-    /// the system's unless a test gives one it moves itself.
+    /// the system's unless a test gives one it moves itself. Its games are dealt by <paramref name="rules"/>, the native
+    /// engine unless given another - in-person play's, which shows each step to its relay. <paramref name="decks"/> is the
+    /// table's catalog, which a seat reserved with <see cref="GameServer.Reserve"/> names a deck from (the scenario deals
+    /// its own decks whatever a seat names).
     /// </summary>
-    public static async Task<ScenarioTable> StartAsync(ScenarioSpec scenario, string contentRoot, TimeProvider? time = null)
+    public static async Task<ScenarioTable> StartAsync(
+        ScenarioSpec scenario,
+        string contentRoot,
+        TimeProvider? time = null,
+        IRulesHostFactory? rules = null,
+        IReadOnlyList<DeckList>? decks = null)
     {
         ArgumentNullException.ThrowIfNull(scenario);
         GameServer server = await GameServer.StartAsync(new GameServerOptions
@@ -42,6 +50,8 @@ public sealed partial class ScenarioTable : IAsyncDisposable
             AutoStart = true,
             Scenario = scenario,
             TimeProvider = time ?? TimeProvider.System,
+            Rules = rules ?? RulesHostFactory.Native,
+            Decks = decks ?? [],
         });
         var table = new ScenarioTable(server, scenario);
         server.ScenarioProgressed += progress => table._progress.Writer.TryWrite(progress);
