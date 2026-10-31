@@ -20,6 +20,7 @@
   .ip-device a { font-size: 12px; word-break: break-all; }
   .ip-on { color: var(--ready, #2e7d4f); font-weight: 600; }
   .ip-off { color: var(--fg-muted, #888); font-weight: 600; }
+  .ip-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
   @media (max-width: 520px) { .ip-two { grid-template-columns: 1fr; } }
 </style>
 </head>
@@ -35,6 +36,16 @@
   </div>
 
   <p class="notice" id="busy" role="status" hidden></p>
+
+  <section id="going" hidden>
+    <p class="notice"><span class="grow">You already have an in-person table going: <b id="going-name"></b><span id="going-line"></span>.
+      Rejoin it for its devices' codes, or cancel it to start another.</span></p>
+    <div class="ip-actions">
+      <button type="button" class="button primary" id="rejoin">Rejoin that table</button>
+      <button type="button" class="button danger" id="cancel-going">Cancel that table</button>
+    </div>
+    <p class="form-error" id="going-error" role="alert"></p>
+  </section>
 
   <form class="ip-form" id="setup" hidden>
     <div class="ip-two">
@@ -62,6 +73,8 @@
       only way to see them again: keep it to yourself. A device that reloads takes its place back; scanning a code again
       moves that place to the new device.</p>
     <div class="ip-devices" id="devices"></div>
+    <div class="ip-actions"><button type="button" class="button danger" id="cancel-table">Cancel this table</button></div>
+    <p class="form-error" id="table-error" role="alert"></p>
   </section>
 
   <p class="notice" id="closed" hidden>This table has closed, or this link is not for one here. <a href="inperson">Start another</a>.</p>
@@ -71,8 +84,11 @@
 (() => {
   "use strict";
   const $ = id => document.getElementById(id);
+  const STORE = "cantrip.inperson.tables";
   let shown = "";
   let timer = 0;
+  let filled = false;
+  let going = null;
 
   function text(tag, value, cls) {
     const element = document.createElement(tag);
@@ -81,11 +97,61 @@
     return element;
   }
 
+  // The tables this browser made, with their keys: what finds a table again from the landing page. Only a convenience -
+  // a signed-in creator's tables are found by the server, from any browser.
+  function remembered() {
+    try {
+      const list = JSON.parse(localStorage.getItem(STORE) || "[]");
+      return Array.isArray(list) ? list.filter(each => each && typeof each.id === "string") : [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function keep(list) {
+    try {
+      localStorage.setItem(STORE, JSON.stringify(list));
+    } catch (_) {
+    }
+  }
+
+  function remember(table) { keep([...remembered().filter(each => each.id !== table.id), table]); }
+
+  function forget(id) { keep(remembered().filter(each => each.id !== id)); }
+
   // The table and its creator's key are after the #, which no request carries: they go to the server in a request's body.
+  // A signed-in creator's link may name the table alone.
   function held() {
     const hash = new URLSearchParams(location.hash.slice(1));
     const id = hash.get("table"), key = hash.get("key");
-    return id && key ? { id, key } : null;
+    return id ? { id, key } : null;
+  }
+
+  function linkTo(table) {
+    return "inperson#table=" + encodeURIComponent(table.id) + (table.key ? "&key=" + encodeURIComponent(table.key) : "");
+  }
+
+  // A table's state, null for one closed or not the asker's, undefined when the server could not be asked.
+  async function ask(table) {
+    try {
+      const answer = await fetch("inperson/api/table", { method: "POST", cache: "no-store", headers: { "Content-Type": "application/json" }, body: JSON.stringify(table) });
+      if (answer.status === 404) return null;
+      return answer.ok ? await answer.json() : undefined;
+    } catch (_) {
+      return undefined;
+    }
+  }
+
+  // The first table of the asker's still open: the signed-in account's, then this browser's.
+  async function findGoing(mine) {
+    const local = remembered();
+    const candidates = [...mine.map(id => local.find(each => each.id === id) || { id }), ...local.filter(each => !mine.includes(each.id))];
+    for (const table of candidates) {
+      const state = await ask(table);
+      if (state) return { table, state };
+      if (state === null) forget(table.id);
+    }
+    return null;
   }
 
   async function choices() {
@@ -93,12 +159,27 @@
       const answer = await fetch("inperson/api/choices", { cache: "no-store" });
       if (!answer.ok) return;
       const state = await answer.json();
-      if ($("setup").hidden) {
+      if (!filled) {
+        filled = true;
         $("cube").replaceChildren(...state.cubes.map(name => new Option(name, name, false, name === state.cube)));
         $("packs").max = state.mostPacks;
         $("rules").textContent = `A table nobody joins within ${state.unclaimedMinutes} minutes is closed. At most ${state.mostGames} in-person tables are played at once.`;
-        $("setup").hidden = false;
       }
+
+      going = await findGoing(state.mine || []);
+      if (held()) return;
+      if (going) {
+        $("setup").hidden = true;
+        $("busy").hidden = true;
+        $("going").hidden = false;
+        $("going-name").textContent = going.state.event.name;
+        const line = going.state.event.detail || going.state.event.stage;
+        $("going-line").textContent = line ? ` - ${line.replace(/\.$/, "")}` : "";
+        return;
+      }
+
+      $("going").hidden = true;
+      $("setup").hidden = false;
       busy(state.busy);
     } catch (_) {
     }
@@ -106,13 +187,17 @@
 
   function busy(on) {
     $("busy").hidden = !on;
-    $("busy").textContent = on ? "All in-person tables are busy. Try again when one finishes." : "";
+    $("busy").textContent = on
+      ? "All in-person tables are busy. Try again when one finishes. If one of them is yours, open this page in the browser you started it from, or sign in if you were signed in then."
+      : "";
     $("start").disabled = on;
   }
 
   function fill(state) {
     $("setup").hidden = true;
+    $("going").hidden = true;
     $("busy").hidden = true;
+    $("closed").hidden = true;
     $("table").hidden = false;
     $("event").replaceChildren(text("b", state.event.name), document.createTextNode(` - ${state.event.detail || state.event.stage}`));
 
@@ -146,19 +231,65 @@
   async function table() {
     const mine = held();
     if (!mine) return;
-    try {
-      const answer = await fetch("inperson/api/table", { method: "POST", cache: "no-store", headers: { "Content-Type": "application/json" }, body: JSON.stringify(mine) });
-      if (answer.status === 404) {
-        clearInterval(timer);
-        $("table").hidden = true;
-        $("closed").hidden = false;
+    const state = await ask(mine);
+    if (state === null) {
+      clearInterval(timer);
+      forget(mine.id);
+      $("table").hidden = true;
+      $("closed").hidden = false;
+      return;
+    }
+    // Undefined: the server is away; the page says what it last knew.
+    if (state) fill(state);
+  }
+
+  // Calling a table off takes a second press, so a stray tap never ends a draft.
+  function confirming(button, then) {
+    const label = button.textContent;
+    let armed = 0;
+    button.addEventListener("click", async () => {
+      if (!armed) {
+        button.textContent = "Press again to cancel it";
+        armed = setTimeout(() => { armed = 0; button.textContent = label; }, 4000);
         return;
       }
-      if (answer.ok) fill(await answer.json());
-    } catch (_) {
-      // The server is away; the page says what it last knew.
+      clearTimeout(armed);
+      armed = 0;
+      button.textContent = label;
+      button.disabled = true;
+      try {
+        await then();
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+
+  async function cancel(table, error) {
+    $(error).textContent = "";
+    try {
+      const answer = await fetch("inperson/api/cancel", { method: "POST", cache: "no-store", headers: { "Content-Type": "application/json" }, body: JSON.stringify(table) });
+      if (!answer.ok && answer.status !== 404) {
+        const result = await answer.json().catch(() => ({}));
+        $(error).textContent = result.error || "The table could not be cancelled.";
+        return;
+      }
+      forget(table.id);
+      going = null;
+      shown = "";
+      $("table").hidden = true;
+      history.replaceState(null, "", "inperson");
+      start();
+    } catch (failure) {
+      $(error).textContent = String(failure);
     }
   }
+
+  $("rejoin").addEventListener("click", () => {
+    if (going) location.hash = linkTo(going.table).slice("inperson".length);
+  });
+  confirming($("cancel-going"), () => going ? cancel(going.table, "going-error") : Promise.resolve());
+  confirming($("cancel-table"), () => held() ? cancel(held(), "table-error") : Promise.resolve());
 
   $("setup").addEventListener("submit", async event => {
     event.preventDefault();
@@ -175,12 +306,16 @@
       const answer = await fetch("inperson/api/start", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const result = await answer.json();
       if (!answer.ok) {
+        $("start").disabled = false;
+        // The asker's table is already going: the page says so and offers it back.
+        if (result.going) return start();
         $("error").textContent = result.error || "The draft could not be started.";
         if (result.busy) busy(true);
-        $("start").disabled = !!result.busy;
         return;
       }
-      history.replaceState(null, "", `inperson#table=${encodeURIComponent(result.id)}&key=${encodeURIComponent(result.key)}`);
+      const made = { id: result.id, key: result.key };
+      remember(made);
+      history.replaceState(null, "", linkTo(made));
       start();
     } catch (error) {
       $("error").textContent = String(error);
@@ -191,9 +326,13 @@
   function start() {
     clearInterval(timer);
     if (held()) {
+      $("going").hidden = true;
+      $("setup").hidden = true;
       table();
       timer = setInterval(table, 1500);
     } else {
+      $("table").hidden = true;
+      $("closed").hidden = true;
       choices();
       timer = setInterval(choices, 10000);
     }

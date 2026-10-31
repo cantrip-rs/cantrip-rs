@@ -125,6 +125,19 @@ public sealed class InPersonSiteTests : IDisposable
         }
 
         Assert.Equal(ErrorCode.MembershipRefused, strayTold.OfType<DeviceErrorMessage>().Single().Code);
+
+        // The creator calls the table off - with JSON and its key only - and the site has room again.
+        object mine = new { id = made.RootElement.GetProperty("id").GetString(), key = made.RootElement.GetProperty("key").GetString() };
+        using (var plain = new StringContent(JsonSerializer.Serialize(mine), System.Text.Encoding.UTF8, "text/plain"))
+        {
+            Assert.Equal(HttpStatusCode.UnsupportedMediaType, (await http.PostAsync("inperson/api/cancel", plain)).StatusCode);
+        }
+
+        Assert.Equal(HttpStatusCode.NotFound, (await http.PostAsJsonAsync("inperson/api/cancel", new { id = made.RootElement.GetProperty("id").GetString(), key = "wrong" })).StatusCode);
+        Assert.Equal(1, tables.Count);
+        Assert.Equal(HttpStatusCode.OK, (await http.PostAsJsonAsync("inperson/api/cancel", mine)).StatusCode);
+        Assert.Equal(0, tables.Count);
+        Assert.Equal(HttpStatusCode.NotFound, (await http.PostAsJsonAsync("inperson/api/table", mine)).StatusCode);
     }
 
     private static async Task<GameClient> SitAsync(Uri address, string ticket)

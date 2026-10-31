@@ -404,12 +404,15 @@ public sealed class InPersonHost : IAsyncDisposable
         _starting.Dispose();
     }
 
-    /// <summary>A device's QR code: its link, which holds its credential, drawn on this side as SVG.</summary>
+    /// <summary>
+    /// A device's QR code: its link, which holds its credential, drawn on this side as SVG. Sized by its view box alone, so
+    /// the page's box scales the whole code into it; fixed width and height attributes would crop a long link's code.
+    /// </summary>
     internal static string QrSvg(string text)
     {
         using var generator = new QRCodeGenerator();
         using QRCodeData data = generator.CreateQrCode(text, QRCodeGenerator.ECCLevel.M);
-        return new SvgQRCode(data).GetGraphic(4);
+        return new SvgQRCode(data).GetGraphic(4, "#000000", "#ffffff", drawQuietZones: true, sizingMode: SvgQRCode.SizingMode.ViewBoxAttribute);
     }
 
     private sealed record Table(DraftPod Pod, InPersonRelay Relay, GameServer Server, WebApplication Art, IReadOnlyList<DeviceLink> Devices, string Address);

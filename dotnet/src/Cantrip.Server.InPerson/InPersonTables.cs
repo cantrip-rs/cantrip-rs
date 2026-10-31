@@ -73,6 +73,13 @@ public sealed class InPersonTablesOptions
 /// <summary>Every table this site may host is being played: try again once one closes.</summary>
 public sealed class InPersonBusyException(string message) : InvalidOperationException(message);
 
+/// <summary>The account asking already has a table going: it is rejoined or called off before another is made.</summary>
+public sealed class InPersonAlreadyHostingException(string id) : InvalidOperationException("You already have an in-person table going: rejoin it, or cancel it to start another.")
+{
+    /// <summary>The table that is going.</summary>
+    public string Id { get; } = id;
+}
+
 /// <summary>A table just made: its id, and the creator's key that alone shows its devices' codes.</summary>
 public sealed record CreatedInPersonTable(string Id, string Key);
 
@@ -148,16 +155,23 @@ public sealed class InPersonTables : IAsyncDisposable
         return _tables.Values.Select(table => table.Relay).FirstOrDefault(relay => relay.Recognizes(hello));
     }
 
+    /// <summary>The tables <paramref name="owner"/> - a signed-in account - made that are still open; none for nobody.</summary>
+    public List<string> Mine(string? owner) =>
+        owner is null ? [] : [.. _tables.Values.Where(table => table.Owner == owner).OrderBy(table => table.Opened).Select(table => table.Id)];
+
     /// <summary>
-    /// Makes the grid draft a form asks for and opens its table. Throws <see cref="ArgumentException"/> for a form outside its
-    /// limits and <see cref="InPersonBusyException"/> when every table is being played or no port is free.
+    /// Makes the grid draft a form asks for and opens its table, <paramref name="owner"/>'s - a signed-in account, which
+    /// may then reach it from any browser - or nobody's. Throws <see cref="ArgumentException"/> for a form outside its
+    /// limits, <see cref="InPersonAlreadyHostingException"/> when the owner already has a table going, and
+    /// <see cref="InPersonBusyException"/> when every table is being played or no port is free.
     /// </summary>
-    public async Task<CreatedInPersonTable> CreateAsync(SetupRequest request)
+    public async Task<CreatedInPersonTable> CreateAsync(SetupRequest request, string? owner = null)
     {
         InPersonSetup.Validate(request, Cubes());
         await _gate.WaitAsync().ConfigureAwait(false);
         try
         {
+            if (Mine(owner) is [{ } going, ..]) throw new InPersonAlreadyHostingException(going);
             if (_tables.Count >= _options.MostGames) throw Busy();
 
             // Players of their own, never a name's: a name is anybody's to type, and a record it named would be someone else's.
@@ -190,7 +204,7 @@ public sealed class InPersonTables : IAsyncDisposable
             string id = Hex(8);
             string key = Hex(32);
             DateTimeOffset now = _options.TimeProvider.GetUtcNow();
-            var table = new Table(id, Hash(key), pod, seating.Relay, server, server.Port, InPersonSetup.Links(seating, _options.Site, address, _options.Art), now);
+            var table = new Table(id, Hash(key), owner, pod, seating.Relay, server, server.Port, InPersonSetup.Links(seating, _options.Site, address, _options.Art), now);
             _tables[id] = table;
             _options.Log?.Invoke($"In person: table {id} (event {eventId}) opened on port {server.Port}; {_tables.Count} of {_options.MostGames} in play.");
             return new CreatedInPersonTable(id, key);
@@ -201,11 +215,13 @@ public sealed class InPersonTables : IAsyncDisposable
         }
     }
 
-    /// <summary>What the creator's page shows of table <paramref name="id"/> - its event and its devices' codes - or null for no such table or the wrong key.</summary>
-    public object? State(string? id, string? key)
+    /// <summary>
+    /// What the creator's page shows of table <paramref name="id"/> - its event and its devices' codes - or null for no such
+    /// table, or for one asked for with neither its key nor its <paramref name="owner"/>.
+    /// </summary>
+    public object? State(string? id, string? key, string? owner = null)
     {
-        if (id is null || key is null || !_tables.TryGetValue(id, out Table? table)) return null;
-        if (!CryptographicOperations.FixedTimeEquals(table.KeyHash, Hash(key))) return null;
+        if (Creators(id, key, owner) is not { } table) return null;
         IReadOnlyList<DeviceStatus> statuses = table.Relay.Devices;
         StatusEventDetail? detail = table.Detail;
         return new
@@ -221,6 +237,33 @@ public sealed class InPersonTables : IAsyncDisposable
                 connected = i < statuses.Count && statuses[i].Connected,
             }),
         };
+    }
+
+    /// <summary>
+    /// Closes table <paramref name="id"/> at its creator's word - its key, or its <paramref name="owner"/> - its devices told
+    /// and its event called off. False for no such table, or a word not its creator's.
+    /// </summary>
+    public async Task<bool> CancelAsync(string? id, string? key, string? owner = null)
+    {
+        await _gate.WaitAsync().ConfigureAwait(false);
+        try
+        {
+            if (Creators(id, key, owner) is not { } table) return false;
+            await CloseAsync(table, "Its creator called it off.").ConfigureAwait(false);
+            return true;
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
+
+    /// <summary>Table <paramref name="id"/> when its key or its owner asks for it; null otherwise.</summary>
+    private Table? Creators(string? id, string? key, string? owner)
+    {
+        if (id is null || !_tables.TryGetValue(id, out Table? table)) return null;
+        if (owner is not null && table.Owner == owner) return table;
+        return key is not null && CryptographicOperations.FixedTimeEquals(table.KeyHash, Hash(key)) ? table : null;
     }
 
     /// <summary>
@@ -279,11 +322,14 @@ public sealed class InPersonTables : IAsyncDisposable
     /// <summary>
     /// Serves the setup page at <see cref="Route"/>, its API under it and every table's relay at
     /// <see cref="InPersonSite.SocketRoute"/>, open to anyone. <paramref name="page"/> serves the page's template in the
-    /// site's own look; null serves it as it is. The app must already use WebSockets and routing.
+    /// site's own look; null serves it as it is. <paramref name="owner"/> names the account a request is signed in as, whose
+    /// tables it may reach without their key; null, or null from it, for nobody's. The app must already use WebSockets and
+    /// routing.
     /// </summary>
-    public void Map(IEndpointRouteBuilder app, Func<HttpContext, string, IResult>? page = null)
+    public void Map(IEndpointRouteBuilder app, Func<HttpContext, string, IResult>? page = null, Func<HttpContext, string?>? owner = null)
     {
         ArgumentNullException.ThrowIfNull(app);
+        string? Owner(HttpContext context) => owner?.Invoke(context);
         app.MapGet(Route, (HttpContext context) =>
         {
             if (page is not null) return page(context, Page.Value);
@@ -301,6 +347,7 @@ public sealed class InPersonTables : IAsyncDisposable
                 mostPacks = InPersonSetup.MostPacks,
                 longestName = InPersonSetup.LongestName,
                 busy = _tables.Count >= _options.MostGames,
+                mine = Mine(Owner(context)),
                 mostGames = _options.MostGames,
                 unclaimedMinutes = (int)_options.Unclaimed.TotalMinutes,
             });
@@ -312,8 +359,12 @@ public sealed class InPersonTables : IAsyncDisposable
                 return Results.Json(new { error = "That is not a table's form." }, statusCode: StatusCodes.Status400BadRequest);
             try
             {
-                CreatedInPersonTable created = await CreateAsync(request).ConfigureAwait(false);
+                CreatedInPersonTable created = await CreateAsync(request, Owner(context)).ConfigureAwait(false);
                 return Fresh(context, new { id = created.Id, key = created.Key });
+            }
+            catch (InPersonAlreadyHostingException going)
+            {
+                return Results.Json(new { error = going.Message, going = going.Id }, statusCode: StatusCodes.Status409Conflict);
             }
             catch (InPersonBusyException busy)
             {
@@ -328,8 +379,20 @@ public sealed class InPersonTables : IAsyncDisposable
         app.MapPost(Route + "/api/table", async (HttpContext context) =>
         {
             TableKey? asked = await BodyAsync<TableKey>(context).ConfigureAwait(false);
-            return State(asked?.Id, asked?.Key) is { } state
+            return State(asked?.Id, asked?.Key, Owner(context)) is { } state
                 ? Fresh(context, state)
+                : Results.Json(new { error = "There is no such table here, or it has closed." }, statusCode: StatusCodes.Status404NotFound);
+        });
+
+        app.MapPost(Route + "/api/cancel", async (HttpContext context) =>
+        {
+            // JSON alone: a page on another site cannot send it without the browser first asking this server, which never
+            // says yes - so a signed-in creator's cookie never calls a table off for someone else's page.
+            if (!context.Request.HasJsonContentType())
+                return Results.Json(new { error = "That is not a table's cancellation." }, statusCode: StatusCodes.Status415UnsupportedMediaType);
+            TableKey? asked = await BodyAsync<TableKey>(context).ConfigureAwait(false);
+            return await CancelAsync(asked?.Id, asked?.Key, Owner(context)).ConfigureAwait(false)
+                ? Fresh(context, new { cancelled = true })
                 : Results.Json(new { error = "There is no such table here, or it has closed." }, statusCode: StatusCodes.Status404NotFound);
         });
 
@@ -492,11 +555,14 @@ public sealed class InPersonTables : IAsyncDisposable
     /// <summary>What the creator's page asks with: the table and its key, in the request's body.</summary>
     private sealed record TableKey(string? Id, string? Key);
 
-    private sealed class Table(string id, byte[] keyHash, DraftPod pod, InPersonRelay relay, GameServer server, int port, IReadOnlyList<DeviceLink> devices, DateTimeOffset opened)
+    private sealed class Table(string id, byte[] keyHash, string? owner, DraftPod pod, InPersonRelay relay, GameServer server, int port, IReadOnlyList<DeviceLink> devices, DateTimeOffset opened)
     {
         public string Id { get; } = id;
 
         public byte[] KeyHash { get; } = keyHash;
+
+        /// <summary>The signed-in account that made it, which reaches it from any browser; null for nobody's.</summary>
+        public string? Owner { get; } = owner;
 
         public DraftPod Pod { get; } = pod;
 

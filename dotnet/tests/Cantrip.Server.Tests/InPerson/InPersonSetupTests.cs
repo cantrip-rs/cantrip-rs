@@ -63,6 +63,11 @@ public sealed class InPersonSetupTests
         string svg = InPersonHost.QrSvg("http://192.168.1.20:5200/?inperson=tablet&side=0#device=00FF");
         Assert.StartsWith("<svg", svg.TrimStart(), StringComparison.Ordinal);
         Assert.Contains("</svg>", svg, StringComparison.Ordinal);
+
+        // Scaled by the page's box, never cropped by it: a view box, and no fixed size of its own.
+        string open = svg[..svg.IndexOf('>', StringComparison.Ordinal)];
+        Assert.Contains("viewBox=", open, StringComparison.Ordinal);
+        Assert.DoesNotContain(" width=", open, StringComparison.Ordinal);
     }
 
     [Fact]

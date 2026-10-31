@@ -191,8 +191,16 @@ The Discord bot's site hosts in-person tables too, on the cloud server behind it
 
 - **The page.** `/inperson` (`hosted.html`, in the site's look) takes the two names, the cube, the grids, the layout and
   the clocks; there is no address to pick, since the devices reach the public URL. Its API is
-  `/inperson/api/choices`, `/inperson/api/start` and `/inperson/api/table`; the relay's socket is
-  `/inperson/socket`.
+  `/inperson/api/choices`, `/inperson/api/start`, `/inperson/api/table` and `/inperson/api/cancel`; the relay's socket
+  is `/inperson/socket`.
+- **A table already going.** Before showing the form the page looks for its visitor's open table - the signed-in
+  account's (the server keeps who made a table, and `choices` answers `mine`), then the ones this browser made (their
+  ids and keys in `localStorage`). Finding one, it says so and offers **Rejoin** (the table's codes page) or **Cancel**
+  in place of the form; a signed-in account is refused a second table while one is going. The codes page has a cancel
+  button too. Cancelling takes a second press, and `/inperson/api/cancel` takes JSON only, the table's key or its
+  signed-in owner, so another site's page cannot call a table off with the creator's cookie. Nobody signed in, in
+  another browser, is nobody the site can tell from a stranger: that table is reached only from its own browser or
+  link, or closes on its own (below).
 - **Links.** A phone's: `https://<public>/?inperson=phone&server=wss%3A%2F%2F<public>%2Ftable%2F{port}%2Fgame#ticket=T`;
   a tablet's: `https://<public>/?inperson=tablet&side=N&art=https%3A%2F%2F<public>%2F#device=D`. Without `--public-url`
   they use the bot's `--public-host` and web port, and the table's own port.
@@ -205,7 +213,8 @@ The Discord bot's site hosts in-person tables too, on the cloud server behind it
   to its creator. Start answers the table's id and a 256-bit creator key; the page puts both after the `#` of its own
   address (`/inperson#table=ID&key=K`), which no request carries, and asks for the codes with them in a POST body, so
   neither is in an address a log keeps. The server keeps the key only as its SHA-256 hash, compared in constant time.
-  The page's address is the only way back to the codes.
+  The page's address, the browser that made the table, or - for a table made signed in - the creator's account are the
+  only ways back to the codes.
 - **Limits.** At most `--in-person-games` tables at once (2); another is refused with "All in-person tables are busy".
   A table no device has come to within 15 minutes, or that every device has left for 30, is closed, its devices told
   and its event called off; so is one whose event has been over for 10 minutes, and, when the bot starts, any event it

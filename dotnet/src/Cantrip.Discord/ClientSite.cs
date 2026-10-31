@@ -169,7 +169,9 @@ internal static class ClientSite
         }
 
         // In person: the setup page in the site's look, its API, and the devices' relay socket beside the client.
-        inPerson?.Map(app, (context, page) => chrome.Page(context, page, SiteSection.None));
+        // A signed-in creator reaches their table from any browser; anyone else, by the key their own browser keeps.
+        inPerson?.Map(app, (context, page) => chrome.Page(context, page, SiteSection.None),
+            owner: context => SiteSignIn.Account(context) is { } account ? account.Id.ToString(System.Globalization.CultureInfo.InvariantCulture) : null);
 
         if (tables is not null)
         {

@@ -270,6 +270,52 @@ public sealed class InPersonTablesTests : IDisposable
     }
 
     [Fact]
+    public async Task A_signed_in_creator_reaches_their_table_without_its_key_and_makes_no_second_while_it_is_going()
+    {
+        await using InPersonTables tables = Tables(mostGames: 3);
+        CreatedInPersonTable mine = await tables.CreateAsync(Form(), owner: "42");
+        CreatedInPersonTable anyones = await tables.CreateAsync(Form());
+
+        Assert.Equal([mine.Id], tables.Mine("42"));
+        Assert.Empty(tables.Mine("43"));
+        Assert.Empty(tables.Mine(null));
+        Assert.NotNull(tables.State(mine.Id, null, "42"));
+        Assert.NotNull(tables.State(mine.Id, mine.Key));
+        Assert.Null(tables.State(mine.Id, null, "43"));
+        Assert.Null(tables.State(anyones.Id, null, "42"));
+
+        // A second is refused with the one going named, before the site's limit is even asked.
+        InPersonAlreadyHostingException again = await Assert.ThrowsAsync<InPersonAlreadyHostingException>(() => tables.CreateAsync(Form(), "42"));
+        Assert.Equal(mine.Id, again.Id);
+        Assert.Equal(2, tables.Count);
+    }
+
+    [Fact]
+    public async Task A_creator_cancels_their_table_by_its_key_or_their_account_and_nobody_else_can()
+    {
+        await using InPersonTables tables = Tables(mostGames: 2);
+        CreatedInPersonTable keyed = await tables.CreateAsync(Form());
+        CreatedInPersonTable owned = await tables.CreateAsync(Form(), "42");
+
+        Assert.False(await tables.CancelAsync(keyed.Id, owned.Key));
+        Assert.False(await tables.CancelAsync(keyed.Id, null, "42"));
+        Assert.False(await tables.CancelAsync(owned.Id, null, "43"));
+        Assert.False(await tables.CancelAsync("no-such-table", keyed.Key));
+        Assert.Equal(2, tables.Count);
+
+        Assert.True(await tables.CancelAsync(keyed.Id, keyed.Key));
+        Assert.True(await tables.CancelAsync(owned.Id, null, "42"));
+        Assert.Equal(0, tables.Count);
+        Assert.Empty(_store.LiveEvents());
+        Assert.DoesNotContain(Enumerable.Range(1, 65535), tables.Holds);
+        Assert.False(await tables.CancelAsync(keyed.Id, keyed.Key));
+
+        // The creator may start another, and the site has room for it.
+        await tables.CreateAsync(Form(), "42");
+        Assert.Equal(1, tables.Count);
+    }
+
+    [Fact]
     public async Task Tables_an_earlier_run_left_live_are_called_off_and_no_others()
     {
         await using (InPersonTables before = Tables())
