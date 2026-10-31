@@ -91,6 +91,11 @@ fn forest(q: &dyn Query, choice: &Choice, word: u32) -> Verdict {
     Verdict::each(choice, |card| q.chars(card).has_subtype(wanted))
 }
 
+fn basic_land_or_subtype_rule(q: &dyn Query, choice: &Choice, word: u32) -> Verdict {
+    let wanted = crate::lands::word(q, choice.source, u16::try_from(word).unwrap_or(u16::MAX));
+    Verdict::each(choice, |card| crate::lands::is_basic_land_card(q, card) || q.chars(card).has_subtype(wanted))
+}
+
 fn mana_value(q: &dyn Query, choice: &Choice, most: u32) -> Verdict {
     Verdict::each(choice, |card| q.mana_value(card) <= most)
 }
@@ -115,6 +120,16 @@ pub const LAND: Part = part(&(land as SelectFn), 0, "");
 /// through the words of the text of the card that asks (CR 612.2) and a card as it is where it is. Nature's Lore, Three Visits and
 /// Wood Elves search for it.
 pub const FOREST: Part = part(&(forest as SelectFn), crate::lands::sub(Subtype::Forest) as u32, "");
+
+/// "A basic land card or a [subtype] card" (CR 205.4a, 205.3i): a basic land card, or a card with `subtype`, the type read through
+/// the words of the text of the card that asks (CR 612.2) and a card as it is where it is. Spinewoods Armadillo's Desert is
+/// the same shape; `BASIC_LAND_OR_PLANET` is Final Frontier's and Genesis Device's.
+pub const fn basic_land_or_subtype(subtype: Subtype) -> Part {
+    part(&(basic_land_or_subtype_rule as SelectFn), crate::lands::sub(subtype) as u32, "")
+}
+
+/// "A basic land card or Planet card": Final Frontier and Genesis Device search for it.
+pub const BASIC_LAND_OR_PLANET: Part = basic_land_or_subtype(Subtype::Planet);
 
 /// "A creature card". Survival of the Fittest, Worldly Tutor and Formidable Speaker search for it.
 pub const CREATURE: Part = part(&(creature as SelectFn), 0, "");
@@ -370,6 +385,9 @@ pub const fn cards(count: Count) -> Selection {
 pub const fn basic_land_cards(count: Count) -> Selection {
     Selection::of(count, &[BASIC_LAND]).called("basic land")
 }
+
+/// "A basic land card or Planet card", which may be left unfound (CR 701.23b): Final Frontier and Genesis Device.
+pub const BASIC_LAND_OR_PLANET_CARD: Selection = Selection::of(up_to(1), &[BASIC_LAND_OR_PLANET]).called("basic land or Planet");
 
 /// `count` Forest cards: Wood Elves's one (`FOREST_CARD`), which may be left unfound (CR 701.23b).
 pub const fn forest_cards(count: Count) -> Selection {
