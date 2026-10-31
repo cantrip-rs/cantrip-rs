@@ -13,19 +13,17 @@ Lion Sash
 Luminarch Aspirant
 Night Nurse, Healer of Heroes
 Phelia, Exuberant Shepherd
-Securitron Squadron
 Stoneforge Mystic
 Voice of Victory
 Adeline, Resplendent Cathar
 Elite Spellbinder
-Emeritus of Truce
 Enduring Innocence
 Flickerwisp
 Loran of the Third Path
 Sage of the Skies
 Sanguine Evangelist
 Skyclave Apparition
-Appa, Steadfast Guardian
+Auriok Salvagers
 Palace Jailer
 Serra Paragon
 Guardian Scalelord
@@ -34,7 +32,7 @@ Eagles of the North
 Overlord of the Mistmoors
 The Wandering Emperor
 Elspeth, Storm Slayer
-Ephemerate
+Enlightened Tutor
 Erode
 Mana Tithe
 Path to Exile
@@ -48,18 +46,18 @@ Balance
 Winds of Abandon
 Council's Judgment
 Lingering Souls
-Sevinne's Reclamation
-Wrath of God
 Sunfall
 Portable Hole
 Glimmer Lens
 Staff of the Storyteller
+Swift Reconfiguration
 Aang's Iceberg
 Parallax Wave
 Leyline Binding
 Abandoned Air Temple
 Witch Enchanter
 Tamiyo, Inquisitive Student
+Bilbo, Thief in the Night
 Faerie Mastermind
 Jace, Vryn's Prodigy
 Ledger Shredder
@@ -76,10 +74,11 @@ Brazen Borrower
 Emry, Lurker of the Loch
 Forensic Gadgeteer
 Hullbreacher
-Skycoach Conductor
+Seasoned Cryomancer
 Spellseeker
 Tishana's Tidebinder
 Displacer Kitten
+Sphinx of False Conclusions
 Subtlety
 Urza, Lord High Artificer
 Emeritus of Ideation
@@ -113,16 +112,15 @@ Paradoxical Outcome
 Force of Will
 Gush
 Mystic Confluence
+Boomerang Basics
 Ponder
 Preordain
-Flow State
 Time Walk
 Show and Tell
 Stock Up
 Timetwister
 Tinker
 Lórien Revealed
-Time Warp
 Echo of Eons
 Time Spiral
 Upheaval
@@ -130,6 +128,7 @@ Treasure Cruise
 Aether Spellbomb
 Sewer-veillance Cam
 Astrologian's Planisphere
+Cryogen Relic
 Stormchaser's Talent
 Proft's Eidetic Memory
 Otawara, Soaring City
@@ -148,8 +147,8 @@ Iron-Shield Elf
 Orcish Bowmasters
 Super Shredder
 Barrowgoyf
+Sanctum Lurker
 Sedgemoor Witch
-Twilight Diviner
 Grief
 Sheoldred, the Apocalypse
 Harvester of Misery
@@ -188,6 +187,7 @@ Exhume
 Hymn to Tourach
 Life // Death
 Night's Whisper
+Vraska's Final Mercy
 Doomsday
 Toxic Deluge
 Yawgmoth's Will
@@ -199,36 +199,35 @@ Animate Dead
 Necromancy
 Recurring Nightmare
 Urborg, Tomb of Yawgmoth
-Blazing Rootwalla
 Dragon's Rage Channeler
 Goblin Welder
-Marauding Mako
+Monastery Swiftspear
 Orcish Lumberjack
+Pompous Battlemage
 Ragavan, Nimble Pilferer
+Soul-Scar Mage
 Voldaren Epicure
 Batroc the Leaper
+Embereth Shieldbreaker
 Fear of Missing Out
 Gau, Feral Youth
 Generous Plunderer
 Goblin Engineer
-Hexing Squelcher
 Inti, Seneschal of the Sun
 Ivora, Insatiable Heir
-Magda, Brazen Outlaw
-Robber of the Rich
-Anje's Ravager
+Samut, Hazoret's Champion
+Slickshot Show-Off
+Stingcaster Mage
 Bonecrusher Giant
 Broadside Bombardiers
 Death-Greeter's Champion
 Detective's Phoenix
+Gandalf, Goblins' Bane
 Gut, True Soul Zealot
 Laelia, the Blade Reforged
 Phyrexian Dragon Engine
 Screaming Nemesis
 Seasoned Pyromancer
-Squee, Goblin Nabob
-Tersa Lightshatter
-Anger
 Headliner Scarlett
 Pyrogoyf
 Fury
@@ -236,13 +235,16 @@ Oliphaunt
 Etali, Primal Conqueror
 Chandra, Torch of Defiance
 Burst Lightning
+Flashback
 Galvanic Discharge
+Lava Dart
 Lightning Bolt
 Tarfire
 Unholy Heat
 Abrade
 Sear
 Delayed Blast Fireball
+Dead // Gone
 Mine Collapse
 Through the Breach
 Fireblast
@@ -255,43 +257,38 @@ Impractical Joke
 Suplex
 Wheel of Fortune
 Fiery Confluence
+Pyrite Spellbomb
 Cori-Steel Cutter
 Legion Extruder
-Melded Moxite
 Goblin Bombardment
 Underworld Breach
 Fable of the Mirror-Breaker
 Sneak Attack
-The Legend of Roku
 Arena of Glory
-Avacyn's Pilgrim
-Basking Rootwalla
 Birds of Paradise
 Delighted Halfling
 Elvish Mystic
+Elvish Reclaimer
 Haywire Mite
 Hexdrinker
 Ignoble Hierarch
 Llanowar Elves
 Noble Hierarch
+Quirion Ranger
 Sylvan Safekeeper
 Badgermole Cub
 Bristly Bill, Spine Sower
+Carnivorous Cultivator
+Devoted Druid
 Fanatic of Rhonas
 Keen-Eyed Curator
-Michelangelo, Weirdness to 11
-Mutagen Man, Living Ooze
-Satyr Wayfinder
+Marwyn, the Preserver
 Scythecat Cub
 Springheart Nantuko
-Sylvan Caryatid
-Town Greeter
 Emeritus of Abundance
 Endurance
-Eternal Witness
 Formidable Speaker
 Mole Man, Moloid Master
-Sandstorm Salvager
 Sentinel of the Nameless City
 Six
 Tireless Tracker
@@ -300,42 +297,44 @@ Baloth Prime
 Icetill Explorer
 Ouroboroid
 Questing Beast
-Vengevine
+Sowing Mycospawn
 Titania, Protector of Argoth
 Generous Ent
 Vaultborn Tyrant
 Woodfall Primus
 Worldspine Wurm
+Garruk, Curse Breaker
 Nissa, Who Shakes the World
+Crop Rotation
+Tamiyo's Safekeeping
 Once Upon a Time
 Force of Vigor
 Green Sun's Zenith
 Pest Infestation
-Channel
 Malevolent Rumble
 Natural Order
 Esika's Chariot
 Fastbond
 Oath of Druids
-Survival of the Fittest
 Boseiju, Who Endures
 Shifting Woodland
 Yavimaya, Cradle of Growth
 Walking Ballista
+Painter's Servant
 Phyrexian Metamorph
+Ginger, Queen of Sweets
 Myr Battlesphere
 Blightsteel Colossus
 Emrakul, the Aeons Torn
-Krang, Utrom Warlord
-Triplicate Titan
 Tezzeret, Cruel Captain
 Karn, Scion of Urza
 Ugin, Eye of the Storms
+Mutagenic Growth
 Dismember
 Gitaxian Probe
-Together as One
 Black Lotus
 Chrome Mox
+Engineered Explosives
 Everflowing Chalice
 Lion's Eye Diamond
 Lotus Petal
@@ -354,12 +353,12 @@ Candelabra of Tawnos
 Chromatic Star
 Currency Converter
 Expedition Map
-Lavaspur Boots
+Grindstone
 Mana Vault
 Manifold Key
 Retrofitter Foundry
 Sensei's Divining Top
-Shadowspear
+Skateboard
 Skullclamp
 Sol Ring
 Soul-Guide Lantern
@@ -370,19 +369,23 @@ Mind Stone
 Pentad Prism
 Smuggler's Copter
 Sword of the Meek
+The Echoverse Fulcrum
 Umezawa's Jitte
 Basalt Monolith
 Coalition Relic
+Iron Man Armor
 Nettlecyst
 Palantír of Orthanc
+The Fantasticar
+Mystic Forge
 The One Ring
 Memory Jar
 The Mightstone and Weakstone
 Coveted Jewel
 Kaldra Compleat
 Portal to Phyrexia
-Spider-Woman, Stunning Savior
 No More Lies
+Spider-Woman, Stunning Savior
 Talisman of Progress
 Aang, Swift Savior
 Teferi, Time Raveler
@@ -392,7 +395,6 @@ Teferi, Hero of Dominaria
 Baleful Strix
 Psychic Frog
 Talisman of Dominance
-Master of Death
 Kaito, Bane of Nightmares
 Superior Spider-Man
 Fallen Shinobi
@@ -400,15 +402,14 @@ Bloodtithe Harvester
 Carnage Interpreter
 Fire Covenant
 Kolaghan's Command
-Carnage, Crimson Chaos
 Manamorphose
-Territorial Kavu
 Wrenn and Six
 Minsc & Boo, Timeless Heroes
 Bloodbraid Challenger
+Escape to the Wilds
 Vibrance
 Figure of Fable
-Arwen, Mortal Queen
+Knight of the Reliquary
 Brightglass Gearhulk
 Okoye, Mighty and Adored
 Torsten, Founder of Benalia
@@ -416,7 +417,6 @@ Damn
 Tidehollow Sculler
 Cloak and Dagger, Entwined
 Lurrus of the Dream-Den
-Vindicate
 Expressive Iteration
 Talisman of Creativity
 Third Path Iconoclast
@@ -424,24 +424,24 @@ Traumatic Critique
 Dack Fayden
 Flame of Anor
 Lutri, the Spellchaser
-Pinnacle Emissary
 Saheeli, Sublime Artificer
 Vivi Ornitier
 Deathrite Shaman
 Pillage the Bog
 Tear Asunder
+Wight of the Reliquary
 Witherbloom Apprentice
 Grist, the Hunger Tide
 Vicious Rivalry
 Alpha Deathclaw
-Hogaak, Arisen Necropolis
 Figure of Destiny
 Forth Eorlingas!
-Talisman of Conviction
 Phlage, Titan of Fire's Fury
 Zirda, the Dawnwaker
 Otharri, Suns' Glory
+Avatar of Burgeoning Echoes
 Talisman of Curiosity
+Absorbing Man
 Nadu, Winged Wisdom
 Oko, Thief of Crowns
 Uro, Titan of Nature's Wrath
@@ -449,8 +449,6 @@ Tamiyo, Collector of Tales
 Wistfulness
 Thopter Foundry
 Relic of Sauron
-Loot, the Pathfinder
-Leovold, Emissary of Trest
 Omnath, Locus of Creation
 Atraxa, Grand Unifier
 Celestial Colonnade
@@ -524,8 +522,8 @@ Indatha Triome
 Raugrin Triome
 Zagoth Triome
 Ancient Tomb
-Bazaar of Baghdad
 City of Traitors
+Dark Depths
 Fabled Passage
 Gaea's Cradle
 Karakas
@@ -536,6 +534,8 @@ Multiversal Passage
 Prismatic Vista
 Starting Town
 Strip Mine
+Talon Gates of Madara
+Thespian's Stage
 Tolarian Academy
 Urza's Saga
 Wasteland

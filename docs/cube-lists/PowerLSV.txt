@@ -1,4 +1,4 @@
-# mainboard
+# mainboard of https://cubecobra.com/cube/list/PowerLSV, by tools/maintenance/cubecobra-sync.py
 Giver of Runes
 Guide of Souls
 Mother of Runes
@@ -15,14 +15,12 @@ Spectacular Spider-Man
 Stoneforge Mystic
 Thalia, Guardian of Thraben
 Voice of Victory
-Adeline, Resplendent Cathar
 Agent Bishop, Man in Black
 Anointed Peacekeeper
 Archon of Emeria
 Clarion Conqueror
 Elite Spellbinder
 Enduring Innocence
-Flickerwisp
 Loran of the Third Path
 Sage of the Skies
 Sanguine Evangelist
@@ -57,16 +55,15 @@ Mox Pearl
 Portable Hole
 Glimmer Lens
 Staff of the Storyteller
-The Mind Stone
 Touch the Spirit Realm
 Parallax Wave
 Leyline Binding
 Tamiyo, Inquisitive Student
 Bilbo, Thief in the Night
 Faerie Mastermind
+Geist of Saint Thalia
 Jace, Vryn's Prodigy
 Malcolm, Alluring Scoundrel
-Norman Osborn
 Snapcaster Mage
 Thassa's Oracle
 The Wondrous Wasp
@@ -84,15 +81,15 @@ Trinket Mage
 True-Name Nemesis
 Displacer Kitten
 Phyrexian Metamorph
+Sphinx of False Conclusions
 Subtlety
 Urza, Lord High Artificer
 Feywild Caretaker
 Quantum Riddler
-Wan Shi Tong, All-Knowing
 Kappa Cannoneer
 Narset, Parter of Veils
-Jace, the Mind Sculptor
 Jace, Wielder of Mysteries
+The Theorist, Jace Beleren
 Ancestral Recall
 Brainstorm
 Consider
@@ -150,7 +147,6 @@ Gollum, Riddle Master
 Iron-Shield Elf
 Orcish Bowmasters
 Sunset Saboteur
-Super Shredder
 Barrowgoyf
 Sedgemoor Witch
 Grief
@@ -208,13 +204,12 @@ Batroc the Leaper
 Embereth Shieldbreaker
 Fear of Missing Out
 Generous Plunderer
-Goblin Engineer
-Hexing Squelcher
 Inti, Seneschal of the Sun
 Ivora, Insatiable Heir
 Magda, Brazen Outlaw
-Ravenous Robots
 Robber of the Rich
+Samut, Hazoret's Champion
+Stingcaster Mage
 "Name Sticker" Goblin
 Broadside Bombardiers
 Death-Greeter's Champion
@@ -228,8 +223,8 @@ Caves of Chaos Adventurer
 Flametongue Kavu
 Headliner Scarlett
 Pyrogoyf
+Bonehoard Dracosaur
 Fury
-Thor, God of Thunder
 Oliphaunt
 Etali, Primal Conqueror
 Chandra, Torch of Defiance
@@ -247,7 +242,6 @@ Pyrokinesis
 Chain Lightning
 Faithless Looting
 Flame Slash
-Shatterskull Smashing
 Suplex
 Wheel of Fortune
 Fiery Confluence
@@ -255,7 +249,6 @@ Mox Ruby
 Pyrite Spellbomb
 Cori-Steel Cutter
 Legion Extruder
-Goblin Bombardment
 Underworld Breach
 Fable of the Mirror-Breaker
 Sneak Attack
@@ -273,7 +266,6 @@ Badgermole Cub
 Bejeweled Warg
 Bristly Bill, Spine Sower
 Fanatic of Rhonas
-Guerrilla Gorilla
 Keen-Eyed Curator
 Lotus Cobra
 Outland Liberator
@@ -302,9 +294,7 @@ Generous Ent
 Vaultborn Tyrant
 Woodfall Primus
 Worldspine Wurm
-Nissa, Who Shakes the World
 Crop Rotation
-Worldly Tutor
 Once Upon a Time
 Tear Asunder
 Force of Vigor
@@ -315,7 +305,6 @@ Natural Order
 Mox Emerald
 Esika's Chariot
 Fastbond
-Oath of Druids
 Walking Ballista
 Painter's Servant
 Cogwork Librarian
@@ -332,7 +321,6 @@ Lion's Eye Diamond
 Lotus Petal
 Mana Crypt
 Mishra's Bauble
-Mox Amber
 Mox Diamond
 Mox Opal
 Urza's Bauble
@@ -365,7 +353,6 @@ Time Vault
 Basalt Monolith
 Coalition Relic
 Crucible of Worlds
-Nettlecyst
 Palantír of Orthanc
 The Fantasticar
 The One Ring
@@ -389,6 +376,7 @@ Ertai Resurrected
 Kaito, Bane of Nightmares
 Superior Spider-Man
 Fallen Shinobi
+Uldaros Theorix
 Bloodtithe Harvester
 Talisman of Indulgence
 Carnage Interpreter
@@ -399,8 +387,8 @@ Manamorphose
 Mawloc
 Territorial Kavu
 Wrenn and Six
+Aerid Konstrari
 Minsc & Boo, Timeless Heroes
-Wolverine, Fierce Fighter
 Bloodbraid Challenger
 Raph & Mikey, Troublemakers
 Figure of Fable
@@ -440,7 +428,6 @@ Oko, Thief of Crowns
 Uro, Titan of Nature's Wrath
 Tamiyo, Collector of Tales
 Thopter Foundry
-Raffine, Scheming Seer
 Relic of Sauron
 Loot, the Pathfinder
 Aragorn, King of Gondor
@@ -466,7 +453,6 @@ Commercial District
 Copperline Gorge
 Stomping Ground
 Taiga
-Thornspire Verge
 Horizon Canopy
 Lush Portico
 Razorverge Thicket
@@ -540,4 +526,3 @@ Verdant Catacombs
 Wasteland
 Windswept Heath
 Wooded Foothills
-
