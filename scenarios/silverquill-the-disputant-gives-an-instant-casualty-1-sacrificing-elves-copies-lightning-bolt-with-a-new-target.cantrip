@@ -1,0 +1,60 @@
+# Silverquill, the Disputant: "Each instant and sorcery spell you cast has casualty 1" (CR 702.153a, 604.1). Bot1 plays a Black Lotus
+# and three Moxes, casts Llanowar Elves and Silverquill (the Lotus's three Green, Pearl, Jet), then Lightning Bolt with Ruby. The
+# Bolt is cast with casualty: Bot1 sacrifices the Elves (a creature with power 1, as little as the cost asks) and the casualty
+# trigger copies the Bolt (CR 707.10), the copy given a new target (CR 707.10c). The Bolt hits Bot2, the copy Bot1: each loses
+# 3. The copy is no card, so only the Bolt and the Elves (and the spent Lotus) are in Bot1's graveyard, and Silverquill, not sacrificed, stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Llanowar Elves
+Silverquill, the Disputant
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x27
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill, the Disputant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Modes(Casualty 1)
+Bot1.Choose(Llanowar Elves)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Llanowar Elves; Black Lotus
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Silverquill, the Disputant
+Stack.Count = 0

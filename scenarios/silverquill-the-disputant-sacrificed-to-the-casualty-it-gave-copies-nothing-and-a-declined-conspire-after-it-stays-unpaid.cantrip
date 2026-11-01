@@ -1,0 +1,69 @@
+# Silverquill, the Disputant ("Each instant and sorcery spell you cast has casualty 1") on turn 1 and Raiding Schemes ("Each
+# noncreature spell you cast has conspire") on turn 3 give Lightning Bolt casualty and then conspire, in the order of their
+# timestamps (CR 613.7). Bot1 pays casualty by sacrificing Silverquill itself and declines conspire (CR 601.2b). The Bolt
+# loses casualty as Silverquill leaves (CR 611.3a), so when it becomes cast it has no casualty to trigger (CR 601.2i, 702.153b),
+# and the conspire it still has was not paid (CR 702.78b): nothing copies it. The Bolt alone hits Bot2: 20-3 = 17.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Silverquill, the Disputant
+Raiding Schemes
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill, the Disputant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Raiding Schemes.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Modes(Casualty 1)
+Bot1.Modes(Cast without conspire)
+Bot1.Choose(Silverquill, the Disputant)
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Silverquill, the Disputant; Black Lotus
+Stack.Count = 0

@@ -1,0 +1,64 @@
+# Silverquill, the Disputant gives Lightning Bolt casualty 1 (CR 702.153a): "you may sacrifice a creature with power 1 or greater".
+# Bot1 controls Silverquill (4/4), Llanowar Elves (1/1) and an Ornithopter (0/2) on turn 3. The Ornithopter, with power 0, is not
+# offered for the cost; the Elves are, and Bot1 sacrifices them. The cost is paid, so the Bolt is copied: Bot2 loses 6 of its 20
+# (the Bolt and its copy), ending on 14. The Ornithopter stays.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Silverquill, the Disputant
+Ornithopter
+Llanowar Elves
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill, the Disputant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Llanowar Elves.Cast
+! Bot1.Modes
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Modes
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Modes(Casualty 1)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Life = 20
+Bot1.Battlefield = Silverquill, the Disputant; Ornithopter; Mox Jet; Mox Pearl; Mox Ruby
+Bot1.Graveyard = Lightning Bolt; Llanowar Elves; Black Lotus
+Stack.Count = 0

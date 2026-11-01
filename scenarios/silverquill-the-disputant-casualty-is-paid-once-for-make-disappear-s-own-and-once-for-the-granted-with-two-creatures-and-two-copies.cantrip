@@ -1,0 +1,73 @@
+# Several instances of casualty on one spell (CR 702.153b): Make Disappear has casualty 1 printed, and Silverquill, the Disputant gives
+# the instant a second. Each is announced and paid on its own: Bot1 pays both, the Elves for one (the first) and, the Elves no
+# longer offered (a permanent already sacrificed to another cost is not paid twice, CR 118.3), Dryad Arbor for the other. Each
+# instance's trigger copies the spell for its own payment: two triggers on the stack above Make Disappear and Bot2's Lightning
+# Bolt, 4 objects, and the Bolt is countered once (the Bot2 mana cannot pay {2}). Silverquill stays. The copies are no cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Llanowar Elves
+Silverquill, the Disputant
+Dryad Arbor
+Mox Sapphire
+Make Disappear
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill, the Disputant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dryad Arbor.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Make Disappear.Cast(Stack.Lightning Bolt)
+Bot1.Modes(Casualty 1)
+Bot1.Modes(Casualty 1)
+Bot1.Choose(Llanowar Elves)
+! Bot1.Choose(Llanowar Elves)
+Bot1.Choose(Dryad Arbor)
+Bot1.Triggers(copy this spell; copy it and)
+? Stack.Count = 4
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Sapphire; Silverquill, the Disputant
+Stack.Count = 0

@@ -1,0 +1,63 @@
+# Silverquill, the Disputant gives casualty 1 to "each instant and sorcery spell you cast" (CR 702.153a, 604.1) and to no other spell.
+# Bot1's Llanowar Elves, a creature spell cast with Silverquill on the battlefield, is asked nothing; its Lightning Bolt, an
+# instant, is asked and the cost declined (the first answer): nothing is sacrificed and nothing copied, Bot2 loses 3 only.
+# Bot2's own Lightning Bolt on its turn is asked nothing either: Silverquill is Bot1's, so it is not a spell Bot1 casts.
+# Bot1 ends with the Elves and all it began with, 17 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Ruby
+Silverquill, the Disputant
+Llanowar Elves
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill, the Disputant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Llanowar Elves.Cast
+! Bot1.Modes
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield = Llanowar Elves; Mox Jet; Mox Pearl; Mox Ruby; Silverquill, the Disputant

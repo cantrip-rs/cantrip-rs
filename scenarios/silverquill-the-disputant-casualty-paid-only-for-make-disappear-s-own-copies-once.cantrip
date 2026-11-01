@@ -1,0 +1,68 @@
+# Casualty is paid per instance (CR 702.153b): Make Disappear has casualty 1 printed and Silverquill, the Disputant gives it a second. Bot1 pays
+# the first announced (Make Disappear's own) with the Elves and declines the granted one, so only the printed instance's trigger is on the stack above
+# Make Disappear and Bot2's Lightning Bolt: 3 objects, one copy, and Dryad Arbor stays (it is a land creature). The granted one's trigger, its cost unpaid, never triggers.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Llanowar Elves
+Silverquill, the Disputant
+Dryad Arbor
+Mox Sapphire
+Make Disappear
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill, the Disputant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dryad Arbor.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Make Disappear.Cast(Stack.Lightning Bolt)
+Bot1.Modes(Casualty 1)
+Bot1.Modes(1)
+Bot1.Choose(Llanowar Elves)
+? Stack.Count = 3
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield = Dryad Arbor; Mox Jet; Mox Pearl; Mox Sapphire; Silverquill, the Disputant
+Stack.Count = 0

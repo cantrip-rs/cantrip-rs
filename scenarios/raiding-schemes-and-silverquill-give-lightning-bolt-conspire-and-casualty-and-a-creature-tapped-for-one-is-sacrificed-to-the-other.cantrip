@@ -1,0 +1,87 @@
+# Raiding Schemes ("Each noncreature spell you cast has conspire") and Silverquill, the Disputant ("Each instant and sorcery spell
+# you cast has casualty 1") together give Lightning Bolt two optional costs (CR 601.2b, 702.78a, 702.153a). Bot1 pays both on turn 7:
+# conspire taps the Goblin Champion and the Cacophony Scamp, casualty sacrifices the Scamp - a creature tapped as one cost is
+# sacrificed as another, paid in any order (CR 601.2h) - and each ability's trigger copies the Bolt for its own cost. The Bolt hits
+# Bot2 and the copies Bot1 (twice). Silverquill stays; the Scamp dies and its death trigger deals 1 to Bot2: Bot2 20-3-1 = 16, Bot1 14. The copies are no cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Pearl
+Raiding Schemes
+Goblin Champion
+Silverquill, the Disputant
+Cacophony Scamp
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Raiding Schemes.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Champion.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Silverquill, the Disputant.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cacophony Scamp.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Modes(Conspire:)
+Bot1.Modes(Casualty 1)
+Bot1.Choose(Goblin Champion; Cacophony Scamp)
+Bot1.Choose(Cacophony Scamp)
+? Stack.Count = 1
+Bot1.Triggers(dies; Conspire; Casualty)
+Bot1.Target(Bot2)
+? Stack.Count = 4
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 14
+Bot2.Life = 16
+Bot1.Battlefield.Goblin Champion.Tapped = true
+Bot1.Battlefield.Silverquill, the Disputant.Tapped = false
+Stack.Count = 0

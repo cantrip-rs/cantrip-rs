@@ -1,0 +1,84 @@
+# Two Silverquills, the Disputant - the card and a Clone of it, kept by Mirror Gallery (CR 704.5j) - give Lightning Bolt two
+# instances of casualty 1, the card's first by timestamp (CR 613.7), each paid or not on its own (CR 702.153b, 601.2b). Bot1
+# declines the first and pays the second by sacrificing the card that gave the first: the Bolt loses that instance (CR
+# 611.3a), and the one left, the Clone's, was paid, so it triggers and copies the Bolt once (CR 601.2i, 707.10). The Bolt hits
+# Bot2 and the copy Bot1, each losing 3; the Clone stays and the card is in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Silverquill, the Disputant
+Mirror Gallery
+Clone
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Silverquill, the Disputant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mirror Gallery.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Clone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Modes(Cast without casualty)
+Bot1.Modes(Casualty 1)
+Bot1.Choose(Silverquill, the Disputant#1)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
+Bot1.Graveyard = Lightning Bolt; Silverquill, the Disputant; Black Lotus
+Stack.Count = 0
