@@ -1,0 +1,54 @@
+# Compassionate Healer {1}{W}: "Whenever this creature becomes tapped, you gain 1 life and scry 1." Bot1 attacks with it on turns 3
+# and 5 (an attack taps it): each time Bot1 gains exactly 1 life (21, then 22) and scries 1. On turn 3 the Mountain on top goes to
+# the bottom, on turn 5 the Swamp stays on top and is drawn on turn 7. Bot2's Ornithopter being tapped by attacking would not count
+# (it is "this creature"), so Bot1's life moves only for the Healer.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Compassionate Healer
+Plains
+Plains
+Plains
+Plains
+Island
+Mountain
+Forest
+Swamp
+Plains x12
+
+[Bot2 Deck]
+Ornithopter
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Compassionate Healer.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand = Plains; Plains; Plains; Plains; Island
+Bot1.Attack(Compassionate Healer > Bot2)
+Bot1.Pass
+Bot1.Arrange( | Mountain)
+? Bot1.Life = 21
+[T3 Bot1.Main2]
+? Bot1.Life = 21
+[T5 Bot1.Main1]
+Bot1.Attack(Compassionate Healer > Bot2)
+Bot1.Pass
+Bot1.Arrange(Swamp | )
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 22
+Bot1.Hand = Plains; Plains; Plains; Plains; Island; Forest; Swamp
