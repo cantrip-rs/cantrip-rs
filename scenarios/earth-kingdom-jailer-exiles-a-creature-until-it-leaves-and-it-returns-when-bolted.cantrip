@@ -1,0 +1,58 @@
+# Earth Kingdom Jailer {2}{W}: "When this creature enters, exile up to one target artifact, creature, or enchantment an opponent
+# controls with mana value 3 or greater until this creature leaves the battlefield." (CR 610.3). Bot2's Hill Giant (mana value 4) is
+# exiled when the Jailer enters on turn 3; on turn 4 Bot2's Lightning Bolt kills the 3/3 Jailer (3 damage) and the Hill Giant
+# comes back (a new object, CR 400.7), under its owner Bot2's control.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Earth Kingdom Jailer
+Plains x16
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Hill Giant
+Lightning Bolt
+Mountain
+Mountain
+Mountain x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Earth Kingdom Jailer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Pass
+Bot2.Pass
+? Exile = Hill Giant
+? Bot2.Battlefield = Mountain
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Earth Kingdom Jailer)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Earth Kingdom Jailer
+Exile = 
+Bot2.Battlefield = Mountain; Mountain; Hill Giant

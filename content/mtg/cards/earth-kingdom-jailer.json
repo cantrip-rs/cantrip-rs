@@ -1,0 +1,8 @@
+{
+  "name": "Earth Kingdom Jailer",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Soldier Ally",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, exile up to one target artifact, creature, or enchantment an opponent controls with mana value 3 or greater until this creature leaves the battlefield."
+}

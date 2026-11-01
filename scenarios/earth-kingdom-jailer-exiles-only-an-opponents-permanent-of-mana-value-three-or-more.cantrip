@@ -1,0 +1,71 @@
+# Earth Kingdom Jailer's target is "an artifact, creature, or enchantment an opponent controls with mana value 3 or greater"
+# (CR 115.1, 202.3). Bot2 controls a Mountain (no artifact, creature or enchantment), an Ornithopter (mana value 0), a Mind Stone
+# (2) and a Coalition Relic (exactly 3); Bot1 controls a Coalition Relic of its own. Only Bot2's Relic is a legal target: the
+# first four are refused, and the Relic is exiled until the Jailer leaves.
+
+[Bot1 Deck]
+Black Lotus
+Coalition Relic
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Earth Kingdom Jailer
+Plains x15
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Mox Jet
+Ornithopter
+Mind Stone
+Coalition Relic
+Mountain x13
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Coalition Relic.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Mind Stone.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Coalition Relic.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Earth Kingdom Jailer.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Mountain)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Mind Stone)
+! Bot1.Target(Bot1.Battlefield.Coalition Relic)
+Bot1.Target(Bot2.Battlefield.Coalition Relic)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Coalition Relic
+Bot2.Battlefield = Mountain; Mox Ruby; Mox Jet; Ornithopter; Mind Stone
+Bot1.Battlefield = Coalition Relic; Mox Pearl; Mox Sapphire; Mox Jet; Earth Kingdom Jailer
