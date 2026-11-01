@@ -1,0 +1,52 @@
+# World War Hulk's chapter I made its effect with "red or green" as its text read when it resolved (CR 612.1, 608.2h): a Sleight
+# of Mind that changes the Saga's "green" to "blue" afterwards changes the Saga's text, not the effect already made. So a blue
+# Coral Merfolk is not offered the free cast, Runeclaw Bear ({1}{G}) still is and is cast with nothing spent, and the Bear uses
+# the effect up (CR 611.2c), judged by the same words: the red Raging Goblin after it is not offered it either.
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Mox Sapphire
+World War Hulk
+Sleight of Mind
+Runeclaw Bear
+Coral Merfolk
+Raging Goblin
+Forest x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.World War Hulk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.World War Hulk)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Green)
+Bot1.Colors(Blue)
+! Bot1.Hand.Coral Merfolk.Cast(Ability: Without paying its mana cost)
+Bot1.Hand.Runeclaw Bear.Cast(Ability: Without paying its mana cost)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Raging Goblin.Cast(Ability: Without paying its mana cost)
+
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield.Runeclaw Bear.Power = 2
+Bot1.Graveyard = Sleight of Mind; Black Lotus
+Bot1.Hand = Coral Merfolk; Raging Goblin

@@ -1,0 +1,34 @@
+# Chapter I lets a creature spell be cast without paying its mana cost; it does not let it be cast at other times (CR 118.9,
+# 307.1, 117.1a). Runeclaw Bear is free in the main phase of the turn the chapter resolves and is refused it in that turn's
+# end step, while still the same turn and the same effect.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+World War Hulk
+Runeclaw Bear
+Hill Giant
+Forest x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.World War Hulk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+? Bot1.Battlefield.World War Hulk.Counters.Lore = 1
+! Bot1.Hand.Runeclaw Bear.Cast(Ability: Without paying its mana cost)
+
+[Expect]
+Bot1.Hand = Forest; Hill Giant; Runeclaw Bear

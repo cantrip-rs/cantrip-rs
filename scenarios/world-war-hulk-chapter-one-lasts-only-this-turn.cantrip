@@ -1,0 +1,33 @@
+# "This turn" (CR 611.2a): World War Hulk is cast on turn 1 and no creature spell follows. On turn 3, with chapter II
+# resolved and nothing paid, Hill Giant is not offered a free cast, and Bot1 has no mana for it either.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+World War Hulk
+Hill Giant
+Forest x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.World War Hulk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.World War Hulk.Counters.Lore = 2
+? Bot1.Mana =
+! Bot1.Hand.Hill Giant.Cast(Ability: Without paying its mana cost)
+
+[Expect]
+Bot1.Hand = Forest; Forest; Forest; Hill Giant

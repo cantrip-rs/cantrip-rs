@@ -1,0 +1,43 @@
+# Chapter I: "The next red or green creature spell you cast this turn can be cast without paying its mana cost" (CR 118.9,
+# 611.2a). Black Lotus and two Moxen pay all five mana of World War Hulk, so the pool is empty when chapter I resolves.
+# Hill Giant ({3}{R}) is a red creature spell and is offered "without paying its mana cost" and cast with nothing spent;
+# Shock (red, but no creature) and Ornithopter (a creature, but colorless) are refused it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+World War Hulk
+Hill Giant
+Shock
+Ornithopter
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.World War Hulk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Stack.Count = 0
+! Bot1.Hand.Shock.Cast(Ability: Without paying its mana cost)
+! Bot1.Hand.Ornithopter.Cast(Ability: Without paying its mana cost)
+Bot1.Hand.Hill Giant.Cast(Ability: Without paying its mana cost)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana =
+Bot1.Hand = Shock; Ornithopter
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.World War Hulk.Counters.Lore = 1

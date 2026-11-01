@@ -1,0 +1,37 @@
+# Chapter I offers the free cast for a green creature spell too ("red or green"): Runeclaw Bear ({1}{G}) is cast with nothing
+# spent, a black creature (Vampire Nighthawk) is refused it. A creature spell that is both colors would be either.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+World War Hulk
+Runeclaw Bear
+Vampire Nighthawk
+Hill Giant
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.World War Hulk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Vampire Nighthawk.Cast(Ability: Without paying its mana cost)
+Bot1.Hand.Runeclaw Bear.Cast(Ability: Without paying its mana cost)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana =
+Bot1.Hand = Vampire Nighthawk; Hill Giant
+Bot1.Battlefield.Runeclaw Bear.Power = 2

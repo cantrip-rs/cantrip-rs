@@ -1,0 +1,41 @@
+# "The next red or green creature spell you cast this turn": the first one uses the effect up (CR 611.2a). Raging Goblin
+# ({R}) is the first and is paid for with Mox Ruby, so Runeclaw Bear, the second, is not offered a free cast. A spell the
+# effect is not for does not use it up: Mox Jet is cast first (no creature) and the Goblin is still offered it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+World War Hulk
+Raging Goblin
+Runeclaw Bear
+Forest x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.World War Hulk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raging Goblin.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Raging Goblin.Power = 1
+! Bot1.Hand.Runeclaw Bear.Cast(Ability: Without paying its mana cost)
+
+[Expect]
+Bot1.Hand = Runeclaw Bear
+Bot1.Mana =

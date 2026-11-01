@@ -1,0 +1,64 @@
+# Chapter I gives Runeclaw Bear (2/2) for nothing; Raging Goblin (1/1) is paid for. Chapter II (turn 3): three +1/+1 counters
+# on a target creature you control, so the Bear is 5/5 (the Goblin stays 1/1), and Bot2's Ornithopter is not a legal target. Chapter III (turn 5): double the Bear's power
+# and toughness (+5/+5, so 10/10) and trample until end of turn, then the Saga is sacrificed. Next turn the Bear is 5/5 again
+# with no trample.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Mox Jet
+World War Hulk
+Runeclaw Bear
+Raging Goblin
+Forest x13
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.World War Hulk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Runeclaw Bear.Cast(Ability: Without paying its mana cost)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raging Goblin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Runeclaw Bear)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Runeclaw Bear.Power = 5
+? Bot1.Battlefield.Raging Goblin.Power = 1
+? Bot1.Battlefield.Runeclaw Bear.Toughness = 5
+[T5 Bot1.Main1]
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Runeclaw Bear)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Runeclaw Bear.Power = 10
+? Bot1.Battlefield.Runeclaw Bear.Toughness = 10
+? Bot1.Battlefield.Runeclaw Bear.Keywords = Trample
+? Bot1.Battlefield.World War Hulk = (absent)
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Runeclaw Bear.Power = 5
+Bot1.Battlefield.Runeclaw Bear.Keywords = (absent)
+Bot1.Battlefield.Runeclaw Bear.Counters.PlusOnePlusOne = 3
