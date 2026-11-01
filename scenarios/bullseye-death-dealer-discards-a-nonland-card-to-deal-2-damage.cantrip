@@ -1,0 +1,51 @@
+# Bullseye, Death Dealer: "{3}, {T}, Sacrifice an artifact or discard a nonland card: Bullseye deals 2 damage to any target." (CR 602.2b,
+# 118.3.) Bot1 casts it on turn 1 (declining the enter trigger) and on turn 3, with the Moxen untapped, activates it: of the two ways
+# of paying, both possible, it chooses to discard, and Lightning Bolt is the only card it may name. The cost is paid at once, so the
+# card is in the graveyard before the ability resolves; Bot2 then takes 2 damage. No artifact is sacrificed.
+
+[Bot1 Deck]
+Bullseye, Death Dealer
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Lightning Bolt
+Mountain x21
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bullseye, Death Dealer.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Modes(Neither)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Bullseye, Death Dealer.Activate(Bot2)
+Bot1.Modes(Discard a nonland card)
+! Bot1.Choose(Mountain)
+Bot1.Choose(Lightning Bolt)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Graveyard = Lightning Bolt
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Lightning Bolt
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Sapphire; Bullseye, Death Dealer
+Bot1.Battlefield.Bullseye, Death Dealer.Tapped = true
+Stack.Count = 0

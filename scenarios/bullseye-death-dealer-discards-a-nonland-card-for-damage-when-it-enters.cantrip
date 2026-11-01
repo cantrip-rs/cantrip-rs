@@ -1,0 +1,40 @@
+# Bullseye, Death Dealer: the enter trigger may discard a nonland card instead (CR 701.9, 603.12). Bot1 casts it with three Moxen,
+# chooses to discard, and Lightning Bolt is the only card it may name (the Mountains are lands): the reflexive trigger then
+# deals 2 damage to Bot2. The Moxen all stay, since the discard was the choice.
+
+[Bot1 Deck]
+Bullseye, Death Dealer
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bullseye, Death Dealer.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Modes(Discard a nonland card)
+! Bot1.Choose(Mountain)
+Bot1.Choose(Lightning Bolt)
+Bot1.Target(Bot2)
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Lightning Bolt
+Bot1.Hand = Mountain; Mountain
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Sapphire; Bullseye, Death Dealer
+Stack.Count = 0

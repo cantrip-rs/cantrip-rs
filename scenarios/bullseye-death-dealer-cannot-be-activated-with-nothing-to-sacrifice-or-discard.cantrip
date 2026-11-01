@@ -1,0 +1,37 @@
+# Bullseye, Death Dealer: the ability is offered only while some way of paying its cost is possible (CR 602.2b, 118.3). Bot1 has no
+# artifact and a hand of lands only (a land is not a nonland card), so on turn 7, with four Mountains untapped and Bullseye able to
+# tap, the activation is not offered.
+
+[Bot1 Deck]
+Bullseye, Death Dealer
+Mountain x30
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Bullseye, Death Dealer.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+! Bot1.Battlefield.Bullseye, Death Dealer.Activate
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Bullseye, Death Dealer.Tapped = false

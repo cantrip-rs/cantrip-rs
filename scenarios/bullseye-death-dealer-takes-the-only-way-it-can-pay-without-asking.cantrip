@@ -1,0 +1,45 @@
+# Bullseye, Death Dealer: a way of paying the cost that can't be paid is not offered, and a lone one is taken without asking (CR 601.2b,
+# 602.2b). Bot1's hand holds nothing but lands, so there is no nonland card to discard: on turn 3 activating it goes straight to naming
+# the artifact to sacrifice, with no choice between the two ways, and Mox Sapphire is the one. Bot2 takes 2 damage.
+
+[Bot1 Deck]
+Bullseye, Death Dealer
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mountain x23
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bullseye, Death Dealer.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Modes(Neither)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Bullseye, Death Dealer.Activate(Bot2)
+Bot1.Choose(Mox Sapphire)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Graveyard = Mox Sapphire
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Mox Sapphire
+Stack.Count = 0

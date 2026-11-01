@@ -1,0 +1,34 @@
+# Bullseye, Death Dealer: with no artifact and only lands in hand, neither half of the choice can be done (a land is not a nonland
+# card), so nothing is asked and no reflexive trigger is created (CR 101.2, 603.12). Bot1 plays a Mountain a turn and casts it on its
+# third turn.
+
+[Bot1 Deck]
+Bullseye, Death Dealer
+Mountain x25
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Bullseye, Death Dealer.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Delayed.Count = 0
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield = Mountain; Mountain; Mountain; Bullseye, Death Dealer

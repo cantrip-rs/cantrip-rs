@@ -1,0 +1,47 @@
+# Bullseye, Death Dealer: with no artifact, the only way to pay is to discard a nonland card, which is taken without asking which way
+# (CR 601.2b, 602.2b), and the enter trigger offers only that and "neither" (CR 101.2). Bot1 casts it on turn 5 with three Mountains,
+# declines to discard Lightning Bolt, and on turn 7 activates it: Lightning Bolt is the card named, and Bot2 takes 2 damage.
+
+[Bot1 Deck]
+Bullseye, Death Dealer
+Mountain x4
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Bullseye, Death Dealer.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Pass
+Bot1.Pass
+Bot1.Modes(Neither)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Bullseye, Death Dealer.Activate(Bot2)
+Bot1.Choose(Lightning Bolt)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+? Bot1.Graveyard = Lightning Bolt
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Lightning Bolt
+Stack.Count = 0

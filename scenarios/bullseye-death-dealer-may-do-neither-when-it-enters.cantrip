@@ -1,0 +1,36 @@
+# Bullseye, Death Dealer: "you may" - Bot1 has an artifact and a nonland card and chooses neither, so nothing is sacrificed or
+# discarded and the reflexive trigger is never created: Bot2 takes no damage and nothing is asked of a target (CR 603.12).
+
+[Bot1 Deck]
+Bullseye, Death Dealer
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bullseye, Death Dealer.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Modes(Neither)
+? Delayed.Count = 0
+? Stack.Count = 0
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard.Count = 0
+Bot1.Hand = Lightning Bolt; Mountain; Mountain
+Bot1.Battlefield = Mox Ruby; Mox Jet; Mox Sapphire; Bullseye, Death Dealer

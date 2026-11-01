@@ -1,0 +1,50 @@
+# Bullseye, Death Dealer: the other way of paying "Sacrifice an artifact or discard a nonland card" (CR 602.2b, 118.3). Bot1 casts it on
+# turn 1 (declining the enter trigger) and on turn 3 activates it with a Mountain, Mox Ruby and Mox Jet paying {3}: of the two ways, both
+# possible, it chooses to sacrifice, naming Mox Sapphire, and Lightning Bolt stays in hand. Bot2 takes 2 damage.
+
+[Bot1 Deck]
+Bullseye, Death Dealer
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Lightning Bolt
+Mountain x21
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bullseye, Death Dealer.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Modes(Neither)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Bullseye, Death Dealer.Activate(Bot2)
+Bot1.Modes(Sacrifice an artifact)
+Bot1.Choose(Mox Sapphire)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Graveyard = Mox Sapphire
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Mox Sapphire
+Bot1.Hand = Lightning Bolt; Mountain; Mountain
+Bot1.Battlefield = Mountain; Mox Ruby; Mox Jet; Bullseye, Death Dealer
+Stack.Count = 0

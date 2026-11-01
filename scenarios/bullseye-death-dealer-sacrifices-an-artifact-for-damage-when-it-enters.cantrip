@@ -1,0 +1,39 @@
+# Bullseye, Death Dealer: "When Bullseye enters, you may sacrifice an artifact or discard a nonland card. When you do, Bullseye deals 2 damage to
+# any target." (CR 603.12, 701.21a, 120.2b.) Bot1 casts it with three Moxen, chooses to sacrifice, naming Mox Sapphire; the reflexive
+# trigger then targets Bot2 and deals 2 damage. The sacrifice was the choice, so nothing was discarded.
+
+[Bot1 Deck]
+Bullseye, Death Dealer
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Lightning Bolt
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Bullseye, Death Dealer.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Modes(Sacrifice an artifact)
+Bot1.Choose(Mox Sapphire)
+Bot1.Target(Bot2)
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Mox Sapphire
+Bot1.Hand = Lightning Bolt; Mountain; Mountain
+Bot1.Battlefield = Mox Ruby; Mox Jet; Bullseye, Death Dealer
+Stack.Count = 0
