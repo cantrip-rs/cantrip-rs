@@ -82,6 +82,15 @@ pub fn disappear(q: &dyn Query, asker: &Asker) -> bool {
     permanent_left_battlefield_this_turn(q, asker.controller)
 }
 
+/// "Another creature entered the battlefield under your control this turn" (CR 603.6a): a creature other than `except` entered
+/// under `player`'s control this turn, judged as it entered (the controller and card types `Event::Entered` holds), so one that has
+/// since died, been stolen or stopped being a creature still counts and one that entered under an opponent's control and was
+/// stolen does not. `except` is the object itself; a permanent that left and came back is another (CR 400.7). Bristlebane Outrider
+/// asks it from its static ability's layers and Wary Farmer from a triggered ability's condition.
+pub fn another_creature_entered_under_control_this_turn(history: History<'_>, player: PlayerId, except: ObjectId) -> bool {
+    history.entered().any(|e| e.permanent != except && e.controller == player && e.is(CardType::Creature))
+}
+
 /// The number of permanents `player` has sacrificed this turn (CR 701.21a): every permanent that went from the battlefield to a
 /// graveyard as a sacrifice this turn, token or not, under that player's control as it left. Asked of the history (CR 603.10a).
 /// Obsessive Pursuit counts them; Phoenix Fleet Airship asks whether there was one ("if you sacrificed a permanent this turn").
