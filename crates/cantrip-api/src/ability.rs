@@ -599,6 +599,15 @@ impl AbilityDef {
         }
     }
 
+    /// "{3}, {T}, Sacrifice an artifact or discard a nonland card" (CR 601.2b, 602.2b): the ways of paying the part of its cost
+    /// that names a choice (`ActivatedDef::cost_choice`), beside the `cost` already given.
+    pub const fn pay_one_of(self, ways: &'static [ExtraCost]) -> AbilityDef {
+        match self {
+            AbilityDef::Activated(d) => AbilityDef::Activated(ActivatedDef { cost_choice: ways, ..d }),
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => panic!("only an activated ability has a cost"),
+        }
+    }
+
     /// Its modes (CR 700.2): chosen on activation, or as the triggered ability is put on the stack.
     pub const fn modal(self, modal: &'static ModalDef) -> AbilityDef {
         match self {

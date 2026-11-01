@@ -92,6 +92,7 @@ fn label_name(game: &Game, l: &Label) -> String {
         Label::Name(c) => format!("Name:{}", name(c)),
         Label::Mode(a, n) => format!("Mode:{}:{}:{n}", name(a.card), a.index),
         Label::Extra(c, n) => format!("Extra:{}:{n}", name(c)),
+        Label::AbilityExtra(a, n) => format!("AbilityExtra:{}:{}:{n}", name(a.card), a.index),
         Label::Face(c) => format!("Face:{}", name(c)),
         Label::Miracle(m) => format!("Miracle:{}:{}:{}", name(m.card), name(m.granter), m.index),
         ref other => format!("{other:?}"),

@@ -135,6 +135,7 @@ pub fn label_text_in(table: &'static CardTable, label: &Label) -> &'static str {
         // one among them).
         Label::Mode(ability, i) => cards().modal_of(ability).and_then(|m| m.modes.get(i as usize)).map_or("", |m| m.text),
         Label::Extra(card, i) => cards().get(card).additional_choice.get(i as usize).map_or("", |c| c.text),
+        Label::AbilityExtra(ability, i) => cards().cost_choice_of(ability).get(i as usize).map_or("", |c| c.text),
         Label::PayLife(Color::White) => "Pay 2 life for {W/P}",
         Label::PayLife(Color::Blue) => "Pay 2 life for {U/P}",
         Label::PayLife(Color::Black) => "Pay 2 life for {B/P}",
@@ -323,6 +324,21 @@ mod tests {
             let spell_costs = def.ways.iter().map(|w| w.cost).chain(def.additional_cost).chain(def.optional_cost.map(|o| o.cost));
             for cost in spell_costs.chain(def.additional_choice.iter().map(|c| c.cost)) {
                 assert!(cost.materials.is_none(), "{}: a spell's cost can't exile craft materials", def.name);
+            }
+        }
+    }
+
+    /// The ways of an activated ability's cost that names a choice (`ActivatedDef::cost_choice`) are chosen as it is
+    /// announced, after the mana of the whole cost is judged: none carries mana, which the choice would otherwise skip.
+    #[test]
+    fn a_way_of_paying_an_ability_cost_has_no_mana() {
+        for def in &cards().cards {
+            for ability in def.abilities.iter().chain(def.delayed.iter()) {
+                if let AbilityDef::Activated(a) = ability {
+                    for way in a.cost_choice {
+                        assert!(way.cost.mana.is_zero() && !way.cost.pay_x_life, "{}: a way of paying an ability's cost carries mana or X", def.name);
+                    }
+                }
             }
         }
     }

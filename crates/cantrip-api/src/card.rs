@@ -1438,6 +1438,12 @@ pub struct ActivatedDef {
     /// keyword's shared mechanics (`triggers::cycling`, `typecycling`), never by a card, and held to the words by
     /// `cantrip-cards/tests/cycling_matches_oracle.rs`.
     pub cycling: bool,
+    /// "Sacrifice an artifact or discard a nonland card" (CR 601.2b, 602.2b, 118.3): the part of the cost that names a choice
+    /// between ways of paying, one of which the player chooses as the ability is announced, before X and its targets; it is
+    /// paid with `cost`, the two together. A way that can't be paid is not offered, and a lone one is taken without asking. None
+    /// has mana (`cantrip-engine`'s tests refuse one), since the cost is judged for being afforded before a way is chosen.
+    /// Empty when the cost names no choice. A spell's is `CardDef::additional_choice`.
+    pub cost_choice: &'static [ExtraCost],
     /// "X can't be 0" (CR 107.3a, 601.2b by way of 602.2b): the X of its activation cost is announced as 1 or more, and it is
     /// offered only where it could be paid with X as 1 (Lair of the Hydra, Helm of Obedience, Aladdin's Lamp).
     pub x_cant_be_zero: bool,
@@ -1504,6 +1510,7 @@ impl ActivatedDef {
         x_cant_be_zero: false,
         special_action: false,
         modal: None,
+        cost_choice: &[],
     };
 }
 
@@ -4464,6 +4471,15 @@ impl CardTable {
             AbilityDef::Activated(a) => a.modal,
             AbilityDef::Triggered(t) => t.modal,
             AbilityDef::Static(_) | AbilityDef::PlayRule(_) => None,
+        }
+    }
+
+    /// The ways of paying the part of an activated ability's cost that names a choice (`ActivatedDef::cost_choice`), which
+    /// `Label::AbilityExtra` names one of.
+    pub fn cost_choice_of(&self, ability: AbilityRef) -> &'static [ExtraCost] {
+        match self.ability(ability) {
+            AbilityDef::Activated(a) => a.cost_choice,
+            AbilityDef::Triggered(_) | AbilityDef::Static(_) | AbilityDef::PlayRule(_) => &[],
         }
     }
 

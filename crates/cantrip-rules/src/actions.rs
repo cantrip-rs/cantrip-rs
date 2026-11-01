@@ -4918,7 +4918,7 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // A special action's whole cost: turning a face-down permanent up for a morph cost that is not mana alone
             // ("Morph—Pay 5 life") is offered only where that could be paid (CR 702.37e, 118.3).
             let whole = if def.special_action { special_action_whole_cost(cx, id, ability, def) } else { def.cost };
-            if !can_pay_activation(cx, id, player, &whole, activating(def), by) {
+            if !ability_cost_payable(cx, id, player, &whole, def, by) {
                 continue;
             }
             // An X that can't be 0 counting targets there are none of ("X target ...", CR 107.3a, 601.2c): nothing may be
@@ -8951,6 +8951,47 @@ fn announce_optional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardI
     }
 }
 
+/// Whether the non-mana cost of an activation could be paid (CR 602.2b, 118.3): `whole`, and if the cost names a choice
+/// (`ActivatedDef::cost_choice`) some one of its ways beside it.
+fn ability_cost_payable(cx: &Cx, source: ObjectId, controller: PlayerId, whole: &Cost, def: &ActivatedDef, by: Option<Linked>) -> bool {
+    let paid = activating(def);
+    if def.cost_choice.is_empty() {
+        return can_pay_activation(cx, source, controller, whole, paid, by);
+    }
+    def.cost_choice.iter().any(|way| can_pay_activation(cx, source, controller, &whole.and(way.cost), paid, by))
+}
+
+/// Chooses which way of paying an activated ability's cost that names a choice is used (CR 601.2b by way of 602.2b), as
+/// `choose_additional` does for a spell's additional cost: only the ways that can be paid are offered, and a lone one is
+/// taken without asking. The whole cost with it; the ability's own cost alone when it names no choice.
+fn choose_cost_way(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: AbilityRef, def: &'static ActivatedDef, paid: Option<CostFor>, by: Option<Linked>) -> R<Cost> {
+    if def.cost_choice.is_empty() {
+        return Ok(def.cost);
+    }
+    let payable: Vec<u8> = (0..def.cost_choice.len() as u8)
+        .filter(|&i| can_pay_activation(cx, source, player, &def.cost.and(def.cost_choice[i as usize].cost), paid, by))
+        .collect();
+    let Some(&first) = payable.first() else { return Err(Stop::Cancel) };
+    let mut picked = first;
+    if payable.len() > 1 {
+        let ask = RequestKind::ChooseModes {
+            source,
+            modes: (0..def.cost_choice.len() as u8).map(|i| Label::AbilityExtra(ability, i)).collect(),
+            eligible: payable,
+            count: 1,
+            at_most: 0,
+            affordable: Vec::new(),
+            additional_cost: true,
+            repeat: false,
+        };
+        match cx.ask_core(player, ask, true)? {
+            Answer::Modes(chosen) => picked = chosen.first().copied().unwrap_or(first),
+            _ => return Err(Stop::Cancel),
+        }
+    }
+    Ok(def.cost.and(def.cost_choice[picked as usize].cost))
+}
+
 /// Chooses which additional cost is paid (CR 601.2b): only the ones that can be paid are offered, and a lone one is
 /// taken without asking, as the C# engine does.
 fn choose_additional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardId, def: &'static CardDef) -> R<Cost> {
@@ -9123,6 +9164,8 @@ fn activate(
         mask = choose_modes(cx, player, source, false, ability, modal, (modal.min, modal.max), mana, by)?;
         item.modes = mask;
     }
+    // CR 601.2b by way of 602.2b: the way of paying a cost that names a choice is chosen before X and the targets.
+    let whole = choose_cost_way(cx, player, source, ability, def, paid, by)?;
     if mana.x > 0 {
         // "X target lands" cannot be announced past the legal targets there are (CR 601.2c, 602.2b).
         let cap = x_target_cap(cx, &Asker { source, controller: player, by, spell: false }, def);
@@ -9131,13 +9174,13 @@ fn activate(
         item.x = n;
     }
     // CR 606.4, 107.3, 601.2b by way of 602.2b: "−X" announces X, up to the loyalty counters there are to remove (CR 118.3).
-    if def.cost.loyalty == Some(LOYALTY_MINUS_X) {
+    if whole.loyalty == Some(LOYALTY_MINUS_X) {
         let cap = cx.s().obj(source).counters(CounterKind::Loyalty).max(0) as u16;
         item.x = announce_x(cx, player, source, mana, None, 0, u32::from(least_x(def.x_cant_be_zero)), u32::from(cap), true, 0, 0, "")? as u16;
     }
     // CR 118.3, 602.2b: "Remove any number of [kind] counters from this" announces how many, up to the counters there are; the
     // number is the ability's X (CR 107.3), which its effect reads as "that many".
-    let removes = match def.cost.variable {
+    let removes = match whole.variable {
         Some(VariableCost::RemoveAnyNumberOfCounters(kind)) => {
             let cap = cx.s().obj(source).counters(kind).clamp(0, i16::MAX) as u32;
             item.x = announce_x(cx, player, source, mana, None, 0, 0, cap, false, 0, 0, VariableCost::RemoveAnyNumberOfCounters(kind).governs())? as u16;
@@ -9181,18 +9224,18 @@ fn activate(
         (at_least(cost, least), life)
     };
     let life = life + added_life;
-    if added_life > 0 && i64::from(payable_life_for(cx, player, paid)) < i64::from(life) + i64::from(def.cost.life) {
+    if added_life > 0 && i64::from(payable_life_for(cx, player, paid)) < i64::from(life) + i64::from(whole.life) {
         return Err(Stop::Cancel);
     }
 
     // CR 601.2g-h by way of 602.2b: the permanents the cost names are chosen with the rest of the cost, before the mana,
     // except tapped ones ("return a tapped creature you control"), chosen once the mana is paid, as a spell's are
     // (`cast`): a mana ability activated while paying may have tapped them.
-    let late = permanents_after_mana(&def.cost);
-    let mut chosen = if late { Vec::new() } else { choose_permanents(cx, player, source, &def.cost, paid, by)? };
-    let discards = choose_discards(cx, player, source, &def.cost, by)?;
-    let exiles = choose_exiles(cx, player, source, &def.cost)?;
-    let counter = choose_counter_kind(cx, player, source, &def.cost)?;
+    let late = permanents_after_mana(&whole);
+    let mut chosen = if late { Vec::new() } else { choose_permanents(cx, player, source, &whole, paid, by)? };
+    let discards = choose_discards(cx, player, source, &whole, by)?;
+    let exiles = choose_exiles(cx, player, source, &whole)?;
+    let counter = choose_counter_kind(cx, player, source, &whole)?;
     pay_mana_with(
         cx,
         player,
@@ -9206,12 +9249,12 @@ fn activate(
         },
     )?;
     if late {
-        chosen = choose_permanents(cx, player, source, &def.cost, paid, by)?;
+        chosen = choose_permanents(cx, player, source, &whole, paid, by)?;
     }
     // The creatures a crew or saddle cost taps, once the mana is paid (CR 601.2g-h by way of 602.2b), as a spell's are
     // (`cast`): a mana ability activated while paying a cost increase (Anointed Peacekeeper's) may have tapped one, and a
     // tapped creature can't pay the cost.
-    let tappers = choose_tappers(cx, player, source, &def.cost)?;
+    let tappers = choose_tappers(cx, player, source, &whole)?;
     // What an attacking creature the cost returns or sacrifices was attacking, for the effect to read (ninjutsu,
     // CR 702.49a: the ninja attacks the same player, planeswalker or battle).
     if let Some(first) = chosen.first()
@@ -9235,26 +9278,26 @@ fn activate(
     // Craft's materials are exiled as the cost is paid (CR 601.2h by way of 602.2b), after the mana abilities (CR 601.2g):
     // they are chosen now, from what is still there, so a Black Lotus sacrificed for the mana is no material. Too few left
     // is a cost that can't be paid, and the activation is taken back.
-    let materials = choose_materials(cx, player, source, &def.cost, by)?;
+    let materials = choose_materials(cx, player, source, &whole, by)?;
     // The creature a blight puts its counters on (CR 701.68a) and the counters removed from among permanents (CR 118.3) are
     // chosen as they are paid, after the mana abilities (CR 601.2g-h by way of 602.2b), as a spell's additional cost's are:
     // from what is there once the mana is paid. With no creature left to blight the cost can't be paid (CR 701.68b).
-    if def.cost.blight > 0 && blight_candidates(cx, player).is_empty() {
+    if whole.blight > 0 && blight_candidates(cx, player).is_empty() {
         return Err(Stop::Cancel);
     }
-    let blighted = choose_blight(cx, player, source, &def.cost, 0)?;
-    let removed = choose_counters_among(cx, player, source, &def.cost)?;
+    let blighted = choose_blight(cx, player, source, &whole, 0)?;
+    let removed = choose_counters_among(cx, player, source, &whole)?;
     // What a behold chooses (CR 701.4a), as a spell's is chosen: once the mana is paid (CR 601.2g-h by way of 602.2b), from
     // what is still there - a permanent a mana ability sacrificed while paying is not. None left is a cost that can't be
     // paid, and the activation is taken back.
-    if def.cost.behold.is_some_and(|(n, _, _)| behold_candidates(cx, None, player, &def.cost, source, by).len() < n as usize) {
+    if whole.behold.is_some_and(|(n, _, _)| behold_candidates(cx, None, player, &whole, source, by).len() < n as usize) {
         return Err(Stop::Cancel);
     }
-    let beheld = choose_behold(cx, player, source, &def.cost)?;
+    let beheld = choose_behold(cx, player, source, &whole)?;
     // The energy and life, judged again after the mana abilities (CR 601.2g-h by way of 602.2b), and the permanents the cost
     // sacrifices by naming them, which a static ability may forbid it to (CR 101.2, `may_sacrifice_for`).
-    if !rest_payable(cx, player, def.cost.energy as u32, life + def.cost.life, paid)
-        || def.cost.sacrifice_self && !may_sacrifice_for(cx, player, source, paid)
+    if !rest_payable(cx, player, whole.energy as u32, life + whole.life, paid)
+        || whole.sacrifice_self && !may_sacrifice_for(cx, player, source, paid)
         || granter.is_some_and(|g| !may_sacrifice_for(cx, player, g, paid))
     {
         return Err(Stop::Cancel);
@@ -9267,17 +9310,17 @@ fn activate(
     // "whenever ... becomes tapped" sees the tap of a permanent still on the battlefield ("{T}, Exile this artifact",
     // "{T}, Sacrifice a creature" choosing itself).
     // Tapped quietly, and announced in the batch of the cost's other taps if it has any (CR 603.2c).
-    let mut tapped = tap_source(cx, source, &def.cost, !tappers.is_empty());
+    let mut tapped = tap_source(cx, source, &whole, !tappers.is_empty());
     // Counters put on and taken off permanents next, so a permanent the cost also sacrifices leaves with them.
-    pay_blight(cx, player, &def.cost, blighted, 0);
+    pay_blight(cx, player, &whole, blighted, 0);
     pay_counters_among(cx, &removed);
-    pay_permanents(cx, player, &def.cost, &chosen, Some(cx.linked(&item)), &mut tapped);
+    pay_permanents(cx, player, &whole, &chosen, Some(cx.linked(&item)), &mut tapped);
     let revealed = pay_behold(cx, player, source, false, &beheld);
     let at = cx.s().stack.len() - 1;
     add_revealed_to_item(cx, at, &revealed);
     pay_discards(cx, &discards);
     pay_exiles(cx, &exiles);
-    pay_life_and_counters(cx, player, source, &def.cost);
+    pay_life_and_counters(cx, player, source, &whole);
     if let Some(kind) = counter {
         counters::remove(cx, source, kind, 1);
     }
@@ -9286,29 +9329,29 @@ fn activate(
     {
         counters::remove(cx, source, kind, n as i16);
     }
-    pay_exert_and_tappers(cx, source, &def.cost, &tappers, &mut tapped);
+    pay_exert_and_tappers(cx, source, &whole, &tappers, &mut tapped);
     ops::tap_together_with(cx, &mut tapped, &[]);
     // CR 702.122b-c: the creatures tapped for a crew cost crewed the Vehicle, for "creatures that crewed it" to ask the history.
-    if def.cost.tap_creatures.is_some_and(|t| t.greater_with == Some(Keyword::CrewsAsThoughPowerTwoGreater)) {
+    if whole.tap_creatures.is_some_and(|t| t.greater_with == Some(Keyword::CrewsAsThoughPowerTwoGreater)) {
         for &creature in &tappers {
             cx.record(Event::Crewed { creature, vehicle: source });
         }
     }
     note_activation(cx, source, index as usize, def);
     // Craft exiles its source with its materials, last of all (`pay_materials`).
-    if def.cost.exile_self && def.cost.materials.is_none() {
+    if whole.exile_self && whole.materials.is_none() {
         ops::move_to_for(cx, source, Zone::exile(cx.s().obj(source).owner), ZoneReason::Exile);
     }
     // Discarding this card to pay a cycling ability's cost is cycling it (CR 702.29c), typecycling's included (CR 702.29f);
     // any other "Discard this card" (channel, Harvester of Misery's) is a discard and nothing more.
-    if def.cost.discard_self {
+    if whole.discard_self {
         if def.cycling {
             ops::cycle(cx, player, source);
         } else {
             ops::discard(cx, source);
         }
     }
-    if let Some(loyalty) = def.cost.loyalty {
+    if let Some(loyalty) = whole.loyalty {
         let turn = cx.s().turn.number;
         let change = if loyalty == LOYALTY_MINUS_X { -(item.x as i16) } else { loyalty as i16 };
         cx.st().update_obj(source, |o| o.loyalty_turn = turn);
@@ -9321,20 +9364,20 @@ fn activate(
             counters::remove(cx, source, CounterKind::Loyalty, -change);
         }
     }
-    if def.cost.sacrifice_self {
+    if whole.sacrifice_self {
         ops::sacrifice(cx, player, &[source]);
     }
     if let Some(granter) = granter {
         ops::sacrifice(cx, player, &[granter]);
     }
-    if def.cost.return_self {
+    if whole.return_self {
         ops::move_to_for(cx, source, Zone::hand(cx.s().obj(source).owner), ZoneReason::Other);
     }
-    if let Some(place) = def.cost.put_self_into_library {
+    if let Some(place) = whole.put_self_into_library {
         ops::put_into_library(cx, &[source], place);
     }
-    if def.cost.materials.is_some() {
-        assert!(def.cost.exile_self, "craft exiles its source with its materials (CR 702.167a)");
+    if whole.materials.is_some() {
+        assert!(whole.exile_self, "craft exiles its source with its materials (CR 702.167a)");
         pay_materials(cx, source, &materials);
     }
     cx.emit(Event::AbilityActivated { source, ability, player, by: Grant::of(granted) });
