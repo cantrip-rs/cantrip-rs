@@ -1,0 +1,39 @@
+# Wary Farmer's intervening "if" (CR 603.4): the ability looks as the end step begins, and no other creature has entered
+# under Bot1's control then, so it does not trigger at all. Ashcoat Bear flashed in during that end step is too late, and
+# nothing is surveilled: the library keeps its 8 cards and the Counterspell on top (a surveil would have binned it).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Jet
+Wary Farmer
+Ashcoat Bear
+Island x2
+Counterspell
+Island x7
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wary Farmer.Cast
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ashcoat Bear.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+
+[Expect]
+Bot1.Surveilled = (absent)
+Bot1.Battlefield.Ashcoat Bear.Power = 2
+Bot1.Library.Count = 8
+Bot1.Library = Counterspell; Island; Island; Island; Island; Island; Island; Island
+Bot1.Graveyard = Black Lotus

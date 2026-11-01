@@ -1,0 +1,41 @@
+# Wary Farmer: "At the beginning of your end step, if another creature entered the battlefield under your control this turn,
+# surveil 1" (CR 603.4, 701.25). Turn 1: the Farmer is the only creature that entered (an Island entered too, which is no
+# creature), and "another" leaves it out, so its end step passes with no surveil (the library keeps its 8 cards). Turn 3: an
+# Ornithopter entering is another creature, so at the end step Bot1 looks at exactly one card, the top Counterspell, and puts
+# it into the graveyard; Lightning Bolt is the next card and stays (surveil 1 looks at one card, not two); the turn 3 draw
+# took the Mountain.
+
+[Bot1 Deck]
+Black Lotus
+Wary Farmer
+Ornithopter
+Island x4
+Mountain
+Counterspell
+Lightning Bolt
+Island x5
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wary Farmer.Cast
+Bot1.Hand.Island.Play
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Upkeep]
+? Bot1.Library.Count = 8
+? Bot1.Surveilled = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Counterspell)
+
+[Expect]
+Bot1.Surveilled = 1 requested, 1 looked
+Bot1.Graveyard = Counterspell; Black Lotus
+Bot1.Library = Lightning Bolt; Island; Island; Island; Island; Island

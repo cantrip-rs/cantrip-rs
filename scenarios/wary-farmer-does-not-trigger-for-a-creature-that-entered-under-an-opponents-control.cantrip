@@ -1,0 +1,40 @@
+# Wary Farmer: the creature must have entered "under your control". Bot1 has Wary Farmer since turn 1; on turn 3, Bot2 flashes
+# Ashcoat Bear in during Bot1's second main phase (a creature entering this turn, under Bot2's control), so at Bot1's end step
+# the ability does not trigger and no surveil is asked: the Counterspell stays on top of Bot1's library.
+
+[Bot1 Deck]
+Black Lotus
+Wary Farmer
+Island x5
+Mountain
+Counterspell
+Island x6
+
+[Bot2 Deck]
+Mox Emerald
+Mox Jet
+Ashcoat Bear
+Island x21
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wary Farmer.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main2]
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Ashcoat Bear.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Upkeep]
+
+[Expect]
+Bot1.Surveilled = (absent)
+Bot2.Battlefield.Ashcoat Bear.Power = 2
+Bot1.Library = Counterspell; Island; Island; Island; Island; Island; Island
