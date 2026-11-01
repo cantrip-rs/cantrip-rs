@@ -1,0 +1,46 @@
+# Fancy Footwork {2}{W}, "Untap one or two target creatures. They each get +2/+2 until end of turn." (CR 701.26, 611.2a). Bot1's
+# two Ornithopters (0/2) attack on turn 3 and are tapped; in the second main phase Footwork, paid with Black Lotus, untaps both
+# and makes each a 2/4 -- until end of turn only: they are 0/2 again on turn 5. A third Ornithopter, left untapped, cannot be a third
+# target ("one or two"), and no target at all is refused (CR 115.1).
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Ornithopter
+Ornithopter
+Fancy Footwork
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter#1; Ornithopter#2 > Bot2)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter#1.Tapped = true
+? Bot1.Battlefield.Ornithopter#2.Tapped = true
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Fancy Footwork.Cast
+! Bot1.Target(Ornithopter#1; Ornithopter#2; Ornithopter#3)
+! Bot1.Target(Count: 0)
+Bot1.Target(Ornithopter#1; Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Tapped = false
+? Bot1.Battlefield.Ornithopter#2.Tapped = false
+? Bot1.Battlefield.Ornithopter#1.Power = 2
+? Bot1.Battlefield.Ornithopter#2.Toughness = 4
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Power = 0
+Bot1.Battlefield.Ornithopter#1.Toughness = 2
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot1.Battlefield.Ornithopter#2.Toughness = 2

@@ -1,0 +1,6 @@
+{
+  "name": "Fancy Footwork",
+  "manaCost": "{2}{W}",
+  "type": "Instant — Lesson",
+  "oracleText": "Untap one or two target creatures. They each get +2/+2 until end of turn."
+}
