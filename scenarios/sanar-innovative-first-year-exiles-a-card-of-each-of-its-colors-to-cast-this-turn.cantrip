@@ -1,0 +1,52 @@
+# Sanar, Innovative First-Year: "At the beginning of your first main phase, reveal cards from the top of your library until you
+# reveal X nonland cards, where X is the number of colors among permanents you control. For each of those colors, you may exile
+# a card of that color from among the revealed cards. Then shuffle. You may cast the exiled cards this turn." Bot1's only colored
+# permanent is Sanar, blue and red (hybrid {U/R}{U/R}), Black Lotus and the Mox colorless artifacts: X is 2. On turn 3 the draw
+# takes the Island; the trigger reveals Lightning Bolt, Mountain and Counterspell (two nonland cards, the Mountain between them
+# revealed too, a land of no color) and the Elves below them stay unrevealed. Bot1 exiles Counterspell for blue and the Bolt
+# for red, the library is shuffled, and the Bolt, cast for {R}, hits Bot2. The Counterspell is still in exile once the turn is
+# over, and cannot be cast on turn 5.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Sanar, Innovative First-Year
+Island x4
+Island
+Lightning Bolt
+Mountain
+Counterspell
+Llanowar Elves
+Island x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sanar, Innovative First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Choose(Counterspell)
+Bot1.Choose(Lightning Bolt)
+? Bot1.Shuffles = 1
+? Exile = Counterspell; Lightning Bolt
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+! Bot1.Exile.Counterspell.Cast
+
+[Expect]
+Bot2.Life = 17
+Exile = Counterspell

@@ -1,0 +1,42 @@
+# Sanar, Innovative First-Year: "reveal cards from the top of your library until you reveal X nonland cards" (CR 701.20): with
+# fewer than X nonland cards in the library the whole library is revealed and nothing else happens. Sanar is blue and red, so X
+# is 2, but on turn 3 (after the draw) Bot1's library holds only Lightning Bolt and an Island. Both are revealed; blue has no
+# card to offer and is skipped without a prompt, red offers the Bolt (the Island, no color, is never offered), and Bot1 exiles
+# it. The Island is shuffled back as the whole library, and the Bolt, exiled, may be cast this turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Sanar, Innovative First-Year
+Island x4
+Island
+Lightning Bolt
+Island
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sanar, Innovative First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Choose(Lightning Bolt)
+? Bot1.Shuffles = 1
+? Bot1.Library.Count = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Library.Count = 1

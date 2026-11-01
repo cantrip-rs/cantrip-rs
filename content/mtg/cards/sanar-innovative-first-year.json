@@ -1,0 +1,8 @@
+{
+  "name": "Sanar, Innovative First-Year",
+  "manaCost": "{2}{U/R}{U/R}",
+  "type": "Legendary Creature — Goblin Sorcerer",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Vivid — At the beginning of your first main phase, reveal cards from the top of your library until you reveal X nonland cards, where X is the number of colors among permanents you control. For each of those colors, you may exile a card of that color from among the revealed cards. Then shuffle. You may cast the exiled cards this turn."
+}

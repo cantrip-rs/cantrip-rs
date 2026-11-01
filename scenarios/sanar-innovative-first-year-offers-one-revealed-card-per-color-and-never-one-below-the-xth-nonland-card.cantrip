@@ -1,0 +1,50 @@
+# Sanar, Innovative First-Year: "For each of those colors, you may exile a card of that color from among the revealed cards"
+# (CR 701.20, 207.2c). Sanar is blue and red, so X is 2. On turn 3 the draw takes the Island and the trigger reveals Lightning
+# Bolt, an Island and Burst Lightning: the second nonland card, which ends the reveal, so Chain Lightning below it is not
+# revealed and can't be exiled. Blue has no card among them and asks nothing; red offers the Bolt and Burst Lightning for
+# one exile only (taking both is refused), never the Island. Bot1 exiles Burst Lightning and casts it, unkicked, at Bot2,
+# for 2 damage, the Bolt shuffled back with the rest of the library.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Sanar, Innovative First-Year
+Island x4
+Island
+Lightning Bolt
+Island
+Burst Lightning
+Chain Lightning
+Island x2
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sanar, Innovative First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Choose(Lightning Bolt; Burst Lightning)
+! Bot1.Choose(Chain Lightning)
+! Bot1.Choose(Island)
+Bot1.Choose(Burst Lightning)
+? Bot1.Shuffles = 1
+? Bot1.Library.Count = 5
+? Exile = Burst Lightning
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Exile.Burst Lightning.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Library.Count = 5

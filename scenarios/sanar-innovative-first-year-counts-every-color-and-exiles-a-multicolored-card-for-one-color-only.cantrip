@@ -1,0 +1,58 @@
+# Sanar, Innovative First-Year: X is the number of colors among permanents Bot1 controls as the ability resolves (CR 207.2c): blue
+# and red from Sanar, green from a Llanowar Elves, so 3. Three nonland cards are revealed: Stormchaser Mage (blue and red), Lightning
+# Bolt and a second Llanowar Elves. Blue offers the Mage, and Bot1 exiles it: for red only the Bolt is left (a card is exiled once,
+# for one color), and Bot1 declines it ("may"); green offers the Elves, exiled. The Bolt goes back into the shuffled library,
+# one card of the revealed three; with the Island drawn, the library holds what is left of the deck. The exiled Elves is cast
+# for {G}, and the Mage (not cast) stays in exile.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Sanar, Innovative First-Year
+Llanowar Elves
+Island
+Island
+Island
+Stormchaser Mage
+Lightning Bolt
+Llanowar Elves
+Island x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sanar, Innovative First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Choose(Stormchaser Mage)
+Bot1.Choose()
+Bot1.Choose(Llanowar Elves)
+? Exile = Stormchaser Mage; Llanowar Elves
+? Bot1.Shuffles = 1
+? Bot1.Library.Count = 11
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Exile.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Stormchaser Mage
+Bot1.Battlefield = Llanowar Elves; Llanowar Elves; Mox Emerald; Mox Ruby; Sanar, Innovative First-Year

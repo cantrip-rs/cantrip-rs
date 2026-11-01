@@ -1,0 +1,64 @@
+# Sanar, Innovative First-Year: "For each of those colors, you may exile a card of that color from among the revealed cards" is
+# one exile (CR 608.2c, 101.4): the card for each color is chosen, then they are exiled together. Laelia, the Blade Reforged
+# ("Whenever one or more cards are put into exile from your library and/or your graveyard, put a +1/+1 counter on Laelia")
+# sees one event and triggers once (CR 603.2c). Bot1 casts Sanar (Black Lotus's Blue, Mox Jet) and Laelia (Mox Ruby, Mox
+# Emerald, Mox Pearl) on turn 1; X is 2, blue and red. On turn 3 the trigger reveals Lightning Bolt, Mountain and Counterspell,
+# Bot1 exiles Counterspell for blue and the Bolt for red, and Laelia gets one counter: 3/3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Sanar, Innovative First-Year
+Laelia, the Blade Reforged
+Island
+Lightning Bolt
+Mountain
+Counterspell
+Llanowar Elves
+Island x10
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sanar, Innovative First-Year.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Laelia, the Blade Reforged.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Choose(Counterspell)
+Bot1.Choose(Lightning Bolt)
+? Exile = Counterspell; Lightning Bolt
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Laelia, the Blade Reforged.Power = 3
+Exile = Counterspell; Lightning Bolt
+Stack.Count = 0
