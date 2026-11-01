@@ -1,0 +1,47 @@
+# Invasion Reinforcements {1}{W} has flash and "When this creature enters, create a 1/1 white Ally creature token." Bot1 casts it
+# on Bot2's turn 2 (flash: at instant speed, with Plains and Mox Pearl) and ends with the creature and exactly one 1/1 white Ally
+# token. A second cast on turn 3 makes one more (the token is per entering, not once per game).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Invasion Reinforcements
+Invasion Reinforcements
+Plains
+Plains
+Plains x15
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Invasion Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Plains; Mox Pearl; Invasion Reinforcements; Ally Token
+? Bot1.Battlefield.Ally Token.Power = 1
+? Bot1.Battlefield.Ally Token.Toughness = 1
+? Bot1.Battlefield.Ally Token.Colors = White
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Invasion Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 7
+Bot1.Battlefield.Invasion Reinforcements#1.Power = 1

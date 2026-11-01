@@ -1,0 +1,11 @@
+{
+  "name": "Invasion Reinforcements",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Warrior Ally",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flash\nWhen this creature enters, create a 1/1 white Ally creature token.",
+  "keywords": [
+    "Flash"
+  ]
+}
