@@ -1,0 +1,58 @@
+# Hakoda's "Sacrifice Hakoda: Creatures you control get +0/+5 and gain indestructible until end of turn." (CR 611.2c). On turn 1
+# Bot1 has Hakoda (a Plains and Black Lotus) and an Earth Kingdom Protectors (Mox Pearl). On turn 2 Bot2 casts an Ornithopter and
+# Lightning Bolts the Protectors; in response Bot1 sacrifices Hakoda: the Protectors are a 1/6 with indestructible and survive the
+# 3 damage, Bot2's Ornithopter is still a 0/2. The effect is over on turn 3: Hakoda, the sacrificed, is in the graveyard.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Hakoda, Selfless Commander
+Earth Kingdom Protectors
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Ornithopter
+Mountain x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Hakoda, Selfless Commander.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Earth Kingdom Protectors)
+Bot2.Pass
+Bot1.Battlefield.Hakoda, Selfless Commander.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earth Kingdom Protectors.Power = 1
+? Bot1.Battlefield.Earth Kingdom Protectors.Toughness = 6
+? Bot1.Battlefield.Earth Kingdom Protectors.Keywords = Indestructible; Vigilance
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Hakoda, Selfless Commander; Black Lotus
+Bot1.Battlefield.Earth Kingdom Protectors.Toughness = 1
+Bot1.Battlefield.Earth Kingdom Protectors.Keywords = Vigilance

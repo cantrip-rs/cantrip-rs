@@ -1,0 +1,11 @@
+{
+  "name": "Hakoda, Selfless Commander",
+  "manaCost": "{3}{W}",
+  "type": "Legendary Creature — Human Warrior Ally",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Vigilance\nYou may look at the top card of your library any time.\nYou may cast Ally spells from the top of your library.\nSacrifice Hakoda: Creatures you control get +0/+5 and gain indestructible until end of turn.",
+  "keywords": [
+    "Vigilance"
+  ]
+}

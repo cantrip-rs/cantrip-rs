@@ -1,0 +1,41 @@
+# Hakoda, Selfless Commander {3}{W}: "You may cast Ally spells from the top of your library" (CR 601.3). On turn 1 Bot1 pays for
+# Hakoda with a Plains and Black Lotus, then casts the Earth Kingdom Protectors (an Ally) on top of its library with Mox Pearl;
+# the Ornithopter now on top is no Ally, so it may not be cast from there even though it costs nothing. It is drawn on turn 3
+# (the Protectors left the library, the Ornithopter was next) and cast from the hand: the positive control.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Hakoda, Selfless Commander
+Plains
+Plains
+Plains
+Earth Kingdom Protectors
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Hakoda, Selfless Commander.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Library.Earth Kingdom Protectors.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Library.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Pearl; Hakoda, Selfless Commander; Earth Kingdom Protectors; Ornithopter
+Bot1.Hand.Count = 3
