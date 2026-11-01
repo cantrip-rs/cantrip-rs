@@ -1,0 +1,48 @@
+# Aang, the Last Airbender: "When Aang enters, airbend up to one other target nonland permanent." "Up to one" lets Bot1 choose
+# no target (CR 115.1d, 601.2c) though Bot2's Ornithopter is there to take: the trigger airbends nothing, and the Ornithopter
+# stays.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Aang, the Last Airbender
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Aang, the Last Airbender.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield = Plains; Ornithopter
+Exile.Count = 0
+Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Mox Jet; Aang, the Last Airbender

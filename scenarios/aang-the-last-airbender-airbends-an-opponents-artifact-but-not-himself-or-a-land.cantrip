@@ -1,0 +1,50 @@
+# Aang, the Last Airbender: "When Aang enters, airbend up to one other target nonland permanent." Cast on turn 3 with Plains
+# and three Moxen. The trigger's target refuses Aang himself ("other") and Bot2's Plains (nonland) - both on the battlefield and
+# both matching the rest of the text - and takes Bot2's Ornithopter, an opponent's permanent (CR 701.65a): it is exiled.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Aang, the Last Airbender
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Aang, the Last Airbender.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Aang, the Last Airbender)
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield = Plains
+Exile = Ornithopter
+Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Mox Jet; Aang, the Last Airbender
