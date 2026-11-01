@@ -604,6 +604,10 @@ pub trait Game: Query {
     fn still_in_game(&mut self, player: PlayerId) -> bool;
 
     fn draw(&mut self, player: PlayerId, count: u32);
+    /// Applies the replacement effects of `creature` conniving N (CR 701.50): "instead you draw a card, then that creature
+    /// connives" (Leader, Super-Genius) draws the card, once for each such effect (CR 614.5); the connive itself is the
+    /// caller's (`cantrip_mechanics::connive_n`).
+    fn would_connive(&mut self, creature: ObjectId, count: u32);
     fn discard(&mut self, card: ObjectId);
     /// Discards cards at once (CR 701.9): one event for what watches "one or more" discards.
     ///

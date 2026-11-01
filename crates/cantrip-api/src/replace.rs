@@ -146,6 +146,15 @@ pub struct DrawInstruction {
     pub count: u32,
 }
 
+/// A permanent about to connive (CR 701.50): "if a creature you control would connive, instead you draw a card, then that
+/// creature connives" (Leader, Super-Genius), what the effect does besides being its `ReplacementThen`. The creature is
+/// its last known information if it has left the battlefield (CR 701.50b); `count` is the N of connive N.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub struct Connive {
+    pub creature: ObjectId,
+    pub count: u32,
+}
+
 /// One card about to be drawn (CR 121.1, 121.6): replaceable even when the library has no cards to draw. `replaced`
 /// is set by an effect that replaces the draw ("instead you win the game"): nothing is drawn then (CR 614.6).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -234,6 +243,7 @@ pub enum Proposal {
     PlayerCounters(PlayerCounters),
     DrawInstruction(DrawInstruction),
     Draw(CardDraw),
+    Connive(Connive),
     Damage(DamageEvent),
     TokenCreation(TokenCreation),
     LifeChange(LifeChange),
@@ -247,6 +257,8 @@ pub enum ReplacementKind {
     Counters,
     DrawInstruction,
     Draw,
+    /// A permanent conniving (CR 701.50): `Proposal::Connive`.
+    Connive,
     Damage,
     TokenCreation,
     LifeChange,
@@ -261,6 +273,7 @@ impl Proposal {
             Proposal::Counters(_) | Proposal::PlayerCounters(_) => ReplacementKind::Counters,
             Proposal::DrawInstruction(_) => ReplacementKind::DrawInstruction,
             Proposal::Draw(_) => ReplacementKind::Draw,
+            Proposal::Connive(_) => ReplacementKind::Connive,
             Proposal::Damage(_) => ReplacementKind::Damage,
             Proposal::TokenCreation(_) => ReplacementKind::TokenCreation,
             Proposal::LifeChange(_) => ReplacementKind::LifeChange,

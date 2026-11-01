@@ -399,6 +399,7 @@ fn subject_of(proposal: &Proposal) -> Option<ObjectId> {
         // The permanent tapped for mana. Its own `own_everywhere` effects are looked at where a cost has moved it (a
         // sacrificed Treasure's): no printed card has one of this kind, which would function from its new zone here.
         Proposal::ManaProduction(m) => Some(m.permanent),
+        Proposal::Connive(c) => Some(c.creature),
         Proposal::DrawInstruction(_)
         | Proposal::Draw(_)
         | Proposal::TokenCreation(_)
@@ -434,6 +435,8 @@ fn affected(cx: &Cx, proposal: &Proposal) -> PlayerId {
         Proposal::PlayerCounters(c) => c.player,
         Proposal::DrawInstruction(d) => d.player,
         Proposal::Draw(d) => d.player,
+        // Whoever controls the conniving creature (last controlled, CR 701.50b), who is the one that draws and discards.
+        Proposal::Connive(c) => cx.s().obj(c.creature).controller,
         Proposal::TokenCreation(t) => t.controller,
         Proposal::LifeChange(l) => l.player,
         // "If multiple replacement effects would modify the mana an ability you control produces, choose one to apply"
@@ -1322,6 +1325,14 @@ pub fn draw_count(cx: &mut Cx, player: PlayerId, count: u32) -> u32 {
     match proposal {
         Proposal::DrawInstruction(d) => d.count,
         _ => unreachable!("an effect cannot change the kind of the event"),
+    }
+}
+
+/// A permanent about to connive (CR 701.50): the effects that replace it apply, each once (CR 614.5), doing what they do
+/// in its place ("instead you draw a card", their `then`); the connive then goes on as it is. Two of them draw two cards.
+pub fn would_connive(cx: &mut Cx, creature: ObjectId, count: u32) {
+    if possible(cx, None) {
+        apply(cx, &mut Proposal::Connive(Connive { creature, count }));
     }
 }
 

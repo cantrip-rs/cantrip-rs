@@ -530,6 +530,11 @@ pub fn connive(g: &mut dyn Game, creature: ObjectId, source: ObjectId) -> Result
 /// goes on the creature for each nonland card discarded, read where it went by its discard (`hand::discarded_nonland_card`:
 /// one put into a hidden zone unrevealed is undefined, no nonland card, CR 701.9c). Raffine, Scheming Seer connives X; Ledger Shredder, 1.
 pub fn connive_n(g: &mut dyn Game, creature: ObjectId, source: ObjectId, count: u32) -> Result<(), Suspend> {
+    // A permanent that would connive 0 does not connive (CR 701.50e): no event, so nothing replaces it.
+    if count == 0 {
+        return Ok(());
+    }
+    g.would_connive(creature, count);
     let player = g.obj(creature).controller;
     g.draw(player, count);
     let chosen = choose_from_hand(g, player, source, count)?;

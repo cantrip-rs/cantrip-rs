@@ -1780,6 +1780,10 @@ impl cantrip_api::Game for Cx<'_> {
         ops::draw_cards(self, player, count);
     }
 
+    fn would_connive(&mut self, creature: ObjectId, count: u32) {
+        replace::would_connive(self, creature, count);
+    }
+
     fn discard(&mut self, card: ObjectId) {
         ops::discard(self, card);
     }

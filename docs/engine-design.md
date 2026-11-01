@@ -1011,6 +1011,11 @@ kind of replacement a card there has. A resolved "the next time you would draw a
 up as it applies (`GrantedReplacementDef::once`). A question a `then` asks (which card to discard) suspends a run that cannot
 stop there; the run is wound back to where the question was asked (`Cx::asked_at`), so the question names objects that exist.
 
+A permanent conniving (CR 701.50) is an event of its own, `Proposal::Connive` (`cantrip_mechanics::connive_n` asks `Game::would_connive`
+before it draws; connive 0 is no event, CR 701.50e): "instead you draw a card, then that creature connives" (Leader, Super-Genius)
+leaves the event as it was and draws in its `then`, the card meeting the draw replacements, so the connive that follows draws and
+discards after it. The creature is read as it was if it has left the battlefield (CR 701.50b).
+
 Replacement effects of a gain or loss of life (CR 614.1a: "you gain that much life plus 1 instead", "they lose twice that much
 life instead", "that player loses that much life instead") are `ReplacementKind::LifeChange` effects over a
 `Proposal::LifeChange { player, amount }`, `amount` signed (a gain above zero, a loss below), applied by `change_life` through
