@@ -1,0 +1,68 @@
+# Baron Helmut Zemo: "up to three of the copies". Bot1 exiles four cards - the Excruciator, Pox Plague, Griselbrand and an Entomb
+# (16 symbols; more than fifteen is allowed) - and casts the Entomb copy (an instant, it searches for a Swamp), the Griselbrand copy
+# and the Excruciator copy. The fourth, Pox Plague, is not offered: the boast is over after three casts, the Pox Plague copy
+# ceases to exist and the card stays in exile, so Bot2 loses no life to it. The Entomb copy is cast from exile, not from Bot1's
+# hand, so Zemo does not connive for it: its single +1/+1 counter is the one from the earlier Entomb cast from the hand.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Baron Helmut Zemo
+Entomb
+Entomb
+Entomb
+Griselbrand
+Doomsday Excruciator
+Pox Plague
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Doomsday Excruciator)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Pox Plague)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Baron Helmut Zemo.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Choose(Griselbrand)
+Bot1.Search(Swamp)
+Bot1.Pass
+Bot1.Attack(Baron Helmut Zemo > Bot2)
+Bot1.Battlefield.Baron Helmut Zemo.Activate
+Bot1.Choose(Doomsday Excruciator; Pox Plague; Griselbrand; Entomb)
+! Bot1.Choose(Entomb; Griselbrand)
+Bot1.Choose(Entomb)
+Bot1.Choose(Griselbrand)
+Bot1.Choose(Doomsday Excruciator)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+Bot1.Search(Swamp)
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Baron Helmut Zemo; Doomsday Excruciator; Griselbrand; Mox Jet; Swamp; Swamp; Swamp
+Bot1.Battlefield.Baron Helmut Zemo.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Swamp; Entomb; Swamp; Entomb
+Exile = (face down); (face down); (face down); (face down); (face down); Doomsday Excruciator; Entomb; Griselbrand; Pox Plague
+Bot1.Life = 20
+Bot2.Life = 16
+Stack.Count = 0

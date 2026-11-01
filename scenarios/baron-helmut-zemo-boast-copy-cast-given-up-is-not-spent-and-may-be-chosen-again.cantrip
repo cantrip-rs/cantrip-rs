@@ -1,0 +1,69 @@
+# Baron Helmut Zemo: a player may give up casting a copy (CR 733.1) and the cast is undone as if never begun, so the copy is not
+# spent and counts for nothing towards the three. The setup is the first boast scenario's, but the third Entomb takes Duress, so
+# the Excruciator, Pox Plague, Griselbrand and Duress (6 + 5 + 4 + 1) are exiled. Bot1 starts casting the Duress copy and cancels
+# at its target; the cast is undone, and Bot1 is asked again: it casts the Griselbrand copy, then the Duress copy after all
+# (its target, Bot2's hand of Islands, has no card to take), and stops with two cast.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Baron Helmut Zemo
+Entomb
+Entomb
+Entomb
+Griselbrand
+Doomsday Excruciator
+Pox Plague
+Swamp x3
+Duress
+Swamp x7
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Doomsday Excruciator)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Pox Plague)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Baron Helmut Zemo.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Choose(Griselbrand)
+Bot1.Search(Duress)
+Bot1.Pass
+Bot1.Attack(Baron Helmut Zemo > Bot2)
+Bot1.Battlefield.Baron Helmut Zemo.Activate
+Bot1.Choose(Doomsday Excruciator; Pox Plague; Griselbrand; Duress)
+Bot1.Choose(Duress)
+Bot1.Cancel
+Bot1.Choose(Griselbrand)
+Bot1.Choose(Duress)
+Bot1.Target(Bot2)
+Bot1.Choose()
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Baron Helmut Zemo; Griselbrand; Mox Jet; Swamp; Swamp; Swamp
+Bot1.Battlefield.Griselbrand.Token = true
+Bot1.Graveyard = Entomb; Entomb; Entomb
+Exile = Doomsday Excruciator; Duress; Griselbrand; Pox Plague
+Bot2.Hand.Count = 7
+Bot2.Life = 16
+Stack.Count = 0

@@ -1,0 +1,69 @@
+# Baron Helmut Zemo (3/3 for {B}{B}{B}): "Boast - Exile any number of black cards from your graveyard with fifteen or more black mana
+# symbols among their mana costs: Copy those exiled cards. You may cast up to three of the copies without paying their mana
+# costs." Two Entombs, cast on turn 1, put Doomsday Excruciator ({B}x6) and Pox Plague ({B}x5) into Bot1's graveyard; Zemo comes
+# down on turn 3. On turn 5 the third Entomb takes a Swamp (no colour, no symbols) and Zemo's connive discards Griselbrand (4), so
+# the graveyard holds three Entombs (a black symbol each), the Excruciator, Pox Plague, Griselbrand and the Swamp. Zemo cannot
+# boast until it attacks. The cards chosen must be black and have fifteen or more symbols between them: the Excruciator, Pox Plague
+# and the three Entombs (6 + 5 + 3 = 14) are refused, so is the Swamp with fifteen, and the Excruciator, Pox Plague and
+# Griselbrand (exactly 15) are exiled. Of the three copies, Bot1 casts the Griselbrand one - it becomes a token - and stops; the
+# other two copies cease to exist and the cards stay in exile.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Baron Helmut Zemo
+Entomb
+Entomb
+Entomb
+Griselbrand
+Doomsday Excruciator
+Pox Plague
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Doomsday Excruciator)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Pox Plague)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Baron Helmut Zemo.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Choose(Griselbrand)
+Bot1.Search(Swamp)
+! Bot1.Battlefield.Baron Helmut Zemo.Activate
+Bot1.Pass
+Bot1.Attack(Baron Helmut Zemo > Bot2)
+Bot1.Battlefield.Baron Helmut Zemo.Activate
+! Bot1.Choose(Doomsday Excruciator; Pox Plague; Entomb#1; Entomb#2; Entomb#3)
+! Bot1.Choose(Doomsday Excruciator; Pox Plague; Griselbrand; Swamp)
+Bot1.Choose(Doomsday Excruciator; Pox Plague; Griselbrand)
+Bot1.Choose(Griselbrand)
+Bot1.Choose()
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Baron Helmut Zemo; Griselbrand; Mox Jet; Swamp; Swamp; Swamp
+Bot1.Battlefield.Baron Helmut Zemo.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Griselbrand.Token = true
+Bot1.Graveyard = Entomb; Swamp; Entomb; Entomb
+Exile = Doomsday Excruciator; Griselbrand; Pox Plague
+Bot2.Life = 16
+Stack.Count = 0

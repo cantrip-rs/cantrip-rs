@@ -1,0 +1,57 @@
+# Baron Helmut Zemo: "You may cast up to three of the copies" - none is a legal answer. Bot1 exiles the Excruciator, Pox Plague and
+# Griselbrand (see the first boast scenario for the setup) and declines to cast any copy: the copies cease to exist (CR 707.10a)
+# with nothing cast, so nothing is on the stack or the battlefield, the three original cards stay in exile (CR 400.7) and the
+# graveyard keeps the rest. The boast's cost was paid all the same.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Baron Helmut Zemo
+Entomb
+Entomb
+Entomb
+Griselbrand
+Doomsday Excruciator
+Pox Plague
+Swamp x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Doomsday Excruciator)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Pox Plague)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Baron Helmut Zemo.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Pass
+Bot1.Choose(Griselbrand)
+Bot1.Search(Swamp)
+Bot1.Pass
+Bot1.Attack(Baron Helmut Zemo > Bot2)
+Bot1.Battlefield.Baron Helmut Zemo.Activate
+Bot1.Choose(Doomsday Excruciator; Pox Plague; Griselbrand)
+Bot1.Choose()
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Baron Helmut Zemo; Mox Jet; Swamp; Swamp; Swamp
+Bot1.Graveyard = Entomb; Swamp; Entomb; Entomb
+Exile = Doomsday Excruciator; Griselbrand; Pox Plague
+Stack.Count = 0

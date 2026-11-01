@@ -1,0 +1,8 @@
+{
+  "name": "Baron Helmut Zemo",
+  "manaCost": "{B}{B}{B}",
+  "type": "Legendary Creature — Human Noble Villain",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever you cast a black spell from your hand, Baron Helmut Zemo connives.\nBoast — Exile any number of black cards from your graveyard with fifteen or more black mana symbols among their mana costs: Copy those exiled cards. You may cast up to three of the copies without paying their mana costs. (Activate only if this creature attacked this turn and only once each turn.)"
+}

@@ -1,0 +1,64 @@
+# Baron Helmut Zemo: "Whenever you cast a black spell from your hand, Zemo connives." A colourless Ornithopter cast from Bot1's
+# hand does not make it connive, nor does Bot2's black Entomb: no discard is asked and Zemo gets no +1/+1 counter. (The black spell
+# cast from the hand that does is in the boast scenarios.) The boast's cost counts only the cards in Bot1's own graveyard: it holds
+# Doomsday Excruciator (6) and Pox Plague (5), eleven symbols, and Bot2's graveyard holds Griselbrand (4), which brings them to
+# fifteen only if it counted, so Zemo cannot boast.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Baron Helmut Zemo
+Entomb
+Entomb
+Ornithopter
+Swamp
+Doomsday Excruciator
+Pox Plague
+Swamp x10
+
+[Bot2 Deck]
+Swamp
+Entomb
+Swamp x5
+Swamp
+Swamp x9
+Griselbrand
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Doomsday Excruciator)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Pox Plague)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Baron Helmut Zemo.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Griselbrand)
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot1.Attack(Baron Helmut Zemo > Bot2)
+! Bot1.Battlefield.Baron Helmut Zemo.Activate
+Bot1.Pass
+[Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Baron Helmut Zemo; Mox Jet; Ornithopter; Swamp; Swamp
+Bot1.Battlefield.Baron Helmut Zemo.Power = 3
+Bot1.Graveyard = Entomb; Pox Plague; Entomb; Doomsday Excruciator
+Bot1.Hand = Swamp; Swamp
+Bot2.Graveyard = Entomb; Griselbrand; Swamp
+Stack.Count = 0
