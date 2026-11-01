@@ -560,45 +560,53 @@ pub fn may_sacrifice(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule:
     Ok(g.sacrifice(player, &chosen))
 }
 
-/// "You may sacrifice an artifact or discard a card. If you do, draw `n` cards" (CR 608.2c-d, 701.9, 701.21). The player chooses
-/// as the effect resolves which of the two to do, or neither; an option with nothing to do it with (no artifact, an empty hand)
-/// is not offered, and nothing is asked with neither possible. The cards are drawn only if the sacrifice or the discard actually
-/// happened. The options are the card's `labels`, in the order "Sacrifice an artifact", "Discard a card", "Neither". Chandra,
-/// Spark Hunter (one card) and Vision of Love (two) print it.
-pub fn may_sacrifice_an_artifact_or_discard_to_draw(g: &mut dyn Game, item: &StackItem, n: u32) -> Result<(), Suspend> {
+/// "You may sacrifice an artifact or discard [a kind of] card" (CR 608.2c-d, 701.9, 701.21): the player chooses as the effect
+/// resolves which of the two to do, or neither; the discard is one card `discard` allows of their hand. An option with nothing
+/// to do it with (no artifact, no card of the kind in hand) is not offered, and nothing is asked with neither possible.
+/// Returns whether the sacrifice or the discard actually happened, for the "if you do" or reflexive "when you do" (CR 608.2c,
+/// 603.12) that follows. The options are the card's `labels`, in the order "Sacrifice an artifact", "Discard ...", "Neither".
+/// Chandra, Spark Hunter and Vision of Love (a card) and Bullseye, Death Dealer (a nonland card) print it.
+pub fn may_sacrifice_an_artifact_or_discard(g: &mut dyn Game, player: PlayerId, source: ObjectId, discard: Selection) -> Result<bool, Suspend> {
     const SACRIFICE: u8 = 0;
     const DISCARD: u8 = 1;
     const NEITHER: u8 = 2;
-    let you = item.controller;
     // An artifact that can't be sacrificed is nothing to do it with (CR 101.2: the option can't be taken).
     let artifacts: Vec<ObjectId> =
-        g.permanents_of(you).into_iter().filter(|&id| g.chars(id).is(CardType::Artifact) && g.can_sacrifice(you, id)).collect();
+        g.permanents_of(player).into_iter().filter(|&id| g.chars(id).is(CardType::Artifact) && g.can_sacrifice(player, id)).collect();
+    let rule = discard.taking(crate::select::exactly(1));
+    let hand = g.state().zone(Zone::hand(player)).to_vec();
     let mut options = Vec::new();
     if !artifacts.is_empty() {
         options.push(SACRIFICE);
     }
-    if !g.state().zone(Zone::hand(you)).is_empty() {
+    if cantrip_api::select::first_answer(&*g, &rule, player, source, &hand, true).is_some_and(|cards| !cards.is_empty()) {
         options.push(DISCARD);
     }
     if options.is_empty() {
-        return Ok(());
+        return Ok(false);
     }
     options.push(NEITHER);
-    let card = g.obj(item.object).card;
+    let card = g.obj(source).card;
     let labels = options.iter().map(|&i| Label::Card(card, i)).collect();
-    let done = match options[crate::choose::one_of(g, you, item.object, labels)? as usize] {
+    Ok(match options[crate::choose::one_of(g, player, source, labels)? as usize] {
         SACRIFICE => {
-            let chosen = crate::choose::cards(g, you, item.object, Purpose::Sacrifice, artifacts, 1, false)?;
-            !g.sacrifice(you, &chosen).is_empty()
+            let chosen = crate::choose::cards(g, player, source, Purpose::Sacrifice, artifacts, 1, false)?;
+            !g.sacrifice(player, &chosen).is_empty()
         }
         DISCARD => {
-            let chosen = crate::choose_from_hand(g, you, item.object, 1)?;
+            let chosen = crate::choose::select(g, player, source, Purpose::Discard, hand, rule)?;
             !g.discard_together(&chosen).is_empty()
         }
         _ => false,
-    };
-    if done {
-        g.draw(you, n);
+    })
+}
+
+/// "You may sacrifice an artifact or discard a card. If you do, draw `n` cards" (CR 608.2c-d, 701.9, 701.21):
+/// `may_sacrifice_an_artifact_or_discard` for any card, then the cards are drawn only if it happened. Chandra, Spark Hunter
+/// (one card) and Vision of Love (two) print it.
+pub fn may_sacrifice_an_artifact_or_discard_to_draw(g: &mut dyn Game, item: &StackItem, n: u32) -> Result<(), Suspend> {
+    if may_sacrifice_an_artifact_or_discard(g, item.controller, item.object, crate::select::CARD)? {
+        g.draw(item.controller, n);
     }
     Ok(())
 }
