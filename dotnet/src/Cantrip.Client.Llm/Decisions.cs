@@ -1376,7 +1376,7 @@ public sealed class Decisions
                 Heading = what,
                 Note = string.Create(
                     CultureInfo.InvariantCulture,
-                    $"You need total mana value {prompt.MinimumManaValue} and have {total} so far."),
+                    $"You need total {(prompt.Kind.Length > 0 ? prompt.Kind : "mana value")} {prompt.MinimumManaValue} and have {total} so far."),
                 Choices = [.. left.Select(index => GameText.Named(client, prompt.Cards[index]))],
             });
 

@@ -833,6 +833,11 @@ pub struct Cost {
     /// Collect evidence N (CR 701.59a): exile cards with total mana value N or more from your graveyard, other than the
     /// source, chosen as the cost is chosen.
     pub collect_evidence: u8,
+    /// "Exile any number of [color] cards from your graveyard with N or more [color] mana symbols among their mana costs"
+    /// (Baron Helmut Zemo's boast): cards of the color, other than the source, chosen as the cost is chosen (CR 601.2h by way
+    /// of 602.2b), their symbols counted as devotion counts them (CR 700.5). The same choice as collect evidence, whose total
+    /// is mana value; the exiled cards are the ability's `Query::cost_objects`.
+    pub exile_symbols: Option<(Color, u8)>,
     /// Behold N (CR 701.4a): for each, choose a permanent you control or reveal a card from your hand that passes the
     /// filter ("behold a Dragon"), chosen as the cost is chosen. Nothing moves unless `behold_exile`: a permanent is only chosen, a hand card
     /// is revealed as the cost is paid (CR 601.2h). Payable only with that many to choose among. Dispelling Exhale,
@@ -1045,6 +1050,7 @@ impl Cost {
             variable,
             discard_hand,
             collect_evidence,
+            exile_symbols,
             behold,
             behold_exile,
             behold_type,
@@ -1081,6 +1087,7 @@ impl Cost {
             && variable.is_none()
             && !discard_hand
             && collect_evidence == 0
+            && exile_symbols.is_none()
             && behold.is_none()
             && !behold_exile
             && !behold_type
@@ -1225,6 +1232,14 @@ impl Cost {
         }
         c.discard_hand |= other.discard_hand;
         c.collect_evidence += other.collect_evidence;
+        c.exile_symbols = match (self.exile_symbols, other.exile_symbols) {
+            (Some((a, n)), Some((b, m))) => {
+                assert!(a as u8 == b as u8, "two exiles counting symbols of different colors can't be combined");
+                Some((a, n + m))
+            }
+            (None, b) => b,
+            (a, None) => a,
+        };
         // Two beholds add only when they ask for the same quality (CR 701.4a): one filter can't stand for two.
         c.behold = match (self.behold, other.behold) {
             (Some((a, f, name)), Some((b, _, other_name))) => {
@@ -1276,6 +1291,7 @@ impl Cost {
             variable: None,
             discard_hand: false,
             collect_evidence: 0,
+            exile_symbols: None,
             behold: None,
             behold_exile: false,
             behold_type: false,

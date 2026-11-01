@@ -314,6 +314,22 @@ pub trait Query {
         self.chars_if_face_up(id).has(keyword).then_some(way)
     }
 
+    /// Mana symbols of `color` in an object's mana cost (CR 700.5, 202.2): hybrid ({U/R}, {2/U}) and Phyrexian symbols of the
+    /// color each count once, numeric and other colors' symbols not. A copy counts the cost it copies (CR 707.2, 700.5a),
+    /// none if it has none (CR 707.9b). Devotion's measure, and a cost's that counts them (`Cost::exile_symbols`).
+    fn mana_symbols(&self, id: ObjectId, color: Color) -> u32 {
+        let mana = color.mana();
+        let values = self.copiable_values(id);
+        if values.has_no_cost() {
+            return 0;
+        }
+        let cost = self.card(values.card).cost;
+        cost.symbols[mana as usize] as u32
+            + cost.hybrid.iter().flatten().filter(|(a, b)| *a == mana || *b == mana).count() as u32
+            + cost.phyrexian[mana as usize] as u32
+            + cost.twobrid[mana as usize] as u32
+    }
+
     /// An object's copiable values (CR 707.2): what a copy of it copies, the exceptions of its own copy effect
     /// included, and the face that is up for a double-faced permanent (CR 707.8). Those of a permanent or card represented
     /// by a double-faced card or token name its front face and whether its back face is up (`Copiable::faces`): a token copy

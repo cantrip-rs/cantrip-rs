@@ -454,6 +454,7 @@ pub(crate) fn ask_of(
             cards,
             values,
             minimum,
+            ..
         } => {
             source = r(*s);
             let (cards, values) = sorted_with(cards.iter().map(|&id| r(id)).collect(), values);

@@ -1233,6 +1233,8 @@ public sealed class ChooseCardsPromptMessage : PromptPayload, ISelectionPrompt
     /// <summary>
     /// The total mana value the chosen cards must add up to, as collect evidence's "total mana value N or greater"
     /// (CR 701.59a); zero for a choice that asks nothing of it. <c>Cantrip.Core.Decisions.TotalManaValue</c> is the rule.
+    /// When <see cref="Kind"/> is set, the total counts that instead of mana value ("black mana symbols", CR 700.5: Baron Helmut
+    /// Zemo), the <see cref="ManaValues"/> being each card's count of it.
     /// </summary>
     [Key(11)]
     public int MinimumManaValue { get; set; }

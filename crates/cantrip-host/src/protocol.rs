@@ -1234,6 +1234,8 @@ pub struct ChooseCardsPrompt {
     /// generic mana of the total cost, which X, a kicker or the targets announced after it may still change (CR 601.2b-f);
     /// false when it is exactly what it takes off.
     pub powers_up_to: bool,
+    /// The total the chosen cards must add up to (collect evidence, CR 701.59a): mana value, or, when `kind` is set, the mana
+    /// symbols of a color it names ("black mana symbols", CR 700.5: Baron Helmut Zemo). `mana_values` are each card's count.
     pub minimum_mana_value: i32,
     pub mana_values: Vec<i32>,
     pub maximum_mana_value: i32,

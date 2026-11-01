@@ -83,6 +83,8 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
         };
         int power = Cantrip.Core.Decisions.TotalPower.Of(prompt.Cards, prompt.Powers, picked.Select(h => new ViewHandle(h)));
         int manaValue = Cantrip.Core.Decisions.TotalManaValue.Of(prompt.Cards, prompt.ManaValues, picked.Select(h => new ViewHandle(h)));
+        // What the total counts: mana value (collect evidence), or the mana symbols of a color the question names (Baron Helmut Zemo).
+        string total = prompt.MinimumManaValue > 0 && prompt.Kind.Length > 0 ? prompt.Kind : "mana value";
         // Craft (CR 702.167a): the materials are permanents you control and cards in your graveyard, of the quality the ability
         // names, exiled with the crafting permanent as its cost.
         bool craft = prompt.Purpose == CardChoicePurposeView.Craft;
@@ -100,7 +102,7 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
             : prompt.MinimumPower > 0
             ? $"{source}: choose creatures with total power {prompt.MinimumPower} or more to tap"
             : prompt.MinimumManaValue > 0
-                ? $"{source}: choose cards with total mana value {prompt.MinimumManaValue} or more to {verb}"
+                ? $"{source}: choose cards with total {total} {prompt.MinimumManaValue} or more to {verb}"
             : prompt.Count == 0 ? $"{source}: nothing to choose"
             // Harmonize (CR 702.180a): up to one, and what tapping it does to the cost is said before it is chosen.
             : prompt.Purpose == CardChoicePurposeView.TapToReduce
@@ -167,7 +169,7 @@ public sealed record CardChoicePresentation(string Title, string Detail, string 
             : prompt.MinimumPower > 0
             ? $"{picked.Count} chosen  ·  total power {power} of {prompt.MinimumPower}{where}"
             : prompt.MinimumManaValue > 0
-                ? $"{picked.Count} chosen  ·  total mana value {manaValue} of {prompt.MinimumManaValue}{where}"
+                ? $"{picked.Count} chosen  ·  total {total} {manaValue} of {prompt.MinimumManaValue}{where}"
             : prompt.MaximumTotalManaValue is { } most
                 ? $"{picked.Count} of {prompt.Count} chosen  ·  total mana value {manaValue} of {most} or less{where}"
             : ordered && prompt.Count > 1

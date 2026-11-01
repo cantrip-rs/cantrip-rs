@@ -1503,6 +1503,12 @@ targets", Urgent Necropsy) is `CardDef::cost_of_targets`, asked once the targets
 however many times it is named (`move_together`), by the first of its moves (a later one to another zone is dropped): a
 permanent a spell targets in two slots is destroyed once.
 
+A cost that exiles graveyard cards by a total other than mana value is `Cost::exile_symbols` ("exile any number of black cards
+from your graveyard with fifteen or more black mana symbols among their mana costs", Baron Helmut Zemo's boast): the same
+`CollectEvidence` choice, offered the graveyard's cards of the color with each one's symbols of it (`Query::mana_symbols`, as
+devotion counts them, CR 700.5) as its values; the prompt's `kind` names what is counted. The cards it exiled, as they are in
+exile, are the activated ability's `Query::cost_objects`.
+
 ### Actions: the source's own option, and what made it possible
 
 An action is what a player does with priority or while paying - cast a spell, activate an ability, take a special action,

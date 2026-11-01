@@ -470,8 +470,10 @@ pub enum RequestKind {
     /// creature is chosen (CR 702.180b, 601.2b: X, a kicker and the targets come after it).
     TapForPower { source: ObjectId, purpose: Purpose, cards: Vec<ObjectId>, powers: Vec<i16>, minimum: u8, up_to: bool },
     /// Collect evidence N (CR 701.59a): exile any subset of `cards` (the player's graveyard) whose `values` (their mana
-    /// values) add up to `minimum` or more.
-    CollectEvidence { source: ObjectId, cards: Vec<ObjectId>, values: Vec<u8>, minimum: u8 },
+    /// values) add up to `minimum` or more. With `symbols`, the `values` are instead the mana symbols of that color among
+    /// each card's mana cost (CR 700.5): Baron Helmut Zemo's "exile any number of black cards ... with fifteen or more
+    /// black mana symbols among their mana costs".
+    CollectEvidence { source: ObjectId, cards: Vec<ObjectId>, values: Vec<u8>, minimum: u8, symbols: Option<Color> },
     /// Craft's materials (CR 702.167a): exile `minimum` to `maximum` of `cards`, which are permanents the player controls
     /// and cards in their graveyard, each one of what `quality` names ("artifact", "creature"). An exact number of
     /// materials has `minimum == maximum`; "one or more" has `maximum` of every card offered.

@@ -165,7 +165,8 @@ pub fn selection_verdict(game: &Game, request: &Request, selected: &[ObjectId]) 
             let total: i32 = selected.iter().filter_map(|c| cards.iter().position(|x| x == c)).map(|i| i32::from(powers[i])).sum();
             (cards.clone(), Verdict { complete: among(cards) && total >= i32::from(*minimum), addable: unchosen(cards) })
         }
-        // Collect evidence (CR 701.59a): total mana value `minimum` or more.
+        // Collect evidence (CR 701.59a): total mana value `minimum` or more; or total mana symbols of a color, as Baron Helmut
+        // Zemo's cost counts them.
         RequestKind::CollectEvidence { cards, values, minimum, .. } => {
             let total: u32 = selected.iter().filter_map(|c| cards.iter().position(|x| x == c)).map(|i| u32::from(values[i])).sum();
             (cards.clone(), Verdict { complete: among(cards) && total >= u32::from(*minimum), addable: unchosen(cards) })
@@ -324,7 +325,7 @@ pub fn check(game: &Game, request: &Request, answer: &Answer) -> Result<(), Reje
             if !distinct(chosen) || !chosen.iter().all(|c| cards.contains(c)) {
                 no("not among the cards that may be exiled")
             } else if total < *minimum as u32 {
-                no(format!("total mana value {total}, {minimum} needed"))
+                no(format!("total {total}, {minimum} needed"))
             } else {
                 Ok(())
             }

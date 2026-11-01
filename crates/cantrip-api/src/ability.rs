@@ -127,6 +127,14 @@ pub const fn exile_from_graveyard_of(n: u8, filter: ObjectFilter) -> Cost {
     Cost { exile_from_graveyard: n, exile_from_graveyard_of: Some(filter), ..Cost::NONE }
 }
 
+/// "Exile any number of [color] cards from your graveyard with N or more [color] mana symbols among their mana costs": the
+/// graveyard's cards of the color, other than the source, chosen as the cost is chosen (CR 601.2h by way of 602.2b), whose
+/// symbols of the color (CR 700.5) add up to N or more. The exiled cards are the ability's `Query::cost_objects`. Baron
+/// Helmut Zemo's boast.
+pub const fn exile_from_graveyard_with_symbols(color: Color, n: u8) -> Cost {
+    Cost { exile_symbols: Some((color, n)), ..Cost::NONE }
+}
+
 /// A cost written in mana symbols as printed: `cost("{2}{G}")`, `cost("{X}{R}")`, `cost("{W/U}")`, `cost("{G/P}")`,
 /// `cost("{1}, {T}")`. Read as the card is compiled: a symbol it doesn't know fails the build.
 pub const fn cost(symbols: &str) -> Cost {
@@ -1141,6 +1149,7 @@ pub const fn multikicker_cost(cost: Cost) -> Option<Kicker> {
             && !cost.exert
             && !cost.discard_hand
             && cost.collect_evidence == 0
+            && cost.exile_symbols.is_none()
             && cost.variable.is_none()
             && cost.loyalty.is_none()
             && cost.mana.x == 0

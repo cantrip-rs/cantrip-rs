@@ -578,6 +578,14 @@ fn can_pay_other_as(cx: &Cx, source: ObjectId, controller: PlayerId, cost: &Cost
             return false;
         }
     }
+    // Exiling cards with N or more mana symbols of a color among their costs: payable only if the graveyard's cards of that
+    // color, the source apart, have that many between them.
+    if let Some((color, n)) = cost.exile_symbols {
+        let total: u32 = symbol_exiles(cx, controller, source, color).iter().map(|&c| cx.mana_symbols(c, color)).sum();
+        if total < n as u32 {
+            return false;
+        }
+    }
     if let Some(p) = cost.permanents {
         let asker = Asker { source, controller, by, spell: false };
         let mut candidates = cx.permanents_of(controller).into_iter().filter(|&id| pays_permanents(cx, cost, &p, &asker, id, paid)).count();
@@ -1121,16 +1129,28 @@ fn choose_hand_exiles(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Co
 /// Collect evidence N (CR 701.59a): the cards, with total mana value N or more, that a cost exiles from the graveyard;
 /// always asked.
 fn choose_evidence(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost) -> R<Vec<ObjectId>> {
-    if cost.collect_evidence == 0 {
+    let (cards, values, minimum, symbols) = if let Some((color, n)) = cost.exile_symbols {
+        let cards = symbol_exiles(cx, player, source, color);
+        let values: Vec<u8> = cards.iter().map(|&c| cx.mana_symbols(c, color).min(255) as u8).collect();
+        (cards, values, n, Some(color))
+    } else if cost.collect_evidence > 0 {
+        let cards: Vec<ObjectId> = cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|&c| c != source).collect();
+        let values: Vec<u8> = cards.iter().map(|&c| cx.mana_value(c).min(255) as u8).collect();
+        (cards, values, cost.collect_evidence, None)
+    } else {
         return Ok(Vec::new());
-    }
-    let cards: Vec<ObjectId> = cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|&c| c != source).collect();
-    let values: Vec<u8> = cards.iter().map(|&c| cx.mana_value(c).min(255) as u8).collect();
-    let ask = RequestKind::CollectEvidence { source, cards, values, minimum: cost.collect_evidence };
+    };
+    let ask = RequestKind::CollectEvidence { source, cards, values, minimum, symbols };
     match cx.ask_core(player, ask, true)? {
         Answer::Cards(cards) => Ok(cards),
         _ => Err(Stop::Cancel),
     }
+}
+
+/// The cards of `player`'s graveyard a cost counting mana symbols of `color` may exile: those of that color, the source apart
+/// (Baron Helmut Zemo's "any number of black cards").
+fn symbol_exiles(cx: &Cx, player: PlayerId, source: ObjectId, color: Color) -> Vec<ObjectId> {
+    cx.s().zone(Zone::graveyard(player)).iter().copied().filter(|&c| c != source && cx.chars(c).colors.has(color)).collect()
 }
 
 /// The cards of `player`'s graveyard a cost may exile: any but the source, or those of the quality it names (CR 601.2h).
@@ -1157,13 +1177,14 @@ fn choose_exiles(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost) -
     }
 }
 
-/// Pays the exile part of a cost: the chosen cards, together.
-fn pay_exiles(cx: &mut Cx, chosen: &[ObjectId]) {
+/// Pays the exile part of a cost: the chosen cards, together. Returns the cards as they are in exile, new objects
+/// (CR 400.7).
+fn pay_exiles(cx: &mut Cx, chosen: &[ObjectId]) -> Vec<ObjectId> {
     if chosen.is_empty() {
-        return;
+        return Vec::new();
     }
     let moves: Vec<ops::Moving> = chosen.iter().map(|&id| ops::Moving::to(id, Zone::exile(cx.s().obj(id).owner))).collect();
-    ops::move_together(cx, &moves, ZoneReason::Exile);
+    ops::move_together(cx, &moves, ZoneReason::Exile)
 }
 
 /// Whether `id` may pay a permanents cost now: it passes the cost's filter, and is tapped if the cost asks for tapped
@@ -9276,7 +9297,16 @@ fn activate(
     let at = cx.s().stack.len() - 1;
     add_revealed_to_item(cx, at, &revealed);
     pay_discards(cx, &discards);
-    pay_exiles(cx, &exiles);
+    let exiled = pay_exiles(cx, &exiles);
+    // The cards a cost counting symbols exiled stay with the ability, as they are in exile (CR 400.7), for its effect to
+    // name ("those exiled cards", `Query::cost_objects`, CR 602.2b, 601.2h).
+    if def.cost.exile_symbols.is_some() {
+        let at = cx.s().stack.len() - 1;
+        let mut with = cx.s().stack[at];
+        let objects: Vec<ObjectId> = cx.s().members(with.members).iter().copied().chain(exiled).collect();
+        with.members = cx.st().members_push(&objects);
+        cx.st().stack_set(at, with);
+    }
     pay_life_and_counters(cx, player, source, &def.cost);
     if let Some(kind) = counter {
         counters::remove(cx, source, kind, 1);
@@ -11192,6 +11222,7 @@ fn resolution_parts(cost: &Cost) -> bool {
         variable: _,
         discard_hand: _,
         collect_evidence: _,
+        exile_symbols: _,
         behold: _,
         behold_exile: _,
         behold_type: _,
