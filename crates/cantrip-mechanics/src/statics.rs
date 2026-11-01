@@ -586,14 +586,19 @@ pub fn base_pt<const P: i16, const T: i16>(_: &dyn LayerQuery, _: ObjectId, char
 
 /// "Spells you cast" (CR 601.2i, 707.10): `affected` is a spell on the stack that was cast, from the zone it was cast from
 /// (a copy of a spell was cast from none, CR 707.10; a copy of a card that was cast, a prepare spell's, CR 707.12, 722.3c,
-/// is a spell cast), and its controller is `source`'s controller. Thrumming Stone and Ral, Crackling Wit's emblem grant
-/// their abilities to such spells.
+/// is a spell cast), and its controller is `source`'s controller. It is one from the moment it is put on the stack (CR 601.2a),
+/// as it is cast and before the item is on the stack (an optional cost announced for it, CR 601.2b, is offered by the abilities
+/// it has then). Thrumming Stone and Ral, Crackling Wit's emblem grant their abilities to such spells.
 pub fn spell_you_cast(view: &dyn LayerQuery, source: ObjectId, affected: ObjectId) -> bool {
     let s = view.state();
     let obj = s.obj(affected);
+    let mine = s.obj(source).controller;
     obj.zone.is(ZoneKind::Stack)
         && obj.cast_from.is_some()
-        && s.stack.iter().any(|i| i.kind == StackKind::Spell && i.object == affected && i.controller == s.obj(source).controller)
+        && match s.stack.iter().find(|i| i.kind == StackKind::Spell && i.object == affected) {
+            Some(item) => item.controller == mine,
+            None => obj.controller == mine,
+        }
 }
 
 /// "Instant and sorcery spells you cast" (CR 601.2i, 707.10): `spell_you_cast` whose characteristics, as it is on the stack, are

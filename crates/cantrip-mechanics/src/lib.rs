@@ -20,6 +20,7 @@ pub mod dash;
 pub mod discover;
 pub mod combat;
 pub mod companion;
+pub mod conspire;
 pub mod copy;
 pub mod counters;
 pub mod cumulative_upkeep;
