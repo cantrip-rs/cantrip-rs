@@ -1,0 +1,56 @@
+# Jeong Jeong's Deserters {1}{W}: "When this creature enters, put a +1/+1 counter on target creature." Any creature will do. On turn 1
+# the first Deserters has only itself to target (the only creature there is, so no question is asked) and is a 2/3. Bot2 casts an Ornithopter on turn 2; the second
+# Deserters on turn 3 refuses Bot1's Mox Pearl (not a creature) and puts its counter on Bot2's Ornithopter, which becomes 1/3.
+# The first Deserters keeps exactly one counter.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Jeong Jeong's Deserters
+Jeong Jeong's Deserters
+Plains
+Plains
+Plains
+Plains x15
+
+[Bot2 Deck]
+Ornithopter
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Jeong Jeong's Deserters.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Jeong Jeong's Deserters.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Jeong Jeong's Deserters.Power = 2
+? Bot1.Battlefield.Jeong Jeong's Deserters.Toughness = 3
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Jeong Jeong's Deserters.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Jeong Jeong's Deserters#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Jeong Jeong's Deserters#2.Counters.PlusOnePlusOne = (absent)

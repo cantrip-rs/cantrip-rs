@@ -1,0 +1,8 @@
+{
+  "name": "Jeong Jeong's Deserters",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Rebel Ally",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "When this creature enters, put a +1/+1 counter on target creature."
+}
