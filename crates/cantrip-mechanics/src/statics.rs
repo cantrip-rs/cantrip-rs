@@ -717,3 +717,10 @@ pub fn every_basic_land_type(_: &dyn LayerQuery, _: ObjectId, chars: &mut Chars)
 pub fn shares_creature_type(a: SubtypeSet, b: SubtypeSet) -> bool {
     Subtype::CREATURE_TYPES.iter().any(|&t| a.has(t) && b.has(t))
 }
+
+/// The card rule of a `PlayRule::LibraryTopSpells`: "you may cast [subtype] spells from the top of your library" (CR 601.3,
+/// 205.3): the card on top as the spell it would be, its subtype read through the words of the text that gives the
+/// permission (CR 612). Traveling Chocobo (Birds) and Hakoda, Selfless Commander (Allies) print it.
+pub fn subtype_spell<const SUBTYPE: u16>(q: &dyn Query, asker: &Asker, card: ObjectId) -> bool {
+    q.chars(card).has_subtype(crate::lands::word(q, asker.source, SUBTYPE))
+}
