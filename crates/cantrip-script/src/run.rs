@@ -1910,6 +1910,25 @@ impl<'s> Run<'s> {
                     }
                 }
             }
+            // `! Bot1.Choose(A; B)` for collecting evidence or exiling cards for their mana symbols: the cards named are one answer
+            // the question must refuse - their total short of the least (CR 701.59a) - or a card it does not offer (a card the cost
+            // cannot take: another colour, another graveyard) that is in the game.
+            RequestKind::CollectEvidence { cards, .. } if action.positional().next().is_some() => {
+                let everything: Vec<ObjectId> = (0..self.game.state.objects.len() as u32).map(ObjectId).collect();
+                let mut chosen: Vec<ObjectId> = Vec::new();
+                for spec in action.positional() {
+                    match self.objects(action, spec.trim(), cards)?.into_iter().find(|id| !chosen.contains(id)) {
+                        Some(id) => chosen.push(id),
+                        None if self.objects(action, spec.trim(), &everything)?.is_empty() => {
+                            return fail(format!("line {line}: {text} proves nothing: no such card is in the game"));
+                        }
+                        None => return Ok(()),
+                    }
+                }
+                if check_answer(&self.game, request, &Answer::Cards(chosen)).is_ok() {
+                    return fail(format!("line {line} says {text} must not be an answer the question accepts, but it is"));
+                }
+            }
             // `! Bot1.Choose(Ornithopter)` for craft: no such material may be chosen. Naming only materials that may be, it is
             // one answer the question must refuse instead: too few for "two creatures" (CR 702.167a).
             RequestKind::Craft { cards, .. }
