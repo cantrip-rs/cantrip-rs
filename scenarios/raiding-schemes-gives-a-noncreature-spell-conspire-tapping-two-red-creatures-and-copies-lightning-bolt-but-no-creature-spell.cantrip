@@ -1,0 +1,79 @@
+# Raiding Schemes: "Each noncreature spell you cast has conspire" (CR 702.78a, 604.1). Bot1 casts it on turn 1 (the Lotus's three Red,
+# Mox Emerald, Mox Jet), then Goblin Champion, Cacophony Scamp (turn 3) and Fanatical Firebrand (turn 5), all red. The Firebrand is
+# a creature spell: asked nothing with two untapped red creatures to tap (! Bot1.Modes). On turn 7 Lightning Bolt is a noncreature
+# spell: Bot1 pays conspire by tapping the Champion and the Firebrand (the Scamp is left untapped, and tapping them as a cost is
+# no {T} ability, so the Firebrand's summoning sickness is no matter, CR 302.6). The trigger copies the Bolt (CR 707.10), the
+# copy given a new target (CR 707.10c): the Bolt hits Bot2, the copy Bot1, each losing 3. The copy is no card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Raiding Schemes
+Goblin Champion
+Mox Pearl
+Cacophony Scamp
+Fanatical Firebrand
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Raiding Schemes.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Champion.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cacophony Scamp.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+! Bot1.Modes
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Modes(Conspire:)
+Bot1.Choose(Goblin Champion; Fanatical Firebrand)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
+Bot1.Battlefield.Goblin Champion.Tapped = true
+Bot1.Battlefield.Fanatical Firebrand.Tapped = true
+Bot1.Battlefield.Cacophony Scamp.Tapped = false
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+Stack.Count = 0

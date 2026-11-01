@@ -9,8 +9,8 @@
 use cantrip_api::*;
 
 /// The keyword abilities whose trigger is "when you cast this spell" (CR 702.40a storm, 702.56a replicate, 702.60a ripple,
-/// 702.85a cascade, 702.153a casualty), whose ability text may be the keyword alone.
-const CAST_KEYWORDS: [&str; 5] = ["storm", "replicate", "ripple", "cascade", "casualty"];
+/// 702.78a conspire, 702.85a cascade, 702.153a casualty), whose ability text may be the keyword alone.
+const CAST_KEYWORDS: [&str; 6] = ["storm", "replicate", "ripple", "conspire", "cascade", "casualty"];
 
 /// The zones the words of a triggered ability say it functions in (CR 113.6), for a card named `name`: the union over its
 /// trigger conditions (CR 113.6k: "when you cast this spell and whenever this creature attacks" has two, functioning in

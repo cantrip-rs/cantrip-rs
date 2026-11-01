@@ -1,0 +1,6 @@
+{
+  "name": "Raiding Schemes",
+  "manaCost": "{3}{R}{G}",
+  "type": "Enchantment",
+  "oracleText": "Each noncreature spell you cast has conspire. (As you cast a noncreature spell, you may tap two untapped creatures you control that share a color with it. When you do, copy it and you may choose new targets for the copy. A copy of a permanent spell becomes a token.)"
+}

@@ -1,0 +1,58 @@
+# Raiding Schemes: conspire taps "two untapped creatures you control that share a color with it" (CR 702.78a). Bot1 casts the
+# Schemes and a Goblin Champion (red) on turn 1 and a Cacophony Scamp (red) on turn 3. Mox Pearl, a colorless noncreature spell,
+# shares no color with the two untapped red creatures (CR 105.2c): conspire can only be declined (! Bot1.Modes(Conspire:)), where it is
+# for a red spell (the scenario of Lightning Bolt with conspire paid). Nothing is tapped.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Emerald
+Mox Jet
+Raiding Schemes
+Goblin Champion
+Cacophony Scamp
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Island x30
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Raiding Schemes.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Champion.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Cacophony Scamp.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+! Bot1.Modes(Conspire:)
+Bot1.Modes(1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Goblin Champion.Tapped = false
+Bot1.Battlefield.Cacophony Scamp.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = false
+Stack.Count = 0
