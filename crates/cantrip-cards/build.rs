@@ -21,6 +21,14 @@ fn main() {
         .map(|p| p.file_stem().unwrap().to_string_lossy().to_string())
         .collect();
     names.sort();
+    // Only these cards, for tools that build one card over and over (card-mutate.py): a file of stems, one a line.
+    println!("cargo:rerun-if-env-changed=CANTRIP_CARDS_ONLY");
+    if let Ok(list) = std::env::var("CANTRIP_CARDS_ONLY") {
+        println!("cargo:rerun-if-changed={list}");
+        let text = std::fs::read_to_string(&list).expect("CANTRIP_CARDS_ONLY names a file");
+        let only: std::collections::HashSet<&str> = text.lines().collect();
+        names.retain(|name| only.contains(name.as_str()));
+    }
     // Keep module paths usable by IDEs too: canonicalize() adds Windows' verbatim (\\?\) prefix.
     let manifest_dir = std::path::PathBuf::from(std::env::var_os("CARGO_MANIFEST_DIR").unwrap());
     let mut out = String::new();

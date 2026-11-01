@@ -58,3 +58,8 @@ codegen-units = 256
 [profile.checked]
 inherits = "cards"
 debug-assertions = true
+
+# card-mutate.py's builds, of only the cards a card's scenarios play (`CANTRIP_CARDS_ONLY`): the cards profile with a place of
+# its own under `target/`, so they never cost that profile a rebuild.
+[profile.mutate]
+inherits = "cards"
