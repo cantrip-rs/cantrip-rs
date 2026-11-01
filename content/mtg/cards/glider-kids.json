@@ -1,0 +1,11 @@
+{
+  "name": "Glider Kids",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Pilot Ally",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature enters, scry 1. (Look at the top card of your library. You may put it on the bottom.)",
+  "keywords": [
+    "Flying"
+  ]
+}

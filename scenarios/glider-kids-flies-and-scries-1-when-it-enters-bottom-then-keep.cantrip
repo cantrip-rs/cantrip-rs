@@ -1,0 +1,51 @@
+# Glider Kids {2}{W} has flying and "When this creature enters, scry 1." Bot1 casts one on turn 1 (Plains, Mox Pearl, Mox
+# Sapphire) and puts the Island on top of its library on the bottom, so the draw on turn 3 is the Mountain under it; the second,
+# cast on turn 3, scries the Forest and keeps it on top, so the turn 5 draw is the Forest. The Island never reaches the hand.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Glider Kids
+Glider Kids
+Plains
+Plains
+Island
+Mountain
+Forest
+Plains x14
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Glider Kids.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Glider Kids.Keywords = Flying
+Bot1.Arrange( | Island)
+! Bot1.Arrange
+[T3 Bot1.Main1]
+? Bot1.Hand = Glider Kids; Plains; Plains; Mountain
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Glider Kids.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Forest | )
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Hand = Plains; Mountain; Forest
+Bot1.Battlefield.Glider Kids#1.Keywords = Flying
+Bot1.Battlefield.Glider Kids#2.Keywords = Flying
