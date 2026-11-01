@@ -1,0 +1,60 @@
+# Airbender's Reversal, second mode: "Airbend target creature you control." (CR 701.65a). Bot1 casts it (Plains and Mox Pearl)
+# on its own Savannah Lions: the Lions are exiled, and Bot1 may cast them from exile for {2} rather than {W}. With the
+# Plains and the Pearl tapped that is not offered; on turn 5 a Plains and the Pearl cast them. Its target question refuses
+# Bot2's Ornithopter, a creature Bot1 does not control.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Airbender's Reversal
+Savannah Lions
+Plains
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Airbender's Reversal.Cast
+Bot1.Modes(Airbend target creature)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Exile = Savannah Lions
+! Bot1.Exile.Savannah Lions.Cast(Mana: short)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Exile = 
+Bot1.Battlefield = Plains; Plains; Mox Pearl; Savannah Lions
+Bot1.Graveyard = Airbender's Reversal

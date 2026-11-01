@@ -1,0 +1,56 @@
+# Airbender's Reversal, first mode: "Destroy target attacking creature." (CR 506.4, 701.8). Bot2 has two Ornithopters and on
+# turn 4 attacks Bot1 with one; with the attack declared Bot1 casts the Reversal (Plains and Mox Pearl). Its target question
+# refuses Bot1's own Savannah Lions (not attacking) and Bot2's Ornithopter that stayed home; the attacking one is destroyed
+# and the home one is untouched. Bot1 takes no damage.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Airbender's Reversal
+Savannah Lions
+Plains
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Attack(Ornithopter#1 > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Airbender's Reversal.Cast
+Bot1.Modes(Destroy target attacking creature)
+! Bot1.Target(Savannah Lions)
+! Bot1.Target(Bot2.Battlefield.Ornithopter#2)
+Bot1.Target(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Graveyard = Airbender's Reversal
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Ornithopter
+Bot1.Battlefield = Plains; Mox Pearl; Savannah Lions
+Bot1.Life = 20
