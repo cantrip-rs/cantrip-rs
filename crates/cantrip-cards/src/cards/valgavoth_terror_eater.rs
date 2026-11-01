@@ -38,6 +38,7 @@ pub static CARD: CardDef = CardDef {
         any_type: false,
         lands: true,
         life_for_mana_value: true,
+        instead: None,
     }],
     ..oracle::VALGAVOTH_TERROR_EATER
 };

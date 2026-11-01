@@ -2155,6 +2155,10 @@ pub struct ExileCast {
     /// alternative cost a cast by it may be made for (CR 118.9a); an X in its cost is 0 (CR 107.3), and additional costs are
     /// paid as usual (CR 118.8). As a play permission's `PlayGrant::life_for_mana_value` pays. Valgavoth, Terror Eater.
     pub life_for_mana_value: bool,
+    /// "You may cast [it] without paying its mana cost" (CR 118.9): the cost a cast by it is made for rather than the mana cost,
+    /// `Some(ManaCost::ZERO)` for none. As a play permission's `PlayGrant::instead` does. It is the one alternative cost of the
+    /// cast (CR 118.9a); an X in the cost is 0 (CR 107.3b), and additional costs are still paid (CR 118.8). Maralen, Fae Ascendant.
+    pub instead: Option<ManaCost>,
 }
 
 /// A static ability of a permanent that gives cards in a hand miracle (CR 702.94a): "each instant and sorcery card in your

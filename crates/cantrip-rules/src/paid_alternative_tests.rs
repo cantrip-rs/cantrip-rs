@@ -76,7 +76,7 @@ static SCROLL: CardDef = CardDef {
 static EXILER: CardDef = CardDef {
     name: "Paid Test Exiler",
     types: TypeSet::of(&[CardType::Enchantment]),
-    exile_casts: &[ExileCast { text: "Cast from exile", allows: any_card, additional: Cost::NONE, any_type: false, lands: false, life_for_mana_value: false }],
+    exile_casts: &[ExileCast { text: "Cast from exile", allows: any_card, additional: Cost::NONE, any_type: false, lands: false, life_for_mana_value: false, instead: None }],
     ..CardDef::BLANK
 };
 

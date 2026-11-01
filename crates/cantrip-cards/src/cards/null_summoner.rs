@@ -32,6 +32,6 @@ pub static CARD: CardDef = CardDef {
     )
     .targets(&[targets::OPPONENT])],
     // "... and mana of any type can be spent to cast that spell" (CR 609.4b).
-    exile_casts: &[ExileCast { text: "Threshold: you may cast this with mana of any type", allows: may_cast_the_exiled_card, additional: Cost::NONE, any_type: true, lands: false, life_for_mana_value: false }],
+    exile_casts: &[ExileCast { text: "Threshold: you may cast this with mana of any type", allows: may_cast_the_exiled_card, additional: Cost::NONE, any_type: true, lands: false, life_for_mana_value: false, instead: None }],
     ..oracle::NULL_SUMMONER
 };

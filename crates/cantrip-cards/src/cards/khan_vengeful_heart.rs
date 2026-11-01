@@ -36,6 +36,7 @@ pub static CARD: CardDef = CardDef {
         any_type: false,
         lands: false,
         life_for_mana_value: false,
+        instead: None,
     }],
     ..oracle::KHAN_VENGEFUL_HEART
 };

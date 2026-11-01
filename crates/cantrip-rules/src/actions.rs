@@ -5926,7 +5926,7 @@ impl Route {
     fn exile_cast(c: &Given<ExileCast>) -> Route {
         Route {
             by: Some(c.grant),
-            terms: PlayGrant { any_type: c.what.any_type, life_for_mana_value: c.what.life_for_mana_value, ..PlayGrant::CAST },
+            terms: PlayGrant { any_type: c.what.any_type, life_for_mana_value: c.what.life_for_mana_value, instead: c.what.instead, ..PlayGrant::CAST },
             additional: c.what.additional,
             allows: Allows::Exile(c.asker(), c.what),
             ..Route::RULES
@@ -11286,7 +11286,7 @@ mod tests {
     static EXILER: CardDef = CardDef {
         name: "Alternative Test Exiler",
         types: TypeSet::of(&[CardType::Enchantment]),
-        exile_casts: &[ExileCast { text: "Cast from exile", allows: any_card, additional: Cost::NONE, any_type: false, lands: false, life_for_mana_value: false }],
+        exile_casts: &[ExileCast { text: "Cast from exile", allows: any_card, additional: Cost::NONE, any_type: false, lands: false, life_for_mana_value: false, instead: None }],
         ..CardDef::BLANK
     };
     /// "You may cast spells from the top of your library" (CR 601.3).
