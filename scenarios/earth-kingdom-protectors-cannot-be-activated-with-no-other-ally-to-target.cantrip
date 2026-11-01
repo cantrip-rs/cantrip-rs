@@ -1,0 +1,31 @@
+# Earth Kingdom Protectors' sacrifice names "another target Ally you control" (CR 115.1, 602.2b): a lone Protectors, or one with only
+# non-Ally creatures and an opponent's Ally beside it, has no legal target and the ability is not offered (nothing is sacrificed).
+
+[Bot1 Deck]
+Earth Kingdom Protectors
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Black Lotus
+Earth Kingdom Protectors
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Earth Kingdom Protectors.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Earth Kingdom Protectors.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Earth Kingdom Protectors.Activate(Bot2.Battlefield.Earth Kingdom Protectors)
+! Bot1.Battlefield.Earth Kingdom Protectors.Activate(Bot1.Battlefield.Ornithopter)
+! Bot1.Battlefield.Earth Kingdom Protectors.Activate
+
+[Expect]
+Bot1.Battlefield = Plains; Earth Kingdom Protectors; Ornithopter
+Bot1.Graveyard = 

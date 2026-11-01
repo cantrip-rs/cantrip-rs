@@ -1,0 +1,46 @@
+# Earth Kingdom Protectors {W}: "Sacrifice this creature: Another target Ally you control gains indestructible until end of
+# turn." (CR 702.12b, 611.2a). Bot1 has two Protectors (Ally creatures) and an Ornithopter (not an Ally). The ability cannot
+# target the Ornithopter, and in response to Bot2's Lightning Bolt on the second Protectors, Bot1 sacrifices the first to name it:
+# the Bolt's 3 damage does not destroy it, and it is a plain creature again (no keyword) on the next turn.
+
+[Bot1 Deck]
+Black Lotus
+Earth Kingdom Protectors
+Earth Kingdom Protectors
+Ornithopter
+Plains x16
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Earth Kingdom Protectors.Cast
+Bot1.Hand.Earth Kingdom Protectors.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Earth Kingdom Protectors#1.Activate(Bot1.Battlefield.Ornithopter)
+! Bot1.Battlefield.Earth Kingdom Protectors#1.Activate(Bot1.Battlefield.Earth Kingdom Protectors#1)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Earth Kingdom Protectors#2)
+Bot2.Pass
+Bot1.Battlefield.Earth Kingdom Protectors#1.Activate(Bot1.Battlefield.Earth Kingdom Protectors#2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Earth Kingdom Protectors; Black Lotus
+? Bot1.Battlefield.Earth Kingdom Protectors.Keywords = Indestructible; Vigilance
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Earth Kingdom Protectors; Ornithopter
+Bot1.Battlefield.Earth Kingdom Protectors.Keywords = Vigilance
+Bot1.Graveyard = Earth Kingdom Protectors; Black Lotus
