@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{effects, targets};
 use cantrip_oracle as oracle;
 
 /// "Target Villain you control" (CR 115.1): a Villain permanent its controller controls, "Villain" read through this land's text
@@ -7,12 +7,6 @@ use cantrip_oracle as oracle;
 fn villain_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id)
         if targets::permanent(q, id) && q.controller(id) == asker.controller && q.chars(id).has_subtype(q.words(asker.source).subtype(Subtype::Villain)))
-}
-
-/// "Target Villain you control connives" (CR 701.50): the target is still the creature it was, if it is still legal (CR 608.2b).
-fn connive_villain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(villain) = targets::object(g, item, 0) else { return Ok(()) };
-    cantrip_mechanics::connive(g, villain, item.object)
 }
 
 pub static CARD: CardDef = CardDef {
@@ -25,7 +19,7 @@ pub static CARD: CardDef = CardDef {
         ),
         ability(
             cost("{3}, {T}"),
-            connive_villain,
+            effects::target_connives,
             "{3}, {T}: Target Villain you control connives. Activate only as a sorcery.",
         )
         .targets(&[target(villain_you_control)])

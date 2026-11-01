@@ -1827,6 +1827,13 @@ pub fn this_connives(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     crate::connive(g, item.object, item.object)
 }
 
+/// "Target [creature] connives" (CR 701.50): the first target, if it is still legal (CR 608.2b). Leader, Super-Genius and Villainous
+/// Hideout print it.
+pub fn target_connives(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    crate::connive(g, creature, item.object)
+}
+
 /// "Return the exiled card to its owner's hand" (CR 607.2a): the cards exiled with this ability's object, linked to it. Tidehollow
 /// Sculler's second ability, and Champion of the Clachan's and Champions of the Shoal's, whose cost exiled it (CR 607.2q).
 pub fn return_exiled_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
