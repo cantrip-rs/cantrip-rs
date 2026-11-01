@@ -10,12 +10,6 @@ fn you_activate_an_ability_of_a_creature(q: &dyn Query, me: &Asker, event: &Even
     (player == me.controller && def.from == ZoneKind::Battlefield && q.chars(creature).is(CardType::Creature)).then_some(Fired::PLAIN)?
 }
 
-/// "Other target nonland permanents you control" (CR 115.1): on the battlefield under this ability's controller's control,
-/// not a land, and not Elrond himself.
-fn other_nonland_permanent_you_control(q: &dyn Query, asker: &Asker, t: Target) -> bool {
-    targets::nonland_permanent_you_control_filter(q, asker, t) && t != Target::Object(asker.source)
-}
-
 /// "Exile up to two other target nonland permanents you control. Return those cards to the battlefield under their owner's
 /// control at the beginning of the next end step." (CR 701.13, 603.7, 400.7): those still legal are exiled together, and the
 /// delayed ability is about the cards exiled (CR 603.7c): a token has ceased to exist and does not return, a card that left
@@ -39,7 +33,7 @@ pub static CARD: CardDef = CardDef {
             flicker,
             "{5}{U}{U}: Exile up to two other target nonland permanents you control. Return those cards to the battlefield under their owner's control at the beginning of the next end step.",
         )
-        .targets(&[target(other_nonland_permanent_you_control).between(0, 2)]),
+        .targets(&[target(targets::other_nonland_permanent_you_control_filter).between(0, 2)]),
     ],
     delayed: &[delayed_trigger(delayed::return_exiled_to_battlefield, "Return those cards to the battlefield under their owner's control.")],
     ..oracle::ELROND_MOON_READER

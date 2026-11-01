@@ -587,6 +587,13 @@ pub fn other_nonland_permanent_filter(q: &dyn Query, asker: &Asker, t: Target) -
     nonland_permanent_filter(q, asker, t) && t != Target::Object(asker.source)
 }
 
+/// "Another target nonland permanent you control", "other target nonland permanent you control" (CR 115.1, 109.5): a nonland
+/// permanent on the battlefield under your control other than the source, for a slot of "up to one", "any number" or "up to
+/// two". Appa, Loyal Sky Bison, Appa, Steadfast Guardian, Elrond, Moon Reader and The Mind Stone print it.
+pub fn other_nonland_permanent_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    nonland_permanent_you_control_filter(q, asker, t) && t != Target::Object(asker.source)
+}
+
 fn nonland_permanent_an_opponent_controls_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     nonland_permanent_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
 }
