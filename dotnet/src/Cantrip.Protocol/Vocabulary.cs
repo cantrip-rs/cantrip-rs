@@ -450,6 +450,9 @@ public enum ManaSpendFilterView
     ArtifactSpellsOrAnyAbility = 25,
     /// <summary>Only to cast artifact spells or activate abilities of artifact sources, in any zone.</summary>
     ArtifactSpellsOrAbilities = 26,
+    /// <summary>Only to cast a spell with one of the subtypes named beside it or activate an equip ability: "Equipment spells
+    /// or ... equip abilities".</summary>
+    SubtypeSpellsOrEquipAbilities = 27,
 }
 
 /// <summary>What spending some mana does to whatever it pays for (CR 106.6): the effect half of a restriction.</summary>

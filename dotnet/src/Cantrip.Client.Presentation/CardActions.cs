@@ -663,6 +663,7 @@ public sealed class CardActions
         ManaSpendFilterView.SubtypeCreatureSpells => $"{Subtypes(subtypes)} creature spells",
         ManaSpendFilterView.SubtypeSpellsOrAbilities => $"{Subtypes(subtypes)} spells and abilities of {Subtypes(subtypes)} sources",
         ManaSpendFilterView.SubtypeSpellsOrAbilitiesOfPermanents => $"{Subtypes(subtypes)} spells and abilities of {Subtypes(subtypes)} permanents",
+        ManaSpendFilterView.SubtypeSpellsOrEquipAbilities => $"{Subtypes(subtypes)} spells and equip abilities",
         ManaSpendFilterView.SubtypeCreatureSpellsOrAbilities =>
             $"{Subtypes(subtypes)} creature spells and abilities of {Subtypes(subtypes)} creature sources",
         ManaSpendFilterView.CreatureSpells => "creature spells",

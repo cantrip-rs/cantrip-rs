@@ -366,6 +366,8 @@ pub enum ManaSpendFilterView {
     ArtifactSpellsOrAnyAbility,
     /// Artifact spells, or abilities of artifact sources in any zone.
     ArtifactSpellsOrAbilities,
+    /// Spells with one of the subtypes named beside it, or equip abilities: "Equipment spells or ... equip abilities".
+    SubtypeSpellsOrEquipAbilities,
 }
 
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq, Hash, Serialize, Deserialize)]

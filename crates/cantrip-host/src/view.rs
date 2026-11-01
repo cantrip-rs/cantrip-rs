@@ -109,6 +109,11 @@ pub fn restriction_view(restriction: ManaRestriction) -> (ManaSpendFilterView, M
             if m.or_x { ManaSpendFilterView::ManaValueOrXSpells } else { ManaSpendFilterView::ManaValueSpells }
         }
         r if r == ManaRestriction::NONCREATURE_SPELLS => ManaSpendFilterView::NoncreatureSpells,
+        // Equipment spells or equip abilities: the equip abilities come with no other kind of ability or creature limit.
+        ManaRestriction::Subtypes(s) if s.equip && !s.creature && s.abilities.is_none() => {
+            subtypes = s.subtypes.iter().map(|t| t.name().to_string()).collect();
+            ManaSpendFilterView::SubtypeSpellsOrEquipAbilities
+        }
         ManaRestriction::Subtypes(s) => {
             subtypes = s.subtypes.iter().map(|t| t.name().to_string()).collect();
             match (s.creature, s.abilities) {
@@ -165,6 +170,7 @@ pub fn restriction_of(filter: ManaSpendFilterView, effect: ManaSpendEffectView, 
             | ManaSpendFilterView::SubtypeSpellsOrAbilities
             | ManaSpendFilterView::SubtypeCreatureSpellsOrAbilities
             | ManaSpendFilterView::SubtypeSpellsOrAbilitiesOfPermanents
+            | ManaSpendFilterView::SubtypeSpellsOrEquipAbilities
     ) {
         let mut named = SubtypeSet::NONE;
         for name in subtypes {
@@ -175,6 +181,7 @@ pub fn restriction_of(filter: ManaSpendFilterView, effect: ManaSpendEffectView, 
             chosen: false,
             creature: matches!(filter, ManaSpendFilterView::SubtypeCreatureSpells | ManaSpendFilterView::SubtypeCreatureSpellsOrAbilities),
             uncounterable: effect == ManaSpendEffectView::CantBeCountered,
+            equip: filter == ManaSpendFilterView::SubtypeSpellsOrEquipAbilities,
             abilities: match filter {
                 ManaSpendFilterView::SubtypeSpellsOrAbilities | ManaSpendFilterView::SubtypeCreatureSpellsOrAbilities => Some(AbilitiesOf::Sources),
                 ManaSpendFilterView::SubtypeSpellsOrAbilitiesOfPermanents => Some(AbilitiesOf::Permanents),
@@ -1616,6 +1623,11 @@ mod tests {
         }
         let (filter, ..) = restriction_view(ManaRestriction::ARTIFACT_SPELLS_OR_ANY_ABILITY);
         assert_eq!(filter, ManaSpendFilterView::ArtifactSpellsOrAnyAbility);
+        // Ronin, Shadow Stalker's: Equipment spells or equip abilities, the subtype beside the filter.
+        let ronin = ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Equipment).or_equip_abilities());
+        let (filter, effect, subtypes, mana_value) = restriction_view(ronin);
+        assert_eq!((filter, subtypes.as_slice()), (ManaSpendFilterView::SubtypeSpellsOrEquipAbilities, ["Equipment".to_string()].as_slice()));
+        assert_eq!(restriction_of(filter, effect, &subtypes, mana_value), Some(ronin));
     }
 
     /// A power and toughness printed as stars are not a number on the printed card: the goyfs' sizes are their abilities'

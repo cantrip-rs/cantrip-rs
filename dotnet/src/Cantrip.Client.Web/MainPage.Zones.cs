@@ -645,6 +645,7 @@ public sealed partial class MainPage
             when subtypes.Count == 0 => "no type chosen",
         (ManaSpendFilterView.SubtypeCreatureSpellsOrAbilities, _) => $"{CardActions.Subtypes(subtypes).ToLowerInvariant()} creatures & abilities",
         (ManaSpendFilterView.SubtypeSpellsOrAbilities, _) => $"{CardActions.Subtypes(subtypes).ToLowerInvariant()} spells & abilities",
+        (ManaSpendFilterView.SubtypeSpellsOrEquipAbilities, _) => $"{CardActions.Subtypes(subtypes).ToLowerInvariant()} spells & equip abilities",
         (ManaSpendFilterView.SubtypeSpellsOrAbilitiesOfPermanents, _) =>
             $"{CardActions.Subtypes(subtypes).ToLowerInvariant()} spells & battlefield {CardActions.Subtypes(subtypes).ToLowerInvariant()} abilities",
         (ManaSpendFilterView.SubtypeSpells, ManaSpendEffectView.CantBeCountered) => $"{CardActions.Subtypes(subtypes).ToLowerInvariant()} spells · uncounterable",
@@ -696,6 +697,8 @@ public sealed partial class MainPage
                 $"Spend this mana only to cast {CardActions.Subtypes(subtypes)} creature spells or activate abilities of {CardActions.Subtypes(subtypes)} creature sources.",
             ManaSpendFilterView.SubtypeSpellsOrAbilities =>
                 $"Spend this mana only to cast {CardActions.Subtypes(subtypes)} spells or activate abilities of {CardActions.Subtypes(subtypes)} sources.",
+            ManaSpendFilterView.SubtypeSpellsOrEquipAbilities =>
+                $"Spend this mana only to cast {CardActions.Subtypes(subtypes)} spells or activate equip abilities.",
             ManaSpendFilterView.SubtypeSpellsOrAbilitiesOfPermanents when subtypes.Count == 0 =>
                 "Spend this mana only to cast a spell of the chosen type or activate an ability of a permanent of the chosen type. "
                 + "No type was chosen, so it can't be spent on anything.",

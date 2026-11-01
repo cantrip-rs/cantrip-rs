@@ -146,7 +146,7 @@ fn every_payment_context_uses_the_same_restricted_inventory() {
             0 => Paying::Casting,
             1 => {
                 let chars = cx.chars(source);
-                Paying::Activating(ability_payment(&cx, source, chars.types, chars.subtypes))
+                Paying::Activating(ability_payment(&cx, source, chars.types, chars.subtypes, false))
             }
             _ => Paying::Other,
         };

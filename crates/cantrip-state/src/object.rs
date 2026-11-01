@@ -2136,33 +2136,37 @@ pub struct SubtypeSpells {
     /// permanent (`AbilitiesOf::Permanents`, CR 109.2: the rulings of Smokebraider and Myr Reservoir) - never a special
     /// action or a triggered ability's cost. None: spells only.
     pub abilities: Option<AbilitiesOf>,
+    /// "... or activate equip abilities" (CR 106.6, 602.2b, 702.6a): it pays too for activating an equip ability, whatever
+    /// the subtypes of its source - not another ability of an Equipment (a reconfigure cost, an ability of its own) nor a
+    /// triggered ability's cost. Ronin, Shadow Stalker's Equipment spells.
+    pub equip: bool,
 }
 
 impl SubtypeSpells {
     /// "Spend this mana only to cast a creature spell of the chosen type."
     pub const CHOSEN_TYPE_CREATURE: SubtypeSpells =
-        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: true, uncounterable: false, abilities: None };
+        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: true, uncounterable: false, abilities: None, equip: false };
 
     /// "Spend this mana only to cast a spell of the chosen type or activate an ability of a source of the chosen type"
     /// (Eclipsed Realms).
     pub const CHOSEN_TYPE_SPELLS_OR_ABILITIES: SubtypeSpells =
-        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources) };
+        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false };
 
     /// "Spend this mana only to cast a creature spell of the chosen type or activate an ability of a creature source of the
     /// chosen type" (Secluded Courtyard): `creature` limits the ability's source as it does the spell.
     pub const CHOSEN_TYPE_CREATURE_SPELLS_OR_ABILITIES: SubtypeSpells =
-        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources) };
+        SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: true, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false };
 
     /// "Spend this mana only to cast [subtype] spells."
     pub const fn of(subtype: Subtype) -> SubtypeSpells {
-        SubtypeSpells { subtypes: SubtypeSet::of(&[subtype]), chosen: false, creature: false, uncounterable: false, abilities: None }
+        SubtypeSpells { subtypes: SubtypeSet::of(&[subtype]), chosen: false, creature: false, uncounterable: false, abilities: None, equip: false }
     }
 
     /// "Spend this mana only to cast a [subtype] spell or a [subtype] spell [or ...]": any number of subtypes, any one of
     /// which the spell must have. This is the one way to say "any of these subtypes"; `ManaRestriction::AnyOf` is for a union
     /// of restrictions of different kinds.
     pub const fn of_any(subtypes: &[Subtype]) -> SubtypeSpells {
-        SubtypeSpells { subtypes: SubtypeSet::of(subtypes), chosen: false, creature: false, uncounterable: false, abilities: None }
+        SubtypeSpells { subtypes: SubtypeSet::of(subtypes), chosen: false, creature: false, uncounterable: false, abilities: None, equip: false }
     }
 
     /// "... and that spell can't be countered."
@@ -2173,6 +2177,11 @@ impl SubtypeSpells {
     /// "... or activate abilities of [subtype] sources": Flamebraider's Elementals.
     pub const fn or_abilities(self) -> SubtypeSpells {
         SubtypeSpells { abilities: Some(AbilitiesOf::Sources), ..self }
+    }
+
+    /// "... or activate equip abilities" (CR 702.6a): Ronin, Shadow Stalker's Equipment spells.
+    pub const fn or_equip_abilities(self) -> SubtypeSpells {
+        SubtypeSpells { equip: true, ..self }
     }
 
     /// "... or activate abilities of [subtype]s", permanents only (CR 109.2): Smokebraider's Elementals, Myr Reservoir's Myr.
@@ -2199,7 +2208,8 @@ pub enum ManaPayment {
     /// Activating an ability whose source has these card types and these subtypes as it is activated (CR 602.2b, 605.3a):
     /// both always filled, from the source's characteristics. `on_battlefield`: whether the source is a permanent (CR
     /// 109.2), not a card in a hand, a graveyard or exile.
-    Ability { source: TypeSet, subtypes: SubtypeSet, on_battlefield: bool },
+    /// `equip`: whether the ability is an equip ability (CR 702.6a).
+    Ability { source: TypeSet, subtypes: SubtypeSet, on_battlefield: bool, equip: bool },
     /// Anything else: a special action, "unless ... pays", a cost a resolving effect asks for.
     Other,
 }
@@ -2388,10 +2398,11 @@ impl ManaRestriction {
                 of.admits(on_battlefield) && allowed.0 & source.0 != 0
             }
             (ManaRestriction::Subtypes(s), ManaPayment::Spell { types, ref subtypes, .. }) => s.admits(types, subtypes),
-            (ManaRestriction::Subtypes(s), ManaPayment::Ability { source, ref subtypes, on_battlefield }) => {
-                s.abilities.is_some_and(|of| of.admits(on_battlefield))
-                    && (!s.creature || source.has(CardType::Creature))
-                    && s.subtypes.intersects(*subtypes)
+            (ManaRestriction::Subtypes(s), ManaPayment::Ability { source, ref subtypes, on_battlefield, equip }) => {
+                (s.equip && equip)
+                    || (s.abilities.is_some_and(|of| of.admits(on_battlefield))
+                        && (!s.creature || source.has(CardType::Creature))
+                        && s.subtypes.intersects(*subtypes))
             }
             _ => false,
         }
@@ -2429,6 +2440,9 @@ impl ManaRestriction {
                 Some(AbilitiesOf::Sources) => name.push_str("OrAbilities"),
                 Some(AbilitiesOf::Permanents) => name.push_str("OrAbilitiesOfPermanents"),
                 None => {}
+            }
+            if s.equip {
+                name.push_str("OrEquipAbilities");
             }
             if s.uncounterable {
                 name.push_str(", CantBeCountered");
@@ -2471,10 +2485,14 @@ impl ManaRestriction {
             return None;
         }
         let limit = text.iter().find(|w| *w != "cantbecountered")?;
+        let (limit, equip) = match limit.strip_suffix("orequipabilities") {
+            Some(rest) => (rest, true),
+            None => (limit.as_str(), false),
+        };
         let (limit, abilities) = match (limit.strip_suffix("orabilities"), limit.strip_suffix("orabilitiesofpermanents")) {
             (Some(rest), _) => (rest, Some(AbilitiesOf::Sources)),
             (None, Some(rest)) => (rest, Some(AbilitiesOf::Permanents)),
-            (None, None) => (limit.as_str(), None),
+            (None, None) => (limit, None),
         };
         let (body, creature) = match limit.strip_suffix("creaturespells") {
             Some(body) => (body, true),
@@ -2492,7 +2510,7 @@ impl ManaRestriction {
             })
         }
         let subtypes = if body == "notype" { SubtypeSet::NONE } else { names(body)? };
-        Some(ManaRestriction::Subtypes(SubtypeSpells { subtypes, chosen: false, creature, uncounterable, abilities }))
+        Some(ManaRestriction::Subtypes(SubtypeSpells { subtypes, chosen: false, creature, uncounterable, abilities, equip }))
     }
 }
 
@@ -2785,13 +2803,14 @@ mod tests {
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Dragon, Subtype::Omen])));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Dragon, Subtype::Omen, Subtype::Elf])));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of_any(&[Subtype::Horror, Subtype::Orc, Subtype::Warrior])));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::of(&[Subtype::Elf]), chosen: false, creature: true, uncounterable: true, abilities: None }));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: false, creature: true, uncounterable: false, abilities: None }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::of(&[Subtype::Elf]), chosen: false, creature: true, uncounterable: true, abilities: None, equip: false }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: false, creature: true, uncounterable: false, abilities: None, equip: false }));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Elemental).or_abilities()));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::of(&[Subtype::Elf]), chosen: false, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources) }));
-        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: false, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources) }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::of(&[Subtype::Elf]), chosen: false, creature: true, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false }));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells { subtypes: SubtypeSet::NONE, chosen: false, creature: false, uncounterable: false, abilities: Some(AbilitiesOf::Sources), equip: false }));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Elemental).or_abilities_of_permanents()));
         all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Myr).or_abilities_of_permanents()));
+        all.push(ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Equipment).or_equip_abilities()));
         all.push(ManaRestriction::mana_value_at_least(4));
         all.push(ManaRestriction::mana_value_at_least_or_x(5));
         all.push(ManaRestriction::mana_value_at_least(12));
@@ -2823,6 +2842,28 @@ mod tests {
         assert_eq!(restriction.name(), "DragonOrElfOrOmenSpells");
     }
 
+    /// "Spend this mana only to cast Equipment spells or activate equip abilities" (CR 106.6, 702.6a; Ronin, Shadow Stalker):
+    /// an Equipment spell, and an equip ability of any source - not another ability of an Equipment, nor an ability of
+    /// anything else, nor a spell that is not an Equipment.
+    #[test]
+    fn equipment_spells_or_equip_abilities() {
+        let restriction = ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Equipment).or_equip_abilities());
+        let artifact = TypeSet::of(&[CardType::Artifact]);
+        let spell = |subtypes| ManaPayment::Spell { types: artifact, subtypes, legendary: false, mana_value: 2, x: false, from: ZoneKind::Hand };
+        let ability = |subtypes, equip| ManaPayment::Ability { source: artifact, subtypes, on_battlefield: true, equip };
+        let equipment = SubtypeSet::of(&[Subtype::Equipment]);
+        assert!(restriction.may_pay(&spell(equipment)));
+        assert!(!restriction.may_pay(&spell(SubtypeSet::of(&[Subtype::Vehicle]))));
+        assert!(restriction.may_pay(&ability(equipment, true)), "an equip ability of an Equipment");
+        assert!(restriction.may_pay(&ability(SubtypeSet::NONE, true)), "an equip ability, whatever its source is");
+        assert!(!restriction.may_pay(&ability(equipment, false)), "another ability of an Equipment");
+        assert!(!restriction.may_pay(&ability(SubtypeSet::NONE, false)));
+        assert!(!restriction.may_pay(&ManaPayment::Other));
+        assert!(!ManaRestriction::Subtypes(SubtypeSpells::of(Subtype::Equipment)).may_pay(&ability(equipment, true)), "Equipment spells alone");
+        assert_eq!(restriction.name(), "EquipmentSpellsOrEquipAbilities");
+        assert!(restriction.is_known() && restriction.names_subtypes());
+    }
+
     /// "Abilities of [type]s" are a permanent's only (CR 109.2), "abilities of [type] sources" a source's in any zone (CR
     /// 109.2c): a creature card's cycling in the hand is paid by Gwenna's mana, not by Castle Garenbrig's (its ruling), nor
     /// Soldevi Machinist's by an artifact card's unearth, nor Smokebraider's by an Elemental card's.
@@ -2831,7 +2872,7 @@ mod tests {
         let creature = TypeSet::of(&[CardType::Creature]);
         let artifact = TypeSet::of(&[CardType::Artifact]);
         let elemental = || SubtypeSet::of(&[Subtype::Elemental]);
-        let ability = |source, subtypes, on_battlefield| ManaPayment::Ability { source, subtypes, on_battlefield };
+        let ability = |source, subtypes, on_battlefield| ManaPayment::Ability { source, subtypes, on_battlefield, equip: false };
         let spell = |types| ManaPayment::Spell { types, subtypes: SubtypeSet::NONE, legendary: false, mana_value: 2, x: false, from: ZoneKind::Hand };
         let castle = ManaRestriction::CREATURE_SPELLS_OR_ABILITIES_OF_CREATURES;
         assert!(castle.may_pay(&spell(creature)));
