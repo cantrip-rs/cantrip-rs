@@ -1,0 +1,65 @@
+# Airbending Lesson: "Airbend target nonland permanent. Draw a card." Bot1 casts it (three mana: Plains, Mox Pearl, Mox
+# Sapphire) on Bot2's Ornithopter (CR 701.65a): the artifact is exiled and then Bot1 draws (hand 4 with the Lesson on the
+# stack, 5 after). Its owner may cast it from exile for {2} rather than its mana cost, and for that only: with one Plains
+# the cast is not offered, with a second land it goes through and the Ornithopter is back.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Airbending Lesson
+Plains
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Plains.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Airbending Lesson.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Hand.Count = 4
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Hand.Count = 5
+? Bot2.Battlefield = Plains
+? Exile = Ornithopter
+? Bot1.Graveyard = Airbending Lesson
+[T4 Bot2.Main1]
+Bot2.Battlefield.Plains.Activate
+! Bot2.Exile.Ornithopter.Cast(Mana: short)
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Exile.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Battlefield = Plains; Plains; Ornithopter
+Exile = 
+Bot1.Hand.Count = 5

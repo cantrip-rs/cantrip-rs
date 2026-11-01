@@ -1,0 +1,59 @@
+# Airbending Lesson on Bot2's Ornithopter, and a second Lesson cast in response on the same permanent. The second resolves
+# first: the Ornithopter is exiled and Bot1 draws. The first then has no legal target and does not resolve (CR 608.2b), so it
+# draws nothing: Bot1 ends with one card in hand (the Plains drawn on turn 3 is played, both Lessons are cast, one draw).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Airbending Lesson
+Airbending Lesson
+Plains
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Airbending Lesson.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Airbending Lesson.Cast(Bot2.Battlefield.Ornithopter)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+? Exile = Ornithopter
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Stack = 
+Exile = Ornithopter
+Bot1.Hand.Count = 1
+Bot1.Graveyard = Airbending Lesson; Airbending Lesson
+Bot2.Battlefield = 
