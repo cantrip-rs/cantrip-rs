@@ -1,0 +1,37 @@
+# Ronin, Shadow Stalker: "Pay 2 life: Add two mana of any one color. Spend this mana only to cast Equipment spells or activate
+# equip abilities. Activate only once each turn." (CR 106.6, 602.2b, 605.1a, 702.6a). Turn 1 Bot1 casts Ronin ({2}{B}) with Black
+# Lotus, then pays 2 life for {W}{W} that is restricted: it can't pay Savannah Lions ({W}, a creature spell), but it pays Bark of
+# Doran ({1}{W}, an Equipment). The ability can't be activated a second time that turn, and Ronin, just cast, is not summoning sick
+# for it: it costs life, not {T}.
+
+[Bot1 Deck]
+Black Lotus
+Ronin, Shadow Stalker
+Bark of Doran
+Savannah Lions
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ronin, Shadow Stalker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Color: White)
+? Bot1.Mana = {W}{W} (EquipmentSpellsOrEquipAbilities)
+? Bot1.Life = 18
+! Bot1.Hand.Savannah Lions.Cast(Mana: short)
+! Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Color: White)
+Bot1.Hand.Bark of Doran.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Mana =
+
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield = Ronin, Shadow Stalker; Bark of Doran
+Bot1.Hand = Island; Island; Island; Savannah Lions

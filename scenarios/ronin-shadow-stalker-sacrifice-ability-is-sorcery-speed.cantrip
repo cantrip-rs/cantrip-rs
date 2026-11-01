@@ -1,0 +1,37 @@
+# Ronin, Shadow Stalker: "{T}, Sacrifice an Equipment attached to Ronin: ... Activate only as a sorcery." (CR 307.5, 602.5d). On
+# turn 3 Bot1 equips Bark of Doran to Ronin with Ronin's own restricted mana. With the equip ability still on the stack the
+# sacrifice ability is refused (the stack is not empty), and so it is in the end step (not a main phase): Ronin is untapped, Bark
+# still attached, and both stay (the success is in the scenario with the Raging Goblin).
+
+[Bot1 Deck]
+Black Lotus
+Ronin, Shadow Stalker
+Bark of Doran
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ronin, Shadow Stalker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Color: White)
+Bot1.Hand.Bark of Doran.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Color: Blue)
+Bot1.Battlefield.Bark of Doran.Activate(Bot1.Battlefield.Ronin, Shadow Stalker)
+! Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Ability: Sacrifice; Bot1.Battlefield.Ronin, Shadow Stalker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bark of Doran.AttachedTo = Ronin, Shadow Stalker
+[T3 Bot1.End]
+! Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Ability: Sacrifice; Bot1.Battlefield.Ronin, Shadow Stalker)
+
+[Expect]
+Bot1.Battlefield = Bark of Doran; Ronin, Shadow Stalker
+Bot1.Battlefield.Ronin, Shadow Stalker.Tapped = false

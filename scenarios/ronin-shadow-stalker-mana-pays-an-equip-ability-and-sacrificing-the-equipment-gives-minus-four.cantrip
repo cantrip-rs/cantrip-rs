@@ -1,0 +1,56 @@
+# Ronin, Shadow Stalker: "{T}, Sacrifice an Equipment attached to Ronin: Target creature gets -4/-4 until end of turn. Activate
+# only as a sorcery." and the restricted mana that "activates equip abilities" (CR 106.6, 602.2b, 702.6a). Turn 1 Bot1 casts Ronin
+# with Black Lotus and Bark of Doran with Ronin's mana. Turn 2 Bot2 casts Raging Goblin. Turn 3 the sacrifice ability is refused
+# with no Equipment attached; Ronin's {W}{W} (restricted) pays Bark's equip {1} onto Ronin; then {T} and sacrificing Bark gives
+# Raging Goblin -4/-4, and it dies.
+
+[Bot1 Deck]
+Black Lotus
+Ronin, Shadow Stalker
+Bark of Doran
+Island x20
+
+[Bot2 Deck]
+Mountain
+Raging Goblin
+Mountain x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ronin, Shadow Stalker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Color: White)
+Bot1.Hand.Bark of Doran.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Raging Goblin.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Ability: Sacrifice; Bot2.Battlefield.Raging Goblin)
+Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Color: Blue)
+? Bot1.Mana = {U}{U} (EquipmentSpellsOrEquipAbilities)
+? Bot1.Life = 16
+Bot1.Battlefield.Bark of Doran.Activate(Bot1.Battlefield.Ronin, Shadow Stalker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bark of Doran.AttachedTo = Ronin, Shadow Stalker
+? Bot1.Mana = {U} (EquipmentSpellsOrEquipAbilities)
+Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Ability: Sacrifice; Bot2.Battlefield.Raging Goblin)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ronin, Shadow Stalker.Tapped = true
+? Bot2.Graveyard = Raging Goblin
+
+[Expect]
+Bot1.Life = 16
+Bot1.Graveyard = Bark of Doran; Black Lotus
+Bot2.Graveyard = Raging Goblin
+Bot2.Battlefield = Mountain

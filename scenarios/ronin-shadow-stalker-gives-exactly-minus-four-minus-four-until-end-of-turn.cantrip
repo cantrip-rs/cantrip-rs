@@ -1,0 +1,46 @@
+# Ronin, Shadow Stalker: "Target creature gets -4/-4 until end of turn." (CR 611.2a, 514.2). Bot2's Aegis Turtle (0/5) survives it
+# as a -4/1 for the rest of turn 3 and is a 0/5 again in turn 4.
+
+[Bot1 Deck]
+Black Lotus
+Ronin, Shadow Stalker
+Bark of Doran
+Island x20
+
+[Bot2 Deck]
+Island
+Aegis Turtle
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ronin, Shadow Stalker.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Color: White)
+Bot1.Hand.Bark of Doran.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Color: Blue)
+Bot1.Battlefield.Bark of Doran.Activate(Bot1.Battlefield.Ronin, Shadow Stalker)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ronin, Shadow Stalker.Activate(Ability: Sacrifice; Bot2.Battlefield.Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Aegis Turtle.Power = -4
+? Bot2.Battlefield.Aegis Turtle.Toughness = 1
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Aegis Turtle.Power = 0
+? Bot2.Battlefield.Aegis Turtle.Toughness = 5
+
+[Expect]
+Bot1.Graveyard = Bark of Doran; Black Lotus
