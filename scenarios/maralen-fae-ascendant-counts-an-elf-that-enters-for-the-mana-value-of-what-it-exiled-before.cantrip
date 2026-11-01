@@ -1,0 +1,66 @@
+# Maralen, Fae Ascendant: the number is of Elves and Faeries you control when the spell is cast (CR 601.2), and it covers every
+# card exiled with her this turn, whenever in the turn. Maralen's own trigger exiles Bot2's Runeclaw Bear and an Island: the Bear has
+# mana value 2, Maralen is the only Elf or Faerie (once, though she is both), so it can't be cast. Llanowar Elves enters, its
+# trigger exiles a Grizzly Bear and a Mountain, and with two the Runeclaw Bear can be cast for no mana, from the first pair.
+# A land is no spell: neither Island nor Mountain can be cast or played from exile. The Bear's cast uses up the permission:
+# the Grizzly Bear, also mana value 2, is not offered.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Llanowar Elves
+Maralen, Fae Ascendant
+Island
+Island x20
+
+[Bot2 Deck]
+Island x7
+Runeclaw Bear
+Island
+Grizzly Bears
+Mountain
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Maralen, Fae Ascendant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Runeclaw Bear; Island
+! Bot1.Exile.Runeclaw Bear.Cast
+! Bot1.Exile.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Runeclaw Bear; Island; Grizzly Bears; Mountain
+! Bot1.Exile.Mountain.Play
+! Bot1.Exile.Island.Play
+Bot1.Exile.Runeclaw Bear.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Exile.Grizzly Bears.Cast
+
+[Expect]
+Bot1.Battlefield = Llanowar Elves; Maralen, Fae Ascendant; Mox Emerald; Mox Jet; Mox Sapphire; Runeclaw Bear
+Exile = Island; Grizzly Bears; Mountain

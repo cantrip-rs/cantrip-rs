@@ -1,0 +1,55 @@
+# Maralen, Fae Ascendant: "Once each turn" (CR 118.9): the permission is used up by one cast. Bot2's Lightning Bolt and Shock
+# are both mana value 1, the one Elf and Faerie Bot1 controls is Maralen herself, and both were exiled this turn with her: Bolt is
+# cast for no mana, and then Shock, though it would be cast the same way, is not offered again this turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Llanowar Elves
+Maralen, Fae Ascendant
+Island
+Island x20
+
+[Bot2 Deck]
+Island x7
+Lightning Bolt
+Shock
+Mountain
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Maralen, Fae Ascendant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Shock
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+! Bot1.Exile.Shock.Cast
+[T3 Bot1.Main1]
+! Bot1.Exile.Shock.Cast
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Mountain; Lightning Bolt
+Exile = Shock

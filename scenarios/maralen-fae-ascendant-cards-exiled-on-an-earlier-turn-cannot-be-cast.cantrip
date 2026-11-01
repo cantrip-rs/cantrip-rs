@@ -1,0 +1,52 @@
+# Maralen, Fae Ascendant: "from among cards exiled with Maralen this turn". Bot2's Lightning Bolt and Island are exiled by her
+# trigger on turn 1, and Bot1 casts nothing. The Bolt is mana value 1, an instant, and still exiled with her on turn 3, but it was
+# not exiled this turn: it is not offered, in either of Bot1's main phases. (Turn 1: the Bolt is offered, a check that it can be.)
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Llanowar Elves
+Maralen, Fae Ascendant
+Island
+Island x20
+
+[Bot2 Deck]
+Island x7
+Lightning Bolt
+Island
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Maralen, Fae Ascendant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Island
+Bot1.Pass
+[T2 Bot2.Upkeep]
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+[T3 Bot1.Main1]
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+! Bot1.Exile.Island.Play
+
+[Expect]
+Bot2.Life = 20
+Exile = Lightning Bolt; Island

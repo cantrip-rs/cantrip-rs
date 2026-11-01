@@ -1,0 +1,61 @@
+# Maralen, Fae Ascendant: the cards are exiled with her (CR 607.2a) for good, not until she leaves (CR 610.3 would return them): on
+# turn 1 her trigger exiles Bot2's Lightning Bolt and an Island and Bot1 casts nothing. On turn 2 Bot2 exiles Maralen with Swords
+# to Plowshares and both cards stay in exile, with Maralen. The permission was a static ability of hers (CR 113.6, 611.3a): it is
+# gone with her, and on turn 3 the Bolt is not offered (it would not be this turn's exile either).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Llanowar Elves
+Maralen, Fae Ascendant
+Island
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Island x5
+Lightning Bolt
+Island
+Island x16
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Maralen, Fae Ascendant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Island
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Maralen, Fae Ascendant)
+Bot2.Pass
+Bot1.Pass
+? Exile = Lightning Bolt; Island; Maralen, Fae Ascendant
+[T3 Bot1.Main1]
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Bot1.Life = 24
+Exile = Lightning Bolt; Island; Maralen, Fae Ascendant

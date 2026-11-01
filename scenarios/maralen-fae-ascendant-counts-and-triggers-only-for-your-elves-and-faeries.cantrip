@@ -1,0 +1,74 @@
+# Maralen, Fae Ascendant: "another Elf or Faerie you control" and "the number of Elves and Faeries you control" are Bot1's alone.
+# Bot2's Llanowar Elves enters on turn 2 and does not trigger anything (Bot1 has no Maralen yet). On turn 3 Bot1 casts Maralen:
+# her trigger exiles Bot2's Runeclaw Bear and an Island. The Bear is mana value 2, and Bot1 controls one Elf or Faerie (Bot2's
+# Elf is not counted): not offered. A Scryb Sprites, a Faerie that is no Elf, enters: its trigger exiles two more (Shock and an
+# Island), Bot1 now controls two and the Bear is cast for no mana.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Scryb Sprites
+Maralen, Fae Ascendant
+Island
+Island x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x5
+Mountain
+Runeclaw Bear
+Island
+Shock
+Island
+Island x14
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+? Exile.Count = 0
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Maralen, Fae Ascendant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Runeclaw Bear; Island
+! Bot1.Exile.Runeclaw Bear.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Scryb Sprites.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Runeclaw Bear; Island; Shock; Island
+Bot1.Exile.Runeclaw Bear.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield = Maralen, Fae Ascendant; Mox Emerald; Mox Jet; Mox Sapphire; Runeclaw Bear; Scryb Sprites
+Bot2.Battlefield = Forest; Llanowar Elves
+Exile = Island; Island; Shock

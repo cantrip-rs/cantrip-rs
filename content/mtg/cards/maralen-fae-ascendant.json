@@ -1,0 +1,11 @@
+{
+  "name": "Maralen, Fae Ascendant",
+  "manaCost": "{2}{B}{G}{U}",
+  "type": "Legendary Creature — Elf Faerie Noble",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "Flying\nWhenever Maralen or another Elf or Faerie you control enters, exile the top two cards of target opponent's library.\nOnce each turn, you may cast a spell with mana value less than or equal to the number of Elves and Faeries you control from among cards exiled with Maralen this turn without paying its mana cost.",
+  "keywords": [
+    "Flying"
+  ]
+}

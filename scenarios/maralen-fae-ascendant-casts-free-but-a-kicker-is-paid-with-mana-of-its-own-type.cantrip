@@ -1,0 +1,72 @@
+# Maralen, Fae Ascendant: "you may cast a spell ... from among cards exiled with Maralen this turn without paying its mana cost"
+# is an alternative cost (CR 118.9); an additional cost is still paid (CR 118.8, 601.2f), with mana of the types it asks for
+# - the permission says nothing of mana of any type (CR 609.4b). Bot1 has Llanowar Elves out from turn 1 and casts Maralen on
+# turn 3 (Mox Emerald, Mox Sapphire, Black Lotus's three Black): two Elves and Faeries, and Maralen's trigger exiles Bot2's
+# Tear Asunder (mana value 2) and Mountain. With {R}{W} floating, Tear Asunder is cast kicked for nothing: the {W} pays the
+# kicker's {1}, the {R} can't pay its {B}, so Mox Jet's {B} does, and the {R} is left. Kicked, it exiles the Elves, a nonland
+# permanent that is no artifact or enchantment. (Bot2 discarded an Island to hand size on turn 2.)
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Mox Ruby
+Llanowar Elves
+Maralen, Fae Ascendant
+Mox Pearl
+Island x20
+
+[Bot2 Deck]
+Island x8
+Tear Asunder
+Mountain
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Maralen, Fae Ascendant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Tear Asunder; Mountain
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Tear Asunder.Cast(Kicked: 1)
+Bot1.Target(Bot1.Battlefield.Llanowar Elves)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Mountain; Llanowar Elves
+Bot2.Graveyard = Tear Asunder; Island
+Bot1.Mana = {R}
+Stack.Count = 0

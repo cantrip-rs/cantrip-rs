@@ -1,0 +1,63 @@
+# Maralen, Fae Ascendant: "Whenever Maralen or another Elf or Faerie you control enters, exile the top two cards of target
+# opponent's library" (CR 603.6a), and "once each turn, you may cast a spell with mana value less than or equal to the number
+# of Elves and Faeries you control from among cards exiled with Maralen this turn without paying its mana cost" (CR 118.9).
+# Maralen is an Elf and a Faerie, and counts once: one such permanent, so mana value 1 or less. Bot1 casts Maralen on turn 1
+# with a Black Lotus (three Green, {2} and {G}) and the three Moxes; her trigger exiles Bot2's Lightning Bolt and Counterspell
+# (not the card below them). Counterspell has mana value 2, more than one: it can't be cast, and nothing else is spent; the
+# Bolt is cast for no mana at Bot2, and the Moxes' mana is used up. The permission is Bot1's, the cards Bot2's: the Bolt
+# goes to Bot2's graveyard. Counterspell stays in exile.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Llanowar Elves
+Maralen, Fae Ascendant
+Island
+Island x20
+
+[Bot2 Deck]
+Island x7
+Lightning Bolt
+Counterspell
+Mountain
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Maralen, Fae Ascendant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Exile = Lightning Bolt; Counterspell
+? Bot2.Library.Count = 16
+! Bot1.Exile.Counterspell.Cast
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot1.Mana =
+! Bot1.Exile.Counterspell.Cast
+
+[Expect]
+Bot2.Life = 17
+Bot2.Graveyard = Lightning Bolt
+Exile = Counterspell
+Bot2.Library.Count = 16
+Bot1.Life = 20
