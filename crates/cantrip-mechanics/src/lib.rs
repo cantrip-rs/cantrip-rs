@@ -676,6 +676,13 @@ pub fn airbend(g: &mut dyn Game, item: &StackItem) {
     airbend_all(g, &targets);
 }
 
+/// The resolution of "airbend [target(s)]" as an ability's or spell's effect (`airbend`): Aang, Swift Savior, Airbender Ascension,
+/// Appa, Steadfast Guardian and Glider Staff airbend their targets so.
+pub fn airbend_targets(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    airbend(g, item);
+    Ok(())
+}
+
 /// Airbend (CR 701.65a) these objects, targeted or not: they are exiled together, and each card exiled this way may be cast
 /// by its owner for {2} rather than its mana cost for as long as it stays exiled. A token or a copy is exiled and gone: only
 /// a card can be cast again. Avatar's Wrath ("airbend all other creatures") and Monk Gyatso ("you may airbend that

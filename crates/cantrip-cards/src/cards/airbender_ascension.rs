@@ -1,13 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::{CREATURE_YOU_CONTROL_ENTERS, THIS_ENTERS, YOUR_END_STEP};
-use cantrip_mechanics::{airbend, exile_and_return, targets};
+use cantrip_mechanics::{airbend_targets, exile_and_return, targets};
 use cantrip_oracle as oracle;
-
-/// "When this enchantment enters, airbend up to one target creature" (CR 701.65a): any creature, anyone's.
-fn airbend_a_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    airbend(g, item);
-    Ok(())
-}
 
 /// "Whenever a creature you control enters, put a quest counter on this enchantment." The counter goes on the object
 /// that triggered; if it has left the battlefield by now the core puts nothing on it.
@@ -32,7 +26,7 @@ fn flicker(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(THIS_ENTERS, airbend_a_creature, "When this enchantment enters, airbend up to one target creature.")
+        triggered(THIS_ENTERS, airbend_targets, "When this enchantment enters, airbend up to one target creature.")
             .targets(&[targets::CREATURE.between(0, 1)]),
         triggered(CREATURE_YOU_CONTROL_ENTERS, quest_counter, "Whenever a creature you control enters, put a quest counter on this enchantment."),
         triggered(

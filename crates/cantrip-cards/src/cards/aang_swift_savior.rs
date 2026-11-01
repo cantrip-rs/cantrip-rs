@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{airbend, triggers::THIS_ENTERS, targets};
+use cantrip_mechanics::{airbend_targets, triggers::THIS_ENTERS, targets};
 use cantrip_oracle as oracle;
 
 /// "Up to one other target creature or spell": a creature on the battlefield, or a spell on the stack, other than Aang.
@@ -11,11 +11,6 @@ fn other_creature_or_spell(q: &dyn Query, asker: &Asker, t: Target) -> bool {
         }
         _ => false,
     }
-}
-
-fn airbend_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    airbend(g, item);
-    Ok(())
 }
 
 /// "Put a +1/+1 counter on each tapped creature you control."
@@ -38,7 +33,7 @@ pub static BACK: CardDef = CardDef {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(THIS_ENTERS, airbend_it, "When Aang enters, airbend up to one other target creature or spell.")
+        triggered(THIS_ENTERS, airbend_targets, "When Aang enters, airbend up to one other target creature or spell.")
             .targets(&[up_to_one(other_creature_or_spell)]),
         ability(cost("{8}"), cantrip_mechanics::effects::transform_self, "Waterbend {8}: Transform Aang. (While paying a waterbend cost, you can tap your artifacts and creatures to help. Each one pays for {1}.)")
             .waterbend(),
