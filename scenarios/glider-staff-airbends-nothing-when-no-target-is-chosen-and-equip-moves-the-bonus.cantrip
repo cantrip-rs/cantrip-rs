@@ -1,0 +1,68 @@
+# Glider Staff's airbend is "up to one target creature" (CR 115.1d): Bot1 chooses no target (the Bot1 Target() line), so
+# nothing is exiled and both Memnites and Bot2's Ornithopter stay. Equip {2} onto the first Memnite and then, on turn 5, onto the
+# second: the bonus (+1/+1 and flying) leaves the first Memnite and the second has it (CR 301.5c).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Memnite
+Memnite
+Glider Staff
+Plains
+Plains
+Plains
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Plains x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Glider Staff.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+? Exile = 
+? Bot2.Battlefield = Ornithopter
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Glider Staff.Activate(Bot1.Battlefield.Memnite#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite#1.Keywords = Flying
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Glider Staff.Activate(Bot1.Battlefield.Memnite#2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Glider Staff.AttachedTo = Memnite
+Bot1.Battlefield.Memnite#1.Power = 1
+Bot1.Battlefield.Memnite#1.Keywords = (absent)
+Bot1.Battlefield.Memnite#2.Power = 2
+Bot1.Battlefield.Memnite#2.Keywords = Flying
