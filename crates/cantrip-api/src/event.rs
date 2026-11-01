@@ -48,8 +48,11 @@ pub struct DamageResult {
 /// one it became (CR 400.7).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum Event {
-    /// A spell became cast (CR 601.2i), with how many spells its caster has cast this turn, this one included.
-    SpellCast { spell: ObjectId, player: PlayerId, nth: u32 },
+    /// A spell became cast (CR 601.2i), with how many spells its caster has cast this turn, this one included. `options` has a
+    /// bit for each optional cost its abilities offer as it becomes cast (`TriggeredDef::cast_option`), in the order it has them,
+    /// set where that cost was paid: the "when you cast this spell, if its cost was paid" of each instance reads its own (CR
+    /// 702.153b). An object has at most `MAX_ABILITIES` (32) abilities, so each has its bit.
+    SpellCast { spell: ObjectId, player: PlayerId, nth: u32, options: u32 },
     /// An object or player became the target of a spell or ability (CR 115.10). `by` is the spell, or the source of the ability;
     /// `ability` says which it was, since an ability's source can itself be a spell on the stack ("when you cast this spell").
     BecameTarget { target: Target, by: ObjectId, controller: PlayerId, ability: bool },

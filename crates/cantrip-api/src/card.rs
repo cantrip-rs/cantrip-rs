@@ -1011,6 +1011,12 @@ pub struct PermanentCost {
 }
 
 impl Cost {
+    /// Whether the cost is mana and permanents to tap or remove and nothing else (CR 118.3): the parts a spell's optional cost
+    /// an ability gave it (`TriggeredDef::cast_option`) pays. Judged by `is_tap_only`, which names every part of a cost.
+    pub fn is_mana_and_permanents_only(&self) -> bool {
+        Cost { mana: ManaCost::ZERO, tap: true, permanents: None, tap_permanents: false, ..*self }.is_tap_only()
+    }
+
     /// Whether the cost is {T} and nothing else (CR 107.5): what a basic land's mana ability costs. Every part is named, so
     /// a part added to `Cost` must be judged here too.
     pub fn is_tap_only(&self) -> bool {
@@ -1557,6 +1563,7 @@ impl TriggeredDef {
         flanking: false,
         on_sacrifice: false,
         attack_option: None,
+        cast_option: None,
     };
 }
 
@@ -1691,6 +1698,15 @@ pub struct TriggeredDef {
     /// triggers on that instance's `Event::PaidToAttack` - the core owns the trigger, `listens` and `matches` are not used.
     /// Its subject is the creature the cost tapped (enlist's), or none.
     pub attack_option: Option<AttackOption>,
+    /// The optional additional cost to cast a spell (CR 601.2b) this ability is linked to (CR 607.2h): casualty's (CR 702.153a)
+    /// or conspire's (CR 702.78a), on a spell whose abilities include it - its own card's `delayed` ability given to it by
+    /// another object ("Each instant and sorcery spell you cast has casualty 1") - beside the printed one
+    /// (`CardDef::optional_cost`). The static ability that offers the cost and this "when you cast this spell, if its cost was
+    /// paid" ability are kept as one, so each instance of the pair offers its own cost and triggers only on its own payment
+    /// (CR 702.153b, 702.78c): the cost is announced as the spell is cast, after the printed one, and paid with its other
+    /// costs; the ability triggers on the `SpellCast` whose `options` has the bit of its place among the spell's abilities
+    /// that have such a cost. The core owns the trigger: `listens` and `matches` are not used.
+    pub cast_option: Option<OptionalCost>,
 }
 
 #[derive(Clone, Copy)]

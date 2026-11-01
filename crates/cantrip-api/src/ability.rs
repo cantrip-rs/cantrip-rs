@@ -379,6 +379,15 @@ pub const fn paid_as_it_attacks(option: AttackOption, effect: Effect, text: &'st
     AbilityDef::Triggered(TriggeredDef { text, listens: EventMask::PAID_TO_ATTACK, attack_option: Some(option), effect, ..TriggeredDef::BLANK })
 }
 
+/// An optional additional cost to cast a spell and the triggered ability linked to it (CR 601.2b, 607.2h): "As an additional
+/// cost to cast this spell, you may [pay `option`]. When you cast this spell, if its cost was paid, [`effect`]." - casualty
+/// (CR 702.153a) and conspire (CR 702.78a) as a spell has them from another object, beside any printed one. The core offers the
+/// cost as the spell is cast, after the printed optional cost, and owns the trigger (`TriggeredDef::cast_option`), which
+/// functions on the stack (CR 113.6k); `cantrip_mechanics::casualty::granted` and `cantrip_mechanics::conspire` build it.
+pub const fn paid_as_it_is_cast(option: OptionalCost, effect: Effect, text: &'static str) -> AbilityDef {
+    AbilityDef::Triggered(TriggeredDef { text, listens: EventMask::SPELL_CAST, functions: ON_THE_STACK, cast_option: Some(option), effect, ..TriggeredDef::BLANK })
+}
+
 /// A delayed triggered ability (CR 603.7), listed in a card's `delayed`: the effect that created it says when it
 /// triggers (`Game::delayed_trigger`), and `effect` is what it does then.
 pub const fn delayed_trigger(effect: Effect, text: &'static str) -> AbilityDef {

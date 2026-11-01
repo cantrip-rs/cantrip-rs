@@ -865,6 +865,8 @@ fn consider(
                 chapter_reached(cx, source, &chars, t.chapter, event)
             } else if t.attack_option.is_some() {
                 paid_to_attack(source, ability, chars.instance(nth), event)
+            } else if t.cast_option.is_some() {
+                paid_to_cast(cx, source, &chars, nth, event)
             } else if t.listens.intersects(mask) {
                 t.fires(cx, &Asker { source, controller, by: by(), spell: false }, event)
             } else {
@@ -1039,6 +1041,19 @@ fn paid_to_attack(source: ObjectId, ability: AbilityRef, instance: u8, event: &E
     match *event {
         Event::PaidToAttack { attacker, ability: paid, instance: nth, tapped, .. } if attacker == source && paid == ability && nth == instance => {
             Fired::about(if tapped == ObjectId::NONE { Target::None } else { Target::Object(tapped) })
+        }
+        _ => None,
+    }
+}
+
+/// The "when you cast this spell, if its cost was paid" ability linked to an optional cost to cast (CR 607.2h, 601.2b;
+/// `TriggeredDef::cast_option`) triggers when that cost was paid: the payment of this instance of it, the `nth` of the spell's
+/// abilities, and no other (CR 702.153b). Its bit of the `SpellCast`'s `options` is its place among the abilities that have one.
+fn paid_to_cast(cx: &Cx, source: ObjectId, chars: &Chars, nth: usize, event: &Event) -> Option<Fired> {
+    match *event {
+        Event::SpellCast { spell, options, .. } if spell == source => {
+            let place = chars.abilities().take(nth).filter(|&a| matches!(cx.cards().ability(a), AbilityDef::Triggered(t) if t.cast_option.is_some())).count();
+            if options.checked_shr(place as u32).is_some_and(|o| o & 1 == 1) { Fired::PLAIN } else { None }
         }
         _ => None,
     }
@@ -1471,7 +1486,11 @@ pub fn collect_batch(cx: &mut Cx, events: &[Event], before: Option<Before>, star
                     if let AbilityDef::Triggered(t) = cx.cards().ability(ability)
                         && t.functions.contains(zone)
                         && t.listens.intersects(mask)
-                        && let Some(fired) = t.fires(cx, &Asker { source: id, controller: cx.s().obj(id).controller, by: by(), spell: false }, event)
+                        && let Some(fired) = if t.cast_option.is_some() {
+                            paid_to_cast(cx, id, &chars, nth, event)
+                        } else {
+                            t.fires(cx, &Asker { source: id, controller: cx.s().obj(id).controller, by: by(), spell: false }, event)
+                        }
                     {
                         // A spell is controlled by whoever cast it; a card in another zone answers to its owner.
                         let controller = if cx.s().obj(id).zone.is(ZoneKind::Stack) {

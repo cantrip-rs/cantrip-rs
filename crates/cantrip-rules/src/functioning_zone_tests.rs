@@ -87,7 +87,7 @@ fn a_cast_trigger_functions_from_the_stack_and_a_battlefield_ability_does_not() 
     let (mut game, table) = game();
     let spell = put(&mut game, table, &CASTER, Zone::STACK);
     let mut cx = cx(&mut game);
-    cx.emit(Event::SpellCast { spell, player: PlayerId(0), nth: 1 });
+    cx.emit(Event::SpellCast { spell, player: PlayerId(0), nth: 1, options: 0 });
     assert_eq!(triggered_of(&cx, spell), vec![0]);
 }
 
@@ -106,7 +106,7 @@ fn a_battlefield_ability_does_not_trigger_from_another_zone() {
     ];
     let spell = put(&mut game, table, &RETURNER, Zone::STACK);
     let mut cx = cx(&mut game);
-    cx.emit(Event::SpellCast { spell, player: PlayerId(1), nth: 1 });
+    cx.emit(Event::SpellCast { spell, player: PlayerId(1), nth: 1, options: 0 });
     assert_eq!(triggered_of(&cx, on_battlefield), vec![1]);
     for id in elsewhere {
         assert!(triggered_of(&cx, id).is_empty(), "{:?} triggered from {:?}", id, cx.s().obj(id).zone.kind());
@@ -123,7 +123,7 @@ fn a_graveyard_ability_does_not_trigger_from_the_battlefield() {
     let in_hand = put(&mut game, table, &RETURNER, Zone::hand(PlayerId(0)));
     let spell = put(&mut game, table, &CASTER, Zone::STACK);
     let mut cx = cx(&mut game);
-    cx.emit(Event::SpellCast { spell, player: PlayerId(1), nth: 1 });
+    cx.emit(Event::SpellCast { spell, player: PlayerId(1), nth: 1, options: 0 });
     assert_eq!(triggered_of(&cx, in_graveyard), vec![0]);
     assert!(triggered_of(&cx, on_battlefield).is_empty());
     assert!(triggered_of(&cx, in_hand).is_empty());

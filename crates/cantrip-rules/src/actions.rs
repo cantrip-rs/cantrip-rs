@@ -1228,9 +1228,16 @@ fn permanents_after_mana(cost: &Cost) -> bool {
 /// among (tapped ones, judged once the mana is paid) is a cost that can't be paid: the announcement is taken back. `paid` is
 /// what the cost is paid for (`permanent_allowed`).
 fn choose_permanents(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, paid: Option<CostFor>, by: Option<Linked>) -> R<Vec<ObjectId>> {
+    choose_permanents_apart(cx, player, source, cost, paid, by, &[])
+}
+
+/// `choose_permanents`, none of `taken` among those it may choose: the permanents another cost of the same payment chose are not
+/// offered again (CR 118.3; CR 702.153b: each casualty is paid with a creature of its own).
+fn choose_permanents_apart(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &Cost, paid: Option<CostFor>, by: Option<Linked>, taken: &[ObjectId]) -> R<Vec<ObjectId>> {
     let Some(p) = cost.permanents else { return Ok(Vec::new()) };
     let asker = Asker { source, controller: player, by, spell: false };
-    let eligible: Vec<ObjectId> = cx.permanents_of(player).into_iter().filter(|&id| pays_permanents(cx, cost, &p, &asker, id, paid)).collect();
+    let eligible: Vec<ObjectId> =
+        cx.permanents_of(player).into_iter().filter(|&id| !taken.contains(&id) && pays_permanents(cx, cost, &p, &asker, id, paid)).collect();
     if eligible.len() < p.count as usize {
         return Err(Stop::Cancel);
     }
@@ -7377,6 +7384,19 @@ fn cast(
         }
     }
 
+    // CR 601.2b, 702.153b: the optional costs the spell's abilities offer (casualty an object gave it), each announced after the
+    // printed one and paid on its own: each paid is kept with what gave the spell its ability, so the bit the cast sets is
+    // that instance's however the spell's abilities change while its costs are paid (`TriggeredDef::cast_option`).
+    let mut paid_options: Vec<(AbilityRef, ObjectId)> = Vec::new();
+    let mut option_costs: Vec<Cost> = Vec::new();
+    for (ability, giver, optional) in cast_options(cx, spell) {
+        if announce_cast_option(cx, player, spell, ability.card, &optional)? {
+            paid_options.push((ability, giver));
+            option_costs.push(optional.cost);
+            cost.mana = add_cost(cost.mana, optional.cost.mana);
+        }
+    }
+
     // CR 702.180b, 601.2b: the creature harmonize taps is chosen as the harmonize cost is, before any target. What is announced
     // after it could still change the generic mana its power comes off (CR 601.2b-f): X, a kicker, the modes a payment
     // decides, splicing onto Arcane, a cost its targets define, and the targets themselves where a cost change could read them.
@@ -7765,6 +7785,21 @@ fn cast(
     }
     let extra_discards = choose_discards(cx, player, spell, &extra, None)?;
     let extra_tappers = choose_tappers(cx, player, spell, &extra)?;
+    // The permanents each optional cost of an ability names (CR 601.2b, 702.153b). Tapping and removing are paid in turn (CR 601.2h:
+    // in any order, taps first), so a permanent tapped for one cost can also be sacrificed to another; none is tapped for two,
+    // or sacrificed (exiled, returned) for two.
+    let mut tapped: Vec<ObjectId> = extra_tappers.clone();
+    let mut gone: Vec<ObjectId> = [&way_sacrifices, &extra_sacrifices].into_iter().flatten().copied().collect();
+    for (c, these) in [(&cost, &chosen), (&extra, &extra_chosen)] {
+        if c.tap_permanents { tapped.extend(these) } else { gone.extend(these) }
+    }
+    let mut option_chosen: Vec<Vec<ObjectId>> = Vec::new();
+    for c in &option_costs {
+        let apart = if c.tap_permanents { &mut tapped } else { &mut gone };
+        let these = choose_permanents_apart(cx, player, spell, c, Some(CostFor::Spell), None, apart)?;
+        apart.extend(&these);
+        option_chosen.push(these);
+    }
     let extra_evidence = choose_exiles(cx, player, spell, &extra)?;
     let hand_exiled = match extra.exile_from_hand_for_less {
         Some(for_less) => confirm_hand_exiles(cx, player, spell, for_less, &hand_chosen, &hand_could)?,
@@ -7796,6 +7831,10 @@ fn cast(
     if !rest_payable(cx, player, cost.energy as u32 + extra.energy as u32, life_owed, Some(CostFor::Spell)) {
         return Err(Stop::Cancel);
     }
+    // The permanents tapped for an optional cost an ability gave the spell are tapped first: one may be sacrificed to another cost.
+    for (c, these) in option_costs.iter().zip(&option_chosen).filter(|(c, _)| c.tap_permanents) {
+        pay_permanents(cx, player, c, these, None, &mut Vec::new());
+    }
     // Counters put on and taken off permanents are paid first (CR 601.2h: in any order), so a permanent the cost also
     // sacrifices leaves with them as the payment left it.
     pay_blight(cx, player, &cost, blighted, u32::from(item.x));
@@ -7823,6 +7862,9 @@ fn cast(
     pay_discards(cx, &extra_variable_discards);
     pay_life_and_counters(cx, player, spell, &extra);
     pay_exert_and_tappers(cx, spell, &extra, &extra_tappers, &mut Vec::new());
+    for (c, these) in option_costs.iter().zip(&option_chosen).filter(|(c, _)| !c.tap_permanents) {
+        pay_permanents(cx, player, c, these, None, &mut Vec::new());
+    }
     // CR 702.194a: the creatures tapped for the teamwork cost became tapped to pay it, which abilities of theirs trigger on.
     if item.paid > 0 && def.optional_cost.is_some_and(|o| o.cost.tap_creatures.is_some()) {
         for &creature in &extra_tappers {
@@ -7895,7 +7937,8 @@ fn cast(
         }
     }
     let nth = count_u32(cx.history().casts_by(player).count());
-    cx.emit(Event::SpellCast { spell, player, nth });
+    let options = paid_options_now(cx, spell, paid_options);
+    cx.emit(Event::SpellCast { spell, player, nth, options });
     ops::became_targets(cx, targets.iter().copied(), spell, player, false);
     ops::commit_crime(cx, player, spell, targets);
     Ok(())
@@ -8925,6 +8968,44 @@ fn kicker_total(base: ManaCost, k: Kicker, n: u16) -> ManaCost {
     total
 }
 
+/// The optional costs to cast `spell` that its abilities offer (`TriggeredDef::cast_option`), in the order it has them, each
+/// with the object that gave it the ability (`layers::ability_givers`; `ObjectId::NONE` for one of its own): two Silverquills
+/// give it two instances of casualty, each paid or not on its own (CR 702.153b). The givers are worked out only for a spell
+/// that has one.
+fn cast_options(cx: &Cx, spell: ObjectId) -> Vec<(AbilityRef, ObjectId, OptionalCost)> {
+    let chars = cx.chars(spell);
+    let offered: Vec<(usize, AbilityRef, OptionalCost)> = (chars.abilities.iter().enumerate())
+        .filter_map(|(slot, &a)| a.map(|a| (slot, a)))
+        .filter_map(|(slot, a)| match cx.cards().ability(a) {
+            AbilityDef::Triggered(t) => t.cast_option.map(|o| (slot, a, o)),
+            _ => None,
+        })
+        .collect();
+    if offered.is_empty() {
+        return Vec::new();
+    }
+    let givers = layers::ability_givers(cx.cards(), cx.s(), &cx.g.log, spell);
+    offered.into_iter().map(|(slot, a, o)| (a, givers[slot].object, o)).collect()
+}
+
+/// The `options` of the cast of `spell` (`Event::SpellCast`): a bit for each optional cost its abilities offer as it becomes
+/// cast (CR 601.2i), set where that instance's cost was paid (`paid`, each with its giver, `cast_options`). An instance the
+/// spell lost while its costs were paid (Silverquill sacrificed to the casualty it gave) has no bit, and one it gained was
+/// not paid, so the instances after it still read their own payments.
+fn paid_options_now(cx: &Cx, spell: ObjectId, mut paid: Vec<(AbilityRef, ObjectId)>) -> u32 {
+    if paid.is_empty() {
+        return 0;
+    }
+    let mut options = 0;
+    for (place, (ability, giver, _)) in cast_options(cx, spell).into_iter().enumerate() {
+        if let Some(at) = paid.iter().position(|&p| p == (ability, giver)) {
+            paid.swap_remove(at);
+            options |= 1 << place;
+        }
+    }
+    options
+}
+
 /// Announces whether an optional cost that is not mana is paid (CR 601.2b), as the C# engine asks it: a choice between
 /// casting without it and paying it, the second on offer only when it could be paid. Whether it was chosen.
 fn announce_optional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardId, def: &'static CardDef, optional: &OptionalCost) -> R<bool> {
@@ -8935,9 +9016,22 @@ fn announce_optional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardI
         modal.when_paid.is_none_or(|(least, _)| eligible_modes(cx, &asker, modal).len() >= least.max(1) as usize)
     });
     let payable = modes_allow && can_pay_other(cx, spell, player, &optional.cost);
+    ask_optional(cx, player, spell, face, def.labels.len(), payable)
+}
+
+/// Announces whether the optional cost an ability the spell has offers is paid (CR 601.2b, 702.153b: casualty another object
+/// gave it), asked as the printed one is and worded by the labels of the card whose ability it is (`card`).
+fn announce_cast_option(cx: &mut Cx, player: PlayerId, spell: ObjectId, card: CardId, optional: &OptionalCost) -> R<bool> {
+    let payable = can_pay_other(cx, spell, player, &optional.cost);
+    ask_optional(cx, player, spell, card, cx.card(card).labels.len(), payable)
+}
+
+/// The question of an optional cost: cast without it, or paying it, the second on offer only when it is `payable`. Whether it was
+/// chosen.
+fn ask_optional(cx: &mut Cx, player: PlayerId, spell: ObjectId, face: CardId, labels: usize, payable: bool) -> R<bool> {
     let ask = RequestKind::ChooseModes {
         source: spell,
-        modes: (0..def.labels.len().min(2) as u8).map(|i| Label::Card(face, i)).collect(),
+        modes: (0..labels.min(2) as u8).map(|i| Label::Card(face, i)).collect(),
         eligible: if payable { vec![0, 1] } else { vec![0] },
         count: 1,
         at_most: 0,
