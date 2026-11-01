@@ -1656,6 +1656,12 @@ of Defiance's "you may cast that card") announces the cost as it is cast (CR 601
 `Label::ManaCost`, each of the card's own ways open from where it is (`Label::Way`: evoke from exile; flashback from its
 owner's graveyard only, CR 702.34a) and each `Label::AlternativeCost` that applies. The battlefield is searched for these once
 per offer, and only once something could be cast.
+One a resolved spell or ability gave the next spell ("the next red or green creature spell you cast this turn can be cast
+without paying its mana cost", World War Hulk's chapter I) is a player effect, `EffectKind::SpellAlternative` naming one of
+its card's `lasting_spell_alternatives` (`Game::next_spell_alternative_this_turn`, CR 611.2a/c): offered as a static one is,
+whatever has become of its source, and used up by the first spell it applies to however that spell is paid for
+(`apply_next_spell_effects`). It keeps the words of its source's text as it resolved (CR 612.1, 608.2h), which its `applies`
+reads through in place of the source's own: a text-changing effect on the Saga afterwards changes the Saga, not the effect.
 The caster is the resolving effect's controller unless the effect names another player (`CastTerms::caster`, CR 608.2g:
 Spell Queller's "the exiled card's owner may cast that card", Knowledge Pool's "that player", Allure of the Unknown's "that
 opponent"). Whether that player could cast it is asked for them (`could_cast_during_resolution_by`,

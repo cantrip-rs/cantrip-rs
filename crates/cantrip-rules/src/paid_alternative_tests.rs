@@ -80,13 +80,34 @@ static EXILER: CardDef = CardDef {
     ..CardDef::BLANK
 };
 
+/// "The next instant spell you cast this turn can be cast without paying its mana cost": a resolved ability's alternative cost
+/// for the player's next spell (`EffectKind::SpellAlternative`), its source long gone from the battlefield. Asked of the
+/// spell on the stack as well, to use it up, so it reads no zone.
+fn instant_spells_you_cast(q: &dyn Query, asker: &Asker, spell: ObjectId, player: PlayerId) -> bool {
+    player == asker.controller && q.chars(spell).is(CardType::Instant)
+}
+/// A sorcery for {U} that does nothing.
+static SORCERY: CardDef =
+    CardDef { name: "Paid Test Sorcery", cost: mana("{U}"), has_cost: true, types: TypeSet::of(&[CardType::Sorcery]), spell: spell(&[], nothing), ..CardDef::BLANK };
+static GIFT: CardDef = CardDef {
+    name: "Paid Test Gift",
+    types: TypeSet::of(&[CardType::Sorcery]),
+    lasting_spell_alternatives: &[SpellAlternative {
+        text: "The next instant spell you cast this turn can be cast without paying its mana cost.",
+        applies: instant_spells_you_cast,
+        cost: InsteadOfManaCost::WithoutPaying,
+        flash: false,
+    }],
+    ..CardDef::BLANK
+};
+
 fn cx(game: &mut Game) -> Cx<'_> {
     Cx { g: game, frame: usize::MAX, cursor: 0, mana_source: None, entering: None, lineage: Vec::new(), asked_at: None, doer: None, producing: None }
 }
 
 /// Your main phase with priority, an empty stack and no mana.
 fn game() -> Game {
-    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &INSTANT, &LEFT, &RIGHT, &FUSED, &TEMPEST, &SCROLL, &EXILER])));
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&FILLER, &INSTANT, &LEFT, &RIGHT, &FUSED, &TEMPEST, &SCROLL, &EXILER, &GIFT, &SORCERY])));
     let deck = || vec![table.id_of(&FILLER); 20];
     let mut g = Game::new(table, &Setup { decks: vec![deck(), deck()], ..Default::default() });
     while !g.state.agenda.is_empty() {
@@ -229,4 +250,76 @@ fn a_cast_permitted_by_one_object_and_paid_for_by_another_records_both() {
     let (paid, by) = recorded(&mut g, spell);
     assert_eq!(paid.map(|g| g.object), Some(scroll));
     assert_eq!(by.map(|g| g.object), Some(exiler));
+}
+
+/// The effect `player` has from `gift`, a resolved ability's: "the next spell you cast ... without paying its mana cost".
+fn give(g: &mut Game, gift: ObjectId, player: PlayerId) {
+    let kind = EffectKind::SpellAlternative { card: g.cards.id_of(&GIFT), index: 0, player, words: Words::NONE };
+    cantrip_api::Game::add_player_effect(&mut cx(g), player, gift, kind, Duration::EndOfTurn);
+}
+
+fn lasting_effects(g: &Game) -> usize {
+    g.state.effects.iter().filter(|e| matches!(e.kind, EffectKind::SpellAlternative { .. })).count()
+}
+
+/// CR 611.2c, 118.9, 601.2b: an alternative cost a resolved ability gave the next spell is offered for the spells it applies to
+/// whether or not its source is still anywhere, is recorded with the cast, and is used up by that cast: the next spell is
+/// offered nothing (it costs {U}, and there is no mana).
+#[test]
+fn a_lasting_alternative_is_offered_recorded_and_used_up_by_the_next_spell() {
+    let mut g = game();
+    let gift = put(&mut g, &GIFT, Zone::graveyard(YOU));
+    give(&mut g, gift, YOU);
+    let first = put(&mut g, &INSTANT, Zone::hand(YOU));
+    let second = put(&mut g, &INSTANT, Zone::hand(YOU));
+    assert_eq!(casts(&mut g, first), [(0, None, Some(gift))]);
+    let spell = cast(&mut g, first, 0, gift);
+    let (paid, by) = recorded(&mut g, spell);
+    assert_eq!(paid.map(|g| g.object), Some(gift));
+    assert_eq!(by, None);
+    assert_eq!(lasting_effects(&g), 0);
+    assert!(casts(&mut g, second).is_empty());
+}
+
+/// "The next instant spell" is used up by the first it applies to even when that one is paid for with mana (CR 611.2a), and a
+/// spell it does not apply to leaves it: a sorcery paid for does not use it up.
+#[test]
+fn a_lasting_alternative_is_used_up_by_a_spell_paid_for_and_not_by_one_it_is_not_for() {
+    let mut g = game();
+    let gift = put(&mut g, &GIFT, Zone::graveyard(YOU));
+    give(&mut g, gift, YOU);
+    let sorcery = put(&mut g, &SORCERY, Zone::hand(YOU));
+    let first = put(&mut g, &INSTANT, Zone::hand(YOU));
+    let second = put(&mut g, &INSTANT, Zone::hand(YOU));
+    let source = g.state.zone(Zone::library(YOU))[0];
+    g.state.add_mana(YOU, Mana::U, 3, source, None, ManaLasts::Step);
+    let pay = |g: &mut Game, card: ObjectId| {
+        let r = next(g);
+        let RequestKind::Priority { options } = &r.kind else { panic!("expected priority") };
+        let option = options.iter().find(|o| o.kind == ActionKind::CastSpell && o.source == Some(card) && o.paid_by.is_none()).expect("offered").clone();
+        g.answer(r.id, r.player, Answer::Act(Action::of(&option))).expect("a legal answer");
+        loop {
+            let r = next(g);
+            let RequestKind::PayCosts { options, .. } = &r.kind else { break };
+            let pay = options.iter().find(|o| matches!(o.kind, ActionKind::ConfirmCasting | ActionKind::AssignMana)).expect("the pool pays").clone();
+            g.answer(r.id, r.player, Answer::Act(Action::of(&pay))).expect("a legal answer");
+        }
+    };
+    pay(&mut g, sorcery);
+    assert_eq!(lasting_effects(&g), 1, "a spell it is not for leaves it");
+    assert_eq!(casts(&mut g, first), [(0, None, None), (0, None, Some(gift))], "an instant is offered it, beside its mana cost");
+    pay(&mut g, first);
+    assert_eq!(lasting_effects(&g), 0, "a spell it is for uses it up, paid for or not");
+    assert_eq!(casts(&mut g, second), [(0, None, None)], "nothing but its mana cost is left");
+}
+
+/// It is the player's: another player's spell is offered nothing for it and does not use it up (CR 109.5).
+#[test]
+fn a_lasting_alternative_is_for_its_players_spells_only() {
+    let mut g = game();
+    let gift = put(&mut g, &GIFT, Zone::graveyard(YOU));
+    give(&mut g, gift, PlayerId(1));
+    let card = put(&mut g, &INSTANT, Zone::hand(YOU));
+    assert!(casts(&mut g, card).is_empty());
+    assert_eq!(lasting_effects(&g), 1);
 }

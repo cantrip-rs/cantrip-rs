@@ -654,6 +654,22 @@ impl<'a> Projector<'a> {
                 });
             }
         }
+        // "The next red or green creature spell you cast this turn can be cast without paying its mana cost" (CR 611.2c, 118.9): an
+        // alternative cost a resolved spell or ability gave the player's next spell, said as the cost changes are.
+        for e in s.effects.iter() {
+            if let EffectKind::SpellAlternative { card, index, player, words } = e.kind
+                && player == p
+            {
+                let def = game.cards.get(card);
+                // Read through the words the effect was made with ("red or green" as the Saga had it then, CR 612.1).
+                let text = crate::text::changed_text(def.lasting_spell_alternatives[index as usize].text, def.name, words);
+                summary.pending_effects.push(if p == self.viewer {
+                    format!("{}: {text}", def.name)
+                } else {
+                    format!("{}'s effect on their spells: {text}", def.name)
+                });
+            }
+        }
         // "Whenever [event] this turn" / "when you next [event] this turn" / "until your next turn, whenever [event]" (CR 603.7b):
         // a delayed triggered ability that waits for its event, on no object, so the page says it beside its controller's life
         // total, in the ability's own words

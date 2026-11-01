@@ -961,6 +961,16 @@ pub trait Game: Query {
         let kind = EffectKind::SpellCostChange { card: item.ability.card, index, player };
         self.add_player_effect(item.controller, item.object, kind, Duration::EndOfTurn);
     }
+    /// "The next [kind of] spell [player] casts this turn can be cast without paying its mana cost" (CR 611.2a/c, 118.9, 601.2b),
+    /// made by the resolving spell or ability `item`: the `index`th of the `lasting_spell_alternatives` of its card (the face
+    /// that is up, for a permanent's ability) gives the first spell of `player`'s it applies to that alternative cost, until the
+    /// turn ends (CR 514.2) or that spell is cast, whether or not the source stays on the battlefield. The effect is controlled
+    /// by `item`'s controller (CR 109.5). Which spells it is for is read through the words of `item`'s text as it resolves
+    /// (CR 612.1, 608.2h), which the effect keeps. World War Hulk's chapter I.
+    fn next_spell_alternative_this_turn(&mut self, item: &StackItem, player: PlayerId, index: u8) {
+        let kind = EffectKind::SpellAlternative { card: item.ability.card, index, player, words: self.words(item.object) };
+        self.add_player_effect(item.controller, item.object, kind, Duration::EndOfTurn);
+    }
     /// "You may play [`count`] additional land[s] this turn" (CR 305.2, 611.2c), made by the resolving spell or ability
     /// `item`: a permission for its controller (CR 109.5), asked nothing as it resolves, that adds `count` to the lands they
     /// can play until the turn ends (CR 514.2), whatever happens to the source, and adds to every other effect and static

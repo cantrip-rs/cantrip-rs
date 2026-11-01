@@ -3095,6 +3095,10 @@ pub struct CardDef {
     /// Alternative costs it gives the spells a player casts, from wherever they are cast, while it is on the battlefield
     /// with its abilities (CR 118.9, 601.2b): Dracogenesis's "you may cast Dragon spells without paying their mana costs".
     pub spell_alternatives: &'static [SpellAlternative],
+    /// The alternative costs its resolving spells and abilities give the next spell a player casts for a duration (CR 611.2c,
+    /// 118.9): `EffectKind::SpellAlternative` names the nth. Not standing abilities: they function only while such an effect
+    /// lasts, and `applies` says which spells each is for, as for `spell_alternatives`.
+    pub lasting_spell_alternatives: &'static [SpellAlternative],
     /// Its static abilities that let a player cast cards in exile (CR 601.3, 604.1), while it is on the battlefield with its
     /// abilities: "you may cast spells from among cards exiled with this".
     pub exile_casts: &'static [ExileCast],
@@ -3413,6 +3417,7 @@ impl CardDef {
         ability_alternatives: &[],
         granted_ways: &[],
         spell_alternatives: &[],
+        lasting_spell_alternatives: &[],
         exile_casts: &[],
         granted_miracles: &[],
         opening_hand: None,

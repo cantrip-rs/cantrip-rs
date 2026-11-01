@@ -1462,6 +1462,9 @@ impl AbilityRef {
     pub const PLAY_RULE: u8 = 88;
     /// The kth of a card's `ability_alternatives`: a cost it lets a player pay rather than an activated ability's (CR 118.9).
     pub const ABILITY_ALTERNATIVE: u8 = 104;
+    /// The kth of a card's `lasting_spell_alternatives`: an alternative cost a resolved spell or ability of it gave the spells a
+    /// player casts for a duration (`EffectKind::SpellAlternative`, CR 118.9).
+    pub const LASTING_SPELL_ALTERNATIVE: u8 = 112;
     const BAND: u8 = 8;
     const PLAY_RULES: u8 = 16;
     /// The history's marker of extra loyalty activations allowed this turn (`actions::EXTRA_LOYALTY_ALLOWED`).
@@ -1492,6 +1495,15 @@ impl AbilityRef {
     pub fn ability_alternative(card: CardId, k: usize) -> AbilityRef {
         debug_assert!(k < Self::BAND as usize);
         AbilityRef { card, index: Self::ABILITY_ALTERNATIVE + k as u8 }
+    }
+
+    pub fn lasting_spell_alternative(card: CardId, k: usize) -> AbilityRef {
+        debug_assert!(k < Self::BAND as usize);
+        AbilityRef { card, index: Self::LASTING_SPELL_ALTERNATIVE + k as u8 }
+    }
+
+    pub fn as_lasting_spell_alternative(self) -> Option<usize> {
+        self.band(Self::LASTING_SPELL_ALTERNATIVE, Self::BAND)
     }
 
     pub fn as_ability_alternative(self) -> Option<usize> {

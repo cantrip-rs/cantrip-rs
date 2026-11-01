@@ -278,6 +278,64 @@ impl Query for AsSpell<'_> {
     }
 }
 
+/// Any query, with `source`'s text read through `words`: those a resolved spell or ability's effect was made with (CR 612.1,
+/// 608.2h), which a text-changing effect on the source since has not changed (`EffectKind::SpellAlternative`'s).
+struct WithWords<'a> {
+    q: &'a dyn Query,
+    source: ObjectId,
+    words: Words,
+}
+
+impl Query for WithWords<'_> {
+    fn words(&self, id: ObjectId) -> Words {
+        if id == self.source { self.words } else { self.q.words(id) }
+    }
+
+    fn linked_card(&self, card: CardId) -> CardId {
+        self.q.linked_card(card)
+    }
+
+    fn text_linked(&self, source: ObjectId) -> Linked {
+        self.q.text_linked(source)
+    }
+
+    fn state(&self) -> &GameState {
+        self.q.state()
+    }
+
+    fn card(&self, id: CardId) -> &'static CardDef {
+        self.q.card(id)
+    }
+
+    fn chars(&self, id: ObjectId) -> Chars {
+        self.q.chars(id)
+    }
+
+    fn mana_value(&self, id: ObjectId) -> u32 {
+        self.q.mana_value(id)
+    }
+
+    fn token_chars(&self, card: CardId, copy: Option<Copiable>) -> Chars {
+        self.q.token_chars(card, copy)
+    }
+
+    fn card_id(&self, def: &'static CardDef) -> CardId {
+        self.q.card_id(def)
+    }
+
+    fn lost_all_abilities(&self, id: ObjectId) -> bool {
+        self.q.lost_all_abilities(id)
+    }
+
+    fn events(&self) -> &[Record] {
+        self.q.events()
+    }
+
+    fn can_target(&self, asker: &Asker, target: Target) -> bool {
+        self.q.can_target(asker, target)
+    }
+}
+
 /// The casts among `options`, and the suspends among them (CR 702.62a: "any time you could begin to cast this card"), that a
 /// static ability forbids for the qualities of the spell each would cast (CR 101.2, 601.3: Gaddock Teeg, Deafening Silence),
 /// judged on that spell on the stack under its caster, the face it is cast as alone (CR 601.2a, 601.3e, 709.3a, 715.3a,
@@ -5538,6 +5596,9 @@ struct Given<T: 'static> {
     /// How the ability is linked (CR 607.1), where it is one of a merged permanent's components other than the one it has
     /// now (CR 702.140e): that component's card's.
     by: Option<Linked>,
+    /// The words of the text that made it, for one a resolved spell or ability made (`EffectKind::SpellAlternative`, CR
+    /// 612.1, 608.2h): read in place of its source's own. None for a static ability, whose text is read as it is now.
+    words: Option<Words>,
 }
 
 impl<T> Given<T> {
@@ -5570,7 +5631,7 @@ fn given<T>(
                 continue;
             }
             for (k, what) in items.iter().enumerate() {
-                all.push(Given { source: id, controller: obj.controller, grant: Grant { object: id, ability: name(card, k) }, what, by });
+                all.push(Given { source: id, controller: obj.controller, grant: Grant { object: id, ability: name(card, k) }, what, by, words: None });
             }
         }
     }
@@ -5607,20 +5668,31 @@ fn own_exile_casts(cards: &CardTable, s: &GameState, log: &[Record], card: Objec
     items
         .iter()
         .enumerate()
-        .map(|(k, what)| Given { source: card, controller: obj.controller, grant: Grant { object: card, ability: AbilityRef::exile_cast(printed, k) }, what, by: None })
+        .map(|(k, what)| Given { source: card, controller: obj.controller, grant: Grant { object: card, ability: AbilityRef::exile_cast(printed, k) }, what, by: None, words: None })
         .collect()
 }
 
-/// The alternative costs the permanents on the battlefield give the spells players cast (CR 118.9, 601.2b).
+/// The alternative costs the permanents on the battlefield give the spells players cast (CR 118.9, 601.2b), and those a
+/// resolved spell or ability gave the next spell of a player for a duration (`EffectKind::SpellAlternative`, CR 611.2c): the
+/// latter belong to the player, whatever has become of their source.
 fn spell_alternatives_of(cards: &CardTable, s: &GameState, log: &[Record]) -> Vec<Given<SpellAlternative>> {
-    given(cards, s, log, |d| d.spell_alternatives, AbilityRef::spell_alternative)
+    let mut all = given(cards, s, log, |d| d.spell_alternatives, AbilityRef::spell_alternative);
+    for e in &s.effects {
+        if let EffectKind::SpellAlternative { card, index, words, .. } = e.kind {
+            let ability = AbilityRef::lasting_spell_alternative(card, index as usize);
+            let what = &cards.get(card).lasting_spell_alternatives[index as usize];
+            let words = Some(words);
+            all.push(Given { source: e.source, controller: e.controller, grant: Grant { object: e.source, ability }, what, by: None, words });
+        }
+    }
+    all
 }
 
 /// The listed static ability a `Grant` names, read from its card: what an action made by it is made by, whatever else the
 /// battlefield holds. The action was offered as it stands, so it is there.
 fn named<T>(s: &GameState, cards: &CardTable, g: Grant, list: fn(&'static CardDef) -> &'static [T], k: Option<usize>) -> Option<Given<T>> {
     let what = list(cards.get(g.ability.card)).get(k?)?;
-    Some(Given { source: g.object, controller: s.obj(g.object).controller, grant: g, what, by: cards.link_of_text(s, g.object, g.ability.card) })
+    Some(Given { source: g.object, controller: s.obj(g.object).controller, grant: g, what, by: cards.link_of_text(s, g.object, g.ability.card), words: None })
 }
 
 fn named_way(s: &GameState, cards: &CardTable, g: Grant) -> Option<Given<GrantedWay>> {
@@ -5632,6 +5704,15 @@ fn named_exile_cast(s: &GameState, cards: &CardTable, g: Grant) -> Option<Given<
 }
 
 fn named_alternative(s: &GameState, cards: &CardTable, g: Grant) -> Option<Given<SpellAlternative>> {
+    // One a resolved spell or ability gave a player's next spell is its effect's, whose controller is "you" (CR 611.2c).
+    if let Some(k) = g.ability.as_lasting_spell_alternative() {
+        let what = cards.get(g.ability.card).lasting_spell_alternatives.get(k)?;
+        let (e, words) = s.effects.iter().find_map(|e| match e.kind {
+            EffectKind::SpellAlternative { card, index, words, .. } if e.source == g.object && card == g.ability.card && usize::from(index) == k => Some((e, words)),
+            _ => None,
+        })?;
+        return Some(Given { source: g.object, controller: e.controller, grant: g, what, by: None, words: Some(words) });
+    }
     named(s, cards, g, |d| d.spell_alternatives, g.ability.as_spell_alternative())
 }
 
@@ -5846,7 +5927,13 @@ fn alternatives_for(
         if applying.iter().any(|a| a.controller == given.controller && std::ptr::eq(a.what, given.what)) {
             continue;
         }
-        if (given.what.applies)(judged, &given.asker(), card, player) {
+        // One a resolved spell or ability made reads its source's text through the words it was made with (CR 612.1, 608.2h).
+        let with_words = given.words.map(|words| WithWords { q: judged, source: given.source, words });
+        let reads: &dyn Query = match &with_words {
+            Some(view) => view,
+            None => judged,
+        };
+        if (given.what.applies)(reads, &given.asker(), card, player) {
             applying.push(*given);
         }
     }
@@ -7062,12 +7149,21 @@ pub(crate) fn stack_item(kind: StackKind, object: ObjectId, ability: AbilityRef,
 /// "The next spell you cast this turn can't be countered" (CR 611.2c, 601.2, 701.5a): each such effect of `player` marks
 /// this spell as it is cast, before anyone has priority, and is used up; two before one spell both apply to it. So is each cost
 /// change that says "the next ... spell" (`LastingCostChange::next`) this spell is one of: its cost was determined with them
-/// (CR 601.2f), and they end with the cast (Don & Raph, Hard Science).
+/// (CR 601.2f), and they end with the cast (Don & Raph, Hard Science). So is each alternative cost a resolved spell or ability
+/// gave the next spell (`EffectKind::SpellAlternative`) this spell is one of, offered to it while it was cast (World War Hulk).
 fn apply_next_spell_effects(cx: &mut Cx, player: PlayerId, spell: ObjectId) {
     let uncounterable = |e: &cantrip_state::ContinuousEffect| e.kind == EffectKind::NextSpellCantBeCountered && e.controller == player;
-    let costs_next = |e: &cantrip_state::ContinuousEffect| {
-        matches!(e.kind, EffectKind::SpellCostChange { card, index, player: whose }
-            if whose == player && cx.card(card).lasting_cost_changes[index as usize].next.is_some_and(|next| next(&*cx, spell)))
+    let costs_next = |e: &cantrip_state::ContinuousEffect| match e.kind {
+        EffectKind::SpellCostChange { card, index, player: whose } => {
+            whose == player && cx.card(card).lasting_cost_changes[index as usize].next.is_some_and(|next| next(&*cx, spell))
+        }
+        // An alternative cost it gave the next spell is used up by the first it applies to, paid or not (CR 611.2c).
+        EffectKind::SpellAlternative { card, index, player: whose, words } => {
+            let asker = Asker { source: e.source, controller: e.controller, by: None, spell: false };
+            let reads = WithWords { q: &*cx, source: e.source, words };
+            whose == player && (cx.card(card).lasting_spell_alternatives[index as usize].applies)(&reads, &asker, spell, player)
+        }
+        _ => false,
     };
     if !cx.s().effects.iter().any(|e| uncounterable(e) || costs_next(e)) {
         return;
