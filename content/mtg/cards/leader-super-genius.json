@@ -1,0 +1,8 @@
+{
+  "name": "Leader, Super-Genius",
+  "manaCost": "{2}{U}{U}",
+  "type": "Legendary Creature — Gamma Scientist Villain",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "If a creature you control would connive, instead you draw a card, then that creature connives.\nAt the beginning of combat on your turn, target creature you control connives. (Draw a card, then discard a card. If you discarded a nonland card, put a +1/+1 counter on that creature.)"
+}

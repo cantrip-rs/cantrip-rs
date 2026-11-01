@@ -1,0 +1,41 @@
+# Leader, Super-Genius: "If a creature you control would connive, instead you draw a card, then that creature connives." (CR 701.50a,
+# 614.1a, 614.6) and "At the beginning of combat on your turn, target creature you control connives." Turn 1 Bot1 casts Leader with
+# Black Lotus ({U}{U}{U}) and an Island, and at the beginning of its combat Leader connives: Bot1 draws Grizzly Bears (the card the
+# replacement draws), then connive draws a Mountain and Bot1 discards. The card the replacement drew can be the one discarded,
+# so it was drawn before the discard - Grizzly Bears is a nonland card, and Leader gets a +1/+1 counter (2/4). The connive drew
+# once and discarded once, as it was to: the net is two cards in and one out.
+
+[Bot1 Deck]
+Black Lotus
+Leader, Super-Genius
+Island
+Savannah Lions
+Runeclaw Bear
+Hill Giant
+Forest
+Grizzly Bears
+Mountain
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Leader, Super-Genius.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Forest; Hill Giant; Runeclaw Bear; Savannah Lions
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears)
+
+[Expect]
+Bot1.Graveyard = Grizzly Bears; Black Lotus
+Bot1.Hand = Forest; Hill Giant; Mountain; Runeclaw Bear; Savannah Lions
+Bot1.Battlefield.Leader, Super-Genius.Power = 2
+Bot1.Battlefield.Leader, Super-Genius.Toughness = 4

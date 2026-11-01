@@ -1,0 +1,64 @@
+# Leader, Super-Genius with the creature gone: a creature that is no longer on the battlefield as it is instructed to connive is
+# the object it was, controlled by whom it was (CR 701.50b). Bot1's Red Room Recruit enters on turn 3 and Bot2 kills it with
+# Lightning Bolt with its "it connives" ability on the stack. It still connives: Leader still draws Bot1 a card first (the Recruit was a
+# creature Bot1 controlled), then Bot1 draws and discards; it takes no counter, the Recruit being gone.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Leader, Super-Genius
+Mox Jet
+Mox Pearl
+Red Room Recruit
+Plains
+Savannah Lions
+Hill Giant
+Runeclaw Bear
+Forest
+Grizzly Bears
+Plains x9
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Leader, Super-Genius.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+? Bot1.Hand = Hill Giant; Mox Jet; Mox Pearl; Red Room Recruit; Runeclaw Bear; Savannah Lions
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Red Room Recruit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Red Room Recruit)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Red Room Recruit; Plains; Black Lotus
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+
+[Expect]
+Bot1.Hand = Grizzly Bears; Hill Giant; Runeclaw Bear; Savannah Lions
+Bot1.Graveyard = Forest; Red Room Recruit; Plains; Black Lotus

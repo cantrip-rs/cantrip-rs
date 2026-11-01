@@ -1,0 +1,61 @@
+# Leader, Super-Genius: "If a creature you control would connive" - only Bot1's creatures. Bot1 casts Leader on turn 1 (Black Lotus and
+# Mox Sapphire). On turn 2 Bot2 casts Red Room Recruit with two Moxen: it enters and connives, drawing and discarding a card with
+# no card from Bot1's Leader (nor for Bot2: Leader is not theirs). Bot2's hand is the same size as before the Recruit: 8 drawn,
+# three cast, one drawn and one discarded makes 5.
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Leader, Super-Genius
+Plains
+Savannah Lions
+Hill Giant
+Runeclaw Bear
+Forest
+Plains x9
+
+[Bot2 Deck]
+Mox Jet
+Mox Pearl
+Red Room Recruit
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x10
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Leader, Super-Genius.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+? Bot1.Hand.Count = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Red Room Recruit.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Swamp)
+? Bot2.Hand.Count = 5
+? Bot1.Hand.Count = 5
+
+[Expect]
+Bot2.Graveyard = Swamp
+Bot2.Battlefield.Red Room Recruit.Power = 1

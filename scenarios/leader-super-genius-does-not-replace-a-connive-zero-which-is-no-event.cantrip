@@ -1,0 +1,55 @@
+# Leader, Super-Genius: "If a creature you control would connive" - connive 0 is no event, so nothing replaces it (CR 701.50e). The
+# same turn 1 as before, then on turn 3 no creature has died when Spymaster's Vault's "Target creature you control connives X"
+# is activated: X is 0, and Bot1 draws and discards nothing - no card from the replacement either, and no prompt.
+
+[Bot1 Deck]
+Swamp
+Mox Sapphire
+Mox Ruby
+Black Lotus
+Leader, Super-Genius
+Spymaster's Vault
+Lightning Bolt
+Plains
+Savannah Lions
+Hill Giant
+Runeclaw Bear
+Forest
+Plains x9
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Forest x18
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Leader, Super-Genius.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+? Bot1.Hand = Hill Giant; Savannah Lions; Spymaster's Vault; Lightning Bolt
+Bot1.Hand.Spymaster's Vault.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Spymaster's Vault.Activate(Ability: connives; Bot1.Battlefield.Leader, Super-Genius)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Hill Giant; Savannah Lions; Lightning Bolt
+? Bot1.Battlefield.Leader, Super-Genius.Power = 1
+? Bot1.Library.Count = 11
+
+[Expect]
+Bot2.Battlefield = Forest; Llanowar Elves
