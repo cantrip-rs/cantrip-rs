@@ -10,14 +10,12 @@
 //! exceptions ("the copy isn't legendary and has starting loyalty X") is `trigger_with(text, effect)`, its effect the card's
 //! own copy, made with `Game::copy_spell_as` and the X announced, `x(q, item)`.
 //!
-//! Casualty here is the card's own printed instance, its one `CardDef::optional_cost`. Granted casualty (Anhelo, the
-//! Painter: "The first instant or sorcery spell you cast each turn has casualty 2") is not built, and needs:
-//!
-//! - casualty given to a spell by another object, its cost announced and its trigger triggering as a printed one's;
-//! - several instances on one spell (CR 702.153b): each paid separately, and each trigger copying for its own payment only,
-//!   not for any other instance's - one optional cost and one `paid` for each;
-//! - casualty X beside a kicker: the spell's X and the times it is kicked are announced apart (CR 601.2b), where today one
-//!   announcement is either the kicks or the X.
+//! Casualty a spell has from another object (Silverquill, the Disputant: "Each instant and sorcery spell you cast has casualty
+//! 1") is `granted::<N>(text)`: the giving card lists it first among its `delayed` abilities, grants it with
+//! `statics::grant_delayed_ability`, and gives the two labels for the announcement as its `labels`. The core offers its cost
+//! beside the spell's own (`paid_as_it_is_cast`) and each instance is paid and copies on its own (CR 702.153b), with a creature
+//! of its own. Casualty X beside a kicker (the spell's X and the times it is kicked announced apart, CR 601.2b) is not built:
+//! one announcement is either the kicks or the X.
 
 use cantrip_api::*;
 
@@ -60,6 +58,12 @@ fn copy_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// The casualty trigger; `text` is the card's own reminder text.
 pub const fn trigger(text: &'static str) -> AbilityDef {
     trigger_with(text, copy_it)
+}
+
+/// Casualty N as another object gives it to a spell (CR 702.153a-b): the cost to cast it and the trigger that copies it when
+/// that cost was paid, an instance of its own. `text` is the giving card's reminder text.
+pub const fn granted<const N: u8>(text: &'static str) -> AbilityDef {
+    paid_as_it_is_cast(optional::<N>(), copy_it, text)
 }
 
 /// The casualty trigger whose copy the card makes itself, with the exceptions it prints (CR 707.9b): Ob Nixilis, the
