@@ -1,0 +1,63 @@
+# Avatar Enthusiasts {2}{W} is an Ally: "Whenever another Ally you control enters, put a +1/+1 counter on this creature." Entering
+# itself (turn 1) gives it nothing. Bot2's Invasion Reinforcements (an Ally under the other player) gives it nothing either. On
+# turn 3 Bot1's own Invasion Reinforcements is an Ally and so is the Ally token it makes: two counters, 4/4. Bot1's Ornithopter,
+# no Ally, adds none.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Avatar Enthusiasts
+Invasion Reinforcements
+Ornithopter
+Plains
+Plains x14
+
+[Bot2 Deck]
+Invasion Reinforcements
+Mox Pearl
+Plains
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Avatar Enthusiasts.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Avatar Enthusiasts.Counters.PlusOnePlusOne = (absent)
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Invasion Reinforcements.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Avatar Enthusiasts.Counters.PlusOnePlusOne = (absent)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.Invasion Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Avatar Enthusiasts.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Avatar Enthusiasts.Power = 4
+Bot1.Battlefield.Avatar Enthusiasts.Toughness = 4

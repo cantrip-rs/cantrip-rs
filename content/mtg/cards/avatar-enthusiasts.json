@@ -1,0 +1,8 @@
+{
+  "name": "Avatar Enthusiasts",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Peasant Ally",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever another Ally you control enters, put a +1/+1 counter on this creature."
+}
