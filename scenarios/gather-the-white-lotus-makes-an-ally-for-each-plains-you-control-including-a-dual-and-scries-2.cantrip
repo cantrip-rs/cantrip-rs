@@ -1,0 +1,47 @@
+# Gather the White Lotus {4}{W}: "Create a 1/1 white Ally creature token for each Plains you control. Scry 2." On turn 5 Bot1
+# controls a Plains and a Plateau (a Mountain Plains, so a Plains too, CR 205.3i) beside an Island, which is no Plains; Bot2's
+# Plains is not counted (it is not "you control"). Paid with Plains, Plateau and Black Lotus (one mana more than the cost, no
+# need for the Island), the spell makes exactly two Ally tokens, then Bot1 scries 2: the Mountain stays on top and the Swamp
+# goes to the bottom, so the turn 7 draw is the Mountain.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Gather the White Lotus
+Plateau
+Island
+Plains
+Plains
+Forest
+Forest
+Swamp
+Mountain
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Hand.Plains.Play
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plateau.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plateau.Activate(Ability: {W})
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Gather the White Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mountain | Swamp)
+? Bot1.Battlefield = Plains; Plateau; Island; Ally Token; Ally Token
+[T7 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Plains; Plateau; Island; Ally Token; Ally Token
+Bot1.Hand = Plains; Plains; Forest; Forest; Mountain
+Bot1.Graveyard = Gather the White Lotus; Black Lotus

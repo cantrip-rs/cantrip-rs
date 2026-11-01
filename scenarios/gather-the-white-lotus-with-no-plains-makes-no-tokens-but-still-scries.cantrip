@@ -1,0 +1,36 @@
+# Gather the White Lotus with no Plains: the count is zero, so no token is created (CR 111.1) and the scry 2 still happens.
+# Bot1 pays {4}{W} with Black Lotus, Mox Pearl and Mox Emerald (and an Island played to be a land that is no Plains) and
+# keeps the Mountain on top while the Swamp goes to the bottom.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Gather the White Lotus
+Island
+Forest
+Forest
+Swamp
+Mountain
+Plains x15
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Gather the White Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mountain | Swamp)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield = Island; Mox Pearl; Mox Emerald
+Bot1.Hand = Forest; Forest; Mountain

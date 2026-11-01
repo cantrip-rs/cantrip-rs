@@ -1,0 +1,48 @@
+# Gather the White Lotus counts the Plains its text names as it resolves (CR 612.2, 608.2h): Bot1 casts it and, in response,
+# Magical Hack changes "Plains" in it to "Island". Bot1 controls a Plains and two Islands, so it makes two Ally tokens (one for
+# each Island), not one (for the Plains), then scries 2.
+
+[Bot1 Deck]
+Island
+Black Lotus
+Mox Sapphire
+Mox Jet
+Gather the White Lotus
+Magical Hack
+Island
+Forest
+Plains
+Swamp
+Mountain
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Gather the White Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magical Hack.Cast(Gather the White Lotus)
+Bot1.Modes(Plains)
+Bot1.Modes(Island)
+Bot1.Pass
+Bot1.Arrange(Swamp; Mountain | )
+? Stack.Count = 0
+
+[Expect]
+Bot1.Battlefield = Island; Island; Plains; Mox Sapphire; Mox Jet; Ally Token; Ally Token
+Bot1.Graveyard = Gather the White Lotus; Magical Hack; Black Lotus
