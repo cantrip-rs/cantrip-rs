@@ -1,0 +1,6 @@
+{
+  "name": "Hunt for Specimens",
+  "manaCost": "{1}{B}",
+  "type": "Sorcery",
+  "oracleText": "Create a 1/1 black and green Pest creature token with \"When this token dies, you gain 1 life.\"\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)"
+}

@@ -1,0 +1,28 @@
+# The spell creates one black and green 1/1 Pest before learning, and its death gains 1 life (CR 701.7a, 701.48a, 119.3).
+[Bot1 Deck]
+Mox Jet
+Hunt for Specimens
+Shock
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hunt for Specimens.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pest Token.Power = 1
+Bot1.Choose(Island)
+? Bot1.Battlefield.Pest Token.Power = 1
+? Bot1.Battlefield.Pest Token.Toughness = 1
+? Bot1.Battlefield.Pest Token.Tapped = false
+? Bot1.Battlefield.Pest Token.Colors = Black; Green
+? Bot1.Battlefield.Pest Token.Subtypes = Pest
+[Expect]
+Bot1.Battlefield.Count = 3
+Bot1.Graveyard = Hunt for Specimens; Island
