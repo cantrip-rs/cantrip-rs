@@ -1,0 +1,31 @@
+# Sylvan Scrying can find no land and still shuffles (CR 701.19a, 701.23a).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Sylvan Scrying
+Island x4
+Grizzly Bears
+Mountain
+Island x20
+
+[Bot2 Deck]
+Mountain
+Island x7
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sylvan Scrying.Cast
+? Bot1.Mana =
+Bot1.Search()
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island
+Bot1.Shuffles = 1
+Bot2.Shuffles = 0
+Bot2.Hand = Mountain; Island; Island; Island; Island; Island; Island
