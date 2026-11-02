@@ -1,0 +1,37 @@
+# Recruitment Officer may decline to reveal a creature, putting all four cards on the bottom (CR 701.16a).
+[Bot1 Deck]
+Mox Pearl
+Black Lotus
+Recruitment Officer
+Island x5
+Hill Giant
+Island
+Grizzly Bears
+Wind Drake
+Llanowar Elves
+Island x20
+[Bot2 Deck]
+Island x8
+Wind Drake
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Recruitment Officer.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Recruitment Officer.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Choose()
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Hand.Wind Drake = (absent)
+Bot2.Library.Count = 20
+Bot1.Hand.Llanowar Elves.Power = 1
