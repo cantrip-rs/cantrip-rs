@@ -1,0 +1,30 @@
+# Consign may return an opponent's nonland permanent to its owner's hand (CR 400.3).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Consign // Oblivion
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Consign // Oblivion.Cast(Bot2.Battlefield.Ornithopter; Ability: Consign)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot2.Hand = Ornithopter; Island; Island; Island; Island; Island; Island; Island
+Bot2.Battlefield.Ornithopter = (absent)

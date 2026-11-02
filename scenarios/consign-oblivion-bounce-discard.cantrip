@@ -1,0 +1,45 @@
+# Consign returns a nonland permanent; Oblivion makes its target opponent discard two cards (CR 701.9a).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Black Lotus
+Ornithopter
+Consign // Oblivion
+Swamp
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Consign // Oblivion.Cast(Bot1.Battlefield.Swamp; Ability: Consign)
+Bot1.Hand.Consign // Oblivion.Cast(Bot1.Battlefield.Ornithopter; Ability: Consign)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Graveyard.Consign // Oblivion.Cast(Bot1; Ability: Oblivion)
+Bot1.Graveyard.Consign // Oblivion.Cast(Bot2; Ability: Oblivion)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Ornithopter
+Bot2.Hand.Count = 5
+Bot2.Graveyard.Count = 3
+Exile = Consign // Oblivion

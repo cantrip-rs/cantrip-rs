@@ -1,0 +1,19 @@
+{
+  "name": "Consign // Oblivion",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Consign",
+      "manaCost": "{1}{U}",
+      "type": "Instant",
+      "oracleText": "Return target nonland permanent to its owner's hand."
+    },
+    {
+      "name": "Oblivion",
+      "manaCost": "{4}{B}",
+      "type": "Sorcery",
+      "oracleText": "Aftermath (Cast this spell only from your graveyard. Then exile it.)\nTarget opponent discards two cards.",
+      "aftermath": true
+    }
+  ]
+}
