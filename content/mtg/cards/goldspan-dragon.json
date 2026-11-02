@@ -1,0 +1,12 @@
+{
+  "name": "Goldspan Dragon",
+  "manaCost": "{3}{R}{R}",
+  "type": "Creature — Dragon",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Flying, haste\nWhenever this creature attacks or becomes the target of a spell, create a Treasure token.\nTreasures you control have \"{T}, Sacrifice this artifact: Add two mana of any one color.\"",
+  "keywords": [
+    "Flying",
+    "Haste"
+  ]
+}

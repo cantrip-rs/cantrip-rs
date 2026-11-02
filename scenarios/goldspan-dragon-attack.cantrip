@@ -1,0 +1,27 @@
+# Haste allows Goldspan Dragon to attack immediately, creating a Treasure; its granted ability makes two mana of one color (CR 702.10b, 603.2, 605.1a).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Goldspan Dragon
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Goldspan Dragon.Cast
+? Bot1.Mana =
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Goldspan Dragon > Bot2)
+Bot1.Pass
+Bot1.Battlefield.Treasure Token.Activate(Ability: Add two; Color: Blue)
+? Bot1.Mana = {U}{U}
+[T1 Bot1.Main2]
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Treasure Token = (absent)

@@ -1,0 +1,48 @@
+# Spells targeting Goldspan Dragon trigger a Treasure for its controller, while a spell targeting another creature does not (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Goldspan Dragon
+Giant Growth
+Mox Emerald
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Shock
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Goldspan Dragon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Goldspan Dragon)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token.Token = true
+? Bot1.Battlefield.Treasure Token.Tapped = false
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Goldspan Dragon)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Count = 6
+[Expect]
+Bot1.Battlefield.Goldspan Dragon.Damage = 2

@@ -1,0 +1,33 @@
+# An ability targeting Goldspan Dragon does not trigger its spell-target ability (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Goldspan Dragon
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Flametongue Kavu
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Goldspan Dragon.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Flametongue Kavu.Cast
+Bot2.Target(Bot1.Battlefield.Goldspan Dragon)
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Treasure Token = (absent)
+[Expect]
+Bot1.Graveyard = Goldspan Dragon; Black Lotus
