@@ -1,0 +1,27 @@
+# The land supplies one black mana, insufficient for two-mana spells, but enough for Duress (CR 605.3a, 601.2f).
+[Bot1 Deck]
+Memorial to Folly
+Ageless Guardian
+Coral Eel
+Bane Alley Blackguard
+Lightning Strike
+Grizzly Bears
+Duress
+Island x20
+[Bot2 Deck]
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Memorial to Folly.Play
+[T3 Bot1.Main1]
+! Bot1.Hand.Ageless Guardian.Cast(Mana: short)
+! Bot1.Hand.Coral Eel.Cast(Mana: short)
+! Bot1.Hand.Bane Alley Blackguard.Cast(Mana: short)
+! Bot1.Hand.Lightning Strike.Cast(Bot2; Mana: short)
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+Bot1.Battlefield.Memorial to Folly.Activate(Ability: Add {B})
+Bot1.Hand.Duress.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Graveyard = Duress

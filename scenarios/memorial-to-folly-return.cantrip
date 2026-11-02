@@ -1,0 +1,51 @@
+# Memorial enters tapped, taps for black, and sacrifices to return its controller's creature card for {2}{B} (CR 603.6a, 605.3a, 701.21a).
+[Bot1 Deck]
+Memorial to Folly
+Mox Ruby
+Mox Jet
+Black Lotus
+Ornithopter
+Shock
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Memorial to Folly.Play
+? Bot1.Battlefield.Memorial to Folly.Tapped = true
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Memorial to Folly.Activate(Ability: Add {B})
+? Bot1.Mana = {B}
+? Bot1.Battlefield.Memorial to Folly.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Battlefield.Memorial to Folly.Activate(Bot2.Graveyard.Ornithopter; Ability: Return)
+! Bot1.Battlefield.Memorial to Folly.Activate(Bot1.Graveyard.Shock; Ability: Return)
+Bot1.Battlefield.Memorial to Folly.Activate(Bot1.Graveyard.Ornithopter; Ability: Return)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Battlefield.Memorial to Folly = (absent)
+Bot2.Graveyard = Ornithopter; Shock
