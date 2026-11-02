@@ -1,0 +1,42 @@
+# The Shark incubates the mana value of a noncreature spell, including X, and flying prevents a ground blocker (CR 202.3b, 702.9b).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Chrome Host Seedshark
+Mind Twist
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Chrome Host Seedshark.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mind Twist.Cast(Bot2; X: 2)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Chrome Host Seedshark)
+! Bot2.Block(Grizzly Bears > Chrome Host Seedshark)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Incubator Token#1.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Incubator Token#2.Counters.PlusOnePlusOne = 3
+Bot1.Battlefield.Count = 3
