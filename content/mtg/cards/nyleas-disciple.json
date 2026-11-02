@@ -1,0 +1,8 @@
+{
+  "name": "Nylea's Disciple",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Centaur Archer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, you gain life equal to your devotion to green. (Each {G} in the mana costs of permanents you control counts toward your devotion to green.)"
+}

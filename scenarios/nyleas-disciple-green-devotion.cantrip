@@ -1,0 +1,40 @@
+# The disciple counts green symbols on its controller's permanents, including itself, but not blue symbols (CR 700.5, 119.3).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Emerald
+Grizzly Bears
+Wind Drake
+Nylea's Disciple
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Wind Drake.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Nylea's Disciple.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 20
