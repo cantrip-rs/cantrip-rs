@@ -1,0 +1,21 @@
+{
+  "name": "Ambitious Farmhand",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Human Peasant",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, you may search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nCoven — {1}{W}{W}: Transform this creature. Activate only if you control three or more creatures with different powers.",
+  "backFace": {
+    "name": "Seasoned Cathar",
+    "colorIndicator": [
+      "White"
+    ],
+    "type": "Creature — Human Knight",
+    "power": 3,
+    "toughness": 3,
+    "oracleText": "Lifelink",
+    "keywords": [
+      "Lifelink"
+    ]
+  }
+}

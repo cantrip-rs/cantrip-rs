@@ -1,0 +1,54 @@
+# Coven requires three different powers controlled by you; the transformed creature gains life from combat damage (CR 702.15b).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Black Lotus
+Ambitious Farmhand
+Ornithopter
+Grizzly Bears
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ambitious Farmhand.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Ambitious Farmhand.Activate(Ability: Transform)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Ambitious Farmhand.Activate(Ability: Transform)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Seasoned Cathar.Transformed = true
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Seasoned Cathar > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 17

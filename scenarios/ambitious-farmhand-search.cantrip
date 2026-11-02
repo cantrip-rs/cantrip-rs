@@ -1,0 +1,40 @@
+# The entering Farmhand may search its controller's library for a basic Plains and put it in hand (CR 603.6a, 701.19a).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Ambitious Farmhand
+Island x4
+Plains
+Plains
+Tundra
+Island x20
+
+[Bot2 Deck]
+Plains
+Island x6
+Plains
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ambitious Farmhand.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Accept
+! Bot1.Search(Island)
+! Bot1.Search(Tundra)
+! Bot1.Search(Plains; Plains)
+Bot1.Search(Plains)
+
+[Expect]
+Bot1.Hand = Island; Island; Island; Island; Plains
+Bot2.Hand = Island; Island; Island; Island; Island; Island; Plains
+Bot2.Library.Count = 21
+Bot1.Revealed = Plains
+Bot1.Shuffles = 1
