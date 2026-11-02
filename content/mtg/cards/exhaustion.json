@@ -1,0 +1,6 @@
+{
+  "name": "Exhaustion",
+  "manaCost": "{2}{U}",
+  "type": "Sorcery",
+  "oracleText": "Creatures and lands target opponent controls don't untap during their next untap step."
+}

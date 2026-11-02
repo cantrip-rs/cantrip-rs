@@ -1,0 +1,77 @@
+# Exhaustion's rule is on a set that gains members (CR 611.2c, its ruling): Glamermite, flashed in by the target
+# opponent after Exhaustion resolved and tapped by its own trigger, stays tapped in Bot2's next untap step (CR 502.3)
+# with Raging Goblin, which attacked, and the tapped Mountain, while Bot2's Moxen, artifacts, untap. Bot1's own lands are
+# not in the set, and Exhaustion can't target Bot1. The rule ends with that untap step: in the next one everything
+# untaps.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Exhaustion
+Island
+Island x16
+
+[Bot2 Deck]
+Mountain
+Raging Goblin
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Glamermite
+Island x14
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Attack(Raging Goblin > Bot1)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Hand.Exhaustion.Cast(Bot1)
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Exhaustion.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Raging Goblin.LastingRules = Creatures and lands target opponent controls don't untap during their next untap step.
+? Bot2.Battlefield.Mountain.LastingRules = Creatures and lands target opponent controls don't untap during their next untap step.
+? Bot2.Battlefield.Mox Ruby.LastingRules = (absent)
+? Bot1.Battlefield.Island#1.LastingRules = (absent)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Glamermite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Modes(Tap target creature)
+Bot2.Target(Glamermite)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Glamermite.Tapped = true
+? Bot2.Battlefield.Glamermite.LastingRules = Creatures and lands target opponent controls don't untap during their next untap step.
+[T4 Bot2.Upkeep]
+? Bot2.Battlefield.Glamermite.Tapped = true
+? Bot2.Battlefield.Raging Goblin.Tapped = true
+? Bot2.Battlefield.Mountain.Tapped = true
+? Bot2.Battlefield.Mox Sapphire.Tapped = false
+? Bot2.Battlefield.Mox Ruby.Tapped = false
+? Bot2.Battlefield.Mox Emerald.Tapped = false
+? Bot2.Battlefield.Glamermite.LastingRules = (absent)
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 19
+Bot1.Graveyard = Exhaustion
+Bot2.Battlefield.Glamermite.Tapped = false
+Bot2.Battlefield.Raging Goblin.Tapped = false
+Bot2.Battlefield.Mountain.Tapped = false
+Bot2.Battlefield.Raging Goblin.LastingRules = (absent)
