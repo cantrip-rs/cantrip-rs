@@ -1,0 +1,37 @@
+# "Target creature gets +3/+2 until end of turn." Bot2's Crimson Kobolds (0/1) has exactly that on turn 3 and is back as printed on
+# turn 4 (CR 611.2a, 514.2). A player and a Mox are refused as targets: "target creature" reads neither.
+
+[Bot1 Deck]
+Mox Ruby
+Infuriate
+Island x20
+
+[Bot2 Deck]
+Crimson Kobolds
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Crimson Kobolds.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Infuriate.Cast(Bot2)
+! Bot1.Hand.Infuriate.Cast(Bot2.Battlefield.Mox Pearl)
+Bot1.Hand.Infuriate.Cast(Bot2.Battlefield.Crimson Kobolds)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Crimson Kobolds.Power = 3
+? Bot2.Battlefield.Crimson Kobolds.Toughness = 3
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Crimson Kobolds.Power = 0
+Bot2.Battlefield.Crimson Kobolds.Toughness = 1
+Bot1.Graveyard = Infuriate

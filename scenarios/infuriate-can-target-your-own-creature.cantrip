@@ -1,0 +1,26 @@
+# "Target creature gets +3/+2 until end of turn." "Target" reads either player's creature: on Bot1's own Crimson Kobolds, it is 3/3 (CR 611.2a).
+
+[Bot1 Deck]
+Crimson Kobolds
+Mox Ruby
+Infuriate
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Crimson Kobolds.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Infuriate.Cast(Bot1.Battlefield.Crimson Kobolds)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Crimson Kobolds.Power = 3
+Bot1.Battlefield.Crimson Kobolds.Toughness = 3
