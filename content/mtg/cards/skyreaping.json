@@ -1,0 +1,6 @@
+{
+  "name": "Skyreaping",
+  "manaCost": "{1}{G}",
+  "type": "Sorcery",
+  "oracleText": "Skyreaping deals damage to each creature with flying equal to your devotion to green. (Each {G} in the mana costs of permanents you control counts toward your devotion to green.)"
+}

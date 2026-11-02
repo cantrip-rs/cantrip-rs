@@ -1,0 +1,33 @@
+# Skyreaping deals damage equal to its controller's green devotion to both players' fliers, leaving ground creatures alone (CR 700.5, 120.3a).
+[Bot1 Deck]
+Mox Emerald
+Island
+Llanowar Elves
+Ornithopter
+Skyreaping
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Skyreaping.Cast
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Llanowar Elves.Damage = 0
