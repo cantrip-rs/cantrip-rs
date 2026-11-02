@@ -1,0 +1,12 @@
+{
+  "name": "Dream Trawler",
+  "manaCost": "{2}{W}{W}{U}{U}",
+  "type": "Creature — Sphinx",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Flying, lifelink\nWhenever you draw a card, this creature gets +1/+0 until end of turn.\nWhenever this creature attacks, draw a card.\nDiscard a card: This creature gains hexproof until end of turn. Tap it.",
+  "keywords": [
+    "Flying",
+    "Lifelink"
+  ]
+}

@@ -1,0 +1,24 @@
+# Discarding to Dream Trawler gives it hexproof and taps it until it untaps normally (CR 701.26a, 702.11b).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Dream Trawler
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Dream Trawler.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Dream Trawler.Activate
+Bot1.Choose(Island)
+
+[Expect]
+Bot1.Battlefield.Dream Trawler.Tapped = true
+Bot1.Battlefield.Dream Trawler.Keywords = Flying; Hexproof; Lifelink

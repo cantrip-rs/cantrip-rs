@@ -1,0 +1,50 @@
+# Drawing and attacking each trigger Dream Trawler; its flying, lifelink, and discard ability work while it is tapped (CR 603.2, 702.9b, 702.15b).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Dream Trawler
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Grizzly Bears
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Dream Trawler.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Dream Trawler.Power = 4
+? Bot1.Battlefield.Dream Trawler.Toughness = 5
+Bot1.Attack(Dream Trawler > Bot2)
+! Bot2.Block(Grizzly Bears > Dream Trawler)
+[T3 Bot1.EndCombat]
+? Bot1.Life = 25
+? Bot2.Life = 15
+Bot1.Battlefield.Dream Trawler.Activate
+Bot1.Choose(Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dream Trawler.Tapped = true
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Shock.Cast(Bot1.Battlefield.Dream Trawler)
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Grizzly Bears)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Dream Trawler.Power = 3
+Bot1.Battlefield.Dream Trawler.Toughness = 5
+Bot1.Battlefield.Dream Trawler.Keywords = Flying; Lifelink
