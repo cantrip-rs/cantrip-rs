@@ -1,0 +1,6 @@
+{
+  "name": "Audacity",
+  "manaCost": "{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +2/+0 and has trample. (It can deal excess combat damage to the player or planeswalker it's attacking.)\nWhen this Aura is put into a graveyard from the battlefield, draw a card."
+}
