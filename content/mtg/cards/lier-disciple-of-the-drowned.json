@@ -1,0 +1,8 @@
+{
+  "name": "Lier, Disciple of the Drowned",
+  "manaCost": "{3}{U}{U}",
+  "type": "Legendary Creature — Human Wizard",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "Spells can't be countered.\nEach instant and sorcery card in your graveyard has flashback. The flashback cost is equal to that card's mana cost."
+}

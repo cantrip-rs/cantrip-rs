@@ -1,0 +1,43 @@
+# Lier gives its controller's graveyard instant flashback for its mana cost; the spell is exiled after resolving (CR 702.34a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Island
+Lier, Disciple of the Drowned
+Shock
+Counterspell
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Lier, Disciple of the Drowned.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Shock.Cast(Bot2; Ability: Flashback)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Counterspell.Cast(Stack.Shock)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot2.Life = 16
+Exile = Shock
+Bot1.Battlefield.Lier, Disciple of the Drowned.Power = 3
+Bot1.Battlefield.Lier, Disciple of the Drowned.Keywords = (absent)
