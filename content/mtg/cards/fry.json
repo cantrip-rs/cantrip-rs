@@ -1,0 +1,9 @@
+{
+  "name": "Fry",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "This spell can't be countered.\nFry deals 5 damage to target creature or planeswalker that's white or blue.",
+  "keywords": [
+    "CantBeCountered"
+  ]
+}
