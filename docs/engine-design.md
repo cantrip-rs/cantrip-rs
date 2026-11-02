@@ -2075,9 +2075,10 @@ as `ManaCost::paid_with_any_color` has it - each colored and hybrid symbol by an
 colorless only - by the payment itself (`pay_mana_used`) and by the advice (`Available::covers_for`, which asks once per
 player whether the rule holds for every payment; whether a card can be cast, which asks for that spell, read as the face
 it would be cast as, CR 712.11c, 709.3a, 715.4 - `spell_covers`, `covers_total`; and the activation offers, which
-ask for their source); the cost, its mana value and the mana spent are unchanged, and no restriction on the mana is lifted. "Mana of
-any type can be spent to cast that spell" (`PlayGrant::any_type`, `ExileCast::any_type`) is the same with {C} too (`ManaCost::paid_with_any_type`,
-`Helpers::any_type`). The payment keeps the cost's symbols and asks for the mana by that view of what is left, so what
+ask for their source); the cost, its mana value and the mana spent are unchanged, and no restriction on the mana is lifted. A
+permission to cast one spell may say the same of that spell (`PlayGrant::any_color`, Robber of the Rich). "Mana of
+any type can be spent to cast that spell" (`PlayGrant::any_type`, `ExileCast::any_type`) is the same with {C} too (`ManaCost::paid_with_any_type`).
+A cast carries which of them it was made by as `AnyMana`, into `Helpers::any` and each announcement whose choices depend on what can be paid. The payment keeps the cost's symbols and asks for the mana by that view of what is left, so what
 pays instead of mana still pays only its own share: delve and improvise the generic mana, convoke a symbol of its
 creature's color.
 

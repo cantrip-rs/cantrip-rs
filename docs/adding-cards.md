@@ -435,7 +435,9 @@ shapes have an example:
   (The Wandering Emperor), and a resolved spell's "you may activate loyalty abilities of [Jace] planeswalkers you control
   ... any time you could cast an instant" is `EffectKind::InstantLoyalty(Some(Subtype::Jace))` (Jace's Machinations; `None`
   for every planeswalker), which changes only the timing (CR 606.3). The board is searched for these only when something is cast or activated.
-- **Mana**: `PlayGrant.any_type` / `CastTerms.any_type` (mana of any type pays, CR 609.4b). Mana with a restriction on
+- **Mana**: `PlayGrant.any_type` / `CastTerms.any_type` (mana of any type pays, {C} included, CR 609.4b);
+  `PlayGrant.any_color` / `CastTerms.any_color` ("as though it were mana of any color", which pays no {C}: read which the
+  card says). Mana with a restriction on
   what it may be spent on (CR 106.6) is added by a mana ability with `.only_for(restriction)` (or `g.add_restricted_mana(..)`
   from an effect): `ManaRestriction::Spells(types)` is "spend this mana only to cast [type] spells" (`ARTIFACT_SPELLS`,
   `INSTANT_OR_SORCERY_SPELLS`, `PLANESWALKER_SPELLS`, `CREATURE_SPELLS`), `ManaRestriction::Abilities(types, of)` "spend this mana only to

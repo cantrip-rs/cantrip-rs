@@ -1622,6 +1622,10 @@ pub struct PlayGrant {
     /// Mana of any type can be spent to cast it (CR 609.4b, 118.14): any mana pays any symbol of its cost, which is not
     /// changed (`ManaCost::paid_with_any_type`).
     pub any_type: bool,
+    /// Mana may be spent as though it were mana of any color to cast it (CR 609.4b): any mana pays a colored or hybrid
+    /// symbol of its cost, which is not changed, and a {C} symbol still takes colorless mana, which no color stands for
+    /// (`ManaCost::paid_with_any_color`). Robber of the Rich's.
+    pub any_color: bool,
     /// Generic mana added to what casting it costs (CR 601.2f): Elite Spellbinder's "costs {2} more to cast".
     pub more: u8,
     /// It may be played only on a turn after the one it was granted on: warp's "cast this card from exile on a later
@@ -1689,7 +1693,7 @@ pub enum PlayCondition {
 
 impl PlayGrant {
     /// "You may cast it": for as long as it stays where it is, for its mana cost.
-    pub const CAST: PlayGrant = PlayGrant { instead: None, lands: false, expiry: Expiry::Never, any_type: false, more: 0, later_turns: false, flashback: false, exile_instead: ExileInstead::Never, when: None, sorcery_speed: false, enters_tapped: false, adventure_only: false, life_for_mana_value: false };
+    pub const CAST: PlayGrant = PlayGrant { instead: None, lands: false, expiry: Expiry::Never, any_type: false, any_color: false, more: 0, later_turns: false, flashback: false, exile_instead: ExileInstead::Never, when: None, sorcery_speed: false, enters_tapped: false, adventure_only: false, life_for_mana_value: false };
 }
 
 /// A standing permission to play or cast one card from a zone it could not be played from (CR 601.3, 305.1): "until

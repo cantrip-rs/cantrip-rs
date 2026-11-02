@@ -51,6 +51,8 @@ pub struct CastTerms {
     pub instead: Option<ManaCost>,
     /// Mana of any type may pay for it (CR 609.4b, 118.14).
     pub any_type: bool,
+    /// Mana may be spent as though it were mana of any color for it (CR 609.4b): a {C} symbol still takes colorless mana.
+    pub any_color: bool,
     /// Generic mana added to its cost (CR 601.2f).
     pub more: u32,
     /// Generic mana taken off what an {X} in `instead` adds, as X is announced and before anything increases the cost, never
