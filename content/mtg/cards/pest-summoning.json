@@ -1,0 +1,6 @@
+{
+  "name": "Pest Summoning",
+  "manaCost": "{1}{B/G}{B/G}",
+  "type": "Sorcery — Lesson",
+  "oracleText": "Create two 1/1 black and green Pest creature tokens with \"When this token dies, you gain 1 life.\""
+}

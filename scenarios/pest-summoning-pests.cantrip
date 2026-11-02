@@ -1,0 +1,35 @@
+# Pest Summoning creates two untapped 1/1 black and green Pests, and a dying Pest gains its controller 1 life (CR 701.7a, 603.6c, 119.3).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Pest Summoning
+Shock
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Pest Summoning.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 3
+? Bot1.Battlefield.Pest Token#1.Power = 1
+? Bot1.Battlefield.Pest Token#1.Toughness = 1
+? Bot1.Battlefield.Pest Token#1.Colors = Black; Green
+? Bot1.Battlefield.Pest Token#1.Subtypes = Pest
+? Bot1.Battlefield.Pest Token#1.Tapped = false
+? Bot1.Battlefield.Pest Token#2.Power = 1
+? Bot1.Battlefield.Pest Token#2.Toughness = 1
+? Bot1.Battlefield.Pest Token#2.Colors = Black; Green
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Pest Token#1)
+Bot1.Pass
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 20
+Bot1.Battlefield.Count = 2
