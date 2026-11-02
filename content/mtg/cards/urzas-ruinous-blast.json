@@ -1,0 +1,6 @@
+{
+  "name": "Urza's Ruinous Blast",
+  "manaCost": "{4}{W}",
+  "type": "Legendary Sorcery",
+  "oracleText": "(You may cast a legendary sorcery only if you control a legendary creature or planeswalker.)\nExile all nonland permanents that aren't legendary."
+}

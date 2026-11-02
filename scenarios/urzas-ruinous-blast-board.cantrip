@@ -1,0 +1,44 @@
+# Urza's Ruinous Blast exiles nonlegendary nonlands on both sides, leaving lands and legendary permanents (CR 608.2c).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Pearl
+Wrenn and Six
+Urza's Ruinous Blast
+Island x20
+
+[Bot2 Deck]
+Island
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl#1.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wrenn and Six.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Urza's Ruinous Blast.Cast
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Wrenn and Six.Types = Planeswalker
+Bot1.Battlefield.Island.Types = Land
+Bot2.Battlefield.Island.Types = Land
+Bot2.Battlefield.Ornithopter = (absent)
+Bot1.Battlefield.Mox Ruby = (absent)
+Exile = Mox Ruby; Mox Pearl; Mox Pearl; Ornithopter
