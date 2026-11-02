@@ -1,0 +1,55 @@
+# If Ossification leaves before its enter ability resolves, its target is not exiled (CR 610.3).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Ornithopter
+Ossification
+Island x20
+
+[Bot2 Deck]
+Island
+Mox Pearl
+Ornithopter
+Ornithopter
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter#1.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Ossification.Cast(Bot2.Battlefield.Island)
+! Bot1.Hand.Ossification.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Ossification.Cast(Bot1.Battlefield.Plains)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Ossification)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Exile =
+Bot2.Battlefield.Ornithopter#1.Power = 0
+Bot2.Battlefield.Ornithopter#2.Power = 0
+Bot1.Graveyard = Ossification
