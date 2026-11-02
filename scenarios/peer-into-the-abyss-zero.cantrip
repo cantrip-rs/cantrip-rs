@@ -1,0 +1,32 @@
+# A player at zero life loses no life to Peer into the Abyss (CR 118.7).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Phyrexian Unlife
+Toxic Deluge
+Peer into the Abyss
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Phyrexian Unlife.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Toxic Deluge.Cast(X: 20)
+[T3 Bot1.Main1]
+? Bot1.Life = 0
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Peer into the Abyss.Cast(Bot1)
+[Expect]
+Bot1.Life = 0
+Result = InProgress
