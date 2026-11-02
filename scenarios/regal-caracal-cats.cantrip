@@ -1,0 +1,59 @@
+# Regal Caracal grants other friendly Cats +1/+1 and lifelink, and creates two white Cat tokens (CR 603.6a, 702.15b).
+
+[Bot1 Deck]
+Mox Pearl
+Sanctuary Cat
+Black Lotus
+Plains
+Regal Caracal
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Sanctuary Cat
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sanctuary Cat.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sanctuary Cat.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Regal Caracal.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Regal Caracal.Power = 3
+? Bot1.Battlefield.Sanctuary Cat.Power = 2
+? Bot1.Battlefield.Sanctuary Cat.Toughness = 3
+? Bot2.Battlefield.Sanctuary Cat.Power = 1
+? Bot1.Battlefield.Cat Token#1.Tapped = false
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Sanctuary Cat; Cat Token#1; Cat Token#2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 26
+Bot2.Life = 14
+Bot1.Battlefield.Cat Token#1.Power = 2
+Bot1.Battlefield.Cat Token#1.Toughness = 2
+Bot1.Battlefield.Cat Token#1.Colors = White
+Bot1.Battlefield.Cat Token#2.Power = 2
+Bot1.Battlefield.Cat Token#2.Token = true
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Cat Token#1.Tapped = true
