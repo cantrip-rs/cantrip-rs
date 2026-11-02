@@ -46,6 +46,7 @@ Bot2.Pass
 ? Bot1.Hand.Count = 4
 ? Bot2.Hand.Count = 4
 Bot1.Attack(Robber of the Rich > Bot2; Ornithopter > Bot2)
+? Stack.Count = 0
 [T3 Bot1.Main2]
 ? Stack.Count = 0
 
