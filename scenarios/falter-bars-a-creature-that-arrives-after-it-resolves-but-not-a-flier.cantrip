@@ -1,0 +1,78 @@
+# Falter's rule is on a set that gains members (CR 611.2c): Ashcoat Bear, flashed in after Falter resolved, can't
+# block Raging Goblin any more than Grizzly Bears can, while Storm Crow, which has flying, blocks Mountain Bandit. The
+# rule ends with the turn (CR 514.2): on Bot1's next attack Ashcoat Bear blocks Raging Goblin.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Raging Goblin
+Mountain Bandit
+Falter
+Island x15
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Mox Sapphire
+Mox Jet
+Storm Crow
+Black Lotus
+Ashcoat Bear
+Island x12
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Raging Goblin.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mountain Bandit.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Storm Crow.Cast
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Falter.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot2.Battlefield.Grizzly Bears.LastingRules = Creatures without flying can't block this turn.
+? Bot2.Battlefield.Storm Crow.LastingRules = (absent)
+? Bot1.Battlefield.Raging Goblin.LastingRules = Creatures without flying can't block this turn.
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Ashcoat Bear.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ashcoat Bear.LastingRules = Creatures without flying can't block this turn.
+Bot1.Attack(Raging Goblin > Bot2; Mountain Bandit > Bot2)
+! Bot2.Block(Ashcoat Bear > Raging Goblin)
+! Bot2.Block(Grizzly Bears > Raging Goblin)
+Bot2.Block(Storm Crow > Mountain Bandit)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ashcoat Bear.LastingRules = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Raging Goblin > Bot2)
+Bot2.Block(Ashcoat Bear > Raging Goblin)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield = Mountain; Mox Ruby
+Bot1.Graveyard = Raging Goblin; Mountain Bandit; Falter
+Bot2.Battlefield = Ashcoat Bear; Forest; Grizzly Bears; Mox Emerald; Mox Jet; Mox Sapphire; Storm Crow
+Bot2.Battlefield.Ashcoat Bear.Damage = 1
+Bot2.Battlefield.Grizzly Bears.LastingRules = (absent)
