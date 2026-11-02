@@ -1,0 +1,43 @@
+# Creative Outburst may target its own caster and deals five damage (CR 115.4, 120.3).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Creative Outburst
+Island
+Island
+Island
+Shock
+Grizzly Bears
+Island
+Mountain
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Creative Outburst.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Creative Outburst.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 15
+Bot1.Arrange(Forest | Shock; Grizzly Bears; Island; Mountain)
+
+[Expect]
+Bot1.Life = 15
+Bot1.Hand.Forest.Colors =
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 24

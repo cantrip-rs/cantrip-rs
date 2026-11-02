@@ -1,0 +1,27 @@
+# Discarding Creative Outburst for its two hybrid mana ability creates a Treasure (CR 602.2b, 107.4e).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Creative Outburst
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Creative Outburst.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Creative Outburst
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Treasure Token.Types = Artifact
+Bot1.Battlefield.Treasure Token.Tapped = false
