@@ -1,0 +1,6 @@
+{
+  "name": "Treacherous Blessing",
+  "manaCost": "{2}{B}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, draw three cards.\nWhenever you cast a spell, you lose 1 life.\nWhen this enchantment becomes the target of a spell or ability, sacrifice it."
+}

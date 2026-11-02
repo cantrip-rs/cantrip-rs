@@ -1,0 +1,34 @@
+# A spell targeting another permanent does not cause Treacherous Blessing to be sacrificed (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Treacherous Blessing
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Island
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Treacherous Blessing.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Ruby)
+? Stack.Count = 1
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Treacherous Blessing.Types = Enchantment
+Bot1.Graveyard = Mox Ruby; Black Lotus

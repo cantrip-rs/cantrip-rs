@@ -1,0 +1,36 @@
+# Treacherous Blessing draws three on entry, costs its controller life for each spell, and is sacrificed when targeted (CR 603.2, 119.3, 701.21a).
+[Bot1 Deck]
+Black Lotus
+Treacherous Blessing
+Mox Pearl
+Disenchant
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Treacherous Blessing.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 8
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Treacherous Blessing)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Treacherous Blessing = (absent)
+Bot1.Graveyard.Count = 3
