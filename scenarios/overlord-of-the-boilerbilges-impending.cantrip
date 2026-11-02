@@ -1,0 +1,25 @@
+# The impending cost is {2}{R}{R}, and the entering noncreature has four time counters while its entry trigger deals four damage (CR 702.176a, 603.6a).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Overlord of the Boilerbilges
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Overlord of the Boilerbilges.Cast(Ability: Impending)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield.Overlord of the Boilerbilges.Types = Enchantment
+Bot1.Battlefield.Overlord of the Boilerbilges.Counters.Time = 4

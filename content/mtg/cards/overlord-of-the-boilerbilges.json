@@ -1,0 +1,8 @@
+{
+  "name": "Overlord of the Boilerbilges",
+  "manaCost": "{4}{R}{R}",
+  "type": "Enchantment Creature — Avatar Horror",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Impending 4—{2}{R}{R} (If you cast this spell for its impending cost, it enters with four time counters and isn't a creature until the last is removed. At the beginning of your end step, remove a time counter from it.)\nWhenever this permanent enters or attacks, it deals 4 damage to any target."
+}

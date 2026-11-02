@@ -1,0 +1,38 @@
+# Overlord deals exactly four damage on entry and again when it attacks, targeting either player (CR 603.6a, 603.2, 120.3a).
+[Bot1 Deck]
+Black Lotus x2
+Island
+Overlord of the Boilerbilges
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Overlord of the Boilerbilges.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Overlord of the Boilerbilges > Bot2)
+Bot1.Target(Bot1)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+! Bot1.Target
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 11
