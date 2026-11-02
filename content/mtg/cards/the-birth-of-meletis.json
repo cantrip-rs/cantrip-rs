@@ -1,0 +1,6 @@
+{
+  "name": "The Birth of Meletis",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII — Create a 0/4 colorless Wall artifact creature token with defender.\nIII — You gain 2 life."
+}
