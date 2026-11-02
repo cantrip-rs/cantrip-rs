@@ -1,0 +1,24 @@
+# Reclamation Sage may target its controller's artifact and decline to destroy it (CR 603.3d, 609.3).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Ruby
+Reclamation Sage
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Reclamation Sage.Cast
+? Bot1.Mana =
+Bot1.Target(Bot1.Battlefield.Mox Ruby)
+Bot1.Decline
+
+[Expect]
+Bot1.Battlefield.Mox Ruby.Types = Artifact

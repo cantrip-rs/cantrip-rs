@@ -1,0 +1,29 @@
+# Reclamation Sage may destroy an opponent's artifact, but cannot target a land (CR 603.3d, 701.8a).
+
+[Bot1 Deck]
+Black Lotus
+Reclamation Sage
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Reclamation Sage.Cast
+? Bot1.Mana =
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Mox Ruby)
+Bot1.Accept
+
+[Expect]
+Bot2.Battlefield.Mox Ruby = (absent)
+Bot2.Graveyard = Mox Ruby

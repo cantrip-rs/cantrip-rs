@@ -1,0 +1,8 @@
+{
+  "name": "Reclamation Sage",
+  "manaCost": "{2}{G}",
+  "type": "Creature — Elf Shaman",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature enters, you may destroy target artifact or enchantment."
+}
