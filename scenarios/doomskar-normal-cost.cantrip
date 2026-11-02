@@ -1,0 +1,40 @@
+# Doomskar destroys creatures on both sides of the battlefield while leaving other permanents (CR 701.8a).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Black Lotus
+Doomskar
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Doomskar.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot2.Battlefield.Ornithopter = (absent)
+Bot1.Graveyard = Doomskar; Ornithopter; Black Lotus
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Mox Pearl.Types = Artifact
