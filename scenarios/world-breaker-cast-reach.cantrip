@@ -1,0 +1,69 @@
+# World Breaker is colorless, exiles an opposing land when cast, and blocks a flier with reach (CR 702.114a, 702.17b).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+World Breaker
+Mox Ruby
+Shock
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Island
+Wind Drake
+Mox Ruby
+Shock
+Island x20
+
+[Actions]
+? Bot1.Hand.World Breaker.Colors =
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wind Drake.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.World Breaker.Cast
+? Bot1.Mana =
+! Bot1.Target(Bot2.Battlefield.Wind Drake)
+! Bot1.Target(Bot2.Graveyard.Black Lotus)
+Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+! Bot1.Target
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+! Bot1.Target
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Wind Drake)
+Bot1.Block(World Breaker > Wind Drake)
+[T4 Bot2.Main2]
+
+[Expect]
+Exile = Island
+Bot1.Life = 18
+Bot2.Graveyard = Wind Drake; Shock; Black Lotus
+Bot1.Battlefield.World Breaker.Colors = (absent)
+Bot1.Battlefield.World Breaker.Damage = 2

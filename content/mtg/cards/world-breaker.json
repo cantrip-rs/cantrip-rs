@@ -1,0 +1,11 @@
+{
+  "name": "World Breaker",
+  "manaCost": "{6}{G}",
+  "type": "Creature — Eldrazi",
+  "power": 5,
+  "toughness": 7,
+  "oracleText": "Devoid (This card has no color.)\nWhen you cast this spell, exile target artifact, enchantment, or land.\nReach\n{2}{C}, Sacrifice a land: Return this card from your graveyard to your hand. ({C} represents colorless mana.)",
+  "keywords": [
+    "Reach"
+  ]
+}
