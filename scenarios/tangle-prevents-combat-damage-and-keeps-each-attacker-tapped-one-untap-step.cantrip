@@ -1,0 +1,75 @@
+# Tangle, cast once Raging Goblin and Grizzly Bears attack, prevents all combat damage this turn (CR 615.1): Bot2 loses
+# no life to the unblocked Goblin, and neither Grizzly Bears nor its blocker Ashcoat Bear is dealt damage. Shock is no
+# combat damage and is dealt. Each attacking creature stays tapped in its controller's next untap step (CR 502.3), while
+# Llanowar Elves, tapped but not attacking, untaps; in the untap step after that the attackers untap too.
+
+[Bot1 Deck]
+Forest
+Llanowar Elves
+Mox Ruby
+Raging Goblin
+Black Lotus
+Grizzly Bears
+Shock
+Island x13
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Black Lotus
+Ashcoat Bear
+Tangle
+Island x15
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raging Goblin.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Ashcoat Bear.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Raging Goblin > Bot2; Grizzly Bears > Bot2)
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Tangle.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Raging Goblin.DoesntUntap = true
+? Bot1.Battlefield.Grizzly Bears.DoesntUntap = true
+Bot2.Block(Ashcoat Bear > Grizzly Bears)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+? Bot1.Battlefield.Grizzly Bears.Damage = 0
+? Bot2.Battlefield.Ashcoat Bear.Damage = 0
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+? Bot1.Battlefield.Llanowar Elves.DoesntUntap = (absent)
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Raging Goblin.Tapped = true
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+? Bot1.Battlefield.Raging Goblin.DoesntUntap = (absent)
+[T7 Bot1.Upkeep]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Raging Goblin.Tapped = false
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot2.Battlefield.Ashcoat Bear.Damage = 0
+Bot2.Graveyard = Tangle; Black Lotus

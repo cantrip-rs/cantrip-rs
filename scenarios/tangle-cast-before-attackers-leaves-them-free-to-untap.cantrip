@@ -1,0 +1,40 @@
+# Tangle's attacking creatures are the ones attacking as it resolves (its ruling; CR 611.2c: the effect changes no
+# rule of the game, so its set is fixed then). Cast in Bot1's first main phase, it finds none: Raging Goblin attacks
+# afterwards, its combat damage is still prevented this turn (CR 615.1), and it untaps in Bot1's next untap step.
+
+[Bot1 Deck]
+Mountain
+Raging Goblin
+Island x18
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Tangle
+Island x17
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Raging Goblin.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Tangle.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+Bot1.Attack(Raging Goblin > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+? Bot1.Battlefield.Raging Goblin.Tapped = true
+? Bot1.Battlefield.Raging Goblin.DoesntUntap = (absent)
+[T5 Bot1.Upkeep]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Raging Goblin.Tapped = false
+Bot2.Graveyard = Tangle
