@@ -1,0 +1,29 @@
+# Cycling another card does not trigger Vizier's own cycling trigger (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Vizier of Tumbling Sands
+Unearth
+Mox Ruby
+Mox Ruby
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vizier of Tumbling Sands.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Unearth.Activate(Ability: Cycling)
+! Bot1.Target
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Mox Ruby#1.Tapped = true
+Bot1.Battlefield.Mox Ruby#2.Tapped = true
+Bot1.Graveyard = Unearth; Black Lotus

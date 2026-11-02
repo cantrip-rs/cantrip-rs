@@ -1,0 +1,8 @@
+{
+  "name": "Vizier of Tumbling Sands",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Cleric",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{T}: Untap another target permanent.\nCycling {1}{U} ({1}{U}, Discard this card: Draw a card.)\nWhen you cycle this card, untap target permanent."
+}
