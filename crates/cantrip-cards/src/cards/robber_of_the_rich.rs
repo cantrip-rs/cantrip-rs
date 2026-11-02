@@ -20,13 +20,14 @@ fn attacks_a_richer_player(q: &dyn Query, source: ObjectId, event: &Event) -> Op
 }
 
 /// Exile the top card of their library; during any turn you attacked with a Rogue, you may cast that card, spending mana
-/// as though it were mana of any type (CR 609.4b). The intervening "if" holds again as the ability resolves.
+/// as though it were mana of any color, which pays no {C} (CR 609.4b). The intervening "if" holds again as the ability
+/// resolves.
 fn plunder(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Target::Player(defending) = item.subject else { return Ok(()) };
     if hand_size(g, defending) <= hand_size(g, item.controller) {
         return Ok(());
     }
-    let grant = PlayGrant { any_type: true, when: Some(PlayCondition::AttackedWithThisTurn(g.words(item.object).subtype(Subtype::Rogue))), ..PlayGrant::CAST };
+    let grant = PlayGrant { any_color: true, when: Some(PlayCondition::AttackedWithThisTurn(g.words(item.object).subtype(Subtype::Rogue))), ..PlayGrant::CAST };
     exile_top_may_play(g, defending, 1, item.controller, grant);
     Ok(())
 }

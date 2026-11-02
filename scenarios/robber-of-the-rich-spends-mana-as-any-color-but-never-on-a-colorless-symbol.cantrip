@@ -1,0 +1,71 @@
+# Robber of the Rich lets Bot1 spend mana "as though it were mana of any color" (CR 609.4b), and colorless is not a color
+# (CR 105.2a, 106.1b): a {C} symbol still takes colorless mana. Bot2's Sowing Mycospawn, exiled by the Robber on turn 3,
+# costs {4}{G}{C} kicked (its kicker is {1}{C}, CR 107.4c). With exactly six colored mana floating, none of it green, Bot1
+# announces the kicker and cannot finish paying: the mana pays nothing of the {C}, the spell is not cast and Bot1 gives it
+# up (CR 601.2g-h, 733.1), the Mycospawn back in exile and the pool as it was. With Sol Ring's {C}{C} added, the same cast is
+# paid: {C} by colorless mana, and the {G} and the generic mana by mana of other colors.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Sol Ring
+Robber of the Rich
+Swamp
+Island
+Island x11
+
+[Bot2 Deck]
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Sowing Mycospawn
+Forest x11
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Robber of the Rich.Cast
+Bot1.Pass
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Attack(Robber of the Rich)
+[T3 Bot1.Main2]
+? Exile = Sowing Mycospawn
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Exile.Sowing Mycospawn.Cast(Kicked: 1)
+Bot1.Cancel
+? Exile = Sowing Mycospawn
+? Bot1.Mana = {W}{U}{B}{B}{R}{R}
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Exile.Sowing Mycospawn.Cast(Kicked: 1; Spend: C, W, U, B, B, R)
+Bot1.Target(Bot2.Battlefield.Forest)
+? Bot1.Mana = {R}{C}
+Bot1.Search(Island)
+[T3 Bot1.End]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Sowing Mycospawn.Power = 3
+Exile = Forest
+Bot2.Battlefield.Count = 0
