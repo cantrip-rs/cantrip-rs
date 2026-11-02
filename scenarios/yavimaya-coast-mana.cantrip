@@ -1,0 +1,35 @@
+# Yavimaya Coast taps for colorless without damage, or green or blue with one damage to its controller (CR 605.3a, 120.3).
+[Bot1 Deck]
+Yavimaya Coast
+Lightning Bolt
+Dark Ritual
+Savannah Lions
+Coral Eel
+Grizzly Bears
+Alpha Myr
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Yavimaya Coast.Play
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+! Bot1.Hand.Dark Ritual.Cast(Mana: short)
+! Bot1.Hand.Savannah Lions.Cast(Mana: short)
+! Bot1.Hand.Coral Eel.Cast(Mana: short)
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+! Bot1.Hand.Alpha Myr.Cast(Mana: short)
+Bot1.Battlefield.Yavimaya Coast.Activate(Ability: {C})
+? Bot1.Mana = {C}
+? Bot1.Life = 20
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Yavimaya Coast.Activate(Ability: {G}; Color: White)
+Bot1.Battlefield.Yavimaya Coast.Activate(Ability: {G}; Color: Green)
+? Bot1.Mana = {G}
+? Bot1.Life = 19
+[T5 Bot1.Main1]
+Bot1.Battlefield.Yavimaya Coast.Activate(Ability: {G}; Color: Blue)
+? Bot1.Mana = {U}
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot1.Battlefield.Yavimaya Coast.Tapped = true
