@@ -1,0 +1,54 @@
+# Glidecar scries one on entry; crew animates it, and tapping three other creatures grants flying and a counter until the appropriate duration (CR 701.18a, 702.122a, 611.2a).
+[Bot1 Deck]
+Mox Pearl
+Ornithopter x3
+Voyager Glidecar
+Eager Cadet
+Island
+Shock
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Voyager Glidecar.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(| Shock)
+! Bot1.Battlefield.Voyager Glidecar.Activate(Ability: Crew)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+Bot1.Battlefield.Voyager Glidecar.Activate(Ability: Crew)
+Bot1.Choose(Eager Cadet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Voyager Glidecar.Types = Artifact; Creature
+! Bot1.Battlefield.Voyager Glidecar.Activate(Ability: Tap three)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Voyager Glidecar.Activate(Ability: Tap three)
+Bot1.Choose(Ornithopter#1; Ornithopter#2; Ornithopter#3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Voyager Glidecar.Keywords = Flying
+? Bot1.Battlefield.Voyager Glidecar.Power = 3
+? Bot1.Battlefield.Voyager Glidecar.Toughness = 4
+? Bot1.Battlefield.Voyager Glidecar.Counters.PlusOnePlusOne = 1
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Voyager Glidecar.Types = Artifact
+Bot1.Battlefield.Voyager Glidecar.Keywords = (absent)
+Bot1.Battlefield.Voyager Glidecar.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Shock = (absent)

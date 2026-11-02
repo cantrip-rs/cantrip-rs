@@ -1,0 +1,30 @@
+# Tapping three other creatures makes the Vehicle a flying artifact creature until end of turn (CR 611.2a).
+[Bot1 Deck]
+Mox Pearl
+Ornithopter x3
+Voyager Glidecar
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Voyager Glidecar.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Island |)
+Bot1.Battlefield.Voyager Glidecar.Activate(Ability: Tap three)
+Bot1.Choose(Ornithopter#1; Ornithopter#2; Ornithopter#3)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Voyager Glidecar.Types = Artifact; Creature
+Bot1.Battlefield.Voyager Glidecar.Keywords = Flying
+Bot1.Battlefield.Voyager Glidecar.Counters.PlusOnePlusOne = 1
