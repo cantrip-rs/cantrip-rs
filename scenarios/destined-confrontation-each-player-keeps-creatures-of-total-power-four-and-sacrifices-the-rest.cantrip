@@ -1,0 +1,64 @@
+# Destined Confrontation: "Each player chooses any number of creatures they control with total power 4 or less, then sacrifices
+# all other creatures they control." (CR 101.4, 608.2d, 701.21a). Bot1 casts it on turn 3 (Plains and three Moxen) with three
+# Memnites (power 1 each) against Bot2's seven Memnites and an Ornithopter (power 0). Bot1, who chooses first, may keep any
+# number: it keeps one and sacrifices two. Bot2's question refuses five Memnites (total power 5) and accepts four Memnites and
+# the Ornithopter (total 4, a creature of no power being as welcome at the limit as before it): the other three Memnites are
+# sacrificed, together with Bot1's two.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Memnite
+Memnite
+Memnite
+Destined Confrontation
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Memnite
+Memnite
+Memnite
+Memnite
+Memnite
+Ornithopter
+Memnite
+Island x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Destined Confrontation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+! Bot2.Choose(Memnite; Memnite; Memnite; Memnite; Memnite)
+Bot2.Choose(Memnite; Memnite; Memnite; Memnite; Ornithopter)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Pearl; Mox Jet; Mox Ruby; Memnite
+Bot1.Graveyard = Destined Confrontation; Memnite; Memnite
+Bot2.Battlefield = Memnite; Memnite; Memnite; Memnite; Ornithopter
+Bot2.Graveyard = Memnite; Memnite; Memnite

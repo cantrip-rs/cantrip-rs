@@ -1,0 +1,6 @@
+{
+  "name": "Destined Confrontation",
+  "manaCost": "{2}{W}{W}",
+  "type": "Sorcery",
+  "oracleText": "Each player chooses any number of creatures they control with total power 4 or less, then sacrifices all other creatures they control."
+}
