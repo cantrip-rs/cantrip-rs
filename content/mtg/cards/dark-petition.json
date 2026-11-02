@@ -1,0 +1,6 @@
+{
+  "name": "Dark Petition",
+  "manaCost": "{3}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Search your library for a card, put that card into your hand, then shuffle.\nSpell mastery — If there are two or more instant and/or sorcery cards in your graveyard, add {B}{B}{B}."
+}

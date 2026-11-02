@@ -1,0 +1,37 @@
+# Dark Petition searches its controller's library and adds three black mana with two instants in that graveyard (CR 701.23a, 608.2c).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Shock
+Lightning Bolt
+Dark Petition
+Island
+Sol Ring
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Dark Petition.Cast
+? Bot1.Mana =
+Bot1.Search(Sol Ring)
+? Bot1.Mana = {B}{B}{B}
+[Expect]
+Bot1.Hand.Sol Ring.Colors =
+Bot1.Shuffles = 1
+Bot2.Life = 15
