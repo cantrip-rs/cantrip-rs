@@ -1,0 +1,36 @@
+# Gastal Thrillroller returns from its owner's graveyard with a finality counter and becomes a creature on entry (CR 122.1h, 603.2).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Gastal Thrillroller
+Shock
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Gastal Thrillroller.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Gastal Thrillroller)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Gastal Thrillroller; Shock; Black Lotus
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Graveyard.Gastal Thrillroller.Activate
+Bot1.Choose(Island)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Gastal Thrillroller.Tapped = false
+Bot1.Battlefield.Gastal Thrillroller.Counters.Finality = 1
+Bot1.Battlefield.Gastal Thrillroller.Types = Artifact; Creature

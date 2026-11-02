@@ -1,0 +1,12 @@
+{
+  "name": "Gastal Thrillroller",
+  "manaCost": "{2}{R}",
+  "type": "Artifact — Vehicle",
+  "power": 4,
+  "toughness": 2,
+  "oracleText": "Trample, haste\nWhen this Vehicle enters, it becomes an artifact creature until end of turn.\nCrew 2\n{2}{R}, Discard a card: Return this card from your graveyard to the battlefield with a finality counter on it. Activate only as a sorcery.",
+  "keywords": [
+    "Trample",
+    "Haste"
+  ]
+}

@@ -1,0 +1,54 @@
+# On entering, the Vehicle becomes a creature with haste and trample for the turn; crew makes it a creature again later (CR 702.10b, 702.10c, 702.122a).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Grizzly Bears
+Llanowar Elves
+Mox Emerald
+Forest
+Gastal Thrillroller
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Gastal Thrillroller.Cast
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Gastal Thrillroller > Bot2)
+Bot2.Block(Ornithopter > Gastal Thrillroller)
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.BeginCombat]
+? Bot2.Battlefield.Mox Ruby.Types = Artifact
+? Bot1.Battlefield.Gastal Thrillroller.Types = Artifact
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Gastal Thrillroller.Activate(Ability: Crew)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Gastal Thrillroller.Activate(Ability: Crew)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gastal Thrillroller.Types = Artifact; Creature
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Ornithopter = (absent)
