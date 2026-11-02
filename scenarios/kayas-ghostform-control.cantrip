@@ -1,0 +1,23 @@
+# Ghostform may enchant a creature its controller controls but not an opponent's (CR 702.5a).
+[Bot1 Deck]
+Ornithopter
+Mox Jet
+Kaya's Ghostform
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Kaya's Ghostform.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Kaya's Ghostform.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Kaya's Ghostform.AttachedTo = Ornithopter

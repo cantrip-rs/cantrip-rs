@@ -1,0 +1,6 @@
+{
+  "name": "Kaya's Ghostform",
+  "manaCost": "{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature or planeswalker you control\nWhen enchanted permanent dies or is put into exile, return that card to the battlefield under your control."
+}

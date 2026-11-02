@@ -1,0 +1,33 @@
+# Exiling an unrelated card from a graveyard does not trigger Ghostform (CR 603.2).
+[Bot1 Deck]
+Ornithopter
+Ornithopter
+Mox Jet
+Mox Jet
+Mox Ruby
+Shock
+Kaya's Ghostform
+Cling to Dust
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Kaya's Ghostform.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Cling to Dust.Cast(Bot1.Graveyard.Ornithopter)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Exile = Ornithopter
