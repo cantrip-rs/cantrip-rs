@@ -1,0 +1,69 @@
+# Shifting Ceratops cannot be countered and its ability grants the chosen keyword only for this turn (CR 701.5b, 611.2a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Forest
+Shifting Ceratops
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Island
+Counterspell
+Unsummon
+Swords to Plowshares
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Shifting Ceratops.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Counterspell.Cast(Stack.Shifting Ceratops)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Shifting Ceratops.Activate
+? Bot1.Mana =
+Bot1.Modes(reach)
+? Bot1.Battlefield.Shifting Ceratops.Keywords = CantBeCountered; Reach
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Shifting Ceratops.Keywords = CantBeCountered
+Bot2.Battlefield.Island.Activate
+! Bot2.Hand.Unsummon.Cast(Bot1.Battlefield.Shifting Ceratops)
+Bot2.Hand.Unsummon.Cast(Bot2.Battlefield.Ornithopter)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Shifting Ceratops.Activate
+? Bot1.Mana =
+Bot1.Modes(trample)
+? Bot1.Battlefield.Shifting Ceratops.Keywords = CantBeCountered; Trample
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Shifting Ceratops.Activate
+? Bot1.Mana =
+Bot1.Modes(haste)
+? Bot1.Battlefield.Shifting Ceratops.Keywords = CantBeCountered; Haste; Trample
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Shifting Ceratops)
+
+[Expect]
+Exile = Shifting Ceratops
+Bot1.Life = 25

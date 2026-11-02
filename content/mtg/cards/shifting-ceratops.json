@@ -1,0 +1,11 @@
+{
+  "name": "Shifting Ceratops",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Dinosaur",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "This spell can't be countered.\nProtection from blue (This creature can't be blocked, targeted, dealt damage, enchanted, or equipped by anything blue.)\n{G}: This creature gains your choice of reach, trample, or haste until end of turn.",
+  "keywords": [
+    "CantBeCountered"
+  ]
+}
