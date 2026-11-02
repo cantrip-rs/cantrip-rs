@@ -1,0 +1,6 @@
+{
+  "name": "Environmental Sciences",
+  "manaCost": "{2}",
+  "type": "Sorcery — Lesson",
+  "oracleText": "Search your library for a basic land card, reveal it, put it into your hand, then shuffle. You gain 2 life."
+}

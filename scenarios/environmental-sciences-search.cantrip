@@ -1,0 +1,34 @@
+# Environmental Sciences finds and reveals a basic land, shuffles the library, and gains its controller two life (CR 701.19a, 701.20a, 701.23a, 119.3).
+[Bot1 Deck]
+Mox Sapphire
+Island
+Environmental Sciences
+Island x4
+Forest
+Tundra
+Shock
+Island x20
+[Bot2 Deck]
+Island x7
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Environmental Sciences.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Search(Tundra)
+! Bot1.Search(Shock)
+! Bot1.Search(Forest; Island)
+Bot1.Search(Forest)
+? Bot1.Revealed = Forest
+[Expect]
+Bot1.Hand = Forest; Island; Island; Island; Island
+Bot1.Shuffles = 1
+Bot1.Life = 22
+Bot2.Life = 20
+Bot2.Library.Count = 21
