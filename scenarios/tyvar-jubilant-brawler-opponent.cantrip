@@ -1,0 +1,32 @@
+# Tyvar allows only creatures its controller controls to use tap abilities despite summoning sickness (CR 302.6).
+[Bot1 Deck]
+Island
+Mox Jet
+Mox Emerald
+Tyvar, Jubilant Brawler
+Island x20
+[Bot2 Deck]
+Black Lotus
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tyvar, Jubilant Brawler.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.Battlefield.Llanowar Elves.Activate
+[T4 Bot2.Main1]
+Bot2.Battlefield.Llanowar Elves.Activate
+? Bot2.Mana = {G}
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = true

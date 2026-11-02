@@ -1,0 +1,43 @@
+# Tyvar permits a newly controlled creature's tap ability, and +1 untaps a creature without granting haste (CR 302.6, 606.4).
+[Bot1 Deck]
+Island
+Mox Jet
+Mox Emerald
+Black Lotus
+Tyvar, Jubilant Brawler
+Llanowar Elves
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tyvar, Jubilant Brawler.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Llanowar Elves.Activate
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+! Bot1.Battlefield.Tyvar, Jubilant Brawler.Activate(Bot1.Battlefield.Island; Ability: Untap)
+Bot1.Battlefield.Tyvar, Jubilant Brawler.Activate(Bot1.Battlefield.Llanowar Elves; Ability: Untap)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+? Bot1.Battlefield.Tyvar, Jubilant Brawler.Counters.Loyalty = 4
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Llanowar Elves > Bot2)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Tyvar, Jubilant Brawler.Activate(Ability: Untap)
+[Expect]
+Bot1.Battlefield.Tyvar, Jubilant Brawler.Counters.Loyalty = 5
+Bot1.Battlefield.Llanowar Elves.Keywords = (absent)

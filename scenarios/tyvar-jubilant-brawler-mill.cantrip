@@ -1,0 +1,33 @@
+# Tyvar mills three before returning a creature of mana value two (CR 701.13a, 608.2c).
+[Bot1 Deck]
+Island
+Mox Jet
+Mox Emerald
+Tyvar, Jubilant Brawler
+Island
+Island
+Island
+Wind Drake
+Grizzly Bears
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Tyvar, Jubilant Brawler.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Tyvar, Jubilant Brawler.Activate(Ability: Mill)
+! Bot1.Choose(Wind Drake)
+! Bot1.Choose(Grizzly Bears; Ornithopter)
+Bot1.Choose(Grizzly Bears)
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Battlefield.Tyvar, Jubilant Brawler.Counters.Loyalty = 1
+Bot1.Graveyard = Ornithopter; Wind Drake
