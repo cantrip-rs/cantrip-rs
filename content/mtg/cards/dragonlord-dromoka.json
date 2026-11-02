@@ -1,0 +1,13 @@
+{
+  "name": "Dragonlord Dromoka",
+  "manaCost": "{4}{G}{W}",
+  "type": "Legendary Creature — Elder Dragon",
+  "power": 5,
+  "toughness": 7,
+  "oracleText": "This spell can't be countered.\nFlying, lifelink\nYour opponents can't cast spells during your turn.",
+  "keywords": [
+    "Flying",
+    "Lifelink",
+    "CantBeCountered"
+  ]
+}

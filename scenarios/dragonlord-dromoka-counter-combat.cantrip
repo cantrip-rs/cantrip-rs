@@ -1,0 +1,52 @@
+# Dromoka cannot be countered, stops opposing spells on its controller's turn, and gains life from flying combat damage (CR 702.9b, 702.15b, 702.23).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Dragonlord Dromoka
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Counterspell
+Shock
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Dragonlord Dromoka.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Counterspell.Cast(Stack.Dragonlord Dromoka)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dragonlord Dromoka.Power = 5
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Shock.Cast(Bot1)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Dragonlord Dromoka > Bot2)
+[T5 Bot1.DeclareBlockers]
+! Bot2.Block(Grizzly Bears > Dragonlord Dromoka)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 15
