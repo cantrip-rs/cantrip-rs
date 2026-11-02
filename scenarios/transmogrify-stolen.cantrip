@@ -1,0 +1,35 @@
+# Transmogrify uses the creature's controller before exile, even if the opponent owns it (CR 608.2h).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Act of Treason
+Transmogrify
+Island
+Island
+Island
+Hill Giant
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Act of Treason.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Transmogrify.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[Expect]
+Exile = Ornithopter
+Bot1.Battlefield.Hill Giant.Power = 3
+Bot1.Shuffles = 1
+Bot2.Shuffles = 0
