@@ -1,0 +1,41 @@
+# Pore Over the Pages draws three, untaps up to two lands including an opponent's, then discards a newly drawn card (CR 121.1, 701.21a, 701.9a).
+
+[Bot1 Deck]
+Island
+Island
+Black Lotus
+Pore Over the Pages
+Island x4
+Forest
+Mountain
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Pore Over the Pages.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Island; Island; Island; Island; Forest; Mountain; Plains
+! Bot1.Choose(Bot1.Battlefield.Island#1; Bot1.Battlefield.Island#2; Bot2.Battlefield.Island)
+Bot1.Choose(Bot1.Battlefield.Island#1; Bot2.Battlefield.Island)
+Bot1.Choose(Plains)
+
+[Expect]
+Bot1.Battlefield.Island#1.Tapped = false
+Bot1.Battlefield.Island#2.Tapped = true
+Bot2.Battlefield.Island.Tapped = false
+Bot1.Graveyard = Pore Over the Pages; Plains; Black Lotus

@@ -1,0 +1,6 @@
+{
+  "name": "Pore Over the Pages",
+  "manaCost": "{3}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Draw three cards, untap up to two lands, then discard a card."
+}
