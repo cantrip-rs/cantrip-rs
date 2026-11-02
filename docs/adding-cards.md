@@ -414,6 +414,12 @@ shapes have an example:
   `lasting_cost_changes`, made with `g.spells_cost_this_turn(item, player, index)`: it changes `player`'s spells (only
   spells, and only theirs - the core checks that) until the turn ends, whether or not its source is still around, so its
   `change` never asks who controls its `source`; its `text` is shown beside that player's life total while it lasts.
+  A rule a resolving spell or ability gives a set of permanents that can still gain members ("creatures without flying
+  can't block this turn": Falter; "each creature attacks this turn if able": Goblin Diplomats; "creatures and lands
+  target opponent controls don't untap during their next untap step": Exhaustion) is a `LastingRule { text, rule,
+  applies }` in the card's `lasting_rules`, made with `g.add_lasting_rule(item, index, about, duration)`: `applies(q,
+  asker, about, id)` is asked of each permanent whenever the rule is read, with `about` what the words named as it
+  resolved (the target opponent) - never marked on the permanents there as it resolves (CR 611.2c).
   A card's own convoke, delve and improvise are characteristics (`pay_with`, from the content JSON); a static ability that
   gives them to the spells a player casts ("noncreature spells you cast have improvise": Ironheart, Clever Champion; Chief
   Engineer's convoke; Teval's delve) is a `PayWithGrant` in `CardDef.grants_pay_with`,

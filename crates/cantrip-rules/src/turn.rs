@@ -206,8 +206,10 @@ fn next_turn_taker(s: &mut GameState, after: PlayerId) -> PlayerId {
 /// ("until your next turn", CR 701.15a) ends here, as do Sparas Adjudicators' "can't attack or block until its controller's
 /// next turn".
 fn turn_would_have_begun(s: &mut GameState, p: PlayerId) {
-    if s.effects.iter().any(|e| e.duration == Duration::UntilNextTurnOf(p) || e.duration == Duration::EndOfNextTurnOf(p)) {
-        s.effects_retain(|e| e.duration != Duration::UntilNextTurnOf(p) && e.duration != Duration::EndOfNextTurnOf(p));
+    // "During that player's next untap step" too: the untap step would have been that turn's first step.
+    let waits = |e: &ContinuousEffect| matches!(e.duration, Duration::UntilNextTurnOf(q) | Duration::EndOfNextTurnOf(q) | Duration::DuringNextUntapStepOf(q) if q == p);
+    if s.effects.iter().any(waits) {
+        s.effects_retain(|e| !waits(e));
     }
     for at in (0..s.delayed.len()).rev() {
         if s.delayed[at].when == DelayedWhen::UntilNextTurnOf(p) {
@@ -553,7 +555,7 @@ fn skip_turn(cx: &mut Cx, player: PlayerId) -> R<bool> {
 
 /// CR 502.3: the active player's permanents untap, all at once. Except an exerted one, for the untap step it sits out
 /// (CR 701.43a), and one that doesn't untap during its controller's untap step (CR 502.3: its own `Keyword::DoesNotUntap`,
-/// or another permanent's `CardDef::untap_bans`); and one with a stun counter
+/// another permanent's `CardDef::untap_bans`, or a resolved effect's, `static_rules::untap_step_skips`); and one with a stun counter
 /// has a counter removed from it instead (CR 122.1d). With them, the other players' permanents that a static ability of
 /// a permanent another player controls untaps "during each other player's untap step" (`CardDef::untap_in_others_untap_steps`).
 pub(crate) fn untap_step(cx: &mut Cx, active: PlayerId) -> R<()> {
@@ -580,6 +582,7 @@ pub(crate) fn untap_step(cx: &mut Cx, active: PlayerId) -> R<()> {
             || obj.marks.exerted_by == Some(active)
             || cx.chars(id).has(Keyword::DoesNotUntap)
             || crate::static_rules::untap_banned(cx, cx.cards(), id)
+            || crate::static_rules::untap_step_skips(cx, cx.cards(), id, active)
         {
             continue;
         }
@@ -613,6 +616,19 @@ pub(crate) fn untap_step(cx: &mut Cx, active: PlayerId) -> R<()> {
     }
     for id in untapping {
         ops::untap(cx, id);
+    }
+    // "During its controller's next untap step" and "during [this player's] next untap step" end with this untap step,
+    // whatever it untapped (CR 611.2a; the Frost Titan ruling): the first is over for each permanent the active player
+    // controls now, whoever controlled it as the effect began (the Tamiyo, the Moon Sage ruling).
+    let s = cx.s();
+    let ends = |e: &ContinuousEffect| match e.duration {
+        Duration::DuringNextUntapStepOf(p) => p == active,
+        Duration::DuringItsControllersNextUntapStep => s.obj(e.affected).controller == active,
+        _ => false,
+    };
+    if s.effects.iter().any(ends) {
+        let keep: Vec<bool> = s.effects.iter().map(|e| !ends(e)).collect();
+        cx.st().effects_keep(&keep);
     }
     // No player gets priority in the untap step (CR 502.4), so no state-based actions are checked before the upkeep begins:
     // an effect "for as long as [it] remains tapped" ends the moment its source untaps (CR 611.2b), and the controller it
@@ -707,6 +723,9 @@ fn declare_attackers(cx: &mut Cx) -> R<()> {
                 && !obj.tapped
                 // CR 508.1c: an effect saying it can't attack; a static ability's restriction is read below, of each attack.
                 && !cx.s().effects.iter().any(|e| e.affected == id && e.kind == EffectKind::CantAttack && in_force(cx, e))
+                // A resolved rule about an open set that takes it in now (CR 611.2c): "creatures without flying can't attack
+                // this turn".
+                && crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::CantAttack).next().is_none()
                 && !summoning_sick(cx.cards(), cx.s(), &cx.g.log, id)
                 // CR 702.3b: defender, unless an effect or a static ability lets it attack as though it didn't have it
                 // (CR 609.4), which lifts no other restriction: asked last, of a creature that could otherwise attack.
@@ -965,6 +984,11 @@ fn can_block(cx: &Cx, blocker: ObjectId, attacker: ObjectId, rule_sources: &[Obj
     if cx.s().effects.iter().any(|e| e.affected == attacker && e.kind == EffectKind::CantBeBlocked) {
         return false;
     }
+    // "Creatures you control can't be blocked this turn": a resolved rule about an open set that takes the attacker in now
+    // (CR 611.2c), whenever it arrived.
+    if crate::static_rules::lasting_rules_on(cx, cx.cards(), attacker, LastingRuleKind::CantBeBlocked).next().is_some() {
+        return false;
+    }
     // A resolved restriction on who may block whom ("it can't be blocked this turn except by creatures with haste"): an
     // effect too, so it holds whatever abilities its source or the creature have lost since (CR 113.1a, 611.2c, 613.1f).
     for e in &cx.s().effects {
@@ -1062,6 +1086,11 @@ fn attack_rules(cx: &Cx, eligible: &[ObjectId], targets: &[Target], barred: Vec<
         for _ in 0..cx.chars(id).must_attack {
             required.push(RequiredAttack { attacker: id, aim: AttackAim::Anything });
         }
+        // "Each creature attacks this turn if able" (Goblin Diplomats): one for each resolved rule about an open set that takes
+        // it in now (CR 611.2c), an effect and no ability, so one that has lost its abilities attacks too.
+        for _ in crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::MustAttack) {
+            required.push(RequiredAttack { attacker: id, aim: AttackAim::Anything });
+        }
         let mut goaders: Vec<PlayerId> = Vec::new();
         for e in cx.s().effects.iter().filter(|e| e.affected == id) {
             match e.kind {
@@ -1127,7 +1156,8 @@ fn spend_next_turn_effects(cx: &mut Cx) {
     }
 }
 
-/// "Can't block" (CR 509.1b): from an effect on this creature, or the turn's rule that no creature can.
+/// "Can't block" (CR 509.1b): from an effect on this creature, a resolved rule about an open set that takes it in now
+/// (`LastingRuleKind::CantBlock`: Falter), or the turn's rule that no creature can.
 fn cant_block(cx: &Cx, id: ObjectId) -> bool {
     let s = cx.s();
     s.turn.no_blocks_turn == s.turn.number
@@ -1137,6 +1167,7 @@ fn cant_block(cx: &Cx, id: ObjectId) -> bool {
             EffectKind::CreaturesCantBlock(p) => s.obj(id).controller == p,
             _ => false,
         })
+        || crate::static_rules::lasting_rules_on(cx, cx.cards(), id, LastingRuleKind::CantBlock).next().is_some()
 }
 
 fn declare_blockers(cx: &mut Cx) -> R<()> {
@@ -1269,6 +1300,19 @@ fn block_rules(cx: &Cx, attackers: &[ObjectId], allowed: &[(ObjectId, ObjectId)]
             && allowed.contains(&(e.affected, attacker))
         {
             required.push(RequiredBlock { blocker: Some(e.affected), attacker: Some(attacker) });
+        }
+    }
+    // "Each creature blocks this turn if able": one for each resolved rule about an open set that takes in a creature that may
+    // block something (CR 509.1c, 611.2c).
+    let mut blockers: Vec<ObjectId> = Vec::new();
+    for &(b, _) in allowed {
+        if !blockers.contains(&b) {
+            blockers.push(b);
+        }
+    }
+    for b in blockers {
+        for _ in crate::static_rules::lasting_rules_on(cx, cx.cards(), b, LastingRuleKind::MustBlock) {
+            required.push(RequiredBlock { blocker: Some(b), attacker: None });
         }
     }
     // A creature blocking one member of an attacking band blocks every member (CR 702.22h), so blocking any member obeys a

@@ -623,6 +623,13 @@ kind, place it where the action could otherwise be taken, with a wait or `BotN.P
 - `BotN.Battlefield.<Name>.BlockRestriction` (`Can't be blocked except by creatures with haste`), each restriction on
   blocking a resolved spell or ability put on a permanent (CR 509.1b, 611.2c: Gingerbrute's), in its card's words, sorted
   and joined with `; `, while it lasts, and absent otherwise; like `CantBeBlocked`, an effect and not in `Keywords`
+- `BotN.Battlefield.<Name>.DoesntUntap`, `true` while a resolved spell or ability's "it doesn't untap during its
+  controller's next untap step" is on a permanent (CR 502.3, 611.2c: Tangle's, Frost Breath's), absent otherwise; an
+  effect, not in `Keywords`, whose printed kin is `DoesNotUntap`
+- `BotN.Battlefield.<Name>.LastingRules` (`Creatures without flying can't block this turn.`), each rule a resolved spell
+  or ability gave an open set of objects that takes the permanent in now (CR 611.2c: Falter's, Goblin Diplomats',
+  Exhaustion's), in its card's words, sorted and joined with `; `, while it lasts, and absent otherwise: asked again at
+  each dump, so a permanent that arrived later or came to match has it and one that stopped matching does not
 - `BotN.Battlefield.<Name>.AttachedTo` (`Grizzly Bears`), what an Aura or Equipment enchants or equips, or the player an
   Aura enchants (`Bot2`, CR 303.4), absent otherwise
 

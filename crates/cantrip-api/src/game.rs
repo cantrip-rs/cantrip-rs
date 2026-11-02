@@ -965,6 +965,18 @@ pub trait Game: Query {
         let kind = EffectKind::SpellCostChange { card: item.ability.card, index, player };
         self.add_player_effect(item.controller, item.object, kind, Duration::EndOfTurn);
     }
+    /// A rule about an open set of objects (CR 611.2c), made by the resolving spell or ability `item`: the `index`th of the
+    /// `lasting_rules` of its card (the face that is up, for a permanent's ability) applies, for `duration`, to each permanent
+    /// its set takes in each time the rule is read, those that arrive later too, whether or not the source stays on the
+    /// battlefield (CR 611.2a). `about` is what the words named as it resolved, which the set is asked with: "target opponent"
+    /// (Exhaustion), or `Target::None`. Controlled by `item`'s controller (CR 109.5). Falter, Goblin Diplomats, Exhaustion,
+    /// Mana Vapors.
+    fn add_lasting_rule(&mut self, item: &StackItem, index: u8, about: Target, duration: Duration) {
+        // A set has no one controller whose untap step it could wait for.
+        debug_assert!(duration != Duration::DuringItsControllersNextUntapStep, "a rule about a set lasts until a named player's untap step");
+        let kind = EffectKind::LastingRule { card: item.ability.card, index, about };
+        self.add_player_effect(item.controller, item.object, kind, duration);
+    }
     /// "You may play [`count`] additional land[s] this turn" (CR 305.2, 611.2c), made by the resolving spell or ability
     /// `item`: a permission for its controller (CR 109.5), asked nothing as it resolves, that adds `count` to the lands they
     /// can play until the turn ends (CR 514.2), whatever happens to the source, and adds to every other effect and static

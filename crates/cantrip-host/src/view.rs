@@ -663,6 +663,17 @@ impl<'a> Projector<'a> {
                 });
             }
         }
+        // A rule a resolved spell or ability gives an open set of objects (CR 611.2c: "creatures without flying can't block this
+        // turn"): about no one object, and reaching ones that arrive later, so the page says it beside its controller's life
+        // total too, in the card's words and named for it. The other seat is told whose it is.
+        for e in s.effects.iter().filter(|e| e.controller == p) {
+            if let EffectKind::LastingRule { card, index, .. } = e.kind
+                && let Some(rule) = game.cards.get(card).lasting_rules.get(index as usize)
+            {
+                let name = game.cards.get(card).name;
+                summary.pending_effects.push(if p == self.viewer { format!("{name}: {}", rule.text) } else { format!("Their {name}'s effect: {}", rule.text) });
+            }
+        }
         // "Whenever [event] this turn" / "when you next [event] this turn" / "until your next turn, whenever [event]" (CR 603.7b):
         // a delayed triggered ability that waits for its event, on no object, so the page says it beside its controller's life
         // total, in the ability's own words
@@ -868,6 +879,9 @@ impl<'a> Projector<'a> {
             Duration::UntilNextTurnOf(q) if q == self.viewer => " until your next turn".to_string(),
             Duration::UntilNextTurnOf(q) => format!(" until {}'s next turn", self.names.get(q.index()).cloned().unwrap_or_default()),
             Duration::DuringControllersNextTurn(_) => " during its controller's next turn".to_string(),
+            Duration::DuringItsControllersNextUntapStep => " during its controller's next untap step".to_string(),
+            Duration::DuringNextUntapStepOf(q) if q == self.viewer => " during your next untap step".to_string(),
+            Duration::DuringNextUntapStepOf(q) => format!(" during {}'s next untap step", self.names.get(q.index()).cloned().unwrap_or_default()),
             Duration::EndOfExtraTurn(_) => " during the extra turn".to_string(),
             Duration::WhileTapped => " for as long as it remains tapped".to_string(),
             Duration::WhileCounter(kind) => format!(" for as long as it has a {} counter on it", kind.name()),
@@ -1422,6 +1436,12 @@ impl<'a> Projector<'a> {
                     EffectKind::CantActivateAbilities => "Its activated abilities can't be activated",
                     EffectKind::CantBeSacrificed => "Can't be sacrificed",
                     EffectKind::CantBecomeUntapped => "Can't become untapped",
+                    // "Doesn't untap during its controller's next untap step." (CR 502.3); for another duration, "during its
+                    // controller's untap step" and how long.
+                    EffectKind::DoesntUntap => match e.duration {
+                        Duration::DuringItsControllersNextUntapStep | Duration::DuringNextUntapStepOf(_) => "Doesn't untap",
+                        _ => "Doesn't untap during its controller's untap step",
+                    },
                     // A resolved control-changing effect (CR 613.1b): who has it and for how long, named for where it came
                     // from, as nothing else on the permanent says so. A permanent given for good says nothing.
                     EffectKind::Control(p) if e.duration != Duration::Indefinite => {
@@ -1449,6 +1469,16 @@ impl<'a> Projector<'a> {
                     _ => continue,
                 };
                 view.granted_abilities.push(AbilityTextView { text: format!("{what}{}.", self.until_text(e.duration)), spent: false });
+            }
+            // A resolved rule about an open set that takes it in now (CR 611.2c: Falter's "creatures without flying can't block
+            // this turn"), in its card's words and named for it: no ability of the permanent says so.
+            for e in s.effects.iter() {
+                if let EffectKind::LastingRule { card, index, about } = e.kind
+                    && let Some(rule) = game.cards.get(card).lasting_rules.get(index as usize)
+                    && (rule.applies)(game, &Asker::new(e.source, e.controller), about, id)
+                {
+                    view.granted_abilities.push(AbilityTextView { text: format!("{} ({})", rule.text, game.cards.get(card).name), spent: false });
+                }
             }
             // "Can't attack" from a static ability while its condition holds (CR 508.1c: Patchwork Beastie without delirium).
             if c.is(CardType::Creature) && !game.attack_rules_allow(id) {

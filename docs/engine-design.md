@@ -2329,6 +2329,23 @@ the restrictions are cumulative) is offered no block at all (`turn::declare_bloc
 at the attacker clicked and says why the rest are still held; the tactical, random, automatic and language-model seats never
 declare more. A multi-pair refusal in a scenario is judged by the engine's check of that declaration.
 
+A resolved rule about a set that can still gain members (CR 611.2c: an effect that changes no characteristics is a rule of
+the game, and reaches objects that weren't there as it began) is `EffectKind::LastingRule { card, index, about }`, naming the
+`index`th of the `CardDef::lasting_rules` of the card that made it, made by `Game::add_lasting_rule`: a `LastingRule { text,
+rule, applies }`, whose `rule` (`LastingRuleKind`) is one of the per-object rules above - can't attack, can't block, can't be
+blocked, attacks or blocks if able, doesn't untap - and whose `applies` (`OpenSet`) is asked of a permanent each time that rule
+is read, so Falter's "creatures without flying can't block this turn" bars a creature that enters later and frees one that
+gains flying. `about` is what the words named as it resolved ("target opponent", for Exhaustion's "creatures and lands target
+opponent controls don't untap during their next untap step"), handed to `applies`. It is read beside each per-object effect
+(`static_rules::lasting_rules_on`: `turn::declare_attackers`, `attack_rules`, `can_block`, `cant_block`, `block_rules`,
+`untap_step`), from the effects and not from any object's abilities, so neither the source's nor the permanent's losing
+abilities ends it, and it outlives its source. A set the words fix as the effect resolves ("each attacking creature doesn't
+untap during its controller's next untap step", Tangle; "those creatures", Frost Breath) is an effect on each object instead:
+`EffectKind::DoesntUntap`, weaker than `CantBecomeUntapped` (another untap still untaps it, CR 502.3), with
+`Duration::DuringItsControllersNextUntapStep` - whoever controls it at that untap step, per the Tamiyo, the Moon Sage ruling -
+or `Duration::DuringNextUntapStepOf(player)`, which applies in that player's untap step alone; both end as that untap step
+does (`turn::untap_step`).
+
 ### Blocks an effect requires
 
 A requirement to block (CR 509.1c) is one `RequiredBlock` of the question's `BlockRequirements`, one for each effect or static

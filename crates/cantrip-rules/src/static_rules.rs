@@ -655,6 +655,37 @@ pub fn untap_banned(q: &dyn Query, cards: &'static CardTable, id: ObjectId) -> b
     any_static(q, cards, |d| d.untap_bans, |rule, asker| rule(q, asker, id))
 }
 
+/// The rules about an open set of objects that resolved spells and abilities made (CR 611.2c, `EffectKind::LastingRule`) that
+/// say `rule` of the permanent `id` now: one for each such effect whose set takes in `id` as it is now, asked as the effect's
+/// source and controller with what its words named (`OpenSet`). A rule of the game, not an ability of `id` or of the source,
+/// so it holds whatever abilities either has lost (CR 613.1f), and it outlives the source (CR 611.2a).
+pub fn lasting_rules_on<'a>(
+    q: &'a dyn Query,
+    cards: &'static CardTable,
+    id: ObjectId,
+    rule: LastingRuleKind,
+) -> impl Iterator<Item = &'a ContinuousEffect> + 'a {
+    q.state().effects.iter().filter(move |e| match e.kind {
+        EffectKind::LastingRule { card, index, about } => cards
+            .get(card)
+            .lasting_rules
+            .get(index as usize)
+            .is_some_and(|r| r.rule == rule && (r.applies)(q, &Asker::new(e.source, e.controller), about, id)),
+        _ => false,
+    })
+}
+
+/// Whether a resolved effect says the permanent `id`, which `active` controls, doesn't untap during `active`'s untap step
+/// (CR 502.3, 611.2c): one on `id` (`EffectKind::DoesntUntap`: Tangle, Frost Breath) or a rule about an open set that takes it
+/// in (`LastingRuleKind::DoesntUntap`: Exhaustion), for as long as it lasts - one "during [a player's] next untap step"
+/// (`Duration::DuringNextUntapStepOf`) only in that player's (the Exhaustion ruling). No ability of `id`'s, so it holds
+/// whatever abilities `id` has lost (CR 613.1f).
+pub fn untap_step_skips(q: &dyn Query, cards: &'static CardTable, id: ObjectId, active: PlayerId) -> bool {
+    let this_step = |e: &ContinuousEffect| !matches!(e.duration, Duration::DuringNextUntapStepOf(p) if p != active);
+    q.state().effects.iter().any(|e| e.affected == id && e.kind == EffectKind::DoesntUntap && this_step(e))
+        || lasting_rules_on(q, cards, id, LastingRuleKind::DoesntUntap).any(this_step)
+}
+
 /// Whether the permanent `id` can't become untapped (CR 101.2, 701.26b): a resolved effect says so
 /// (`EffectKind::CantBecomeUntapped`: Spider-Woman, Secret Agent), or a static ability of a permanent on the battlefield with
 /// its abilities does (`CardDef::cant_become_untapped`: Frozen in Ice, Blossombind). No ability of `id`'s, so it holds

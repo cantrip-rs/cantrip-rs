@@ -650,6 +650,31 @@ impl StateDump {
                         restrictions.sort_unstable();
                         d.set(format!("{key}.BlockRestriction"), restrictions.join("; "));
                     }
+                    // A resolved "doesn't untap during its controller's next untap step" on it (CR 502.3, 611.2c), while it
+                    // lasts: an effect, not a keyword.
+                    if s.effects.iter().any(|e| e.affected == id && e.kind == EffectKind::DoesntUntap) {
+                        d.set(format!("{key}.DoesntUntap"), true);
+                    }
+                    // Each resolved rule about an open set that takes it in now (CR 611.2c), in its card's words: an effect,
+                    // not a keyword.
+                    let mut rules: Vec<&str> = s
+                        .effects
+                        .iter()
+                        .filter_map(|e| match e.kind {
+                            EffectKind::LastingRule { card, index, about } => game
+                                .cards
+                                .get(card)
+                                .lasting_rules
+                                .get(index as usize)
+                                .filter(|r| (r.applies)(game, &Asker::new(e.source, e.controller), about, id))
+                                .map(|r| r.text),
+                            _ => None,
+                        })
+                        .collect();
+                    if !rules.is_empty() {
+                        rules.sort_unstable();
+                        d.set(format!("{key}.LastingRules"), rules.join("; "));
+                    }
                     // What was chosen for it, as an ability of the text it has now reads it (CR 607.2d, 607.5): a choice made by
                     // a text it no longer has as its own is no part of it.
                     let own = game.cards.linked_to(s, id);
@@ -890,7 +915,7 @@ const PLAYER_KEYS: &[&str] = &[
 /// The keys the dump writes of a permanent, after `BotN.Battlefield.<name>.` (or `.PhasedOut.`), beside `Counters.<Kind>`.
 const PERMANENT_KEYS: &[&str] = &[
     "Tapped", "Toxic", "FaceDown", "FaceDownName", "Token", "Prototyped", "Transformed", "ManaValue", "X", "Doors", "Prepared", "AttachedTo", "Monstrous",
-    "Solved", "Suspected", "Saddled", "Exerted", "GoadedBy", "MustAttack", "CantBeBlocked", "BlockRestriction", "ChosenPlayer", "ChosenOption", "ChosenNumber", "ChosenObject",
+    "Solved", "Suspected", "Saddled", "Exerted", "GoadedBy", "MustAttack", "CantBeBlocked", "BlockRestriction", "DoesntUntap", "LastingRules", "ChosenPlayer", "ChosenOption", "ChosenNumber", "ChosenObject",
     "ChosenModes", "ChosenName", "ClassLevel", "Types", "Supertypes", "Subtypes", "Colors", "Keywords", "HexproofFrom",
     "ProtectionFrom", "ProtectionFromSubtypes", "ProtectionFromManaValue", "Power", "Toughness", "Damage", "SummoningSick", "ChosenColor", "ChosenSubtype",
 ];

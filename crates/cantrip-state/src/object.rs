@@ -1313,6 +1313,15 @@ pub enum EffectKind {
     /// when an effect would untap it, and a stun counter on it stays (CR 122.1d). As `CardDef::cant_become_untapped`, but a
     /// resolved effect of an ability on the permanent it names, so it is no ability of that permanent (CR 613.1f).
     CantBecomeUntapped,
+    /// "It doesn't untap during its controller's next untap step" (CR 502.3, 611.2c) for as long as the effect lasts: the
+    /// permanent stays tapped in the untap step of the player who controls it then - with
+    /// `Duration::DuringItsControllersNextUntapStep`, whoever that is by then (the Frost Titan and Tamiyo, the Moon Sage
+    /// rulings); with `Duration::DuringNextUntapStepOf`, only in that player's ("that player's next untap step": Sleep).
+    /// Weaker than `CantBecomeUntapped`: any other untap untaps it - a spell, an ability, another player's untap step it
+    /// untaps in (`CardDef::untap_in_others_untap_steps`) - and a stun counter on it is removed as usual (CR 122.1d). A resolved
+    /// effect, not an ability of the permanent, so it holds whatever abilities the permanent loses (CR 613.1f). Tangle's
+    /// "each attacking creature", Frost Breath's "those creatures": the objects are the ones named as it resolves.
+    DoesntUntap,
     /// The permanent is harnessed (CR 701.64): a designation it keeps as long as it stays where it is
     /// (`Duration::Indefinite`), which turns its infinity abilities on (CR 702.186).
     Harnessed,
@@ -1378,6 +1387,17 @@ pub enum EffectKind {
     /// "Creatures [this player] controls can't block this turn" (CR 509.1b, 611.2c): a rule about a player, so it reaches creatures
     /// that arrive later too and grants no ability. Its `affected` object is only the source.
     CreaturesCantBlock(PlayerId),
+    /// A rule a resolving spell or ability gives an open set of objects (CR 611.2c) for as long as the effect lasts: the
+    /// `index`th of the `lasting_rules` of `card`, the card whose spell or ability made it (the face that was up), which says
+    /// what the rule is (can't attack, can't block, can't be blocked, attacks or blocks if able, doesn't untap) and which
+    /// objects it applies to. An effect that changes no characteristics is a rule of the game, so the set is asked again
+    /// each time the rule is read - a creature that arrives or comes to match it afterwards is under it, one that stops
+    /// matching is not - and it gives no object an ability, so one that loses its abilities is still under it (CR 613.1f).
+    /// Falter's "creatures without flying can't block this turn", Goblin Diplomats' "each creature attacks this turn if
+    /// able", Exhaustion's "creatures and lands target opponent controls don't untap during their next untap step". `about`
+    /// is what its words named as it resolved, which the set is asked with: the player or object ("target opponent"), or
+    /// `Target::None`. About no object, so it outlives its `affected` object, which is only the source.
+    LastingRule { card: CardId, index: u8, about: Target },
     /// A regeneration shield (CR 701.19a, 614.8): the next time the permanent would be destroyed this turn, it is
     /// tapped, its damage removed and it is removed from combat instead. One effect for each shield.
     RegenerationShield,
@@ -1490,6 +1510,7 @@ impl EffectKind {
                 | EffectKind::ControlsPlayer(_)
                 | EffectKind::NoLegendRule(_)
                 | EffectKind::SpellCostChange { .. }
+                | EffectKind::LastingRule { .. }
         ) || matches!(self, EffectKind::Prevention { to, .. } if to.object().is_none())
     }
 }
@@ -1569,6 +1590,17 @@ pub enum Duration {
     /// nothing if it is false as the effect would begin; it never comes back. Old Man of the Sea's "for as long as this
     /// creature remains tapped and that creature's power remains less than or equal to this creature's power".
     AsLongAs(CardId, u8),
+    /// "During its controller's next untap step" (CR 502.3, 611.2a): until the end of the next untap step of the player who
+    /// controls the affected object then - whoever that is by then, so a permanent that changes controllers first is under it
+    /// in its new controller's next untap step (the Frost Titan, Tamiyo, the Moon Sage and Hands of Binding rulings). It
+    /// ends with that untap step, whatever it did: a permanent untapped as that step began is under it no more (the Frost
+    /// Titan ruling). About an object, so only an effect on one lasts so (`EffectKind::DoesntUntap`).
+    DuringItsControllersNextUntapStep,
+    /// "During [that player's] next untap step" (CR 502.3, 611.2a): until the end of this player's next untap step, and a
+    /// rule it makes about untapping applies in that untap step alone (Exhaustion's "their next untap step"; Sleep's "that
+    /// player's next untap step") - another player's untap step a permanent untaps in is not it (the Exhaustion ruling). A
+    /// player who has left the game would have begun their turn, and it ends then (CR 800.4m).
+    DuringNextUntapStepOf(PlayerId),
 }
 
 impl Duration {

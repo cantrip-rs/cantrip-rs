@@ -2338,6 +2338,51 @@ pub struct LastingBlockRule {
     pub allows: BlockRule,
 }
 
+/// Whether a rule a resolving spell or ability made about an open set of objects applies to the permanent `id` now (CR
+/// 611.2c): asked whenever the rule is read, of the permanent as it is then, so the set takes in what arrives or comes to
+/// match it later and lets go of what stops matching. `asker` is the effect's source - which may have left the battlefield,
+/// so it is never asked who controls it - and the effect's controller, "you"; `about` is what the effect's words named as
+/// it resolved, as `EffectKind::LastingRule` holds it: "target opponent" (Exhaustion), or `Target::None`.
+pub type OpenSet = fn(&dyn Query, &Asker, Target, ObjectId) -> bool;
+
+/// What a `LastingRule` says of each permanent it applies to: the rules read of one object (`EffectKind`'s `CantAttack`,
+/// `CantBlock`, `CantBeBlocked`, `MustBlock` and `DoesntUntap`, and "attacks each combat if able" as a requirement, not an
+/// ability), here of a set.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub enum LastingRuleKind {
+    /// "Can't attack" (CR 508.1c).
+    CantAttack,
+    /// "Can't block" (CR 509.1b).
+    CantBlock,
+    /// "Can't be blocked" (CR 509.1b).
+    CantBeBlocked,
+    /// "Attacks [this turn] if able" (CR 508.1d): one requirement for each such effect. The creature's controller still
+    /// chooses what it attacks (the Goblin Diplomats ruling).
+    MustAttack,
+    /// "Blocks [this turn] if able" (CR 509.1c): one requirement for each such effect, any attacker it is able to block.
+    MustBlock,
+    /// "Doesn't untap during [its controller's] untap step" (CR 502.3), as `EffectKind::DoesntUntap` reads it: in the untap
+    /// step of the player who controls the permanent, and with `Duration::DuringNextUntapStepOf`, only in that player's.
+    DoesntUntap,
+}
+
+/// A rule a resolving spell or ability gives an open set of objects for a duration (CR 611.2c): "creatures without flying
+/// can't block this turn" (Falter), "each creature attacks this turn if able" (Goblin Diplomats), "creatures and lands target
+/// opponent controls don't untap during their next untap step" (Exhaustion, Mana Vapors). The effect
+/// (`EffectKind::LastingRule`, made by `Game::add_lasting_rule`) is about no object and gives none an ability, so it reaches
+/// permanents that arrive later and holds whatever abilities they or its source lose (CR 613.1f). A card lists these in
+/// its `lasting_rules`.
+#[derive(Clone, Copy)]
+pub struct LastingRule {
+    /// What it says, in the card's own words with their duration ("Creatures without flying can't block this turn."):
+    /// shown beside its controller's life total, and on each permanent it applies to, while it lasts.
+    pub text: &'static str,
+    /// What the rule is.
+    pub rule: LastingRuleKind,
+    /// Which permanents it applies to, asked as the rule is read.
+    pub applies: OpenSet,
+}
+
 /// A static ability that limits how many creatures may block an attacker (CR 509.1b), a restriction on the whole declaration
 /// rather than on one block: asked, while the object that has it is on the battlefield with its abilities, of each attacker
 /// (the object itself or another), `Some(n)` saying it can't be blocked by more than `n` creatures. Another permanent's
@@ -3077,6 +3122,9 @@ pub struct CardDef {
     /// The restrictions on blocking its resolving spells and abilities make for a duration (CR 509.1b, 611.2a):
     /// `EffectKind::BlockRestriction` names the nth. Not standing abilities: they function only while such an effect lasts.
     pub lasting_block_rules: &'static [LastingBlockRule],
+    /// The rules its resolving spells and abilities give an open set of objects for a duration (CR 611.2c):
+    /// `EffectKind::LastingRule` names the nth. Not standing abilities: they function only while such an effect lasts.
+    pub lasting_rules: &'static [LastingRule],
     /// Its static abilities that give the spells a player casts convoke, delve or improvise (CR 601.2f-h), while it is on the
     /// battlefield.
     pub grants_pay_with: &'static [PayWithGrant],
@@ -3402,6 +3450,7 @@ impl CardDef {
         own_cost_changes: &[],
         lasting_cost_changes: &[],
         lasting_block_rules: &[],
+        lasting_rules: &[],
         grants_pay_with: &[],
         ability_alternatives: &[],
         granted_ways: &[],

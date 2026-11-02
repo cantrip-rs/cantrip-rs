@@ -191,6 +191,8 @@ mod turn;
 #[cfg(test)]
 mod cant_become_untapped_tests;
 #[cfg(test)]
+mod lasting_rules_tests;
+#[cfg(test)]
 mod untap_bans_tests;
 #[cfg(test)]
 mod untap_others_tests;
@@ -975,11 +977,13 @@ impl Game {
 
     /// Whether a tapped permanent would stay tapped through its controller's next untap step as things stand: it doesn't
     /// untap during its controller's untap step (its own `Keyword::DoesNotUntap`, or another permanent's
-    /// `CardDef::untap_bans`, CR 502.3), or a stun counter would replace its untap (CR 122.1d). Reads only: for a player
-    /// choosing what to tap (`cantrip_ai::pay`); the untap step itself decides (`turn::untap_step`).
+    /// `CardDef::untap_bans`, CR 502.3, or a resolved effect's, `static_rules::untap_step_skips`), or a stun counter would
+    /// replace its untap (CR 122.1d). Reads only: for a player choosing what to tap (`cantrip_ai::pay`); the untap step itself
+    /// decides (`turn::untap_step`).
     pub fn stays_tapped(&self, id: ObjectId) -> bool {
         self.chars(id).has(Keyword::DoesNotUntap)
             || static_rules::untap_banned(self, self.cards, id)
+            || static_rules::untap_step_skips(self, self.cards, id, self.state.obj(id).controller)
             || self.state.obj(id).counters(CounterKind::Stun) > 0
     }
 
@@ -1310,6 +1314,11 @@ impl<'a> Cx<'a> {
                     "only the declaration of attackers reads whether it is the controller's next turn"
                 );
                 Duration::DuringControllersNextTurn(self.g.state.turn.number)
+            }
+            // Only the untap step reads it, of a permanent's untapping.
+            Duration::DuringItsControllersNextUntapStep => {
+                debug_assert!(kind == EffectKind::DoesntUntap, "only an effect on untapping lasts until its controller's next untap step");
+                duration
             }
             other => other,
         };
