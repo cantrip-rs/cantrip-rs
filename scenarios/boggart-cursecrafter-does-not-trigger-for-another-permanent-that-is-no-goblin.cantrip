@@ -1,0 +1,38 @@
+# Boggart Cursecrafter: "another Goblin you control" (CR 700.4). Bot1's Ornithopter is an artifact creature with no creature type.
+# It dies to Bot1's own Lightning Bolt and nothing happens: Bot2 stays at 20.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Boggart Cursecrafter
+Ornithopter
+Lightning Bolt
+Mountain
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Boggart Cursecrafter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ornithopter; Lightning Bolt
+? Stack =
+
+[Expect]
+Bot2.Life = 20
