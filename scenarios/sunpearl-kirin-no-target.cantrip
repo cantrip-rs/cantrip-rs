@@ -1,0 +1,37 @@
+# The enter ability may choose no target, leaving a Treasure in play and drawing no card (CR 115.1d).
+
+[Bot1 Deck]
+Black Lotus
+Gold Pan
+Sunpearl Kirin
+Mox Pearl
+Plains
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Gold Pan.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sunpearl Kirin.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Sunpearl Kirin.Power = 2
