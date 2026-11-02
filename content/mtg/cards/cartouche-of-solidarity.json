@@ -1,0 +1,6 @@
+{
+  "name": "Cartouche of Solidarity",
+  "manaCost": "{W}",
+  "type": "Enchantment — Aura Cartouche",
+  "oracleText": "Enchant creature you control\nWhen this Aura enters, create a 1/1 white Warrior creature token with vigilance.\nEnchanted creature gets +1/+1 and has first strike. (It deals combat damage before creatures without first strike.)"
+}

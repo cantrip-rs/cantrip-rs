@@ -1,0 +1,52 @@
+# Cartouche enchants a creature its controller controls, creates a vigilant white Warrior, and grants first strike and +1/+1 (CR 702.4b, 702.20b, 603.6a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Grizzly Bears
+Cartouche of Solidarity
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Cartouche of Solidarity.Cast(Bot2.Battlefield.Grizzly Bears)
+! Bot1.Hand.Cartouche of Solidarity.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Cartouche of Solidarity.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Toughness = 3
+? Bot1.Battlefield.Warrior Token.Power = 1
+? Bot1.Battlefield.Warrior Token.Toughness = 1
+? Bot1.Battlefield.Warrior Token.Colors = White
+? Bot1.Battlefield.Warrior Token.Tapped = false
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Grizzly Bears > Grizzly Bears)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Grizzly Bears.Damage = 0
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Warrior Token > Bot2)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Warrior Token.Tapped = false
+Bot2.Life = 19
