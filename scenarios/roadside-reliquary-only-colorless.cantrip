@@ -1,0 +1,26 @@
+# One Reliquary supplies only one colorless mana, insufficient for colored costs or a two-mana artifact (CR 106.3, 601.2f).
+
+[Bot1 Deck]
+Roadside Reliquary
+Savannah Lions
+Aegis Turtle
+Muck Rats
+Norwood Ranger
+Gold Pan
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Roadside Reliquary.Play
+! Bot1.Hand.Savannah Lions.Cast(Mana: short)
+! Bot1.Hand.Aegis Turtle.Cast(Mana: short)
+! Bot1.Hand.Muck Rats.Cast(Mana: short)
+! Bot1.Hand.Norwood Ranger.Cast(Mana: short)
+! Bot1.Hand.Gold Pan.Cast(Mana: short)
+Bot1.Battlefield.Roadside Reliquary.Activate(Ability: Add)
+? Bot1.Mana = {C}
+
+[Expect]
+Bot1.Mana = {C}

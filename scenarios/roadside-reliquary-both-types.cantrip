@@ -1,0 +1,40 @@
+# Reliquary produces colorless mana and draws twice when one controlled permanent is both an artifact and an enchantment (CR 106.3, 121.1).
+
+[Bot1 Deck]
+Black Lotus
+Bow of Nylea
+Roadside Reliquary
+Mox Ruby
+Mox Ruby
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Roadside Reliquary.Play
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Bow of Nylea.Cast
+Bot1.Pass
+Bot1.Battlefield.Roadside Reliquary.Activate(Ability: Add)
+? Bot1.Mana = {C}
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Roadside Reliquary.Activate(Ability: Draw)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 5
+Bot1.Battlefield.Roadside Reliquary = (absent)
+Bot1.Graveyard = Roadside Reliquary; Black Lotus

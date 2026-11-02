@@ -1,0 +1,40 @@
+# Reliquary draws one for a single controlled artifact but none for an opponent’s enchantment (CR 121.1).
+
+[Bot1 Deck]
+Roadside Reliquary
+Mox Ruby
+Forest
+Forest
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Bow of Nylea
+Island x20
+
+[Actions]
+Bot1.Hand.Roadside Reliquary.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Bow of Nylea.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Main1]
+? Bot1.Hand.Count = 6
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Roadside Reliquary.Activate(Ability: Draw)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 7
+Bot2.Battlefield.Bow of Nylea.Types = Artifact; Enchantment
