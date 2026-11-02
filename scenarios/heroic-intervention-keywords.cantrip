@@ -1,0 +1,46 @@
+# Hexproof prevents the opponent targeting your permanent, and indestructible stops lethal damage from destroying it (CR 702.11b, 702.12b).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Heroic Intervention
+Ornithopter
+Shock
+Island x20
+
+[Bot2 Deck]
+Mountain
+Shock
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Heroic Intervention.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Damage = 2
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+! Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Damage = 2
+Bot2.Battlefield.Ornithopter = (absent)

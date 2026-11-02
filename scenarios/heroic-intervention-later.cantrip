@@ -1,0 +1,26 @@
+# Permanents entering after Heroic Intervention resolves do not gain its abilities (CR 611.2c).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Heroic Intervention
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Heroic Intervention.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+
+[Expect]
+Bot1.Battlefield.Forest.Keywords = Hexproof; Indestructible
+Bot1.Battlefield.Ornithopter.Keywords = Flying

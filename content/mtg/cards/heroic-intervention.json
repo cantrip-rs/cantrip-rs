@@ -1,0 +1,6 @@
+{
+  "name": "Heroic Intervention",
+  "manaCost": "{1}{G}",
+  "type": "Instant",
+  "oracleText": "Permanents you control gain hexproof and indestructible until end of turn."
+}

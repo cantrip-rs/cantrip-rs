@@ -1,0 +1,31 @@
+# Heroic Intervention affects artifacts, creatures, and enchantments under your control (CR 611.2a).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Black Lotus
+Fang of Shigeki
+Grizzly Bears
+Heroic Intervention
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Fang of Shigeki.Cast
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Heroic Intervention.Cast
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Mox Emerald.Keywords = Hexproof; Indestructible
+Bot1.Battlefield.Grizzly Bears.Keywords = Hexproof; Indestructible
+Bot1.Battlefield.Fang of Shigeki.Keywords = Deathtouch; Hexproof; Indestructible

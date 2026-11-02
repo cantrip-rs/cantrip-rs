@@ -1,0 +1,33 @@
+# Heroic Intervention gives only your current permanents hexproof and indestructible until end of turn (CR 611.2a, 702.11b, 702.12b).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Heroic Intervention
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Heroic Intervention.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Hexproof; Indestructible
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Battlefield.Ornithopter.Keywords = Flying

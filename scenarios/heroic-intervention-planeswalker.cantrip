@@ -1,0 +1,28 @@
+# Heroic Intervention gives a planeswalker hexproof and indestructible (CR 611.2a).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Ruby
+Wrenn and Six
+Heroic Intervention
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wrenn and Six.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Heroic Intervention.Cast
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Wrenn and Six.Keywords = Hexproof; Indestructible
