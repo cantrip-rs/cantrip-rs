@@ -1,0 +1,51 @@
+# Thought Distortion survives Counterspell, reveals the opponent's hand, and exiles noncreature nonlands from their hand and graveyard (CR 702.12a, 701.20a, 701.11a).
+[Bot1 Deck]
+Black Lotus x2
+Mox Sapphire
+Island
+Counterspell
+Thought Distortion
+Shock
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock x2
+Sol Ring
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Thought Distortion.Cast(Bot1)
+Bot1.Hand.Thought Distortion.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Counterspell.Cast(Stack.Thought Distortion)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Revealed = Shock; Sol Ring; Grizzly Bears; Island; Island; Island
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Shock.Colors = Red
+Bot2.Hand.Grizzly Bears.Power = 2
+Bot2.Hand = Grizzly Bears; Island; Island; Island
+Bot2.Graveyard =
+Exile = Shock; Sol Ring; Shock

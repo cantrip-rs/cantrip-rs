@@ -1,0 +1,9 @@
+{
+  "name": "Thought Distortion",
+  "manaCost": "{4}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "This spell can't be countered.\nTarget opponent reveals their hand. Exile all noncreature, nonland cards from that player's hand and graveyard.",
+  "keywords": [
+    "CantBeCountered"
+  ]
+}
