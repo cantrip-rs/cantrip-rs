@@ -1187,6 +1187,17 @@ pub fn create_a_kithkin(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     Ok(())
 }
 
+/// A 1/1 white Warrior creature token with vigilance (CR 111). Cartouche of Solidarity, Oketra the True and Oketra's
+/// Monument create this exact token.
+pub static WARRIOR_1_1_WHITE: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    colors: Some(ColorSet(1)),
+    power: Some(1),
+    toughness: Some(1),
+    keywords: Keywords::of(&[Keyword::Vigilance]),
+    ..token!(Warrior)
+};
+
 #[cfg(test)]
 mod tests {
     use super::*;
