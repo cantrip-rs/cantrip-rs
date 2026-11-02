@@ -1,0 +1,38 @@
+# Claim returns a creature of mana value two and cannot target a larger creature or a noncreature (CR 115.1a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Faithless Looting
+Grizzly Bears
+Wind Drake
+Claim // Fame
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Grizzly Bears; Wind Drake)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Claim // Fame.Cast(Bot1.Graveyard.Wind Drake; Ability: Claim)
+! Bot1.Hand.Claim // Fame.Cast(Bot1.Graveyard.Faithless Looting; Ability: Claim)
+! Bot1.Hand.Claim // Fame.Cast(Bot1.Battlefield.Mox Jet; Ability: Claim)
+Bot1.Hand.Claim // Fame.Cast(Bot1.Graveyard.Grizzly Bears; Ability: Claim)
+Bot1.Pass
+! Bot1.Graveyard.Claim // Fame.Cast(Bot1.Battlefield.Mox Jet; Ability: Fame)
+Bot1.Graveyard.Claim // Fame.Cast(Bot1.Battlefield.Grizzly Bears; Ability: Fame)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 4
+Bot1.Graveyard = Faithless Looting; Wind Drake; Black Lotus

@@ -1,0 +1,19 @@
+{
+  "name": "Claim // Fame",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Claim",
+      "manaCost": "{B}",
+      "type": "Sorcery",
+      "oracleText": "Return target creature card with mana value 2 or less from your graveyard to the battlefield."
+    },
+    {
+      "name": "Fame",
+      "manaCost": "{1}{R}",
+      "type": "Sorcery",
+      "oracleText": "Aftermath (Cast this spell only from your graveyard. Then exile it.)\nTarget creature gets +2/+0 and gains haste until end of turn.",
+      "aftermath": true
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+# Claim returns a creature from its controller's graveyard; Fame gives it +2/+0 and haste for the turn (CR 611.2a, 702.10b).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mountain
+Ornithopter
+Shock
+Claim // Fame
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Claim // Fame.Cast(Bot1.Graveyard.Ornithopter; Ability: Claim)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Claim // Fame.Cast(Bot1.Battlefield.Ornithopter; Ability: Fame)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Haste
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Exile = Claim // Fame
