@@ -1,0 +1,33 @@
+# The artifact condition must remain true as the combat trigger resolves (CR 603.4).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Toolcraft Exemplar
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Island
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Toolcraft Exemplar.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Pearl)
+[T3 Bot1.DeclareAttackers]
+
+[Expect]
+Bot1.Battlefield.Toolcraft Exemplar.Power = 1
+Bot1.Battlefield.Toolcraft Exemplar.Toughness = 1

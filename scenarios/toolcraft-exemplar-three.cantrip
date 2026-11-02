@@ -1,0 +1,39 @@
+# Three controlled artifacts give Toolcraft Exemplar +2/+1 and first strike until end of turn (CR 603.4, 611.2a, 702.7b).
+
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Ornithopter
+Toolcraft Exemplar
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter#1.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Toolcraft Exemplar.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Toolcraft Exemplar.Power = 3
+? Bot1.Battlefield.Toolcraft Exemplar.Toughness = 2
+Bot1.Attack(Toolcraft Exemplar > Bot2)
+Bot2.Block(Grizzly Bears > Toolcraft Exemplar)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Toolcraft Exemplar.Damage = 0
+? Bot2.Battlefield.Grizzly Bears = (absent)
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Toolcraft Exemplar.Power = 1
+Bot1.Battlefield.Toolcraft Exemplar.Toughness = 1
+Bot1.Battlefield.Toolcraft Exemplar.Keywords = (absent)

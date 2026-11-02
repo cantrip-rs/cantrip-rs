@@ -1,0 +1,26 @@
+# Two artifacts you control grant the bonus but an opponent's artifact does not satisfy the three-artifact condition (CR 603.4).
+
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Toolcraft Exemplar
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Toolcraft Exemplar.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+
+[Expect]
+Bot1.Battlefield.Toolcraft Exemplar.Power = 3
+Bot1.Battlefield.Toolcraft Exemplar.Toughness = 2
+Bot1.Battlefield.Toolcraft Exemplar.Keywords = (absent)
