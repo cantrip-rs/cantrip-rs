@@ -1,0 +1,5 @@
+{
+  "name": "Restless Ridgeline",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {R} or {G}.\n{2}{R}{G}: This land becomes a 3/4 red and green Dinosaur creature until end of turn. It's still a land.\nWhenever this land attacks, another target attacking creature gets +2/+0 until end of turn. Untap that creature."
+}

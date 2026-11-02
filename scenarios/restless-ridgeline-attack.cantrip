@@ -1,0 +1,50 @@
+# Ridgeline enters tapped, becomes a 3/4 red and green Dinosaur land, and pumps and untaps another attacker until end of turn (CR 603.2, 611.2a).
+[Bot1 Deck]
+Restless Ridgeline
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Grizzly Bears
+Ornithopter
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Restless Ridgeline.Play
+? Bot1.Battlefield.Restless Ridgeline.Tapped = true
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Restless Ridgeline.Activate(Ability: becomes)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Ridgeline.Power = 3
+? Bot1.Battlefield.Restless Ridgeline.Toughness = 4
+? Bot1.Battlefield.Restless Ridgeline.Colors = Green; Red
+? Bot1.Battlefield.Restless Ridgeline.Types = Land; Creature
+? Bot1.Battlefield.Restless Ridgeline.Subtypes = Dinosaur
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Restless Ridgeline; Grizzly Bears; Ornithopter#1 > Bot2)
+! Bot1.Target(Restless Ridgeline)
+! Bot1.Target(Ornithopter#2)
+Bot1.Target(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 4
+? Bot1.Battlefield.Grizzly Bears.Toughness = 2
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Restless Ridgeline.Types = Land
+Bot2.Life = 13

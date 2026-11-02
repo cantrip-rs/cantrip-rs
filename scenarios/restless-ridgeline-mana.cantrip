@@ -1,0 +1,17 @@
+# Ridgeline enters tapped and can tap for either red or green mana on later turns (CR 605.1a).
+[Bot1 Deck]
+Restless Ridgeline
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Restless Ridgeline.Play
+? Bot1.Battlefield.Restless Ridgeline.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Battlefield.Restless Ridgeline.Activate(Color: Red)
+? Bot1.Mana = {R}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Restless Ridgeline.Activate(Color: Green)
+? Bot1.Mana = {G}
+[Expect]
+Bot1.Battlefield.Restless Ridgeline.Tapped = true
