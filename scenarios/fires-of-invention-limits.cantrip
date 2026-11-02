@@ -1,0 +1,55 @@
+# Fires counts spells cast earlier in the turn and prevents its controller from casting a third spell or casting during the opponent's turn (CR 601.2e).
+
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Fires of Invention
+Ornithopter
+Shock
+Mountain
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fires of Invention.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Hand.Ornithopter.Cast
+[T4 Bot2.Main1]
+! Bot1.Hand.Ornithopter.Cast
+[T5 Bot1.Main1]
+! Bot1.Hand.Grizzly Bears.Cast(Ability: Without paying)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Battlefield.Ornithopter.Power = 0
