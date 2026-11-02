@@ -1,0 +1,8 @@
+{
+  "name": "Voyaging Satyr",
+  "manaCost": "{1}{G}",
+  "type": "Creature — Satyr Druid",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{T}: Untap target land."
+}

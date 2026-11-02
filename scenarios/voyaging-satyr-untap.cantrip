@@ -1,0 +1,41 @@
+# Voyaging Satyr taps to untap a land controlled by either player, and cannot target a creature (CR 602.2b, 701.21a).
+
+[Bot1 Deck]
+Forest
+Mox Emerald
+Voyaging Satyr
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Voyaging Satyr.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Voyaging Satyr.Activate(Bot1.Battlefield.Voyaging Satyr)
+Bot1.Battlefield.Voyaging Satyr.Activate(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Voyaging Satyr.Tapped = true
+? Bot2.Battlefield.Island.Tapped = false
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Voyaging Satyr.Activate(Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Tapped = false
+? Bot1.Mana = {G}
+[T7 Bot1.Main1]
+Bot1.Battlefield.Voyaging Satyr.Activate(Bot2.Battlefield.Island)
+
+[Expect]
+Bot1.Battlefield.Voyaging Satyr.Tapped = true
+Bot2.Battlefield.Island.Tapped = false
