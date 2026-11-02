@@ -1,0 +1,8 @@
+{
+  "name": "Omnath, Locus of the Roil",
+  "manaCost": "{1}{G}{U}{R}",
+  "type": "Legendary Creature — Elemental",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When Omnath enters, it deals damage to any target equal to the number of Elementals you control.\nLandfall — Whenever a land you control enters, put a +1/+1 counter on target Elemental you control. If you control eight or more lands, draw a card."
+}
