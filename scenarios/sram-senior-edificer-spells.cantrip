@@ -1,0 +1,43 @@
+# Sram triggers on each of its controller's Equipment, Aura, and Vehicle spells before the spell resolves (CR 603.2, 603.3).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Sram, Senior Edificer
+Paradise Mantle
+Ornithopter
+Rancor
+Smuggler's Copter
+Island x20
+[Bot2 Deck]
+Paradise Mantle
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sram, Senior Edificer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Paradise Mantle.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Smuggler's Copter.Colors =
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Rancor.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Smuggler's Copter.Cast
+[T2 Bot2.Main1]
+? Bot1.Library.Count = 18
+Bot2.Hand.Paradise Mantle.Cast
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Library.Count = 18
+Bot1.Hand.Count = 2
+Bot1.Battlefield.Smuggler's Copter.Types = Artifact
