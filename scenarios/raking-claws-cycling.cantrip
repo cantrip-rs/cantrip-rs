@@ -1,0 +1,23 @@
+# Cycling discards Raking Claws for two mana and draws one card (CR 702.29a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Raking Claws
+Island
+Island
+Island
+Island
+Shock
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raking Claws.Activate(Ability: Cycling)
+? Bot1.Mana =
+[Expect]
+Bot1.Graveyard = Raking Claws
+Bot1.Hand = Island; Island; Island; Island; Shock

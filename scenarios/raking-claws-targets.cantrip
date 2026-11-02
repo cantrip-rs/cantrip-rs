@@ -1,0 +1,44 @@
+# Raking Claws can target either player's creature and grants double strike only through the turn (CR 115.1a, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Grizzly Bears
+Raking Claws
+Raking Claws
+Island
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Raking Claws.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Raking Claws.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = DoubleStrike
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raking Claws.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Ornithopter.Keywords = DoubleStrike; Flying
