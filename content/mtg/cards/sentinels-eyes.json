@@ -1,0 +1,6 @@
+{
+  "name": "Sentinel's Eyes",
+  "manaCost": "{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+1 and has vigilance.\nEscape—{W}, Exile two other cards from your graveyard. (You may cast this card from your graveyard for its escape cost.)"
+}

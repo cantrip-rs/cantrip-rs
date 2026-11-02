@@ -1,0 +1,45 @@
+# Sentinel's Eyes gives +1/+1 and vigilance, and escapes for {W} by exiling two other graveyard cards (CR 702.21a, 702.139a).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Ornithopter x2
+Sentinel's Eyes
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Sentinel's Eyes.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Sentinel's Eyes.Cast(Bot1.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 1
+? Bot1.Battlefield.Ornithopter#1.Toughness = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Sentinel's Eyes.Cast(Bot1.Battlefield.Ornithopter; Ability: Escape)
+Bot1.Choose(Ornithopter; Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot2.Life = 19
+Exile = Ornithopter; Lightning Bolt
