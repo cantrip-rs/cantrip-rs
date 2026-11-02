@@ -1,0 +1,33 @@
+# Another creature dying does not trigger the Aura’s draw ability (CR 603.2).
+[Bot1 Deck]
+Mox Ruby
+Ornithopter x2
+Demonic Ruckus
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Demonic Ruckus.Activate(Ability: Plot)
+? Bot1.Mana =
+! Bot1.Exile.Demonic Ruckus.Cast(Bot1.Battlefield.Ornithopter#1)
+[T3 Bot1.Main1]
+Bot1.Exile.Demonic Ruckus.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 1
+? Bot1.Battlefield.Ornithopter#1.Toughness = 3
+? Bot1.Battlefield.Ornithopter#1.Keywords = Flying; Menace; Trample
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#2)
+Bot1.Pass
+[Expect]
+Bot1.Graveyard = Ornithopter; Lightning Bolt
+Bot1.Hand.Count = 3

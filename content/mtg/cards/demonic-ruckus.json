@@ -1,0 +1,6 @@
+{
+  "name": "Demonic Ruckus",
+  "manaCost": "{1}{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+1 and has menace and trample.\nWhen this Aura is put into a graveyard from the battlefield, draw a card.\nPlot {R} (You may pay {R} and exile this card from your hand. Cast it as a sorcery on a later turn without paying its mana cost. Plot only as a sorcery.)"
+}

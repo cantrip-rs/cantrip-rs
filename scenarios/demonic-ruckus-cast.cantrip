@@ -1,0 +1,26 @@
+# Demonic Ruckus enchants a creature for {1}{R}, granting +1/+1, menace, and trample (CR 702.5a, 702.111a, 702.19a).
+[Bot1 Deck]
+Mox Ruby
+Island
+Ornithopter
+Demonic Ruckus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Demonic Ruckus.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Demonic Ruckus.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Menace; Trample
+Bot1.Battlefield.Demonic Ruckus.AttachedTo = Ornithopter
