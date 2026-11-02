@@ -1,0 +1,6 @@
+{
+  "name": "Alpha Authority",
+  "manaCost": "{1}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature has hexproof and can't be blocked by more than one creature."
+}

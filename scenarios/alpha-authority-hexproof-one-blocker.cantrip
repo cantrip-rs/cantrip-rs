@@ -1,0 +1,55 @@
+# The Aura gives its creature hexproof and permits one blocker but not two (CR 702.11b, 509.1b).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Grizzly Bears
+Alpha Authority
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Shock
+Ornithopter
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Alpha Authority.Cast(Bot1.Battlefield.Mox Emerald)
+Bot1.Hand.Alpha Authority.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter#1.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Shock.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears)
+! Bot2.Block(Ornithopter#1 > Grizzly Bears; Ornithopter#2 > Grizzly Bears)
+Bot2.Block(Ornithopter#1 > Grizzly Bears)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Alpha Authority.AttachedTo = Grizzly Bears
+Bot1.Battlefield.Grizzly Bears.Keywords = Hexproof
+Bot1.Battlefield.Ornithopter = (absent)
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Graveyard = Ornithopter; Shock
