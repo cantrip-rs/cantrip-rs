@@ -1,0 +1,49 @@
+# Both chapter effects draw for attacking Octopuses and Serpents, but not other creatures (CR 603.2).
+
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Black Lotus
+Black Lotus
+Summon: Leviathan
+Omen Hawker
+Loch Mare
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Omen Hawker.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Loch Mare.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Summon: Leviathan.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Omen Hawker; Loch Mare; Ornithopter > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Library.Count = 17
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Omen Hawker; Loch Mare; Ornithopter > Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Library.Count = 14

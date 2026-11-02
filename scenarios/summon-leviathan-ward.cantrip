@@ -1,0 +1,78 @@
+# Ward requires two mana to prevent countering the targeting spell (CR 702.21a).
+
+[Bot1 Deck]
+Mox Sapphire
+Ornithopter
+Merfolk of the Pearl Trident
+Black Lotus
+Black Lotus
+Summon: Leviathan
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Mountain
+Shock
+Mox Jet
+Mox Jet
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Summon: Leviathan.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter = (absent)
+? Bot2.Battlefield.Ornithopter = (absent)
+? Bot1.Battlefield.Merfolk of the Pearl Trident.Power = 1
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Summon: Leviathan)
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.PayCost
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Summon: Leviathan.Damage = 2
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Summon: Leviathan; Merfolk of the Pearl Trident > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Library.Count = 16
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Merfolk of the Pearl Trident > Bot2)
+[T7 Bot1.Main2]
+? Bot1.Library.Count = 14
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Merfolk of the Pearl Trident > Bot2)
+[T9 Bot1.Main2]
+
+[Expect]
+Bot1.Library.Count = 13

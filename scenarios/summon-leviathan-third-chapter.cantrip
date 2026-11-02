@@ -1,0 +1,40 @@
+# Chapter III draws when a Leviathan attacks, even after the Saga is sacrificed (CR 603.2).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Segovian Leviathan
+Summon: Leviathan
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Segovian Leviathan.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Summon: Leviathan.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Segovian Leviathan > Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Library.Count = 16
