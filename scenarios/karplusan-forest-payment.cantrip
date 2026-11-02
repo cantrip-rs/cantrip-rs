@@ -1,0 +1,26 @@
+# A single Forest can pay for Shock but cannot pay two mana for Grizzly Bears (CR 601.2f, 605.3a).
+[Bot1 Deck]
+Karplusan Forest
+Shock
+Grizzly Bears
+Ageless Guardian
+Coral Eel
+Bane Alley Blackguard
+Lightning Strike
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Karplusan Forest.Play
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+! Bot1.Hand.Ageless Guardian.Cast(Mana: short)
+! Bot1.Hand.Coral Eel.Cast(Mana: short)
+! Bot1.Hand.Bane Alley Blackguard.Cast(Mana: short)
+! Bot1.Hand.Lightning Strike.Cast(Bot2; Mana: short)
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Battlefield.Karplusan Forest.Activate(Ability: {R}; Color: Red)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 19

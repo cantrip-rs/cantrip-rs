@@ -1,0 +1,27 @@
+# Karplusan Forest taps for colorless without damage, or for red or green and deals 1 damage to its controller (CR 605.3a, 120.3a).
+[Bot1 Deck]
+Karplusan Forest x3
+Healing Salve
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Karplusan Forest.Play
+! Bot1.Hand.Healing Salve.Cast(Bot1)
+Bot1.Battlefield.Karplusan Forest.Activate(Ability: {C})
+? Bot1.Mana = {C}
+? Bot1.Life = 20
+? Bot1.Battlefield.Karplusan Forest.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Hand.Karplusan Forest.Play
+! Bot1.Battlefield.Karplusan Forest#1.Activate(Ability: {R}; Color: White)
+Bot1.Battlefield.Karplusan Forest#1.Activate(Ability: {R}; Color: Red)
+? Bot1.Mana = {R}
+? Bot1.Life = 19
+Bot1.Battlefield.Karplusan Forest#2.Activate(Ability: {R}; Color: Green)
+? Bot1.Mana = {R}{G}
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot1.Battlefield.Karplusan Forest#1.Tapped = true
+Bot1.Battlefield.Karplusan Forest#2.Tapped = true

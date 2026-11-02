@@ -1,0 +1,20 @@
+# One colorless mana is insufficient for a two-mana artifact, but another land makes it payable (CR 601.2f).
+[Bot1 Deck]
+Karplusan Forest
+Island
+Alpha Myr
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Karplusan Forest.Play
+! Bot1.Hand.Alpha Myr.Cast(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Karplusan Forest.Activate(Ability: {C})
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Alpha Myr.Cast
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Alpha Myr.Power = 2

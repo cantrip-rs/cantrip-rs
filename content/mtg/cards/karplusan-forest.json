@@ -1,0 +1,5 @@
+{
+  "name": "Karplusan Forest",
+  "type": "Land",
+  "oracleText": "{T}: Add {C}.\n{T}: Add {R} or {G}. This land deals 1 damage to you."
+}
