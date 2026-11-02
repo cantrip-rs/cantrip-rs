@@ -1,0 +1,6 @@
+{
+  "name": "Ethereal Armor",
+  "manaCost": "{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+1 for each enchantment you control and has first strike."
+}
