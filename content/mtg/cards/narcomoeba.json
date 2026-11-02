@@ -1,0 +1,11 @@
+{
+  "name": "Narcomoeba",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Illusion",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying\nWhen this card is put into your graveyard from your library, you may put it onto the battlefield.",
+  "keywords": [
+    "Flying"
+  ]
+}

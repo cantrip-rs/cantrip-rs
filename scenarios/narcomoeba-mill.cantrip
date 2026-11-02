@@ -1,0 +1,25 @@
+# Each Narcomoeba milled from its owner's library triggers, and its controller may accept or decline (CR 603.2, 603.6c).
+
+[Bot1 Deck]
+Mox Sapphire
+Thought Scour
+Island x5
+Narcomoeba
+Narcomoeba
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Accept
+Bot1.Decline
+
+[Expect]
+Bot1.Battlefield.Narcomoeba.Power = 1
+Bot1.Battlefield.Narcomoeba.Tapped = false
+Bot1.Graveyard = Thought Scour; Narcomoeba

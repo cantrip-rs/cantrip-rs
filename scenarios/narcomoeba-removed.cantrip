@@ -1,0 +1,35 @@
+# A Narcomoeba removed from the graveyard before its trigger resolves stays in exile (CR 400.7, 603.2).
+
+[Bot1 Deck]
+Mox Sapphire
+Thought Scour
+Island x5
+Island
+Narcomoeba
+Island x20
+
+[Bot2 Deck]
+Mox Jet
+Cling to Dust
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thought Scour.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Cling to Dust.Cast(Bot1.Graveyard.Narcomoeba)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Accept
+
+[Expect]
+Exile = Narcomoeba
+Bot1.Battlefield.Narcomoeba = (absent)
