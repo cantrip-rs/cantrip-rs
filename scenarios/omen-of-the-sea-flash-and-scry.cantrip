@@ -1,0 +1,36 @@
+# Omen can be flashed in during an opponent's turn; its entrance scries two before drawing, and its sacrifice ability scries two (CR 702.8a, 701.22a, 603.6a).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Black Lotus
+Omen of the Sea
+Island
+Island
+Island
+Lightning Bolt
+Shock
+Grizzly Bears
+Hill Giant
+Sol Ring
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Omen of the Sea.Cast
+? Bot1.Mana =
+Bot1.Arrange(Shock | Lightning Bolt)
+[T3 Bot1.Main1]
+? Bot1.Hand = Black Lotus; Island; Island; Island; Shock; Grizzly Bears
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Omen of the Sea.Activate
+? Bot1.Mana =
+Bot1.Arrange(Sol Ring | Hill Giant)
+[Expect]
+Bot1.Graveyard = Omen of the Sea; Black Lotus
+Bot1.Library = Sol Ring; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Island; Lightning Bolt; Hill Giant
