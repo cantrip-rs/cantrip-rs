@@ -1,0 +1,38 @@
+# Kaervek gives other creatures on both sides -1/-1, but does not affect itself or noncreatures (CR 611.3c, 613.4c).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Kaervek, the Spiteful
+Ornithopter
+Sol Ring
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kaervek, the Spiteful.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Kaervek, the Spiteful.Power = 3
+Bot1.Battlefield.Kaervek, the Spiteful.Toughness = 2
+Bot1.Battlefield.Ornithopter.Power = -1
+Bot1.Battlefield.Ornithopter.Toughness = 1
+Bot2.Battlefield.Grizzly Bears.Power = 1
+Bot2.Battlefield.Grizzly Bears.Toughness = 1
+Bot1.Battlefield.Sol Ring.Types = Artifact

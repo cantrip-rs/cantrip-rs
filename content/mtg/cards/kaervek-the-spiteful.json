@@ -1,0 +1,8 @@
+{
+  "name": "Kaervek, the Spiteful",
+  "manaCost": "{2}{B}{B}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Other creatures get -1/-1."
+}
