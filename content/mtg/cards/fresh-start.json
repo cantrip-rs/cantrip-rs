@@ -1,0 +1,9 @@
+{
+  "name": "Fresh Start",
+  "manaCost": "{1}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Flash\nEnchant creature\nEnchanted creature gets -5/-0 and loses all abilities.",
+  "keywords": [
+    "Flash"
+  ]
+}

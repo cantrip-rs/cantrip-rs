@@ -1,0 +1,41 @@
+# Fresh Start enchants either player's creature, giving -5/-0 and removing flying; flash allows casting on the opponent's turn (CR 702.8a, 702.5a, 613.1).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Fresh Start
+Fresh Start
+Ornithopter
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Fresh Start.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Fresh Start.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = -5
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Keywords = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Fresh Start.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = -5
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Ornithopter.Keywords = (absent)
