@@ -1,0 +1,53 @@
+# When cast Zacama enters, it untaps its controller's lands and leaves an opponent's land tapped (CR 603.4, 701.21a).
+[Bot1 Deck]
+Black Lotus x2
+Mox Sapphire
+Mox Emerald
+Forest
+Plains
+Zacama, Primal Calamity
+Ornithopter
+Island x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Zacama, Primal Calamity.Cast
+? Bot1.Mana =
+? Bot1.Battlefield.Forest.Tapped = true
+? Bot1.Battlefield.Plains.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Forest.Tapped = false
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Plains.Tapped = false
+Bot2.Battlefield.Forest.Tapped = true

@@ -1,0 +1,79 @@
+# Zacama's abilities deal three, destroy an artifact, and gain three life for their respective costs; it has reach, vigilance, and trample (CR 120.3a, 701.8a, 119.3, 702.17a, 702.21a, 702.19a).
+[Bot1 Deck]
+Black Lotus x3
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Zacama, Primal Calamity
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Ornithopter x2
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Zacama, Primal Calamity.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Zacama, Primal Calamity.Activate(Bot2; Ability: deals 3)
+! Bot1.Battlefield.Zacama, Primal Calamity.Activate(Bot2.Battlefield.Mox Ruby; Ability: deals 3)
+Bot1.Battlefield.Zacama, Primal Calamity.Activate(Bot1.Battlefield.Zacama, Primal Calamity; Ability: deals 3)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zacama, Primal Calamity.Damage = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Zacama, Primal Calamity > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Ornithopter#1 > Zacama, Primal Calamity)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Zacama, Primal Calamity.Tapped = false
+? Bot2.Life = 13
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Block(Zacama, Primal Calamity > Ornithopter)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Zacama, Primal Calamity.Activate(Bot1.Battlefield.Zacama, Primal Calamity; Ability: Destroy)
+Bot1.Battlefield.Zacama, Primal Calamity.Activate(Bot2.Battlefield.Mox Ruby; Ability: Destroy)
+? Bot1.Mana =
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Zacama, Primal Calamity.Activate(Ability: gain 3 life)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 13
+Bot2.Battlefield.Mox Ruby = (absent)

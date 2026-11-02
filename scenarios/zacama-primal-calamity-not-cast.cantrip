@@ -1,0 +1,30 @@
+# Putting Zacama onto the battlefield without casting it does not untap lands (CR 603.4).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Faithless Looting
+Reanimate
+Zacama, Primal Calamity
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Zacama, Primal Calamity; Island)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reanimate.Cast(Bot1.Graveyard.Zacama, Primal Calamity)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Zacama, Primal Calamity.Power = 9
+Bot1.Battlefield.Island.Tapped = true
+Bot1.Life = 11

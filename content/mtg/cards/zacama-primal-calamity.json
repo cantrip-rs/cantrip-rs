@@ -1,0 +1,13 @@
+{
+  "name": "Zacama, Primal Calamity",
+  "manaCost": "{6}{R}{G}{W}",
+  "type": "Legendary Creature — Elder Dinosaur",
+  "power": 9,
+  "toughness": 9,
+  "oracleText": "Reach, vigilance, trample\nWhen Zacama enters, if you cast it, untap all lands you control.\n{2}{R}: Zacama deals 3 damage to target creature.\n{2}{G}: Destroy target artifact or enchantment.\n{2}{W}: You gain 3 life.",
+  "keywords": [
+    "Reach",
+    "Vigilance",
+    "Trample"
+  ]
+}
