@@ -1,0 +1,55 @@
+# Ruric Thar deals six to each noncreature spell's caster, attacks if able without tapping, and can block a flyer (CR 603.2, 702.17b, 702.20b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Ruric Thar, the Unbowed
+Shock
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Wind Drake
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wind Drake.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Ruric Thar, the Unbowed.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+[T4 Bot2.Main1]
+? Bot1.Life = 14
+? Bot2.Life = 18
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Wind Drake > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Block(Ruric Thar, the Unbowed > Wind Drake)
+[T4 Bot2.Main2]
+? Bot1.Life = 12
+? Bot2.Life = 12
+? Bot1.Battlefield.Ruric Thar, the Unbowed.Damage = 2
+[T5 Bot1.Main2]
+? Bot2.Life = 6
+? Bot1.Battlefield.Ruric Thar, the Unbowed.Tapped = false
+[Expect]
+Bot1.Life = 12

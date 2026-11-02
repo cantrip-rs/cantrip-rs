@@ -1,0 +1,12 @@
+{
+  "name": "Ruric Thar, the Unbowed",
+  "manaCost": "{4}{R}{G}",
+  "type": "Legendary Creature — Ogre Warrior",
+  "power": 6,
+  "toughness": 6,
+  "oracleText": "Reach, vigilance\nRuric Thar attacks each combat if able.\nWhenever a player casts a noncreature spell, Ruric Thar deals 6 damage to that player.",
+  "keywords": [
+    "Reach",
+    "Vigilance"
+  ]
+}
