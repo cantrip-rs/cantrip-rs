@@ -1,0 +1,5 @@
+{
+  "name": "Restless Bivouac",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {R} or {W}.\n{1}{R}{W}: This land becomes a 2/2 red and white Ox creature until end of turn. It's still a land.\nWhenever this land attacks, put a +1/+1 counter on target creature you control."
+}

@@ -1,0 +1,61 @@
+# Restless Bivouac enters tapped, animates for {1}{R}{W}, and puts a counter on its controller's creature when it attacks (CR 611.2a, 603.2, 122.1a).
+[Bot1 Deck]
+Restless Bivouac
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Restless Bivouac.Play
+? Bot1.Battlefield.Restless Bivouac.Tapped = true
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Restless Bivouac.Activate(Ability: becomes)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Bivouac.Types = Land; Creature
+? Bot1.Battlefield.Restless Bivouac.Subtypes = Ox
+? Bot1.Battlefield.Restless Bivouac.Colors = Red; White
+? Bot1.Battlefield.Restless Bivouac.Power = 2
+? Bot1.Battlefield.Restless Bivouac.Toughness = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Restless Bivouac > Bot2)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Restless Bivouac)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Restless Bivouac.Types = Land
+? Bot1.Battlefield.Restless Bivouac.Counters.PlusOnePlusOne = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Restless Bivouac.Activate(Ability: Add; Color: Red)
+? Bot1.Mana = {R}
+[T7 Bot1.Main1]
+Bot1.Battlefield.Restless Bivouac.Activate(Ability: Add; Color: White)
+? Bot1.Mana = {W}
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Restless Bivouac.Activate(Ability: becomes)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Restless Bivouac.Power = 3
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Restless Bivouac.Counters.PlusOnePlusOne = 1
