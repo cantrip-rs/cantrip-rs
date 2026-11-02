@@ -7400,7 +7400,7 @@ fn cast(
     if let Some(modal) = def.modal
         && !modes_after_costs
     {
-        mask = cast_modes(cx, player, spell, &mut item, modal, (modal.min, modal.max), &mut cost, &mut extra)?;
+        mask = cast_modes(cx, player, spell, &mut item, modal, (modal.min, modal.max), &mut cost, &mut extra, any)?;
     }
 
     // CR 601.2b: an additional cost that is one of several is chosen now, before X (as the C# engine asks it).
@@ -7549,7 +7549,7 @@ fn cast(
         && let Some(paid_range) = modal.when_paid
     {
         let range = if item.paid > 0 || item.kicked > 0 { paid_range } else { (modal.min, modal.max) };
-        mask = cast_modes(cx, player, spell, &mut item, modal, range, &mut cost, &mut extra)?;
+        mask = cast_modes(cx, player, spell, &mut item, modal, range, &mut cost, &mut extra, any)?;
     }
     // CR 702.47a-b: as an Arcane spell is cast, cards with splice onto Arcane may be revealed from the hand and their
     // cost paid; their spell abilities are added to this spell's, after its own, in the order chosen.
@@ -7689,7 +7689,7 @@ fn cast(
         cost.mana = add_cost(cost.mana, added.mana);
     }
     announce_hybrids(cx, player, spell, Costed::Spell(spell), &mut cost.mana, &targets, any)?;
-    let split = announce_reduction(cx, player, spell, Costed::Spell(spell), &cost.mana, &targets)?;
+    let split = announce_reduction(cx, player, spell, Costed::Spell(spell), &cost.mana, &targets, any)?;
     let (added_life, least);
     (cost.mana, added_life, least) = apply_cost_changes_before_least(cx, player, Costed::Spell(spell), cost.mana, &targets, &split);
     if added_life > 0 {
@@ -8642,8 +8642,9 @@ fn cast_modes(
     range: (u8, u8),
     cost: &mut Cost,
     extra: &mut Cost,
+    any: AnyMana,
 ) -> R<u32> {
-    let mask = choose_modes(cx, player, spell, true, item.ability, modal, range, cost.mana, None)?;
+    let mask = choose_modes(cx, player, spell, true, item.ability, modal, range, cost.mana, None, any)?;
     cost.mana = modal_cost(modal, mask, cost.mana);
     item.modes = mask;
     // CR 702.120a: the rest of the escalate cost (a discard) is an additional cost, chosen and paid with the others.
@@ -8655,14 +8656,15 @@ fn cast_modes(
 
 /// Asks for a modal spell's or ability's modes (CR 601.2b, 602.2b, 700.2), as the C# engine's `ChooseModesPrompt`:
 /// `range` (at least, at most) of the eligible modes, with the ones whose own cost could be paid beside `base` as advice.
-/// Returns the chosen modes as a bit for each.
-fn choose_modes(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, ability: AbilityRef, modal: &ModalDef, range: (u8, u8), base: ManaCost, by: Option<Linked>) -> R<u32> {
+/// Returns the chosen modes as a bit for each. `any`: what mana may pay the cost (CR 609.4b), which what could be paid reads.
+#[allow(clippy::too_many_arguments)]
+fn choose_modes(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, ability: AbilityRef, modal: &ModalDef, range: (u8, u8), base: ManaCost, by: Option<Linked>, any: AnyMana) -> R<u32> {
     let (least, max) = range;
     let asker = Asker { source, controller: player, by, spell };
     let eligible = eligible_modes(cx, &asker, modal);
     let costed = modal.modes.iter().any(|m| m.cost.mana_value() > 0);
     let affordable: Vec<u8> = if costed {
-        eligible.iter().copied().filter(|&i| can_afford(cx, player, source, &add_cost(base, modal.modes[i as usize].cost))).collect()
+        eligible.iter().copied().filter(|&i| can_afford(cx, player, source, &any.view(&add_cost(base, modal.modes[i as usize].cost)))).collect()
     } else {
         Vec::new()
     };
@@ -8672,7 +8674,7 @@ fn choose_modes(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, ab
     if modal.escalate.is_some() {
         let payable = |cx: &Cx, n: u8| {
             let first_n = (0..usize::from(n)).fold(0u32, |mask, i| modal.with(mask, i));
-            can_afford(cx, player, source, &modal_cost(modal, first_n, base)) && can_pay_other(cx, source, player, &escalate_cost(modal, first_n))
+            can_afford(cx, player, source, &any.view(&modal_cost(modal, first_n, base))) && can_pay_other(cx, source, player, &escalate_cost(modal, first_n))
         };
         while most > least.max(1) && !payable(cx, most) {
             most -= 1;
@@ -8764,7 +8766,7 @@ fn announce_twobrids(cx: &mut Cx, player: PlayerId, source: ObjectId, cost: &mut
 /// reduction is applied - of {U/R} {U} or {R}, of {2/R} {R} or {2} of generic mana (`Label::ReduceAs`, `Label::ReduceGeneric`,
 /// each the second half; unchosen, the first). Asked only where a reduction has such a symbol. The halves, for
 /// `split_reduction`.
-fn announce_reduction(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: Costed, cost: &ManaCost, targets: &[Target]) -> R<Vec<bool>> {
+fn announce_reduction(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: Costed, cost: &ManaCost, targets: &[Target], any: AnyMana) -> R<Vec<bool>> {
     let (more, whole, ..) = deltas(cx, &cost_change_sources(cx), player, costed, None, targets);
     let n = reduction_choices(&whole);
     if n == 0 {
@@ -8784,7 +8786,7 @@ fn announce_reduction(cx: &mut Cx, player: PlayerId, source: ObjectId, costed: C
                 let split: Vec<bool> = (0..n).map(|i| mask & (1 << i) != 0).collect();
                 let mut total = *cost;
                 total.generic += more;
-                can_afford(cx, player, source, &reduce(total, &split_reduction(&whole, &split)))
+                can_afford(cx, player, source, &any.view(&reduce(total, &split_reduction(&whole, &split))))
             })
             .map(|mask| (0..n as u8).filter(|&i| mask & (1 << i) != 0).collect())
             .unwrap_or_default()
@@ -9170,7 +9172,7 @@ fn activate(
     // CR 602.2b, 601.2b: a modal ability's modes first, then X, then the Phyrexian symbols paid with life.
     let mut mask = 0u32;
     if let Some(modal) = def.modal {
-        mask = choose_modes(cx, player, source, false, ability, modal, (modal.min, modal.max), mana, by)?;
+        mask = choose_modes(cx, player, source, false, ability, modal, (modal.min, modal.max), mana, by, AnyMana::No)?;
         item.modes = mask;
     }
     if mana.x > 0 {
@@ -9224,7 +9226,7 @@ fn activate(
     // here, so nothing that happens to a target later changes what is paid. Life a change adds (CR 118.8) is payable only
     // with that much life, the rest of the cost's included (CR 119.4, 118.3), or the activation is taken back.
     announce_hybrids(cx, player, source, Costed::Ability(source, ability, by), &mut mana, &targets, AnyMana::No)?;
-    let split = announce_reduction(cx, player, source, Costed::Ability(source, ability, by), &mana, &targets)?;
+    let split = announce_reduction(cx, player, source, Costed::Ability(source, ability, by), &mana, &targets, AnyMana::No)?;
     let added_life;
     (mana, added_life) = {
         let (cost, life, least) = change_parts_split(cx, &cost_change_sources(cx), player, Costed::Ability(source, ability, by), mana, None, &targets, &split);
@@ -9506,7 +9508,7 @@ fn special_action(cx: &mut Cx, player: PlayerId, source: ObjectId, ability: Abil
     // A special action is no activation (CR 116.2): what forbids paying life to activate abilities leaves it alone.
     let life = announce_life(cx, player, source, &mut printed, AnyMana::No, None)?;
     announce_hybrids(cx, player, source, costed, &mut printed, &[], AnyMana::No)?;
-    let split = announce_reduction(cx, player, source, costed, &printed, &[])?;
+    let split = announce_reduction(cx, player, source, costed, &printed, &[], AnyMana::No)?;
     let (mana, _, least) = change_parts_split(cx, &cost_change_sources(cx), player, costed, printed, None, &[], &split);
     let mana = at_least(mana, least);
     // The rest of the cost is chosen with it (CR 601.2h by way of 602.2b): permanents (tapped ones once the mana is paid),

@@ -1,0 +1,53 @@
+# How many modes may be chosen for an escalate cost is limited only by what the player could pay (CR 702.120a, 601.2b), and
+# Robber of the Rich's permission is part of that (CR 609.4b). Bot2's Collective Brutality, exiled by the Robber on turn 1,
+# costs {1}{B}. Bot1 has no black mana, only a Mox Sapphire and a Mox Pearl spent as though they were black, and still
+# chooses two modes, discarding an Island for the escalate cost: the reveal, and the drain at Bot2.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Robber of the Rich
+Mox Sapphire
+Mox Pearl
+Island
+Island
+Island x8
+
+[Bot2 Deck]
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Forest
+Collective Brutality
+Forest x7
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Robber of the Rich.Cast
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Robber of the Rich > Bot2)
+[T1 Bot1.Main2]
+? Exile = Collective Brutality
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Exile.Collective Brutality.Cast
+Bot1.Modes(1; 3)
+Bot1.Target(Bot2)
+Bot1.Target(Bot2)
+Bot1.Choose(Island)
+[T1 Bot1.End]
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Island
+Bot2.Graveyard = Collective Brutality
+Bot1.Life = 22
+Bot2.Life = 16
