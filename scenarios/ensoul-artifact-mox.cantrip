@@ -1,0 +1,30 @@
+# An artifact already controlled since the turn began can attack after becoming a 5/5 creature (CR 302.6, 613.1d).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Emerald
+Ensoul Artifact
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ensoul Artifact.Cast(Bot1.Battlefield.Mox Emerald)
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Mox Emerald > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Mox Emerald.Types = Artifact; Creature
+Bot1.Battlefield.Mox Emerald.Power = 5
+Bot1.Battlefield.Mox Emerald.Toughness = 5

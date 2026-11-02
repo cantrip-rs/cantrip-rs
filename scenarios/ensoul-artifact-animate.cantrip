@@ -1,0 +1,37 @@
+# Ensoul Artifact enchants an artifact creature, sets its base to 5/5, and preserves its artifact type (CR 702.5a, 613.4b).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Emerald
+Ornithopter
+Ensoul Artifact
+Giant Growth
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Ensoul Artifact.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Ensoul Artifact.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 5
+? Bot1.Battlefield.Ornithopter.Toughness = 5
+? Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+? Bot1.Battlefield.Mox Emerald.Types = Artifact
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Ornithopter)
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 8
+Bot1.Battlefield.Ornithopter.Toughness = 8
+Bot1.Battlefield.Ensoul Artifact.AttachedTo = Ornithopter

@@ -1,0 +1,6 @@
+{
+  "name": "Ensoul Artifact",
+  "manaCost": "{1}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant artifact\nEnchanted artifact is a creature with base power and toughness 5/5 in addition to its other types."
+}
