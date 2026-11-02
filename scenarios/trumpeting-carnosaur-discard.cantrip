@@ -1,0 +1,39 @@
+# Discarding Trumpeting Carnosaur deals exactly three damage to an opposing creature, not a player (CR 602.2b, 120.3).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Ageless Guardian
+Trumpeting Carnosaur
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Ageless Guardian
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Ageless Guardian.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Ageless Guardian.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+! Bot1.Hand.Trumpeting Carnosaur.Activate(Bot2)
+! Bot1.Hand.Trumpeting Carnosaur.Activate(Bot1.Battlefield.Mox Ruby#1)
+Bot1.Hand.Trumpeting Carnosaur.Activate(Bot2.Battlefield.Ageless Guardian)
+? Bot1.Mana =
+
+[Expect]
+Bot2.Battlefield.Ageless Guardian.Damage = 3
+Bot1.Graveyard = Trumpeting Carnosaur; Black Lotus

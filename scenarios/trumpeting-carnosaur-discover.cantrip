@@ -1,0 +1,35 @@
+# Discover 5 skips a six-mana spell and can put a five-mana spell into hand; trample assigns excess combat damage (CR 701.56a, 702.19b).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Trumpeting Carnosaur
+Island x4
+Colossal Dreadmaw
+Earth Elemental
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Trumpeting Carnosaur.Cast
+? Bot1.Mana =
+Bot1.Decline
+? Bot1.Hand.Earth Elemental.Power = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Trumpeting Carnosaur > Bot2)
+Bot2.Block(Ornithopter > Trumpeting Carnosaur)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Earth Elemental.Power = 4
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Life = 15

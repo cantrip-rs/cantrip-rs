@@ -1,0 +1,11 @@
+{
+  "name": "Trumpeting Carnosaur",
+  "manaCost": "{4}{R}{R}",
+  "type": "Creature — Dinosaur",
+  "power": 7,
+  "toughness": 6,
+  "oracleText": "Trample\nWhen this creature enters, discover 5.\n{2}{R}, Discard this card: It deals 3 damage to target creature or planeswalker.",
+  "keywords": [
+    "Trample"
+  ]
+}
