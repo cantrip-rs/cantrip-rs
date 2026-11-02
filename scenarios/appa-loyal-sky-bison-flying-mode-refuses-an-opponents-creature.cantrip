@@ -1,0 +1,52 @@
+# Appa, Loyal Sky Bison's first mode: "Target creature you control gains flying until end of turn." (CR 115.1). Bot2 casts an
+# Ornithopter on turn 2; on turn 3 Bot1 casts Appa and chooses the flying mode for its enters trigger: the target question
+# refuses Bot2's Ornithopter (a creature, but not Bot1's) and takes Bot1's Savannah Lions, which fly until end of turn.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Savannah Lions
+Appa, Loyal Sky Bison
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Appa, Loyal Sky Bison.Cast
+Bot1.Pass
+Bot1.Modes(Target creature you control gains flying)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Keywords = Flying
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Savannah Lions.Keywords = Flying
+Exile.Count = 0

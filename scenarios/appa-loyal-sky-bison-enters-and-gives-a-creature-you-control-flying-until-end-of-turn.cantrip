@@ -1,0 +1,49 @@
+# Appa, Loyal Sky Bison: "Whenever Appa enters or attacks, choose one - Target creature you control gains flying until end
+# of turn; or airbend another target nonland permanent you control." On turn 1 Bot1 casts Savannah Lions, then Appa (Black
+# Lotus, two Moxen and a Plains pay). The enters trigger's first mode offers Lions and Appa itself, and gives the
+# Lions flying; that is over by the end of turn, so on turn 3 the Lions are a plain ground creature again.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Plains
+Savannah Lions
+Appa, Loyal Sky Bison
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Appa, Loyal Sky Bison.Cast
+Bot1.Pass
+Bot1.Modes(Target creature you control gains flying)
+Bot1.Target(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Keywords = Flying
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+Bot1.Battlefield.Appa, Loyal Sky Bison.Keywords = Flying

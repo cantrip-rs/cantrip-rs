@@ -1,0 +1,57 @@
+# Appa, Loyal Sky Bison, "enters or attacks": the same choice when it attacks. On turn 1 Bot1 casts Savannah Lions and Appa
+# (the enters trigger gives the Lions flying, which wears off); Bot2 casts an Ornithopter. On turn 3 Bot1 attacks with Appa
+# and the Lions: the attack trigger's airbend mode refuses Bot2's Ornithopter ("you control") and airbends Mox Ruby.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Ruby
+Plains
+Savannah Lions
+Appa, Loyal Sky Bison
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Plains
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Appa, Loyal Sky Bison.Cast
+Bot1.Pass
+Bot1.Modes(Target creature you control gains flying)
+Bot1.Target(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Appa, Loyal Sky Bison > Bot2)
+Bot1.Modes(Airbend another target nonland permanent you control)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+? Exile = Mox Ruby
+[T3 Bot1.Main2]
+
+[Expect]
+Exile = Mox Ruby
+Bot2.Life = 16
