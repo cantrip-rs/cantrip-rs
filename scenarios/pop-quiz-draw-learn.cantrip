@@ -1,0 +1,23 @@
+# Pop Quiz draws before learning, allowing the drawn card to be discarded to draw again (CR 121.1, 701.45a).
+
+[Bot1 Deck]
+Black Lotus
+Pop Quiz
+Island x5
+Grizzly Bears
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Pop Quiz.Cast
+? Bot1.Mana =
+Bot1.Choose(Grizzly Bears)
+
+[Expect]
+Bot1.Hand = Forest; Island; Island; Island; Island; Island
+Bot1.Graveyard = Pop Quiz; Grizzly Bears; Black Lotus

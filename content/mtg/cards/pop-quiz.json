@@ -1,0 +1,6 @@
+{
+  "name": "Pop Quiz",
+  "manaCost": "{2}{U}",
+  "type": "Instant",
+  "oracleText": "Draw a card.\nLearn. (You may reveal a Lesson card you own from outside the game and put it into your hand, or discard a card to draw a card.)"
+}
