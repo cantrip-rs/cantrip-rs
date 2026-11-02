@@ -1,0 +1,88 @@
+# Zur animates a controlled enchantment at its mana value and grants it hexproof, lifelink and deathtouch; Zur has flying (CR 613.1g, 702.11b, 702.2b, 702.15b, 702.9b).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Zur, Eternal Schemer
+Goblin Bombardment
+Shardmage's Rescue
+Plains
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Fortified Rampart
+Spirit of the Labyrinth
+Mox Pearl
+Mox Ruby
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Zur, Eternal Schemer.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Fortified Rampart.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Spirit of the Labyrinth.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Goblin Bombardment.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shardmage's Rescue.Cast(Bot1.Battlefield.Zur, Eternal Schemer)
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Zur, Eternal Schemer.Activate(Bot2.Battlefield.Spirit of the Labyrinth)
+! Bot1.Battlefield.Zur, Eternal Schemer.Activate(Bot1.Battlefield.Mox Ruby)
+! Bot1.Battlefield.Zur, Eternal Schemer.Activate(Bot1.Battlefield.Shardmage's Rescue)
+Bot1.Battlefield.Zur, Eternal Schemer.Activate(Bot1.Battlefield.Goblin Bombardment)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Bombardment.Power = 2
+? Bot1.Battlefield.Goblin Bombardment.Toughness = 2
+? Bot2.Battlefield.Spirit of the Labyrinth.Keywords = (absent)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Shock.Cast(Bot1.Battlefield.Goblin Bombardment)
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Zur, Eternal Schemer)
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Zur, Eternal Schemer; Goblin Bombardment)
+! Bot2.Block(Fortified Rampart > Zur, Eternal Schemer)
+Bot2.Block(Fortified Rampart > Goblin Bombardment)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot2.Graveyard = Fortified Rampart; Shock; Black Lotus
+Bot1.Battlefield.Goblin Bombardment.Keywords = Deathtouch; Hexproof; Lifelink
+Bot1.Battlefield.Goblin Bombardment.Types = Enchantment; Creature
