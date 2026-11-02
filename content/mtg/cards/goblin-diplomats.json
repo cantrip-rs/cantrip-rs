@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Diplomats",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "{T}: Each creature attacks this turn if able."
+}

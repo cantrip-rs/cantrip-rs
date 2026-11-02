@@ -1,0 +1,68 @@
+# Goblin Diplomats' rule is on a set that gains members (CR 611.2c, its ruling): activated in Bot2's upkeep, it makes
+# Llanowar Elves and Memnite attack, and Raging Goblin too, cast after the ability resolved, so no two of them may
+# attack without the third (CR 508.1d). The rule ends with the turn (CR 514.2): activated again in Bot1's turn it makes Bot1's own
+# Ornithopter attack, and on Bot2's next turn nothing has to attack.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Goblin Diplomats
+Ornithopter
+Island x16
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Memnite
+Mountain
+Raging Goblin
+Island x15
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Diplomats.Cast
+? Bot1.Mana =
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.Upkeep]
+Bot1.Battlefield.Goblin Diplomats.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Diplomats.Tapped = true
+? Bot2.Battlefield.Llanowar Elves.LastingRules = Each creature attacks this turn if able.
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Raging Goblin.LastingRules = Each creature attacks this turn if able.
+! Bot2.Attack()
+! Bot2.Attack(Llanowar Elves > Bot1; Memnite > Bot1)
+! Bot2.Attack(Memnite > Bot1; Raging Goblin > Bot1)
+Bot2.Attack(Llanowar Elves > Bot1; Memnite > Bot1; Raging Goblin > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 17
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Llanowar Elves.LastingRules = (absent)
+Bot1.Battlefield.Goblin Diplomats.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.LastingRules = Each creature attacks this turn if able.
+! Bot1.Attack()
+Bot1.Attack(Ornithopter > Bot2)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 20
+Bot2.Battlefield.Llanowar Elves.Tapped = false
+Bot2.Battlefield.Raging Goblin.Tapped = false
+Bot2.Battlefield.Raging Goblin.LastingRules = (absent)
