@@ -1187,6 +1187,29 @@ pub fn create_a_kithkin(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     Ok(())
 }
 
+/// A 1/1 black and green Pest creature token with this_dies with "When this token dies, you gain 1 life." (CR 111).
+/// Beledros Witherbloom, Blight Mound and Containment Breach create this exact token.
+pub static PEST_1_1_BLACK_GREEN: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    colors: Some(ColorSet(20)),
+    power: Some(1),
+    toughness: Some(1),
+    abilities: &[
+        triggered(
+            crate::triggers::THIS_DIES,
+            pest_1_1_black_green_gain_1_life,
+            "When this token dies, you gain 1 life.",
+        ),
+    ],
+    ..token!(Pest)
+};
+
+/// "When this token dies, you gain 1 life." (CR 608.2, 119.1).
+fn pest_1_1_black_green_gain_1_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    g.gain_life(item.controller, 1);
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
