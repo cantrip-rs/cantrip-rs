@@ -1,0 +1,66 @@
+# Xira flies over a ground blocker, then pays {B}{R}{G} and taps to draw for either targeted player (CR 702.9, 602.2).
+[Bot1 Deck]
+Xira Arien
+Mox Jet
+Mox Ruby
+Mox Emerald
+Memnite
+Swamp x20
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Xira Arien.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Xira Arien > Bot2; Memnite > Bot2)
+! Bot2.Block(Llanowar Elves > Xira Arien)
+Bot2.Block(Llanowar Elves > Memnite)
+[T5 Bot1.Main1]
+? Bot2.Life = 19
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Xira Arien.Activate(Bot2.Battlefield.Forest)
+Bot1.Battlefield.Xira Arien.Activate(Bot1)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 5
+? Bot1.Battlefield.Xira Arien.Tapped = true
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Xira Arien.Activate(Bot2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Hand.Count = 8
+Bot1.Battlefield.Xira Arien.Tapped = true
