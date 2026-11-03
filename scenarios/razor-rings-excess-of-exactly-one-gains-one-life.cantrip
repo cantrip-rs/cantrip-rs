@@ -1,0 +1,33 @@
+# Razor Rings on a creature of toughness 3: 4 damage is exactly 1 excess (CR 120.10), so Bot1 gains exactly 1 life. Bot2's Centaur
+# Courser (3/3) attacks on turn 4 and dies before combat damage: Bot1 ends on 21.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Razor Rings
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Centaur Courser
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Centaur Courser.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Centaur Courser > Bot1)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Razor Rings.Cast(Bot2.Battlefield.Centaur Courser)
+Bot1.Pass
+[Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 21
+Bot2.Graveyard = Centaur Courser; Black Lotus

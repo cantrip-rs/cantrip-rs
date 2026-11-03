@@ -1,0 +1,37 @@
+# Razor Rings deals exactly 4 damage (CR 120.3): Bot2's Arni, Renowned Champion (1/5) attacks on turn 4 and survives with 4 damage
+# marked. Lethal damage was 5, so there is no excess (CR 120.10) and Bot1 gains nothing: 20 less the 1 Arni hits for, 19.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Razor Rings
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Arni, Renowned Champion
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Arni, Renowned Champion.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Arni, Renowned Champion > Bot1)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Razor Rings.Cast(Bot2.Battlefield.Arni, Renowned Champion)
+? Bot1.Mana = 
+Bot1.Pass
+[Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 19
+Bot2.Battlefield.Arni, Renowned Champion.Damage = 4

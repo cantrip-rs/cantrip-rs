@@ -1,0 +1,49 @@
+# Razor Rings targets "attacking or blocking" creatures of either player (CR 115.1). On turn 3 Bot1 attacks with its Ornithopter and
+# Bot2 blocks with its own: one Razor Rings on the blocker and one on Bot1's own attacker are both accepted, each deals 4 to a 0/2
+# (2 excess) and gains 2, so Bot1 ends on 24 and both Ornithopters die.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ornithopter
+Razor Rings
+Razor Rings
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+Bot2.Block(Ornithopter > Ornithopter)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Razor Rings.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+Bot1.Hand.Razor Rings.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 24
+Bot1.Graveyard = Ornithopter; Razor Rings; Razor Rings
+Bot2.Graveyard = Ornithopter

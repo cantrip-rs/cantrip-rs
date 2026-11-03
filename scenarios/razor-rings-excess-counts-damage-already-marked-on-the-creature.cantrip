@@ -1,0 +1,48 @@
+# Razor Rings' excess is over the lethal damage that remains (CR 120.10, and the 2025-10-02 ruling): Bot2's Arni, Renowned Champion
+# (1/5) attacks on turn 4; Bot1 first Lightning Bolts it (3 marked), then Razor Rings: lethal damage is now 2, so 4 damage is 2 excess
+# and Bot1 gains 2: 22 (Arni dies before combat damage, so Bot1 loses nothing).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Ruby
+Lightning Bolt
+Razor Rings
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Arni, Renowned Champion
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Arni, Renowned Champion.Cast
+[T4 Bot2.Main1]
+Bot2.Attack(Arni, Renowned Champion > Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Arni, Renowned Champion)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Arni, Renowned Champion.Damage = 3
+? Bot1.Life = 20
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Razor Rings.Cast(Bot2.Battlefield.Arni, Renowned Champion)
+? Bot1.Mana = 
+Bot1.Pass
+[Bot2.Main2]
+
+[Expect]
+Turn = 4
+Bot1.Life = 22
+Bot2.Graveyard = Arni, Renowned Champion; Black Lotus

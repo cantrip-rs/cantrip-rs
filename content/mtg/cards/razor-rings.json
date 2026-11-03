@@ -1,0 +1,6 @@
+{
+  "name": "Razor Rings",
+  "manaCost": "{1}{W}",
+  "type": "Instant",
+  "oracleText": "Razor Rings deals 4 damage to target attacking or blocking creature. You gain life equal to the excess damage dealt this way."
+}
