@@ -1,0 +1,44 @@
+# Untapping and retapping between two activations ends the first duration before it resolves (CR 611.2b).
+[Bot1 Deck]
+Ashnod's Battle Gear
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Steel Wall
+Voltaic Key
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ashnod's Battle Gear.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Voltaic Key.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Ashnod's Battle Gear.Activate(Bot1.Battlefield.Steel Wall)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Voltaic Key.Activate(Bot1.Battlefield.Ashnod's Battle Gear)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ashnod's Battle Gear.Activate(Bot1.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Steel Wall.Power = 2
+Bot1.Battlefield.Steel Wall.Toughness = 2
