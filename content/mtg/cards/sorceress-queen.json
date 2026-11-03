@@ -1,0 +1,8 @@
+{
+  "name": "Sorceress Queen",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Human Wizard Sorcerer",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Target creature other than this creature has base power and toughness 0/2 until end of turn."
+}
