@@ -1,0 +1,31 @@
+# The intervening condition is checked again on resolution: destroying the active player's only Plains prevents the life gain (CR 603.4).
+[Bot1 Deck]
+Spiritual Sanctuary
+Black Lotus
+Mox Pearl
+Strip Mine
+Island x20
+[Bot2 Deck]
+Plains
+Mox Ruby
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Spiritual Sanctuary.Cast
+? Bot1.Mana =
+Bot1.Hand.Strip Mine.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Ruby.Cast
+[T4 Bot2.Upkeep]
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Battlefield.Strip Mine.Activate(Ability: Destroy; Bot2.Battlefield.Plains)
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield = Mox Ruby
+Bot2.Graveyard = Plains
