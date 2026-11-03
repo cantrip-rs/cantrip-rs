@@ -1,0 +1,6 @@
+{
+  "name": "Urza's Chalice",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "Whenever a player casts an artifact spell, you may pay {1}. If you do, you gain 1 life."
+}
