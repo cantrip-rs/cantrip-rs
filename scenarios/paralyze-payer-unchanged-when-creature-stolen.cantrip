@@ -1,0 +1,39 @@
+# The upkeep player remains the payer when Old Man of the Sea takes the enchanted creature in response (CR 603.3, 608.2h).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Old Man of the Sea
+Paralyze
+Island x20
+[Bot2 Deck]
+Ornithopter
+Mox Sapphire x4
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Old Man of the Sea.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Paralyze.Cast(Bot2.Battlefield.Ornithopter)
+[T4 Bot2.Upkeep]
+Bot1.Battlefield.Old Man of the Sea.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Sapphire#3.Activate
+Bot2.Battlefield.Mox Sapphire#4.Activate
+Bot2.PayCost
+? Bot2.Mana =
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Paralyze.AttachedTo = Ornithopter
