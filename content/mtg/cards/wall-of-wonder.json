@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Wonder",
+  "manaCost": "{2}{U}{U}",
+  "type": "Creature — Wall",
+  "power": 1,
+  "toughness": 5,
+  "oracleText": "Defender (This creature can't attack.)\n{2}{U}{U}: This creature gets +4/-4 until end of turn and can attack this turn as though it didn't have defender.",
+  "keywords": [
+    "Defender"
+  ]
+}
