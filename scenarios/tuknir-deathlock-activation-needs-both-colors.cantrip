@@ -1,0 +1,49 @@
+# Tuknir needs both red and green mana to activate; two of either color are insufficient (CR 602.2b).
+[Bot1 Deck]
+Tuknir Deathlock
+Mox Ruby
+Gleemox
+Mox Emerald
+Lotus Petal
+Memnite
+Mountain x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Lotus Petal.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Lotus Petal.Activate(Color: Green)
+Bot1.Hand.Tuknir Deathlock.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+! Bot1.Battlefield.Tuknir Deathlock.Activate(Bot1.Battlefield.Tuknir Deathlock; Mana: short)
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Red)
+! Bot1.Battlefield.Tuknir Deathlock.Activate(Bot1.Battlefield.Tuknir Deathlock; Mana: short)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Tuknir Deathlock.Activate(Bot1.Battlefield.Tuknir Deathlock)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Tuknir Deathlock.Power = 4
+Bot1.Battlefield.Tuknir Deathlock.Toughness = 4
+Bot1.Battlefield.Tuknir Deathlock.Tapped = true
