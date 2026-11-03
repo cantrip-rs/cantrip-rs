@@ -1,0 +1,6 @@
+{
+  "name": "United Front",
+  "manaCost": "{X}{W}{W}",
+  "type": "Sorcery",
+  "oracleText": "Create X 1/1 white Ally creature tokens, then put a +1/+1 counter on each creature you control."
+}

@@ -1,0 +1,59 @@
+# United Front {X}{W}{W}, a sorcery: "Create X 1/1 white Ally creature tokens, then put a +1/+1 counter on each creature you control."
+# With one source of white (Plains) and three other Moxen the cast with X = 2 is refused (CR 601.2f: {W}{W} needs two). Once Mox Pearl
+# is in play X = 2 pays {2}{W}{W} out of five mana, one {G} left over. Two white Ally tokens are made and, since the tokens come
+# first (CR 608.2c), they get a counter too: 2/2 each, Bot1's Ornithopter 1/3, and Bot2's Ornithopter stays 0/2 ("you control").
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Mox Ruby
+Mox Emerald
+Ornithopter
+United Front
+Mox Pearl
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.United Front.Cast(X: 2; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.United Front.Cast(X: 2)
+Bot1.Pass
+? Stack.Count = 1
+? Bot1.Mana = {G}
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Jet; Mox Ruby; Mox Emerald; Mox Pearl; Ornithopter; Ally Token; Ally Token
+Bot1.Battlefield.Ally Token#1.Power = 2
+Bot1.Battlefield.Ally Token#1.Toughness = 2
+Bot1.Battlefield.Ally Token#2.Power = 2
+Bot1.Battlefield.Ally Token#2.Toughness = 2
+Bot1.Battlefield.Ally Token#1.Colors = White
+Bot1.Battlefield.Ally Token#1.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Graveyard = United Front
