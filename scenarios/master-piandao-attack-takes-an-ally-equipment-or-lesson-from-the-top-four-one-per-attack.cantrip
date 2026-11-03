@@ -1,0 +1,79 @@
+# Master Piandao {4}{W} 4/4 first strike: "Whenever Master Piandao attacks, look at the top four cards of your library. You may
+# reveal an Ally, Equipment, or Lesson card from among them and put it into your hand. Put the rest on the bottom of your library
+# in a random order." Each attack sees only four cards (the draw for the turn comes off the top first) and takes one:
+# turn 3 sees Kyoshi Warriors (an Ally), Grizzly Bears, Bark of Doran (an Equipment) and an Island - Bears and the Island are
+# refused, so are two cards at once and Invasion Reinforcements (an Ally in fifth place) - and takes the Equipment; turn 5 sees
+# Accumulate Wisdom (a Lesson), takes it and leaves the others; turn 7 sees Savannah Lions and Aang, Swift Savior (an Ally).
+# Bot2 has an Ally and an Equipment in its library, which stay there.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Master Piandao
+Island
+Island
+Kyoshi Warriors
+Grizzly Bears
+Bark of Doran
+Island
+Invasion Reinforcements
+Accumulate Wisdom
+Savannah Lions
+Grizzly Bears
+Island
+Island
+Savannah Lions
+Aang, Swift Savior
+Island x14
+
+[Bot2 Deck]
+Island x19
+Kyoshi Warriors
+Bark of Doran
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Master Piandao.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Master Piandao.Keywords = FirstStrike
+[T3 Bot1.Main1]
+Bot1.Attack(Master Piandao > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Grizzly Bears)
+! Bot1.Choose(Island)
+! Bot1.Choose(Invasion Reinforcements)
+! Bot1.Choose(Kyoshi Warriors; Bark of Doran)
+Bot1.Choose(Bark of Doran)
+? Bot1.Revealed = Bark of Doran
+[T5 Bot1.Main1]
+Bot1.Attack(Master Piandao > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Accumulate Wisdom)
+[T7 Bot1.Main1]
+Bot1.Attack(Master Piandao > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Savannah Lions)
+Bot1.Choose(Aang, Swift Savior)
+
+[Expect]
+Bot1.Hand = Aang, Swift Savior; Accumulate Wisdom; Bark of Doran; Invasion Reinforcements; Island; Island; Island
+Bot2.Library.Kyoshi Warriors.Colors = White
+Bot2.Library.Bark of Doran.Colors = White
+Bot2.Library.Count = 11
+Bot2.Life = 12

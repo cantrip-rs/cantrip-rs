@@ -1,0 +1,45 @@
+# Master Piandao: "You may reveal an Ally, Equipment, or Lesson card from among them" - Bot1 declines with a Lesson (Accumulate
+# Wisdom) and an Ally (Kyoshi Warriors) among the four, so nothing is revealed and the hand is as it was (CR 701.20a, 401.4).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Master Piandao
+Island
+Island
+Accumulate Wisdom
+Kyoshi Warriors
+Grizzly Bears
+Island
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Master Piandao.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Master Piandao > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Island; Island
+Bot1.Library.Count = 18
