@@ -1,0 +1,35 @@
+# Arenson's Aura sacrifices itself for its {W} ability to destroy an opponent's enchantment (CR 701.21a, 701.8a).
+# A creature is not a legal target; the same activation can target Holy Strength.
+[Bot1 Deck]
+Arenson's Aura
+Black Lotus
+Plains x18
+[Bot2 Deck]
+Memnite
+Holy Strength
+Plains x18
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Arenson's Aura.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Holy Strength.Cast(Memnite)
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Arenson's Aura.Activate(Bot2.Battlefield.Memnite; Sacrifice: Arenson's Aura)
+Bot1.Battlefield.Arenson's Aura.Activate(Bot2.Battlefield.Holy Strength; Sacrifice: Arenson's Aura)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Arenson's Aura)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Arenson's Aura; Black Lotus
+Bot2.Graveyard = Holy Strength
+Bot2.Battlefield.Memnite.Power = 1

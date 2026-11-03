@@ -1,0 +1,6 @@
+{
+  "name": "Arenson's Aura",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "{W}, Sacrifice an enchantment: Destroy target enchantment.\n{3}{U}{U}: Counter target enchantment spell."
+}

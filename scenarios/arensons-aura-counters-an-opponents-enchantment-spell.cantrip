@@ -1,0 +1,41 @@
+# Arenson's Aura counters an opponent's enchantment spell but cannot target a creature spell (CR 701.6a).
+# Black Lotus, Island and Mox Sapphire pay exactly {3}{U}{U}.
+[Bot1 Deck]
+Arenson's Aura
+Black Lotus x2
+Mox Sapphire
+Island x16
+[Bot2 Deck]
+Memnite x2
+Holy Strength
+Plains x17
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Arenson's Aura.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Battlefield.Arenson's Aura.Activate(Stack.Memnite; Ability: Counter)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Holy Strength.Cast(Memnite)
+Bot1.Battlefield.Arenson's Aura.Activate(Stack.Holy Strength; Ability: Counter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Holy Strength
+Bot2.Battlefield.Memnite#1.Power = 1
+Bot2.Battlefield.Memnite#2.Power = 1

@@ -1,0 +1,39 @@
+# The counter ability targets enchantment spells, not an enchantment's activated ability (CR 113.1, 115.1c).
+# Holy Strength is sacrificed to activate the first ability; two Lotuses provide sufficient mana for the counter ability.
+[Bot1 Deck]
+Arenson's Aura
+Black Lotus x3
+Mox Pearl
+Mox Sapphire
+Memnite
+Holy Strength
+Plains x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Arenson's Aura.Cast
+? Bot1.Mana =
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Strength.Cast(Memnite)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Arenson's Aura.Activate(Bot1.Battlefield.Arenson's Aura; Ability: Sacrifice)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Holy Strength)
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Battlefield.Arenson's Aura.Activate(Stack.Arenson's Aura; Ability: Counter)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Arenson's Aura; Black Lotus; Black Lotus; Holy Strength; Black Lotus

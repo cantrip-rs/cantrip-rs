@@ -1,0 +1,39 @@
+# Arenson's Aura may destroy its controller's enchantment after sacrificing a different enchantment (CR 701.8a).
+# Blue mana cannot pay the white cost; white mana and Holy Strength do pay it.
+[Bot1 Deck]
+Arenson's Aura
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Memnite
+Holy Strength
+Plains x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Arenson's Aura.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Strength.Cast(Memnite)
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Arenson's Aura.Activate(Bot1.Battlefield.Arenson's Aura; Ability: Sacrifice; Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Arenson's Aura.Activate(Bot1.Battlefield.Arenson's Aura; Ability: Sacrifice)
+Bot1.Choose(Pay mana)
+! Bot1.Choose(Memnite)
+Bot1.Choose(Holy Strength)
+? Bot1.Mana = {U}
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Arenson's Aura; Holy Strength; Black Lotus
+Bot1.Battlefield.Memnite.Power = 1
