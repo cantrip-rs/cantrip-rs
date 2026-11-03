@@ -1,0 +1,33 @@
+# Cooperation can enchant an opponent's creature; removing it ends the granted banding (CR 303.4, 611.3b).
+[Bot1 Deck]
+Cooperation
+Black Lotus
+Island x20
+[Bot2 Deck]
+Memnite
+Disenchant
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Cooperation.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Keywords = Banding
+? Bot1.Battlefield.Cooperation.AttachedTo = Memnite
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Cooperation)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Keywords = (absent)
+Bot1.Graveyard.Cooperation.Colors = White
