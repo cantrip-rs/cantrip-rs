@@ -1,0 +1,66 @@
+# With flash, Typhoon damages two opponents at once; the active opponent chooses between both Furnaces
+# before the next opponent does (CR 616.1).
+[Bot1 Deck]
+Typhoon
+Teferi, Time Raveler
+Mox Sapphire
+Mox Pearl
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Island
+Furnace of Rath
+Black Lotus
+Mox Pearl
+Forest x20
+
+[Bot3 Deck]
+Island
+Furnace of Rath
+Black Lotus
+Mox Pearl
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Teferi, Time Raveler.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Furnace of Rath.Cast
+[T3 Bot3.Main1]
+Bot3.Hand.Island.Play
+Bot3.Hand.Black Lotus.Cast
+Bot3.Hand.Mox Pearl.Cast
+Bot3.Battlefield.Black Lotus.Activate(Color: Red)
+Bot3.Battlefield.Mox Pearl.Activate
+Bot3.Hand.Furnace of Rath.Cast
+[T4 Bot1.Main1]
+Bot1.Battlefield.Teferi, Time Raveler.Activate(Ability: +1)
+[T5 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Typhoon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot3.Life = 20
+Bot2.Replace(Furnace of Rath)
+Bot3.Replace(Furnace of Rath)
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 16
+Bot3.Life = 16
