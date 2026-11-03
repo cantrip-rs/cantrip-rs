@@ -1,0 +1,39 @@
+# Dress Down removes the characteristic-defining ability; Giant Growth keeps the resulting base 0/0 alive and exposes both base values (CR 613.1f, 613.1g).
+[Bot1 Deck]
+Drift of the Dead
+Black Lotus
+Snow-Covered Forest
+Giant Growth
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Dress Down
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Snow-Covered Forest.Activate
+Bot1.Hand.Drift of the Dead.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Dress Down.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Drift of the Dead)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Drift of the Dead.Power = 3
+Bot1.Battlefield.Drift of the Dead.Toughness = 3

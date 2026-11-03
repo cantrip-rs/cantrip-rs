@@ -1,0 +1,11 @@
+{
+  "name": "Drift of the Dead",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Wall",
+  "power": "*",
+  "toughness": "*",
+  "oracleText": "Defender (This creature can't attack.)\nDrift of the Dead's power and toughness are each equal to the number of snow lands you control.",
+  "keywords": [
+    "Defender"
+  ]
+}

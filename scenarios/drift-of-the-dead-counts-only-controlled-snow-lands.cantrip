@@ -1,0 +1,49 @@
+# Drift's characteristic-defining ability counts its controller's snow lands in every zone, not ordinary lands, opposing snow lands, or snow nonlands; defender forbids attacking (CR 604.3, 702.3b).
+[Bot1 Deck]
+Drift of the Dead
+Black Lotus x2
+Snow-Covered Forest
+Phyrexian Soulgorger
+Memnite
+Island x20
+[Bot2 Deck]
+Snow-Covered Plains
+Island x20
+[Actions]
+? Bot1.Hand.Drift of the Dead.Power = 0
+? Bot1.Hand.Drift of the Dead.Toughness = 0
+Bot1.Hand.Snow-Covered Forest.Play
+? Bot1.Hand.Drift of the Dead.Power = 1
+? Bot1.Hand.Drift of the Dead.Toughness = 1
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Snow-Covered Forest.Activate
+Bot1.Hand.Drift of the Dead.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Phyrexian Soulgorger.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Drift of the Dead.Power = 1
+? Bot1.Battlefield.Drift of the Dead.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+? Bot1.Battlefield.Drift of the Dead.Power = 1
+? Bot1.Battlefield.Drift of the Dead.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+? Bot1.Battlefield.Drift of the Dead.Power = 1
+? Bot1.Battlefield.Drift of the Dead.Toughness = 1
+! Bot1.Attack(Drift of the Dead > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Drift of the Dead.Power = 1
+Bot1.Battlefield.Drift of the Dead.Toughness = 1
