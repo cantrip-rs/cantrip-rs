@@ -1,0 +1,6 @@
+{
+  "name": "Rod of Ruin",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "{3}, {T}: This artifact deals 1 damage to any target."
+}
