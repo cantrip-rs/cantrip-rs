@@ -1,0 +1,39 @@
+# Conversion changes both players' Mountains into Plains and is sacrificed when its upkeep cost is declined (CR 613.1d, 603.1).
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Pearl
+Conversion
+Island x20
+[Bot2 Deck]
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Conversion.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+? Bot2.Mana = {W}
+? Bot1.Battlefield.Mountain.Subtypes = Plains
+? Bot2.Battlefield.Mountain.Subtypes = Plains
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Battlefield.Conversion.Types = Enchantment
+[T5 Bot1.Upkeep]
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Conversion; Black Lotus
+Bot1.Battlefield.Mountain.Subtypes = Mountain
+Bot2.Battlefield.Mountain.Subtypes = Mountain

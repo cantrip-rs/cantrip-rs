@@ -1,0 +1,34 @@
+# Blood Moon makes snow Dark Depths a Mountain; Conversion then makes it a Plains without changing its supertypes.
+[Bot1 Deck]
+Dark Depths
+Black Lotus
+Black Lotus
+Mox Pearl
+Blood Moon
+Conversion
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Dark Depths.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Blood Moon.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dark Depths.Subtypes = Mountain
+? Bot1.Battlefield.Dark Depths.Supertypes = Legendary; Snow
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Conversion.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dark Depths.Subtypes = Plains
+? Bot1.Battlefield.Dark Depths.Supertypes = Legendary; Snow
+Bot1.Battlefield.Dark Depths.Activate(Ability: Add {W})
+? Bot1.Mana = {W}
+[Expect]
+Bot1.Battlefield.Dark Depths.Supertypes = Legendary; Snow
+Bot1.Battlefield.Dark Depths.Subtypes = Plains
