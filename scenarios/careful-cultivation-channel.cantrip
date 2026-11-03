@@ -1,0 +1,28 @@
+# Channel discards Careful Cultivation as a cost and makes a green Human Monk with a green mana ability (CR 702.79a, 605.1a).
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Careful Cultivation
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Careful Cultivation.Activate(Ability: Channel)
+? Bot1.Mana =
+? Bot1.Graveyard = Careful Cultivation
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Human Monk Token.Tapped = false
+? Bot1.Battlefield.Human Monk Token.Power = 1
+? Bot1.Battlefield.Human Monk Token.Toughness = 1
+? Bot1.Battlefield.Human Monk Token.Colors = Green
+? Bot1.Battlefield.Human Monk Token.Subtypes = Human; Monk
+[T3 Bot1.Main1]
+Bot1.Battlefield.Human Monk Token.Activate
+? Bot1.Mana = {G}
+[Expect]
+Bot1.Battlefield.Human Monk Token.Tapped = true

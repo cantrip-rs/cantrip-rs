@@ -1,0 +1,36 @@
+# The enchanted ground creature can block a flying attacker because it gains reach (CR 702.17b).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Careful Cultivation
+Island x20
+[Bot2 Deck]
+Black Lotus
+Wind Drake
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Careful Cultivation.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wind Drake.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Wind Drake > Bot1)
+Bot1.Block(Grizzly Bears > Wind Drake)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Grizzly Bears.Damage = 2
+Bot2.Battlefield.Wind Drake = (absent)

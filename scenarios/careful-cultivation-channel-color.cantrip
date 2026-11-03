@@ -1,0 +1,23 @@
+# Channel requires green mana even when enough total mana is available (CR 107.4b, 602.2b).
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Emerald
+Careful Cultivation
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+! Bot1.Hand.Careful Cultivation.Activate(Ability: Channel; Mana: short)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Careful Cultivation.Activate(Ability: Channel)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Careful Cultivation
+Bot1.Battlefield.Human Monk Token.Power = 1

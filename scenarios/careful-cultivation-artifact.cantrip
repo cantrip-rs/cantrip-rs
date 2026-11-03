@@ -1,0 +1,29 @@
+# The Aura can enchant a noncreature artifact but grants its creature-only effects only while it is a creature (CR 702.5a, 604.1).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Sol Ring
+Careful Cultivation
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Careful Cultivation.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Careful Cultivation.Cast(Bot1.Battlefield.Sol Ring)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Sol Ring.Activate(Ability: {G}{G})
+Bot1.Battlefield.Sol Ring.Activate
+? Bot1.Mana = {C}{C}
+[Expect]
+Bot1.Battlefield.Careful Cultivation.AttachedTo = Sol Ring
+Bot1.Battlefield.Sol Ring.Types = Artifact
