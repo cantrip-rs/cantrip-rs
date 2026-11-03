@@ -1,0 +1,56 @@
+# Kyoshi Warriors {3}{W} is a 3/3 Human Warrior Ally. "When this creature enters, create a 1/1 white Ally creature token." Bot1
+# casts it with four Plains: it makes exactly one 1/1 white Ally token (the token is not a Kyoshi Warriors and makes no
+# trigger of its own), and the trigger is the creature's own entering: a second cast the next turn makes one more.
+
+[Bot1 Deck]
+Plains
+Plains
+Plains
+Plains
+Kyoshi Warriors
+Kyoshi Warriors
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Battlefield.Plains#4.Activate
+Bot1.Hand.Kyoshi Warriors.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = Plains; Plains; Plains; Plains; Kyoshi Warriors; Ally Token
+? Bot1.Battlefield.Ally Token.Power = 1
+? Bot1.Battlefield.Ally Token.Toughness = 1
+? Bot1.Battlefield.Ally Token.Colors = White
+? Bot1.Battlefield.Kyoshi Warriors.Power = 3
+? Bot1.Battlefield.Kyoshi Warriors.Toughness = 3
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Battlefield.Plains#4.Activate
+Bot1.Hand.Kyoshi Warriors.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T9 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Plains; Plains; Plains; Plains; Kyoshi Warriors; Kyoshi Warriors; Ally Token; Ally Token

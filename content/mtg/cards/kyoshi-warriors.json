@@ -1,0 +1,8 @@
+{
+  "name": "Kyoshi Warriors",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Warrior Ally",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "When this creature enters, create a 1/1 white Ally creature token."
+}

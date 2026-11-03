@@ -1,0 +1,51 @@
+# Kyoshi Warriors {3}{W}, 3/3: "When this creature enters, create a 1/1 white Ally creature token." The trigger is
+# independent of its source once it is on the stack (CR 113.7a): Bot2 answers it by killing the Warriors with Lightning Bolt,
+# and the Ally token is made for Bot1 all the same, under the trigger's controller (CR 111.2).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Kyoshi Warriors
+Plains x15
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Kyoshi Warriors.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Kyoshi Warriors)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Kyoshi Warriors
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield = Plains; Mox Pearl; Mox Sapphire; Mox Ruby; Ally Token
+Bot1.Battlefield.Ally Token.Power = 1
+Bot1.Battlefield.Ally Token.Toughness = 1
+Bot2.Battlefield = Mountain
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0
