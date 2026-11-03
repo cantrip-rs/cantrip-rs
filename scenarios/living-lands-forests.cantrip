@@ -1,0 +1,30 @@
+# Forests controlled by both players become 1/1 creatures and remain lands (CR 205.1b, 613.1d).
+[Bot1 Deck]
+Forest
+Black Lotus
+Mox Emerald
+Living Lands
+Island x20
+[Bot2 Deck]
+Forest
+Island
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Living Lands.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[Expect]
+Bot1.Battlefield.Forest.Power = 1
+Bot1.Battlefield.Forest.Toughness = 1
+Bot1.Battlefield.Forest.Types = Land; Creature
+Bot1.Battlefield.Mox Emerald.Types = Artifact
+Bot2.Battlefield.Forest.Power = 1
+Bot2.Battlefield.Forest.Toughness = 1
+Bot2.Battlefield.Forest.Types = Land; Creature
