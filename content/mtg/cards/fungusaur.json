@@ -1,0 +1,8 @@
+{
+  "name": "Fungusaur",
+  "manaCost": "{3}{G}",
+  "type": "Creature — Fungus Dinosaur",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature is dealt damage, put a +1/+1 counter on it."
+}
