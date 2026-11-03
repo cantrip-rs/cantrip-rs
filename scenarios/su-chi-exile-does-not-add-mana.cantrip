@@ -1,0 +1,56 @@
+# Exiling Su-Chi produces no mana; a second copy dying does produce four colorless mana (CR 700.4).
+[Bot1 Deck]
+Su-Chi
+Black Lotus
+Mox Pearl
+Opt
+Su-Chi
+Black Lotus
+Island x20
+[Bot2 Deck]
+Plains
+Swords to Plowshares
+Mountain
+Vandalblast
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Su-Chi.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Su-Chi)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Hand.Opt.Cast(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Su-Chi.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Vandalblast.Cast(Bot1.Battlefield.Su-Chi)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Mana = {C}{C}{C}{C}
+[Expect]
+Bot1.Graveyard = Su-Chi; Black Lotus; Black Lotus
+Exile = Su-Chi
+Bot1.Life = 24
+Bot2.Graveyard = Vandalblast; Swords to Plowshares
