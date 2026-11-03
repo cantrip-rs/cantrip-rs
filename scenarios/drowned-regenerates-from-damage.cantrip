@@ -1,0 +1,37 @@
+# Black mana pays Drowned's regeneration ability; lethal damage is replaced
+# by tapping it and removing its damage (CR 701.19a).
+[Bot1 Deck]
+Drowned
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Island x20
+[Bot2 Deck]
+Black Lotus
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Drowned.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Drowned)
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Drowned.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Drowned.Tapped = true
+? Bot1.Battlefield.Drowned.Damage = 0
+[Expect]
+Bot1.Battlefield.Drowned.Tapped = true
+Bot1.Battlefield.Drowned.Damage = 0

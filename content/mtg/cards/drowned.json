@@ -1,0 +1,8 @@
+{
+  "name": "Drowned",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Zombie",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{B}: Regenerate this creature."
+}

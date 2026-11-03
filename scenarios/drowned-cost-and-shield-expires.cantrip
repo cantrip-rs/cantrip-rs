@@ -1,0 +1,38 @@
+# Blue mana cannot pay Drowned's black ability; a paid shield expires at the
+# end of the turn and cannot save it from later lethal damage (CR 701.19a, 611.2a).
+[Bot1 Deck]
+Drowned
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Drowned.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Drowned.Activate(Mana: short)
+Bot1.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Drowned.Activate
+? Bot1.Mana =
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Drowned)
+[Bot2.Main2]
+[Expect]
+Bot1.Graveyard = Drowned
+Bot1.Battlefield.Drowned = (absent)
