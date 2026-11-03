@@ -1,0 +1,37 @@
+# Ball Lightning attacks on the turn it enters, tramples over Ornithopter for four damage, then is sacrificed at the end step (CR 702.10b, 702.19b, 603.2).
+[Bot1 Deck]
+Ball Lightning
+Black Lotus
+Mountain x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Ball Lightning.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ball Lightning.Keywords = Haste; Trample
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ball Lightning > Bot2)
+Bot2.Block(Ornithopter > Ball Lightning)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+? Bot1.Battlefield.Ball Lightning.Power = 6
+? Bot1.Battlefield.Ball Lightning.Toughness = 1
+[T3 Bot1.End]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Ball Lightning; Black Lotus
+Bot1.Battlefield.Ball Lightning = (absent)
+Bot2.Graveyard = Ornithopter
