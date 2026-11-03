@@ -1,0 +1,35 @@
+# The enchanted 2/2 blocks: both damage it would deal are prevented, while incoming damage is not.
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Grizzly Bears
+Demonic Torment
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Demonic Torment.Cast(Bot1.Battlefield.Grizzly Bears)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Grizzly Bears > Memnite)
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Damage = 1
+Bot2.Battlefield.Memnite.Damage = 0

@@ -1,0 +1,47 @@
+# Demonic Torment enchants the opponent's Memnite, which cannot attack but can block; its combat damage is prevented.
+# The opponent's other creature may attack, and the blocking Memnite still receives combat damage normally.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Memnite
+Demonic Torment
+Swamp x15
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Demonic Torment.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Demonic Torment.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Demonic Torment.AttachedTo = Memnite
+[T4 Bot2.DeclareAttackers]
+! Bot2.Attack(Memnite > Bot1)
+Bot2.Attack(Ornithopter > Bot1)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Memnite > Memnite)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Damage = 0
+Bot2.Graveyard = Memnite
+Bot1.Life = 20
+Bot2.Life = 20
