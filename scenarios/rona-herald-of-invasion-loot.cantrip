@@ -1,0 +1,50 @@
+# Rona draws before discarding and untaps from casting a legendary spell, but not from playing a legendary land (CR 603.3, 701.9).
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Rona, Herald of Invasion
+Kytheon, Hero of Akros
+Eiganjo, Seat of the Empire
+Ornithopter
+Island
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Rona, Herald of Invasion.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Rona, Herald of Invasion.Activate(Ability: Draw)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears)
+? Bot1.Graveyard.Grizzly Bears.Power = 2
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Rona, Herald of Invasion.Tapped = true
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rona, Herald of Invasion.Tapped = true
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kytheon, Hero of Akros.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rona, Herald of Invasion.Tapped = false
+? Stack = Kytheon, Hero of Akros
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Rona, Herald of Invasion.Activate(Ability: Draw)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Island)
+Bot1.Hand.Eiganjo, Seat of the Empire.Play
+[Expect]
+Bot1.Battlefield.Rona, Herald of Invasion.Tapped = true
+Bot1.Battlefield.Eiganjo, Seat of the Empire.Types = Land

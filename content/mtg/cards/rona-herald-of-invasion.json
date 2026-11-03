@@ -1,0 +1,22 @@
+{
+  "name": "Rona, Herald of Invasion",
+  "manaCost": "{1}{U}",
+  "type": "Legendary Creature — Human Wizard",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Whenever you cast a legendary spell, untap Rona.\n{T}: Draw a card, then discard a card.\n{5}{B/P}: Transform Rona. Activate only as a sorcery. ({B/P} can be paid with either {B} or 2 life.)",
+  "backFace": {
+    "name": "Rona, Tolarian Obliterator",
+    "colorIndicator": [
+      "Black",
+      "Blue"
+    ],
+    "type": "Legendary Creature — Phyrexian Wizard",
+    "power": 5,
+    "toughness": 5,
+    "oracleText": "Trample\nWhenever a source deals damage to Rona, that source's controller exiles a card from their hand at random. If it's a land card, you may put it onto the battlefield under your control. Otherwise, you may cast it without paying its mana cost.",
+    "keywords": [
+      "Trample"
+    ]
+  }
+}
