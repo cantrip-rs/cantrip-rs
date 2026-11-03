@@ -1187,6 +1187,17 @@ pub fn create_a_kithkin(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     Ok(())
 }
 
+/// A 1/1 green Human Monk creature token (CR 111). Careful Cultivation and Jugan Defends the Temple // Remnant of the
+/// Rising Star create this exact token.
+pub static HUMAN_MONK: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    colors: Some(ColorSet(16)),
+    power: Some(1),
+    toughness: Some(1),
+    abilities: &[mana_ability(TAP, add(Mana::G), "{T}: Add {G}.")],
+    ..token!(Human Monk)
+};
+
 #[cfg(test)]
 mod tests {
     use super::*;
