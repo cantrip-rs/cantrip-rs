@@ -1,0 +1,6 @@
+{
+  "name": "Wanderlust",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nAt the beginning of the upkeep of enchanted creature's controller, this Aura deals 1 damage to that player."
+}
