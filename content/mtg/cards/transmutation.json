@@ -1,0 +1,6 @@
+{
+  "name": "Transmutation",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Switch target creature's power and toughness until end of turn."
+}

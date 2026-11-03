@@ -1,0 +1,26 @@
+# Transmutation can target an opposing Ornithopter; its switched toughness is zero, so it dies (CR 704.5f).
+[Bot1 Deck]
+Transmutation
+Mox Jet
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Transmutation.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Graveyard = Transmutation

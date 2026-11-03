@@ -1,0 +1,42 @@
+# Transmutation switches Giver of Runes from 1/2 to 2/1; a later +1/+0 is applied before the switch, and both expire (CR 613.4d, 611.2a).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Giver of Runes
+Transmutation
+Dowsing Device
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Giver of Runes.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Transmutation.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Transmutation.Cast(Bot1.Battlefield.Giver of Runes)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Giver of Runes.Power = 2
+? Bot1.Battlefield.Giver of Runes.Toughness = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dowsing Device.Cast
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Giver of Runes)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Giver of Runes.Power = 2
+? Bot1.Battlefield.Giver of Runes.Toughness = 2
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Giver of Runes.Power = 1
+Bot1.Battlefield.Giver of Runes.Toughness = 2
