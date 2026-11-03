@@ -1,0 +1,81 @@
+# Water Tribe Rallier: "Waterbend {5}: ..." Bot2's Anointed Peacekeeper names it, so the ability costs {2} more (CR 601.2f
+# by way of 602.2b). Tapping artifacts and creatures pays only the generic mana of the waterbend cost, never the tax
+# (CR 701.67b). On turn 3 Bot1 has one Island and six untapped creatures: seven in all, but only five of them may pay, and
+# the activation is refused for want of mana. On turn 5, with Mox Pearl and Mox Jet too, the Island and the Pearl pay
+# the tax and five creatures the waterbend, and the Jet and the Savannah Lions stay untapped.
+
+[Bot1 Deck]
+Island
+Mox Pearl
+Water Tribe Rallier
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Savannah Lions
+Mox Jet
+Hill Giant
+Grizzly Bears
+Serra Angel
+Island x10
+
+[Bot2 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Anointed Peacekeeper
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Water Tribe Rallier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Anointed Peacekeeper.Cast
+Bot2.Name(Water Tribe Rallier)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Water Tribe Rallier.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Water Tribe Rallier.Activate(Convoke: Water Tribe Rallier, Ornithopter, Ornithopter, Ornithopter, Ornithopter)
+Bot1.Pass
+? Stack.Count = 1
+? Bot1.Mana =
+Bot2.Pass
+Bot1.Choose(Hill Giant)
+
+[Expect]
+Bot1.Hand = Hill Giant
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot1.Battlefield.Savannah Lions.Tapped = false
+Bot1.Battlefield.Water Tribe Rallier.Tapped = true

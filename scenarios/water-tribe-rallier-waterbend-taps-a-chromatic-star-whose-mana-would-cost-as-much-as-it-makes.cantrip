@@ -1,0 +1,55 @@
+# Water Tribe Rallier: "Waterbend {5}: ..." Waterbend (CR 701.67a) may tap any untapped artifact or creature, a mana source
+# among them: Chromatic Star ("{1}, {T}, Sacrifice this artifact: Add one mana of any color") makes no more mana than it
+# costs, but tapped for waterbend it pays {1}. With an Island and Mox Pearl for two and the Rallier, an Ornithopter and the
+# Star tapped for three, the five is paid exactly (CR 602.2b): the activation is offered, and the Star stays on the
+# battlefield, tapped, having drawn nothing.
+
+[Bot1 Deck]
+Island
+Mox Pearl
+Water Tribe Rallier
+Ornithopter
+Chromatic Star
+Serra Angel
+Serra Angel
+Island
+Hill Giant
+Grizzly Bears
+Serra Angel
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Water Tribe Rallier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Chromatic Star.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Water Tribe Rallier.Activate(Convoke: Water Tribe Rallier, Chromatic Star, Ornithopter)
+Bot1.Pass
+? Stack.Count = 1
+? Bot1.Mana =
+Bot2.Pass
+Bot1.Choose(Hill Giant)
+
+[Expect]
+Bot1.Hand = Serra Angel; Serra Angel; Hill Giant
+Bot1.Battlefield.Chromatic Star.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Water Tribe Rallier.Tapped = true

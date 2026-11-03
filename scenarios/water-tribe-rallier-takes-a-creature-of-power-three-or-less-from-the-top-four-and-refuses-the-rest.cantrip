@@ -1,0 +1,67 @@
+# Water Tribe Rallier: "Waterbend {5}: Look at the top four cards of your library. You may reveal a creature card with power 3
+# or less from among them and put it into your hand. Put the rest on the bottom of your library in a random order." Waterbend
+# (CR 701.67a) taps the Rallier itself for one of the five: one short is refused with four sources, five in all pay it and
+# leave the pool empty. Of the top four (Serra Angel 4/4, an Island, Grizzly Bears 2/2, Hill Giant 3/3) Bears and Giant qualify, the Giant at
+# power exactly 3, but only one may be taken, and the fifth card (a Savannah Lions that would qualify) is not among the four. Bot2 has a Hill Giant in its library
+# too, which stays there.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Emerald
+Water Tribe Rallier
+Sol Ring
+Serra Angel
+Island
+Grizzly Bears
+Hill Giant
+Savannah Lions
+Island x10
+
+[Bot2 Deck]
+Island x7
+Serra Angel
+Hill Giant
+Island x11
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Water Tribe Rallier.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Water Tribe Rallier.Activate(Mana: short)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Water Tribe Rallier.Activate(Convoke: Water Tribe Rallier)
+Bot1.Pass
+? Stack.Count = 1
+? Bot1.Mana =
+Bot2.Pass
+! Bot1.Choose(Serra Angel)
+! Bot1.Choose(Island)
+! Bot1.Choose(Savannah Lions)
+! Bot1.Choose(Grizzly Bears; Hill Giant)
+Bot1.Choose(Hill Giant)
+? Bot1.Revealed = Hill Giant
+
+[Expect]
+Bot1.Hand = Hill Giant
+Bot1.Library.Count = 14
+Bot1.Library.Serra Angel.Power = 4
+Bot1.Library.Grizzly Bears.Power = 2
+Bot2.Library.Count = 13
+Bot2.Library.Hill Giant.Colors = Red
+Bot1.Battlefield.Water Tribe Rallier.Tapped = true

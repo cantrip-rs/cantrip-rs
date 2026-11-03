@@ -1,0 +1,57 @@
+# Water Tribe Rallier: "Waterbend {5}: Look at the top four cards ... You may reveal a creature card with power 3 or less". Waterbend
+# (CR 701.67a-b) pays the five with untapped artifacts and creatures instead of mana, any of them whatever they have been through:
+# the Rallier and three Ornithopters (summoning sick, no mana ability) are four of the five and the activation is refused; a fourth
+# Ornithopter makes five and it is offered, the pool staying empty. "May": Bot1 declines the Hill Giant on top, so the hand stays
+# empty and all four cards go to the bottom (CR 401.4).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Water Tribe Rallier
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Hill Giant
+Grizzly Bears
+Savannah Lions
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Water Tribe Rallier.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Water Tribe Rallier.Activate(Mana: short)
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Water Tribe Rallier.Activate(Convoke: Water Tribe Rallier, Ornithopter, Ornithopter, Ornithopter, Ornithopter)
+Bot1.Pass
+? Stack.Count = 1
+? Bot1.Mana =
+Bot2.Pass
+Bot1.Choose()
+
+[Expect]
+Bot1.Hand =
+Bot1.Library.Count = 14
+Bot1.Battlefield.Water Tribe Rallier.Tapped = true
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#4.Tapped = true
