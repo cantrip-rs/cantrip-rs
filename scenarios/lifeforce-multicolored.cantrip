@@ -1,0 +1,33 @@
+# A black-and-blue spell is black and can be countered by Lifeforce (CR 105.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Lifeforce
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Tidehollow Strix
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Lifeforce.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Tidehollow Strix.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Lifeforce.Activate(Stack.Tidehollow Strix)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Tidehollow Strix

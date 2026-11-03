@@ -1,0 +1,6 @@
+{
+  "name": "Lifeforce",
+  "manaCost": "{G}{G}",
+  "type": "Enchantment",
+  "oracleText": "{G}{G}: Counter target black spell."
+}

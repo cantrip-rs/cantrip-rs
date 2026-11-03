@@ -1,0 +1,31 @@
+# Lifeforce counters its controller's black spell for exactly {G}{G} (CR 701.6a).
+[Bot1 Deck]
+Mox Emerald
+Mox Emerald
+Mox Jet
+Lifeforce
+Dark Ritual
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Lifeforce.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Lifeforce.Activate(Stack.Dark Ritual)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[Expect]
+Bot1.Graveyard = Dark Ritual
