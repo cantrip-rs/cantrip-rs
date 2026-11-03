@@ -1,0 +1,48 @@
+# Countering Book of Rass's activated ability stops the draw, but its two mana and two life costs remain paid (CR 602.2b).
+[Bot1 Deck]
+Book of Rass
+Black Lotus x2
+Mox Pearl
+Mox Sapphire
+Island x15
+[Bot2 Deck]
+Stifle
+Island x19
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Book of Rass.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Book of Rass.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Life = 18
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Stifle.Cast(Stack.Book of Rass)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 18
+? Bot1.Hand.Count = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Book of Rass.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 16
+Bot1.Hand.Count = 4
+Bot2.Graveyard = Stifle
