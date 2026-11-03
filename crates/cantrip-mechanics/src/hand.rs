@@ -112,6 +112,16 @@ pub fn target_opponent_discards_chosen_nonland_permanent(g: &mut dyn Game, item:
     Ok(())
 }
 
+/// "Look at target player's hand": Glasses of Urza and Gitaxian Probe.
+/// The ability's controller alone sees the target's current hand.
+pub fn look_at_target_players_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(player) = crate::targets::player(g, item, 0) {
+        let hand = g.state().zone(Zone::hand(player)).to_vec();
+        g.look_at(item.controller, &hand);
+    }
+    Ok(())
+}
+
 /// "Look at target player's hand. You may choose a card from it [that passes `eligible`]": the ability's controller sees the hand
 /// (it is shown to them alone, not revealed) and may choose one eligible card. Looking is part of the ability, so the choice is
 /// asked of any hand that is not empty, even when nothing in it is eligible; an empty hand is nothing to look at. The card chosen
