@@ -1,0 +1,6 @@
+{
+  "name": "Forethought Amulet",
+  "manaCost": "{5}",
+  "type": "Artifact",
+  "oracleText": "At the beginning of your upkeep, sacrifice this artifact unless you pay {3}.\nIf an instant or sorcery source would deal 3 or more damage to you, it deals 2 damage to you instead."
+}
