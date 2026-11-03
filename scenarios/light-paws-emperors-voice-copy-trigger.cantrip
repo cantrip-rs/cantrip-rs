@@ -1,0 +1,52 @@
+# An opponent copying Light-Paws's trigger did not cast the Aura, so only the original controller may search (CR 603.4, 707.10).
+[Bot1 Deck]
+Mox Pearl x2
+Mox Sapphire
+Mox Ruby
+Light-Paws, Emperor's Voice
+Spreading Seas
+Island
+Island x2
+All That Glitters
+Island x20
+[Bot2 Deck]
+Black Lotus
+Return the Favor
+Island x25
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Light-Paws, Emperor's Voice.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Spreading Seas.Cast(Bot1.Battlefield.Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Return the Favor.Cast
+Bot2.Modes(1)
+Bot2.Target(Stack.Light-Paws, Emperor's Voice)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot2.Accept
+Bot1.Accept
+Bot1.Search(All That Glitters)
+[Expect]
+Bot1.Battlefield.All That Glitters.AttachedTo = Light-Paws, Emperor's Voice
+Bot1.Shuffles = 1
+Bot2.Shuffles = 0

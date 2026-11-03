@@ -1,0 +1,43 @@
+# An Aura that cannot enchant Light-Paws remains in the library (CR 303.4i).
+[Bot1 Deck]
+Mox Pearl x2
+Mox Sapphire
+Mox Ruby
+Light-Paws, Emperor's Voice
+Spreading Seas
+Island
+Island
+Footfall Crater
+Spreading Seas
+Lure
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x7
+Super Intelligence
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Light-Paws, Emperor's Voice.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Spreading Seas.Cast(Bot1.Battlefield.Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Accept
+! Bot1.Search(Spreading Seas)
+! Bot1.Search(Lure)
+! Bot1.Search(Ornithopter)
+Bot1.Search(Footfall Crater)
+[Expect]
+Bot1.Library.Footfall Crater.Colors = Red
+Bot1.Shuffles = 1
+Bot2.Library.Super Intelligence.Colors = Blue
