@@ -186,6 +186,14 @@ pub fn attacking_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> boo
 /// still is as the ability resolves, or the target is illegal. Raffine, Scheming Seer and Raubahn, Bull of Ala Mhigo print it.
 pub const ATTACKING_CREATURE: TargetSpec = target(attacking_creature_filter);
 
+fn another_attacking_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    attacking_creature_filter(q, asker, t) && t != Target::Object(asker.source)
+}
+
+/// "Another target attacking creature" (CR 115.1, 506.4): an attacking creature other than the source.
+/// Helitrooper and Thousand-Faced Shadow print it.
+pub const ANOTHER_ATTACKING_CREATURE: TargetSpec = target(another_attacking_creature_filter);
+
 /// "Target attacking or blocking creature" (CR 506.4, 508.1, 509.1): a creature on the battlefield that is attacking or
 /// blocking now. Gideon's Memorial and Eiganjo, Seat of the Empire print it.
 pub fn attacking_or_blocking_creature_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
