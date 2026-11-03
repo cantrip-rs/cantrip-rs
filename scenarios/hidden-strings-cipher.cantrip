@@ -1,0 +1,46 @@
+# An encoded creature that deals combat damage creates a free copy, which can untap a permanent (CR 702.99).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Island
+Llanowar Elves
+Hidden Strings
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Hidden Strings.Cast
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot1.Battlefield.Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Do nothing)
+Bot1.Modes(Do nothing)
+Bot1.Choose(Llanowar Elves)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2)
+Bot1.Accept
+! Bot1.Target(Bot1.Graveyard.Black Lotus)
+Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Tap)
+Bot1.Modes(Tap)
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot1.Battlefield.Island.Tapped = true
+Exile = Hidden Strings

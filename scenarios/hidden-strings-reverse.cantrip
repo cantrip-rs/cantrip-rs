@@ -1,0 +1,29 @@
+# Hidden Strings untaps one target before tapping a different target, then can encode onto a creature (CR 701.21, 702.99).
+[Bot1 Deck]
+Mox Sapphire
+Island
+Ornithopter
+Hidden Strings
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Hidden Strings.Cast
+! Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Tap)
+Bot1.Modes(Untap)
+Bot1.Choose(Ornithopter)
+[Expect]
+Bot1.Battlefield.Mox Sapphire.Tapped = false
+Bot1.Battlefield.Ornithopter.Tapped = true
+Exile = Hidden Strings

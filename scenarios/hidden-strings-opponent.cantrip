@@ -1,0 +1,32 @@
+# Hidden Strings can leave the first permanent alone and tap an opposing land (CR 701.21).
+[Bot1 Deck]
+Mox Sapphire
+Island
+Ornithopter
+Hidden Strings
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Hidden Strings.Cast
+Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+! Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot2.Battlefield.Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Do nothing)
+Bot1.Modes(Tap)
+Bot1.Choose()
+[Expect]
+Bot1.Battlefield.Mox Sapphire.Tapped = true
+Bot2.Battlefield.Island.Tapped = true
+Bot1.Graveyard = Hidden Strings
