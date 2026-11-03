@@ -1,0 +1,21 @@
+# Escape Velocity can enchant an opponent's creature but cannot enchant a land (CR 702.5a).
+[Bot1 Deck]
+Mox Ruby
+Escape Velocity
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Escape Velocity.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Escape Velocity.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 2

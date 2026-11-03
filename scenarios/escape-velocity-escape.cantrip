@@ -1,0 +1,55 @@
+# Escape Velocity grants haste and +1/+0, then can be cast from the graveyard by paying its escape cost (CR 702.10, 702.138a).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald x2
+Mox Ruby
+Mox Pearl
+Grizzly Bears
+Escape Velocity
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Escape Velocity.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Toughness = 2
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Escape Velocity.Cast(Bot1.Battlefield.Ornithopter; Ability: Escape)
+Bot1.Choose(Black Lotus; Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Escape Velocity.AttachedTo = Ornithopter
+Exile = Grizzly Bears; Black Lotus

@@ -1,0 +1,6 @@
+{
+  "name": "Escape Velocity",
+  "manaCost": "{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+0 and has haste.\nEscape—{1}{R}, Exile two other cards from your graveyard. (You may cast this card from your graveyard for its escape cost.)"
+}
