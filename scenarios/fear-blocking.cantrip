@@ -1,0 +1,42 @@
+# Fear enchants a creature and prevents a nonartifact, nonblack creature from blocking it (CR 702.36b).
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Black Lotus
+Grizzly Bears
+Fear
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Fear.Cast(Bot1.Battlefield.Swamp)
+Bot1.Hand.Fear.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana = {G}
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+! Bot2.Block(Grizzly Bears > Bot1.Battlefield.Grizzly Bears)
+Bot2.Block(Ornithopter > Bot1.Battlefield.Grizzly Bears)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Fear.AttachedTo = Grizzly Bears
+Bot2.Life = 20
