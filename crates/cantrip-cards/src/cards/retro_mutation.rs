@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{attach::attached_object, statics::base_pt, targets};
+use cantrip_mechanics::{attach::{attached_object, enchanted_creature_cant_attack}, statics::base_pt, targets};
 use cantrip_oracle as oracle;
 
 // "Enchanted creature is a Turtle with base power and toughness 0/1. It can't attack and loses all abilities.": static
@@ -10,12 +10,6 @@ use cantrip_oracle as oracle;
 fn turtle(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
     let kept = chars.subtypes.iter().filter(|t| !t.is_creature_type()).fold(SubtypeSet::NONE, SubtypeSet::with);
     chars.subtypes = kept.with(view.words(source).subtype(Subtype::Turtle));
-}
-
-/// "Enchanted creature can't attack" (CR 508.1c): asked of each creature that could be declared an attacker, with this Aura as
-/// the source. The Aura keeps its own ability whatever the creature loses.
-fn enchanted_creature_cant_attack(q: &dyn Query, asker: &Asker, attacker: ObjectId, _: Target) -> bool {
-    q.obj(asker.source).attached_to != Some(attacker)
 }
 
 pub static CARD: CardDef = CardDef {

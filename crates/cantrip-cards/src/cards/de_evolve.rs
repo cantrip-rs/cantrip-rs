@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{attach::{attached_object, enchanted_creature_cant_block}, targets, triggers};
+use cantrip_mechanics::{attach::{attached_object, enchanted_creature_cant_block, exile_enchanted_creature}, targets, triggers};
 use cantrip_oracle as oracle;
 
 /// "Enchanted creature gets -4/-0" (CR 613.4c, layer 7c).
@@ -17,13 +17,6 @@ fn salamander(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
 /// ability resolves. The graveyard belongs to the Aura's controller.
 fn threshold(q: &dyn Query, asker: &Asker) -> bool {
     cantrip_mechanics::threshold(q, asker.controller)
-}
-
-fn exile_enchanted_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = g.obj(item.object).attached_to {
-        g.exile(creature);
-    }
-    Ok(())
 }
 
 pub static CARD: CardDef = CardDef {

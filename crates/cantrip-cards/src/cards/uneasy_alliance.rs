@@ -1,25 +1,11 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, tokens};
+use cantrip_mechanics::{attach::{enchanted_creature_cant_attack, enchanted_creature_cant_block, exile_enchanted_creature}, targets, tokens};
 use cantrip_oracle as oracle;
 
-/// "Enchanted creature can't attack" (CR 508.1c): the creature this Aura is attached to.
-fn enchanted_creature_cant_attack(q: &dyn Query, asker: &Asker, attacker: ObjectId, _: Target) -> bool {
-    q.attached_to(asker.source) != Some(attacker)
-}
-
-/// "Enchanted creature can't ... block" (CR 509.1b).
-fn enchanted_creature_cant_block(q: &dyn Query, source: ObjectId, blocker: ObjectId, _: ObjectId) -> bool {
-    q.attached_to(source) != Some(blocker)
-}
-
-/// "Exile enchanted creature. You create a 1/1 black Ninja creature token": the Aura was sacrificed as a cost, so the creature
-/// is the one it was last attached to (CR 608.2h), exiled only if it is still on the battlefield. The token is made either way.
+/// "Exile enchanted creature. You create a 1/1 black Ninja creature token": the token is made whether or not the creature was
+/// still there to exile.
 fn exile_enchanted_creature_and_create_a_ninja(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = g.obj(item.object).attached_to
-        && targets::permanent(g, creature)
-    {
-        g.exile(creature);
-    }
+    exile_enchanted_creature(g, item)?;
     g.end_sentence();
     tokens::create(g, item.controller, &tokens::NINJA, 1)?;
     Ok(())

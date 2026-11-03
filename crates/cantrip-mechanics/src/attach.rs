@@ -169,6 +169,26 @@ pub fn enchanted_creature_cant_block(q: &dyn Query, source: ObjectId, blocker: O
     q.obj(source).attached_to != Some(blocker)
 }
 
+/// "Enchanted creature can't attack" (CR 508.1c, 303.4) as a `CardDef::attack_rules` entry, asked of each creature that could be
+/// declared an attacker: false for the one the Aura is attached to. It is a rule of the Aura's, no ability of the creature
+/// (CR 113.1a), so a creature that loses all its abilities is still under it (CR 613.1f). Path to Redemption, Retro-Mutation,
+/// Spiral into Solitude and Uneasy Alliance print it.
+pub fn enchanted_creature_cant_attack(q: &dyn Query, asker: &Asker, attacker: ObjectId, _: Target) -> bool {
+    q.obj(asker.source).attached_to != Some(attacker)
+}
+
+/// "Exile enchanted creature" (CR 701.13): the creature the Aura is attached to as the ability resolves, or, if the Aura has left
+/// the battlefield by then (sacrificed for the cost), the one it was attached to as it left (CR 608.2h), exiled only if it is
+/// still on the battlefield (CR 400.7). De-evolve, Path to Redemption, Spiral into Solitude and Uneasy Alliance print it.
+pub fn exile_enchanted_creature(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = g.obj(item.object).attached_to
+        && targets::permanent(g, creature)
+    {
+        g.exile(creature);
+    }
+    Ok(())
+}
+
 /// "Enchanted creature" / "equipped creature" as a rule of the source's own that is no ability of the creature (CR 113.1a,
 /// 301.5, 303.4): the `CardDef::untap_bans`, `cant_become_untapped`, `sacrifice_bans` and `face_up_bans` of an Aura or
 /// Equipment, true of exactly the permanent the source is attached to. It is no ability of that permanent, so the permanent
