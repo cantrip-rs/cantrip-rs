@@ -1,0 +1,32 @@
+# An unused regeneration shield ends at cleanup; a Bolt next turn destroys the Elephant Rat (CR 701.19a, 514.2).
+[Bot1 Deck]
+Elephant Graveyard
+Elephant-Rat
+Mox Jet
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Lightning Bolt
+Mox Ruby
+Island x20
+[Actions]
+Bot1.Hand.Elephant Graveyard.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Elephant-Rat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Elephant Graveyard.Activate(Bot1.Battlefield.Elephant-Rat; Ability: Regenerate)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Elephant-Rat)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Graveyard = Elephant-Rat
+Bot2.Graveyard = Lightning Bolt

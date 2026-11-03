@@ -1,0 +1,34 @@
+# Artificial Evolution changes the land's Elephant word to Thopter, allowing it to regenerate an Ornithopter (CR 612.2, 701.19a).
+[Bot1 Deck]
+Elephant Graveyard
+Mox Sapphire
+Artificial Evolution
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Elephant Graveyard.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Bot1.Battlefield.Elephant Graveyard)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Elephant)
+Bot1.Modes(Thopter)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Battlefield.Elephant Graveyard.Activate(Bot1.Battlefield.Ornithopter; Ability: Regenerate)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Damage = 0
