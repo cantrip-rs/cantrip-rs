@@ -1,0 +1,27 @@
+# Triskelion can deal one damage to an opposing creature twice, destroying a 0/2 (CR 120.3e).
+[Bot1 Deck]
+Triskelion
+Black Lotus
+Black Lotus
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Triskelion.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Triskelion.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Damage = 1
+Bot1.Battlefield.Triskelion.Activate(Bot2.Battlefield.Ornithopter)
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Triskelion.Counters.PlusOnePlusOne = 1

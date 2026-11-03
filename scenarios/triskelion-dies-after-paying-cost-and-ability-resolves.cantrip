@@ -1,0 +1,33 @@
+# Removing a counter lowers toughness to marked damage, so Triskelion dies before its ability resolves, but its damage is still dealt (CR 704.5g, 113.7a).
+[Bot1 Deck]
+Triskelion
+Black Lotus
+Black Lotus
+Island x20
+[Bot2 Deck]
+Shock
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Triskelion.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Triskelion.Activate(Bot2)
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Triskelion)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Triskelion.Damage = 2
+Bot2.Pass
+Bot1.Battlefield.Triskelion.Activate(Bot2)
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Graveyard = Triskelion; Black Lotus; Black Lotus
+Bot2.Life = 18
