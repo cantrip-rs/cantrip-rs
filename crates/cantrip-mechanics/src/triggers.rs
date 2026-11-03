@@ -2007,6 +2007,9 @@ pub const EACH_OPPONENTS_UPKEEP: Trigger = when_asked(EventMask::STEP_BEGAN, eac
 pub const BEGINNING_OF_YOUR_COMBAT: Trigger = when_asked(EventMask::STEP_BEGAN, beginning_of_your_combat);
 pub const YOUR_END_STEP: Trigger = when_asked(EventMask::STEP_BEGAN, your_end_step);
 pub const ENCHANTED_PERMANENTS_CONTROLLERS_UPKEEP: Trigger = when(EventMask::STEP_BEGAN, enchanted_permanents_controllers_upkeep);
+
+/// The same host and captured upkeep player, for creature-enchanting Auras such as Paralyze (CR 303.4, 503.1a).
+pub const ENCHANTED_CREATURES_CONTROLLERS_UPKEEP: Trigger = ENCHANTED_PERMANENTS_CONTROLLERS_UPKEEP;
 pub const EACH_UPKEEP: Trigger = when(EventMask::STEP_BEGAN, each_upkeep);
 pub const EACH_PLAYERS_UPKEEP: Trigger = when(EventMask::STEP_BEGAN, each_players_upkeep);
 pub const EACH_END_STEP: Trigger = when(EventMask::STEP_BEGAN, each_end_step);
