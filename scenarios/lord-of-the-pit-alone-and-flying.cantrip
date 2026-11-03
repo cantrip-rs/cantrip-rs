@@ -1,0 +1,47 @@
+# Alone on upkeep Lord deals 7 damage to its controller; flying avoids a ground blocker (CR 603.2, 702.9b).
+[Bot1 Deck]
+Lord of the Pit
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lord of the Pit.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Life = 13
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lord of the Pit)
+! Bot2.Block(Memnite > Lord of the Pit)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 13
+Bot2.Life = 13
+Bot1.Battlefield.Lord of the Pit.Power = 7
