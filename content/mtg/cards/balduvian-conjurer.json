@@ -1,0 +1,8 @@
+{
+  "name": "Balduvian Conjurer",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 0,
+  "toughness": 2,
+  "oracleText": "{T}: Target snow land becomes a 2/2 creature until end of turn. It's still a land."
+}

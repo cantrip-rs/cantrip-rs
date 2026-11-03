@@ -1,0 +1,34 @@
+# Life and Limb makes a snow Forest a Saproling land creature; Conjurer preserves both subtypes (CR 205.1b).
+[Bot1 Deck]
+Balduvian Conjurer
+Mox Sapphire
+Mox Pearl
+Black Lotus
+Snow-Covered Forest
+Life and Limb
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Balduvian Conjurer.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Life and Limb.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snow-Covered Forest.Subtypes = Forest; Saproling
+Bot1.Battlefield.Balduvian Conjurer.Activate(Bot1.Battlefield.Snow-Covered Forest)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Snow-Covered Forest.Subtypes = Forest; Saproling
+Bot1.Battlefield.Snow-Covered Forest.Power = 2
+Bot1.Battlefield.Snow-Covered Forest.Toughness = 2

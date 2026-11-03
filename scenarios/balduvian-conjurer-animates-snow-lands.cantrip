@@ -1,0 +1,54 @@
+# Balduvian Conjurer taps to animate either player's snow land as a 2/2 land creature until end of turn (CR 611.2a).
+
+[Bot1 Deck]
+Balduvian Conjurer
+Mox Sapphire
+Mox Pearl
+Snow-Covered Forest
+Wall of Shards
+Island x20
+
+[Bot2 Deck]
+Snow-Covered Plains
+Island x20
+
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Balduvian Conjurer.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Battlefield.Balduvian Conjurer.Activate(Bot1.Battlefield.Island)
+Bot1.Battlefield.Balduvian Conjurer.Activate(Bot1.Battlefield.Snow-Covered Forest)
+? Bot1.Battlefield.Balduvian Conjurer.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snow-Covered Forest.Power = 2
+? Bot1.Battlefield.Snow-Covered Forest.Toughness = 2
+? Bot1.Battlefield.Snow-Covered Forest.Types = Land; Creature
+? Bot1.Battlefield.Snow-Covered Forest.Subtypes = Forest
+! Bot1.Battlefield.Balduvian Conjurer.Activate(Bot2.Battlefield.Snow-Covered Plains)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Snow-Covered Forest.Types = Land
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Snow-Covered Forest.Activate
+Bot1.Hand.Wall of Shards.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Balduvian Conjurer.Activate(Bot1.Battlefield.Wall of Shards)
+Bot1.Battlefield.Balduvian Conjurer.Activate(Bot2.Battlefield.Snow-Covered Plains)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Snow-Covered Plains.Power = 2
+? Bot2.Battlefield.Snow-Covered Plains.Toughness = 2
+? Bot2.Battlefield.Snow-Covered Plains.Types = Land; Creature
+[T7 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield.Snow-Covered Plains.Types = Land
