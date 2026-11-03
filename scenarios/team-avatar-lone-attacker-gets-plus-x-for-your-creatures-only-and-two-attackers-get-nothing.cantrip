@@ -1,0 +1,57 @@
+# Team Avatar: "Whenever a creature you control attacks alone, it gets +X/+X until end of turn, where X is the number of creatures
+# you control." In turn 3 Bot1 (two Ornithopters) attacks with one of them: X is 2, Bot2's own Ornithopter not counted, so the
+# 0/2 hits for 2 (Bot2 20 -> 18). The pump lasts until end of turn (CR 611.2a): in turn 5 the Ornithopter is 0/2 again in
+# Main1, and attacking with both triggers nothing (CR 506.5), so Bot2 stays at 18. Team Avatar's discard ability does not work
+# from the battlefield (CR 602.2: it is a hand-only ability).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Team Avatar
+Ornithopter
+Ornithopter
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Team Avatar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Team Avatar.Activate(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter#1)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter#1.Power = 2
+? Bot1.Battlefield.Ornithopter#1.Toughness = 4
+? Bot1.Battlefield.Ornithopter#2.Power = 0
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter#1.Toughness = 2
+? Bot1.Battlefield.Ornithopter#1.Power = 0
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter#1; Ornithopter#2)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter#1.Power = 0
+
+[Expect]
+Bot2.Life = 18

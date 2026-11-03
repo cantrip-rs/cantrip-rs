@@ -1,0 +1,47 @@
+# Team Avatar, ruling 2025-10-02: X is determined only as the triggered ability begins to resolve. Bot1 has two Ornithopters;
+# Bot1 attacks with one, and in response Bot2 Lightning Bolts the other, so X is 1 and the attacker is a 1/3 that deals 1
+# (Bot2 20 -> 19), not 2.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Team Avatar
+Ornithopter
+Ornithopter
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Hand.Team Avatar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter#1)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot2.Life = 19
+
+[Expect]
+Bot2.Life = 19

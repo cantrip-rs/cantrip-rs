@@ -1,0 +1,6 @@
+{
+  "name": "Team Avatar",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment",
+  "oracleText": "Whenever a creature you control attacks alone, it gets +X/+X until end of turn, where X is the number of creatures you control.\n{2}{W}, Discard this card: It deals damage equal to the number of creatures you control to target creature."
+}
