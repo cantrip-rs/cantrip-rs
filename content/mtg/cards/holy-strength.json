@@ -1,0 +1,6 @@
+{
+  "name": "Holy Strength",
+  "manaCost": "{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +1/+2."
+}

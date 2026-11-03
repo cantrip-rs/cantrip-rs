@@ -1,0 +1,26 @@
+# Holy Strength enchants a creature and gives it +1/+2 (CR 604.1).
+
+[Bot1 Deck]
+Plains
+Ornithopter
+Holy Strength
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+! Bot1.Hand.Holy Strength.Cast(Bot1.Battlefield.Plains)
+Bot1.Hand.Holy Strength.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Holy Strength.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 4
