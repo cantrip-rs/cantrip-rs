@@ -1,0 +1,8 @@
+{
+  "name": "Lazav, the Multifarious",
+  "manaCost": "{U}{B}",
+  "type": "Legendary Creature — Shapeshifter",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "When Lazav enters, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)\n{X}: Lazav becomes a copy of target creature card in your graveyard with mana value X, except its name is Lazav, the Multifarious, it's legendary in addition to its other types, and it has this ability."
+}

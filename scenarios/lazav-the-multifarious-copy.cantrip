@@ -1,0 +1,58 @@
+# Lazav surveils one card and copies a creature of the chosen mana value while retaining its name and legendary status (CR 701.25a, 707.9).
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Lazav, the Multifarious
+Island x2
+Grizzly Bears
+Hill Giant
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Grizzly Bears
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lazav, the Multifarious.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(| Grizzly Bears)
+? Bot1.Graveyard = Grizzly Bears
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Lazav, the Multifarious.Activate(X: 2)
+Bot1.Target(Bot1.Graveyard.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Lazav, the Multifarious.Activate(X: 2)
+! Bot1.Target(Bot2.Graveyard.Grizzly Bears)
+Bot1.Target(Bot1.Graveyard.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Lazav, the Multifarious.Power = 2
+Bot1.Battlefield.Lazav, the Multifarious.Toughness = 2
+Bot1.Battlefield.Lazav, the Multifarious.Subtypes = Bear
+Bot1.Battlefield.Lazav, the Multifarious.Supertypes = Legendary
+Bot1.Graveyard = Grizzly Bears
+Bot2.Graveyard = Grizzly Bears; Shock; Black Lotus
