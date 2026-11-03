@@ -571,6 +571,13 @@ pub static ALLY: CardDef = CardDef {
     ..token!(Ally)
 };
 
+/// "Create a 1/1 white Ally creature token" as an effect (CR 111.1): one `ALLY` under the controller of the resolving spell or
+/// ability. Appa, Invasion Reinforcements, Kyoshi Warriors and Suki, Courageous Rescuer print it.
+pub fn create_an_ally(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &ALLY, 1)?;
+    Ok(())
+}
+
 /// The 1/1 red Goblin creature token. Frontline Rush and Den of the Bugbear make it.
 pub static GOBLIN: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::Red)),
