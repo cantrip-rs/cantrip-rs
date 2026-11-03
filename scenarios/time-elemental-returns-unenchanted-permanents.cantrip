@@ -1,0 +1,82 @@
+# An enchanted creature is not a legal target, while an unenchanted land and an opponent's creature
+# return to their owners' hands. Each activation pays {2}{U}{U} and taps the Elemental (CR 115.1, 400.3).
+[Bot1 Deck]
+Time Elemental
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ancestral Recall
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Plains
+Holy Strength
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Time Elemental.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Holy Strength.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Time Elemental.Activate(Bot2.Battlefield.Memnite; Mana: short)
+Bot1.Hand.Island.Play
+! Bot1.Battlefield.Time Elemental.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Time Elemental.Activate(Bot1.Battlefield.Island)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Time Elemental.Tapped = true
+? Bot1.Battlefield.Island = (absent)
+? Bot1.Hand.Count = 4
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Time Elemental.Activate(Bot2.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Hand.Memnite.Colors =
+Bot2.Battlefield.Ornithopter.Power = 1

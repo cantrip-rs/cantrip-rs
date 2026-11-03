@@ -1,0 +1,40 @@
+# The Elemental is destroyed in combat after attacking; its delayed ability still deals 5 damage (CR 113.7a).
+[Bot1 Deck]
+Time Elemental
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Time Elemental.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Time Elemental)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Time Elemental)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 15
+Bot1.Graveyard = Time Elemental
+Bot2.Life = 20
