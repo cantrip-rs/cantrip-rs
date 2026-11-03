@@ -1,0 +1,31 @@
+# Wild Growth enchants a land and adds green when its controller taps it for mana (CR 605.1b).
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Island
+Ornithopter
+Wild Growth
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Wild Growth.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Hand.Wild Growth.Cast(Bot1.Battlefield.Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {U}{G}
+Bot1.Battlefield.Mox Sapphire.Activate
+? Bot1.Mana = {U}{U}{G}
+
+[Expect]
+Bot1.Battlefield.Wild Growth.AttachedTo = Island

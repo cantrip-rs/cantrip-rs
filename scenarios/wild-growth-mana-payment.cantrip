@@ -1,0 +1,25 @@
+# The Island and Wild Growth together can pay {G}{U} before the Island is tapped (CR 605.4a).
+[Bot1 Deck]
+Island
+Mox Emerald
+Wild Growth
+Gaea's Skyfolk
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wild Growth.Cast(Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+Bot1.Hand.Gaea's Skyfolk.Cast
+? Turn = 1
+Bot1.Battlefield.Island.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Gaea's Skyfolk.Power = 2
+Bot1.Mana =
