@@ -1,0 +1,55 @@
+# Brine Shaman can sacrifice itself to counter its controller's artifact creature spell, but cannot counter a noncreature spell (CR 701.6a).
+
+[Bot1 Deck]
+Brine Shaman
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Memnite
+Island
+Mox Emerald
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brine Shaman.Cast
+? Bot1.Mana =
+[T1 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Island.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+! Bot1.Battlefield.Brine Shaman.Activate(Stack.Memnite; Ability: Counter target creature spell; Mana: short)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Emerald.Cast
+! Bot1.Battlefield.Brine Shaman.Activate(Stack.Mox Emerald; Ability: Counter target creature spell)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Brine Shaman.Activate(Stack.Memnite; Ability: Counter target creature spell)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Brine Shaman)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Brine Shaman.Power = 1
+Bot1.Graveyard.Memnite.Power = 1
+Bot1.Battlefield.Mox Emerald.Tapped = false

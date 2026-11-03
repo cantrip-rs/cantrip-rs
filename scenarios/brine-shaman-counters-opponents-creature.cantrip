@@ -1,0 +1,46 @@
+# Brine Shaman sacrifices another creature and pays {1}{U}{U} to counter an opponent's creature spell (CR 701.6a).
+
+[Bot1 Deck]
+Brine Shaman
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Ornithopter
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brine Shaman.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Brine Shaman.Activate(Stack.Memnite; Ability: Counter target creature spell)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Memnite.Power = 1
+Bot1.Graveyard.Ornithopter.Power = 0
+Bot1.Battlefield.Brine Shaman.Power = 1
