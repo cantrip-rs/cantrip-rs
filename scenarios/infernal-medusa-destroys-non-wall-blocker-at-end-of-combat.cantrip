@@ -1,0 +1,39 @@
+# When blocked, Infernal Medusa destroys each non-Wall blocker at end of combat, but not a Wall.
+# Its damage is assigned to Steel Wall, so the undamaged Aegis Turtle can die only from the delayed trigger.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Infernal Medusa
+Swamp x20
+[Bot2 Deck]
+Island
+Mox Sapphire
+Aegis Turtle
+Steel Wall
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Infernal Medusa.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Steel Wall.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Infernal Medusa > Bot2)
+Bot2.Block(Aegis Turtle > Infernal Medusa; Steel Wall > Infernal Medusa)
+Bot1.AssignDamage(Infernal Medusa > Steel Wall: 2; Infernal Medusa > Aegis Turtle: 0)
+? Bot2.Battlefield.Aegis Turtle.Damage = 0
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard = Aegis Turtle
+Bot2.Battlefield.Steel Wall.Damage = 2

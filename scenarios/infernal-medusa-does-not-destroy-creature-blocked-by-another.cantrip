@@ -1,0 +1,35 @@
+# A different creature's block does not cause Medusa to destroy the attacker at end of combat.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Infernal Medusa
+Steel Wall
+Swamp x20
+[Bot2 Deck]
+Island
+Aegis Turtle
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Infernal Medusa.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Steel Wall.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Aegis Turtle > Bot1)
+Bot1.Block(Steel Wall > Aegis Turtle)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Aegis Turtle.Damage = 0
+Bot1.Battlefield.Infernal Medusa.Damage = 0

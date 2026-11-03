@@ -1,0 +1,8 @@
+{
+  "name": "Infernal Medusa",
+  "manaCost": "{3}{B}{B}",
+  "type": "Creature — Gorgon",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Whenever this creature blocks a creature, destroy that creature at end of combat.\nWhenever this creature becomes blocked by a non-Wall creature, destroy that creature at end of combat."
+}
