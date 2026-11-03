@@ -1,0 +1,49 @@
+# An opponent's Plains does not grant Dire Wolves banding, but its controller's nonbasic Plains does (CR 305.6, 604.1).
+# Banding makes the blocker block both attackers and lets Bot1 assign its damage (CR 702.22h, 702.22k).
+# Destroying the Plains removes banding.
+[Bot1 Deck]
+Black Lotus
+Dire Wolves
+Ornithopter
+Savannah
+Island x20
+
+[Bot2 Deck]
+Plains
+Black Lotus
+Ulvenwald Oddity
+Strip Mine
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Dire Wolves.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Ulvenwald Oddity.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Dire Wolves.Keywords = (absent)
+Bot1.Hand.Savannah.Play
+? Bot1.Battlefield.Dire Wolves.Keywords = Banding
+Bot1.Attack(Dire Wolves > Bot2; Ornithopter > Bot2)
+Bot1.Choose(Ornithopter)
+? Combat.Attackers = Dire Wolves > Bot2 (band 1); Ornithopter > Bot2 (band 1)
+Bot2.Block(Ulvenwald Oddity > Dire Wolves)
+[T3 Bot1.Blockers]
+? Combat.Blocks = Ulvenwald Oddity > Dire Wolves; Ulvenwald Oddity > Ornithopter
+Bot1.AssignDamage(Ulvenwald Oddity > Ornithopter: 4)
+[T4 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+Bot2.Battlefield.Strip Mine.Activate(Bot1.Battlefield.Savannah; Ability: Destroy target land)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Dire Wolves.Keywords = (absent)
+Bot1.Battlefield.Dire Wolves.Damage = 0
+Bot1.Graveyard = Savannah; Ornithopter; Black Lotus
+Bot2.Battlefield.Ulvenwald Oddity.Damage = 0
