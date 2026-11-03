@@ -1,0 +1,40 @@
+# Avalanche targets snow lands, not snow creatures; X=1 takes exactly one of two snow lands (CR 115.1a).
+[Bot1 Deck]
+Avalanche
+Black Lotus x2
+Mox Ruby
+Mox Jet
+Snow-Covered Forest
+Wall of Shards
+Plains x15
+[Bot2 Deck]
+Snow-Covered Plains
+Plains x19
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Wall of Shards.Cast
+Bot1.Accept
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Avalanche.Cast(X: 1)
+! Bot1.Target(Wall of Shards)
+! Bot1.Target(Count: 0)
+! Bot1.Target(Count: 2)
+Bot1.Target(Bot1.Battlefield.Snow-Covered Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Avalanche; Snow-Covered Forest; Black Lotus; Black Lotus
+Bot1.Battlefield.Wall of Shards.Toughness = 8
+Bot2.Battlefield.Snow-Covered Plains.Tapped = false

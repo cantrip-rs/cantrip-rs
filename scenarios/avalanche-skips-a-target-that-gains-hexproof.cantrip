@@ -1,0 +1,38 @@
+# Teyo gives Bot2's targeted snow land hexproof in response, so Avalanche must leave it alone and destroy the other (CR 608.2b).
+[Bot1 Deck]
+Avalanche
+Black Lotus x2
+Snow-Covered Forest
+Forest x16
+[Bot2 Deck]
+Snow-Covered Plains
+Black Lotus
+Teyo, Lightshield Expert
+Plains x17
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Avalanche.Cast(X: 2)
+Bot1.Target(Bot1.Battlefield.Snow-Covered Forest; Bot2.Battlefield.Snow-Covered Plains)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Teyo, Lightshield Expert.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Target(Bot2.Battlefield.Snow-Covered Plains)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Graveyard = Avalanche; Snow-Covered Forest; Black Lotus; Black Lotus
+Bot2.Battlefield.Snow-Covered Plains.Tapped = false
+Bot2.Battlefield.Snow-Covered Plains.Keywords = Hexproof

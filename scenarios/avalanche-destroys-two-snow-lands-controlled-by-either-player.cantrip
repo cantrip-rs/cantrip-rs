@@ -1,0 +1,31 @@
+# Avalanche with X=2 destroys exactly two snow lands, one belonging to each player, leaving a nonsnow land (CR 701.8a).
+# Two Lotuses pay the six-mana cost exactly; the target question refuses a nonsnow land and a wrong count.
+[Bot1 Deck]
+Avalanche
+Black Lotus x2
+Snow-Covered Forest
+Island x16
+[Bot2 Deck]
+Snow-Covered Plains
+Plains x19
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Avalanche.Cast(X: 2)
+! Bot1.Target(Bot1.Battlefield.Island)
+! Bot1.Target(Count: 1)
+Bot1.Target(Bot1.Battlefield.Snow-Covered Forest; Bot2.Battlefield.Snow-Covered Plains)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Avalanche; Snow-Covered Forest; Black Lotus; Black Lotus
+Bot2.Graveyard = Snow-Covered Plains
+Bot1.Battlefield.Island.Tapped = false

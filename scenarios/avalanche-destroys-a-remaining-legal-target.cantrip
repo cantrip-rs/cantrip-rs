@@ -1,0 +1,35 @@
+# One targeted snow land is sacrificed to Crop Rotation in response; Avalanche still destroys its other legal target (CR 608.2b).
+[Bot1 Deck]
+Avalanche
+Crop Rotation
+Black Lotus x2
+Snow-Covered Forest
+Forest x15
+[Bot2 Deck]
+Snow-Covered Plains
+Plains x19
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Avalanche.Cast(X: 2)
+Bot1.Target(Bot1.Battlefield.Snow-Covered Forest; Bot2.Battlefield.Snow-Covered Plains)
+? Bot1.Mana =
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Crop Rotation.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Snow-Covered Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Snow-Covered Plains
+Bot1.Graveyard = Avalanche; Crop Rotation; Snow-Covered Forest; Black Lotus; Black Lotus

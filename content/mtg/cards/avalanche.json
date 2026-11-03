@@ -1,0 +1,6 @@
+{
+  "name": "Avalanche",
+  "manaCost": "{X}{2}{R}{R}",
+  "type": "Sorcery",
+  "oracleText": "Destroy X target snow lands."
+}
