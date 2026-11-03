@@ -1201,3 +1201,22 @@ mod tests {
         assert_eq!(OFFICER.toughness, Some(1));
     }
 }
+
+/// A 1/1 colorless Spirit creature token (CR 111). Akki Ember-Keeper, Baku Altar and the Architect of Restoration
+/// face of The Restoration of Eiganjo create this exact token.
+pub static SPIRIT_1_1_COLORLESS: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Spirit)
+};
+
+/// A 2/2 white Knight Ally creature token (CR 111). Allied Reinforcements and Gideon, Ally of Zendikar create
+/// this exact token.
+pub static KNIGHT_ALLY: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    colors: Some(ColorSet(1)),
+    power: Some(2),
+    toughness: Some(2),
+    ..token!(Knight Ally)
+};
