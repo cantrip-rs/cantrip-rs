@@ -1,0 +1,36 @@
+# The tap ability deals exactly one to either player, refuses a land, and cannot be reused while tapped (CR 602.2b).
+[Bot1 Deck]
+Island
+Pirate Ship
+Black Lotus
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Pirate Ship.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Pirate Ship.Activate(Bot2.Battlefield.Island)
+Bot1.Battlefield.Pirate Ship.Activate(Bot2)
+? Bot1.Battlefield.Pirate Ship.Tapped = true
+! Bot1.Battlefield.Pirate Ship.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+Bot1.Battlefield.Pirate Ship.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
