@@ -1,0 +1,8 @@
+{
+  "name": "The Wretched",
+  "manaCost": "{3}{B}{B}",
+  "type": "Creature — Demon",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "At end of combat, gain control of all creatures blocking this creature for as long as you control this creature."
+}

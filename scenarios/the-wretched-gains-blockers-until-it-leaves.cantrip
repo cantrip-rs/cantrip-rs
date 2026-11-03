@@ -1,0 +1,56 @@
+# The Wretched gains both surviving blockers at end of combat, then losing The Wretched ends control of both (CR 611.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+The Wretched
+Plains
+Swords to Plowshares
+Island x20
+[Bot2 Deck]
+Forest
+Mox Emerald
+Wall of Wood
+Wall of Wood
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Wretched.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Wall of Wood#1.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Wretched)
+Bot2.Block(Wall of Wood#1 > The Wretched; Wall of Wood#2 > The Wretched)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Wall of Wood#1.Power = 0
+? Bot1.Battlefield.Wall of Wood#2.Power = 0
+? Bot2.Battlefield.Wall of Wood = (absent)
+? Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.The Wretched)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Wall of Wood#1.Power = 0
+Bot2.Battlefield.Wall of Wood#2.Power = 0
+Bot1.Battlefield.Wall of Wood = (absent)
+Exile = The Wretched
