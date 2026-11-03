@@ -1,0 +1,32 @@
+# Rust refuses an artifact's triggered ability while countering an activated artifact ability on the same stack (CR 603.1, 701.6a).
+[Bot1 Deck]
+Black Lotus
+Aether Spellbomb
+Ornithopter
+Mox Sapphire
+Mox Emerald
+Rust
+Eerie Gravestone
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Hand.Eerie Gravestone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Aether Spellbomb.Activate(Ornithopter; Ability: Return target creature)
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Hand.Rust.Cast(Stack.Eerie Gravestone)
+Bot1.Hand.Rust.Cast(Stack.Aether Spellbomb)
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Eerie Gravestone.Types = Artifact
+Bot1.Hand = Island

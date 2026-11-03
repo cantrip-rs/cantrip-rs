@@ -1,0 +1,36 @@
+# Rust counters an Aether Spellbomb ability after the artifact was sacrificed to activate it.
+[Bot1 Deck]
+Forest
+Mox Emerald
+Rust
+Island x15
+[Bot2 Deck]
+Island
+Mox Sapphire
+Aether Spellbomb
+Ornithopter
+Island x15
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aether Spellbomb.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Aether Spellbomb.Activate(Bot2.Battlefield.Ornithopter; Ability: Return target creature)
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Rust.Cast(Stack.Aether Spellbomb)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot2.Graveyard = Aether Spellbomb
+Bot1.Graveyard = Rust
