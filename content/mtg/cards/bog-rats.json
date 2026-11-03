@@ -1,0 +1,8 @@
+{
+  "name": "Bog Rats",
+  "manaCost": "{B}",
+  "type": "Creature — Rat",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "This creature can't be blocked by Walls."
+}

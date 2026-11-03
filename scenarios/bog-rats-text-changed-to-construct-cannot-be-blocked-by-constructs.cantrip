@@ -1,0 +1,41 @@
+# Artificial Evolution changes Walls to Constructs in Bog Rats' text (CR 612.1); a Wall can block it, a Construct cannot.
+[Bot1 Deck]
+Bog Rats
+Mox Jet
+Mox Sapphire
+Artificial Evolution
+Memnite
+Swamp x20
+[Bot2 Deck]
+Wall of Wood
+Forest
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Bog Rats.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Wall of Wood.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Bot1.Battlefield.Bog Rats)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Wall)
+Bot1.Modes(Construct)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bog Rats > Bot2; Memnite > Bot2)
+! Bot2.Block(Bot2.Battlefield.Memnite > Bog Rats)
+Bot2.Block(Wall of Wood > Bog Rats; Bot2.Battlefield.Memnite > Bot1.Battlefield.Memnite)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Memnite; Artificial Evolution
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Wall of Wood.Toughness = 3
+Bot2.Life = 20
