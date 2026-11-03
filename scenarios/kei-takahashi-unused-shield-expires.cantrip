@@ -1,0 +1,39 @@
+# Kei’s unused prevention shield ends at cleanup, so a later Bolt deals its full damage (CR 514.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Kei Takahashi
+Island
+Aegis Turtle
+Island x20
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kei Takahashi.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Aegis Turtle.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+[T4 Bot2.Main1]
+! Bot1.Battlefield.Kei Takahashi.Activate(Bot1.Battlefield.Island)
+Bot1.Battlefield.Kei Takahashi.Activate(Bot1.Battlefield.Aegis Turtle)
+? Bot1.Mana =
+? Bot1.Battlefield.Kei Takahashi.Tapped = true
+[T6 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Aegis Turtle)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Aegis Turtle.Damage = 3
+Prevented = (absent)
