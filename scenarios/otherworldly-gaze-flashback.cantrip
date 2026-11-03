@@ -1,0 +1,33 @@
+# Surveil three puts chosen cards in the graveyard and orders the rest, and flashback exiles the spell (CR 701.25a, 702.34a).
+[Bot1 Deck]
+Mox Sapphire x2
+Mox Ruby
+Otherworldly Gaze
+Island x3
+Grizzly Bears
+Hill Giant
+Shock
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Otherworldly Gaze.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Hill Giant; Grizzly Bears | Shock)
+? Bot1.Library.Hill Giant.Power = 3
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Graveyard.Otherworldly Gaze.Cast(Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Lightning Bolt | Hill Giant; Grizzly Bears)
+[Expect]
+Exile = Otherworldly Gaze
+Bot1.Graveyard = Grizzly Bears; Hill Giant; Shock
+Bot1.Library.Lightning Bolt.Colors = Red
