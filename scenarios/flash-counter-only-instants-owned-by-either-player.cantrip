@@ -1,0 +1,57 @@
+# Flash Counter refuses a sorcery, counters the opponent's instant, and can counter its controller's instant (CR 115.1a, 701.6a).
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Flash Counter x2
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Chain Lightning
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Chain Lightning.Cast(Bot1)
+! Bot1.Hand.Flash Counter.Cast(Stack.Chain Lightning)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flash Counter.Cast(Stack.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flash Counter.Cast(Stack.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 20
+Bot1.Graveyard = Flash Counter; Lightning Bolt; Flash Counter
+Bot2.Graveyard = Lightning Bolt; Chain Lightning
