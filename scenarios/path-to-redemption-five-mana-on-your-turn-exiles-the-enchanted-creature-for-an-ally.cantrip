@@ -1,0 +1,54 @@
+# Path to Redemption: "{5}, Sacrifice this Aura: Exile enchanted creature. Create a 1/1 white Ally creature token. Activate only
+# during your turn." The Aura is on Bot2's Ornithopter. With Mox Pearl, Black Lotus and nothing else untapped (four mana) the
+# ability is refused as short; with a third Mox Pearl there are five sources, but in Bot2's turn 4 it is refused as not Bot1's
+# turn. In turn 5 Black Lotus and two Mox Pearls pay exactly {5} (the pool is empty after), the Aura goes to Bot1's graveyard,
+# the Ornithopter to exile and Bot1 gets the Ally.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Black Lotus
+Path to Redemption
+Plains
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Path to Redemption.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Path to Redemption.Activate(Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+[T4 Bot2.Main1]
+! Bot1.Battlefield.Path to Redemption.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Path to Redemption.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Path to Redemption; Black Lotus
+Bot2.Battlefield.Count = 0
+Exile = Ornithopter
+Bot1.Battlefield.Ally Token.Power = 1
+Bot1.Battlefield.Ally Token.Colors = White

@@ -1,0 +1,49 @@
+# Path to Redemption on Bot2's Savannah Lions: "Enchanted creature can't attack or block" (CR 508.1c, 509.1b) only for that
+# creature. Bot2's Ornithopter is untouched. In turn 3 blocking Bot1's Ornithopter with the enchanted Lions is refused and the
+# Ornithopter blocks it (Bot2 takes nothing); in turn 4 attacking with the enchanted Lions is refused and the Ornithopter attacks
+# (0 damage, but it is declared: Bot1 is attacked and the Lions stays untapped).
+
+[Bot1 Deck]
+Plains
+Ornithopter
+Path to Redemption
+Mox Pearl
+Plains
+Plains x15
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Ornithopter
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Path to Redemption.Cast(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+! Bot2.Block(Savannah Lions > Ornithopter)
+Bot2.Block(Ornithopter > Ornithopter)
+[T3 Bot1.Main2]
+[T4 Bot2.DeclareAttackers]
+! Bot2.Attack(Savannah Lions > Bot1)
+Bot2.Attack(Ornithopter > Bot1)
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Savannah Lions.Tapped = false
+? Bot2.Battlefield.Ornithopter.Tapped = true
+
+[Expect]
+Bot2.Life = 20

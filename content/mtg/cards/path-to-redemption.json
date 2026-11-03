@@ -1,0 +1,6 @@
+{
+  "name": "Path to Redemption",
+  "manaCost": "{1}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can't attack or block.\n{5}, Sacrifice this Aura: Exile enchanted creature. Create a 1/1 white Ally creature token. Activate only during your turn."
+}

@@ -1,0 +1,53 @@
+# Path to Redemption on Bot1's own Ornithopter (an Aura may enchant any creature): in turn 3 Bot1 pays {5} and sacrifices the
+# Aura as a cost; in response Bot2 Bolts the Ornithopter, which is not the creature the Aura was attached to anymore (CR 400.7).
+# The ability resolves with nothing to exile: the Ornithopter card stays in Bot1's graveyard (not exiled, Exile.Count 0), and the
+# Ally token is made anyway (the ability does what it can).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Black Lotus
+Path to Redemption
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Path to Redemption.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Path to Redemption.Activate
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard.Ornithopter.Power = 0
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Ornithopter; Path to Redemption; Black Lotus
+Exile.Count = 0
+Bot1.Battlefield.Ally Token.Power = 1
