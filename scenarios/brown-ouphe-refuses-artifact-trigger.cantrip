@@ -1,0 +1,42 @@
+# Chromatic Star's death trigger is not an activated ability, even though its source is an artifact (CR 602.1, 603.1).
+[Bot1 Deck]
+Brown Ouphe
+Mox Emerald
+Mox Sapphire
+Mox Pearl
+Chromatic Star
+Tormod's Crypt
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Brown Ouphe.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Chromatic Star.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Chromatic Star.Activate(Color: Blue)
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot2)
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Brown Ouphe.Activate(Stack.Chromatic Star)
+Bot1.Battlefield.Brown Ouphe.Activate(Stack.Tormod's Crypt)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Brown Ouphe.Tapped = true
+Bot1.Hand.Count = 3
