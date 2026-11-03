@@ -1,0 +1,8 @@
+{
+  "name": "Ghosts of the Damned",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Spirit",
+  "power": 0,
+  "toughness": 2,
+  "oracleText": "{T}: Target creature gets -1/-0 until end of turn."
+}

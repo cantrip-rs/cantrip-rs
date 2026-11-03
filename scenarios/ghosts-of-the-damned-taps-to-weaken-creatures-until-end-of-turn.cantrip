@@ -1,0 +1,45 @@
+# Ghosts taps to give either player's creature -1/-0 for the turn, and cannot target a noncreature (CR 602.2b, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Ghosts of the Damned
+Memnite
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Ghosts of the Damned.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Ghosts of the Damned.Activate(Mox Pearl)
+Bot1.Battlefield.Ghosts of the Damned.Activate(Bot2.Battlefield.Memnite)
+? Bot1.Battlefield.Ghosts of the Damned.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 0
+? Bot2.Battlefield.Memnite.Toughness = 1
+! Bot1.Battlefield.Ghosts of the Damned.Activate(Bot2.Battlefield.Memnite)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Memnite.Power = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ghosts of the Damned.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 0
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
