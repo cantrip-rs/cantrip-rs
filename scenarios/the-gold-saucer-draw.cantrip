@@ -1,0 +1,35 @@
+# The Gold Saucer sacrifices exactly two artifacts and draws exactly one card for its third ability (CR 601.2h, 121.1).
+[Bot1 Deck]
+The Gold Saucer
+Black Lotus
+Mox Ruby
+Mox Ruby
+Ornithopter
+Mox Emerald
+Llanowar Elves
+Grizzly Bears
+Hill Giant
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Hand.The Gold Saucer.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.The Gold Saucer.Activate(Ability: #3)
+! Bot1.Choose(Llanowar Elves)
+Bot1.Choose(Mox Ruby#1; Mox Ruby#2)
+? Bot1.Mana =
+? Bot1.Graveyard.Count = 3
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Library.Hill Giant.Power = 3
+Bot1.Battlefield.Ornithopter.Toughness = 2

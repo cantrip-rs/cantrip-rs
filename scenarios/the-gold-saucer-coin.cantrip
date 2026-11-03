@@ -1,0 +1,36 @@
+# The Gold Saucer taps for colorless mana, and its coin ability creates a Treasure only on a win (CR 605.1a, 705.1).
+[Bot1 Deck]
+The Gold Saucer
+Mox Ruby
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Island x20
+[Dice]
+1; 2
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.The Gold Saucer.Play
+Bot1.Battlefield.The Gold Saucer.Activate(Ability: #1)
+? Bot1.Mana = {C}
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.The Gold Saucer.Activate(Ability: #2; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.The Gold Saucer.Activate(Ability: #2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token.Token = true
+? Bot1.Battlefield.Treasure Token.Tapped = false
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.The Gold Saucer.Activate(Ability: #2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Treasure Token.Token = true
