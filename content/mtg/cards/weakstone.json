@@ -1,0 +1,6 @@
+{
+  "name": "Weakstone",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "Attacking creatures get -1/-0."
+}
