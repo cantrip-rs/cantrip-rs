@@ -1,0 +1,8 @@
+{
+  "name": "Banshee",
+  "manaCost": "{2}{B}{B}",
+  "type": "Creature — Spirit",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "{X}, {T}: This creature deals half X damage, rounded down, to any target, and half X damage, rounded up, to you."
+}

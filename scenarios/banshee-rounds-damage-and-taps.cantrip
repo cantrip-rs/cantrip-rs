@@ -1,0 +1,55 @@
+# Banshee splits odd X as 1 and 2, splits even X as 1 and 1 when targeting its controller, and X=0 deals no damage (CR 120.3a, 602.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Banshee
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Island
+Island x20
+[Bot2 Deck]
+Island x27
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Banshee.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Battlefield.Banshee.Activate(Bot2.Battlefield.Island; X: 3)
+Bot1.Battlefield.Banshee.Activate(Bot2; X: 3)
+Bot1.Pass
+? Bot1.Mana =
+! Bot1.Battlefield.Banshee.Activate(Bot2; X: 0)
+[T3 Bot1.Main2]
+? Bot1.Life = 18
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Banshee.Activate(Bot1; X: 2)
+Bot1.Pass
+? Bot1.Mana =
+[T5 Bot1.Main2]
+? Bot1.Life = 16
+[T7 Bot1.Main1]
+Bot1.Battlefield.Banshee.Activate(Bot2; X: 0)
+Bot1.Pass
+? Bot1.Mana =
+[T7 Bot1.Main2]
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 19
+Bot1.Battlefield.Banshee.Tapped = true
