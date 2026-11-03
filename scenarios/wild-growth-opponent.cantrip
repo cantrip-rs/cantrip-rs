@@ -1,0 +1,26 @@
+# The enchanted land's controller receives the additional green mana (CR 605.1b).
+
+[Bot1 Deck]
+Mox Emerald
+Wild Growth
+Island x20
+
+[Bot2 Deck]
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wild Growth.Cast(Bot2.Battlefield.Mountain)
+? Bot1.Mana =
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+? Bot2.Mana = {R}{G}
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Wild Growth.AttachedTo = Mountain

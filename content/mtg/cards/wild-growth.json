@@ -1,0 +1,6 @@
+{
+  "name": "Wild Growth",
+  "manaCost": "{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land\nWhenever enchanted land is tapped for mana, its controller adds an additional {G}."
+}
