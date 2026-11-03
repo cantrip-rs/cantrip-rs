@@ -1,0 +1,40 @@
+# After the opponent attacks with Turtle, Old Man takes it that turn; its new controller may attack with it next turn because it did not attack on that player's last turn (CR 508.1c).
+
+[Bot1 Deck]
+Black Lotus
+Old Man of the Sea
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Giant Turtle
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Old Man of the Sea.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Giant Turtle.Cast
+? Bot2.Mana =
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Giant Turtle > Bot1)
+[T4 Bot2.Main2]
+Bot1.Battlefield.Old Man of the Sea.Activate(Bot2.Battlefield.Giant Turtle)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Giant Turtle > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Battlefield.Giant Turtle.Tapped = true
