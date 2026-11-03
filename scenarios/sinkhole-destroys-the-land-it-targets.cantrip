@@ -1,0 +1,36 @@
+# "Destroy target land." Bot2's Island goes to its graveyard (CR 701.8a); a Mox Pearl and a player are refused as
+# targets. The pool is checked right after the cast, so the cost is exact.
+
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Sinkhole
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Hand.Sinkhole.Cast(Bot2.Battlefield.Mox Pearl)
+! Bot1.Hand.Sinkhole.Cast(Bot2)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Sinkhole.Cast(Bot2.Battlefield.Island)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Island = (absent)
+Bot2.Graveyard = Island
+Bot1.Graveyard = Sinkhole

@@ -1,0 +1,6 @@
+{
+  "name": "Sinkhole",
+  "manaCost": "{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Destroy target land."
+}
