@@ -1,0 +1,6 @@
+{
+  "name": "Stone Rain",
+  "manaCost": "{2}{R}",
+  "type": "Sorcery",
+  "oracleText": "Destroy target land."
+}

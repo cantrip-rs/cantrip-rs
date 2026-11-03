@@ -1,0 +1,32 @@
+# "Destroy target land." "Target" reads either player's: Bot1's own Island goes to its owner's graveyard (CR 115.1, 701.8a).
+# The spell goes there as the last step of resolving, so it is on top (CR 307.2).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Stone Rain
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Stone Rain.Cast(Bot1.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Island = (absent)
+Bot1.Graveyard = Stone Rain; Island
