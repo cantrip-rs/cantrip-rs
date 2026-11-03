@@ -1,0 +1,55 @@
+# South Pole Voyager only answers an Ally you control entering (CR 603.2): Bot1's Savannah Lions (a Cat, not an Ally) entering
+# does nothing, and neither does Bot2's own South Pole Voyager, an Ally entering under the opponent's control; Bot2's own
+# copy gains Bot2 life for its own entering only.
+
+[Bot1 Deck]
+Plains
+Plains
+Mox Pearl
+Mox Ruby
+South Pole Voyager
+Savannah Lions
+Plains
+Plains x13
+
+[Bot2 Deck]
+Plains
+Plains
+South Pole Voyager
+Plains x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.South Pole Voyager.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Life = 21
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Hand.South Pole Voyager.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 21
