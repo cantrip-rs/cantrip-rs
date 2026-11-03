@@ -1,0 +1,25 @@
+# Syphon Soul deals exactly two to the other player and gives its controller exactly that much life (CR 120.3, 119.3).
+[Bot1 Deck]
+Syphon Soul
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Syphon Soul.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18
+Bot1.Graveyard = Syphon Soul

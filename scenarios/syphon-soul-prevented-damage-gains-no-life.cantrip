@@ -1,0 +1,37 @@
+# Healing Salve prevents the opponent's damage, so Syphon Soul gains its controller no life (CR 615.6).
+[Bot1 Deck]
+Syphon Soul
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp x20
+[Bot2 Deck]
+Plains
+Healing Salve
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Syphon Soul.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Prevent the next 3 damage)
+Bot2.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Prevented = 2 Syphon Soul > Bot2 by Healing Salve
