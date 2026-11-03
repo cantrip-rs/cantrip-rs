@@ -1,0 +1,29 @@
+# Glasses of Urza taps to look at either player's hand (CR 602.2).
+
+[Bot1 Deck]
+Island
+Glasses of Urza
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Mountain
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Glasses of Urza.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Glasses of Urza.Activate(Bot1.Battlefield.Island)
+Bot1.Battlefield.Glasses of Urza.Activate(Bot2)
+! Bot1.Battlefield.Glasses of Urza.Activate(Bot2)
+[T3 Bot1.Main1]
+? Bot1.Looked.Count = 7
+Bot1.Battlefield.Glasses of Urza.Activate(Bot1)
+
+[Expect]
+Bot1.Looked.Count = 13
+Bot1.Battlefield.Glasses of Urza.Tapped = true
