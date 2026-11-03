@@ -1,0 +1,31 @@
+# Kird Ape is 1/1 with only an opponent's Forest, becomes 2/3 with its controller's Forest, and returns to 1/1 when it is destroyed (CR 604.1).
+[Bot1 Deck]
+Mountain
+Forest
+Kird Ape
+Mountain x20
+[Bot2 Deck]
+Forest
+Strip Mine
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Kird Ape.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+? Bot1.Battlefield.Kird Ape.Power = 1
+? Bot1.Battlefield.Kird Ape.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+? Bot1.Battlefield.Kird Ape.Power = 2
+? Bot1.Battlefield.Kird Ape.Toughness = 3
+[T4 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+Bot2.Battlefield.Strip Mine.Activate(Bot1.Battlefield.Forest; Ability: Destroy target land)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Kird Ape.Power = 1
+Bot1.Battlefield.Kird Ape.Toughness = 1
+Bot1.Graveyard = Forest
