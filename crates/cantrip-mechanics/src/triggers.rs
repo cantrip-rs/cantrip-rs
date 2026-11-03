@@ -2,6 +2,18 @@
 
 use cantrip_api::*;
 
+/// "When enchanted creature dies" (CR 603.6c, 603.10a): inspect the attachment and creature on the board before
+/// the zone change. Return both the last battlefield object and the new graveyard object: Creature Bond needs the
+/// former's last characteristics and controller; Ferocity of the Hunt returns the latter.
+pub fn enchanted_creature_died(q: &dyn Query, source: ObjectId, event: &Event) -> Option<(ObjectId, ObjectId)> {
+    match event {
+        Event::ZoneChange { old, new, from, to, .. }
+            if from.is(ZoneKind::Battlefield) && to.is(ZoneKind::Graveyard)
+                && q.obj(source).attached_to == Some(*old) && q.chars(*old).is(CardType::Creature) => Some((*old, *new)),
+        _ => None,
+    }
+}
+
 /// "Whenever this creature enlists a creature" (CR 702.154c): enlist's, kept with the keyword.
 pub use crate::enlist::{THIS_ENLISTS, this_enlists};
 
