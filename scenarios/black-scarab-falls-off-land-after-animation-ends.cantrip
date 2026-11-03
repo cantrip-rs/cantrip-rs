@@ -1,0 +1,27 @@
+# Black Scarab enchants Mutavault while it is a creature, then goes to the graveyard when the land stops being a creature at cleanup (CR 303.4c, 704.5m).
+[Bot1 Deck]
+Mutavault
+Mox Sapphire
+Mox Pearl
+Black Scarab
+Island x23
+[Bot2 Deck]
+Island x27
+[Actions]
+Bot1.Hand.Mutavault.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mutavault.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Black Scarab.Cast(Bot1.Battlefield.Mutavault)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Black Scarab.AttachedTo = Mutavault
+[T2 Bot2.Main1]
+[Expect]
+Bot1.Graveyard.Black Scarab.Colors = White
+Bot1.Battlefield.Mutavault.Types = Land

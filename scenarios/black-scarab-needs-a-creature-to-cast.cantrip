@@ -1,0 +1,22 @@
+# With only noncreature artifacts in play Black Scarab cannot be cast; after Ornithopter enters it can enchant that creature (CR 303.4a, 115.1a).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Black Scarab
+Ornithopter
+Island x23
+[Bot2 Deck]
+Island x27
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Black Scarab.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Scarab.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Black Scarab.AttachedTo = Ornithopter
