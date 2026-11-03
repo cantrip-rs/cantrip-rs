@@ -1,0 +1,44 @@
+# Tetsuo destroys an opposing untapped blocking creature (CR 701.8a).
+[Bot1 Deck]
+Tetsuo Umezawa
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Gleemox
+Ornithopter
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tetsuo Umezawa.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bot1.Battlefield.Ornithopter)
+Bot2.Block(Bot2.Battlefield.Ornithopter > Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Tetsuo Umezawa.Activate(Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Tetsuo Umezawa.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Tetsuo Umezawa.Tapped = true
+Bot1.Battlefield.Ornithopter.Tapped = true

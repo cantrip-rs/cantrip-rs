@@ -1,0 +1,46 @@
+# Tetsuo requires blue mana; four mana without it cannot pay, then adding it permits the same activation.
+[Bot1 Deck]
+Tetsuo Umezawa
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Gleemox
+Mox Pearl
+Ornithopter
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tetsuo Umezawa.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Tetsuo Umezawa.Activate(Bot1.Battlefield.Ornithopter; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Tetsuo Umezawa.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Battlefield.Tetsuo Umezawa.Tapped = true
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Ornithopter

@@ -1,0 +1,8 @@
+{
+  "name": "Tetsuo Umezawa",
+  "manaCost": "{U}{B}{R}",
+  "type": "Legendary Creature — Human Archer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Tetsuo Umezawa can't be the target of Aura spells.\n{U}{B}{B}{R}, {T}: Destroy target tapped or blocking creature."
+}
