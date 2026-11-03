@@ -1,0 +1,6 @@
+{
+  "name": "Meekstone",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "Creatures with power 3 or greater don't untap during their controllers' untap steps."
+}

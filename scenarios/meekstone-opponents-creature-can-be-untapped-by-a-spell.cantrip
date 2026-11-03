@@ -1,0 +1,41 @@
+# Meekstone stops an opponent's 3-power creature in their untap step, but Hidden Strings can untap it later (CR 502.3).
+[Bot1 Deck]
+Mox Sapphire
+Meekstone
+Hidden Strings
+Island x20
+[Bot2 Deck]
+Black Lotus
+Hill Giant
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Meekstone.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Hill Giant > Bot1)
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Hill Giant.Tapped = true
+? Bot2.Battlefield.Forest.Tapped = false
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Hidden Strings.Cast
+Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Target(Bot2.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Untap)
+Bot1.Modes(Do nothing)
+[T7 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Hill Giant.Tapped = false
