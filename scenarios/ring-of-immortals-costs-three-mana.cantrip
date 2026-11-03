@@ -1,0 +1,51 @@
+# Two mana cannot pay the Ring's activation; Dark Ritual supplies three and the
+# Ring counters Disenchant for exactly {3}, tapping as a cost (CR 602.2b).
+[Bot1 Deck]
+Ring of Immortals
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Dark Ritual
+Island x20
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ring of Immortals.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Ring of Immortals)
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Ring of Immortals.Activate(Disenchant; Mana: short)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Ring of Immortals.Activate(Disenchant)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Ring of Immortals.Tapped = true
+
+[Expect]
+Bot2.Graveyard = Disenchant
+Bot1.Battlefield.Ring of Immortals.Tapped = true

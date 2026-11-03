@@ -1,0 +1,6 @@
+{
+  "name": "Ring of Immortals",
+  "manaCost": "{5}",
+  "type": "Artifact",
+  "oracleText": "{3}, {T}: Counter target instant or Aura spell that targets a permanent you control."
+}
