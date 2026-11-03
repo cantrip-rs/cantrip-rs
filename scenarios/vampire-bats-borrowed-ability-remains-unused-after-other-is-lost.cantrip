@@ -1,0 +1,67 @@
+# The Ooze's unused ability from Bot2's Bats is separate from the exhausted ability it loses when Bot1's graveyard is exiled (CR 602.5c).
+[Bot1 Deck]
+Vampire Bats
+Necrotic Ooze
+Mox Jet
+Black Lotus
+Black Lotus
+Tormod's Crypt
+Mox Ruby
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Vampire Bats
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vampire Bats.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Vampire Bats.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Vampire Bats)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Necrotic Ooze.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Necrotic Ooze.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Necrotic Ooze.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Vampire Bats)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 0
+? Bot2.Graveyard.Vampire Bats.Colors = Black
+? Bot1.Mana = {B}
+Bot1.Battlefield.Necrotic Ooze.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Necrotic Ooze.Power = 7
+Bot1.Battlefield.Necrotic Ooze.Toughness = 3

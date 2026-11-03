@@ -1,0 +1,11 @@
+{
+  "name": "Vampire Bats",
+  "manaCost": "{B}",
+  "type": "Creature — Bat",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "Flying (This creature can't be blocked except by creatures with flying or reach.)\n{B}: This creature gets +1/+0 until end of turn. Activate no more than twice each turn.",
+  "keywords": [
+    "Flying"
+  ]
+}
