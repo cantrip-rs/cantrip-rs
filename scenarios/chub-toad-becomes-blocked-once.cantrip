@@ -1,0 +1,50 @@
+# Two creatures block Chub Toad at once: it triggers once, gains +2/+2, then loses the bonus at cleanup (CR 509.1h, 514.2).
+[Bot1 Deck]
+Chub Toad
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest x20
+[Bot2 Deck]
+Ornithopter x2
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Chub Toad.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Chub Toad > Bot2)
+Bot2.Block(Ornithopter#1 > Chub Toad; Ornithopter#2 > Chub Toad)
+? Bot1.Battlefield.Chub Toad.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Chub Toad.Power = 3
+? Bot1.Battlefield.Chub Toad.Toughness = 3
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Chub Toad.Power = 1
+? Bot1.Battlefield.Chub Toad.Toughness = 1
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Chub Toad > Bot2)
+Bot2.Block(Ornithopter > Chub Toad)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Chub Toad.Power = 3
+? Bot1.Battlefield.Chub Toad.Toughness = 3
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Chub Toad.Power = 1
+Bot1.Battlefield.Chub Toad.Toughness = 1

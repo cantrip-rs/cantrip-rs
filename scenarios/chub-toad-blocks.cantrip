@@ -1,0 +1,45 @@
+# Blocking triggers Chub Toad before combat damage, letting it survive a 2/2 and destroy it (CR 603.2, 510.2).
+[Bot1 Deck]
+Chub Toad
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest x20
+[Bot2 Deck]
+Grizzly Bears
+Mox Emerald
+Forest
+Forest x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Chub Toad.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Chub Toad > Grizzly Bears)
+? Bot1.Battlefield.Chub Toad.Power = 1
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Chub Toad.Power = 3
+? Bot1.Battlefield.Chub Toad.Toughness = 3
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Chub Toad.Damage = 2
+Bot2.Graveyard = Grizzly Bears
