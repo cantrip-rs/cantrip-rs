@@ -1,0 +1,8 @@
+{
+  "name": "Desert Nomads",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Nomad",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Desertwalk\nPrevent all damage that would be dealt to this creature by Deserts."
+}

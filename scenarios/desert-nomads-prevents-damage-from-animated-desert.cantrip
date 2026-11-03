@@ -1,0 +1,47 @@
+# A Desert animated by Nissa deals combat damage to Nomads, which prevents that damage (CR 615.1).
+[Bot1 Deck]
+Scavenger Grounds
+Black Lotus
+Mox Emerald
+Mox Pearl
+Nissa, Who Shakes the World
+Island x20
+
+[Bot2 Deck]
+Desert Nomads
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Scavenger Grounds.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nissa, Who Shakes the World.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Nissa, Who Shakes the World.Activate(Bot1.Battlefield.Scavenger Grounds; Ability: +1)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Desert Nomads.Cast
+? Bot2.Mana =
+[T3 Bot1.Main1]
+Bot1.Attack(Scavenger Grounds > Bot2)
+Bot2.Block(Desert Nomads > Scavenger Grounds)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Desert Nomads.Damage = 0
+Bot1.Battlefield.Scavenger Grounds.Damage = 2
+Prevented = 3 Scavenger Grounds > Desert Nomads by Desert Nomads

@@ -1,0 +1,43 @@
+# Desertwalk allows a blocker while the defending player lacks a Desert and forbids it after they play one (CR 702.14c).
+[Bot1 Deck]
+Desert Nomads
+Black Lotus
+Scavenger Grounds
+Mountain x20
+
+[Bot2 Deck]
+Plains
+Scavenger Grounds
+Black Lotus
+Ageless Guardian
+Island x20
+
+[Actions]
+Bot1.Hand.Scavenger Grounds.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Desert Nomads.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Ageless Guardian.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Desert Nomads > Bot2)
+Bot2.Block(Ageless Guardian > Desert Nomads)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[T4 Bot2.Main1]
+Bot2.Hand.Scavenger Grounds.Play
+[T5 Bot1.Main1]
+Bot1.Attack(Desert Nomads > Bot2)
+! Bot2.Block(Ageless Guardian > Desert Nomads)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Desert Nomads.Power = 2
+Bot1.Battlefield.Desert Nomads.Keywords = Desertwalk
