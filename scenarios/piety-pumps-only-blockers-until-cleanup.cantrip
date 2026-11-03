@@ -1,0 +1,39 @@
+# Piety affects each creature blocking when it resolves, including opponents' blockers, but not the attacker or a nonblocker; its effect ends at cleanup (CR 611.2c, 514.2).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Piety
+Island x20
+[Bot2 Deck]
+Ornithopter x3
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+Bot2.Block(Ornithopter#1 > Ornithopter; Ornithopter#2 > Ornithopter)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Piety.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter#1.Power = 0
+? Bot2.Battlefield.Ornithopter#1.Toughness = 5
+? Bot2.Battlefield.Ornithopter#2.Toughness = 5
+? Bot2.Battlefield.Ornithopter#3.Toughness = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter#1.Toughness = 2
+Bot2.Battlefield.Ornithopter#2.Toughness = 2
