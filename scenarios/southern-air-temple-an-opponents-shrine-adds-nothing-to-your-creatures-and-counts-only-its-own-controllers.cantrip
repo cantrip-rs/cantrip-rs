@@ -1,0 +1,65 @@
+# Southern Air Temple, "Shrines you control" / "another Shrine you control": Bot1's Temple (turn 1) puts one counter on its
+# Ornithopter. In turn 2 Bot2 casts its own Temple: it puts one counter on Bot2's Ornithopter (X counts only Bot2's Shrines) and
+# Bot1's Temple does not trigger for it, so Bot1's Ornithopter stays at 1 (the opponent's Temple is not a Shrine "you control").
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Southern Air Temple
+Ornithopter
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Southern Air Temple
+Ornithopter
+Island
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Southern Air Temple.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Battlefield.Mox Pearl#4.Activate
+Bot2.Hand.Southern Air Temple.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Power = 1
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Power = 1

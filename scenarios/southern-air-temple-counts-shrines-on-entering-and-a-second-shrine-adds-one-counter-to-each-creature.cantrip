@@ -1,0 +1,68 @@
+# Southern Air Temple: "When this enters, put X +1/+1 counters on each creature you control, where X is the number of Shrines you
+# control" (here the Temple alone, 1) puts one counter on Bot1's first Ornithopter and none on Bot2's. An Ornithopter cast after the
+# Temple is not a Shrine, so it triggers nothing and has no counter. In turn 3 a second Temple enters (a Shrine that is
+# another one, "you control", CR 603.6a): the first Temple's trigger adds one counter to each of Bot1's creatures, the legend rule
+# (CR 704.5j) leaves one Temple, and the entering one's own trigger adds X = 1: 3 counters on the first Ornithopter, 2 on the second,
+# still none on Bot2's.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Southern Air Temple
+Ornithopter
+Ornithopter
+Southern Air Temple
+Island x12
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Southern Air Temple.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 1
+? Bot1.Battlefield.Ornithopter#2.Power = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Southern Air Temple.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Southern Air Temple#2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 3
+? Bot1.Battlefield.Ornithopter#2.Power = 2
+? Bot2.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Power = 3

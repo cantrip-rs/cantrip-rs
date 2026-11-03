@@ -1,0 +1,6 @@
+{
+  "name": "Southern Air Temple",
+  "manaCost": "{3}{W}",
+  "type": "Legendary Enchantment — Shrine",
+  "oracleText": "When Southern Air Temple enters, put X +1/+1 counters on each creature you control, where X is the number of Shrines you control.\nWhenever another Shrine you control enters, put a +1/+1 counter on each creature you control."
+}
