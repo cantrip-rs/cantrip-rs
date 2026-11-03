@@ -1,0 +1,21 @@
+# Each of two opponents is dealt one damage on their own draw step; the controller is not (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Underworld Dreams
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Underworld Dreams.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot3.Main1]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot3.Life = 19
