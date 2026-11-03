@@ -1,0 +1,53 @@
+# Deflection refuses Walking Ballista's targeted activated ability but can redirect a single-target spell (CR 113.1, 115.1a).
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Walking Ballista
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Pearl
+Mox Emerald
+Deflection
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Walking Ballista.Activate(Bot2; Ability: Remove)
+Bot1.Pass
+! Bot2.Hand.Deflection.Cast(Stack.Walking Ballista)
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Deflection.Cast(Stack.Lightning Bolt)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 19
+Bot1.Graveyard = Lightning Bolt; Walking Ballista

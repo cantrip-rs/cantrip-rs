@@ -1,0 +1,6 @@
+{
+  "name": "Deflection",
+  "manaCost": "{3}{U}",
+  "type": "Instant",
+  "oracleText": "Change the target of target spell with a single target."
+}

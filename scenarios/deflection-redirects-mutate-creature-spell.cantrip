@@ -1,0 +1,57 @@
+# Deflection changes a targeted creature spell cast for mutate from Ornithopter to its controller's Memnite (CR 702.140a, 115.7a).
+[Bot1 Deck]
+Cubwarden
+Ornithopter
+Memnite
+Black Lotus
+Mox Pearl
+Mox Pearl
+Plains x20
+[Bot2 Deck]
+Deflection
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Pearl
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Cubwarden.Cast(Bot1.Battlefield.Ornithopter; Ability: Mutate)
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Deflection.Cast(Stack.Cubwarden)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+Bot1.Modes(1)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Cubwarden.Toughness = 5
+Bot1.Battlefield.Cubwarden.Keywords = Lifelink; Mutate
+Bot1.Battlefield.Cat Token#1.Toughness = 1
