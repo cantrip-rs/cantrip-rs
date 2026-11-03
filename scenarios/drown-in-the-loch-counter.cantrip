@@ -1,0 +1,31 @@
+# Drown counters an opponent's one-mana spell when its controller has one card in their graveyard (CR 601.3, 701.5a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Drown in the Loch
+Island x20
+[Bot2 Deck]
+Black Lotus
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Drown in the Loch.Cast
+! Bot1.Modes(Count: 0)
+! Bot1.Modes(1; 2)
+Bot1.Modes(1)
+Bot1.Target(Stack.Shock)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Shock; Black Lotus

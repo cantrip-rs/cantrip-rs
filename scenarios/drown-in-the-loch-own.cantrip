@@ -1,0 +1,38 @@
+# The creature mode can target the caster’s zero-mana creature when its controller has no cards in their graveyard (CR 115.1, 701.8a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Ornithopter
+Drown in the Loch
+Island x20
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Grizzly Bears
+Hill Giant
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hill Giant.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Drown in the Loch.Cast
+Bot1.Modes(2)
+! Bot1.Target(Bot2.Battlefield.Hill Giant)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Hill Giant.Power = 3
+Bot1.Battlefield.Ornithopter = (absent)

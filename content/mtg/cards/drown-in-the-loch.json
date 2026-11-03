@@ -1,0 +1,6 @@
+{
+  "name": "Drown in the Loch",
+  "manaCost": "{U}{B}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Counter target spell with mana value less than or equal to the number of cards in its controller's graveyard.\n• Destroy target creature with mana value less than or equal to the number of cards in its controller's graveyard."
+}

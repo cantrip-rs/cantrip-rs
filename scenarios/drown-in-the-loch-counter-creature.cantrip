@@ -1,0 +1,32 @@
+# Drown also counters a creature spell whose mana value equals its controller's graveyard count (CR 115.1, 701.5a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Drown in the Loch
+Island x20
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Drown in the Loch.Cast
+Bot1.Modes(1)
+Bot1.Target(Stack.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Grizzly Bears = (absent)
+Bot2.Graveyard = Grizzly Bears; Black Lotus; Black Lotus
