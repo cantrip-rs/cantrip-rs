@@ -1,0 +1,54 @@
+# Hazezon leaves in response to the delayed upkeep trigger; its leave trigger resolves before the Sand Warriors are created (CR 603.7).
+[Bot1 Deck]
+Hazezon Tamar
+Mountain
+Forest
+Plains
+Mountain
+Mountain
+Mountain
+Mountain
+Swords to Plowshares
+Mox Pearl
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+[T1 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Hazezon Tamar.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+[T14 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T15 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Hazezon Tamar)
+[T15 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Count = 15
+Bot1.Battlefield.Sand Warrior Token#1.Power = 1
+Exile = Hazezon Tamar
