@@ -1,0 +1,66 @@
+# Water Tribe Captain {2}{W} is a 3/3 Ally with "{5}: Creatures you control get +1/+1 until end of turn." Bot1 casts it on turn 1
+# with Plains and two Moxen, leaving one source: the ability is refused (it costs five). On turn 3, with four sources, it is
+# refused still (one short); a fifth source, a second Plains, pays it exactly (the pool is empty right after) and the Captain
+# (3/3) and Bot1's Ornithopter (0/2) get +1/+1 while Bot2's Ornithopter does not (CR 611.2c: "you control"). On Bot2's turn the
+# effect is over (CR 514.2).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Water Tribe Captain
+Ornithopter
+Plains
+Plains x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Water Tribe Captain.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Water Tribe Captain.Activate(Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Water Tribe Captain.Activate(Mana: short)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+! Bot1.Battlefield.Water Tribe Captain.Activate(Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Water Tribe Captain.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Water Tribe Captain.Power = 4
+? Bot1.Battlefield.Water Tribe Captain.Toughness = 4
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Water Tribe Captain.Power = 3
+Bot1.Battlefield.Water Tribe Captain.Toughness = 3
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2

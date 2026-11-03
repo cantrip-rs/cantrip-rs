@@ -1,0 +1,8 @@
+{
+  "name": "Water Tribe Captain",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Soldier Ally",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{5}: Creatures you control get +1/+1 until end of turn."
+}

@@ -1,0 +1,71 @@
+# Water Tribe Captain's "{5}: Creatures you control get +1/+1 until end of turn" fixes the creatures it affects as it resolves
+# (CR 611.2c): Bot1 activates it twice with eleven mana, so the Captain (3/3) gets +1/+1 twice and is 5/5 (CR 613.4c), then casts
+# Ornithopter (0/2), which entered after both resolved and stays 0/2.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Water Tribe Captain
+Black Lotus
+Black Lotus
+Mox Jet
+Ornithopter
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Water Tribe Captain.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Water Tribe Captain.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Water Tribe Captain.Power = 4
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Water Tribe Captain.Activate
+? Bot1.Mana = {W}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Water Tribe Captain.Power = 5
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Water Tribe Captain.Power = 5
+Bot1.Battlefield.Water Tribe Captain.Toughness = 5
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Graveyard = Black Lotus; Black Lotus
