@@ -1,0 +1,58 @@
+# Nissa's −6 untaps two of her controller's lands and makes each a 5/5 flying hasty Elemental until end of turn (CR 611.2a, 702.9, 702.10).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Nissa, Steward of Elements
+Island
+Forest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nissa, Steward of Elements.Cast(X: 6)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+Bot1.Battlefield.Nissa, Steward of Elements.Activate(Ability: #2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Nissa, Steward of Elements.Activate(Ability: #3)
+! Bot1.Target(Bot2.Battlefield.Island)
+! Bot1.Target(Count: 3)
+Bot1.Target(Bot1.Battlefield.Island#1; Bot1.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Island#1.Tapped = false
+? Bot1.Battlefield.Forest.Tapped = false
+? Bot1.Battlefield.Island#1.Power = 5
+? Bot1.Battlefield.Island#1.Toughness = 5
+? Bot1.Battlefield.Island#1.Types = Land; Creature
+? Bot1.Battlefield.Island#1.Subtypes = Elemental; Island
+? Bot1.Battlefield.Island#1.Keywords = Flying; Haste
+? Bot1.Battlefield.Forest.Power = 5
+? Bot1.Battlefield.Nissa, Steward of Elements = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Island; Forest > Bot2)
+[T4 Bot2.Upkeep]
+[Expect]
+Bot2.Life = 10
+Bot1.Battlefield.Island#1.Types = Land
+Bot1.Battlefield.Forest.Types = Land

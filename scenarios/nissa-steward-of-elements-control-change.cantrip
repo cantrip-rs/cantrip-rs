@@ -1,0 +1,51 @@
+# A land that changes controller before Nissa's ability resolves is no longer a legal target, while the other land still animates (CR 608.2b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Sapphire
+Nissa, Steward of Elements
+Island
+Dryad Arbor
+Island x20
+[Bot2 Deck]
+Black Lotus
+Old Man of the Sea
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nissa, Steward of Elements.Cast(X: 6)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+Bot1.Battlefield.Nissa, Steward of Elements.Activate(Ability: #2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Dryad Arbor.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Nissa, Steward of Elements.Activate(Ability: #3)
+Bot1.Target(Bot1.Battlefield.Island#1; Bot1.Battlefield.Dryad Arbor)
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Dryad Arbor)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Island#1.Power = 5
+Bot2.Battlefield.Dryad Arbor.Power = 1
+Bot2.Battlefield.Dryad Arbor.Toughness = 1

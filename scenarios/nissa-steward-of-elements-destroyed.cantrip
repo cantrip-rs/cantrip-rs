@@ -1,0 +1,40 @@
+# If Nissa is destroyed while her ability is on the stack, her last known loyalty determines what can enter (CR 113.7a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Nissa, Steward of Elements
+Island
+Island
+Island
+Island
+Island
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Black Lotus
+Long Goodbye
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nissa, Steward of Elements.Cast(X: 2)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Nissa, Steward of Elements.Activate(Ability: #2)
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Long Goodbye.Cast(Bot1.Battlefield.Nissa, Steward of Elements)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[Expect]
+Bot1.Battlefield.Nissa, Steward of Elements = (absent)
+Bot1.Battlefield.Grizzly Bears.Power = 2
