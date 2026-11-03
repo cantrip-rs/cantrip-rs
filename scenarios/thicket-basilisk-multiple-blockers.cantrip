@@ -1,0 +1,35 @@
+# Each non-Wall blocker gets its own end-of-combat destruction (CR 603.2, 511.1).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald x2
+Thicket Basilisk
+Island x20
+[Bot2 Deck]
+Mox Sapphire x2
+Kraken Hatchling x2
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Thicket Basilisk.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Hand.Kraken Hatchling.Cast
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Hand.Kraken Hatchling.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Thicket Basilisk > Bot2)
+Bot2.Block(Kraken Hatchling#1 > Thicket Basilisk; Kraken Hatchling#2 > Thicket Basilisk)
+[T3 Bot1.EndCombat]
+? Bot2.Battlefield.Kraken Hatchling#1.Toughness = 4
+? Bot2.Battlefield.Kraken Hatchling#2.Toughness = 4
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Kraken Hatchling = (absent)
+Bot2.Graveyard = Kraken Hatchling; Kraken Hatchling

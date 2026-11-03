@@ -1,0 +1,33 @@
+# A Wall blocking the Basilisk survives because the ability excludes Walls (CR 603.2, 511.1).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Thicket Basilisk
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Wall of Wood
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Thicket Basilisk.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wall of Wood.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Thicket Basilisk > Bot2)
+Bot2.Block(Wall of Wood > Thicket Basilisk)
+[T3 Bot1.EndCombat]
+? Bot2.Battlefield.Wall of Wood.Damage = 2
+Bot1.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Wall of Wood.Toughness = 3
