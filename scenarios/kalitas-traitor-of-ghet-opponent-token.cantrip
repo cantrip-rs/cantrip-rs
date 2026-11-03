@@ -1,0 +1,34 @@
+# Opposing creature tokens are not exiled by Kalitas when they die (CR 614.1a, 111.8).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Kalitas, Traitor of Ghet
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Black Lotus
+Assembly Specialist
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kalitas, Traitor of Ghet.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Assembly Specialist.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Borg Token)
+Bot1.Pass
+[Expect]
+Exile =
+Bot1.Battlefield.Zombie Token = (absent)
+Bot2.Battlefield.Borg Token = (absent)
+Bot2.Battlefield.Assembly Specialist.Power = 1

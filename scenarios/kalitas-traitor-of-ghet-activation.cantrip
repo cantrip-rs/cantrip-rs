@@ -1,0 +1,40 @@
+# Sacrificing another Zombie and paying three mana puts two counters on Kalitas (CR 602.2b, 122.1a).
+[Bot1 Deck]
+Black Lotus x2
+Mox Jet
+Mox Ruby
+Kalitas, Traitor of Ghet
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kalitas, Traitor of Ghet.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Battlefield.Kalitas, Traitor of Ghet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot1.Battlefield.Kalitas, Traitor of Ghet.Activate
+Bot1.Choose(Zombie Token)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Kalitas, Traitor of Ghet.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Kalitas, Traitor of Ghet.Power = 5
+Bot1.Battlefield.Zombie Token = (absent)

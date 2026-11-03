@@ -1,0 +1,31 @@
+# A creature controlled by Kalitas's controller dies normally (CR 614.1a).
+[Bot1 Deck]
+Black Lotus x2
+Mox Jet
+Kalitas, Traitor of Ghet
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kalitas, Traitor of Ghet.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Grizzly Bears; Black Lotus; Black Lotus
+Exile =
+Bot1.Battlefield.Zombie Token = (absent)

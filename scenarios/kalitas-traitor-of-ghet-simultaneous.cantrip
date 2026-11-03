@@ -1,0 +1,34 @@
+# Kalitas still replaces an opponent's creature dying at the same time as itself (CR 614.12).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Kalitas, Traitor of Ghet
+Island x20
+[Bot2 Deck]
+Black Lotus x2
+Mox Pearl
+Grizzly Bears
+Wrath of God
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Kalitas, Traitor of Ghet.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Wrath of God.Cast
+Bot2.Pass
+[Expect]
+Exile = Grizzly Bears
+Bot1.Graveyard = Kalitas, Traitor of Ghet; Black Lotus
+Bot1.Battlefield.Zombie Token.Power = 2
