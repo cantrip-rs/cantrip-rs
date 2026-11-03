@@ -1,0 +1,45 @@
+# The upkeep trigger removes a counter from the creature even if Venarian Gold leaves the battlefield in response (CR 113.7a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Venarian Gold
+Island x20
+[Bot2 Deck]
+Ornithopter
+Plains
+Mox Pearl
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Venarian Gold.Cast(Bot1.Battlefield.Mox Sapphire; X: 2)
+Bot1.Hand.Venarian Gold.Cast(Bot2.Battlefield.Ornithopter; X: 2)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Sleep = 2
+[T4 Bot2.Upkeep]
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Venarian Gold)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.Sleep = 1
+Bot1.Graveyard = Venarian Gold; Black Lotus
