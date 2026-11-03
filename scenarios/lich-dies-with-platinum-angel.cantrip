@@ -1,0 +1,42 @@
+# Platinum Angel prevents losing to Lich's death trigger (CR 104.3e).
+[Bot1 Deck]
+Lich
+Platinum Angel
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Jet
+Mox Jet
+Island x20
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Platinum Angel.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Disenchant.Cast(Lich)
+[T2 Bot2.Main2]
+[Expect]
+Result = InProgress
+Bot1.Life = 0
+Bot1.Battlefield = Mox Jet; Mox Jet; Platinum Angel
+Bot1.Graveyard = Lich; Black Lotus; Black Lotus; Black Lotus

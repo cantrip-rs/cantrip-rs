@@ -1,0 +1,51 @@
+# Two Liches replace one life gain once, but each triggers for the same damage (CR 614.5, 603.2).
+[Bot1 Deck]
+Lich x2
+Black Lotus x2
+Mox Jet x2
+Mox Pearl
+Healing Salve
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Mountain
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+? Bot1.Mana =
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Target player gains 3 life)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Replace(Lich)
+? Bot1.Life = 0
+? Bot1.Hand.Count = 3
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Choose(Mox Jet; Mox Jet)
+Bot1.Choose(Mox Pearl; Mox Ruby)
+[Expect]
+Result = InProgress
+Bot1.Life = -2
+Bot1.Battlefield = Lich; Lich

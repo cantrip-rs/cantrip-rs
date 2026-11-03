@@ -1,0 +1,25 @@
+# Lich sets its controller's life to zero as it enters, and prevents a loss at zero (CR 614.1c, 704.5a).
+[Bot1 Deck]
+Lich
+Black Lotus
+Mox Jet
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Result = InProgress
+Bot1.Life = 0
+Bot1.Battlefield = Lich; Mox Jet

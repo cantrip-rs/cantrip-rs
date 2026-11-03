@@ -1,0 +1,47 @@
+# A token Platinum Angel cannot be sacrificed to Lich, and prevents the loss when too few nontokens remain (CR 104.3e, 701.21a).
+[Bot1 Deck]
+Kiki-Jiki, Mirror Breaker
+Platinum Angel
+Lich
+Black Lotus x4
+Mox Jet
+Black Lotus
+Island x20
+[Bot2 Deck]
+Fireball
+Black Lotus
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Kiki-Jiki, Mirror Breaker.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Platinum Angel.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+? Bot1.Mana =
+[T6 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Fireball.Cast(X: 5)
+Bot2.Target(Bot1)
+Bot1.Battlefield.Kiki-Jiki, Mirror Breaker.Activate(Platinum Angel)
+[T6 Bot2.Main2]
+[Expect]
+Result = InProgress
+Bot1.Life = -5
+Bot1.Battlefield = Platinum Angel

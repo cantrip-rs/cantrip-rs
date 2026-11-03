@@ -1,0 +1,35 @@
+# Two damage requires two nontoken permanents, and Lich keeps its controller alive at negative life (CR 603.2, 701.21a).
+[Bot1 Deck]
+Lich
+Black Lotus
+Mox Jet
+Mox Pearl
+Swamp x20
+
+[Bot2 Deck]
+Mountain
+Shock
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Choose()
+Bot1.Choose(Mox Jet; Mox Pearl)
+
+[Expect]
+Result = InProgress
+Bot1.Life = -2
+Bot1.Battlefield = Lich
+Bot1.Graveyard = Mox Pearl; Mox Jet; Black Lotus

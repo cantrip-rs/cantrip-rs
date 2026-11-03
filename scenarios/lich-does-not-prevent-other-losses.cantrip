@@ -1,0 +1,24 @@
+# Lich does not prevent a player from losing to an effect (CR 104.3e).
+[Bot1 Deck]
+Lich
+Glorious End
+Black Lotus
+Black Lotus
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Glorious End.Cast
+[T3 Bot1.End]
+[Expect]
+Result = Bot2 won

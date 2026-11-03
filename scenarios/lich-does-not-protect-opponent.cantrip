@@ -1,0 +1,26 @@
+# Lich protects only its controller from losing for zero life (CR 704.5a).
+[Life]
+Bot2: 2
+[Bot1 Deck]
+Lich
+Black Lotus
+Mox Jet
+Mox Ruby
+Shock
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lich.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+[Expect]
+Result = Bot1 won
+Bot2.Life = 0
