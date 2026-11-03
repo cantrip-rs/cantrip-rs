@@ -1,0 +1,6 @@
+{
+  "name": "Reverse Damage",
+  "manaCost": "{1}{W}{W}",
+  "type": "Instant",
+  "oracleText": "The next time a source of your choice would deal damage to you this turn, prevent that damage. You gain life equal to the damage prevented this way."
+}

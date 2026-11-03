@@ -1,0 +1,40 @@
+# Reverse Damage prevents only the first hit of Fencing Ace's double strike and gains that life; the second hit is dealt (CR 615.8).
+
+[Bot1 Deck]
+Black Lotus
+Reverse Damage
+Island x25
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Fencing Ace
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fencing Ace.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Fencing Ace > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Reverse Damage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fencing Ace)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Prevented = 1 Fencing Ace > Bot1 by Reverse Damage

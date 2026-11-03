@@ -1,0 +1,59 @@
+# Reverse Damage expires at end of turn; a fresh shield prevents the chosen source's next damage and gains that much life (CR 615.1, 119.3).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Reverse Damage
+Reverse Damage
+Mox Ruby
+Shock
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Reverse Damage.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 18
+[T6 Bot2.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Reverse Damage.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 16
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
