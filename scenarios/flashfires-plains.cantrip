@@ -1,0 +1,31 @@
+# Flashfires destroys Plains controlled by both players, including nonbasic Plains (CR 701.8a).
+
+[Bot1 Deck]
+Plains
+Mountain
+Black Lotus
+Flashfires
+Island x20
+
+[Bot2 Deck]
+Tundra
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Tundra.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Flashfires.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Flashfires; Plains; Black Lotus
+Bot2.Graveyard = Tundra
+Bot1.Battlefield.Mountain.Tapped = true
