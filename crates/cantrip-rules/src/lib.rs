@@ -186,6 +186,8 @@ mod settle;
 mod speed;
 mod static_rules;
 #[cfg(test)]
+mod static_rule_source_tests;
+#[cfg(test)]
 mod transformed_cast_tests;
 mod turn;
 #[cfg(test)]

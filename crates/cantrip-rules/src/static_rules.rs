@@ -587,12 +587,14 @@ pub fn block_requirements(cx: &Cx, allowed: &[(ObjectId, ObjectId)]) -> Vec<Requ
     required
 }
 
-/// Whether a static ability of a permanent on the battlefield with its abilities (CR 613.1f) says `test` of its own rules.
-/// Asked only where the rules need the answer - a player about to lose or win, damage to a player, counters about to be put -
-/// so the battlefield is searched then.
+/// Whether a static ability of a permanent with its abilities (CR 613.1f), or an emblem in the command zone
+/// (CR 114.4), says `test` of its own rules. Gideon of the Trials and Platinum Angel both forbid losing and winning.
+/// Asked only when the rules need the answer: losing or winning, damage, or counters about to be put.
 fn any_static<R: Copy + 'static>(q: &dyn Query, cards: &'static CardTable, rules: fn(&CardDef) -> &'static [R], test: impl Fn(R, &Asker) -> bool) -> bool {
     let s = q.state();
-    s.battlefield().iter().any(|&id| {
+    // As in `actions::given`, commanders have no functioning abilities here (CR 113.6); emblems have no types.
+    let emblems = s.zone(Zone::COMMAND).iter().filter(|&&id| cards.get(cards.current(s.obj(id))).types == TypeSet::NONE);
+    s.battlefield().iter().chain(emblems).any(|&id| {
         let obj = s.obj(id);
         cards.texts_linked(s, id).any(|(card, by)| {
             let list = rules(cards.get(card));
