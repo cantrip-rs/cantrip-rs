@@ -1,0 +1,26 @@
+# Choosing Island removes Strip Mine's printed abilities and gives it blue mana without making it basic (CR 305.7).
+[Bot1 Deck]
+Strip Mine
+Mox Sapphire
+Mox Sapphire
+Phantasmal Terrain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Strip Mine.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Phantasmal Terrain.Cast(Bot1.Battlefield.Strip Mine)
+Bot1.Modes(Island)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Strip Mine.Activate(Ability: Destroy; Bot1.Battlefield.Strip Mine)
+? Bot1.Battlefield.Strip Mine.Subtypes = Island
+? Bot1.Battlefield.Strip Mine.Supertypes = (absent)
+Bot1.Battlefield.Strip Mine.Activate
+? Bot1.Mana = {U}
+[Expect]
+Bot1.Battlefield.Phantasmal Terrain.AttachedTo = Strip Mine

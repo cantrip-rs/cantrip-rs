@@ -1,0 +1,26 @@
+# Phantasmal Terrain chooses a basic land type as it enters, changes the enchanted land's subtype and mana ability, and retains snow (CR 305.7).
+[Bot1 Deck]
+Snow-Covered Forest
+Mox Sapphire
+Mox Sapphire
+Phantasmal Terrain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+! Bot1.Hand.Phantasmal Terrain.Cast(Bot1.Battlefield.Mox Sapphire#1)
+Bot1.Hand.Phantasmal Terrain.Cast(Bot1.Battlefield.Snow-Covered Forest)
+? Bot1.Mana =
+Bot1.Modes(Mountain)
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Snow-Covered Forest.Subtypes = Mountain
+? Bot1.Battlefield.Snow-Covered Forest.Supertypes = Basic; Snow
+Bot1.Battlefield.Snow-Covered Forest.Activate
+? Bot1.Mana = {R}
+[Expect]
+Bot1.Battlefield.Phantasmal Terrain.AttachedTo = Snow-Covered Forest

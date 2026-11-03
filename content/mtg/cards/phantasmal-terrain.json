@@ -1,0 +1,6 @@
+{
+  "name": "Phantasmal Terrain",
+  "manaCost": "{U}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land\nAs this Aura enters, choose a basic land type.\nEnchanted land is the chosen type."
+}
