@@ -1,0 +1,6 @@
+{
+  "name": "Howl from Beyond",
+  "manaCost": "{X}{B}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +X/+0 until end of turn."
+}

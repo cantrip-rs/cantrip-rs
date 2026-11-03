@@ -1,0 +1,45 @@
+# Howl from Beyond gives a creature +X/+0 until end of turn, for either player’s creature (CR 107.3, 611.2a).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Black Lotus
+Mox Jet
+Ornithopter
+Howl from Beyond
+Howl from Beyond
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Howl from Beyond.Cast(Bot2.Battlefield.Ornithopter; X: 2)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Howl from Beyond.Cast(Bot1.Battlefield.Island; X: 2)
+Bot1.Hand.Howl from Beyond.Cast(Bot1.Battlefield.Ornithopter; X: 2)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
