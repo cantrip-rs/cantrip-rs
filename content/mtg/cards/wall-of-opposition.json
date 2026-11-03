@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Opposition",
+  "manaCost": "{3}{R}{R}",
+  "type": "Creature — Wall",
+  "power": 0,
+  "toughness": 6,
+  "oracleText": "Defender (This creature can't attack.)\n{1}: This creature gets +1/+0 until end of turn.",
+  "keywords": [
+    "Defender"
+  ]
+}
