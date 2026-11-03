@@ -1,0 +1,47 @@
+# Forge adds an oil counter before creating its hasty Horror and sacrifices that token at the next end step (CR 603.7c, 702.10, 702.19b).
+[Bot1 Deck]
+Black Lotus
+Urabrask's Forge
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Urabrask's Forge.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Urabrask's Forge.Counters.Oil = 1
+? Bot1.Battlefield.Phyrexian Horror Token.Power = 1
+? Bot1.Battlefield.Phyrexian Horror Token.Toughness = 1
+? Bot1.Battlefield.Phyrexian Horror Token.Colors = Red
+? Bot1.Battlefield.Phyrexian Horror Token.Keywords = Haste; Trample
+Bot1.Attack(Phyrexian Horror Token > Bot2)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Phyrexian Horror Token = (absent)
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Llanowar Elves.Cast
+[T2 Bot2.BeginCombat]
+? Bot1.Battlefield.Urabrask's Forge.Counters.Oil = 1
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Urabrask's Forge.Counters.Oil = 2
+? Bot1.Battlefield.Phyrexian Horror Token.Power = 2
+Bot1.Attack(Phyrexian Horror Token > Bot2)
+Bot2.Block(Llanowar Elves > Phyrexian Horror Token)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Llanowar Elves = (absent)
+Bot1.Battlefield.Phyrexian Horror Token = (absent)

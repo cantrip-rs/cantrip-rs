@@ -1,0 +1,6 @@
+{
+  "name": "Urabrask's Forge",
+  "manaCost": "{2}{R}",
+  "type": "Artifact",
+  "oracleText": "At the beginning of combat on your turn, put an oil counter on this artifact, then create an X/1 red Phyrexian Horror creature token with trample and haste, where X is the number of oil counters on this artifact. Sacrifice that token at the beginning of the next end step."
+}

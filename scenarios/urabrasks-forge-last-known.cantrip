@@ -1,0 +1,31 @@
+# If Forge is destroyed after its combat trigger goes on the stack, the token uses its last known oil count (CR 608.2h).
+[Bot1 Deck]
+Black Lotus
+Urabrask's Forge
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Island
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Urabrask's Forge.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Urabrask's Forge)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Urabrask's Forge = (absent)
+Bot1.Battlefield.Phyrexian Horror Token.Power = 1
+Bot1.Battlefield.Phyrexian Horror Token.Toughness = 1
