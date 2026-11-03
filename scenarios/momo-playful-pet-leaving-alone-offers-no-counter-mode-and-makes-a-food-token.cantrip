@@ -1,0 +1,43 @@
+# Momo, Playful Pet: "When Momo leaves the battlefield, choose one - Create a Food token; Put a +1/+1 counter on target creature
+# you control; Scry 2." With Momo alone on Bot1's side (Bot2 has an Elvish Mystic, not Bot1's) the counter mode has no target
+# and is refused (CR 700.2b); Bot1 chooses the Food token.
+
+[Bot1 Deck]
+Plains
+Momo, Playful Pet
+Island x18
+
+[Bot2 Deck]
+Mountain
+Mox Emerald
+Elvish Mystic
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Momo, Playful Pet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Momo, Playful Pet)
+Bot2.Pass
+Bot1.Pass
+! Bot1.Modes(+1/+1 counter)
+Bot1.Modes(Food)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Momo, Playful Pet
+Bot1.Battlefield = Plains; Food Token
+Bot1.Battlefield.Food Token.Types = Artifact
+Bot2.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = (absent)

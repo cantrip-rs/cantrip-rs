@@ -1,0 +1,59 @@
+# Momo, Playful Pet {W} 1/1 flying, vigilance: "When Momo leaves the battlefield, choose one - Create a Food token; Put a +1/+1
+# counter on target creature you control; Scry 2." Bot2's Lightning Bolt kills Momo on turn 2 with Savannah Lions and Ornithopter (Bot1's) and
+# Elvish Mystic (Bot2's) in play: the counter mode may target Bot1's creatures only (Momo herself has left), so Bot2's Mystic is
+# refused and the Lions get it, not the Ornithopter. No Food token is made by that mode.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Momo, Playful Pet
+Savannah Lions
+Ornithopter
+Island x15
+
+[Bot2 Deck]
+Mountain
+Mox Emerald
+Elvish Mystic
+Lightning Bolt
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Momo, Playful Pet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Momo, Playful Pet.Keywords = Flying; Vigilance
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Momo, Playful Pet)
+Bot2.Pass
+Bot1.Pass
+Bot1.Modes(+1/+1 counter)
+! Bot1.Target(Bot2.Battlefield.Elvish Mystic)
+Bot1.Target(Bot1.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Momo, Playful Pet
+Bot1.Battlefield.Savannah Lions.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Savannah Lions.Power = 3
+Bot2.Battlefield.Elvish Mystic.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield = Mox Pearl; Plains; Savannah Lions; Ornithopter

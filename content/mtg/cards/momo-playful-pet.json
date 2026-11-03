@@ -1,0 +1,12 @@
+{
+  "name": "Momo, Playful Pet",
+  "manaCost": "{W}",
+  "type": "Legendary Creature — Lemur Bat Ally",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Flying, vigilance\nWhen Momo leaves the battlefield, choose one —\n• Create a Food token. (It's an artifact with \"{2}, {T}, Sacrifice this token: You gain 3 life.\")\n• Put a +1/+1 counter on target creature you control.\n• Scry 2.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}
