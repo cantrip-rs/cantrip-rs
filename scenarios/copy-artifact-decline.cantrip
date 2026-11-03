@@ -1,0 +1,23 @@
+# Copy Artifact may enter as itself instead of copying an artifact (CR 614.1c).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Ornithopter
+Copy Artifact
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Copy Artifact.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot1.Battlefield.Copy Artifact.Types = Enchantment
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature

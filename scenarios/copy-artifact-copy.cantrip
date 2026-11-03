@@ -1,0 +1,26 @@
+# Copy Artifact can enter as a copy of an artifact, adding enchantment to its types (CR 614.1c, 707.9).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Ornithopter
+Copy Artifact
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Copy Artifact.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Ornithopter)
+[Expect]
+Bot1.Battlefield.Ornithopter#2.Types = Artifact; Creature; Enchantment
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot1.Battlefield.Ornithopter#2.Toughness = 2
+Bot1.Battlefield.Ornithopter#2.Colors = (absent)

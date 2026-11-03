@@ -1,0 +1,48 @@
+# Copy an opponent's blue-black artifact creature, then Clone the copy to prove its added type is copiable: it keeps the copied colors and creature type and adds enchantment (CR 707.9b).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Copy Artifact
+Clone
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Tidehollow Strix
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Tidehollow Strix.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Copy Artifact.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Target(Bot2.Battlefield.Tidehollow Strix)
+? Bot1.Battlefield.Tidehollow Strix.Types = Artifact; Creature; Enchantment
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Clone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot1.Battlefield.Tidehollow Strix)
+[Expect]
+Bot1.Battlefield.Tidehollow Strix#2.Types = Artifact; Creature; Enchantment
+Bot1.Battlefield.Tidehollow Strix#2.Colors = Black; Blue
+Bot1.Battlefield.Tidehollow Strix#2.Keywords = Deathtouch; Flying
+Bot2.Battlefield.Tidehollow Strix.Types = Artifact; Creature

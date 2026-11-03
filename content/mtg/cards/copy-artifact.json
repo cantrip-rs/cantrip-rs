@@ -1,0 +1,6 @@
+{
+  "name": "Copy Artifact",
+  "manaCost": "{1}{U}",
+  "type": "Enchantment",
+  "oracleText": "You may have this enchantment enter as a copy of any artifact on the battlefield, except it's an enchantment in addition to its other types."
+}

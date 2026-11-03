@@ -1,0 +1,21 @@
+# With no artifact on the battlefield, Copy Artifact enters unchanged and asks no copy choice (CR 614.1c).
+[Bot1 Deck]
+Island
+Island
+Copy Artifact
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Copy Artifact.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[Expect]
+Bot1.Battlefield.Copy Artifact.Types = Enchantment
+Bot1.Battlefield.Copy Artifact.Colors = Blue
