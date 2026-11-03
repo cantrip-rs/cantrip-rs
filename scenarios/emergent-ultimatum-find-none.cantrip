@@ -1,0 +1,48 @@
+# Searching for up to three permits finding nothing, then the spell is exiled (CR 701.23).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Jet
+Emergent Ultimatum
+Island
+Shock
+Grizzly Bears
+Wind Drake
+Shock
+Ornithopter
+Grizzled Leotau
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Emergent Ultimatum.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Emergent Ultimatum
+Bot1.Shuffles = 1
+Bot1.Battlefield.Grizzly Bears = (absent)

@@ -1,0 +1,41 @@
+# Finding one card means that card is shuffled back and none can be cast (CR 608.2c).
+[Bot1 Deck]
+Swamp x2
+Black Lotus
+Mox Sapphire x2
+Emergent Ultimatum
+Island
+Island
+Grizzly Bears
+Hill Giant
+Ageless Guardian
+Grizzly Bears
+Ornithopter
+Dovin's Veto
+Island x20
+[Bot2 Deck]
+Island x7
+Island
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Emergent Ultimatum.Cast
+? Bot1.Mana =
+Bot1.Search(Hill Giant)
+Bot2.Choose(Hill Giant)
+
+[Expect]
+Bot1.Library.Hill Giant.Power = 3
+Bot1.Shuffles = 1
+Exile = Emergent Ultimatum

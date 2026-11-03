@@ -1,0 +1,41 @@
+# Finding two cards permits declining to cast the one the opponent leaves in exile (CR 701.23, 701.24).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Sapphire
+Mox Sapphire
+Emergent Ultimatum
+Island
+Shock
+Giant Growth
+Healing Salve
+Shock
+Lightning Helix
+Ornithopter
+Island x20
+[Bot2 Deck]
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Emergent Ultimatum.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Shock; Giant Growth)
+Bot2.Choose(Giant Growth)
+Bot1.Choose()
+[Expect]
+Bot2.Life = 20
+Bot1.Shuffles = 1
+Exile = Shock; Emergent Ultimatum

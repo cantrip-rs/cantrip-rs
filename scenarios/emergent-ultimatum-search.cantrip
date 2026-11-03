@@ -1,0 +1,50 @@
+# Emergent Ultimatum finds up to three differently named monocolored cards, lets the opponent choose one to shuffle back, and may cast the rest (CR 701.23, 701.24).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Sapphire
+Mox Sapphire
+Emergent Ultimatum
+Island
+Shock
+Giant Growth
+Healing Salve
+Shock
+Lightning Helix
+Ornithopter
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Emergent Ultimatum.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Bot1.Library.Shock#1; Bot1.Library.Shock#2)
+! Bot1.Search(Shock; Giant Growth; Healing Salve; Lightning Bolt)
+! Bot1.Search(Lightning Helix)
+! Bot1.Search(Ornithopter)
+Bot1.Search(Shock; Giant Growth; Healing Salve)
+Bot2.Choose(Giant Growth)
+Bot1.Choose(Shock)
+Bot1.Target(Bot2)
+Bot1.Choose(Healing Salve)
+Bot1.Target(Bot1)
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 23
+Bot1.Shuffles = 1
+Exile = Emergent Ultimatum
