@@ -1,0 +1,54 @@
+# Wall of Dust cannot attack; only the creature it blocks misses its controller's next attack, and can attack later (CR 702.3b, 603.2).
+[Bot1 Deck]
+Wall of Dust
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Memnite
+Ornithopter
+Mountain x20
+[Bot2 Deck]
+Grizzly Bears
+Memnite
+Ornithopter
+Forest
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wall of Dust.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Wall of Dust > Bot2)
+Bot1.Attack(Bot1.Battlefield.Memnite)
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears; Bot2.Battlefield.Ornithopter)
+Bot1.Block(Wall of Dust > Grizzly Bears; Bot1.Battlefield.Ornithopter > Bot2.Battlefield.Ornithopter)
+[T4 Bot2.Main2]
+? Bot2.Battlefield.Grizzly Bears.Damage = 1
+[T6 Bot2.DeclareAttackers]
+! Bot2.Attack(Grizzly Bears > Bot1)
+Bot2.Attack(Bot2.Battlefield.Memnite; Bot2.Battlefield.Ornithopter)
+[T6 Bot2.Main2]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T8 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears)
+[T8 Bot2.Main2]
+[Expect]
+Bot1.Life = 17
+Bot2.Battlefield.Grizzly Bears.Power = 2

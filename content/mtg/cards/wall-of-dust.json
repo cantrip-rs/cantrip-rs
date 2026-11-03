@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Dust",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Wall",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Defender (This creature can't attack.)\nWhenever this creature blocks a creature, that creature can't attack during its controller's next turn.",
+  "keywords": [
+    "Defender"
+  ]
+}
