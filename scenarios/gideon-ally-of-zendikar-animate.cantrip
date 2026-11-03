@@ -1,0 +1,46 @@
+# Gideon's +1 makes him a 5/5 indestructible creature and prevents damage to him this turn (CR 611.2a, 615.1).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Gideon, Ally of Zendikar
+Shock
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gideon, Ally of Zendikar.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gideon, Ally of Zendikar.Activate(Ability: #1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gideon, Ally of Zendikar.Power = 5
+? Bot1.Battlefield.Gideon, Ally of Zendikar.Toughness = 5
+? Bot1.Battlefield.Gideon, Ally of Zendikar.Types = Planeswalker; Creature
+? Bot1.Battlefield.Gideon, Ally of Zendikar.Subtypes = Ally; Gideon; Human; Soldier
+? Bot1.Battlefield.Gideon, Ally of Zendikar.Keywords = Indestructible
+? Bot1.Battlefield.Gideon, Ally of Zendikar.Counters.Loyalty = 5
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Gideon, Ally of Zendikar)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gideon, Ally of Zendikar.Damage = 0
+? Bot1.Battlefield.Gideon, Ally of Zendikar.Counters.Loyalty = 5
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Gideon, Ally of Zendikar)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Gideon, Ally of Zendikar.Types = Planeswalker
+Bot1.Battlefield.Gideon, Ally of Zendikar.Counters.Loyalty = 3

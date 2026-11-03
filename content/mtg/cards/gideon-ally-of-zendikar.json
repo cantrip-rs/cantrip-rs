@@ -1,0 +1,7 @@
+{
+  "name": "Gideon, Ally of Zendikar",
+  "manaCost": "{2}{W}{W}",
+  "type": "Legendary Planeswalker — Gideon",
+  "loyalty": 4,
+  "oracleText": "+1: Until end of turn, Gideon becomes a 5/5 Human Soldier Ally creature with indestructible that's still a planeswalker. Prevent all damage that would be dealt to him this turn.\n0: Create a 2/2 white Knight Ally creature token.\n−4: You get an emblem with \"Creatures you control get +1/+1.\""
+}

@@ -1,0 +1,37 @@
+# A Glasspool Mimic copying animated Gideon has copiable Rogue and Shapeshifter types (CR 707.9).
+# Its own animation keeps those types while adding Human, Soldier and Ally (CR 205.1b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Gideon, Ally of Zendikar
+Glasspool Mimic
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gideon, Ally of Zendikar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gideon, Ally of Zendikar.Activate(Ability: #1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Glasspool Mimic.Cast
+Bot1.Accept
+Bot1.Choose(Gideon, Ally of Zendikar#2)
+Bot1.Battlefield.Gideon, Ally of Zendikar.Activate(Ability: #1)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Gideon, Ally of Zendikar.Power = 5
+Bot1.Battlefield.Gideon, Ally of Zendikar.Toughness = 5
+Bot1.Battlefield.Gideon, Ally of Zendikar.Types = Planeswalker; Creature
+Bot1.Battlefield.Gideon, Ally of Zendikar.Subtypes = Ally; Gideon; Human; Rogue; Shapeshifter; Soldier
