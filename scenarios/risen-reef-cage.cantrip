@@ -1,0 +1,32 @@
+# If a land creature cannot enter from the library, Risen Reef puts it into its controller's hand (CR 609.3).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Grafdigger's Cage
+Risen Reef
+Island
+Island
+Island
+Dryad Arbor
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grafdigger's Cage.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Risen Reef.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[Expect]
+Bot1.Hand = Island; Island; Island; Dryad Arbor
+Bot1.Library.Count = 20
+Bot1.Looked = Dryad Arbor

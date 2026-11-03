@@ -1,0 +1,32 @@
+# A replacement exiles the chosen land creature instead of putting it onto the battlefield.
+# The ability still follows that card, not the next card of the library (CR 400.7j, 614.6).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Containment Priest
+Risen Reef
+Island
+Island
+Dryad Arbor
+Mountain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Containment Priest.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Risen Reef.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[Expect]
+Bot1.Hand = Island; Island; Dryad Arbor
+Bot1.Library.Count = 21
+Bot1.Looked = Dryad Arbor
+Exile.Count = 0

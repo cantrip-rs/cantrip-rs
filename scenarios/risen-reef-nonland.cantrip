@@ -1,0 +1,30 @@
+# A nonland looked at by Risen Reef is put into hand rather than left on top (CR 608.2c).
+[Bot1 Deck]
+Island
+Mox Emerald
+Mox Sapphire
+Risen Reef
+Island
+Island
+Island
+Shock
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Risen Reef.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[Expect]
+Bot1.Hand.Shock.Colors = Red
+Bot1.Looked = Shock

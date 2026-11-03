@@ -1,0 +1,29 @@
+# Accepting a land puts it onto the battlefield tapped, without putting the next card into hand (CR 608.2c, 400.7).
+[Bot1 Deck]
+Island
+Mox Emerald
+Mox Sapphire
+Risen Reef
+Island
+Island
+Island
+Forest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Risen Reef.Cast
+? Bot1.Mana =
+Bot1.Accept
+[Expect]
+Bot1.Battlefield.Forest.Tapped = true
+Bot1.Hand = Island; Island; Island
+Bot1.Library.Count = 20
+Bot2.Library.Count = 13
+Bot1.Looked = Forest
