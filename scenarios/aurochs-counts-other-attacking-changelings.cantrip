@@ -1,0 +1,42 @@
+# Two attacking changelings named Universal Automaton each add one power, not toughness, and the bonus ends with the turn (CR 603.2, 611.2a).
+[Bot1 Deck]
+Aurochs
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Universal Automaton
+Universal Automaton
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Aurochs.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Universal Automaton.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Universal Automaton.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Aurochs > Bot2; Universal Automaton#1 > Bot2; Universal Automaton#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Aurochs.Power = 4
+? Bot1.Battlefield.Aurochs.Toughness = 3
+[T5 Bot1.Main2]
+? Bot2.Life = 14
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Aurochs.Power = 2
+Bot1.Battlefield.Aurochs.Toughness = 3

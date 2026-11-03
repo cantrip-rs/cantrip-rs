@@ -1,0 +1,47 @@
+# Aurochs attacking alone does not count itself or two nonattacking changelings; trample sends one damage through a 1/1 blocker (CR 702.19b).
+[Bot1 Deck]
+Aurochs
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Universal Automaton
+Universal Automaton
+Forest x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Aurochs.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Universal Automaton.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Universal Automaton.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Aurochs > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Aurochs.Power = 2
+? Bot1.Battlefield.Aurochs.Toughness = 3
+Bot2.Block(Memnite > Aurochs)
+[T5 Bot1.Main2]
+? Bot2.Life = 19
+? Bot2.Graveyard = Memnite; Island
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Aurochs.Power = 2
+Bot1.Battlefield.Aurochs.Toughness = 3
