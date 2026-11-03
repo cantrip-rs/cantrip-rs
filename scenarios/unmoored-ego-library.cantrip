@@ -1,0 +1,43 @@
+# The search can find a named card only in the library and leaves the opponent’s hand and graveyard unchanged (CR 701.19, 701.20).
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Unmoored Ego
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock
+Shock
+Shock
+Shock
+Shock
+Island
+Shock
+Shock
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Unmoored Ego.Cast(Bot1)
+Bot1.Hand.Unmoored Ego.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Name(Grizzly Bears)
+Bot1.Search(Grizzly Bears)
+[Expect]
+Exile = Grizzly Bears
+Bot2.Graveyard = Shock
+Bot2.Shuffles = 1
+Bot2.Hand.Count = 6
