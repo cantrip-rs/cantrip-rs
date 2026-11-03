@@ -1,0 +1,24 @@
+# Remove Soul may counter its controller's creature spell (CR 701.6a).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Remove Soul
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Remove Soul.Cast(Ornithopter)
+? Bot1.Mana =
+
+[Expect]
+Bot1.Graveyard = Remove Soul; Ornithopter
+Stack.Count = 0
