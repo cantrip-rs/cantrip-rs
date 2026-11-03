@@ -1,0 +1,62 @@
+# Sandbenders' Storm {3}{W}, first mode: "Destroy target creature with power 4 or greater." Bot1's Centaur Courser (power 3, one
+# below the limit) is refused as a target, Bot2's Alpine Grizzly (power 4, exactly at it) is accepted and destroyed (CR 115.1, 701.8a).
+# The Courser is untouched.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Black Lotus
+Centaur Courser
+Sandbenders' Storm
+Island x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Alpine Grizzly
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Centaur Courser.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sandbenders' Storm.Cast
+Bot1.Modes(Destroy target creature with power 4 or greater)
+! Bot1.Target(Bot1.Battlefield.Centaur Courser)
+Bot1.Target(Bot2.Battlefield.Alpine Grizzly)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Sandbenders' Storm; Black Lotus
+Bot1.Battlefield.Centaur Courser.Power = 3
+Bot2.Graveyard = Alpine Grizzly; Black Lotus

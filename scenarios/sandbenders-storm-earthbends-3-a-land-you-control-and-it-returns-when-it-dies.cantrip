@@ -1,0 +1,54 @@
+# Sandbenders' Storm, second mode: "Earthbend 3" (CR 701.66a). Bot2's Mountain and Bot1's Mox Pearl (not a land you control) are refused
+# as the target; Bot1's Plains becomes a 0/0 land creature with haste and exactly three +1/+1 counters (3/3, still a land). Then
+# Lightning Bolt kills the 3/3 Plains and the delayed ability returns it to the battlefield tapped as a plain land.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Sandbenders' Storm
+Island x14
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sandbenders' Storm.Cast
+Bot1.Modes(Earthbend 3)
+! Bot1.Target(Bot2.Battlefield.Mountain)
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+Bot1.Target(Bot1.Battlefield.Plains)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Plains.Power = 3
+? Bot1.Battlefield.Plains.Toughness = 3
+? Bot1.Battlefield.Plains.Types = Land; Creature
+? Bot1.Battlefield.Plains.Keywords = Haste
+? Bot1.Battlefield.Plains.Counters.PlusOnePlusOne = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Plains)
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Plains.Types = Land
+Bot1.Battlefield.Plains.Tapped = true
+Bot1.Battlefield.Plains.Counters.PlusOnePlusOne = (absent)

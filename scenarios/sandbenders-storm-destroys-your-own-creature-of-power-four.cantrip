@@ -1,0 +1,51 @@
+# Sandbenders' Storm's first mode accepts a creature of your own at exactly power 4 (CR 115.1): Bot1 casts Alpine Grizzly (4/2) with
+# Black Lotus and a Mox, and on turn 3 destroys it with the Storm. Bot2's Memnite (power 1, below the limit) is refused.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Emerald
+Mox Ruby
+Black Lotus
+Alpine Grizzly
+Sandbenders' Storm
+Plains
+Island x13
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Alpine Grizzly.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sandbenders' Storm.Cast
+Bot1.Modes(Destroy target creature with power 4 or greater)
+! Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Alpine Grizzly)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Sandbenders' Storm; Alpine Grizzly; Black Lotus
+Bot2.Battlefield.Memnite.Power = 1
