@@ -1,0 +1,43 @@
+# The enchanted Bear deals two combat damage as both Bears die; Spirit Link still triggers and gains its controller two life (CR 704.5g).
+[Bot1 Deck]
+Forest
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Spirit Link
+Island x20
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Spirit Link.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears)
+Bot2.Block(Grizzly Bears > Grizzly Bears)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 20
+Bot1.Graveyard = Spirit Link; Grizzly Bears
+Bot2.Graveyard = Grizzly Bears
