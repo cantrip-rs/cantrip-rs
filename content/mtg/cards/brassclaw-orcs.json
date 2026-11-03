@@ -1,0 +1,8 @@
+{
+  "name": "Brassclaw Orcs",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Orc",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "This creature can't block creatures with power 2 or greater."
+}
