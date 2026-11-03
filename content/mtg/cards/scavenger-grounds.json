@@ -1,0 +1,5 @@
+{
+  "name": "Scavenger Grounds",
+  "type": "Land — Desert",
+  "oracleText": "{T}: Add {C}.\n{2}, {T}, Sacrifice a Desert: Exile all graveyards."
+}

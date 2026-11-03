@@ -1,0 +1,36 @@
+# Scavenger Grounds adds colorless mana and can sacrifice itself to exile both players' graveyards, including itself (CR 605.1a, 602.2b).
+[Bot1 Deck]
+Scavenger Grounds
+Black Lotus
+Mox Ruby x2
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Black Lotus
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Scavenger Grounds.Play
+Bot1.Battlefield.Scavenger Grounds.Activate(Ability: Add)
+? Bot1.Mana = {C}
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Scavenger Grounds.Activate(Ability: Exile)
+Bot1.Choose(Scavenger Grounds)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard.Count = 0
+Exile = Scavenger Grounds; Lightning Bolt; Black Lotus; Shock; Black Lotus
