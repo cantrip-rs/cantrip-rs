@@ -1,0 +1,35 @@
+# Frozen Shade gets +1/+1 until end of turn for black mana (CR 611.2a).
+
+[Bot1 Deck]
+Island
+Black Lotus
+Mox Jet
+Frozen Shade
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Frozen Shade.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Frozen Shade.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Frozen Shade.Power = 1
+? Bot1.Battlefield.Frozen Shade.Toughness = 2
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Frozen Shade.Activate(Mana: short)
+
+[Expect]
+Bot1.Battlefield.Frozen Shade.Power = 0
+Bot1.Battlefield.Frozen Shade.Toughness = 1

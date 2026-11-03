@@ -1,0 +1,8 @@
+{
+  "name": "Frozen Shade",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Shade",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "{B}: This creature gets +1/+1 until end of turn."
+}
