@@ -1,21 +1,13 @@
 use cantrip_api::*;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{effects::target_player_gains_x_life, targets};
 use cantrip_oracle as oracle;
-
-/// "Target player gains X life" (CR 119.3): the player the spell targeted, if still a legal target (CR 608.2b).
-fn stream_of_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(player) = targets::player(g, item, 0) {
-        g.gain_life(player, item.x as i32);
-    }
-    Ok(())
-}
 
 /// Infirmary Healer's prepare spell (CR 722): not a card, only ever a copy.
 pub static STREAM_OF_LIFE: CardDef = CardDef {
     name: "Stream of Life",
     cost: mana("{X}{G}"),
     types: TypeSet::of(&[CardType::Sorcery]),
-    spell: spell(&[targets::PLAYER], stream_of_life),
+    spell: spell(&[targets::PLAYER], target_player_gains_x_life),
     text: "Target player gains X life.",
     ..CardDef::BLANK
 };
