@@ -1,0 +1,55 @@
+# Tor Wauki taps to deal exactly two damage to an opposing attacker and, on a later turn, to a blocker; a noncombatant is not a legal target (CR 115.1, 120.3).
+[Bot1 Deck]
+Tor Wauki
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Emerald
+Grizzly Bears
+Forest x20
+
+[Bot2 Deck]
+Ageless Guardian
+Black Lotus
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tor Wauki.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Ageless Guardian.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ageless Guardian > Bot1)
+! Bot1.Battlefield.Tor Wauki.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Tor Wauki.Activate(Bot2.Battlefield.Ageless Guardian)
+? Bot1.Battlefield.Tor Wauki.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ageless Guardian.Damage = 2
+! Bot1.Battlefield.Tor Wauki.Activate(Bot2.Battlefield.Ageless Guardian)
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Ageless Guardian > Grizzly Bears)
+Bot1.Battlefield.Tor Wauki.Activate(Bot2.Battlefield.Ageless Guardian)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ageless Guardian.Damage = 2
+[T7 Bot1.Main2]
+[Expect]
+Bot2.Graveyard.Ageless Guardian.Colors = White

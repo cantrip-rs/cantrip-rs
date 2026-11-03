@@ -1,0 +1,8 @@
+{
+  "name": "Tor Wauki",
+  "manaCost": "{2}{B}{B}{R}",
+  "type": "Legendary Creature — Human Archer",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{T}: Tor Wauki deals 2 damage to target attacking or blocking creature."
+}

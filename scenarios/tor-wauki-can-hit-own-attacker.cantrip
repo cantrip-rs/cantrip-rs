@@ -1,0 +1,37 @@
+# Tor Wauki may target its controller's attacking creature and deals two damage to it (CR 115.1, 120.3).
+[Bot1 Deck]
+Tor Wauki
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Ageless Guardian
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tor Wauki.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ageless Guardian.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ageless Guardian > Bot2)
+Bot1.Battlefield.Tor Wauki.Activate(Bot1.Battlefield.Ageless Guardian)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ageless Guardian.Damage = 2
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ageless Guardian.Damage = 2
