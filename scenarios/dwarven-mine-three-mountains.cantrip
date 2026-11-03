@@ -1,0 +1,24 @@
+# With three other controlled Mountains, Dwarven Mine enters untapped and creates a red 1/1 Dwarf (CR 603.6a).
+[Bot1 Deck]
+Mountain x3
+Dwarven Mine
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Dwarven Mine.Play
+[Expect]
+Bot1.Battlefield.Dwarven Mine.Tapped = false
+Bot1.Battlefield.Dwarf Token.Power = 1
+Bot1.Battlefield.Dwarf Token.Toughness = 1
+Bot1.Battlefield.Dwarf Token.Colors = Red
+Bot1.Battlefield.Dwarf Token.Subtypes = Dwarf
+Bot1.Battlefield.Dwarf Token.Token = true
+Bot1.Battlefield.Count = 5
+Bot1.Battlefield.Dwarf Token.Tapped = false

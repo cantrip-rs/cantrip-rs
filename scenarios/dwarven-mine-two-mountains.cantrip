@@ -1,0 +1,20 @@
+# Two Mountains controlled by the player and two by the opponent do not let Dwarven Mine enter untapped (CR 614.12).
+[Bot1 Deck]
+Mountain x2
+Dwarven Mine
+Island x20
+[Bot2 Deck]
+Mountain x2
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Dwarven Mine.Play
+[Expect]
+Bot1.Battlefield.Dwarven Mine.Tapped = true
+Bot1.Battlefield.Dwarf Token = (absent)

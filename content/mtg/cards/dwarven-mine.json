@@ -1,0 +1,5 @@
+{
+  "name": "Dwarven Mine",
+  "type": "Land — Mountain",
+  "oracleText": "({T}: Add {R}.)\nThis land enters tapped unless you control three or more other Mountains.\nWhen this land enters untapped, create a 1/1 red Dwarf creature token."
+}
