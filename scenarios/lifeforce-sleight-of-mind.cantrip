@@ -1,0 +1,42 @@
+# Changing "black" to "red" changes the spell Lifeforce can target (CR 612.1).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mox Sapphire
+Lifeforce
+Sleight of Mind
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Lifeforce.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Lifeforce)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Black)
+Bot1.Colors(Red)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Lifeforce.Activate(Stack.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
