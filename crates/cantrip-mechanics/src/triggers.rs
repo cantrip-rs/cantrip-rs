@@ -17,6 +17,17 @@ pub fn enchanted_creature_died(q: &dyn Query, source: ObjectId, event: &Event) -
 /// "Whenever this creature enlists a creature" (CR 702.154c): enlist's, kept with the keyword.
 pub use crate::enlist::{THIS_ENLISTS, this_enlists};
 
+/// "Whenever a player casts a [color] spell" (CR 603.2, 601.2i): the spell is the subject, and the color word is
+/// read from the trigger source (CR 612.2). Wooden Sphere and Kor Firewalker print this trigger.
+pub fn a_player_casts_colored_spell<const COLOR: u8>(q: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, .. } if q.chars(*spell).colors.has(q.words(asker.source).color(Color::ALL[COLOR as usize])) => {
+            Fired::about(Target::Object(*spell))
+        }
+        _ => None,
+    }
+}
+
 /// What ward's discard cost asks the player whose spell or ability targeted, the question on that spell or ability.
 const WARD_DISCARD: Question =
     Question::new("DiscardUnlessCountered", "Discard a card, or {source} is countered?", "Ward: what it targeted can't be targeted for free", "Discard a card", "Let it be countered").no_default();
