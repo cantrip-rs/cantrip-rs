@@ -1,0 +1,37 @@
+# Black Lotus is tapped and sacrificed for one activation; the Aura's single tap trigger still deals 2 damage.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Artifact Possession
+Swamp x16
+
+[Bot2 Deck]
+Black Lotus
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artifact Possession.Cast(Bot2.Battlefield.Black Lotus)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Graveyard = Artifact Possession
+Bot2.Graveyard = Black Lotus

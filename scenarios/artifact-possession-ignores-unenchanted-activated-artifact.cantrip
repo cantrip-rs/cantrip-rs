@@ -1,0 +1,48 @@
+# Only the enchanted Ballista's non-tap ability triggers the Aura: the other Ballista is activated first.
+# Both Ballistas leave the battlefield, so the trigger must still identify the enchanted one's controller.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Artifact Possession
+Swamp x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Walking Ballista x2
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artifact Possession.Cast(Bot2.Battlefield.Walking Ballista#1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Walking Ballista#2.Activate(Bot1; Ability: Remove)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 20
+Bot2.Battlefield.Walking Ballista.Activate(Bot1; Ability: Remove)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18

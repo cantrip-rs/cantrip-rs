@@ -1,0 +1,6 @@
+{
+  "name": "Artifact Possession",
+  "manaCost": "{2}{B}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant artifact\nWhenever enchanted artifact becomes tapped or a player activates an ability of enchanted artifact without {T} in its activation cost, this Aura deals 2 damage to that artifact's controller."
+}
