@@ -1,0 +1,49 @@
+# Goblin Kings each boost the other, while Goblins have mountainwalk against a Mountain (CR 702.14c).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Goblin King
+Goblin King
+Fanatical Firebrand
+Island x20
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Goblin King.Cast
+? Bot1.Mana =
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Goblin King.Power = 2
+? Bot1.Battlefield.Fanatical Firebrand.Power = 2
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin King.Cast
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Fanatical Firebrand > Bot2)
+! Bot2.Block(Grizzly Bears > Fanatical Firebrand)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Goblin King#1.Power = 3
+Bot1.Battlefield.Goblin King#2.Power = 3
+Bot1.Battlefield.Fanatical Firebrand.Power = 3
+Bot1.Battlefield.Fanatical Firebrand.Toughness = 3
+Bot2.Battlefield.Grizzly Bears.Power = 2
+Bot2.Life = 17
