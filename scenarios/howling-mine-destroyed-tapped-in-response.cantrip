@@ -1,0 +1,35 @@
+# The Mine is tapped and then destroyed while its draw trigger waits; its last status was tapped, so no extra draw (CR 603.4, 608.2h).
+[Bot1 Deck]
+Mox Ruby
+Mox Sapphire
+Black Lotus x2
+Howling Mine
+Pestermite
+Disenchant
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Howling Mine.Cast
+[T2 Bot2.Draw]
+? Bot2.Hand.Count = 8
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Pestermite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Howling Mine)
+Bot2.Pass
+Bot1.Pass
+Bot1.Modes(Tap)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Howling Mine)
+[T2 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Howling Mine = (absent)
+Bot2.Hand.Count = 8
