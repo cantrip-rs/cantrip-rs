@@ -1,0 +1,44 @@
+# Keruga draws once for each other controlled permanent with mana value at least three (CR 121.2).
+[Bot1 Deck]
+Black Lotus x2
+Mox Emerald x2
+Mox Ruby
+Wind Drake
+Keruga, the Macrosage
+Grizzly Bears
+Shock
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Wind Drake
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Wind Drake.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Wind Drake.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Keruga, the Macrosage.Cast
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Hand = Shock; Island
+Bot1.Battlefield.Keruga, the Macrosage.Power = 5

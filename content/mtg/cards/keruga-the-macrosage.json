@@ -1,0 +1,8 @@
+{
+  "name": "Keruga, the Macrosage",
+  "manaCost": "{3}{G/U}{G/U}",
+  "type": "Legendary Creature — Dinosaur Hippo",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Companion — Your starting deck contains only cards with mana value 3 or greater and land cards. (If this card is your chosen companion, you may put it into your hand from outside the game for {3} as a sorcery.)\nWhen Keruga enters, draw a card for each other permanent you control with mana value 3 or greater."
+}

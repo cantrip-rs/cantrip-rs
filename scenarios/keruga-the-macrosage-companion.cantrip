@@ -1,0 +1,11 @@
+# Keruga can be chosen as companion when the starting deck contains only lands and cards of mana value at least three (CR 702.139a).
+[Bot1 Deck]
+Wind Drake
+Island x20
+[Bot1 Companion]
+Keruga, the Macrosage
+[Bot2 Deck]
+Island x20
+[Actions]
+[Expect]
+Bot1.Companion = Keruga, the Macrosage

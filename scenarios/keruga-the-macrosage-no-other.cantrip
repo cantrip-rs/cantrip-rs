@@ -1,0 +1,20 @@
+# Keruga itself does not count toward its entering draw ability (CR 603.6a).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald x2
+Keruga, the Macrosage
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Keruga, the Macrosage.Cast
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Hand.Count = 3
