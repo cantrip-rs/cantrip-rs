@@ -7,7 +7,7 @@
 //! rollback inside the fork (a resolution prompt re-run) keeps the world. Then the question waiting is asked again
 //! (`Game::ask_again`), of the world's cards and not the real ones.
 
-use std::collections::{BTreeMap, HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet, VecDeque};
 
 use cantrip_engine::visibility::{knows_face, looks_into, observable, request_objects};
 use cantrip_engine::*;
@@ -123,12 +123,7 @@ pub fn determinize_owned(game: &mut Game, k: &Knowledge, seat: PlayerId, mode: I
     let visible = observable(game, seat, &extra);
     let sees = |id: ObjectId| visible.contains(&id) && knows_face(s, seat, id);
     // What each row became from, and the rows the seat was shown at some point.
-    let mut from: HashMap<ObjectId, ObjectId> = HashMap::new();
-    for (i, o) in s.objects.iter().enumerate() {
-        if let Some(b) = o.became {
-            from.insert(b, ObjectId(i as u32));
-        }
-    }
+    let (from, merged_parts) = physical_card_links(game);
     let mut shown: HashSet<ObjectId> = HashSet::new();
     for record in &game.log {
         match record.event {
@@ -158,54 +153,71 @@ pub fn determinize_owned(game: &mut Game, k: &Knowledge, seat: PlayerId, mode: I
     let mut unplaced: Vec<ObjectId> = Vec::new();
     let mut accounted: BTreeMap<(PlayerId, Origin), Vec<CardId>> = BTreeMap::new();
     let mut rows: Vec<ObjectId> = Vec::new();
-    for slot in 0..s.zones.len() {
-        for &id in &s.zones[slot] {
-            let o = s.obj(id);
-            if o.token || o.card_copy || !live(s, id) {
-                continue;
-            }
+    for id in s
+        .zones
+        .iter()
+        .flatten()
+        .copied()
+        .chain(merged_parts.keys().copied())
+    {
+        let o = s.obj(id);
+        let component = merged_parts.contains_key(&id);
+        let token = s.merge_of(id).map_or(o.token, |m| m.own_token);
+        if token || o.card_copy || (!component && !live(s, id)) {
+            continue;
+        }
+        if !component {
             rows.push(id);
-            let mut chain = vec![id];
-            let mut root = id;
-            let mut hidden = true;
-            while let Some(&p) = from.get(&root) {
-                root = p;
-                hidden &= !row_seen(p);
-                if hidden {
-                    chain.push(p);
-                }
+        }
+        let mut chain = vec![id];
+        let mut root = id;
+        let mut hidden = true;
+        while let Some(&p) = from.get(&root) {
+            root = p;
+            hidden &= !row_seen(p);
+            if hidden {
+                chain.push(p);
             }
-            let origin = match s.obj(root).zone.kind() {
-                ZoneKind::Library => Origin::Library,
-                ZoneKind::Sideboard => Origin::Sideboard,
-                _ => continue,
-            };
-            let library = o.zone.is(ZoneKind::Library);
-            let known = k.knows(id);
-            // A row the object was before and the seat saw (a card of its hand shuffled back by a mulligan, a card
-            // revealed and then put into its library): the object is that card, whatever the seat can still tell of
-            // which object it is, as a card is the same card in every zone. Dealing it another would deal the seat a
-            // history it did not see (and change its decklist, which counts the rows the deal began with).
-            let seen_before = !hidden;
-            if sees(id) || known.is_some() || seen_before {
-                accounted.entry((o.owner, origin)).or_default().push(front(game, o.card));
-                // Its place is dealt anew where the seat does not know it - but not where it sees it now (a library it is
-                // searching shows its order).
-                if library && !sees(id) && known != Some(true) && (known == Some(false) || seen_before) {
-                    unplaced.push(id);
-                }
-                continue;
-            }
-            if !dealt(o.owner) {
-                continue;
-            }
-            if library {
+        }
+        let origin = match s.obj(root).zone.kind() {
+            ZoneKind::Library => Origin::Library,
+            ZoneKind::Sideboard => Origin::Sideboard,
+            _ => continue,
+        };
+        let library = o.zone.is(ZoneKind::Library);
+        let known = k.knows(id);
+        // A row the object was before and the seat saw (a card of its hand shuffled back by a mulligan, a card
+        // revealed and then put into its library): the object is that card, whatever the seat can still tell of
+        // which object it is, as a card is the same card in every zone. Dealing it another would deal the seat a
+        // history it did not see (and change its decklist, which counts the rows the deal began with).
+        let seen_before = !hidden;
+        // A mutating spell was face up on the stack. Its card remains known
+        // as a component even though its old row is no longer in a zone.
+        if component || sees(id) || known.is_some() || seen_before {
+            accounted
+                .entry((o.owner, origin))
+                .or_default()
+                .push(front(game, o.card));
+            // Its place is dealt anew where the seat does not know it - but not where it sees it now (a library it is
+            // searching shows its order).
+            if library && !sees(id) && known != Some(true) && (known == Some(false) || seen_before)
+            {
                 unplaced.push(id);
             }
-            unknown.push(Unseen { owner: o.owner, origin, chain });
+            continue;
         }
+        if !dealt(o.owner) {
+            continue;
+        }
+        if library {
+            unplaced.push(id);
+        }
+        unknown.push(Unseen {
+            owner: o.owner,
+            origin,
+            chain,
+        });
     }
-
     // What each owner's unseen cards are dealt from: the deck as dealt less what is accounted for.
     let mut pools: BTreeMap<(PlayerId, Origin), Vec<CardId>> = BTreeMap::new();
     for p in s.seats() {
@@ -333,6 +345,94 @@ pub fn determinize_owned(game: &mut Game, k: &Knowledge, seat: PlayerId, mode: I
     if changed {
         game.ask_again();
     }
+}
+
+/// Physical-card ancestry (CR 730.2-3), distinct from `became`: a mutating spell
+/// follows the existing permanent as an object, but is still a separate deck
+/// card. On separation each new row follows its own component's card, not the
+/// merged permanent's topmost card. Ordinary games retain the old fast path.
+fn physical_card_links(game: &Game) -> (HashMap<ObjectId, ObjectId>, HashMap<ObjectId, ObjectId>) {
+    let s = &game.state;
+    let links = |merged: &HashSet<ObjectId>| -> HashMap<ObjectId, ObjectId> {
+        s.objects
+            .iter()
+            .enumerate()
+            .filter_map(|(i, o)| {
+                let id = ObjectId(i as u32);
+                o.became
+                    .filter(|_| !merged.contains(&id))
+                    .map(|next| (next, id))
+            })
+            .collect()
+    };
+    if s.merges.is_empty() {
+        return (links(&HashSet::new()), HashMap::new());
+    }
+    struct Components {
+        cards: Vec<ObjectId>,
+        top: usize,
+    }
+    let mut merged: HashMap<ObjectId, Components> = HashMap::new();
+    let mut spells = HashSet::new();
+    let mut separating: HashMap<ObjectId, VecDeque<ObjectId>> = HashMap::new();
+    let mut separated = HashMap::new();
+    for record in &game.log {
+        match record.event {
+            Event::Mutated {
+                permanent,
+                spell,
+                on_top,
+            } => {
+                spells.insert(spell);
+                let parts = merged.entry(permanent).or_insert_with(|| Components {
+                    cards: vec![permanent],
+                    top: 0,
+                });
+                parts.cards.push(spell);
+                if on_top {
+                    parts.top = parts.cards.len() - 1;
+                }
+            }
+            Event::ZoneChange {
+                old,
+                new,
+                part: false,
+                ..
+            } => {
+                if let Some(parts) = merged.remove(&old) {
+                    separated.insert(new, parts.cards[parts.top]);
+                    separating.insert(
+                        old,
+                        parts
+                            .cards
+                            .into_iter()
+                            .enumerate()
+                            .filter_map(|(i, id)| (i != parts.top).then_some(id))
+                            .collect(),
+                    );
+                }
+            }
+            Event::ZoneChange {
+                old,
+                new,
+                part: true,
+                ..
+            } => {
+                if let Some(card) = separating.get_mut(&old).and_then(VecDeque::pop_front) {
+                    separated.insert(new, card);
+                }
+            }
+            _ => {}
+        }
+    }
+    let mut from = links(&spells);
+    from.extend(separated);
+    let components = merged
+        .into_iter()
+        .filter(|(id, _)| live(s, *id))
+        .flat_map(|(id, parts)| parts.cards.into_iter().skip(1).map(move |card| (card, id)))
+        .collect();
+    (from, components)
 }
 
 /// The cards dealt into a zone: its rows that no other row became, tokens and copies left out.
