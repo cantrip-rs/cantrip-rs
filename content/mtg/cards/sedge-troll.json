@@ -1,0 +1,8 @@
+{
+  "name": "Sedge Troll",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Troll",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "This creature gets +1/+1 as long as you control a Swamp.\n{B}: Regenerate this creature."
+}

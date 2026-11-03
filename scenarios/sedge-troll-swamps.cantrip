@@ -1,0 +1,50 @@
+# Sedge Troll gets +1/+1 only from its controller's Swamp and can regenerate for black mana (CR 604.1, 701.19a).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Sedge Troll
+Swamp
+Lightning Bolt
+Island x20
+
+[Bot2 Deck]
+Swamp
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Sedge Troll.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Ornithopter.Cast
+? Bot1.Battlefield.Sedge Troll.Power = 2
+? Bot1.Battlefield.Sedge Troll.Toughness = 2
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Sedge Troll.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+? Bot1.Battlefield.Sedge Troll.Power = 3
+? Bot1.Battlefield.Sedge Troll.Toughness = 3
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Sedge Troll.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sedge Troll)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sedge Troll.Tapped = true
+Bot1.Battlefield.Sedge Troll.Damage = 0
