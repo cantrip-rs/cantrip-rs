@@ -1,0 +1,38 @@
+# X=2 among two creatures deals exactly one damage to each.
+
+[Bot1 Deck]
+Black Lotus
+Ornithopter
+Dwarven Catapult
+Mountain x20
+
+[Bot2 Deck]
+Ornithopter x2
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter#1.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Hand.Dwarven Catapult.Cast(Bot1; X: 2)
+Bot1.Hand.Dwarven Catapult.Cast(Bot2; X: 2)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot2.Battlefield.Ornithopter#1.Damage = 1
+Bot2.Battlefield.Ornithopter#2.Damage = 1

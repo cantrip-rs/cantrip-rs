@@ -1,0 +1,6 @@
+{
+  "name": "Dwarven Catapult",
+  "manaCost": "{X}{R}",
+  "type": "Instant",
+  "oracleText": "Dwarven Catapult deals X damage divided evenly, rounded down, among all creatures target opponent controls."
+}
