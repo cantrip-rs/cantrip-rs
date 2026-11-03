@@ -1,0 +1,81 @@
+# All three colored abilities give +1/+0 until end of turn; the Dragon flies over a ground blocker, and its upkeep must be paid or it is sacrificed (CR 611.2a, 702.9b).
+[Bot1 Deck]
+Vaevictis Asmadi
+Black Lotus
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Emerald
+Forest x20
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Vaevictis Asmadi.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Vaevictis Asmadi.Activate(Ability: {B}; Mana: short)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Vaevictis Asmadi.Activate(Ability: {R})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vaevictis Asmadi.Power = 8
+? Bot1.Battlefield.Vaevictis Asmadi.Toughness = 7
+! Bot1.Battlefield.Vaevictis Asmadi.Activate(Ability: {R}; Mana: short)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Vaevictis Asmadi.Activate(Ability: {G})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vaevictis Asmadi.Power = 9
+? Bot1.Battlefield.Vaevictis Asmadi.Toughness = 7
+! Bot1.Battlefield.Vaevictis Asmadi.Activate(Ability: {G}; Mana: short)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Vaevictis Asmadi.Power = 7
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Vaevictis Asmadi.Activate(Ability: {B})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Vaevictis Asmadi.Power = 8
+? Bot1.Battlefield.Vaevictis Asmadi.Toughness = 7
+Bot1.Attack(Vaevictis Asmadi > Bot2)
+! Bot2.Block(Llanowar Elves > Vaevictis Asmadi)
+[T3 Bot1.Main2]
+? Bot2.Life = 12
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Vaevictis Asmadi.Power = 7
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Vaevictis Asmadi.Activate(Ability: {G})
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Graveyard.Vaevictis Asmadi.Power = 7

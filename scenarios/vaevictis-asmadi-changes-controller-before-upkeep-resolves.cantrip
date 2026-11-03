@@ -1,0 +1,58 @@
+# The upkeep trigger's controller cannot sacrifice Vaevictis after an opponent gains control in response (CR 701.21a).
+[Bot1 Deck]
+Vaevictis Asmadi
+Black Lotus
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Mox Emerald
+Forest x20
+
+[Bot2 Deck]
+Old Man of the Sea
+Black Lotus
+Mox Emerald
+Mox Emerald
+Giant Growth
+Giant Growth
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Vaevictis Asmadi.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T5 Bot1.Upkeep]
+Bot2.Battlefield.Mox Emerald#1.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Old Man of the Sea)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald#2.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Old Man of the Sea)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Vaevictis Asmadi)
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Vaevictis Asmadi.Power = 7
