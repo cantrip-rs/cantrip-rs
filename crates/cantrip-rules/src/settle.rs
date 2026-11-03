@@ -541,6 +541,14 @@ fn choose_trigger_targets(
     of: &mut Vec<u8>,
     first_spec: u8,
 ) -> R<bool> {
+    choose_trigger_targets_after(cx, trigger, specs, all_of_few, targets, of, first_spec, false)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn choose_trigger_targets_after(
+    cx: &mut Cx, trigger: &PendingTrigger, specs: &[TargetSpec], all_of_few: bool,
+    targets: &mut Vec<Target>, of: &mut Vec<u8>, first_spec: u8, after_divided: bool,
+) -> R<bool> {
     // Asked as the ability it is (CR 607.5): one an effect gave its source reads only its own links.
     let asker = Asker { source: trigger.source, controller: trigger.controller, by: layers::given_link(cx.cards(), cx.s(), trigger.source, trigger.ability, trigger.acquired), spell: false };
     let start = targets.len();
@@ -558,7 +566,7 @@ fn choose_trigger_targets(
                 cx,
                 &asker,
                 spec,
-                if slots.len() > 1 { &targets[start..] } else { &[] },
+                if after_divided { &targets[..] } else if slots.len() > 1 { &targets[start..] } else { &[] },
                 trigger.subject,
                 *slot_player,
                 text,
@@ -743,6 +751,10 @@ fn put_trigger_as(cx: &mut Cx, trigger: PendingTrigger, by: Option<Linked>) -> R
             }
             crate::actions::Divided::Skipped => {}
             crate::actions::Divided::Impossible => return Ok(()),
+        }
+        of.resize(targets.len(), 0);
+        if !choose_trigger_targets_after(cx, &trigger, &def.targets[1..], false, &mut targets, &mut of, 1, true)? {
+            return Ok(());
         }
     } else if !choose_trigger_targets(cx, &trigger, def.targets, false, &mut targets, &mut of, 0)? {
         return Ok(());

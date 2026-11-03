@@ -7649,6 +7649,13 @@ fn cast(
             // A total that needs a target and has none to give it is not a legal announcement.
             Divided::Impossible => return Err(Stop::Cancel),
         }
+        // Magma Opus divides damage in its first slot, then targets two permanents.
+        // Later slots retain their own numbers and may reuse a target of the divided slot (CR 115.3).
+        of.resize(targets.len(), 0);
+        let (later, later_of) = choose_slots_after(cx, player, spell, true, &specs[1..], counted, item.kicked, announced_x(&item), None, &targets, 1)?;
+        targets.extend(later);
+        of.extend(later_of);
+        set_item_targets(cx, &targets, &of);
     } else if (resolving || !targets_with_cast(cx.cards(), def)) && !specs.is_empty() {
         (targets, of) = choose_slots(cx, player, spell, true, specs, counted, item.kicked, announced_x(&item), None)?;
         set_item_targets(cx, &targets, &of);
@@ -8514,17 +8521,23 @@ pub(crate) fn enough_together(q: &dyn Query, asker: &Asker, together: &Option<Pa
 /// `x` is the X announced for the spell or ability (`resolve::announced_x`), which its filters read.
 #[allow(clippy::too_many_arguments)]
 fn choose_slots(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, specs: &[TargetSpec], counted: u32, kicked: u8, x: Option<u16>, by: Option<Linked>) -> R<(Vec<Target>, Vec<u8>)> {
+    choose_slots_after(cx, player, source, spell, specs, counted, kicked, x, by, &[], 0)
+}
+
+/// Announce slots after a divided slot, preserving the earlier targets for filters that read them.
+#[allow(clippy::too_many_arguments)]
+fn choose_slots_after(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, specs: &[TargetSpec], counted: u32, kicked: u8, x: Option<u16>, by: Option<Linked>, earlier: &[Target], first_spec: u8) -> R<(Vec<Target>, Vec<u8>)> {
     let asker = Asker { source, controller: player, by, spell };
     let slots = crate::resolve::expand_specs(cx.s(), player, specs);
-    let mut targets = Vec::new();
-    let mut of = Vec::new();
+    let mut targets = earlier.to_vec();
+    let start = targets.len();
+    let mut of = vec![0; start];
     for (spec, slot_player, at) in &slots {
         // CR 702.33a, 601.2c: "if this spell was kicked, instead choose ...", the kicker announced by now.
         let spec = &spec.when_kicked(kicked);
         let before = targets.len();
         'slot: {
-            let candidates =
-                target_candidates_given(cx, &asker, spec, if slots.len() > 1 { &targets } else { &[] }, Target::None, *slot_player, x);
+            let candidates = target_candidates_given(cx, &asker, spec, &targets, Target::None, *slot_player, x);
             let (candidates, together) = within_together(cx, &asker, spec, counted, candidates);
             let (least, most) = spec.bounds(counted);
             // Fewer legal targets than the slot's minimum is not a legal announcement (CR 601.2c, 602.2b): given up whole.
@@ -8561,13 +8574,13 @@ fn choose_slots(cx: &mut Cx, player: PlayerId, source: ObjectId, spell: bool, sp
         if slots.len() > 1 && spec.max <= 1 && targets.len() == before {
             targets.push(Target::None);
         }
-        of.resize(targets.len(), *at);
+        of.resize(targets.len(), first_spec + at);
     }
-    while targets.last() == Some(&Target::None) {
+    while targets.len() > start && targets.last() == Some(&Target::None) {
         targets.pop();
     }
     of.truncate(targets.len());
-    Ok((targets, of))
+    Ok((targets.split_off(start), of.split_off(start)))
 }
 
 /// What asking a divided slot came to.
