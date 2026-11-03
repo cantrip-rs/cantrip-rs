@@ -1,0 +1,43 @@
+# Jalum Tome costs two mana and taps; its controller draws before choosing a single discard
+# in the same resolving ability (CR 602.2b, 608.2c, 701.9a). The Forest is drawn and discarded.
+[Bot1 Deck]
+Black Lotus
+Jalum Tome
+Mox Pearl
+Mox Sapphire
+Island
+Island
+Island
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Jalum Tome.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Jalum Tome.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Jalum Tome.Tapped = true
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose()
+! Bot1.Choose(Forest; Island)
+Bot1.Choose(Forest)
+
+[Expect]
+Bot1.Graveyard = Forest; Black Lotus
+Bot1.Hand = Island; Island; Island
+Bot1.Library.Count = 20
+Bot1.Battlefield.Jalum Tome.Tapped = true

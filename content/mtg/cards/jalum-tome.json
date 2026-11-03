@@ -1,0 +1,6 @@
+{
+  "name": "Jalum Tome",
+  "manaCost": "{3}",
+  "type": "Artifact — Book",
+  "oracleText": "{2}, {T}: Draw a card, then discard a card."
+}
