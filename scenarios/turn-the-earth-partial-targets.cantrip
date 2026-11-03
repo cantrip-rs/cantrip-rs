@@ -1,0 +1,44 @@
+# If one target leaves its graveyard, the remaining legal targets are shuffled and life is gained (CR 608.2b).
+[Bot1 Deck]
+Black Lotus x2
+Mox Emerald
+Lightning Bolt
+Turn the Earth
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Cling to Dust
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Turn the Earth.Cast
+! Bot1.Target(Bot1.Battlefield.Mox Emerald)
+! Bot1.Target(Bot1.Graveyard.Lightning Bolt; Bot1.Graveyard.Black Lotus#1; Bot2.Graveyard.Shock; Bot2.Graveyard.Black Lotus)
+Bot1.Target(Bot1.Graveyard.Lightning Bolt; Bot1.Graveyard.Black Lotus#1; Bot2.Graveyard.Shock)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Cling to Dust.Cast(Bot2.Graveyard.Shock)
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot1.Shuffles = 1
+Bot2.Shuffles = 0
+Bot2.Graveyard = Cling to Dust; Black Lotus
+Exile = Shock
+Bot1.Library.Lightning Bolt.Colors = Red

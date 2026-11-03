@@ -1,0 +1,6 @@
+{
+  "name": "Turn the Earth",
+  "manaCost": "{G}",
+  "type": "Instant",
+  "oracleText": "Choose up to three target cards in graveyards. The owners of those cards shuffle them into their libraries. You gain 2 life.\nFlashback {1}{G} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}
