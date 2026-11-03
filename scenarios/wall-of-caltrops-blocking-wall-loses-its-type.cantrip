@@ -1,0 +1,55 @@
+# A co-blocker that loses its Wall creature type before the trigger resolves makes the intervening condition false (CR 603.4).
+[Bot1 Deck]
+Wall of Caltrops
+Steel Wall
+Fortified Rampart
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Hill Giant
+Black Lotus
+Mountain
+Swamp
+Mox Jet
+Nameless Inversion
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wall of Caltrops.Cast
+Bot1.Hand.Fortified Rampart.Cast
+Bot1.Hand.Steel Wall.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hill Giant.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Hill Giant > Bot1)
+Bot1.Block(Wall of Caltrops > Hill Giant; Steel Wall > Hill Giant; Fortified Rampart > Hill Giant)
+? Stack.Count = 1
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Nameless Inversion.Cast(Steel Wall)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Wall of Caltrops.Keywords = Defender
+? Bot1.Battlefield.Steel Wall.Subtypes = (absent)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
