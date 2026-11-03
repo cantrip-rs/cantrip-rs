@@ -1,0 +1,42 @@
+# A creature with haste entering after Siren's Call must attack; the new Ornithopter cannot attack
+# and is spared at end step because it entered this turn (CR 508.1d).
+[Bot1 Deck]
+Siren's Call
+Rapier Wit
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Mountain
+Raging Goblin
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Siren's Call.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+[T2 Bot2.DeclareAttackers]
+! Bot2.Attack()
+Bot2.Attack(Raging Goblin > Bot1)
+[T3 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Raging Goblin.Power = 1
+Bot2.Battlefield.Ornithopter.Power = 0
