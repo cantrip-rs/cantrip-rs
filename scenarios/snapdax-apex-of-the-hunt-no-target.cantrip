@@ -1,0 +1,29 @@
+# Without a legal target the mutate trigger is not put onto the stack and gains no life (CR 603.3d).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Ornithopter
+Ornithopter
+Snapdax, Apex of the Hunt
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Snapdax, Apex of the Hunt.Cast(Bot1.Battlefield.Ornithopter#1; Ability: Mutate)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1)
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Snapdax, Apex of the Hunt.Power = 3
