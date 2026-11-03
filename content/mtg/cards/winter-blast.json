@@ -1,0 +1,6 @@
+{
+  "name": "Winter Blast",
+  "manaCost": "{X}{G}",
+  "type": "Sorcery",
+  "oracleText": "Tap X target creatures. Winter Blast deals 2 damage to each of those creatures with flying."
+}

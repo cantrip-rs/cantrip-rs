@@ -1,0 +1,23 @@
+# X=0 chooses no creatures, so even an available flying creature remains untapped and undamaged.
+[Bot1 Deck]
+Winter Blast
+Mox Emerald
+Ornithopter
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Winter Blast.Cast(X: 0)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Graveyard = Winter Blast
