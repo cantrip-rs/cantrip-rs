@@ -1,0 +1,8 @@
+{
+  "name": "Overlord of the Hauntwoods",
+  "manaCost": "{3}{G}{G}",
+  "type": "Enchantment Creature — Avatar Horror",
+  "power": 6,
+  "toughness": 5,
+  "oracleText": "Impending 4—{1}{G}{G} (If you cast this spell for its impending cost, it enters with four time counters and isn't a creature until the last is removed. At the beginning of your end step, remove a time counter from it.)\nWhenever this permanent enters or attacks, create a tapped colorless land token named Everywhere that is every basic land type."
+}

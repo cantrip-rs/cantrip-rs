@@ -1,0 +1,45 @@
+# Impending enters with four time counters and creates a tapped Everywhere; after the counters leave, attacking creates another (CR 702.176a, 603.2).
+[Bot1 Deck]
+Black Lotus
+Overlord of the Hauntwoods
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Overlord of the Hauntwoods.Cast(Ability: Impending)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Overlord of the Hauntwoods.Counters.Time = 4
+? Bot1.Battlefield.Overlord of the Hauntwoods.Types = Enchantment
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Everywhere.Tapped = true
+? Bot1.Battlefield.Everywhere.Colors = (absent)
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Everywhere.Activate(Ability: {U})
+? Bot1.Mana = {U}
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Count = 2
+[T7 Bot1.End]
+[T9 Bot1.DeclareAttackers]
+Bot1.Attack(Overlord of the Hauntwoods > Bot2)
+[T9 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Overlord of the Hauntwoods.Power = 6
+Bot1.Battlefield.Overlord of the Hauntwoods.Counters.Time = (absent)
+Bot1.Battlefield.Everywhere#1.Tapped = false
+Bot1.Battlefield.Everywhere#2.Tapped = true
+Bot1.Battlefield.Everywhere#1.Subtypes = Forest; Island; Mountain; Plains; Swamp
+Bot1.Battlefield.Everywhere#1.Supertypes = (absent)
+Bot2.Life = 14
