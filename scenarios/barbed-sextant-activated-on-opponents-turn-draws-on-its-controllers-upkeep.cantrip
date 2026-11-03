@@ -1,0 +1,25 @@
+# Activating during the opponent's turn schedules the draw for the controller's next upkeep, before the normal draw step.
+[Bot1 Deck]
+Barbed Sextant
+Mox Pearl
+Island x18
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Barbed Sextant.Cast
+? Bot1.Mana =
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Barbed Sextant.Activate(Color: Blue)
+? Bot1.Mana = {U}
+? Bot1.Hand.Count = 4
+[T3 Bot1.Draw]
+? Bot1.Hand.Count = 6
+[T4 Bot2.Main1]
+? Bot1.Hand.Count = 6
+[Expect]
+Bot1.Graveyard = Barbed Sextant

@@ -1,0 +1,78 @@
+# Locus gains Sextant’s mana ability: sacrificing Locus still schedules Sextant’s draw (CR 113.7a, 603.7).
+[Bot1 Deck]
+Island
+The Enigma Jewel
+Walking Ballista
+Aether Spellbomb
+Pyrite Spellbomb
+Barbed Sextant
+Goblin Bombardment
+Mountain
+Island
+Black Lotus
+Mountain
+Ornithopter
+Island x10
+
+[Bot2 Deck]
+Swamp x30
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.The Enigma Jewel.Cast
+Bot2.Pass
+Bot1.Hand.Walking Ballista.Cast(X: 0)
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Pyrite Spellbomb.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Barbed Sextant.Cast
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Island#1.Activate
+Bot1.Hand.Goblin Bombardment.Cast
+Bot1.Pass
+[T9 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.The Enigma Jewel.Activate(Ability: Craft)
+Bot1.Battlefield.The Enigma Jewel.Activate(Ability: Add)
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Graveyard.Walking Ballista; Aether Spellbomb; Pyrite Spellbomb; Barbed Sextant; Goblin Bombardment)
+[T11 Bot1.Main1]
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Locus of Enlightenment.Activate(Color: Green; Ability: Sacrifice this artifact)
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {G}
+? Bot1.Hand.Count = 1
+[T12 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 2
+[T13 Bot1.Upkeep]
+[Expect]
+Bot1.Hand.Count = 2
+Bot1.Graveyard = The Enigma Jewel; Black Lotus

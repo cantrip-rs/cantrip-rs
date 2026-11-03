@@ -1,0 +1,28 @@
+# Barbed Sextant is a mana ability and can be activated during a spell's mana payment (CR 605.3a).
+# Island pays the Sextant's cost and the white mana it makes pays for Giver of Runes.
+# These sources cannot pay two mana for Grizzly Bears: the Sextant costs one of the mana it makes.
+[Bot1 Deck]
+Barbed Sextant
+Mox Pearl
+Giver of Runes
+Grizzly Bears
+Island x17
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Barbed Sextant.Cast
+? Bot1.Mana =
+Bot1.Hand.Island.Play
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+Bot1.Hand.Giver of Runes.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Barbed Sextant.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Giver of Runes.Power = 1
+Bot1.Graveyard = Barbed Sextant
+Bot1.Mana =
