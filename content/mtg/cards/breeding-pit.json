@@ -1,0 +1,6 @@
+{
+  "name": "Breeding Pit",
+  "manaCost": "{3}{B}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, sacrifice this enchantment unless you pay {B}{B}.\nAt the beginning of your end step, create a 0/1 black Thrull creature token."
+}
