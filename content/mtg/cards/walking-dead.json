@@ -1,0 +1,8 @@
+{
+  "name": "Walking Dead",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Zombie",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{B}: Regenerate this creature."
+}
