@@ -1,0 +1,44 @@
+# Sleight of Mind changes Black Knight's color word from white to red (CR 612.2, 702.16b):
+# a white spell can then target it, while a red spell cannot.
+
+[Bot1 Deck]
+Mox Jet x2
+Black Knight
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Sleight of Mind
+Swords to Plowshares
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Black Knight.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+? Bot1.Battlefield.Black Knight.ProtectionFrom = White
+! Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Black Knight)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Black Knight)
+Bot2.Pass
+Bot1.Pass
+Bot2.Colors(White)
+Bot2.Colors(Red)
+? Bot1.Battlefield.Black Knight.ProtectionFrom = Red
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Black Knight)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Black Knight)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Black Knight = (absent)
+Exile = Black Knight
