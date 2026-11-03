@@ -1,0 +1,65 @@
+# Battle Frenzy pumps its controller's multicolor green creature +1/+1 and colorless creature +1/+0, leaving opposing creatures unchanged until the effects expire (CR 611.2a).
+
+[Bot1 Deck]
+Battle Frenzy
+Wildfire Wickerfolk
+Ornithopter
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Mountain
+Dwarven Trader
+Island x20
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wildfire Wickerfolk.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Dwarven Trader.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Battle Frenzy.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wildfire Wickerfolk.Power = 4
+? Bot1.Battlefield.Wildfire Wickerfolk.Toughness = 3
+? Bot1.Battlefield.Dwarven Trader.Power = 2
+? Bot1.Battlefield.Dwarven Trader.Toughness = 1
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+? Bot2.Battlefield.Elvish Mystic.Power = 1
+? Bot2.Battlefield.Elvish Mystic.Toughness = 1
+? Bot2.Battlefield.Ornithopter.Power = 0
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Wildfire Wickerfolk.Power = 3
+Bot1.Battlefield.Wildfire Wickerfolk.Toughness = 2
+Bot1.Battlefield.Dwarven Trader.Power = 1
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
