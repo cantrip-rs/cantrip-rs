@@ -1,0 +1,61 @@
+# Kry Shield prevents a controlled creature's combat and triggered damage this turn and adds its mana value to toughness; both effects expire (CR 615.1, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Hired Claw
+Kry Shield
+Island x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Hired Claw.Cast
+Bot1.Hand.Kry Shield.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Kry Shield.Activate(Bot2.Battlefield.Memnite)
+! Bot1.Battlefield.Kry Shield.Activate(Mox Pearl)
+Bot1.Battlefield.Kry Shield.Activate(Hired Claw)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Kry Shield.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hired Claw.Power = 1
+? Bot1.Battlefield.Hired Claw.Toughness = 3
+Bot1.Attack(Hired Claw > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Hired Claw.Toughness = 2
+[T5 Bot1.Main1]
+Bot1.Attack(Hired Claw > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 18
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Kry Shield.Activate(Hired Claw)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hired Claw.Toughness = 3
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Hired Claw.Power = 1
+Bot1.Battlefield.Hired Claw.Toughness = 2
+Bot2.Life = 18
