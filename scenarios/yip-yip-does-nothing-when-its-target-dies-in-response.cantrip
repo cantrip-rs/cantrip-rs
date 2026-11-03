@@ -1,0 +1,35 @@
+# Yip Yip! with its only target gone on resolution (CR 608.2b): Bot1 targets its White Knight (2/2) and Bot2 answers with Lightning
+# Bolt, killing it before the +2/+2 could matter. Yip Yip! is countered on resolution and does nothing, and both go to their graveyards.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+White Knight
+Yip Yip!
+Plains x16
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.White Knight.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Yip Yip!.Cast(Bot1.Battlefield.White Knight)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.White Knight)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Yip Yip!; White Knight
+Bot2.Graveyard = Lightning Bolt
+Stack.Count = 0

@@ -1,0 +1,39 @@
+# Yip Yip! on an Ally: Invasion Reinforcements makes a 1/1 white Ally token; Yip Yip! makes it 3/3 and "it also gains flying until
+# end of turn" (CR 611.2a). On Bot2's turn the token is 1/1 with no flying again (CR 514.2).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Invasion Reinforcements
+Yip Yip!
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Invasion Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ally Token.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Yip Yip!.Cast(Bot1.Battlefield.Ally Token)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ally Token.Power = 3
+? Bot1.Battlefield.Ally Token.Toughness = 3
+? Bot1.Battlefield.Ally Token.Keywords = Flying
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Ally Token.Power = 1
+? Bot1.Battlefield.Ally Token.Toughness = 1
+? Bot1.Battlefield.Ally Token.Keywords = (absent)
+
+[Expect]
+Bot1.Graveyard = Yip Yip!
