@@ -1,0 +1,6 @@
+{
+  "name": "Disrupting Scepter",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "{3}, {T}: Target player discards a card. Activate only during your turn."
+}
