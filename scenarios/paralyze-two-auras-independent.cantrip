@@ -1,0 +1,39 @@
+# A second Paralyze can enchant the already tapped creature; paying one of the two upkeep triggers untaps it (CR 603.3, 701.26b).
+[Bot1 Deck]
+Mox Jet x2
+Paralyze x2
+Island x20
+[Bot2 Deck]
+Ornithopter
+Mox Sapphire x4
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Paralyze.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Paralyze.Cast(Bot2.Battlefield.Ornithopter)
+[T4 Bot2.Upkeep]
+Bot2.Battlefield.Mox Sapphire#1.Activate
+Bot2.Battlefield.Mox Sapphire#2.Activate
+Bot2.Battlefield.Mox Sapphire#3.Activate
+Bot2.Battlefield.Mox Sapphire#4.Activate
+Bot2.PayCost
+? Bot2.Battlefield.Ornithopter.Tapped = false
+Bot2.Decline
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = false
