@@ -68,6 +68,16 @@ pub fn target_creature_gets<const P: i16, const T: i16>(g: &mut dyn Game, item: 
     Ok(())
 }
 
+/// "Enchanted/equipped creature gets +P/+T until end of turn" (CR 608.2h, 611.2a): use the attachment as the ability
+/// resolves, or as the source last existed, and affect only that same object if it remains on the battlefield.
+/// Firebreathing and Umezawa's Jitte print this recipe.
+pub fn attached_creature_gets<const P: i16, const T: i16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = g.obj(item.object).attached_to {
+        crate::pump(g, item.object, creature, P, T);
+    }
+    Ok(())
+}
+
 /// "Target creature gets +`P`/+`T` and gains first strike until end of turn" (CR 611.2a, 702.7): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Interjection
 /// (+2/+2), Charge the Sanctum's single-target mode (+2/+0) and Riverguard's Reflexes (+2/+2) print it.

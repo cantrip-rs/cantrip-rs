@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::attach::equip;
-use cantrip_mechanics::{effects, pump, targets};
+use cantrip_mechanics::{effects, targets};
 use cantrip_oracle as oracle;
 
 /// "Whenever equipped creature deals combat damage": a creature the Jitte is attached to dealing more than 0 combat
@@ -20,17 +20,8 @@ fn two_charge_counters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend
     Ok(())
 }
 
-/// Equipped creature gets +2/+2 until end of turn: whatever the Jitte is attached to as the ability resolves, or the
-/// one it was last attached to if it has left the battlefield (CR 608.2h).
-fn pump_equipped(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = g.obj(item.object).attached_to {
-        pump(g, item.object, creature, 2, 2);
-    }
-    Ok(())
-}
-
 static MODAL: ModalDef = modes(&[
-    mode(pump_equipped, "Equipped creature gets +2/+2 until end of turn."),
+    mode(effects::attached_creature_gets::<2, 2>, "Equipped creature gets +2/+2 until end of turn."),
     mode(effects::target_creature_gets::<-1, -1>, "Target creature gets -1/-1 until end of turn.")
         .targets(&[targets::CREATURE]),
     mode(|g, item| cantrip_mechanics::effects::gain_life(g, item, 2), "You gain 2 life."),
