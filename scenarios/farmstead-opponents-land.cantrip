@@ -1,0 +1,31 @@
+# Farmstead grants the ability to the enchanted land, so its controller pays on their upkeep and gains life (CR 603.3a).
+[Bot1 Deck]
+Farmstead
+Black Lotus
+Island x20
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Island x20
+
+[Actions]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farmstead.Cast(Bot2.Battlefield.Plains)
+[T4 Bot2.Upkeep]
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.PayCost
+? Bot2.Mana =
+? Bot2.Life = 21
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 21
+Bot1.Battlefield.Farmstead.AttachedTo = Plains

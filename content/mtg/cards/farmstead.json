@@ -1,0 +1,6 @@
+{
+  "name": "Farmstead",
+  "manaCost": "{W}{W}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land\nEnchanted land has \"At the beginning of your upkeep, you may pay {W}{W}. If you do, you gain 1 life.\""
+}
