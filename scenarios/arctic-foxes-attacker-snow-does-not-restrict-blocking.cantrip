@@ -1,0 +1,40 @@
+# A snow nonland controlled by the defender and a snow land controlled by the attacker does not stop the defender's 2-power creature from blocking when the defender has no snow land (CR 509.1b).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Arctic Foxes
+Snow-Covered Forest
+Island x23
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Phyrexian Soulgorger
+Grizzly Bears
+Island x25
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Arctic Foxes.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Phyrexian Soulgorger.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Arctic Foxes > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Grizzly Bears > Arctic Foxes)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Arctic Foxes.Power = 1
+Bot2.Battlefield.Grizzly Bears.Damage = 1
+Bot2.Life = 20
