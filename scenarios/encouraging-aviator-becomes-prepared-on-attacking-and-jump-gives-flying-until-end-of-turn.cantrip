@@ -25,6 +25,7 @@ Bot1.Hand.Encouraging Aviator.Cast
 Bot1.Pass
 [T1 Bot1.Main2]
 ? Bot1.Battlefield.Encouraging Aviator.Prepared = (absent)
+? Bot1.Battlefield.Encouraging Aviator.Keywords = Flying
 ? Exile.Count = 0
 [T3 Bot1.Main1]
 Bot1.Attack(Encouraging Aviator > Bot2)
