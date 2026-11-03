@@ -1,0 +1,54 @@
+# Memory Deluge takes two of the four cards seen for four mana, and flashback sees seven for seven mana (CR 608.2c, 702.34a).
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Memory Deluge
+Island
+Mountain
+Forest
+Plains
+Swamp
+Grizzly Bears
+Hill Giant
+Wind Drake
+Serra Angel
+Shock
+Lightning Bolt
+Giant Growth
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Memory Deluge.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Arrange(Mountain | Swamp; Forest; Plains)
+! Bot1.Arrange(Mountain; Swamp; Forest | Plains)
+Bot1.Arrange(Mountain; Swamp | Forest; Plains)
+? Bot1.Revealed = (absent)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Graveyard.Memory Deluge.Cast(Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Grizzly Bears; Giant Growth | Hill Giant; Wind Drake; Serra Angel; Shock; Lightning Bolt)
+
+[Expect]
+Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Hand = Island; Mountain; Swamp; Grizzly Bears; Giant Growth
+Exile = Memory Deluge
+Bot2.Library.Count = 13
