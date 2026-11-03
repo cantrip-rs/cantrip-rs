@@ -1,0 +1,25 @@
+# Any number includes zero even while Fury itself is a legal damage target (CR 107.1c, 601.2d).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Fury
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Fury.Cast
+Bot1.Divide()
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Fury.Power = 3
+Bot1.Battlefield.Fury.Damage = 0
+Bot1.Life = 20
+Bot2.Life = 20
+Stack.Count = 0

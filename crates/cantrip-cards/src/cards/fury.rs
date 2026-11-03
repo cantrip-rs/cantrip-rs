@@ -8,7 +8,7 @@ fn red_card(q: &dyn Query, asker: &Asker, id: ObjectId) -> bool {
 }
 
 /// Fury deals 4 damage divided as you choose among any number of target creatures and/or planeswalkers (CR 601.2d):
-/// each target takes its own share, and one that has since become illegal is left out with it.
+/// any number includes zero (CR 107.1c); each chosen target takes its own share, and an illegal target is left out.
 fn divided_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     damage_divided(g, item);
     Ok(())
@@ -17,7 +17,7 @@ fn divided_damage(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(THIS_ENTERS, divided_damage, "When this creature enters, it deals 4 damage divided as you choose among any number of target creatures and/or planeswalkers.")
-            .targets(&[targets::CREATURE_OR_PLANESWALKER.between(1, TargetSpec::COUNTED)])
+            .targets(&[targets::CREATURE_OR_PLANESWALKER.between(0, TargetSpec::COUNTED)])
             .divide(Divide { total: 4, of_x: None }),
         evoke::sacrifice_trigger("When Fury enters, if its evoke cost was paid, its controller sacrifices it."),
     ],

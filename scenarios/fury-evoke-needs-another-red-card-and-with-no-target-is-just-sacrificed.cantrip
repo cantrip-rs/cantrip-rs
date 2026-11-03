@@ -1,7 +1,6 @@
 # "Evoke - Exile a red card from your hand" (CR 118.9, 702.74): on turn 1 Bot1's hand is Fury and six Mountains - no other red
 # card - so the evoke way is not offered (a Mountain is colorless; Fury itself cannot pay for itself). On turn 3 it has drawn a
-# Lightning Bolt and evokes Fury exiling it (the positive control). Bot2 controls no creature or planeswalker, so the enters trigger,
-# which needs at least one target, is removed from the stack (CR 603.3d); the evoke trigger still sacrifices Fury.
+# Lightning Bolt and evokes Fury exiling it (the positive control). Bot2 controls no creature or planeswalker. The damage ability may choose no targets (CR 107.1c); the evoke trigger still sacrifices Fury.
 
 [Bot1 Deck]
 Fury
