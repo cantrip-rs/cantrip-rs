@@ -1,0 +1,47 @@
+# Atog sacrifices its own artifacts as costs, gains +2/+2 for each activation, and loses the bonuses at cleanup (CR 701.21a, 514.2).
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Atog
+Ornithopter
+Mountain x16
+
+[Bot2 Deck]
+Mox Emerald
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Atog.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Atog.Activate
+! Bot1.Choose(Bot2.Battlefield.Mox Emerald)
+! Bot1.Choose(Bot1.Battlefield.Mountain)
+! Bot1.Choose(Bot1.Battlefield.Atog)
+Bot1.Choose(Ornithopter)
+? Bot1.Graveyard = Ornithopter
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Atog.Power = 3
+? Bot1.Battlefield.Atog.Toughness = 4
+Bot1.Battlefield.Atog.Activate
+Bot1.Choose(Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Atog.Power = 5
+? Bot1.Battlefield.Atog.Toughness = 6
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Atog.Power = 1
+Bot1.Battlefield.Atog.Toughness = 2
+Bot1.Graveyard = Mox Pearl; Ornithopter
+Bot2.Battlefield = Mox Emerald
