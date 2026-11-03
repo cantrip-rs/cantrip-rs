@@ -1,0 +1,8 @@
+{
+  "name": "Cave People",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Human",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Whenever this creature attacks, it gets +1/-2 until end of turn.\n{1}{R}{R}, {T}: Target creature gains mountainwalk until end of turn. (It can't be blocked as long as defending player controls a Mountain.)"
+}
