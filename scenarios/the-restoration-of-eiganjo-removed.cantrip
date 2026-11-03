@@ -1,0 +1,35 @@
+# If the Saga is destroyed before chapter III resolves, it cannot be exiled and returned transformed (CR 400.7).
+[Bot1 Deck]
+Black Lotus
+The Restoration of Eiganjo
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Island
+Disenchant
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.The Restoration of Eiganjo.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Choose()
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.The Restoration of Eiganjo)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Architect of Restoration = (absent)
+Bot1.Graveyard = The Restoration of Eiganjo; Black Lotus

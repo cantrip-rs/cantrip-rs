@@ -1,0 +1,36 @@
+# A player may find no Plains, and may decline the second chapter (CR 701.23, 714.2).
+[Bot1 Deck]
+Black Lotus
+The Restoration of Eiganjo
+Grizzly Bears
+Island
+Island
+Island
+Island
+Plains
+Tundra
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x6
+Plains
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.The Restoration of Eiganjo.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+? Bot1.Shuffles = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Choose()
+[Expect]
+Bot1.Hand.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears = (absent)

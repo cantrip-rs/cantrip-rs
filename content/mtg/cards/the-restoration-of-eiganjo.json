@@ -1,0 +1,19 @@
+{
+  "name": "The Restoration of Eiganjo",
+  "manaCost": "{2}{W}",
+  "type": "Enchantment — Saga",
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter.)\nI — Search your library for a basic Plains card, reveal it, put it into your hand, then shuffle.\nII — You may discard a card. When you do, return target permanent card with mana value 2 or less from your graveyard to the battlefield tapped.\nIII — Exile this Saga, then return it to the battlefield transformed under your control.",
+  "backFace": {
+    "name": "Architect of Restoration",
+    "colorIndicator": [
+      "White"
+    ],
+    "type": "Enchantment Creature — Fox Monk",
+    "power": 3,
+    "toughness": 4,
+    "oracleText": "Vigilance\nWhenever this creature attacks or blocks, create a 1/1 colorless Spirit creature token.",
+    "keywords": [
+      "Vigilance"
+    ]
+  }
+}

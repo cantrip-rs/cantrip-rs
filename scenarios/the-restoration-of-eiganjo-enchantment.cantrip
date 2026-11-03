@@ -1,0 +1,48 @@
+# The reflexive trigger may return a discarded enchantment, tapped (CR 603.12).
+
+[Bot1 Deck]
+Black Lotus
+The Restoration of Eiganjo
+Military Intelligence
+Island x4
+Plains
+Plains
+Tundra
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.The Restoration of Eiganjo.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Search(Island)
+! Bot1.Search(Tundra)
+! Bot1.Search(Plains; Plains)
+Bot1.Search(Plains)
+? Bot1.Revealed = Plains
+? Bot1.Shuffles = 1
+[T3 Bot1.Main1]
+Bot1.Choose(Military Intelligence)
+Bot1.Target(Bot1.Graveyard.Military Intelligence)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Military Intelligence.Tapped = true
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Architect of Restoration.Transformed = true
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Architect of Restoration > Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Spirit Token.Tapped = false
+Bot1.Battlefield.Spirit Token.Supertypes = (absent)
+Bot1.Battlefield.Architect of Restoration.Tapped = false
+Bot1.Battlefield.Spirit Token.Power = 1
+Bot1.Battlefield.Spirit Token.Toughness = 1
+Bot1.Battlefield.Spirit Token.Colors = (absent)
+Bot1.Battlefield.Spirit Token.Token = true

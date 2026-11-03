@@ -1,0 +1,61 @@
+# The Saga searches for Plains, returns the discarded creature tapped, and its transformed Architect makes Spirits when blocking and attacking (CR 714.2, 702.20).
+[Bot1 Deck]
+Black Lotus
+The Restoration of Eiganjo
+Grizzly Bears
+Island
+Island
+Island
+Island
+Plains
+Tundra
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x6
+Plains
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.The Restoration of Eiganjo.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Tundra)
+Bot1.Search(Plains)
+? Bot1.Hand.Plains.Colors =
+? Bot1.Shuffles = 1
+? Bot1.Revealed = Plains
+? Bot2.Library.Plains.Colors =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Choose(Grizzly Bears)
+Bot1.Target(Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+? Bot1.Battlefield.Architect of Restoration.Transformed = true
+? Bot1.Battlefield.Architect of Restoration.Power = 3
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Architect of Restoration > Grizzly Bears)
+[T6 Bot2.Main2]
+? Bot1.Battlefield.Spirit Token.Power = 1
+? Bot1.Battlefield.Spirit Token.Toughness = 1
+? Bot1.Battlefield.Spirit Token.Colors = (absent)
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Architect of Restoration > Bot2)
+[T7 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Architect of Restoration.Tapped = false
+Bot1.Battlefield.Spirit Token#2.Power = 1
+Bot2.Life = 17

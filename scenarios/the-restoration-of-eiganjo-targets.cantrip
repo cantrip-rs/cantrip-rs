@@ -1,0 +1,52 @@
+# Chapter II targets a permanent card of mana value at most two in its controller's graveyard, including the card just discarded (CR 603.12).
+[Bot1 Deck]
+Mox Ruby
+Black Lotus
+Faithless Looting
+The Restoration of Eiganjo
+Wind Drake
+Grizzly Bears
+Island
+Island
+Island
+Plains
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Faithless Looting
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Wind Drake; Grizzly Bears)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.The Restoration of Eiganjo.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Search(Plains)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Grizzly Bears; Island)
+[T3 Bot1.Main1]
+! Bot1.Choose(Plains; Island)
+Bot1.Choose(Plains)
+! Bot1.Target(Bot1.Graveyard.Wind Drake)
+! Bot1.Target(Bot1.Graveyard.Faithless Looting)
+! Bot1.Target(Bot2.Graveyard.Grizzly Bears)
+Bot1.Target(Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot1.Graveyard.Wind Drake.Power = 2
+Bot2.Graveyard.Grizzly Bears.Power = 2
