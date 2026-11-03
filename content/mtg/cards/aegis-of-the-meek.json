@@ -1,0 +1,6 @@
+{
+  "name": "Aegis of the Meek",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "{1}, {T}: Target 1/1 creature gets +1/+2 until end of turn."
+}
