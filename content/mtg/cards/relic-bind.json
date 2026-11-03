@@ -1,0 +1,6 @@
+{
+  "name": "Relic Bind",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant artifact an opponent controls\nWhenever enchanted artifact becomes tapped, choose one —\n• This Aura deals 1 damage to target player or planeswalker.\n• Target player gains 1 life."
+}
