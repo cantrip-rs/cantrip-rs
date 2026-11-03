@@ -1,0 +1,38 @@
+# The targeted blue creature returns to hand in response, so the ability does not destroy it; a later activation destroys a different blue creature (CR 608.2b).
+[Bot1 Deck]
+Spinal Villain
+Black Lotus
+Mox Sapphire
+Aven Envoy
+Mountain x20
+
+[Bot2 Deck]
+Aven Envoy
+Unsummon
+Mox Sapphire
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Spinal Villain.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aven Envoy.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aven Envoy.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Spinal Villain.Activate(Bot2.Battlefield.Aven Envoy)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Unsummon.Cast(Bot2.Battlefield.Aven Envoy)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Spinal Villain.Activate(Bot1.Battlefield.Aven Envoy)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Hand.Aven Envoy.Colors = Blue
+Bot1.Graveyard.Aven Envoy.Colors = Blue

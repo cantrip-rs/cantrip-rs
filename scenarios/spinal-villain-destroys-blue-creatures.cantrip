@@ -1,0 +1,56 @@
+# Spinal Villain taps to destroy its controller's blue creature and, after untapping, an opponent's blue-black creature; it cannot target a green creature (CR 701.8a).
+[Bot1 Deck]
+Spinal Villain
+Black Lotus
+Mox Sapphire
+Aven Envoy
+Mountain x20
+
+[Bot2 Deck]
+Baleful Strix
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Llanowar Elves
+Island
+Spreading Seas
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Spinal Villain.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aven Envoy.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Baleful Strix.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Spinal Villain.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot1.Battlefield.Spinal Villain.Activate(Bot1.Battlefield.Aven Envoy)
+? Bot1.Battlefield.Spinal Villain.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Aven Envoy.Colors = Blue
+! Bot1.Battlefield.Spinal Villain.Activate(Bot2.Battlefield.Baleful Strix)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Spreading Seas.Cast(Bot2.Battlefield.Island)
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Spinal Villain.Activate(Bot2.Battlefield.Spreading Seas)
+Bot1.Battlefield.Spinal Villain.Activate(Bot2.Battlefield.Baleful Strix)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard.Baleful Strix.Colors = Black; Blue
+Bot2.Battlefield.Llanowar Elves.Power = 1
