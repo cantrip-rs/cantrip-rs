@@ -1,0 +1,42 @@
+# Sage taps and sacrifices an artifact as its cost, then draws exactly one card (CR 602.2b, 121.1).
+[Bot1 Deck]
+Sage of Lat-Nam
+Mox Sapphire
+Mox Pearl
+Ornithopter
+Island
+Island
+Island
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sage of Lat-Nam.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Sage of Lat-Nam.Activate
+! Bot1.Choose()
+! Bot1.Choose(Island)
+! Bot1.Choose(Ornithopter; Mox Pearl)
+Bot1.Choose(Tap Sage of Lat-Nam)
+Bot1.Choose(Ornithopter)
+? Bot1.Mana =
+? Bot1.Battlefield.Sage of Lat-Nam.Tapped = true
+? Bot1.Graveyard = Ornithopter
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Sage of Lat-Nam.Activate
+
+[Expect]
+Bot1.Battlefield.Sage of Lat-Nam.Tapped = true
+Bot1.Graveyard = Ornithopter
+Bot1.Hand = Forest; Island; Island; Island
