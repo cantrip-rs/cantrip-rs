@@ -1,0 +1,60 @@
+# The Egg needs two hatchling counters, each costing {3} and tapping it; after the second resolves it can be sacrificed while tapped to put one creature from hand onto the battlefield (CR 602.1a, 602.1b).
+[Bot1 Deck]
+Triassic Egg
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Grizzly Bears
+Ornithopter
+Forest x20
+
+[Bot2 Deck]
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triassic Egg.Cast
+? Bot1.Mana =
+! Bot1.Battlefield.Triassic Egg.Activate(Ability: Sacrifice)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Triassic Egg.Activate(Ability: hatchling counter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Triassic Egg.Counters.Hatchling = 1
+! Bot1.Battlefield.Triassic Egg.Activate(Ability: Sacrifice)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Triassic Egg.Activate(Ability: hatchling counter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Triassic Egg.Counters.Hatchling = 2
+? Bot1.Battlefield.Triassic Egg.Tapped = true
+Bot1.Battlefield.Triassic Egg.Activate(Ability: Sacrifice)
+! Bot1.Modes(Count: 0)
+Bot1.Modes(You may put a creature)
+! Bot1.Choose(Grizzly Bears; Ornithopter)
+! Bot1.Choose(Forest)
+Bot1.Choose(Grizzly Bears)
+[Expect]
+Bot1.Graveyard = Triassic Egg
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot2.Hand.Grizzly Bears.Colors = Green
