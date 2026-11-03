@@ -1,0 +1,6 @@
+{
+  "name": "Enigmatic Incarnation",
+  "manaCost": "{2}{G}{U}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your end step, you may sacrifice another enchantment. If you do, search your library for a creature card with mana value equal to 1 plus the sacrificed enchantment's mana value, put that card onto the battlefield, then shuffle."
+}

@@ -1,0 +1,36 @@
+# An enchantment that cannot be sacrificed is not eligible for the ability (CR 701.17a).
+[Bot1 Deck]
+Black Lotus x3
+Mox Emerald
+Enigmatic Incarnation
+Enchanted Evening
+Hithlain Rope
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Enigmatic Incarnation.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Enchanted Evening.Cast
+[T1 Bot1.End]
+Bot1.Choose()
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Hithlain Rope.Cast
+[T3 Bot1.End]
+! Bot1.Choose(Hithlain Rope)
+Bot1.Choose(Enchanted Evening)
+Bot1.Search()
+[Expect]
+Bot1.Battlefield.Hithlain Rope.Types = Artifact
+Bot1.Shuffles = 1

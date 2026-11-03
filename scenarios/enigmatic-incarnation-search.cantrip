@@ -1,0 +1,43 @@
+# Sacrificing another enchantment searches for a creature with mana value one greater (CR 603.1).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald x3
+Enigmatic Incarnation
+Fang of Shigeki
+Fang of Shigeki
+Grizzly Bears x2
+Hill Giant
+Island x20
+
+[Bot2 Deck]
+Island x7
+Grizzly Bears
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Enigmatic Incarnation.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Fang of Shigeki.Cast
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Hand.Fang of Shigeki.Cast
+[T1 Bot1.End]
+! Bot1.Choose(Enigmatic Incarnation)
+! Bot1.Choose(Fang of Shigeki#1; Fang of Shigeki#2)
+Bot1.Choose(Fang of Shigeki)
+! Bot1.Search(Hill Giant)
+! Bot1.Search(Grizzly Bears#1; Grizzly Bears#2)
+Bot1.Search(Grizzly Bears)
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Graveyard = Fang of Shigeki; Black Lotus
+Bot1.Shuffles = 1
+Bot2.Library.Grizzly Bears.Power = 2

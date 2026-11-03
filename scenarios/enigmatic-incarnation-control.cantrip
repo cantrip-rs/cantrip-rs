@@ -1,0 +1,34 @@
+# Only an enchantment controlled by the ability's controller can be sacrificed (CR 701.17a).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald x2
+Enigmatic Incarnation
+Fang of Shigeki
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Fang of Shigeki
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Enigmatic Incarnation.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Fang of Shigeki.Cast
+[T1 Bot1.End]
+Bot1.Choose()
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Fang of Shigeki.Cast
+[T3 Bot1.End]
+! Bot1.Choose(Bot2.Battlefield.Fang of Shigeki)
+Bot1.Choose(Bot1.Battlefield.Fang of Shigeki)
+Bot1.Search()
+[Expect]
+Bot2.Battlefield.Fang of Shigeki.Power = 1
+Bot1.Shuffles = 1
