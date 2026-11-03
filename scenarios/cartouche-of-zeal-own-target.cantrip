@@ -1,0 +1,34 @@
+# The enters ability can target its controller’s own enchanted creature (CR 115.1d).
+[Bot1 Deck]
+Mox Emerald x2
+Mox Ruby
+Grizzly Bears
+Cartouche of Zeal
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Cartouche of Zeal.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Cartouche of Zeal.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Battlefield.Grizzly Bears.Power = 3
+? Bot1.Battlefield.Grizzly Bears.Toughness = 3
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 3
+Bot1.Battlefield.Cartouche of Zeal.AttachedTo = Grizzly Bears
