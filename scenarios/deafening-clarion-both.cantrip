@@ -1,0 +1,48 @@
+# Both modes deal three damage to each creature and grant lifelink only to creatures controlled by the caster until end of turn (CR 700.2, 120.3, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Pearl
+Deafening Clarion
+Serra Angel
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Serra Angel
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Serra Angel.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Hand.Serra Angel.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Deafening Clarion.Cast
+! Bot1.Modes(Count: 0)
+Bot1.Modes(1; 2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Serra Angel.Damage = 3
+? Bot2.Battlefield.Serra Angel.Damage = 3
+? Bot1.Battlefield.Serra Angel.Keywords = Flying; Lifelink; Vigilance
+? Bot2.Battlefield.Serra Angel.Keywords = Flying; Vigilance
+[T4 Bot2.Upkeep]
+[Expect]
+Bot1.Battlefield.Serra Angel.Keywords = Flying; Vigilance
+Bot2.Battlefield.Serra Angel.Keywords = Flying; Vigilance
