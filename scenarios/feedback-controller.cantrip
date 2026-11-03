@@ -1,0 +1,33 @@
+# Feedback enchants an enchantment and damages its controller at that player's upkeep (CR 603.2, 120.3a).
+
+[Bot1 Deck]
+Black Lotus
+Feedback
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Forest
+Fang of Shigeki
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Fang of Shigeki.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Hand.Feedback.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Hand.Feedback.Cast(Bot2.Battlefield.Fang of Shigeki)
+? Bot1.Mana =
+[T4 Bot2.Main1]
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 19
+Bot1.Battlefield.Feedback.AttachedTo = Fang of Shigeki

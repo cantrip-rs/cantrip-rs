@@ -1,0 +1,38 @@
+# Taking the enchanted creature after the upkeep trigger leaves that trigger aimed at the old controller; the next upkeep uses the new controller (CR 603.3, 608.2h).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Island
+Old Man of the Sea
+Feedback
+Island x20
+[Bot2 Deck]
+Forest
+Fang of Shigeki
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Old Man of the Sea.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Fang of Shigeki.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Feedback.Cast(Bot2.Battlefield.Fang of Shigeki)
+[T4 Bot2.Upkeep]
+Bot1.Battlefield.Old Man of the Sea.Activate(Bot2.Battlefield.Fang of Shigeki)
+[T4 Bot2.Main1]
+? Bot1.Life = 20
+? Bot2.Life = 19
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
