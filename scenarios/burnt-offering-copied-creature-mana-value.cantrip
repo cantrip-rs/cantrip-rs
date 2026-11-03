@@ -1,0 +1,34 @@
+# A Clone copying Ornithopter has mana value zero as it leaves, although Clone in the graveyard has mana value four (CR 608.2h, 707.2).
+# Burnt Offering therefore adds no mana.
+[Bot1 Deck]
+Ornithopter
+Black Lotus
+Mox Sapphire
+Clone
+Mox Jet
+Burnt Offering
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clone.Cast
+Bot1.Accept
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Burnt Offering.Cast
+Bot1.Choose(Pay mana)
+Bot1.Choose(Bot1.Battlefield.Ornithopter#2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Colors
+[Expect]
+Bot1.Mana =
+Bot1.Graveyard = Burnt Offering; Clone; Black Lotus
