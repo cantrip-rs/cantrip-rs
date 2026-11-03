@@ -1,0 +1,32 @@
+# Repudiate counters the selected ability when two different activated abilities are on the stack (CR 115.1, 701.5a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Terramorphic Expanse
+Repudiate // Replicate
+Island x20
+[Bot2 Deck]
+Evolving Wilds
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Terramorphic Expanse.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Evolving Wilds.Play
+Bot2.Battlefield.Evolving Wilds.Activate
+Bot2.Pass
+Bot1.Battlefield.Terramorphic Expanse.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Repudiate // Replicate.Cast(Stack.Terramorphic Expanse; Ability: Repudiate)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Search(Island)
+[Expect]
+Bot1.Shuffles = 0
+Bot2.Shuffles = 1
+Bot1.Battlefield.Island = (absent)
+Bot2.Battlefield.Island.Tapped = true

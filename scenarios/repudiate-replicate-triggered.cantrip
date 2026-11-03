@@ -1,0 +1,31 @@
+# Repudiate can counter a triggered ability (CR 603.3, 701.5a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Repudiate // Replicate
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Rampaging Ferocidon
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Rampaging Ferocidon.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Repudiate // Replicate.Cast(Stack.Rampaging Ferocidon; Ability: Repudiate)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Ornithopter.Toughness = 2

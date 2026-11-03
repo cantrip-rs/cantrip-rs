@@ -1,0 +1,18 @@
+{
+  "name": "Repudiate // Replicate",
+  "oracleText": "",
+  "halves": [
+    {
+      "name": "Repudiate",
+      "manaCost": "{G/U}{G/U}",
+      "type": "Instant",
+      "oracleText": "Counter target activated or triggered ability. (Mana abilities can't be targeted.)"
+    },
+    {
+      "name": "Replicate",
+      "manaCost": "{1}{G}{U}",
+      "type": "Sorcery",
+      "oracleText": "Create a token that's a copy of target creature you control."
+    }
+  ]
+}

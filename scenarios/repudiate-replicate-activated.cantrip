@@ -1,0 +1,33 @@
+# Repudiate counters an opponent's activated ability while leaving a spell on the stack alone (CR 602.2, 701.5a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Repudiate // Replicate
+Island x20
+[Bot2 Deck]
+Evolving Wilds
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Evolving Wilds.Play
+Bot2.Battlefield.Evolving Wilds.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+! Bot1.Hand.Repudiate // Replicate.Cast(Stack.Shock; Ability: Repudiate)
+Bot1.Hand.Repudiate // Replicate.Cast(Stack.Evolving Wilds; Ability: Repudiate)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.End]
+[Expect]
+Bot2.Battlefield.Island = (absent)
+Bot2.Shuffles = 0
+Bot1.Life = 18
