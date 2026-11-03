@@ -1,0 +1,8 @@
+{
+  "name": "Combat Medic",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Human Cleric Soldier",
+  "power": 0,
+  "toughness": 2,
+  "oracleText": "{1}{W}: Prevent the next 1 damage that would be dealt to any target this turn."
+}

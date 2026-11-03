@@ -1,0 +1,44 @@
+# Combat Medic shields its controller's Ornithopter against one of Shock's two damage; a land is not any target (CR 115.4, 615.7).
+[Bot1 Deck]
+Combat Medic
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Shock
+Plains
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Combat Medic.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+! Bot1.Battlefield.Combat Medic.Activate(Bot1.Battlefield.Plains)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Combat Medic.Activate(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Damage = 1
+Prevented = 1 Shock > Ornithopter by Combat Medic
