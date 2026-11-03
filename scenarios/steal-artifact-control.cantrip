@@ -1,0 +1,28 @@
+# The Aura enchants an artifact creature and transfers control only of that artifact (CR 702.5a, 613.1b).
+[Bot1 Deck]
+Mox Sapphire
+Black Lotus
+Steal Artifact
+Island x20
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Hand.Steal Artifact.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Steal Artifact.Cast(Bot2.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Steal Artifact.AttachedTo = Ornithopter
+Bot2.Battlefield.Ornithopter.Power = 0

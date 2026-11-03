@@ -1,0 +1,6 @@
+{
+  "name": "Steal Artifact",
+  "manaCost": "{2}{U}{U}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant artifact\nYou control enchanted artifact."
+}
