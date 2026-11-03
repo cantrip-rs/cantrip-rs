@@ -1,0 +1,6 @@
+{
+  "name": "Rocket Launcher",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "{2}: This artifact deals 1 damage to any target. Destroy this artifact at the beginning of the next end step. Activate only if you've controlled this artifact continuously since the beginning of your most recent turn."
+}

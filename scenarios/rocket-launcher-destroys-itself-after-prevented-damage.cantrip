@@ -1,0 +1,40 @@
+# Preventing the damage does not stop the resolved ability from scheduling destruction at the next end step (CR 603.7).
+[Bot1 Deck]
+Rocket Launcher
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x20
+[Bot2 Deck]
+Healing Salve
+Mox Pearl
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Rocket Launcher.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Rocket Launcher.Activate(Bot2)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Healing Salve.Cast
+Bot2.Modes(Prevent the next 3 damage)
+Bot2.Target(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+? Bot1.Battlefield.Rocket Launcher.Types = Artifact
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Rocket Launcher; Black Lotus
