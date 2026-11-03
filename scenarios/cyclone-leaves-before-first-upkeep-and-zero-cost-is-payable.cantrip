@@ -1,0 +1,36 @@
+# Removing Cyclone before its first upkeep trigger resolves leaves zero wind counters; the resulting {0} payment is available without green mana (CR 608.2h, 118.5).
+[Bot1 Deck]
+Cyclone
+Black Lotus
+Mox Pearl
+Forest x20
+[Bot2 Deck]
+Disenchant
+Mox Pearl
+Mox Sapphire
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cyclone.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Cyclone)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Graveyard = Cyclone; Black Lotus
+Bot2.Pass
+Bot1.PayCost
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Graveyard = Cyclone; Black Lotus

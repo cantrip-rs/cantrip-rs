@@ -1,0 +1,67 @@
+# Cyclone adds a counter before its green upkeep cost, deals that much damage to each player and creature, and is sacrificed when the next cost cannot be paid (CR 603.2, 120.3, 701.21a).
+[Bot1 Deck]
+Cyclone
+Black Lotus x2
+Mox Pearl
+Mox Emerald x2
+Wall of Ice
+Forest x20
+[Bot2 Deck]
+Black Lotus
+Wall of Ice
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Cyclone.Cast
+Bot1.Hand.Wall of Ice.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Wall of Ice.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cyclone.Counters.Wind = 1
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Life = 19
+? Bot2.Life = 19
+? Bot1.Battlefield.Wall of Ice.Damage = 1
+? Bot2.Battlefield.Wall of Ice.Damage = 1
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cyclone.Counters.Wind = 2
+Bot1.Battlefield.Mox Emerald#1.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T5 Bot1.Main1]
+? Bot1.Life = 17
+? Bot2.Life = 17
+? Bot1.Battlefield.Wall of Ice.Damage = 2
+? Bot2.Battlefield.Wall of Ice.Damage = 2
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cyclone.Counters.Wind = 3
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+! Bot1.PayCost
+Bot1.Decline
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
+Bot1.Graveyard = Cyclone; Black Lotus; Black Lotus
