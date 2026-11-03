@@ -1,0 +1,47 @@
+# Wyluli Wolf taps to give either player's creature +1/+1, and each effect ends at cleanup (CR 602.2, 611.2a, 514.2).
+
+[Bot1 Deck]
+Wyluli Wolf
+Mox Emerald
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Wyluli Wolf.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Wyluli Wolf.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Wyluli Wolf.Activate(Bot1.Battlefield.Wyluli Wolf)
+? Bot1.Battlefield.Wyluli Wolf.Tapped = true
+! Bot1.Battlefield.Wyluli Wolf.Activate(Bot1.Battlefield.Wyluli Wolf)
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Wyluli Wolf.Power = 2
+? Bot1.Battlefield.Wyluli Wolf.Toughness = 2
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Wyluli Wolf.Power = 1
+? Bot1.Battlefield.Wyluli Wolf.Toughness = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Wyluli Wolf.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+[T5 Bot1.Main2]
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot2.Battlefield.Ornithopter.Toughness = 3
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
