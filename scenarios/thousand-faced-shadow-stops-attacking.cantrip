@@ -1,0 +1,49 @@
+# A pending ETB trigger rechecks that its source is attacking after Old Man of the Sea takes it out of combat (CR 603.4, 506.4).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Ornithopter
+Ornithopter
+Grizzly Bears
+Thousand-Faced Shadow
+Island x20
+[Bot2 Deck]
+Black Lotus
+Old Man of the Sea
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter#1; Ornithopter#2; Grizzly Bears > Bot2)
+[T5 Bot1.DeclareBlockers]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thousand-Faced Shadow.Activate(Ability: Ninjutsu)
+Bot1.Choose(Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot1.Battlefield.Thousand-Faced Shadow)
+! Bot1.Target(Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Thousand-Faced Shadow)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Thousand-Faced Shadow.Power = 1
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Combat.Attackers.Count = 2

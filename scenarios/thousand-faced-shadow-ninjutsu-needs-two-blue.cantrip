@@ -1,0 +1,49 @@
+# Four mana with only one blue cannot pay ninjutsu; on the next turn two blue plus two colorless pay it exactly (CR 107.4a, 702.49).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Sol Ring
+Ornithopter
+Grizzly Bears
+Thousand-Faced Shadow
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter; Grizzly Bears > Bot2)
+[T3 Bot1.DeclareBlockers]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Thousand-Faced Shadow.Activate(Ability: Ninjutsu; Mana: short)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter; Grizzly Bears > Bot2)
+[T5 Bot1.DeclareBlockers]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Thousand-Faced Shadow.Activate(Ability: Ninjutsu)
+Bot1.Choose(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Thousand-Faced Shadow.Power = 1
+Bot1.Battlefield.Grizzly Bears#2.Token = true
+Bot1.Battlefield.Grizzly Bears#2.Tapped = true
+Combat.Attackers.Count = 3
