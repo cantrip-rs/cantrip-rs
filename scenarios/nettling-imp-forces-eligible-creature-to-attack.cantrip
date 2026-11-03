@@ -1,0 +1,51 @@
+# Nettling Imp forces an eligible opposing creature to attack, and it survives the end step after attacking (CR 508.1d).
+[Bot1 Deck]
+Nettling Imp
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp x20
+[Bot2 Deck]
+Ornithopter
+Memnite
+Steel Wall
+Mox Jet
+Mox Pearl
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Nettling Imp.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Steel Wall.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Nettling Imp.Activate(Bot1.Battlefield.Nettling Imp)
+! Bot1.Battlefield.Nettling Imp.Activate(Bot2.Battlefield.Steel Wall)
+! Bot1.Battlefield.Nettling Imp.Activate(Bot2.Battlefield.Memnite)
+! Bot1.Battlefield.Nettling Imp.Activate(Bot2)
+Bot1.Battlefield.Nettling Imp.Activate(Bot2.Battlefield.Ornithopter)
+? Bot1.Battlefield.Nettling Imp.Tapped = true
+[T4 Bot2.DeclareAttackers]
+! Bot2.Attack()
+Bot2.Attack(Ornithopter)
+[T4 Bot2.End]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack()
+[T6 Bot2.End]
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot2.Life = 20
