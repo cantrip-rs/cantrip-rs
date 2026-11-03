@@ -1,0 +1,6 @@
+{
+  "name": "Holy Armor",
+  "manaCost": "{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +0/+2.\n{W}: Enchanted creature gets +0/+1 until end of turn."
+}

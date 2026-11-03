@@ -1,0 +1,45 @@
+# Holy Armor gives +0/+2 and its white ability adds +0/+1 until end of turn (CR 611.2a).
+
+[Bot1 Deck]
+Island
+Mox Pearl
+Mox Pearl
+Ornithopter
+Holy Armor
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+! Bot1.Hand.Holy Armor.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Holy Armor.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Holy Armor.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 5
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Holy Armor.Activate(Mana: short)
+
+[Expect]
+Bot1.Battlefield.Holy Armor.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 4
