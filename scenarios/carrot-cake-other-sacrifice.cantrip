@@ -1,0 +1,36 @@
+# Sacrificing Carrot Cake to another spell also creates a Rabbit and scries (CR 603.2).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Carrot Cake
+Deadly Dispute
+Island
+Shock
+Hill Giant
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Carrot Cake.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(| Shock)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Deadly Dispute.Cast
+Bot1.Choose(Carrot Cake)
+Bot1.Pass
+Bot1.Arrange(Hill Giant |)
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Rabbit Token#1.Power = 1
+Bot1.Battlefield.Rabbit Token#2.Power = 1
+Bot1.Graveyard = Deadly Dispute; Carrot Cake

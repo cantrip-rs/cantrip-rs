@@ -1,0 +1,54 @@
+# Entering and sacrificing Carrot Cake each create a Rabbit before scrying, and its activated ability gains three life (CR 603.2, 701.18a, 119.3).
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Carrot Cake
+Black Lotus
+Island
+Shock
+Hill Giant
+Island x20
+[Bot2 Deck]
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Carrot Cake.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rabbit Token.Power = 1
+Bot1.Arrange(| Shock)
+? Bot1.Battlefield.Rabbit Token.Power = 1
+? Bot1.Battlefield.Rabbit Token.Toughness = 1
+? Bot1.Battlefield.Rabbit Token.Colors = White
+? Bot1.Battlefield.Rabbit Token.Tapped = false
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Carrot Cake.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Arrange(Island |)
+? Bot1.Life = 20
+? Bot1.Battlefield.Rabbit Token#2.Power = 1
+Bot1.Pass
+[Expect]
+Bot1.Life = 23
+Bot1.Graveyard = Carrot Cake; Black Lotus
+Bot1.Battlefield.Rabbit Token#1.Subtypes = Rabbit
+Bot1.Battlefield.Rabbit Token#2.Subtypes = Rabbit
+Bot1.Battlefield.Count = 6
