@@ -402,6 +402,10 @@ with a name in common for "with different names".
 it, and the cards named together must be an answer; a refusal of one name holds when no card of that name may be picked
 first.
 
+A division, `! Bot1.Divide(Bot1: 0; Bot2: 4)`, checks that the next divided-target question rejects that answer,
+using the engine's answer validation (CR 601.2d). `! Bot1.Divide()` checks that choosing no targets is refused.
+Follow the refusals with a legal division so the same spell or ability resolves.
+
 A target, `! Bot1.Target(Lightning Bolt)`, is checked at that player's next target question and fails if the named object is among its
 candidates; it fails as proving nothing when no such card exists anywhere in the game. It shows a spell or ability cannot target something
 (a creature card, not an instant, in "target creature card in your graveyard", or one worth more than a slot's "total mana value X or less" by

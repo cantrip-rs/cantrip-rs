@@ -535,8 +535,8 @@ impl ScriptStep {
         }
         if let Some(rest) = line.strip_prefix('!') {
             let action = ActionStep::parse(rest.trim(), number)?;
-            if !matches!(action.verb, ScriptVerb::Play | ScriptVerb::Cast | ScriptVerb::Activate | ScriptVerb::Foretell | ScriptVerb::Suspend | ScriptVerb::TakeCompanion | ScriptVerb::Block | ScriptVerb::Attack | ScriptVerb::Search | ScriptVerb::Accept | ScriptVerb::Modes | ScriptVerb::Target | ScriptVerb::Undo | ScriptVerb::PayCost | ScriptVerb::RemoveCounters) && !action.verb.is_question() {
-                return Err(ParseError("a refusal (!) names a Play, Cast, Activate, Foretell, Suspend, TakeCompanion, Block, Attack, Search, Accept, Modes, Number, Target, Undo or PayCost that must not be offered".into()));
+            if !matches!(action.verb, ScriptVerb::Play | ScriptVerb::Cast | ScriptVerb::Activate | ScriptVerb::Foretell | ScriptVerb::Suspend | ScriptVerb::TakeCompanion | ScriptVerb::Block | ScriptVerb::Attack | ScriptVerb::Search | ScriptVerb::Accept | ScriptVerb::Modes | ScriptVerb::Target | ScriptVerb::Divide | ScriptVerb::Undo | ScriptVerb::PayCost | ScriptVerb::RemoveCounters) && !action.verb.is_question() {
+                return Err(ParseError("a refusal (!) names a Play, Cast, Activate, Foretell, Suspend, TakeCompanion, Block, Attack, Search, Accept, Modes, Number, Target, Divide, Undo or PayCost that must not be offered".into()));
             }
             return Ok(ScriptStep::Refused { line: number, text: line.to_string(), action });
         }

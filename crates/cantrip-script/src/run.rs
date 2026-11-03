@@ -1869,6 +1869,12 @@ impl<'s> Run<'s> {
                     return fail(format!("line {line} says {text} must not be a choice the question allows, but it is"));
                 }
             }
+            RequestKind::ChooseDividedTargets { candidates, .. } => {
+                let answer = self.divide(action, candidates)?;
+                if check_answer(&self.game, request, &answer).is_ok() {
+                    return fail(format!("line {line} says {text} must not be a division the question accepts, but it is"));
+                }
+            }
             RequestKind::ChooseTarget { candidates, least, count, .. } => {
                 // `! Bot1.Target(Count: 2)`: the question does not take that many targets (CR 601.2c), though it has the
                 // candidates for it; `Count: 0` is choosing none.
