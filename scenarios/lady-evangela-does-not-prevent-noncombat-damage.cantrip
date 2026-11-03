@@ -1,0 +1,32 @@
+# The chosen creature's activated ability deals noncombat damage, which Lady Evangela does not prevent (CR 510.2).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Black Lotus
+Lady Evangela
+Prodigal Sorcerer
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lady Evangela.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Prodigal Sorcerer.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Lady Evangela.Activate(Bot1.Battlefield.Prodigal Sorcerer)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 19

@@ -1,0 +1,38 @@
+# Lady Evangela can prevent the combat damage of its controller's creature, but cannot target
+# a noncreature artifact; Memnite's unblocked damage is prevented (CR 615.1).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Lady Evangela
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lady Evangela.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Lady Evangela.Activate(Bot1.Battlefield.Mox Sapphire)
+Bot1.Battlefield.Lady Evangela.Activate(Bot1.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Lady Evangela.Tapped = true
