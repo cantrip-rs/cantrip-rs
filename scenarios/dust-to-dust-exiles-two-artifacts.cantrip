@@ -1,0 +1,37 @@
+# Dust to Dust requires exactly two different artifact targets, accepts either player's artifact, and refuses a land (CR 115.3, 701.13a).
+[Bot1 Deck]
+Dust to Dust
+Black Lotus
+Ornithopter
+Plains
+Plains x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Dust to Dust.Cast
+! Bot1.Target(Count: 1)
+! Bot1.Target(Count: 3)
+! Bot1.Target(Bot1.Battlefield.Plains; Bot2.Battlefield.Island)
+! Bot1.Target(Bot2.Battlefield.Memnite; Bot2.Battlefield.Memnite)
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Exile = Ornithopter; Memnite
+Bot2.Battlefield.Ornithopter.Toughness = 2

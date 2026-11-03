@@ -1,0 +1,6 @@
+{
+  "name": "Dust to Dust",
+  "manaCost": "{1}{W}{W}",
+  "type": "Sorcery",
+  "oracleText": "Exile two target artifacts."
+}
