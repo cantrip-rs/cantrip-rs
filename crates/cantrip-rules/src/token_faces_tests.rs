@@ -234,7 +234,7 @@ fn a_double_faced_token_made_with_changed_words_transforms() {
     let (mut game, table) = game();
     let words = Words::NONE.changed(Word::Color(Color::White), Word::Color(Color::Blue));
     let mut cx = cx(&mut game);
-    let token = ops::create_tokens_worded(&mut cx, &[(table.id_of(&INCUBATOR), YOU)], false, None, &[], words, None).expect("nothing is asked")[0];
+    let token = ops::create_tokens_worded(&mut cx, &[(table.id_of(&INCUBATOR), YOU)], false, None, &[], words, None, None).expect("nothing is asked")[0];
     assert!(ops::turn_over(&mut cx, token).expect("nothing is asked"));
     assert!(cx.chars(token).is(CardType::Creature));
 }

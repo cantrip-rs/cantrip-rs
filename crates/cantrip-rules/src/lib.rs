@@ -2073,7 +2073,7 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn create_tokens_with_counters(&mut self, def: CardId, controller: PlayerId, count: u32, tapped: bool, counters: &[(CounterKind, i16)], words: Words) -> Result<Vec<ObjectId>, Suspend> {
         let tokens: Vec<(CardId, PlayerId)> = (0..count).map(|_| (def, controller)).collect();
-        ops::create_tokens_worded(self, &tokens, tapped, None, counters, words, None).map_err(|_| Suspend)
+        ops::create_tokens_worded(self, &tokens, tapped, None, counters, words, None, None).map_err(|_| Suspend)
     }
 
     fn create_token_copies(&mut self, of: ObjectId, controller: PlayerId, count: u32) -> Result<Vec<ObjectId>, Suspend> {
@@ -2091,6 +2091,10 @@ impl cantrip_api::Game for Cx<'_> {
 
     fn create_token_copies_tapped(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool) -> Result<Vec<ObjectId>, Suspend> {
         ops::create_token_copies_tapped(self, values, controller, count, tapped).map_err(|_| Suspend)
+    }
+
+    fn create_token_copies_attacking(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool, defender: Option<Target>) -> Result<Vec<ObjectId>, Suspend> {
+        ops::create_token_copies_attacking(self, values, controller, count, tapped, defender).map_err(|_| Suspend)
     }
 
     fn enter_attacking(&mut self, entered: &[ObjectId], defender: Target) {
@@ -2361,11 +2365,7 @@ impl cantrip_api::Game for Cx<'_> {
     }
 
     fn create_tokens_worded(&mut self, tokens: &[(CardId, PlayerId)], tapped: bool, attacking: Option<Target>, words: Words) -> Result<Vec<ObjectId>, Suspend> {
-        let created = ops::create_tokens_worded(self, tokens, tapped, None, &[], words, None).map_err(|_| Suspend)?;
-        if let Some(defender) = attacking {
-            ops::attack_with_tokens(self, &created, defender);
-        }
-        Ok(created)
+        ops::create_tokens_worded(self, tokens, tapped, None, &[], words, None, attacking).map_err(|_| Suspend)
     }
 
     fn create_token_attached(&mut self, def: CardId, controller: PlayerId, host: ObjectId) -> Result<Vec<ObjectId>, Suspend> {

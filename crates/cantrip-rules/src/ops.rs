@@ -244,6 +244,11 @@ pub fn move_together(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> Vec<O
 /// `move_together`, which also returns the objects, by their old ids, put into a hand or a library that every player could
 /// see as they moved (`seen_by_all`, decided as the moves were made): the rest put there were not revealed.
 fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec<ObjectId>, Vec<ObjectId>) {
+    move_together_entering(cx, moves, reason, None)
+}
+
+/// An instruction can name the defender of the arriving creatures (CR 508.4).
+fn move_together_entering(cx: &mut Cx, moves: &[Moving], reason: ZoneReason, attacking: Option<Target>) -> (Vec<ObjectId>, Vec<ObjectId>) {
     // An object moves once however many times the batch names it: a permanent a spell targets twice ("destroy target
     // artifact and target creature" at an artifact creature, CR 115.3) is destroyed once (CR 400.7). The first move kept.
     // And an object that has changed zones or ceased to exist since it was named is not moved at all: it became a new
@@ -684,8 +689,11 @@ fn move_together_seen(cx: &mut Cx, moves: &[Moving], reason: ZoneReason) -> (Vec
     }
     // A replacement that has it arrive attacking (CR 614.1c, 508.4): in the combat as it arrives, before anything of its
     // entry is announced, and attacking what its controller chooses (CR 508.4).
-    if !attacking_arrivals.is_empty() {
+    if attacking.is_none() && !attacking_arrivals.is_empty() {
         enter_attacking_by_choice(cx, &attacking_arrivals);
+    }
+    if let Some(defender) = attacking {
+        enter_attacking(cx, &entered, defender);
     }
     if binned.len() > 1 {
         arrange_graveyards(cx, &binned);
@@ -1650,11 +1658,23 @@ pub fn put_onto_battlefield_with(cx: &mut Cx, objects: &[(ObjectId, PlayerId, bo
 /// watches either sees the board once, as it was before and after all of it.
 pub fn put_onto_battlefield_along(
     cx: &mut Cx,
+    moves: Vec<Moving>,
+    objects: &[(ObjectId, PlayerId, bool)],
+    reason: ZoneReason,
+    with: &[(CounterKind, i16)],
+    becomes: Option<Becomes>,
+) -> R<Vec<ObjectId>> {
+    put_onto_battlefield_into(cx, moves, objects, reason, with, becomes, None)
+}
+
+fn put_onto_battlefield_into(
+    cx: &mut Cx,
     mut moves: Vec<Moving>,
     objects: &[(ObjectId, PlayerId, bool)],
     reason: ZoneReason,
     with: &[(CounterKind, i16)],
     becomes: Option<Becomes>,
+    attacking: Option<Target>,
 ) -> R<Vec<ObjectId>> {
 
     // What leaves the battlefield in this move is gone as each entering permanent is judged (CR 101.4, 614.12).
@@ -1664,7 +1684,7 @@ pub fn put_onto_battlefield_along(
     *cx.s().leaving_together.borrow_mut() = outer_leaving;
     prepared?;
     crate::attach::choose_aura_hosts(cx, &mut moves)?;
-    Ok(move_together(cx, &moves, reason))
+    Ok(move_together_entering(cx, &moves, reason, attacking).0)
 }
 
 /// Whether `id` would enter the battlefield as an instant or sorcery card, which can't (CR 304.4, 307.4, 110.4, 400.4a): if
@@ -2052,7 +2072,7 @@ impl Copies<'_> {
 pub fn create_token_copies_together(cx: &mut Cx, copies: &[(Copiable, PlayerId)]) -> R<Vec<ObjectId>> {
     let tokens: Vec<(CardId, PlayerId)> = copies.iter().map(|&(values, controller)| (values.card, controller)).collect();
     let values: Vec<Copiable> = copies.iter().map(|&(values, _)| values).collect();
-    create_tokens_onto(cx, &tokens, false, Copies::Each(&values), &[], Words::NONE, None, None)
+    create_tokens_onto(cx, &tokens, false, Copies::Each(&values), &[], Words::NONE, None, None, None)
 }
 
 /// Creates tokens that are copies of a permanent (CR 707.2, 111.1): the permanent's copiable values, its own copy
@@ -2065,6 +2085,14 @@ pub fn create_token_copies(cx: &mut Cx, values: Copiable, controller: PlayerId, 
 /// attacking" (CR 702.116a) is created tapped, not tapped afterwards.
 pub fn create_token_copies_tapped(cx: &mut Cx, values: Copiable, controller: PlayerId, count: u32, tapped: bool) -> R<Vec<ObjectId>> {
     create_tokens_as(cx, values.card, controller, count, tapped, Some(values), &[])
+}
+
+/// Thousand-Faced Shadow and Flamerush Rider make token copies entering tapped and attacking (CR 508.4, 707.2).
+/// The explicit defender, or each token's controller's choice, is established before ETB matching (CR 603.6a).
+pub fn create_token_copies_attacking(cx: &mut Cx, values: Copiable, controller: PlayerId, count: u32, tapped: bool, defender: Option<Target>) -> R<Vec<ObjectId>> {
+    let tokens = vec![(values.card, controller); count as usize];
+    let attack = defender.map_or(AttackEntry::Choose, AttackEntry::Defender);
+    create_tokens_onto(cx, &tokens, tapped, Copies::All(Some(values)), &[], Words::NONE, None, None, Some(attack))
 }
 
 /// An object that ceases to exist where it is, in no zone it can be in (CR 111.7, 111.8, 707.10a, 704.5d, 800.4a), as it
@@ -2221,16 +2249,27 @@ fn token_copy(cards: &CardTable, card: CardId, copy: Option<Copiable>, words: Wo
     })
 }
 
+/// Whether an instruction names a defender or leaves its choice to the entering creature's controller (CR 508.4).
+#[derive(Clone, Copy)]
+enum AttackEntry {
+    Defender(Target),
+    Choose,
+}
+
 /// Creates tokens of several definitions as one instruction (CR 111.1, 101.4): all enter at once, and what watches
 /// them sees one event (CR 603.2c).
 pub fn create_tokens_batch(cx: &mut Cx, tokens: &[(CardId, PlayerId)], tapped: bool, copy: Option<Copiable>, with: &[(CounterKind, i16)]) -> R<Vec<ObjectId>> {
+    create_tokens_batch_attacking(cx, tokens, tapped, copy, with, None)
+}
+
+fn create_tokens_batch_attacking(cx: &mut Cx, tokens: &[(CardId, PlayerId)], tapped: bool, copy: Option<Copiable>, with: &[(CounterKind, i16)], attacking: Option<Target>) -> R<Vec<ObjectId>> {
     // CR 612.4, 612.2a: a token is what the text that makes it says, so a changed text makes tokens of the colors and
     // creature types it names now - an ability's text as it was put on the stack (`Cx::own_text`, CR 113.7a).
     let words = match cx.cause() {
         Cause::Spell(source) | Cause::Ability { source, .. } if copy.is_none() => Query::words(&*cx, source),
         _ => Words::NONE,
     };
-    create_tokens_worded(cx, tokens, tapped, copy, with, words, None)
+    create_tokens_worded(cx, tokens, tapped, copy, with, words, None, attacking)
 }
 
 /// Creates tokens whose text has `words` (CR 612.4): `create_tokens_batch` with the words given, not the creating text's.
@@ -2239,6 +2278,7 @@ pub fn create_tokens_batch(cx: &mut Cx, tokens: &[(CardId, PlayerId)], tapped: b
 /// reason: Resolve`, as any permanent spell's is, and "if you cast it" (`cast_of(old)`, CR 707.12, 603.4) finds the copy's cast.
 /// An Aura spell's token enters attached to what the spell targeted, wherever that is (CR 303.4f, 608.3b, 707.10c): a
 /// creature card in a graveyard for Animate Dead (CR 303.4a), as the Aura card itself would.
+#[allow(clippy::too_many_arguments)]
 pub fn create_tokens_worded(
     cx: &mut Cx,
     tokens: &[(CardId, PlayerId)],
@@ -2247,8 +2287,9 @@ pub fn create_tokens_worded(
     with: &[(CounterKind, i16)],
     words: Words,
     spell: Option<&StackItem>,
+    attacking: Option<Target>,
 ) -> R<Vec<ObjectId>> {
-    create_tokens_onto(cx, tokens, tapped, Copies::All(copy), with, words, spell, None)
+    create_tokens_onto(cx, tokens, tapped, Copies::All(copy), with, words, spell, None, attacking.map(AttackEntry::Defender))
 }
 
 /// Creates a token "attached to" a permanent (CR 111.1, 303.4): `Game::create_token_attached`, with the words of the text
@@ -2258,7 +2299,7 @@ pub fn create_token_attached(cx: &mut Cx, card: CardId, controller: PlayerId, ho
         Cause::Spell(source) | Cause::Ability { source, .. } => Query::words(&*cx, source),
         _ => Words::NONE,
     };
-    create_tokens_onto(cx, &[(card, controller)], false, Copies::All(None), &[], words, None, Some(host))
+    create_tokens_onto(cx, &[(card, controller)], false, Copies::All(None), &[], words, None, Some(host), None)
 }
 
 /// `create_tokens_worded`, each token an effect says is created attached to `host` entering so (CR 303.4): an Aura only
@@ -2275,6 +2316,7 @@ fn create_tokens_onto(
     words: Words,
     spell: Option<&StackItem>,
     host: Option<ObjectId>,
+    defender: Option<AttackEntry>,
 ) -> R<Vec<ObjectId>> {
     // Replacements inspect copy exceptions and changed text too (CR 614.12).
     let proposed: Vec<(CardId, Option<Copiable>, PlayerId)> = tokens
@@ -2426,8 +2468,13 @@ fn create_tokens_onto(
     }
     // A replacement that has it arrive attacking (CR 614.1c, 508.4): in the combat as it arrives, as a permanent put there
     // by a move is (`move_together`).
-    if !attacking.is_empty() {
-        enter_attacking_by_choice(cx, &attacking);
+    // An instruction and a replacement can both say attacking. Each arrival
+    // chooses only once; an instruction that names a defender needs no choice.
+    match defender {
+        Some(AttackEntry::Defender(defender)) => enter_attacking(cx, &created, defender),
+        Some(AttackEntry::Choose) => enter_attacking_by_choice(cx, &created),
+        None if !attacking.is_empty() => enter_attacking_by_choice(cx, &attacking),
+        None => {}
     }
     // What each token was as it entered (CR 603.6a, 614.12): judged once they are all there, as the permanents that enter by
     // a move are, so the history says it of tokens too.
@@ -2962,14 +3009,11 @@ pub fn resolve_copy_as_token(cx: &mut Cx, item: &StackItem, at: usize) -> R<()> 
     // that enters tapped and attacking what the original's returned creature attacked (CR 702.190b), unless the rules keep
     // it out of combat (`enter_attacking`, CR 506.3b: its controller is not the attacking player).
     let attacking = item.attacking;
-    let tokens = create_tokens_worded(cx, &[(values.card, item.controller)], attacking, copy, &[], words, Some(item))?;
+    let tokens = create_tokens_worded(cx, &[(values.card, item.controller)], attacking, copy, &[], words, Some(item), attacking.then_some(item.subject))?;
     // The spell became that token (CR 707.10f), as a card's spell becomes its permanent: what the copy was cast for, which a
     // copy copies, is found through the copy's `Copied` event (`sneak::was_cast_for_sneak`).
     if let Some(&token) = tokens.first() {
         cx.st().update_obj(item.object, |o| o.became = Some(token));
-    }
-    if attacking {
-        enter_attacking(cx, &tokens, item.subject);
     }
     for token in tokens.into_iter().filter(|_| door != 0) {
         unlock_door(cx, token, door, item.controller);
@@ -4202,12 +4246,10 @@ pub fn fight(cx: &mut Cx, first: ObjectId, second: ObjectId) {
     damage_together(cx, &[(first, Target::Object(second), a), (second, Target::Object(first), b)]);
 }
 
-/// Creates tokens attacking, tapped when `tapped` (CR 508.4): they enter together, then are attacking `defender` without
+/// Creates tokens attacking, tapped when `tapped` (CR 508.4): they enter together attacking `defender` without
 /// having been declared as attackers, so no "whenever attacks" ability sees them. Outside combat they are only tokens.
 pub fn create_tokens_attacking(cx: &mut Cx, tokens: &[(CardId, PlayerId)], tapped: bool, defender: Target) -> R<Vec<ObjectId>> {
-    let created = create_tokens_batch(cx, tokens, tapped, None, &[])?;
-    attack_with_tokens(cx, &created, defender);
-    Ok(created)
+    create_tokens_batch_attacking(cx, tokens, tapped, None, &[], Some(defender))
 }
 
 /// Makes created tokens attack `defender` (CR 508.4), when there is a combat to attack in.
@@ -4219,8 +4261,10 @@ pub fn attack_with_tokens(cx: &mut Cx, created: &[ObjectId], defender: Target) {
 /// battlefield from your hand tapped and attacking". Outside combat it is only tapped. It enters with `counters` as well
 /// (CR 122.6, 614.1c): Grim Reaper's finality counter.
 pub fn put_onto_battlefield_attacking(cx: &mut Cx, object: ObjectId, controller: PlayerId, defender: Target, counters: &[(CounterKind, i16)]) -> R<ObjectId> {
-    let new = put_onto_battlefield_with(cx, &[(object, controller, true)], ZoneReason::Other, counters)?.first().copied().unwrap_or(object);
-    enter_attacking(cx, &[new], defender);
+    // Thousand-Faced Shadow and Fallen Shinobi use this ninjutsu path.
+    // It is attacking before its arrival is observed (CR 603.6a, 508.4).
+    let new = put_onto_battlefield_into(cx, Vec::new(), &[(object, controller, true)], ZoneReason::Other, counters, None, Some(defender))?
+        .first().copied().unwrap_or(object);
     Ok(new)
 }
 
@@ -4245,11 +4289,7 @@ pub fn enter_attacking(cx: &mut Cx, entered: &[ObjectId], defender: Target) {
     let mut attackers = cx.s().attackers.clone();
     let mut changed = false;
     for &id in entered {
-        if !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield) || cx.s().obj(id).controller != attacking {
-            continue;
-        }
-        let chars = cx.chars(id);
-        if !chars.is(CardType::Creature) || chars.is(CardType::Battle) {
+        if !eligible_to_enter_attacking(cx, id) {
             continue;
         }
         // One already in this combat as it arrived - a replacement made it attack (`ZoneChange::attacking`, CR 508.4), which
@@ -4273,6 +4313,16 @@ pub fn enter_attacking(cx: &mut Cx, entered: &[ObjectId], defender: Target) {
     }
 }
 
+/// CR 506.3a-b,f: only a creature controlled by the attacking player can join this combat.
+fn eligible_to_enter_attacking(cx: &Cx, id: ObjectId) -> bool {
+    if !cx.s().turn.attacked || !live(cx.s(), id) || !cx.s().obj(id).zone.is(ZoneKind::Battlefield)
+        || cx.s().obj(id).controller != cx.s().turn.active {
+        return false;
+    }
+    let chars = cx.chars(id);
+    chars.is(CardType::Creature) && !chars.is(CardType::Battle)
+}
+
 /// Permanents a replacement has arrive attacking (CR 614.1c, 508.4): its "instead it enters tapped and attacking" names no
 /// defender, so each attacks what its controller chooses as it arrives (`Query::enter_attacking_targets`) - asked only when there is a choice, as the effect
 /// that names one asks (`cantrip_mechanics::combat::choose_attack_target`), and the first candidate when the question cannot
@@ -4280,6 +4330,9 @@ pub fn enter_attacking(cx: &mut Cx, entered: &[ObjectId], defender: Target) {
 /// permanent the rules keep out of combat only enters (`enter_attacking`, CR 506.3).
 fn enter_attacking_by_choice(cx: &mut Cx, entered: &[ObjectId]) {
     for &id in entered {
+        if !eligible_to_enter_attacking(cx, id) {
+            continue;
+        }
         let controller = cx.s().obj(id).controller;
         let candidates = cx.enter_attacking_targets(controller);
         let defender = match candidates[..] {

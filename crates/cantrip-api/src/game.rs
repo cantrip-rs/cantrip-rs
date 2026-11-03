@@ -819,6 +819,9 @@ pub trait Game: Query {
     /// (`create_tokens_attacking`'s limits: no combat, not a creature, a defender that can't be attacked) only stays where it
     /// is. Tokens made by `create_token_copies_tapped` first, so a copy's attack is chosen after the tokens are created.
     fn enter_attacking(&mut self, entered: &[ObjectId], defender: Target);
+    /// Creates token copies entering attacking (CR 508.4, 707.2), tapped only when `tapped`. If `defender` is absent,
+    /// each token's controller chooses what it attacks as it enters. Attacking state is visible to ETB abilities.
+    fn create_token_copies_attacking(&mut self, values: Copiable, controller: PlayerId, count: u32, tapped: bool, defender: Option<Target>) -> Result<Vec<ObjectId>, Suspend>;
     /// The player gets an emblem (CR 114.2): a new object in the command zone, owned by them, with the abilities
     /// of this definition. It never leaves.
     fn create_emblem(&mut self, def: CardId, player: PlayerId) -> ObjectId;
