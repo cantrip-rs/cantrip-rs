@@ -1,0 +1,41 @@
+# Force of Nature tramples over a blocker and deals 8 damage unless its controller pays four green (CR 702.19b, 120.3a).
+
+[Bot1 Deck]
+Forest
+Black Lotus
+Black Lotus
+Black Lotus
+Force of Nature
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Green)
+Bot1.Hand.Force of Nature.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+? Bot1.Life = 20
+Bot1.Attack(Force of Nature > Bot2)
+Bot2.Block(Ornithopter > Force of Nature)
+[T3 Bot1.Main2]
+? Bot2.Life = 14
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 12
+Bot2.Graveyard = Island; Ornithopter

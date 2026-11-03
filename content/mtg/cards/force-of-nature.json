@@ -1,0 +1,11 @@
+{
+  "name": "Force of Nature",
+  "manaCost": "{2}{G}{G}{G}{G}",
+  "type": "Creature — Elemental",
+  "power": 8,
+  "toughness": 8,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nAt the beginning of your upkeep, this creature deals 8 damage to you unless you pay {G}{G}{G}{G}.",
+  "keywords": [
+    "Trample"
+  ]
+}
