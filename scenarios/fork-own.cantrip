@@ -1,0 +1,33 @@
+# Fork copies its controller's instant and can retarget the copy (CR 707.10).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Shock
+Fork
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Fork.Cast(Stack.Shock)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1)
+[T1 Bot1.End]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Graveyard = Shock; Fork
