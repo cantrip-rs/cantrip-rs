@@ -1201,3 +1201,13 @@ mod tests {
         assert_eq!(OFFICER.toughness, Some(1));
     }
 }
+
+/// A 4/4 blue and red Elemental creature token (CR 111). Elemental Masterpiece, Elemental Summoning and Magma Opus
+/// create this exact token.
+pub static ELEMENTAL: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    colors: Some(ColorSet(10)),
+    power: Some(4),
+    toughness: Some(4),
+    ..token!(Elemental)
+};
