@@ -1,0 +1,36 @@
+# Each player's creatures receive their own upkeep trigger: Bot1 pays one for its creature, while Bot2 pays for one of two and the other is destroyed (CR 603.2, 701.8a).
+[Bot1 Deck]
+The Tabernacle at Pendrell Vale
+Mox Pearl
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.The Tabernacle at Pendrell Vale.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T4 Bot2.Upkeep]
+Bot2.Battlefield.Forest.Activate
+Bot2.PayCost
+? Bot2.Mana =
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Graveyard = Ornithopter

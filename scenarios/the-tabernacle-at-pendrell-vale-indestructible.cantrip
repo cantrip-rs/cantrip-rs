@@ -1,0 +1,22 @@
+# An unpaid upkeep ability destroys an ordinary creature but cannot destroy an indestructible creature (CR 702.12b).
+[Bot1 Deck]
+The Tabernacle at Pendrell Vale
+Black Lotus
+Darksteel Myr
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.The Tabernacle at Pendrell Vale.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Darksteel Myr.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Darksteel Myr.Toughness = 1
+Bot1.Graveyard = Ornithopter; Black Lotus
