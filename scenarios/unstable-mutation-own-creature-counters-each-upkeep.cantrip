@@ -1,0 +1,25 @@
+# The enchanted creature controlled by the Aura's controller gets one counter each of its controller's upkeeps, not the opponent's (CR 603.2).
+[Bot1 Deck]
+Unstable Mutation
+Mox Sapphire
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unstable Mutation.Cast(Ornithopter)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Counters.MinusOneMinusOne = (absent)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 2
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3

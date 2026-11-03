@@ -1,0 +1,29 @@
+# The upkeep trigger refers to the original creature, not the new object returned by Ephemerate (CR 400.7).
+[Bot1 Deck]
+Unstable Mutation
+Mox Sapphire
+Mox Pearl
+Ornithopter
+Ephemerate
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unstable Mutation.Cast(Ornithopter)
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ephemerate.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.MinusOneMinusOne = (absent)
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Graveyard = Unstable Mutation
