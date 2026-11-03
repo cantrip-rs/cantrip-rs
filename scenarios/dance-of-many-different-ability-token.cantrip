@@ -1,0 +1,85 @@
+# A token made by a different ability of an animated Dance is not linked to its own abilities (CR 607.5).
+[Bot1 Deck]
+Gilded Goose
+Black Lotus x2
+Mox Sapphire x2
+Dance of Many
+Mirrorweave
+Black Lotus
+Island x20
+[Bot2 Deck]
+Black Lotus x2
+Opalescence
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gilded Goose.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Dance of Many.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus#1.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Opalescence.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mirrorweave.Cast(Bot1.Battlefield.Gilded Goose#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gilded Goose#1.Activate(Ability: Sacrifice a Food; Sacrifice: Food Token#1; Color: U)
+Bot1.Battlefield.Gilded Goose#2.Activate(Ability: Create a Food)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Battlefield.Gilded Goose#2.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Upkeep]
+? Bot1.Battlefield.Dance of Many.Tapped = true
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+[T5 Bot1.Main1]
+Bot1.Battlefield.Gilded Goose#2.Activate(Ability: Sacrifice a Food; Sacrifice: Food Token#2; Color: U)
+[Expect]
+Bot1.Battlefield.Dance of Many.Types = Enchantment; Creature

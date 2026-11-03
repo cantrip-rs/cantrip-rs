@@ -1,0 +1,52 @@
+# If Dance leaves before its enter trigger resolves, its leave trigger finds no token; the later copy remains (CR 607.1).
+
+[Bot1 Deck]
+Ornithopter
+Mox Sapphire x2
+Dance of Many
+Island x20
+
+[Bot2 Deck]
+Mox Pearl x2
+Disenchant
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl#1.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Dance of Many.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Dance of Many)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Dance of Many
+Bot1.Battlefield.Ornithopter#2.Token = true
+Bot1.Battlefield.Ornithopter#2.Toughness = 2
