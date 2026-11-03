@@ -1,0 +1,11 @@
+{
+  "name": "Abyssal Specter",
+  "manaCost": "{2}{B}{B}",
+  "type": "Creature — Specter",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever this creature deals damage to a player, that player discards a card.",
+  "keywords": [
+    "Flying"
+  ]
+}
