@@ -1,0 +1,26 @@
+# Dwarven Lieutenant costs {R}{R} and its activated ability can target itself for +1/+0 (CR 602.2, 611.2a).
+[Bot1 Deck]
+Mox Ruby x2
+Dwarven Lieutenant
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Dwarven Lieutenant.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Dwarven Lieutenant.Activate(Bot1.Battlefield.Dwarven Lieutenant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Dwarven Lieutenant.Power = 2
+Bot1.Battlefield.Dwarven Lieutenant.Toughness = 2

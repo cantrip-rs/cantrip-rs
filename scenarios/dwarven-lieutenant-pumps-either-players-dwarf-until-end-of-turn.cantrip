@@ -1,0 +1,58 @@
+# The Lieutenant can target either player's Dwarf, but not a non-Dwarf; its {1}{R} ability gives +1/+0 until cleanup (CR 115.1c, 611.2a).
+# Two blue mana cannot replace the red symbol; adding red and spending exactly two allows the ability.
+[Bot1 Deck]
+Black Lotus
+Dwarven Lieutenant
+Mox Sapphire
+Island
+Mox Ruby
+Ornithopter
+Delver of Secrets
+Island x20
+
+[Bot2 Deck]
+Mountain
+Dwarven Trader
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Dwarven Lieutenant.Cast
+? Bot1.Mana = {R}
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Dwarven Lieutenant.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Dwarven Lieutenant.Activate(Bot1.Battlefield.Dwarven Lieutenant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dwarven Lieutenant.Power = 2
+? Bot1.Battlefield.Dwarven Lieutenant.Toughness = 2
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Dwarven Lieutenant.Power = 1
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Dwarven Trader.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Dwarven Lieutenant.Activate(Bot2.Battlefield.Dwarven Trader; Mana: short)
+Bot1.Hand.Delver of Secrets.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Dwarven Lieutenant.Activate(Bot2.Battlefield.Dwarven Trader)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Dwarven Trader.Power = 2
+? Bot2.Battlefield.Dwarven Trader.Toughness = 1
+[T4 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Dwarven Trader.Power = 1
+Bot2.Battlefield.Dwarven Trader.Toughness = 1
+Bot1.Battlefield.Dwarven Lieutenant.Power = 1
