@@ -1,0 +1,42 @@
+# Earthquake deals X damage simultaneously to both players and their nonflying creatures, sparing flyers (CR 120.3, 608.2h).
+[Bot1 Deck]
+Black Lotus x2
+Chandra, Torch of Defiance
+Mox Pearl
+Steel Wall
+Ornithopter
+Earthquake
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Steel Wall
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Chandra, Torch of Defiance.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Steel Wall.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Earthquake.Cast(X: 2)
+Bot1.Pass
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Chandra, Torch of Defiance.Counters.Loyalty = 4
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Battlefield.Steel Wall.Damage = 2
+Bot2.Battlefield.Steel Wall.Damage = 2
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot2.Battlefield.Ornithopter.Damage = 0

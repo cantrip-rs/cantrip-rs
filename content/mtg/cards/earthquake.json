@@ -1,0 +1,6 @@
+{
+  "name": "Earthquake",
+  "manaCost": "{X}{R}",
+  "type": "Sorcery",
+  "oracleText": "Earthquake deals X damage to each creature without flying and each player."
+}
