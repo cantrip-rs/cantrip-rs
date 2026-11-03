@@ -1,0 +1,6 @@
+{
+  "name": "Terror",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Destroy target nonartifact, nonblack creature. It can't be regenerated."
+}

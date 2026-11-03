@@ -1,0 +1,38 @@
+# Terror targets the opponent's green creature but rejects black creatures, artifact creatures and lands (CR 115.1a, 701.8a).
+[Bot1 Deck]
+Mox Jet
+Mox Sapphire
+Terror
+Island x20
+[Bot2 Deck]
+Mox Jet
+Black Lotus
+Ornithopter
+Muck Rats
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Muck Rats.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Terror.Cast(Bot2.Battlefield.Ornithopter)
+! Bot1.Hand.Terror.Cast(Bot2.Battlefield.Muck Rats)
+! Bot1.Hand.Terror.Cast(Bot2.Battlefield.Island)
+Bot1.Hand.Terror.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+[Expect]
+Bot2.Graveyard = Grizzly Bears; Black Lotus
+Bot2.Battlefield.Muck Rats.Power = 1
+Bot2.Battlefield.Ornithopter.Power = 0
