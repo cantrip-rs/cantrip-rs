@@ -6611,9 +6611,18 @@ fn castable_ways(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<Avai
 }
 
 /// The zones `player` may cast from other than a library (CR 601.3): any player's exile, for a card a permission lets them
-/// cast from there; their own hand and graveyard. A zone a rule forbids them to cast from (`barred`, CR 101.2) is not looked in.
+/// cast from there; their own hand and graveyard; and another player's graveyard when an explicit permission covers a
+/// card there (Havengul Lich, CR 601.3). A zone a rule forbids them to cast from (`barred`, CR 101.2) is not looked in.
 fn cast_zones<'a>(cx: &'a Cx, player: PlayerId, barred: ZoneKinds) -> impl Iterator<Item = Zone> + 'a {
-    [Zone::hand(player), Zone::graveyard(player)].into_iter().chain(cx.s().seats().map(Zone::exile)).filter(move |zone| !barred.contains(zone.kind()))
+    let borrowed = (!cx.s().permissions.is_empty()).then(|| {
+        cx.s().seats().filter(move |&owner| {
+            owner != player && cx.s().permissions.iter().any(|p| {
+                p.player == player && matches!(p.what, Playable::Card(card) if cx.s().obj(card).zone == Zone::graveyard(owner))
+            })
+        }).map(Zone::graveyard)
+    }).into_iter().flatten();
+    [Zone::hand(player), Zone::graveyard(player)].into_iter().chain(cx.s().seats().map(Zone::exile)).chain(borrowed)
+        .filter(move |zone| !barred.contains(zone.kind()))
 }
 
 /// The top card of `player`'s library, where a permanent may let them cast spells from there (CR 601.3) and no rule forbids
