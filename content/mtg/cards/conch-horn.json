@@ -1,0 +1,6 @@
+{
+  "name": "Conch Horn",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{1}, {T}, Sacrifice this artifact: Draw two cards, then put a card from your hand on top of your library."
+}
