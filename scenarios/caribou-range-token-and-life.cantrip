@@ -1,0 +1,63 @@
+# Caribou Range creates an untapped token; it can be sacrificed for life, unlike a nontoken Caribou.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Mox Pearl
+Caribou Range
+Universal Automaton
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl#1.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+! Bot1.Hand.Caribou Range.Cast(Bot1.Battlefield.Mox Pearl#2)
+Bot1.Hand.Caribou Range.Cast(Bot1.Battlefield.Plains)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Universal Automaton.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Plains.Activate(Ability: Create a 0/1)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Plains.Tapped = true
+? Bot1.Battlefield.Caribou Token.Tapped = false
+? Bot1.Battlefield.Caribou Token.Power = 0
+? Bot1.Battlefield.Caribou Token.Toughness = 1
+? Bot1.Battlefield.Caribou Token.Colors = White
+? Bot1.Battlefield.Caribou Token.Subtypes = Caribou
+? Bot1.Battlefield.Caribou Token.Token = true
+Bot1.Battlefield.Caribou Range.Activate
+! Bot1.Choose(Universal Automaton)
+Bot1.Choose(Caribou Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 21
+Bot1.Battlefield.Count = 6
