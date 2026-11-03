@@ -1,0 +1,41 @@
+# Black Knight strikes before a normal blocker and has protection from white (CR 702.7b, 702.16b).
+
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Black Knight
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Grizzly Bears
+Ornithopter
+Swords to Plowshares
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Black Knight.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+! Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Black Knight)
+Bot2.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Black Knight > Bot2)
+Bot2.Block(Grizzly Bears > Black Knight)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Black Knight.Damage = 0
+Bot2.Graveyard = Grizzly Bears; Swords to Plowshares; Black Lotus
