@@ -1,0 +1,48 @@
+# City of Shadows exiles only its controller's creatures as a cost, stores counters, and taps for one colorless mana per counter without removing them (CR 602.2b, 106.3).
+[Bot1 Deck]
+City of Shadows
+Memnite
+Ornithopter
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.City of Shadows.Play
+Bot1.Battlefield.City of Shadows.Activate(Ability: Add)
+? Bot1.Mana =
+? Bot1.Battlefield.City of Shadows.Tapped = true
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.City of Shadows.Activate(Ability: Exile)
+Bot1.Choose(Tap City of Shadows)
+! Bot1.Choose(Bot2.Battlefield.Memnite)
+! Bot1.Choose(Bot1.Battlefield.City of Shadows)
+! Bot1.Choose()
+! Bot1.Choose(Bot1.Battlefield.Memnite; Ornithopter)
+Bot1.Choose(Bot1.Battlefield.Memnite)
+? Bot1.Battlefield.City of Shadows.Tapped = true
+? Bot1.Exile.Memnite.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.City of Shadows.Counters.Storage = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.City of Shadows.Activate(Ability: Exile)
+Bot1.Choose(Tap City of Shadows)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.City of Shadows.Counters.Storage = 2
+[T7 Bot1.Main1]
+Bot1.Battlefield.City of Shadows.Activate(Ability: Add)
+? Bot1.Mana = {C}{C}
+? Bot1.Battlefield.City of Shadows.Tapped = true
+[Expect]
+Bot1.Battlefield.City of Shadows.Counters.Storage = 2
+Bot2.Battlefield.Memnite.Power = 1
