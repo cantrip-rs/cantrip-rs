@@ -1,0 +1,11 @@
+{
+  "name": "Sol'kanar the Swamp King",
+  "manaCost": "{2}{U}{B}{R}",
+  "type": "Legendary Creature — Demon",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Swampwalk (This creature can't be blocked as long as defending player controls a Swamp.)\nWhenever a player casts a black spell, you gain 1 life.",
+  "keywords": [
+    "Swampwalk"
+  ]
+}
