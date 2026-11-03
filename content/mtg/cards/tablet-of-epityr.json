@@ -1,0 +1,6 @@
+{
+  "name": "Tablet of Epityr",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "Whenever an artifact you control is put into a graveyard from the battlefield, you may pay {1}. If you do, you gain 1 life."
+}
