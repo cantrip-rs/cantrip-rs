@@ -1,0 +1,35 @@
+# An instant whose additional cost cannot be paid is not cast from the graveyard (CR 601.2h).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Forest
+Crop Rotation
+Torrential Gearhulk
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Crop Rotation.Cast
+Bot1.Choose(Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Search()
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Torrential Gearhulk.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[Expect]
+Bot1.Graveyard.Count = 5
+Bot1.Battlefield.Torrential Gearhulk.Power = 5

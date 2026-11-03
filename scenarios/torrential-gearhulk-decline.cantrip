@@ -1,0 +1,47 @@
+# Gearhulk lets its controller decline casting the targeted instant (CR 603.6a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Ruby
+Shock
+Shock
+Torrential Gearhulk
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Torrential Gearhulk.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Graveyard.Shock)
+Bot1.Target(Bot1.Graveyard.Shock#1)
+Bot1.Pass
+Bot1.Decline
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard.Count = 4
+Exile =

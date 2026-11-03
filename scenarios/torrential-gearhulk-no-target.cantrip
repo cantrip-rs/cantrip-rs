@@ -1,0 +1,37 @@
+# Gearhulk cannot cast a graveyard instant when that instant has no legal target (CR 601.2).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Go for the Throat
+Torrential Gearhulk
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Go for the Throat.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Torrential Gearhulk.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Count = 4
