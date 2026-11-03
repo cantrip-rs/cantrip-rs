@@ -1,0 +1,6 @@
+{
+  "name": "Tawnos's Wand",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "{2}, {T}: Target creature with power 2 or less can't be blocked this turn."
+}
