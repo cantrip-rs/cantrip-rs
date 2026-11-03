@@ -1,0 +1,44 @@
+# The free activation gives -1/-1 and flying until end of turn, allowing an attack past a ground blocker (CR 611.2a, 702.9b).
+[Bot1 Deck]
+Urza's Avenger
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Memnite
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Urza's Avenger.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Urza's Avenger.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Modes(flying)
+? Bot1.Battlefield.Urza's Avenger.Power = 3
+? Bot1.Battlefield.Urza's Avenger.Toughness = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Urza's Avenger; Bot1.Battlefield.Memnite)
+! Bot2.Block(Bot2.Battlefield.Memnite > Urza's Avenger)
+Bot2.Block(Bot2.Battlefield.Memnite > Bot1.Battlefield.Memnite)
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Urza's Avenger.Power = 4
+Bot1.Battlefield.Urza's Avenger.Toughness = 4
+Bot1.Battlefield.Urza's Avenger.Keywords = (absent)
