@@ -1,0 +1,36 @@
+# Spark Double copies a legendary planeswalker without becoming legendary and adds one loyalty counter (CR 707.9, 306.5).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Pearl
+Teferi, Hero of Dominaria
+Spark Double
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Teferi, Hero of Dominaria.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Spark Double.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[Expect]
+Bot1.Battlefield.Teferi, Hero of Dominaria#1.Counters.Loyalty = 4
+Bot1.Battlefield.Teferi, Hero of Dominaria#2.Counters.Loyalty = 5
+Bot1.Battlefield.Teferi, Hero of Dominaria#2.Supertypes = (absent)

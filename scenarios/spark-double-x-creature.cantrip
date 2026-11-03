@@ -1,0 +1,39 @@
+# Spark Double does not copy counters and uses X=0 for a copied Walking Ballista (CR 707.2, 107.3m).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Walking Ballista
+Spark Double
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Walking Ballista.Cast(X: 1)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spark Double.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Target(Bot1.Battlefield.Walking Ballista)
+[Expect]
+Bot1.Battlefield.Walking Ballista#2.Power = 1
+Bot1.Battlefield.Walking Ballista#2.Toughness = 1
+Bot1.Battlefield.Walking Ballista#2.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Grizzly Bears.Power = 2

@@ -1,0 +1,30 @@
+# Copying a Spirit token yields a nontoken 2/2 with flying and one additional counter (CR 707.2, 707.9).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Lingering Souls
+Spark Double
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Lingering Souls.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spark Double.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot1.Battlefield.Spirit Token#1)
+[Expect]
+Bot1.Battlefield.Spirit Token#3.Power = 2
+Bot1.Battlefield.Spirit Token#3.Toughness = 2
+Bot1.Battlefield.Spirit Token#3.Keywords = Flying
+Bot1.Battlefield.Spirit Token#3.Token = (absent)

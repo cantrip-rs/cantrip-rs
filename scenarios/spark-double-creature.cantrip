@@ -1,0 +1,40 @@
+# Spark Double copies a controlled creature and enters with an additional +1/+1 counter (CR 707.9, 122.1).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Grizzly Bears
+Spark Double
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spark Double.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+! Bot1.Target(Bot2.Battlefield.Grizzly Bears)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears)
+[Expect]
+Bot1.Battlefield.Grizzly Bears#2.Power = 3
+Bot1.Battlefield.Grizzly Bears#2.Toughness = 3
+Bot1.Battlefield.Grizzly Bears#2.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Grizzly Bears#2.Counters.Loyalty = (absent)
+Bot2.Battlefield.Grizzly Bears.Power = 2

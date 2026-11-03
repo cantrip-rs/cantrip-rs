@@ -1,0 +1,36 @@
+# Declining the copy leaves Spark Double as a 0/0 that dies to state-based actions (CR 707.9, 704.5f).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Grizzly Bears
+Spark Double
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spark Double.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot1.Graveyard.Spark Double.Power = 0
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot2.Battlefield.Grizzly Bears.Power = 2

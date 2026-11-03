@@ -1,0 +1,39 @@
+# A copied Vehicle that was animated only by crew enters as a noncreature Vehicle and receives no +1/+1 counter (CR 707.2, 707.9).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Sol Ring
+Grizzly Bears
+Smuggler's Copter
+Spark Double
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Smuggler's Copter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Smuggler's Copter.Activate(Ability: Crew)
+Bot1.Choose(Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Spark Double.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot1.Battlefield.Smuggler's Copter)
+[Expect]
+Bot1.Battlefield.Smuggler's Copter#2.Types = Artifact
+Bot1.Battlefield.Smuggler's Copter#2.Counters.PlusOnePlusOne = (absent)
