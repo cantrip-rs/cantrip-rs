@@ -1,0 +1,34 @@
+# The emblem prevents an opposing Oracle's alternate win, and CantWin isolates the win prohibition (CR 104.2b, 114.4).
+[Bot1 Deck]
+Black Lotus
+Gideon of the Trials
+Island x20
+[Bot2 Deck]
+Island
+Island
+Thassa's Oracle
+Island x8
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Gideon of the Trials.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gideon of the Trials.Activate(Ability: #3)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island#1.Activate
+Bot2.Battlefield.Island#2.Activate
+? Bot2.Library.Count = 2
+Bot2.Hand.Thassa's Oracle.Cast
+[T4 Bot2.Main2]
+[Expect]
+Result = InProgress
+Bot2.CantWin = true
+Bot1.CantWin = (absent)
+Bot1.Emblems.Count = 1

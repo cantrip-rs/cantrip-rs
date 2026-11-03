@@ -1,0 +1,25 @@
+# The +1 may target its controller's noncreature artifact, and cannot target a card in hand (CR 115.1, 606.4).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Gideon of the Trials
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Gideon of the Trials.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Gideon of the Trials.Activate(Bot1; Ability: #1)
+! Bot1.Battlefield.Gideon of the Trials.Activate(Bot1.Graveyard.Black Lotus; Ability: #1)
+! Bot1.Battlefield.Gideon of the Trials.Activate(Bot1.Hand.Island; Ability: #1)
+Bot1.Battlefield.Gideon of the Trials.Activate(Bot1.Battlefield.Mox Emerald; Ability: #1)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Gideon of the Trials.Counters.Loyalty = 4
+Bot1.Battlefield.Mox Emerald.Tapped = false

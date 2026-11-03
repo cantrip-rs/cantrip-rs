@@ -1,0 +1,33 @@
+# Gideon's emblem stops its controller losing to Glorious End while that player controls a Gideon planeswalker (CR 104.3, 113.6).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Gideon of the Trials
+Glorious End
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Gideon of the Trials.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gideon of the Trials.Activate(Ability: #3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gideon of the Trials.Counters.Loyalty = 3
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Glorious End.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Result = InProgress
+Bot1.Emblems = Gideon of the Trials emblem
+Bot2.CantWin = true
+Bot1.CantWin = (absent)

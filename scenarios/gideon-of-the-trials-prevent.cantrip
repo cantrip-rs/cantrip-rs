@@ -1,0 +1,37 @@
+# Gideon's +1 prevents all damage from an opposing creature until the start of Gideon's controller's next turn (CR 615.1, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Gideon of the Trials
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Emerald
+Grizzly Bears
+Kalonian Tusker
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Gideon of the Trials.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Kalonian Tusker.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gideon of the Trials.Activate(Bot2.Battlefield.Grizzly Bears; Ability: #1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gideon of the Trials.Counters.Loyalty = 4
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears; Kalonian Tusker > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 17
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears; Kalonian Tusker > Bot1)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 12

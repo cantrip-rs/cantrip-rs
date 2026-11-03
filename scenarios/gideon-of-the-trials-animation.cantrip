@@ -1,0 +1,43 @@
+# Gideon's zero ability makes him a 4/4 indestructible creature and prevents damage to him until end of turn (CR 611.2a, 615.1).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Gideon of the Trials
+Shock
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Gideon of the Trials.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gideon of the Trials.Activate(Ability: #2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gideon of the Trials.Power = 4
+? Bot1.Battlefield.Gideon of the Trials.Toughness = 4
+? Bot1.Battlefield.Gideon of the Trials.Types = Planeswalker; Creature
+? Bot1.Battlefield.Gideon of the Trials.Subtypes = Gideon; Human; Soldier
+? Bot1.Battlefield.Gideon of the Trials.Keywords = Indestructible
+? Bot1.Battlefield.Gideon of the Trials.Counters.Loyalty = 3
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Gideon of the Trials)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gideon of the Trials.Damage = 0
+? Bot1.Battlefield.Gideon of the Trials.Counters.Loyalty = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Gideon of the Trials)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Gideon of the Trials.Types = Planeswalker
+Bot1.Battlefield.Gideon of the Trials.Counters.Loyalty = 1

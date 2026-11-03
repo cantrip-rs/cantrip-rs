@@ -1,0 +1,59 @@
+# An emblem no longer prevents losing after the last Gideon planeswalker loses its loyalty counters (CR 604.1, 104.3e).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Sapphire
+Gideon of the Trials
+Karn, Scion of Urza
+Glorious End
+Island x20
+[Bot2 Deck]
+Black Lotus
+Black Lotus
+Gideon of the Trials
+Vampire Hexmage
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Gideon of the Trials.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Karn, Scion of Urza.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gideon of the Trials.Activate(Ability: #3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gideon of the Trials.Counters.Loyalty = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot2.Hand.Vampire Hexmage.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Gideon of the Trials.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Vampire Hexmage.Activate(Bot1.Battlefield.Gideon of the Trials)
+[T3 Bot1.Main1]
+? Bot1.Emblems.Count = 1
+? Bot2.CantWin = (absent)
+? Bot1.CantWin = (absent)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Glorious End.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Result = Bot2 won
+Bot1.Emblems = Gideon of the Trials emblem
