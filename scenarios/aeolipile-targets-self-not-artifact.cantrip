@@ -1,0 +1,30 @@
+# Aeolipile can target its controller but cannot target a noncreature artifact (CR 115.4).
+[Bot1 Deck]
+Aeolipile
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aeolipile.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Aeolipile.Activate(Bot1.Battlefield.Mox Sapphire)
+Bot1.Battlefield.Aeolipile.Activate(Bot1)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot1.Graveyard = Aeolipile
