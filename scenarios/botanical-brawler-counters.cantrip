@@ -1,0 +1,62 @@
+# Brawler triggers once for another controlled permanent's first counter event per turn, including multiple counters on entry (CR 122.6, 603.4).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Pearl
+Botanical Brawler
+Walking Ballista
+Snakeskin Veil
+Urza's Saga
+Snakeskin Veil
+Island x20
+[Bot2 Deck]
+Black Lotus
+Walking Ballista
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Botanical Brawler.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Botanical Brawler.Counters.PlusOnePlusOne = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Walking Ballista.Cast(X: 1)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Botanical Brawler.Counters.PlusOnePlusOne = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Urza's Saga.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Walking Ballista.Cast(X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Botanical Brawler.Counters.PlusOnePlusOne = 3
+Bot1.Hand.Snakeskin Veil.Cast(Bot1.Battlefield.Walking Ballista)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Battlefield.Botanical Brawler.Counters.PlusOnePlusOne = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Snakeskin Veil.Cast(Bot1.Battlefield.Walking Ballista)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Walking Ballista.Counters.PlusOnePlusOne = 4
+Bot1.Battlefield.Botanical Brawler.Counters.PlusOnePlusOne = 4

@@ -1,0 +1,44 @@
+# With exactly one counter event, changing control of that permanent leaves the first-time condition true (CR 603.4).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Pearl
+Botanical Brawler
+Ornithopter
+Take Up the Shield
+Take Up the Shield
+Island x20
+[Bot2 Deck]
+Black Lotus
+Old Man of the Sea
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Botanical Brawler.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Take Up the Shield.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Botanical Brawler.Counters.PlusOnePlusOne = 3

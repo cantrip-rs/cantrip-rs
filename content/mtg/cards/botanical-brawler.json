@@ -1,0 +1,11 @@
+{
+  "name": "Botanical Brawler",
+  "manaCost": "{G}{W}",
+  "type": "Creature — Elemental Warrior",
+  "power": 0,
+  "toughness": 0,
+  "oracleText": "Trample\nThis creature enters with two +1/+1 counters on it.\nWhenever one or more +1/+1 counters are put on another permanent you control, if it's the first time +1/+1 counters have been put on that permanent this turn, put a +1/+1 counter on this creature.",
+  "keywords": [
+    "Trample"
+  ]
+}

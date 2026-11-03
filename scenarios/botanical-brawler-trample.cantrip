@@ -1,0 +1,29 @@
+# Brawler enters with two counters and tramples over a 1/1 blocker (CR 702.19b, 122.6).
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Botanical Brawler
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Botanical Brawler.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Botanical Brawler > Bot2)
+Bot2.Block(Llanowar Elves > Botanical Brawler)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Botanical Brawler.Counters.PlusOnePlusOne = 2
+Bot2.Battlefield.Llanowar Elves = (absent)
