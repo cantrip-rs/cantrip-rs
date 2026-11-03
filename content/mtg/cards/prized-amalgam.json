@@ -1,0 +1,8 @@
+{
+  "name": "Prized Amalgam",
+  "manaCost": "{1}{U}{B}",
+  "type": "Creature — Zombie",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever a creature enters, if it entered from your graveyard or you cast it from your graveyard, return this card from your graveyard to the battlefield tapped at the beginning of the next end step."
+}

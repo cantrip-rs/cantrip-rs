@@ -1,0 +1,49 @@
+# A creature entering from the graveyard does not set up a delayed return for an Amalgam still on the battlefield (CR 603.6a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Prized Amalgam
+Faithless Looting
+Unearth
+Grizzly Bears
+Shock
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prized Amalgam.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Grizzly Bears; Shock)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unearth.Cast(Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Prized Amalgam)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.End]
+[Expect]
+Bot1.Battlefield.Prized Amalgam = (absent)
+Bot1.Graveyard.Prized Amalgam.Power = 3

@@ -1,0 +1,59 @@
+# If Amalgam leaves the graveyard before its delayed trigger, the new object is not returned (CR 400.7).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Faithless Looting
+Unearth
+Prized Amalgam
+Grizzly Bears
+Tormod's Crypt
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Faithless Looting
+Unearth
+Prized Amalgam
+Grizzly Bears
+Island
+Island x20
+[Actions]
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Prized Amalgam; Grizzly Bears)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Faithless Looting.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Prized Amalgam; Grizzly Bears)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Unearth.Cast(Bot2.Graveyard.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Prized Amalgam.Power = 3
+? Bot2.Battlefield.Prized Amalgam.Tapped = true
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unearth.Cast(Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Prized Amalgam = (absent)
+Exile = Unearth; Faithless Looting; Tormod's Crypt; Prized Amalgam
+Bot2.Battlefield.Prized Amalgam.Power = 3

@@ -1,0 +1,42 @@
+# A copied trigger rechecks whose graveyard the creature came from; the opponent cannot return Amalgam under their control (CR 603.4, 707.10).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Faithless Looting
+Unearth
+Prized Amalgam
+Grizzly Bears
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Return the Favor
+Island x25
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Prized Amalgam; Grizzly Bears)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unearth.Cast(Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Return the Favor.Cast
+Bot2.Modes(1)
+Bot2.Target(Stack.Prized Amalgam)
+Bot2.Pass
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Prized Amalgam.Tapped = true
+Bot2.Battlefield.Prized Amalgam = (absent)

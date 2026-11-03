@@ -1,0 +1,42 @@
+# A later, unrelated creature entry must not replace the entry the intervening condition asks about (CR 603.4).
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Faithless Looting
+Unearth
+Prized Amalgam
+Grizzly Bears
+Spectral Sailor
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Prized Amalgam; Grizzly Bears)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Unearth.Cast(Bot1.Graveyard.Grizzly Bears)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Spectral Sailor.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Prized Amalgam.Tapped = true
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Spectral Sailor.Power = 1
