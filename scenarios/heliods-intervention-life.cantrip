@@ -1,0 +1,23 @@
+# The life mode gives the targeted player twice X life in one instruction (CR 119.3, 700.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Heliod's Intervention
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heliod's Intervention.Cast(X: 2)
+! Bot1.Modes(Count: 0)
+Bot1.Modes(2)
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 24

@@ -1,0 +1,24 @@
+# With X=1 a land cannot be targeted, while an artifact can (CR 115.1).
+[Bot1 Deck]
+Black Lotus
+Island
+Ornithopter
+Heliod's Intervention
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Heliod's Intervention.Cast(X: 1)
+Bot1.Modes(1)
+! Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Battlefield.Island.Tapped = false

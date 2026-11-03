@@ -1,0 +1,33 @@
+# At X=2 the destruction mode targets exactly two artifacts, including either player's, and excludes lands (CR 115.1, 701.8a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Ornithopter
+Heliod's Intervention
+Island x20
+[Bot2 Deck]
+Urza's Saga
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Urza's Saga.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heliod's Intervention.Cast(X: 2)
+! Bot1.Modes(1; 2)
+Bot1.Modes(1)
+! Bot1.Target(Bot1.Battlefield.Island)
+! Bot1.Target(Count: 1)
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Urza's Saga)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot2.Battlefield.Urza's Saga = (absent)
+Bot1.Battlefield.Island.Tapped = false

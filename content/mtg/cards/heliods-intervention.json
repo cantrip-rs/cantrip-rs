@@ -1,0 +1,6 @@
+{
+  "name": "Heliod's Intervention",
+  "manaCost": "{X}{W}{W}",
+  "type": "Instant",
+  "oracleText": "Choose one —\n• Destroy X target artifacts and/or enchantments.\n• Target player gains twice X life."
+}
