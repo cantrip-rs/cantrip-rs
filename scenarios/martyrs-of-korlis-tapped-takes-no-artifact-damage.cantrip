@@ -1,0 +1,65 @@
+# A nonartifact Lightning Bolt damages Martyrs' controller while it is untapped. Once Martyrs
+# attacks and becomes tapped, the opponent's Pyrite Spellbomb damages its controller too (CR 614.1a).
+[Bot1 Deck]
+Martyrs of Korlis
+Black Lotus
+Mox Pearl
+Mox Ruby
+Talisman of Conviction
+Plains
+Plains
+Plains x20
+
+[Bot2 Deck]
+Mountain
+Pyrite Spellbomb
+Mountain
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Martyrs of Korlis.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Pyrite Spellbomb.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Talisman of Conviction.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Talisman of Conviction.Activate(Ability: Add {R} or {W}; Color: White)
+? Bot1.Life = 20
+? Bot1.Battlefield.Martyrs of Korlis.Damage = 1
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+Bot1.Attack(Martyrs of Korlis)
+[T6 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain#1.Activate
+Bot2.Battlefield.Pyrite Spellbomb.Activate(Bot1; Ability: deals 2 damage)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 15
+? Bot1.Battlefield.Martyrs of Korlis.Damage = 0
+
+[Expect]
+Bot1.Life = 15
+Bot1.Battlefield.Martyrs of Korlis.Damage = 0
+Bot2.Graveyard = Pyrite Spellbomb; Lightning Bolt

@@ -1,0 +1,50 @@
+# With two untapped Martyrs, the affected player chooses which replacement applies (CR 616.1).
+# Talisman damage goes to the chosen Martyrs, once, rather than to its controller.
+[Bot1 Deck]
+Martyrs of Korlis
+Martyrs of Korlis
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Pearl
+Talisman of Conviction
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Martyrs of Korlis.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Martyrs of Korlis.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Talisman of Conviction.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Talisman of Conviction.Activate(Ability: Add {R} or {W}; Color: White)
+Bot1.Replace(Martyrs of Korlis#2)
+? Bot1.Life = 20
+
+[Expect]
+Bot1.Battlefield.Martyrs of Korlis#1.Damage = 0
+Bot1.Battlefield.Martyrs of Korlis#2.Damage = 1
