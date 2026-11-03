@@ -1,0 +1,59 @@
+# A blocked Prodigal Sorcerer deals noncombat damage to another creature. The Wall does not
+# protect that creature, but still prevents the Sorcerer’s combat damage to itself (CR 615.1).
+[Bot1 Deck]
+Wall of Vapor
+Memnite
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Forest
+Quirion Ranger
+Prodigal Sorcerer
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Wall of Vapor.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Quirion Ranger.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Prodigal Sorcerer.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Prodigal Sorcerer > Bot1)
+Bot1.Block(Wall of Vapor > Prodigal Sorcerer)
+Bot2.Battlefield.Quirion Ranger.Activate(Bot2.Battlefield.Prodigal Sorcerer)
+Bot2.Choose(Forest)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Prodigal Sorcerer.Activate(Bot1.Battlefield.Memnite)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Memnite = (absent)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Wall of Vapor.Damage = 0
+Bot1.Graveyard = Memnite
+Prevented = 1 Prodigal Sorcerer > Wall of Vapor by Wall of Vapor

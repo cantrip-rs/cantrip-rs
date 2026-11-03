@@ -1,0 +1,11 @@
+{
+  "name": "Wall of Vapor",
+  "manaCost": "{3}{U}",
+  "type": "Creature — Wall",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "Defender (This creature can't attack.)\nPrevent all damage that would be dealt to this creature by creatures it's blocking.",
+  "keywords": [
+    "Defender"
+  ]
+}
