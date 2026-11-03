@@ -1,0 +1,36 @@
+# Weakness enchants only a creature and gives the enchanted creature -2/-1 (CR 702.5a, 613.4c).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Hill Giant
+Weakness
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Weakness.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Weakness.Cast(Bot1.Battlefield.Hill Giant)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Weakness.AttachedTo = Hill Giant
+Bot1.Battlefield.Hill Giant.Power = 1
+Bot1.Battlefield.Hill Giant.Toughness = 2
