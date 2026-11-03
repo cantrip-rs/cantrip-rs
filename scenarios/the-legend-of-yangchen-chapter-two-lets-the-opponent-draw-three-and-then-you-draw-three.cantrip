@@ -1,0 +1,48 @@
+# The Legend of Yangchen, chapter II: "You may have target opponent draw three cards. If you do, draw three cards." Chapter I
+# (turn 1) finds no permanent of Bot2's with mana value 3 or greater (Bot2 has none) and asks nothing: nothing is exiled. On
+# turn 3 chapter II targets Bot2 (the only opponent), Bot1 accepts, and Bot2 draws three cards, then Bot1 draws three.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+The Legend of Yangchen
+Mox Pearl
+Mox Pearl x3
+Plains x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.The Legend of Yangchen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile.Count = 0
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 2
+? Bot2.Hand.Count = 7
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Hand.Count = 5
+? Bot2.Hand.Count = 10
+
+[Expect]
+Bot1.Library.Count = 9
+Bot2.Library.Count = 9

@@ -1,0 +1,75 @@
+# The Legend of Yangchen, chapter I in a three-player game: "Starting with you, each player chooses up to one permanent with
+# mana value 3 or greater from among permanents your opponents control." Bot2 has Alert Shu Infantry and Bot3 Bender's
+# Waterskin; both are "permanents your opponents control", so Bot1 is offered either (it takes Bot3's Waterskin) and the
+# prompts then come to Bot2 and Bot3 in turn: each may choose from both opponents' permanents, their own included. Bot2
+# chooses its own Infantry; Bot3 chooses the Infantry too (an opponent's permanent already chosen), so the Infantry and the
+# Waterskin are both exiled.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+The Legend of Yangchen
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Alert Shu Infantry
+Plains x16
+
+[Bot3 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Bender's Waterskin
+Plains x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Hand.Alert Shu Infantry.Cast
+Bot2.Pass
+[T3 Bot3.Main1]
+Bot3.Hand.Mox Pearl.Cast
+Bot3.Hand.Mox Pearl.Cast
+Bot3.Hand.Mox Pearl.Cast
+Bot3.Battlefield.Mox Pearl#1.Activate
+Bot3.Battlefield.Mox Pearl#2.Activate
+Bot3.Battlefield.Mox Pearl#3.Activate
+Bot3.Hand.Bender's Waterskin.Cast
+Bot3.Pass
+[T4 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.The Legend of Yangchen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+Bot1.Choose(Bender's Waterskin)
+Bot2.Choose(Alert Shu Infantry)
+Bot3.Choose(Alert Shu Infantry)
+? Exile = Alert Shu Infantry; Bender's Waterskin
+
+[Expect]
+Exile.Count = 2

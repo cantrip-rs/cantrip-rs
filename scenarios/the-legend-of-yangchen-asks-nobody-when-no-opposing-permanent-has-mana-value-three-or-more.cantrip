@@ -1,0 +1,53 @@
+# The Legend of Yangchen, chapter I: Bot2 controls only Ageless Guardian (mana value 2, one short), a Mox Pearl and a Plains, so
+# there is nothing to choose among and neither player is asked: the chapter resolves at once and exiles nothing. Bot1's own
+# Saga (mana value 5) is no more eligible, being the controller's own.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+The Legend of Yangchen
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Ageless Guardian
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Ageless Guardian.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.The Legend of Yangchen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile.Count = 0
+
+[Expect]
+Bot2.Battlefield = Mox Pearl; Mox Pearl; Plains; Ageless Guardian
+Bot1.Battlefield.Count = 6
+Exile.Count = 0

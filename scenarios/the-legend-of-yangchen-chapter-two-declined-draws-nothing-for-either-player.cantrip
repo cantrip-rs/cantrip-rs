@@ -1,0 +1,46 @@
+# The Legend of Yangchen, chapter II: "You may have target opponent draw three cards. If you do, draw three cards." Bot1
+# declines: Bot2 draws nothing and so Bot1 draws nothing either (the second draw depends on the first, CR 608.2c). Bot1's hand
+# stays at the one card left from turn 1 and the one drawn for turn 3 (two); Bot2's at its seven after discarding to hand size.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+The Legend of Yangchen
+Mox Pearl
+Mox Pearl x3
+Plains x10
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.The Legend of Yangchen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Exile.Count = 0
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Hand.Count = 2
+? Bot2.Hand.Count = 7
+
+[Expect]
+Bot1.Library.Count = 12
+Bot2.Library.Count = 12

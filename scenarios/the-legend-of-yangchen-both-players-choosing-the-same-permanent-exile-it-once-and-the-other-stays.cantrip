@@ -1,0 +1,70 @@
+# The Legend of Yangchen, chapter I: Bot1 and Bot2 each choose Alert Shu Infantry. The choices are made one after the other,
+# and a permanent chosen twice is exiled once (it leaves a single time, CR 406.1); Bender's Waterskin, chosen by neither, stays.
+# Bot2 is offered the Infantry even though Bot1 already chose it: choosing does not use a permanent up.
+
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+The Legend of Yangchen
+Plains
+Plains x13
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Alert Shu Infantry
+Bender's Waterskin
+Plains x13
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Hand.Alert Shu Infantry.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl#4.Activate
+Bot2.Battlefield.Mox Pearl#5.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Bender's Waterskin.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.The Legend of Yangchen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Alert Shu Infantry)
+Bot2.Choose(Alert Shu Infantry)
+? Exile = Alert Shu Infantry
+
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl; The Legend of Yangchen
+Bot2.Battlefield = Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl; Mox Pearl; Plains; Bender's Waterskin
+Exile = Alert Shu Infantry
+Exile.Count = 1

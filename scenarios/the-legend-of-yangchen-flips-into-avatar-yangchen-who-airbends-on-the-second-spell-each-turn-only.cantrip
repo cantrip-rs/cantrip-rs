@@ -1,0 +1,74 @@
+# The Legend of Yangchen, chapter III: "Exile this Saga, then return it to the battlefield transformed under your control",
+# as Avatar Yangchen (CR 712.14a), a 4/5 Legendary Creature - Avatar with flying. "Whenever you cast your second spell each
+# turn, airbend up to one other target nonland permanent." Bot1 casts Mox Pearl on turn 3 (a spell on an earlier turn), then on
+# turn 5, the turn it flips, a first Mox Pearl (no trigger) and a second (trigger). The trigger refuses a land and Avatar
+# Yangchen herself ("other"), takes any other nonland permanent - Bot2's Mox Pearl, an opponent's - and exiles it (CR 701.65a).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+The Legend of Yangchen
+Mox Pearl
+Mox Pearl x3
+Plains x10
+
+[Bot2 Deck]
+Mox Pearl
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.The Legend of Yangchen.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.The Legend of Yangchen.Counters.Lore = 2
+? Bot1.Battlefield.Avatar Yangchen = (absent)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Avatar Yangchen.Types = Creature
+? Bot1.Battlefield.Avatar Yangchen.Supertypes = Legendary
+? Bot1.Battlefield.Avatar Yangchen.Subtypes = Avatar
+? Bot1.Battlefield.Avatar Yangchen.Power = 4
+? Bot1.Battlefield.Avatar Yangchen.Toughness = 5
+? Bot1.Battlefield.Avatar Yangchen.Keywords = Flying
+? Bot1.Battlefield.The Legend of Yangchen = (absent)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Hand.Mox Pearl.Cast
+! Bot1.Target(Bot1.Battlefield.Avatar Yangchen)
+! Bot1.Target(Bot2.Battlefield.Plains)
+Bot1.Target(Bot2.Battlefield.Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+? Exile = Mox Pearl
+
+[Expect]
+Bot2.Battlefield = Plains
