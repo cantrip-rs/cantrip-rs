@@ -1,0 +1,6 @@
+{
+  "name": "Stream of Life",
+  "manaCost": "{X}{G}",
+  "type": "Sorcery",
+  "oracleText": "Target player gains X life."
+}
