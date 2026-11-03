@@ -1277,6 +1277,15 @@ pub fn this_enters_or_your_upkeep(q: &dyn Query, me: &Asker, event: &Event) -> O
     this_enters(q, me.source, event).or_else(|| your_upkeep(q, me, event))
 }
 
+/// "At the beginning of each player's draw step" (CR 504.1, 603.2): record that player as the subject.
+/// Howling Mine and Mornsong Aria print this trigger.
+pub fn each_players_draw_step(q: &dyn Query, _: ObjectId, event: &Event) -> Option<Fired> {
+    match event {
+        Event::StepBegan { step: Step::Draw } => Fired::about(Target::Player(q.state().turn.active)),
+        _ => None,
+    }
+}
+
 /// "At the beginning of your draw step" (CR 504.1, 603.2). Mana Vault and Bandit's Talent print it.
 pub fn your_draw_step(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     your_step(q, me, event, Step::Draw)

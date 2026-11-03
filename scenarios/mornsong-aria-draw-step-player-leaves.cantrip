@@ -1,0 +1,25 @@
+# A departed draw-step player cannot search; Wan Shi Tong must not see a search (CR 800.4a).
+[Bot1 Deck]
+Black Lotus x2
+Wan Shi Tong, Librarian
+Mornsong Aria
+Island x20
+[Bot2 Deck]
+Island x20
+[Bot3 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Wan Shi Tong, Librarian.Cast(X: 0)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mornsong Aria.Cast
+[T2 Bot2.Draw]
+? Stack.Count = 1
+Bot2.Concede
+[T3 Bot3.Upkeep]
+[Expect]
+Result = InProgress
+Bot1.Battlefield.Wan Shi Tong, Librarian.Counters.PlusOnePlusOne = (absent)
