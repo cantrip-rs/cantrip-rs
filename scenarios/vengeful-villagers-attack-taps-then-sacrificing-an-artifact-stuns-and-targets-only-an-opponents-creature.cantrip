@@ -1,0 +1,61 @@
+# Vengeful Villagers: "Whenever this creature attacks, choose target creature an opponent controls. Tap it, then you may sacrifice
+# an artifact or creature. If you do, put a stun counter on the chosen creature." In turn 3 Bot1's own Ornithopter is refused as a
+# target (it is not an opponent's creature, CR 115.1, 601.2c) beside Bot2's two legal creatures; Bot2's Ornithopter is chosen, tapped,
+# and Bot1 sacrifices a Mox Pearl: the Ornithopter has one stun counter. In turn 4 its untap step removes the counter instead of
+# untapping it (CR 122.1d), so it stays tapped; the Savannah Lions, not chosen, untaps and has none.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Vengeful Villagers
+Ornithopter
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Savannah Lions
+Plains
+Plains x17
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Vengeful Villagers.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Vengeful Villagers > Bot2)
+! Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Mox Pearl#4; Mox Pearl#5)
+Bot1.Choose(Mox Pearl#5)
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+? Bot2.Battlefield.Savannah Lions.Tapped = false
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+? Bot2.Battlefield.Savannah Lions.Tapped = false
+
+[Expect]
+Bot1.Graveyard = Mox Pearl

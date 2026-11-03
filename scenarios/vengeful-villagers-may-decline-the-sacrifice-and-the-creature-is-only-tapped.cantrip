@@ -1,0 +1,45 @@
+# Vengeful Villagers: "you may sacrifice an artifact or creature. If you do, put a stun counter...". Bot1 attacks and chooses
+# Bot2's Ornithopter; it is tapped, but Bot1 declines to sacrifice anything (Choose with nothing named), so there is no stun
+# counter and nothing leaves Bot1's side: in turn 4 the Ornithopter untaps as usual.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Vengeful Villagers
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Vengeful Villagers.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Vengeful Villagers > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = false
+
+[Expect]
+Bot1.Graveyard.Count = 0

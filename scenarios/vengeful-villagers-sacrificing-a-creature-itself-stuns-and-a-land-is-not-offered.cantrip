@@ -1,0 +1,46 @@
+# Vengeful Villagers: "an artifact or creature" is also this creature. Bot1 sacrifices the Villagers itself (a creature, not an
+# artifact) while it is attacking: the ability still resolves and puts a stun counter on the chosen Ornithopter (CR 608.2c). An
+# Island Bot1 controls is neither, so naming it is refused beside the legal Mox Pearl and Villagers.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Vengeful Villagers
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Plains x19
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Hand.Vengeful Villagers.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Vengeful Villagers > Bot2)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Island)
+Bot1.Choose(Vengeful Villagers)
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+
+[Expect]
+Bot1.Graveyard = Vengeful Villagers
+Bot1.Battlefield.Count = 6
