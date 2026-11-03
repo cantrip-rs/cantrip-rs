@@ -1,0 +1,52 @@
+# Fallen Angel sacrifices one controlled creature as a cost for +2/+1 until cleanup, and can do so again on a later turn (CR 602.2b, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Fallen Angel
+Ornithopter x2
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fallen Angel.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Fallen Angel.Activate
+! Bot1.Choose()
+! Bot1.Choose(Mox Pearl)
+! Bot1.Choose(Ornithopter#1; Ornithopter#2)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fallen Angel.Power = 5
+? Bot1.Battlefield.Fallen Angel.Toughness = 4
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Fallen Angel.Power = 3
+? Bot1.Battlefield.Fallen Angel.Toughness = 3
+Bot1.Battlefield.Fallen Angel.Activate
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fallen Angel.Power = 5
+? Bot1.Battlefield.Fallen Angel.Toughness = 4
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Fallen Angel.Power = 3
+Bot1.Battlefield.Fallen Angel.Toughness = 3
+Bot1.Graveyard.Count = 3
