@@ -1,0 +1,6 @@
+{
+  "name": "Magma Opus",
+  "manaCost": "{6}{U}{R}",
+  "type": "Instant",
+  "oracleText": "Magma Opus deals 4 damage divided as you choose among any number of targets. Tap two target permanents. Create a 4/4 blue and red Elemental creature token. Draw two cards.\n{U/R}{U/R}, Discard this card: Create a Treasure token."
+}

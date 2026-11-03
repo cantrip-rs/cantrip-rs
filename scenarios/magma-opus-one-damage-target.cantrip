@@ -1,0 +1,48 @@
+# The caster is the only legal damage target when the opponent has hexproof and no creatures are present (CR 601.2c–d, 702.11c).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Magma Opus
+Island
+Mountain
+Forest
+Island x20
+[Bot2 Deck]
+Leyline of Sanctity
+Island x20
+[Actions]
+Bot2.Accept
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Magma Opus.Cast
+! Bot1.Divide(Bot1: 3)
+Bot1.Divide(Bot1: 4)
+! Bot1.Target(Bot1.Battlefield.Island; Bot1.Battlefield.Island)
+! Bot1.Target(Magma Opus)
+! Bot1.Target(Bot1; Bot2)
+! Bot1.Target(Bot1.Graveyard.Black Lotus#1; Bot1.Graveyard.Black Lotus#2)
+! Bot1.Target(Bot1.Battlefield.Island)
+! Bot1.Target(Bot1.Battlefield.Island; Bot1.Battlefield.Mox Ruby; Bot1.Battlefield.Mox Sapphire)
+Bot1.Target(Bot1.Battlefield.Island; Bot1.Battlefield.Mox Ruby)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 16
+Bot2.Life = 20
+Bot1.Battlefield.Island.Tapped = true
+Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Battlefield.Elemental Token.Power = 4
+Bot1.Battlefield.Elemental Token.Toughness = 4
+Bot1.Battlefield.Elemental Token.Colors = Blue; Red
+Bot1.Hand = Mountain; Forest; Island
+Bot1.Battlefield.Elemental Token.Tapped = false

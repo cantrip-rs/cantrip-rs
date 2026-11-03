@@ -1,0 +1,39 @@
+# Exactly two legal permanents suffice for the second target group (CR 601.2c).
+# Three sacrificed Lotuses supply the spell without leaving extra mana sources on the battlefield.
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Magma Opus
+Ornithopter
+Ornithopter
+Island
+Mountain
+Forest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Magma Opus.Cast
+Bot1.Divide()
+Bot1.Target(Bot1.Battlefield.Ornithopter#1; Bot1.Battlefield.Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter#1.Tapped = true
+Bot1.Battlefield.Ornithopter#2.Tapped = true
+Bot1.Battlefield.Elemental Token.Power = 4
+Bot1.Battlefield.Elemental Token.Toughness = 4
+Bot1.Battlefield.Count = 3
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Hand = Island; Mountain; Forest
+Stack.Count = 0

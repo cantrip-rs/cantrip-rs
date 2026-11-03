@@ -1,0 +1,61 @@
+# If every target is illegal the spell creates no token and draws no cards; a later copy uses the discard ability (CR 608.2b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Magma Opus
+Ornithopter
+Ornithopter
+Magma Opus
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Shock
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Magma Opus#1.Cast
+Bot1.Divide(Bot1.Battlefield.Ornithopter#1: 2; Bot1.Battlefield.Ornithopter#2: 2)
+Bot1.Target(Bot1.Battlefield.Ornithopter#1; Bot1.Battlefield.Ornithopter#2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Count = 2
+? Bot1.Hand = Magma Opus
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Magma Opus.Activate
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Count = 3
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Hand = Island

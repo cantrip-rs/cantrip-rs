@@ -1,0 +1,23 @@
+# The discard ability pays both hybrid symbols with red mana and makes exactly one Treasure (CR 107.4e, 602.2b, 111.10a).
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Magma Opus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Magma Opus.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Magma Opus
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Treasure Token.Types = Artifact
+Bot1.Battlefield.Treasure Token.Subtypes = Treasure
+Bot1.Battlefield.Treasure Token.Tapped = false

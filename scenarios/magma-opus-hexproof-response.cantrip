@@ -1,0 +1,55 @@
+# A target that gains hexproof stays on the battlefield but is illegal at resolution; the remaining targets resolve (CR 608.2b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Magma Opus
+Ornithopter
+Island
+Mountain
+Forest
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Blossoming Defense
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Magma Opus.Cast
+Bot1.Divide(Bot2: 4)
+Bot1.Target(Bot1.Battlefield.Island; Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Blossoming Defense.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 16
+Bot1.Battlefield.Island.Tapped = true
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Graveyard = Magma Opus; Black Lotus; Black Lotus
+Bot1.Battlefield.Elemental Token.Power = 4
+Bot1.Battlefield.Elemental Token.Toughness = 4
+Bot1.Battlefield.Elemental Token.Colors = Blue; Red
+Bot1.Hand = Mountain; Forest; Island
+Bot1.Battlefield.Elemental Token.Tapped = false
