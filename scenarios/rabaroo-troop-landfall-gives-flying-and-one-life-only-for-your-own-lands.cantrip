@@ -1,0 +1,56 @@
+# Rabaroo Troop {3}{W}{W}, a 3/5: "Landfall - Whenever a land you control enters, this creature gains flying until end of turn and
+# you gain 1 life." Bot2's Island entering on turn 2 does nothing (CR 603.2, "you control": no flying, Bot1 stays at 20). On
+# turn 3 Bot1's own Plains makes the Troop fly and Bot1 gains exactly 1 life (21). On Bot2's turn 4 the flying is gone (CR 514.2).
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Rabaroo Troop
+Plains
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rabaroo Troop.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Bot1.Battlefield.Rabaroo Troop.Keywords = (absent)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 20
+? Bot1.Battlefield.Rabaroo Troop.Keywords = (absent)
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 21
+? Bot1.Battlefield.Rabaroo Troop.Keywords = Flying
+? Bot1.Battlefield.Rabaroo Troop.Power = 3
+? Bot1.Battlefield.Rabaroo Troop.Toughness = 5
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Rabaroo Troop.Keywords = (absent)
+
+[Expect]
+Bot1.Life = 21

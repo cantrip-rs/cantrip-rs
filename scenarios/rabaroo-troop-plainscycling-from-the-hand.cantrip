@@ -1,0 +1,31 @@
+# Rabaroo Troop's plainscycling {2} (CR 702.29e): paying it and discarding the card from the hand finds the Plains in the library
+# and puts it into the hand. The cost {2} is paid exactly with two Moxen, and the pool ends empty; with only one Mox the ability
+# is not offered (one short).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Rabaroo Troop
+Island x4
+Plains
+Island x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Rabaroo Troop.Activate(Ability: Plainscycling; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Rabaroo Troop.Activate(Ability: Plainscycling)
+Bot1.Pass
+? Bot1.Mana = 
+Bot1.Search(Plains)
+
+[Expect]
+Bot1.Graveyard = Rabaroo Troop
+Bot1.Hand = Island; Island; Island; Island; Plains

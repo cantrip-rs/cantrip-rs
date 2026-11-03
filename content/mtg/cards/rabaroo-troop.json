@@ -1,0 +1,8 @@
+{
+  "name": "Rabaroo Troop",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Rabbit Kangaroo",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Landfall — Whenever a land you control enters, this creature gains flying until end of turn and you gain 1 life.\nPlainscycling {2} ({2}, Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle.)"
+}
