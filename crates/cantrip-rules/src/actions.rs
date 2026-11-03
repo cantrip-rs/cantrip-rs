@@ -3922,13 +3922,13 @@ pub fn available(cx: &Cx, player: PlayerId) -> Available {
 /// What `player` has to pay with, `skip` apart: a permanent whose own {T} is in the cost being paid cannot also be
 /// tapped for mana to pay it (CR 602.2b, 605.3b).
 fn available_without(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaWindow) -> Available {
-    available_as(cx, player, skip, window, false)
+    available_as(cx, player, skip.as_slice(), window, false)
 }
 
 /// `available_without`. `defer`: each source's own abilities are kept until those that could tap it are known
 /// (`Repeat::Tap`); without it they are counted as they are found, and finding such an ability starts over with it - so a
 /// board with none pays nothing for them.
-fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaWindow, defer: bool) -> Available {
+fn available_as(cx: &Cx, player: PlayerId, skip: &[ObjectId], window: ManaWindow, defer: bool) -> Available {
     let mut fixed = cx.s().player(player).pool.0;
     let mut restricted: Vec<(ManaRestriction, [u32; 6], u32)> = Vec::new();
     for (restriction, pool) in cx.s().restricted_of(player) {
@@ -3975,7 +3975,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
     let mut own: Vec<(ObjectId, usize, usize)> = Vec::new();
     let mut spent: Vec<ObjectId> = Vec::new();
     for &id in cx.s().battlefield() {
-        if cx.s().obj(id).controller != player || skip == Some(id) {
+        if cx.s().obj(id).controller != player || skip.contains(&id) {
             continue;
         }
         let chars = cx.chars(id);
@@ -4129,7 +4129,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
     }
     if !taps.is_empty() {
         for target in cx.permanents_of(player) {
-            if skip == Some(target) || own.iter().any(|&(id, from, to)| id == target && kept[from..to].iter().all(|a| a.tapped)) {
+            if skip.contains(&target) || own.iter().any(|&(id, from, to)| id == target && kept[from..to].iter().all(|a| a.tapped)) {
                 continue;
             }
             let outlets = tapping(target);
@@ -4147,7 +4147,7 @@ fn available_as(cx: &Cx, player: PlayerId, skip: Option<ObjectId>, window: ManaW
         let mut units: Vec<(Vec<Alternative>, u32)> = Vec::new();
         for target in cx.permanents_of(player) {
             // A permanent whose own {T} is in the cost being paid stays to be tapped for it (CR 602.2b, 605.3b).
-            if skip == Some(target) {
+            if skip.contains(&target) {
                 continue;
             }
             let outlets: Vec<Alternative> = repeatable
@@ -5173,6 +5173,93 @@ fn any_types(cx: &Cx, id: ObjectId, player: PlayerId, def: &ActivatedDef, by: Op
     }
 }
 
+/// The ways `player` could share the waterbend cost of `def`, an ability of `source`, between tapping their artifacts and
+/// creatures for it and making mana with them (CR 701.67a-b): each a mana supply - `None` for `base`, all of it - and how
+/// much of the waterbend cost's generic mana the taps pay. Mana abilities are activated before the cost is paid (CR 601.2g-h),
+/// so a permanent tapped or sacrificed for mana can't then be tapped for it, but one whose mana ability neither taps nor
+/// sacrifices it (Prismite) does both. One with an ability that makes mana that pays anything by its {T} alone (a Forest
+/// creature, a Treasure) is better spent on that, and one with no mana ability to spend is tapped for it; each way the rest
+/// could split, alike ones counted together, is judged with what they would leave (`available_as`).
+fn waterbend_payers(cx: &Cx, player: PlayerId, source: ObjectId, def: &ActivatedDef, base: &Available) -> Vec<(Option<Available>, u32)> {
+    let most = def.cost.mana.generic;
+    let forbidders = static_rules::activation_forbidders(cx);
+    let given = layers::acquisition_possible(cx.cards(), cx.s());
+    let replaceable = crate::replace::mana_may_be_replaced(cx);
+    let mut sure = 0u32;
+    // The rest, alike ones together: what makes them alike (card, characteristics, the mana abilities that can be activated,
+    // whether another source's mana ability would spend them), and which they are.
+    let mut either: Vec<((CardId, Chars, Vec<usize>, bool), Vec<ObjectId>)> = Vec::new();
+    for p in cx.permanents_of(player) {
+        let chars = cx.chars(p);
+        if cx.s().obj(p).tapped || !(chars.is(CardType::Artifact) || chars.is(CardType::Creature)) || (def.cost.tap && p == source) {
+            continue;
+        }
+        let mut abilities = Vec::new();
+        let (mut consumed, mut better) = (false, false);
+        for (index, ability) in chars.abilities().enumerate() {
+            let by = if given { cx.link_nth(p, &chars, index) } else { None };
+            let Some(m) = activated(cx, ability) else { continue };
+            if !m.is_mana_ability()
+                || !ManaWindow::Payment.allows(m)
+                || m.from != ZoneKind::Battlefield
+                || limit_reached(cx, p, &chars, index, m)
+                || !can_pay_activation(cx, p, player, &m.cost, Some(CostFor::ManaAbility), by)
+                || static_rules::activation_barred(cx, &forbidders, p, m)
+                || m.condition.is_some_and(|condition| !condition(cx, &Asker { source: p, controller: player, by, spell: false }))
+            {
+                continue;
+            }
+            abilities.push(index);
+            consumed |= m.cost.tap || m.cost.sacrifice_self;
+            better |= m.mana.is_none()
+                && Cost { tap: true, sacrifice_self: false, ..m.cost }.is_tap_only()
+                && m.restricted.is_none_or(|r| r == ManaRestriction::GainsHaste)
+                && (m.adds.0.iter().any(|&n| n > 0) || m.adds_any > 0 && any_types(cx, p, player, m, by) != 0)
+                && !replaceable;
+        }
+        let spent = base.spent.contains(&p);
+        if better {
+            continue;
+        }
+        if !consumed && !spent {
+            sure += 1;
+            continue;
+        }
+        let key = (cx.s().obj(p).card, chars, abilities, spent);
+        match either.iter_mut().find(|(k, _)| *k == key) {
+            Some((_, alike)) => alike.push(p),
+            None => either.push((key, vec![p])),
+        }
+    }
+    let mut ways = vec![(None, sure.min(most))];
+    let need = most.saturating_sub(sure) as usize;
+    if need == 0 || either.is_empty() {
+        return ways;
+    }
+    // How many of each group are tapped for it: every split of no more than it still needs, the first that many of each.
+    let mut taken = vec![0usize; either.len()];
+    loop {
+        let mut at = 0;
+        while at < either.len() {
+            taken[at] += 1;
+            if taken[at] <= either[at].1.len() && taken.iter().sum::<usize>() <= need {
+                break;
+            }
+            taken[at] = 0;
+            at += 1;
+        }
+        if at == either.len() {
+            return ways;
+        }
+        let mut skip: Vec<ObjectId> = either.iter().zip(&taken).flat_map(|((_, alike), &n)| alike[..n].iter().copied()).collect();
+        let bent = sure + skip.len() as u32;
+        if def.cost.tap {
+            skip.push(source);
+        }
+        ways.push((Some(available_as(cx, player, &skip, ManaWindow::Payment, false)), bent));
+    }
+}
+
 /// The activated abilities `player` may activate now, judged with the mana `available` could pay.
 fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<Available>, options: &mut Vec<ActionOption>) {
     // Abilities of permanents, then abilities that function from the hand (cycling) and the graveyard (unearth).
@@ -5274,7 +5361,16 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
             // (CR 602.2b): a seat handed it would cancel at the payment and be handed it again, forever.
             let owed = if def.special_action { special_action_cost(cx, player, id, ability, def) } else { def.cost.mana };
             // An {X} is judged at the least it may be announced as (CR 107.3a, 601.2b): 0, or 1 where X can't be 0.
-            let judged = at_least_x(owed, def.x_cant_be_zero).mana_value() > 0 && !def.tap_creatures_for_mana && !def.waterbend;
+            let judged = at_least_x(owed, def.x_cant_be_zero).mana_value() > 0 && !def.tap_creatures_for_mana;
+            // Waterbend (CR 701.67a-b): each untapped artifact or creature may pay {1} of the waterbend cost's generic mana by
+            // being tapped, and no more than that cost's generic mana, whatever the total has besides (Anointed Peacekeeper's
+            // tax); the source of a {T} cost is tapped for that already. Each way the permanents could be split between
+            // tapping for it and making mana is a mana supply of its own (`waterbend_payers`): covered if one covers it.
+            let bends = if def.waterbend && judged {
+                waterbend_payers(cx, player, id, def, available.get_or_init(|| self::available(cx, player)))
+            } else {
+                Vec::new()
+            };
             // The source's own mana abilities cannot pay for an ability that taps it (CR 602.2b, 605.3b).
             // Nor may it be spent for mana by another's ability (sacrificed to an altar, tapped by Urza) while paying it.
             let own = (judged
@@ -5294,8 +5390,12 @@ fn activated_options(cx: &Cx, player: PlayerId, available: &std::cell::OnceCell<
                 // Its Phyrexian symbols paid with life where the life total allows, beside the life the cost pays
                 // (CR 107.4f, 601.2b by way of 602.2b, 116.2b), as the activation announces them (`announce_life`).
                 let judge = |cost: ManaCost| {
-                    let cost = phyrexian_with_life(cx, player, cost, whole.life, activating(def));
-                    a.covers_for(&if any_color { cost.paid_with_any_color() } else { cost }, &payment)
+                    let covers = |a: &Available, bent: u32| {
+                        let cost = ManaCost { generic: cost.generic - cost.generic.min(bent), ..cost };
+                        let cost = phyrexian_with_life(cx, player, cost, whole.life, activating(def));
+                        a.covers_for(&if any_color { cost.paid_with_any_color() } else { cost }, &payment)
+                    };
+                    if bends.is_empty() { covers(a, 0) } else { bends.iter().any(|(b, bent)| covers(b.as_ref().unwrap_or(a), *bent)) }
                 };
                 if def.special_action {
                     // Its own cost changes, each way a reduction by hybrid mana could be split (CR 118.7e) and the hybrid
@@ -9789,7 +9889,8 @@ fn activate(
         source,
         mana,
         &Helpers {
-            waterbend: if def.waterbend { u32::MAX } else { 0 },
+            // CR 701.67b: the tapping pays only the generic mana of the waterbend cost, not a tax (Anointed Peacekeeper).
+            waterbend: if def.waterbend { def.cost.mana.generic } else { 0 },
             creatures: def.tap_creatures_for_mana,
             purpose: Paying::Activating(paying),
             ..Helpers::NONE
