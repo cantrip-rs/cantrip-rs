@@ -1,0 +1,42 @@
+# Sorin's −7 deals exactly thirteen damage to its controller and then gains thirteen life (CR 120.3, 119.3).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Sorin the Mirthless
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sorin the Mirthless.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sorin the Mirthless.Activate(Ability: #1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sorin the Mirthless.Activate(Ability: #1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sorin the Mirthless.Activate(Ability: #1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Battlefield.Sorin the Mirthless.Counters.Loyalty = 7
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Battlefield.Sorin the Mirthless.Activate(Bot1.Battlefield.Island; Ability: #3)
+Bot1.Battlefield.Sorin the Mirthless.Activate(Bot1; Ability: #3)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 20
+Bot1.Battlefield.Sorin the Mirthless = (absent)

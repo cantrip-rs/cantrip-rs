@@ -1,0 +1,7 @@
+{
+  "name": "Sorin the Mirthless",
+  "manaCost": "{2}{B}{B}",
+  "type": "Legendary Planeswalker — Sorin",
+  "loyalty": 4,
+  "oracleText": "+1: Look at the top card of your library. You may reveal that card and put it into your hand. If you do, you lose life equal to its mana value.\n−2: Create a 2/3 black Vampire creature token with flying and lifelink.\n−7: Sorin deals 13 damage to any target. You gain 13 life."
+}

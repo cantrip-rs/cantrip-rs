@@ -1,0 +1,38 @@
+# Sorin creates a black Vampire with flying and lifelink, which attacks over a ground creature and gains two life (CR 702.9, 702.15).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Sorin the Mirthless
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sorin the Mirthless.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sorin the Mirthless.Activate(Ability: #2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sorin the Mirthless.Counters.Loyalty = 2
+? Bot1.Battlefield.Vampire Token.Tapped = false
+? Bot1.Battlefield.Vampire Token.Power = 2
+? Bot1.Battlefield.Vampire Token.Toughness = 3
+? Bot1.Battlefield.Vampire Token.Colors = Black
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Vampire Token > Bot2)
+! Bot2.Block(Grizzly Bears > Vampire Token)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 18

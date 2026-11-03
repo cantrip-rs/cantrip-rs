@@ -1,0 +1,43 @@
+# Sorin may reveal and take the top card, losing life equal to its mana value, or leave it on the library (CR 119.3, 701.16).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Sorin the Mirthless
+Island
+Island
+Island
+Island
+Hill Giant
+Shock
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sorin the Mirthless.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sorin the Mirthless.Activate(Ability: #1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot1.Looked = Hill Giant
+? Bot1.Revealed = Hill Giant
+? Bot1.Life = 16
+? Bot1.Hand.Hill Giant.Power = 3
+? Bot1.Battlefield.Sorin the Mirthless.Counters.Loyalty = 5
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sorin the Mirthless.Activate(Ability: #1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot1.Library.Grizzly Bears.Power = 2
+Bot1.Life = 16
+Bot1.Battlefield.Sorin the Mirthless.Counters.Loyalty = 6
+Bot2.Library.Count = 12
