@@ -1,0 +1,41 @@
+# Amnesia reveals the target opponent's whole hand, discards every nonland, and leaves lands and the caster's hand alone (CR 701.20a, 701.9a, 115.1a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Amnesia
+Island
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Forest
+Island
+Lightning Bolt
+Grizzly Bears
+Swamp
+Dark Ritual
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Amnesia.Cast(Bot1.Battlefield.Mox Sapphire)
+Bot1.Hand.Amnesia.Cast(Bot2)
+? Bot1.Mana =
+[Bot1.Main2]
+[Expect]
+Bot2.Revealed = Forest; Island; Lightning Bolt; Grizzly Bears; Swamp; Dark Ritual; Mountain
+Bot2.Hand = Forest; Island; Swamp; Mountain
+Bot2.Graveyard = Dark Ritual; Grizzly Bears; Lightning Bolt
+Bot1.Hand = Island; Lightning Bolt
