@@ -1,0 +1,46 @@
+# Firebreathing's controller pumps the enchanted creature until end of turn (CR 611.2a, 602.2).
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Mox Sapphire
+Firebreathing
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Hand.Firebreathing.Cast(Bot1.Battlefield.Mountain)
+Bot1.Hand.Firebreathing.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Firebreathing.Activate(Mana: short)
+[T3 Bot1.Main2]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Firebreathing.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 1
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Firebreathing.AttachedTo = Ornithopter
