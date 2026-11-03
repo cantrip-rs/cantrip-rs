@@ -1,0 +1,38 @@
+# Each artifact gets its controller's upkeep trigger: Bot1 pays two to keep Memnite, while Bot2 cannot pay for either artifact (CR 603.2, 701.21a).
+[Bot1 Deck]
+Black Lotus
+Energy Flux
+Memnite
+Ancient Tomb
+Island x16
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Ancient Tomb.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Energy Flux.Cast
+? Bot1.Mana =
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot1.Battlefield.Ancient Tomb.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Memnite.Power = 1
+[T4 Bot2.Main1]
+? Bot2.Graveyard = Memnite; Ornithopter
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard = Memnite; Black Lotus
+Bot2.Graveyard = Memnite; Ornithopter

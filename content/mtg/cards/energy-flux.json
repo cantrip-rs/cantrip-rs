@@ -1,0 +1,6 @@
+{
+  "name": "Energy Flux",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment",
+  "oracleText": "All artifacts have \"At the beginning of your upkeep, sacrifice this artifact unless you pay {2}.\""
+}
