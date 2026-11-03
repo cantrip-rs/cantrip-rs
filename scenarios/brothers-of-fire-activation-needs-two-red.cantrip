@@ -1,0 +1,32 @@
+# Three mana with only one red cannot pay the activation; two red and one other mana can (CR 602.2b).
+[Bot1 Deck]
+Black Lotus x2
+Mox Ruby
+Brothers of Fire
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Brothers of Fire.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Brothers of Fire.Activate(Bot2; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Brothers of Fire.Activate(Bot2)
+? Bot1.Mana =
+[T7 Bot1.Main2]
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19

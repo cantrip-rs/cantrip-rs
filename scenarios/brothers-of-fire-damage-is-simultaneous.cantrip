@@ -1,0 +1,28 @@
+# At one life, both damage events happen together before Phyrexian Unlife can make damage poison (CR 120.4).
+[Life]
+Bot1: 1
+[Bot1 Deck]
+Black Lotus x3
+Brothers of Fire
+Phyrexian Unlife
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Brothers of Fire.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Phyrexian Unlife.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Brothers of Fire.Activate(Bot1)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Result = InProgress
+Bot1.Life = -1
+Bot1.Poison = 0
