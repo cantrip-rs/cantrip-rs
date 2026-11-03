@@ -1,0 +1,6 @@
+{
+  "name": "Bone Flute",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "{2}, {T}: All creatures get -1/-0 until end of turn."
+}

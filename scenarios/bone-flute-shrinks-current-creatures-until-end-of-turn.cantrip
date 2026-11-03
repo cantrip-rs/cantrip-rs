@@ -1,0 +1,58 @@
+# Bone Flute affects both players' creatures at resolution, but not one cast later; its effect ends at cleanup (CR 611.2a, 611.2c, 514.2).
+[Bot1 Deck]
+Bone Flute
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Memnite
+Ornithopter
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Bone Flute.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Bone Flute.Activate(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Bone Flute.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Bone Flute.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 0
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Memnite.Power = 0
+? Bot2.Battlefield.Memnite.Toughness = 1
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Ornithopter.Power = 0
