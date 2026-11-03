@@ -1,0 +1,28 @@
+# Meekstone keeps a tapped creature with power 3 tapped, while a creature with power 2 untaps (CR 502.3).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Meekstone
+Grizzly Bears
+Hill Giant
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Meekstone.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Hill Giant.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears; Hill Giant)
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Battlefield.Hill Giant.Tapped = true
