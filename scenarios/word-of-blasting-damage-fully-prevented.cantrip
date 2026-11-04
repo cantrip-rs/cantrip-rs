@@ -1,0 +1,41 @@
+# Amulet of Kroog prevents all damage while the targeted Wall is still destroyed (CR 615.7).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Wall of Wood
+Word of Blasting
+Amulet of Kroog
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wall of Wood.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Amulet of Kroog.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Amulet of Kroog.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Word of Blasting.Cast(Bot1.Battlefield.Wall of Wood)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Wall of Wood.Power = 0
+Bot1.Life = 20
+Prevented = 1 Word of Blasting > Bot1 by Amulet of Kroog
