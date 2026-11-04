@@ -1,0 +1,5 @@
+{
+  "name": "Ruins of Trokair",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {W}.\n{T}, Sacrifice this land: Add {W}{W}."
+}
