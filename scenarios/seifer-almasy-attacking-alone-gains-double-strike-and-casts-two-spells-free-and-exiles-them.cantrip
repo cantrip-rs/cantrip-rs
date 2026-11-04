@@ -1,0 +1,68 @@
+# Seifer Almasy {3}{R}, 3/4: "Whenever a creature you control attacks alone, it gains double strike until end of turn." and "Fire
+# Cross - Whenever Seifer deals combat damage to a player, you may cast target instant or sorcery card with mana value 3 or less from
+# your graveyard without paying its mana cost. If that spell would be put into your graveyard, exile it instead." Bot1 casts a
+# Lightning Bolt on turn 1 (Bot2 17) and a Shock on turn 3 (15), both into its graveyard, and Seifer on turn 3. On turn 5 Seifer
+# attacks alone: double strike (CR 702.4) deals 3 in the first-strike damage step and 3 in the regular one (15 to 9), and each deals
+# combat damage to a player so Fire Cross triggers twice: the Bolt is recast free (3, to 6), then the Shock (2, to 4). Both are exiled
+# instead of going to the graveyard, and no mana is spent.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Lightning Bolt
+Shock
+Seifer Almasy
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 15
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Seifer Almasy.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Seifer Almasy > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Lightning Bolt)
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 6
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 4
+Exile = Lightning Bolt; Shock
+Bot1.Graveyard =
