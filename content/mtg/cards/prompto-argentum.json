@@ -1,0 +1,11 @@
+{
+  "name": "Prompto Argentum",
+  "manaCost": "{1}{R}",
+  "type": "Legendary Creature — Human Scout",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Haste\nSelfie Shot — Whenever you cast a noncreature spell, if at least four mana was spent to cast it, create a Treasure token.",
+  "keywords": [
+    "Haste"
+  ]
+}

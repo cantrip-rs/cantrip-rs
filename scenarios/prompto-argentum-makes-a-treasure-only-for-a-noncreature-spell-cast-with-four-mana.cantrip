@@ -1,0 +1,70 @@
+# Prompto Argentum {1}{R}, haste. "Selfie Shot - Whenever you cast a noncreature spell, if at least four mana was spent to cast it,
+# create a Treasure token." (CR 603.4, 111.10a). The five Moxen are noncreature spells cast for nothing (0 mana), before Prompto is
+# there; after it: Nibelheim Aflame {2}{R}{R}, four mana spent, makes one Treasure (turn 3); Twin Blades {2}{R}, three spent, makes
+# none (turn 5); Anaba Bodyguard {3}{R}, four spent but a creature spell, makes none (turn 7). One Treasure at the end.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Prompto Argentum
+Nibelheim Aflame
+Mountain
+Twin Blades
+Anaba Bodyguard
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+? Bot1.Battlefield.Treasure Token = (absent)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Prompto Argentum.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Nibelheim Aflame.Cast(Bot1.Battlefield.Prompto Argentum)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token.Token = true
+? Bot1.Battlefield.Treasure Token#2 = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Twin Blades.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Treasure Token#2 = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Anaba Bodyguard.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Treasure Token#2 = (absent)
+Bot1.Battlefield.Anaba Bodyguard.Power = 2
