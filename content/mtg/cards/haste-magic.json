@@ -1,0 +1,6 @@
+{
+  "name": "Haste Magic",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +3/+1 and gains haste until end of turn. Exile the top card of your library. You may play it until your next end step."
+}
