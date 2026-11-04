@@ -1,0 +1,35 @@
+# Hunter targets an opponent's creature after it attacks; the next untap is skipped and the following untap succeeds (CR 611.2a).
+[Bot1 Deck]
+Black Lotus
+Elvish Hunter
+Mox Emerald
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elvish Hunter.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter > Bot1)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Elvish Hunter.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Elvish Hunter.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T8 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = false
