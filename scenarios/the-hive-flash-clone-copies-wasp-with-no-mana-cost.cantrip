@@ -1,0 +1,42 @@
+# Flash puts Clone onto the battlefield copying Wasp: its nonexistent mana cost cannot be paid (CR 202.3a, 707.2).
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Black Lotus
+Black Lotus
+Black Lotus
+The Hive
+Flash
+Mox Sapphire
+Clone
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Hive.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.The Hive.Activate
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flash.Cast
+Bot1.Choose(Clone)
+Bot1.Accept
+! Bot1.Accept
+[Expect]
+Bot1.Graveyard = Flash; Clone; Black Lotus; Black Lotus; Black Lotus

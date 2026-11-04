@@ -1,0 +1,55 @@
+# The Hive pays five and taps to make one flying 1/1 colorless Insect artifact creature named Wasp (CR 602.2, 111.3, 702.9b).
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Black Lotus
+Black Lotus
+The Hive
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.The Hive.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.The Hive.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.The Hive.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wasp.Tapped = false
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Wasp > Bot2)
+! Bot2.Block(Grizzly Bears > Wasp)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield = Mox Ruby; Mox Emerald; The Hive; Wasp
+Bot1.Battlefield.Wasp.Power = 1
+Bot1.Battlefield.Wasp.Toughness = 1
+Bot1.Battlefield.Wasp.Types = Artifact; Creature
+Bot1.Battlefield.Wasp.Subtypes = Insect
+Bot1.Battlefield.Wasp.Colors = (absent)
+Bot1.Battlefield.Wasp.Keywords = Flying
+Bot1.Battlefield.Wasp.Token = true
