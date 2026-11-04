@@ -1,0 +1,8 @@
+{
+  "name": "Ultimecia, Temporal Threat",
+  "manaCost": "{4}{U}{U}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When Ultimecia enters, tap all creatures your opponents control.\nWhenever a creature you control deals combat damage to a player, draw a card."
+}

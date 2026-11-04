@@ -1,0 +1,42 @@
+# Ultimecia, Temporal Threat: "deals combat damage to a player" (CR 510.2): on turn 5 Bot2's Ornithopter (cast on turn 4, after the enters trigger) blocks
+# Ultimecia, who deals 4 to it and not to Bot2; Bot1 draws no card (hand 4 after the turn-5 draw) and Bot2 stays at 20.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Ultimecia, Temporal Threat
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ultimecia, Temporal Threat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ultimecia, Temporal Threat > Bot2)
+Bot2.Block(Ornithopter > Ultimecia, Temporal Threat)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot2.Battlefield.Count = 0
+Bot1.Hand.Count = 4

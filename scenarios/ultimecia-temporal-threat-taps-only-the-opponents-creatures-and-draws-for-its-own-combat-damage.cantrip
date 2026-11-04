@@ -1,0 +1,60 @@
+# Ultimecia, Temporal Threat ({4}{U}{U}): "When Ultimecia enters, tap all creatures your opponents control" taps Bot2's Canyon Minotaur and leaves Bot1's
+# own Ornithopter untapped. "Whenever a creature you control deals combat damage to a player, draw a card": on turn 4 Bot2's Minotaur hits Bot1 for 3 and
+# Bot1 draws nothing; on turn 5 the Minotaur is still tapped from attacking, so Ultimecia is unblocked, deals 4 to Bot2 and Bot1 draws exactly one card.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Ornithopter
+Ultimecia, Temporal Threat
+Island
+Island x13
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Canyon Minotaur
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Canyon Minotaur.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Ultimecia, Temporal Threat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Canyon Minotaur.Tapped = true
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot1.Hand.Count = 2
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Canyon Minotaur > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 17
+? Bot1.Hand.Count = 2
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ultimecia, Temporal Threat > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
+Bot1.Hand.Count = 4
