@@ -11,6 +11,6 @@ fn mill_three_and_gain_3(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
 }
 
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(THIS_ENTERS, mill_three_and_gain_3, "When Shinra Reinforcements enters, mill three cards and you gain 3 life.")],
+    abilities: &[triggered(THIS_ENTERS, mill_three_and_gain_3, "When this creature enters, mill three cards and you gain 3 life.")],
     ..oracle::SHINRA_REINFORCEMENTS
 };
