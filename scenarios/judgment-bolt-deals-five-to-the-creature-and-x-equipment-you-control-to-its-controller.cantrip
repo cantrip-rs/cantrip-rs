@@ -1,0 +1,61 @@
+# Judgment Bolt {3}{R}: "Judgment Bolt deals 5 damage to target creature and X damage to that creature's controller, where X is the
+# number of Equipment you control." (CR 120.2, 301.5, 608.2h). Bot1 has two Coral Swords; Bot2 has a Raging Goblin wearing a Coral Sword
+# of its own, which does not count for Bot1. The Bolt kills the Goblin and deals exactly 2 to Bot2 (20 -> 18): X is 2, not 3 or 1.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Jet
+Coral Sword
+Coral Sword
+Black Lotus
+Judgment Bolt
+Mountain
+Island x13
+
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Raging Goblin
+Coral Sword
+Island x3
+Island x13
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Coral Sword.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Coral Sword.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Coral Sword.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Coral Sword.AttachedTo = Raging Goblin
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Judgment Bolt.Cast(Raging Goblin)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield = Coral Sword; Mox Ruby; Mountain
+Bot1.Life = 20
