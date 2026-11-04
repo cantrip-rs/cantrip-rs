@@ -1,0 +1,11 @@
+{
+  "name": "G'raha Tia",
+  "manaCost": "{4}{W}",
+  "type": "Legendary Creature — Cat Archer",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Reach\nThe Allagan Eye — Whenever one or more other creatures and/or artifacts you control die, draw a card. This ability triggers only once each turn.",
+  "keywords": [
+    "Reach"
+  ]
+}

@@ -1,0 +1,64 @@
+# G'raha Tia (The Allagan Eye): another creature or artifact Bot1 controls dying draws a card, once each turn. On turn 3 Bot1
+# Bolts an Ornithopter (an artifact creature) and draws; the second Ornithopter dying the same turn draws nothing. On turn 5 the
+# opponent's Savannah Lions dying draws nothing: it is not Bot1's.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+G'raha Tia
+Ornithopter
+Ornithopter
+Mountain
+Lightning Bolt x3
+Plains x10
+
+[Bot2 Deck]
+Savannah Lions
+Plains x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.G'raha Tia.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 1
+? Bot1.Graveyard = Ornithopter; Lightning Bolt; Black Lotus
+? Stack =
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 0
+? Bot1.Library.Count = 11
+? Stack =
+? Bot1.Battlefield = G'raha Tia; Mountain; Mox Pearl; Mox Ruby
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield = Plains
+? Bot2.Graveyard = Savannah Lions
+? Bot1.Hand.Count = 0
+? Bot1.Library.Count = 10
+
+[Expect]
+Turn = 5

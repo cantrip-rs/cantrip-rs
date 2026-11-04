@@ -1,0 +1,82 @@
+# G'raha Tia: "creatures and/or artifacts" is either type alone. A Savannah Lions (a creature, no artifact) dying draws on turn 3;
+# a Sol Ring (an artifact, no creature) destroyed draws on turn 5; a Mountain (neither) destroyed on turn 7 draws nothing, and nor does a Goblin of Bot1's exiled on turn 9: it does not die.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+G'raha Tia
+Savannah Lions
+Sol Ring
+Mountain
+Lightning Bolt
+Gleeful Demolition
+Plains
+Stone Rain
+Plains
+Swords to Plowshares
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.G'raha Tia.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Savannah Lions; Lightning Bolt; Black Lotus
+? Bot1.Hand = Gleeful Demolition
+? Bot1.Library.Count = 14
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gleeful Demolition.Cast(Sol Ring)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Gleeful Demolition; Sol Ring; Savannah Lions; Lightning Bolt; Black Lotus
+? Bot1.Battlefield = G'raha Tia; Mountain; Mox Pearl; Mox Ruby; Phyrexian Goblin Token; Phyrexian Goblin Token; Phyrexian Goblin Token
+? Bot1.Hand.Count = 2
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Stone Rain.Cast(Mountain)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = G'raha Tia; Mox Pearl; Mox Ruby; Phyrexian Goblin Token; Phyrexian Goblin Token; Phyrexian Goblin Token
+? Bot1.Hand.Count = 2
+? Bot1.Library.Count = 11
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Phyrexian Goblin Token)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield = G'raha Tia; Mox Pearl; Mox Ruby; Phyrexian Goblin Token; Phyrexian Goblin Token
+? Bot1.Hand.Count = 2
+? Bot1.Library.Count = 10
+
+[Expect]
+Turn = 9
