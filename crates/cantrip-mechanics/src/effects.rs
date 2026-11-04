@@ -193,14 +193,15 @@ pub fn pump_other_creatures_you_control(g: &mut dyn Game, item: &StackItem, powe
     others
 }
 
-/// "Creatures you control gain [a keyword] until end of turn" (CR 611.2, 611.2c, 702): the creatures `item`'s controller controls
+/// "Creatures you control gain [keywords] until end of turn" (CR 611.2, 611.2c, 702): the creatures `item`'s controller controls
 /// as it resolves, and no creature that enters later. Bitter Reunion and Ingris Stingerquill print it with haste, Deafening
-/// Clarion with lifelink.
-pub fn creatures_you_control_gain(g: &mut dyn Game, item: &StackItem, keyword: Keyword) {
+/// Clarion with lifelink, Spectacular Spider-Man and Invasion of Gobakhan with hexproof and indestructible, and The Wind
+/// Crystal with flying and lifelink.
+pub fn creatures_you_control_gain(g: &mut dyn Game, item: &StackItem, keywords: &[Keyword]) {
     let creatures: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).is(CardType::Creature)).collect();
     instruction(g, |g| {
         for id in creatures {
-            gain_until_end_of_turn(g, item.object, id, keyword);
+            g.add_effect(item.object, id, EffectKind::AddKeywords(Keywords::of(keywords)), Duration::EndOfTurn);
         }
     });
 }

@@ -4,7 +4,7 @@ use cantrip_oracle as oracle;
 
 /// Creatures you control gain haste until end of turn.
 fn haste(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::creatures_you_control_gain(g, item, Keyword::Haste);
+    effects::creatures_you_control_gain(g, item, &[Keyword::Haste]);
     Ok(())
 }
 

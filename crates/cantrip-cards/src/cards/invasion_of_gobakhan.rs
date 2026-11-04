@@ -31,13 +31,7 @@ fn counters_on_attackers(g: &mut dyn Game, _: &StackItem) -> Result<(), Suspend>
 
 /// "Creatures you control gain hexproof and indestructible until end of turn."
 fn protect_creatures(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let creatures: Vec<ObjectId> =
-        g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).is(CardType::Creature)).collect();
-    instruction(g, |g| {
-        for id in creatures {
-            cantrip_mechanics::effects::gain_hexproof_and_indestructible_until_end_of_turn(g, item.object, id);
-        }
-    });
+    cantrip_mechanics::effects::creatures_you_control_gain(g, item, &[Keyword::Hexproof, Keyword::Indestructible]);
     Ok(())
 }
 

@@ -10,7 +10,7 @@ fn three_damage_to_each_creature(g: &mut dyn Game, item: &StackItem) -> Result<(
 
 /// "Creatures you control gain lifelink until end of turn." (CR 611.2c, 702.15).
 fn creatures_you_control_gain_lifelink(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::creatures_you_control_gain(g, item, Keyword::Lifelink);
+    effects::creatures_you_control_gain(g, item, &[Keyword::Lifelink]);
     Ok(())
 }
 

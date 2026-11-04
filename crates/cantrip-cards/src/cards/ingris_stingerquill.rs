@@ -17,7 +17,7 @@ fn attacker_deals_1_to_each_opponent(g: &mut dyn Game, item: &StackItem) -> Resu
 fn cadet_then_haste(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     tokens::create(g, item.controller, &tokens::CADET, 1)?;
     g.end_sentence();
-    effects::creatures_you_control_gain(g, item, Keyword::Haste);
+    effects::creatures_you_control_gain(g, item, &[Keyword::Haste]);
     Ok(())
 }
 

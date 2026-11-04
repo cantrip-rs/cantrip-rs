@@ -1,19 +1,8 @@
 use cantrip_api::*;
-use cantrip_mechanics::delayed;
+use cantrip_mechanics::{cost_reduction, delayed};
 use cantrip_mechanics::statics::{have_haste, your_creatures};
 use cantrip_mechanics::targets;
 use cantrip_oracle as oracle;
-
-/// "Red spells you cast cost {1} less to cast" (CR 601.2f): asked of the spell's own characteristics as it is cast; only its
-/// controller's spells, and a generic reduction takes only the generic part (CR 118.7c). "Red" is a word of the Crystal's text
-/// (CR 612).
-fn red_spells_cost_less(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
-    let Costed::Spell(spell) = costed else { return CostDelta::NONE };
-    if player != q.controller(source) {
-        return CostDelta::NONE;
-    }
-    if q.chars(spell).colors.has(q.words(source).color(Color::Red)) { CostDelta::less(1) } else { CostDelta::NONE }
-}
 
 /// "Create a token that's a copy of target creature you control. Sacrifice it at the beginning of the next end step" (CR 707.2,
 /// 111.1, 603.7): the delayed ability is about exactly the token this resolution made (CR 603.7c). Nothing happens if the target
@@ -26,7 +15,7 @@ fn copy_and_sacrifice(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
 }
 
 pub static CARD: CardDef = CardDef {
-    cost_changes: &[red_spells_cost_less],
+    cost_changes: &[cost_reduction::spells_of_color_you_cast_cost_one_less::<{ Color::Red as u8 }>],
     statics: &[static_ability(Layer::Ability, your_creatures, have_haste, "Creatures you control have haste.")],
     abilities: &[ability(cost("{4}{R}{R}, {T}"), copy_and_sacrifice, "{4}{R}{R}, {T}: Create a token that's a copy of target creature you control. Sacrifice it at the beginning of the next end step.")
         .targets(&[targets::CREATURE_YOU_CONTROL])],

@@ -1,5 +1,6 @@
 //! "This spell costs {1} less to cast for each ..." where the card is not affinity (CR 702.41a is the keyword, and only the cards
-//! that print the word use `affinity`): a cost reduction (CR 601.2f, 118.7) that counts a pool of the caster's.
+//! that print the word use `affinity`): a cost reduction (CR 601.2f, 118.7) that counts a pool of the caster's. Also the
+//! permanents' "[spells] you cast cost {1} less to cast".
 
 use cantrip_api::*;
 
@@ -18,4 +19,15 @@ pub fn for_each_instant_and_sorcery_in_your_graveyard(q: &dyn Query, _: ObjectId
 pub fn less_if_you_control_subtype<const N: u8, const TYPE: u16>(q: &dyn Query, source: ObjectId, player: PlayerId, _: Costed, _: &[Target]) -> CostDelta {
     let wanted = crate::lands::word(q, source, TYPE);
     if q.permanents_of(player).into_iter().any(|id| q.chars(id).has_subtype(wanted)) { CostDelta::less(N as u32) } else { CostDelta::NONE }
+}
+
+/// "[Color] spells you cast cost {1} less to cast" (CR 601.2f, 118.7c): asked of the spell's own characteristics as it is cast;
+/// only its controller's spells, and a generic reduction takes only the generic part. `COLOR` is `Color::Red as u8` and so on,
+/// a word of the source's text (CR 612). The Fire Crystal (red) and The Wind Crystal (white) print it.
+pub fn spells_of_color_you_cast_cost_one_less<const COLOR: u8>(q: &dyn Query, source: ObjectId, player: PlayerId, costed: Costed, _: &[Target]) -> CostDelta {
+    let Costed::Spell(spell) = costed else { return CostDelta::NONE };
+    if player != q.controller(source) {
+        return CostDelta::NONE;
+    }
+    if q.chars(spell).colors.has(q.words(source).color(Color::ALL[COLOR as usize])) { CostDelta::less(1) } else { CostDelta::NONE }
 }
