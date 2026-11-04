@@ -1,0 +1,47 @@
+# With the defender controlling a snow land, the Sleigh grants vigilance before attackers so the creature attacks without tapping; the effect ends at cleanup (CR 702.20b, 514.2).
+[Bot1 Deck]
+Arcum's Sleigh
+Ornithopter
+Mox Pearl
+Mox Sapphire
+Island x20
+
+[Bot2 Deck]
+Snow-Covered Plains
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Arcum's Sleigh.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Snow-Covered Plains.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+[T3 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Arcum's Sleigh.Activate(Bot1.Battlefield.Ornithopter; Mana: short)
+[T5 Bot1.BeginCombat]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Arcum's Sleigh.Activate(Bot2.Battlefield.Snow-Covered Plains)
+Bot1.Battlefield.Arcum's Sleigh.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Vigilance
+? Bot1.Battlefield.Arcum's Sleigh.Tapped = true
+Bot1.Attack(Ornithopter > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Tapped = false
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+[Expect]
+Bot1.Battlefield.Ornithopter.Keywords = Flying

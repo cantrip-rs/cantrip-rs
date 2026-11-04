@@ -1,0 +1,6 @@
+{
+  "name": "Arcum's Sleigh",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "{2}, {T}: Target creature gains vigilance until end of turn. Activate only during combat and only if defending player controls a snow land."
+}
