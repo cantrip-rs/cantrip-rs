@@ -1,0 +1,51 @@
+# Call the Mountain Chocobo (CR 701.23, 205.3i): it searches for a Mountain card - the Volcanic Island (a nonbasic Island Mountain) is
+# the only one in the library, the Forest and Island in the hand do not matter - reveals it, and makes a 2/2 green Bird. "Whenever a
+# land you control enters, this token gets +1/+0 until end of turn": Bot1's Volcanic Island makes it 3/2 that turn; the Island Bot2
+# plays on turn 2 does not, and by then the pump has worn off anyway.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Call the Mountain Chocobo
+Island
+Forest
+Volcanic Island
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Call the Mountain Chocobo.Cast
+! Bot1.Search(Forest)
+Bot1.Search(Volcanic Island)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bird Token.Power = 2
+Bot1.Hand.Volcanic Island.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bird Token.Power = 3
+? Bot1.Battlefield.Bird Token.Toughness = 2
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+
+[Expect]
+Bot1.Battlefield.Bird Token.Power = 2
+Bot1.Battlefield.Bird Token.Toughness = 2
+Bot1.Battlefield.Bird Token.Colors = Green
+Bot1.Hand.Count = 2
+Bot1.Graveyard = Call the Mountain Chocobo
+Bot1.Revealed = Volcanic Island
