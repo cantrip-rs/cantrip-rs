@@ -1,0 +1,44 @@
+# The Mage needs blue mana and can target its controller's spell, whose controller may decline the payment (CR 602.2b, 118.12a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Vodalian Mage
+Memnite
+Memnite
+Island
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian Mage.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Memnite.Cast
+! Bot1.Battlefield.Vodalian Mage.Activate(Stack.Memnite; Mana: short)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Vodalian Mage.Activate(Stack.Memnite)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Vodalian Mage.Tapped = true
+! Bot1.Battlefield.Vodalian Mage.Activate(Stack.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Graveyard = Memnite; Black Lotus

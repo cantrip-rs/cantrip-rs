@@ -1,0 +1,8 @@
+{
+  "name": "Vodalian Mage",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Merfolk Wizard",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{U}, {T}: Counter target spell unless its controller pays {1}."
+}
