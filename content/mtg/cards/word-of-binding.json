@@ -1,0 +1,6 @@
+{
+  "name": "Word of Binding",
+  "manaCost": "{X}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Tap X target creatures."
+}
