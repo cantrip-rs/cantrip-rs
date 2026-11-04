@@ -1,0 +1,31 @@
+# Jill, Shiva's Dominant: "return up to one other target nonland permanent to its owner's hand" - one of her own controller's is a legal
+# target as well. Bot1 pays {2}{U} with three Moxen and returns its own tapped Mox Ruby to its hand; Jill and the other two Moxen stay.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Jill, Shiva's Dominant
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Jill, Shiva's Dominant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Jill, Shiva's Dominant; Mox Jet; Mox Sapphire
+Bot1.Hand = Island; Island; Island; Mox Ruby

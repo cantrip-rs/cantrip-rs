@@ -1,0 +1,76 @@
+# Shiva, Warden of Ice, chapter III: "Tap all lands your opponents control. Exile Shiva, then return it to the battlefield (front face up)." On turn 7
+# the chapter triggers; in response Bot2 exiles Shiva with Swords to Plowshares (Bot1 gains 4, her power). The ability still resolves as far as it can
+# (CR 608.2b, 400.7): Bot2's two untapped Swamps are tapped (its Plains was tapped for the Swords), but the new object in exile is not the Shiva
+# the ability means, so nothing comes back: no Jill, and no enters trigger.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Black Lotus
+Jill, Shiva's Dominant
+Memnite
+Island
+Island x20
+
+[Bot2 Deck]
+Swords to Plowshares
+Plains
+Swamp x2
+Swamp x4
+Swamp x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Jill, Shiva's Dominant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Jill, Shiva's Dominant.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T5 Bot1.Main1]
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Shiva, Warden of Ice)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Turn = 7
+Bot1.Life = 24
+Bot1.Battlefield = Island; Memnite; Mox Jet; Mox Ruby; Mox Sapphire
+Bot2.Battlefield.Swamp#1.Tapped = true
+Bot2.Battlefield.Swamp#2.Tapped = true

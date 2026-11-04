@@ -1,0 +1,18 @@
+{
+  "name": "Jill, Shiva's Dominant",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Creature — Human Noble Warrior",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When Jill enters, return up to one other target nonland permanent to its owner's hand.\n{3}{U}{U}, {T}: Exile Jill, then return it to the battlefield transformed under its owner's control. Activate only as a sorcery.",
+  "backFace": {
+    "name": "Shiva, Warden of Ice",
+    "colorIndicator": [
+      "Blue"
+    ],
+    "type": "Legendary Enchantment Creature — Saga Elemental",
+    "power": 4,
+    "toughness": 5,
+    "oracleText": "(As this Saga enters and after your draw step, add a lore counter.)\nI, II — Mesmerize — Target creature can't be blocked this turn.\nIII — Cold Snap — Tap all lands your opponents control. Exile Shiva, then return it to the battlefield (front face up)."
+  }
+}

@@ -1,0 +1,61 @@
+# Jill, Shiva's Dominant: "{3}{U}{U}, {T}: Exile Jill, then return it to the battlefield transformed ... Activate only as a sorcery." On turn 3 Bot1 has
+# the mana (Black Lotus, Mox Sapphire, Mox Jet) but casts an Ornithopter first: with it on the stack the ability is refused (CR 307.5); once it
+# resolves it is paid. Shiva's chapter I, Mesmerize, makes the Memnite unblockable: Bot2's Ornithopter may not block it (CR 509.1b), so the
+# Memnite connects for 1 and Bot2 is at 19.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Black Lotus
+Jill, Shiva's Dominant
+Memnite
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Swamp x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Jill, Shiva's Dominant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Battlefield.Jill, Shiva's Dominant.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Jill, Shiva's Dominant.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Memnite > Bot2)
+! Bot2.Block(Ornithopter > Memnite)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 19
