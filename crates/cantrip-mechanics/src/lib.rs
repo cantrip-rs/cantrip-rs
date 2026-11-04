@@ -652,6 +652,23 @@ pub fn counter_unless_pays(g: &mut dyn Game, item: &StackItem, slot: usize, cost
     Ok(Some(spell))
 }
 
+/// What "counter target spell unless its controller pays [cost]. If that spell is countered this way, exile it instead"
+/// asks the payer (CR 118.12a): the refusal says where the spell goes.
+pub const COUNTERED_AND_EXILED_UNLESS_PAID: Question =
+    Question::new("Countered", "pay {cost}, or {subject} is countered and exiled?", "", "Pay {cost}", "Let it be countered");
+
+/// "Counter target spell unless its controller pays `cost`. If that spell is countered this way, exile it instead of putting
+/// it into its owner's graveyard" (CR 118.12, 701.6, 614.1a): `counter_unless_pays`, with the countered spell exiled. No More
+/// Lies ({3}) and Syncopate ({X}) print it (Spell Shrivel and Reject too).
+pub fn counter_unless_pays_else_exile(g: &mut dyn Game, item: &StackItem, slot: usize, cost: ManaCost) -> Result<(), Suspend> {
+    let Some(spell) = targets::object(g, item, slot) else { return Ok(()) };
+    let payer = g.controller(spell);
+    if !g.may_pay(payer, item.object, spell, Cost { mana: cost, ..Cost::NONE }, &COUNTERED_AND_EXILED_UNLESS_PAID)? {
+        g.counter_to(spell, CounterTo::Exile);
+    }
+    Ok(())
+}
+
 /// Exiles the targeted permanent until `source` leaves the battlefield (CR 610.3, 400.7): a returning card is a new
 /// object. The permanent that was exiled, if the target was still legal. Aang's Iceberg and Conclave Tribunal print it
 /// (Portable Hole and Sheltered by Ghosts as well).
