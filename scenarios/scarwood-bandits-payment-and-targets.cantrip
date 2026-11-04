@@ -1,0 +1,50 @@
+# The ability accepts either player's artifact, rejects a land, and an opponent paying exactly {2} prevents the control effect (CR 115.1c, 118.12a).
+[Bot1 Deck]
+Scarwood Bandits
+Black Lotus x3
+Mox Pearl
+Forest x20
+[Bot2 Deck]
+Mox Jet
+Sol Ring
+Forest x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Scarwood Bandits.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Battlefield.Scarwood Bandits.Activate(Bot2.Battlefield.Forest)
+Bot1.Battlefield.Scarwood Bandits.Activate(Bot2.Battlefield.Sol Ring)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.PayCost
+? Bot2.Mana =
+? Bot2.Battlefield.Sol Ring.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Scarwood Bandits.Activate(Bot1.Battlefield.Mox Pearl)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Sol Ring.Tapped = false
+Bot1.Battlefield.Mox Pearl.Tapped = false

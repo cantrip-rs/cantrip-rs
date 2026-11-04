@@ -1,0 +1,46 @@
+# Killing Scarwood Bandits after it takes an artifact ends the control effect (CR 611.2a).
+[Bot1 Deck]
+Scarwood Bandits
+Black Lotus x2
+Mox Pearl
+Forest x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Scarwood Bandits.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Scarwood Bandits.Activate(Bot2.Battlefield.Mox Jet)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Mox Jet.Tapped = false
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Scarwood Bandits)
+Bot2.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Mox Jet.Tapped = false
+Bot1.Graveyard = Scarwood Bandits; Black Lotus; Black Lotus
