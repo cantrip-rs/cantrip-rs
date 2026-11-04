@@ -352,9 +352,16 @@ pub fn artifacts_you_control(view: &dyn LayerQuery, source: ObjectId) -> i16 {
 /// artifact. The Construct token (Urza's Saga, Karn, Scion of Urza), Adaptive Omnitool's equipped creature and Iron Man
 /// Armor's animated Equipment print it.
 pub fn plus_one_plus_one_per_artifact_you_control(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
+    plus_per_artifact_you_control::<1, 1>(view, source, chars);
+}
+
+/// "Gets +`P`/+`T` for each artifact you control" (CR 613.4c, layer 7c), counted as `artifacts_you_control` does: the artifacts
+/// under the source's controller as the earlier layers left them, the source among them if it is one. Machinist's Arsenal's
+/// "+2/+2 for each artifact you control" is the same count at a different step.
+pub fn plus_per_artifact_you_control<const P: i16, const T: i16>(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
     let n = artifacts_you_control(view, source);
-    chars.power = chars.power.map(|v| v + n);
-    chars.toughness = chars.toughness.map(|v| v + n);
+    chars.power = chars.power.map(|v| v + n * P);
+    chars.toughness = chars.toughness.map(|v| v + n * T);
 }
 
 /// "Enchanted creature gets +1/+1 for each enchantment you control" (CR 613.4c, layer 7c): "you" is the controller of the source,
