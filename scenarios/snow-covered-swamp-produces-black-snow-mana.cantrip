@@ -1,0 +1,15 @@
+# A basic snow Swamp taps for black mana produced by a snow source (CR 305.6, 106.3, 205.4g).
+[Bot1 Deck]
+Snow-Covered Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Snow-Covered Swamp.Play
+Bot1.Battlefield.Snow-Covered Swamp.Activate
+[Expect]
+Bot1.Battlefield.Snow-Covered Swamp.Tapped = true
+Bot1.Battlefield.Snow-Covered Swamp.Supertypes = Basic; Snow
+Bot1.Battlefield.Snow-Covered Swamp.Subtypes = Swamp
+Bot1.Battlefield.Snow-Covered Swamp.Types = Land
+Bot1.Mana = {B}
+Bot1.ManaFrom = {B} snow Snow-Covered Swamp
