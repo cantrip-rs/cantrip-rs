@@ -1,0 +1,8 @@
+{
+  "name": "Sisters of the Flame",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Human Shaman",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{T}: Add {R}."
+}
