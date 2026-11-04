@@ -1,0 +1,78 @@
+# Whiteout removes flying from both players' creatures until cleanup, allowing a ground creature to block; its graveyard ability sacrifices a snow land and returns only its own card (CR 611.2a, 701.21a).
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Whiteout
+Ornithopter
+Forest
+Snow-Covered Forest
+Phyrexian Soulgorger
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Whiteout
+Ornithopter
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Whiteout.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Keywords = (absent)
+? Bot2.Battlefield.Ornithopter.Keywords = (absent)
+Bot2.Block(Llanowar Elves > Ornithopter)
+[T3 Bot1.Main2]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Keywords = (absent)
+? Bot1.Battlefield.Ornithopter#2.Keywords = Flying
+! Bot1.Graveyard.Whiteout.Activate
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter#1.Keywords = Flying
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Whiteout.Cast
+? Bot2.Mana =
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Phyrexian Soulgorger.Cast
+Bot1.Pass
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Graveyard.Whiteout.Activate
+! Bot1.Choose(Forest)
+! Bot1.Choose(Phyrexian Soulgorger)
+Bot1.Choose(Snow-Covered Forest)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Whiteout.Colors = Green
+Bot1.Graveyard.Snow-Covered Forest.Colors =
+Bot2.Graveyard.Whiteout.Colors = Green
+Bot1.Battlefield.Phyrexian Soulgorger.Toughness = 8
