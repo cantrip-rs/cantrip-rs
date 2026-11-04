@@ -1,0 +1,6 @@
+{
+  "name": "Dwarven Song",
+  "manaCost": "{R}",
+  "type": "Instant",
+  "oracleText": "One or more target creatures become red until end of turn."
+}
