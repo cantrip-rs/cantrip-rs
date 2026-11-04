@@ -1,0 +1,29 @@
+# A creature made noncreature in response is unaffected while the other target becomes green (CR 608.2b).
+[Bot1 Deck]
+Mox Emerald
+Sylvan Paradise
+Memnite
+Island x25
+[Bot2 Deck]
+Mox Pearl
+Swift Reconfiguration
+Ornithopter
+Island x25
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sylvan Paradise.Cast
+Bot1.Target(Bot1.Battlefield.Memnite; Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swift Reconfiguration.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Colors = Green
+Bot2.Battlefield.Ornithopter.Types = Artifact
+Bot2.Battlefield.Ornithopter.Colors = (absent)
+Bot2.Battlefield.Swift Reconfiguration.AttachedTo = Ornithopter
