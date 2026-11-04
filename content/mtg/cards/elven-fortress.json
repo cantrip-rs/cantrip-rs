@@ -1,0 +1,6 @@
+{
+  "name": "Elven Fortress",
+  "manaCost": "{G}",
+  "type": "Enchantment",
+  "oracleText": "{1}{G}: Target blocking creature gets +0/+1 until end of turn."
+}

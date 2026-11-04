@@ -1,0 +1,60 @@
+# Elven Fortress can strengthen either player's blocking creature, but not an attacker or a nonblocking creature; the bonus expires at cleanup (CR 115.1, 611.2a).
+[Bot1 Deck]
+Elven Fortress
+Mox Emerald x2
+Mox Sapphire x2
+Memnite x2
+Island x20
+[Bot2 Deck]
+Memnite x2
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Elven Fortress.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite#1 > Bot2)
+Bot2.Block(Memnite#1 > Bot1.Battlefield.Memnite#1)
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+! Bot1.Battlefield.Elven Fortress.Activate(Bot1.Battlefield.Memnite#1)
+! Bot1.Battlefield.Elven Fortress.Activate(Bot2.Battlefield.Memnite#2)
+Bot1.Battlefield.Elven Fortress.Activate(Bot2.Battlefield.Memnite#1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite#1.Power = 1
+? Bot2.Battlefield.Memnite#1.Toughness = 2
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Memnite#1.Toughness = 1
+Bot2.Attack(Memnite#1 > Bot1)
+Bot1.Block(Bot1.Battlefield.Memnite > Bot2.Battlefield.Memnite#1)
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Elven Fortress.Activate(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 2
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Memnite.Toughness = 1
