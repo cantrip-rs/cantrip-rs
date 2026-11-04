@@ -1,0 +1,50 @@
+# Grave Robbers targets an artifact card in either graveyard, not a nonartifact, and gains two life each time (CR 115.1c, 119.3).
+[Bot1 Deck]
+Grave Robbers
+Black Lotus
+Swamp
+Dark Ritual
+Mox Pearl
+Swamp x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Forest x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Grave Robbers.Cast
+? Bot1.Mana =
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Swamp.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Grave Robbers.Activate(Bot1.Graveyard.Black Lotus; Mana: short)
+Bot1.Hand.Swamp.Play
+! Bot1.Battlefield.Grave Robbers.Activate(Bot1.Graveyard.Dark Ritual)
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Grave Robbers.Activate(Bot1.Graveyard.Black Lotus)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Grave Robbers.Tapped = true
+? Bot1.Graveyard = Dark Ritual; Black Lotus
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Exile = Black Lotus
+[T5 Bot1.Main1]
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Grave Robbers.Activate(Bot2.Graveyard.Black Lotus)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 20
+Exile = Black Lotus; Black Lotus

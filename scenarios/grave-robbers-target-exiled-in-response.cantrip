@@ -1,0 +1,38 @@
+# Removing the sole target in response stops the ability and life gain; a later legal activation resolves (CR 608.2b).
+[Bot1 Deck]
+Grave Robbers
+Black Lotus
+Swamp
+Swamp x20
+[Bot2 Deck]
+Tormod's Crypt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Grave Robbers.Cast
+? Bot1.Mana =
+Bot1.Hand.Swamp.Play
+Bot2.Hand.Tormod's Crypt.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Grave Robbers.Activate(Bot1.Graveyard.Black Lotus)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Graveyard = Black Lotus
+Bot2.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+? Exile = Black Lotus
+[T5 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Grave Robbers.Activate(Bot2.Graveyard.Tormod's Crypt)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 22
+Exile = Tormod's Crypt; Black Lotus
