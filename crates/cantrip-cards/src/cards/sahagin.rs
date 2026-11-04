@@ -14,7 +14,7 @@ fn grow_and_cant_be_blocked(g: &mut dyn Game, item: &StackItem) -> Result<(), Su
 
 pub static CARD: CardDef = CardDef {
     abilities: &[triggered(
-        when_asked(EventMask::SPELL_CAST, triggers::noncreature_spell_you_cast_with_four_or_more_mana_spent),
+        when_asked(EventMask::SPELL_CAST, triggers::noncreature_spell_you_cast_with_at_least_mana_spent::<4>),
         grow_and_cant_be_blocked,
         "Whenever you cast a noncreature spell, if at least four mana was spent to cast it, put a +1/+1 counter on this creature and it can't be blocked this turn.",
     )],

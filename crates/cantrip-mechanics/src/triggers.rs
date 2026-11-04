@@ -1058,13 +1058,13 @@ pub fn noncreature_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> O
     }
 }
 
-/// "Whenever you cast a noncreature spell, if at least four mana was spent to cast it" (CR 603.2, 603.4, 601.2h): the mana
+/// "Whenever you cast a noncreature spell, if at least `N` mana was spent to cast it" (CR 603.2, 603.4, 601.2h): the mana
 /// spent is the whole of the payment, additional costs too, and is read from the spell's own object as it is cast (a spell
 /// cast without spending mana has none). Answered as it triggers; what was spent on the spell does not change afterwards.
-/// Sahagin and The Prima Vista print it.
-pub fn noncreature_spell_you_cast_with_four_or_more_mana_spent(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+/// With 4: Sahagin, The Prima Vista and Ultros, Obnoxious Octopus's first ability; with 8: Ultros's second.
+pub fn noncreature_spell_you_cast_with_at_least_mana_spent<const N: u32>(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::SpellCast { spell, .. } if q.obj(*spell).spent.total() >= 4 => noncreature_spell_you_cast(q, me, event),
+        Event::SpellCast { spell, .. } if q.obj(*spell).spent.total() >= N => noncreature_spell_you_cast(q, me, event),
         _ => None,
     }
 }

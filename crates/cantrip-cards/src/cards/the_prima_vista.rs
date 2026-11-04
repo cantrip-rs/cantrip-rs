@@ -6,7 +6,7 @@ use cantrip_oracle as oracle;
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
-            when_asked(EventMask::SPELL_CAST, triggers::noncreature_spell_you_cast_with_four_or_more_mana_spent),
+            when_asked(EventMask::SPELL_CAST, triggers::noncreature_spell_you_cast_with_at_least_mana_spent::<4>),
             becomes_a_creature,
             "Whenever you cast a noncreature spell, if at least four mana was spent to cast it, The Prima Vista becomes an artifact creature until end of turn.",
         ),
