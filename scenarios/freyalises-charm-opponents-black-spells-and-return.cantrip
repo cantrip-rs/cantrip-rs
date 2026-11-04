@@ -1,0 +1,83 @@
+# Opponent black spells, including a black-green spell, trigger the Charm; red spells and its controller's black spells
+# do not. Paying draws one card, declining draws none, and the Charm returns for {G}{G} (CR 603.2, 118.12, 400.3).
+[Bot1 Deck]
+Freyalise's Charm
+Mox Emerald
+Gleemox
+Mox Jet
+Dark Ritual
+Forest
+Forest
+Forest
+Sol Ring
+Forest x20
+
+[Bot2 Deck]
+Mox Jet
+Mox Jet
+Mox Ruby
+Ornithopter
+Shock
+Revitalizing Repast
+Muck Rats
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Freyalise's Charm.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+? Stack.Count = 1
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Hand.Revitalizing Repast.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+! Bot1.PayCost
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Pass
+? Bot1.Hand.Sol Ring.Colors =
+? Bot1.Library.Count = 20
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Hand.Muck Rats.Cast
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+? Bot1.Library.Count = 20
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Freyalise's Charm.Activate(Mana: short)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Battlefield.Freyalise's Charm.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Freyalise's Charm.Colors = Green
+Bot1.Hand.Sol Ring.Colors =
+Bot1.Battlefield.Freyalise's Charm = (absent)
