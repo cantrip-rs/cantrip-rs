@@ -1,0 +1,6 @@
+{
+  "name": "Disintegrate",
+  "manaCost": "{X}{R}",
+  "type": "Sorcery",
+  "oracleText": "Disintegrate deals X damage to any target. If it's a creature, it can't be regenerated this turn, and if it would die this turn, exile it instead."
+}

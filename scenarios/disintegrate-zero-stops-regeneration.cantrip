@@ -1,0 +1,41 @@
+# X=0 still prevents the targeted creature from regenerating and exiles it if it dies (CR 614.1a, 701.19a).
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Drudge Skeletons
+Disintegrate
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Drudge Skeletons.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Disintegrate.Cast(Bot1.Battlefield.Drudge Skeletons; X: 0)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Drudge Skeletons.Damage = 0
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Drudge Skeletons.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Drudge Skeletons)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Exile = Drudge Skeletons
+Bot1.Graveyard = Disintegrate
