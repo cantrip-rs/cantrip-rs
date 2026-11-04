@@ -1,0 +1,45 @@
+# Clive, Ifrit's Dominant: devotion to red (CR 700.5) counts every {R} among the mana costs of permanents Bot1 controls as the trigger
+# resolves - Monastery Swiftspear's {R} and Clive's {R}{R} make 3. Every card is cast, so the hand is empty: discarding it is still
+# allowed (its ruling) and Bot1 draws exactly 3, the Ornithopter, the Forest and an Island.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Clive, Ifrit's Dominant
+Monastery Swiftspear
+Ornithopter
+Forest
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Monastery Swiftspear.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Clive, Ifrit's Dominant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 3
+Bot1.Hand = Forest; Island; Ornithopter
+Bot1.Graveyard = Black Lotus

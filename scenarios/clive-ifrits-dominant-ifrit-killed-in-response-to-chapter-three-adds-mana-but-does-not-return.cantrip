@@ -1,0 +1,71 @@
+# Clive, Ifrit's Dominant: chapter III is on the stack with three lore counters on Ifrit when Bot2's Go for the Throat kills him in
+# response. The chapter still adds {R}{R}{R}{R}, but Ifrit is no longer on the battlefield to have "three or more lore counters" or to
+# be exiled and returned (CR 400.7): Clive does not come back, and Clive's card stays in the graveyard.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Clive, Ifrit's Dominant
+Mountain x13
+
+[Bot2 Deck]
+Swamp
+Mox Jet
+Go for the Throat
+Island x4
+Island x13
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Clive, Ifrit's Dominant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Clive, Ifrit's Dominant.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Go for the Throat.Cast(Ifrit, Warden of Inferno)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana = {R}{R}{R}{R}
+Bot1.Graveyard = Clive, Ifrit's Dominant; Black Lotus
+Bot1.Battlefield.Count = 6

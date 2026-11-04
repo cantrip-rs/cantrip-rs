@@ -1,0 +1,64 @@
+# Clive, Ifrit's Dominant: "{4}{R}{R}, {T}: Exile Clive, then return it to the battlefield transformed under its owner's control.
+# Activate only as a sorcery." (CR 712.14a). Turn 1: Clive is cast (the Lotus's RRR and three Moxen) and the discard is declined. Turn 3:
+# the four Moxen and two Mountains pay {4}{R}{R} exactly; Clive returns as Ifrit, Warden of Inferno, a 9/9 red Legendary Enchantment
+# Creature Saga Demon with its first lore counter (CR 714.3a), and chapter I Lunge has Ifrit fight Bot2's Ornithopter (0/2): it dies,
+# and Ifrit, dealt 0, is undamaged.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Clive, Ifrit's Dominant
+Mountain x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Clive, Ifrit's Dominant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Clive, Ifrit's Dominant.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ifrit, Warden of Inferno.Power = 9
+Bot1.Battlefield.Ifrit, Warden of Inferno.Toughness = 9
+Bot1.Battlefield.Ifrit, Warden of Inferno.Types = Enchantment; Creature
+Bot1.Battlefield.Ifrit, Warden of Inferno.Subtypes = Demon; Saga
+Bot1.Battlefield.Ifrit, Warden of Inferno.Colors = Red
+Bot1.Battlefield.Ifrit, Warden of Inferno.Counters.Lore = 1
+Bot1.Battlefield.Ifrit, Warden of Inferno.Damage = 0
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Ornithopter
