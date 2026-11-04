@@ -1,0 +1,6 @@
+{
+  "name": "Warning",
+  "manaCost": "{W}",
+  "type": "Instant",
+  "oracleText": "Prevent all combat damage that would be dealt by target attacking creature this turn."
+}
