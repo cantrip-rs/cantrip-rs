@@ -163,6 +163,9 @@ fn scenarios_that_once_failed_record() {
             "emrakul-the-promised-end-costs-one-less-for-each-card-type-in-your-graveyard",
             "emrakul-the-promised-end-controls-the-next-turn-then-gives-an-extra-one-and-is-protected-from-instants",
             "emrakul-the-promised-end-countered-still-controls-the-next-turn-and-gives-an-extra-one",
+            // The source Deflecting Palm's controller chooses has left the battlefield (CR 400.7) but a delayed ability still
+            // names it: the request offers an object the zones no longer hold, shown as it last existed.
+            "deflecting-palm-chooses-a-dead-dragonhawk-whose-delayed-burn-waits",
         ]
         .iter()
         .map(|n| {

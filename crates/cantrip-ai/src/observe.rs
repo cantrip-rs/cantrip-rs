@@ -8,7 +8,7 @@
 
 use std::collections::{BTreeMap, HashMap, HashSet};
 
-use cantrip_engine::visibility::{StackEntry, ability_key, deferred, knows_face, looks_into, observable, request_objects, stack_entries};
+use cantrip_engine::visibility::{StackEntry, ability_key, is_ability_key, deferred, knows_face, looks_into, observable, request_objects, stack_entries};
 use cantrip_engine::*;
 use cantrip_obs::*;
 use cantrip_obs::Count;
@@ -38,7 +38,20 @@ pub fn observe_indexed(game: &Game, knowledge: &Knowledge, seat: PlayerId, mode:
         Some(r) if cantrip_engine::visibility::answering(game, r) == seat => request_objects(r),
         _ => HashSet::new(),
     };
-    let view = View { game, knowledge, seat, full: mode == InfoMode::Full, visible: observable(game, seat, &extra) };
+    // The objects the request offers that are no longer the objects they were (CR 400.7), which it still names: the source
+    // of damage Deflecting Palm's controller chooses may be a creature that has left the battlefield since a delayed ability
+    // began waiting on it (CR 609.7a). Each is shown as it last existed, among the command zone's.
+    let last_known: Vec<ObjectId> = match request {
+        Some(r) if cantrip_engine::visibility::answering(game, r) == seat && matches!(r.kind, RequestKind::ChooseCards { .. }) => {
+            let mut gone: Vec<ObjectId> = first_choices(game, r).into_iter().filter(|&id| left_public(&game.state, id)).collect();
+            gone.sort();
+            gone
+        }
+        _ => Vec::new(),
+    };
+    let mut visible = observable(game, seat, &extra);
+    visible.extend(last_known.iter().copied());
+    let view = View { game, knowledge, seat, full: mode == InfoMode::Full, visible };
 
     // Each place's objects in canonical order, built once with every ref left out to sort by.
     let mut slots: Vec<Slot> = Vec::new();
@@ -55,6 +68,10 @@ pub fn observe_indexed(game: &Game, knowledge: &Knowledge, seat: PlayerId, mode:
         slots.push(Slot { id: entry.key(), stack: Some((i, entry)), obs: view.stacked(i, &entry, &none) });
     }
     view.place(Zone::COMMAND, &none, &mut slots);
+    for id in last_known {
+        let place = place_of(Zone::GONE);
+        slots.push(Slot { id, stack: None, obs: ObjectObs::Visible(Box::new(view.visible(id, place, None, &none))) });
+    }
 
     // The refs: to what the seat sees, by index; anything else is out of its sight.
     let refs: HashMap<ObjectId, u32> = slots
@@ -114,6 +131,18 @@ pub fn observe_indexed(game: &Game, knowledge: &Knowledge, seat: PlayerId, mode:
             .collect(),
     };
     Some((observation, index))
+}
+
+/// Whether `id` is an object that has changed zones or ceased to exist (CR 400.7) from a zone everyone sees into: what it was
+/// is public, so it is shown as it last existed (`observe_indexed`).
+fn left_public(s: &GameState, id: ObjectId) -> bool {
+    !is_ability_key(id)
+        && id.index() < s.objects.len()
+        && !live(s, id)
+        && matches!(
+            s.obj(id).zone.kind(),
+            ZoneKind::Battlefield | ZoneKind::PhasedOut | ZoneKind::Stack | ZoneKind::Graveyard | ZoneKind::Exile | ZoneKind::Command
+        )
 }
 
 /// An object in canonical order, as first built with its refs left out.
