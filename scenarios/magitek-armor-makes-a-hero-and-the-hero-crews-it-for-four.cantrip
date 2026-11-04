@@ -1,0 +1,49 @@
+# Magitek Armor (4/4 Vehicle, crew 1): when it enters it makes a 1/1 colorless Hero token, which crews it at once (a creature that
+# came this turn may crew) on turn 3; the crewed Armor is a 4/4 artifact creature that attacks for 4. On turn 5, with the Hero
+# tapped for nothing, the Armor is not a creature and may not attack.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Magitek Armor
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Magitek Armor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hero Token.Power = 1
+? Bot1.Battlefield.Hero Token.Toughness = 1
+? Bot1.Battlefield.Hero Token.Colors = (absent)
+? Bot1.Battlefield.Magitek Armor.Types = Artifact
+[T3 Bot1.Main1]
+Bot1.Battlefield.Magitek Armor.Activate(Ability: Crew)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Magitek Armor.Types = Artifact; Creature
+? Bot1.Battlefield.Hero Token.Tapped = true
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Magitek Armor > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 16
+[T5 Bot1.Main1]
+[T5 Bot1.DeclareAttackers]
+! Bot1.Attack(Magitek Armor > Bot2)
+
+[Expect]
+Turn = 5

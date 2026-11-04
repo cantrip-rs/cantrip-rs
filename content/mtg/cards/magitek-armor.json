@@ -1,0 +1,8 @@
+{
+  "name": "Magitek Armor",
+  "manaCost": "{3}{W}",
+  "type": "Artifact — Vehicle",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "When this Vehicle enters, create a 1/1 colorless Hero creature token.\nCrew 1 (Tap any number of creatures you control with total power 1 or more: This Vehicle becomes an artifact creature until end of turn.)"
+}
