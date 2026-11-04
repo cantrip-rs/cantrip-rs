@@ -846,6 +846,15 @@ pub fn still_exiled(q: &dyn Query, cards: &[ObjectId]) -> Vec<ObjectId> {
     cards.iter().copied().filter(|&c| is_still_exiled(q, c)).collect()
 }
 
+/// "Each opponent exiles the top `count` cards of their library" (CR 101.4, 406.2): every opponent of `controller` still in
+/// the game, the cards of all of them leaving together, face up. The cards that really reached exile (a replacement may send
+/// one elsewhere). Ensign Pavel Chekov (X cards) and Malboro (three) print it.
+pub fn each_opponent_exiles_top(g: &mut dyn Game, controller: PlayerId, count: usize) -> Vec<ObjectId> {
+    let opponents: Vec<PlayerId> = g.state().opponents(controller).collect();
+    let top: Vec<ObjectId> = opponents.iter().flat_map(|&opponent| top_of_library(g, opponent, count)).collect();
+    g.exile_all(&top).into_iter().filter(|&card| g.obj(card).zone.is(ZoneKind::Exile)).collect()
+}
+
 /// "Exile the top `count` cards of `from`'s library. `who` may play them" under `grant` (CR 406, 305.1, 601.3): the cards
 /// leave together, face up, and each that really reached exile (a replacement may send it elsewhere) can be played
 /// under the grant, a land among them under the ordinary land-play rules. The cards still in exile. Laelia, the Blade

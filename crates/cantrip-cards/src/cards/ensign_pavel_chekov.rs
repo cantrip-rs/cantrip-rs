@@ -25,8 +25,7 @@ fn strange_new_worlds(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     let you = item.controller;
     let count = lands::differently_named_lands(g, you);
     let opponents: Vec<PlayerId> = g.state().opponents(you).collect();
-    let top: Vec<ObjectId> = opponents.iter().flat_map(|&opponent| cantrip_mechanics::top_of_library(g, opponent, count)).collect();
-    let exiled: Vec<ObjectId> = g.exile_all(&top).into_iter().filter(|&card| g.obj(card).zone.is(ZoneKind::Exile)).collect();
+    let exiled = cantrip_mechanics::library::each_opponent_exiles_top(g, you, count);
 
     for opponent in opponents {
         let rule = land_owned_by(opponent);
