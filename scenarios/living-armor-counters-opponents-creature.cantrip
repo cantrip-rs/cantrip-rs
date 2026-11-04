@@ -1,0 +1,37 @@
+# Living Armor sacrifices as its cost and puts three +0/+1 counters on an opponent's mana value three creature (CR 602.2b, 122.1a).
+[Bot1 Deck]
+Living Armor
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Alpine Grizzly
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Living Armor.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Alpine Grizzly.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Living Armor.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Living Armor.Activate(Bot2.Battlefield.Alpine Grizzly)
+Bot1.Choose(Tap Living Armor)
+? Bot1.Graveyard = Living Armor; Black Lotus
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Alpine Grizzly.Counters.Plus0Plus1 = 3
+Bot2.Battlefield.Alpine Grizzly.Power = 4
+Bot2.Battlefield.Alpine Grizzly.Toughness = 5

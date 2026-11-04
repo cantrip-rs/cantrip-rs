@@ -1,0 +1,6 @@
+{
+  "name": "Living Armor",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "{T}, Sacrifice this artifact: Put X +0/+1 counters on target creature, where X is that creature's mana value."
+}
