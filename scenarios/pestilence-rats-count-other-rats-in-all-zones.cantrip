@@ -1,0 +1,65 @@
+# Pestilence Rats counts other Rats on both sides, excluding itself on the battlefield, and its defining ability works in hand (CR 604.3, 604.3a).
+[Bot1 Deck]
+Pestilence Rats
+Pestilence Rats
+Black Lotus
+Black Lotus
+Mox Jet
+Muck Rats
+Ornithopter
+Swamp x20
+
+[Bot2 Deck]
+Mox Jet
+Muck Rats
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+? Bot1.Hand.Pestilence Rats#1.Power = 0
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Pestilence Rats.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pestilence Rats.Power = 0
+? Bot1.Battlefield.Pestilence Rats.Toughness = 3
+? Bot1.Hand.Pestilence Rats.Power = 1
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Muck Rats.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pestilence Rats.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Muck Rats.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Pestilence Rats.Power = 2
+? Bot1.Hand.Pestilence Rats.Power = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Pestilence Rats.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pestilence Rats#1.Power = 3
+? Bot1.Battlefield.Pestilence Rats#2.Power = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Muck Rats)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Pestilence Rats#1.Power = 2
+Bot1.Battlefield.Pestilence Rats#2.Power = 2
+Bot1.Battlefield.Pestilence Rats#1.Toughness = 3
+Bot1.Battlefield.Ornithopter.Power = 0

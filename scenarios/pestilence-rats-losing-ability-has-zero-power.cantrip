@@ -1,0 +1,42 @@
+# A star is zero when Dress Down removes its defining ability; it counts Rats again after Dress Down leaves (CR 208.5, 604.3).
+[Bot1 Deck]
+Pestilence Rats
+Black Lotus
+Mox Jet
+Muck Rats
+Swamp x20
+
+[Bot2 Deck]
+Dress Down
+Mox Sapphire
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Pestilence Rats.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Muck Rats.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pestilence Rats.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dress Down.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Pestilence Rats.Power = 0
+? Bot1.Battlefield.Pestilence Rats.Toughness = 3
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Pestilence Rats.Power = 1
+Bot1.Battlefield.Pestilence Rats.Toughness = 3
+Bot2.Graveyard.Dress Down.Colors = Blue
