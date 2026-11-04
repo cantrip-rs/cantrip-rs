@@ -1,0 +1,54 @@
+# The red ability prevents the opponent's regeneration shield from saving its creature from lethal damage (CR 701.19a, 101.2).
+[Bot1 Deck]
+Orcish Healer
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Swamp
+Drudge Skeletons
+Mox Jet
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Orcish Healer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet#1.Activate
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Hand.Drudge Skeletons.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+! Bot1.Battlefield.Orcish Healer.Activate(Ability: can't be regenerated; Bot1.Battlefield.Mox Ruby)
+Bot1.Battlefield.Orcish Healer.Activate(Ability: can't be regenerated; Bot2.Battlefield.Drudge Skeletons)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Drudge Skeletons.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Drudge Skeletons)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Drudge Skeletons
+Bot1.Battlefield.Orcish Healer.Tapped = true
