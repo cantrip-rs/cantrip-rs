@@ -1,0 +1,35 @@
+# The Wizard needs blue and taps to turn {U} into exactly {C}{C}{C}; white mana alone cannot pay its cost (CR 605.1a, 602.2b).
+[Bot1 Deck]
+Apprentice Wizard
+Black Lotus
+Mox Sapphire
+Plains
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Apprentice Wizard.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+? Bot1.Mana = {W}
+! Bot1.Battlefield.Apprentice Wizard.Activate(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+? Bot1.Mana = {W}{U}
+Bot1.Battlefield.Apprentice Wizard.Activate
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {W}{C}{C}{C}
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Apprentice Wizard.Activate
+[Expect]
+Bot1.Battlefield.Apprentice Wizard.Tapped = true
+Bot1.Mana = {W}{C}{C}{C}
