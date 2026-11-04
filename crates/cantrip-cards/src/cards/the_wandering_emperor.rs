@@ -15,11 +15,7 @@ fn instant_loyalty(q: &dyn Query, asker: &Asker, source: ObjectId, index: u8, ac
 
 /// +1: put a +1/+1 counter on up to one target creature. It gains first strike until end of turn.
 fn plus_one(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        g.add_counters(creature, CounterKind::PlusOne, 1);
-        effects::gain_until_end_of_turn(g, item.object, creature, Keyword::FirstStrike);
-    }
-    Ok(())
+    effects::plus_one_counter_on_target_and_gain_until_end_of_turn(g, item, Keyword::FirstStrike)
 }
 
 /// -1: create a 2/2 white Samurai creature token with vigilance.

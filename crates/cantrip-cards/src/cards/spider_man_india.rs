@@ -7,11 +7,7 @@ use cantrip_oracle as oracle;
 /// Pavitr's Sevā: "Put a +1/+1 counter on target creature you control. It gains flying until end of turn." (CR 122.1,
 /// 611.2)
 fn seva(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(creature) = targets::object(g, item, 0) {
-        g.add_counters(creature, CounterKind::PlusOne, 1);
-        effects::gain_until_end_of_turn(g, item.object, creature, Keyword::Flying);
-    }
-    Ok(())
+    effects::plus_one_counter_on_target_and_gain_until_end_of_turn(g, item, Keyword::Flying)
 }
 
 pub static CARD: CardDef = CardDef {

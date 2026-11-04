@@ -1821,6 +1821,19 @@ pub fn plus_one_counter_on_target(g: &mut dyn Game, item: &StackItem) -> Result<
     Ok(())
 }
 
+/// "Put a +1/+1 counter on [up to one] target creature [you control]. It gains [`keyword`] until end of turn." (CR 122.1a,
+/// 611.2a): two sentences, so the counter and the keyword are two instructions (CR 608.2c); nothing if the target is no longer
+/// legal or none was chosen (CR 608.2b). Additive Evolution and Dig Site Inventory (vigilance), Rosa, Resolute White Mage
+/// (lifelink), Spider-Man India (flying), The Wandering Emperor (first strike), Origin of Metalbending and Revitalizing Repast
+/// (indestructible) and Snakeskin Veil (hexproof) print it.
+pub fn plus_one_counter_on_target_and_gain_until_end_of_turn(g: &mut dyn Game, item: &StackItem, keyword: Keyword) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    g.add_counters(creature, CounterKind::PlusOne, 1);
+    g.end_sentence();
+    gain_until_end_of_turn(g, item.object, creature, keyword);
+    Ok(())
+}
+
 /// "Put [its / those] counters on [up to one] target [permanent]": as many of each kind as `from` had as it left, read from its
 /// last existence on the battlefield (CR 603.10a, 608.2h); the counters are put on, not moved (the rulings), every kind of
 /// them, -1/-1 counters too, together as one event (CR 122.6). Nothing if the target is no longer legal (CR 608.2b) or none was
