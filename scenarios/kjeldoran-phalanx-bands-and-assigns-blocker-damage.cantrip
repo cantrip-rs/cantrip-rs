@@ -1,0 +1,59 @@
+# Phalanx bands with Gorilla; the blocker blocks both, and their controller assigns its four damage to Phalanx (CR 702.22c, 702.22h, 702.22k).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Emerald
+Mox Ruby
+Kjeldoran Phalanx
+Guerrilla Gorilla
+Island
+Island x15
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Ulvenwald Oddity
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus#1.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Kjeldoran Phalanx.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Ulvenwald Oddity.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kjeldoran Phalanx > Bot2; Guerrilla Gorilla > Bot2)
+Bot1.Choose(Guerrilla Gorilla)
+? Combat.Attackers = Kjeldoran Phalanx > Bot2 (band 1); Guerrilla Gorilla > Bot2 (band 1)
+Bot2.Block(Ulvenwald Oddity > Kjeldoran Phalanx)
+[T3 Bot1.Blockers]
+? Combat.Blocks = Ulvenwald Oddity > Kjeldoran Phalanx; Ulvenwald Oddity > Guerrilla Gorilla
+Bot1.AssignDamage(Ulvenwald Oddity > Kjeldoran Phalanx: 4)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Kjeldoran Phalanx.Damage = 4
+Bot1.Battlefield.Guerrilla Gorilla.Damage = 0
+Bot2.Graveyard.Ulvenwald Oddity.Power = 4
+Bot2.Life = 20
