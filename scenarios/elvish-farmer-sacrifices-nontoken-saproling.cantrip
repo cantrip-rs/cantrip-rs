@@ -1,0 +1,54 @@
+# A changeling is a Saproling even as a nontoken; the Farmer can sacrifice its controller's, not the opponent's.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Jet
+Elvish Farmer
+Universal Automaton
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Universal Automaton
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elvish Farmer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Universal Automaton.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Universal Automaton.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Elvish Farmer.Activate(Ability: Sacrifice a Saproling)
+! Bot1.Choose(Bot2.Battlefield.Universal Automaton)
+Bot1.Choose(Bot1.Battlefield.Universal Automaton)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Graveyard = Universal Automaton
+Bot2.Battlefield.Universal Automaton.Power = 1

@@ -1,0 +1,63 @@
+# Elvish Farmer gets one spore counter on each of its controller's upkeeps, spends three to create
+# an untapped green 1/1 Saproling, and sacrifices that Saproling for two life.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Elvish Farmer
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elvish Farmer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Elvish Farmer.Counters.Spore = (absent)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Elvish Farmer.Counters.Spore = 1
+! Bot1.Battlefield.Elvish Farmer.Activate(Ability: Remove three)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Elvish Farmer.Counters.Spore = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Elvish Farmer.Counters.Spore = 2
+! Bot1.Battlefield.Elvish Farmer.Activate(Ability: Remove three)
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Elvish Farmer.Counters.Spore = 3
+Bot1.Battlefield.Elvish Farmer.Activate(Ability: Remove three)
+? Turn = 7
+? Bot1.Battlefield.Elvish Farmer.Counters.Spore = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Saproling Token.Types = Creature
+? Bot1.Battlefield.Saproling Token.Power = 1
+? Bot1.Battlefield.Saproling Token.Toughness = 1
+? Bot1.Battlefield.Saproling Token.Colors = Green
+? Bot1.Battlefield.Saproling Token.Subtypes = Saproling
+? Bot1.Battlefield.Saproling Token.Token = true
+? Bot1.Battlefield.Saproling Token.Tapped = false
+Bot1.Battlefield.Elvish Farmer.Activate(Ability: Sacrifice a Saproling)
+! Bot1.Choose(Ornithopter)
+Bot1.Choose(Saproling Token)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 22
+Bot1.Battlefield.Count = 4
