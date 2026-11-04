@@ -1,0 +1,8 @@
+{
+  "name": "Minion of Tevesh Szat",
+  "manaCost": "{4}{B}{B}{B}",
+  "type": "Creature — Demon Minion",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "At the beginning of your upkeep, this creature deals 2 damage to you unless you pay {B}{B}.\n{T}: Target creature gets +3/-2 until end of turn."
+}
