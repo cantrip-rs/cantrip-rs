@@ -1,0 +1,8 @@
+{
+  "name": "Summon: G.F. Ifrit",
+  "manaCost": "{2}{R}",
+  "type": "Enchantment Creature — Saga Demon",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after IV.)\nI, II — You may discard a card. If you do, draw a card.\nIII, IV — Add {R}."
+}

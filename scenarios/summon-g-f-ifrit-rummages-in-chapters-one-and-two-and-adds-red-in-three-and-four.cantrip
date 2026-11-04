@@ -1,0 +1,58 @@
+# Summon: G.F. Ifrit ({2}{R}), cast on turn 3 with Black Lotus and Mox Ruby. I (turn 3): "You may discard a card. If you do,
+# draw a card." - Bot1 discards Lightning Bolt and draws the Swamp under the turn's Plains (the graveyard has the Bolt, the hand
+# keeps its size). II (turn 5): Bot1 chooses no card, so nothing is discarded and nothing is drawn beyond the turn's draw
+# (the hand grows by one). III (turn 7) and IV (turn 9): each adds {R} (the pool holds exactly {R} once the chapter has
+# resolved), and after IV, with nothing on the stack, the Saga is sacrificed (CR 714.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Summon: G.F. Ifrit
+Lightning Bolt
+Mountain
+Island
+Island
+Plains
+Swamp
+Forest
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Summon: G.F. Ifrit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+? Bot1.Battlefield.Summon: G.F. Ifrit.Counters.Lore = 1
+? Bot1.Hand = Island; Island; Plains; Swamp
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Graveyard = Lightning Bolt; Black Lotus
+? Bot1.Hand = Forest; Island; Island; Plains; Swamp
+? Bot1.Battlefield.Summon: G.F. Ifrit.Counters.Lore = 2
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Summon: G.F. Ifrit.Counters.Lore = 3
+[T9 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {R}
+[T9 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Summon: G.F. Ifrit; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Summon: G.F. Ifrit = (absent)
+Stack.Count = 0
