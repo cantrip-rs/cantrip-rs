@@ -580,6 +580,15 @@ pub fn plus_pt<const P: i16, const T: i16>(_: &dyn LayerQuery, _: ObjectId, char
     chars.toughness = chars.toughness.map(|v| v + T);
 }
 
+/// "Gets +1/+1 for each [permanent] you control" (CR 613.4c, layer 7c): the number of permanents `counts` accepts under the
+/// control of the source's controller (CR 109.5), as the earlier layers made them, tokens and nontoken alike. Grand Nagus
+/// Zek (Treasures) and Adelbert Steiner (Equipment) print it.
+pub fn plus_one_plus_one_for_each_you_control(view: &dyn LayerQuery, source: ObjectId, chars: &mut Chars, counts: &dyn Fn(&Chars) -> bool) {
+    let n = crate::lands::count_you_control(view, source, counts);
+    chars.power = chars.power.map(|v| v + n);
+    chars.toughness = chars.toughness.map(|v| v + n);
+}
+
 /// "Creatures you control get +1/+1." (CR 613.4c, layer 7c): every creature its controller controls, itself among them once
 /// it is one (an Opalescence-animated Glorious Anthem pumps itself), judged on what the earlier layers made each object.
 /// Glorious Anthem, Warleader's Call and Cosmium Kiln (Clay-Fired Bricks' back face) print it.

@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{lands, statics, tokens, triggers};
+use cantrip_mechanics::{statics, tokens, triggers};
 use cantrip_oracle as oracle;
 
 /// "Grand Nagus Zek gets +1/+1 for each Treasure you control." "You" means the source's current controller (CR 109.5),
@@ -9,9 +9,7 @@ fn plus_one_plus_one_per_treasure_you_control(
     source: ObjectId,
     chars: &mut Chars,
 ) {
-    let n = lands::count_you_control(view, source, &|c| c.has_subtype(Subtype::Treasure));
-    chars.power = chars.power.map(|v| v + n);
-    chars.toughness = chars.toughness.map(|v| v + n);
+    statics::plus_one_plus_one_for_each_you_control(view, source, chars, &|c| c.has_subtype(Subtype::Treasure));
 }
 
 pub static CARD: CardDef = CardDef {
