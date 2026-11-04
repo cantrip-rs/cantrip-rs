@@ -1,0 +1,44 @@
+# Keeping Weaponry tapped preserves the bonus through an untap step; untapping it ends the bonus (CR 502.3, 611.2b).
+# A noncreature is refused while a creature can be targeted with the same activation.
+[Bot1 Deck]
+Tawnos's Weaponry
+Black Lotus
+Mox Jet
+Mox Pearl
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Tawnos's Weaponry.Cast
+? Bot1.Mana = {U}
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Tawnos's Weaponry.Activate(Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Tawnos's Weaponry.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Tawnos's Weaponry.Tapped = true
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Accept
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Tawnos's Weaponry.Tapped = false
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
