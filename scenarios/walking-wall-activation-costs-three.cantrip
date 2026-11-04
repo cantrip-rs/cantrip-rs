@@ -1,0 +1,33 @@
+# Two available mana sources cannot pay the Wall's {3}; after a third source is played, the activation succeeds (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Walking Wall
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Walking Wall.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Walking Wall.Activate(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Walking Wall.Activate
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Walking Wall.Power = 3
+Bot1.Battlefield.Walking Wall.Toughness = 5

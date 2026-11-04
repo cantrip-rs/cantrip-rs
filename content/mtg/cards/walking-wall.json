@@ -1,0 +1,11 @@
+{
+  "name": "Walking Wall",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Wall",
+  "power": 0,
+  "toughness": 6,
+  "oracleText": "Defender\n{3}: This creature gets +3/-1 until end of turn and can attack this turn as though it didn't have defender. Activate only once each turn.",
+  "keywords": [
+    "Defender"
+  ]
+}
