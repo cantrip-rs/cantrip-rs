@@ -1,0 +1,45 @@
+# Vaan, Street Thief connects: the top card of Bot2's library, Lightning Bolt, is exiled and Bot1 casts it (paying {R}), so no
+# Treasure. The Bolt is a spell Bot1 does not own, so Vaan's second ability puts a +1/+1 counter on each Scout, Pirate and
+# Rogue Bot1 controls - Vaan (a Human Scout) and Warship Scout, not Memnite - and resolves before the Bolt does (ruling 2025-06-06).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Vaan, Street Thief
+Warship Scout
+Memnite
+Island x3
+Island x10
+
+[Bot2 Deck]
+Island x8
+Lightning Bolt
+Island x11
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Vaan, Street Thief.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Warship Scout.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Vaan, Street Thief > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot2.Graveyard = Lightning Bolt; Island
+Bot1.Battlefield.Vaan, Street Thief.Power = 3
+Bot1.Battlefield.Vaan, Street Thief.Toughness = 3
+Bot1.Battlefield.Warship Scout.Power = 3
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Treasure Token = (absent)

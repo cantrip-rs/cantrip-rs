@@ -1,0 +1,28 @@
+# Vaan, Street Thief connects and exiles an Island from the top of Bot2's library: a land cannot be cast, so Bot1 is not asked
+# and creates a Treasure token (the land stays in exile).
+
+[Bot1 Deck]
+Black Lotus
+Vaan, Street Thief
+Island x5
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Vaan, Street Thief.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Vaan, Street Thief > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Exile = Island
+Bot1.Battlefield.Treasure Token.Tapped = false
