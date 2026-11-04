@@ -419,6 +419,24 @@ pub static PEST: CardDef = CardDef {
     ..token!(Pest)
 };
 
+/// "Whenever you cast a noncreature spell, this token deals 1 damage to each opponent."
+fn ping_each_opponent(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    crate::effects::damage_each_opponent(g, item, 1);
+    Ok(())
+}
+
+/// The 0/1 black Wizard creature token with "Whenever you cast a noncreature spell, this token deals 1 damage to each
+/// opponent." Mage Siege (Lindblum, Industrial Regency) and Circle of Power make it.
+pub static WIZARD: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Black)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(0),
+    toughness: Some(1),
+    abilities: &[triggered(crate::triggers::NONCREATURE_SPELL_YOU_CAST, ping_each_opponent, "Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.")],
+    text: "Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.",
+    ..token!(Wizard)
+};
+
 /// "Whenever this token attacks, you gain 1 life."
 fn gain_a_life_on_attack(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.gain_life(item.controller, 1);
