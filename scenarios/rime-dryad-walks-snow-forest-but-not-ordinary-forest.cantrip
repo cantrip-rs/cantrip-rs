@@ -1,0 +1,39 @@
+# Rime Dryad can be blocked through an ordinary Forest, but cannot be blocked once the defending player controls a snow Forest (CR 702.14c).
+[Bot1 Deck]
+Rime Dryad
+Mox Emerald
+Memnite
+Forest x20
+[Bot2 Deck]
+Forest
+Snow-Covered Forest
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Rime Dryad.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Rime Dryad > Bot2)
+Bot2.Block(Ornithopter > Rime Dryad)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+[T4 Bot2.Main1]
+Bot2.Hand.Snow-Covered Forest.Play
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Rime Dryad > Bot2; Memnite > Bot2)
+! Bot2.Block(Ornithopter > Rime Dryad)
+Bot2.Block(Ornithopter > Memnite)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Rime Dryad.Power = 1

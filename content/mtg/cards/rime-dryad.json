@@ -1,0 +1,11 @@
+{
+  "name": "Rime Dryad",
+  "manaCost": "{G}",
+  "type": "Creature — Dryad",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Snow forestwalk (This creature can't be blocked as long as defending player controls a snow Forest.)",
+  "keywords": [
+    "SnowForestwalk"
+  ]
+}
