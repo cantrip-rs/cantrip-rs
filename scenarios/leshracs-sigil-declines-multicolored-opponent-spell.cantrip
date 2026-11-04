@@ -1,0 +1,68 @@
+# An opponent's green-white spell triggers the Sigil, whose controller can decline; the controller's own green spell does not trigger it (CR 603.2, 105.2b).
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Emerald
+Leshrac's Sigil
+Elvish Mystic
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Voice of Resurgence
+Lightning Bolt
+Island
+Island
+Island
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Leshrac's Sigil.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Voice of Resurgence.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Mana = {B}{B}
+[T2 Bot2.Main2]
+? Bot2.Hand.Lightning Bolt.Colors = Red
+? Bot2.Graveyard.Count = 0
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+? Bot1.Mana =
+? Stack = Elvish Mystic
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Hand.Lightning Bolt.Colors = Red
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot2.Battlefield.Voice of Resurgence.Power = 2

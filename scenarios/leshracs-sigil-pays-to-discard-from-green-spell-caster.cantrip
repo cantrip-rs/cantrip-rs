@@ -1,0 +1,63 @@
+# An opponent's green spell triggers the Sigil; its controller pays {B}{B} and chooses exactly one card from that opponent's hand (CR 603.2, 701.9a).
+[Bot1 Deck]
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Leshrac's Sigil
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Emerald
+Elvish Mystic
+Lightning Bolt
+Ornithopter
+Island
+Island
+Island
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Leshrac's Sigil.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+? Stack = Ornithopter
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Battlefield.Mox Jet#4.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+? Bot1.Mana =
+! Bot1.Choose()
+! Bot1.Choose(Lightning Bolt; Island)
+Bot1.Choose(Lightning Bolt)
+? Bot1.Looked = Lightning Bolt; Island; Island; Island; Island
+[T2 Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard.Lightning Bolt.Colors = Red
+Bot2.Battlefield.Elvish Mystic.Power = 1
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Leshrac's Sigil.Types = Enchantment
