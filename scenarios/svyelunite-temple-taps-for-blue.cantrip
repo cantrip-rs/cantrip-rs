@@ -1,0 +1,19 @@
+# The Temple enters tapped and, after untapping, taps for one blue mana (CR 614.1d, 605.1a).
+[Bot1 Deck]
+Svyelunite Temple
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Svyelunite Temple.Play
+? Bot1.Battlefield.Svyelunite Temple.Tapped = true
+! Bot1.Battlefield.Svyelunite Temple.Activate(Ability: Add {U}.)
+! Bot1.Battlefield.Svyelunite Temple.Activate(Ability: Sacrifice)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Svyelunite Temple.Activate(Ability: Add {U}.)
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Svyelunite Temple.Tapped = true
+! Bot1.Battlefield.Svyelunite Temple.Activate(Ability: Add {U}.)
+! Bot1.Battlefield.Svyelunite Temple.Activate(Ability: Sacrifice)
+[Expect]
+Bot1.Battlefield.Svyelunite Temple.Tapped = true
