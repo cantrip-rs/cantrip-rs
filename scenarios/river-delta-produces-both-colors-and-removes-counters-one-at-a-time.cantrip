@@ -1,0 +1,45 @@
+# River Delta produces blue and black, accumulates depletion counters when Ley Druid untaps it, then skips untap and removes one each upkeep (CR 605.3a, 502.3).
+[Bot1 Deck]
+River Delta
+Ley Druid
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.River Delta.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Ley Druid.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.River Delta.Activate(Color: White)
+Bot1.Battlefield.River Delta.Activate(Color: Blue)
+? Bot1.Mana = {U}
+? Bot1.Battlefield.River Delta.Counters.Depletion = 1
+Bot1.Battlefield.Ley Druid.Activate(Bot1.Battlefield.River Delta)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.River Delta.Tapped = false
+Bot1.Battlefield.River Delta.Activate(Color: Black)
+? Bot1.Mana = {U}{B}
+? Bot1.Battlefield.River Delta.Counters.Depletion = 2
+? Bot1.Battlefield.River Delta.Tapped = true
+! Bot1.Battlefield.River Delta.Activate(Color: Blue)
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.River Delta.Tapped = true
+? Bot1.Battlefield.River Delta.Counters.Depletion = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.River Delta.Counters.Depletion = 1
+[T7 Bot1.Upkeep]
+? Bot1.Battlefield.River Delta.Tapped = true
+? Bot1.Battlefield.River Delta.Counters.Depletion = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.River Delta.Counters.Depletion = (absent)
+[T9 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.River Delta.Tapped = false
+Bot1.Battlefield.River Delta.Counters.Depletion = (absent)
