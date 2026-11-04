@@ -1,0 +1,38 @@
+# Poison the Waters, second mode, aimed at Bot2: its hand is revealed, Bot1 chooses an artifact or creature card from it (the Memnite, an
+# artifact creature; the Lightning Bolt and the Islands cannot be chosen), and that player discards that card. Bot2 keeps the other six.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Poison the Waters
+Plains x17
+
+[Bot2 Deck]
+Memnite
+Lightning Bolt
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Poison the Waters.Cast
+Bot1.Modes(Target player reveals their hand)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard = Memnite
+Bot2.Hand.Count = 6
+Bot1.Graveyard = Poison the Waters

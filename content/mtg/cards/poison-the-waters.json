@@ -1,0 +1,6 @@
+{
+  "name": "Poison the Waters",
+  "manaCost": "{1}{B}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• All creatures get -1/-1 until end of turn.\n• Target player reveals their hand. You choose an artifact or creature card from it. That player discards that card."
+}

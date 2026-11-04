@@ -1,0 +1,44 @@
+# Poison the Waters, first mode: "All creatures get -1/-1 until end of turn." Bot1's Memnite (1/1) and Bot2's Memnite both die, one from each
+# side; Bot2's Ornithopter (0/2) survives as a -1/1 that turn and is a 0/2 again on turn 4 (CR 611.2). Paid with exactly {1}{B}.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Memnite
+Poison the Waters
+Plains x16
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Poison the Waters.Cast
+Bot1.Modes(All creatures get -1/-1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = -1
+? Bot2.Battlefield.Ornithopter.Toughness = 1
+? Bot1.Graveyard = Memnite; Poison the Waters
+? Bot2.Graveyard = Memnite
+[T4 Bot2.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
