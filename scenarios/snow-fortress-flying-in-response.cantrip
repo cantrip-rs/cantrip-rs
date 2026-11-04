@@ -1,0 +1,87 @@
+# A creature attacking a planeswalker is not attacking its controller (CR 506.2); an attacking creature that gains flying in response is no longer a legal target; another ground attacker can be damaged (CR 608.2b).
+[Bot1 Deck]
+Snow Fortress
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Sol Ring
+Island
+Mox Ruby
+Mox Emerald
+Kiora, Behemoth Beckoner
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Runeclaw Bear
+Ornithopter
+Black Lotus
+Island
+Jump
+Forest
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Snow Fortress.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Runeclaw Bear.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Kiora, Behemoth Beckoner.Cast
+Bot1.Pass
+Bot1.Battlefield.Kiora, Behemoth Beckoner.Activate(Bot1.Battlefield.Sol Ring)
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1; Runeclaw Bear > Bot1; Ornithopter > Bot1; Memnite > Bot1.Battlefield.Kiora, Behemoth Beckoner)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Snow Fortress.Activate(Bot2.Battlefield.Memnite; Ability: deals 1 damage)
+! Bot1.Battlefield.Snow Fortress.Activate(Bot2.Battlefield.Ornithopter; Ability: deals 1 damage)
+! Bot1.Battlefield.Snow Fortress.Activate(Bot1.Battlefield.Snow Fortress; Ability: deals 1 damage)
+Bot1.Battlefield.Snow Fortress.Activate(Bot2.Battlefield.Grizzly Bears; Ability: deals 1 damage)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Jump.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Snow Fortress.Activate(Bot2.Battlefield.Runeclaw Bear; Ability: deals 1 damage)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Snow Fortress.Activate(Bot2.Battlefield.Runeclaw Bear; Ability: deals 1 damage; Mana: short)
+[Expect]
+Bot2.Battlefield.Runeclaw Bear.Damage = 1
