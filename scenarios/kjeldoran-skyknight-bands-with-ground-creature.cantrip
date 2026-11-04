@@ -1,0 +1,45 @@
+# Blocking the ground member blocks its flying bandmate too; the Skyknight's controller assigns the blocker's damage (CR 702.22h, 702.22k).
+[Bot1 Deck]
+Kjeldoran Skyknight
+Guerrilla Gorilla
+Plains
+Mox Emerald
+Mox Pearl
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kjeldoran Skyknight.Cast
+? Bot1.Mana =
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Guerrilla Gorilla.Cast
+? Bot1.Mana =
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Kjeldoran Skyknight > Bot2; Guerrilla Gorilla > Bot2)
+Bot1.Choose(Guerrilla Gorilla)
+! Bot2.Block(Grizzly Bears > Kjeldoran Skyknight)
+Bot2.Block(Grizzly Bears > Guerrilla Gorilla)
+[T5 Bot1.Blockers]
+? Combat.Blocks = Grizzly Bears > Guerrilla Gorilla; Grizzly Bears > Kjeldoran Skyknight
+Bot1.AssignDamage(Grizzly Bears > Kjeldoran Skyknight: 2)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Kjeldoran Skyknight
+Bot1.Battlefield.Guerrilla Gorilla.Damage = 0
+Bot2.Graveyard = Grizzly Bears; Black Lotus
