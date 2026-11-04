@@ -1,0 +1,6 @@
+{
+  "name": "Fight On!",
+  "manaCost": "{2}{B}",
+  "type": "Instant",
+  "oracleText": "Return up to two target creature cards from your graveyard to your hand."
+}

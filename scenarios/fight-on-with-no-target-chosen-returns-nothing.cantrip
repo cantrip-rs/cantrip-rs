@@ -1,0 +1,31 @@
+# Fight On!: "up to two" may be none (CR 601.2c): with Memnite in the graveyard, Bot1 chooses no target, the spell resolves and
+# Memnite stays in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Entomb
+Fight On!
+Island x3
+Memnite
+Island x19
+
+[Bot2 Deck]
+Island x22
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Memnite)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Fight On!.Cast
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 3
+Bot1.Graveyard = Fight On!; Black Lotus; Entomb; Memnite

@@ -1,0 +1,66 @@
+# Fight On!: "up to two target creature cards" (CR 601.2c) is no more than two: with three Banemakers in the graveyard, naming all
+# three is refused, and choosing just one returns that one and leaves the other two.
+
+[Bot1 Deck]
+Burrog Banemaker
+Burrog Banemaker
+Burrog Banemaker
+Mox Jet
+Mox Jet
+Mox Jet
+Mox Jet
+Fight On!
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Lightning Bolt
+Lightning Bolt
+Lightning Bolt
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Burrog Banemaker.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker#1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker#1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Lightning Bolt.Cast(Burrog Banemaker)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Jet#3.Activate
+Bot1.Hand.Fight On!.Cast
+! Bot1.Target(Bot1.Graveyard.Burrog Banemaker#1; Bot1.Graveyard.Burrog Banemaker#2; Bot1.Graveyard.Burrog Banemaker#3)
+Bot1.Target(Bot1.Graveyard.Burrog Banemaker#1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard.Count = 3
+Bot1.Hand.Burrog Banemaker.Power = 1
