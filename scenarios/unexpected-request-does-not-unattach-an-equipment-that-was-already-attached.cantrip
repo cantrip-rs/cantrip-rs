@@ -1,0 +1,48 @@
+# Unexpected Request on Bot1's own Memnite, which already carries Basilisk Collar: attaching an Equipment to the creature it is
+# already attached to does nothing (CR 701.3b), so Bot1 did not "attach it this way" and the "If you do" unattaching is not set
+# up - the Collar is still on the Memnite after the end step of turn 3.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Memnite
+Basilisk Collar
+Black Lotus
+Unexpected Request
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Basilisk Collar.Activate(Ability: Equip; Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Basilisk Collar.AttachedTo = Memnite
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Unexpected Request.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Basilisk Collar)
+? Delayed.Count = 0
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Basilisk Collar.AttachedTo = Memnite
+
+[Expect]
+Bot1.Battlefield.Basilisk Collar.AttachedTo = Memnite

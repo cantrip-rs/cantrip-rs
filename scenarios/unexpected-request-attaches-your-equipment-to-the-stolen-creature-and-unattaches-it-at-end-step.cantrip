@@ -1,0 +1,47 @@
+# Unexpected Request ({2}{R}): Bot1 gains control of Bot2's Memnite (a 1/1) until end of turn, untaps it and gives it haste,
+# then attaches Colossus Hammer (+10/+10) to it (CR 701.3a): the Memnite is an 11/11 under Bot1's control. At the beginning of
+# the next end step the Hammer is unattached (CR 701.3d, 603.7) and the Memnite returns to Bot2 as a 1/1; the Hammer stays on
+# the battlefield.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Colossus Hammer
+Unexpected Request
+Island x3
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Colossus Hammer.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Unexpected Request.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Colossus Hammer)
+? Bot1.Battlefield.Memnite.Power = 11
+? Bot1.Battlefield.Memnite.Toughness = 11
+? Bot1.Battlefield.Colossus Hammer.AttachedTo = Memnite
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Colossus Hammer.AttachedTo = Memnite
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Colossus Hammer.AttachedTo = (absent)
+? Bot2.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot1.Battlefield.Colossus Hammer.AttachedTo = (absent)
+Bot2.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Memnite = (absent)

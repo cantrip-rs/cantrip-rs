@@ -1,0 +1,34 @@
+# Unexpected Request with no Equipment of Bot1's (Bot2 controls a Colossus Hammer, which is not "an Equipment you control"):
+# Bot1 is asked nothing, steals Bot2's Memnite, and the Hammer stays unattached on Bot2's side.
+
+[Bot1 Deck]
+Black Lotus
+Unexpected Request
+Island x18
+
+[Bot2 Deck]
+Memnite
+Colossus Hammer
+Mox Jet
+Island x17
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Colossus Hammer.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Unexpected Request.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Colossus Hammer.AttachedTo = (absent)
+
+[Expect]
+Bot2.Battlefield.Colossus Hammer.AttachedTo = (absent)
+Delayed.Count = 0

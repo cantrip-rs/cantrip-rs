@@ -1,0 +1,42 @@
+# Unexpected Request: "You may attach an Equipment you control to that creature" - Bot1 chooses no Equipment, so Colossus Hammer
+# stays unattached (the stolen Memnite is still a 1/1 with haste under Bot1's control), and nothing is set up for the end step.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Colossus Hammer
+Unexpected Request
+Island x3
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Colossus Hammer.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Unexpected Request.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Colossus Hammer.AttachedTo = (absent)
+[T3 Bot1.Main2]
+? Delayed.Count = 0
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Memnite.Power = 1
+
+[Expect]
+Bot1.Battlefield.Colossus Hammer.AttachedTo = (absent)
+Bot1.Battlefield.Memnite = (absent)

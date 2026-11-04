@@ -1,0 +1,45 @@
+# Unexpected Request: "You may attach AN Equipment you control" - with Colossus Hammer and Basilisk Collar both in play, choosing
+# both is refused; choosing the Collar attaches only it (the Hammer stays unattached), and the Collar is unattached at the end step.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Colossus Hammer
+Basilisk Collar
+Unexpected Request
+Island x3
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Colossus Hammer.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Unexpected Request.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Colossus Hammer; Basilisk Collar)
+Bot1.Choose(Basilisk Collar)
+? Bot1.Battlefield.Basilisk Collar.AttachedTo = Memnite
+? Bot1.Battlefield.Colossus Hammer.AttachedTo = (absent)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Basilisk Collar.AttachedTo = (absent)
+
+[Expect]
+Bot1.Battlefield.Colossus Hammer.AttachedTo = (absent)
