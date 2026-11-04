@@ -1,0 +1,48 @@
+# Untapping and retapping Gremlins before its first ability resolves ends the first duration;
+# the first artifact is tapped but only the second remains locked during untap (CR 611.2b).
+[Bot1 Deck]
+Phyrexian Gremlins
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Vow to Erebor
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Phyrexian Gremlins.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Phyrexian Gremlins.Activate(Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Vow to Erebor.Cast(Bot1.Battlefield.Phyrexian Gremlins)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Phyrexian Gremlins.Activate(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Jet.Tapped = true
+? Bot2.Battlefield.Mox Ruby.Tapped = true
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Mox Ruby.Tapped = true
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Phyrexian Gremlins.Tapped = true
+Bot1.Battlefield.Mox Jet.Tapped = false
+Bot2.Battlefield.Mox Ruby.Tapped = true

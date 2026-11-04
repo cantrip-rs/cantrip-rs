@@ -1,0 +1,8 @@
+{
+  "name": "Phyrexian Gremlins",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Phyrexian Gremlin",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "You may choose not to untap this creature during your untap step.\n{T}: Tap target artifact. It doesn't untap during its controller's untap step for as long as this creature remains tapped."
+}
