@@ -1,0 +1,6 @@
+{
+  "name": "Sunstone",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "{2}, Sacrifice a snow land: Prevent all combat damage that would be dealt this turn."
+}
