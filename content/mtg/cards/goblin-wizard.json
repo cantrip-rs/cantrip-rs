@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Wizard",
+  "manaCost": "{2}{R}{R}",
+  "type": "Creature — Goblin Wizard",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: You may put a Goblin permanent card from your hand onto the battlefield.\n{R}: Target Goblin gains protection from white until end of turn."
+}

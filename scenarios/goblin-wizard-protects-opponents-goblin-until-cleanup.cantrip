@@ -1,0 +1,57 @@
+# The ability targets an opponent's Goblin, not a non-Goblin, and protection from white ends at cleanup (CR 115.1, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Goblin Wizard
+Mountain
+Swords to Plowshares
+Ornithopter
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Black Lotus
+Goblin Piker
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Wizard.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Goblin Piker.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mountain.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Goblin Wizard.Activate(Ability: gains protection; Bot2.Battlefield.Goblin Piker; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Battlefield.Goblin Wizard.Activate(Ability: gains protection; Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Goblin Wizard.Activate(Ability: gains protection; Bot2.Battlefield.Goblin Piker)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Goblin Piker)
+[T6 Bot2.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Goblin Piker)
+[T6 Bot2.Main2]
+
+[Expect]
+Exile = Goblin Piker
+Bot2.Life = 22
+Bot1.Graveyard = Swords to Plowshares; Black Lotus

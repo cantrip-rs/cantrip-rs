@@ -1,0 +1,39 @@
+# The player may choose no Goblin when the tap ability resolves (CR 608.2d).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Goblin Wizard
+Goblin Piker
+Goblin Chariot
+Ornithopter
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Goblin Piker
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Wizard.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Goblin Wizard.Activate(Ability: {T})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Goblin Wizard.Tapped = true
+Bot1.Hand.Goblin Piker.Power = 2
+Bot1.Hand.Goblin Chariot.Power = 2
+Bot1.Hand.Ornithopter.Power = 0
+Bot2.Hand.Goblin Piker.Power = 2

@@ -1,0 +1,34 @@
+# Sleight of Mind changes the Wizard's white word to red; the granted protection follows it (CR 612.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Goblin Wizard
+Sleight of Mind
+Mountain
+Island
+Mountain x15
+[Bot2 Deck]
+Mountain x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Wizard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Goblin Wizard)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(White)
+Bot1.Colors(Red)
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Goblin Wizard.Activate(Ability: gains protection; Bot1.Battlefield.Goblin Wizard)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Goblin Wizard.ProtectionFrom = Red

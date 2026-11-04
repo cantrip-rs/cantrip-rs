@@ -1,0 +1,40 @@
+# The activated ability retains its Goblin word when Artificial Evolution changes the source in response (CR 113.7a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Goblin Wizard
+Artificial Evolution
+Goblin Piker
+Llanowar Elves
+Mountain x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Wizard.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Goblin Wizard.Activate(Ability: {T})
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Artificial Evolution.Cast(Bot1.Battlefield.Goblin Wizard)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Goblin)
+Bot1.Modes(Elf)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Llanowar Elves)
+Bot1.Choose(Goblin Piker)
+[Expect]
+Bot1.Battlefield.Goblin Piker.Power = 2
+Bot1.Hand.Llanowar Elves.Power = 1
+Bot1.Battlefield.Goblin Wizard.Subtypes = Elf; Wizard
