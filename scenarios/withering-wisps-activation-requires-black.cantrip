@@ -1,0 +1,40 @@
+# A snow Swamp permits activation but white mana cannot pay {B}; black mana on the next turn does (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Withering Wisps
+Urborg, Tomb of Yawgmoth
+Snow-Covered Forest
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Urborg, Tomb of Yawgmoth.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Withering Wisps.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Battlefield.Urborg, Tomb of Yawgmoth.Activate
+Bot1.Battlefield.Snow-Covered Forest.Activate(Ability: {B})
+Bot1.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Withering Wisps.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Withering Wisps.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Battlefield.Ornithopter.Damage = 1

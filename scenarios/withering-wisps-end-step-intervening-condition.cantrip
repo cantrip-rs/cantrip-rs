@@ -1,0 +1,50 @@
+# A creature entering in response prevents the sacrifice; a creature dying after the next end step begins causes no trigger until a later end step (CR 603.4).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Withering Wisps
+Doorkeeper Thrull
+Island
+Island
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Withering Wisps.Cast
+? Bot1.Mana =
+[T1 Bot1.End]
+? Stack.Count = 1
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Doorkeeper Thrull.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Withering Wisps.Types = Enchantment
+? Bot1.Battlefield.Doorkeeper Thrull.Power = 1
+Bot2.Hand.Mox Ruby.Cast
+[T2 Bot2.End]
+? Stack.Count = 0
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Doorkeeper Thrull)
+? Bot2.Mana =
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Withering Wisps.Types = Enchantment
+? Bot1.Battlefield.Doorkeeper Thrull = (absent)
+[T3 Bot1.End]
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Withering Wisps = (absent)
+Bot1.Graveyard = Withering Wisps; Doorkeeper Thrull; Black Lotus

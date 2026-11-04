@@ -1,0 +1,48 @@
+# Each copy has its own once-per-snow-Swamp limit; activating one does not use the other's allowance (CR 602.5).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Withering Wisps
+Withering Wisps
+Urborg, Tomb of Yawgmoth
+Snow-Covered Forest
+Ornithopter
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Urborg, Tomb of Yawgmoth.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Withering Wisps.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Withering Wisps.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Urborg, Tomb of Yawgmoth.Activate
+Bot1.Battlefield.Withering Wisps#1.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Withering Wisps#2.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+! Bot1.Battlefield.Withering Wisps#1.Activate
+! Bot1.Battlefield.Withering Wisps#2.Activate
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Battlefield.Ornithopter = (absent)
