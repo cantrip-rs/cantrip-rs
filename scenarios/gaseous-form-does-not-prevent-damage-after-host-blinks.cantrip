@@ -1,0 +1,60 @@
+# Go Ninja Go blinks the enchanted creature, then deals damage during the same resolution, before the unattached Aura goes to the graveyard (CR 400.7, 704.5m).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Pearl
+Memnite
+Gaseous Form
+Go Ninja Go
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Coral Merfolk
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Gaseous Form.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Coral Merfolk.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Go Ninja Go.Cast
+Bot1.Modes(1; 2)
+Bot1.Target(Memnite)
+Bot1.Target(Coral Merfolk)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard.Coral Merfolk.Power = 2
+Bot1.Graveyard.Gaseous Form.Colors = Blue
+Bot1.Battlefield.Memnite.Power = 1
