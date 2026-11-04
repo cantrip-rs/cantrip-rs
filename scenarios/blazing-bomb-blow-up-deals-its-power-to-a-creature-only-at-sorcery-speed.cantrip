@@ -1,0 +1,57 @@
+# Blazing Bomb's Blow Up (CR 602.5d, 113.7a, 608.2h): "{T}, Sacrifice this creature: It deals damage equal to its power to target
+# creature. Activate only as a sorcery." Fireball for X = 3 on turn 1 makes the Bomb a 2/2. On turn 3 it cannot be activated while a
+# Lightning Bolt is on the stack, nor at a player; once the Bolt has resolved it kills Bot2's Ornithopter (0/2) with 2 damage and is
+# itself sacrificed.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Blazing Bomb
+Fireball
+Lightning Bolt
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Blazing Bomb.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Fireball.Cast(X: 3)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+! Bot1.Battlefield.Blazing Bomb.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Blazing Bomb.Activate(Bot2)
+Bot1.Battlefield.Blazing Bomb.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter = (absent)
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Blazing Bomb = (absent)
+# Fireball, Lightning Bolt and the sacrificed Bomb.
+Bot1.Graveyard.Count = 3
+Bot2.Life = 14

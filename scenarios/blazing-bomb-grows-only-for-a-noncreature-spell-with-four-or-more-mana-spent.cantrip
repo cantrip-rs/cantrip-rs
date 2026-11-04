@@ -1,0 +1,49 @@
+# Blazing Bomb (CR 603.4, 601.2h): "Whenever you cast a noncreature spell, if at least four mana was spent to cast it, put a +1/+1
+# counter on this creature." Fireball for X = 2 costs {2}{R}, three mana - one short, no counter; X = 3 on the next turn costs four,
+# the counter comes and the Bomb is a 2/2.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Blazing Bomb
+Fireball
+Fireball
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Blazing Bomb.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Fireball.Cast(X: 2)
+Bot1.Target(Bot2)
+? Bot1.Battlefield.Blazing Bomb.Counters.PlusOnePlusOne = (absent)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Fireball.Cast(X: 3)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Blazing Bomb.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Blazing Bomb.Power = 2
+Bot1.Battlefield.Blazing Bomb.Toughness = 2
+Bot2.Life = 15
