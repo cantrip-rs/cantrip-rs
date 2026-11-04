@@ -1,0 +1,34 @@
+# The Aura enchants only a creature and gives it swampwalk: a defending player with a Swamp cannot block it (CR 303.4, 702.14c).
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Grizzly Bears
+Leshrac's Rite
+Island x20
+[Bot2 Deck]
+Swamp
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Leshrac's Rite.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Leshrac's Rite.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T4 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Ornithopter.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears)
+! Bot2.Block(Ornithopter > Grizzly Bears)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Leshrac's Rite.AttachedTo = Grizzly Bears
+Bot2.Life = 18
