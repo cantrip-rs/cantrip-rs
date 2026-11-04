@@ -264,3 +264,25 @@ pub const COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST: AbilityDef = triggered(
     copy_the_cast_spell,
     "When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy.",
 );
+
+/// `COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST` as printed "copy it": Rimefire Torque and Summon: G.F. Cerberus's chapter II.
+pub const COPY_IT_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST: AbilityDef = triggered(
+    when_asked(EventMask::SPELL_CAST, crate::triggers::you_cast_instant_or_sorcery),
+    copy_the_cast_spell,
+    "When you next cast an instant or sorcery spell this turn, copy it. You may choose new targets for the copy.",
+);
+
+/// "Copy it twice. You may choose new targets for the copies" (CR 707.10, 707.10c) for a trigger about the spell that was cast:
+/// two copies, neither cast, each with its own choice of new targets.
+pub fn copy_the_cast_spell_twice(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    copy_the_cast_spell(g, item)?;
+    copy_the_cast_spell(g, item)
+}
+
+/// The delayed ability of "When you next cast an instant or sorcery spell this turn, copy it twice. You may choose new targets for
+/// the copies" (CR 603.7b, 707.10), for the card's `delayed` list. Summon: G.F. Cerberus's chapter III prints it.
+pub const COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST_TWICE: AbilityDef = triggered(
+    when_asked(EventMask::SPELL_CAST, crate::triggers::you_cast_instant_or_sorcery),
+    copy_the_cast_spell_twice,
+    "When you next cast an instant or sorcery spell this turn, copy it twice. You may choose new targets for the copies.",
+);
