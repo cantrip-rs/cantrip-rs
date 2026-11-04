@@ -1,0 +1,37 @@
+# "Look at the top three cards of your library. Put one of them into your hand and the rest into your graveyard": Bot1 sees a
+# Memnite, an Ornithopter and a Darksteel Myr, takes the Ornithopter, and the other two go to its graveyard; the fourth card, an Island,
+# stays on top of the library and Bot2's hand, library and graveyard are untouched. Paid with exactly {1}{B}: the pool is empty.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Resentful Revelation
+Swamp x4
+Memnite
+Ornithopter
+Darksteel Myr
+Island
+Swamp x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Resentful Revelation.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ornithopter | Memnite; Darksteel Myr)
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Resentful Revelation; Darksteel Myr; Memnite
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 10
+Bot2.Hand.Count = 7
+Bot2.Graveyard.Count = 0
+Bot2.Library.Count = 13

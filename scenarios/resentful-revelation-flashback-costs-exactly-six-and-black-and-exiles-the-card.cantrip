@@ -1,0 +1,55 @@
+# Flashback {6}{B} (CR 702.34): cast from the graveyard on turn 3 with a Black Lotus (black) and four other Moxen, exactly seven
+# mana, so the pool is empty after it. It looks at the next three cards (a Plains, a Forest, a Mountain): Bot1 takes the Forest, the
+# others go to the graveyard, and the card is exiled instead of staying in the graveyard (the Mox Jet is left untapped).
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Black Lotus
+Resentful Revelation
+Memnite
+Ornithopter
+Darksteel Myr
+Island
+Plains
+Forest
+Mountain
+Swamp x6
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Resentful Revelation.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Ornithopter | Memnite; Darksteel Myr)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Graveyard.Resentful Revelation.Cast(Ability: Flashback)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Forest | Plains; Mountain)
+
+[Expect]
+Stack.Count = 0
+Exile = Resentful Revelation
+Bot1.Hand = Ornithopter; Island; Forest
+Bot1.Graveyard = Mountain; Plains; Black Lotus; Darksteel Myr; Memnite
+Bot1.Battlefield.Mox Jet.Tapped = false
