@@ -1,0 +1,29 @@
+# Two damage is nonlethal to the enchanted Ornithopter, but sacrificing the Aura makes it lethal before the ability resolves (CR 704.5g).
+[Bot1 Deck]
+Swamp
+Thrull Retainer
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mountain
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Thrull Retainer.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Damage = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Thrull Retainer.Activate
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Graveyard = Ornithopter; Thrull Retainer
+Bot1.Battlefield.Ornithopter = (absent)

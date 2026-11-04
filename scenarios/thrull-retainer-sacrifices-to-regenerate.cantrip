@@ -1,0 +1,34 @@
+# The Aura enchants a creature, gives +1/+1, then is sacrificed to shield that creature from Shock (CR 701.19a).
+[Bot1 Deck]
+Swamp
+Thrull Retainer
+Ornithopter
+Mox Jet
+Island x20
+[Bot2 Deck]
+Mountain
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Hand.Thrull Retainer.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Thrull Retainer.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Thrull Retainer.AttachedTo = Ornithopter
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Thrull Retainer.Activate
+? Bot1.Graveyard.Thrull Retainer.Colors = Black
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Graveyard = Thrull Retainer
