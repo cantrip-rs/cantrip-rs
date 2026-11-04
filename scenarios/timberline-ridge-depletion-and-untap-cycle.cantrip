@@ -1,0 +1,58 @@
+# Mana adds a counter, skips untapping, and removes one on its controller's upkeep; Satyr makes two counters to check the amount (CR 502.3, 603.2).
+[Bot1 Deck]
+Timberline Ridge
+Mox Emerald
+Mox Emerald
+Voyaging Satyr
+Island
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Timberline Ridge.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Voyaging Satyr.Cast
+? Bot1.Mana =
+[T1 Bot1.Main2]
+! Bot1.Battlefield.Timberline Ridge.Activate(Color: Blue)
+! Bot1.Battlefield.Timberline Ridge.Activate(Color: Black)
+! Bot1.Battlefield.Timberline Ridge.Activate(Color: White)
+! Bot1.Battlefield.Timberline Ridge.Activate(Color: C)
+Bot1.Battlefield.Timberline Ridge.Activate(Color: Red)
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Timberline Ridge.Tapped = true
+? Bot1.Battlefield.Timberline Ridge.Counters.Depletion = 1
+! Bot1.Battlefield.Timberline Ridge.Activate(Color: Green)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Timberline Ridge.Counters.Depletion = 1
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Timberline Ridge.Tapped = true
+? Bot1.Battlefield.Timberline Ridge.Counters.Depletion = 1
+Bot1.Battlefield.Voyaging Satyr.Activate(Bot1.Battlefield.Timberline Ridge)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Timberline Ridge.Activate(Color: Green)
+? Bot1.Mana = {G}
+? Bot1.Battlefield.Timberline Ridge.Counters.Depletion = 2
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Timberline Ridge.Tapped = true
+? Bot1.Battlefield.Timberline Ridge.Counters.Depletion = 1
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Island.Tapped = false
+? Bot1.Battlefield.Timberline Ridge.Tapped = true
+? Bot1.Battlefield.Timberline Ridge.Counters.Depletion = (absent)
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Timberline Ridge.Tapped = false
+Bot1.Battlefield.Timberline Ridge.Counters.Depletion = (absent)
