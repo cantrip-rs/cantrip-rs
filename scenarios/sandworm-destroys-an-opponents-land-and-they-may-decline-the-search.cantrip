@@ -1,0 +1,47 @@
+# Sandworm's trigger on Bot2's Island, chosen among the three lands (a Mox, an artifact, is not a candidate): "its controller" is Bot2, not the caster, and Bot2 is the one asked (CR 701.23). Bot2 declines,
+# so nothing is searched for and its library is not shuffled (Bot2.Shuffles stays 0); Bot1's library is not touched either. Cast
+# on turn 3 with two Mountains and three Moxen (5 mana).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Mountain
+Sandworm
+Plains
+Plains x10
+
+[Bot2 Deck]
+Island
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Sandworm.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Mox Ruby)
+Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+
+[Expect]
+Bot2.Graveyard = Island
+Bot2.Battlefield =
+Bot2.Shuffles = 0
+Bot1.Shuffles = 0
+Bot1.Battlefield.Sandworm.Power = 5
