@@ -1,0 +1,8 @@
+{
+  "name": "Scavenger Folk",
+  "manaCost": "{G}",
+  "type": "Creature — Human",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{G}, {T}, Sacrifice this creature: Destroy target artifact."
+}
