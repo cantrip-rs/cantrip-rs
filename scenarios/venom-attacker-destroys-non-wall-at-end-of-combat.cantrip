@@ -1,0 +1,46 @@
+# Venom on an attacker destroys a non-Wall blocker at end of combat, but leaves a Wall and the enchanted creature alive (CR 603.2, 701.8a).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Venom
+Llanowar Elves
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Kraken Hatchling
+Steel Wall
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Venom.Cast(Bot1.Battlefield.Mox Emerald)
+Bot1.Hand.Venom.Cast(Bot1.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Kraken Hatchling.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Steel Wall.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves)
+Bot2.Block(Kraken Hatchling > Llanowar Elves; Steel Wall > Llanowar Elves)
+[T3 Bot1.EndCombat]
+? Bot2.Battlefield.Kraken Hatchling.Toughness = 4
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Toughness = 1
+Bot1.Battlefield.Venom.AttachedTo = Llanowar Elves
+Bot2.Battlefield.Kraken Hatchling = (absent)
+Bot2.Battlefield.Steel Wall.Toughness = 4

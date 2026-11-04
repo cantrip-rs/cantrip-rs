@@ -1,0 +1,45 @@
+# Venom destroys its blocker’s attacker but ignores a separate block by two Ornithopters (CR 603.2, 701.8a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Kraken Hatchling
+Venom
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Kraken Hatchling
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kraken Hatchling.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Venom.Cast(Bot1.Battlefield.Kraken Hatchling)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Kraken Hatchling.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Kraken Hatchling; Ornithopter)
+Bot1.Block(Kraken Hatchling > Kraken Hatchling; Ornithopter > Ornithopter)
+[T4 Bot2.EndCombat]
+? Bot2.Battlefield.Kraken Hatchling.Toughness = 4
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Kraken Hatchling.Toughness = 4
+Bot1.Battlefield.Venom.AttachedTo = Kraken Hatchling
+Bot2.Battlefield.Kraken Hatchling = (absent)
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Ornithopter.Toughness = 2
