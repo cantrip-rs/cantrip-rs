@@ -1,0 +1,51 @@
+# Ether (CR 605.3, 603.7b, 707.10): "{T}, Exile this artifact: Add {U}. When you next cast an instant or sorcery spell this turn,
+# copy that spell. You may choose new targets for the copy." On turn 3 Bot1 taps and exiles Ether for {U} and casts Ancestral Recall
+# at itself: the copy, retargeted at Bot2, is not cast and resolves first, so Bot2 draws three; the original then draws Bot1 three.
+# The delayed ability triggered once, so a second Ancestral Recall cast afterwards is not copied.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Mox Pearl
+Ether
+Ancestral Recall
+Ancestral Recall
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ether.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Ether.Activate
+? Bot1.Mana = {U}
+? Exile = Ether
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Ancestral Recall; Ancestral Recall
+Bot1.Hand.Count = 7

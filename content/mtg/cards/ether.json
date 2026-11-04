@@ -1,0 +1,6 @@
+{
+  "name": "Ether",
+  "manaCost": "{3}{U}",
+  "type": "Artifact",
+  "oracleText": "{T}, Exile this artifact: Add {U}. When you next cast an instant or sorcery spell this turn, copy that spell. You may choose new targets for the copy."
+}
