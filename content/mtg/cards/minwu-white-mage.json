@@ -1,0 +1,12 @@
+{
+  "name": "Minwu, White Mage",
+  "manaCost": "{3}{W}{W}",
+  "type": "Legendary Creature — Human Cleric",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Vigilance, lifelink\nWhenever you gain life, put a +1/+1 counter on each Cleric you control.",
+  "keywords": [
+    "Vigilance",
+    "Lifelink"
+  ]
+}

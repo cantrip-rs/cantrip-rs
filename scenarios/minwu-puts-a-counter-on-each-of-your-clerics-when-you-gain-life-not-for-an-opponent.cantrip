@@ -1,0 +1,72 @@
+# Minwu, White Mage: "Whenever you gain life, put a +1/+1 counter on each Cleric you control." Vigilance, lifelink. Bot1 has Minwu and a
+# Bishop of Wings (both Clerics); Bot2 has its own Bishop of Wings. On turn 2 Bot2's Lightning Helix gains Bot2 3 life: Minwu gets no counter.
+# On turn 3 Minwu attacks (vigilance, so she stays untapped) and her lifelink damage gains Bot1 3 life: one counter on each of Bot1's Clerics,
+# none on Bot2's.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Minwu, White Mage
+Bishop of Wings
+Island x20
+
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Ruby
+Bishop of Wings
+Lightning Helix
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.Minwu, White Mage.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Bishop of Wings.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl#3.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Helix.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot2.Life = 23
+? Bot1.Battlefield.Minwu, White Mage.Power = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Bishop of Wings.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Attack(Minwu, White Mage > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Battlefield.Minwu, White Mage.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Minwu, White Mage.Power = 4
+Bot1.Battlefield.Minwu, White Mage.Tapped = false
+Bot1.Battlefield.Bishop of Wings.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Bishop of Wings.Counters.PlusOnePlusOne = (absent)
