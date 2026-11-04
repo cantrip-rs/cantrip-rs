@@ -1,0 +1,23 @@
+# Untapping Hollow Trees in response causes its intervening-if upkeep trigger to do nothing (CR 603.4).
+[Bot1 Deck]
+Hollow Trees
+Black Lotus
+Voyaging Satyr
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Hollow Trees.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Voyaging Satyr.Cast
+Bot1.Decline
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Voyaging Satyr.Activate(Bot1.Battlefield.Hollow Trees)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Hollow Trees.Tapped = false
+Bot1.Battlefield.Hollow Trees.Counters.Storage = (absent)

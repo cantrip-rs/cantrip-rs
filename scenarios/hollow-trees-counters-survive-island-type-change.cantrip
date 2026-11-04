@@ -1,0 +1,40 @@
+# Changing Hollow Trees into an Island removes its abilities, not its storage counters; after the Aura leaves it can spend them (CR 305.7, 122.1).
+[Bot1 Deck]
+Hollow Trees
+Black Lotus
+Spreading Seas
+Disenchant
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Hollow Trees.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Hollow Trees.Counters.Storage = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Spreading Seas.Cast(Bot1.Battlefield.Hollow Trees)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hollow Trees.Counters.Storage = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Hollow Trees.Activate
+? Bot1.Mana = {U}
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Spreading Seas)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hollow Trees.Counters.Storage = 1
+Bot1.Accept
+[T7 Bot1.Main1]
+Bot1.Battlefield.Hollow Trees.Activate(X: 1)
+Bot1.Pass
+? Bot1.Mana = {G}
+[Expect]
+Bot1.Battlefield.Hollow Trees.Counters.Storage = (absent)

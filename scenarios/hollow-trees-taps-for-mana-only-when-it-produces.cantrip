@@ -1,0 +1,32 @@
+# Wild Growth triggers when Hollow Trees produces mana, but not when zero counters are removed (CR 106.12a, 603.2).
+[Bot1 Deck]
+Hollow Trees
+Wild Growth
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Hollow Trees.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wild Growth.Cast(Bot1.Battlefield.Hollow Trees)
+Bot1.Accept
+[T3 Bot1.Main1]
+Bot1.Battlefield.Hollow Trees.Activate(X: 0)
+Bot1.Pass
+? Bot1.Mana =
+? Stack.Count = 0
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Hollow Trees.Counters.Storage = 1
+Bot1.Decline
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Hollow Trees.Counters.Storage = 2
+Bot1.Accept
+[T9 Bot1.Main1]
+Bot1.Battlefield.Hollow Trees.Activate(X: 2)
+Bot1.Pass
+[Expect]
+Bot1.Mana = {G}{G}{G}
+Bot1.Battlefield.Hollow Trees.Counters.Storage = (absent)

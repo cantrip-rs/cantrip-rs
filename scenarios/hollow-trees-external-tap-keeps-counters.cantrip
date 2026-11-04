@@ -1,0 +1,36 @@
+# An external tap does not remove storage counters; the land later spends the retained counter (CR 122.1).
+[Bot1 Deck]
+Hollow Trees
+Black Lotus
+Icy Manipulator
+Mox Emerald
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Hollow Trees.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Hollow Trees.Counters.Storage = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Icy Manipulator.Cast
+Bot1.Accept
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Icy Manipulator.Activate(Bot1.Battlefield.Hollow Trees)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hollow Trees.Tapped = true
+? Bot1.Battlefield.Hollow Trees.Counters.Storage = 1
+Bot1.Accept
+[T7 Bot1.Main1]
+Bot1.Battlefield.Hollow Trees.Activate(X: 1)
+Bot1.Pass
+? Bot1.Mana = {G}
+[Expect]
+Bot1.Battlefield.Hollow Trees.Counters.Storage = (absent)
