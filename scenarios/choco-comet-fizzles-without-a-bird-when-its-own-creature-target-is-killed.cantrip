@@ -1,0 +1,45 @@
+# Choco-Comet may target a creature Bot1 controls, and if that target is illegal as it tries to resolve (CR 608.2b) it does not
+# resolve: no damage and, by its ruling, no Bird. Bot2 answers with a Lightning Bolt at Bot1's Ornithopter, so only the four Rubies
+# are on the battlefield and Bot2 is at 20.
+
+[Bot1 Deck]
+Ornithopter
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Choco-Comet
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Choco-Comet.Cast(Bot1.Battlefield.Ornithopter; X: 2)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Count = 4
+Bot1.Graveyard.Count = 2
+Bot2.Life = 20

@@ -1,0 +1,36 @@
+# Choco-Comet's "any target" takes a creature too: X = 2 kills Bot2's Ornithopter (0/2) and the Bird is made.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Choco-Comet
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Choco-Comet.Cast(Bot2.Battlefield.Ornithopter; X: 2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 0
+Bot2.Graveyard = Ornithopter
+Bot2.Life = 20
+Bot1.Battlefield.Bird Token.Power = 2
