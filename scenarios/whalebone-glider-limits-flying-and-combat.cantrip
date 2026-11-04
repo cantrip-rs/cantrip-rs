@@ -1,0 +1,94 @@
+# The Glider accepts power 3, refuses power 4, and grants flying only through the turn; it can be blocked on a later turn (CR 115.1, 611.2a, 702.9b).
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Whalebone Glider
+Blade of the Sixth Pride
+Memnite
+Ancestral Recall
+Island x20
+[Bot2 Deck]
+Black Lotus
+Alpine Grizzly
+Memnite
+Memnite
+Memnite
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Blade of the Sixth Pride.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Whalebone Glider.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Alpine Grizzly.Cast
+? Bot2.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Whalebone Glider.Activate(Bot1.Battlefield.Blade of the Sixth Pride; Mana: short)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Blade of the Sixth Pride.Power = 3
+? Bot2.Battlefield.Alpine Grizzly.Power = 4
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+! Bot1.Battlefield.Whalebone Glider.Activate(Bot2.Battlefield.Alpine Grizzly)
+! Bot1.Battlefield.Whalebone Glider.Activate(Bot1.Battlefield.Mox Emerald)
+Bot1.Battlefield.Whalebone Glider.Activate(Bot1.Battlefield.Blade of the Sixth Pride)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Whalebone Glider.Tapped = true
+! Bot1.Battlefield.Whalebone Glider.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Blade of the Sixth Pride > Bot2; Memnite > Bot2)
+! Bot2.Block(Memnite#1 > Blade of the Sixth Pride)
+Bot2.Block(Memnite#1 > Memnite)
+[T5 Bot1.Main2]
+? Bot2.Life = 17
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Blade of the Sixth Pride.Keywords = (absent)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Whalebone Glider.Activate(Bot2.Battlefield.Memnite#1)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite#1.Keywords = Flying
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Blade of the Sixth Pride > Bot2)
+Bot2.Block(Memnite#2 > Blade of the Sixth Pride)
+[T7 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Blade of the Sixth Pride = (absent)
+Bot2.Battlefield.Memnite.Keywords = Flying
+Bot2.Life = 17
