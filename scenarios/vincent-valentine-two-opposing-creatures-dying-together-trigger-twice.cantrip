@@ -1,0 +1,48 @@
+# Vincent Valentine (CR 603.2, 700.4, 608.2h): two creatures an opponent controls die at once to Pyroclasm, so the ability triggers twice and
+# each resolution puts counters equal to that creature's power: two Raging Goblins (1/1) give two counters. Bot1 saves Vincent with Giant
+# Growth in response (2/2 becomes 5/5 and survives Pyroclasm's 2 damage), so it ends as a 7/7 (4/4 with two counters, +3/+3 until end of turn).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Emerald
+Vincent Valentine
+Giant Growth
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Raging Goblin
+Raging Goblin
+Pyroclasm
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Vincent Valentine.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+Bot2.Hand.Pyroclasm.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Vincent Valentine)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 1
+Bot1.Battlefield.Vincent Valentine.Power = 7
+Bot1.Battlefield.Vincent Valentine.Toughness = 7

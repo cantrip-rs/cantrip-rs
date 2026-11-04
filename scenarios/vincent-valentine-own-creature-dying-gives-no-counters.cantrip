@@ -1,0 +1,38 @@
+# Vincent Valentine (CR 700.4): "a creature an opponent controls" - Bot1's own Eager Cadet (1/1) is killed by Bot2's Lightning Bolt and Vincent
+# gets no counters, staying a 2/2 (a counter for every creature that died would make it 3/3).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Vincent Valentine
+Eager Cadet
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vincent Valentine.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Eager Cadet)
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Eager Cadet; Black Lotus
+Bot1.Battlefield.Vincent Valentine.Power = 2
+Bot1.Battlefield.Vincent Valentine.Toughness = 2

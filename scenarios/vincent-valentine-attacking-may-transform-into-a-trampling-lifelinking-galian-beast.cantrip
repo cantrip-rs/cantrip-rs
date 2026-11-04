@@ -1,0 +1,32 @@
+# Vincent Valentine (CR 701.27, 608.2d, 702.19, 702.15): "Whenever Vincent Valentine attacks, you may transform it." Bot1 accepts on turn 3: it
+# becomes Galian Beast, a 3/2 with trample and lifelink, still attacking, so its 3 damage is dealt to Bot2 and gains Bot1 3 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Vincent Valentine
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vincent Valentine.Cast
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Vincent Valentine > Bot2)
+Bot1.Pass
+Bot1.Accept
+? Bot1.Battlefield.Galian Beast.Transformed = true
+? Bot1.Battlefield.Galian Beast.Keywords = Lifelink; Trample
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 23
+Bot1.Battlefield.Galian Beast.Power = 3
+Bot1.Battlefield.Galian Beast.Toughness = 2

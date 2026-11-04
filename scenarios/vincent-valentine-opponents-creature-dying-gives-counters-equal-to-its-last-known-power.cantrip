@@ -1,0 +1,43 @@
+# Vincent Valentine (CR 700.4, 603.10a, 608.2h, 122.1b): "Whenever a creature an opponent controls dies, put a number of +1/+1 counters on
+# Vincent Valentine equal to that creature's power." Bot2's Grizzly Bears (2/2) is given Berserk (+X/+0, X its power: 4/2) and then killed by
+# Lightning Bolt: Vincent gets four counters - the power the Bears last had, not its printed 2 - and is a 6/6.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Vincent Valentine
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Grizzly Bears
+Berserk
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vincent Valentine.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Hand.Berserk.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+?Bot2.Battlefield.Grizzly Bears.Power = 4
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Grizzly Bears)
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Grizzly Bears; Lightning Bolt; Berserk; Black Lotus
+Bot1.Battlefield.Vincent Valentine.Power = 6
+Bot1.Battlefield.Vincent Valentine.Toughness = 6

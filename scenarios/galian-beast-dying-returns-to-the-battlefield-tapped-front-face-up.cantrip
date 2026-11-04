@@ -1,0 +1,39 @@
+# Galian Beast (CR 712.14a, 110.2a, 400.7): "When Galian Beast dies, return it to the battlefield tapped (front face up)." Bot1 attacks with
+# Vincent Valentine on turn 3 and transforms it; Bot2 kills the Beast with Lightning Bolt. It returns under its owner's control as Vincent
+# Valentine, tapped, a new 2/2 with no counters - and no damage was dealt to Bot2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Vincent Valentine
+Swamp x20
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vincent Valentine.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Vincent Valentine > Bot2)
+Bot1.Pass
+Bot1.Accept
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Galian Beast)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Vincent Valentine.Tapped = true
+Bot1.Battlefield.Vincent Valentine.Power = 2

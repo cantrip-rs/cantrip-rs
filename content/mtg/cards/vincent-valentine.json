@@ -1,0 +1,22 @@
+{
+  "name": "Vincent Valentine",
+  "manaCost": "{2}{B}{B}",
+  "type": "Legendary Creature — Assassin",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever a creature an opponent controls dies, put a number of +1/+1 counters on Vincent Valentine equal to that creature's power.\nWhenever Vincent Valentine attacks, you may transform it.",
+  "backFace": {
+    "name": "Galian Beast",
+    "colorIndicator": [
+      "Black"
+    ],
+    "type": "Legendary Creature — Werewolf Beast",
+    "power": 3,
+    "toughness": 2,
+    "oracleText": "Trample, lifelink\nWhen Galian Beast dies, return it to the battlefield tapped (front face up).",
+    "keywords": [
+      "Trample",
+      "Lifelink"
+    ]
+  }
+}

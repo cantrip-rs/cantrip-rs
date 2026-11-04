@@ -1,0 +1,34 @@
+# Vincent Valentine (CR 603.10a, 400.7): Vincent and an opponent's Raging Goblin die together to Pyroclasm. The ability triggers (it looks
+# back) but Vincent is no longer on the battlefield, so there is nothing to put counters on and nothing returns: it stays in the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Vincent Valentine
+Swamp x20
+
+[Bot2 Deck]
+Black Lotus
+Raging Goblin
+Pyroclasm
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vincent Valentine.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Raging Goblin.Cast
+Bot2.Pass
+Bot2.Hand.Pyroclasm.Cast
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard = Vincent Valentine; Black Lotus
+Bot1.Battlefield.Count = 1
+Bot2.Graveyard = Raging Goblin; Pyroclasm; Black Lotus
