@@ -1,0 +1,46 @@
+# White Disenchant cannot target the opponent's Raiding Party but can destroy an artifact; green Sundering Vitae can destroy it (CR 115.1).
+[Bot1 Deck]
+Raiding Party
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Disenchant
+Sundering Vitae
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Raiding Party.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+! Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Raiding Party)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Pearl)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sundering Vitae.Cast(Bot1.Battlefield.Raiding Party)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Graveyard = Raiding Party; Mox Pearl

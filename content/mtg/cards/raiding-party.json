@@ -1,0 +1,6 @@
+{
+  "name": "Raiding Party",
+  "manaCost": "{2}{R}",
+  "type": "Enchantment",
+  "oracleText": "This enchantment can't be the target of white spells or abilities from white sources.\nSacrifice an Orc: Each player may tap any number of untapped white creatures they control. For each creature tapped this way, that player chooses up to two Plains. Then destroy all Plains that weren't chosen this way by any player."
+}
