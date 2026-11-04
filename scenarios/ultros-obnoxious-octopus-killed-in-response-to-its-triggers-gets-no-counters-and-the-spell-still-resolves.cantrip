@@ -1,0 +1,67 @@
+# Ultros, Obnoxious Octopus: with both its triggers on the stack above Bot1's eight-mana Fractalize (X=7, on Bot2's Ornithopter), Bot2 kills it with
+# Lightning Bolt. The triggers resolve with Ultros gone (CR 400.7, 608.2b): no counters on the card in the graveyard; the Ornithopter, still a legal target of
+# the tap trigger, is tapped and stunned; the Fractalize still resolves and both it and Ultros are in Bot1's graveyard (beside the Black Lotus that was sacrificed for mana).
+
+[Bot1 Deck]
+Ultros, Obnoxious Octopus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Black Lotus
+Fractalize
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ultros, Obnoxious Octopus.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fractalize.Cast(Bot2.Battlefield.Ornithopter; X: 7)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ultros, Obnoxious Octopus)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main1]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Graveyard = Fractalize; Ultros, Obnoxious Octopus; Black Lotus
+Bot1.Battlefield.Ultros, Obnoxious Octopus = (absent)
+Bot1.Graveyard.Ultros, Obnoxious Octopus.Counters.PlusOnePlusOne = (absent)
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Counters.Stun = 1
