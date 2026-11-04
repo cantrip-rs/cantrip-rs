@@ -1,0 +1,45 @@
+# Haste Magic {1}{R}: "Target creature gets +3/+1 and gains haste until end of turn. Exile the top card of your library. You may play it
+# until your next end step." (CR 611.2a, 702.10, 608.2c, 305.1). Memnite, cast this turn, a 1/1, gets +3/+1 and is a
+# 4/2 with haste, attacks for 4 (CR 302.6), and the exiled Mountain on top of the library is played from exile as the land drop. On Bot2's turn
+# the Memnite is a 1/1 again with no haste (CR 514.2).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Memnite
+Haste Magic
+Island x3
+Mountain
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Haste Magic.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 4
+? Bot1.Battlefield.Memnite.Toughness = 2
+? Bot1.Battlefield.Memnite.Keywords = Haste
+? Exile = Mountain
+? Bot1.Library.Count = 15
+? Bot2.Library.Count = 13
+Bot1.Exile.Mountain.Play
+? Exile.Count = 0
+Bot1.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T2 Bot2.Upkeep]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+
+[Expect]
+Bot2.Life = 16
+Bot1.Battlefield = Memnite; Mountain; Mox Jet; Mox Ruby
