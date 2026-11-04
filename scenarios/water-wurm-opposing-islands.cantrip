@@ -1,0 +1,42 @@
+# Only opposing Islands grant +0/+1; two qualifying lands do not stack, and losing the last removes the bonus (CR 604.1, 305.6).
+[Bot1 Deck]
+Island
+Water Wurm
+Strip Mine
+Strip Mine
+Island x25
+[Bot2 Deck]
+Tundra
+Island
+Mountain x25
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Water Wurm.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Water Wurm.Power = 1
+? Bot1.Battlefield.Water Wurm.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Tundra.Play
+? Bot1.Battlefield.Water Wurm.Power = 1
+? Bot1.Battlefield.Water Wurm.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Hand.Strip Mine.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+? Bot1.Battlefield.Water Wurm.Power = 1
+? Bot1.Battlefield.Water Wurm.Toughness = 2
+[T5 Bot1.Main1]
+Bot1.Battlefield.Strip Mine.Activate(Bot2.Battlefield.Tundra; Ability: Destroy target land)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Water Wurm.Toughness = 2
+Bot1.Hand.Strip Mine.Play
+Bot1.Battlefield.Strip Mine.Activate(Bot2.Battlefield.Island; Ability: Destroy target land)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Water Wurm.Power = 1
+Bot1.Battlefield.Water Wurm.Toughness = 1
+Bot2.Graveyard = Island; Tundra

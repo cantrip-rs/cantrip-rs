@@ -1,0 +1,8 @@
+{
+  "name": "Water Wurm",
+  "manaCost": "{U}",
+  "type": "Creature — Wurm",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "This creature gets +0/+1 as long as an opponent controls an Island."
+}
