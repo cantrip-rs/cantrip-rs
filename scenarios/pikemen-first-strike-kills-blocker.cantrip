@@ -1,0 +1,30 @@
+# Pikemen's first strike kills a 1/1 blocker before it can deal damage (CR 702.7b).
+[Bot1 Deck]
+Pikemen
+Mox Pearl
+Mox Sapphire
+Plains x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Pikemen.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Pikemen > Bot2)
+Bot2.Block(Memnite > Pikemen)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Pikemen.Damage = 0
+Bot2.Graveyard.Memnite.Colors =
+Bot2.Life = 20
