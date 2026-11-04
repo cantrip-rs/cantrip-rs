@@ -2,17 +2,8 @@ use cantrip_api::*;
 use cantrip_mechanics::{effects, targets, tokens};
 use cantrip_oracle as oracle;
 
-/// A 2/2 white Knight creature token (CR 111.4).
-static KNIGHT: CardDef = CardDef {
-    colors: Some(ColorSet::of(Color::White)),
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(2),
-    toughness: Some(2),
-    ..token!(Knight)
-};
-
 fn attack(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create(g, item.controller, &KNIGHT, 1)?;
+    tokens::create(g, item.controller, &tokens::KNIGHT_2_2_WHITE, 1)?;
     Ok(())
 }
 
@@ -26,4 +17,4 @@ static MODAL: ModalDef = modes(&[
 
 pub static CARD: CardDef = CardDef { spell: Some(SpellDef::MODAL), modal: Some(&MODAL), ..oracle::BATTLE_MENU };
 
-pub static EXTRA: &[&CardDef] = &[&KNIGHT];
+pub static EXTRA: &[&CardDef] = &[&tokens::KNIGHT_2_2_WHITE];

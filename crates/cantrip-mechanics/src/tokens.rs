@@ -250,6 +250,15 @@ pub static SAMURAI: CardDef = CardDef {
     ..token!(Samurai)
 };
 
+/// A 2/2 white Knight creature token (CR 111.4). Battle Menu and Dion, Bahamut's Dominant make it.
+pub static KNIGHT_2_2_WHITE: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::White)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    ..token!(Knight)
+};
+
 /// A 2/2 white Knight creature token with vigilance (CR 111.4). Doom Foretold, Gallant Cavalry, Hopeful Vigil, Valorous Steed and
 /// Banish into Fable make it.
 pub static KNIGHT: CardDef = CardDef {
