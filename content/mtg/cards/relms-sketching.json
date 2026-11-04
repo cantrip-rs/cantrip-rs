@@ -1,0 +1,6 @@
+{
+  "name": "Relm's Sketching",
+  "manaCost": "{2}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Create a token that's a copy of target artifact, creature, or land."
+}

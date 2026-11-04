@@ -1,0 +1,56 @@
+# Relm's Sketching: "target artifact, creature, or land" (CR 115.1). Bot2 has Llanowar Elves, a Forest and a Sylvan Library (an enchantment): the Library is refused as a target
+# (the refusal, naming it), the Elves are copied on one cast and the Forest on another, Bot1's two Sketchings paid by a Black Lotus, a Mox Sapphire and a Mox Jet. Bot1 ends
+# with a token Llanowar Elves and a token Forest, both its own; the enchantment is not copied.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Jet
+Relm's Sketching
+Relm's Sketching
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Llanowar Elves
+Forest
+Sylvan Library
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Sylvan Library.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Forest.Activate
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Relm's Sketching.Cast(Bot2.Battlefield.Sylvan Library)
+Bot1.Hand.Relm's Sketching.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Hand.Relm's Sketching.Cast(Bot2.Battlefield.Forest)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Forest; Llanowar Elves; Mox Jet; Mox Sapphire
+Bot1.Battlefield.Forest.Token = true
+Bot1.Battlefield.Llanowar Elves.Token = true
+Bot2.Battlefield = Forest; Llanowar Elves; Mox Emerald; Sylvan Library

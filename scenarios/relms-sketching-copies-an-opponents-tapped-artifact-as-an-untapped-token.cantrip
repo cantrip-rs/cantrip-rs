@@ -1,0 +1,35 @@
+# Relm's Sketching {2}{U}{U} sorcery: "Create a token that's a copy of target artifact, creature, or land." Bot2 taps its Mox Ruby on turn 2; on turn 3 Bot1 pays with Black Lotus and
+# Mox Sapphire and copies it (an artifact of an opponent's is a legal target, CR 115.1). The token copy is Bot1's, untapped: a copy takes the copiable values only, not the
+# permanent's tapped status (CR 707.2, the rulings).
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Relm's Sketching
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Relm's Sketching.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Mox Ruby.Token = true
+Bot1.Battlefield.Mox Ruby.Tapped = false
+Bot2.Battlefield = Mox Ruby
+Bot2.Battlefield.Mox Ruby.Tapped = true
