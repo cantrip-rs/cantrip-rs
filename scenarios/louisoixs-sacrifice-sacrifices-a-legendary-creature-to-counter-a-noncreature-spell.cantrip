@@ -1,0 +1,47 @@
+# Louisoix's Sacrifice: "sacrifice a legendary creature or pay {2}" (CR 601.2b, 701.21a), then "counter target ... noncreature spell" (CR 701.6). Bot1 has
+# only Mox Sapphire's {U} for the Sacrifice itself, so the only way to pay is the creature: of its two creatures only Cecil, Dark Knight is legendary, so the
+# Ornithopter (not legendary) stays and Cecil is sacrificed. Bot2's Lightning Bolt, aimed at Bot1, is countered: Bot1 stays at 20.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Cecil, Dark Knight
+Ornithopter
+Louisoix's Sacrifice
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cecil, Dark Knight.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Louisoix's Sacrifice.Cast(Stack.Lightning Bolt)
+Bot1.Modes(Sacrifice a legendary creature)
+Bot1.Choose(Cecil, Dark Knight)
+? Bot1.Battlefield = Mox Jet; Mox Sapphire; Ornithopter
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Turn = 2
+Bot1.Life = 20
+Bot1.Battlefield = Mox Jet; Mox Sapphire; Ornithopter
+Bot1.Graveyard = Louisoix's Sacrifice; Cecil, Dark Knight
+Bot2.Graveyard = Lightning Bolt

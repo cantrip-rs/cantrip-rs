@@ -1,0 +1,49 @@
+# Louisoix's Sacrifice {U} instant: "As an additional cost to cast this spell, sacrifice a legendary creature or pay {2}. Counter target activated
+# ability, triggered ability, or noncreature spell" (CR 601.2b, 701.6, 115.1). Bot1 has no legendary creature, and pays {U}{2} exactly with three Moxen.
+# Bot2's Flametongue Kavu enters and its "4 damage to target creature" trigger aims at Bot1's Ornithopter; the Sacrifice counters that trigger, so the
+# Ornithopter is undamaged and the Kavu stays.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Ornithopter
+Louisoix's Sacrifice
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Flametongue Kavu
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Flametongue Kavu.Cast
+Bot1.Pass
+Bot2.Target(Ornithopter)
+? Stack.Count = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Louisoix's Sacrifice.Cast(Stack.Flametongue Kavu)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Graveyard = Louisoix's Sacrifice
+Bot2.Battlefield = Mountain; Flametongue Kavu

@@ -1,0 +1,44 @@
+# Louisoix's Sacrifice: "Counter target activated ability, triggered ability, or noncreature spell" (CR 115.1) and "sacrifice a legendary creature or pay {2}"
+# (CR 601.2b). Bot1 has one {U} from Mox Sapphire and an Ornithopter, which is not legendary. Bot2's Memnite, a creature spell, is no target (the first
+# refusal); and Lightning Bolt on the stack has the right type, but Bot1 can neither pay {2} nor sacrifice a legendary creature (the second refusal), so
+# the Bolt resolves and Bot1 is at 17.
+
+[Bot1 Deck]
+Mox Sapphire
+Ornithopter
+Louisoix's Sacrifice
+Island
+Island x15
+
+[Bot2 Deck]
+Mountain
+Memnite
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Memnite.Cast
+? Stack = Memnite
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Louisoix's Sacrifice.Cast(Stack.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+! Bot1.Hand.Louisoix's Sacrifice.Cast(Stack.Lightning Bolt; Mana: short)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Turn = 2
+Bot1.Life = 17
+Bot1.Battlefield = Mox Sapphire; Ornithopter
+Bot1.Hand.Count = 5
+Bot2.Battlefield = Memnite; Mountain
