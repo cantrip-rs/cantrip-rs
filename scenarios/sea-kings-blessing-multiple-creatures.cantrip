@@ -1,0 +1,55 @@
+# Blessing changes three creatures controlled by both players to blue, replacing their other colors until cleanup (CR 115.1, 613.1e, 611.2a).
+[Bot1 Deck]
+Sea Kings' Blessing x2
+Mox Sapphire
+Mox Ruby
+Mox Emerald
+Scarwood Goblins
+Ornithopter
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Scarwood Goblins.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sea Kings' Blessing.Cast
+! Bot1.Target(Count: 0)
+! Bot1.Target(Bot1.Battlefield.Island)
+Bot1.Target(Bot1.Battlefield.Scarwood Goblins; Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Scarwood Goblins.Colors = Blue
+? Bot1.Battlefield.Ornithopter.Colors = Blue
+? Bot2.Battlefield.Memnite.Colors = Blue
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Scarwood Goblins.Colors = Green; Red
+? Bot1.Battlefield.Ornithopter.Colors = (absent)
+? Bot2.Battlefield.Memnite.Colors = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sea Kings' Blessing.Cast
+Bot1.Target(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Colors = Blue
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Memnite.Colors = (absent)
+Bot1.Battlefield.Scarwood Goblins.Colors = Green; Red
