@@ -1,0 +1,44 @@
+# Qiqirn Merchant, "{1}, {T}: Draw a card, then discard a card." Bot1 empties its hand on turn 1 (Black Lotus pays the Merchant, five Moxen) and on turn 3 holds only
+# the Ornithopter it drew for the turn. One Mox Jet pays the {1} exactly (the pool is empty, CR 601.2f); the Merchant draws the Memnite first and the discard then
+# chooses among the Ornithopter and the Memnite (CR 608.2c): Bot1 discards the Memnite, which it could not if it discarded before drawing. The other Mox stays untapped.
+
+[Bot1 Deck]
+Black Lotus
+Qiqirn Merchant
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Ornithopter
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Qiqirn Merchant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Qiqirn Merchant.Activate(Ability: Draw a card)
+? Bot1.Mana =
+Bot1.Choose(Memnite)
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Turn = 3
+Bot1.Hand = Ornithopter
+Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Battlefield.Qiqirn Merchant.Tapped = true
+Bot1.Battlefield.Mox Ruby.Tapped = false

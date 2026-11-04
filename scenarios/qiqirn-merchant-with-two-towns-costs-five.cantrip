@@ -1,0 +1,41 @@
+# Qiqirn Merchant, "This ability costs {1} less to activate for each Town you control" (CR 601.2f): Bot1 controls two Towns (Adventurer's Inns, one played on each of its
+# turns), so {7} becomes {5}, paid exactly by a Black Lotus's three mana and the two Inns' {C}, the pool empty afterwards. Bot2 controls a Town too, which does not count: it
+# would take the cost to {4} and leave a mana floating.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Qiqirn Merchant
+Adventurer's Inn
+Adventurer's Inn
+Memnite
+Memnite
+Island x20
+
+[Bot2 Deck]
+Adventurer's Inn
+Island x20
+
+[Actions]
+Bot1.Hand.Adventurer's Inn.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Qiqirn Merchant.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Adventurer's Inn.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Adventurer's Inn.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Adventurer's Inn.Activate
+Bot1.Battlefield.Adventurer's Inn.Activate
+Bot1.Battlefield.Qiqirn Merchant.Activate(Ability: Draw three)
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Turn = 3
+Bot1.Graveyard = Qiqirn Merchant; Black Lotus; Black Lotus

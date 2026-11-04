@@ -1,0 +1,44 @@
+# Qiqirn Merchant, "{7}, {T}, Sacrifice this creature: Draw three cards. This ability costs {1} less to activate for each Town you control." With no Town it costs all {7}:
+# with two Black Lotuses' six mana in the pool the ability is refused (CR 601.2f); a Mox Jet makes seven and it is paid exactly, leaving the pool empty. The Merchant
+# is sacrificed as a cost (CR 118.3) and Bot1 draws three cards: the turn-3 draw was the Ornithopter, so the hand is the two Memnites, the Ornithopter and the three Islands.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Qiqirn Merchant
+Mox Jet
+Memnite
+Memnite
+Ornithopter
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Qiqirn Merchant.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Battlefield.Qiqirn Merchant.Activate(Ability: Draw three; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Qiqirn Merchant.Activate(Ability: Draw three)
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Turn = 3
+Bot1.Hand = Island; Island; Island; Memnite; Memnite; Ornithopter
+Bot1.Graveyard = Qiqirn Merchant; Black Lotus; Black Lotus; Black Lotus
