@@ -1,0 +1,8 @@
+{
+  "name": "Item Shopkeep",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Human Citizen",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever you attack, target attacking equipped creature gains menace until end of turn. (It can't be blocked except by two or more creatures.)"
+}
