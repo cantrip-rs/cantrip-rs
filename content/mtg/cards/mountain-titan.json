@@ -1,0 +1,8 @@
+{
+  "name": "Mountain Titan",
+  "manaCost": "{2}{B}{R}",
+  "type": "Creature — Giant",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{1}{R}{R}: Until end of turn, whenever you cast a black spell, put a +1/+1 counter on this creature."
+}

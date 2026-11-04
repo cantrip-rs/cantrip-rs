@@ -1,0 +1,70 @@
+# During the ability, an opponent’s black spell and a red spell do not trigger it, while its controller’s black spells do (CR 603.2).
+[Bot1 Deck]
+Mountain Titan
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mountain
+Mountain
+Lightning Bolt
+Rakdos Cackler
+Dark Ritual
+Swamp x20
+[Bot2 Deck]
+Swamp
+Dark Ritual
+Swamp x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mountain Titan.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain Titan.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Mountain Titan.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mountain Titan.Counters.PlusOnePlusOne = (absent)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rakdos Cackler.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mountain Titan.Counters.PlusOnePlusOne = 1
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Mountain Titan.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Mountain Titan.Power = 3
