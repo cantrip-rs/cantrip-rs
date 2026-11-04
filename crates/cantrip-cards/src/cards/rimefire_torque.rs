@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{chosen_type, copy, delayed, triggers};
+use cantrip_mechanics::{chosen_type, copy, delayed};
 use cantrip_oracle as oracle;
 
 /// "Whenever a permanent you control of the chosen type enters" (CR 603.6a): a permanent of any card type, this one
@@ -42,10 +42,6 @@ pub static CARD: CardDef = CardDef {
             "{T}, Remove three charge counters from this artifact: When you next cast an instant or sorcery spell this turn, copy it. You may choose new targets for the copy.",
         ),
     ],
-    delayed: &[triggered(
-        when_asked(EventMask::SPELL_CAST, triggers::you_cast_instant_or_sorcery),
-        copy::copy_the_cast_spell,
-        "When you next cast an instant or sorcery spell this turn, copy it. You may choose new targets for the copy.",
-    )],
+    delayed: &[copy::COPY_IT_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST],
     ..oracle::RIMEFIRE_TORQUE
 };
