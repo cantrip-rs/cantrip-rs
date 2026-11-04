@@ -1,0 +1,8 @@
+{
+  "name": "Angus Mackenzie",
+  "manaCost": "{G}{W}{U}",
+  "type": "Legendary Creature — Human Cleric",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{G}{W}{U}, {T}: Prevent all combat damage that would be dealt this turn. Activate only before the combat damage step."
+}
