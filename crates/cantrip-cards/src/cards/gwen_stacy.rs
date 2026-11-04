@@ -3,14 +3,6 @@ use cantrip_mechanics::triggers::{self, THIS_ENTERS};
 use cantrip_mechanics::{effects, library};
 use cantrip_oracle as oracle;
 
-/// "When Gwen Stacy enters, exile the top card of your library. You may play that card for as long as you control this
-/// creature" (CR 611.2b, 305.1, 601.3): the permission ends the first time her controller doesn't control her, and she
-/// transforming into Ghost-Spider is not that (CR 701.27f, the same object).
-fn exile_top_play_while_you_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    library::exile_top_play_while_you_control(g, item.controller, item.object);
-    Ok(())
-}
-
 /// "Whenever you play a land from exile or cast a spell from exile" (CR 305.1, 601.2a, 603.2): a spell its controller cast
 /// from exile (a copy cast from exile counts), or a land they played from exile, which is a land play (a land put onto the
 /// battlefield from exile by an effect is not played).
@@ -48,7 +40,9 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
             THIS_ENTERS,
-            exile_top_play_while_you_control,
+            // The permission ends the first time her controller doesn't control her, and her transforming into Ghost-Spider is not that
+            // (CR 611.2b, 701.27f: the same object).
+            library::exile_top_card_play_while_you_control,
             "When Gwen Stacy enters, exile the top card of your library. You may play that card for as long as you control this creature.",
         ),
         ability(cost("{2}{U}{R}{W}"), effects::transform_self, "{2}{U}{R}{W}: Transform Gwen Stacy. Activate only as a sorcery.").sorcery_speed(),

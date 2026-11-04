@@ -969,6 +969,14 @@ pub fn exile_top_play_while_you_control(g: &mut dyn Game, player: PlayerId, sour
     exile_top_may_play(g, player, 1, player, grant)
 }
 
+/// "Exile the top card of your library. You may play that card for as long as you control this creature" as a resolving ability's
+/// whole effect: `exile_top_play_while_you_control` for the ability's controller, with the ability's source as the permanent. An
+/// empty library exiles nothing. Gwen Stacy and Lightning, Security Sergeant print it.
+pub fn exile_top_card_play_while_you_control(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    exile_top_play_while_you_control(g, item.controller, item.object);
+    Ok(())
+}
+
 /// "[One] of `items` chosen at random": one is drawn from the game's own generator, so the same game picks
 /// the same one; no draw is made when there is no choice. None from an empty list. Crabomination picks a card at random
 /// from a graveyard and a hand, Chaos Defiler one of the creatures chosen, Ursine Monstrosity an opponent and Tersa
