@@ -1,0 +1,32 @@
+# Even with four creatures available, the controller may decline and sacrifice Hecatomb instead.
+[Bot1 Deck]
+Memnite x4
+Black Lotus
+Hecatomb
+Swamp
+Swamp x13
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Hecatomb.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Battlefield.Memnite#1.Power = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot1.Graveyard = Hecatomb; Black Lotus
+Bot1.Battlefield.Memnite#1.Power = 1
+Bot1.Battlefield.Memnite#2.Power = 1
+Bot1.Battlefield.Memnite#3.Power = 1
+Bot1.Battlefield.Memnite#4.Power = 1
