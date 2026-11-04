@@ -1,0 +1,11 @@
+{
+  "name": "Delivery Moogle",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Moogle",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "Flying\nWhen this creature enters, search your library and/or graveyard for an artifact card with mana value 2 or less, reveal it, and put it into your hand. If you search your library this way, shuffle.",
+  "keywords": [
+    "Flying"
+  ]
+}

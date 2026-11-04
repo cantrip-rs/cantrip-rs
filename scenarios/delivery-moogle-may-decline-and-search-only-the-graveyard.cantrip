@@ -1,0 +1,56 @@
+# Delivery Moogle with X in both zones' reach: Wheel of Fortune puts Bronze Sable (2) and Darksteel Myr (3) in Bot1's graveyard. Bot1
+# declines to search the library, so it is not shuffled (CR 701.23: no library search, no shuffle) and keeps its order, and the graveyard,
+# being public, must give up a card that fits: Black Lotus (0) or Bronze Sable (2), and Bot1 takes the Sable. The Myr (3) is refused.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Wheel of Fortune
+Bronze Sable
+Darksteel Myr
+Plains
+Delivery Moogle
+Mox Ruby
+Mox Pearl
+Plains x4
+Island
+Swamp
+Forest
+Mountain
+Sol Ring
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wheel of Fortune.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Delivery Moogle.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+! Bot1.Choose(Darksteel Myr)
+Bot1.Choose(Bronze Sable)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot1.Hand = Plains; Plains; Plains; Plains; Bronze Sable
+Bot1.Graveyard = Wheel of Fortune; Plains; Darksteel Myr; Black Lotus
+Bot1.Library = Island; Swamp; Forest; Mountain; Sol Ring

@@ -1,0 +1,44 @@
+# Delivery Moogle's enters ability searches the library and/or graveyard for an artifact card with mana value 2 or less. Bot1 searches
+# the library: Alpha Myr (2) is taken, revealed into the hand; Coalition Relic (3) is past the limit and refused, and Bot2's own Sol Ring
+# is no part of the search. The library was searched, so it is shuffled (its order is no longer the deck's).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Delivery Moogle
+Plains x2
+Coalition Relic
+Alpha Myr
+Island
+Swamp
+Forest
+Mountain
+Sol Ring
+
+[Bot2 Deck]
+Sol Ring
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Delivery Moogle.Cast
+Bot1.Accept
+! Bot1.Search(Coalition Relic)
+Bot1.Search(Alpha Myr)
+[T1 Bot1.Main2]
+
+[Expect]
+Turn = 1
+Bot1.Hand = Plains; Plains; Alpha Myr
+Bot1.Battlefield.Delivery Moogle.Keywords = Flying
+Bot1.Library = Sol Ring; Coalition Relic; Swamp; Mountain; Forest; Island
+Bot2.Library.Count = 9
