@@ -1,0 +1,49 @@
+# Mysidian Elder {2}{R}: "When this creature enters, create a 0/1 black Wizard creature token with 'Whenever you cast a noncreature
+# spell, this token deals 1 damage to each opponent.'" (CR 111.1, 603.6a). The Wizard is 0/1 and black. Casting Mox Sapphire and Mox
+# Emerald, two noncreature spells, deals 1 damage each to Bot2 (20 to 18); casting Memnite, a creature spell, deals none (CR 601.2i).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mysidian Elder
+Mox Sapphire
+Mox Emerald
+Memnite
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Mysidian Elder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wizard Token.Power = 0
+? Bot1.Battlefield.Wizard Token.Toughness = 1
+? Bot1.Battlefield.Wizard Token.Colors = Black
+? Bot2.Life = 20
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Wizard Token.Toughness = 1
+Bot1.Battlefield.Memnite.Power = 1

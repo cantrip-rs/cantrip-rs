@@ -1,0 +1,8 @@
+{
+  "name": "Mysidian Elder",
+  "manaCost": "{2}{R}",
+  "type": "Creature — Human Wizard",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "When this creature enters, create a 0/1 black Wizard creature token with \"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\""
+}
