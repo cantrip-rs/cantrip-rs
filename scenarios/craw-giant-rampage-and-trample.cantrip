@@ -1,0 +1,45 @@
+# One blocker gives no rampage bonus; three blockers give +4/+4, and trample carries damage past lethal blockers to the defender (CR 702.23a, 702.19b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Craw Giant
+Island x16
+[Bot2 Deck]
+Ornithopter x4
+Island x16
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Craw Giant.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Craw Giant > Bot2)
+Bot2.Block(Ornithopter#1 > Craw Giant)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Craw Giant.Power = 6
+? Bot1.Battlefield.Craw Giant.Toughness = 4
+? Bot2.Life = 16
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Craw Giant > Bot2)
+Bot2.Block(Ornithopter#1 > Craw Giant; Ornithopter#2 > Craw Giant; Ornithopter#3 > Craw Giant)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Craw Giant.Power = 10
+? Bot1.Battlefield.Craw Giant.Toughness = 8
+[T5 Bot1.Main2]
+? Bot2.Life = 12
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Craw Giant.Power = 6
+Bot1.Battlefield.Craw Giant.Toughness = 4
+Bot2.Life = 12

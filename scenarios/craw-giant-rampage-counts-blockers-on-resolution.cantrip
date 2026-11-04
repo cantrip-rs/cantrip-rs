@@ -1,0 +1,36 @@
+# A blocker removed before rampage resolves no longer contributes; the remaining single blocker gives no bonus (CR 702.23b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Ruby
+Craw Giant
+Lightning Bolt
+Island x14
+[Bot2 Deck]
+Ornithopter x2
+Island x18
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Craw Giant.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Craw Giant > Bot2)
+Bot2.Block(Ornithopter#1 > Craw Giant; Ornithopter#2 > Craw Giant)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter#1)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Craw Giant.Power = 6
+Bot1.Battlefield.Craw Giant.Toughness = 4
+Bot2.Life = 16
+Bot2.Graveyard = Ornithopter; Ornithopter
