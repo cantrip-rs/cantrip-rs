@@ -1,0 +1,32 @@
+# The Lunar Whale (crew 1) with no creature to tap cannot be crewed (CR 702.122a: total power 1 or more), so it never attacks and the Ornithopter
+# on top of Bot1's library cannot be cast from there.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+The Lunar Whale
+Island
+Island
+Island
+Island
+Island
+Ornithopter
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Lunar Whale.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.The Lunar Whale.Activate(Ability: Crew)
+! Bot1.Library.Ornithopter.Cast
+
+[Expect]
+Bot1.Battlefield.The Lunar Whale.Types = Artifact

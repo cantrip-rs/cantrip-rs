@@ -1,0 +1,47 @@
+# The Lunar Whale: after it attacked on turn 3 the Lightning Bolt on top of Bot1's library is cast from there like any spell, for its mana
+# cost: Mox Ruby is tapped for the {R} (the Bolt cannot be cast without it). On turn 5 the Whale stays home, and the Island on top of the
+# library, with the turn's land play unused, cannot be played from there.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+The Lunar Whale
+Memnite
+Island
+Island
+Island
+Lightning Bolt
+Island
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Lunar Whale.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.The Lunar Whale.Activate(Ability: Crew)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Lunar Whale > Bot2)
+[T3 Bot1.Main2]
+Bot1.Library.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Battlefield.Mox Ruby.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+! Bot1.Library.Island.Play
+
+[Expect]
+Bot2.Life = 14
+Bot1.Graveyard = Lightning Bolt; Black Lotus

@@ -1,0 +1,44 @@
+# The Lunar Whale ({3}{U}, 3/5 flying Vehicle, crew 1): "As long as The Lunar Whale attacked this turn, you may play the top card of your
+# library." Bot1 casts it on turn 1 with Black Lotus and Mox Sapphire, and a Memnite. On turn 3 the Ornithopter on top of its library cannot
+# be cast from there, not before the Whale is crewed and not after, until it is declared as an attacker. In the second main phase it may
+# be cast from the top (it costs {0}), and then the Island that is next on top is played from the library: its land play for the turn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+The Lunar Whale
+Memnite
+Island
+Island
+Island
+Island
+Ornithopter
+Island
+Island x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.The Lunar Whale.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Library.Ornithopter.Cast
+Bot1.Battlefield.The Lunar Whale.Activate(Ability: Crew)
+! Bot1.Library.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(The Lunar Whale > Bot2)
+[T3 Bot1.Main2]
+Bot1.Library.Ornithopter.Cast
+Bot1.Library.Island.Play
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Battlefield = The Lunar Whale; Memnite; Mox Sapphire; Island; Ornithopter
