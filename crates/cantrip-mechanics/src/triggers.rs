@@ -2042,6 +2042,17 @@ pub const ENCHANTED_PLAYER_ATTACKED: Trigger = when(EventMask::ATTACKS, enchante
 pub const YOU_ATTACK: Trigger = when_asked(EventMask::ATTACKERS_DECLARED, you_attack);
 pub const INSTANT_OR_SORCERY_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_instant_or_sorcery);
 pub const YOU_CAST_A_SPELL: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_a_spell);
+
+/// "Whenever you cast a spell you don't own" (CR 603.2, 108.3): the spell's owner is not the player who cast it, whatever zone it
+/// was cast from or how it came to be theirs to cast. Nita, Forum Conciliator and Vaan, Street Thief print it.
+pub fn you_cast_a_spell_you_dont_own(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, .. } if *player == me.controller && q.obj(*spell).owner != me.controller => Fired::PLAIN,
+        _ => None,
+    }
+}
+
+pub const YOU_CAST_A_SPELL_YOU_DONT_OWN: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_a_spell_you_dont_own);
 pub const YOU_CAST_A_SPELL_WITH_MANA_VALUE_4_OR_GREATER: Trigger =
     when_asked(EventMask::SPELL_CAST, you_cast_a_spell_with_mana_value_at_least::<4>);
 pub const THIS_BECOMES_THE_TARGET_OF_A_SPELL_OR_ABILITY: Trigger = when(EventMask::BECAME_TARGET, this_becomes_the_target);
