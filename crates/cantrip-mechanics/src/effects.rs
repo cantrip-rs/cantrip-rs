@@ -248,7 +248,7 @@ pub fn put_loyalty_counter_on_each_planeswalker_you_control(g: &mut dyn Game, it
 }
 
 /// `n` `kind` counters on each of `objects`, all of them at once (CR 608.2, 101.4).
-fn counters_on_each(g: &mut dyn Game, objects: &[ObjectId], kind: CounterKind, n: i16) {
+pub fn counters_on_each(g: &mut dyn Game, objects: &[ObjectId], kind: CounterKind, n: i16) {
     let puts: Vec<(ObjectId, CounterKind, i16)> = objects.iter().map(|&id| (id, kind, n)).collect();
     g.add_counters_together(&puts);
 }

@@ -1,0 +1,65 @@
+# Aerith Gainsborough: lifelink damage is a life gain, so she gets a +1/+1 counter (2/2 to 3/3). When she dies with that counter,
+# X = 1 (counters as she last was, CR 603.10a) goes on each legendary creature Bot1 controls: Adelbert Steiner (legendary) becomes 3/2 while the non-legendary Suntail Hawk stays 1/1.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Aerith Gainsborough
+Adelbert Steiner
+Suntail Hawk
+Plains
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Aerith Gainsborough.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Suntail Hawk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Adelbert Steiner.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Aerith Gainsborough > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 22
+? Bot1.Battlefield.Aerith Gainsborough.Power = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Aerith Gainsborough)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+
+? Bot1.Battlefield.Adelbert Steiner.Power = 3
+
+[Expect]
+Bot1.Battlefield.Suntail Hawk.Power = 1

@@ -1,0 +1,11 @@
+{
+  "name": "Aerith Gainsborough",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Human Cleric",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Lifelink\nWhenever you gain life, put a +1/+1 counter on Aerith Gainsborough.\nWhen Aerith Gainsborough dies, put X +1/+1 counters on each legendary creature you control, where X is the number of +1/+1 counters on Aerith Gainsborough.",
+  "keywords": [
+    "Lifelink"
+  ]
+}
