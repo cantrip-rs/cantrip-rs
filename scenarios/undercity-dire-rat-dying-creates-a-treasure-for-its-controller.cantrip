@@ -1,0 +1,33 @@
+# Undercity Dire Rat (CR 700.4, 603.6c, 111.10a): "When this creature dies, create a Treasure token." Bot1's Rat is killed by Bot2's Lightning
+# Bolt: Bot1 gets one Treasure (and the Rat is in the graveyard); Bot2 gets none.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Undercity Dire Rat
+Swamp x22
+
+[Bot2 Deck]
+Black Lotus
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Undercity Dire Rat.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Undercity Dire Rat)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Undercity Dire Rat
+Bot1.Battlefield.Count = 3
+Bot2.Battlefield.Count = 0

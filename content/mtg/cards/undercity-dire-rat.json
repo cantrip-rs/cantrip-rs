@@ -1,0 +1,8 @@
+{
+  "name": "Undercity Dire Rat",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Rat",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Rat Tail — When this creature dies, create a Treasure token. (It's an artifact with \"{T}, Sacrifice this token: Add one mana of any color.\")"
+}
