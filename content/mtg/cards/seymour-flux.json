@@ -1,0 +1,8 @@
+{
+  "name": "Seymour Flux",
+  "manaCost": "{4}{B}",
+  "type": "Legendary Creature — Spirit Avatar",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "At the beginning of your upkeep, you may pay 1 life. If you do, draw a card and put a +1/+1 counter on Seymour Flux."
+}
