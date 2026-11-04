@@ -32,6 +32,17 @@ fn dealt_by(_: &dyn Query, _: &Asker, source: ObjectId, d: &DamageEvent) -> bool
     d.source == source
 }
 
+fn dealt_to_creature_you_control(q: &dyn Query, asker: &Asker, _: ObjectId, d: &DamageEvent) -> bool {
+    matches!(d.target, Target::Object(id) if q.is_on_battlefield(id) && q.chars(id).is(CardType::Creature) && q.controller(id) == asker.controller)
+}
+
+/// Damage of any kind to the creatures the effect's controller controls (CR 615.1, 120.1): "prevent all damage that would be
+/// dealt to creatures you control this turn". It is read as the damage would be dealt, so a creature that arrives later in
+/// the turn is covered and one that has changed hands is not. Summon: Alexander (I, II) prints it. The card gives its own
+/// words (`.text(..)`), and makes the effect with `this_turn(g, item, Target::None, index, Shield::All)`.
+pub const DAMAGE_TO_CREATURES_YOU_CONTROL: GrantedPreventionDef =
+    GrantedPreventionDef { hint: "prevents all damage dealt to creatures you control", damage: "damage", of_it: None, applies: dealt_to_creature_you_control, then: None, text: "" };
+
 /// Damage of any kind whose source is the object the effect is about (CR 615.1, 120.1): "prevent all damage that would be
 /// dealt by [that creature]". Once that object has left the zone it was in it is a new object (CR 400.7), which the effect
 /// is not about. Old Fat Spider Can't See Me and Gideon of the Trials (+1) print it. The card gives its own words (`.text(..)`).
