@@ -1,0 +1,44 @@
+# Lightning, Security Sergeant: the trigger is for combat damage dealt "to a player" (CR 510.2). Bot2 blocks Lightning (menace needs two
+# blockers, CR 702.111b) with a Memnite and an Ornithopter, so its damage goes to creatures only: nothing is exiled and Bot2's life is
+# unchanged.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Lightning, Security Sergeant
+Island
+Island
+Island
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x5
+Island x13
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning, Security Sergeant.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lightning, Security Sergeant > Bot2)
+Bot2.Block(Memnite > Lightning, Security Sergeant; Ornithopter > Lightning, Security Sergeant)
+[T3 Bot1.Main2]
+? Bot2.Life = 20
+
+[Expect]
+Exile.Count = 0
+Bot1.Battlefield.Lightning, Security Sergeant.Damage = 1

@@ -1,0 +1,41 @@
+# Lightning, Security Sergeant {2}{R}: "Whenever Lightning deals combat damage to a player, exile the top card of your library. You may
+# play that card for as long as you control Lightning." (CR 510.2, 611.2b, 305.1). Cast on turn 1 and attacking on turn 3 with no
+# blockers, Lightning deals 2 to Bot2 and exiles the top card of Bot1's library - the Mountain, not the Island Bot1 drew that turn and
+# not a card of Bot2's library - which Bot1 plays from exile as the turn's land drop.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Lightning, Security Sergeant
+Island
+Island
+Island
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lightning, Security Sergeant.Cast
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lightning, Security Sergeant > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Exile = Mountain
+? Bot2.Library.Count = 12
+Bot1.Exile.Mountain.Play
+? Exile.Count = 0
+
+[Expect]
+Bot1.Battlefield.Mountain.Tapped = false
+Bot1.Library.Count = 12
