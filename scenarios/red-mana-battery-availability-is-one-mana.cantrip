@@ -1,0 +1,28 @@
+# An uncharged Battery can pay for Lightning Bolt but cannot pay for the two-mana Nest Robber (CR 601.2g).
+[Bot1 Deck]
+Red Mana Battery
+Black Lotus
+Mox Pearl
+Lightning Bolt
+Nest Robber
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Red Mana Battery.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Nest Robber.Cast(Mana: short)
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Battlefield.Red Mana Battery.Activate(Ability: Remove any number; X: 0)
+Bot1.Pass
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 17
