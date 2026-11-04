@@ -1,0 +1,36 @@
+# Fire Drake's flying prevents a ground creature from blocking, but another flyer can block it (CR 702.9b).
+[Bot1 Deck]
+Fire Drake
+Black Lotus
+Mountain x20
+
+[Bot2 Deck]
+Forest
+Elvish Mystic
+Ornithopter
+Forest x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Fire Drake.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Fire Drake.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Fire Drake > Bot2)
+! Bot2.Block(Elvish Mystic > Fire Drake)
+Bot2.Block(Ornithopter > Fire Drake)
+? Combat.Blocks.Count = 1
+[Bot1.Main2]
+[Expect]
+Bot2.Life = 20
