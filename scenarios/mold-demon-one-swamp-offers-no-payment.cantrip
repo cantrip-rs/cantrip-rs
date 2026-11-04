@@ -1,0 +1,37 @@
+# One Swamp is not enough to pay, so no payment choice is offered and Mold Demon is sacrificed (CR 118.12a).
+[Bot1 Deck]
+Swamp
+Black Lotus
+Black Lotus
+Mox Jet
+Mold Demon
+Island x20
+
+[Bot2 Deck]
+Island
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mold Demon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Decline
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Mold Demon; Black Lotus; Black Lotus
+Bot1.Battlefield.Swamp.Tapped = false
+Bot2.Battlefield.Island.Tapped = false

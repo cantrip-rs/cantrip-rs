@@ -1,0 +1,49 @@
+# Mold Demon's entry trigger lets its controller sacrifice exactly two Swamps to keep it;
+# the opponent's Swamp is not available to pay; another creature's entry does not retrigger
+# Mold Demon's own entry ability (CR 603.3, 701.21a).
+[Bot1 Deck]
+Swamp
+Swamp
+Black Lotus
+Black Lotus
+Mox Jet
+Mold Demon
+Memnite
+Island x20
+
+[Bot2 Deck]
+Swamp
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mold Demon.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mold Demon.Power = 6
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+! Bot1.Choose()
+Bot1.Choose(Bot1.Battlefield.Swamp#1; Bot1.Battlefield.Swamp#2)
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mold Demon.Power = 6
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Swamp = (absent)
+Bot2.Battlefield.Swamp.Tapped = false
