@@ -1,0 +1,38 @@
+# Swallowed by Leviathan ({2}{U}): the surveil 2 keeps both cards on top this time (Lightning Bolt, then Counterspell), so only the Black Lotus Bot1 sacrificed for the mana
+# is in its graveyard when the Bolt is countered "unless its controller pays {1} for each card in your graveyard": {1}, which Bot2 pays with Mox Jet. The Bolt resolves and
+# hits Bot1 for 3.
+
+[Bot1 Deck]
+Black Lotus
+Swallowed by Leviathan
+Island x5
+Lightning Bolt
+Counterspell
+Island x13
+
+[Bot2 Deck]
+Mountain
+Mox Jet
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Swallowed by Leviathan.Cast(Lightning Bolt)
+Bot1.Pass
+Bot1.Arrange(Lightning Bolt; Counterspell | )
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.PayCost
+
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Swallowed by Leviathan; Black Lotus
+Bot2.Battlefield.Mox Jet.Tapped = true
