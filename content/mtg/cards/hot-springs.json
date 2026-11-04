@@ -1,0 +1,6 @@
+{
+  "name": "Hot Springs",
+  "manaCost": "{1}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land you control\nEnchanted land has \"{T}: Prevent the next 1 damage that would be dealt to any target this turn.\""
+}
