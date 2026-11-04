@@ -1,0 +1,36 @@
+# Destroy does nothing to an indestructible permanent (CR 702.12b) but the spell still resolves, so Sephiroth's Intervention's
+# "You gain 2 life" happens (CR 608.2c): Bot2 discards a card for Iron-Shield Elf's indestructibility; the Elf survives and Bot1 has 22.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Sephiroth's Intervention
+Swamp x17
+
+[Bot2 Deck]
+Island
+Mox Jet
+Iron-Shield Elf
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Iron-Shield Elf.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sephiroth's Intervention.Cast(Bot2.Battlefield.Iron-Shield Elf)
+Bot2.Battlefield.Iron-Shield Elf.Activate
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot2.Battlefield.Iron-Shield Elf.Keywords = Indestructible

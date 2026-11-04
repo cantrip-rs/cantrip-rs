@@ -1,0 +1,36 @@
+# Sephiroth's Intervention (CR 701.8a, 119.1): "target creature" refuses a Mox (an artifact, not a creature, the refusal); Bot2's Memnite
+# is destroyed at instant speed and Bot1 gains exactly 2 life (22), paid from Black Lotus's {B}{B}{B} and a Mox Jet.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Sephiroth's Intervention
+Swamp x17
+
+[Bot2 Deck]
+Memnite
+Mox Ruby
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Sephiroth's Intervention.Cast(Bot2.Battlefield.Mox Ruby)
+Bot1.Hand.Sephiroth's Intervention.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot2.Life = 20
+Bot2.Graveyard = Memnite
+Bot2.Battlefield = Mox Ruby
+Bot1.Graveyard = Sephiroth's Intervention; Black Lotus

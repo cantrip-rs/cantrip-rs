@@ -1,0 +1,6 @@
+{
+  "name": "Sephiroth's Intervention",
+  "manaCost": "{3}{B}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature. You gain 2 life."
+}

@@ -1,0 +1,34 @@
+# Sephiroth's Intervention's "target creature" is any creature, the caster's included (CR 701.8a): Bot1 destroys its own Memnite and
+# gains 2 life (22), paid from Black Lotus's {B}{B}{B} and a Mox Jet; Bot2's Memnite is left alone.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Memnite
+Sephiroth's Intervention
+Swamp x16
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sephiroth's Intervention.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 22
+Bot1.Graveyard = Sephiroth's Intervention; Memnite; Black Lotus
+Bot2.Battlefield.Memnite.Power = 1
