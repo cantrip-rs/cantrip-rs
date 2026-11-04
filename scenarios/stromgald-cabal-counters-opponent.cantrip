@@ -1,0 +1,26 @@
+# Stromgald Cabal pays one life and taps to counter an opponent's white spell (CR 701.6a).
+[Bot1 Deck]
+Black Lotus
+Stromgald Cabal
+Swamp x20
+[Bot2 Deck]
+Black Lotus
+Savannah Lions
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Stromgald Cabal.Cast
+? Bot1.Mana =
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Stromgald Cabal.Activate(Stack.Savannah Lions)
+Bot1.Choose(Tap Stromgald Cabal)
+? Bot1.Life = 19
+? Bot1.Battlefield.Stromgald Cabal.Tapped = true
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Graveyard = Savannah Lions; Black Lotus; Island
+Bot2.Battlefield.Savannah Lions = (absent)
