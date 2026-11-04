@@ -112,3 +112,32 @@ fn a_static_control_ability_stops_giving_the_leaving_player_control() {
     assert!(!s.battlefield().contains(&mind));
     assert_eq!(s.zone(Zone::exile(P1)).len(), 1);
 }
+
+/// CR 800.4a: a player who has left controls nothing, so an effect that would give them control after they left never
+/// begins ("that player gains control of Kain" after a three-player game's Kain dealt them lethal damage). The Bear stays
+/// P2's, and `gain_control` says the player did not gain it ("if they do", CR 608.2c).
+#[test]
+fn a_player_who_has_left_gains_no_control() {
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&BEAR])));
+    let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new(), Vec::new()], ..Default::default() });
+    let bear = put(&mut game, &BEAR, P2, P2);
+    let mut cx = cx(&mut game);
+    cx.st().update_player(P3, |p| p.lost = true);
+    crate::ops::leave_game(&mut cx, P3);
+    assert!(!cantrip_api::Game::gain_control(&mut cx, bear, bear, P3, Duration::Indefinite));
+    let s = cx.s();
+    assert!(s.battlefield().contains(&bear));
+    assert_eq!(s.obj(bear).controller, P2);
+    assert!(!s.effects.iter().any(|e| e.kind == EffectKind::Control(P3)));
+}
+
+/// The other side of it: a player still in the game gains control, and `gain_control` says so.
+#[test]
+fn a_player_still_in_the_game_gains_control() {
+    let table: &'static CardTable = Box::leak(Box::new(CardTable::new([&BEAR])));
+    let mut game = Game::new(table, &Setup { decks: vec![Vec::new(), Vec::new(), Vec::new()], ..Default::default() });
+    let bear = put(&mut game, &BEAR, P2, P2);
+    let mut cx = cx(&mut game);
+    assert!(cantrip_api::Game::gain_control(&mut cx, bear, bear, P3, Duration::Indefinite));
+    assert_eq!(cx.s().obj(bear).controller, P3);
+}

@@ -1336,6 +1336,13 @@ impl<'a> Cx<'a> {
         if !(live(&self.g.state, affected) || kind.outlives_affected()) {
             return;
         }
+        // A player who has left the game controls nothing: an effect that would give them control ends as they leave, so one
+        // that would begin after they left never does (CR 800.4a).
+        if let EffectKind::Control(player) = kind
+            && self.g.state.player(player).lost
+        {
+            return;
+        }
         // A phased-out permanent is in no set of objects an effect affects, even one naming it (CR 702.26e).
         if self.g.state.obj(affected).zone.is(ZoneKind::PhasedOut) && !kind.outlives_affected() {
             return;
