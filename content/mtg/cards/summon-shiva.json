@@ -1,0 +1,8 @@
+{
+  "name": "Summon: Shiva",
+  "manaCost": "{3}{U}{U}",
+  "type": "Enchantment Creature — Saga Elemental",
+  "power": 4,
+  "toughness": 5,
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI, II — Heavenly Strike — Tap target creature an opponent controls. Put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nIII — Diamond Dust — Draw a card for each tapped creature your opponents control."
+}

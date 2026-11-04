@@ -1,0 +1,80 @@
+# Summon: Shiva ({3}{U}{U}) is cast on turn 3 with Black Lotus's {U}{U}{U} and Mox Pearl and Mox Jet. As it enters it gets a lore counter (CR 714.3a): chapter I taps Bot2's
+# Ornithopter and puts a stun counter on it (Bot1's own Elvish Mystic is no legal target). After Bot1's draw on turn 5 it gets another: chapter II does the same to Bot2's
+# Memnite. On turn 6 Bot2's Ornithopter untaps (its stun counter went in the turn-4 untap step), the Memnite stays tapped (its counter goes now), and Bot2 taps its
+# Llanowar Elves for mana. Chapter III on turn 7 draws a card for each tapped creature Bot2 controls: Memnite and Llanowar Elves, two; the untapped Ornithopter does not
+# count, nor does Bot1's own Elvish Mystic, tapped for mana while the chapter is on the stack. It is then sacrificed (CR 714.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Emerald
+Summon: Shiva
+Elvish Mystic
+Island
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Mox Emerald
+Llanowar Elves
+Island x3
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Mystic.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Summon: Shiva.Cast
+Bot1.Pass
+! Bot1.Target(Bot1.Battlefield.Elvish Mystic)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = 1
+? Bot2.Battlefield.Memnite.Tapped = false
+? Bot1.Battlefield.Summon: Shiva.Counters.Lore = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Summon: Shiva.Counters.Lore = 2
+? Bot2.Battlefield.Ornithopter.Tapped = true
+? Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot1.Pass
+? Bot2.Battlefield.Memnite.Tapped = true
+? Bot2.Battlefield.Memnite.Counters.Stun = 1
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = false
+? Bot2.Battlefield.Memnite.Tapped = true
+? Bot2.Battlefield.Memnite.Counters.Stun = (absent)
+Bot2.Battlefield.Llanowar Elves.Activate
+[T7 Bot1.Main1]
+? Bot1.Hand.Count = 4
+Bot1.Battlefield.Elvish Mystic.Activate
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Hand.Count = 6
+Bot1.Battlefield.Summon: Shiva = (absent)
+Bot1.Graveyard = Summon: Shiva; Black Lotus
