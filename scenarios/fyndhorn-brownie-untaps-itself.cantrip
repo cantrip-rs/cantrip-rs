@@ -1,0 +1,40 @@
+# Brownie can untap itself after paying {2}{G} and tapping; three non-green mana cannot pay its green requirement (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Fyndhorn Brownie
+Forest
+Forest x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Fyndhorn Brownie.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Fyndhorn Brownie.Activate(Bot1.Battlefield.Fyndhorn Brownie; Mana: short)
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Fyndhorn Brownie.Activate(Bot1.Battlefield.Mox Jet)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Fyndhorn Brownie.Activate(Bot1.Battlefield.Fyndhorn Brownie)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Fyndhorn Brownie.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Fyndhorn Brownie.Tapped = false
