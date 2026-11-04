@@ -1,0 +1,39 @@
+# Desert taps for colorless mana, then on a later turn can damage its controller's attacking creature after combat damage.
+[Bot1 Deck]
+Desert
+Forest
+Grizzly Bears
+Memnite
+Island x15
+
+[Bot2 Deck]
+Island x18
+
+[Actions]
+Bot1.Hand.Desert.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Desert.Activate(Ability: Add {C})
+? Bot1.Mana = {C}
+? Bot1.Battlefield.Desert.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Desert.Activate(Ability: Add {C})
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Desert.Activate(Grizzly Bears; Ability: deals 1 damage)
+Bot1.Attack(Grizzly Bears > Bot2)
+[T5 Bot1.Damage]
+! Bot1.Battlefield.Desert.Activate(Grizzly Bears; Ability: deals 1 damage)
+[T5 Bot1.EndCombat]
+? Bot2.Life = 18
+! Bot1.Battlefield.Desert.Activate(Memnite; Ability: deals 1 damage)
+Bot1.Battlefield.Desert.Activate(Grizzly Bears; Ability: deals 1 damage)
+? Bot1.Mana =
+! Bot1.Battlefield.Desert.Activate(Ability: Add {C})
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Desert.Tapped = true
+Bot1.Battlefield.Grizzly Bears.Damage = 1
+Bot2.Life = 18
