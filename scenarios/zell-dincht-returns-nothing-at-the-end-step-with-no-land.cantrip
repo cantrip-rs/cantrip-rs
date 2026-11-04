@@ -1,0 +1,23 @@
+# Zell Dincht with no land to return: his end-step ability asks nothing and does nothing - Bot2's Island is not Bot1's to return,
+# and Zell, no land, is not returned either. He is a 0/3 with no land; the turn passes to Bot2.
+
+[Bot1 Deck]
+Black Lotus
+Zell Dincht
+Island x18
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Zell Dincht.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+
+[Expect]
+Turn = 2
+Bot1.Battlefield.Zell Dincht.Power = 0
+Bot1.Battlefield.Zell Dincht.Toughness = 3
+Bot2.Battlefield.Island.Tapped = false

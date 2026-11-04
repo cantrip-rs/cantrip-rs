@@ -1,0 +1,45 @@
+# Zell Dincht ({2}{R}, a 0/3): "You may play an additional land on each of your turns", so Bot1 plays two lands on turn 1 (a
+# third is refused) and Zell gets +1/+0 for each land Bot1 controls - Bot1's two Mountains, not Bot2's Island and not Zell
+# himself: a 2/3. At the beginning of Bot1's end step a land Bot1 chooses returns to its owner's hand (Mountain), leaving
+# Zell a 1/3 with one land. On turn 3 Bot1 plays two lands again (Island and Mountain) and Zell is a 3/3.
+
+[Bot1 Deck]
+Black Lotus
+Zell Dincht
+Mountain
+Mountain
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Zell Dincht.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Zell Dincht.Power = 0
+Bot1.Hand.Mountain.Play
+? Bot1.Battlefield.Zell Dincht.Power = 1
+Bot1.Hand.Mountain.Play
+? Bot1.Battlefield.Zell Dincht.Power = 2
+! Bot1.Hand.Island.Play
+[T1 Bot1.End]
+Bot1.Choose(Mountain)
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+? Bot1.Battlefield.Zell Dincht.Power = 1
+? Bot1.Battlefield.Zell Dincht.Toughness = 3
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mountain.Play
+? Bot1.Battlefield.Zell Dincht.Power = 3
+! Bot1.Hand.Island.Play
+
+[Expect]
+Bot1.Battlefield.Zell Dincht.Power = 3
+Bot1.Battlefield.Zell Dincht.Toughness = 3
