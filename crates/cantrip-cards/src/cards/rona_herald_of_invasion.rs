@@ -41,15 +41,9 @@ pub static BACK: CardDef = CardDef {
     ..oracle::RONA_TOLARIAN_OBLITERATOR
 };
 
-/// "Whenever you cast a legendary spell" (CR 603.2).
-fn when_cast_legendary_spell(q: &dyn Query, asker: &Asker, event: &Event) -> Option<Fired> {
-    let Event::SpellCast { spell, player, .. } = event else { return None };
-    if asker.controller == *player && q.chars(*spell).supertypes.legendary { Fired::about(Target::Object(*spell)) } else { None }
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        triggered(when_asked(EventMask::SPELL_CAST, when_cast_legendary_spell), effects::untap_self, "Whenever you cast a legendary spell, untap Rona."),
+        triggered(triggers::LEGENDARY_SPELL_YOU_CAST, effects::untap_self, "Whenever you cast a legendary spell, untap Rona."),
         ability(TAP, effects::loot, "{T}: Draw a card, then discard a card."),
         ability(cost("{5}{B/P}"), effects::transform_self, "{5}{B/P}: Transform Rona. Activate only as a sorcery.").sorcery_speed(),
     ],

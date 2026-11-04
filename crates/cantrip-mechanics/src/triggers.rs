@@ -1656,6 +1656,15 @@ pub fn subtype_spell_you_cast<const SUBTYPE: u16>(q: &dyn Query, me: &Asker, eve
     }
 }
 
+/// "Whenever you cast a legendary spell" (CR 603.2, 205.4a), about the spell. Rona, Herald of Invasion and Venat, Heart of
+/// Hydaelyn print it.
+pub fn legendary_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, .. } if *player == me.controller && q.chars(*spell).supertypes.legendary => Fired::about(Target::Object(*spell)),
+        _ => None,
+    }
+}
+
 /// "Whenever you cast an artifact spell" (CR 603.2). Pinnacle Emissary and Ravenous Robots print it.
 pub fn artifact_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
@@ -2008,6 +2017,7 @@ pub const ANOTHER_CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, another_
 pub const CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_dies);
 pub const ANOTHER_CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_dies);
 pub const ARTIFACT_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, artifact_spell_you_cast);
+pub const LEGENDARY_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, legendary_spell_you_cast);
 pub const CREATURE_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, creature_spell_you_cast);
 pub const DEALS_COMBAT_DAMAGE_TO_PLAYER_SUBJECT: Trigger = when(EventMask::DAMAGE, deals_combat_damage_to_player_subject);
 pub const DEALS_COMBAT_DAMAGE_TO_PLAYER: Trigger = when(EventMask::DAMAGE, deals_combat_damage_to_player);
