@@ -1,0 +1,42 @@
+# Self-Destruct {1}{R}: "Target creature you control deals X damage to any other target and X damage to itself, where X is its power."
+# On turn 1 Black Lotus (RRR) and Mox Pearl pay for Anaba Bodyguard (2/3), Mox Ruby and Mox Jet for Self-Destruct. The first target
+# must be a creature Bot1 controls (Bot2, a player, is refused) and the other target cannot be that creature again (CR 115.3);
+# Anaba deals X = 2 to Bot2 (20 to 18) and 2 to itself, which it survives with 2 damage marked.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Anaba Bodyguard
+Self-Destruct
+Island
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Anaba Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Self-Destruct.Cast
+! Bot1.Target(Bot2)
+Bot1.Target(Anaba Bodyguard)
+! Bot1.Target(Anaba Bodyguard)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Anaba Bodyguard.Damage = 2
+Bot1.Graveyard = Self-Destruct; Black Lotus

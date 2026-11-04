@@ -1,0 +1,6 @@
+{
+  "name": "Self-Destruct",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "Target creature you control deals X damage to any other target and X damage to itself, where X is its power."
+}
