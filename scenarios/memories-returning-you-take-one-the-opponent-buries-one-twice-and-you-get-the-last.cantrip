@@ -1,0 +1,47 @@
+# Memories Returning {2}{U}{U} sorcery: "Reveal the top five cards of your library. Put one of them into your hand. Then choose an opponent. They put one on
+# the bottom of your library. Then you put one into your hand. Then they put one on the bottom of your library. Put the other into your hand."
+# Bot1 pays {2}{U}{U} with Black Lotus and Mox Sapphire. The top five are Lightning Bolt, Memnite, Ornithopter, Mox Jet and Mox Ruby: Bot1 takes the Bolt;
+# Bot2 buries Memnite, then (after Bot1 takes Mox Jet) Ornithopter, so Memnite lies above Ornithopter on the bottom; and the last card, Mox Ruby, comes
+# to the hand. The two Islands that were below the five are now on top of the library.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Memories Returning
+Island
+Island
+Island
+Island
+Lightning Bolt
+Memnite
+Ornithopter
+Mox Jet
+Mox Ruby
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Memories Returning.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot1.ChoosePlayer(Bot2)
+Bot2.Choose(Memnite)
+Bot1.Choose(Mox Jet)
+Bot2.Choose(Ornithopter)
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Turn = 1
+Bot1.Hand = Island; Island; Island; Island; Lightning Bolt; Mox Jet; Mox Ruby
+Bot1.Library = Island; Island; Memnite; Ornithopter
+Bot1.Revealed = Lightning Bolt; Memnite; Mox Jet; Mox Ruby; Ornithopter
+Bot1.Graveyard = Memories Returning; Black Lotus

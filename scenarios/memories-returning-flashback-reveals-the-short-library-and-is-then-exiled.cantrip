@@ -1,0 +1,59 @@
+# Memories Returning, Flashback {7}{U}{U}: cast from the graveyard (CR 702.34a) it is exiled afterwards. Bot1 casts it first from hand with Black Lotus and Mox
+# Sapphire over a five-card library (Lightning Bolt, Memnite, Ornithopter, Mox Jet, Mox Ruby: it takes the Bolt and Mox Jet, Bot2 buries Memnite and
+# Ornithopter, and the last card, Mox Ruby, comes to the hand), then flashes it back with nine blue mana from three more Black Lotuses. Only two cards, Memnite
+# and Ornithopter, are left in the library (CR 609.3): both are revealed, Bot1 takes the Ornithopter and Bot2 puts the only card left, Memnite, on the
+# bottom - the library of one - and the rest of the instructions have no card to act on. Memories Returning is in exile, not the graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Sapphire
+Memories Returning
+Island
+Lightning Bolt
+Memnite
+Ornithopter
+Mox Jet
+Mox Ruby
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Memories Returning.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Bolt)
+Bot1.ChoosePlayer(Bot2)
+Bot2.Choose(Memnite)
+Bot1.Choose(Mox Jet)
+Bot2.Choose(Ornithopter)
+? Bot1.Library = Memnite; Ornithopter
+? Bot1.Graveyard = Memories Returning; Black Lotus
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Graveyard.Memories Returning.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+Bot1.ChoosePlayer(Bot2)
+Bot2.Choose(Memnite)
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Turn = 1
+Bot1.Hand = Island; Lightning Bolt; Mox Jet; Mox Ruby; Ornithopter
+Bot1.Library = Memnite
+Bot1.Exile.Memories Returning.Colors = Blue
+Bot1.Graveyard = Black Lotus; Black Lotus; Black Lotus; Black Lotus

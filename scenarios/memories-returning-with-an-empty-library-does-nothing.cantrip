@@ -1,0 +1,31 @@
+# Memories Returning with no cards in the library: there is nothing to reveal (CR 609.3), so no choice is asked and nothing is put into a hand. Bot1's whole deck
+# is seven cards, all in its opening hand, so the library is empty when the spell resolves; it goes to the graveyard and the game goes on.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Memories Returning
+Island
+Island
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Memories Returning.Cast
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Turn = 1
+Bot1.Hand = Island; Island; Island; Island
+Bot1.Library.Count = 0
+Bot1.Graveyard = Memories Returning; Black Lotus
