@@ -1,0 +1,58 @@
+# Each of Summon: Choco/Mog's four chapters gives the other creatures Bot1 controls as it resolves +1/+0 until end of turn
+# (CR 611.2c, 714.2b): Ornithopter is 1/2 on each of Bot1's turns and 0/2 on Bot2's, the Saga stays 3/3, and Bot2's
+# Phyrexian Walker is never pumped. Memnite, cast after chapter III, gets nothing from it, but chapter IV pumps it. After
+# chapter IV the Saga is sacrificed (CR 714.4).
+
+[Bot1 Deck]
+Plains
+Ornithopter
+Black Lotus
+Summon: Choco/Mog
+Memnite
+Plains x12
+
+[Bot2 Deck]
+Phyrexian Walker
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Summon: Choco/Mog.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Summon: Choco/Mog.Power = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Summon: Choco/Mog.Counters.Lore = 2
+? Bot2.Battlefield.Phyrexian Walker.Power = 0
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Summon: Choco/Mog = (absent)
+Bot1.Graveyard = Summon: Choco/Mog; Black Lotus
+Bot2.Battlefield.Phyrexian Walker.Power = 0
