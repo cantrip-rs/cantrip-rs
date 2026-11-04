@@ -437,6 +437,14 @@ pub static WIZARD: CardDef = CardDef {
     ..token!(Wizard)
 };
 
+/// "Create a 0/1 black Wizard creature token with 'Whenever you cast a noncreature spell, this token deals 1 damage to each
+/// opponent.'" as an ability's whole effect (CR 111.1, 701.7a): one, under its controller. The card file lists `tokens::WIZARD`
+/// in its `EXTRA`. Lindblum, Industrial Regency's Mage Siege, Mysidian Elder and Queen Brahne print it.
+pub fn create_a_wizard(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    create(g, item.controller, &WIZARD, 1)?;
+    Ok(())
+}
+
 /// "Whenever this token attacks, you gain 1 life."
 fn gain_a_life_on_attack(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.gain_life(item.controller, 1);
