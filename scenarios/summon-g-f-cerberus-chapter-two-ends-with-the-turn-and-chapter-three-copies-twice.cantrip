@@ -1,0 +1,70 @@
+# Summon: G.F. Cerberus is cast on turn 3 (Black Lotus and Mox Ruby); chapter I surveils 1 and Bot1 keeps the Mountain on top.
+# Chapter II on turn 5 sets up its delayed ability, which ends with the turn (CR 603.7b): on Bot2's turn 6 Bot1's Lightning Bolt
+# is not copied, Bot2 takes 3 once. Chapter III ("Triple") on turn 7 copies the next instant or sorcery twice (CR 707.10), each
+# copy with its own new target: Bot1's Lightning Bolt at Bot2 gets one copy aimed at Bot2's Memnite and one aimed at Bot2 again,
+# so Bot2 takes 3 + 3 and the Memnite dies. The Saga is sacrificed after chapter III (CR 714.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Summon: G.F. Cerberus
+Mountain
+Mountain
+Lightning Bolt
+Lightning Bolt
+Island
+Mountain
+Island x14
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Actions]
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Summon: G.F. Cerberus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Mountain | )
+? Bot1.Graveyard = Black Lotus
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 1
+[T6 Bot2.Main1]
+? Delayed.Count = 0
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+? Bot2.Battlefield.Memnite.Damage = 0
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Delayed.Count = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 11
+Bot2.Battlefield.Memnite = (absent)
+Bot1.Battlefield.Summon: G.F. Cerberus = (absent)
+Delayed.Count = 0
