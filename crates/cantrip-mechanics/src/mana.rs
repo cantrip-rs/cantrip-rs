@@ -49,6 +49,14 @@ pub fn enters_tapped(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Su
     Ok(())
 }
 
+/// "This creature enters tapped with `N` stun counters on it" (CR 614.1c-d, 122.1d): the counters are on it as it enters, and
+/// keep it tapped through `N` untaps. Baloth Prime (six) and Tonberry (one) print it.
+pub fn enters_tapped_with_stun_counters<const N: i16>(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
+    entering.tapped = true;
+    entering.counters[CounterKind::Stun as usize] += N;
+    Ok(())
+}
+
 /// "This creature enters tapped unless it's your turn" / "enters tapped if it's not your turn" (CR 614.1d): it only ever sets
 /// tapped, so a permanent an instruction puts onto the battlefield tapped stays tapped. It is its controller's turn when the
 /// active player is the one it enters under. Eddymurk Crab and Horned Loch-Whale print it.

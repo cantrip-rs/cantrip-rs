@@ -59,4 +59,5 @@ Bot1.Battlefield.Baloth Prime.Tapped = true
 Bot1.Battlefield.Beast Token#1.Tapped = true
 Bot1.Battlefield.Beast Token#2.Tapped = true
 Bot1.Battlefield.Beast Token#2.Power = 4
+Bot1.Battlefield.Beast Token#2.Toughness = 4
 Bot1.Hand = Plains; Forest

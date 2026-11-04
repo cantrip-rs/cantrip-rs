@@ -1,14 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, effects};
+use cantrip_mechanics::{effects, mana, targets};
 use cantrip_oracle as oracle;
-
-/// "This creature enters tapped with six stun counters on it" (CR 614.1c-d, 122.1d): the counters then keep it tapped
-/// through six untaps, unless sacrificing lands untaps it sooner.
-fn enters_stunned(_: &mut dyn Game, entering: &mut Entering) -> Result<(), Suspend> {
-    entering.tapped = true;
-    entering.counters[CounterKind::Stun as usize] += 6;
-    Ok(())
-}
 
 /// The tapped 4/4 green Beast creature token it makes.
 pub static BEAST: CardDef = CardDef {
@@ -39,7 +31,7 @@ fn wake(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 pub static CARD: CardDef = CardDef {
-    enters: Some(enters_stunned),
+    enters: Some(mana::enters_tapped_with_stun_counters::<6>),
     abilities: &[
         triggered(when(EventMask::ZONE_CHANGE, sacrificed_a_land), wake, "Whenever you sacrifice a land, create a tapped 4/4 green Beast creature token and untap this creature.")
             .on_sacrifice(),
