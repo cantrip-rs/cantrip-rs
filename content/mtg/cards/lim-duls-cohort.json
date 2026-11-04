@@ -1,0 +1,8 @@
+{
+  "name": "Lim-Dûl's Cohort",
+  "manaCost": "{1}{B}{B}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever this creature blocks or becomes blocked by a creature, that creature can't be regenerated this turn."
+}

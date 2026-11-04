@@ -1,0 +1,31 @@
+# A blocking Skeleton's regeneration shield cannot save it from combat damage.
+[Bot1 Deck]
+Black Lotus
+Lim-Dûl's Cohort
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Drudge Skeletons
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Lim-Dûl's Cohort.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Drudge Skeletons.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Lim-Dûl's Cohort > Bot2)
+Bot2.Block(Drudge Skeletons > Lim-Dûl's Cohort)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Drudge Skeletons.Activate
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard = Drudge Skeletons; Black Lotus
+Bot1.Battlefield.Lim-Dûl's Cohort.Damage = 1
