@@ -1,0 +1,22 @@
+# With no Forests the characteristic-defining ability sets toughness to zero and the creature dies (CR 604.3, 704.5f).
+[Bot1 Deck]
+Mox Emerald
+Gleemox
+People of the Woods
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.People of the Woods.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = People of the Woods
+Bot1.Battlefield.People of the Woods = (absent)

@@ -1,0 +1,33 @@
+# Dress Down removes the toughness-defining ability, so the printed star is zero and People of the Woods dies despite its Forest (CR 613.1f, 704.5f).
+[Bot1 Deck]
+Forest
+Mox Emerald
+People of the Woods
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Dress Down
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.People of the Woods.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Dress Down.Cast
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Graveyard = People of the Woods
+Bot1.Battlefield.People of the Woods = (absent)
