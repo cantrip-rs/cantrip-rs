@@ -1,0 +1,56 @@
+# Elvish Scout requires green mana, taps for its ability, and can target only an attacking creature its controller controls (CR 115.1, 602.1a).
+[Bot1 Deck]
+Black Lotus
+Elvish Scout
+Grizzly Bears
+Forest
+Mox Ruby
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Elvish Scout.Cast
+Bot1.Pass
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Forest.Activate
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears)
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Elvish Scout.Activate(Bot1.Battlefield.Grizzly Bears; Mana: short)
+[T3 Bot1.Main2]
+Bot1.Hand.Mox Emerald.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears)
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Elvish Scout.Activate(Bot2.Battlefield.Grizzly Bears)
+! Bot1.Battlefield.Elvish Scout.Activate(Bot1.Battlefield.Grizzly Bears)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Elvish Scout.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Elvish Scout.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Life = 18

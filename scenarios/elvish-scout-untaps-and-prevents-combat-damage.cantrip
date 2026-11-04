@@ -1,0 +1,64 @@
+# The Scout untaps its attacking Bear and prevents combat damage to and by it; a separate Shock still damages the opponent, and combat on a later turn is not protected (CR 510.2, 615.1).
+[Bot1 Deck]
+Elvish Scout
+Mox Emerald
+Black Lotus
+Grizzly Bears
+Forest
+Mox Ruby
+Shock
+Forest x20
+[Bot2 Deck]
+Grizzly Bears
+Mox Emerald
+Forest
+Forest x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elvish Scout.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Bot1.Battlefield.Grizzly Bears > Bot2)
+Bot2.Block(Bot2.Battlefield.Grizzly Bears > Bot1.Battlefield.Grizzly Bears)
+? Bot1.Battlefield.Grizzly Bears.Tapped = true
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Elvish Scout.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Battlefield.Grizzly Bears.Damage = 0
+? Bot2.Battlefield.Grizzly Bears.Damage = 0
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Bot1.Battlefield.Grizzly Bears > Bot2)
+Bot2.Block(Bot2.Battlefield.Grizzly Bears > Bot1.Battlefield.Grizzly Bears)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Grizzly Bears; Shock; Black Lotus
+Bot2.Graveyard = Grizzly Bears
