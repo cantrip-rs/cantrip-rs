@@ -1,0 +1,8 @@
+{
+  "name": "Zell Dincht",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Human Monk",
+  "power": 0,
+  "toughness": 3,
+  "oracleText": "You may play an additional land on each of your turns.\nZell Dincht gets +1/+0 for each land you control.\nAt the beginning of your end step, return a land you control to its owner's hand."
+}
