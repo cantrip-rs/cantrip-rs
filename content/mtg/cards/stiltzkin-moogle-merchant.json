@@ -1,0 +1,11 @@
+{
+  "name": "Stiltzkin, Moogle Merchant",
+  "manaCost": "{W}",
+  "type": "Legendary Creature — Moogle",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "Lifelink\n{2}, {T}: Target opponent gains control of another target permanent you control. If they do, you draw a card.",
+  "keywords": [
+    "Lifelink"
+  ]
+}

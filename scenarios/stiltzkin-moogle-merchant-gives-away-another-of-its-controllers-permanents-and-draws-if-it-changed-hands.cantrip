@@ -1,0 +1,66 @@
+# Stiltzkin, Moogle Merchant: on turn 3 Bot1 pays {2} with two Moxen (its pool empty after), refused itself ("another") and
+# Bot2's Ornithopter ("you control"), and gives its Memnite to Bot2, drawing a card (hand 1 to 2). On turn 5 it targets its
+# Black Lotus and sacrifices the Lotus in response: the permanent target is illegal, so nothing changes hands and Bot1 draws
+# nothing (CR 608.2b). On turn 7 it attacks for 1 with lifelink (CR 702.15b).
+
+[Bot1 Deck]
+Stiltzkin, Moogle Merchant
+Plains
+Memnite
+Black Lotus
+Mox Pearl
+Mox Jet
+Plains
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Stiltzkin, Moogle Merchant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Stiltzkin, Moogle Merchant.Activate
+! Bot1.Target(Stiltzkin, Moogle Merchant)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Memnite)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite = (absent)
+? Bot1.Hand.Count = 2
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 3
+Bot1.Battlefield.Stiltzkin, Moogle Merchant.Activate
+Bot1.Target(Black Lotus)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+? Bot2.Battlefield.Black Lotus = (absent)
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Stiltzkin, Moogle Merchant > Bot2)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 19
+Bot1.Graveyard = Black Lotus
