@@ -1,24 +1,13 @@
 use cantrip_api::*;
-use cantrip_mechanics::{effects, targets, tokens};
+use cantrip_mechanics::{effects, library, targets, tokens};
 use cantrip_oracle as oracle;
 
 /// +1: "Exile the top card of your library. You may cast that card. If you don't, Chandra deals 2 damage to each
 /// opponent." The card is offered only if it could be cast now (CR 608.2g): it is not a land and has a legal target
 /// for everything it needs. An empty library exiles nothing, and then nothing was cast.
 fn impulse(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let you = item.controller;
-    let mut cast = false;
-    if let Some(&top) = g.state().zone(Zone::library(you)).first() {
-        let exiled = g.exile(top);
-        if g.obj(exiled).zone.is(ZoneKind::Exile)
-            && g.could_cast_during_resolution(exiled)
-            && effects::ask_may(g, you, item.object, Purpose::Cast)?
-        {
-            cast = g.cast_during_resolution(exiled, None)?;
-        }
-    }
-    if !cast {
-        cantrip_mechanics::effects::damage_each_opponent(g, item, 2);
+    if !library::exile_top_may_cast(g, item.controller, item.controller, item.object)? {
+        effects::damage_each_opponent(g, item, 2);
     }
     Ok(())
 }

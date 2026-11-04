@@ -846,6 +846,20 @@ pub fn still_exiled(q: &dyn Query, cards: &[ObjectId]) -> Vec<ObjectId> {
     cards.iter().copied().filter(|&c| is_still_exiled(q, c)).collect()
 }
 
+/// "Exile the top card of `from`'s library. `caster` may cast it. If [they] don't, ..." (CR 608.2g, 601.2): the card is offered
+/// only if it really reached exile and could be cast now (it is not a land, and has a legal target for all it needs); it is
+/// cast as the effect resolves, paying its costs. Whether it was cast, so the caller can do "if you don't"; a cast given up
+/// (CR 733.1) is not a cast. An empty library exiles nothing, and nothing was cast. Chandra, Torch of Defiance (her own library)
+/// and Vaan, Street Thief (the damaged player's) print it.
+pub fn exile_top_may_cast(g: &mut dyn Game, from: PlayerId, caster: PlayerId, source: ObjectId) -> Result<bool, Suspend> {
+    let Some(&top) = g.state().zone(Zone::library(from)).first() else { return Ok(false) };
+    let exiled = g.exile(top);
+    if g.obj(exiled).zone.is(ZoneKind::Exile) && g.could_cast_during_resolution(exiled) && crate::effects::ask_may(g, caster, source, Purpose::Cast)? {
+        return g.cast_during_resolution(exiled, None);
+    }
+    Ok(false)
+}
+
 /// "Exile the top `count` cards of `from`'s library. `who` may play them" under `grant` (CR 406, 305.1, 601.3): the cards
 /// leave together, face up, and each that really reached exile (a replacement may send it elsewhere) can be played
 /// under the grant, a land among them under the ordinary land-play rules. The cards still in exile. Laelia, the Blade
