@@ -1,0 +1,6 @@
+{
+  "name": "Travel the Overworld",
+  "manaCost": "{5}{U}{U}",
+  "type": "Sorcery",
+  "oracleText": "Affinity for Towns (This spell costs {1} less to cast for each Town you control.)\nDraw four cards."
+}

@@ -1,0 +1,31 @@
+# Travel the Overworld ({5}{U}{U}, Affinity for Towns): with no Town it costs all 7, so Black Lotus (UUU), Mox Sapphire and Mox Jet (5 mana) are short;
+# once Bot1 controls one Town (Adventurer's Inn) it costs {4}{U}{U} = 6, paid exactly by those three plus the Inn's {C}, and it draws exactly four cards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Adventurer's Inn
+Travel the Overworld
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Travel the Overworld.Cast(Mana: short)
+Bot1.Hand.Adventurer's Inn.Play
+Bot1.Battlefield.Adventurer's Inn.Activate
+Bot1.Hand.Travel the Overworld.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Hand.Count = 6
+
+[Expect]
