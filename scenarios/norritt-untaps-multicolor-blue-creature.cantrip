@@ -1,0 +1,45 @@
+# Norritt can untap a creature that is blue as well as green (CR 105.2b, 701.26b).
+[Bot1 Deck]
+Norritt
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Aven Envoy
+Island x20
+[Bot2 Deck]
+Island
+Mox Emerald
+Gaea's Skyfolk
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Norritt.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aven Envoy.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Gaea's Skyfolk.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Aven Envoy > Bot2)
+! Bot1.Battlefield.Norritt.Activate(Bot1.Battlefield.Norritt; Ability: Untap target blue)
+Bot1.Battlefield.Norritt.Activate(Bot1.Battlefield.Aven Envoy; Ability: Untap target blue)
+? Bot1.Battlefield.Norritt.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Aven Envoy.Tapped = false
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Gaea's Skyfolk > Bot1)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Norritt.Activate(Bot2.Battlefield.Gaea's Skyfolk; Ability: Untap target blue)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Gaea's Skyfolk.Tapped = false

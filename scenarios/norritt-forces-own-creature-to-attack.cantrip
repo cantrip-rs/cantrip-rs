@@ -1,0 +1,28 @@
+# Norritt can force its controller's creature to attack on that player's turn; after it attacks it survives (CR 508.1d).
+[Bot1 Deck]
+Norritt
+Black Lotus
+Mox Pearl
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Norritt.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Norritt.Activate(Bot1.Battlefield.Ornithopter; Ability: Choose target non-Wall)
+? Bot1.Battlefield.Norritt.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack()
+Bot1.Attack(Ornithopter)
+[T3 Bot1.End]
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
