@@ -63,6 +63,7 @@ Bot1.Target(Phyrexian Walker)
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Battlefield.Phyrexian Walker.Power = 1
+? Bot1.Battlefield.Phyrexian Walker.Toughness = 3
 [T9 Bot1.Main2]
 
 [Expect]

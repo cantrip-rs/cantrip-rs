@@ -1,7 +1,8 @@
-# Summon: Knights of Round's chapters I to IV each create exactly three 2/2 white Knight tokens: three on entering, twelve
-# by chapter IV. Chapter V gives the other creatures Bot1 controls +2/+2 until end of turn and then an indestructible
-# counter each (CR 608.2c, 122.1b): the Knights and Ornithopter, not Bot2's Memnite. The Saga is indestructible but still
-# sacrificed after chapter V (CR 714.4, 701.21a). The counters outlast the turn's +2/+2.
+# Summon: Knights of Round's chapters I to IV each create exactly three 2/2 white Knight tokens: Bot1 has 7 permanents
+# after chapter I, then 10, 13 and 16 after chapters II, III and IV, twelve of them Knights. Chapter V gives the other
+# creatures Bot1 controls +2/+2 until end of turn and then an indestructible counter each (CR 608.2c, 122.1b): the Knights
+# and Ornithopter, not Bot2's Memnite. The Saga is indestructible but still sacrificed after chapter V (CR 714.4,
+# 701.21a). The counters outlast the turn's +2/+2.
 
 [Bot1 Deck]
 Plains
@@ -32,15 +33,27 @@ Bot2.Pass
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Battlefield.Count = 7
+? Stack.Count = 0
 ? Bot1.Battlefield.Knight Token#1.Power = 2
 ? Bot1.Battlefield.Knight Token#1.Colors = White
 ? Bot1.Battlefield.Summon: Knights of Round.Keywords = Indestructible
 [T2 Bot2.Main1]
 Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 10
+? Stack.Count = 0
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 13
+? Stack.Count = 0
 [T7 Bot1.Main1]
 Bot1.Pass
 Bot2.Pass
 ? Bot1.Battlefield.Count = 16
+? Stack.Count = 0
 [T9 Bot1.Main1]
 Bot1.Pass
 Bot2.Pass

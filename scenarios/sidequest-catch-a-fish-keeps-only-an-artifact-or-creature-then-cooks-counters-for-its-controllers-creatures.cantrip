@@ -1,6 +1,7 @@
 # Sidequest: Catch a Fish: at Bot1's turn 3 upkeep the top card is a Plains, so nothing is asked and it is drawn. At turn 5
 # Bot1 is asked of an Ornithopter (an artifact creature) and declines: it stays on top, is drawn, and the enchantment does
-# not transform (the 2025-06-06 ruling). At turn 7 Bot1 reveals Memnite and puts it into its hand: a Food token, and the
+# not transform (the 2025-06-06 ruling). At turn 7 Bot1 reveals Grizzly Bears (a creature that is no
+# artifact) and puts it into its hand: a Food token, and the
 # enchantment transforms (CR 701.27a) into Cooking Campsite. Its "{3}, {T}, Sacrifice an artifact" is refused in the
 # beginning of combat step (sorcery speed, CR 602.5d) and in the second main phase taken off three Moxen, the pool empty
 # after, sacrificing the Food: a +1/+1 counter on each creature Bot1 controls, Savannah Lions and Ornithopter, and none on
@@ -16,7 +17,7 @@ Mox Jet
 Mox Ruby
 Plains
 Ornithopter
-Memnite
+Grizzly Bears
 Plains x10
 
 [Bot2 Deck]
@@ -57,7 +58,7 @@ Bot1.Pass
 Bot2.Pass
 Bot1.Accept
 [T7 Bot1.Main1]
-? Bot1.Hand = Memnite; Plains; Plains
+? Bot1.Hand = Grizzly Bears; Plains; Plains
 ? Bot1.Battlefield.Cooking Campsite.Types = Land
 ? Bot1.Battlefield.Food Token.Types = Artifact
 [T7 Bot1.BeginCombat]
