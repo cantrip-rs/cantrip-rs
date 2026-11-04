@@ -832,6 +832,14 @@ pub fn surveil(g: &mut dyn Game, item: &StackItem, n: usize) -> Result<(), Suspe
     crate::surveil(g, item.controller, item.object, n)
 }
 
+/// "Surveil N, then draw a card." (CR 701.25a, 121.1): the surveil is finished, the chosen cards in the graveyard, before the
+/// draw. Dreams of Laguna (1) and Prismari Charm (2) print it.
+pub fn surveil_then_draw<const N: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    surveil(g, item, N)?;
+    g.draw(item.controller, 1);
+    Ok(())
+}
+
 /// "Return target <permanent> to its owner's hand. Surveil N." as one spell's whole effect, for its first target.
 /// Banishing Betrayal (nonland permanent, surveil 1) and Ephara's Dispersal (creature, surveil 2) print it. A spell whose
 /// only target has become illegal does nothing at all (CR 608.2b), so there is no surveil then; otherwise the surveil
