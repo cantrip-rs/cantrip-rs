@@ -1,0 +1,57 @@
+# The Aura counts its controller's opponent's red permanents, including multicolored ones, and not its controller's.
+[Bot1 Deck]
+Red Scarab
+Mox Pearl
+Ornithopter
+Mox Ruby
+Blazing Rootwalla
+Plains x2
+Plains x20
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Aziza, Mage Tower Captain
+Ornithopter
+Eternal Warrior
+Mountain
+Plains x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Blazing Rootwalla.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Red Scarab.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Red Scarab.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Eternal Warrior.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Aziza, Mage Tower Captain.Cast
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Red Scarab.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4

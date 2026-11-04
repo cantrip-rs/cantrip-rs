@@ -1,0 +1,57 @@
+# Red and multicolored red creatures cannot block the enchanted creature; they can block another attacker, and a colorless creature can block the enchanted one.
+[Bot1 Deck]
+Red Scarab
+Mox Pearl
+Isamaru, Hound of Konda
+Black Lotus
+Grizzly Bears
+Plains x2
+Plains x20
+[Bot2 Deck]
+Mox Pearl
+Mox Ruby
+Aziza, Mage Tower Captain
+Blazing Rootwalla
+Ornithopter
+Mountain
+Plains
+Plains x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Aziza, Mage Tower Captain.Cast
+Bot2.Pass
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Blazing Rootwalla.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Red Scarab.Cast(Bot1.Battlefield.Isamaru, Hound of Konda)
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Isamaru, Hound of Konda; Grizzly Bears)
+! Bot2.Block(Blazing Rootwalla > Isamaru, Hound of Konda)
+! Bot2.Block(Aziza, Mage Tower Captain > Isamaru, Hound of Konda)
+Bot2.Block(Aziza, Mage Tower Captain > Grizzly Bears; Ornithopter > Isamaru, Hound of Konda)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard = Aziza, Mage Tower Captain; Ornithopter
