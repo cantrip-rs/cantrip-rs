@@ -1,0 +1,22 @@
+# Fyndhorn Elves cannot tap while summoning sick; later it taps for exactly one green mana and cannot tap again (CR 302.6).
+[Bot1 Deck]
+Forest
+Fyndhorn Elves
+Forest x20
+[Bot2 Deck]
+Island x22
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Fyndhorn Elves.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Fyndhorn Elves.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Fyndhorn Elves.Activate
+? Bot1.Mana = {G}
+! Bot1.Battlefield.Fyndhorn Elves.Activate
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Fyndhorn Elves.Tapped = true
