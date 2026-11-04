@@ -1,0 +1,46 @@
+# Gaea's Touch puts a basic Forest from its controller's hand onto the battlefield without using a land play; a nonbasic Forest is ineligible and a second activation that turn is refused (CR 602.5d, 305.2a).
+[Bot1 Deck]
+Gaea's Touch
+Mox Emerald
+Gleemox
+Forest
+Forest
+Taiga
+Plains
+Forest x20
+[Bot2 Deck]
+Snow-Covered Forest x25
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Gaea's Touch.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gaea's Touch.Activate(Ability: {0})
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Taiga)
+! Bot1.Choose(Plains)
+! Bot1.Choose(Snow-Covered Forest)
+! Bot1.Choose(Forest#1; Forest#2)
+Bot1.Choose(Forest)
+? Bot1.LandsPlayed = 0
+! Bot1.Battlefield.Gaea's Touch.Activate(Ability: {0})
+Bot1.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gaea's Touch.Activate(Ability: {0})
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Forest)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Forest#1.Tapped = false
+Bot1.Battlefield.Forest#2.Tapped = false
+Bot1.Battlefield.Forest#3.Tapped = false
+Bot1.Hand.Taiga.Colors =
+Bot2.Battlefield.Count = 0
+Bot2.Hand.Count = 7

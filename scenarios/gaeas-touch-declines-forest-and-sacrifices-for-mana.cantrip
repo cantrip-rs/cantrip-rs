@@ -1,0 +1,30 @@
+# Declining the optional Forest still uses the activation; the sorcery restriction forbids combat, while sacrificing Gaea's Touch makes two green mana immediately (CR 602.5d, 605.3b).
+[Bot1 Deck]
+Gaea's Touch
+Mox Emerald
+Gleemox
+Forest x22
+[Bot2 Deck]
+Forest x25
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Gaea's Touch.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gaea's Touch.Activate(Ability: {0})
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+? Bot1.Battlefield.Count = 3
+! Bot1.Battlefield.Gaea's Touch.Activate(Ability: {0})
+[T3 Bot1.BeginCombat]
+! Bot1.Battlefield.Gaea's Touch.Activate(Ability: {0})
+Bot1.Battlefield.Gaea's Touch.Activate(Ability: Sacrifice)
+? Bot1.Mana = {G}{G}
+[Expect]
+Bot1.Graveyard = Gaea's Touch
+Bot1.Battlefield.Count = 2
