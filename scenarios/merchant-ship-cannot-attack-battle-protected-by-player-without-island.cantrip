@@ -1,0 +1,43 @@
+# A battle's protector is the defending player: without an Island Bot2's protected Siege cannot be attacked by Merchant Ship; after Bot2 plays one it can (CR 508.5).
+[Bot1 Deck]
+Island
+Mox Pearl
+Mox Sapphire
+Merchant Ship
+Invasion of Gobakhan
+Memnite
+Island x20
+
+[Bot2 Deck]
+Plains
+Island
+Plains x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Merchant Ship.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Invasion of Gobakhan.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+! Bot1.Attack(Merchant Ship > Bot1.Battlefield.Invasion of Gobakhan)
+Bot1.Attack(Memnite > Bot1.Battlefield.Invasion of Gobakhan)
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Merchant Ship > Bot1.Battlefield.Invasion of Gobakhan)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Life = 22

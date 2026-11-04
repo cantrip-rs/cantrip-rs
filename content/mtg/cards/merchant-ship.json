@@ -1,0 +1,8 @@
+{
+  "name": "Merchant Ship",
+  "manaCost": "{U}",
+  "type": "Creature — Human",
+  "power": 0,
+  "toughness": 2,
+  "oracleText": "This creature can't attack unless defending player controls an Island.\nWhenever this creature attacks and isn't blocked, you gain 2 life.\nWhen you control no Islands, sacrifice this creature."
+}

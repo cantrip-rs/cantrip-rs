@@ -1,0 +1,39 @@
+# A blocked Ship gains no life; unblocked it gains two. Losing its controller's last Island makes it sacrificed despite the opponent's Island (CR 603.2, 603.8).
+[Bot1 Deck]
+Island
+Merchant Ship
+Plains x20
+[Bot2 Deck]
+Island
+Ornithopter
+Strip Mine
+Plains x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Merchant Ship.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Merchant Ship)
+Bot2.Block(Ornithopter > Merchant Ship)
+[T3 Bot1.Main2]
+? Bot1.Life = 20
+[T4 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Merchant Ship)
+[T5 Bot1.Main2]
+? Bot1.Life = 22
+[T6 Bot2.Main1]
+Bot2.Battlefield.Strip Mine.Activate(Bot1.Battlefield.Island; Ability: Destroy)
+Bot2.Pass
+Bot1.Pass
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Graveyard.Merchant Ship.Power = 0
+Bot1.Graveyard.Island.Colors =
+Bot2.Battlefield.Island.Types = Land
+Bot1.Life = 22

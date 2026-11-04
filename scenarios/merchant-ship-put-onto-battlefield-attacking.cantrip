@@ -1,0 +1,28 @@
+# Merchant Ship put onto the battlefield attacking by Kinscaer Sentry gains life if unblocked, even though it was not declared as an attacker (CR 508.4, 509.1h).
+[Bot1 Deck]
+Island
+Mox Pearl
+Mox Sapphire
+Kinscaer Sentry
+Merchant Ship
+Plains x20
+[Bot2 Deck]
+Plains x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kinscaer Sentry.Cast
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Kinscaer Sentry)
+Bot1.Choose(Merchant Ship)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Merchant Ship.Tapped = true
+Bot1.Life = 24
+Bot2.Life = 18
