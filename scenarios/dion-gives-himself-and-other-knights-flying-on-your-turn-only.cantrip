@@ -1,0 +1,48 @@
+# Dion, Bahamut's Dominant: Dragonfire Dive gives Dion and the other Knights Bot1 controls flying during Bot1's turn only. The Knight
+# token its enters ability makes has flying on turn 1 and Dion himself does, while Savannah Lions (a Human Soldier, no Knight) does not.
+# On Bot2's turn, none of them has flying.
+
+[Bot1 Deck]
+Plains
+Savannah Lions
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Dion, Bahamut's Dominant
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Dion, Bahamut's Dominant.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Dion, Bahamut's Dominant.Keywords = Flying
+? Bot1.Battlefield.Knight Token.Keywords = Flying
+? Bot1.Battlefield.Knight Token.Power = 2
+? Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Dion, Bahamut's Dominant.Keywords = (absent)
+? Bot1.Battlefield.Knight Token.Keywords = (absent)
+
+[Expect]
+Turn = 2
+Bot1.Battlefield.Count = 8

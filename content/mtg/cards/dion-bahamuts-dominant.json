@@ -1,0 +1,21 @@
+{
+  "name": "Dion, Bahamut's Dominant",
+  "manaCost": "{3}{W}",
+  "type": "Legendary Creature — Human Noble Knight",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Dragonfire Dive — During your turn, Dion and other Knights you control have flying.\nWhen Dion enters, create a 2/2 white Knight creature token.\n{4}{W}{W}, {T}: Exile Dion, then return it to the battlefield transformed under its owner's control. Activate only as a sorcery.",
+  "backFace": {
+    "name": "Bahamut, Warden of Light",
+    "colorIndicator": [
+      "White"
+    ],
+    "type": "Legendary Enchantment Creature — Saga Dragon",
+    "power": 5,
+    "toughness": 5,
+    "oracleText": "(As this Saga enters and after your draw step, add a lore counter.)\nI, II — Wings of Light — Put a +1/+1 counter on each other creature you control. Those creatures gain flying until end of turn.\nIII — Gigaflare — Destroy target permanent. Exile Bahamut, then return it to the battlefield (front face up).\nFlying",
+    "keywords": [
+      "Flying"
+    ]
+  }
+}

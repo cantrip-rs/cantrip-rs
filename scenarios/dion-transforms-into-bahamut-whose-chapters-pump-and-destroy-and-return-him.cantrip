@@ -1,0 +1,88 @@
+# Dion, Bahamut's Dominant: {4}{W}{W}, {T} at sorcery speed exiles Dion and returns him as Bahamut, Warden of Light, a 5/5 Saga with
+# flying. Chapter I (Wings of Light) puts a +1/+1 counter on each other creature Bot1 controls, the Knight token and Savannah Lions,
+# which fly until end of turn; chapter II does it again on turn 5. Chapter III (Gigaflare) on turn 7 destroys Bot2's Savannah Lions
+# and then exiles Bahamut and returns him front face up: Dion enters anew, making another Knight token.
+
+[Bot1 Deck]
+Plains
+Savannah Lions
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Dion, Bahamut's Dominant
+Plains x10
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Plains x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Dion, Bahamut's Dominant.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Dion, Bahamut's Dominant.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Bahamut, Warden of Light.Counters.Lore = 1
+? Bot1.Battlefield.Bahamut, Warden of Light.Keywords = Flying
+? Bot1.Battlefield.Bahamut, Warden of Light.Power = 5
+? Bot1.Battlefield.Knight Token.Power = 3
+? Bot1.Battlefield.Knight Token.Keywords = Flying
+? Bot1.Battlefield.Savannah Lions.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Savannah Lions.Keywords = Flying
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bahamut, Warden of Light.Counters.Lore = 2
+? Bot1.Battlefield.Knight Token.Power = 4
+? Bot1.Battlefield.Knight Token.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Savannah Lions.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Bahamut, Warden of Light.Counters.PlusOnePlusOne = (absent)
+[T7 Bot1.Main1]
+Bot1.Target(Bot2.Savannah Lions)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 7
+Bot1.Battlefield.Bahamut, Warden of Light = (absent)
+Bot1.Battlefield.Dion, Bahamut's Dominant.Power = 3
+Bot2.Battlefield = Plains
+Bot2.Battlefield.Savannah Lions = (absent)
+Bot1.Battlefield = Dion, Bahamut's Dominant; Knight Token; Knight Token; Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Plains; Plains; Savannah Lions

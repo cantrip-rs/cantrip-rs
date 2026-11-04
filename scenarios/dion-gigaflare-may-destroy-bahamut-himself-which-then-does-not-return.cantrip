@@ -1,0 +1,88 @@
+# Dion, Bahamut's Dominant: Bahamut's chapter III, Gigaflare, may target any permanent, Bahamut himself among them. Destroyed by it,
+# he is no longer on the battlefield to be exiled and returned (CR 400.7), so no Dion comes back and no second Knight token is made.
+
+
+[Bot1 Deck]
+Plains
+Savannah Lions
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Dion, Bahamut's Dominant
+Plains x10
+
+[Bot2 Deck]
+Plains
+Savannah Lions
+Mountain
+Lightning Bolt
+Plains x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Dion, Bahamut's Dominant.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Dion, Bahamut's Dominant.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Bahamut, Warden of Light.Counters.Lore = 1
+? Bot1.Battlefield.Bahamut, Warden of Light.Keywords = Flying
+? Bot1.Battlefield.Bahamut, Warden of Light.Power = 5
+? Bot1.Battlefield.Knight Token.Power = 3
+? Bot1.Battlefield.Knight Token.Keywords = Flying
+? Bot1.Battlefield.Savannah Lions.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Savannah Lions.Keywords = Flying
+[T4 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Bahamut, Warden of Light.Counters.Lore = 2
+? Bot1.Battlefield.Knight Token.Power = 4
+? Bot1.Battlefield.Knight Token.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Savannah Lions.Counters.PlusOnePlusOne = 2
+? Bot1.Battlefield.Bahamut, Warden of Light.Counters.PlusOnePlusOne = (absent)
+[T7 Bot1.Main1]
+Bot1.Target(Bahamut, Warden of Light)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 7
+Bot1.Battlefield.Bahamut, Warden of Light = (absent)
+Bot1.Battlefield.Dion, Bahamut's Dominant = (absent)
+Bot1.Graveyard = Dion, Bahamut's Dominant
+Bot1.Battlefield.Count = 8
