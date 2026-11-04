@@ -1,0 +1,6 @@
+{
+  "name": "Flare",
+  "manaCost": "{2}{R}",
+  "type": "Instant",
+  "oracleText": "Flare deals 1 damage to any target.\nDraw a card at the beginning of the next turn's upkeep."
+}
