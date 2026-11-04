@@ -1,0 +1,56 @@
+# Barret Wallace (CR 508.5, 301.5a): attacking, it deals damage to defending player equal to the number of equipped creatures its controller
+# controls - Barret and Bot1's Ornithopter, each with a Skullclamp: 2, and the Ornithopter Bot2 equips on its own turn is not counted.
+# Bot2 takes 2 from the trigger and 5 from Barret's unblocked combat damage (a Skullclamp makes it 5/3): 13.
+
+[Bot1 Deck]
+Mountain
+Sol Ring
+Mox Ruby
+Mox Sapphire
+Barret Wallace
+Ornithopter
+Skullclamp
+Skullclamp
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Ornithopter
+Skullclamp
+Island x16
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Barret Wallace.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Skullclamp.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Skullclamp.Activate(Bot2.Battlefield.Ornithopter; Ability: Equip)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Skullclamp.Cast
+Bot1.Hand.Skullclamp.Cast
+Bot1.Battlefield.Skullclamp#1.Activate(Bot1.Battlefield.Barret Wallace; Ability: Equip)
+Bot1.Battlefield.Skullclamp#2.Activate(Bot1.Battlefield.Ornithopter; Ability: Equip)
+Bot1.Attack(Barret Wallace)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 13
