@@ -1,0 +1,63 @@
+# Clive, Ifrit's Dominant through Ifrit's three chapters (CR 714): I has Bot1 choose no creature to fight (Bot2 has none); II, with
+# two lore counters, adds {R}{R}{R}{R} and leaves Ifrit where he is ("three or more" is not met); III, with three, adds
+# {R}{R}{R}{R} and exiles Ifrit and returns him front face up (CR 400.7: a new object, Clive again, 5/5 with no lore counter), whose enters trigger asks
+# again and is declined.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Clive, Ifrit's Dominant
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Clive, Ifrit's Dominant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Clive, Ifrit's Dominant.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ifrit, Warden of Inferno.Counters.Lore = 2
+? Bot1.Mana = {R}{R}{R}{R}
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+
+[Expect]
+Bot1.Mana = {R}{R}{R}{R}
+Bot1.Battlefield.Clive, Ifrit's Dominant.Power = 5
+Bot1.Battlefield.Clive, Ifrit's Dominant.Counters.Lore = (absent)
+Bot1.Battlefield.Count = 7

@@ -1,0 +1,43 @@
+# Clive, Ifrit's Dominant (CR 701.9, 700.5): accepting the enters trigger discards Bot1's own hand - the two Islands, not Bot2's seven
+# cards - and then draws cards equal to devotion to red: Clive's {R}{R} count 2, the Moxen's {0} and the sacrificed Black Lotus's
+# {0} none. Bot1 draws the Ornithopter and the Forest and no more, so the draw came after the discard (the Islands are not drawn
+# back) and the count is exactly two.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Clive, Ifrit's Dominant
+Island
+Island
+Ornithopter
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Clive, Ifrit's Dominant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand.Count = 2
+
+Bot1.Hand = Forest; Ornithopter
+Bot1.Graveyard.Count = 3
+Bot1.Graveyard = Island; Island; Black Lotus
+Bot2.Hand.Count = 7

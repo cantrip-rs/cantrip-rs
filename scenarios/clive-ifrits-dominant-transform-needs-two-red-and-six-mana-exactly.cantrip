@@ -1,0 +1,58 @@
+# Clive, Ifrit's Dominant: "{4}{R}{R}, {T}". Turn 1 pays Clive's own {4}{R}{R} with the Lotus's RRR and three other Moxen (the {4} is
+# generic, any color), then declines the discard. Turn 3 has six sources but one red (a Mountain), so the {R}{R} is refused though the
+# six mana are there. Turn 5 plays a second Mountain: with exactly six
+# (both Mountains and the four Moxen, the Island left untapped) it is paid, nothing floating - so {4}{R}{R} is exactly six.
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Mox Pearl
+Clive, Ifrit's Dominant
+Island
+Mountain
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Clive, Ifrit's Dominant.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Battlefield.Clive, Ifrit's Dominant.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Clive, Ifrit's Dominant.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Mana =
+Bot1.Battlefield.Island.Tapped = false
+Bot1.Battlefield.Ifrit, Warden of Inferno.Power = 9
