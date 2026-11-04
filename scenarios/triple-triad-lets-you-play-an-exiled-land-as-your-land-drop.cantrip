@@ -1,0 +1,44 @@
+# Triple Triad: Bot1's upkeep exiles its Mountain (mana value 0) and Bot2's Memnite (mana value 0, not lesser than 0, so not
+# playable). "Play" lets Bot1 play the Mountain as its land play for the turn (CR 305.1); the Memnite stays in exile.
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Triple Triad
+Island
+Island
+Island
+Mountain
+Island x11
+
+[Bot2 Deck]
+Island x9
+Memnite
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triple Triad.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+! Bot1.Exile.Memnite.Cast
+[T5 Bot1.Main1]
+Bot1.Exile.Mountain.Play
+! Bot1.Hand.Island.Play
+
+[Expect]
+Bot1.Battlefield.Mountain.Tapped = false
+Exile.Count = 1

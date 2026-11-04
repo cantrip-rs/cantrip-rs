@@ -1,0 +1,44 @@
+# Triple Triad: Bot1's upkeep exiles its Lightning Bolt (mana value 1) and Bot2's Burst Lightning (mana value 1). "Lesser mana
+# value than it" is strictly less: the Burst Lightning, equal, may not be played. Bot1 plays nothing on turn 5, and the permission
+# lasts "until end of turn": on Bot2's turn 6 the Bolt can no longer be cast from exile.
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Triple Triad
+Island
+Island
+Island
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Island x9
+Burst Lightning
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triple Triad.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+! Bot1.Exile.Burst Lightning.Cast(Bot2)
+[T6 Bot2.Main1]
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Bot2.Life = 20
+Exile.Count = 2

@@ -1,0 +1,52 @@
+# Triple Triad ({3}{R}{R}{R}, Black Lotus and three Moxen) is cast on turn 3. At the beginning of Bot1's upkeep on turn 5 each player
+# exiles the top card of their library: Bot1's Lightning Bolt (mana value 1) and Bot2's Memnite (mana value 0). Until end of turn
+# Bot1 may play the Bolt, which it owns, and the Memnite, which has lesser mana value, both without paying their mana costs
+# (CR 118.9): the Bolt (cast with no mana) takes 3 from Bot2, and the Memnite, owned by Bot2, enters under Bot1's control.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Triple Triad
+Island
+Island
+Island
+Lightning Bolt
+Island x11
+
+[Bot2 Deck]
+Island x9
+Memnite
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triple Triad.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 2
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 17
+[T5 Bot1.Main1]
+Bot1.Exile.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot2.Battlefield.Memnite = (absent)
+Bot1.Mana =
