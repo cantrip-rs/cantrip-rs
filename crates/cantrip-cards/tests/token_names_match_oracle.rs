@@ -25,7 +25,8 @@ const PREDEFINED_NAMED: [(&str, &str); 9] = [
 /// The words a type line's card types and supertypes are, which may come between a token's subtypes and "token".
 const TYPE_WORDS: [&str; 9] = ["artifact", "creature", "enchantment", "land", "planeswalker", "battle", "legendary", "snow", "kindred"];
 
-/// The keyword actions whose rules make a token (CR 701), as the card's text says them, and the token as the rule says it:
+/// The keywords whose rules make a token, as the card's text says them, and the token as the rule says it, for a card printed
+/// without reminder text still makes it: the keyword ability job select (CR 702.182a) and the keyword actions
 /// empower Jace (CR 701.71a), amass (CR 701.47a, Orcs and Goblins) and investigate (CR 701.16a).
 const KEYWORD_TOKENS: [(&str, &str); 5] = [
     ("job select", "a 1/1 colorless Hero creature token"),
