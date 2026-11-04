@@ -1,0 +1,54 @@
+# The two-red ability makes the controlled creature unblockable, then destroys it and the Sappers at end of combat; its target question refuses an opposing creature and a noncreature (CR 115.1, 509.1b, 701.8).
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Goblin Sappers
+Ornithopter
+Mountain
+Mountain
+Mountain
+Mountain x15
+
+[Bot2 Deck]
+Ornithopter
+Mountain x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Sappers.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Goblin Sappers.Activate(Ability: {R}{R},; Bot1.Battlefield.Ornithopter; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Goblin Sappers.Activate(Ability: {R}{R},; Bot2.Battlefield.Ornithopter)
+! Bot1.Battlefield.Goblin Sappers.Activate(Ability: {R}{R},; Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Goblin Sappers.Activate(Ability: {R}{R},; Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter > Bot2)
+! Bot2.Block(Ornithopter > Ornithopter)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard = Goblin Sappers; Ornithopter
+Bot2.Battlefield = Ornithopter
+Bot2.Life = 20

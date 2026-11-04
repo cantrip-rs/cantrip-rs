@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Sappers",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Goblin",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{R}{R}, {T}: Target creature you control can't be blocked this turn. Destroy it and this creature at end of combat.\n{R}{R}{R}{R}, {T}: Target creature you control can't be blocked this turn. Destroy it at end of combat."
+}
