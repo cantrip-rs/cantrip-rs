@@ -1,0 +1,32 @@
+# With X=2 and only one card in hand at resolution, Recall discards and returns only one card (CR 101.3, 701.9a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Recall
+Ornithopter x2
+Forest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Recall.Cast(X: 2)
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Hand.Forest.Colors =
+Bot2.Pass
+Bot1.Choose(Forest)
+! Bot1.Choose(Forest; Black Lotus)
+Bot1.Choose(Forest)
+[Expect]
+Bot1.Hand = Forest
+Bot1.Graveyard = Black Lotus
+Exile = Recall

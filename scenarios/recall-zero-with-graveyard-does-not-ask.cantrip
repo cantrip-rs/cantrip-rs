@@ -1,0 +1,19 @@
+# With X zero, Recall makes no return choice even when the graveyard contains a card (CR 107.3, 608.2d).
+[Bot1 Deck]
+Recall
+Black Lotus
+Forest
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Recall.Cast(X: 0)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose
+[Expect]
+Bot1.Graveyard.Black Lotus.Colors =
+Exile = Recall
