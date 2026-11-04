@@ -1,0 +1,45 @@
+# Pyroclasm deals two damage to each Ornithopter simultaneously; Justice triggers once and then deals four to the spell's controller (CR 603.2c, 603.3).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Justice
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Pyroclasm
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Justice.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Pyroclasm.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+? Bot2.Life = 20
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 16
+Bot1.Graveyard.Ornithopter.Power = 0
+Bot2.Graveyard.Ornithopter.Power = 0

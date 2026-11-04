@@ -1,0 +1,6 @@
+{
+  "name": "Justice",
+  "manaCost": "{2}{W}{W}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, sacrifice this enchantment unless you pay {W}{W}.\nWhenever a red creature or spell deals damage, this enchantment deals that much damage to that creature's or spell's controller."
+}

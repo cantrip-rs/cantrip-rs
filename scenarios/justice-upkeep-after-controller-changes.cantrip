@@ -1,0 +1,65 @@
+# Justice's upkeep trigger belongs to its former controller; after Aladdin takes it in response, that player cannot sacrifice it (CR 603.3a, 701.21a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Justice
+Plains
+Island x20
+[Bot2 Deck]
+Aladdin
+Mycosynth Lattice
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Mountain
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Justice.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Aladdin.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Mycosynth Lattice.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+Bot1.Pass
+[T5 Bot1.Upkeep]
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Aladdin.Activate(Bot1.Battlefield.Justice)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Justice.Types = Enchantment; Artifact
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Justice.Types = Enchantment; Artifact
+Bot1.Graveyard = Black Lotus

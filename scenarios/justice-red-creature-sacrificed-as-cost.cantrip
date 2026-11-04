@@ -1,0 +1,45 @@
+# Firebrand sacrifices itself to deal damage; Justice uses the red creature's last-known characteristics and controller to retaliate (CR 113.7a, 608.2h).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Plains
+Justice
+Island x20
+[Bot2 Deck]
+Mountain
+Fanatical Firebrand
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Justice.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Fanatical Firebrand.Cast
+Bot2.Pass
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Fanatical Firebrand.Activate(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 19
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19

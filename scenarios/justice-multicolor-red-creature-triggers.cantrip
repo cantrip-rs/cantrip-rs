@@ -1,0 +1,34 @@
+# A black-and-red creature is red: Spike Jester's combat damage makes Justice damage its controller for the same amount (CR 105.2b, 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Justice
+Island x20
+[Bot2 Deck]
+Mountain
+Mox Jet
+Spike Jester
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Justice.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Spike Jester.Cast
+Bot2.Pass
+Bot2.Attack(Spike Jester > Bot1)
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Life = 17
+Bot2.Life = 17
