@@ -1,0 +1,62 @@
+# The Saddlebags cost {3} and tap to untap a creature, including an opponent's; a land is not a legal target (CR 115.1).
+[Bot1 Deck]
+Forest
+Sol Ring
+Black Lotus
+Llanowar Elves
+Jandor's Saddlebags
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Jandor's Saddlebags.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Battlefield.Jandor's Saddlebags.Activate(Bot1.Battlefield.Llanowar Elves; Mana: short)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Llanowar Elves > Bot2)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Battlefield.Jandor's Saddlebags.Activate(Bot1.Battlefield.Forest)
+Bot1.Battlefield.Jandor's Saddlebags.Activate(Bot1.Battlefield.Llanowar Elves)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Jandor's Saddlebags.Tapped = true
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Llanowar Elves.Tapped = false
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Jandor's Saddlebags.Activate(Bot2.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[T6 Bot2.Main2]
+? Bot2.Battlefield.Memnite.Tapped = false
+[T7 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Jandor's Saddlebags.Activate(Bot2.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[T7 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Tapped = false
+Bot1.Battlefield.Jandor's Saddlebags.Tapped = true

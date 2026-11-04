@@ -1,0 +1,6 @@
+{
+  "name": "Jandor's Saddlebags",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{3}, {T}: Untap target creature."
+}
