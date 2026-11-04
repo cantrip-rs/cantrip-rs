@@ -12,7 +12,7 @@ pub static HORROR: CardDef = CardDef {
 };
 
 /// "Create two tapped 2/2 black Horror creature tokens. If this spell was cast from a graveyard, instead create X of those
-/// tokens, where X is the number of creature cards in your graveyard." (CR 111.1, 608.2, 614.1c): X is counted once, as the
+/// tokens, where X is the number of creature cards in your graveyard." (CR 111.1, 608.2c): X is counted once, as the
 /// spell resolves (the rulings), in its controller's graveyard - the spell itself is on the stack, so it is no creature card
 /// there - and the tokens are created together (CR 101.4), tapped, whichever number it is.
 fn horrors(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {

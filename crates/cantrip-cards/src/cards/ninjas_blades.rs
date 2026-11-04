@@ -5,7 +5,7 @@ use cantrip_mechanics::statics::{also_a, grant_delayed_ability, plus_pt};
 use cantrip_mechanics::{effects, hand, lands, triggers};
 use cantrip_oracle as oracle;
 
-/// "Draw a card, then discard a card. That player loses life equal to the discarded card's mana value" (CR 121.1, 701.9, 118.4):
+/// "Draw a card, then discard a card. That player loses life equal to the discarded card's mana value" (CR 121.1, 701.9, 119.3):
 /// the card is read as it last existed in the graveyard it went to, so {X} counts as 0 (CR 202.3e); nothing discarded (an empty
 /// hand, or a discard that put no card anywhere) is no life lost. The player is the one the creature dealt damage to.
 fn loot_and_drain(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
