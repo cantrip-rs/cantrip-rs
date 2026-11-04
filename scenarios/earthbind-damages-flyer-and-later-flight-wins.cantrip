@@ -1,0 +1,49 @@
+# Earthbind enchants an opponent's flyer, deals exactly two damage and removes
+# flying; a later Flight grants flying again by timestamp (CR 603.4, 613.7).
+[Bot1 Deck]
+Earthbind
+Mox Ruby
+Mox Sapphire
+Flight
+Memnite
+Island x20
+[Bot2 Deck]
+Air Elemental
+Black Lotus
+Mox Sapphire
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Air Elemental.Cast
+? Bot2.Mana =
+[T3 Bot1.Main1]
+! Bot1.Hand.Earthbind.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Earthbind.Cast(Bot2.Battlefield.Air Elemental)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Earthbind.AttachedTo = Air Elemental
+? Bot2.Battlefield.Air Elemental.Damage = 2
+? Bot2.Battlefield.Air Elemental.Keywords = (absent)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flight.Cast(Bot2.Battlefield.Air Elemental)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Air Elemental.Damage = 2
+Bot2.Battlefield.Air Elemental.Keywords = Flying
+Bot1.Battlefield.Earthbind.AttachedTo = Air Elemental

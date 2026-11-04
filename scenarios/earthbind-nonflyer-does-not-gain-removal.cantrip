@@ -1,0 +1,31 @@
+# On entering attached to a creature without flying Earthbind does not trigger;
+# a later Flight gives that creature flying without dealing damage (CR 603.4).
+[Bot1 Deck]
+Earthbind
+Flight
+Mox Ruby
+Mox Sapphire
+Memnite
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Earthbind.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Damage = 0
+? Bot1.Battlefield.Earthbind.AttachedTo = Memnite
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flight.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Memnite.Keywords = Flying
+Bot1.Battlefield.Earthbind.AttachedTo = Memnite

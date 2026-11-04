@@ -1,0 +1,6 @@
+{
+  "name": "Earthbind",
+  "manaCost": "{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nWhen this Aura enters, if enchanted creature has flying, this Aura deals 2 damage to that creature and this Aura gains \"Enchanted creature loses flying.\""
+}

@@ -1,0 +1,59 @@
+# Removing flying while Earthbind's entry trigger is on the stack stops that
+# trigger; another Earthbind later resolves on the flyer (CR 603.4).
+[Bot1 Deck]
+Earthbind
+Earthbind
+Radjan Spirit
+Black Lotus
+Mox Emerald
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Air Elemental
+Black Lotus
+Mox Sapphire
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Radjan Spirit.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Air Elemental.Cast
+? Bot2.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Earthbind.Cast(Bot2.Battlefield.Air Elemental)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Radjan Spirit.Activate(Bot2.Battlefield.Air Elemental)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Air Elemental.Damage = 0
+? Bot2.Battlefield.Air Elemental.Keywords = (absent)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Air Elemental.Keywords = Flying
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Earthbind.Cast(Bot2.Battlefield.Air Elemental)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Air Elemental.Damage = 2
+Bot2.Battlefield.Air Elemental.Keywords = (absent)
