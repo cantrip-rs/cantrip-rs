@@ -31,6 +31,20 @@ public sealed class PromptGalleryTests(WebClient web)
     }
 
     [Fact]
+    public async Task Memories_Returning_says_what_the_opponent_chosen_does()
+    {
+        await using TablePage table = await TablePage.OpenAsync(
+            web, "prompt=choose-player-bottom", WebClient.Pictures(nameof(PromptGalleryTests)));
+        TableState opened = await table.SettledAsync(state => state.Fixture == "choose-player-bottom");
+        Assert.Equal("Memories Returning: choose an opponent", opened.Title);
+        Assert.Equal("The player you choose chooses which of the revealed cards go on the bottom of your library, one at a time (up to 2)", opened.Detail);
+        await table.ClickAsync("Bot 3", "button");
+        TableState chosen = await table.SettledAsync(state => state.Answered.Length > 0);
+        Assert.StartsWith("PlayerChosenAnswer", chosen.Answered, StringComparison.Ordinal);
+        Assert.Empty(table.Errors);
+    }
+
+    [Fact]
     public async Task Piles_are_separated_with_an_empty_pile_allowed_and_chosen_by_their_contents()
     {
         await using TablePage table = await TablePage.OpenAsync(

@@ -38,7 +38,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.reveal(you, &left);
     take_one(g, you, item.object, &mut left)?;
     let opponents: Vec<PlayerId> = g.state().opponents(you).collect();
-    let opponent = choose::player(g, you, item.object, opponents, "PutOnBottom", 2)?;
+    let opponent = choose::player(g, you, item.object, opponents, "PutOnBottomOfYourLibrary", 2)?;
     bury_one(g, opponent, you, item.object, &mut left)?;
     take_one(g, you, item.object, &mut left)?;
     bury_one(g, opponent, you, item.object, &mut left)?;

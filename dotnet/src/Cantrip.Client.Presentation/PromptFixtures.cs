@@ -303,6 +303,7 @@ public static class PromptFixtures
         "choose-put-on-bottom-effect",
         "waiting-to-start",
         "choose-player",
+        "choose-player-bottom",
         "choose-player-protection",
         "choose-player-gift",
         "choose-player-protector",
@@ -2125,6 +2126,19 @@ public static class PromptFixtures
                     Source = new ViewHandle(OnStack),
                     Candidates = [Rival, 3],
                     Verb = "Gift",
+                };
+
+            case "choose-player-bottom":
+                // Memories Returning: the opponent chosen puts two of the revealed cards on the bottom of its caster's library.
+                Announce(view, "Memories Returning", "{2}{U}{U}", "Reveal the top five cards of your library. Put one of them into your hand. Then choose an opponent. They put one on the bottom of your library. Then you put one into your hand. Then they put one on the bottom of your library. Put the other into your hand.", Viewer);
+                view.Players.Add(new PlayerSummaryView { Seat = 3, Name = "Bot 3", Team = 3, Life = 20, HandCount = 5, LibraryCount = 30 });
+                return new ChoosePlayerPromptMessage
+                {
+                    Player = Viewer,
+                    Source = new ViewHandle(OnStack),
+                    Candidates = [Rival, 3],
+                    Verb = "PutOnBottomOfYourLibrary",
+                    Amount = 2,
                 };
 
             case "choose-player-protection":

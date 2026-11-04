@@ -1291,6 +1291,7 @@ public sealed partial class MainPage
             "GainControl" => "gains control of this artifact",
             "GainControlOf" => $"gains control of {subject}",
             "SeparatePiles" => $"separates the {(prompt.Amount == 1 ? "revealed card" : $"{prompt.Amount} revealed cards")} into two piles",
+            "PutOnBottomOfYourLibrary" => $"chooses which of the revealed cards go on the bottom of your library, one at a time (up to {prompt.Amount})",
             _ => prompt.Verb,
         };
 
