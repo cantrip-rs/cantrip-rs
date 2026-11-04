@@ -1,0 +1,69 @@
+# An untapped 3/3 defender prevents Orgg attacking even when it cannot attack or block; once tapped it no longer prevents attack and Orgg tramples over a 2/2 (CR 508.1c, 702.19b).
+[Bot1 Deck]
+Orgg
+Black Lotus x2
+Mox Ruby
+Mox Pearl
+Icy Manipulator
+Memnite
+Falter
+Island x20
+[Bot2 Deck]
+Ogre Sentry
+Grizzly Bears
+Black Lotus x2
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Orgg.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Ogre Sentry.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Falter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Orgg > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Icy Manipulator.Cast
+Bot1.Pass
+Bot1.Battlefield.Icy Manipulator.Activate(Bot2.Battlefield.Ogre Sentry)
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Orgg > Bot2)
+Bot2.Block(Grizzly Bears > Orgg)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 15
+Bot2.Graveyard.Grizzly Bears.Power = 2
+Bot1.Battlefield.Orgg.Damage = 2
