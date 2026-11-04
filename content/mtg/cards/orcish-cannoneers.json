@@ -1,0 +1,8 @@
+{
+  "name": "Orcish Cannoneers",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Orc Warrior",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{T}: This creature deals 2 damage to any target and 3 damage to you."
+}

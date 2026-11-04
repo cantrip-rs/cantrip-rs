@@ -1,0 +1,26 @@
+# At two life, Phyrexian Unlife makes later damage poisonous after reaching zero; the two damage events are simultaneous and both reduce life (CR 120.4).
+[Life]
+Bot1: 2
+[Bot1 Deck]
+Black Lotus x2
+Orcish Cannoneers
+Phyrexian Unlife
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Orcish Cannoneers.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Phyrexian Unlife.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Orcish Cannoneers.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Result = InProgress
+Bot1.Life = -3
+Bot1.Poison = 0

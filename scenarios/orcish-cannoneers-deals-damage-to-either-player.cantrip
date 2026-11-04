@@ -1,0 +1,32 @@
+# The tap ability can target either player but not a land, deals 2 to the target and 3 to its controller, and cannot be used again while tapped (CR 115.4, 120.3).
+[Bot1 Deck]
+Black Lotus
+Orcish Cannoneers
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orcish Cannoneers.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Orcish Cannoneers.Activate(Bot2.Battlefield.Island)
+Bot1.Battlefield.Orcish Cannoneers.Activate(Bot2)
+? Bot1.Battlefield.Orcish Cannoneers.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+? Bot2.Life = 18
+! Bot1.Battlefield.Orcish Cannoneers.Activate(Bot2)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Orcish Cannoneers.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 12
+Bot2.Life = 18
+Bot1.Battlefield.Orcish Cannoneers.Tapped = true
