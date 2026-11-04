@@ -1,0 +1,47 @@
+# Sage's Nouliths {1}{U}, Job select: the Hero token it makes is a 2/1 Hero Cleric ("Equipped creature gets +1/+0 ... and is a Cleric
+# in addition to its other types"). "Whenever this creature attacks, untap target attacking creature" (CR 603.2): on turn 3 the Hero
+# and Bot1's Ornithopter attack, Memnite stays home. The Memnite is refused as the target (not attacking); the Ornithopter is chosen
+# and untapped (the Hero stays tapped), and Bot2 takes the Hero's 2 damage.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Sage's Nouliths
+Ornithopter
+Memnite
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sage's Nouliths.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hero Token.Power = 2
+? Bot1.Battlefield.Hero Token.Toughness = 1
+? Bot1.Battlefield.Hero Token.Subtypes = Cleric; Hero
+? Bot1.Battlefield.Sage's Nouliths.AttachedTo = Hero Token
+[T3 Bot1.Main1]
+Bot1.Attack(Hero Token; Ornithopter > Bot2)
+! Bot1.Target(Memnite)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Hero Token.Tapped = true
+Bot2.Life = 18

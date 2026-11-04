@@ -1,0 +1,6 @@
+{
+  "name": "Sage's Nouliths",
+  "manaCost": "{1}{U}",
+  "type": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature gets +1/+0, has \"Whenever this creature attacks, untap target attacking creature,\" and is a Cleric in addition to its other types.\nHagneia — Equip {3}"
+}

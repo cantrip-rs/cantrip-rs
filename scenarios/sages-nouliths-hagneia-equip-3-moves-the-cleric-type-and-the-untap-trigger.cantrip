@@ -1,0 +1,52 @@
+# Sage's Nouliths, Hagneia - Equip {3}: on turn 1, with one Mox untapped after casting it, the equip is refused (short of {3}). On turn 3,
+# with three Moxen untapped, it moves from the Hero to Bot1's Ornithopter for exactly {3} (the pool empty afterwards): the Ornithopter
+# becomes a 1/2 Cleric Thopter and the Hero a plain 1/1 Hero (the +1/+0 and the Cleric type go with the Equipment). The Ornithopter attacks
+# alone and its granted trigger untaps itself (an attacking creature); the Hero, no longer equipped, has no such ability.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Sage's Nouliths
+Ornithopter
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sage's Nouliths.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Sage's Nouliths.Activate(Ornithopter; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Sage's Nouliths.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Sage's Nouliths.AttachedTo = Ornithopter
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Subtypes = Cleric; Thopter
+? Bot1.Battlefield.Hero Token.Power = 1
+? Bot1.Battlefield.Hero Token.Subtypes = Hero
+Bot1.Attack(Ornithopter > Bot2)
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot2.Life = 19
