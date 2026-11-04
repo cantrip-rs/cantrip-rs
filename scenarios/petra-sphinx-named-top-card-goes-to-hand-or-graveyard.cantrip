@@ -1,0 +1,52 @@
+# The targeted player names before the reveal: Bot2 names its Forest and gets it, while
+# Bot1 names Island and puts the different top card into its graveyard (CR 701.20a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Petra Sphinx
+Plains
+Plains
+Plains
+Mountain
+Swamp
+Forest
+Island x20
+
+[Bot2 Deck]
+Island x7
+Swamp
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Petra Sphinx.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Petra Sphinx.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Petra Sphinx.Activate(Bot2)
+? Bot1.Battlefield.Petra Sphinx.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Revealed = (absent)
+Bot2.Name(Forest)
+? Bot2.Hand.Forest.Colors =
+? Bot2.Revealed = Forest
+? Bot2.Library.Count = 20
+! Bot1.Battlefield.Petra Sphinx.Activate(Bot1)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Petra Sphinx.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Name(Island)
+
+[Expect]
+Bot1.Graveyard = Forest; Black Lotus
+Bot1.Library.Count = 20
+Bot1.Battlefield.Petra Sphinx.Tapped = true

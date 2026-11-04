@@ -1,0 +1,32 @@
+# With an empty library the targeted player still names a card, reveals nothing and does not
+# lose; putting a card into hand is not a draw (CR 121.4, 104.3c).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Petra Sphinx
+Island x4
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Petra Sphinx.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 0
+Bot1.Battlefield.Petra Sphinx.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Name(Island)
+
+[Expect]
+Bot1.Library.Count = 0
+Bot1.Graveyard = Black Lotus
+Result = InProgress
