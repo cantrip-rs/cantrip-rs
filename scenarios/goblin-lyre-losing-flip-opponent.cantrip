@@ -1,0 +1,30 @@
+# Losing the flip with an opponent targeted deals damage to the activator for that opponent's creatures, not their own (CR 113.7a).
+[Bot1 Deck]
+Goblin Lyre
+Black Lotus
+Ornithopter
+Island x20
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x20
+[Dice]
+2
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Goblin Lyre.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Goblin Lyre.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
