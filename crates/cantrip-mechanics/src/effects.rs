@@ -459,9 +459,16 @@ pub fn target_player_draws_then_discards(g: &mut dyn Game, item: &StackItem, slo
 /// "Draw a card, then discard a card" (CR 121.1, 701.9): the controller draws, then chooses a card of their hand and
 /// discards it. Currency Converter and Sphinx of False Conclusions print it.
 pub fn loot(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.draw(item.controller, 1);
-    crate::discard_chosen(g, item.controller, item.object, 1)?;
+    loot_discarding(g, item.controller, item.object)?;
     Ok(())
+}
+
+/// `loot` for an ability that goes on to ask about the card: the cards the discard actually put into the graveyard (none for
+/// an empty hand). Ninja's Blades loses the damaged player life equal to its mana value.
+pub fn loot_discarding(g: &mut dyn Game, player: PlayerId, source: ObjectId) -> Result<Vec<ObjectId>, Suspend> {
+    g.draw(player, 1);
+    let chosen = crate::choose_from_hand(g, player, source, 1)?;
+    Ok(g.discard_together(&chosen))
 }
 
 /// "[Player] discards any number of cards, then draws that many cards" (CR 701.9, 121.1): `player` chooses any number of cards of
