@@ -1,6 +1,6 @@
 # Summon: Anima ({4}{B}{B}, 4/4 menace) is cast on turn 1 with Black Lotus and three Moxen. As it enters it gets a lore counter
 # (CR 714.3a): chapter I draws a card and loses 1 life. Chapters II (turn 3) and III (turn 5) do the same. Chapter IV (turn 7)
-# makes Bot2 sacrifice the Memnite it controls, the only creature it has, and lose 3 life; the Saga is then sacrificed (CR 714.4).
+# makes Bot2 sacrifice the Memnite it controls, the only creature it has, and lose 3 life; the Saga is then sacrificed (CR 714.4). The stack is checked empty after each chapter, so no chapter is played twice.
 
 [Bot1 Deck]
 Black Lotus
@@ -35,6 +35,7 @@ Bot2.Pass
 ? Bot1.Battlefield.Summon: Anima.Counters.Lore = 1
 ? Bot1.Life = 19
 ? Bot1.Hand.Count = 3
+? Stack.Count = 0
 [T2 Bot2.Main1]
 Bot2.Hand.Memnite.Cast
 Bot2.Pass
@@ -45,6 +46,7 @@ Bot1.Pass
 Bot2.Pass
 ? Bot1.Life = 18
 ? Bot1.Hand.Count = 5
+? Stack.Count = 0
 [T5 Bot1.Main1]
 Bot1.Pass
 Bot2.Pass

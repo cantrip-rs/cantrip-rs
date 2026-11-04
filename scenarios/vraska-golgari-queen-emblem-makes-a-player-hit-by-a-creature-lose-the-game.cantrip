@@ -1,4 +1,4 @@
-# Vraska, Golgari Queen reaches -9 on her fourth activation and Bot1 gets her emblem; Llanowar Elves then deals combat damage to Bot2, who loses the game (CR 104.3e) though at 19 life.
+# Vraska, Golgari Queen reaches -9 on her fourth activation and Bot1 gets her emblem; Llanowar Elves then deals combat damage to Bot2, who loses the game (CR 104.3e) though at 19 life. Vraska is left at 1 loyalty (4 + 2 + 2 + 2 - 9).
 
 [Bot1 Deck]
 Black Lotus
@@ -42,3 +42,4 @@ Bot1.Pass
 Result = Bot1 won
 Bot1.Emblems.Count = 1
 Bot2.Life = 19
+Bot1.Battlefield.Vraska, Golgari Queen.Counters.Loyalty = 1

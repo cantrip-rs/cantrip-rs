@@ -1,0 +1,47 @@
+# Vraska, Golgari Queen's -3 targets a nonland permanent with mana value 3 or less: Bot2's The One Ring (mana value 4) is refused
+# and its Coalition Relic (mana value 3) is destroyed.
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Vraska, Golgari Queen
+Swamp x14
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Sol Ring
+Coalition Relic
+The One Ring
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Vraska, Golgari Queen.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Vraska, Golgari Queen.Activate(Ability: sacrifice)
+Bot1.Choose()
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Coalition Relic.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Coalition Relic.Activate(Ability: Add; Color: Blue)
+Bot2.Hand.The One Ring.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Vraska, Golgari Queen.Activate(Bot2.Battlefield.The One Ring; Ability: Destroy target)
+Bot1.Battlefield.Vraska, Golgari Queen.Activate(Bot2.Battlefield.Coalition Relic; Ability: Destroy target)
+[T3 Bot1.Main2]
+
+[Expect]
+Turn = 3
+Bot2.Battlefield = Island; Mox Sapphire; Sol Ring; The One Ring
+Bot2.Graveyard = Coalition Relic; Black Lotus
+Bot1.Battlefield.Vraska, Golgari Queen.Counters.Loyalty = 3
