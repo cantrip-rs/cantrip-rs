@@ -1,0 +1,37 @@
+# Two tails deal damage separately, so Massacre Girl triggers twice (CR 603.2, 705.1).
+[Bot1 Deck]
+Mana Clash
+Massacre Girl, Most Wanted
+Black Lotus
+Mox Jet
+Mox Jet
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Island x20
+[Dice]
+1; 2; 1; 2; 1; 1
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Hand.Massacre Girl, Most Wanted.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mana Clash.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot1.Battlefield.Massacre Girl, Most Wanted.Counters.PlusOnePlusOne = 2
