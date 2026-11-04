@@ -1,0 +1,29 @@
+# A storage counter stays when Pestermite taps the Vault; only the Vault's own mana cost removes counters (CR 701.26a).
+[Bot1 Deck]
+Bottomless Vault
+Black Lotus
+Pestermite
+Island x22
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Bottomless Vault.Play
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 1
+Bot1.Accept
+[T5 Bot1.Upkeep]
+? Stack.Count = 0
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Pestermite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Bottomless Vault)
+Bot1.Modes(Tap)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Bottomless Vault.Counters.Storage = 1
+Bot1.Battlefield.Bottomless Vault.Tapped = true

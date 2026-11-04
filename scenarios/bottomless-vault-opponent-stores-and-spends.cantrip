@@ -1,0 +1,23 @@
+# A Vault controlled by the other player also stores two counters and produces exactly two black mana (CR 603.4, 605.1a).
+[Bot1 Deck]
+Island x25
+[Bot2 Deck]
+Bottomless Vault
+Island x25
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Bottomless Vault.Play
+Bot2.Decline
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Bottomless Vault.Counters.Storage = 1
+Bot2.Decline
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Bottomless Vault.Counters.Storage = 2
+Bot2.Accept
+[T8 Bot2.Main1]
+Bot2.Battlefield.Bottomless Vault.Activate(X: 2)
+Bot2.Pass
+? Bot2.Mana = {B}{B}
+[Expect]
+Bot2.Battlefield.Bottomless Vault.Tapped = true
+Bot2.Battlefield.Bottomless Vault.Counters.Storage = (absent)

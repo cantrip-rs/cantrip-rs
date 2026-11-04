@@ -1,0 +1,32 @@
+# The Vault enters tapped; choosing to keep it tapped adds one counter on each upkeep, then it untaps and spends two of three for {B}{B} (CR 502.3, 603.4).
+[Bot1 Deck]
+Bottomless Vault
+Island x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Bottomless Vault.Play
+? Bot1.Battlefield.Bottomless Vault.Tapped = true
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 1
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 2
+Bot1.Decline
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 3
+Bot1.Accept
+[T9 Bot1.Main1]
+? Bot1.Battlefield.Bottomless Vault.Tapped = false
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 3
+Bot1.Battlefield.Bottomless Vault.Activate(X: 2)
+! Bot1.Battlefield.Bottomless Vault.Activate(X: 4)
+Bot1.Pass
+? Bot1.Mana = {B}{B}
+? Bot1.ManaFrom = {B}{B} Bottomless Vault
+? Bot1.Battlefield.Bottomless Vault.Counters.Storage = 1
+! Bot1.Battlefield.Bottomless Vault.Activate
+[Expect]
+Bot1.Battlefield.Bottomless Vault.Tapped = true
+Bot1.Battlefield.Bottomless Vault.Counters.Storage = 1

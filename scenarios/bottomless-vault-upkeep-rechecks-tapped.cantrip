@@ -1,0 +1,28 @@
+# Keeping the Vault tapped triggers at upkeep, but untapping it in response prevents the counter (CR 603.4).
+[Bot1 Deck]
+Bottomless Vault
+Black Lotus
+Pestermite
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Bottomless Vault.Play
+Bot1.Decline
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Pestermite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Battlefield.Bottomless Vault)
+Bot1.Modes(Untap)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Bottomless Vault.Tapped = false
+Bot1.Battlefield.Bottomless Vault.Counters.Storage = (absent)
