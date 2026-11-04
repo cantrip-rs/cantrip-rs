@@ -1,0 +1,40 @@
+# Kicked Vayne's Treachery sacrifices Eager Cadet (a creature, CR 701.21a, 702.33a) and gives Bot2's Wall of Ice -6/-6 (CR 702.33d),
+# leaving its 7 toughness at exactly 1 - a -5 or -7 spell would leave 2 or dead.
+
+[Bot1 Deck]
+Vayne's Treachery
+Swamp
+Mox Jet
+Mox Pearl
+Eager Cadet
+Island x12
+
+[Bot2 Deck]
+Black Lotus
+Wall of Ice
+Forest x12
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Wall of Ice.Cast
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Vayne's Treachery.Cast(Bot2.Battlefield.Wall of Ice)
+Bot1.Modes(Kicker—Sacrifice an artifact or creature)
+Bot1.Choose(Eager Cadet)
+Bot1.Pass
+
+[Expect]
+Bot1.Graveyard = Vayne's Treachery; Eager Cadet
+Bot2.Battlefield.Wall of Ice.Toughness = 1
