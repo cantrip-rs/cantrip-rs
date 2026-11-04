@@ -1,0 +1,8 @@
+{
+  "name": "Nebuchadnezzar",
+  "manaCost": "{3}{U}{B}",
+  "type": "Legendary Creature — Human Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "{X}, {T}: Choose a card name. Target opponent reveals X cards at random from their hand. Then that player discards all cards with that name revealed this way. Activate only during your turn."
+}
