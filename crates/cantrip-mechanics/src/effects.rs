@@ -1973,3 +1973,19 @@ pub fn return_exiled_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), S
     g.return_to_hand(&exiled);
     Ok(())
 }
+
+/// "You may cast target [card] from a graveyard, and mana of any type can be spent to cast that spell" (CR 608.2g, 609.4b):
+/// the ability's first target is cast as the ability resolves, whatever the timing restrictions of its types, if its controller
+/// says yes and it can be cast; the way is chosen for a card that has several (CR 715.3, 720.3), and a cast that cannot be paid
+/// for is given up (CR 733.1). `exile_instead` is the card's own "If that spell would be put into a graveyard, exile it instead"
+/// or `ExileInstead::Never`. Tinybones, the Pickpocket (`Never`) and Quistis Trepe (`Spell`) print it.
+pub fn may_cast_first_target_with_mana_of_any_type(g: &mut dyn Game, item: &StackItem, exile_instead: ExileInstead) -> Result<(), Suspend> {
+    let Some(card) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    if !g.could_cast_during_resolution(card) || !ask_may(g, item.controller, item.object, Purpose::Cast)? {
+        return Ok(());
+    }
+    let ways = g.cast_ways_during_resolution(card);
+    let way = crate::choose::cast_way(g, item.controller, card, ways)?.map(|w| w.way);
+    g.cast_during_resolution_as(card, CastTerms { any_type: true, exile_instead, way, ..CastTerms::default() })?;
+    Ok(())
+}
