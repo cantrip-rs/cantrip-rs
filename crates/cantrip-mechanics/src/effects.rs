@@ -735,6 +735,15 @@ fn gain_life_amount<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<
     gain_life(g, item, N)
 }
 
+/// "You lose `n` life and create a [token] token" (CR 119.3, 111.1): the controller loses the life, then the token is created
+/// under their control, whether or not any life was lost. The card file lists `def` in its `EXTRA`. Obsessive Pursuit (a Clue)
+/// and Namazu Trader (a Treasure) print it, each of one life.
+pub fn lose_life_and_create_token(g: &mut dyn Game, item: &StackItem, n: i32, def: &'static CardDef) -> Result<(), Suspend> {
+    g.lose_life(item.controller, n);
+    crate::tokens::create(g, item.controller, def, 1)?;
+    Ok(())
+}
+
 /// "You gain N life" (CR 119.3). Zuran Orb and Inventor's Fair print it (two and one).
 pub fn gain_life(g: &mut dyn Game, item: &StackItem, n: i32) -> Result<(), Suspend> {
     g.gain_life(item.controller, n);

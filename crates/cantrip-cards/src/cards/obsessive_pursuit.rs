@@ -6,9 +6,7 @@ use cantrip_oracle as oracle;
 /// "You lose 1 life and create a Clue token." (CR 119.3, 111.10f.) Creating a Clue is not investigating (the ruling), so
 /// nothing that triggers on investigating sees it.
 fn lose_life_and_create_a_clue(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    g.lose_life(item.controller, 1);
-    tokens::create(g, item.controller, &tokens::CLUE, 1)?;
-    Ok(())
+    effects::lose_life_and_create_token(g, item, 1, &tokens::CLUE)
 }
 
 /// "Put X +1/+1 counters on target attacking creature, where X is the number of permanents you've sacrificed this turn. If X is
