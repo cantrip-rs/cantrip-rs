@@ -1,0 +1,40 @@
+# Heal can shield a creature, not a noncreature artifact; the creature receives two of three damage (CR 115.4, 615.7).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Darksteel Myr
+Heal
+Lightning Bolt
+Plains
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Darksteel Myr.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Heal.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Heal.Cast(Bot1.Battlefield.Darksteel Myr)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Darksteel Myr)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Darksteel Myr.Damage = 2
+
+[Expect]
+Bot1.Battlefield.Darksteel Myr.Damage = 2
+Prevented.Count = 1
