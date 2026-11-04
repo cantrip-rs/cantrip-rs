@@ -1,0 +1,31 @@
+# After attacking removes one counter, the controller pays X=1 during upkeep and chooses to add zero counters (CR 608.2d).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Clockwork Avian
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clockwork Avian.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Attack(Clockwork Avian > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Clockwork Avian.Counters.Plus1Plus0 = 3
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Clockwork Avian.Activate(X: 1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Number(0)
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Clockwork Avian.Counters.Plus1Plus0 = 3

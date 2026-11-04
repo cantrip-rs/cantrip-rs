@@ -1,0 +1,27 @@
+# An untapped Avian can recharge in its controller's upkeep, not its opponent's (CR 602.5b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Clockwork Avian
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clockwork Avian.Cast
+[T4 Bot2.Upkeep]
+! Bot1.Battlefield.Clockwork Avian.Activate
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Clockwork Avian.Activate(X: 0)
+Bot1.Pass
+Bot2.Pass
+Bot1.Number(0)
+[Expect]
+Bot1.Battlefield.Clockwork Avian.Tapped = true
+Bot1.Battlefield.Clockwork Avian.Counters.Plus1Plus0 = 4
