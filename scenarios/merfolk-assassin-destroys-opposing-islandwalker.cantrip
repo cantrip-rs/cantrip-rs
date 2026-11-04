@@ -1,0 +1,41 @@
+# Merfolk Assassin taps to destroy an opponent's creature with islandwalk, but cannot target a creature without it (CR 115.1c, 701.8a).
+
+[Bot1 Deck]
+Merfolk Assassin
+Mox Sapphire
+Gleemox
+Island x20
+
+[Bot2 Deck]
+Grayscaled Gharial
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Merfolk Assassin.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Grayscaled Gharial.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Merfolk Assassin.Activate(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Merfolk Assassin.Activate(Bot2.Battlefield.Grayscaled Gharial)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Grayscaled Gharial = (absent)
+Bot2.Graveyard.Grayscaled Gharial.Power = 1
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Merfolk Assassin.Tapped = true
