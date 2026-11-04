@@ -1,0 +1,40 @@
+# The Crystal's Chosen creates four 1/1 colorless Hero tokens, then puts a +1/+1 counter on each creature its caster
+# controls (CR 608.2c): the four new Heroes included, so each is a 2/2, and Memnite with them. Bot2's Ornithopter
+# gets none. Exactly four are made: Bot1's battlefield is the four Heroes, Memnite and Plains.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Black Lotus
+Memnite
+The Crystal's Chosen
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.The Crystal's Chosen.Cast
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Hero Token#1.Power = 2
+Bot1.Battlefield.Hero Token#1.Toughness = 2
+Bot1.Battlefield.Hero Token#1.Subtypes = Hero
+Bot1.Battlefield.Hero Token#4.Power = 2
+Bot1.Battlefield.Hero Token#4.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Power = 0

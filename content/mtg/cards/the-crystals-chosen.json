@@ -1,0 +1,6 @@
+{
+  "name": "The Crystal's Chosen",
+  "manaCost": "{5}{W}{W}",
+  "type": "Sorcery",
+  "oracleText": "Create four 1/1 colorless Hero creature tokens. Then put a +1/+1 counter on each creature you control."
+}
