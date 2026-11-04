@@ -1,0 +1,59 @@
+# Random Encounter's Flashback {6}{R}{R} (CR 702.34a, 118.9): cast from the hand on turn 1 with five Moxen and a Mountain it mills
+# four Mountains (the library is all Mountains, so the shuffle changes nothing) and goes to the graveyard. On turn 5, with the
+# five Moxen and three Mountains, exactly the 8 mana of the flashback cost is there: it mills four more and is exiled as it leaves
+# the stack (CR 702.34a). Neither cast puts a creature onto the battlefield.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Random Encounter
+Mountain
+Mountain
+Mountain
+Mountain x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Random Encounter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Count = 5
+? Bot1.Shuffles = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Battlefield.Mountain#3.Activate
+Bot1.Graveyard.Random Encounter.Cast(; Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Random Encounter
+Bot1.Graveyard.Count = 8
+Bot1.Shuffles = 2
