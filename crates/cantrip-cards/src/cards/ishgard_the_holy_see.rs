@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{mana, targets};
+use cantrip_mechanics::{effects, mana, targets};
 use cantrip_oracle as oracle;
 
 /// "Target artifact and/or enchantment cards from your graveyard" (CR 115.1), up to two: each an artifact card or an
@@ -8,17 +8,9 @@ fn artifact_or_enchantment_card_in_your_graveyard(q: &dyn Query, asker: &Asker, 
     targets::card_in_your_graveyard(q, asker, t, &[CardType::Artifact, CardType::Enchantment])
 }
 
-/// Faith & Grief: "Return up to two target artifact and/or enchantment cards from your graveyard to your hand": those still
-/// legal, together (CR 608.2b).
-fn faith_and_grief(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let returning = targets::legal_objects(g, item);
-    g.return_to_hand(&returning);
-    Ok(())
-}
-
 /// The Adventure (CR 715): a sorcery, then exiled on its adventure, from where the land may be played (CR 715.3d).
 pub static FAITH_GRIEF: CardDef = CardDef {
-    spell: spell(&[up_to(2, artifact_or_enchantment_card_in_your_graveyard)], faith_and_grief),
+    spell: spell(&[up_to(2, artifact_or_enchantment_card_in_your_graveyard)], effects::return_targets_to_hand),
     ..oracle::FAITH_GRIEF
 };
 

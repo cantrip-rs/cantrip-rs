@@ -28,14 +28,6 @@ fn instant_or_sorcery_card_in_your_graveyard(q: &dyn Query, asker: &Asker, t: Ta
     targets::card_in_your_graveyard(q, asker, t, &[CardType::Instant, CardType::Sorcery])
 }
 
-/// "Return up to two target instant and/or sorcery cards from your graveyard to your hand": those still legal go together
-/// (CR 608.2b, 101.4).
-fn return_them(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let cards = targets::legal_objects(g, item);
-    g.return_to_hand(&cards);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(
@@ -50,7 +42,7 @@ pub static CARD: CardDef = CardDef {
             "When the fourth plan counter is put on this enchantment, sacrifice it. When you do, return up to two target instant and/or sorcery cards from your graveyard to your hand.",
         ),
     ],
-    delayed: &[delayed_trigger(return_them, "When you do, return up to two target instant and/or sorcery cards from your graveyard to your hand.")
+    delayed: &[delayed_trigger(effects::return_targets_to_hand, "When you do, return up to two target instant and/or sorcery cards from your graveyard to your hand.")
         .targets(&[up_to(2, instant_or_sorcery_card_in_your_graveyard)])],
     ..oracle::REWRITE_HISTORY
 };

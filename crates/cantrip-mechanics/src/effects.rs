@@ -1339,6 +1339,16 @@ pub fn return_first_target_to_hand(g: &mut dyn Game, item: &StackItem) -> Result
     Ok(())
 }
 
+/// "Return up to N target [cards] from your graveyard to your hand" as an ability's or spell's whole effect (CR 400.3): the
+/// targets that are still legal return together, as one event (CR 608.2b, 101.4); with none chosen or none still legal nothing
+/// happens (a spell whose every chosen target is illegal is removed before this runs, the core's). Fight On!, Ishgard's Faith &
+/// Grief, Rewrite History, Does Machines and Call Damage Control print it.
+pub fn return_targets_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let cards = crate::targets::legal_objects(g, item);
+    g.return_to_hand(&cards);
+    Ok(())
+}
+
 /// "Return up to one target [permanent] to its owner's hand. If you do, put a +1/+1 counter on this creature" (CR 400.3, 122.1): a
 /// target that became illegal is not returned (CR 608.2b); the source gets the counter only if the permanent really arrived in a
 /// hand ("if a permanent was returned this way"), and only if it is still on the battlefield. Mirkwood Nurturer and Nurturing Pixie
