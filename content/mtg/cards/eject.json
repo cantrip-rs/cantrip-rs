@@ -1,0 +1,9 @@
+{
+  "name": "Eject",
+  "manaCost": "{3}{U}",
+  "type": "Instant",
+  "oracleText": "This spell can't be countered.\nReturn target nonland permanent to its owner's hand.\nDraw a card.",
+  "keywords": [
+    "CantBeCountered"
+  ]
+}
