@@ -63,7 +63,7 @@ pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(cantrip_mechanics::triggers::THIS_ENTERS, enters, "When Dion enters, create a 2/2 white Knight creature token."),
         ability(cost("{4}{W}{W}").and(TAP), transform, "{4}{W}{W}, {T}: Exile Dion, then return it to the battlefield transformed under its owner's control. Activate only as a sorcery.")
-            .timing(Timing::Sorcery),
+            .sorcery_speed(),
     ],
     statics: &[
         static_ability(Layer::Ability, itself_during_your_turn, have_flying, "Dragonfire Dive \u{2014} During your turn, Dion and other Knights you control have flying."),

@@ -4,7 +4,7 @@ use cantrip_oracle as oracle;
 
 /// "Take the Elevator — Create three 1/1 colorless Hero creature tokens." (CR 701.7, 111.1): together (CR 101.4).
 fn elevator(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    tokens::create_by_rule(g, item.controller, &tokens::HERO_1_1_COLORLESS, 3, false)?;
+    tokens::create(g, item.controller, &tokens::HERO_1_1_COLORLESS, 3)?;
     Ok(())
 }
 
