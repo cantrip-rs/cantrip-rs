@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{targets, effects};
+use cantrip_mechanics::{effects, library, targets};
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("ShuffleIntoLibrary", "shuffle the targeted cards from your graveyard into your library?", "If you don't, they stay in your graveyard", "Shuffle them in", "Leave them");
@@ -9,9 +9,7 @@ const ASK: Question = Question::new("ShuffleIntoLibrary", "shuffle the targeted 
 /// to shuffle (CR 608.2b); the second sentence is a "you may" asked as it resolves, and a yes shuffles the caster's
 /// library even when no card of it remains a legal target (CR 701.24c-d).
 fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Some(permanent) = targets::object(g, item, 0) {
-        g.put_into_library(&[permanent], LibraryPlace::ShuffledIn);
-    }
+    library::shuffle_first_target_into_owners_library(g, item)?;
 
     let you = item.controller;
     let cards: Vec<ObjectId> = (1..item.target_count as usize).filter_map(|slot| targets::object(g, item, slot)).collect();

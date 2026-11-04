@@ -1145,6 +1145,16 @@ pub fn owner_puts_on_top_or_bottom(g: &mut dyn Game, source: ObjectId, object: O
     Ok(())
 }
 
+/// "Target [permanent]'s owner shuffles it into their library" (CR 701.24a, 400.3): the first target goes into its owner's
+/// library, whoever controlled it, and that library is shuffled. With its target gone it does nothing, and shuffles no one's
+/// library (CR 608.2b). Living Library, Cathartic Parting (as its first sentence) and Ice Magic's Blizzaga print it.
+pub fn shuffle_first_target_into_owners_library(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(permanent) = crate::targets::object(g, item, 0) {
+        g.put_into_library(&[permanent], LibraryPlace::ShuffledIn);
+    }
+    Ok(())
+}
+
 /// "Target creature's owner puts it on their choice of the top or bottom of their library": the first target's owner
 /// chooses (`owner_puts_on_top_or_bottom`). With its target gone the spell does not resolve (CR 608.2b). Uneasy Partings, Lagoon
 /// Breach (Horned Loch-Whale) and Run Behind print it.
