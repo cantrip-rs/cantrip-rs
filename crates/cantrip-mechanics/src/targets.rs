@@ -174,9 +174,10 @@ pub const TAPPED_CREATURE_AN_OPPONENT_CONTROLS: TargetSpec = target(tapped_creat
 
 /// "This spell costs {`N`} less to cast if it targets a tapped creature" (CR 601.2c, 601.2f): the target as the total cost is
 /// determined, once it is announced; generic mana only (CR 118.7a). What happens to the creature afterwards changes nothing
-/// paid. Ajani's Response and Magnificent End print it (`CardDef::own_cost_changes`).
+/// paid. A tapped permanent that is no creature does not count, which matters to a spell that may target any permanent. Ajani's
+/// Response, Grounded for Life, Magnificent End and Fate of the Sun-Cryst print it (`CardDef::own_cost_changes`).
 pub fn costs_less_if_it_targets_a_tapped_creature<const N: u8>(q: &dyn Query, _: ObjectId, _: PlayerId, _: Costed, targets: &[Target]) -> CostDelta {
-    let tapped = targets.iter().filter_map(|t| t.object()).any(|creature| q.obj(creature).tapped);
+    let tapped = targets.iter().filter_map(|t| t.object()).any(|creature| q.obj(creature).tapped && q.chars(creature).is(CardType::Creature));
     if tapped { CostDelta::less(N as u32) } else { CostDelta::NONE }
 }
 /// "This spell costs {`N`} less to cast if it targets an attacking creature" (CR 601.2c, 601.2f): the target as the total cost
