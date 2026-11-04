@@ -1,0 +1,44 @@
+# With no counters the Battery supplies one mana, too little for White Knight; a second source makes it castable.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+White Mana Battery
+White Knight
+Howling Mine
+Plains
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.White Mana Battery.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Hand.White Knight.Cast(Mana: short)
+! Bot1.Hand.Howling Mine.Cast(Mana: short)
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.White Mana Battery.Activate(Ability: Remove any number; X: 0)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.White Knight.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Howling Mine.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.White Knight.Types = Creature
+Bot1.Battlefield.Howling Mine.Types = Artifact
