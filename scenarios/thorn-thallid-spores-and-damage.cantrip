@@ -1,0 +1,46 @@
+# Thorn Thallid gains one spore each of its controller's upkeeps and spends three to deal one damage to any target (CR 603.2, 115.4, 120.3).
+[Bot1 Deck]
+Thorn Thallid
+Black Lotus
+Forest x25
+[Bot2 Deck]
+Ornithopter
+Island
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thorn Thallid.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Thorn Thallid.Counters.Spore = 1
+! Bot1.Battlefield.Thorn Thallid.Activate(Bot2)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Thorn Thallid.Counters.Spore = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Thorn Thallid.Counters.Spore = 2
+! Bot1.Battlefield.Thorn Thallid.Activate(Bot2)
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Thorn Thallid.Counters.Spore = 3
+! Bot1.Battlefield.Thorn Thallid.Activate(Bot2.Battlefield.Island)
+Bot1.Battlefield.Thorn Thallid.Activate(Bot2.Battlefield.Ornithopter)
+? Bot1.Battlefield.Thorn Thallid.Counters.Spore = (absent)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Damage = 1
+[T13 Bot1.Main1]
+Bot1.Battlefield.Thorn Thallid.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+[T19 Bot1.Main1]
+Bot1.Battlefield.Thorn Thallid.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 19
