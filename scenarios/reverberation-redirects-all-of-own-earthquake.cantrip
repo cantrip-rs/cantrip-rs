@@ -1,0 +1,62 @@
+# Earthquake would damage both players and both creatures; Reverberation redirects all four points to its controller (CR 614.1a).
+[Bot1 Deck]
+Earthquake
+Reverberation
+Memnite
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mountain
+Reverberation
+Earthquake
+Mountain x20
+
+[Bot2 Deck]
+Mox Ruby
+Shock
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earthquake.Cast(X: 1)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Reverberation.Cast(Bot2.Battlefield.Memnite)
+Bot1.Hand.Reverberation.Cast(Stack.Earthquake)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+! Bot1.Hand.Reverberation.Cast(Stack.Shock)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main2]
+? Bot1.Life = 14
+? Bot2.Life = 20
+? Bot1.Battlefield.Memnite.Damage = 0
+? Bot2.Battlefield.Memnite.Damage = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Earthquake.Cast(X: 1)
+Bot1.Pass
+? Bot1.Mana =
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 13
+Bot2.Life = 19
+Bot1.Graveyard = Memnite; Earthquake; Earthquake; Reverberation; Black Lotus
+Bot2.Graveyard = Memnite; Shock
