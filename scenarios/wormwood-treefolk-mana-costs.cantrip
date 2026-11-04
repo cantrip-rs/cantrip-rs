@@ -1,0 +1,40 @@
+# One green or one black source plus other colors cannot pay the respective costs; adding a second source of each color permits the abilities (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Mox Jet
+Wormwood Treefolk
+Forest
+Swamp
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wormwood Treefolk.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Wormwood Treefolk.Activate(Ability: forestwalk; Mana: short)
+! Bot1.Battlefield.Wormwood Treefolk.Activate(Ability: swampwalk; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Wormwood Treefolk.Activate(Ability: forestwalk)
+? Bot1.Mana =
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Wormwood Treefolk.Activate(Ability: swampwalk)
+? Bot1.Mana =
+[Expect]
+Bot1.Life = 16
