@@ -1,0 +1,55 @@
+# Red Mage's Rapier {1}{R}, cast on turn 1: job select makes a 1/1 colorless Hero token and attaches the Equipment to it, so the
+# Hero is a Wizard as well and has "Whenever you cast a noncreature spell, this creature gets +2/+0 until end of turn" (CR 702.182,
+# 613.1d, 613.1f). A creature spell (Memnite) does not pump it; each noncreature spell (Mox Sapphire, then Mox Emerald) does,
+# 1 to 3 to 5 (CR 603.2). Bot2's Mox Ruby on its own turn does not (it is Bot2's spell, not "you cast"), and the pump has worn
+# off by then.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Red Mage's Rapier
+Memnite
+Mox Sapphire
+Mox Emerald
+Island
+Island x12
+
+[Bot2 Deck]
+Mox Ruby
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Red Mage's Rapier.Cast
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Red Mage's Rapier.AttachedTo = Hero Token
+? Bot1.Battlefield.Hero Token.Subtypes = Hero; Wizard
+? Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hero Token.Power = 3
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hero Token.Power = 5
+? Bot1.Battlefield.Hero Token.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Battlefield.Memnite.Power = 1
+Stack.Count = 0

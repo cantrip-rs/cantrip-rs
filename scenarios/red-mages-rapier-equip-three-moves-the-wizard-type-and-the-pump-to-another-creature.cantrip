@@ -1,0 +1,47 @@
+# Red Mage's Rapier: Equip {3} (CR 702.6) moves the Equipment from the Hero to Memnite. On turn 1 five Moxen pay the cast ({1}{R})
+# and the equip ({3}) exactly. Memnite is a Wizard then and the Hero is only a Hero (CR 613.1d); on turn 3 a noncreature spell
+# (Black Lotus) pumps Memnite to 3/1 and leaves the Hero at 1/1.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Red Mage's Rapier
+Memnite
+Black Lotus
+Island x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Red Mage's Rapier.Cast
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Red Mage's Rapier.AttachedTo = Hero Token
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Red Mage's Rapier.Activate(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Red Mage's Rapier.AttachedTo = Memnite
+? Bot1.Battlefield.Memnite.Subtypes = Construct; Wizard
+? Bot1.Battlefield.Hero Token.Subtypes = Hero
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Hero Token.Power = 1
+Stack.Count = 0

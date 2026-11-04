@@ -1,0 +1,6 @@
+{
+  "name": "Red Mage's Rapier",
+  "manaCost": "{1}{R}",
+  "type": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature has \"Whenever you cast a noncreature spell, this creature gets +2/+0 until end of turn\" and is a Wizard in addition to its other types.\nEquip {3}"
+}
