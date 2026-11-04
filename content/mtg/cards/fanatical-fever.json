@@ -1,0 +1,6 @@
+{
+  "name": "Fanatical Fever",
+  "manaCost": "{2}{G}{G}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +3/+0 and gains trample until end of turn."
+}
