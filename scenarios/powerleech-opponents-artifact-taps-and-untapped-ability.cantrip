@@ -1,0 +1,66 @@
+# An opponent's Mox taps for mana, giving one life; Zuran Orb's ability has no tap symbol and gives another.
+# Tapping a land and the Powerleech controller's own Mox give no life; its own Orb gives only its printed 2 life.
+# An opponent's sacrificed Spellbomb also triggers.
+[Bot1 Deck]
+Powerleech
+Mox Emerald
+Gleemox
+Zuran Orb
+Forest x20
+
+[Bot2 Deck]
+Mox Jet
+Zuran Orb
+Aether Spellbomb
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Zuran Orb.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Green)
+Bot1.Hand.Powerleech.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Zuran Orb.Cast
+Bot2.Pass
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+? Bot1.Life = 20
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 21
+Bot2.Hand.Aether Spellbomb.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Zuran Orb.Activate(Sacrifice: Forest)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Life = 22
+Bot1.Battlefield.Mox Emerald.Activate
+? Bot1.Life = 22
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Zuran Orb.Activate(Sacrifice: Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 24
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Aether Spellbomb.Activate(Ability: Draw a card)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 25
+Bot2.Life = 22
