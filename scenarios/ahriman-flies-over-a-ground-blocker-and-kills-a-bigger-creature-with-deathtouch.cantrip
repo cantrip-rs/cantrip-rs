@@ -1,0 +1,58 @@
+# Ahriman (2/2 flying, deathtouch): on turn 3 Bot2's Hill Giant cannot block it (flying), so Bot2 takes 2. On turn 4 Hill Giant hits Bot1 (Ahriman is tapped from attacking); on
+# turn 6 it attacks, Ahriman blocks, and Hill Giant dies to 2 deathtouch damage (CR 702.2) although it has toughness 3; Ahriman dies to its 3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Ahriman
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Jet
+Hill Giant
+Island x15
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ahriman.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ahriman > Bot2)
+! Bot2.Block(Hill Giant > Ahriman)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Hill Giant > Bot1)
+[T4 Bot2.Main2]
+? Bot1.Life = 17
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Hill Giant > Bot1)
+Bot1.Block(Ahriman > Hill Giant)
+[T6 Bot2.Main2]
+
+[Expect]
+Bot2.Graveyard = Hill Giant
+Bot1.Graveyard = Ahriman
+Bot1.Life = 17

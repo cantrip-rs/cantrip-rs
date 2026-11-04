@@ -1,0 +1,12 @@
+{
+  "name": "Ahriman",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Eye Horror",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flying, deathtouch\n{3}, Sacrifice another creature or artifact: Draw a card.",
+  "keywords": [
+    "Flying",
+    "Deathtouch"
+  ]
+}
