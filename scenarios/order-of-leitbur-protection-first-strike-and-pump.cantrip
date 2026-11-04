@@ -1,0 +1,60 @@
+# Protection refuses a black spell; first strike defeats a 1/1 blocker without damage back, while +1/+0 and first strike expire in cleanup (CR 702.16b, 702.7b, 611.2a).
+[Bot1 Deck]
+Order of Leitbur
+Mox Pearl x3
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Mox Jet
+Suntail Hawk
+Ornithopter
+Stab
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Order of Leitbur.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Suntail Hawk.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Jet.Activate
+! Bot2.Hand.Stab.Cast(Bot1.Battlefield.Order of Leitbur)
+Bot2.Hand.Stab.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Order of Leitbur.Activate(Ability: first strike)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Order of Leitbur.Activate(Ability: +1/+0)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Order of Leitbur.Power = 3
+? Bot1.Battlefield.Order of Leitbur.Toughness = 1
+Bot1.Attack(Order of Leitbur)
+Bot2.Block(Suntail Hawk > Order of Leitbur)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Order of Leitbur.Damage = 0
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Order of Leitbur.Power = 2
+Bot1.Battlefield.Order of Leitbur.Toughness = 1
+Bot1.Battlefield.Order of Leitbur.Keywords = (absent)
+Bot2.Graveyard.Suntail Hawk.Power = 1

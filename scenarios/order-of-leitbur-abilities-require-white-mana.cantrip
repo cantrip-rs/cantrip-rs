@@ -1,0 +1,50 @@
+# Neither ability accepts black mana in place of white; {W} and {W}{W} pay their respective costs exactly (CR 602.2b, 107.4a).
+[Bot1 Deck]
+Order of Leitbur
+Mox Pearl x3
+Mox Jet
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Order of Leitbur.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Order of Leitbur.Activate(Ability: first strike; Mana: short)
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Order of Leitbur.Activate(Ability: +1/+0; Mana: short)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Order of Leitbur.Activate(Ability: first strike)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Order of Leitbur.Activate(Ability: +1/+0)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Order of Leitbur.Power = 3
+Bot1.Battlefield.Order of Leitbur.Toughness = 1

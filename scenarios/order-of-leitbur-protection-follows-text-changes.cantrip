@@ -1,0 +1,41 @@
+# Changing the color word changes this creature's protection (CR 612.2, 702.16b).
+[Bot1 Deck]
+Mox Pearl x2
+Order of Leitbur
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Sleight of Mind
+Stab
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Order of Leitbur.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+? Bot1.Battlefield.Order of Leitbur.ProtectionFrom = Black
+! Bot2.Hand.Stab.Cast(Bot1.Battlefield.Order of Leitbur)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Order of Leitbur)
+Bot2.Pass
+Bot1.Pass
+Bot2.Colors(Black)
+Bot2.Colors(Red)
+? Bot1.Battlefield.Order of Leitbur.ProtectionFrom = Red
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Order of Leitbur)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Stab.Cast(Bot1.Battlefield.Order of Leitbur)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Order of Leitbur = (absent)
+Bot1.Graveyard.Order of Leitbur.Power = 2
