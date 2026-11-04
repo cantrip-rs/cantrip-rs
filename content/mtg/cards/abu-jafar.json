@@ -1,0 +1,8 @@
+{
+  "name": "Abu Ja'far",
+  "manaCost": "{W}",
+  "type": "Creature — Human",
+  "power": 0,
+  "toughness": 1,
+  "oracleText": "When this creature dies, destroy all creatures blocking or blocked by it. They can't be regenerated."
+}

@@ -1,0 +1,25 @@
+# When Abu Ja'far blocks a creature and dies in combat, his death ability destroys that attacking creature (CR 603.10a).
+[Bot1 Deck]
+Mox Pearl
+Abu Ja'far
+Plains x20
+[Bot2 Deck]
+Mox Pearl
+Savannah Lions
+Plains x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Abu Ja'far.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions > Bot1)
+Bot1.Block(Abu Ja'far > Savannah Lions)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Graveyard.Abu Ja'far.Power = 0
+Bot2.Graveyard.Savannah Lions.Power = 2
