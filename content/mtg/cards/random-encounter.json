@@ -1,0 +1,6 @@
+{
+  "name": "Random Encounter",
+  "manaCost": "{4}{R}{R}",
+  "type": "Sorcery",
+  "oracleText": "Shuffle your library, then mill four cards. Put each creature card milled this way onto the battlefield. They gain haste. At the beginning of the next end step, return those creatures to their owner's hand.\nFlashback {6}{R}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}

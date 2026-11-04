@@ -1,0 +1,50 @@
+# Random Encounter {4}{R}{R} sorcery. "Shuffle your library, then mill four cards. Put each creature card milled this way onto the
+# battlefield. They gain haste. At the beginning of the next end step, return those creatures to their owner's hand." (CR 701.17,
+# 701.24, 603.7c). Bot1's library is exactly four cards, so the shuffle cannot change what is milled: two creatures and two
+# lands. Both creatures enter (the lands stay in the graveyard), the 2/3 Anaba Bodyguard attacks the turn it entered (haste, CR
+# 702.10; Bot2 20 to 18), and at the end step both go to hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Random Encounter
+Island
+Island
+Anaba Bodyguard
+Memnite
+Island
+Island
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Random Encounter.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Anaba Bodyguard.Tapped = false
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot1.Graveyard.Count = 4
+? Bot1.Library.Count = 0
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Anaba Bodyguard > Bot2)
+[T1 Bot1.Main2]
+? Bot2.Life = 18
+[T1 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Anaba Bodyguard = (absent)
+Bot1.Battlefield.Memnite = (absent)
+Bot1.Hand = Anaba Bodyguard; Island; Island; Memnite
