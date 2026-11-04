@@ -1,0 +1,29 @@
+# Giant Strength targets a creature, including an opponent's, and gives only that creature +2/+2 (CR 303.4, 613.4c).
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Giant Strength
+Memnite
+Mountain x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Giant Strength.Cast(Bot1.Battlefield.Mountain)
+Bot1.Hand.Giant Strength.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Giant Strength.AttachedTo = Ornithopter
+Bot2.Battlefield.Ornithopter.Power = 2
+Bot2.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
