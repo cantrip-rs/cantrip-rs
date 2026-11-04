@@ -28,17 +28,10 @@ fn emblem(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 
 // --- The emblem ---------------------------------------------------------------------------------------------------
 
-fn that_player_loses(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    if let Target::Player(p) = item.subject {
-        g.lose_game(p);
-    }
-    Ok(())
-}
-
 pub static EMBLEM: CardDef = CardDef {
     name: "Vraska, Golgari Queen emblem",
     has_cost: false,
-    abilities: &[triggered(when_asked(EventMask::DAMAGE, cantrip_mechanics::triggers::creature_you_control_deals_combat_damage_to_player), that_player_loses, "Whenever a creature you control deals combat damage to a player, that player loses the game.")],
+    abilities: &[triggered(when_asked(EventMask::DAMAGE, cantrip_mechanics::triggers::creature_you_control_deals_combat_damage_to_player), cantrip_mechanics::effects::that_player_loses_the_game, "Whenever a creature you control deals combat damage to a player, that player loses the game.")],
     text: "Whenever a creature you control deals combat damage to a player, that player loses the game.",
     ..CardDef::BLANK
 };

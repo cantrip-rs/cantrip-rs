@@ -742,6 +742,26 @@ fn gain_life_amount<const N: i32>(g: &mut dyn Game, item: &StackItem) -> Result<
     gain_life(g, item, N)
 }
 
+/// "Draw `cards` cards. Each player loses `life` life." (CR 121.1, 119.3): the controller draws first; then every player still in
+/// the game loses the life, in turn order. Conciliator's Duelist (a card, 1) and Summon: Primal Odin (two cards, 2) print it.
+pub fn draw_then_each_player_loses_life(g: &mut dyn Game, item: &StackItem, cards: u32, life: i32) -> Result<(), Suspend> {
+    draw(g, item, cards)?;
+    g.end_sentence();
+    for player in g.state().apnap().collect::<Vec<_>>() {
+        g.lose_life(player, life);
+    }
+    Ok(())
+}
+
+/// "That player loses the game" (CR 104.3e) for a trigger whose subject is the player it names (`deals_combat_damage_to_player_subject`
+/// and the triggers like it). Vraska, Golgari Queen's emblem and Summon: Primal Odin's granted ability print it.
+pub fn that_player_loses_the_game(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Target::Player(p) = item.subject {
+        g.lose_game(p);
+    }
+    Ok(())
+}
+
 /// "You lose `n` life and create a [token] token" (CR 119.3, 111.1): the controller loses the life, then the token is created
 /// under their control, whether or not any life was lost. The card file lists `def` in its `EXTRA`. Obsessive Pursuit (a Clue)
 /// and Namazu Trader (a Treasure) print it, each of one life.
