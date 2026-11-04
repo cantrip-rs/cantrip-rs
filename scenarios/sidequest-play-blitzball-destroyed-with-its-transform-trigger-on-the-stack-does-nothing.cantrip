@@ -1,0 +1,63 @@
+# Sidequest: Play Blitzball's end-of-combat ability triggers (6 combat damage on turn 3: the pumped Anaba Bodyguard 4 and Elite
+# Vanguard 2) but Bot2 answers with Disenchant, paid with Black Lotus, on the enchantment. The ability resolves with the Sidequest
+# gone (a new object if it returned, CR 400.7): nothing transforms and nothing is attached, and no question is asked.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Sidequest: Play Blitzball
+Anaba Bodyguard
+Elite Vanguard
+Mountain x13
+
+[Bot2 Deck]
+Black Lotus
+Disenchant
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Anaba Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elite Vanguard.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sidequest: Play Blitzball.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Target(Anaba Bodyguard)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Anaba Bodyguard > Bot2; Elite Vanguard > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Sidequest: Play Blitzball)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Graveyard = Sidequest: Play Blitzball; Black Lotus
+Bot1.Battlefield = Anaba Bodyguard; Elite Vanguard; Mox Ruby; Mox Jet; Mox Pearl
