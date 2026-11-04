@@ -1,0 +1,6 @@
+{
+  "name": "Vincent's Limit Break",
+  "manaCost": "{1}{B}",
+  "type": "Instant",
+  "oracleText": "Tiered (Choose one additional cost.)\nUntil end of turn, target creature you control gains \"When this creature dies, return it to the battlefield tapped under its owner's control\" and has the chosen base power and toughness.\n• Galian Beast — {0} — 3/2.\n• Death Gigas — {1} — 5/2.\n• Hellmasker — {3} — 7/2."
+}

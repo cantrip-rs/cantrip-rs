@@ -1,0 +1,41 @@
+# Vincent's Limit Break (CR 702.183a, 601.2c): the {1} mode, Death Gigas, makes Bot1's Eager Cadet a 5/2 (three mana in all: {1}{B}
+# and {1}). "Target creature you control": Bot2's Eager Cadet is refused as the target, and stays 1/1.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Eager Cadet
+Vincent's Limit Break
+Swamp x20
+
+[Bot2 Deck]
+Mox Pearl
+Eager Cadet
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Eager Cadet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Vincent's Limit Break.Cast(Bot2.Battlefield.Eager Cadet)
+Bot1.Hand.Vincent's Limit Break.Cast
+Bot1.Modes(Death Gigas)
+Bot1.Target(Bot1.Battlefield.Eager Cadet)
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Eager Cadet.Power = 5
+Bot1.Battlefield.Eager Cadet.Toughness = 2
+Bot2.Battlefield.Eager Cadet.Power = 1

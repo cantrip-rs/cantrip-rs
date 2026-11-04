@@ -1,0 +1,43 @@
+# Vincent's Limit Break (CR 702.183a, 603.10a): the {3} mode, Hellmasker, makes Bot1's Ornithopter (0/2) a 7/2 ({1}{B} + {3}: five
+# mana). Lightning Bolt on it afterwards kills it (toughness 2), and the gained ability returns it to the battlefield tapped, a new 0/2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Sapphire
+Mox Ruby
+Ornithopter
+Vincent's Limit Break
+Lightning Bolt
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Vincent's Limit Break.Cast
+Bot1.Modes(Hellmasker)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Pass
+?Bot1.Battlefield.Ornithopter.Power = 7
+?Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2

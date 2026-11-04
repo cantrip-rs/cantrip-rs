@@ -1,0 +1,38 @@
+# Vincent's Limit Break (CR 702.183a, 613.4b): the {0} mode, Galian Beast, makes Bot1's Eager Cadet (1/1) a 3/2 until end of turn for
+# {1}{B} alone. Giant Growth on it afterwards (+3/+3) still applies on top of the new base: 6/5.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Emerald
+Eager Cadet
+Vincent's Limit Break
+Giant Growth
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Eager Cadet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Vincent's Limit Break.Cast
+Bot1.Modes(Galian Beast)
+Bot1.Target(Bot1.Battlefield.Eager Cadet)
+Bot1.Pass
+Bot1.Pass
+?Bot1.Battlefield.Eager Cadet.Power = 3
+?Bot1.Battlefield.Eager Cadet.Toughness = 2
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Eager Cadet)
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Eager Cadet.Power = 6
+Bot1.Battlefield.Eager Cadet.Toughness = 5
