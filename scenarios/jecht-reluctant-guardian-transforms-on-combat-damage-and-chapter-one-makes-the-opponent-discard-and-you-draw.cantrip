@@ -1,0 +1,57 @@
+# Jecht, Reluctant Guardian (4/3 menace): "Whenever Jecht deals combat damage to a player, you may exile it, then return it
+# to the battlefield transformed under its owner's control." Jecht attacks Bot2 on turn 3 and hits for 4; Bot1 accepts and
+# Braska's Final Aeon (7/7 Saga Nightmare creature, menace) enters with its first lore counter (CR 714.3a, 712.14a). Chapter
+# I, Jecht Beam: Bot2 discards a card (its Lightning Bolt, of its choice, from seven) and Bot1 draws one.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp
+Jecht, Reluctant Guardian
+Swamp
+Swamp
+Plains x13
+
+[Bot2 Deck]
+Island
+Lightning Bolt
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Jecht, Reluctant Guardian.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Jecht, Reluctant Guardian > Bot2)
+Bot1.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 16
+Bot2.Graveyard = Lightning Bolt
+Bot2.Hand.Count = 6
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Braska's Final Aeon.Power = 7
+Bot1.Battlefield.Braska's Final Aeon.Toughness = 7
+Bot1.Battlefield.Braska's Final Aeon.Types = Enchantment; Creature
+Bot1.Battlefield.Braska's Final Aeon.Counters.Lore = 1
+Bot1.Battlefield.Count = 5

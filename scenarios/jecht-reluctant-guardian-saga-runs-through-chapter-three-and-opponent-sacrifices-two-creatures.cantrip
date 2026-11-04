@@ -1,0 +1,74 @@
+# Braska's Final Aeon: chapters I and II each make Bot2 discard and Bot1 draw; chapter III, Ultimate Jecht Shot, "Each
+# opponent sacrifices two creatures of their choice" (CR 701.21a): of Bot2's three Memnites exactly two go and one stays,
+# and the Saga is sacrificed after III (CR 714.4). Jecht transforms after hitting Bot2 on turn 3 (the Memnites are
+# summoning sick no longer but do not block).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp
+Jecht, Reluctant Guardian
+Swamp
+Swamp
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Memnite
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Jecht, Reluctant Guardian.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Jecht, Reluctant Guardian > Bot2)
+Bot1.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island)
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island)
+[T6 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Memnite#1; Memnite#2)
+
+[Expect]
+Turn = 7
+Stack.Count = 0
+Bot2.Battlefield.Count = 1
+Bot2.Graveyard = Memnite; Memnite; Island; Island
+Bot1.Battlefield.Count = 4
+Bot1.Graveyard = Jecht, Reluctant Guardian
