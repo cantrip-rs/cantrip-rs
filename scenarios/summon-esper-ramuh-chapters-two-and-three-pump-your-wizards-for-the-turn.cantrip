@@ -1,0 +1,88 @@
+# Summon: Esper Ramuh on turn 3 (Black Lotus and Mox Ruby); chapter I hits Bot2's Anaba Bodyguard for 1 (the Lotus is the one
+# noncreature, nonland card in Bot1's graveyard). Chapter II after Bot1's draw on turn 5 gives the Wizards Bot1 controls +1/+0 until
+# end of turn: Ramuh (3 -> 4) and Fugitive Wizard (1 -> 2), but not Memnite (not a Wizard) or Bot2's Fugitive Wizard (not Bot1's).
+# A Ghitu Lavarunner (a Wizard) cast afterwards that turn is not pumped (CR 611.2c). On Bot2's turn 6 it has ended: Ramuh is 3/3 again.
+# Chapter III on turn 7 does it again, and the Saga is sacrificed after it (CR 714.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Summon: Esper Ramuh
+Fugitive Wizard
+Memnite
+Ghitu Lavarunner
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Anaba Bodyguard
+Fugitive Wizard
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fugitive Wizard.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Anaba Bodyguard.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Fugitive Wizard.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Summon: Esper Ramuh.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Anaba Bodyguard)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Anaba Bodyguard.Damage = 1
+? Bot1.Battlefield.Summon: Esper Ramuh.Power = 3
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Summon: Esper Ramuh.Counters.Lore = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Summon: Esper Ramuh.Power = 4
+? Bot1.Battlefield.Fugitive Wizard.Power = 2
+? Bot1.Battlefield.Fugitive Wizard.Toughness = 1
+? Bot1.Battlefield.Summon: Esper Ramuh.Toughness = 3
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Fugitive Wizard.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ghitu Lavarunner.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ghitu Lavarunner.Power = 1
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Summon: Esper Ramuh.Power = 3
+? Bot1.Battlefield.Fugitive Wizard.Power = 1
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Fugitive Wizard.Power = 2
+? Bot1.Battlefield.Ghitu Lavarunner.Power = 2
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot2.Battlefield.Fugitive Wizard.Power = 1
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Summon: Esper Ramuh = (absent)
+Bot1.Graveyard = Summon: Esper Ramuh; Black Lotus
+Bot1.Battlefield.Fugitive Wizard.Power = 2

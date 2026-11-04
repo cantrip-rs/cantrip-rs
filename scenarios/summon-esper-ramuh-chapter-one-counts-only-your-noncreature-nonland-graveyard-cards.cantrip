@@ -1,0 +1,50 @@
+# Summon: Esper Ramuh ({2}{R}{R}) is cast on turn 3 with Black Lotus and Mox Ruby. Chapter I deals damage equal to the number of
+# noncreature, nonland cards in Bot1's graveyard to target creature an opponent controls: Bot1's Faithless Looting and the
+# sacrificed Black Lotus count (2), but not the Elite Vanguard (a creature) or the Mountain (a land) Looting discarded, and not
+# Bot2's own sacrificed Black Lotus, so Bot2's Anaba Bodyguard (2/3) has 2 damage and lives. Bot1's own Memnite is not a legal target, so the chapter picks Anaba Bodyguard
+# on its own and Memnite is undamaged.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Faithless Looting
+Summon: Esper Ramuh
+Elite Vanguard
+Mountain
+Memnite
+Mountain x2
+Island x16
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Anaba Bodyguard
+Island x17
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Elite Vanguard; Mountain)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Anaba Bodyguard.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Summon: Esper Ramuh.Cast
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Memnite.Damage = 0
+Bot2.Battlefield.Anaba Bodyguard.Damage = 2
+Bot1.Battlefield.Summon: Esper Ramuh.Counters.Lore = 1
+Bot1.Graveyard = Black Lotus; Faithless Looting; Mountain; Elite Vanguard
