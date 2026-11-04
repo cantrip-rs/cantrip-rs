@@ -1,0 +1,46 @@
+# Fate of the Sun-Cryst: "This spell costs {2} less to cast if it targets a tapped creature. Destroy target nonland permanent." Bot2's
+# Mox Jet is tapped on turn 5 and so is the Ornithopter that attacked on turn 4; the second Ornithopter is untapped. Bot1 has three
+# sources, so the full {4}{W} is out of reach: the cast at the untapped Ornithopter and at the tapped Mox (a permanent, not a creature)
+# are refused. The cast at the tapped Ornithopter costs {2}{W}, empties the pool, and destroys it.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Fate of the Sun-Cryst
+Island x14
+
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Mox Jet
+Island x15
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Jet.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Attack(Ornithopter#1 > Bot1)
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter#1.Tapped = true
+? Bot2.Battlefield.Mox Jet.Tapped = true
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Fate of the Sun-Cryst.Cast(Bot2.Battlefield.Ornithopter#2; Mana: short)
+! Bot1.Hand.Fate of the Sun-Cryst.Cast(Bot2.Battlefield.Mox Jet; Mana: short)
+Bot1.Hand.Fate of the Sun-Cryst.Cast(Bot2.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Turn = 5
+Bot1.Graveyard = Fate of the Sun-Cryst
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield.Mox Jet.Tapped = true
