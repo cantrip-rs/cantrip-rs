@@ -1,0 +1,61 @@
+# Adelbert Steiner: "gets +1/+1 for each Equipment you control" (CR 613.4c): a 2/1 with none, 3/2 with one Basilisk Collar, 4/3 with
+# two; an opponent's Collar (Bot2's, on T2) does not count. With lifelink (CR 702.15), its 4 damage to Bot2 gains Bot1 4 life.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Adelbert Steiner
+Basilisk Collar
+Basilisk Collar
+Island
+Island x13
+
+[Bot2 Deck]
+Mox Ruby
+Basilisk Collar
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Adelbert Steiner.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Adelbert Steiner.Power = 2
+? Bot1.Battlefield.Adelbert Steiner.Toughness = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Adelbert Steiner.Power = 3
+? Bot1.Battlefield.Adelbert Steiner.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Basilisk Collar.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Adelbert Steiner.Power = 3
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Basilisk Collar.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Adelbert Steiner.Power = 4
+? Bot1.Battlefield.Adelbert Steiner.Toughness = 3
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Adelbert Steiner > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 16

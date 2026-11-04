@@ -1,0 +1,11 @@
+{
+  "name": "Adelbert Steiner",
+  "manaCost": "{1}{W}",
+  "type": "Legendary Creature — Human Knight",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Lifelink\nAdelbert Steiner gets +1/+1 for each Equipment you control.",
+  "keywords": [
+    "Lifelink"
+  ]
+}
