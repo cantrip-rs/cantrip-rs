@@ -1,0 +1,46 @@
+# A black and red spell cast by the Talisman's controller triggers it and can untap an opponent's attacking creature (CR 603.2, 105.2b).
+[Bot1 Deck]
+Onyx Talisman
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Black Lotus
+Stingerquill Charm
+Mox Jet
+Island x20
+[Bot2 Deck]
+Plains
+Savannah Lions
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Onyx Talisman.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Savannah Lions.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions > Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Stingerquill Charm.Cast
+Bot1.Modes(3)
+Bot1.Target(Bot2.Battlefield.Savannah Lions)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Savannah Lions.Tapped = false
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Savannah Lions.Tapped = false
+Bot1.Life = 18

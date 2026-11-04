@@ -1,0 +1,35 @@
+# An opponent’s black spell lets the Talisman’s controller pay three to untap the opponent’s tapped land (CR 603.2, 701.26b).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Black Lotus
+Onyx Talisman
+Island x20
+
+[Bot2 Deck]
+Swamp
+Dark Ritual
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Onyx Talisman.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Dark Ritual.Cast
+! Bot1.Target(Bot2)
+Bot1.Target(Bot2.Battlefield.Swamp)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.PayCost
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Swamp.Tapped = false
