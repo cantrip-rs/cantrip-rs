@@ -1,0 +1,55 @@
+# Miracle Worker can destroy either player's Aura on its controller's creature, but not an Aura on an opposing creature (CR 115.1, 701.8a).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Miracle Worker
+Flight
+Island x20
+[Bot2 Deck]
+Mox Sapphire
+Ornithopter
+Flight
+Flight
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Miracle Worker.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Flight#1.Cast(Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Flight.Cast(Bot1.Battlefield.Miracle Worker)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Miracle Worker.Activate(Bot2.Battlefield.Flight)
+! Bot1.Battlefield.Miracle Worker.Activate(Bot1.Battlefield.Mox Pearl)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Flight.Cast(Bot1.Battlefield.Miracle Worker)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Miracle Worker.Activate(Bot2.Battlefield.Flight#2)
+? Bot1.Battlefield.Miracle Worker.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Flight.Colors = Blue
+? Bot2.Battlefield.Flight.AttachedTo = Ornithopter
+? Bot1.Battlefield.Flight.AttachedTo = Miracle Worker
+! Bot1.Battlefield.Miracle Worker.Activate(Bot1.Battlefield.Flight)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Miracle Worker.Activate(Bot1.Battlefield.Flight)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Flight.Colors = Blue
+Bot2.Battlefield.Flight.AttachedTo = Ornithopter
+Bot1.Battlefield.Miracle Worker.Tapped = true
