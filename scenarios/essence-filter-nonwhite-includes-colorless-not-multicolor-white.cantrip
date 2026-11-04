@@ -1,0 +1,49 @@
+# The nonwhite choice destroys a colorless enchantment land but preserves a white-and-black enchantment (CR 105.2, 205.2b).
+[Bot1 Deck]
+Essence Filter
+Fang of Shigeki
+Lunar Convocation
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Jet
+Forest x20
+[Bot2 Deck]
+Urza's Saga
+Mox Emerald
+Fang of Shigeki
+Forest x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Fang of Shigeki.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lunar Convocation.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Urza's Saga.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Fang of Shigeki.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Essence Filter.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(2)
+[Expect]
+Bot1.Battlefield.Lunar Convocation.Colors = Black; White
+Bot1.Graveyard = Essence Filter; Fang of Shigeki; Black Lotus
+Bot2.Graveyard = Fang of Shigeki; Urza's Saga

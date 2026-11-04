@@ -1,0 +1,6 @@
+{
+  "name": "Essence Filter",
+  "manaCost": "{1}{G}{G}",
+  "type": "Sorcery",
+  "oracleText": "Destroy all enchantments or all nonwhite enchantments."
+}
