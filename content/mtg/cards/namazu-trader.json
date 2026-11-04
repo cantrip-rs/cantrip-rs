@@ -1,0 +1,8 @@
+{
+  "name": "Namazu Trader",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Fish Citizen",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "When this creature enters, you lose 1 life and create a Treasure token.\nWhenever this creature attacks, you may sacrifice another creature or artifact. If you do, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)"
+}

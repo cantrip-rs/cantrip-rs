@@ -1,0 +1,51 @@
+# Namazu Trader: "another creature or artifact" excludes the Trader itself. Bot1 casts it on turn 3 with two Swamps and a Dark
+# Ritual, spends the Treasure it made on turn 5 (for mana nothing uses), and attacks with no other creature or artifact:
+# nothing is asked, nothing is sacrificed and no surveil happens. Bot2 takes 3.
+
+[Bot1 Deck]
+Swamp
+Swamp
+Dark Ritual
+Namazu Trader
+Plains
+Plains
+Plains
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Namazu Trader.Cast
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Treasure Token.Activate(Color: Black)
+Bot1.Attack(Namazu Trader > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.CombatDamage]
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot1.Graveyard = Dark Ritual
+Bot1.Battlefield.Namazu Trader.Power = 3
+Bot1.Battlefield.Count = 3

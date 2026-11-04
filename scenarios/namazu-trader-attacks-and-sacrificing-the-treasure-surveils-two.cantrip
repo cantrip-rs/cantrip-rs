@@ -1,0 +1,51 @@
+# Namazu Trader: "Whenever this creature attacks, you may sacrifice another creature or artifact. If you do, surveil 2."
+# Bot1 attacks on turn 3, sacrifices the Treasure it made (an artifact, not the Trader itself) and surveils 2: of the two
+# looked at, the Forest goes to the graveyard and the Island stays on top. The Trader is unblocked and deals 3.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp
+Namazu Trader
+Plains
+Plains
+Mountain
+Forest
+Island
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Namazu Trader.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Namazu Trader > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Treasure Token)
+Bot1.Arrange(Island | Forest)
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot1.Battlefield.Treasure Token = (absent)
+Bot1.Graveyard = Forest
+Bot1.Surveilled = 2 requested, 2 looked
+Bot1.Library.Count = 11

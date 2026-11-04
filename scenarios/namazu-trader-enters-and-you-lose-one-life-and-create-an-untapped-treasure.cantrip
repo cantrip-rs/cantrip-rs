@@ -1,0 +1,34 @@
+# Namazu Trader (3/4): "When this creature enters, you lose 1 life and create a Treasure token." Bot1 pays {3}{B} with
+# three Moxen and a Swamp: it loses exactly 1 life (19) and controls one untapped Treasure token.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp
+Namazu Trader
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Namazu Trader.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 19
+Bot1.Battlefield.Treasure Token.Tapped = false
+Bot1.Battlefield.Treasure Token.Token = true
+Bot1.Battlefield.Namazu Trader.Power = 3
+Bot1.Battlefield.Namazu Trader.Toughness = 4
