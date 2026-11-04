@@ -1,0 +1,43 @@
+# An attack by another creature does not stop the enchanted creature from untapping (CR 502.3).
+[Bot1 Deck]
+Mox Sapphire
+Tangle Kelp
+Ornithopter
+Memnite
+Springleaf Drum
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tangle Kelp.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Tapped = true
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Springleaf Drum.Cast
+Bot1.Pass
+Bot1.Battlefield.Springleaf Drum.Activate(Tap: Ornithopter; Color: Blue)
+Bot1.Choose(Tap Springleaf Drum)
+Bot1.Choose(Ornithopter)
+? Bot1.Battlefield.Ornithopter.Tapped = true
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Tangle Kelp.AttachedTo = Ornithopter

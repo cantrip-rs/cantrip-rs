@@ -1,0 +1,37 @@
+# Tangle Kelp taps its enchanted creature, which untaps if it did not attack on its last turn, stays tapped after attacking, then untaps after a turn without attacking (CR 502.3).
+[Bot1 Deck]
+Mox Sapphire
+Tangle Kelp
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Tangle Kelp.Cast(Bot1.Battlefield.Mox Sapphire)
+? Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Hand.Tangle Kelp.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = false
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Ornithopter)
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Tapped = true
+[T8 Bot2.Main1]
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = false
+Bot1.Battlefield.Tangle Kelp.AttachedTo = Ornithopter
