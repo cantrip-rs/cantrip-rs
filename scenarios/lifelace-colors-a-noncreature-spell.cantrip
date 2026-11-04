@@ -1,0 +1,35 @@
+# A white instant becomes green on the stack, making it legal for Aether Gust; it was not red or green before (CR 105.3).
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Ornithopter
+Swords to Plowshares
+Lifelace
+Aether Gust
+Island x12
+[Bot2 Deck]
+Island x16
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Hand.Aether Gust.Cast(Stack.Swords to Plowshares)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Lifelace.Cast(Stack.Swords to Plowshares)
+? Bot1.Mana = {U}{U}
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Aether Gust.Cast(Stack.Swords to Plowshares)
+Bot1.Accept
+[Expect]
+Bot1.Battlefield.Ornithopter.Types = Artifact; Creature
+Bot1.Library.Swords to Plowshares.Colors = White

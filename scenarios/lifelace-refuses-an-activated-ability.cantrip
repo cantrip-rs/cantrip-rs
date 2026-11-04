@@ -1,0 +1,34 @@
+# Lifelace can target a spell or permanent, but not an activated ability (CR 112.1, 113.1).
+# Rootwalla's ability is on the stack when the refusal is checked; Ornithopter is a legal spell target afterward.
+
+[Bot1 Deck]
+Forest
+Forest
+Basking Rootwalla
+Ornithopter
+Forest x16
+
+[Bot2 Deck]
+Forest
+Lifelace
+Forest x16
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Basking Rootwalla.Cast
+Bot1.Battlefield.Forest.Activate
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest#1.Activate
+Bot1.Battlefield.Forest#2.Activate
+Bot1.Battlefield.Basking Rootwalla.Activate
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate
+! Bot2.Hand.Lifelace.Cast(Stack.Basking Rootwalla)
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Lifelace.Cast(Stack.Ornithopter)
+? Bot2.Mana =
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = Green

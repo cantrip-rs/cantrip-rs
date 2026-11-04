@@ -1,0 +1,23 @@
+# Lifelace replaces both colors of a multicolored permanent with green, rather than adding green (CR 105.3).
+[Bot1 Deck]
+Mox Pearl
+Mox Emerald x2
+Gaddock Teeg
+Lifelace
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Hand.Gaddock Teeg.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Lifelace.Cast(Bot1.Battlefield.Gaddock Teeg)
+? Bot1.Mana =
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Gaddock Teeg.Colors = Green
