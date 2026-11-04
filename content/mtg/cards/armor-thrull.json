@@ -1,0 +1,8 @@
+{
+  "name": "Armor Thrull",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Thrull",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "{T}, Sacrifice this creature: Put a +1/+2 counter on target creature."
+}

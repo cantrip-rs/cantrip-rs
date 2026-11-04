@@ -1,0 +1,38 @@
+# Armor Thrull may target itself, but sacrificing it as the cost makes the ability's target illegal; a second Thrull succeeds on another creature (CR 601.2c, 608.2b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Armor Thrull
+Armor Thrull
+Memnite
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Armor Thrull.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Armor Thrull.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Armor Thrull#1.Activate(Bot1.Battlefield.Armor Thrull#1)
+Bot1.Choose(Tap Armor Thrull)
+? Bot1.Graveyard = Armor Thrull; Black Lotus; Black Lotus
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Armor Thrull.Counters.Plus1Plus2 = (absent)
+Bot1.Battlefield.Armor Thrull.Activate(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Memnite.Counters.Plus1Plus2 = 1
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 3

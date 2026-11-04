@@ -1,0 +1,56 @@
+# Armor Thrull is tapped and sacrificed as a cost, then gives either player's target one +1/+2 counter (CR 602.2b, 122.1a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Armor Thrull
+Armor Thrull
+Memnite
+Mox Sapphire
+Island
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Armor Thrull.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Armor Thrull.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Armor Thrull#1 > Bot2)
+[T3 Bot1.Main2]
+! Bot1.Battlefield.Armor Thrull#1.Activate(Bot1.Battlefield.Memnite)
+! Bot1.Battlefield.Armor Thrull#2.Activate(Bot1.Battlefield.Mox Sapphire)
+Bot1.Battlefield.Armor Thrull#2.Activate(Bot1.Battlefield.Memnite)
+Bot1.Choose(Tap Armor Thrull)
+? LeftBattlefield = Black Lotus (tapped); Black Lotus (tapped); Armor Thrull (tapped)
+? Bot1.Graveyard = Armor Thrull; Black Lotus; Black Lotus
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Counters.Plus1Plus2 = 1
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Armor Thrull.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Tap Armor Thrull)
+? Bot1.Graveyard = Armor Thrull; Armor Thrull; Black Lotus; Black Lotus
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Counters.Plus1Plus2 = 1
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot2.Battlefield.Ornithopter.Counters.Plus1Plus2 = 1
+Bot2.Battlefield.Ornithopter.Power = 1
+Bot2.Battlefield.Ornithopter.Toughness = 4
