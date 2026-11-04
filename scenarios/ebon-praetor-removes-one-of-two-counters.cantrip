@@ -1,0 +1,50 @@
+# After two upkeep counters, sacrificing a non-Thrull removes exactly one and leaves the Praetor 3/3.
+[Bot1 Deck]
+Ebon Praetor
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ebon Praetor.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Battlefield.Ebon Praetor.Activate
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ebon Praetor.Power = 3
+? Bot1.Battlefield.Ebon Praetor.Toughness = 3
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ebon Praetor.Power = 1
+Bot1.Battlefield.Ebon Praetor.Activate
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Ebon Praetor.Activate
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Ebon Praetor.Power = 3
+Bot1.Battlefield.Ebon Praetor.Toughness = 3
+Bot1.Battlefield.Ebon Praetor.Counters.Plus1Plus0 = (absent)
+Bot1.Graveyard = Ornithopter; Black Lotus
