@@ -1,0 +1,6 @@
+{
+  "name": "Stampede",
+  "manaCost": "{1}{G}{G}",
+  "type": "Instant",
+  "oracleText": "Attacking creatures get +1/+0 and gain trample until end of turn."
+}

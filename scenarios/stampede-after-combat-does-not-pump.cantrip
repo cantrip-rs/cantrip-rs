@@ -1,0 +1,26 @@
+# A creature is no longer attacking after combat ends, so Stampede does not affect it in the postcombat main phase (CR 511.3).
+[Bot1 Deck]
+Ornithopter
+Black Lotus
+Stampede
+Forest x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Stampede.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Ornithopter.Keywords = Flying
