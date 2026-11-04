@@ -1311,6 +1311,17 @@ pub fn return_first_target_to_hand(g: &mut dyn Game, item: &StackItem) -> Result
     Ok(())
 }
 
+/// "Return target [permanent] to its owner's hand. Draw a card." as one spell's whole effect, for its first target (CR 400.3,
+/// 121.1). A spell whose only target has become illegal does not resolve at all (CR 608.2b), so there is no draw then. Eject
+/// and Repeal print it.
+pub fn return_first_target_to_hand_then_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(permanent) = crate::targets::object(g, item, 0) {
+        g.return_to_hand(&[permanent]);
+    }
+    g.draw(item.controller, 1);
+    Ok(())
+}
+
 /// "Return up to one target [permanent] to its owner's hand. If you do, put a +1/+1 counter on this creature" (CR 400.3, 122.1): a
 /// target that became illegal is not returned (CR 608.2b); the source gets the counter only if the permanent really arrived in a
 /// hand ("if a permanent was returned this way"), and only if it is still on the battlefield. Mirkwood Nurturer and Nurturing Pixie
