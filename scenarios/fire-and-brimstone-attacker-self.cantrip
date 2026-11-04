@@ -1,0 +1,30 @@
+# A player who attacked this turn can target themself; both 4-damage events apply (CR 508.1, 120.3).
+[Bot1 Deck]
+Ornithopter
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Fire and Brimstone
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Fire and Brimstone.Cast(Bot1)
+[T3 Bot1.Attackers]
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fire and Brimstone.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 12
+Bot2.Life = 20

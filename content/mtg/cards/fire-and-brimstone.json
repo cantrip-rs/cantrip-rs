@@ -1,0 +1,6 @@
+{
+  "name": "Fire and Brimstone",
+  "manaCost": "{3}{W}{W}",
+  "type": "Instant",
+  "oracleText": "Fire and Brimstone deals 4 damage to target player who attacked this turn and 4 damage to you."
+}
