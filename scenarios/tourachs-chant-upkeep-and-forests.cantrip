@@ -1,0 +1,49 @@
+# Forests trigger for their player: one suffers three damage, the other puts one -1/-1 counter on their creature; upkeep requires {B} (CR 603.2, 118.12a, 120.3).
+[Bot1 Deck]
+Tourach's Chant
+Black Lotus
+Mox Jet
+Ornithopter
+Forest
+Swamp x20
+[Bot2 Deck]
+Forest
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Tourach's Chant.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+? Bot2.Life = 20
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Tourach's Chant.Types = Enchantment
+Bot1.Hand.Forest.Play
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Ornithopter)
+? Bot1.Battlefield.Ornithopter.Counters.MinusOneMinusOne = 1
+? Bot1.Life = 20
+[T4 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 17
+[T5 Bot1.Upkeep]
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Graveyard.Tourach's Chant.Colors = Black
+Bot2.Life = 17
