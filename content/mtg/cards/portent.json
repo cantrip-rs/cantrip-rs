@@ -1,0 +1,6 @@
+{
+  "name": "Portent",
+  "manaCost": "{U}",
+  "type": "Sorcery",
+  "oracleText": "Look at the top three cards of target player's library, then put them back in any order. You may have that player shuffle.\nDraw a card at the beginning of the next turn's upkeep."
+}

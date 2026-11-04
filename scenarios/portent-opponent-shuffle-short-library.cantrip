@@ -1,0 +1,30 @@
+# Portent can target the opponent, reorder a library of two cards without drawing, and have that player shuffle.
+[Bot1 Deck]
+Portent
+Mox Sapphire
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x7
+Plains
+Swamp
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Portent.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Hand.Portent.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Plains; Swamp
+Bot1.Arrange(Swamp; Plains)
+? Bot2.Library = Swamp; Plains
+Bot1.Accept
+[Expect]
+Bot2.Shuffles = 1
+Bot2.Library.Count = 2
+Bot2.Hand.Count = 7
+Result = InProgress
