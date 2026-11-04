@@ -1,0 +1,64 @@
+# Summon: Anima ({4}{B}{B}, 4/4 menace) is cast on turn 1 with Black Lotus and three Moxen. As it enters it gets a lore counter
+# (CR 714.3a): chapter I draws a card and loses 1 life. Chapters II (turn 3) and III (turn 5) do the same. Chapter IV (turn 7)
+# makes Bot2 sacrifice the Memnite it controls, the only creature it has, and lose 3 life; the Saga is then sacrificed (CR 714.4).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Summon: Anima
+Mountain x15
+
+[Bot2 Deck]
+Memnite
+Island x15
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Summon: Anima.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Summon: Anima.Counters.Lore = 1
+? Bot1.Life = 19
+? Bot1.Hand.Count = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Summon: Anima.Counters.Lore = 2
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+? Bot1.Hand.Count = 5
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Summon: Anima.Counters.Lore = 3
+? Bot1.Life = 17
+? Bot2.Life = 20
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 17
+Bot2.Battlefield.Memnite = (absent)
+Bot2.Graveyard = Memnite; Island; Island
+Bot1.Battlefield.Summon: Anima = (absent)
+Bot1.Graveyard.Count = 2
