@@ -1,0 +1,29 @@
+# Each time Marsh Viper deals combat damage to a player, that player gets two poison counters (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Marsh Viper
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Marsh Viper.Cast
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Marsh Viper)
+[T3 Bot1.Main2]
+? Bot2.Poison = 2
+? Bot2.Life = 19
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Marsh Viper)
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Poison = 0
+Bot2.Poison = 4
+Bot2.Life = 18
