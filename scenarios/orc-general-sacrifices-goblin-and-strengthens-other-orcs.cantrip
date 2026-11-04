@@ -1,0 +1,62 @@
+# Orc General cannot sacrifice itself or an opposing Orc; sacrificing a Goblin gives other Orc creatures on both sides +1/+1 until end of turn (CR 701.21a, 611.2a).
+[Bot1 Deck]
+Orc General
+Black Lotus
+Mox Ruby
+Mountain
+Orcish Lumberjack
+Fanatical Firebrand
+Island x20
+[Bot2 Deck]
+Mountain
+Orcish Lumberjack
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Orc General.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Orcish Lumberjack.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Orc General.Activate
+? Bot1.Battlefield = Orc General
+? Bot1.Battlefield.Orc General.Tapped = false
+? Bot2.Battlefield = Mountain; Orcish Lumberjack
+? Bot1.Life = 20
+? Bot1.Graveyard.Count = 1
+? Stack.Count = 0
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Orcish Lumberjack.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fanatical Firebrand.Cast
+Bot1.Pass
+Bot1.Battlefield.Orc General.Activate
+Bot1.Choose(Tap Orc General)
+! Bot1.Choose(Orc General)
+! Bot1.Choose(Mountain)
+! Bot1.Choose(Bot2.Battlefield.Orcish Lumberjack)
+Bot1.Choose(Fanatical Firebrand)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Orc General.Tapped = true
+? Bot1.Battlefield.Orc General.Power = 2
+? Bot1.Battlefield.Orc General.Toughness = 2
+? Bot1.Battlefield.Orcish Lumberjack.Power = 2
+? Bot1.Battlefield.Orcish Lumberjack.Toughness = 2
+? Bot2.Battlefield.Orcish Lumberjack.Power = 2
+? Bot2.Battlefield.Orcish Lumberjack.Toughness = 2
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Graveyard.Fanatical Firebrand.Power = 1
+Bot1.Battlefield.Orcish Lumberjack.Power = 1
+Bot2.Battlefield.Orcish Lumberjack.Power = 1
