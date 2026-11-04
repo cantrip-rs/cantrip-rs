@@ -1,0 +1,8 @@
+{
+  "name": "Hecteyes",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Ooze Horror",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "When this creature enters, each opponent discards a card."
+}

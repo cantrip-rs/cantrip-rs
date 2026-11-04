@@ -1,0 +1,30 @@
+# Hecteyes: "When this creature enters, each opponent discards a card." Bot2 chooses which card (CR 701.9b): the Lightning Bolt
+# rather than an Island, one card exactly; Bot1 discards nothing.
+
+[Bot1 Deck]
+Swamp
+Mox Jet
+Hecteyes
+Island x20
+
+[Bot2 Deck]
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hecteyes.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Hecteyes.Power = 1
+Bot1.Battlefield.Hecteyes.Toughness = 1
+Bot1.Hand.Count = 4
+Bot2.Graveyard = Lightning Bolt
+Bot2.Hand.Count = 6
