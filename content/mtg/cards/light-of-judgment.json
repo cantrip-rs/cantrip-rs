@@ -1,0 +1,6 @@
+{
+  "name": "Light of Judgment",
+  "manaCost": "{4}{R}",
+  "type": "Instant",
+  "oracleText": "Light of Judgment deals 6 damage to target creature. Destroy up to one Equipment attached to that creature."
+}
