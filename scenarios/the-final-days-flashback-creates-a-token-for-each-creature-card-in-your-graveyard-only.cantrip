@@ -1,0 +1,61 @@
+# The Final Days cast with flashback (CR 702.34a, 614.1a): "instead create X of those tokens, where X is the number of creature cards in your
+# graveyard", counted as it resolves. Bot1 has one creature card (Grizzly Bears, killed by Bot2's Bolt); Bot2's own graveyard holds a creature
+# card too (Bears, discarded at its cleanup) that does not count. So X is 1 - not 2 (the hand-cast number) and not 2 (both graveyards) - and
+# the one token is made tapped. Turn 1: Lotus and Mox Jet pay the first cast. Turn 3: Bears from a second Lotus. Turn 5: Lotus, Jet and two
+# Swamps pay the flashback {4}{B}{B} exactly.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Jet
+The Final Days
+Grizzly Bears
+Swamp x21
+
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Lightning Bolt
+Island x21
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Final Days.Cast
+Bot1.Pass
+[T2 Bot2.Cleanup]
+Bot2.Discard(Grizzly Bears)
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Graveyard.The Final Days.Cast(Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Mana =
+Exile = The Final Days
+Bot1.Graveyard = Black Lotus; Grizzly Bears; Black Lotus; Black Lotus
+Bot2.Graveyard = Lightning Bolt; Black Lotus; Grizzly Bears
+Bot1.Battlefield.Count = 6
+Bot1.Battlefield.Horror Token#1.Tapped = false
+Bot1.Battlefield.Horror Token#2.Tapped = false
+Bot1.Battlefield.Horror Token#3.Tapped = true

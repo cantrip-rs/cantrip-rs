@@ -1,0 +1,35 @@
+# The Final Days cast with flashback (CR 702.34a, 614.1a) with no creature card in its controller's graveyard: X is 0 (the spell itself, on the
+# stack, is no card in the graveyard and the Horrors from the first cast are tokens), so "instead" makes no token, and the card is exiled.
+# Turn 1: Black Lotus and Mox Jet pay the first cast. Turn 3: two Black Lotuses' six black mana pay the flashback {4}{B}{B} exactly.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Jet
+The Final Days
+Swamp x21
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Final Days.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Graveyard.The Final Days.Cast(Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Mana =
+Exile = The Final Days
+Bot1.Battlefield = Mox Jet; Horror Token; Horror Token

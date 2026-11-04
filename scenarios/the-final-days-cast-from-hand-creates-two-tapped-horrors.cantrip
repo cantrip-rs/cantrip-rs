@@ -1,0 +1,31 @@
+# The Final Days cast from the hand (CR 111.1, 614.1c): two tapped 2/2 black Horror tokens. Black Lotus (BBB) and Mox Jet (B) pay its {2}{B}{B}
+# exactly, so the pool is empty afterwards.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+The Final Days
+Swamp x22
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Final Days.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Mana =
+Bot1.Graveyard = The Final Days; Black Lotus
+Bot1.Battlefield = Mox Jet; Horror Token; Horror Token
+Bot1.Battlefield.Horror Token#1.Tapped = true
+Bot1.Battlefield.Horror Token#2.Tapped = true
+Bot1.Battlefield.Horror Token#1.Power = 2
+Bot1.Battlefield.Horror Token#1.Toughness = 2
+Bot1.Battlefield.Horror Token#1.Colors = Black
+Bot1.Battlefield.Horror Token#1.Subtypes = Horror
