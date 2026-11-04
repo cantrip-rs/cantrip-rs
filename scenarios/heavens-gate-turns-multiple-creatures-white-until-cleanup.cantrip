@@ -1,0 +1,45 @@
+# At least one creature must be targeted; both players' creatures become white rather than retaining their colors, and the effect ends in cleanup (CR 115.1a, 613.1e).
+
+[Bot1 Deck]
+Heaven's Gate
+Black Lotus
+Grizzly Bears
+Ornithopter
+Mox Pearl
+Plains x20
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heaven's Gate.Cast
+! Bot1.Target(Bot1.Battlefield.Mox Pearl)
+! Bot1.Target(Count: 0)
+Bot1.Target(Bot1.Battlefield.Grizzly Bears; Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Colors = White
+? Bot1.Battlefield.Ornithopter.Colors = White
+? Bot2.Battlefield.Memnite.Colors = White
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Colors = Green
+Bot1.Battlefield.Ornithopter.Colors = (absent)
+Bot2.Battlefield.Memnite.Colors = (absent)

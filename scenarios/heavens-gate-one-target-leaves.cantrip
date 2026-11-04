@@ -1,0 +1,39 @@
+# If one of two targets leaves before resolution, Heaven's Gate still changes the remaining legal target (CR 608.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Grizzly Bears
+Ornithopter
+Heaven's Gate
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Heaven's Gate.Cast
+Bot1.Target(Bot1.Battlefield.Grizzly Bears; Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Grizzly Bears = (absent)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = White
+Bot1.Graveyard.Grizzly Bears.Power = 2

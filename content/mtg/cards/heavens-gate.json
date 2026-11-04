@@ -1,0 +1,6 @@
+{
+  "name": "Heaven's Gate",
+  "manaCost": "{W}",
+  "type": "Instant",
+  "oracleText": "One or more target creatures become white until end of turn."
+}
