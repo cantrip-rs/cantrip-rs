@@ -1,0 +1,52 @@
+# Nibelheim Aflame {2}{R}{R}: "Choose target creature you control. It deals damage equal to its power to each other creature. If this
+# spell was cast from a graveyard, discard your hand and draw four cards." Cast from the hand on turn 3 targeting Bot1's Memnite (power 1)
+# it deals exactly 1 to each other creature, those of both players (CR 120.3): Bot1's Ornithopter (0/2) and Bot2's Ornithopter each
+# carry 1 damage, Bot2's Memnite (1/1) dies, and the target itself is dealt none (it is "other" creatures). Cast from the hand it
+# discards and draws nothing: the Island Bot1 drew this turn is still in its hand (CR 601.2a).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Memnite
+Ornithopter
+Nibelheim Aflame
+Island x13
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Hand.Nibelheim Aflame.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Nibelheim Aflame.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island
+Bot1.Graveyard = Nibelheim Aflame
+Bot1.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot2.Graveyard = Memnite
+Bot2.Battlefield.Memnite = (absent)
