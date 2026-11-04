@@ -1,0 +1,8 @@
+{
+  "name": "Dwarven Castle Guard",
+  "manaCost": "{1}{W}",
+  "type": "Creature — Dwarf Soldier",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "When this creature dies, create a 1/1 colorless Hero creature token."
+}

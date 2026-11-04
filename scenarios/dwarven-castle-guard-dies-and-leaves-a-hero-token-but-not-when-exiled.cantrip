@@ -1,0 +1,61 @@
+# Dwarven Castle Guard: "When this creature dies, create a 1/1 colorless Hero creature token." Bot2's Lightning Bolt kills the first Guard
+# (2/1) on turn 2, and Bot1 gets a colorless 1/1 Hero (CR 700.4). The second Guard, exiled by Swords to Plowshares on turn 4, does not die,
+# so it makes no token: Bot1 has the one Hero and the exiled Guard is gone.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Dwarven Castle Guard
+Dwarven Castle Guard
+Plains x8
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Plains
+Swords to Plowshares
+Island x16
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Dwarven Castle Guard#1.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Dwarven Castle Guard.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Lightning Bolt.Cast(Dwarven Castle Guard#1)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Hero Token.Power = 1
+? Bot1.Battlefield.Hero Token.Toughness = 1
+? Bot1.Battlefield.Hero Token.Colors = (absent)
+? Bot1.Battlefield.Dwarven Castle Guard.Power = 2
+? Bot1.Graveyard = Dwarven Castle Guard
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Swords to Plowshares.Cast(Dwarven Castle Guard)
+Bot2.Battlefield.Plains.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 4
+Bot1.Battlefield.Dwarven Castle Guard = (absent)
+Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Graveyard = Dwarven Castle Guard
