@@ -1,0 +1,40 @@
+# Triple Triad: Bot1's library is empty at its upkeep on turn 5 (its eight cards: seven in hand, one drawn on turn 3), so it exiles
+# no card of its own. Bot2's Lightning Bolt is still exiled, but with no card of Bot1's to be lesser than, Bot1 may not cast it
+# (the game ends at the draw step that follows, which Bot1 cannot survive).
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Triple Triad
+Island
+Island
+Island
+
+[Bot2 Deck]
+Island x9
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triple Triad.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 1
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Exile.Count = 1
