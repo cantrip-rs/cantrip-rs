@@ -16,16 +16,8 @@ fn gain_deathtouch_and_return(g: &mut dyn Game, item: &StackItem) -> Result<(), 
     })
 }
 
-/// "Return it to the battlefield tapped under its owner's control" (CR 110.2a, 400.7): the card as it is in the graveyard
-/// (the creature that died; each card of a merged permanent, together, CR 730.3c); a token is not a card and has ceased to exist,
-/// so there is nothing to return (the rulings).
-fn return_it(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    effects::return_what_it_became(g, item.object, true, &[])?;
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
     spell: spell(&[targets::CREATURE], gain_deathtouch_and_return),
-    delayed: &[triggered(THIS_DIES, return_it, "When this creature dies, return it to the battlefield tapped under its owner's control.")],
+    delayed: &[triggered(THIS_DIES, effects::return_it_tapped, "When this creature dies, return it to the battlefield tapped under its owner's control.")],
     ..oracle::PAIN_101
 };

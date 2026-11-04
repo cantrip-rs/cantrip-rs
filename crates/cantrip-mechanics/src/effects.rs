@@ -1121,6 +1121,14 @@ pub fn return_what_it_became(g: &mut dyn Game, left: ObjectId, tapped: bool, cou
     Ok(g.put_all_onto_battlefield_with_counters(&cards, counters)?.into_iter().filter(|&c| g.is_on_battlefield(c)).collect())
 }
 
+/// "When this dies, return it to the battlefield tapped" (CR 110.2a, 400.7): `return_what_it_became` with no counters, tapped - the
+/// card as it is in the graveyard, under its owner's control, a double-faced one front face up (CR 712.14a); a token has ceased to
+/// exist, so nothing returns. Pain 101 and Vincent Valentine's Galian Beast print it.
+pub fn return_it_tapped(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    return_what_it_became(g, item.object, true, &[])?;
+    Ok(())
+}
+
 /// "Untap this [permanent]" (CR 701.26): the ability's source. Basalt Monolith and Grim Monolith print it.
 pub fn untap_self(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     g.untap(item.object);
