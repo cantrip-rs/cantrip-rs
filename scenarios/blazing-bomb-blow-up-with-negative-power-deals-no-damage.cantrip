@@ -1,0 +1,57 @@
+# Blazing Bomb's Blow Up deals damage equal to its power (CR 120.8, 208.1): Bot1 gives its own 2/2 Bomb -4/-0 with Depower first, so
+# it has power -2 and deals no damage - not 1 - to Bot2's Birds of Paradise (0/1), which lives. The Bomb is still sacrificed as the
+# cost. Fireball for X = 3 on turn 1 (its four mana make the Bomb a 2/2) is the only damage Bot2 takes.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Sapphire
+Blazing Bomb
+Fireball
+Depower
+Island x10
+
+[Bot2 Deck]
+Mox Emerald
+Birds of Paradise
+Island x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Blazing Bomb.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fireball.Cast(X: 3)
+Bot1.Target(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Birds of Paradise.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Depower.Cast(Bot1.Battlefield.Blazing Bomb)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Blazing Bomb.Power = -2
+Bot1.Battlefield.Blazing Bomb.Activate(Bot2.Battlefield.Birds of Paradise)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Blazing Bomb = (absent)
+Bot2.Battlefield.Birds of Paradise.Toughness = 1
+Bot2.Life = 17

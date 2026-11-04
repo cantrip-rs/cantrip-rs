@@ -1,0 +1,8 @@
+{
+  "name": "Blazing Bomb",
+  "manaCost": "{R}",
+  "type": "Creature — Elemental",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Whenever you cast a noncreature spell, if at least four mana was spent to cast it, put a +1/+1 counter on this creature.\nBlow Up — {T}, Sacrifice this creature: It deals damage equal to its power to target creature. Activate only as a sorcery."
+}
