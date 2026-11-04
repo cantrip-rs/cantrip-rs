@@ -1,0 +1,37 @@
+# Mind Bend changes forestwalk to islandwalk in Scarwood Hag's abilities; its tap ability then removes islandwalk from the target (CR 612.1, 612.2).
+[Bot1 Deck]
+Scarwood Hag
+Black Lotus
+Mox Sapphire
+Mind Bend
+Island x20
+[Bot2 Deck]
+Island
+Grayscaled Gharial
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Scarwood Hag.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Grayscaled Gharial.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind Bend.Cast(Bot1.Battlefield.Scarwood Hag)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Replace a basic land type)
+Bot1.Modes(Forest)
+Bot1.Modes(Island)
+Bot1.Battlefield.Scarwood Hag.Activate(Bot2.Battlefield.Grayscaled Gharial; Ability: loses)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Grayscaled Gharial.Keywords = (absent)

@@ -1,0 +1,41 @@
+# The type word in a resolving grant follows Mind Bend, including the exact four-green activation cost (CR 612.1-2).
+[Bot1 Deck]
+Scarwood Hag
+Black Lotus x2
+Mox Sapphire
+Mind Bend
+Mox Emerald
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Scarwood Hag.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind Bend.Cast(Bot1.Battlefield.Scarwood Hag)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(Replace a basic land type)
+Bot1.Modes(Forest)
+Bot1.Modes(Island)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Scarwood Hag.Activate(Bot1.Battlefield.Grizzly Bears; Ability: gains)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Keywords = Islandwalk
