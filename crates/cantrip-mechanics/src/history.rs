@@ -136,6 +136,27 @@ pub fn void(q: &dyn Query) -> bool {
         || crate::warp::spell_was_warped_this_turn(q)
 }
 
+/// The cast of the spell `id` is, or of the spell the permanent `id` was (CR 400.7, 608.3), and the turn it was cast in. For a
+/// copy of a spell (no cast of its own, CR 707.10) it is the cast of the spell it copied, back to the one that was cast:
+/// a copy copies the alternative cost paid for it, so "cast for its sneak cost" and "cast for its warp cost" are its too.
+/// `None` for an object that was never a spell cast: a card put onto the battlefield, a token.
+pub fn cast_of(q: &dyn Query, id: ObjectId) -> Option<(Cast, u32)> {
+    let mut spell = id;
+    loop {
+        let is_it = |s: ObjectId| s == spell || q.obj(s).became == Some(spell);
+        let cast = q.history().all().iter().rev().find_map(|r| match &r.event {
+            Event::Cast(c) if is_it(c.spell) => Some(Ok((*c, r.turn))),
+            Event::Copied { copy, original, .. } if is_it(*copy) => Some(Err(*original)),
+            _ => None,
+        });
+        match cast {
+            Some(Ok(cast)) => return Some(cast),
+            Some(Err(original)) => spell = original,
+            None => return None,
+        }
+    }
+}
+
 /// Cards (not tokens) that left `player`'s graveyard this turn (Gau, Feral Youth; Wilt in the Heat).
 pub fn cards_left_graveyard_this_turn(q: &dyn Query, player: PlayerId) -> usize {
     q.history()

@@ -2080,6 +2080,11 @@ pub struct GrantedWay {
     /// As `WayDef::enters_attacking`: a permanent spell cast by the way enters tapped and attacking what the creature its cost
     /// returned to hand was attacking (sneak, CR 702.190b).
     pub enters_attacking: bool,
+    /// As `CardDef::end_step_riders` for a card's own way: the index in the granting card's `delayed` abilities of the one
+    /// the way leaves behind to happen at the beginning of the next end step (CR 608.3g, 603.7a), about the permanent the
+    /// spell becomes, created as the spell is cast by the way. Warp given to a hand's cards (CR 702.185a: "exile this
+    /// permanent at the beginning of the next end step"): Tannuk, Steadfast Second.
+    pub end_step_rider: Option<u8>,
 }
 
 impl GrantedWay {
@@ -2096,6 +2101,7 @@ impl GrantedWay {
         spell_replacement: None,
         instant_speed: false,
         enters_attacking: false,
+        end_step_rider: None,
     };
 }
 

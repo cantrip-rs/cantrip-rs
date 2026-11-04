@@ -8468,21 +8468,27 @@ fn cast(
 
     // CR 608.3g: what the way cast for leaves behind to happen at the next end step, aimed at the permanent the spell
     // becomes, which `Obj::became` follows.
-    for &(rider_way, delayed) in def.end_step_riders {
-        if rider_way == way {
-            let since = cx.g.log.len() as u32;
-            cx.st().delayed_push(cantrip_state::Delayed {
-                when: DelayedWhen::Step { step: Step::End, on_turn_of: None },
-                source: spell,
-                controller: player,
-                ability: AbilityRef::delayed(face, delayed),
-                subject: Target::Object(spell),
-                members: cantrip_state::Span::default(),
-                since,
-                acquired: Acquired::OWN,
-                words: None,
-            });
-        }
+    // A way a permanent gives leaves its own, from the granting card's delayed abilities (warp given, CR 702.185a); the
+    // card's own ways are not open under it.
+    let given = granted.and_then(|g| g.what.end_step_rider.map(|n| AbilityRef::delayed(g.grant.ability.card, n)));
+    let own = def
+        .end_step_riders
+        .iter()
+        .filter(|&&(rider_way, _)| granted.is_none() && rider_way == way)
+        .map(|&(_, n)| AbilityRef::delayed(face, n));
+    for ability in given.into_iter().chain(own) {
+        let since = cx.g.log.len() as u32;
+        cx.st().delayed_push(cantrip_state::Delayed {
+            when: DelayedWhen::Step { step: Step::End, on_turn_of: None },
+            source: spell,
+            controller: player,
+            ability,
+            subject: Target::Object(spell),
+            members: cantrip_state::Span::default(),
+            since,
+            acquired: Acquired::OWN,
+            words: None,
+        });
     }
 
     // CR 601.2i: it becomes cast.

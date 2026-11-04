@@ -1,0 +1,49 @@
+# Tannuk, Steadfast Second's "Other creatures you control have haste" and "red creature cards in your hand have warp
+# {2}{R}": Bot1's Memnite has haste and Tannuk itself does not ("other"); Grizzly Bears, a green creature card in Bot1's
+# hand, has no warp; on Bot2's turn Bot2's Gray Ogre, a red creature, has no haste, and the Hill Giant in Bot2's hand has no
+# warp (not "your hand" of Tannuk's controller). Refused even with mana to spare.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Tannuk, Steadfast Second
+Memnite
+Grizzly Bears
+Mountain x16
+
+[Bot2 Deck]
+Mox Ruby x3
+Gray Ogre
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Tannuk, Steadfast Second.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T1 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Keywords = Haste
+? Bot1.Battlefield.Tannuk, Steadfast Second.Keywords = (absent)
+! Bot1.Hand.Grizzly Bears.Cast(Ability: Warp)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Battlefield.Mox Ruby#2.Activate
+Bot2.Battlefield.Mox Ruby#3.Activate
+Bot2.Hand.Gray Ogre.Cast
+Bot2.Pass
+[T2 Bot2.Main2]
+? Bot2.Battlefield.Gray Ogre.Keywords = (absent)
+! Bot2.Hand.Hill Giant.Cast(Ability: Warp)
+[T3 Bot1.Main1]
+
+[Expect]
+Bot2.Battlefield = Mox Ruby; Mox Ruby; Mox Ruby; Gray Ogre
+Bot2.Hand = Hill Giant; Island; Island; Island

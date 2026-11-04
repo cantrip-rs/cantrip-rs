@@ -3,7 +3,9 @@
 //!
 //! A card with warp lists `way(cost, text)` as its only alternative cost, `EXILE` among its `delayed` abilities as the
 //! first, and `RIDERS` as its `end_step_riders`: the way casts it, and the core creates the delayed ability without
-//! the stack as the spell is cast for it (CR 608.3g, 603.7a), about the permanent the spell becomes.
+//! the stack as the spell is cast for it (CR 608.3g, 603.7a), about the permanent the spell becomes. A permanent that
+//! gives warp lists `granted(cost)` among its granted ways and `EXILE` as its first `delayed` ability (Tannuk, Steadfast
+//! Second).
 
 use cantrip_api::*;
 
@@ -21,18 +23,27 @@ pub const fn way_with_cost(cost: Cost, text: &'static str) -> WayDef {
 /// Warp's delayed ability (CR 702.185a): the way is the card's first and this its first delayed ability.
 pub const RIDERS: &[(u8, u8)] = &[(1, 0)];
 
-/// "Was cast for its warp cost" (CR 702.185a): the permanent (or spell) was cast through the way a card with warp lists
-/// as warp (`WayKind::Warp`, set by `way`). Another keyword's way is not warp's, and a permanent that was not cast (a
-/// token, a copy, one put onto the battlefield) was not cast for it. Full Bore asks it.
+/// "Was cast for its warp cost" (CR 702.185a): the permanent (or spell) was cast through a way marked as warp
+/// (`WayKind::Warp`), the card's own (`way`) or one a permanent gave it (`granted`: Tannuk, Steadfast Second). Another
+/// keyword's way is not warp's, and a permanent that was never a spell cast (a token, one put onto the battlefield) was not
+/// cast for it; a copy of a spell copies the alternative cost the original was cast for (CR 707.10). Read from the spell's
+/// `Cast` record (`history::cast_of`). Full Bore asks it.
 pub fn was_cast_for_warp(q: &dyn Query, id: ObjectId) -> bool {
-    let object = q.state().obj(id);
-    object.cast_way > 0 && q.card(object.card).ways.get(object.cast_way as usize - 1).is_some_and(|w| w.kind == WayKind::Warp)
+    crate::history::cast_of(q, id).is_some_and(|(cast, _)| cast.way_kind(q) == WayKind::Warp)
 }
 
-/// "A spell was warped this turn" (CR 702.185c): a spell, any player's, was cast for its warp cost this turn. Elegy Acolyte's
-/// void condition asks it.
+/// "A spell was warped this turn" (CR 702.185c): a spell, any player's, was cast for its warp cost this turn, its own or a
+/// granted one. Elegy Acolyte's void condition asks it.
 pub fn spell_was_warped_this_turn(q: &dyn Query) -> bool {
-    q.history().casts().any(|c| c.way > 0 && q.card(q.obj(c.spell).card).ways.get(c.way as usize - 1).is_some_and(|w| w.kind == WayKind::Warp))
+    q.history().casts().any(|c| c.way_kind(q) == WayKind::Warp)
+}
+
+/// Warp a permanent gives cards in its controller's hand (CR 702.185a, 113.6, 604): "artifact cards and red creature cards
+/// in your hand have warp {2}{R}" (Tannuk, Steadfast Second). `cost` is the warp cost of each card, or none for one without
+/// it. The granting card lists `EXILE` as its first `delayed` ability: the core sets it up as the spell is cast by this
+/// way (`GrantedWay::end_step_rider`), about the permanent the spell becomes, as it does for a card's own warp.
+pub const fn granted(cost: GrantedCost) -> GrantedWay {
+    GrantedWay { text: "Warp", cost, from: ZoneKind::Hand, kind: WayKind::Warp, end_step_rider: Some(0), ..GrantedWay::CAST }
 }
 
 /// Exile the permanent the warped spell became, if it is still on the battlefield, and let its owner cast it from

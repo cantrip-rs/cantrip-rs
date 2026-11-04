@@ -55,6 +55,19 @@ impl Cast {
         self.types.has(t)
     }
 
+    /// Which keyword's way it was cast by (CR 118.9, 601.2b): one a permanent gave it, under that permanent's permission
+    /// (Underworld Breach's escape, Tannuk, Steadfast Second's warp), or else one of its card's own; `WayKind::Other` for its
+    /// mana cost, another permission, or a way of no keyword. Under another permission the card's own ways are not open, so
+    /// a way given is the only one it can have been cast by then. "Escaped" (CR 702.138b), "cast for its warp cost" (CR
+    /// 702.185a) and "cast for its sneak cost" (CR 702.190a) ask it.
+    pub fn way_kind(&self, q: &dyn crate::Query) -> crate::WayKind {
+        match self.granted_by() {
+            Some(grant) => grant.ability.as_granted_way().and_then(|k| q.card(grant.ability.card).granted_ways.get(k)).map(|w| w.kind),
+            None => self.way.checked_sub(1).and_then(|k| q.card(q.obj(self.spell).card).ways.get(k as usize)).map(|w| w.kind),
+        }
+        .unwrap_or(crate::WayKind::Other)
+    }
+
     /// The spell's mana value as it became cast (CR 202.3e: X counted, 601.2i), from its last-known row.
     pub fn value(&self, q: &dyn crate::Query) -> u32 {
         let s = q.state();

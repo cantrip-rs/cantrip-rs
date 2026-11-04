@@ -1,0 +1,8 @@
+{
+  "name": "Tannuk, Steadfast Second",
+  "manaCost": "{2}{R}{R}",
+  "type": "Legendary Creature — Kavu Pilot",
+  "power": 3,
+  "toughness": 5,
+  "oracleText": "Other creatures you control have haste.\nArtifact cards and red creature cards in your hand have warp {2}{R}. (You may cast a card from your hand for its warp cost. Exile that permanent at the beginning of the next end step, then you may cast it from exile on a later turn.)"
+}

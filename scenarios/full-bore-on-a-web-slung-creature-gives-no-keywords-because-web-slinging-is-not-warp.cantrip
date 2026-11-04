@@ -1,0 +1,38 @@
+# Full Bore: "If that creature was cast for its warp cost" (CR 702.185a). Another keyword's alternative cost is not warp's:
+# Bot1 attacks with Memnite on turn 3, then casts Spider-Man, Web-Slinger for its web-slinging cost {W} (Mox Pearl),
+# returning the tapped Memnite, and Full Bore on it (Mox Ruby): a 6/5 with neither trample nor haste.
+
+[Bot1 Deck]
+Memnite
+Mox Pearl
+Mox Ruby
+Spider-Man, Web-Slinger
+Full Bore
+Mountain x2
+Mountain x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Spider-Man, Web-Slinger.Cast(Ability: Web-slinging)
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Full Bore.Cast(Bot1.Battlefield.Spider-Man, Web-Slinger)
+Bot1.Pass
+[T3 Bot1.End]
+? Bot1.Battlefield.Spider-Man, Web-Slinger.Power = 6
+? Bot1.Battlefield.Spider-Man, Web-Slinger.Keywords = (absent)
+
+[Expect]
+Bot1.Hand = Memnite; Mountain; Mountain; Mountain
+Bot1.Graveyard = Full Bore

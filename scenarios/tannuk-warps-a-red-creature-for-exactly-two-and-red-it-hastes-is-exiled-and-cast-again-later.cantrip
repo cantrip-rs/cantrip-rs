@@ -1,0 +1,51 @@
+# Tannuk, Steadfast Second: "Red creature cards in your hand have warp {2}{R}" (CR 702.185a, 113.6). Bot1 casts Tannuk
+# (Black Lotus and a Mox Ruby), then Hill Giant ({3}{R}) for the warp Tannuk gives: with two Mox Rubies it is not offered
+# (and would be with more mana), with a third it is, so the cost is {2}{R} exactly. "Other creatures you control have haste":
+# the Giant attacks at once for 3. At the beginning of the end step warp exiles it, and on Bot1's next turn it is cast from
+# exile for its mana cost (CR 702.185a), staying.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby x4
+Tannuk, Steadfast Second
+Hill Giant
+Mountain x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Tannuk, Steadfast Second.Cast
+Bot1.Pass
+! Bot1.Hand.Hill Giant.Cast(Ability: Warp; Mana: short)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Hill Giant.Cast(Ability: Warp)
+? Bot1.Mana = 
+[T1 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Hill Giant.Keywords = Haste
+? Bot1.Battlefield.Tannuk, Steadfast Second.Keywords = (absent)
+Bot1.Attack(Hill Giant > Bot2)
+[T2 Bot2.Main1]
+? Exile = Hill Giant
+? Bot2.Life = 17
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Exile.Hill Giant.Cast
+Bot1.Pass
+[T4 Bot2.Main1]
+
+[Expect]
+Exile = 
+Bot1.Battlefield = Mox Ruby; Mox Ruby; Mox Ruby; Mox Ruby; Tannuk, Steadfast Second; Hill Giant

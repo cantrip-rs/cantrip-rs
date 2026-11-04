@@ -1,0 +1,48 @@
+# Elegy Acolyte's Void: "if ... a spell was warped this turn" (CR 702.185c). Turn 1 Bot1 casts Elegy Acolyte (Black Lotus
+# and Mox Jet; the Lotus having left, a Robot that turn), on turn 3 Tannuk, Steadfast Second (four Mox Rubies: no Robot,
+# nothing left and nothing warped). On turn 5 Bot1 does nothing but cast Hill Giant for the warp Tannuk gives: nothing left
+# the battlefield as the end step begins, so the warp alone makes the Void true and a second Robot is created.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Elegy Acolyte
+Mox Ruby x4
+Tannuk, Steadfast Second
+Hill Giant
+Mountain x16
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Elegy Acolyte.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Robot Token.Token = true
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Tannuk, Steadfast Second.Cast
+Bot1.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield = Mox Jet; Elegy Acolyte; Mox Ruby; Mox Ruby; Mox Ruby; Mox Ruby; Robot Token; Tannuk, Steadfast Second
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Hill Giant.Cast(Ability: Warp)
+Bot1.Pass
+[T6 Bot2.Main1]
+
+[Expect]
+Exile = Hill Giant
+Bot1.Battlefield = Mox Jet; Elegy Acolyte; Mox Ruby; Mox Ruby; Mox Ruby; Mox Ruby; Robot Token; Tannuk, Steadfast Second; Robot Token

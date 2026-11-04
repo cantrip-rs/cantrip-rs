@@ -1689,7 +1689,12 @@ A `GrantedWay` names the zone of its controller's own it casts from (`GrantedWay
 Paragon, Underworld Breach's escape, mayhem) or the hand. Each is judged on the face being cast and offered as that face's
 cast with the way's `Grant`, which the spell's `Cast` record keeps (`Cast::by`): what the spell was cast with is read from
 it and the way it names (`GrantedWay::kind`, as `WayDef::kind` for the card's own ways), so a card escaped by Underworld
-Breach's escape escaped as one cast by its own (`escape::escaped`, CR 702.138b). One that is a permission (`GrantedWay::permission`: Lurrus, Serra Paragon) is a route: the card
+Breach's escape escaped as one cast by its own (`escape::escaped`, CR 702.138b), and one warped by Tannuk, Steadfast
+Second's warp was warped (`Cast::way_kind`, `warp::was_cast_for_warp`). A way whose keyword leaves a delayed ability as the
+spell is cast, as a card's own way does through `CardDef::end_step_riders`, names it among the granting card's `delayed`
+abilities (`GrantedWay::end_step_rider`: warp's "exile this permanent at the beginning of the next end step", CR
+702.185a), and the core creates it about the spell as it is cast, so it happens whether or not the granting permanent is
+still there. One that is a permission (`GrantedWay::permission`: Lurrus, Serra Paragon) is a route: the card
 is cast by it for its mana cost or any alternative cost, as by any permission. Any other is the one alternative cost of that
 cast (CR 118.9a); additional costs and cost increases still apply to it (CR 118.9d). Whether X is announced follows from the
 cost the way names (CR 107.3a-b): a cost that is or includes the mana cost has its {X}; `Cost::NONE`, "without paying its
@@ -2870,7 +2875,7 @@ Known gaps:
   event records a change of control); Arachne, Psionic Weaver needs a card type chosen as it enters (`Entering` has a
   color, a subtype, a player, a name, odd or even, no card type) and a prompt for it; Peter Parker // Amazing
   Spider-Man's back face grants web-slinging to the legendary spells its controller casts, a way a permanent gives to
-  cards in hand (`GrantedWay::from` the hand), which no card in content gives yet.
+  cards in hand (`GrantedWay::from` the hand), as Tannuk, Steadfast Second gives warp.
 - `web_slinging::way` is a way from the hand (`ZoneKind::Hand`), like every printed alternative cost. Cast from
   elsewhere at priority by a permission or the card's own say-so, a hand way is offered too (`castable`'s `elsewhere`;
   Spider-Sense from the graveyard under Yawgmoth's Will is a scenario, and sneak's instant-speed way likewise), unless its
