@@ -1,0 +1,34 @@
+# Il Mheg Pixie: surveil 1 may put nothing into the graveyard (CR 701.25a). On turn 3 Bot1 draws Mountain, attacks, and keeps the
+# Swamp on top: the graveyard stays empty and the Swamp is the next card Bot1 draws, on turn 5. The trigger does not happen when the
+# Pixie does not attack, so the library is untouched before combat.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Il Mheg Pixie
+Island x4
+Mountain
+Swamp
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Il Mheg Pixie.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Library.Count = 13
+Bot1.Attack(Il Mheg Pixie > Bot2)
+Bot1.Arrange(Swamp | )
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Hand = Island; Island; Island; Island; Mountain; Swamp
+Bot1.Library.Count = 12

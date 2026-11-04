@@ -1,0 +1,11 @@
+{
+  "name": "Il Mheg Pixie",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Faerie",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nWhenever this creature attacks, surveil 1. (Look at the top card of your library. You may put it into your graveyard.)",
+  "keywords": [
+    "Flying"
+  ]
+}

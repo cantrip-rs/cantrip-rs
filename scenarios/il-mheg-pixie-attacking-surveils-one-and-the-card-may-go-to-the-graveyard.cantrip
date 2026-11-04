@@ -1,0 +1,35 @@
+# Il Mheg Pixie: "Flying. Whenever this creature attacks, surveil 1." Bot1 pays {1}{U} with Mox Sapphire and Mox Ruby on turn 1. On turn 3,
+# after drawing Mountain, it attacks; the trigger looks at exactly one card, the Swamp on top, and Bot1 puts it into the graveyard (CR 701.25a)
+# while the Plains under it stays in the library. The Pixie flies, and Bot2, with no flyer, takes its 2 damage.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Il Mheg Pixie
+Island x4
+Mountain
+Swamp
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Il Mheg Pixie.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Il Mheg Pixie > Bot2)
+Bot1.Arrange(| Swamp)
+[T3 Bot1.Main2]
+? Bot1.Graveyard = Swamp
+? Bot1.Battlefield.Il Mheg Pixie.Keywords = Flying
+
+[Expect]
+Bot1.Graveyard = Swamp
+Bot1.Library.Count = 12
+Bot2.Life = 18
