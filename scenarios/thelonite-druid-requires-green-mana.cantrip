@@ -1,0 +1,34 @@
+# Two white sources cannot pay {1}{G}; after a Forest is played the same activation is legal (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Pearl
+Thelonite Druid
+Forest
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Thelonite Druid.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Thelonite Druid.Activate(Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Thelonite Druid.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Thelonite Druid)
+Bot1.Choose(Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Forest.Power = 2
