@@ -1,0 +1,63 @@
+# The Spider cannot activate without red or green even with three other mana, and can activate with the exact cost (CR 602.2).
+[Bot1 Deck]
+Giant Trap Door Spider
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Forest x20
+
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Ornithopter
+Forest x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Giant Trap Door Spider.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Mox Ruby.Activate
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Giant Trap Door Spider.Activate(Bot2.Battlefield.Grizzly Bears; Mana: short)
+[T6 Bot2.BeginCombat]
+Bot1.Battlefield.Mox Emerald.Activate
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Giant Trap Door Spider.Activate(Bot2.Battlefield.Grizzly Bears; Mana: short)
+[T8 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Giant Trap Door Spider.Activate(Bot2.Battlefield.Grizzly Bears)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Exile = Giant Trap Door Spider; Grizzly Bears
