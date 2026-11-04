@@ -1,0 +1,24 @@
+# A creature spell becomes white and remains white as the permanent it becomes
+# across the spell's resolution (CR 400.7a, 611.2a).
+[Bot1 Deck]
+Purelace
+Mox Pearl
+Mox Emerald
+Llanowar Elves
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Purelace.Cast(Stack.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Colors = White

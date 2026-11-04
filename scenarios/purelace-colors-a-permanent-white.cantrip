@@ -1,0 +1,18 @@
+# Purelace makes a colorless permanent white indefinitely (CR 105.3, 611.2a).
+[Bot1 Deck]
+Mox Pearl
+Ornithopter
+Purelace
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Purelace.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = White

@@ -1,0 +1,26 @@
+# Sleight of Mind changes Purelace's white instruction to blue while it is on the stack (CR 612.2).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Purelace
+Sleight of Mind
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Purelace.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Stack.Purelace)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(White)
+Bot1.Colors(Blue)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Colors = Blue

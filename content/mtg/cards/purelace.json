@@ -1,0 +1,6 @@
+{
+  "name": "Purelace",
+  "manaCost": "{W}",
+  "type": "Instant",
+  "oracleText": "Target spell or permanent becomes white. (Mana symbols on that permanent remain unchanged.)"
+}
