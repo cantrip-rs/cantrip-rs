@@ -1,0 +1,53 @@
+# The Sphere gives its controller's creatures +2/+0 on their turn and -0/-2 on the opponent's turn, killing a 1/1 (CR 604.1, 704.5f).
+[Bot1 Deck]
+Vibrating Sphere
+Black Lotus
+Mox Pearl
+Mox Ruby
+Steel Wall
+Memnite
+Island x20
+[Bot2 Deck]
+Steel Wall
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Steel Wall.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Steel Wall.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vibrating Sphere.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Steel Wall.Power = 2
+? Bot1.Battlefield.Steel Wall.Toughness = 4
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot2.Battlefield.Steel Wall.Power = 0
+? Bot2.Battlefield.Steel Wall.Toughness = 4
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Steel Wall.Power = 0
+? Bot1.Battlefield.Steel Wall.Toughness = 2
+? Bot1.Graveyard.Memnite.Power = 1
+? Bot2.Battlefield.Steel Wall.Power = 0
+? Bot2.Battlefield.Steel Wall.Toughness = 4
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Steel Wall.Power = 2
+Bot1.Battlefield.Steel Wall.Toughness = 4
+Bot2.Battlefield.Steel Wall.Toughness = 4
