@@ -1,0 +1,50 @@
+# A lost flip cannot make the ability's controller sacrifice a creature now controlled by an opponent (CR 701.21a).
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Mox Jet
+Goblin Kites
+Grizzly Bears
+Mountain
+Mountain x14
+[Bot2 Deck]
+Mountain
+Claim the Firstborn
+Island x18
+[Dice]
+2
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Kites.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Goblin Kites.Activate(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Flying
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Claim the Firstborn.Cast(Bot1.Battlefield.Grizzly Bears)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Grizzly Bears.Toughness = 2
+[T2 Bot2.End]
+? Stack.Count = 1
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Graveyard =

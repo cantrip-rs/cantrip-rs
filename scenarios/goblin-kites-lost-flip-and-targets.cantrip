@@ -1,0 +1,57 @@
+# Only your creature with toughness at most 2 is eligible; losing the end-step flip sacrifices it.
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Goblin Kites
+Grizzly Bears
+Phyrexian Walker
+Mountain
+Mountain x13
+[Bot2 Deck]
+Ornithopter
+Island x19
+[Dice]
+2
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Kites.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Battlefield.Goblin Kites.Activate(Bot1.Battlefield.Grizzly Bears; Mana: short)
+? Bot1.Mana = {G}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Battlefield.Goblin Kites.Activate(Bot1.Battlefield.Phyrexian Walker)
+! Bot1.Battlefield.Goblin Kites.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Goblin Kites.Activate(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = Flying
+[T5 Bot1.End]
+? Stack.Count = 1
+? Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Grizzly Bears
+Bot1.Battlefield.Phyrexian Walker.Toughness = 3
+Bot2.Battlefield.Ornithopter.Toughness = 2
