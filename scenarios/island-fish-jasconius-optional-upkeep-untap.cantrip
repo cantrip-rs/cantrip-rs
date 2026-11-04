@@ -1,0 +1,59 @@
+# The Fish attacks an Island's controller, stays tapped through untap, and its upkeep payment can be declined or paid for {U}{U}{U} (CR 502.3, 118.1).
+[Bot1 Deck]
+Island
+Island Fish Jasconius
+Black Lotus x2
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Island Fish Jasconius.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Attack(Island Fish Jasconius > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Island Fish Jasconius.Tapped = true
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Island Fish Jasconius.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Decline
+? Bot1.Mana = {U}{U}{U}
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Island Fish Jasconius.Tapped = true
+Bot1.Hand.Island.Play
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Island#3.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Island Fish Jasconius.Tapped = false
+Bot2.Life = 14
