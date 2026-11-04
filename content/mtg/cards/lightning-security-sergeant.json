@@ -1,0 +1,11 @@
+{
+  "name": "Lightning, Security Sergeant",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Human Soldier",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Menace (This creature can't be blocked except by two or more creatures.)\nWhenever Lightning deals combat damage to a player, exile the top card of your library. You may play that card for as long as you control Lightning.",
+  "keywords": [
+    "Menace"
+  ]
+}
