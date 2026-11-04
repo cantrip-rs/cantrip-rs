@@ -1,0 +1,33 @@
+# Aerith Rescue Mission, Take the Elevator: three 1/1 colorless Hero creature tokens (CR 111.1, 701.7).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Aerith Rescue Mission
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aerith Rescue Mission.Cast
+Bot1.Modes(Take the Elevator)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Hero Token#1.Power = 1
+Bot1.Battlefield.Hero Token#2.Subtypes = Hero
+Bot1.Battlefield.Hero Token#3.Toughness = 1
+Bot1.Battlefield.Hero Token#1.Tapped = false
+Bot1.Battlefield.Count = 7

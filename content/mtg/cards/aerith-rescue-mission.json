@@ -1,0 +1,6 @@
+{
+  "name": "Aerith Rescue Mission",
+  "manaCost": "{3}{W}",
+  "type": "Sorcery",
+  "oracleText": "Choose one —\n• Take the Elevator — Create three 1/1 colorless Hero creature tokens.\n• Take 59 Flights of Stairs — Tap up to three target creatures. Put a stun counter on one of them. (If a permanent with a stun counter would become untapped, remove one from it instead.)"
+}
