@@ -1,0 +1,11 @@
+{
+  "name": "Zodiark, Umbral God",
+  "manaCost": "{B}{B}{B}{B}{B}",
+  "type": "Legendary Creature — God",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "Indestructible\nWhen Zodiark enters, each player sacrifices half the non-God creatures they control of their choice, rounded down.\nWhenever a player sacrifices another creature, put a +1/+1 counter on Zodiark.",
+  "keywords": [
+    "Indestructible"
+  ]
+}

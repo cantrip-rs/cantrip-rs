@@ -1,0 +1,51 @@
+# Zodiark, Umbral God (CR 701.21a, 101.4, 107.1a, 603.2): entering, each player sacrifices half the non-God creatures they control,
+# rounded down. Bot1 has three Ornithopters (half of 3 is 1; Zodiark, a God, is not counted, or it would be 2) and Bot2 five (2),
+# so three creatures are sacrificed and Zodiark, 5/5, gets a +1/+1 counter for each of them: 8/8. Bot2 is left with 3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Swamp
+Zodiark, Umbral God
+Ornithopter x3
+Swamp x16
+
+[Bot2 Deck]
+Ornithopter x5
+Island x2
+Island x13
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Zodiark, Umbral God.Cast
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Battlefield.Count = 3
+Bot1.Battlefield.Zodiark, Umbral God.Power = 8
+Bot1.Battlefield.Zodiark, Umbral God.Toughness = 8
