@@ -19,3 +19,12 @@ pub fn less_if_you_control_subtype<const N: u8, const TYPE: u16>(q: &dyn Query, 
     let wanted = crate::lands::word(q, source, TYPE);
     if q.permanents_of(player).into_iter().any(|id| q.chars(id).has_subtype(wanted)) { CostDelta::less(N as u32) } else { CostDelta::NONE }
 }
+
+/// "This ability costs {1} less to activate for each [subtype] you control" (CR 601.2f, 118.7a): generic mana only, counted as
+/// the total cost is determined over the controller's permanents of that type, read through the layers with the type a word of
+/// the ability's rules text (CR 612.2). `TYPE` is `lands::sub(Subtype::Town)` and so on. The Lonely Mountain (Equipment) and
+/// Qiqirn Merchant (Town) print it.
+pub fn ability_less_for_each_subtype_you_control<const TYPE: u16>(q: &dyn Query, asker: &Asker, _: Costed, _: &[Target]) -> CostDelta {
+    let wanted = crate::lands::word(q, asker.source, TYPE);
+    CostDelta::less(crate::permanents_with_subtype_you_control(q, asker.controller, wanted) as u32)
+}
