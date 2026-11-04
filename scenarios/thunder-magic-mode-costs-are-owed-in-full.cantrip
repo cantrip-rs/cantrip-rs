@@ -1,0 +1,44 @@
+# Thunder Magic, tiered (CR 702.183a): the mode's cost is paid on top of {R}. With only Mox Ruby, Thundara ({3}) and Thundaga
+# ({5}{R}) each still owe their cost once the Ruby has paid {R}: those casts are cancelled and nothing is dealt; the same Ruby
+# then casts Thunder, which costs nothing more.
+
+[Bot1 Deck]
+Mox Ruby
+Thunder Magic
+Island x18
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Indomitable Ancients
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Indomitable Ancients.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thunder Magic.Cast
+Bot1.Modes(Thundara)
+Bot1.Target(Bot2.Battlefield.Indomitable Ancients)
+Bot1.Cancel
+Bot1.Hand.Thunder Magic.Cast
+Bot1.Modes(Thundaga)
+Bot1.Target(Bot2.Battlefield.Indomitable Ancients)
+Bot1.Cancel
+Bot1.Hand.Thunder Magic.Cast
+Bot1.Modes(Thunder)
+Bot1.Target(Bot2.Battlefield.Indomitable Ancients)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Indomitable Ancients.Damage = 2
+Bot1.Graveyard = Thunder Magic
