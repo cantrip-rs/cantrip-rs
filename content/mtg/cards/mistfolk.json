@@ -1,0 +1,8 @@
+{
+  "name": "Mistfolk",
+  "manaCost": "{U}{U}",
+  "type": "Creature — Illusion",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{U}: Counter target spell that targets this creature."
+}
