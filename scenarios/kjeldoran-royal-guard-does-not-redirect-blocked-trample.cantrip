@@ -1,0 +1,57 @@
+# The Guard redirects the unblocked Goblin, while trample damage from a blocked attacker still reaches the player (CR 702.19b, 614.1a).
+[Bot1 Deck]
+Plains
+Savannah Lions
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Kjeldoran Royal Guard
+Island x20
+[Bot2 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Goblin Deathraiders
+Mons's Goblin Raiders
+Island x20
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kjeldoran Royal Guard.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Goblin Deathraiders.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Goblin Deathraiders > Bot1; Mons's Goblin Raiders > Bot1)
+Bot1.Battlefield.Kjeldoran Royal Guard.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Block(Savannah Lions > Goblin Deathraiders)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 18
+Bot1.Battlefield.Kjeldoran Royal Guard.Damage = 1
+Bot1.Graveyard.Savannah Lions.Power = 2

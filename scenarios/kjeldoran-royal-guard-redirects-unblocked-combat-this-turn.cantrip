@@ -1,0 +1,58 @@
+# The Guard redirects two unblocked attackers' combat damage, but not Lightning Bolt; next turn its effect is gone (CR 614.1a, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Kjeldoran Royal Guard
+Island x20
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Mons's Goblin Raiders
+Mons's Goblin Raiders
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kjeldoran Royal Guard.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Mons's Goblin Raiders.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Mons's Goblin Raiders#1 > Bot1; Mons's Goblin Raiders#2 > Bot1)
+Bot1.Battlefield.Kjeldoran Royal Guard.Activate
+? Bot1.Battlefield.Kjeldoran Royal Guard.Tapped = true
+! Bot1.Battlefield.Kjeldoran Royal Guard.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 17
+[T4 Bot2.Main2]
+? Bot1.Life = 17
+? Bot1.Battlefield.Kjeldoran Royal Guard.Damage = 2
+[T6 Bot2.DeclareAttackers]
+Bot2.Attack(Mons's Goblin Raiders#1 > Bot1; Mons's Goblin Raiders#2 > Bot1)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Life = 15
+Bot1.Battlefield.Kjeldoran Royal Guard.Damage = 0

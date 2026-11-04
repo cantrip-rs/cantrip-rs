@@ -1,0 +1,47 @@
+# Exiling the Guard after its ability resolves means combat damage from an unblocked attacker reaches the player normally (CR 614.9).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Kjeldoran Royal Guard
+Island x20
+[Bot2 Deck]
+Plains
+Mox Pearl
+Savannah Lions
+Swords to Plowshares
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kjeldoran Royal Guard.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Savannah Lions.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Savannah Lions > Bot1)
+Bot1.Battlefield.Kjeldoran Royal Guard.Activate
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Kjeldoran Royal Guard)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Life = 22
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Exile = Kjeldoran Royal Guard
