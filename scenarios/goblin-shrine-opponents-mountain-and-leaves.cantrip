@@ -1,0 +1,72 @@
+# Shrine boosts both players' Goblins on an opponent's Mountain. Sacrificing an unrelated Lotus causes no damage; destroying Shrine deals 1 to each Goblin (CR 702.5a, 603.2, 120.3).
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Goblin Assailant
+Black Lotus
+Goblin Shrine
+Ornithopter
+Black Lotus
+Island x15
+[Bot2 Deck]
+Mountain
+Mox Ruby
+Goblin Assailant
+Plains
+Disenchant
+Island
+Island
+Island x15
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Assailant.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Goblin Assailant.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Goblin Shrine.Cast(Bot2.Battlefield.Mountain)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Shrine.AttachedTo = Mountain
+? Bot1.Battlefield.Goblin Assailant.Power = 3
+? Bot1.Battlefield.Goblin Assailant.Toughness = 2
+? Bot2.Battlefield.Goblin Assailant.Power = 3
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Assailant.Damage = 0
+? Bot2.Battlefield.Goblin Assailant.Damage = 0
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Goblin Shrine)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Goblin Assailant.Damage = 1
+? Bot2.Battlefield.Goblin Assailant.Damage = 1
+? Bot1.Battlefield.Ornithopter.Damage = 0
+? Bot1.Battlefield.Goblin Assailant.Power = 2
+[Expect]
+Bot1.Graveyard = Goblin Shrine; Black Lotus; Black Lotus

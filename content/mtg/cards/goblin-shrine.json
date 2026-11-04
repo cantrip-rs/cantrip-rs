@@ -1,0 +1,6 @@
+{
+  "name": "Goblin Shrine",
+  "manaCost": "{1}{R}{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land\nAs long as enchanted land is a basic Mountain, Goblin creatures get +1/+0.\nWhen this Aura leaves the battlefield, it deals 1 damage to each Goblin creature."
+}
