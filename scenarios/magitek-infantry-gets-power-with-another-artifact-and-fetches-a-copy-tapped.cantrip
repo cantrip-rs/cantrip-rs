@@ -1,0 +1,55 @@
+# Magitek Infantry (1/1 artifact creature): alone it is 1/1 -- it is an artifact itself but not "another"; with a Mox Pearl it is
+# 2/1; the opponent's Mox Jet does not count. {2}{W} (paid exactly) fetches another Magitek Infantry from the library onto the
+# battlefield tapped, leaving the other cards, and shuffles; a copy of the Infantry in the opponent's library stays.
+
+[Bot1 Deck]
+Magitek Infantry
+Mox Pearl
+Plains x5
+Plains x2
+Magitek Infantry
+Magitek Infantry
+Plains x9
+
+[Bot2 Deck]
+Magitek Infantry
+Mox Jet
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Magitek Infantry.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Magitek Infantry.Power = 1
+? Bot1.Battlefield.Magitek Infantry.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+? Bot1.Battlefield.Magitek Infantry.Power = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Magitek Infantry.Power = 2
+? Bot1.Battlefield.Magitek Infantry.Toughness = 1
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Magitek Infantry.Activate
+Bot1.Pass
+Bot2.Pass
+! Bot1.Search(Magitek Infantry; Magitek Infantry)
+Bot1.Search(Magitek Infantry)
+? Bot1.Mana =
+? Bot1.Battlefield.Magitek Infantry#2.Tapped = true
+? Bot1.Battlefield.Magitek Infantry#2.Power = 2
+? Bot1.Battlefield.Magitek Infantry#1.Power = 2
+? Bot1.Library.Count = 11
+? Bot1.Library.Magitek Infantry.Power = 1
+? Bot2.Library.Count = 12
+? Bot1.Shuffles = 1
+
+[Expect]
+Turn = 3
