@@ -1,0 +1,51 @@
+# The life-gain target gains hexproof in response, while the caster remains a legal damage target (CR 608.2b).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Fiery Justice
+Island x20
+
+[Bot2 Deck]
+Black Lotus x2
+Mox Pearl
+Valley Floodcaller
+Leyline of Sanctity
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus#1.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot2.Hand.Valley Floodcaller.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fiery Justice.Cast
+Bot1.Divide(Bot1: 5)
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Leyline of Sanctity.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 15
+Bot2.Life = 20
+Bot2.Battlefield.Leyline of Sanctity.Types = Enchantment

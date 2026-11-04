@@ -1,0 +1,42 @@
+# When the life-gain target concedes, the legal damage target still takes its five damage.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Fiery Justice
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fiery Justice.Cast
+Bot1.Divide(Bot3: 5)
+! Bot1.Target(Bot1)
+Bot1.Target(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Concede
+Bot3.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 20
+Bot2.Status = Lost
+Bot3.Life = 15
