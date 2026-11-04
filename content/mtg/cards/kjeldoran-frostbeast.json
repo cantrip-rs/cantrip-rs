@@ -1,0 +1,8 @@
+{
+  "name": "Kjeldoran Frostbeast",
+  "manaCost": "{3}{G}{W}",
+  "type": "Creature — Elemental Beast",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "At end of combat, destroy all creatures blocking or blocked by this creature."
+}
