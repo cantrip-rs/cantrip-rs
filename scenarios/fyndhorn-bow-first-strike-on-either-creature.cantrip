@@ -1,0 +1,76 @@
+# Fyndhorn Bow targets either player's creature, not an artifact alone; first strike lets its bear kill a blocker
+# before damage comes back and expires before the next turn. The Bow's {3} cost taps it (CR 115.1c, 702.7b, 611.2a).
+[Bot1 Deck]
+Fyndhorn Bow
+Mox Emerald
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Fyndhorn Bow.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Fyndhorn Bow.Activate(Bot1.Battlefield.Grizzly Bears; Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Fyndhorn Bow.Activate(Bot1.Battlefield.Mox Emerald)
+Bot1.Battlefield.Fyndhorn Bow.Activate(Bot1.Battlefield.Grizzly Bears)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = FirstStrike
+? Bot1.Battlefield.Fyndhorn Bow.Tapped = true
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Grizzly Bears > Grizzly Bears)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Grizzly Bears.Damage = 0
+? Bot2.Graveyard.Grizzly Bears.Power = 2
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Fyndhorn Bow.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Keywords = FirstStrike; Flying
+[T7 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.Grizzly Bears.Power = 2
