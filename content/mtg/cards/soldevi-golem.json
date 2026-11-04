@@ -1,0 +1,8 @@
+{
+  "name": "Soldevi Golem",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Golem",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "This creature doesn't untap during your untap step.\nAt the beginning of your upkeep, you may untap target tapped creature an opponent controls. If you do, untap this creature."
+}

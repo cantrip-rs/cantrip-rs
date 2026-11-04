@@ -1,0 +1,31 @@
+# A stun counter replaces the chosen untap cost; the cost remains paid and the Golem untaps (CR 118.11, 118.12).
+[Bot1 Deck]
+Soldevi Golem
+Black Lotus x2
+Mox Pearl
+Procrastinate
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Soldevi Golem.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Procrastinate.Cast(Bot2.Battlefield.Ornithopter; X: 1)
+[T3 Bot1.Attackers]
+Bot1.Attack(Soldevi Golem)
+[T5 Bot1.Upkeep]
+Bot1.Accept
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Soldevi Golem.Tapped = false
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Counters.Stun = (absent)
