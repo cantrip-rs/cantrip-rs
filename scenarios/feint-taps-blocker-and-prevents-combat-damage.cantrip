@@ -1,0 +1,35 @@
+# Feint taps the blocker and prevents combat damage dealt by both the attacker and blocker (CR 615.1).
+[Bot1 Deck]
+Plains
+Mountain
+Bofur, Reliable Guardian
+Feint
+Island x16
+
+[Bot2 Deck]
+Forest
+Dragon Sniper
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Bofur, Reliable Guardian.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Dragon Sniper.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Attack(Bofur, Reliable Guardian > Bot2)
+Bot2.Block(Dragon Sniper > Bofur, Reliable Guardian)
+[T3 Bot1.Blockers]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Feint.Cast(Bofur, Reliable Guardian)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Battlefield.Dragon Sniper.Tapped = true
+Prevented = 1 Bofur, Reliable Guardian > Dragon Sniper by Feint; 1 Dragon Sniper > Bofur, Reliable Guardian by Feint
