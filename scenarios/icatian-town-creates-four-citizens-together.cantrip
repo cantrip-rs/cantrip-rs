@@ -1,0 +1,43 @@
+# Icatian Town creates four 1/1 white Citizen tokens together, so Mister Fantastic triggers only once (CR 603.2c, 701.7a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mister Fantastic, Reed Richards
+Icatian Town
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mister Fantastic, Reed Richards.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Icatian Town.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[Expect]
+Bot1.Battlefield.Count = 6
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Citizen Token#1.Power = 1
+Bot1.Battlefield.Citizen Token#1.Toughness = 1
+Bot1.Battlefield.Citizen Token#1.Token = true
+Bot1.Battlefield.Citizen Token#1.Tapped = false
+Bot1.Battlefield.Citizen Token#1.Colors = White
+Bot1.Battlefield.Citizen Token#1.Types = Creature
+Bot1.Battlefield.Citizen Token#1.Subtypes = Citizen
+Bot1.Battlefield.Citizen Token#4.Power = 1
+Bot1.Graveyard = Icatian Town; Black Lotus; Black Lotus; Black Lotus
