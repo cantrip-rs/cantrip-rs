@@ -1,0 +1,40 @@
+# Shatterstorm destroys artifacts of both players, including an artifact creature with a regeneration shield, but leaves an indestructible artifact and nonartifacts (CR 701.8, 701.19c).
+[Bot1 Deck]
+Shatterstorm
+Black Lotus
+Mox Pearl
+Ornithopter
+Forest
+Darksteel Citadel
+Mountain x20
+[Bot2 Deck]
+Ornithopter
+Forest
+Yavimaya Hollow
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Darksteel Citadel.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Yavimaya Hollow.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shatterstorm.Cast
+? Bot1.Mana =
+Bot2.Battlefield.Yavimaya Hollow.Activate(Bot2.Battlefield.Ornithopter; Ability: Regenerate)
+Bot2.Battlefield.Forest.Activate
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield = Forest; Darksteel Citadel
+Bot1.Graveyard = Shatterstorm; Ornithopter; Mox Pearl; Black Lotus
+Bot2.Battlefield = Forest; Yavimaya Hollow
+Bot2.Graveyard = Ornithopter
