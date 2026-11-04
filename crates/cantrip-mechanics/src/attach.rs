@@ -14,6 +14,18 @@ pub fn attach_to_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspen
     Ok(())
 }
 
+/// "When this Equipment enters, attach it to target creature you control. That creature gains [a keyword] until end of turn."
+/// (CR 701.3a, 608.2b, 611.2a): the target no longer legal, the whole ability does nothing; otherwise the creature gains the
+/// keyword whether or not the Equipment is still there to be attached (CR 400.7), for the rest of the turn. Twin Blades (double
+/// strike), Barbed Bloodletter (wither) and Coral Sword (first strike) print it.
+pub fn attach_to_target_and_gain_until_end_of_turn(g: &mut dyn Game, item: &StackItem, keyword: Keyword) -> Result<(), Suspend> {
+    attach_to_target(g, item)?;
+    if let Some(creature) = targets::object(g, item, 0) {
+        crate::effects::gain_until_end_of_turn(g, item.object, creature, keyword);
+    }
+    Ok(())
+}
+
 /// "Attach [first target] to [second target]" (CR 701.3a): both targets still legal as it resolves, the first is attached to
 /// the second; it does nothing if either was not chosen (an "up to one") or has become illegal (CR 608.2b), and an
 /// Equipment that cannot be attached to that creature stays where it is (CR 701.3b). Raubahn, Bull of Ala Mhigo and Iron Hills
