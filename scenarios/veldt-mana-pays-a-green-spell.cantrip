@@ -1,0 +1,16 @@
+# Veldt alone makes a one-green spell castable and pays for it during casting (CR 601.2g, 605.3a).
+[Bot1 Deck]
+Veldt
+Llanowar Elves
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Veldt.Play
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Veldt.Activate(Color: Green)
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Power = 1
+Bot1.Battlefield.Veldt.Tapped = true
+Bot1.Battlefield.Veldt.Counters.Depletion = 1

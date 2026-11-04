@@ -1,0 +1,35 @@
+# Candelabra untaps Veldt outside the untap step, allowing a second counter; each upkeep removes only one (CR 502.3, 603.2).
+[Bot1 Deck]
+Veldt
+Candelabra of Tawnos
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Veldt.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Veldt.Activate(Color: Green)
+Bot1.Hand.Candelabra of Tawnos.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Candelabra of Tawnos.Activate(X: 1)
+Bot1.Target(Bot1.Battlefield.Veldt)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Veldt.Tapped = false
+? Bot1.Battlefield.Veldt.Counters.Depletion = 1
+Bot1.Battlefield.Veldt.Activate(Color: White)
+? Bot1.Mana = {W}
+? Bot1.Battlefield.Veldt.Counters.Depletion = 2
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Veldt.Tapped = true
+? Bot1.Battlefield.Veldt.Counters.Depletion = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Veldt.Tapped = true
+? Bot1.Battlefield.Veldt.Counters.Depletion = (absent)
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Veldt.Tapped = false

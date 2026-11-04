@@ -1,0 +1,21 @@
+# Veldt alone cannot pay {1}{G}; adding a second mana source permits the same cast (CR 601.2g).
+[Bot1 Deck]
+Veldt
+Mox Pearl
+Grizzly Bears
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Veldt.Play
+! Bot1.Hand.Grizzly Bears.Cast(Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Battlefield.Veldt.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Veldt.Counters.Depletion = 1
