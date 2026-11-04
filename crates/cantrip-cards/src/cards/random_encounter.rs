@@ -36,7 +36,7 @@ pub static CARD: CardDef = CardDef {
     ways: &[flashback::way(cost("{6}{R}{R}"), "Flashback {6}{R}{R}")],
     delayed: &[delayed_trigger(
         return_those_creatures,
-        "Return those creatures to their owner's hand at the beginning of the next end step.",
+        "At the beginning of the next end step, return those creatures to their owner's hand.",
     )],
     ..oracle::RANDOM_ENCOUNTER
 };
