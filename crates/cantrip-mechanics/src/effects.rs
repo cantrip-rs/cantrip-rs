@@ -1186,6 +1186,20 @@ pub fn may_pay_to_gain_life(g: &mut dyn Game, item: &StackItem, cost: Cost) -> R
     Ok(())
 }
 
+const PAY_TO_RETURN_THIS_TO_HAND: Question =
+    Question::new("ReturnToHand", "pay {cost} to return {subject} to your hand?", "It is in your graveyard", "Pay {cost}", "Leave it");
+
+/// "You may pay [cost]. If you do, return this card from your graveyard to your hand." (CR 608.2d, 118.12, 400.3) as the
+/// ability resolves: its controller is asked whether to pay `cost`, and the card returns only if they did; a card that has left
+/// the graveyard by then is a new object and is not returned (CR 400.7). Killian's Confidence, Gabriel Lorca, Mirror Menace and
+/// Shambling Cie'th print it.
+pub fn may_pay_to_return_this_to_hand(g: &mut dyn Game, item: &StackItem, cost: Cost) -> Result<(), Suspend> {
+    if g.may_pay(item.controller, item.object, item.object, cost, &PAY_TO_RETURN_THIS_TO_HAND)? {
+        return_this_to_hand(g, item)?;
+    }
+    Ok(())
+}
+
 /// "[Player] may cast [card] without paying its mana cost" as the effect resolves (CR 608.2g, 118.9): `player` casts it then
 /// or not at all, its timing waived, X 0 (CR 107.3b), its additional costs paid. Nothing is asked when they could not cast
 /// it at all (a land, no legal target for them, split second on the stack); asked, they may decline, and a cast they give

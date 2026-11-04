@@ -10,16 +10,9 @@ fn pump_and_draw(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     effects::draw(g, item, 1)
 }
 
-const ASK: Question = Question::new("ReturnToHand", "pay {cost} to return {subject} to your hand?", "It is in your graveyard", "Pay {cost}", "Leave it");
-
-/// "You may pay {W/B}. If you do, return this card from your graveyard to your hand." Paying is optional (CR 118.12); a card that
-/// has left the graveyard by the time the ability resolves is a new object and is not returned (CR 400.7).
+/// "You may pay {W/B}. If you do, return this card from your graveyard to your hand."
 fn pay_to_return(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let card = item.object;
-    if g.may_pay(item.controller, card, card, cost("{W/B}"), &ASK)? {
-        effects::return_this_to_hand(g, item)?;
-    }
-    Ok(())
+    effects::may_pay_to_return_this_to_hand(g, item, cost("{W/B}"))
 }
 
 pub static CARD: CardDef = CardDef {
