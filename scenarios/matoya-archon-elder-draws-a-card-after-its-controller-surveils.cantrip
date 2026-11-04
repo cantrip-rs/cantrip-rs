@@ -1,0 +1,43 @@
+# Matoya, Archon Elder: "Whenever you scry or surveil, draw a card." Bot1 casts Matoya with Black Lotus, then Dreams of Laguna (surveil 1, then draw a card) with
+# Mox Sapphire and Mox Jet. The surveil puts the top card, an Island, into the graveyard (CR 701.25) and triggers Matoya: Dreams draws a card
+# and Matoya draws another, so the library goes 33 -> 32 (surveil) -> 31 -> 30 and the hand is 7 - 5 cast + 2 = 4.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Matoya, Archon Elder
+Dreams of Laguna
+Island
+Island
+Island x33
+
+[Bot2 Deck]
+Island x40
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Matoya, Archon Elder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dreams of Laguna.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange( | Island)
+? Stack.Count = 1
+? Bot1.Library.Count = 31
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Turn = 1
+Bot1.Library.Count = 30
+Bot1.Graveyard = Dreams of Laguna; Island; Black Lotus
+Bot1.Hand.Count = 4

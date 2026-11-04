@@ -1,0 +1,40 @@
+# Matoya, Archon Elder: "Whenever you scry or surveil, draw a card." Bot1 casts Matoya with Black Lotus, then Preordain (scry 2, then draw a card) with
+# Mox Sapphire. Once the scry is complete (CR 701.22d) Matoya's trigger goes on the stack and Preordain finishes: it draws its card, leaving the
+# trigger still on the stack with the library at 32; then Matoya's own draw makes it 31. Bot1 has cast four cards from a hand of seven and drawn two.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Matoya, Archon Elder
+Preordain
+Island
+Island
+Island
+Island x33
+
+[Bot2 Deck]
+Island x40
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Matoya, Archon Elder.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Preordain.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island; Island | )
+? Stack.Count = 1
+? Bot1.Library.Count = 32
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Turn = 1
+Bot1.Library.Count = 31
+Bot1.Hand.Count = 5

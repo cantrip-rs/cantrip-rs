@@ -1,0 +1,8 @@
+{
+  "name": "Matoya, Archon Elder",
+  "manaCost": "{2}{U}",
+  "type": "Legendary Creature — Human Warlock",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "Whenever you scry or surveil, draw a card. (Draw after you scry or surveil.)"
+}

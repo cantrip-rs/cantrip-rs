@@ -1,0 +1,48 @@
+# Matoya, Archon Elder: "Whenever you scry or surveil" is the controller's own scry (CR 603.2): Bot2's Preordain does not trigger Bot1's Matoya. Bot1
+# casts Matoya with Black Lotus; on Bot2's turn Bot2 pays Preordain with Mox Sapphire, scries and draws once: Bot1's library stays at 33 and its hand at
+# 5 (seven cards less the Lotus and Matoya), where Matoya's trigger would have drawn a card.
+
+[Bot1 Deck]
+Black Lotus
+Matoya, Archon Elder
+Island
+Island
+Island
+Island
+Island
+Island x33
+
+[Bot2 Deck]
+Mox Sapphire
+Preordain
+Island
+Island
+Island
+Island
+Island
+Island x33
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Matoya, Archon Elder.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Preordain.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Arrange(Island; Island | )
+? Stack.Count = 0
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+
+[Expect]
+Stack.Count = 0
+Turn = 2
+Bot1.Library.Count = 33
+Bot1.Hand.Count = 5
+Bot2.Library.Count = 31
