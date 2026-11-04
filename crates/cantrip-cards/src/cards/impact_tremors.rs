@@ -15,13 +15,7 @@ fn your_creature_enters(q: &dyn Query, source: ObjectId, event: &Event) -> Optio
     }
 }
 
-/// This enchantment deals 1 damage to each opponent (CR 120.3).
-fn tremor(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    cantrip_mechanics::effects::damage_each_opponent(g, item, 1);
-    Ok(())
-}
-
 pub static CARD: CardDef = CardDef {
-    abilities: &[triggered(when(EventMask::ZONE_CHANGE, your_creature_enters), tremor, "Whenever a creature you control enters, this enchantment deals 1 damage to each opponent.")],
+    abilities: &[triggered(when(EventMask::ZONE_CHANGE, your_creature_enters), cantrip_mechanics::effects::deals_1_damage_to_each_opponent, "Whenever a creature you control enters, this enchantment deals 1 damage to each opponent.")],
     ..oracle::IMPACT_TREMORS
 };
