@@ -1102,6 +1102,20 @@ pub fn noncreature_spell_you_cast(q: &dyn Query, me: &Asker, event: &Event) -> O
     }
 }
 
+/// "Whenever you cast a noncreature spell, if at least four mana was spent to cast it" (CR 603.2, 603.4, 601.2h): the payment is
+/// over before the trigger and nothing changes it afterwards, so the condition asked as it triggers is the one asked as it
+/// resolves. A spell cast without spending mana has had none spent. Blazing Bomb and Prompto Argentum print it.
+pub fn noncreature_spell_you_cast_with_four_mana_spent(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::SpellCast { spell, player, .. }
+            if *player == me.controller && !q.chars(*spell).is(CardType::Creature) && q.obj(*spell).spent.total() >= 4 =>
+        {
+            Fired::PLAIN
+        }
+        _ => None,
+    }
+}
+
 /// "Whenever you cast a noncreature spell, ... that spell's ..." (CR 603.2, 601.2i): the same trigger as
 /// `noncreature_spell_you_cast`, with the spell as the ability's subject so the effect can read it ("that spell's mana
 /// value"). Chrome Host Seedshark, Shark Typhoon and Thor, God of Thunder print it.
@@ -2032,6 +2046,8 @@ pub const YOU_CAST_A_SPELL_WITH_MANA_VALUE_4_OR_GREATER: Trigger =
     when_asked(EventMask::SPELL_CAST, you_cast_a_spell_with_mana_value_at_least::<4>);
 pub const THIS_BECOMES_THE_TARGET_OF_A_SPELL_OR_ABILITY: Trigger = when(EventMask::BECAME_TARGET, this_becomes_the_target);
 pub const NONCREATURE_SPELL_YOU_CAST: Trigger = when_asked(EventMask::SPELL_CAST, noncreature_spell_you_cast);
+pub const NONCREATURE_SPELL_YOU_CAST_WITH_FOUR_MANA_SPENT: Trigger =
+    when_asked(EventMask::SPELL_CAST, noncreature_spell_you_cast_with_four_mana_spent);
 pub const NONCREATURE_SPELL_YOU_CAST_ABOUT_IT: Trigger = when_asked(EventMask::SPELL_CAST, noncreature_spell_you_cast_about_it);
 pub const YOU_CAST_A_SPELL_FROM_EXILE: Trigger = when_asked(EventMask::SPELL_CAST, you_cast_a_spell_from_exile);
 pub const THIS_DIES: Trigger = when(EventMask::ZONE_CHANGE, this_dies);
