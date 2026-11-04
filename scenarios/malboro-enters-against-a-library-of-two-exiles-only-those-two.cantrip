@@ -1,0 +1,36 @@
+# Malboro: "exiles the top three cards of their library" does as much as it can (CR 608.2c, 701.13): Bot2's library holds two
+# cards, both are exiled and nothing else happens or goes wrong; the discard and the 2 life lost were still done first.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Malboro
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Island x9
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Malboro.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Island)
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 18
+Bot2.Hand.Count = 6
+Bot2.Library.Count = 0
+Exile.Count = 2

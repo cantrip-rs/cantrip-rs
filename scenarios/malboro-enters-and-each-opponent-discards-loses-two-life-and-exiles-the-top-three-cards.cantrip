@@ -1,0 +1,40 @@
+# Malboro, "Bad Breath - When this creature enters, each opponent discards a card, loses 2 life, and exiles the top three
+# cards of their library." Bot1 pays {4}{B}{B} with Black Lotus, Mox Pearl, Mox Sapphire and Mox Emerald. Bot2 (seven cards,
+# thirteen in its library) discards the Lightning Bolt of its choice, goes to 18 and exiles exactly three cards, leaving ten.
+
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Malboro
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Lightning Bolt
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Malboro.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Choose(Lightning Bolt)
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 18
+Bot2.Hand.Count = 6
+Bot2.Graveyard = Lightning Bolt
+Bot2.Library.Count = 10
+Exile.Count = 3
+Bot1.Life = 20

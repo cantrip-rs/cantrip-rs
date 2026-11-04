@@ -1,0 +1,8 @@
+{
+  "name": "Malboro",
+  "manaCost": "{4}{B}{B}",
+  "type": "Creature — Plant Horror",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Bad Breath — When this creature enters, each opponent discards a card, loses 2 life, and exiles the top three cards of their library.\nSwampcycling {2} ({2}, Discard this card: Search your library for a Swamp card, reveal it, put it into your hand, then shuffle.)"
+}

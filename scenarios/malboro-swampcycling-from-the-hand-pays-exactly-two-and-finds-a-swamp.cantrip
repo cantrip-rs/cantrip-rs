@@ -1,0 +1,28 @@
+# Malboro's swampcycling {2} (CR 702.29e): {2} paid exactly with Mana Crypt's {C}{C} (the pool ends empty) discards Malboro
+# from the hand and finds the Swamp in the library; with only Blasted Landscape's {C} the ability is not offered.
+
+[Bot1 Deck]
+Blasted Landscape
+Mana Crypt
+Malboro
+Plains x4
+Swamp
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Blasted Landscape.Play
+! Bot1.Hand.Malboro.Activate(Ability: Swampcycling; Mana: short)
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Malboro.Activate(Ability: Swampcycling)
+Bot1.Pass
+? Bot1.Mana = 
+Bot1.Search(Swamp)
+
+[Expect]
+Bot1.Graveyard.Malboro.Colors = Black
+Bot1.Hand = Plains; Plains; Plains; Plains; Swamp
