@@ -1,0 +1,53 @@
+# The Team must be ready to tap and sacrifices itself to destroy either player's Wall; a non-Wall is not a legal target.
+[Bot1 Deck]
+Mox Ruby
+Mox Emerald
+Goblin Digging Team
+Goblin Digging Team
+Wall of Wood
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Emerald
+Wall of Wood
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wall of Wood.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Digging Team.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Goblin Digging Team.Activate(Bot1.Battlefield.Wall of Wood)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Wall of Wood.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Goblin Digging Team.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Goblin Digging Team.Activate(Bot2.Battlefield.Wall of Wood)
+Bot1.Choose(Tap Goblin Digging Team)
+? Bot1.Graveyard.Goblin Digging Team.Colors = Red
+? LeftBattlefield = Goblin Digging Team (tapped)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Wall of Wood.Colors = Green
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Digging Team.Cast
+? Bot1.Mana =
+[T5 Bot1.Main1]
+Bot1.Battlefield.Goblin Digging Team.Activate(Bot1.Battlefield.Wall of Wood)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Wall of Wood.Colors = Green
+Bot1.Graveyard.Count = 3
+Bot1.Battlefield.Ornithopter.Power = 0

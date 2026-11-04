@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Digging Team",
+  "manaCost": "{R}",
+  "type": "Creature — Goblin",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}, Sacrifice this creature: Destroy target Wall."
+}
