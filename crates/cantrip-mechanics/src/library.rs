@@ -473,6 +473,15 @@ pub fn look_at_top(
     Ok(taken)
 }
 
+/// "Look at the top `N` cards of your library. You may reveal an artifact card from among them and put it into your hand. Put the
+/// rest on the bottom of your library in a random order." (CR 401.4, 701.20a) as an ability's whole effect (`look_at_top`): a
+/// library with fewer cards shows what it has (CR 609.3); with no artifact card among them the cards are still looked at and all go
+/// to the bottom. Tony Stark and Casey Jones, Jury-Rig Justiciar (4), Ashe, Princess of Dalmasca (5) and Adaptive Omnitool (6) print it.
+pub fn look_for_an_artifact<const N: usize>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    look_at_top(g, item.controller, item.object, N, (0, 1), true, |c| c.is(CardType::Artifact), Rest::BottomRandom)?;
+    Ok(())
+}
+
 /// `look_at_top` with the cards that may be taken told by a selection rule (`crate::select`: how many, of what quality), asked
 /// with `choose::select`: "Look at the top four cards of your library. You may reveal a creature card with mana value 3 or less
 /// from among them and put it into your hand. Put the rest on the bottom of your library in a random order." The cards looked at
