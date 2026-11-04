@@ -2467,8 +2467,8 @@ fn contract_pairs(base: Chars, ability: AbilityRef) -> Vec<(Chars, Chars)> {
 /// The raw state a static ability's effect may check before it does anything, varied: the source attached to the object or
 /// not, a counter of every kind on both, the source at its highest class level and with choices made (a creature type, a
 /// color, a player), the object under the other player's control, and life totals high; a crowded game (another of the
-/// source's card, an artifact, a black and a white permanent, an Equipment attached to the source, creature cards in the
-/// graveyards and cards in hand); and the source in a hand.
+/// source's card, an artifact, a black and a white permanent, a land that is a Mountain and a Forest, an Equipment attached to
+/// the source, creature cards in the graveyards and cards in hand); and the source in a hand.
 const SCENES: usize = 7;
 
 fn contract_scene(cards: &CardTable, card: CardId, target: CardId, scene: usize) -> (GameState, ObjectId, ObjectId) {
@@ -2513,7 +2513,8 @@ fn contract_scene(cards: &CardTable, card: CardId, target: CardId, scene: usize)
             }
         };
         put(Some(card), Zone::BATTLEFIELD, None);
-        for name in ["Sol Ring", "Bloodghast", "White Knight"] {
+        // Taiga: a land, a Mountain and a Forest, for what counts the lands or the Mountains its controller controls.
+        for name in ["Sol Ring", "Bloodghast", "White Knight", "Taiga"] {
             put(cards.find(name), Zone::BATTLEFIELD, None);
         }
         put(cards.find("Colossus Hammer"), Zone::BATTLEFIELD, Some(source));

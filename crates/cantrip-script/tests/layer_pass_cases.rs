@@ -416,18 +416,6 @@ const INERT: &[(&str, &str)] = &[
         "its effect counts Officer tokens its controller controls, and the synthetic boards hold none; a scenario of the card shows the +1/+0 for itself as an Officer token",
     ),
     (
-        "Desert Were-Worm",
-        "its effect counts the Mountains its controller controls, and the synthetic boards hold none; a scenario of the card shows the +2/+0 for each",
-    ),
-    (
-        "Molten Man, Inferno Incarnate",
-        "its effect counts the Mountains its controller controls, and the synthetic boards hold none; a scenario of the card shows the +1/+1 for each",
-    ),
-    (
-        "Zell Dincht",
-        "its effect counts the lands its controller controls, and the synthetic boards hold none; a scenario of the card shows the +1/+0 for each",
-    ),
-    (
         "Grand Nagus Zek",
         "its effect counts Treasures its controller controls, and the synthetic boards hold none; a scenario of the card shows the +1/+1 for each",
     ),
