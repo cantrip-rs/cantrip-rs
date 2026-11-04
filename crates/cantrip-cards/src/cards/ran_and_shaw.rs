@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::THIS_ENTERS_IF_CAST;
-use cantrip_mechanics::{firebending, pump};
+use cantrip_mechanics::{effects, firebending};
 use cantrip_oracle as oracle;
 
 /// "...if you cast them and there are three or more Dragon and/or Lesson cards in your graveyard" (CR 603.4): the second half of
@@ -23,16 +23,10 @@ fn copy_not_legendary(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend>
     Ok(())
 }
 
-/// "Dragons you control get +2/+0 until end of turn." (CR 611.2, 611.2c): the Dragons its controller controls as it resolves,
-/// and no Dragon that enters later. Dragon is a word of this card's text (CR 612); the creatures' types are the layers' answer.
+/// "Dragons you control get +2/+0 until end of turn." (CR 611.2, 611.2c): `effects::subtype_you_control_get` over Dragon, a word of
+/// this card's text (CR 612).
 fn dragons_get_plus_two(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let dragon = g.words(item.object).subtype(Subtype::Dragon);
-    let dragons: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).has_subtype(dragon)).collect();
-    instruction(g, |g| {
-        for &id in &dragons {
-            pump(g, item.object, id, 2, 0);
-        }
-    });
+    effects::subtype_you_control_get(g, item, Subtype::Dragon, 2, 0);
     Ok(())
 }
 
