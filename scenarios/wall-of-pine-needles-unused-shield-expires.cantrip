@@ -1,0 +1,30 @@
+# An unused regeneration shield expires in cleanup, so destruction on the next turn is not replaced (CR 701.19a, 514.2).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Emerald
+Wall of Pine Needles
+Island x16
+[Bot2 Deck]
+Black Lotus
+Go for the Throat
+Island x18
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Wall of Pine Needles.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Wall of Pine Needles.Activate
+? Bot1.Mana =
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Go for the Throat.Cast(Wall of Pine Needles)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Graveyard = Wall of Pine Needles; Black Lotus
