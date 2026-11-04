@@ -1,0 +1,31 @@
+# The Chirurgeon may sacrifice itself to regenerate the opponent's creature, even though the source leaves before resolution (CR 113.7a, 701.19a).
+[Bot1 Deck]
+Mountain
+Goblin Chirurgeon
+Mountain x20
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Goblin Chirurgeon.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Goblin Chirurgeon.Activate(Bot2.Battlefield.Memnite)
+Bot1.Choose(Goblin Chirurgeon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Graveyard = Goblin Chirurgeon
+Bot2.Battlefield.Memnite.Tapped = true
+Bot2.Battlefield.Memnite.Damage = 0

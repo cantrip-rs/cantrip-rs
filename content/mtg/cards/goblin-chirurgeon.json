@@ -1,0 +1,8 @@
+{
+  "name": "Goblin Chirurgeon",
+  "manaCost": "{R}",
+  "type": "Creature — Goblin Shaman",
+  "power": 0,
+  "toughness": 2,
+  "oracleText": "Sacrifice a Goblin: Regenerate target creature."
+}
