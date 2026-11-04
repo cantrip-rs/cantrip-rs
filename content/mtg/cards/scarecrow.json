@@ -1,0 +1,8 @@
+{
+  "name": "Scarecrow",
+  "manaCost": "{5}",
+  "type": "Artifact Creature — Scarecrow",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{6}, {T}: Prevent all damage that would be dealt to you this turn by creatures with flying."
+}

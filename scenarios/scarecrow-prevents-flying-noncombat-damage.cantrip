@@ -1,0 +1,62 @@
+# Scarecrow prevents noncombat damage from a creature with flying, but not from that creature on a later turn after flying expires (CR 615.1, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Sol Ring
+Sol Ring
+Prodigal Sorcerer
+Scarecrow
+Island
+Ancient Tomb
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Jump
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Hand.Prodigal Sorcerer.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Hand.Scarecrow.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Ancient Tomb.Play
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Ancient Tomb.Activate
+Bot1.Battlefield.Scarecrow.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Scarecrow.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Jump.Cast(Bot1.Battlefield.Prodigal Sorcerer)
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 18
+[T5 Bot1.Main1]
+Bot1.Battlefield.Prodigal Sorcerer.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 17
