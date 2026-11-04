@@ -1,0 +1,50 @@
+# Kain, Traitorous Dragoon: "that player gains control of Kain. If they do, ..." (CR 608.2c). With the trigger on the stack
+# Bot1 exiles Kain with Swords to Plowshares (and gains his 2 power); the player cannot gain control of a card that is gone, so
+# there is no draw, no Treasure and no life lost for the damage: Bot1 is at 22, Bot2 at 18, and nothing of Kain's is on either side.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Kain, Traitorous Dragoon
+Swamp
+Swords to Plowshares
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kain, Traitorous Dragoon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kain, Traitorous Dragoon > Bot2)
+Bot1.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Kain, Traitorous Dragoon)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 18
+Bot1.Life = 22
+Bot1.Hand.Count = 2
+Bot2.Battlefield.Count = 0
+Bot1.Battlefield.Treasure Token#1 = (absent)
+Bot1.Exile.Kain, Traitorous Dragoon.Power = 2

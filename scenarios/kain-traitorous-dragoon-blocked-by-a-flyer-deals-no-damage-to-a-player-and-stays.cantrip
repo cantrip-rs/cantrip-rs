@@ -1,0 +1,50 @@
+# Kain, Traitorous Dragoon: the trigger is combat damage "to a player" (CR 510.2, 120.3). Bot2's Ornithopter (flying) blocks
+# the flying Kain on turn 3 and takes his 2 damage (dying); Bot2 loses nothing, keeps its Island count, and Kain stays under
+# Bot1 with no draw, no Treasure and no life lost.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Kain, Traitorous Dragoon
+Swamp
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kain, Traitorous Dragoon.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kain, Traitorous Dragoon > Bot2)
+Bot1.Pass
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Ornithopter > Kain, Traitorous Dragoon)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 20
+Bot1.Life = 20
+Bot1.Hand.Count = 4
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Kain, Traitorous Dragoon.Power = 2
+Bot1.Battlefield.Treasure Token#1 = (absent)

@@ -1,0 +1,56 @@
+# Kain, Traitorous Dragoon, three players: "that player gains control of Kain. If they do, you draw that many cards, ..."
+# (CR 608.2c). Kain's damage takes Bot2 from 2 to 0 on turn 4 and Bot2 loses the game (CR 704.5a) before the trigger resolves;
+# a player who has left cannot gain control of anything (CR 800.4a), so Kain stays with Bot1, who draws, makes and loses nothing.
+# Bot1 has 8 cards on turn 1 (first player of more than two draws, CR 103.8a), 4 after four casts, 5 with the turn-4 draw.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Kain, Traitorous Dragoon
+Swamp
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Bot3 Deck]
+Island x20
+
+[Life]
+Bot2: 2
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kain, Traitorous Dragoon.Cast
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot3.Pass
+Bot1.Pass
+[T3 Bot3.Main1]
+Bot3.Pass
+Bot1.Pass
+Bot2.Pass
+[T4 Bot1.Main1]
+Bot1.Attack(Kain, Traitorous Dragoon > Bot2)
+Bot1.Pass
+[T4 Bot1.CombatDamage]
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 20
+Bot1.Hand.Count = 5
+Bot1.Battlefield.Kain, Traitorous Dragoon.Power = 2
+Bot1.Battlefield.Treasure Token#1 = (absent)

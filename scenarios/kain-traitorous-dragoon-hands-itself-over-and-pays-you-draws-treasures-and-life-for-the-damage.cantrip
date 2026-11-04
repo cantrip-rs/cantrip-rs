@@ -1,0 +1,49 @@
+# Kain, Traitorous Dragoon (2/4): "Jump - During your turn, Kain has flying." and "Whenever Kain deals combat damage to a
+# player, that player gains control of Kain. If they do, you draw that many cards, create that many tapped Treasure tokens,
+# then lose that much life." Kain hits Bot2 for 2 on turn 3: Bot2 controls him, loses 2 (18) and Bot1 draws 2 (one for the
+# turn, so hand 3 + 1 + 2), makes 2 tapped Treasures and loses 2 life (18). He has flying on Bot1's turn, not on Bot2's.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Kain, Traitorous Dragoon
+Swamp
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kain, Traitorous Dragoon.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Kain, Traitorous Dragoon.Keywords = (absent)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Kain, Traitorous Dragoon.Keywords = Flying
+Bot1.Attack(Kain, Traitorous Dragoon > Bot2)
+Bot1.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 18
+Bot1.Life = 18
+Bot1.Hand.Count = 6
+Bot1.Battlefield.Kain, Traitorous Dragoon = (absent)
+Bot2.Battlefield.Kain, Traitorous Dragoon.Power = 2
+Bot1.Battlefield.Treasure Token#1.Tapped = true
+Bot1.Battlefield.Treasure Token#2.Tapped = true
+Bot1.Battlefield.Treasure Token#3 = (absent)
