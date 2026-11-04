@@ -1,0 +1,11 @@
+{
+  "name": "Vodalian War Machine",
+  "manaCost": "{1}{U}{U}",
+  "type": "Creature — Wall",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "Defender (This creature can't attack.)\nTap an untapped Merfolk you control: This creature can attack this turn as though it didn't have defender.\nTap an untapped Merfolk you control: This creature gets +2/+1 until end of turn.\nWhen this creature dies, destroy all Merfolk tapped this turn to pay for its abilities.",
+  "keywords": [
+    "Defender"
+  ]
+}

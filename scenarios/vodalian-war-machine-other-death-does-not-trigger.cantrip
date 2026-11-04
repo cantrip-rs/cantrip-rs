@@ -1,0 +1,34 @@
+# Another creature dying does not trigger the War Machine even after a Merfolk paid its cost (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Vodalian War Machine
+Mox Sapphire
+Merfolk of the Pearl Trident
+Memnite
+Black Lotus
+Bilbo's Deadly Slice
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Vodalian War Machine.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Vodalian War Machine.Activate(Ability: gets +2/+1)
+Bot1.Choose(Merfolk of the Pearl Trident)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Bilbo's Deadly Slice.Cast(Bot1.Battlefield.Memnite)
+[T1 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Merfolk of the Pearl Trident.Tapped = true
+Bot1.Graveyard.Memnite.Colors =
