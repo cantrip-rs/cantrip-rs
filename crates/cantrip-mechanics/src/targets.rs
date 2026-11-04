@@ -828,6 +828,12 @@ fn creature_that_dealt_damage_this_turn_filter(q: &dyn Query, asker: &Asker, t: 
 /// "Target creature that dealt damage this turn" (CR 115.1, 120.2): judged as it is chosen and again as the ability resolves.
 /// Avenging Arrow and Executioner's Swing print it.
 pub const CREATURE_THAT_DEALT_DAMAGE_THIS_TURN: TargetSpec = target(creature_that_dealt_damage_this_turn_filter);
+fn creature_that_was_dealt_damage_this_turn_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_filter(q, asker, t) && matches!(t, Target::Object(id) if crate::history::was_dealt_damage_this_turn(q.history(), id))
+}
+/// "Target creature that was dealt damage this turn" (CR 115.1, 120.2): judged as it is chosen and again as the ability resolves.
+/// Qutrub Forayer, Fatal Blow and Final-Sting Faerie print it.
+pub const CREATURE_THAT_WAS_DEALT_DAMAGE_THIS_TURN: TargetSpec = target(creature_that_was_dealt_damage_this_turn_filter);
 fn creature_an_opponent_controls_that_dealt_damage_this_turn_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     creature_that_dealt_damage_this_turn_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
 }
