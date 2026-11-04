@@ -1,0 +1,55 @@
+# Storm Spirit taps to deal exactly 2 damage to creatures on either side, but cannot target a land or activate twice (CR 602.2, 120.3).
+[Bot1 Deck]
+Storm Spirit
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Gleemox
+Forest x20
+[Bot2 Deck]
+Steel Wall
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Storm Spirit.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Steel Wall.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Storm Spirit.Activate(Bot2.Battlefield.Island)
+Bot1.Battlefield.Storm Spirit.Activate(Bot1.Battlefield.Storm Spirit)
+? Bot1.Mana =
+? Bot1.Battlefield.Storm Spirit.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Storm Spirit.Damage = 2
+! Bot1.Battlefield.Storm Spirit.Activate(Bot2.Battlefield.Steel Wall)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Storm Spirit.Activate(Bot2.Battlefield.Steel Wall)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Steel Wall.Damage = 2
+Bot1.Battlefield.Storm Spirit.Tapped = true
