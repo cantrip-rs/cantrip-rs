@@ -1,0 +1,70 @@
+# Clone copies a one-mana blue creature. Sacrificing it makes one token, using the copied mana value before it left, not Clone's mana value four in the graveyard (CR 608.2h, 707.2).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Homarid Spawning Bed
+Clone
+Black Lotus
+Black Lotus
+Ornithopter
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island
+Merfolk of the Pearl Trident
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Homarid Spawning Bed.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Merfolk of the Pearl Trident.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Clone.Cast
+Bot1.Accept
+Bot1.Target(Bot2.Battlefield.Merfolk of the Pearl Trident)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Merfolk of the Pearl Trident.ManaValue = 1
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Homarid Spawning Bed.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Homarid Spawning Bed.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+! Bot1.Choose(Ornithopter)
+! Bot1.Choose(Bot2.Battlefield.Merfolk of the Pearl Trident)
+Bot1.Choose(Bot1.Battlefield.Merfolk of the Pearl Trident)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Camarid Token.Power = 1
+Bot1.Battlefield.Camarid Token.Toughness = 1
+Bot1.Battlefield.Camarid Token.Colors = Blue
+Bot1.Battlefield.Camarid Token.Subtypes = Camarid
+Bot1.Battlefield.Camarid Token.Token = true
+Bot1.Battlefield.Camarid Token.Tapped = false
+Bot1.Battlefield.Count = 5
+Bot1.Graveyard.Clone.Colors = Blue

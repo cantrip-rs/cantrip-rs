@@ -1,0 +1,44 @@
+# Sleight changes the blue color words to red, both for the sacrifice and the tokens (CR 612.2).
+[Bot1 Deck]
+Homarid Spawning Bed
+Black Lotus
+Black Lotus
+Mox Ruby
+Raging Goblin
+Sleight of Mind
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Homarid Spawning Bed.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Sleight of Mind.Cast(Bot1.Battlefield.Homarid Spawning Bed)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Blue)
+Bot1.Colors(Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Raging Goblin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Homarid Spawning Bed.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Raging Goblin)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Camarid Token.Colors = Red
+Bot1.Battlefield.Camarid Token.Subtypes = Camarid
+Bot1.Battlefield.Camarid Token.Power = 1
+Bot1.Battlefield.Camarid Token.Toughness = 1
