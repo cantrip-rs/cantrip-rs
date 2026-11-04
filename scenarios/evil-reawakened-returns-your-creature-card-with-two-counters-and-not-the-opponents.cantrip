@@ -1,0 +1,57 @@
+# Evil Reawakened: "Return target creature card from your graveyard to the battlefield with two additional +1/+1 counters on it."
+# Bot2's Entomb has put Memnite in Bot2's graveyard: it is refused as the target (CR 115.1, "your graveyard"). Bot1's own
+# Entomb has put Ornithopter, a 0/2, in its graveyard: Evil Reawakened returns it with exactly two +1/+1 counters (CR 614.1c,
+# 122.6), so it is 2/4, and the Entomb in the graveyard, not a creature card, is no target either.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Mox Pearl
+Mox Ruby
+Entomb
+Evil Reawakened
+Island
+Ornithopter
+Island x19
+
+[Bot2 Deck]
+Mox Jet
+Entomb
+Island x7
+Memnite
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Entomb.Cast
+Bot1.Search(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Entomb.Cast
+Bot2.Search(Memnite)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Evil Reawakened.Cast(Bot2.Graveyard.Memnite)
+! Bot1.Hand.Evil Reawakened.Cast(Bot1.Graveyard.Entomb)
+Bot1.Hand.Evil Reawakened.Cast(Bot1.Graveyard.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 2
+Bot1.Battlefield.Ornithopter.Tapped = false
+Bot2.Graveyard = Entomb; Memnite
