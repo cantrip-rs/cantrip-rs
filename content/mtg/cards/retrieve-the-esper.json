@@ -1,0 +1,6 @@
+{
+  "name": "Retrieve the Esper",
+  "manaCost": "{3}{U}",
+  "type": "Sorcery",
+  "oracleText": "Create a 3/3 blue Robot Warrior artifact creature token. Then if this spell was cast from a graveyard, put two +1/+1 counters on that token.\nFlashback {5}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}

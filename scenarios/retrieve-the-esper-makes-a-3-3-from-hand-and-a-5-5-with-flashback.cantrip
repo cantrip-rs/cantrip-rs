@@ -1,0 +1,51 @@
+# Retrieve the Esper {3}{U} sorcery: "Create a 3/3 blue Robot Warrior artifact creature token. Then if this spell was cast from a graveyard, put two +1/+1 counters on that token.
+# Flashback {5}{U}". Cast from hand, paid exactly by a Black Lotus and a Mox Jet, it makes a plain 3/3. From the graveyard (CR 702.34a) it costs {5}{U}: with five mana in the pool,
+# from a Lotus and two Moxen, it is refused; a sixth makes it castable and the pool is empty afterwards. That token is 5/5 with its two counters, and the spell is exiled.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Pearl
+Retrieve the Esper
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Retrieve the Esper.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Robot Warrior Token.Power = 3
+? Bot1.Battlefield.Robot Warrior Token.Toughness = 3
+? Bot1.Battlefield.Robot Warrior Token.Colors = Blue
+? Bot1.Battlefield.Robot Warrior Token.Types = Artifact; Creature
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.Graveyard.Retrieve the Esper.Cast(Ability: Flashback; Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Graveyard.Retrieve the Esper.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+[Bot1.Main2]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Robot Warrior Token#1.Power = 3
+Bot1.Battlefield.Robot Warrior Token#2.Power = 5
+Bot1.Battlefield.Robot Warrior Token#2.Toughness = 5
+Bot1.Exile.Retrieve the Esper.Colors = Blue
+Bot1.Graveyard = Black Lotus; Black Lotus
