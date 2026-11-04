@@ -1,0 +1,33 @@
+# An animated Gideon is a white creature as he leaves, so his controller draws even though he is a planeswalker card in exile (CR 608.2h).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Gideon of the Trials
+Martyr's Cry
+Island
+Island
+Forest
+Island x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Gideon of the Trials.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gideon of the Trials.Activate(Ability: becomes a 4/4)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Martyr's Cry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Exile = Gideon of the Trials
+Bot1.Hand.Forest.Colors =

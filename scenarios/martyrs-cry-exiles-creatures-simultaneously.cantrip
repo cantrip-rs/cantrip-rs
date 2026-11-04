@@ -1,0 +1,40 @@
+# The two white creatures leave together, so Dour Port-Mage triggers once and its controller draws three cards in all (CR 603.2c, 701.13).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Gleemox
+Yoked Ox
+Figure of Destiny
+Dour Port-Mage
+Martyr's Cry
+Forest
+Mountain
+Swamp
+Plains
+Island x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Dour Port-Mage.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Yoked Ox.Cast
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Figure of Destiny.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Martyr's Cry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+[Expect]
+Exile = Figure of Destiny; Yoked Ox
+Bot1.Hand.Swamp.Colors =
+Bot1.Library.Plains.Colors =

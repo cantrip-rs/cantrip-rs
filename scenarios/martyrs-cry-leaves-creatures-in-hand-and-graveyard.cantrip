@@ -1,0 +1,33 @@
+# Only creatures on the battlefield are exiled; copies in hand and graveyard stay there (CR 109.2, 701.13).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gleemox
+Phyrexian Tower
+Yoked Ox
+Yoked Ox
+Martyr's Cry
+Island x15
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Phyrexian Tower.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Yoked Ox.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Phyrexian Tower.Activate(Ability: Sacrifice)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Martyr's Cry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Exile =
+Bot1.Hand.Yoked Ox.Power = 0
+Bot1.Graveyard.Yoked Ox.Power = 0

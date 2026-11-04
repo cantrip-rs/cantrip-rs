@@ -1,0 +1,54 @@
+# White and multicolored creatures on both sides are exiled; each controller draws per creature, while green survives (CR 701.13, 121.1).
+[Bot1 Deck]
+Mox Pearl
+Gleemox
+Plains
+Yoked Ox
+Figure of Destiny
+Martyr's Cry
+Island
+Island
+Forest
+Mountain
+Island x15
+[Bot2 Deck]
+Plains
+Mox Emerald
+Yoked Ox
+Llanowar Elves
+Island
+Island
+Island
+Island
+Swamp
+Island x15
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Yoked Ox.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Figure of Destiny.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Yoked Ox.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Martyr's Cry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Exile = Figure of Destiny; Yoked Ox; Yoked Ox
+Bot1.Hand.Forest.Colors =
+Bot1.Hand.Mountain.Colors =
+Bot2.Hand.Swamp.Colors =
+Bot2.Battlefield.Llanowar Elves.Power = 1
+Bot1.Library.Count = 15
+Bot2.Library.Count = 15

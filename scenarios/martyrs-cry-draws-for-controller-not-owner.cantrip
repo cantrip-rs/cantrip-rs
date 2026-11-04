@@ -1,0 +1,43 @@
+# A stolen creature's controller draws when it is exiled, even though its owner is the opponent (CR 400.7, 701.13).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Gleemox
+Control Magic
+Martyr's Cry
+Island
+Island
+Forest
+Island x15
+[Bot2 Deck]
+Plains
+Yoked Ox
+Island x6
+Swamp
+Island x15
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Yoked Ox.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Yoked Ox)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Martyr's Cry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Exile = Yoked Ox
+Bot1.Hand.Forest.Colors =
+Bot2.Library.Swamp.Colors =
