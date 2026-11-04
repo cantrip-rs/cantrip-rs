@@ -317,6 +317,21 @@ pub fn plus_one_counter_on_each_of_subtype_you_control<const SUBTYPE: u16>(g: &m
     Ok(())
 }
 
+/// "[Subtype] you control get +`power`/+`toughness` until end of turn" (CR 611.2, 611.2c): the permanents of that subtype the
+/// ability's controller controls as it resolves (CR 205.3), the source among them, and none that enters later, the subtype
+/// read through the words of the source's text (CR 612.2). The permanents. Ran and Shaw (Dragons, +2/+0) and Summon: Esper
+/// Ramuh (Wizards, +1/+0) print it.
+pub fn subtype_you_control_get(g: &mut dyn Game, item: &StackItem, subtype: Subtype, power: i16, toughness: i16) -> Vec<ObjectId> {
+    let word = g.words(item.object).subtype(subtype);
+    let objects: Vec<ObjectId> = g.permanents_of(item.controller).into_iter().filter(|&id| g.chars(id).has_subtype(word)).collect();
+    instruction(g, |g| {
+        for &id in &objects {
+            crate::pump(g, item.object, id, power, toughness);
+        }
+    });
+    objects
+}
+
 /// "Put a +1/+1 counter on each other [subtype] you control" as an ability's whole effect: `counters_on_each_other_of_subtype_you_control`.
 /// Thalia's Lieutenant, Rescue Retriever, Camellia, the Seedmiser, Agent Phil Coulson, Doctor Spectrum and Vampire Socialite.
 pub fn plus_one_counter_on_each_other_of_subtype_you_control<const SUBTYPE: u16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
