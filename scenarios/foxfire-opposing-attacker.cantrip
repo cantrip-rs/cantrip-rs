@@ -1,0 +1,28 @@
+# Foxfire can untap an opponent's attacker and prevent its combat damage to its defender (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Foxfire
+Forest x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Forest x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.Attackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Foxfire.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Tapped = false
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 20
+Bot2.Battlefield.Grizzly Bears.Tapped = false
