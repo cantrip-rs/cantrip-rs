@@ -1,0 +1,6 @@
+{
+  "name": "War Chariot",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "{3}, {T}: Target creature gains trample until end of turn."
+}

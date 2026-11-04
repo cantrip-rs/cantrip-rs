@@ -1,0 +1,51 @@
+# War Chariot can give an opponent's creature trample; its activation costs three mana and tapping the artifact (CR 602.1a, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Jet
+Mox Sapphire
+War Chariot
+Ornithopter
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.War Chariot.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.War Chariot.Activate(Bot2.Battlefield.Ornithopter; Mana: short)
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.War Chariot.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.War Chariot.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Trample
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+! Bot1.Battlefield.War Chariot.Activate(Bot2.Battlefield.Ornithopter)
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter.Keywords = Flying
