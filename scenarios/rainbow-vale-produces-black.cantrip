@@ -1,0 +1,23 @@
+# A Vale tapped during an end step changes hands at the next turn's end step, not the current one (CR 603.7b).
+[Bot1 Deck]
+Rainbow Vale
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Rainbow Vale.Play
+[T1 Bot1.End]
+Bot1.Battlefield.Rainbow Vale.Activate(Color: Black)
+? Bot1.Mana = {B}
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Rainbow Vale.Tapped = true
+[T2 Bot2.End]
+Bot2.Pass
+Bot1.Pass
+Bot1.ChoosePlayer(Bot2)
+
+[Expect]
+Bot2.Battlefield.Rainbow Vale.Tapped = true
+Bot1.Battlefield.Rainbow Vale = (absent)

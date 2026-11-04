@@ -1,0 +1,57 @@
+# Both players activate the same Vale in a turn; the nonactive player's delayed trigger resolves first (CR 603.3b).
+[Bot1 Deck]
+Rainbow Vale
+Iroh, Tea Master
+Black Lotus
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Pearl
+Vizier of Tumbling Sands
+Island x20
+
+[Actions]
+Bot1.Hand.Rainbow Vale.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Iroh, Tea Master.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Rainbow Vale.Activate(Color: Green)
+? Bot1.Mana = {G}
+[T3 Bot1.BeginCombat]
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Rainbow Vale)
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+? Bot2.Battlefield.Rainbow Vale.Tapped = true
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Vizier of Tumbling Sands.Activate(Ability: Cycling)
+Bot2.Target(Bot2.Battlefield.Rainbow Vale)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Rainbow Vale.Activate(Color: Red)
+? Bot2.Mana = {R}
+[T3 Bot1.End]
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot2.ChoosePlayer(Bot1)
+? Bot1.Battlefield.Rainbow Vale.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.ChoosePlayer(Bot2)
+
+[Expect]
+Bot2.Battlefield.Rainbow Vale.Tapped = true
+Bot1.Battlefield.Rainbow Vale = (absent)

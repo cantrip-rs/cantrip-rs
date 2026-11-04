@@ -1,0 +1,24 @@
+# Vesuva copies Rainbow Vale, makes mana, and its own delayed ability transfers the copied land (CR 707.2, 603.7e).
+[Bot1 Deck]
+Rainbow Vale
+Island x20
+[Bot2 Deck]
+Vesuva
+Island x20
+[Actions]
+Bot1.Hand.Rainbow Vale.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Vesuva.Play
+Bot2.Accept
+? Bot2.Battlefield.Rainbow Vale.Tapped = true
+[T4 Bot2.Main1]
+Bot2.Battlefield.Rainbow Vale.Activate(Color: Red)
+? Bot2.Mana = {R}
+[T4 Bot2.End]
+Bot2.Pass
+Bot1.Pass
+Bot2.ChoosePlayer(Bot1)
+[Expect]
+Bot1.Battlefield.Count = 2
+Bot1.Battlefield.Rainbow Vale#2.Tapped = true
+Bot2.Battlefield.Rainbow Vale = (absent)

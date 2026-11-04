@@ -1,0 +1,5 @@
+{
+  "name": "Rainbow Vale",
+  "type": "Land",
+  "oracleText": "{T}: Add one mana of any color. An opponent gains control of this land at the beginning of the next end step."
+}

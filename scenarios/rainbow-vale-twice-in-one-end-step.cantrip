@@ -1,0 +1,41 @@
+# A use in one end step and another in the following turn make two delayed triggers at that turn's end (CR 603.7b).
+[Bot1 Deck]
+Rainbow Vale
+Mox Sapphire
+Mox Pearl
+Vizier of Tumbling Sands
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Rainbow Vale.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T1 Bot1.End]
+Bot1.Battlefield.Rainbow Vale.Activate(Color: Black)
+? Bot1.Mana = {B}
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Vizier of Tumbling Sands.Activate(Ability: Cycling)
+Bot1.Target(Bot1.Battlefield.Rainbow Vale)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Rainbow Vale.Activate(Color: White)
+? Bot1.Mana = {W}
+[T2 Bot2.End]
+Bot1.Triggers(Rainbow Vale; Rainbow Vale)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+Bot1.ChoosePlayer(Bot2)
+Bot2.Pass
+Bot1.Pass
+Bot1.ChoosePlayer(Bot2)
+
+[Expect]
+Bot2.Battlefield.Rainbow Vale.Tapped = true
