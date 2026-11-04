@@ -1,0 +1,20 @@
+# X=0 costs {R} and deals one damage (CR 107.3).
+[Bot1 Deck]
+Mox Ruby
+Meteor Shower
+Mountain x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Meteor Shower.Cast(X: 0)
+Bot1.Divide(Bot2: 1)
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 19
