@@ -1,0 +1,6 @@
+{
+  "name": "Inquisition",
+  "manaCost": "{2}{B}",
+  "type": "Sorcery",
+  "oracleText": "Target player reveals their hand. Inquisition deals damage to that player equal to the number of white cards in their hand."
+}
