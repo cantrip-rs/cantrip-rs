@@ -1,0 +1,50 @@
+# The Ward can enchant an opponent's creature and prevents the Aura controller's red damage too;
+# red damage to another creature is not prevented (CR 615.1).
+[Bot1 Deck]
+Prismatic Ward
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Lightning Bolt
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Prismatic Ward.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Prismatic Ward.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Damage = 0
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Prismatic Ward.AttachedTo = Ornithopter
+Bot2.Battlefield.Ornithopter.Damage = 0
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Graveyard = Ornithopter; Lightning Bolt
