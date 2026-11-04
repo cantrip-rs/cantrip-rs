@@ -1,0 +1,6 @@
+{
+  "name": "Divine Transformation",
+  "manaCost": "{2}{W}{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +3/+3."
+}

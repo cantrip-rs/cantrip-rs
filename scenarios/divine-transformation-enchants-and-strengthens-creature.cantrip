@@ -1,0 +1,32 @@
+# Divine Transformation enchants a creature and gives only it +3/+3; a noncreature artifact cannot be enchanted (CR 303.4, 613.1g).
+[Bot1 Deck]
+Divine Transformation
+Black Lotus
+Mox Pearl
+Ornithopter
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+! Bot1.Hand.Divine Transformation.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Divine Transformation.Cast(Bot1.Battlefield.Ornithopter#1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Divine Transformation.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter#1.Power = 3
+Bot1.Battlefield.Ornithopter#1.Toughness = 5
+Bot1.Battlefield.Ornithopter#2.Power = 0
+Bot1.Battlefield.Ornithopter#2.Toughness = 2
