@@ -1687,8 +1687,14 @@ pub fn gain_indestructible_until_end_of_turn(g: &mut dyn Game, source: ObjectId,
 /// nothing if it is no longer a legal target as the spell or ability resolves (CR 608.2b). Valorous Stance's first mode and
 /// Burdened Stoneback print it.
 pub fn target_creature_gains_indestructible(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    target_creature_gains_until_end_of_turn(g, item, Keyword::Indestructible)
+}
+
+/// "Target creature gains [a keyword] until end of turn" (CR 611.2a), the creature being the ability's first target; nothing if
+/// it is no longer a legal target as the spell or ability resolves (CR 608.2b). Hog Monkey and Item Shopkeep print it with menace.
+pub fn target_creature_gains_until_end_of_turn(g: &mut dyn Game, item: &StackItem, keyword: Keyword) -> Result<(), Suspend> {
     if let Some(creature) = crate::targets::object(g, item, 0) {
-        gain_indestructible_until_end_of_turn(g, item.object, creature);
+        gain_until_end_of_turn(g, item.object, creature, keyword);
     }
     Ok(())
 }
