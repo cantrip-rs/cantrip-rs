@@ -1,0 +1,69 @@
+# Weapons Vendor draws a card as it enters (Bot1's hand 2 to 3). On turn 3 only Bot2 controls an Equipment, so the combat
+# ability does not trigger (CR 603.4). On turn 5 Bot1 controls its own Paradise Mantle: it pays {1} with its one Plains, and
+# when it does, attaches its own Mantle (Bot2's is refused) to its own Memnite (Bot2's Ornithopter is refused; CR 603.12).
+# On turn 7 Bot1 declines to pay, so the Mantle stays on Memnite and the Plains stays untapped.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Mox Pearl
+Memnite
+Weapons Vendor
+Paradise Mantle
+Plains
+Plains x10
+
+[Bot2 Deck]
+Paradise Mantle
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Weapons Vendor.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+[T2 Bot2.Main1]
+Bot2.Hand.Paradise Mantle.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.BeginCombat]
+? Stack.Count = 0
+[T3 Bot1.Main2]
+Bot1.Hand.Paradise Mantle.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.PayCost
+! Bot1.Target(Bot2.Battlefield.Paradise Mantle)
+Bot1.Target(Bot1.Battlefield.Paradise Mantle)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Paradise Mantle.AttachedTo = Memnite
+? Bot2.Battlefield.Paradise Mantle.AttachedTo = (absent)
+? Bot1.Battlefield.Plains.Tapped = true
+[T7 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Paradise Mantle.AttachedTo = Memnite
+Bot1.Battlefield.Plains.Tapped = false

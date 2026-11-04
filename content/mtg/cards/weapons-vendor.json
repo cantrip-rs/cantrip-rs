@@ -1,0 +1,8 @@
+{
+  "name": "Weapons Vendor",
+  "manaCost": "{3}{W}",
+  "type": "Creature — Human Artificer",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "When this creature enters, draw a card.\nAt the beginning of combat on your turn, if you control an Equipment, you may pay {1}. When you do, attach target Equipment you control to target creature you control."
+}
