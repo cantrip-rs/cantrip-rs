@@ -1,0 +1,40 @@
+# Skycaptain may band with one nonbanding attacker but cannot take two (CR 702.22c).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Kjeldoran Skycaptain
+Memnite
+Memnite
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Memnite#1.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Kjeldoran Skycaptain.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Kjeldoran Skycaptain > Bot2; Memnite#1 > Bot2; Memnite#2 > Bot2)
+! Bot1.Choose(Memnite#1; Memnite#2)
+Bot1.Choose(Memnite#1)
+? Combat.Attackers = Kjeldoran Skycaptain > Bot2 (band 1); Memnite > Bot2 (band 1); Memnite > Bot2
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 16
