@@ -1,0 +1,35 @@
+# A player may target themself and puts all available cards back when holding fewer than three (CR 101.3).
+[Bot1 Deck]
+Stunted Growth
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Forest
+Island
+Mountain
+Plains x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Stunted Growth.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Stunted Growth.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Choose()
+Bot1.Choose(Island; Mountain)
+
+[Expect]
+Bot1.Hand.Count = 0
+Bot1.Library = Mountain; Island; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains; Plains

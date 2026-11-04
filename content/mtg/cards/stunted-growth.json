@@ -1,0 +1,6 @@
+{
+  "name": "Stunted Growth",
+  "manaCost": "{3}{G}{G}",
+  "type": "Sorcery",
+  "oracleText": "Target player chooses three cards from their hand and puts them on top of their library in any order."
+}
