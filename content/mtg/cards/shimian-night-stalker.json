@@ -1,0 +1,8 @@
+{
+  "name": "Shimian Night Stalker",
+  "manaCost": "{3}{B}{B}",
+  "type": "Creature — Nightstalker",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "{B}, {T}: All damage that would be dealt to you this turn by target attacking creature is dealt to this creature instead."
+}
