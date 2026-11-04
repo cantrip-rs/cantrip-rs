@@ -1,0 +1,6 @@
+{
+  "name": "Barl's Cage",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "{3}: Target creature doesn't untap during its controller's next untap step."
+}
