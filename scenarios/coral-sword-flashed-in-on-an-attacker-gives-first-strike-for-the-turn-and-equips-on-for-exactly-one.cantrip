@@ -1,0 +1,69 @@
+# Coral Sword {R} (flash): "When this Equipment enters, attach it to target creature you control. That creature gains first strike until end
+# of turn. Equipped creature gets +1/+0. Equip {1}". Turn 3: Bot1's Memnite attacks and, in the declare attackers step, Coral Sword is flashed
+# in for exactly {R}. Bot2's Ornithopter is refused as the trigger's target, the Memnite taken: a 2/1 with first strike, it deals 2 (Bot2
+# 20 -> 18). Turn 5: the first strike is gone (the +1/+0 stays), the Memnite hits for 2 (16), and equip {1} (sorcery speed, paid exactly)
+# moves the Sword to the Ornithopter: a 1/2 flier (toughness unchanged), the Memnite a 1/1 again.
+
+[Bot1 Deck]
+Memnite
+Mox Ruby
+Mox Jet
+Coral Sword
+Ornithopter
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Coral Sword.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 1
+? Bot1.Battlefield.Memnite.Keywords = FirstStrike
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+? Bot1.Battlefield.Memnite.Power = 2
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 16
+[T5 Bot1.Main2]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Coral Sword.Activate(Ability: Equip; Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Coral Sword.AttachedTo = Ornithopter
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
