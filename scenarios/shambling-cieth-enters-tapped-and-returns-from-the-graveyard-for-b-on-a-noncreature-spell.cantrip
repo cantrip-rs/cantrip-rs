@@ -1,0 +1,42 @@
+# Shambling Cie'th (CR 614.1d, 113.6m): it enters tapped. Killed by Bot1's own Lightning Bolt, it triggers from the graveyard when
+# Bot1 casts a noncreature spell (a Mox Emerald): Bot1 pays {B} from a Mox Jet and the card returns to its hand.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Shambling Cie'th
+Lightning Bolt
+Mox Emerald
+Memnite
+Island x13
+
+[Bot2 Deck]
+Shambling Cie'th
+Mountain x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Shambling Cie'th.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Shambling Cie'th.Tapped = true
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Shambling Cie'th)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Shambling Cie'th; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.PayCost
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Shambling Cie'th; Memnite
+Bot1.Graveyard = Lightning Bolt; Black Lotus
+? Bot1.Mana = 

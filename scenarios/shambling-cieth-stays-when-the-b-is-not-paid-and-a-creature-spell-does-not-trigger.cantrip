@@ -1,0 +1,47 @@
+# Shambling Cie'th: "you may pay {B}" - Bot1 declines, so the card stays in its graveyard even with the {B} available; casting a
+# creature spell (Memnite) afterwards does not trigger it at all (no prompt), and Bot2's own Cie'th in its hand is untouched.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Shambling Cie'th
+Lightning Bolt
+Mox Emerald
+Memnite
+Island x13
+
+[Bot2 Deck]
+Shambling Cie'th
+Mountain x19
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Shambling Cie'th.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Shambling Cie'th.Tapped = true
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Shambling Cie'th)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Shambling Cie'th; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Shambling Cie'th; Lightning Bolt; Black Lotus
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Hand.Count = 0
+Bot2.Hand.Count = 7
