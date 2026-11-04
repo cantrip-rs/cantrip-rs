@@ -32,10 +32,16 @@ pub fn attached_creature_fights_first_target(g: &mut dyn Game, item: &StackItem)
 /// source of the damage, so its abilities (lifelink, deathtouch) and colors count. Its power is read now, as the spell or
 /// ability resolves (CR 608.2c); a creature with no power deals none. Hard-Hitting Question and Archdruid's Charm print it.
 pub fn bite(g: &mut dyn Game, creature: ObjectId, victim: ObjectId) {
-    let power = g.chars(creature).power.unwrap_or(0);
+    let power = damage_equal_to_power(g, creature);
     if power > 0 {
-        g.damage(creature, Target::Object(victim), power as u16);
+        g.damage(creature, Target::Object(victim), power);
     }
+}
+
+/// "Damage equal to its power" (CR 120.3, 608.2h): the power `creature` has now, as the spell or ability resolves, as an amount
+/// of damage - none for a creature with no power or a negative one (CR 120.8). `bite` and Nibelheim Aflame use it.
+pub fn damage_equal_to_power(q: &dyn Query, creature: ObjectId) -> u16 {
+    q.chars(creature).power.unwrap_or(0).max(0) as u16
 }
 
 /// "Target creature you control deals damage equal to its power to target [creature]" (CR 120.3, 609.7, 608.2b): the creature
