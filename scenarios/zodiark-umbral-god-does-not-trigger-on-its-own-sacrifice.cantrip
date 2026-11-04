@@ -1,0 +1,40 @@
+# Zodiark, Umbral God: "Whenever a player sacrifices another creature" (CR 603.10a). Bot1 sacrifices Zodiark itself to
+# Phyrexian Altar, a mana ability, so nothing else goes on the stack: Zodiark's ability does not trigger and the stack stays
+# empty.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Swamp
+Zodiark, Umbral God
+Phyrexian Altar
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Zodiark, Umbral God.Cast
+Bot1.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp#1.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Phyrexian Altar.Cast
+Bot1.Pass
+Bot1.Battlefield.Phyrexian Altar.Activate(Sacrifice: Zodiark, Umbral God; Color: Black)
+? Stack.Count = 0
+? Bot1.Graveyard = Zodiark, Umbral God; Black Lotus
+
+[Expect]
+Bot1.Battlefield = Mox Jet; Phyrexian Altar; Swamp; Swamp

@@ -22,11 +22,15 @@ fn each_player_sacrifices_half(g: &mut dyn Game, item: &StackItem) -> Result<(),
     Ok(())
 }
 
-/// "Whenever a player sacrifices another creature" (CR 701.21a, 603.10a): any player's creature, as it last was on the battlefield.
-/// Zodiark sacrificing itself puts the counter on nothing (CR 400.7), so "another" needs no test of its own.
-fn a_player_sacrifices_another_creature(q: &dyn Query, _: &Asker, event: &Event) -> Option<Fired> {
+/// "Whenever a player sacrifices another creature" (CR 701.21a, 603.10a): any player's creature but Zodiark, as it last was
+/// on the battlefield. Looking back, Zodiark sacrificed would see its own sacrifice, so "another" is tested: it does not trigger.
+fn a_player_sacrifices_another_creature(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
     match event {
-        Event::ZoneChange { old, from, reason: ZoneReason::Sacrifice, .. } if from.is(ZoneKind::Battlefield) && q.chars(*old).is(CardType::Creature) => Fired::PLAIN,
+        Event::ZoneChange { old, from, reason: ZoneReason::Sacrifice, .. }
+            if *old != me.source && from.is(ZoneKind::Battlefield) && q.chars(*old).is(CardType::Creature) =>
+        {
+            Fired::PLAIN
+        }
         _ => None,
     }
 }
