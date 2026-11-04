@@ -1,0 +1,11 @@
+{
+  "name": "Sandworm",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Worm",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Haste\nWhen this creature enters, destroy target land. Its controller may search their library for a basic land card, put it onto the battlefield tapped, then shuffle.",
+  "keywords": [
+    "Haste"
+  ]
+}

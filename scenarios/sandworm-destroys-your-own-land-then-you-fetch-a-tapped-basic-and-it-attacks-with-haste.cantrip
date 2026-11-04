@@ -1,0 +1,45 @@
+# Sandworm {4}{R}, 5/4 haste: "When this creature enters, destroy target land. Its controller may search their library for a basic
+# land card, put it onto the battlefield tapped, then shuffle." Cast on turn 1 with Black Lotus (RRR), Mox Ruby and Mox Jet, the
+# only land to target is Bot1's own Mountain (the Moxen are artifacts), so it is the target; it is destroyed and its controller,
+# Bot1, accepts and takes the Mountain from the library (CR 701.23, 701.24): it enters tapped and the library is shuffled once. The
+# Sandworm attacks the turn it entered (haste, CR 702.10) for 5 (Bot2 20 to 15).
+
+[Bot1 Deck]
+Mountain
+Black Lotus
+Mox Ruby
+Mox Jet
+Sandworm
+Island
+Plains
+Mountain
+Plains x8
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sandworm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Search(Mountain)
+? Bot1.Shuffles = 1
+? Bot1.Graveyard = Mountain; Black Lotus
+? Bot1.Battlefield.Mountain.Tapped = true
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Sandworm > Bot2)
+[T1 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Mountain.Tapped = true
