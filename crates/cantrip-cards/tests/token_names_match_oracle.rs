@@ -27,7 +27,8 @@ const TYPE_WORDS: [&str; 9] = ["artifact", "creature", "enchantment", "land", "p
 
 /// The keyword actions whose rules make a token (CR 701), as the card's text says them, and the token as the rule says it:
 /// empower Jace (CR 701.71a), amass (CR 701.47a, Orcs and Goblins) and investigate (CR 701.16a).
-const KEYWORD_TOKENS: [(&str, &str); 4] = [
+const KEYWORD_TOKENS: [(&str, &str); 5] = [
+    ("job select", "a 1/1 colorless Hero creature token"),
     ("empower jace", "a blue Jace planeswalker token"),
     ("amass orcs", "a 0/0 black Orc Army creature token"),
     ("amass goblins", "a 0/0 black Goblin Army creature token"),
