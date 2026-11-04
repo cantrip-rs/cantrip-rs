@@ -10,8 +10,7 @@ fn sacrifice_and_trample(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspe
     });
     cantrip_mechanics::trample_until_end_of_turn(g, item.object, item.object);
     if klingon {
-        g.draw(item.controller, 1);
-        g.lose_life(item.controller, 1);
+        effects::draw_a_card_and_lose_1_life(g, item)?;
     }
     Ok(())
 }

@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{blight, triggers};
+use cantrip_mechanics::{blight, effects, triggers};
 use cantrip_oracle as oracle;
 
 const BLIGHT_TWO: Question = Question::new("BlightTwo", "blight 2?", "", "Blight 2", "Don't");
@@ -8,8 +8,7 @@ const BLIGHT_TWO: Question = Question::new("BlightTwo", "blight 2?", "", "Blight
 /// counters were put on a creature.
 fn blight_then_draw_and_lose_life(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if blight::may_in_effect(g, item.controller, item.object, 2, &BLIGHT_TWO)?.is_some() {
-        g.draw(item.controller, 1);
-        g.lose_life(item.controller, 1);
+        effects::draw_a_card_and_lose_1_life(g, item)?;
     }
     Ok(())
 }
