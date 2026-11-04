@@ -135,7 +135,16 @@ pub const LAND: Part = part(&(land as SelectFn), 0, "");
 /// "A Forest card" (CR 205.3i, 305.6): a land card with the subtype Forest, basic or not (a Stomping Ground is one), the type read
 /// through the words of the text of the card that asks (CR 612.2) and a card as it is where it is. Nature's Lore, Three Visits and
 /// Wood Elves search for it.
-pub const FOREST: Part = part(&(forest as SelectFn), crate::lands::sub(Subtype::Forest) as u32, "");
+pub const FOREST: Part = subtype_card(Subtype::Forest);
+
+/// "A [subtype] card" (CR 205.3, 612.2): a card with `subtype`, the type read through the words of the text of the card that asks
+/// and a card as it is where it is. `FOREST` is the Forest card; From Father to Son searches for a Vehicle card.
+pub const fn subtype_card(subtype: Subtype) -> Part {
+    part(&(forest as SelectFn), crate::lands::sub(subtype) as u32, "")
+}
+
+/// "A Vehicle card", which may be left unfound (CR 701.23b): From Father to Son searches for it.
+pub const VEHICLE_CARD: Selection = Selection::of(up_to(1), &[subtype_card(Subtype::Vehicle)]).called("Vehicle");
 
 /// "A basic land card or a [subtype] card" (CR 205.4a, 205.3i): a basic land card, or a card with `subtype`, the type read through
 /// the words of the text of the card that asks (CR 612.2) and a card as it is where it is. Spinewoods Armadillo's Desert is
