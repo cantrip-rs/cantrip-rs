@@ -1,0 +1,27 @@
+# Losing the controller's last Island triggers Dandân's sacrifice even while the opponent has an Island (CR 603.8).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Dandân
+Island x20
+[Bot2 Deck]
+Island
+Strip Mine
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dandân.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+Bot2.Battlefield.Strip Mine.Activate(Bot1.Battlefield.Island; Ability: Destroy target land)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Graveyard.Dandân.Power = 4
+Bot1.Graveyard.Island.Colors =
+Bot2.Battlefield.Island.Types = Land

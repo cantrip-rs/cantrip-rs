@@ -1,0 +1,8 @@
+{
+  "name": "Dandân",
+  "manaCost": "{U}{U}",
+  "type": "Creature — Fish",
+  "power": 4,
+  "toughness": 1,
+  "oracleText": "This creature can't attack unless defending player controls an Island.\nWhen you control no Islands, sacrifice this creature."
+}
