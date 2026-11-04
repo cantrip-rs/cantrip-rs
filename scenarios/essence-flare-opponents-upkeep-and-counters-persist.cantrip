@@ -1,0 +1,58 @@
+# The Aura boosts the enchanted creature and puts counters on its controller's upkeep; those counters remain after the Aura is destroyed (CR 603.2, 122.1a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Pearl
+Essence Flare
+Disenchant
+Island
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Wall of Earth
+Island
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Wall of Earth.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Essence Flare.Cast(Bot1.Battlefield.Mox Pearl#1)
+Bot1.Hand.Essence Flare.Cast(Bot2.Battlefield.Wall of Earth)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Essence Flare.AttachedTo = Wall of Earth
+? Bot2.Battlefield.Wall of Earth.Power = 2
+? Bot2.Battlefield.Wall of Earth.Toughness = 6
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Wall of Earth.Counters.Plus0Minus1 = 1
+? Bot2.Battlefield.Wall of Earth.Power = 2
+? Bot2.Battlefield.Wall of Earth.Toughness = 5
+[T5 Bot1.Main1]
+? Bot2.Battlefield.Wall of Earth.Counters.Plus0Minus1 = 1
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Wall of Earth.Counters.Plus0Minus1 = 2
+? Bot2.Battlefield.Wall of Earth.Toughness = 4
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Essence Flare)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Essence Flare = (absent)
+Bot2.Battlefield.Wall of Earth.Counters.Plus0Minus1 = 2
+Bot2.Battlefield.Wall of Earth.Power = 0
+Bot2.Battlefield.Wall of Earth.Toughness = 4

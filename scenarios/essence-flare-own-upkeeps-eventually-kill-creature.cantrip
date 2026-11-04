@@ -1,0 +1,31 @@
+# The Aura triggers on its own enchanted creature's controller's upkeep and accumulating -0/-1 counters eventually make its toughness zero (CR 704.5f).
+[Bot1 Deck]
+Mox Sapphire
+Essence Flare
+Ornithopter
+Island
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Essence Flare.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter.Counters.Plus0Minus1 = 1
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 1
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter = (absent)
+Bot1.Battlefield.Essence Flare = (absent)
+Bot1.Graveyard = Essence Flare; Ornithopter

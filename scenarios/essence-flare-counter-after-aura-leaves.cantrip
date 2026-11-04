@@ -1,0 +1,48 @@
+# The upkeep ability uses the Aura's last enchanted creature if the Aura is destroyed before the ability resolves (CR 608.2h).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Wall of Earth
+Essence Flare
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Disenchant
+Island
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Wall of Earth.Cast
+[T1 Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Essence Flare.Cast(Bot1.Battlefield.Wall of Earth)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Essence Flare)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Essence Flare = (absent)
+Bot1.Battlefield.Wall of Earth.Counters.Plus0Minus1 = 1
+Bot1.Battlefield.Wall of Earth.Power = 0
+Bot1.Battlefield.Wall of Earth.Toughness = 5
