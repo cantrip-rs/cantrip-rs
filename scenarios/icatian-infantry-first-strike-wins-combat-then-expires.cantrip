@@ -1,0 +1,50 @@
+# First strike lets the Infantry kill a 1/1 blocker before damage; on a later turn it trades with a second 1/1 (CR 702.7b, 514.2).
+[Bot1 Deck]
+Mox Pearl
+Icatian Infantry
+Island
+Island
+Island
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Memnite
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Icatian Infantry.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Icatian Infantry.Activate(Ability: first strike; Mana: short)
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite#1.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Icatian Infantry.Activate(Ability: first strike)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Icatian Infantry > Bot2)
+Bot2.Block(Memnite#1 > Icatian Infantry)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Icatian Infantry.Damage = 0
+? Bot2.Graveyard.Memnite.Power = 1
+[T5 Bot1.Main1]
+Bot1.Attack(Icatian Infantry > Bot2)
+Bot2.Block(Memnite > Icatian Infantry)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Graveyard.Icatian Infantry.Power = 1
+Bot2.Graveyard.Count = 2
