@@ -1,0 +1,52 @@
+# The activation costs {1}{R}, gives a lasting +2/+0 and flying, and sacrifices the patrol at the next end step (CR 611.2a, 603.7).
+[Bot1 Deck]
+Goblin Ski Patrol
+Mox Ruby
+Mox Pearl
+Mox Jet
+Snow-Covered Forest
+Prismatic Omen
+Black Lotus
+Mountain x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Prismatic Omen.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Ski Patrol.Cast
+? Bot1.Mana =
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Battlefield.Snow-Covered Forest.Activate(Ability: Add {G})
+! Bot1.Battlefield.Goblin Ski Patrol.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Snow-Covered Forest.Activate(Ability: Add {R})
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Goblin Ski Patrol.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Goblin Ski Patrol.Power = 3
+? Bot1.Battlefield.Goblin Ski Patrol.Toughness = 1
+? Bot1.Battlefield.Goblin Ski Patrol.Keywords = Flying
+! Bot1.Battlefield.Goblin Ski Patrol.Activate
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Ski Patrol > Bot2)
+! Bot2.Block(Grizzly Bears > Goblin Ski Patrol)
+Bot2.Block(Ornithopter > Goblin Ski Patrol)
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Graveyard = Goblin Ski Patrol; Black Lotus
