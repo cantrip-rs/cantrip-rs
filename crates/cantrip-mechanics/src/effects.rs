@@ -1737,6 +1737,15 @@ pub fn this_gains_until_end_of_turn(g: &mut dyn Game, item: &StackItem, keyword:
     Ok(())
 }
 
+/// "It gains double strike until end of turn" (CR 702.4a, 611.2a): the creature the trigger is about (its subject, the
+/// attacker), which gains it only if it is still the object it was. Seifer Almasy and Yuriko, Blade of the Mighty print it.
+pub fn subject_gains_double_strike_until_end_of_turn(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Target::Object(creature) = item.subject {
+        gain_until_end_of_turn(g, item.object, creature, Keyword::DoubleStrike);
+    }
+    Ok(())
+}
+
 /// "This creature gains flying until end of turn" (CR 702.9b): `this_gains_until_end_of_turn` for flying.
 pub fn this_gains_flying(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     this_gains_until_end_of_turn(g, item, Keyword::Flying)
