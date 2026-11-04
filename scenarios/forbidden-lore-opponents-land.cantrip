@@ -1,0 +1,30 @@
+# The land's controller alone may activate the granted ability, and it can target an opposing creature.
+[Bot1 Deck]
+Black Lotus
+Forbidden Lore
+Ornithopter
+Island x20
+[Bot2 Deck]
+Forest
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Forbidden Lore.Cast(Bot2.Battlefield.Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Forest.Activate(Bot1.Battlefield.Ornithopter; Ability: Target creature)
+Bot1.Pass
+Bot2.Battlefield.Forest.Activate(Bot1.Battlefield.Ornithopter; Ability: Target creature)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot2.Battlefield.Forest.Tapped = true
+Bot1.Battlefield.Forbidden Lore.AttachedTo = Forest

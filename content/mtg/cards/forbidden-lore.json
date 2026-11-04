@@ -1,0 +1,6 @@
+{
+  "name": "Forbidden Lore",
+  "manaCost": "{2}{G}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land\nEnchanted land has \"{T}: Target creature gets +2/+1 until end of turn.\""
+}
