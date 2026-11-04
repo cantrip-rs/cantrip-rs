@@ -1,0 +1,52 @@
+# You're Not Alone counts the creatures its caster controls as it resolves (CR 608.2h). With two (Ornithopter and Memnite),
+# while Bot2 controls three (Phyrexian Walker and two Memnite), the target gets +2/+2 only: Ornithopter 0/2 becomes 2/4. A third creature brings Bot1 to exactly
+# three, and the next one gives +4/+4 instead (CR 608.2c), not +2/+2 as well: Bot2's Phyrexian Walker 0/3 becomes 4/7, an
+# opponent's creature accepted as the target. "Target creature" refuses a player. Both wear off at end of turn (CR 514.2).
+
+[Bot1 Deck]
+Mox Pearl
+Plains
+Ornithopter
+Memnite
+You're Not Alone
+You're Not Alone
+Memnite
+Island x10
+
+[Bot2 Deck]
+Phyrexian Walker
+Memnite
+Memnite
+Island x12
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.You're Not Alone.Cast(Bot2)
+Bot1.Hand.You're Not Alone.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.You're Not Alone.Cast(Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Phyrexian Walker.Power = 4
+? Bot2.Battlefield.Phyrexian Walker.Toughness = 7
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot2.Battlefield.Phyrexian Walker.Power = 0

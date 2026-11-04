@@ -1,0 +1,6 @@
+{
+  "name": "You're Not Alone",
+  "manaCost": "{W}",
+  "type": "Instant",
+  "oracleText": "Target creature gets +2/+2 until end of turn. If you control three or more creatures, it gets +4/+4 until end of turn instead."
+}
