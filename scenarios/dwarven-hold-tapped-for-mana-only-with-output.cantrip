@@ -1,0 +1,31 @@
+# Wild Growth triggers when the Hold makes red mana, but not when zero counters are removed and it makes none (CR 106.12a).
+[Bot1 Deck]
+Dwarven Hold
+Wild Growth
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Dwarven Hold.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Wild Growth.Cast(Bot1.Battlefield.Dwarven Hold)
+[T3 Bot1.Untap]
+Bot1.Accept
+[T3 Bot1.Main1]
+Bot1.Battlefield.Dwarven Hold.Activate(X: 0)
+Bot1.Pass
+? Bot1.Mana =
+[T5 Bot1.Untap]
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Dwarven Hold.Counters.Storage = 1
+[T7 Bot1.Untap]
+Bot1.Accept
+[T7 Bot1.Main1]
+Bot1.Battlefield.Dwarven Hold.Activate(X: 1)
+Bot1.Pass
+? Bot1.Mana = {R}{G}
+[Expect]
+Bot1.Battlefield.Dwarven Hold.Tapped = true

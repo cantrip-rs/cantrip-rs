@@ -1,0 +1,28 @@
+# Dwarven Hold enters tapped, stores once per kept-tapped upkeep, then spends one counter for one red mana (CR 603.4, 605.1a).
+[Bot1 Deck]
+Dwarven Hold
+Island x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Dwarven Hold.Play
+? Bot1.Battlefield.Dwarven Hold.Tapped = true
+[T3 Bot1.Untap]
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Dwarven Hold.Counters.Storage = 1
+[T5 Bot1.Untap]
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Dwarven Hold.Counters.Storage = 2
+[T7 Bot1.Untap]
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Dwarven Hold.Tapped = false
+? Bot1.Battlefield.Dwarven Hold.Counters.Storage = 2
+Bot1.Battlefield.Dwarven Hold.Activate(X: 1)
+Bot1.Pass
+? Bot1.Mana = {R}
+[Expect]
+Bot1.Battlefield.Dwarven Hold.Tapped = true
+Bot1.Battlefield.Dwarven Hold.Counters.Storage = 1
