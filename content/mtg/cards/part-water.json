@@ -1,0 +1,6 @@
+{
+  "name": "Part Water",
+  "manaCost": "{X}{X}{U}",
+  "type": "Sorcery",
+  "oracleText": "X target creatures gain islandwalk until end of turn. (They can't be blocked as long as defending player controls an Island.)"
+}

@@ -1,0 +1,45 @@
+# X=2 targets creatures of both players, granting islandwalk until cleanup; the unselected creature stays unchanged (CR 115.1, 702.14, 514.2).
+[Bot1 Deck]
+Part Water
+Black Lotus
+Mox Sapphire
+Mox Jet
+Phyrexian Walker
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island
+Phyrexian Walker
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Phyrexian Walker.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Part Water.Cast(X: 2)
+! Bot1.Target(Bot2.Battlefield.Island)
+! Bot1.Target(Count: 1)
+! Bot1.Target(Count: 3)
+Bot1.Target(Bot1.Battlefield.Phyrexian Walker; Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Phyrexian Walker.Keywords = Islandwalk
+? Bot2.Battlefield.Ornithopter.Keywords = Flying; Islandwalk
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Attack(Phyrexian Walker > Bot2)
+! Bot2.Block(Phyrexian Walker > Bot1.Battlefield.Phyrexian Walker)
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Phyrexian Walker.Keywords = (absent)
+[Expect]
+Bot2.Battlefield.Ornithopter.Keywords = Flying
