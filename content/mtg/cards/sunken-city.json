@@ -1,0 +1,6 @@
+{
+  "name": "Sunken City",
+  "manaCost": "{U}{U}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of your upkeep, sacrifice this enchantment unless you pay {U}{U}.\nBlue creatures get +1/+1."
+}

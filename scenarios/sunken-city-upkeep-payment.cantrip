@@ -1,0 +1,36 @@
+# Paying exactly two blue mana keeps Sunken City; one blue mana cannot pay its next upkeep (CR 118.12a).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Sunken City
+Island x20
+[Bot2 Deck]
+Strip Mine
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sunken City.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Sunken City.Types = Enchantment
+[T4 Bot2.Main1]
+Bot2.Battlefield.Strip Mine.Activate(Bot1.Battlefield.Island; Ability: Destroy target land)
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.PayCost
+Bot1.Decline
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Graveyard = Sunken City; Island; 
