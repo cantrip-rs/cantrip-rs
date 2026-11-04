@@ -1,0 +1,29 @@
+# Fissure can target an indestructible land, which survives destruction (CR 702.12b).
+[Bot1 Deck]
+Fissure
+Black Lotus
+Mox Ruby x2
+Mountain
+Island x20
+[Bot2 Deck]
+Darksteel Citadel
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Darksteel Citadel.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Fissure.Cast(Bot2.Battlefield.Darksteel Citadel)
+? Bot1.Mana =
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Darksteel Citadel.Keywords = Indestructible

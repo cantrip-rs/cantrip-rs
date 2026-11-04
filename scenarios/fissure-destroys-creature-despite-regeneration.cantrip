@@ -1,0 +1,43 @@
+# Fissure targets an opponent's creature and destroys it even after a regeneration shield is made in response; a noncreature artifact is not a legal target (CR 701.8a, 701.19a).
+[Bot1 Deck]
+Fissure
+Black Lotus
+Mox Ruby x2
+Island x20
+[Bot2 Deck]
+Drudge Skeletons
+Black Lotus
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Drudge Skeletons.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+! Bot1.Hand.Fissure.Cast(Bot2.Battlefield.Mox Jet)
+Bot1.Hand.Fissure.Cast(Bot2.Battlefield.Drudge Skeletons)
+? Bot1.Mana =
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Drudge Skeletons.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Graveyard.Drudge Skeletons.Power = 1
+Bot1.Graveyard.Fissure.Colors = Red

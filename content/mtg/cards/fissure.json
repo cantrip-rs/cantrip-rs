@@ -1,0 +1,6 @@
+{
+  "name": "Fissure",
+  "manaCost": "{3}{R}{R}",
+  "type": "Instant",
+  "oracleText": "Destroy target creature or land. It can't be regenerated."
+}
