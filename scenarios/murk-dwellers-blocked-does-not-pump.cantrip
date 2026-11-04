@@ -1,0 +1,37 @@
+# A blocked Murk Dwellers remains 2/2 and deals two to its blocker; a later unblocked attack pumps it (CR 509.1h).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Murk Dwellers
+Island x20
+[Bot2 Deck]
+Plains
+Yoked Ox
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Murk Dwellers.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Yoked Ox.Cast
+[T3 Bot1.Attackers]
+Bot1.Attack(Murk Dwellers > Bot2)
+Bot2.Block(Yoked Ox > Murk Dwellers)
+[T3 Bot1.Damage]
+? Bot1.Battlefield.Murk Dwellers.Power = 2
+? Bot1.Battlefield.Murk Dwellers.Toughness = 2
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Yoked Ox.Damage = 2
+? Bot2.Life = 20
+[T5 Bot1.Attackers]
+Bot1.Attack(Murk Dwellers > Bot2)
+[T5 Bot1.Damage]
+? Bot1.Battlefield.Murk Dwellers.Power = 4
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 16

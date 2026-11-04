@@ -1,0 +1,8 @@
+{
+  "name": "Murk Dwellers",
+  "manaCost": "{3}{B}",
+  "type": "Creature — Zombie",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever this creature attacks and isn't blocked, it gets +2/+0 until end of combat."
+}
