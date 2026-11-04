@@ -1,0 +1,49 @@
+# Ninja's Blades: Equip {2} (Mutsunokami) is refused with one Swamp and goes through with two, the pool empty right after. The
+# Hero token (job select, turn 1) is a 1/1 Hero again and Memnite a 2/2 Construct Ninja.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Ninja's Blades
+Swamp
+Memnite
+Swamp
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ninja's Blades.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Swamp.Activate
+! Bot1.Battlefield.Ninja's Blades.Activate(Target: Memnite)
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Ninja's Blades.Activate(Target: Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Ninja's Blades.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 2
+Bot1.Battlefield.Memnite.Subtypes = Construct; Ninja
+Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Battlefield.Hero Token.Toughness = 1
+Bot1.Battlefield.Hero Token.Subtypes = Hero

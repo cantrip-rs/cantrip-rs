@@ -1,0 +1,52 @@
+# Ninja's Blades: job select makes a Hero token with the Equipment attached: a 2/2 Hero Ninja (CR 702.182). On turn 3 it hits Bot2
+# (20 -> 18); Bot1 draws the Fireball and discards it rather than the Lightning Bolt. {X}{R} is X = 0 in the graveyard (the ruling):
+# mana value 1, so Bot2 loses exactly 1 more (17), and the Bolt stays in Bot1's hand.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Ninja's Blades
+Swamp
+Lightning Bolt
+Plains
+Island
+Fireball
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ninja's Blades.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hero Token.Power = 2
+? Bot1.Battlefield.Hero Token.Toughness = 2
+? Bot1.Battlefield.Hero Token.Subtypes = Hero; Ninja
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Hero Token > Bot2)
+Bot1.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot1.Choose(Fireball)
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot1.Life = 20
+Bot1.Graveyard = Fireball
+Bot1.Hand.Count = 3
+Bot1.Battlefield.Ninja's Blades.AttachedTo = Hero Token

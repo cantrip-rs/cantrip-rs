@@ -1,0 +1,50 @@
+# Ninja's Blades: only combat damage to a player triggers the looting. Bot2's Memnite blocks the 2/2 Hero, taking its combat damage
+# (the Memnite dies; the Hero survives its 1 damage): no draw, no discard, no life lost.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Ninja's Blades
+Swamp
+Plains
+Plains
+Hill Giant
+Plains x12
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ninja's Blades.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Attack(Hero Token > Bot2)
+Bot1.Pass
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Memnite > Hero Token)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 20
+Bot2.Graveyard = Memnite
+Bot1.Hand.Count = 3
+Bot1.Graveyard.Count = 0
+Bot1.Battlefield.Hero Token.Power = 2

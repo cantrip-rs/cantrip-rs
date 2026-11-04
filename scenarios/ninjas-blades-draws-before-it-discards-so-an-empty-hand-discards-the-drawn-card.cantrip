@@ -1,0 +1,49 @@
+# Ninja's Blades: "draw a card, then discard a card" in that order (CR 121.1, 701.9). Bot1's hand is empty when the Hero hits on turn
+# 3: the card it draws (Hill Giant, mana value 4) is the only one it can discard, so Bot2 loses 4 on top of the 2 combat damage:
+# 20 - 2 - 4 = 14. Discarding first would find an empty hand and lose nothing.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Ninja's Blades
+Swamp
+Memnite
+Memnite
+Plains
+Hill Giant
+Plains x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ninja's Blades.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+? Bot1.Hand.Count = 0
+Bot1.Attack(Hero Token > Bot2)
+Bot1.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+Bot1.Choose(Hill Giant)
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 14
+Bot1.Graveyard = Hill Giant
+Bot1.Hand.Count = 0
