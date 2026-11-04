@@ -34,6 +34,14 @@ fn creature_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id) if on_battlefield(q, id) && q.chars(id).is(CardType::Creature))
 }
 
+fn nonenchantment_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    creature_filter(q, asker, t) && matches!(t, Target::Object(id) if !q.chars(id).is(CardType::Enchantment))
+}
+
+/// "Target nonenchantment creature" (CR 115.1): a creature that is not also an enchantment, as the layers have it. Coeurl
+/// prints it.
+pub const NONENCHANTMENT_CREATURE: TargetSpec = target(nonenchantment_creature_filter);
+
 fn tapped_creature_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
     creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.obj(id).tapped)
 }
