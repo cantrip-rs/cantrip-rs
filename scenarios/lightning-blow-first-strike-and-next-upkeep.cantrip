@@ -1,0 +1,58 @@
+# A Bear gains first strike before combat damage and survives its equal blocker; the caster draws during the next turn's upkeep and the effect expires (CR 702.7b, 603.7b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Grizzly Bears
+Lightning Blow
+Island
+Island
+Island x20
+[Bot2 Deck]
+Forest
+Mox Emerald
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Battlefield.Forest.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Grizzly Bears > Grizzly Bears)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Lightning Blow.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Lightning Blow.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = FirstStrike
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Grizzly Bears.Damage = 0
+? Bot2.Graveyard.Grizzly Bears.Power = 2
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+? Bot1.Library.Count = 18
+[T5 Bot1.Main1]
+? Bot1.Library.Count = 17
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Damage = 0
+Bot1.Library.Count = 17
