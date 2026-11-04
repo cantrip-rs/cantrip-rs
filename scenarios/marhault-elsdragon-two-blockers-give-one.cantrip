@@ -1,0 +1,37 @@
+# Two blockers give exactly +1/+1, checked before combat damage (CR 702.23a).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Marhault Elsdragon
+Island x15
+[Bot2 Deck]
+Ornithopter x2
+Island x18
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Marhault Elsdragon.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Marhault Elsdragon > Bot2)
+Bot2.Block(Ornithopter#1 > Marhault Elsdragon; Ornithopter#2 > Marhault Elsdragon)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Marhault Elsdragon.Power = 5
+? Bot1.Battlefield.Marhault Elsdragon.Toughness = 7
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Marhault Elsdragon.Power = 5
+Bot1.Battlefield.Marhault Elsdragon.Toughness = 7
