@@ -1,6 +1,7 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::{THIS_ENTERS, THIS_ENTERS_OR_ATTACKS};
-use cantrip_mechanics::{choose, craft, effects, targets};
+use cantrip_mechanics::hand::discard_chosen_artifact_or_creature_from_revealed_hand;
+use cantrip_mechanics::{craft, effects, targets};
 use cantrip_oracle as oracle;
 
 const ASK: Question = Question::new("Mill", "mill two cards?", "The top two cards of your library go into your graveyard", "Mill two", "Don't mill");
@@ -9,18 +10,7 @@ const ASK: Question = Question::new("Mill", "mill two cards?", "The top two card
 /// The whole hand is revealed (CR 701.20a), and nothing is asked when it holds no artifact or creature card.
 fn reveal_and_take(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Target::Player(opponent) = item.target(0) else { return Ok(()) };
-    let hand = g.state().zone(Zone::hand(opponent)).to_vec();
-    g.reveal(opponent, &hand);
-    let eligible: Vec<ObjectId> = hand
-        .iter()
-        .copied()
-        .filter(|&c| {
-            let chars = g.chars(c);
-            chars.is(CardType::Artifact) || chars.is(CardType::Creature)
-        })
-        .collect();
-    let chosen = choose::cards_from_kind(g, item.controller, item.object, Purpose::Discard, "artifact or creature", hand, eligible, 1, false)?;
-    g.discard_revealed(&chosen);
+    discard_chosen_artifact_or_creature_from_revealed_hand(g, item, opponent)?;
     Ok(())
 }
 

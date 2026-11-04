@@ -90,6 +90,16 @@ pub fn discard_chosen_nonland_from_revealed_hand(g: &mut dyn Game, item: &StackI
     discard_chosen_from_revealed_hand_of_kind(g, item, player, Purpose::TakeFromHand, "nonland", |q, c| !q.chars(c).is(CardType::Land))
 }
 
+/// "[Target player] reveals their hand. You choose an artifact or creature card from it. That player discards that card." (CR 701.9a,
+/// 205.2a): a card that is an artifact, a creature or both (an artifact creature is one card), and none being there, no choice is
+/// asked (CR 608.2d). Visage of Dread and Poison the Waters print it.
+pub fn discard_chosen_artifact_or_creature_from_revealed_hand(g: &mut dyn Game, item: &StackItem, player: PlayerId) -> Result<Vec<ObjectId>, Suspend> {
+    discard_chosen_from_revealed_hand_of_kind(g, item, player, Purpose::TakeFromHand, "artifact or creature", |q, c| {
+        let chars = q.chars(c);
+        chars.is(CardType::Artifact) || chars.is(CardType::Creature)
+    })
+}
+
 /// "[Target opponent] reveals their hand. You choose a nonland permanent card from it. That player discards that card." (CR 701.9a,
 /// 110.4a): only an artifact, battle, creature, enchantment or planeswalker card may be taken, and none being there, no choice is
 /// asked (CR 608.2d). Solve for Disappointment and Auntie's Sentence print it.
