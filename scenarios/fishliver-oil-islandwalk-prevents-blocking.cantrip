@@ -1,0 +1,29 @@
+# Fishliver Oil enchants a creature but not a noncreature artifact, and islandwalk prevents a block while the defender controls an Island (CR 702.14c).
+[Bot1 Deck]
+Memnite
+Fishliver Oil
+Mox Sapphire
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Fishliver Oil.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Fishliver Oil.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Memnite > Bot2)
+! Bot2.Block(Memnite > Memnite)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Fishliver Oil.AttachedTo = Memnite
+Bot2.Life = 19
