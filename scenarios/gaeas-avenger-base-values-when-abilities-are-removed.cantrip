@@ -1,0 +1,40 @@
+# Dress Down removes the Avenger's characteristic-defining ability; its printed 1+* becomes 1/1 until its ability returns (CR 613.1f).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Gaea's Avenger
+Dress Down
+Forest x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gaea's Avenger.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Gaea's Avenger.Power = 2
+? Bot1.Battlefield.Gaea's Avenger.Toughness = 2
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Dress Down.Cast
+? Bot1.Mana =
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Gaea's Avenger.Power = 1
+? Bot1.Battlefield.Gaea's Avenger.Toughness = 1
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Gaea's Avenger.Power = 2
+Bot1.Battlefield.Gaea's Avenger.Toughness = 2
+Bot1.Graveyard = Dress Down; Black Lotus

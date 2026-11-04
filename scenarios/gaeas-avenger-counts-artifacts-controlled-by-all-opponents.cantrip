@@ -1,0 +1,39 @@
+# The Avenger counts artifacts controlled by both opponents, not its controller, for both power and toughness (CR 604.3a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gaea's Avenger
+Forest x17
+
+[Bot2 Deck]
+Memnite
+Island x19
+
+[Bot3 Deck]
+Mox Jet
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gaea's Avenger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot3.Pass
+? Bot1.Battlefield.Gaea's Avenger.Power = 1
+? Bot1.Battlefield.Gaea's Avenger.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+[T3 Bot3.Main1]
+? Bot1.Battlefield.Gaea's Avenger.Power = 2
+? Bot1.Battlefield.Gaea's Avenger.Toughness = 2
+Bot3.Hand.Island.Play
+Bot3.Hand.Mox Jet.Cast
+[T4 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Gaea's Avenger.Power = 3
+Bot1.Battlefield.Gaea's Avenger.Toughness = 3

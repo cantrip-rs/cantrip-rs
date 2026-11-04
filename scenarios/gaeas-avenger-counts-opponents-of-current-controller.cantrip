@@ -1,0 +1,41 @@
+# When Control Magic changes the Avenger's controller, it counts its new opponent's artifact instead of its new controller's two (CR 604.3a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Gaea's Avenger
+Forest x20
+[Bot2 Deck]
+Ornithopter
+Mox Sapphire
+Black Lotus
+Control Magic
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gaea's Avenger.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Gaea's Avenger.Power = 4
+? Bot1.Battlefield.Gaea's Avenger.Toughness = 4
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Control Magic.Cast(Bot1.Battlefield.Gaea's Avenger)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Gaea's Avenger.Power = 2
+Bot2.Battlefield.Gaea's Avenger.Toughness = 2
+Bot1.Battlefield.Mox Pearl.Types = Artifact
