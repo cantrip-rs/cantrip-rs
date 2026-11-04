@@ -7,13 +7,8 @@ use cantrip_api::*;
 
 use crate::{tokens, triggers};
 
-/// The 1/1 colorless Hero creature token job select makes.
-pub static HERO: CardDef = CardDef {
-    types: TypeSet::of(&[CardType::Creature]),
-    power: Some(1),
-    toughness: Some(1),
-    ..token!(Hero)
-};
+/// The 1/1 colorless Hero creature token job select makes (`tokens::HERO_1_1_COLORLESS`).
+pub use crate::tokens::HERO_1_1_COLORLESS as HERO;
 
 /// "Create a 1/1 colorless Hero creature token, then attach this to it." An Equipment that has left the battlefield attaches
 /// to nothing, and a token a replacement stopped is not there to be equipped (CR 701.3b). The token enters first, as a 1/1

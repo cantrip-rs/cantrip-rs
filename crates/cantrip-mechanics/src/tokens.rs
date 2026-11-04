@@ -634,6 +634,15 @@ pub static KITHKIN: CardDef = CardDef {
     ..token!(Kithkin)
 };
 
+/// The 1/1 colorless Hero creature token. Job select (Astrologian's Planisphere, Dark Knight's Greatsword, Samurai's Katana)
+/// and Aerith Rescue Mission make it.
+pub static HERO_1_1_COLORLESS: CardDef = CardDef {
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(1),
+    ..token!(Hero)
+};
+
 /// The 3/2 white Hero creature token with vigilance. Pet Avengers and Borough Backup make it.
 pub static HERO_3_2_WHITE_VIGILANCE: CardDef = CardDef {
     colors: Some(ColorSet::of(Color::White)),
