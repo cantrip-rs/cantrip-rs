@@ -1,0 +1,73 @@
+# Three flyers blocking Chromium give it +4/+4 from rampage; flying later prevents a ground block, and the upkeep is paid exactly (CR 702.23a, 702.9b).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Chromium
+Memnite
+Island x20
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Ornithopter
+Memnite
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Chromium.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Chromium > Bot2)
+Bot2.Block(Ornithopter#1 > Chromium; Ornithopter#2 > Chromium; Ornithopter#3 > Chromium)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Chromium.Power = 11
+? Bot1.Battlefield.Chromium.Toughness = 11
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Chromium.Power = 11
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Chromium.Power = 7
+Bot2.Hand.Ornithopter.Cast
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Chromium > Bot2; Memnite > Bot2)
+! Bot2.Block(Memnite > Chromium)
+Bot2.Block(Memnite > Memnite)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 13
+Bot1.Battlefield.Chromium.Power = 7

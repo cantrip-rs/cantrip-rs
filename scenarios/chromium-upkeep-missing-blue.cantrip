@@ -1,0 +1,31 @@
+# Chromium's controller cannot pay {W}{U}{B} without blue mana at its upkeep, so it is sacrificed (CR 118.12a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Mox Pearl
+Chromium
+Mox Jet
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Chromium.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Chromium.Power = 7
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Chromium = (absent)
+Bot1.Graveyard = Chromium; Black Lotus; Black Lotus
