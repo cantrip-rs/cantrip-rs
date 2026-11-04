@@ -1,0 +1,8 @@
+{
+  "name": "Fang, Fearless l'Cie",
+  "manaCost": "{2}{B}",
+  "type": "Legendary Creature — Human Warrior",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever one or more cards leave your graveyard, you draw a card and you lose 1 life. This ability triggers only once each turn.\n(Melds with Vanille, Cheerful l'Cie.)"
+}

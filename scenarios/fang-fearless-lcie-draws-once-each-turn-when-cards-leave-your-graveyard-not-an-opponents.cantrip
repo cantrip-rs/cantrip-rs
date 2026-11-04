@@ -1,0 +1,87 @@
+# Fang, Fearless l'Cie {2}{B}: "Whenever one or more cards leave your graveyard, you draw a card and you lose 1 life. This
+# ability triggers only once each turn." Turn 1: Tormod's Crypt exiles Bot1's graveyard (Dark Ritual and the Crypt
+# together), and Fang draws the second Crypt for exactly 1 life. Cling to Dust then exiles Black Lotus from Bot1's graveyard
+# the same turn: no second trigger. Turn 3: Soul-Guide Lantern exiles Bot2's Dark Ritual: not Bot1's graveyard, so nothing.
+# Turn 5: the second Crypt exiles Bot1's graveyard again, and Fang triggers again.
+
+[Bot1 Deck]
+Swamp
+Dark Ritual
+Fang, Fearless l'Cie
+Tormod's Crypt
+Black Lotus
+Cling to Dust
+Soul-Guide Lantern
+Tormod's Crypt
+Swamp x20
+
+[Bot2 Deck]
+Swamp
+Dark Ritual
+Plains x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Fang, Fearless l'Cie.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Stack = Fang, Fearless l'Cie
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+? Bot1.Hand = Black Lotus; Cling to Dust; Soul-Guide Lantern; Tormod's Crypt
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Cling to Dust.Cast(Bot1.Graveyard.Black Lotus)
+Bot1.Pass
+Bot2.Pass
+? Exile = Black Lotus; Dark Ritual; Tormod's Crypt
+? Stack = 
+? Bot1.Life = 19
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Battlefield.Swamp.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Soul-Guide Lantern.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Graveyard.Dark Ritual)
+Bot1.Pass
+Bot2.Pass
+? Exile.Count = 4
+? Stack = 
+? Bot1.Life = 19
+[T5 Bot1.Main1]
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Stack = Fang, Fearless l'Cie
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 18
+Bot1.Hand.Count = 4
+Bot1.Graveyard.Count = 0
+Exile.Count = 6
+Bot2.Life = 20
