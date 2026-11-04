@@ -1,0 +1,6 @@
+{
+  "name": "Shield of the Ages",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{2}: Prevent the next 1 damage that would be dealt to you this turn."
+}

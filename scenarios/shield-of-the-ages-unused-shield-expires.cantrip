@@ -1,0 +1,40 @@
+# An unused prevention shield expires at end of turn, so next turn's Lightning Bolt deals its full three damage.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Shield of the Ages
+Plains x3
+Plains x20
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Plains x5
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Shield of the Ages.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Shield of the Ages.Activate
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Life = 17
