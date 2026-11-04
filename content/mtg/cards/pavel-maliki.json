@@ -1,0 +1,8 @@
+{
+  "name": "Pavel Maliki",
+  "manaCost": "{4}{B}{R}",
+  "type": "Legendary Creature — Human",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "{B}{R}: Pavel Maliki gets +1/+0 until end of turn."
+}

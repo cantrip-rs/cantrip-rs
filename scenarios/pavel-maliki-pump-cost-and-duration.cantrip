@@ -1,0 +1,59 @@
+# Each color is required for Pavel's +1/+0 until end of turn, tested with one source unavailable and then both available (CR 611.2a).
+[Bot1 Deck]
+Pavel Maliki
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Swamp x25
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Pavel Maliki.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pavel Maliki.Power = 5
+? Bot1.Battlefield.Pavel Maliki.Toughness = 3
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Pavel Maliki.Activate(Mana: short)
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Pavel Maliki.Activate(Mana: short)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Pavel Maliki.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pavel Maliki.Power = 6
+? Bot1.Battlefield.Pavel Maliki.Toughness = 3
+[T8 Bot2.Main1]
+? Bot1.Battlefield.Pavel Maliki.Power = 5
+? Bot1.Battlefield.Pavel Maliki.Toughness = 3
+[T9 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Pavel Maliki.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Pavel Maliki.Power = 6
+[T10 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Pavel Maliki.Power = 5
+Bot1.Battlefield.Pavel Maliki.Toughness = 3
