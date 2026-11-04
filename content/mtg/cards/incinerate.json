@@ -1,0 +1,6 @@
+{
+  "name": "Incinerate",
+  "manaCost": "{1}{R}",
+  "type": "Instant",
+  "oracleText": "Incinerate deals 3 damage to any target. A creature dealt damage this way can't be regenerated this turn."
+}

@@ -1,0 +1,43 @@
+# A creature dealt nonlethal damage cannot regenerate from a later destruction this turn, even with a new shield (CR 701.19c).
+[Bot1 Deck]
+Incinerate
+Shatter
+Mountain
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Spellskite
+Welding Jar
+Black Lotus
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Welding Jar.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Spellskite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Incinerate.Cast(Bot2.Battlefield.Spellskite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Spellskite.Damage = 3
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Hand.Shatter.Cast(Bot2.Battlefield.Spellskite)
+Bot1.Pass
+Bot2.Battlefield.Welding Jar.Activate(Bot2.Battlefield.Spellskite)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Spellskite; Welding Jar; Black Lotus
