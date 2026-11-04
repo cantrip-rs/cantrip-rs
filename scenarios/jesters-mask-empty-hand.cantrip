@@ -1,0 +1,40 @@
+# With the opponent's hand empty, the Mask searches for zero cards and still shuffles their library (CR 701.23, 701.24a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Jester's Mask
+Island x20
+[Bot2 Deck]
+Memnite x7
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Jester's Mask.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+? Bot2.Hand.Count = 0
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Jester's Mask.Activate(Bot2)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Hand.Count = 0
+Bot2.Shuffles = 1
+Bot1.Graveyard = Jester's Mask; Black Lotus
