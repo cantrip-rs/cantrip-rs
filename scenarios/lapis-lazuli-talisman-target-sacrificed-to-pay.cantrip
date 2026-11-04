@@ -1,0 +1,32 @@
+# The target can be sacrificed for mana while paying; the departed object is not untapped (CR 400.7, 608.2b).
+[Bot1 Deck]
+Lapis Lazuli Talisman
+Sol Ring
+Mox Pearl
+Mox Sapphire
+Black Lotus
+Aven Envoy
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Lapis Lazuli Talisman.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aven Envoy.Cast
+Bot1.Target(Black Lotus)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.PayCost
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Black Lotus = (absent)
+Bot1.Graveyard = Black Lotus

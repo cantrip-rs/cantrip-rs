@@ -1,0 +1,6 @@
+{
+  "name": "Lapis Lazuli Talisman",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "Whenever a player casts a blue spell, you may pay {3}. If you do, untap target permanent."
+}

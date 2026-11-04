@@ -1,0 +1,75 @@
+# Payment changes Wickermaw's color; untapping Old Man returns the other blue permanent.
+[Bot1 Deck]
+Black Lotus
+Sol Ring
+Mox Sapphire
+Foraging Wickermaw
+Aven Envoy
+Thoughtlace
+Lapis Lazuli Talisman
+Ancestral Recall
+Island x20
+[Bot2 Deck]
+Black Lotus
+Old Man of the Sea
+Sol Ring
+Mox Pearl
+Jihad
+Braided Net
+Plains x2
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Foraging Wickermaw.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aven Envoy.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Sol Ring.Cast
+Bot2.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thoughtlace.Cast(Bot1.Battlefield.Foraging Wickermaw)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Aven Envoy)
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains#1.Activate
+Bot2.Battlefield.Plains#2.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Jihad.Cast
+Bot2.Colors(Blue)
+Bot2.ChoosePlayer(Bot1)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Lapis Lazuli Talisman.Cast
+[T6 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Battlefield.Sol Ring.Activate
+Bot2.Hand.Braided Net.Cast
+Bot2.Battlefield.Braided Net.Activate(Bot2.Battlefield.Old Man of the Sea)
+[T7 Bot1.Main1]
+? Bot2.Battlefield.Jihad.ChosenColor = Blue
+? Bot1.Battlefield.Foraging Wickermaw.Colors = Blue
+? Bot2.Battlefield.Aven Envoy.Colors = Blue
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ancestral Recall.Cast(Bot1)
+Bot1.Target(Bot2.Battlefield.Old Man of the Sea)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Foraging Wickermaw.Activate(Color: Green)
+Bot1.PayCost
+[Expect]
+Bot2.Battlefield.Jihad = (absent)
+Bot1.Battlefield.Aven Envoy.Tapped = false
