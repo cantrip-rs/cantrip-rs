@@ -1,0 +1,35 @@
+# With only three cards left the Librarian looks at and exiles all three, leaving nothing to order (CR 609.3).
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Orcish Librarian
+Mountain x5
+Forest
+Plains
+Swamp
+
+[Bot2 Deck]
+Island x20
+
+[Dice]
+1; 1; 1
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Orcish Librarian.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Orcish Librarian.Activate
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Looked = Forest; Plains; Swamp
+Exile = Forest; Plains; Swamp
+Bot1.Library.Count = 0
