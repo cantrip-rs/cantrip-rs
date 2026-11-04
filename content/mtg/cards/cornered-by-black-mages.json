@@ -1,0 +1,6 @@
+{
+  "name": "Cornered by Black Mages",
+  "manaCost": "{1}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Target opponent sacrifices a creature of their choice.\nCreate a 0/1 black Wizard creature token with \"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\""
+}

@@ -1,0 +1,50 @@
+# Cornered by Black Mages: "Target opponent sacrifices a creature of their choice" (CR 701.21a): Bot2 controls Ornithopter, Memnite
+# and a Mox Sapphire, chooses Memnite, and keeps the other creature and the artifact that is not a creature; Bot1's own Ornithopter
+# stays. Bot1 gets a 0/1 black Wizard token, and Mox Pearl cast after it, a noncreature spell, makes it deal 1 damage to Bot2.
+
+[Bot1 Deck]
+Mox Jet
+Swamp
+Swamp
+Cornered by Black Mages
+Ornithopter
+Mox Pearl
+Swamp
+Swamp x14
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mox Sapphire
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Cornered by Black Mages.Cast(Bot2)
+Bot1.Pass
+Bot2.Choose(Memnite)
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Sapphire; Ornithopter
+Bot2.Graveyard = Memnite
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Wizard Token.Power = 0
+Bot1.Battlefield.Wizard Token.Toughness = 1
+Bot1.Battlefield.Wizard Token.Colors = Black
+Bot2.Life = 19
+Bot1.Life = 20

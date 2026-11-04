@@ -1,0 +1,34 @@
+# Cornered by Black Mages at an opponent with no creature (only a Mox Sapphire, an artifact that is not a creature): nothing is
+# sacrificed (CR 701.21a: a Mox is no creature), and Bot1 still creates the 0/1 black Wizard token, the second sentence not
+# depending on the first. Bot2 loses no life.
+
+[Bot1 Deck]
+Mox Jet
+Swamp
+Swamp
+Cornered by Black Mages
+Swamp x15
+
+[Bot2 Deck]
+Mox Sapphire
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Cornered by Black Mages.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield = Mox Sapphire
+Bot2.Graveyard.Count = 0
+Bot1.Battlefield.Wizard Token.Power = 0
+Bot2.Life = 20
