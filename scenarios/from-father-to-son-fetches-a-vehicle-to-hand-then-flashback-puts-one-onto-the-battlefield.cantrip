@@ -1,0 +1,70 @@
+# From Father to Son: cast from hand ({1}{W}) it reveals and takes a Vehicle card to hand and leaves the other Vehicle, a non-Vehicle
+# artifact and the opponent's Vehicle alone. Flashback {4}{W}{W}{W} (seven mana, each W needed) puts the next Vehicle onto the
+# battlefield instead, never into the hand, and the spell is exiled.
+
+[Bot1 Deck]
+From Father to Son
+Plains x6
+Plains
+Great Gilded Boat
+Dependable Quinjet
+Lumbering Worldwagon
+Sol Ring
+Plains x9
+
+[Bot2 Deck]
+Boommobile
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Hand.From Father to Son.Cast
+Bot1.Search(Great Gilded Boat)
+[T3 Bot1.Main2]
+? Bot1.Hand = Plains; Plains; Plains; Plains; Plains; Great Gilded Boat
+? Bot1.Battlefield.Count = 2
+? Bot1.Hand.Count = 6
+? Bot1.Graveyard = From Father to Son
+? Bot1.Revealed = Great Gilded Boat
+? Bot2.Library.Count = 12
+[T5 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T7 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Battlefield.Plains#4.Activate
+Bot1.Battlefield.Plains#5.Activate
+Bot1.Battlefield.Plains#6.Activate
+! Bot1.Graveyard.From Father to Son.Cast(Ability: Flashback; Mana: short)
+[T13 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Plains#3.Activate
+Bot1.Battlefield.Plains#4.Activate
+Bot1.Battlefield.Plains#5.Activate
+Bot1.Battlefield.Plains#6.Activate
+Bot1.Battlefield.Plains#7.Activate
+Bot1.Graveyard.From Father to Son.Cast(Ability: Flashback)
+Bot1.Search(Lumbering Worldwagon)
+[T13 Bot1.Main2]
+? Bot1.Mana =
+? Bot1.Graveyard =
+? Bot1.Revealed = Great Gilded Boat
+? Exile = From Father to Son
+? Bot1.Battlefield.Lumbering Worldwagon.Tapped = false
+? Bot1.Hand = Dependable Quinjet; Great Gilded Boat; Plains; Plains; Plains; Sol Ring
+? Bot2.Battlefield =
+
+[Expect]
+Turn = 13

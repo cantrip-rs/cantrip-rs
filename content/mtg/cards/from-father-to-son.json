@@ -1,0 +1,6 @@
+{
+  "name": "From Father to Son",
+  "manaCost": "{1}{W}",
+  "type": "Sorcery",
+  "oracleText": "Search your library for a Vehicle card, reveal it, and put it into your hand. If this spell was cast from a graveyard, put that card onto the battlefield instead. Then shuffle.\nFlashback {4}{W}{W}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}
