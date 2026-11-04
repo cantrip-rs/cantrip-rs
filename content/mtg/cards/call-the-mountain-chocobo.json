@@ -1,0 +1,6 @@
+{
+  "name": "Call the Mountain Chocobo",
+  "manaCost": "{3}{R}",
+  "type": "Sorcery",
+  "oracleText": "Search your library for a Mountain card, reveal it, put it into your hand, then shuffle. Create a 2/2 green Bird creature token with \"Whenever a land you control enters, this token gets +1/+0 until end of turn.\"\nFlashback {5}{R} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}

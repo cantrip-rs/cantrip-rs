@@ -1,0 +1,52 @@
+# Call the Mountain Chocobo's flashback {5}{R} (CR 702.34a, 701.23b): the first cast takes the Volcanic Island from the library; the
+# flashback, six mana from the four Rubies, the Mountain and the Sapphire, finds no Mountain card left, still makes its second Bird, and
+# exiles the card instead of putting it in the graveyard. The Mountain Bot1 plays first pumps the first Bird (3/2); the second is 2/2.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Mox Ruby
+Call the Mountain Chocobo
+Mountain
+Mox Sapphire
+Volcanic Island
+Forest
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Hand.Call the Mountain Chocobo.Cast
+Bot1.Search(Volcanic Island)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Battlefield.Mox Ruby#3.Activate
+Bot1.Battlefield.Mox Ruby#4.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Graveyard.Call the Mountain Chocobo.Cast(Ability: Flashback)
+Bot1.Search()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Exile.Call the Mountain Chocobo.Colors.Count = 1
+Bot1.Graveyard.Count = 0
+# The first Bird was pumped by the Mountain Bot1 played this turn; the second was made after it.
+Bot1.Battlefield.Bird Token#1.Power = 3
+Bot1.Battlefield.Bird Token#2.Power = 2
