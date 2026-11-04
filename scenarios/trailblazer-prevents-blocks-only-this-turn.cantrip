@@ -1,0 +1,45 @@
+# Trailblazer stops a block on the chosen attacker, leaves another block legal, and wears off before the next attack (CR 509.1b, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Emerald
+Grizzly Bears
+Ornithopter
+Trailblazer
+Island
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald#1.Activate
+! Bot1.Hand.Trailblazer.Cast(Bot1.Battlefield.Mox Emerald#2)
+Bot1.Hand.Trailblazer.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2; Ornithopter > Bot2)
+! Bot2.Block(Ornithopter > Grizzly Bears)
+Bot2.Block(Ornithopter > Ornithopter)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzly Bears > Bot2)
+Bot2.Block(Ornithopter > Grizzly Bears)
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Life = 18
+Bot2.Battlefield.Ornithopter = (absent)

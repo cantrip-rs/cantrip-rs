@@ -1,0 +1,42 @@
+# Trailblazer may target an opponent's creature: its attacker cannot be blocked, while another attacker can (CR 115.1, 509.1b).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Ornithopter
+Trailblazer
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Ornithopter
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Trailblazer.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1; Ornithopter > Bot1)
+! Bot1.Block(Ornithopter > Grizzly Bears)
+Bot1.Block(Ornithopter > Ornithopter)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 18

@@ -1,0 +1,6 @@
+{
+  "name": "Trailblazer",
+  "manaCost": "{2}{G}{G}",
+  "type": "Instant",
+  "oracleText": "Target creature can't be blocked this turn."
+}
