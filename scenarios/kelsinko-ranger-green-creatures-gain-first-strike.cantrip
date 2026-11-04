@@ -1,0 +1,67 @@
+# The Ranger gives first strike to green creatures on either side, including a multicolored creature; the ability costs {1}{W} and expires at cleanup.
+[Bot1 Deck]
+Mox Pearl x2
+Mox Emerald
+Mox Jet
+Kelsinko Ranger
+Voice of Resurgence
+Plains x14
+[Bot2 Deck]
+Mox Emerald
+Mox Pearl
+Grizzly Bears
+Island x17
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Kelsinko Ranger.Cast
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Voice of Resurgence.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Kelsinko Ranger.Activate(Bot1.Battlefield.Voice of Resurgence; Mana: short)
+? Bot1.Mana = {B}{G}
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Kelsinko Ranger.Activate(Bot1.Battlefield.Kelsinko Ranger)
+! Bot1.Battlefield.Kelsinko Ranger.Activate(Bot1.Battlefield.Mox Emerald)
+Bot1.Battlefield.Kelsinko Ranger.Activate(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Keywords = FirstStrike
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Grizzly Bears.Keywords = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Kelsinko Ranger.Activate(Bot1.Battlefield.Voice of Resurgence)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Voice of Resurgence > Bot2)
+Bot2.Block(Grizzly Bears > Voice of Resurgence)
+[T7 Bot1.Main2]
+? Bot1.Battlefield.Voice of Resurgence.Damage = 0
+? Bot2.Graveyard.Grizzly Bears.Power = 2
+[T8 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Voice of Resurgence.Keywords = (absent)
+Bot1.Battlefield.Voice of Resurgence.Power = 2
+Bot2.Graveyard.Grizzly Bears.Power = 2
