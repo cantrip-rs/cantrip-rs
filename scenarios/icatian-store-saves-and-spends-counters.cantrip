@@ -1,0 +1,39 @@
+# The Store enters tapped, may remain tapped through untap steps to accumulate counters, and spends them for white mana (CR 603.4, 605.1a).
+[Bot1 Deck]
+Icatian Store
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Icatian Store.Play
+? Bot1.Battlefield.Icatian Store.Tapped = true
+[T3 Bot1.Untap]
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Icatian Store.Counters.Storage = 1
+[T5 Bot1.Untap]
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Icatian Store.Counters.Storage = 2
+[T7 Bot1.Untap]
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Battlefield.Icatian Store.Tapped = false
+? Bot1.Battlefield.Icatian Store.Counters.Storage = 2
+Bot1.Battlefield.Icatian Store.Activate(X: 1)
+Bot1.Pass
+? Bot1.Mana = {W}
+? Bot1.Battlefield.Icatian Store.Counters.Storage = 1
+[T9 Bot1.Untap]
+Bot1.Decline
+[T9 Bot1.Main1]
+? Bot1.Battlefield.Icatian Store.Counters.Storage = 2
+[T11 Bot1.Untap]
+Bot1.Accept
+[T11 Bot1.Main1]
+Bot1.Battlefield.Icatian Store.Activate(X: 2)
+Bot1.Pass
+? Bot1.Mana = {W}{W}
+[Expect]
+Bot1.Battlefield.Icatian Store.Counters.Storage = (absent)
+Bot1.Battlefield.Icatian Store.Tapped = true

@@ -1,0 +1,26 @@
+# The Store's upkeep trigger checks again on resolution: untapping it in response prevents the counter (CR 603.4).
+[Bot1 Deck]
+Icatian Store
+Black Lotus
+Voyaging Satyr
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Voyaging Satyr.Cast
+? Bot1.Mana = {G}
+Bot1.Hand.Icatian Store.Play
+[T3 Bot1.Untap]
+Bot1.Decline
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Voyaging Satyr.Activate(Bot1.Battlefield.Icatian Store)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Icatian Store.Tapped = false
+Bot1.Battlefield.Icatian Store.Counters.Storage = (absent)
