@@ -1,0 +1,6 @@
+{
+  "name": "Dreams of Laguna",
+  "manaCost": "{1}{U}",
+  "type": "Instant",
+  "oracleText": "Surveil 1, then draw a card. (To surveil 1, look at the top card of your library. You may put it into your graveyard.)\nFlashback {3}{U} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}

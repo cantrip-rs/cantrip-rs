@@ -1,0 +1,49 @@
+# Dreams of Laguna: "Surveil 1, then draw a card" (CR 701.25a), flashback {3}{U} (CR 702.34a). Hard cast with the top two
+# cards Lightning Bolt and Counterspell: Bot1 puts the Bolt into the graveyard, so the draw takes Counterspell, the card
+# that was under it (a draw before the surveil would have drawn the Bolt). Then it is cast from the graveyard with flashback
+# for {3}{U}, the new top card, Mana Leak, is kept and drawn, and the card is exiled afterwards.
+
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Dreams of Laguna
+Lightning Bolt
+Counterspell
+Mana Leak
+Island x13
+
+[Bot2 Deck]
+Plains x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Dreams of Laguna.Cast
+Bot1.Arrange( | Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Counterspell
+? Bot1.Graveyard = Dreams of Laguna; Lightning Bolt
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Mox Sapphire#4.Activate
+Bot1.Battlefield.Mox Sapphire#5.Activate
+Bot1.Graveyard.Dreams of Laguna.Cast(Ability: Flashback)
+Bot1.Arrange(Mana Leak | )
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Counterspell; Mana Leak
+Bot1.Graveyard = Lightning Bolt
+Exile = Dreams of Laguna
