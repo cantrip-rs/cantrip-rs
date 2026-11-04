@@ -1,0 +1,66 @@
+# A creature bounced and replayed after gaining flying is a new object and is not sacrificed by the delayed trigger (CR 400.7, 603.7c).
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Mox Sapphire
+Island
+Krovikan Elementalist
+Memnite
+Aether Spellbomb
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Krovikan Elementalist.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+[T3 Bot1.Main2]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Krovikan Elementalist.Activate(Bot1.Battlefield.Memnite; Ability: gains flying; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Krovikan Elementalist.Activate(Bot2.Battlefield.Ornithopter; Ability: gains flying)
+! Bot1.Battlefield.Krovikan Elementalist.Activate(Bot1.Battlefield.Mox Jet; Ability: gains flying)
+Bot1.Battlefield.Krovikan Elementalist.Activate(Bot1.Battlefield.Memnite; Ability: gains flying)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Flying
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Aether Spellbomb.Cast
+Bot1.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Aether Spellbomb.Activate(Bot1.Battlefield.Memnite; Ability: Return target creature)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Krovikan Elementalist.Power = 1
+Bot2.Battlefield.Ornithopter.Power = 0

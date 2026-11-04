@@ -1,0 +1,39 @@
+# Three nonred mana cannot pay the red symbol of the pump ability, while adding red permits it (CR 107.4a).
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Mox Sapphire
+Krovikan Elementalist
+Memnite
+Black Lotus
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Krovikan Elementalist.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+! Bot1.Battlefield.Krovikan Elementalist.Activate(Memnite; Ability: Target creature gets; Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Krovikan Elementalist.Activate(Memnite; Ability: Target creature gets)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Memnite.Power = 2
