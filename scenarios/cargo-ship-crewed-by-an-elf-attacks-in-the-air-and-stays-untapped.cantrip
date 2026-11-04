@@ -1,0 +1,39 @@
+# Cargo Ship (2/3 flying, vigilance, crew 1): on turn 3 Bot1 taps Llanowar Elves (power 1, exactly enough for crew 1) to crew
+# it, and it attacks as an artifact creature with Flying and Vigilance: 2 damage, and it is still untapped after attacking (CR
+# 702.20b) while the Elves that crewed it are tapped.
+
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Jet
+Llanowar Elves
+Cargo Ship
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cargo Ship.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Cargo Ship.Activate(Ability: Crew)
+? Bot1.Battlefield.Cargo Ship.Keywords = Flying; Vigilance
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Cargo Ship > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Cargo Ship.Tapped = false
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+
+[Expect]
+Bot2.Life = 18
