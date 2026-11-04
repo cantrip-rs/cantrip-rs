@@ -1,0 +1,38 @@
+# Snow Villiers's power is the number of creatures Bot1 controls, herself included (CR 604.3, the ruling): with Ornithopter
+# she is a 2/3, and Bot2's Ornithopter adds nothing. Memnite makes it 3. She attacks for exactly 3 with vigilance
+# (CR 702.20b), so she stays untapped.
+
+[Bot1 Deck]
+Black Lotus
+Snow Villiers
+Ornithopter
+Memnite
+Plains x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Snow Villiers.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Snow Villiers.Power = 2
+? Bot1.Battlefield.Snow Villiers.Toughness = 3
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Snow Villiers.Power = 3
+Bot1.Attack(Snow Villiers > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Snow Villiers.Tapped = False

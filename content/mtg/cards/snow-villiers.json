@@ -1,0 +1,11 @@
+{
+  "name": "Snow Villiers",
+  "manaCost": "{2}{W}",
+  "type": "Legendary Creature — Human Rebel Monk",
+  "power": "*",
+  "toughness": 3,
+  "oracleText": "Vigilance\nSnow Villiers's power is equal to the number of creatures you control.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
