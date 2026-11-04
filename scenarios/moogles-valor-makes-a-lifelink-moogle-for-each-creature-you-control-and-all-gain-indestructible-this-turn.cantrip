@@ -1,0 +1,57 @@
+# Moogles' Valor: "For each creature you control, create a 1/2 white Moogle creature token with lifelink. Then creatures you control gain
+# indestructible until end of turn." Bot1 has two Ornithopters, Bot2 one (not counted): two Moogles are made (the count is taken before
+# the tokens exist), and "Then" the two Ornithopters and both new Moogles - but not Bot2's Ornithopter - are indestructible.
+# On Bot2's turn the effect has ended.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Mox Pearl
+Ornithopter
+Ornithopter
+Moogles' Valor
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Mox Pearl#3.Activate
+Bot1.Battlefield.Mox Pearl#4.Activate
+! Bot1.Hand.Moogles' Valor.Cast(Mana: short)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#5.Activate
+Bot1.Hand.Moogles' Valor.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Count = 9
+? Bot1.Battlefield.Moogle Token#1.Keywords = Indestructible; Lifelink
+? Bot1.Battlefield.Moogle Token#2.Keywords = Indestructible; Lifelink
+? Bot1.Battlefield.Ornithopter#1.Keywords = Flying; Indestructible
+? Bot1.Battlefield.Ornithopter#2.Keywords = Flying; Indestructible
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Count = 9
+Bot1.Battlefield.Moogle Token#1.Power = 1
+Bot1.Battlefield.Moogle Token#1.Toughness = 2
+Bot1.Battlefield.Moogle Token#1.Colors = White
+Bot1.Battlefield.Moogle Token#1.Keywords = Lifelink
+Bot1.Battlefield.Moogle Token#2.Keywords = Lifelink
+Bot1.Battlefield.Ornithopter#1.Keywords = Flying

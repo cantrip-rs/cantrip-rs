@@ -1,0 +1,6 @@
+{
+  "name": "Moogles' Valor",
+  "manaCost": "{3}{W}{W}",
+  "type": "Instant",
+  "oracleText": "For each creature you control, create a 1/2 white Moogle creature token with lifelink. Then creatures you control gain indestructible until end of turn."
+}
