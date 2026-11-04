@@ -1,0 +1,52 @@
+# Item Shopkeep {1}{R}: "Whenever you attack, target attacking equipped creature gains menace until end of turn." (CR 115.1, 506.4,
+# 301.5a, 702.111, 611.2a). Turn 1 Bot1 casts Item Shopkeep, two Raging Goblins (haste) and Coral Sword, which attaches to the first. Both
+# Goblins attack: the unequipped one is no legal target (CR 115.4, 301.5a), the equipped one gains menace, and the keyword has ended by
+# Bot2's turn.
+
+[Bot1 Deck]
+Mountain
+Mox Ruby
+Black Lotus
+Item Shopkeep
+Raging Goblin
+Raging Goblin
+Coral Sword
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Item Shopkeep.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Raging Goblin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Coral Sword.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Raging Goblin)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Raging Goblin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T1 Bot1.DeclareAttackers]
+Bot1.Attack(Raging Goblin#1; Raging Goblin#2 > Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Raging Goblin#1.Keywords = FirstStrike; Haste; Menace
+? Bot1.Battlefield.Raging Goblin#2.Keywords = Haste
+[T2 Bot2.Upkeep]
+? Bot1.Battlefield.Raging Goblin#1.Keywords = Haste
+
+[Expect]
+Bot2.Life = 17
