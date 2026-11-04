@@ -1,0 +1,55 @@
+# The entry trigger taps both players' red creatures, including a multicolored one, but not a colorless creature or red noncreature; red creatures stay tapped through their respective untap steps (CR 603.2, 502.3).
+[Bot1 Deck]
+Mox Ruby
+Mountain Bandit
+Mox Sapphire
+Mox Sapphire
+Black Lotus
+Wrath of Marit Lage
+Memnite
+Island x13
+[Bot2 Deck]
+Black Lotus
+Boggart Ram-Gang
+Mox Ruby
+Eternal Warrior
+Island x16
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Mountain Bandit.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Boggart Ram-Gang.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Eternal Warrior.Cast(Boggart Ram-Gang)
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Wrath of Marit Lage.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mountain Bandit.Tapped = false
+? Bot2.Battlefield.Boggart Ram-Gang.Tapped = false
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mountain Bandit.Tapped = true
+? Bot2.Battlefield.Boggart Ram-Gang.Tapped = true
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot2.Battlefield.Eternal Warrior.Tapped = false
+Bot1.Attack(Memnite > Bot2)
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Boggart Ram-Gang.Tapped = true
+[T5 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Mountain Bandit.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = false
+Bot2.Battlefield.Boggart Ram-Gang.Tapped = true
