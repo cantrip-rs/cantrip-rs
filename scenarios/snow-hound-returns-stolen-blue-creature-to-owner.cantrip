@@ -1,0 +1,50 @@
+# Snow Hound can target a blue creature it controls but does not own, returning each creature to its owner.
+[Bot1 Deck]
+Snow Hound
+Black Lotus x2
+Mox Pearl
+Mox Sapphire
+Control Magic
+Plains
+Plains x20
+[Bot2 Deck]
+Mox Sapphire
+Merfolk of the Pearl Trident
+Plains x5
+Plains x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Snow Hound.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Merfolk of the Pearl Trident.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Control Magic.Cast(Bot2.Battlefield.Merfolk of the Pearl Trident)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Snow Hound.Activate(Bot1.Battlefield.Merfolk of the Pearl Trident)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Snow Hound.Power = 1
+Bot2.Hand.Merfolk of the Pearl Trident.Power = 1
+Bot1.Graveyard.Control Magic.Colors = Blue
