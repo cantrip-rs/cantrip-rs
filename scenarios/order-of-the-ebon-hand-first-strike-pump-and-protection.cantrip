@@ -1,0 +1,61 @@
+# Protection refuses white targeting and blocking; paid first strike and +1/+0 beat a green blocker and expire at cleanup (CR 702.16, 702.7b).
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Order of the Ebon Hand
+Swamp
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Grizzly Bears
+Ornithopter
+Swords to Plowshares
+Yoked Ox
+Plains
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Order of the Ebon Hand.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+! Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Order of the Ebon Hand)
+Bot2.Hand.Swords to Plowshares.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Yoked Ox.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Order of the Ebon Hand.Activate(Ability: gains first strike)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Order of the Ebon Hand.Activate(Ability: gets +1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Order of the Ebon Hand.Power = 3
+? Bot1.Battlefield.Order of the Ebon Hand.Toughness = 1
+Bot1.Attack(Order of the Ebon Hand > Bot2)
+! Bot2.Block(Yoked Ox > Order of the Ebon Hand)
+Bot2.Block(Grizzly Bears > Order of the Ebon Hand)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Order of the Ebon Hand.Damage = 0
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Order of the Ebon Hand.Power = 2
+Bot1.Battlefield.Order of the Ebon Hand.Toughness = 1
+Bot1.Battlefield.Order of the Ebon Hand.Keywords = (absent)
+Bot2.Graveyard.Grizzly Bears.Power = 2

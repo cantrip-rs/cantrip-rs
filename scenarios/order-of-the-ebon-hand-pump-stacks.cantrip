@@ -1,0 +1,31 @@
+# Repeated {B}{B} activations each grant +1/+0 for the turn (CR 611.2a).
+[Bot1 Deck]
+Mox Jet
+Gleemox
+Order of the Ebon Hand
+Black Lotus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Order of the Ebon Hand.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Order of the Ebon Hand.Activate(Ability: gets +1)
+? Bot1.Mana = {B}{B}
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Order of the Ebon Hand.Activate(Ability: gets +1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Order of the Ebon Hand.Power = 4
+Bot1.Battlefield.Order of the Ebon Hand.Toughness = 1
