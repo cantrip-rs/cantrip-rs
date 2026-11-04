@@ -1,0 +1,43 @@
+# Fog prevents combat damage, but the attack still causes the end-of-combat counter removal (CR 603.4).
+
+[Bot1 Deck]
+Clockwork Beast
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Fog
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Clockwork Beast.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 7
+? Bot1.Battlefield.Clockwork Beast.Power = 7
+? Bot1.Battlefield.Clockwork Beast.Toughness = 4
+! Bot1.Battlefield.Clockwork Beast.Activate
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Clockwork Beast > Bot2)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Fog.Cast
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Clockwork Beast.Counters.Plus1Plus0 = 6

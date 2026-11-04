@@ -1,0 +1,8 @@
+{
+  "name": "Clockwork Beast",
+  "manaCost": "{6}",
+  "type": "Artifact Creature — Beast",
+  "power": 0,
+  "toughness": 4,
+  "oracleText": "This creature enters with seven +1/+0 counters on it.\nAt end of combat, if this creature attacked or blocked this combat, remove a +1/+0 counter from it.\n{X}, {T}: Put up to X +1/+0 counters on this creature. This ability can't cause the total number of +1/+0 counters on this creature to be greater than seven. Activate only during your upkeep."
+}
