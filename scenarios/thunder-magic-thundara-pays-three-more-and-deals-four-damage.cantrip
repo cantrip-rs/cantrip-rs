@@ -1,0 +1,44 @@
+# Thunder Magic, Thundara ({R} + {3}, four mana from four Moxen): 4 damage to target creature - exactly 4 marked on Bot2's
+# Indomitable Ancients (a 2/10), not the 2 of Thunder or the 8 of Thundaga.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Thunder Magic
+Island x17
+
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Indomitable Ancients
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Indomitable Ancients.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Thunder Magic.Cast
+Bot1.Modes(Thundara)
+Bot1.Target(Bot2.Battlefield.Indomitable Ancients)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Indomitable Ancients.Damage = 4
+Bot1.Graveyard = Thunder Magic
