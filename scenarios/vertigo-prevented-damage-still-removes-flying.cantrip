@@ -1,0 +1,31 @@
+# Fully preventing Vertigo's damage consumes the shield but does not stop the later loss of flying (CR 615.7, 608.2c).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Kei Takahashi
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Vertigo
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Kei Takahashi.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Vertigo.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Kei Takahashi.Activate(Bot1.Battlefield.Ornithopter)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Ornithopter.Damage = 0
+Bot1.Battlefield.Ornithopter.Keywords = (absent)
+Prevented = 2 Vertigo > Ornithopter by Kei Takahashi

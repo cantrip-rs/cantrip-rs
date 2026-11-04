@@ -1,0 +1,40 @@
+# A second Vertigo resolves first, removes flying, and makes the first one's only target illegal; the target survives with two damage (CR 608.2b).
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Mox Ruby
+Mox Ruby
+Vertigo
+Vertigo
+Concordia Pegasus
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Concordia Pegasus.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Vertigo#1.Cast(Bot1.Battlefield.Concordia Pegasus)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Vertigo.Cast(Bot1.Battlefield.Concordia Pegasus)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Concordia Pegasus.Damage = 2
+? Bot1.Battlefield.Concordia Pegasus.Keywords = (absent)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Concordia Pegasus.Damage = 2
+Bot1.Battlefield.Concordia Pegasus.Keywords = (absent)
+Bot1.Graveyard.Count = 2

@@ -1,0 +1,45 @@
+# Removing flying lets a ground creature block the target while another flying attacker remains unblocked (CR 702.9b, 509.1b).
+[Bot1 Deck]
+Mox Ruby
+Vertigo
+Memnite
+Island
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Mox Pearl
+Concordia Pegasus
+Ornithopter
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Concordia Pegasus.Cast
+? Bot2.Mana =
+[T4 Bot2.Main1]
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Vertigo.Cast(Bot2.Battlefield.Concordia Pegasus)
+? Bot1.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Concordia Pegasus > Bot1; Ornithopter > Bot1)
+! Bot1.Block(Memnite > Ornithopter)
+Bot1.Block(Memnite > Concordia Pegasus)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Concordia Pegasus = (absent)
+Bot1.Battlefield.Memnite = (absent)
+Bot2.Battlefield.Ornithopter.Keywords = Flying
