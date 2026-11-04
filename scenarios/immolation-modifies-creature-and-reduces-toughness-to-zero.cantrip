@@ -1,0 +1,41 @@
+# Immolation gives its enchanted creature +2/-2, and can enchant an opponent's creature, which dies at zero toughness (CR 303.4, 704.5f).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Wall of Wood
+Immolation
+Immolation
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Wall of Wood.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Immolation.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Immolation#1.Cast(Bot1.Battlefield.Wall of Wood)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Immolation.AttachedTo = Wall of Wood
+? Bot1.Battlefield.Wall of Wood.Power = 2
+? Bot1.Battlefield.Wall of Wood.Toughness = 1
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Immolation.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard.Ornithopter.Power = 0
+Bot1.Graveyard.Immolation.Colors = Red
+Bot1.Battlefield.Wall of Wood.Power = 2
+Bot1.Battlefield.Wall of Wood.Toughness = 1

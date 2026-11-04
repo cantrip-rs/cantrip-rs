@@ -1,0 +1,6 @@
+{
+  "name": "Immolation",
+  "manaCost": "{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature gets +2/-2."
+}
