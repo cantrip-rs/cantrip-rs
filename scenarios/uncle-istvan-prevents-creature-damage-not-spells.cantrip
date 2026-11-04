@@ -1,0 +1,44 @@
+# Istvan prevents damage from a creature's activated ability and combat damage, but Lightning Bolt still kills him (CR 615.1).
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Uncle Istvan
+Island x25
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Prodigal Sorcerer
+Memnite
+Mountain
+Lightning Bolt
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Uncle Istvan.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Prodigal Sorcerer.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Prodigal Sorcerer.Activate(Bot1.Battlefield.Uncle Istvan)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Uncle Istvan.Damage = 0
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+Bot1.Block(Uncle Istvan > Memnite)
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Uncle Istvan.Damage = 0
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Uncle Istvan)
+[T4 Bot2.End]
+[Expect]
+Bot1.Battlefield.Uncle Istvan = (absent)
+Bot1.Graveyard.Uncle Istvan.Power = 1

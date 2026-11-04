@@ -1,0 +1,8 @@
+{
+  "name": "Uncle Istvan",
+  "manaCost": "{1}{B}{B}{B}",
+  "type": "Creature — Human",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Prevent all damage that would be dealt to this creature by creatures."
+}
