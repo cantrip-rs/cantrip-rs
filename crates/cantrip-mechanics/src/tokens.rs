@@ -1158,6 +1158,29 @@ pub fn create_an_elf(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> 
     Ok(())
 }
 
+/// The 2/2 green Bird creature token with "Whenever a land you control enters, this token gets +1/+0 until end of turn." (CR 111.1,
+/// 111.4, 603.2): the landfall pump is the token's own ability. Call the Mountain Chocobo and Choco-Comet make it.
+pub static LANDFALL_BIRD: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::Green)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(2),
+    toughness: Some(2),
+    abilities: &[triggered(
+        crate::triggers::LANDFALL,
+        crate::effects::this_gets::<1, 0>,
+        "Whenever a land you control enters, this token gets +1/+0 until end of turn.",
+    )],
+    ..token!(Bird)
+};
+
+/// "Create a 2/2 green Bird creature token with 'Whenever a land you control enters, this token gets +1/+0 until end of turn.'"
+/// (CR 111.1, 701.7a): one, under `controller`. The card file lists `tokens::LANDFALL_BIRD` in its `EXTRA`. Call the Mountain
+/// Chocobo and Choco-Comet print it.
+pub fn create_a_landfall_bird(g: &mut dyn Game, controller: PlayerId) -> Result<(), Suspend> {
+    create(g, controller, &LANDFALL_BIRD, 1)?;
+    Ok(())
+}
+
 /// The 0/0 green and blue Fractal creature token. Oracle's Gift (Jadzi, Steward of Fate) and Fractal Anomaly make it.
 pub static FRACTAL: CardDef = CardDef {
     colors: Some(ColorSet(ColorSet::of(Color::Green).0 | ColorSet::of(Color::Blue).0)),
