@@ -1,0 +1,50 @@
+# Gaelicat (1/3 flying, vigilance): with one artifact Bot1 controls (a Mox Pearl; the opponent's Mox Jet makes two on the table but
+# does not count) it stays 1/3; a second artifact (Sol Ring) makes it 3/3, power only; destroying that Sol Ring takes the bonus away.
+
+[Bot1 Deck]
+Plains
+Plains
+Mountain
+Mox Pearl
+Gaelicat
+Sol Ring
+Gleeful Demolition
+Plains x13
+
+[Bot2 Deck]
+Mox Jet
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Gaelicat.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gaelicat.Power = 1
+? Bot1.Battlefield.Gaelicat.Toughness = 3
+? Bot1.Battlefield.Gaelicat.Keywords = Flying; Vigilance
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gaelicat.Power = 3
+? Bot1.Battlefield.Gaelicat.Toughness = 3
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Gleeful Demolition.Cast(Sol Ring)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Gaelicat.Power = 1
+? Bot1.Battlefield.Gaelicat.Toughness = 3
+
+[Expect]
+Turn = 5

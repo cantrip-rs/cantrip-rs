@@ -1,0 +1,12 @@
+{
+  "name": "Gaelicat",
+  "manaCost": "{2}{W}",
+  "type": "Creature — Cat",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Flying, vigilance\nAs long as you control two or more artifacts, this creature gets +2/+0.",
+  "keywords": [
+    "Flying",
+    "Vigilance"
+  ]
+}
