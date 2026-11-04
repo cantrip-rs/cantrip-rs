@@ -1,0 +1,8 @@
+{
+  "name": "Wolverine Pack",
+  "manaCost": "{2}{G}{G}",
+  "type": "Creature — Wolverine",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Rampage 2 (Whenever this creature becomes blocked, it gets +2/+2 until end of turn for each creature blocking it beyond the first.)"
+}
