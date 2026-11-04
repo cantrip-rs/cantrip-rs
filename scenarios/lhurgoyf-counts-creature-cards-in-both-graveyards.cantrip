@@ -1,0 +1,58 @@
+# The characteristic-defining ability counts creature cards in both graveyards, excluding noncreature cards, in hand, on the battlefield and in the graveyard (CR 604.3).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Ruby
+Lhurgoyf
+Ornithopter
+Shock
+Shock
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+? Bot1.Hand.Lhurgoyf.Power = 0
+? Bot1.Hand.Lhurgoyf.Toughness = 1
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lhurgoyf.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lhurgoyf.Power = 0
+? Bot1.Battlefield.Lhurgoyf.Toughness = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lhurgoyf.Power = 1
+? Bot1.Battlefield.Lhurgoyf.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lhurgoyf.Power = 2
+? Bot1.Battlefield.Lhurgoyf.Toughness = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Lhurgoyf)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard.Lhurgoyf.Power = 3
+Bot1.Graveyard.Lhurgoyf.Toughness = 4
+Bot1.Graveyard.Ornithopter.Power = 0
+Bot2.Graveyard.Ornithopter.Power = 0
