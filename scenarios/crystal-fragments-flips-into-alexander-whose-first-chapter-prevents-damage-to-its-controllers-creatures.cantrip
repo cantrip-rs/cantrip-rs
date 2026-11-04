@@ -1,0 +1,53 @@
+# Crystal Fragments: "{5}{W}{W}: Exile this Equipment, then return it to the battlefield transformed under its owner's control" (CR 712.14a) makes Summon: Alexander, a 4/3 white Saga creature with flying that enters with a lore counter, so chapter I (CR 714.3a) prevents all damage that would be dealt to creatures Bot1 controls this turn. On turn 3 Bot1 pays the seven mana with Black Lotus and its other mana sources, and a Lightning Bolt at its own Alexander (3 damage to a 4/3) is prevented.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Ruby
+Mox Jet
+Mox Emerald
+Sol Ring
+Black Lotus
+Crystal Fragments
+Lightning Bolt
+Plains x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Crystal Fragments.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Crystal Fragments.Activate(Ability: Exile)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Summon: Alexander)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Summon: Alexander.Power = 4
+Bot1.Battlefield.Summon: Alexander.Toughness = 3
+Bot1.Battlefield.Summon: Alexander.Damage = 0
+Bot1.Battlefield.Summon: Alexander.Counters.Lore = 1
+Bot1.Battlefield.Summon: Alexander.Colors = White
+Bot1.Graveyard.Lightning Bolt.Colors = Red
