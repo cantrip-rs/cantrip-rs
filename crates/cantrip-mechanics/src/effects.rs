@@ -81,6 +81,18 @@ pub fn target_creature_gets_and_gains_first_strike<const P: i16, const T: i16>(g
     Ok(())
 }
 
+/// "[Another] target creature [you control] gets +`P`/+`T` and gains flying until end of turn" (CR 611.2a, 702.9): one
+/// instruction, the creature being the ability's first target; nothing if it is no longer a legal target as it resolves
+/// (CR 608.2b). Hovel Hurler and Summon: Primal Garuda's Slipstream (+1/+0) print it.
+pub fn target_creature_gets_and_gains_flying<const P: i16, const T: i16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    instruction(g, |g| {
+        crate::pump(g, item.object, creature, P, T);
+        gain_until_end_of_turn(g, item.object, creature, Keyword::Flying);
+    });
+    Ok(())
+}
+
 /// "Target creature gets +`P`/+`T` and gains haste until end of turn" (CR 611.2a, 702.10): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Wild Ride
 /// (+3/+0) and Fame (+2/+0) print it.
