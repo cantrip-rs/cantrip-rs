@@ -1,0 +1,65 @@
+# Machinist's Arsenal: job select makes a 1/1 Hero and attaches it. "Equipped creature gets +2/+2 for each artifact you control and is
+# an Artificer in addition to its other types": with Bot1's five artifacts (four Moxen and the Arsenal) the Hero is an 11/11 Hero
+# Artificer; the opponent's Mox Emerald does not count. Machina, Equip {4}, moves it to Savannah Lions (2/1 -> 12/11), the pool
+# empty after paying, and the Hero is a plain 1/1 again.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Machinist's Arsenal
+Savannah Lions
+Plains x13
+
+[Bot2 Deck]
+Mox Emerald
+Island x19
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Machinist's Arsenal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Machinist's Arsenal.AttachedTo = Hero Token
+? Bot1.Battlefield.Hero Token.Power = 11
+? Bot1.Battlefield.Hero Token.Toughness = 11
+? Bot1.Battlefield.Hero Token.Subtypes = Artificer; Hero
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+? Bot1.Battlefield.Hero Token.Power = 11
+? Bot1.Battlefield.Hero Token.Toughness = 11
+[T3 Bot1.Main1]
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Machinist's Arsenal.Activate(Ability: Machina; Savannah Lions)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Machinist's Arsenal.AttachedTo = Savannah Lions
+? Bot1.Battlefield.Savannah Lions.Power = 12
+? Bot1.Battlefield.Savannah Lions.Toughness = 11
+? Bot1.Battlefield.Hero Token.Power = 1
+? Bot1.Battlefield.Hero Token.Toughness = 1
+? Bot1.Battlefield.Hero Token.Subtypes = Hero
+
+[Expect]
+Turn = 3

@@ -1,0 +1,6 @@
+{
+  "name": "Machinist's Arsenal",
+  "manaCost": "{4}{W}",
+  "type": "Artifact — Equipment",
+  "oracleText": "Job select (When this Equipment enters, create a 1/1 colorless Hero creature token, then attach this to it.)\nEquipped creature gets +2/+2 for each artifact you control and is an Artificer in addition to its other types.\nMachina — Equip {4} ({4}: Attach to target creature you control. Equip only as a sorcery.)"
+}
