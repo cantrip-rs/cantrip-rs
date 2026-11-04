@@ -1,0 +1,55 @@
+# White Mage's Staff: job select makes a 1/1 Hero and attaches the Staff, so the Hero is a 2/2 Hero Cleric with "Whenever
+# this creature attacks, you gain 1 life": it attacks for 2 and Bot1 gains exactly 1 (CR 613.1f). Equip {3} moves the Staff
+# to Savannah Lions (a 3/2 Cat Cleric); when both attack, only the Lions has the ability, so Bot1 gains 1 more.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+White Mage's Staff
+Savannah Lions
+Mox Pearl
+Mox Jet
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.White Mage's Staff.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.White Mage's Staff.AttachedTo = Hero Token
+? Bot1.Battlefield.Hero Token.Power = 2
+? Bot1.Battlefield.Hero Token.Toughness = 2
+? Bot1.Battlefield.Hero Token.Subtypes = Cleric; Hero
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hero Token > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 21
+? Bot2.Life = 18
+Bot1.Battlefield.White Mage's Staff.Activate(Savannah Lions)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Power = 3
+? Bot1.Battlefield.Savannah Lions.Toughness = 2
+? Bot1.Battlefield.Savannah Lions.Subtypes = Cat; Cleric
+? Bot1.Battlefield.Hero Token.Power = 1
+? Bot1.Battlefield.Hero Token.Subtypes = Hero
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Hero Token; Savannah Lions > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Life = 22
+Bot2.Life = 14
