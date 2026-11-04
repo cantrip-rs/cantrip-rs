@@ -1,0 +1,63 @@
+# Sidequest: Play Blitzball needs a player to be dealt the combat damage: on turn 3 the pumped Anaba Bodyguard (4) and Elite Vanguard
+# (2) deal 6 combat damage in all, but Bot2's Ornithopter and Memnite block them, so Bot2 takes none (20) and Blitzball stays a
+# Sidequest enchantment with no Equipment attached. Bot2's creatures come in on turn 2, Bot1's on turn 1 (Black Lotus, Mox Ruby, Mox Pearl).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Sidequest: Play Blitzball
+Anaba Bodyguard
+Elite Vanguard
+Mountain x13
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Anaba Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elite Vanguard.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sidequest: Play Blitzball.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Target(Anaba Bodyguard)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Anaba Bodyguard > Bot2; Elite Vanguard > Bot2)
+Bot2.Block(Ornithopter > Anaba Bodyguard; Memnite > Elite Vanguard)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Sidequest: Play Blitzball.Types = Enchantment

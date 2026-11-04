@@ -1,0 +1,14 @@
+{
+  "name": "Sidequest: Play Blitzball",
+  "manaCost": "{2}{R}",
+  "type": "Enchantment",
+  "oracleText": "At the beginning of combat on your turn, target creature you control gets +2/+0 until end of turn.\nAt the end of combat on your turn, if a player was dealt 6 or more combat damage this turn, transform this enchantment, then attach it to a creature you control.",
+  "backFace": {
+    "name": "World Champion, Celestial Weapon",
+    "colorIndicator": [
+      "Red"
+    ],
+    "type": "Legendary Artifact — Equipment",
+    "oracleText": "Double Overdrive — Equipped creature gets +2/+0 and has double strike.\nEquip {3} ({3}: Attach to target creature you control. Equip only as a sorcery.)"
+  }
+}

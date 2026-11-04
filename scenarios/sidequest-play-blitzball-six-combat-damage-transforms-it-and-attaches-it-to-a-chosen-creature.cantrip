@@ -1,0 +1,59 @@
+# Sidequest: Play Blitzball: "At the beginning of combat on your turn, target creature you control gets +2/+0 until end of turn."
+# On turn 3 Anaba Bodyguard (2/3) gets +2/+0 and attacks with Elite Vanguard (2/1): 4 + 2 is exactly 6 combat damage to Bot2
+# (20 to 14), so at the end of combat Blitzball transforms into World Champion, Celestial Weapon and Bot1 chooses Elite Vanguard
+# (not the pumped Anaba) to attach it to: Vanguard has +2/+0 (4/1) and double strike; Anaba is 4/3 from the pump alone.
+# Anaba and Elite Vanguard come in on turn 1 (Black Lotus and Mox Ruby; Mox Pearl), Blitzball on turn 3 (Moxes).
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Sidequest: Play Blitzball
+Anaba Bodyguard
+Elite Vanguard
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Anaba Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elite Vanguard.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sidequest: Play Blitzball.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Target(Anaba Bodyguard)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Anaba Bodyguard > Bot2; Elite Vanguard > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.EndCombat]
+Bot1.Choose(Elite Vanguard)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.World Champion, Celestial Weapon.AttachedTo = Elite Vanguard
+Bot1.Battlefield.Elite Vanguard.Power = 4
+Bot1.Battlefield.Elite Vanguard.Toughness = 1
+Bot1.Battlefield.Anaba Bodyguard.Power = 4

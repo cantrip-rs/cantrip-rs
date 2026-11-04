@@ -1,0 +1,56 @@
+# Sidequest: Play Blitzball needs 6 or more combat damage dealt to a player this turn: noncombat damage is not counted. On turn 3
+# the pumped Anaba Bodyguard (2/3 +2/+0) deals 4 combat damage to Bot2 and Shock deals 2 more before combat: 6 damage in all, but
+# only 4 of it combat damage, so Blitzball stays a Sidequest enchantment with no Equipment attached, and Anaba is 4/3 from the pump alone.
+# Black Lotus and Mox Jet pay for Anaba on turn 1; Blitzball and Shock are cast on turn 3 with the three Moxes and the Mountain drawn.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Sidequest: Play Blitzball
+Anaba Bodyguard
+Shock
+Mountain x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Anaba Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sidequest: Play Blitzball.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Anaba Bodyguard > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 14
+Bot1.Battlefield.Sidequest: Play Blitzball.Types = Enchantment
+Bot1.Battlefield.Anaba Bodyguard.Power = 4
+Bot1.Battlefield.Anaba Bodyguard.Toughness = 3

@@ -1,0 +1,52 @@
+# Sidequest: Play Blitzball needs 6 or more combat damage: on turn 3 the pumped Anaba Bodyguard (4) and Memnite (1) deal exactly 5 to
+# Bot2 (15), one short, so it stays a Sidequest enchantment with no Equipment attached. Black Lotus and Mox Jet pay for Anaba on
+# turn 1 (Memnite is free) and Mox Ruby, Mox Jet and the Mountain for Blitzball on turn 3.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Sidequest: Play Blitzball
+Anaba Bodyguard
+Memnite
+Mountain
+Mountain x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Anaba Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Sidequest: Play Blitzball.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+Bot1.Target(Anaba Bodyguard)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Anaba Bodyguard > Bot2; Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.EndCombat]
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 15
+Bot1.Battlefield.Sidequest: Play Blitzball.Types = Enchantment
