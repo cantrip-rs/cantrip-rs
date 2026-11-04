@@ -1,0 +1,32 @@
+# An untapped Lyre cannot be activated without its one generic mana; once a
+# source untaps, paying that mana makes the creature 3/3 (CR 602.2b).
+[Bot1 Deck]
+Elven Lyre
+Mox Sapphire
+Mox Pearl
+Memnite
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Elven Lyre.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Elven Lyre.Activate(Bot1.Battlefield.Memnite; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Elven Lyre.Activate(Bot1.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Graveyard = Elven Lyre
