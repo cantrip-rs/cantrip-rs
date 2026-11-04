@@ -1,0 +1,11 @@
+{
+  "name": "Dragoon's Wyvern",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Drake",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Flying\nWhen this creature enters, create a 1/1 colorless Hero creature token.",
+  "keywords": [
+    "Flying"
+  ]
+}

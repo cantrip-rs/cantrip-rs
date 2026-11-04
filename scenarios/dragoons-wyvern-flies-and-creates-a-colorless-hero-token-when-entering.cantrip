@@ -1,0 +1,37 @@
+# Dragoon's Wyvern (2/1 flying): its enters trigger (CR 603.6a) creates one 1/1 colorless Hero creature token (CR 111.1) under
+# its controller: the battlefield list pins the count and whose it is, the token's keys its characteristics.
+
+[Bot1 Deck]
+Dragoon's Wyvern
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Dragoon's Wyvern.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield = Dragoon's Wyvern; Hero Token; Mox Jet; Mox Ruby; Mox Sapphire
+Bot1.Battlefield.Dragoon's Wyvern.Keywords = Flying
+Bot1.Battlefield.Dragoon's Wyvern.Power = 2
+Bot1.Battlefield.Dragoon's Wyvern.Toughness = 1
+Bot1.Battlefield.Hero Token.Types = Creature
+Bot1.Battlefield.Hero Token.Subtypes = Hero
+Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Battlefield.Hero Token.Toughness = 1
+Bot1.Battlefield.Hero Token.Token = True
+Bot1.Battlefield.Hero Token.Colors = (absent)
+Bot2.Battlefield.Count = 0
