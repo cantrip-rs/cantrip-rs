@@ -1,0 +1,47 @@
+# The first fixed random choice discards the first card of the target player’s hand (CR 701.9a).
+[Bot1 Deck]
+Gwendlyn Di Corci
+Mox Sapphire
+Mox Jet
+Gleemox
+Mox Ruby
+Plains
+Mountain
+Island x20
+
+[Bot2 Deck]
+Forest
+Plains
+Mountain
+Island x20
+
+[Dice]
+1
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Gleemox.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Gwendlyn Di Corci.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T4 Bot2.Main1]
+! Bot1.Battlefield.Gwendlyn Di Corci.Activate(Bot2)
+[T5 Bot1.Main1]
+! Bot1.Battlefield.Gwendlyn Di Corci.Activate(Gwendlyn Di Corci)
+Bot1.Battlefield.Gwendlyn Di Corci.Activate(Bot2)
+? Bot1.Battlefield.Gwendlyn Di Corci.Tapped = true
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Forest; Island
