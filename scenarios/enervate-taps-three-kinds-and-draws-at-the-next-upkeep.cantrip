@@ -1,0 +1,67 @@
+# Enervate taps an artifact, creature, or land, but not an enchantment (CR 115.1a, 701.26a).
+# Each spell creates one draw at the next turn's upkeep rather than drawing on resolution or repeating (CR 603.7b).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Enervate x3
+Island x20
+
+[Bot2 Deck]
+Forest
+Black Lotus
+Grizzly Bears
+Rancor
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Enervate.Cast(Bot1.Battlefield.Mox Jet)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mox Jet.Tapped = true
+? Bot1.Hand.Count = 3
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 4
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Hand.Rancor.Cast(Bot2.Battlefield.Grizzly Bears)
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Enervate.Cast(Bot2.Battlefield.Rancor)
+Bot1.Hand.Enervate.Cast(Bot2.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Grizzly Bears.Tapped = true
+? Bot1.Hand.Count = 4
+[T4 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 5
+[T4 Bot2.Main1]
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 6
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Enervate.Cast(Bot2.Battlefield.Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Forest.Tapped = true
+? Bot1.Hand.Count = 5
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Hand.Count = 6
