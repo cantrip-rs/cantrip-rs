@@ -1,0 +1,48 @@
+# Rook Turret: "Whenever another artifact you control enters, you may draw a card. If you do, discard a card." Entering itself (an artifact) triggers nothing; Bot1's Mox Ruby entering does:
+# it accepts, draws an Island and discards the Memnite. Its Mox Pearl entering triggers it again and Bot1 declines: nothing is drawn. Bot2's Mox Emerald entering on turn 2 triggers nothing
+# ("you control"). Bot1 ends with one card drawn, one discarded: its library 19, the Island and the Ornithopter in hand. The Turret has flying.
+
+[Bot1 Deck]
+Mox Jet
+Black Lotus
+Rook Turret
+Mox Ruby
+Mox Pearl
+Memnite
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Mox Emerald
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rook Turret.Cast
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Memnite)
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 0
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand = Island; Ornithopter
+Bot1.Library.Count = 19
+Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Battlefield.Rook Turret.Keywords = Flying

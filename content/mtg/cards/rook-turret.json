@@ -1,0 +1,11 @@
+{
+  "name": "Rook Turret",
+  "manaCost": "{3}{U}",
+  "type": "Artifact Creature — Construct",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever another artifact you control enters, you may draw a card. If you do, discard a card.",
+  "keywords": [
+    "Flying"
+  ]
+}
