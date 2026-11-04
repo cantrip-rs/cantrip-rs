@@ -1,0 +1,8 @@
+{
+  "name": "Aerathi Berserker",
+  "manaCost": "{2}{R}{R}{R}",
+  "type": "Creature — Human Berserker",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Rampage 3 (Whenever this creature becomes blocked, it gets +3/+3 until end of turn for each creature blocking it beyond the first.)"
+}
