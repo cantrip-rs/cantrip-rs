@@ -1,0 +1,6 @@
+{
+  "name": "Implements of Sacrifice",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "{1}, {T}, Sacrifice this artifact: Add two mana of any one color."
+}

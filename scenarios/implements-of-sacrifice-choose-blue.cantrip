@@ -1,0 +1,27 @@
+# The artifact costs one mana and sacrifices itself to add two blue mana of one chosen color; without mana its activation is unavailable (CR 605.1a, 106.4).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Implements of Sacrifice
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Implements of Sacrifice.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Implements of Sacrifice.Activate(Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Implements of Sacrifice.Activate(Color: Blue)
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {U}{U}
+[Expect]
+Bot1.Mana = {U}{U}
+Bot1.Graveyard = Implements of Sacrifice
+LeftBattlefield = Implements of Sacrifice (tapped)
