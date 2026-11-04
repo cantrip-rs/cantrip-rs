@@ -1,0 +1,44 @@
+# Quistis Trepe: "When Quistis Trepe enters, you may cast target instant or sorcery card from a graveyard, and mana of any type can be spent to cast that spell. If that spell
+# would be put into a graveyard, exile it instead." Bot1 kills its own Memnite with a Lightning Bolt paid by Mox Ruby, so its graveyard holds a creature card and an
+# instant: only the Bolt is a legal target, so none is asked for. Quistis is paid with Black Lotus; the Bolt is cast as the trigger resolves, its {R} paid with the black mana
+# of a Mox Jet, and it deals 3 to Bot2. The Bolt is then in exile, not the graveyard, with the Memnite still there.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Black Lotus
+Lightning Bolt
+Memnite
+Quistis Trepe
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Quistis Trepe.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Target(Bot2)
+Bot1.Battlefield.Mox Jet.Activate
+[Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 17
+Bot1.Graveyard = Black Lotus; Memnite
+Bot1.Exile.Lightning Bolt.Colors = Red

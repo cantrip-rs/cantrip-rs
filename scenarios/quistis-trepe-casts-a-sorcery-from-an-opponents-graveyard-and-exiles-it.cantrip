@@ -1,0 +1,43 @@
+# Quistis Trepe: the target is "from a graveyard", any player's, and a sorcery card is as good as an instant (CR 115.1): Bot2 casts Preordain on its turn 2, so it lies in Bot2's
+# graveyard. On turn 3 Bot1 casts Quistis with Black Lotus; the Preordain is the only target and is cast as the trigger resolves (CR 608.2g), though it is a sorcery and
+# the stack is not empty, its {U} paid with a Mox Jet's black mana. Bot1 scries 2 and keeps both Islands on top; the Preordain is exiled, not put into Bot2's graveyard.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Quistis Trepe
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Preordain
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Preordain.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Arrange(Island; Island | )
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Quistis Trepe.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Arrange(Island; Island | )
+[Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard =
+Bot2.Exile.Preordain.Colors = Blue
