@@ -1,0 +1,45 @@
+# Feldon’s Cane exiles itself as a cost and shuffles its controller’s graveyard into their library, leaving the opponent’s zones alone (CR 701.24a).
+[Bot1 Deck]
+Black Lotus
+Feldon's Cane
+Mox Pearl
+Island x18
+
+[Bot2 Deck]
+Black Lotus
+Memnite
+Island x6
+Black Lotus
+Island x12
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Feldon's Cane.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Feldon's Cane.Activate
+? Bot1.Mana =
+Bot1.Choose(Tap Feldon's Cane)
+? Exile = Feldon's Cane
+? LeftBattlefield = Black Lotus (tapped); Black Lotus (tapped); Feldon's Cane (tapped)
+? Bot1.Graveyard = Black Lotus
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Count = 0
+Bot1.Library.Black Lotus.Colors =
+Bot1.Shuffles = 1
+Bot2.Shuffles = 0
+Bot2.Library.Black Lotus.Colors =
+Bot2.Library.Count = 13
+Bot2.Graveyard = Black Lotus
+Exile = Feldon's Cane

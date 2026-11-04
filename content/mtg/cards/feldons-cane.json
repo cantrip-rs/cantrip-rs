@@ -1,0 +1,6 @@
+{
+  "name": "Feldon's Cane",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "{T}, Exile this artifact: Shuffle your graveyard into your library."
+}
