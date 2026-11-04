@@ -1,0 +1,6 @@
+{
+  "name": "Goblin Grenade",
+  "manaCost": "{R}",
+  "type": "Sorcery",
+  "oracleText": "As an additional cost to cast this spell, sacrifice a Goblin.\nGoblin Grenade deals 5 damage to any target."
+}
