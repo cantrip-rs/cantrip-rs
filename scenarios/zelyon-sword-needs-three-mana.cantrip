@@ -1,0 +1,42 @@
+# Two mana cannot pay the Sword's activation; three can, and the tap cost prevents another activation (CR 602.2).
+[Bot1 Deck]
+Zelyon Sword
+Black Lotus
+Mox Pearl
+Sol Ring
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Zelyon Sword.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sol Ring.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Battlefield.Zelyon Sword.Activate(Bot1.Battlefield.Ornithopter; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Zelyon Sword.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+! Bot1.Battlefield.Zelyon Sword.Activate(Bot1.Battlefield.Ornithopter)
+[Expect]
+Bot1.Battlefield.Zelyon Sword.Tapped = true

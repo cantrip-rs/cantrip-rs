@@ -1,0 +1,69 @@
+# The Sword pumps either player's creature while tapped, can be left tapped at untap, and stops pumping when untapped (CR 502.3, 611.2b).
+[Bot1 Deck]
+Zelyon Sword
+Black Lotus
+Mox Pearl
+Mox Ruby
+Mox Sapphire
+Ornithopter
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Zelyon Sword.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Zelyon Sword.Activate(Bot1.Battlefield.Mox Pearl)
+Bot1.Battlefield.Zelyon Sword.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Zelyon Sword.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot1.Decline
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Zelyon Sword.Tapped = true
+? Bot1.Battlefield.Ornithopter.Power = 2
+Bot1.Accept
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Zelyon Sword.Tapped = false
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Zelyon Sword.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 2
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+Bot1.Accept
+[T7 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Zelyon Sword.Tapped = false
