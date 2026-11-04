@@ -1,0 +1,31 @@
+# Standing Stones costs one mana, a tap, and one life to add one mana of a chosen color (CR 605.1a).
+
+[Bot1 Deck]
+Black Lotus
+Standing Stones
+Island
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Standing Stones.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Standing Stones.Activate(Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Standing Stones.Activate(Color: Red)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Tap Standing Stones)
+? Bot1.Mana = {R}
+
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Standing Stones.Tapped = true
+Bot1.Mana = {R}

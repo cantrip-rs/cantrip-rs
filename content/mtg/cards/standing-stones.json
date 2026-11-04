@@ -1,0 +1,6 @@
+{
+  "name": "Standing Stones",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "{1}, {T}, Pay 1 life: Add one mana of any color."
+}
