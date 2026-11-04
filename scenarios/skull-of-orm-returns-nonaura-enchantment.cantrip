@@ -1,0 +1,58 @@
+# Skull of Orm also returns a non-Aura enchantment card (CR 115.1c).
+[Bot1 Deck]
+Black Lotus x2
+Faithless Looting
+Underworld Dreams
+Skull of Orm
+Sol Ring x2
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Underworld Dreams
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Pass
+Bot1.Choose(Underworld Dreams; Island)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Skull of Orm.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Cleanup]
+Bot2.Discard(Underworld Dreams)
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+! Bot1.Battlefield.Skull of Orm.Activate(Bot1.Graveyard.Underworld Dreams; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring#1.Activate
+Bot1.Battlefield.Sol Ring#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Skull of Orm.Activate(Bot2.Graveyard.Underworld Dreams)
+! Bot1.Battlefield.Skull of Orm.Activate(Bot1.Graveyard.Faithless Looting)
+Bot1.Battlefield.Skull of Orm.Activate(Bot1.Graveyard.Underworld Dreams)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Skull of Orm.Tapped = true
+Bot1.Pass
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Hand.Underworld Dreams.Colors = Black
+Bot2.Graveyard = Island; Underworld Dreams
