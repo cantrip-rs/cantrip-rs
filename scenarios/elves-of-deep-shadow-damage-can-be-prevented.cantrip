@@ -1,0 +1,29 @@
+# Healing Salve prevents the Elves' damage while their mana is still added (CR 615.7).
+[Bot1 Deck]
+Elves of Deep Shadow
+Mox Emerald
+Mox Pearl
+Healing Salve
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elves of Deep Shadow.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Elves of Deep Shadow.Activate
+? Bot1.Mana = {B}
+[Expect]
+Bot1.Life = 20
+Bot1.Battlefield.Elves of Deep Shadow.Tapped = true

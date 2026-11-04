@@ -1,0 +1,41 @@
+# Elves of Deep Shadow is the only untapped mana source: it can pay for a black spell but cannot pay for a spell of
+# another color or one requiring two mana (CR 106.1b, 601.2g). Giant Growth uses the Forest before these checks.
+[Bot1 Deck]
+Forest
+Elves of Deep Shadow
+Giant Growth x2
+Swords to Plowshares
+Opt
+Lightning Bolt
+Dark Ritual
+Mind Stone
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Elves of Deep Shadow.Cast
+? Bot1.Mana =
+[T5 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Elves of Deep Shadow)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Elves of Deep Shadow; Mana: short)
+! Bot1.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Elves of Deep Shadow; Mana: short)
+! Bot1.Hand.Opt.Cast(Mana: short)
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+! Bot1.Hand.Mind Stone.Cast(Mana: short)
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Battlefield.Elves of Deep Shadow.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Mana = {B}{B}{B}
+Bot1.Life = 19
+Bot1.Battlefield.Elves of Deep Shadow.Tapped = true

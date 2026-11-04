@@ -1,0 +1,30 @@
+# Elves of Deep Shadow cannot tap for its ability while summoning sick; on a later turn it taps to add one black mana
+# and deals one damage to its controller as the mana ability resolves (CR 302.6, 605.3b, 120.3a).
+[Bot1 Deck]
+Mox Emerald
+Elves of Deep Shadow
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Elves of Deep Shadow.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Elves of Deep Shadow.Activate
+[T3 Bot1.Main1]
+Bot1.Battlefield.Elves of Deep Shadow.Activate
+? Bot1.Mana = {B}
+? Bot1.Life = 19
+? Bot2.Life = 20
+? Bot1.Battlefield.Elves of Deep Shadow.Tapped = true
+? Stack.Count = 0
+[Expect]
+Bot1.Mana = {B}
+Bot1.Life = 19
+Bot2.Life = 20
+Bot1.Battlefield.Elves of Deep Shadow.Tapped = true
