@@ -1,0 +1,63 @@
+# Dragoon's Lance: job select makes a 1/1 Hero and attaches the Lance: "Equipped creature gets +1/+0 and is a Knight in addition to its
+# other types. During your turn, equipped creature has flying", so on turn 1 the Hero is a 2/1 flying Hero Knight, and on Bot2's
+# turn 2 it has no flying. Gae Bolg, Equip {4}, moves the Lance to Savannah Lions on turn 3 (a 3/1 flying Cat Knight), and the
+# Hero is a plain 1/1 again.
+
+[Bot1 Deck]
+Plains
+Savannah Lions
+Mox Jet
+Mox Pearl
+Dragoon's Lance
+Mox Ruby
+Mox Sapphire
+Plains x10
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Dragoon's Lance.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Dragoon's Lance.AttachedTo = Hero Token
+? Bot1.Battlefield.Hero Token.Power = 2
+? Bot1.Battlefield.Hero Token.Toughness = 1
+? Bot1.Battlefield.Hero Token.Subtypes = Hero; Knight
+? Bot1.Battlefield.Hero Token.Keywords = Flying
+? Bot1.Battlefield.Savannah Lions.Keywords = (absent)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Hero Token.Keywords = (absent)
+? Bot1.Battlefield.Hero Token.Power = 2
+? Bot1.Battlefield.Hero Token.Toughness = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Dragoon's Lance.Activate(Ability: Gae Bolg; Savannah Lions)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Dragoon's Lance.AttachedTo = Savannah Lions
+Bot1.Battlefield.Savannah Lions.Power = 3
+Bot1.Battlefield.Savannah Lions.Keywords = Flying
+Bot1.Battlefield.Savannah Lions.Subtypes = Cat; Knight
+Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Battlefield.Hero Token.Keywords = (absent)
+Bot1.Battlefield.Hero Token.Subtypes = Hero
