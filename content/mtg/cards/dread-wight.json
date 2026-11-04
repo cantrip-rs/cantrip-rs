@@ -1,0 +1,8 @@
+{
+  "name": "Dread Wight",
+  "manaCost": "{3}{B}{B}",
+  "type": "Creature — Zombie",
+  "power": 3,
+  "toughness": 4,
+  "oracleText": "At end of combat, put a paralyzation counter on each creature blocking or blocked by this creature and tap those creatures. Each of those creatures doesn't untap during its controller's untap step for as long as it has a paralyzation counter on it. Each of those creatures gains \"{4}: Remove a paralyzation counter from this creature.\""
+}

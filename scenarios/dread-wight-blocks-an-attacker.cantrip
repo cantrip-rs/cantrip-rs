@@ -1,0 +1,38 @@
+# A creature blocked by Dread Wight receives a paralyzation counter at end of combat (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Dread Wight
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Giant Spider
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dread Wight.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Giant Spider.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Giant Spider > Bot1)
+Bot1.Block(Dread Wight > Giant Spider)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Counters.Paralyzation = (absent)
+Bot1.Battlefield.Dread Wight.Counters.Paralyzation = (absent)
+Bot2.Battlefield.Giant Spider.Counters.Paralyzation = 1
+Bot2.Battlefield.Giant Spider.Tapped = true

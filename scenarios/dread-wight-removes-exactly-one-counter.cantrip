@@ -1,0 +1,65 @@
+# Blocking twice gives two paralyzation counters; the granted ability removes exactly one (CR 122.1).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Dread Wight
+Memnite
+Island x20
+[Bot2 Deck]
+Black Lotus x2
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Wall of Mist
+Murmuring Phantasm
+Vow to Erebor
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Dread Wight.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Wall of Mist.Cast
+Bot2.Hand.Murmuring Phantasm.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Dread Wight > Bot2)
+Bot2.Block(Wall of Mist > Dread Wight; Murmuring Phantasm > Dread Wight)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Memnite.Counters.Paralyzation = (absent)
+? Bot2.Battlefield.Wall of Mist.Counters.Paralyzation = 1
+? Bot2.Battlefield.Murmuring Phantasm.Counters.Paralyzation = 1
+? Bot2.Battlefield.Wall of Mist.Tapped = true
+? Bot2.Battlefield.Murmuring Phantasm.Tapped = true
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Wall of Mist.Tapped = true
+? Bot2.Battlefield.Murmuring Phantasm.Tapped = true
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Vow to Erebor.Cast(Bot2.Battlefield.Wall of Mist)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Dread Wight > Bot2)
+Bot2.Block(Wall of Mist > Dread Wight)
+[T5 Bot1.Main2]
+? Bot2.Battlefield.Wall of Mist.Counters.Paralyzation = 2
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Wall of Mist.Activate(Ability: Remove a paralyzation)
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot2.Battlefield.Wall of Mist.Counters.Paralyzation = 1
