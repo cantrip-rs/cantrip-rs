@@ -1,0 +1,50 @@
+# Ragnar pays {G}{W}{U} and taps to shield an opponent’s creature from lethal damage (CR 701.19a).
+[Bot1 Deck]
+Ragnar
+Lightning Bolt
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Ruby
+Forest x20
+[Bot2 Deck]
+Llanowar Elves
+Forest x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ragnar.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Battlefield.Forest.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Ragnar.Activate(Bot1.Battlefield.Mox Emerald)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Ragnar.Activate(Bot2.Battlefield.Llanowar Elves)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Ragnar.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Battlefield.Mox Ruby.Activate
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Damage = 0
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Graveyard = Lightning Bolt
