@@ -1,0 +1,63 @@
+# Formation gives either player's creature banding for the turn; the controller draws at the next turn's upkeep (CR 611.2a, 514.2, 603.7b, 702.22j).
+[Bot1 Deck]
+Island
+Mox Pearl
+Formation x2
+Ornithopter
+Llanowar Elves
+Mox Emerald
+Island x20
+
+[Bot2 Deck]
+Mountain
+Black Lotus
+Hill Giant
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Hill Giant.Cast
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Formation.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Formation.Cast(Bot1.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Keywords = Banding
+? Bot1.Library.Count = 19
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Hill Giant > Bot1)
+Bot1.Block(Ornithopter > Hill Giant; Llanowar Elves > Hill Giant)
+Bot1.AssignDamage(Hill Giant > Ornithopter: 3)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Llanowar Elves.Keywords = (absent)
+? Bot1.Library.Count = 17
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Formation.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Keywords = Banding; Flying
+? Bot1.Library.Count = 17
+[T6 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Library.Count = 16
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Library.Count = 15
+Bot1.Battlefield.Llanowar Elves.Power = 1
