@@ -1,0 +1,6 @@
+{
+  "name": "Deadly Embrace",
+  "manaCost": "{3}{B}{B}",
+  "type": "Sorcery",
+  "oracleText": "Destroy target creature an opponent controls. Then draw a card for each creature that died this turn."
+}

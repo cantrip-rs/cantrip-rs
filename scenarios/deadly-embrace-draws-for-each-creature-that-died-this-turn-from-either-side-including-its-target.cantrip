@@ -1,0 +1,46 @@
+# Deadly Embrace: "Destroy target creature an opponent controls" (an own creature is refused as the target). Then it draws a
+# card for each creature that died this turn (CR 700.4), whoever controlled it: Bot1's own Memnite, killed by Lightning Bolt
+# first, and Bot2's Ornithopter, destroyed by Embrace, so two cards. Bot2's Memnite, still alive, is not counted.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Mox Pearl
+Lightning Bolt
+Deadly Embrace
+Memnite
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Memnite
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Deadly Embrace.Cast(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Memnite; Lightning Bolt; Black Lotus
+Bot1.Hand.Deadly Embrace.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard = Ornithopter
+Bot2.Battlefield = Memnite
+Bot1.Hand.Count = 3
