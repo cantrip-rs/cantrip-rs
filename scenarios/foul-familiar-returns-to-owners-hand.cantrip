@@ -1,0 +1,44 @@
+# A stolen Foul Familiar returns to its owner's hand, not its controller's (CR 400.3).
+[Bot1 Deck]
+Foul Familiar
+Black Lotus
+Swamp x20
+[Bot2 Deck]
+Mind Control
+Black Lotus
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Foul Familiar.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Mind Control.Cast(Bot1.Battlefield.Foul Familiar)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Foul Familiar.Activate
+Bot2.Choose(Pay mana)
+? Bot2.Life = 19
+? Bot2.Mana =
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Hand.Foul Familiar.Power = 3
+Bot2.Graveyard.Mind Control.Colors = Blue
+Bot2.Life = 19
