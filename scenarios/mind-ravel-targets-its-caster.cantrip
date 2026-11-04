@@ -1,0 +1,28 @@
+# The caster can target themself and chooses the discarded card (CR 115.1a, 701.9a).
+[Bot1 Deck]
+Mind Ravel
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Forest
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind Ravel.Cast(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Choose(Forest)
+[T2 Bot2.Main1]
+[Expect]
+Bot1.Graveyard = Mind Ravel; Forest
+Bot1.Hand.Count = 3
