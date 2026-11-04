@@ -1,0 +1,41 @@
+# Ambrosia Whiteheart, a 2/2 flash Bird: "When this enters, you may return another permanent you control to its owner's hand"
+# (CR 603.6a): Bot1 returns Mox Jet (not Ambrosia herself, nor an opponent's permanent), and her landfall then gives +1/+0 until
+# end of turn (CR 611.2): 3/2 when Bot1's Island enters, a 2/2 again next turn.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Ambrosia Whiteheart
+Island
+Island x16
+
+[Bot2 Deck]
+Mox Ruby
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ambrosia Whiteheart.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Ambrosia Whiteheart)
+! Bot1.Choose(Mox Pearl; Mox Jet)
+Bot1.Choose(Mox Jet)
+? Bot1.Battlefield.Count = 2
+? Bot1.Battlefield.Ambrosia Whiteheart.Power = 2
+Bot1.Hand.Island.Play
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ambrosia Whiteheart.Power = 3
+? Bot1.Battlefield.Ambrosia Whiteheart.Toughness = 2
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ambrosia Whiteheart.Power = 2
+
+[Expect]
+Bot1.Battlefield.Count = 3

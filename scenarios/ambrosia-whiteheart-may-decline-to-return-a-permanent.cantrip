@@ -1,0 +1,29 @@
+# Ambrosia Whiteheart's enters trigger is a "may" (CR 603.5, 608.2d): Bot1 chooses nothing and Mox Pearl and Mox Jet stay.
+# Cast with flash on Bot2's turn 2, an opponent's land entering gives her nothing ("you control").
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Ambrosia Whiteheart
+Island x17
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ambrosia Whiteheart.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+Bot2.Hand.Island.Play
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Ambrosia Whiteheart.Power = 2
+
+[Expect]
+Bot1.Battlefield.Count = 3

@@ -1,0 +1,11 @@
+{
+  "name": "Ambrosia Whiteheart",
+  "manaCost": "{1}{W}",
+  "type": "Legendary Creature — Bird",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Flash\nWhen Ambrosia Whiteheart enters, you may return another permanent you control to its owner's hand.\nLandfall — Whenever a land you control enters, Ambrosia Whiteheart gets +1/+0 until end of turn.",
+  "keywords": [
+    "Flash"
+  ]
+}
