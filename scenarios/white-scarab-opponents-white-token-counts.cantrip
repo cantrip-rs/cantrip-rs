@@ -1,0 +1,25 @@
+# A white token is a white permanent even when the opposing token-maker is blue and artifact (CR 111.6).
+[Bot1 Deck]
+Mox Pearl
+Memnite
+White Scarab
+Island x17
+[Bot2 Deck]
+Black Lotus
+S.H.I.E.L.D. Deployment Drone
+Island x18
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.White Scarab.Cast(Memnite)
+? Bot1.Mana =
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.S.H.I.E.L.D. Deployment Drone.Cast
+[T2 Bot2.Main2]
+[Expect]
+Bot1.Battlefield.Memnite.Power = 3
+Bot1.Battlefield.Memnite.Toughness = 3
