@@ -1,0 +1,6 @@
+{
+  "name": "Goblin War Drums",
+  "manaCost": "{2}{R}",
+  "type": "Enchantment",
+  "oracleText": "Creatures you control have menace. (They can't be blocked except by two or more creatures.)"
+}
