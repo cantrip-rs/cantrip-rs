@@ -1,0 +1,44 @@
+# Magic Damper needs a creature you control (CR 115.1): with only Bot2's Ornithopter on the battlefield it is not offered,
+# and with Ornithopters of Bot1's it is, though it cannot name Bot2's. After it resolves, Bot1's first Ornithopter has
+# hexproof (CR 702.11b), so Bot2's Lightning Bolt cannot target it, while the same Bolt can target Bot1's second
+# Ornithopter, which has none (the positive control).
+
+[Bot1 Deck]
+Island
+Island
+Ornithopter
+Ornithopter
+Magic Damper
+Island x12
+
+[Bot2 Deck]
+Mountain
+Ornithopter
+Lightning Bolt
+Mountain x12
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Hand.Magic Damper.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+! Bot1.Hand.Magic Damper.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Magic Damper.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+! Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#2)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Keywords = Flying; Hexproof
+Bot2.Graveyard = Lightning Bolt

@@ -1,0 +1,40 @@
+# Magic Damper targets Bot1's first Ornithopter; Bot2 responds with Lightning Bolt and kills it. The target is gone on
+# resolution, so Magic Damper is countered on resolution (CR 608.2b) and does nothing: the other Ornithopter is not pumped
+# and gets no hexproof, and Magic Damper goes to the graveyard.
+
+[Bot1 Deck]
+Island
+Ornithopter
+Ornithopter
+Island
+Magic Damper
+Island x12
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x13
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Magic Damper.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Stack.Count = 0
+
+[Expect]
+Bot1.Graveyard = Magic Damper; Ornithopter
+Bot2.Graveyard = Lightning Bolt
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Keywords = Flying

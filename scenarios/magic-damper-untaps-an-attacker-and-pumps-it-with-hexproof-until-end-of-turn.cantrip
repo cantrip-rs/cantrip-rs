@@ -1,0 +1,35 @@
+# Magic Damper on a tapped attacking Ornithopter (0/2): it gets +1/+1 and hexproof and untaps, and as it is still attacking
+# it deals 1 damage as a 1/3. In Bot2's next turn the pump and the hexproof have ended (until end of turn, CR 514.2).
+
+[Bot1 Deck]
+Island
+Ornithopter
+Island
+Magic Damper
+Island x12
+
+[Bot2 Deck]
+Island x15
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Attack(Ornithopter > Bot2)
+? Bot1.Battlefield.Ornithopter.Tapped = true
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Magic Damper.Cast(Bot1.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Ornithopter.Tapped = false
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Hexproof
+? Bot2.Life = 19
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+
+[Expect]
+Bot2.Life = 19
+Bot1.Graveyard = Magic Damper
