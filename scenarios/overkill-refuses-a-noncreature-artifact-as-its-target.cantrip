@@ -1,0 +1,25 @@
+# Overkill targets a creature only: Bot1's own Mox Jet (an artifact) is refused, the spell stays in hand, and the Mox is untouched.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Overkill
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Overkill.Cast(Target: Mox Jet)
+
+[Expect]
+Stack.Count = 0
+Bot1.Hand.Count = 4
+Bot1.Battlefield.Count = 3

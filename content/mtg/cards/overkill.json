@@ -1,0 +1,6 @@
+{
+  "name": "Overkill",
+  "manaCost": "{2}{B}",
+  "type": "Instant",
+  "oracleText": "Target creature gets -0/-9999 until end of turn."
+}
