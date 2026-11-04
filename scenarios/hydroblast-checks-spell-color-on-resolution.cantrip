@@ -1,0 +1,55 @@
+# The counter mode checks a spell's current color: a green spell made red is countered, while a red spell made blue resolves (CR 608.2h).
+[Bot1 Deck]
+Hydroblast
+Hydroblast
+Thoughtlace
+Chaoslace
+Mox Sapphire
+Mox Sapphire
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Llanowar Elves
+Lightning Bolt
+Mox Emerald
+Mox Ruby
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Hydroblast.Cast
+Bot1.Modes(1)
+Bot1.Target(Stack.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Chaoslace.Cast(Stack.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Llanowar Elves
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Hydroblast.Cast
+Bot1.Modes(1)
+Bot1.Target(Stack.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Thoughtlace.Cast(Stack.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt; Llanowar Elves

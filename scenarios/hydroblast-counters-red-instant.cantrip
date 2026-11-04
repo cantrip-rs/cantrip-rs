@@ -1,0 +1,25 @@
+# Counter mode counters a red instant before it deals damage (CR 701.6a).
+[Bot1 Deck]
+Island
+Hydroblast
+Island x20
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Mountain x20
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Hydroblast.Cast
+Bot1.Modes(1)
+Bot1.Target(Stack.Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt

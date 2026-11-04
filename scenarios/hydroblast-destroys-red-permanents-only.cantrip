@@ -1,0 +1,52 @@
+# Destroy mode may target a nonred permanent of yours, but destroys an opponent's red creature and red enchantment (CR 701.8a).
+[Bot1 Deck]
+Hydroblast
+Hydroblast
+Hydroblast
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Goblin Bombardment
+Mountain Bandit
+Mountain x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Goblin Bombardment.Cast
+Bot2.Hand.Mountain Bandit.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Hand.Hydroblast.Cast
+Bot1.Modes(2)
+! Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Hand.Hydroblast.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2.Battlefield.Goblin Bombardment)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Goblin Bombardment; Black Lotus
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Hand.Hydroblast.Cast
+Bot1.Modes(2)
+Bot1.Target(Bot2.Battlefield.Mountain Bandit)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard = Mountain Bandit; Goblin Bombardment; Black Lotus
+Bot1.Battlefield.Ornithopter.Toughness = 2
