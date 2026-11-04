@@ -1,0 +1,24 @@
+# A vigilant ground attacker starts untapped; Ice Floe taps it without removing it from combat (CR 702.20b).
+[Bot1 Deck]
+Ice Floe
+Island x20
+[Bot2 Deck]
+Black Lotus
+Maned Serval
+Island x20
+[Actions]
+Bot1.Hand.Ice Floe.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Maned Serval.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Maned Serval > Bot1)
+? Bot2.Battlefield.Maned Serval.Tapped = false
+Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Maned Serval)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Maned Serval.Tapped = true
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19

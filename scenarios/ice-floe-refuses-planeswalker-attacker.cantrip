@@ -1,0 +1,33 @@
+# A creature attacking a planeswalker is not attacking its controller; a creature attacking that player is legal (CR 508.1b).
+[Bot1 Deck]
+Ice Floe
+Black Lotus
+Liliana of the Veil
+Island x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mox Sapphire
+Triton Shorethief
+Island x20
+[Actions]
+Bot1.Hand.Ice Floe.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Liliana of the Veil.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Triton Shorethief.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1.Battlefield.Liliana of the Veil; Triton Shorethief > Bot1)
+! Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Triton Shorethief)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Ice Floe.Tapped = true

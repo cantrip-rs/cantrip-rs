@@ -1,0 +1,38 @@
+# Destroying the tapped Ice Floe ends its effect without immediately untapping the creature.
+[Bot1 Deck]
+Ice Floe
+Wasteland
+Island x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Ice Floe.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Wasteland.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Llanowar Elves > Bot1; Ornithopter > Bot1)
+! Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Battlefield.Ice Floe.Activate(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Battlefield.Ice Floe.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+? Bot1.Life = 19
+Bot1.Decline
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ice Floe.Tapped = true
+Bot1.Battlefield.Wasteland.Activate(Bot1.Battlefield.Ice Floe; Ability: Destroy)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Tapped = true
+[T6 Bot2.Main1]
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = false
