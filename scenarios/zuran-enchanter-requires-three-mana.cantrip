@@ -1,0 +1,37 @@
+# One black and one red mana cannot pay {2}{B}; a third source makes the activation legal (CR 602.2b).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Ruby
+Mox Jet
+Zuran Enchanter
+Island
+Island x20
+[Bot2 Deck]
+Mountain x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Zuran Enchanter.Cast
+? Bot1.Mana =
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Zuran Enchanter.Activate(Bot2; Mana: short)
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Zuran Enchanter.Activate(Bot2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot2.Choose(Mountain)
+[Expect]
+Bot2.Graveyard = Mountain; Mountain
