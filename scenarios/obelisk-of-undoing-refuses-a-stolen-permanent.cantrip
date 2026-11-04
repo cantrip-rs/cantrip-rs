@@ -1,0 +1,58 @@
+# An opponent-owned creature remains ineligible after it is stolen with Claim the Firstborn;
+# Obelisk can return itself instead (CR 108.3).
+[Bot1 Deck]
+Obelisk of Undoing
+Mox Ruby
+Mox Pearl
+Claim the Firstborn
+Black Lotus
+Black Lotus
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Obelisk of Undoing.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Claim the Firstborn.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+! Bot1.Battlefield.Obelisk of Undoing.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Obelisk of Undoing.Activate(Bot1.Battlefield.Obelisk of Undoing)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 0
+
+[Expect]
+Bot1.Hand.Obelisk of Undoing.Colors =
+Bot1.Battlefield.Ornithopter.Power = 0

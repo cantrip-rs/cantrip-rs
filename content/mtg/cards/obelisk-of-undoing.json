@@ -1,0 +1,6 @@
+{
+  "name": "Obelisk of Undoing",
+  "manaCost": "{1}",
+  "type": "Artifact",
+  "oracleText": "{6}, {T}: Return target permanent you both own and control to your hand."
+}
