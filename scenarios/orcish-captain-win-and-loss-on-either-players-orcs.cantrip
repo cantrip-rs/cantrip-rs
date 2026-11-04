@@ -1,0 +1,54 @@
+# A winning flip gives +2/+0 to its controller's Orc; a losing flip gives -0/-2 to the opponent's Orc, both until end of turn (CR 705.1, 611.2a).
+[Bot1 Deck]
+Orcish Captain
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Mountain x20
+
+[Bot2 Deck]
+Black Lotus
+Orcish Artillery
+Island x20
+
+[Dice]
+1; 2
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Orcish Captain.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Orcish Artillery.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Orcish Captain.Activate(Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Orcish Captain.Activate(Bot1.Battlefield.Orcish Captain)
+? Bot1.Mana =
+? Bot1.Battlefield.Orcish Captain.Power = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Orcish Captain.Power = 3
+? Bot1.Battlefield.Orcish Captain.Toughness = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Orcish Captain.Activate(Bot2.Battlefield.Orcish Artillery)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Orcish Artillery.Power = 1
+? Bot2.Battlefield.Orcish Artillery.Toughness = 1
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Orcish Captain.Power = 1
+Bot1.Battlefield.Orcish Captain.Toughness = 1
+Bot2.Battlefield.Orcish Artillery.Power = 1
+Bot2.Battlefield.Orcish Artillery.Toughness = 3
