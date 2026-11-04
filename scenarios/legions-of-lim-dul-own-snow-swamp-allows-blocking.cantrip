@@ -1,0 +1,35 @@
+# Only the defending player's snow Swamp prevents blocking; the attacker's snow Forest
+# is a Swamp through Prismatic Omen and does not stop the opponent blocking (CR 702.14c).
+[Bot1 Deck]
+Legions of Lim-Dûl
+Black Lotus
+Mox Emerald
+Mox Pearl
+Snow-Covered Forest
+Prismatic Omen
+Swamp x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Prismatic Omen.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Legions of Lim-Dûl.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+? Bot1.Battlefield.Snow-Covered Forest.Subtypes = Forest; Island; Mountain; Plains; Swamp
+Bot1.Attack(Legions of Lim-Dûl > Bot2)
+Bot2.Block(Ornithopter > Legions of Lim-Dûl)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Ornithopter
+Bot1.Battlefield.Legions of Lim-Dûl.Tapped = true
