@@ -11,9 +11,7 @@ fn creature_you_control_with_a_plus_one_counter(q: &dyn Query, asker: &Asker, t:
 
 /// "... gains menace until end of turn" (CR 702.111, 611.2a).
 fn target_gains_menace(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let Some(creature) = targets::object(g, item, 0) else { return Ok(()) };
-    effects::gain_until_end_of_turn(g, item.object, creature, Keyword::Menace);
-    Ok(())
+    effects::target_creature_gains_until_end_of_turn(g, item, Keyword::Menace)
 }
 
 pub static CARD: CardDef = CardDef {
