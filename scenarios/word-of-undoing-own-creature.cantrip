@@ -1,0 +1,28 @@
+# Word of Undoing may target its controller's creature and returns the creature and its white Aura to their owner's hand (CR 608.2c).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Ornithopter
+Holy Strength
+Word of Undoing
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Strength.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Word of Undoing.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Ornithopter.Power = 0
+Bot1.Hand.Holy Strength.Colors = White

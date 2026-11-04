@@ -1,0 +1,40 @@
+# Word of Undoing returns an owned white Aura even after its control was given to the opponent (CR 108.3, 608.2c).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Ornithopter
+Holy Strength
+Harmless Offering
+Word of Undoing
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Holy Strength.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Holy Strength)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Holy Strength.AttachedTo = Ornithopter
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Word of Undoing.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Holy Strength.Colors = White
+Bot1.Hand.Ornithopter.Power = 0
+Bot2.Graveyard.Holy Strength = (absent)
