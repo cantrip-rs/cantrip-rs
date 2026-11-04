@@ -695,6 +695,11 @@ pub const ARTIFACT_OR_CREATURE_YOU_CONTROL: TargetSpec = target(artifact_or_crea
 /// "Target artifact or creature": a permanent that is either (CR 115.1). Oko, Thief of Crowns, Tezzeret, Cruel Captain, Touch
 /// the Spirit Realm, Iceberg Titan and Lodestone Needle print it.
 pub const ARTIFACT_OR_CREATURE: TargetSpec = target(artifact_or_creature_filter);
+/// "Target artifact or creature an opponent controls" (CR 115.1, 205.2a). Dusk Rose Reliquary and Ice Flan print it.
+pub const ARTIFACT_OR_CREATURE_AN_OPPONENT_CONTROLS: TargetSpec = target(artifact_or_creature_an_opponent_controls_filter);
+fn artifact_or_creature_an_opponent_controls_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    artifact_or_creature_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) != asker.controller)
+}
 /// The filter of `ARTIFACT_OR_CREATURE`, for a slot that is "up to one" of them.
 pub fn artifact_or_creature_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id) if on_battlefield(q, id) && {
