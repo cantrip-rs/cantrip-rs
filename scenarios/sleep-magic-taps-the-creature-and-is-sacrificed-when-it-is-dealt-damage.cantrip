@@ -1,0 +1,65 @@
+# Sleep Magic {U}: "Enchant creature. When this Aura enters, tap enchanted creature. Enchanted creature doesn't untap during its controller's untap step.
+# When enchanted creature is dealt damage, sacrifice this Aura." Bot2's Ravenhill Flock has drawn a +1/+1 counter on turn 4 (a 2/3). On turn 5 Bot1 puts the
+# Aura on it (tapped), then Shocks it: two damage does not kill it, the Aura is sacrificed, and the Flock untaps in Bot2's turn-6 untap step.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Sleep Magic
+Shock
+Island x20
+
+[Bot2 Deck]
+Mox Ruby
+Mox Emerald
+Mox Jet
+Mox Sapphire
+Ravenhill Flock
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Ravenhill Flock.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ravenhill Flock.Counters.PlusOnePlusOne = 1
+? Bot2.Battlefield.Ravenhill Flock.Toughness = 3
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sleep Magic.Cast(Bot2.Battlefield.Ravenhill Flock)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ravenhill Flock.Tapped = true
+? Bot1.Battlefield.Sleep Magic.Types = Enchantment
+Bot1.Hand.Shock.Cast(Bot2.Battlefield.Ravenhill Flock)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+? Bot1.Graveyard = Sleep Magic; Shock
+
+[Expect]
+Bot2.Battlefield.Ravenhill Flock.Tapped = false
+Bot2.Battlefield.Ravenhill Flock.Damage = 0
+Bot1.Graveyard = Sleep Magic; Shock
