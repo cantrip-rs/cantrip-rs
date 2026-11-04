@@ -1,0 +1,8 @@
+{
+  "name": "Dwarven Weaponsmith",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Dwarf Artificer",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}, Sacrifice an artifact: Put a +1/+1 counter on target creature. Activate only during your upkeep."
+}
