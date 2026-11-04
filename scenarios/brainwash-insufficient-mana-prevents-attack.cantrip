@@ -1,0 +1,36 @@
+# With only two mana available, the enchanted Memnite cannot attack; another creature can (CR 508.1h).
+[Bot1 Deck]
+Brainwash
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Memnite
+Ornithopter
+Mox Ruby
+Mox Jet
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Brainwash.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+? Combat.AttackCost = {3}
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+? Bot2.Mana = {B}{R}
+? Combat.AttackCost.Remaining = {3}
+Bot2.Cancel
+Bot2.Attack(Ornithopter > Bot1)
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Tapped = false
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot1.Life = 20

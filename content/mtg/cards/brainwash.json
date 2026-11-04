@@ -1,0 +1,6 @@
+{
+  "name": "Brainwash",
+  "manaCost": "{W}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant creature\nEnchanted creature can't attack unless its controller pays {3}."
+}
