@@ -1,0 +1,25 @@
+# Each player may discard up to three; one discards three and the other none, taking respectively zero and three damage (CR 701.9a, 120.3).
+[Bot1 Deck]
+Mind Bomb
+Mox Sapphire
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Mind Bomb.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Choose(Island#1; Island#2; Island#3; Island#4)
+Bot1.Choose(Island#1; Island#2; Island#3)
+Bot2.Choose()
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17
+Bot1.Hand.Count = 2
+Bot2.Hand.Count = 7
+Bot1.Graveyard.Count = 4
+Bot2.Graveyard.Count = 0
