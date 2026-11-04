@@ -1,0 +1,50 @@
+# Black Mage's Rod: turn 3 job select puts it on the Hero. On turn 5 Equip {3} moves it to Memnite: Memnite is a 2/1 Wizard and the Hero
+# is a 1/1 again, no longer a Wizard. Bot2's noncreature spell on turn 6 (Aether Spellbomb) does not ping, the ability being Bot1's
+# to trigger on Bot1's casts only: Bot1 stays at 20.
+
+[Bot1 Deck]
+Swamp
+Swamp
+Black Mage's Rod
+Swamp
+Memnite
+Swamp x12
+
+[Bot2 Deck]
+Island
+Aether Spellbomb
+Island x16
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Black Mage's Rod.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Battlefield.Swamp#3.Activate
+Bot1.Battlefield.Black Mage's Rod.Activate(Target: Memnite)
+Bot1.Pass
+Bot2.Pass
+[T6 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aether Spellbomb.Cast
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Black Mage's Rod.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 2
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot1.Battlefield.Memnite.Subtypes = Construct; Wizard
+Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Battlefield.Hero Token.Toughness = 1
+Bot1.Battlefield.Hero Token.Subtypes = Hero
+Bot1.Life = 20
+Bot2.Life = 20
