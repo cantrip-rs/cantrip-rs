@@ -4,16 +4,16 @@ use cantrip_oracle as oracle;
 
 /// "That player gains control of Kain. If they do, you draw that many cards, create that many tapped Treasure tokens, then
 /// lose that much life." The player is the one dealt the damage and "that many" the combat damage dealt (CR 510.2, 603.7c).
-/// Kain changes hands for good (CR 611.2a). "If they do" (CR 608.2c): a Kain that has left the battlefield, or a player
-/// who has left the game, as a lethal hit from a three-player game's Kain does (CR 800.4a), cannot be given it, so there
-/// are no draws, no Treasure and no life loss. "You" is the ability's controller as it went on the stack (CR 109.5).
+/// Kain changes hands for good (CR 611.2a). "If they do" (CR 608.2c) is what `gain_control` says: a Kain that has left the
+/// battlefield, or a player who has left the game, as a lethal hit from a three-player game's Kain does (CR 800.4a), gains
+/// no control, so there are no draws, no Treasure and no life loss. "You" is the ability's controller as it went on the
+/// stack (CR 109.5).
 fn change_hands(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let Target::Player(player) = item.subject else { return Ok(()) };
     let kain = item.object;
-    if !g.is_on_battlefield(kain) || !g.still_in_game(player) {
+    if !g.gain_control(kain, kain, player, Duration::Indefinite) {
         return Ok(());
     }
-    g.gain_control(kain, kain, player, Duration::Indefinite);
     let n = item.data[0];
     g.draw(item.controller, n);
     for _ in 0..n {
