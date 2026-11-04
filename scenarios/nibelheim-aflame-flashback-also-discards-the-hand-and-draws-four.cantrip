@@ -1,0 +1,68 @@
+# Nibelheim Aflame, Flashback {5}{R}{R}: "If this spell was cast from a graveyard, discard your hand and draw four cards." Cast from
+# the hand on turn 1 it hits only Bot1's own Ornithopter (1 damage from Memnite) and goes to the graveyard. On turn 5 a Black
+# Lotus, Mox Ruby, Mox Jet, Mox Pearl and a Mountain pay the flashback exactly (7 mana, CR 702.34a): Bot2's
+# Ornithopter may not be its target (it must be a creature Bot1 controls); with Memnite as the target it deals 1 damage to each
+# other creature - Bot1's Ornithopter, Bot2's Ornithopter and Memnite, which dies - then Bot1 discards its hand (the Island it
+# drew on turn 3) and draws four cards, and the spell is exiled.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Memnite
+Ornithopter
+Nibelheim Aflame
+Island
+Black Lotus
+Island x11
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Nibelheim Aflame.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Damage = 1
+? Bot1.Graveyard = Nibelheim Aflame
+? Bot1.Hand.Count = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+! Bot1.Graveyard.Nibelheim Aflame.Cast(Bot2.Battlefield.Ornithopter; Ability: Flashback)
+Bot1.Graveyard.Nibelheim Aflame.Cast(Bot1.Battlefield.Memnite; Ability: Flashback)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Exile = Nibelheim Aflame
+Bot1.Hand.Count = 4
+Bot1.Library.Count = 7
+Bot1.Graveyard.Count = 2
+Bot1.Battlefield.Memnite.Damage = 0
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot2.Battlefield.Ornithopter.Damage = 1
+Bot2.Graveyard = Memnite
