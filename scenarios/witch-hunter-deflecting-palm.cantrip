@@ -1,0 +1,34 @@
+# Deflecting Palm prevents the Hunter's damage and deals it back during the same resolution (CR 615.5).
+[Bot1 Deck]
+Witch Hunter
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Deflecting Palm
+Mox Ruby
+Mox Pearl
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Witch Hunter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Witch Hunter.Activate(Bot2; Ability: 1 damage)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Deflecting Palm.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Choose(Witch Hunter)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 20
+Prevented = 1 Witch Hunter > Bot2 by Deflecting Palm

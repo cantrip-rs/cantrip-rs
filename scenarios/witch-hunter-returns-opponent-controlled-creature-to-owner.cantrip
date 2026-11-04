@@ -1,0 +1,52 @@
+# A creature given to the opponent returns to its owner's hand, not its controller's hand (CR 400.3).
+[Bot1 Deck]
+Witch Hunter
+Black Lotus
+Mox Pearl
+Mox Ruby
+Ornithopter
+Harmless Offering
+Plains
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Witch Hunter.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Witch Hunter.Activate(Bot2.Battlefield.Ornithopter; Ability: Return)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Ornithopter.Power = 0
+Bot2.Battlefield.Count = 0

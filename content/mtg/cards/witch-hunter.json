@@ -1,0 +1,8 @@
+{
+  "name": "Witch Hunter",
+  "manaCost": "{2}{W}{W}",
+  "type": "Creature — Human Cleric",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: This creature deals 1 damage to target player or planeswalker.\n{1}{W}{W}, {T}: Return target creature an opponent controls to its owner's hand."
+}

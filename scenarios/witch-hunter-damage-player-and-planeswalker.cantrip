@@ -1,0 +1,53 @@
+# Witch Hunter taps to deal one damage to either player or a planeswalker, not a creature (CR 115.1, 120.3).
+[Bot1 Deck]
+Witch Hunter
+Black Lotus
+Mox Pearl
+Plains x20
+[Bot2 Deck]
+Kiora, Behemoth Beckoner
+Evolving Wilds
+Black Lotus
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Witch Hunter.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Kiora, Behemoth Beckoner.Cast
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Witch Hunter.Activate(Bot2.Battlefield.Ornithopter; Ability: 1 damage)
+Bot1.Battlefield.Witch Hunter.Activate(Bot2; Ability: 1 damage)
+? Bot1.Battlefield.Witch Hunter.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+! Bot1.Battlefield.Witch Hunter.Activate(Bot1; Ability: 1 damage)
+[T4 Bot2.Main1]
+Bot2.Hand.Evolving Wilds.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Witch Hunter.Activate(Bot1; Ability: 1 damage)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 19
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Evolving Wilds.Activate
+Bot2.Pass
+! Bot1.Battlefield.Witch Hunter.Activate(Stack.Evolving Wilds; Ability: 1 damage)
+Bot1.Battlefield.Witch Hunter.Activate(Bot2.Battlefield.Kiora, Behemoth Beckoner; Ability: 1 damage)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Kiora, Behemoth Beckoner.Counters.Loyalty = 6
+Bot1.Life = 19
+Bot2.Life = 19
