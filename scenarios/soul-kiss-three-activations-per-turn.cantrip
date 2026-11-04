@@ -1,0 +1,66 @@
+# Soul Kiss costs black mana and one life, boosts the enchanted creature three times per turn and resets on the next turn (CR 602.2, 611.2a).
+[Bot1 Deck]
+Soul Kiss
+Black Lotus
+Black Lotus
+Mox Jet
+Mox Sapphire
+Ornithopter
+Swamp
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Hand.Soul Kiss.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Soul Kiss.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Soul Kiss.Activate
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Life = 19
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Soul Kiss.Activate(Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Soul Kiss.Activate
+Bot1.Battlefield.Soul Kiss.Activate
+Bot1.Choose(Pay mana)
+? Bot1.Life = 17
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 6
+? Bot1.Battlefield.Ornithopter.Toughness = 8
+! Bot1.Battlefield.Soul Kiss.Activate
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Ornithopter.Power = 0
+? Bot1.Battlefield.Ornithopter.Toughness = 2
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Soul Kiss.Activate
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Life = 16
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Toughness = 4
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Ornithopter.Toughness = 2
+Bot1.Battlefield.Soul Kiss.AttachedTo = Ornithopter

@@ -1,0 +1,51 @@
+# Each Soul Kiss has its own limit, so activating one three times does not limit another (CR 602.5b).
+[Bot1 Deck]
+Soul Kiss
+Soul Kiss
+Black Lotus
+Black Lotus
+Black Lotus
+Black Lotus
+Ornithopter
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Soul Kiss.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Soul Kiss.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Soul Kiss#1.Activate
+Bot1.Battlefield.Soul Kiss#1.Activate
+Bot1.Battlefield.Soul Kiss#1.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Battlefield.Soul Kiss#1.Activate
+Bot1.Battlefield.Soul Kiss#2.Activate
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 8
+Bot1.Battlefield.Ornithopter.Toughness = 10
+Bot1.Life = 16
