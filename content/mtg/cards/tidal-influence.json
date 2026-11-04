@@ -1,0 +1,6 @@
+{
+  "name": "Tidal Influence",
+  "manaCost": "{2}{U}",
+  "type": "Enchantment",
+  "oracleText": "Cast this spell only if no permanents named Tidal Influence are on the battlefield.\nThis enchantment enters with a tide counter on it.\nAt the beginning of your upkeep, put a tide counter on this enchantment.\nAs long as there is exactly one tide counter on this enchantment, all blue creatures get -2/-0.\nAs long as there are exactly three tide counters on this enchantment, all blue creatures get +2/+0.\nWhenever there are four or more tide counters on this enchantment, remove all tide counters from it."
+}

@@ -1,0 +1,66 @@
+# The tide cycle changes blue creatures on both sides at one, two, three, and zero counters; other colors and toughness are unaffected (CR 604.1, 603.8).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Tidal Influence
+Merfolk of the Pearl Trident
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Jet
+Baleful Strix
+Island
+Merfolk of the Pearl Trident
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Merfolk of the Pearl Trident.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Tidal Influence.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tidal Influence.Counters.Tide = 1
+? Bot1.Battlefield.Merfolk of the Pearl Trident.Power = -1
+? Bot1.Battlefield.Merfolk of the Pearl Trident.Toughness = 1
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Baleful Strix.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Merfolk of the Pearl Trident.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Baleful Strix.Power = -1
+? Bot2.Battlefield.Merfolk of the Pearl Trident.Power = -1
+? Bot2.Battlefield.Merfolk of the Pearl Trident.Toughness = 1
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Tidal Influence.Counters.Tide = 2
+? Bot1.Battlefield.Merfolk of the Pearl Trident.Power = 1
+? Bot2.Battlefield.Merfolk of the Pearl Trident.Power = 1
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Tidal Influence.Counters.Tide = 3
+? Bot1.Battlefield.Merfolk of the Pearl Trident.Power = 3
+? Bot1.Battlefield.Merfolk of the Pearl Trident.Toughness = 1
+? Bot2.Battlefield.Baleful Strix.Power = 3
+? Bot2.Battlefield.Merfolk of the Pearl Trident.Power = 3
+? Bot2.Battlefield.Merfolk of the Pearl Trident.Toughness = 1
+? Bot1.Battlefield.Ornithopter.Power = 0
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tidal Influence.Counters.Tide = 4
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Tidal Influence.Counters.Tide = (absent)
+Bot1.Battlefield.Merfolk of the Pearl Trident.Power = 1
+Bot2.Battlefield.Merfolk of the Pearl Trident.Power = 1
