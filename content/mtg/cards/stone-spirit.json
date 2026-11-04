@@ -1,0 +1,8 @@
+{
+  "name": "Stone Spirit",
+  "manaCost": "{4}{R}",
+  "type": "Creature — Elemental Spirit",
+  "power": 4,
+  "toughness": 3,
+  "oracleText": "This creature can't be blocked by creatures with flying."
+}

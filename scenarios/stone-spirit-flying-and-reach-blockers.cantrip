@@ -1,0 +1,54 @@
+# Stone Spirit rejects a flying blocker, while that same flier can block another attacker and a creature with reach can block Stone Spirit (CR 509.1b).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Emerald
+Stone Spirit
+Black Lotus
+Grizzly Bears
+Island x12
+
+[Bot2 Deck]
+Black Lotus
+Forest
+Giant Spider
+Ornithopter
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Stone Spirit.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Giant Spider.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T5 Bot1.Main1]
+Bot1.Attack(Stone Spirit > Bot2; Grizzly Bears > Bot2)
+! Bot2.Block(Ornithopter > Stone Spirit)
+Bot2.Block(Ornithopter > Grizzly Bears; Giant Spider > Stone Spirit)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 20
+Bot1.Battlefield.Stone Spirit.Damage = 2
+Bot2.Graveyard = Giant Spider; Ornithopter; Black Lotus
