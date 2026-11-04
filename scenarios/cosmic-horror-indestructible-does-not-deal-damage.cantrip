@@ -1,0 +1,44 @@
+# An indestructible Cosmic Horror is not destroyed when upkeep is declined, so it deals no damage (CR 701.8b, 702.12b).
+[Bot1 Deck]
+Cosmic Horror
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Masterful Flourish
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Cosmic Horror.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Masterful Flourish.Cast(Bot1.Battlefield.Cosmic Horror)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Cosmic Horror.Keywords = FirstStrike; Indestructible
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Cosmic Horror.Power = 8
+Bot1.Life = 20
