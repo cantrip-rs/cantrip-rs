@@ -1,0 +1,55 @@
+# Thief's Knife ({2}{U}), Job select: the Hero token it makes is a 2/2 Hero Rogue ("Equipped creature gets +1/+1 ... and is a Rogue in addition to its
+# other types"). "Whenever this creature deals combat damage to a player, draw a card" (CR 603.2): on turn 3 the Hero is blocked by Bot2's Ornithopter
+# (Hero 2 damage to a creature: no draw), and on turn 5, unblocked, it deals 2 to Bot2 and Bot1 draws a card (the Ornithopter that blocked is dead).
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Thief's Knife
+Island
+Island
+Island
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thief's Knife.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hero Token.Power = 2
+? Bot1.Battlefield.Hero Token.Toughness = 2
+? Bot1.Battlefield.Hero Token.Subtypes = Hero; Rogue
+? Bot1.Battlefield.Thief's Knife.AttachedTo = Hero Token
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 4
+Bot1.Attack(Hero Token > Bot2)
+Bot2.Block(Ornithopter > Hero Token)
+[T3 Bot1.Main2]
+? Bot1.Hand.Count = 4
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+? Bot1.Hand.Count = 5
+Bot1.Attack(Hero Token > Bot2)
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Hand.Count = 6

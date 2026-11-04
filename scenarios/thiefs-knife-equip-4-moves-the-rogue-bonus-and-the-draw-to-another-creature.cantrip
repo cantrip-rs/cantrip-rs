@@ -1,0 +1,55 @@
+# Thief's Knife, Equip {4}: on turn 1, with one Mox untapped after casting it, the equip is refused (short of {4}). On turn 3, with four Moxen untapped,
+# it moves from the Hero to Bot1's Ornithopter for exactly {4} (the pool empty afterwards): the Ornithopter becomes a 1/4 Rogue Thopter and the Hero a
+# plain 1/1 Hero. The Ornithopter and the Hero attack; only the Ornithopter's combat damage to Bot2 draws a card.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Thief's Knife
+Ornithopter
+Island
+Island
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Thief's Knife.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Thief's Knife.Activate(Ornithopter; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Thief's Knife.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Thief's Knife.AttachedTo = Ornithopter
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Toughness = 3
+? Bot1.Battlefield.Ornithopter.Subtypes = Rogue; Thopter
+? Bot1.Battlefield.Hero Token.Power = 1
+? Bot1.Battlefield.Hero Token.Subtypes = Hero
+? Bot1.Hand.Count = 2
+Bot1.Attack(Ornithopter; Hero Token > Bot2)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Hand.Count = 3
