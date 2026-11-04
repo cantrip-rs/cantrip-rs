@@ -1,0 +1,15 @@
+# Snow-Covered Island is a basic snow Island; its intrinsic land ability taps it for blue mana (CR 305.6).
+[Bot1 Deck]
+Snow-Covered Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Snow-Covered Island.Play
+? Bot1.Battlefield.Snow-Covered Island.Supertypes = Basic; Snow
+? Bot1.Battlefield.Snow-Covered Island.Subtypes = Island
+Bot1.Battlefield.Snow-Covered Island.Activate
+? Bot1.Mana = {U}
+? Bot1.Battlefield.Snow-Covered Island.Tapped = true
+[Expect]
+Bot1.ManaFrom = {U} snow Snow-Covered Island
