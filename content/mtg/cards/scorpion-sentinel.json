@@ -1,0 +1,8 @@
+{
+  "name": "Scorpion Sentinel",
+  "manaCost": "{1}{U}",
+  "type": "Artifact Creature — Robot Scorpion",
+  "power": 1,
+  "toughness": 4,
+  "oracleText": "As long as you control seven or more lands, this creature gets +3/+0."
+}

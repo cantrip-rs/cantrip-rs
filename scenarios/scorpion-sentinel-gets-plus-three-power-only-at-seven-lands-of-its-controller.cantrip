@@ -1,0 +1,48 @@
+# Scorpion Sentinel 1/4: "As long as you control seven or more lands, this creature gets +3/+0." Fastbond puts five lands out on turn 1 (the Sentinel
+# cast with two Islands, four life lost): a 1/4. Turn 2 Bot2 plays an Island of its own. Turn 3, with six of Bot1's lands (seven lands in all, one
+# of them Bot2's), it is still a 1/4: only the lands "you control" count. Turn 5's seventh land makes it a 4/4: the toughness is unchanged.
+
+[Bot1 Deck]
+Forest
+Fastbond
+Scorpion Sentinel
+Island
+Island
+Island
+Island
+Island
+Island
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Fastbond.Cast
+Bot1.Hand.Island.Play
+Bot1.Hand.Island.Play
+Bot1.Hand.Island.Play
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Hand.Scorpion Sentinel.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Scorpion Sentinel.Power = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+? Bot1.Battlefield.Scorpion Sentinel.Power = 1
+? Bot1.Battlefield.Scorpion Sentinel.Toughness = 4
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+? Bot1.Battlefield.Scorpion Sentinel.Power = 4
+
+[Expect]
+Turn = 5
+Bot1.Life = 16
+Bot1.Battlefield.Scorpion Sentinel.Power = 4
+Bot1.Battlefield.Scorpion Sentinel.Toughness = 4
