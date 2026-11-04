@@ -1,0 +1,11 @@
+{
+  "name": "Rosa, Resolute White Mage",
+  "manaCost": "{3}{W}",
+  "type": "Legendary Creature — Human Noble Cleric",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Reach (This creature can block creatures with flying.)\nAt the beginning of combat on your turn, put a +1/+1 counter on target creature you control. It gains lifelink until end of turn. (Damage dealt by the creature also causes you to gain that much life.)",
+  "keywords": [
+    "Reach"
+  ]
+}

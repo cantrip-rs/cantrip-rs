@@ -1,0 +1,54 @@
+# Rosa, Resolute White Mage's trigger comes at the beginning of combat on her controller's turn only: it puts exactly one
+# +1/+1 counter on a creature Bot1 controls, which gains lifelink until end of turn (CR 611.2a, 514.2). Bot2's Memnite is
+# refused as its target. Ornithopter, made 1/3, attacks and Bot1 gains 1 life; the lifelink is gone on Bot2's turn, no
+# trigger comes on Bot2's turn, and the next one on Bot1's turn picks Rosa herself. She has reach.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Rosa, Resolute White Mage
+Ornithopter
+Plains x12
+
+[Bot2 Deck]
+Memnite
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+[T1 Bot1.Main2]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Rosa, Resolute White Mage.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.BeginCombat]
+! Bot1.Target(Memnite)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Power = 1
+? Bot1.Battlefield.Ornithopter.Keywords = Flying; Lifelink
+Bot1.Attack(Ornithopter > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 21
+? Bot2.Life = 19
+[T4 Bot2.Main2]
+? Bot1.Battlefield.Ornithopter.Keywords = Flying
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Rosa, Resolute White Mage.Keywords = Reach
+[T5 Bot1.BeginCombat]
+Bot1.Target(Rosa, Resolute White Mage)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Rosa, Resolute White Mage.Power = 3
+? Bot1.Battlefield.Rosa, Resolute White Mage.Keywords = Lifelink; Reach
+[T5 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Rosa, Resolute White Mage.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Rosa, Resolute White Mage.Toughness = 4
+Bot2.Battlefield.Memnite.Power = 1
