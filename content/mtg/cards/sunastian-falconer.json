@@ -1,0 +1,8 @@
+{
+  "name": "Sunastian Falconer",
+  "manaCost": "{3}{R}{G}",
+  "type": "Legendary Creature — Human Shaman",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "{T}: Add {C}{C}."
+}

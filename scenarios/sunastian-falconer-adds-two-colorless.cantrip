@@ -1,0 +1,41 @@
+# Sunastian Falconer cannot activate its tap ability on the turn it enters, then taps for exactly two colorless mana, which cannot pay a red cost (CR 302.6, 605.1a, 106.1b).
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Mox Pearl
+Sunastian Falconer
+Lightning Bolt
+Mind Stone
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Sunastian Falconer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Sunastian Falconer.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Sunastian Falconer.Activate(Color: Red)
+! Bot1.Battlefield.Sunastian Falconer.Activate(Color: Green)
+! Bot1.Battlefield.Sunastian Falconer.Activate(Color: Blue)
+Bot1.Battlefield.Sunastian Falconer.Activate
+? Bot1.Mana = {C}{C}
+? Bot1.Battlefield.Sunastian Falconer.Tapped = true
+! Bot1.Battlefield.Sunastian Falconer.Activate
+! Bot1.Hand.Lightning Bolt.Cast(Bot2; Mana: short)
+Bot1.Hand.Mind Stone.Cast
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Mind Stone.Types = Artifact
+Bot1.Battlefield.Sunastian Falconer.Tapped = true
+Bot2.Life = 20
