@@ -1,0 +1,8 @@
+{
+  "name": "Icatian Scout",
+  "manaCost": "{W}",
+  "type": "Creature — Human Soldier Scout",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{1}, {T}: Target creature gains first strike until end of turn."
+}
