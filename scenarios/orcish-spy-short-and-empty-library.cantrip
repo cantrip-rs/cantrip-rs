@@ -1,0 +1,30 @@
+# Looking at a library with one card, then an empty library, leaves its cards in place and does not draw (CR 101.3).
+[Bot1 Deck]
+Orcish Spy
+Mox Ruby
+Mountain x20
+[Bot2 Deck]
+Island x7
+Forest
+Plains
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Orcish Spy.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Orcish Spy.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Looked = Plains
+? Bot2.Library = Plains
+[T5 Bot1.Main1]
+Bot1.Battlefield.Orcish Spy.Activate(Bot2)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Looked = Plains
+Bot2.Library.Count = 0
+Result = InProgress

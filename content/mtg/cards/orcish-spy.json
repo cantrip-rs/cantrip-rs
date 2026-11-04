@@ -1,0 +1,8 @@
+{
+  "name": "Orcish Spy",
+  "manaCost": "{R}",
+  "type": "Creature — Orc Rogue",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: Look at the top three cards of target player's library."
+}
