@@ -1,0 +1,8 @@
+{
+  "name": "Grizzled Wolverine",
+  "manaCost": "{1}{R}{R}",
+  "type": "Creature — Wolverine",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "{R}: This creature gets +2/+0 until end of turn. Activate only during the declare blockers step, only if at least one creature is blocking this creature, and only once each turn."
+}

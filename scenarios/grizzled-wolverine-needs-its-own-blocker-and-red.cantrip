@@ -1,0 +1,50 @@
+# A different attacker being blocked does not enable Wolverine; blue mana cannot pay its red activation cost when it is blocked (CR 509.1, 107.4a).
+[Bot1 Deck]
+Black Lotus
+Grizzled Wolverine
+Mountain
+Mox Ruby
+Mox Sapphire
+Ornithopter
+Island
+Island x20
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Grizzled Wolverine.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzled Wolverine > Bot2; Ornithopter > Bot2)
+Bot2.Block(Ornithopter > Bot1.Battlefield.Ornithopter)
+Bot1.Battlefield.Mountain.Activate
+! Bot1.Battlefield.Grizzled Wolverine.Activate
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Grizzled Wolverine > Bot2)
+Bot2.Block(Ornithopter > Grizzled Wolverine)
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Grizzled Wolverine.Activate(Mana: short)
+? Bot1.Mana = {U}
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Grizzled Wolverine.Power = 2

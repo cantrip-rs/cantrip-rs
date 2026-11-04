@@ -1,0 +1,56 @@
+# Two blockers permit only one +2/+0 activation; the bonus ends at cleanup and a later turn permits another (CR 509.1, 611.2a).
+[Bot1 Deck]
+Black Lotus
+Grizzled Wolverine
+Mountain
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Ornithopter
+Ornithopter
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Grizzled Wolverine.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Grizzled Wolverine.Activate
+Bot1.Attack(Grizzled Wolverine > Bot2)
+Bot2.Block(Ornithopter#1 > Grizzled Wolverine; Ornithopter#2 > Grizzled Wolverine)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Grizzled Wolverine.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzled Wolverine.Power = 4
+? Bot1.Battlefield.Grizzled Wolverine.Toughness = 2
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Grizzled Wolverine.Activate
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Grizzled Wolverine.Power = 2
+? Bot1.Battlefield.Grizzled Wolverine.Toughness = 2
+Bot1.Attack(Grizzled Wolverine > Bot2)
+Bot2.Block(Ornithopter > Grizzled Wolverine)
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Grizzled Wolverine.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzled Wolverine.Power = 4
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Grizzled Wolverine.Power = 4
