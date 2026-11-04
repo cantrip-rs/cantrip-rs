@@ -1,0 +1,49 @@
+# Seasinger's controller changes and then reverts before its ability resolves; the interruption ends its duration (CR 611.2b).
+[Bot1 Deck]
+Island
+Black Lotus
+Seasinger
+Quirion Ranger
+Mox Emerald
+Forest
+Island x20
+[Bot2 Deck]
+Island
+Black Lotus
+Old Man of the Sea
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Seasinger.Cast
+? Bot1.Mana =
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Quirion Ranger.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T5 Bot1.Main1]
+Bot1.Battlefield.Seasinger.Activate(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Seasinger)
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Seasinger.Tapped = true
+Bot1.Battlefield.Quirion Ranger.Activate(Bot2.Battlefield.Old Man of the Sea)
+Bot1.Choose(Forest)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Seasinger.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Seasinger.Tapped = true
