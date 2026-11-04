@@ -1,0 +1,52 @@
+# Laughing Mad {2}{R}: "As an additional cost to cast this spell, discard a card. Draw two cards. Flashback {3}{R}" (CR 601.2b, 118.8,
+# 702.34a). Bot1 casts it from the hand for three mana, discarding the Memnite it chooses, and draws exactly two (an Ornithopter and an
+# Island: the hand is then Black Lotus, Mountain, Ornithopter and Island). Flashed back for {3}{R} (Black Lotus's three red and a
+# Mountain's) it asks for a discard again - the Ornithopter - draws two more, and the card is exiled.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Laughing Mad
+Memnite
+Black Lotus
+Mountain
+Ornithopter
+Island
+Island
+Island
+Island x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Laughing Mad.Cast
+Bot1.Choose(Memnite)
+? Bot1.Mana =
+? Bot1.Graveyard = Memnite
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Black Lotus; Island; Mountain; Ornithopter
+? Bot1.Graveyard = Laughing Mad; Memnite
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Graveyard.Laughing Mad.Cast(Ability: Flashback)
+Bot1.Choose(Ornithopter)
+? Bot1.Mana =
+? Bot1.Graveyard = Ornithopter; Black Lotus; Memnite
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Island; Island; Island
+Bot1.Graveyard = Ornithopter; Black Lotus; Memnite
+Exile = Laughing Mad
