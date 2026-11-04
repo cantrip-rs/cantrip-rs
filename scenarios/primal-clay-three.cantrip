@@ -1,0 +1,25 @@
+# Primal Clay chooses its 3/3 artifact creature form as it enters (CR 614.1c).
+[Bot1 Deck]
+Primal Clay
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+? Bot1.Hand.Primal Clay.Power = 0
+? Bot1.Hand.Primal Clay.Toughness = 0
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Primal Clay.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Modes(3/3 artifact creature)
+[Expect]
+Bot1.Battlefield.Primal Clay.Power = 3
+Bot1.Battlefield.Primal Clay.Toughness = 3
+Bot1.Battlefield.Primal Clay.Types = Artifact; Creature
+Bot1.Battlefield.Primal Clay.Keywords = (absent)
+Bot1.Battlefield.Primal Clay.Subtypes = Shapeshifter

@@ -1,0 +1,44 @@
+# Image copies a flying Clay, chooses 1/6 with defender, and retains its added Illusion type and sacrifice ability (CR 707.5, 707.9a).
+[Bot1 Deck]
+Primal Clay
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Phantasmal Image
+Giant Growth
+Mox Emerald
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Primal Clay.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Modes(2/2 artifact creature with flying)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Phantasmal Image.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Accept
+Bot1.Modes(1/6 Wall artifact creature with defender)
+? Bot1.Battlefield.Primal Clay#2.Power = 1
+? Bot1.Battlefield.Primal Clay#2.Toughness = 6
+? Bot1.Battlefield.Primal Clay#2.Keywords = Defender; Flying
+? Bot1.Battlefield.Primal Clay#2.Subtypes = Illusion; Shapeshifter; Wall
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Primal Clay#2)
+? Stack.Count = 2
+[Expect]
+Bot1.Battlefield = Mox Emerald; Mox Pearl; Mox Sapphire; Primal Clay
+Bot1.Graveyard = Giant Growth; Phantasmal Image; Black Lotus
+Bot1.Battlefield.Primal Clay.Power = 2
+Bot1.Battlefield.Primal Clay.Toughness = 2
+Bot1.Battlefield.Primal Clay.Keywords = Flying

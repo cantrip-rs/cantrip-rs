@@ -1,0 +1,35 @@
+# Artificial Evolution changes Wall to Shapeshifter in the Clay spell's text; choosing that form names its existing type (CR 612.1, 400.7a).
+[Bot1 Deck]
+Primal Clay
+Black Lotus
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Island
+Artificial Evolution
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Primal Clay.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Artificial Evolution.Cast(Stack.Primal Clay)
+Bot2.Pass
+Bot1.Pass
+Bot2.Modes(Wall)
+Bot2.Modes(Shapeshifter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(1/6 Shapeshifter artifact creature with defender)
+[Expect]
+Bot1.Battlefield.Primal Clay.Power = 1
+Bot1.Battlefield.Primal Clay.Toughness = 6
+Bot1.Battlefield.Primal Clay.Subtypes = Shapeshifter
+Bot1.Battlefield.Primal Clay.Keywords = Defender

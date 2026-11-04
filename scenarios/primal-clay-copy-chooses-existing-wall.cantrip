@@ -1,0 +1,34 @@
+# A copy of the Wall form may choose that form again without adding a distinct new subtype (CR 707.5).
+[Bot1 Deck]
+Primal Clay
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Phantasmal Image
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Primal Clay.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Modes(1/6 Wall artifact creature with defender)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Phantasmal Image.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Accept
+Bot1.Modes(1/6 Wall artifact creature with defender)
+[Expect]
+Bot1.Battlefield = Mox Pearl; Mox Sapphire; Primal Clay; Primal Clay
+Bot1.Battlefield.Primal Clay#2.Power = 1
+Bot1.Battlefield.Primal Clay#2.Toughness = 6
+Bot1.Battlefield.Primal Clay#2.Keywords = Defender
+Bot1.Battlefield.Primal Clay#2.Subtypes = Illusion; Shapeshifter; Wall

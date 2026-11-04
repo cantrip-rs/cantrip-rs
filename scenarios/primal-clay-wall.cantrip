@@ -1,0 +1,30 @@
+# The Wall form has defender and cannot attack, while Memnite can attack (CR 702.3b).
+[Bot1 Deck]
+Primal Clay
+Black Lotus
+Mox Pearl
+Memnite
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Primal Clay.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Modes(1/6 Wall artifact creature with defender)
+[T3 Bot1.DeclareAttackers]
+! Bot1.Attack(Primal Clay > Bot2)
+Bot1.Attack(Memnite > Bot2)
+[T3 Bot1.Main2]
+[Expect]
+Bot2.Life = 19
+Bot1.Battlefield.Primal Clay.Power = 1
+Bot1.Battlefield.Primal Clay.Toughness = 6
+Bot1.Battlefield.Primal Clay.Types = Artifact; Creature
+Bot1.Battlefield.Primal Clay.Keywords = Defender
+Bot1.Battlefield.Primal Clay.Subtypes = Shapeshifter; Wall

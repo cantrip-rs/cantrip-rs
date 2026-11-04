@@ -1,0 +1,8 @@
+{
+  "name": "Primal Clay",
+  "manaCost": "{4}",
+  "type": "Artifact Creature — Shapeshifter",
+  "power": "*",
+  "toughness": "*",
+  "oracleText": "As this creature enters, it becomes your choice of a 3/3 artifact creature, a 2/2 artifact creature with flying, or a 1/6 Wall artifact creature with defender in addition to its other types. (A creature with defender can't attack.)"
+}
