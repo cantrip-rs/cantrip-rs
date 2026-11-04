@@ -1610,6 +1610,23 @@ pub fn creature_you_control_dies(q: &dyn Query, me: &Asker, event: &Event) -> Op
     }
 }
 
+/// "Whenever a creature an opponent controls dies" (CR 700.4, 603.10a), looked back on: the creature as it last was on the
+/// battlefield, under the controller it last had (an opponent of the ability's controller). The subject is the creature that died, so
+/// the ability can read its characteristics as it last existed (CR 608.2h). The Meathook Massacre and Vincent Valentine print it.
+pub fn creature_an_opponent_controls_dies(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {
+    match event {
+        Event::ZoneChange { old, from, to, .. }
+            if from.is(ZoneKind::Battlefield)
+                && to.is(ZoneKind::Graveyard)
+                && q.chars(*old).is(CardType::Creature)
+                && q.obj(*old).controller != me.controller =>
+        {
+            Fired::about(Target::Object(*old))
+        }
+        _ => None,
+    }
+}
+
 /// "Whenever a [subtype] you control dies" (CR 700.4, 603.10a), `SUBTYPE` a `Subtype` as `u16` (`lands::sub`), looked back on: a
 /// permanent that had that subtype as it last was on the battlefield (a creature or not, CR 109.2, 205.3), under the controller it
 /// last had, the type read through the words of the source's text (CR 612). This permanent too, if it is one. Bishop of Wings
@@ -2035,6 +2052,7 @@ pub const CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, creature_dies);
 /// A different creature dies, using the characteristics it last had on the battlefield.
 pub const ANOTHER_CREATURE_DIES: Trigger = when(EventMask::ZONE_CHANGE, another_creature_dies);
 pub const CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_you_control_dies);
+pub const CREATURE_AN_OPPONENT_CONTROLS_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, creature_an_opponent_controls_dies);
 pub const ANOTHER_CREATURE_YOU_CONTROL_DIES: Trigger = when_asked(EventMask::ZONE_CHANGE, another_creature_you_control_dies);
 /// "Whenever you cast an enchantment spell" (CR 603.2): the spell is the subject. Verduran Enchantress and Dathon, His Heart Open print it.
 pub fn you_cast_an_enchantment(q: &dyn Query, me: &Asker, event: &Event) -> Option<Fired> {

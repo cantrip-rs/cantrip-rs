@@ -20,27 +20,11 @@ fn shrink_all(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     Ok(())
 }
 
-/// "Whenever a creature an opponent controls dies" (CR 700.4): judged on the board as it was before it died
-/// (CR 603.10a), by who controlled it there.
-fn opponents_dies(q: &dyn Query, source: ObjectId, event: &Event) -> Option<Fired> {
-    match event {
-        Event::ZoneChange { old, from, to, .. }
-            if from.is(ZoneKind::Battlefield)
-                && to.is(ZoneKind::Graveyard)
-                && q.chars(*old).is(CardType::Creature)
-                && q.controller(*old) != q.controller(source) =>
-        {
-            Fired::PLAIN
-        }
-        _ => None,
-    }
-}
-
 pub static CARD: CardDef = CardDef {
     abilities: &[
         triggered(THIS_ENTERS, shrink_all, "When The Meathook Massacre enters, each creature gets -X/-X until end of turn."),
         triggered(cantrip_mechanics::triggers::CREATURE_YOU_CONTROL_DIES, cantrip_mechanics::effects::each_opponent_loses_1_life, "Whenever a creature you control dies, each opponent loses 1 life."),
-        triggered(when(EventMask::ZONE_CHANGE, opponents_dies), |g, item| effects::gain_life(g, item, 1), "Whenever a creature an opponent controls dies, you gain 1 life."),
+        triggered(cantrip_mechanics::triggers::CREATURE_AN_OPPONENT_CONTROLS_DIES, |g, item| effects::gain_life(g, item, 1), "Whenever a creature an opponent controls dies, you gain 1 life."),
     ],
     ..oracle::THE_MEATHOOK_MASSACRE
 };
