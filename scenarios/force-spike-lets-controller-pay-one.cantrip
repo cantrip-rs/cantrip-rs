@@ -1,0 +1,35 @@
+# Counter target spell unless its controller pays {1} (CR 118.12): Bot2 casts Lightning Bolt with a Mountain, keeping Mox Jet
+# untapped, and pays the {1} when Force Spike asks, tapping it. The Bolt resolves and hits Bot1 for 3.
+
+[Bot1 Deck]
+Island
+Force Spike
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Jet
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Force Spike.Cast(Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.PayCost
+? Bot2.Mana =
+
+[Expect]
+Bot1.Life = 17
+Bot2.Graveyard = Lightning Bolt
+Bot1.Graveyard = Force Spike
+Bot2.Battlefield.Mox Jet.Tapped = true

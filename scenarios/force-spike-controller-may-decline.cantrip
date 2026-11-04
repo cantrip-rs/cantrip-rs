@@ -1,0 +1,31 @@
+# Bot2 could pay the {1} (Mox Jet is untapped) but declines: the Bolt is countered (CR 701.6a) and Bot1 stays at 20.
+
+[Bot1 Deck]
+Island
+Force Spike
+Island x20
+
+[Bot2 Deck]
+Mountain
+Mox Jet
+Lightning Bolt
+Mountain x20
+
+[Actions]
+Bot1.Hand.Island.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Force Spike.Cast(Lightning Bolt)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Decline
+
+[Expect]
+Bot1.Life = 20
+Bot2.Graveyard = Lightning Bolt
+Bot2.Battlefield.Mox Jet.Tapped = false

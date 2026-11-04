@@ -1,0 +1,6 @@
+{
+  "name": "Force Spike",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "Counter target spell unless its controller pays {1}."
+}
