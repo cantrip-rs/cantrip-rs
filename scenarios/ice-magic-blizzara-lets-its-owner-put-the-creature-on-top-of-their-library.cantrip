@@ -1,0 +1,43 @@
+# Ice Magic, Blizzara (CR 702.183, 700.2, 401.1): tiered, {2} more, so {3}{U} in all, paid exactly with the four Moxen. Bot2,
+# the owner, chooses the top of its library (Accept): its Ornithopter is not on the battlefield and is drawn again on turn 4.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ice Magic
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x22
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ice Magic.Cast
+Bot1.Modes(Blizzara)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Accept
+[T4 Bot2.Main1]
+
+[Expect]
+Bot1.Graveyard = Ice Magic
+Bot2.Hand.Ornithopter.Power = 0

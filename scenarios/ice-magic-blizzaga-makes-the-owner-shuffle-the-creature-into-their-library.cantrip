@@ -1,0 +1,43 @@
+# Ice Magic, Blizzaga (CR 702.183, 700.2, 701.24a): tiered, {5}{U} more, so {6}{U}{U} in all - eight mana, paid exactly with two
+# Black Lotuses (UUU each), Mox Sapphire and Mox Jet. Bot2's Ornithopter is shuffled into Bot2's library, not put into its hand
+# or graveyard: its library grows by one and its hand does not.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Jet
+Ice Magic
+Island x21
+
+[Bot2 Deck]
+Ornithopter
+Island x22
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ice Magic.Cast
+Bot1.Modes(Blizzaga)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Graveyard.Count = 0
+Bot2.Library.Count = 16

@@ -1,0 +1,36 @@
+# Ice Magic, Blizzard (CR 702.183, 700.2): tiered, so the mode's {0} is its additional cost and the spell costs only {1}{U}, paid
+# exactly with Mox Sapphire and Mox Jet (the pool is empty after). Bot2's Ornithopter returns to its owner's hand.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Ice Magic
+Island x21
+
+[Bot2 Deck]
+Ornithopter
+Island x22
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ice Magic.Cast
+Bot1.Modes(Blizzard)
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Ice Magic
+Bot2.Hand.Ornithopter.Power = 0
