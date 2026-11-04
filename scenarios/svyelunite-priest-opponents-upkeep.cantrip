@@ -1,0 +1,37 @@
+# Even with two blue mana available, the Priest cannot activate during an opponent’s upkeep (CR 602.5).
+[Bot1 Deck]
+Svyelunite Priest
+Mox Sapphire x2
+Mox Pearl
+Island
+Island
+Ornithopter
+Island x20
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Lightning Bolt
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Svyelunite Priest.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Island.Play
+! Bot1.Battlefield.Svyelunite Priest.Activate(Bot1.Battlefield.Ornithopter)
+[T4 Bot2.Upkeep]
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Svyelunite Priest.Activate(Bot1.Battlefield.Ornithopter)
+[Expect]
+Bot1.Battlefield.Svyelunite Priest.Tapped = false
