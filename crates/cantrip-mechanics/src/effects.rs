@@ -1936,3 +1936,13 @@ pub fn return_exiled_to_hand(g: &mut dyn Game, item: &StackItem) -> Result<(), S
     g.return_to_hand(&exiled);
     Ok(())
 }
+
+/// "Target opponent gains control of target permanent you control" (CR 108.4, 611.2: with no duration), the opponent the first
+/// target and the permanent the second: if either is no longer legal there is nobody to take it, or nothing to take, and the
+/// other target is unaffected (CR 608.2b). The opponent cannot refuse. Whether that opponent controls the permanent afterwards,
+/// for an "If they do". Harmless Offering and Stiltzkin, Moogle Merchant print it.
+pub fn target_opponent_gains_control_of_target_permanent(g: &mut dyn Game, item: &StackItem) -> bool {
+    let (Some(opponent), Some(permanent)) = (crate::targets::player(g, item, 0), crate::targets::object(g, item, 1)) else { return false };
+    g.gain_control(item.object, permanent, opponent, Duration::Indefinite);
+    g.controller(permanent) == opponent
+}

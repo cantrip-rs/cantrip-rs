@@ -581,6 +581,13 @@ pub fn permanent_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> 
     permanent_filter(q, asker, t) && matches!(t, Target::Object(id) if q.controller(id) == asker.controller)
 }
 
+fn other_permanent_you_control_filter(q: &dyn Query, asker: &Asker, t: Target) -> bool {
+    permanent_you_control_filter(q, asker, t) && t != Target::Object(asker.source)
+}
+/// "Another target permanent you control" (CR 115.1, 109.5): a permanent its controller controls, other than the source.
+/// Rescue Girl, First Responder and Stiltzkin, Moogle Merchant print it.
+pub const OTHER_PERMANENT_YOU_CONTROL: TargetSpec = target(other_permanent_you_control_filter);
+
 fn nonland_permanent_filter(q: &dyn Query, _: &Asker, t: Target) -> bool {
     matches!(t, Target::Object(id) if on_battlefield(q, id) && !q.chars(id).is(CardType::Land))
 }
