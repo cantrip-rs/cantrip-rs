@@ -1,0 +1,56 @@
+# Sahagin: with its trigger on the stack above Bot1's four-mana Fractalize (X=3, on Bot2's Ornithopter), Bot2 kills it with Lightning Bolt.
+# The trigger resolves doing nothing (CR 608.2b, 400.7: the creature is gone, no counter, no effect), the Fractalize still resolves
+# and both it and Sahagin are in Bot1's graveyard.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Sahagin
+Fractalize
+Island x14
+
+[Bot2 Deck]
+Mox Ruby
+Ornithopter
+Lightning Bolt
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sahagin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fractalize.Cast(Bot2.Battlefield.Ornithopter; X: 3)
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Sahagin)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Bot1.Main1]
+
+[Expect]
+Turn = 3
+Stack.Count = 0
+Bot1.Graveyard = Fractalize; Sahagin
+Bot1.Battlefield.Sahagin = (absent)

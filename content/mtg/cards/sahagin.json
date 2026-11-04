@@ -1,0 +1,8 @@
+{
+  "name": "Sahagin",
+  "manaCost": "{1}{U}",
+  "type": "Creature — Merfolk Warrior",
+  "power": 1,
+  "toughness": 3,
+  "oracleText": "Whenever you cast a noncreature spell, if at least four mana was spent to cast it, put a +1/+1 counter on this creature and it can't be blocked this turn."
+}

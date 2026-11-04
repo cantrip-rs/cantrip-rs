@@ -1,0 +1,95 @@
+# Sahagin 1/3: "Whenever you cast a noncreature spell, if at least four mana was spent to cast it, put a +1/+1 counter on this creature
+# and it can't be blocked this turn." Turn 3: Fractalize with X=2 (three mana, one short) and then Hill Giant (four mana, but a creature
+# spell) leave it a 1/3. Turn 4: Bot2's own Fractalize with X=3 (four mana, but not Bot1's spell) leaves it alone. Turn 5: Bot1's Fractalize
+# with X=3 spends exactly four: it is a 2/4 and Bot2's Grizzly Bears may not block it (Bot2 takes 2). Turn 7: with no spell cast, the
+# effect is over: the Bears block it and die to its 2 power. The counter stays.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Sahagin
+Fractalize
+Hill Giant
+Black Lotus
+Fractalize
+Island x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Grizzly Bears
+Fractalize
+Island x14
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sahagin.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Fractalize.Cast(Bot2.Battlefield.Grizzly Bears; X: 2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Hill Giant.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sahagin.Power = 1
+? Bot1.Battlefield.Sahagin.Toughness = 3
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Fractalize.Cast(Bot2.Battlefield.Grizzly Bears; X: 3)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Sahagin.Power = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fractalize.Cast(Bot2.Battlefield.Grizzly Bears; X: 3)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Sahagin.Power = 2
+? Bot1.Battlefield.Sahagin.Toughness = 4
+Bot1.Attack(Sahagin > Bot2)
+! Bot2.Block(Grizzly Bears > Sahagin)
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(Sahagin > Bot2)
+Bot2.Block(Grizzly Bears > Sahagin)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Bot1.Battlefield.Sahagin.Power = 2
+Bot1.Battlefield.Sahagin.Toughness = 4
+Bot2.Battlefield.Grizzly Bears = (absent)
