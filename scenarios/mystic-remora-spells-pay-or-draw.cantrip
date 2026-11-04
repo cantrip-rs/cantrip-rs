@@ -1,0 +1,65 @@
+# An opponent's noncreature spell lets its caster pay {4}; otherwise Remora's controller may draw, while creature spells do not trigger it (CR 603.2, 118.12).
+[Bot1 Deck]
+Mystic Remora
+Island
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+Mox Sapphire
+Ornithopter
+Island
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Mystic Remora.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot2.PayCost
+Bot2.Decline
+Bot1.Accept
+? Bot1.Hand.Count = 6
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot1.Decline
+? Bot1.Hand.Count = 6
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot1.Decline
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot1.Decline
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+! Bot1.Accept
+? Bot1.Hand.Count = 6
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+! Bot2.PayCost
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.PayCost
+? Bot2.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Hand.Count = 6
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Mox Sapphire.Types = Artifact
