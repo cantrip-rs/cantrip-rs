@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::{copy, delayed, effects};
+use cantrip_mechanics::{copy, delayed, effects, triggers};
 use cantrip_oracle as oracle;
 
 /// "I — Surveil 1." (CR 701.25)
@@ -15,11 +15,19 @@ fn double(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 }
 
 /// "III — Triple — When you next cast an instant or sorcery spell this turn, copy it twice. You may choose new targets for the
-/// copies." (CR 603.7, 707.10): sets up delayed ability 1, `copy::COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST_TWICE`.
+/// copies." (CR 603.7, 707.10): sets up delayed ability 1, `COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST_TWICE`.
 fn triple(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     delayed::next_this_turn(g, item, 1, item.object);
     Ok(())
 }
+
+/// Chapter III's delayed ability (CR 603.7b, 707.10): it triggers once on the next instant or sorcery spell its controller casts
+/// this turn, and ends with the turn if none is.
+const COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST_TWICE: AbilityDef = triggered(
+    triggers::INSTANT_OR_SORCERY_YOU_CAST,
+    copy::copy_the_cast_spell_twice,
+    "When you next cast an instant or sorcery spell this turn, copy it twice. You may choose new targets for the copies.",
+);
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
@@ -35,6 +43,6 @@ pub static CARD: CardDef = CardDef {
             "III \u{2014} Triple \u{2014} When you next cast an instant or sorcery spell this turn, copy it twice. You may choose new targets for the copies.",
         ),
     ],
-    delayed: &[copy::COPY_IT_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST, copy::COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST_TWICE],
+    delayed: &[copy::COPY_IT_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST, COPY_THE_NEXT_INSTANT_OR_SORCERY_YOU_CAST_TWICE],
     ..oracle::SUMMON_G_F_CERBERUS
 };
