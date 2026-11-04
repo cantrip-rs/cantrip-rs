@@ -1,0 +1,63 @@
+# Rukh Egg dies to Lightning Bolt; its Bird appears at the next end step and flies over a ground blocker (CR 700.4, 603.7a).
+[Bot1 Deck]
+Rukh Egg
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mountain x20
+[Bot2 Deck]
+Lightning Bolt
+Mox Ruby
+Memnite
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rukh Egg.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Rukh Egg)
+Bot2.Pass
+Bot1.Pass
+[T2 Bot2.Main2]
+? Bot1.Graveyard = Rukh Egg
+? Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Sapphire; Mox Jet
+[T2 Bot2.End]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Bird Token.Tapped = false
+[T3 Bot1.Attackers]
+Bot1.Attack(Bird Token > Bot2)
+! Bot2.Block(Memnite > Bird Token)
+Bot2.Block(Ornithopter > Bird Token)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Rukh Egg
+Bot1.Battlefield = Mox Ruby; Mox Pearl; Mox Sapphire; Mox Jet; Bird Token
+Bot1.Battlefield.Bird Token.Power = 4
+Bot1.Battlefield.Bird Token.Toughness = 4
+Bot1.Battlefield.Bird Token.Colors = Red
+Bot1.Battlefield.Bird Token.Keywords = Flying
+Bot1.Battlefield.Bird Token.Token = true
+Bot1.Battlefield.Bird Token.Types = Creature
+Bot1.Battlefield.Bird Token.Subtypes = Bird
+Bot1.Battlefield.Bird Token.Tapped = true
+Bot2.Graveyard = Ornithopter; Lightning Bolt

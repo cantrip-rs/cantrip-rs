@@ -1,0 +1,61 @@
+# Exiling an Egg produces no Bird; a second Egg that dies creates one at the next end step (CR 700.4).
+
+[Bot1 Deck]
+Rukh Egg x2
+Mox Ruby
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mountain x20
+
+[Bot2 Deck]
+Swords to Plowshares
+Mox Pearl
+Lightning Bolt
+Mox Ruby
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rukh Egg#1.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.Rukh Egg)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Count = 4
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rukh Egg.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Rukh Egg)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Exile = Rukh Egg
+Bot1.Battlefield.Bird Token.Power = 4
+Bot1.Graveyard = Rukh Egg

@@ -1,0 +1,8 @@
+{
+  "name": "Rukh Egg",
+  "manaCost": "{3}{R}",
+  "type": "Creature — Bird Egg",
+  "power": 0,
+  "toughness": 3,
+  "oracleText": "When this creature dies, create a 4/4 red Bird creature token with flying at the beginning of the next end step."
+}
