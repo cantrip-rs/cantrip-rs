@@ -1,0 +1,54 @@
+# Each activation must be paid for separately, even after the first is paid (CR 602.2).
+[Bot1 Deck]
+Black Lotus
+Thrull Wizard
+Mox Jet
+Mox Jet
+Mox Pearl
+Mox Pearl
+Island x14
+[Bot2 Deck]
+Mox Jet
+Black Lotus
+Dark Ritual
+Island x17
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Thrull Wizard.Cast
+? Bot1.Mana =
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Dark Ritual.Cast
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Thrull Wizard.Activate(Stack.Dark Ritual)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Pass
+Bot1.Pass
+Bot2.PayCost
+? Bot2.Mana = {B}{B}
+Bot1.Battlefield.Mox Jet#2.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Thrull Wizard.Activate(Stack.Dark Ritual)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.PayCost
+? Bot2.Mana = {B}
+Bot2.Pass
+Bot1.Pass
+? Bot2.Mana = {B}{B}{B}{B}
+[T2 Bot2.Main2]
+[Expect]
+Bot2.Graveyard = Dark Ritual; Black Lotus

@@ -1,0 +1,8 @@
+{
+  "name": "Thrull Wizard",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Thrull Wizard",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{1}{B}: Counter target black spell unless that spell's controller pays {B} or {3}."
+}
