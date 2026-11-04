@@ -1,0 +1,61 @@
+# Summon: Knights of Round's chapters I to IV each create exactly three 2/2 white Knight tokens: three on entering, twelve
+# by chapter IV. Chapter V gives the other creatures Bot1 controls +2/+2 until end of turn and then an indestructible
+# counter each (CR 608.2c, 122.1b): the Knights and Ornithopter, not Bot2's Memnite. The Saga is indestructible but still
+# sacrificed after chapter V (CR 714.4, 701.21a). The counters outlast the turn's +2/+2.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Black Lotus
+Black Lotus
+Ornithopter
+Summon: Knights of Round
+Plains x14
+
+[Bot2 Deck]
+Memnite
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Summon: Knights of Round.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 7
+? Bot1.Battlefield.Knight Token#1.Power = 2
+? Bot1.Battlefield.Knight Token#1.Colors = White
+? Bot1.Battlefield.Summon: Knights of Round.Keywords = Indestructible
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T7 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 16
+[T9 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Knight Token#1.Power = 4
+? Bot1.Battlefield.Knight Token#12.Toughness = 4
+? Bot1.Battlefield.Ornithopter.Power = 2
+? Bot1.Battlefield.Ornithopter.Counters.Indestructible = 1
+? Bot2.Battlefield.Memnite.Power = 1
+[T10 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Count = 15
+Bot1.Battlefield.Summon: Knights of Round = (absent)
+Bot1.Graveyard = Summon: Knights of Round; Black Lotus; Black Lotus
+Bot1.Battlefield.Knight Token#1.Power = 2
+Bot1.Battlefield.Knight Token#1.Counters.Indestructible = 1
+Bot1.Battlefield.Knight Token#12.Keywords = Indestructible
+Bot2.Battlefield.Memnite.Keywords = (absent)

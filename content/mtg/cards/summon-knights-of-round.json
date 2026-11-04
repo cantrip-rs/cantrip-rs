@@ -1,0 +1,11 @@
+{
+  "name": "Summon: Knights of Round",
+  "manaCost": "{6}{W}{W}",
+  "type": "Enchantment Creature — Saga Knight",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after V.)\nI, II, III, IV — Create three 2/2 white Knight creature tokens.\nV — Ultimate End — Other creatures you control get +2/+2 until end of turn. Put an indestructible counter on each of them.\nIndestructible",
+  "keywords": [
+    "Indestructible"
+  ]
+}
