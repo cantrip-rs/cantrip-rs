@@ -1,0 +1,54 @@
+# Seifer Almasy attacking with Memnite is not attacking alone (CR 506.5), so nobody gains double strike: Seifer deals 3 once and
+# Memnite 1 (Bot2 20 to 16). Fire Cross triggers on Seifer's combat damage: the Fiery Confluence in the graveyard (mana value 4,
+# one past the limit) is refused as a target, the Lightning Bolt (1) is the one that can be chosen, and Bot1 declines the cast, so the
+# Bolt stays in the graveyard and Bot2 stays at 16. Faithless Looting on turn 1 discards both cards, drawing Seifer and Memnite.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mountain
+Faithless Looting
+Fiery Confluence
+Lightning Bolt
+Seifer Almasy
+Memnite
+Mountain
+Mountain x11
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Faithless Looting.Cast
+Bot1.Choose(Fiery Confluence; Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain#1.Activate
+Bot1.Battlefield.Mountain#2.Activate
+Bot1.Hand.Seifer Almasy.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Seifer Almasy > Bot2; Memnite > Bot2)
+! Bot1.Target(Fiery Confluence)
+Bot1.Target(Lightning Bolt)
+Bot1.Decline
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 16
+Bot1.Graveyard = Faithless Looting; Lightning Bolt; Fiery Confluence
