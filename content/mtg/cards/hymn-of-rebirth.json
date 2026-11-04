@@ -1,0 +1,6 @@
+{
+  "name": "Hymn of Rebirth",
+  "manaCost": "{3}{G}{W}",
+  "type": "Sorcery",
+  "oracleText": "Put target creature card from a graveyard onto the battlefield under your control."
+}

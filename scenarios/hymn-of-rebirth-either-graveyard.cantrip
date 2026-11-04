@@ -1,0 +1,57 @@
+# Hymn returns a creature card from either graveyard under its caster's control; a noncreature card and a battlefield creature are not legal targets.
+[Bot1 Deck]
+Mox Emerald
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Hymn of Rebirth
+Lightning Bolt
+Memnite
+Hymn of Rebirth
+Swamp x15
+[Bot2 Deck]
+Island x7
+Elvish Mystic
+Island x16
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Hymn of Rebirth.Cast(Bot1.Graveyard.Lightning Bolt)
+Bot1.Hand.Hymn of Rebirth.Cast(Bot1.Graveyard.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Tapped = false
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Hymn of Rebirth.Cast(Bot1.Battlefield.Memnite)
+Bot1.Hand.Hymn of Rebirth.Cast(Bot2.Graveyard.Elvish Mystic)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Elvish Mystic.Power = 1
+Bot1.Battlefield.Elvish Mystic.Tapped = false
+Bot2.Graveyard.Elvish Mystic = (absent)
