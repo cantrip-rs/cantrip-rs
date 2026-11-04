@@ -1,0 +1,8 @@
+{
+  "name": "Zuran Spellcaster",
+  "manaCost": "{2}{U}",
+  "type": "Creature — Human Wizard",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "{T}: This creature deals 1 damage to any target."
+}
