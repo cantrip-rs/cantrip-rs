@@ -1,0 +1,19 @@
+# Lava Tubes can pay for Dark Ritual but alone cannot pay two black mana for Hymn to Tourach (CR 601.2h).
+[Bot1 Deck]
+Lava Tubes
+Dark Ritual
+Hymn to Tourach
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Lava Tubes.Play
+! Bot1.Hand.Hymn to Tourach.Cast(Bot2; Mana: short)
+Bot1.Hand.Dark Ritual.Cast
+Bot1.Battlefield.Lava Tubes.Activate(Color: Black)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Mana = {B}{B}{B}
+Bot1.Battlefield.Lava Tubes.Counters.Depletion = 1

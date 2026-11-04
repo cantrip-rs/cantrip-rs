@@ -1,0 +1,33 @@
+# Lava Tubes makes black, skips untapping with a depletion counter, removes one on its controller's upkeep, then untaps normally next turn and makes red (CR 502.3, 603.2).
+[Bot1 Deck]
+Lava Tubes
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Lava Tubes.Play
+! Bot1.Battlefield.Lava Tubes.Activate(Color: Blue)
+! Bot1.Battlefield.Lava Tubes.Activate(Color: White)
+Bot1.Battlefield.Lava Tubes.Activate(Color: Black)
+? Bot1.Mana = {B}
+? Bot1.Battlefield.Lava Tubes.Tapped = true
+? Bot1.Battlefield.Lava Tubes.Counters.Depletion = 1
+! Bot1.Battlefield.Lava Tubes.Activate(Color: Red)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Lava Tubes.Counters.Depletion = 1
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Lava Tubes.Tapped = true
+? Bot1.Battlefield.Lava Tubes.Counters.Depletion = 1
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Lava Tubes.Counters.Depletion = (absent)
+? Bot1.Battlefield.Lava Tubes.Tapped = true
+[T5 Bot1.Upkeep]
+? Bot1.Battlefield.Lava Tubes.Tapped = false
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Lava Tubes.Activate(Color: Red)
+? Bot1.Mana = {R}
+[Expect]
+Bot1.Battlefield.Lava Tubes.Tapped = true
+Bot1.Battlefield.Lava Tubes.Counters.Depletion = 1
