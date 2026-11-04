@@ -1,0 +1,59 @@
+# Gaining flying makes the first target illegal on resolution; a second Trap still destroys the other attacker (CR 608.2b).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Pit Trap x2
+Black Lotus
+Mox Jet
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Island
+Jump
+Memnite x2
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Pit Trap.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Pit Trap.Cast
+? Bot1.Mana =
+[T4 Bot2.Attackers]
+Bot2.Attack(Memnite#1 > Bot1; Memnite#2 > Bot1)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Pit Trap#1.Activate(Bot2.Battlefield.Memnite#1)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Jump.Cast(Bot2.Battlefield.Memnite#1)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite#1.Keywords = Flying
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Pit Trap.Activate(Bot2.Battlefield.Memnite#2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {U}
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Memnite.Power = 1
+Bot2.Graveyard.Memnite.Power = 1
+Bot1.Life = 19

@@ -1,0 +1,31 @@
+# Pit Trap can target its controller's own attacking creature and sacrifices itself as an activation cost (CR 602.2, 701.8a).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Pit Trap
+Memnite
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Pit Trap.Cast
+? Bot1.Mana =
+[T3 Bot1.Attackers]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Pit Trap.Activate(Bot1.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Choose(Tap Pit Trap)
+? Bot1.Graveyard.Pit Trap.Colors =
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Memnite.Power = 1
+Bot2.Life = 20

@@ -1,0 +1,48 @@
+# Pit Trap sacrifices itself for two mana and destroys a nonflying attacker despite a regeneration shield; a flier is illegal (CR 701.8, 701.19).
+[Bot1 Deck]
+Mox Pearl
+Mox Sapphire
+Pit Trap
+Island x20
+[Bot2 Deck]
+Swamp
+Mox Jet
+Drudge Skeletons
+Ornithopter
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Pit Trap.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Swamp.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Drudge Skeletons.Cast
+[T4 Bot2.Attackers]
+Bot2.Attack(Drudge Skeletons > Bot1; Ornithopter > Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Pit Trap.Activate(Ornithopter)
+! Bot1.Battlefield.Pit Trap.Activate(Bot2.Battlefield.Memnite)
+Bot1.Battlefield.Pit Trap.Activate(Drudge Skeletons)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Choose(Tap Pit Trap)
+? Bot1.Graveyard.Pit Trap.Colors =
+Bot1.Pass
+Bot2.Battlefield.Swamp.Activate
+Bot2.Battlefield.Drudge Skeletons.Activate
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Graveyard.Drudge Skeletons.Power = 1
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Memnite.Power = 1
