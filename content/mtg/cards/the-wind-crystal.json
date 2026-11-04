@@ -1,0 +1,6 @@
+{
+  "name": "The Wind Crystal",
+  "manaCost": "{2}{W}{W}",
+  "type": "Legendary Artifact",
+  "oracleText": "White spells you cast cost {1} less to cast.\nIf you would gain life, you gain twice that much life instead.\n{4}{W}{W}, {T}: Creatures you control gain flying and lifelink until end of turn."
+}

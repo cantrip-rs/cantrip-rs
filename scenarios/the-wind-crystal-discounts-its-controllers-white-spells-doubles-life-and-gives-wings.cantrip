@@ -1,0 +1,80 @@
+# The Wind Crystal: Bot1's white Paladin's Arms costs {1}{W} (Plains and Mox Jet, the pool empty after), its colorless Mind
+# Stone still {2} (two Moxen, the pool empty after), and Bot2's white White Mage's Staff still {1}{W} (one of its Lotus's three
+# W left over; CR 601.2f, 118.7c). On turn 5 {4}{W}{W}, {T} gives Bot1's creatures, and not Bot2's, flying and lifelink: the
+# 3/2 Hero hits for 3 and Bot1 gains twice that, 6, instead (CR 614.1a). On Bot2's turn 6 the Hero has neither.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+The Wind Crystal
+Mox Pearl
+Paladin's Arms
+Mox Jet
+Mind Stone
+Plains
+Mox Ruby
+Plains x10
+
+[Bot2 Deck]
+Black Lotus
+White Mage's Staff
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Wind Crystal.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Paladin's Arms.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.White Mage's Staff.Cast
+? Bot2.Mana = {W}
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Mind Stone.Cast
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.The Wind Crystal.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Plains#2.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mind Stone.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hero Token.Keywords = Flying; Lifelink
+? Bot2.Battlefield.Hero Token.Keywords = (absent)
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Hero Token > Bot2)
+[T5 Bot1.Main2]
+? Bot1.Life = 26
+? Bot2.Life = 17
+[T6 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Hero Token.Keywords = (absent)
