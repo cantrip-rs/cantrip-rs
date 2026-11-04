@@ -1,0 +1,44 @@
+# X=0 enters without ice counters; three mana buys one counter which can be removed for {C} (CR 107.3, 122.1).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Ruby
+Iceberg
+Island
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Iceberg.Cast(X: 0)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+? Bot1.Battlefield.Iceberg.Counters.Ice = (absent)
+! Bot1.Battlefield.Iceberg.Activate(Ability: Remove an ice counter)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Iceberg.Activate(Ability: Put an ice counter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Iceberg.Counters.Ice = 1
+Bot1.Battlefield.Iceberg.Activate(Ability: Remove an ice counter)
+? Bot1.Mana = {C}
+? Bot1.Battlefield.Iceberg.Counters.Ice = (absent)
+
+[Expect]
+Bot1.Mana = {C}
+Bot1.Battlefield.Iceberg.Counters.Ice = (absent)

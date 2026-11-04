@@ -1,0 +1,32 @@
+# Removing an ice counter is a mana ability and can pay a spell's generic cost during casting (CR 605.3b, 601.2g).
+[Bot1 Deck]
+Black Lotus
+Iceberg
+Sol Ring
+Island
+Island
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Iceberg.Cast(X: 1)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+? Bot1.Battlefield.Iceberg.Counters.Ice = 1
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Iceberg.Activate(Ability: Remove an ice counter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Sol Ring.Types = Artifact
+Bot1.Battlefield.Iceberg.Counters.Ice = (absent)
+Bot1.Mana =

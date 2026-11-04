@@ -1,0 +1,6 @@
+{
+  "name": "Iceberg",
+  "manaCost": "{X}{U}{U}",
+  "type": "Enchantment",
+  "oracleText": "This enchantment enters with X ice counters on it.\n{3}: Put an ice counter on this enchantment.\nRemove an ice counter from this enchantment: Add {C}."
+}
