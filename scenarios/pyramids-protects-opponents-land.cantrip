@@ -1,0 +1,48 @@
+# Pyramids can replace the destruction of an opponent’s land (CR 614.1a).
+[Bot1 Deck]
+Pyramids
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Strip Mine
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Pyramids.Cast
+? Bot1.Mana =
+Bot1.Hand.Strip Mine.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Strip Mine.Activate(Ability: Add)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Pyramids.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Pyramids.Activate
+Bot1.Modes(The next time target land)
+! Bot1.Target(Bot1.Battlefield.Mox Jet)
+Bot1.Target(Bot2.Battlefield.Island)
+Bot1.Pass
+? Bot1.Mana =
+Bot2.Pass
+Bot1.Battlefield.Strip Mine.Activate(Bot2.Battlefield.Island; Ability: Destroy target land)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Island.Types = Land
+Bot1.Graveyard.Strip Mine.Colors =
