@@ -1,0 +1,53 @@
+# Al Bhed Salvagers: "Whenever this creature or another creature or artifact you control dies, target opponent loses 1 life and you
+# gain 1 life." Wrath of God destroys it with Bot1's Ornithopter and Bot2's Ornithopter at once; the dies trigger looks back
+# (CR 603.10a), so it triggers for Salvagers itself and for Bot1's artifact creature (once, not once as a creature and once as an
+# artifact), and not for Bot2's Ornithopter, which Bot1 does not control. Black Lotus, a noncreature artifact, triggered it earlier
+# when sacrificed for mana. Bot2 loses 3 in all and Bot1 gains 3.
+
+[Bot1 Deck]
+Plains
+Mox Jet
+Mox Ruby
+Al Bhed Salvagers
+Ornithopter
+Wrath of God
+Black Lotus
+Plains x20
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Al Bhed Salvagers.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Wrath of God.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Triggers(Al Bhed Salvagers; Al Bhed Salvagers)
+? Stack.Count = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Life = 23
+Bot2.Graveyard.Count = 1

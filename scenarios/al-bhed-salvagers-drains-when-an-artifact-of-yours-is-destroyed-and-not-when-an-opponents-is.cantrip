@@ -1,0 +1,54 @@
+# Al Bhed Salvagers: the ability triggers for an artifact that is not a creature (the ruling) that Bot1 controls, and for no artifact
+# Bot2 controls. Bot2's Disenchant destroys Bot1's Mox Jet: Bot2 loses 1 and Bot1 gains 1. Later Bot2's second Disenchant
+# destroys Bot2's own Mox Pearl: nothing happens.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Al Bhed Salvagers
+Swamp x30
+
+[Bot2 Deck]
+Plains
+Mox Pearl
+Disenchant
+Disenchant
+Plains x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Al Bhed Salvagers.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Mox Jet)
+Bot2.Pass
+Bot1.Pass
+? Stack.Count = 1
+? Bot2.Life = 20
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 19
+? Bot1.Life = 21
+[T4 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Disenchant.Cast(Bot2.Battlefield.Mox Pearl)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 19
+Bot1.Life = 21
+Bot2.Graveyard = Disenchant; Mox Pearl; Disenchant
+Bot1.Graveyard = Mox Jet

@@ -1,0 +1,8 @@
+{
+  "name": "Al Bhed Salvagers",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Human Artificer Warrior",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Whenever this creature or another creature or artifact you control dies, target opponent loses 1 life and you gain 1 life."
+}
