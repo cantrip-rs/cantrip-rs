@@ -1,0 +1,42 @@
+# Sabotender {1}{R}, 2/1 reach: "Landfall - Whenever a land you control enters, this creature deals 1 damage to each opponent"
+# (CR 603.2, 120.3). Cast on turn 1 with two Moxen it pings nothing yet (Bot2 20). Bot1's Mountain on turn 1 and again on turn 3
+# each deal 1 (19, then 18); Bot2's Island on turn 2 is not "a land you control" and deals nothing.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Sabotender
+Mountain
+Mountain
+Mountain
+Mountain
+Mountain x9
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Sabotender.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 20
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+[T3 Bot1.Main1]
+? Bot1.Life = 20
+Bot1.Hand.Mountain.Play
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 18
+Bot1.Life = 20
+Stack.Count = 0

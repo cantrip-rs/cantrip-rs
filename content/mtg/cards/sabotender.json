@@ -1,0 +1,11 @@
+{
+  "name": "Sabotender",
+  "manaCost": "{1}{R}",
+  "type": "Creature — Plant",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Reach\nLandfall — Whenever a land you control enters, this creature deals 1 damage to each opponent.",
+  "keywords": [
+    "Reach"
+  ]
+}
