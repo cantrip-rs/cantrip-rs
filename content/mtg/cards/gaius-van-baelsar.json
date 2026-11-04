@@ -1,0 +1,8 @@
+{
+  "name": "Gaius van Baelsar",
+  "manaCost": "{2}{B}{B}",
+  "type": "Legendary Creature — Human Soldier",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When Gaius van Baelsar enters, choose one —\n• Each player sacrifices a creature token of their choice.\n• Each player sacrifices a nontoken creature of their choice.\n• Each player sacrifices an enchantment of their choice."
+}
