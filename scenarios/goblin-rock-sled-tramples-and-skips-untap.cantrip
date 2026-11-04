@@ -1,0 +1,34 @@
+# The Sled tramples over a 0/2 blocker, stays tapped after attacking, then untaps after a turn without attacking (CR 702.19, 502.3).
+[Bot1 Deck]
+Goblin Rock Sled
+Mox Ruby
+Mox Pearl
+Island x20
+[Bot2 Deck]
+Mountain
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goblin Rock Sled.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Goblin Rock Sled > Bot2)
+Bot2.Block(Ornithopter > Goblin Rock Sled)
+[T3 Bot1.Main2]
+? Bot2.Life = 19
+? Bot1.Battlefield.Goblin Rock Sled.Tapped = true
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Goblin Rock Sled.Tapped = true
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Goblin Rock Sled.Tapped = false
