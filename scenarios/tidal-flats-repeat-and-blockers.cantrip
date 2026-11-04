@@ -1,0 +1,68 @@
+# An activation before blockers has no later effect on them; a second activation is independent, and paying for the first does not pay for the second (CR 608.2c).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Sapphire
+Mox Sapphire
+Mox Sapphire
+Tidal Flats
+Grizzly Bears
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Mox Pearl
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Tidal Flats.Cast
+? Bot1.Mana = {G}
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Tidal Flats.Activate
+? Bot1.Mana = {U}{U}
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.PayCost
+? Bot2.Mana =
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+Bot1.Block(Grizzly Bears > Grizzly Bears)
+? Bot1.Battlefield.Grizzly Bears.Keywords = (absent)
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Mox Sapphire#3.Activate
+Bot1.Battlefield.Tidal Flats.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Decline
+? Bot1.Battlefield.Grizzly Bears.Keywords = FirstStrike
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Tapped = false
+Bot2.Battlefield.Grizzly Bears = (absent)
