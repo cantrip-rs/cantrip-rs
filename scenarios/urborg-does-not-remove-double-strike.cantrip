@@ -1,0 +1,23 @@
+# Removing first strike does not remove double strike from an opponent's creature (CR 702.4b).
+[Bot1 Deck]
+Urborg
+Island x20
+[Bot2 Deck]
+Black Lotus
+Fencing Ace
+Island x20
+[Actions]
+Bot1.Hand.Urborg.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Fencing Ace.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Urborg.Activate(Ability: Target creature; Bot2.Battlefield.Fencing Ace)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(first strike)
+[Expect]
+Bot2.Battlefield.Fencing Ace.Keywords = DoubleStrike

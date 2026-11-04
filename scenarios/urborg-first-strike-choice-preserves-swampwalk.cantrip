@@ -1,0 +1,46 @@
+# Choosing first strike leaves a creature's swampwalk intact, so it remains unblockable while the defender controls a Swamp (CR 702.14c).
+[Bot1 Deck]
+Urborg
+Swamp
+Ornithopter
+Mox Pearl
+Interjection
+Island x20
+[Bot2 Deck]
+Forest
+Marsh Boa
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Urborg.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Marsh Boa.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Marsh Boa; Ornithopter)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Interjection.Cast(Bot2.Battlefield.Marsh Boa)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Urborg.Activate(Ability: Target creature; Bot2.Battlefield.Marsh Boa)
+? Bot1.Battlefield.Urborg.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(first strike)
+? Bot2.Battlefield.Marsh Boa.Keywords = Swampwalk
+! Bot1.Block(Ornithopter > Marsh Boa)
+Bot1.Block(Ornithopter > Bot2.Battlefield.Ornithopter)
+[T4 Bot2.Main2]
+? Bot1.Life = 17
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Battlefield.Marsh Boa.Keywords = Swampwalk
+Bot1.Life = 17

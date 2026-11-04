@@ -1,0 +1,33 @@
+# Urborg removes first strike from its controller's White Knight for the turn, then the keyword returns (CR 611.2a).
+[Bot1 Deck]
+Urborg
+Black Lotus
+White Knight
+Ornithopter
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Urborg.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.White Knight.Cast
+Bot1.Pass
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Urborg.Activate(Ability: Target creature; Bot1.Battlefield.Urborg)
+Bot1.Battlefield.Urborg.Activate(Ability: Target creature; Bot1.Battlefield.White Knight)
+? Bot1.Battlefield.Urborg.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(first strike)
+? Bot1.Battlefield.White Knight.Keywords = (absent)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Urborg.Activate(Ability: Target creature; Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Modes(first strike)
+[Expect]
+Bot1.Battlefield.Ornithopter.Keywords = Flying
+Bot1.Battlefield.White Knight.Keywords = FirstStrike
