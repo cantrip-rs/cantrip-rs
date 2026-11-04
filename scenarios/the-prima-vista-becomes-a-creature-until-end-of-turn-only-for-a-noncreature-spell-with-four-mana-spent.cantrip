@@ -1,0 +1,67 @@
+# The Prima Vista ({4}{U}, 5/3 flying Vehicle): "Whenever you cast a noncreature spell, if at least four mana was spent to cast it, The Prima Vista
+# becomes an artifact creature until end of turn." Bot1 casts it on turn 1 with Black Lotus, Mox Sapphire and Mox Jet. Turn 3: Fractalize with X=2
+# (three mana, one short) leaves it an artifact. Turn 5: Canyon Minotaur spends four mana but is a creature spell: still an artifact. Turn 7: Fractalize with
+# X=3 spends exactly four: it becomes an artifact creature and attacks in the air for 5 (Bot2 has no creatures). Turn 9: the effect is over.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+The Prima Vista
+Memnite
+Fractalize
+Canyon Minotaur
+Fractalize
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.The Prima Vista.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Fractalize.Cast(Bot1.Battlefield.Memnite; X: 2)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Prima Vista.Types = Artifact
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Canyon Minotaur.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Prima Vista.Types = Artifact
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fractalize.Cast(Bot1.Battlefield.Memnite; X: 3)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.The Prima Vista.Types = Artifact; Creature
+[T7 Bot1.DeclareAttackers]
+Bot1.Attack(The Prima Vista > Bot2)
+[T9 Bot1.Main1]
+? Bot1.Battlefield.The Prima Vista.Types = Artifact
+
+[Expect]
+Bot2.Life = 15

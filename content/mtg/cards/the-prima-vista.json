@@ -1,0 +1,11 @@
+{
+  "name": "The Prima Vista",
+  "manaCost": "{4}{U}",
+  "type": "Legendary Artifact — Vehicle",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "Flying\nWhenever you cast a noncreature spell, if at least four mana was spent to cast it, The Prima Vista becomes an artifact creature until end of turn.\nCrew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)",
+  "keywords": [
+    "Flying"
+  ]
+}
