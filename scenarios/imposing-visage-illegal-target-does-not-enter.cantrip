@@ -1,0 +1,52 @@
+# An Aura whose target is destroyed in response does not enter; another copy attaches to a legal creature (CR 608.2b, 303.4).
+[Bot1 Deck]
+Mox Ruby
+Mox Ruby
+Imposing Visage
+Imposing Visage
+Memnite
+Island
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Imposing Visage#1.Cast(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+? Stack.Count = 2
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Imposing Visage.Colors = Red
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Imposing Visage.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Graveyard.Imposing Visage.Colors = Red
+Bot1.Battlefield.Imposing Visage.AttachedTo = Memnite
+Bot2.Graveyard.Memnite.Power = 1
