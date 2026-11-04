@@ -1,0 +1,8 @@
+{
+  "name": "Queen Brahne",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Human Noble",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Prowess (Whenever you cast a noncreature spell, this creature gets +1/+1 until end of turn.)\nWhenever Queen Brahne attacks, create a 0/1 black Wizard creature token with \"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\""
+}

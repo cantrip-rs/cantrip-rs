@@ -1,0 +1,43 @@
+# Queen Brahne {2}{R}, 2/1, prowess. "Whenever Queen Brahne attacks, create a 0/1 black Wizard creature token with 'Whenever you cast a
+# noncreature spell, this token deals 1 damage to each opponent.'" (CR 508.1m, 111.1). Cast on turn 1 there is no Wizard yet. Attacking
+# on turn 3 makes exactly one, untapped and not attacking, and Brahne deals 2 unblocked (Bot2 20 to 18). After combat Mox Sapphire,
+# a noncreature spell, pumps Brahne to 3/2 with prowess (CR 702.108a) and makes the Wizard deal 1 to Bot2 (18 to 17).
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Queen Brahne
+Mox Sapphire
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Queen Brahne.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Wizard Token = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Queen Brahne > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+? Bot1.Battlefield.Wizard Token.Toughness = 1
+? Bot1.Battlefield.Wizard Token#2 = (absent)
+? Bot1.Battlefield.Wizard Token.Tapped = false
+? Bot1.Battlefield.Queen Brahne.Power = 2
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 17
+Bot1.Battlefield.Queen Brahne.Power = 3
+Bot1.Battlefield.Queen Brahne.Toughness = 2
