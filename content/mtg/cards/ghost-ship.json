@@ -1,0 +1,11 @@
+{
+  "name": "Ghost Ship",
+  "manaCost": "{2}{U}{U}",
+  "type": "Creature — Spirit",
+  "power": 2,
+  "toughness": 4,
+  "oracleText": "Flying\n{U}{U}{U}: Regenerate this creature.",
+  "keywords": [
+    "Flying"
+  ]
+}

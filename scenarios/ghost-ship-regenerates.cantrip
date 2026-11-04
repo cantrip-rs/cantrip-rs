@@ -1,0 +1,45 @@
+# Three blue mana creates a regeneration shield before Infernal Grasp resolves, tapping and saving Ghost Ship.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Island
+Island
+Ghost Ship
+Island x20
+[Bot2 Deck]
+Black Lotus
+Infernal Grasp
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ghost Ship.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T4 Bot2.Main1]
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Infernal Grasp.Cast(Bot1.Battlefield.Ghost Ship)
+Bot2.Pass
+Bot1.Battlefield.Island#1.Activate
+Bot1.Battlefield.Island#2.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Ghost Ship.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Ghost Ship.Tapped = true
+Bot1.Battlefield.Ghost Ship.Damage = 0
+Bot2.Graveyard.Infernal Grasp.Colors = Black
