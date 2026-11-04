@@ -1,0 +1,8 @@
+{
+  "name": "Knight of Stromgald",
+  "manaCost": "{B}{B}",
+  "type": "Creature — Human Knight",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "Protection from white\n{B}: This creature gains first strike until end of turn.\n{B}{B}: This creature gets +1/+0 until end of turn."
+}
