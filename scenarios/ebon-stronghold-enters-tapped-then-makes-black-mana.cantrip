@@ -1,0 +1,24 @@
+# Ebon Stronghold enters tapped, taps for one black mana, and later taps and sacrifices itself for two (CR 614.1d, 605.1a).
+[Bot1 Deck]
+Ebon Stronghold
+Swamp x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Ebon Stronghold.Play
+? Bot1.Battlefield.Ebon Stronghold.Tapped = true
+! Bot1.Battlefield.Ebon Stronghold.Activate(Ability: Add {B}.)
+! Bot1.Battlefield.Ebon Stronghold.Activate(Ability: Sacrifice)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ebon Stronghold.Tapped = false
+Bot1.Battlefield.Ebon Stronghold.Activate(Ability: Add {B}.)
+? Bot1.Mana = {B}
+? Bot1.Battlefield.Ebon Stronghold.Tapped = true
+! Bot1.Battlefield.Ebon Stronghold.Activate(Ability: Sacrifice)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Ebon Stronghold.Activate(Ability: Sacrifice)
+? Bot1.Mana = {B}{B}
+? Bot1.Graveyard = Ebon Stronghold
+[Expect]
+Bot1.Battlefield.Ebon Stronghold = (absent)
+Bot1.Graveyard = Ebon Stronghold
