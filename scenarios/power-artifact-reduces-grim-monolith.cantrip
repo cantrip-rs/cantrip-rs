@@ -1,0 +1,44 @@
+# Power Artifact enchants Grim Monolith: its {4} untap ability costs {2}, while its mana ability still costs only a tap (CR 601.2f, 602.2b).
+[Bot1 Deck]
+Mox Emerald
+Mox Sapphire x2
+Sol Ring
+Grim Monolith
+Power Artifact
+Island
+Mind Stone
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Grim Monolith.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Mind Stone.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+! Bot1.Hand.Power Artifact.Cast(Bot1.Battlefield.Island)
+Bot1.Hand.Power Artifact.Cast(Bot1.Battlefield.Grim Monolith)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Grim Monolith.Activate(Ability: Add)
+? Bot1.Mana = {C}{C}{C}
+Bot1.Battlefield.Grim Monolith.Activate(Ability: Untap)
+? Bot1.Mana = {C}
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Grim Monolith.Tapped = false
