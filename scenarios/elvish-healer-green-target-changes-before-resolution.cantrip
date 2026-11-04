@@ -1,0 +1,57 @@
+# Mondo Gecko turns blue in response to Elvish Healer; the ability checks at resolution and prevents only one damage (CR 608.2h, 615.1).
+[Bot1 Deck]
+Elvish Healer
+Mondo Gecko
+Black Lotus x2
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Hand.Elvish Healer.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mondo Gecko.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mondo Gecko.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Island)
+Bot1.Colors(Green)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mondo Gecko.Colors = Green
+Bot1.Battlefield.Elvish Healer.Activate(Bot1.Battlefield.Mondo Gecko)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mondo Gecko.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Island)
+Bot1.Colors(Blue)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Mondo Gecko.Colors = Blue
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mondo Gecko)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Mondo Gecko.Damage = 2
