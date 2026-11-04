@@ -1,0 +1,47 @@
+# Strip Mine destroys one of three Mountains in response; the spell counts two on resolution.
+
+[Bot1 Deck]
+Mountain x3
+Black Lotus
+Mox Pearl
+Eternal Flame
+Ornithopter
+Island x20
+
+[Bot2 Deck]
+Strip Mine
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain#1.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Strip Mine.Play
+[T3 Bot1.Main1]
+Bot1.Hand.Mountain#1.Play
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Eternal Flame.Cast(Bot1)
+! Bot1.Hand.Eternal Flame.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Hand.Eternal Flame.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Battlefield.Strip Mine.Activate(Bot1.Battlefield.Mountain#1; Ability: Destroy)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 18

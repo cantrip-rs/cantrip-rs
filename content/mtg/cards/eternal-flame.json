@@ -1,0 +1,6 @@
+{
+  "name": "Eternal Flame",
+  "manaCost": "{2}{R}{R}",
+  "type": "Sorcery",
+  "oracleText": "Eternal Flame deals X damage to target opponent or planeswalker and half X damage, rounded up, to you, where X is the number of Mountains you control."
+}
