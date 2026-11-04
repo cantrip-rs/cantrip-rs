@@ -1,0 +1,66 @@
+# Folk of the Pines costs {1}{G} to pump itself +1/+0; activations stack and expire at cleanup (CR 602.2, 611.2a, 514.2).
+[Bot1 Deck]
+Island
+Black Lotus
+Folk of the Pines
+Sol Ring
+Mox Emerald
+Forest
+Island x14
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Folk of the Pines.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Forest.Activate
+[T3 Bot1.Main2]
+Bot1.Battlefield.Sol Ring.Activate
+! Bot1.Battlefield.Folk of the Pines.Activate(Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Folk of the Pines.Activate
+? Bot1.Mana = {C}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Folk of the Pines.Power = 3
+? Bot1.Battlefield.Folk of the Pines.Toughness = 5
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Folk of the Pines.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Folk of the Pines.Power = 4
+? Bot1.Battlefield.Folk of the Pines.Toughness = 5
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Folk of the Pines.Power = 2
+? Bot1.Battlefield.Folk of the Pines.Toughness = 5
+[T7 Bot1.Main1]
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Folk of the Pines.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Folk of the Pines.Power = 3
+? Bot1.Battlefield.Folk of the Pines.Toughness = 5
+[T8 Bot2.Main1]
+
+[Expect]
+Bot1.Battlefield.Folk of the Pines.Power = 2
+Bot1.Battlefield.Folk of the Pines.Toughness = 5

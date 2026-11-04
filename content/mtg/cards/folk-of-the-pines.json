@@ -1,0 +1,8 @@
+{
+  "name": "Folk of the Pines",
+  "manaCost": "{4}{G}",
+  "type": "Creature — Dryad",
+  "power": 2,
+  "toughness": 5,
+  "oracleText": "{1}{G}: This creature gets +1/+0 until end of turn."
+}
