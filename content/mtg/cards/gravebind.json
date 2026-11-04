@@ -1,0 +1,6 @@
+{
+  "name": "Gravebind",
+  "manaCost": "{B}",
+  "type": "Instant",
+  "oracleText": "Target creature can't be regenerated this turn.\nDraw a card at the beginning of the next turn's upkeep."
+}

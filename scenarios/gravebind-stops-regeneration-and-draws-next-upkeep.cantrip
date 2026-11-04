@@ -1,0 +1,52 @@
+# Gravebind stops a shield saving an opposing creature this turn and draws for its caster on the next upkeep.
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Gravebind
+Lightning Bolt
+Island
+Island
+Island
+Swamp
+Island x20
+[Bot2 Deck]
+Mox Jet
+Mox Jet
+Will-o'-the-Wisp
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Will-o'-the-Wisp.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Gravebind.Cast(Bot2.Battlefield.Mox Jet)
+Bot1.Hand.Gravebind.Cast(Bot2.Battlefield.Will-o'-the-Wisp)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mox Jet#2.Activate
+Bot2.Battlefield.Will-o'-the-Wisp.Activate
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Will-o'-the-Wisp)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Will-o'-the-Wisp = (absent)
+? Bot1.Hand.Count = 3
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 4
+[T3 Bot1.Main1]
+? Bot1.Hand.Count = 5
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Hand.Count = 5
+Bot2.Graveyard = Will-o'-the-Wisp
