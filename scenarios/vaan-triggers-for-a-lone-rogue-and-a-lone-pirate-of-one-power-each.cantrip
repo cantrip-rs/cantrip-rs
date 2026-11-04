@@ -1,0 +1,47 @@
+# Vaan, Street Thief stays home while a lone Rogue and then a lone Pirate connect, each for the damage of its own power: Triton
+# Shorethief (a 1/2 Merfolk Rogue) on turn 3 and Swab Goblin (a 2/2 Goblin Pirate) on turn 5. Each trigger exiles a card from
+# the top of Bot2's library (Islands, so none can be cast) and creates a Treasure: two cards exiled in all.
+
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Vaan, Street Thief
+Triton Shorethief
+Swab Goblin
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Vaan, Street Thief.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Triton Shorethief.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Swab Goblin.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Triton Shorethief > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Attack(Swab Goblin > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Exile.Count = 2
+Bot2.Life = 17
+Bot1.Battlefield.Vaan, Street Thief.Power = 2

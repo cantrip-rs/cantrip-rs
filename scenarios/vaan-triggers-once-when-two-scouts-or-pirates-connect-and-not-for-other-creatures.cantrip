@@ -1,0 +1,42 @@
+# "One or more Scouts, Pirates, and/or Rogues you control deal combat damage to a player" (CR 603.2c): Vaan and Warship Scout
+# both connect on turn 3 and trigger one ability, so one card is exiled and one Treasure made. Memnite, an Artifact Construct,
+# attacks with them and is no Scout, Pirate or Rogue: on turn 5 it attacks alone, and Vaan's ability does not trigger.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Vaan, Street Thief
+Warship Scout
+Memnite
+Island x3
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Vaan, Street Thief.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Warship Scout.Cast
+Bot1.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Vaan, Street Thief > Bot2; Warship Scout > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+Bot1.Attack(Memnite > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Exile.Count = 1
+Bot2.Life = 15
+Bot1.Battlefield.Treasure Token.Tapped = false

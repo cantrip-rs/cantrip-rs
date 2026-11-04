@@ -1,0 +1,32 @@
+# Vaan, Street Thief connects and exiles Lightning Bolt from the top of Bot2's library; Bot1 declines to cast it, so Bot1 creates
+# a Treasure token. The Bolt stays in exile, no spell was cast (so no +1/+1 counters), and Bot2 took only the combat damage.
+
+[Bot1 Deck]
+Black Lotus
+Vaan, Street Thief
+Island x5
+Island x13
+
+[Bot2 Deck]
+Island x8
+Lightning Bolt
+Island x11
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Vaan, Street Thief.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Vaan, Street Thief > Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 18
+Exile = Lightning Bolt
+Bot1.Battlefield.Treasure Token.Tapped = false
+Bot1.Battlefield.Vaan, Street Thief.Power = 2

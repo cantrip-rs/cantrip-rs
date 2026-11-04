@@ -1,0 +1,47 @@
+# Vaan, Street Thief triggers only when a Scout, Pirate or Rogue deals combat damage to a PLAYER: on turn 3 Bot2's Holy Day
+# prevents all combat damage, so none is dealt to Bot2 (CR 615); on turn 5 Bot2's Memnite blocks Vaan and takes the damage
+# (CR 510.2). Nothing is exiled and Bot1 gets no Treasure either time.
+
+[Bot1 Deck]
+Black Lotus
+Vaan, Street Thief
+Island x6
+Island x12
+
+[Bot2 Deck]
+Mox Pearl
+Memnite
+Holy Day
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Vaan, Street Thief.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Vaan, Street Thief > Bot2)
+Bot1.Pass
+Bot2.Hand.Holy Day.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 20
+[T5 Bot1.Main1]
+Bot1.Attack(Vaan, Street Thief > Bot2)
+Bot1.Pass
+Bot2.Block(Memnite > Vaan, Street Thief)
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Exile.Count = 0
+Bot2.Life = 20
+Bot1.Battlefield.Treasure Token = (absent)

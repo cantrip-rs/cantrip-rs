@@ -1,0 +1,8 @@
+{
+  "name": "Vaan, Street Thief",
+  "manaCost": "{2}{R}",
+  "type": "Legendary Creature — Human Scout",
+  "power": 2,
+  "toughness": 2,
+  "oracleText": "Whenever one or more Scouts, Pirates, and/or Rogues you control deal combat damage to a player, exile the top card of that player's library. You may cast it. If you don't, create a Treasure token.\nWhenever you cast a spell you don't own, put a +1/+1 counter on each Scout, Pirate, and Rogue you control."
+}
