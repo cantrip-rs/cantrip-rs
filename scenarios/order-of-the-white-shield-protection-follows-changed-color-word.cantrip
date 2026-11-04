@@ -1,0 +1,43 @@
+# Sleight of Mind changes protection from black to red; a red spell is refused and a black spell can target the Knight (CR 612.2, 702.16b).
+[Bot1 Deck]
+Order of the White Shield
+Black Lotus
+Mox Sapphire
+Sleight of Mind
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Shock
+Stab
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Order of the White Shield.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Sleight of Mind.Cast(Order of the White Shield)
+Bot1.Pass
+Bot2.Pass
+Bot1.Colors(Black)
+Bot1.Colors(Red)
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+! Bot2.Hand.Shock.Cast(Bot1.Battlefield.Order of the White Shield)
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Stab.Cast(Bot1.Battlefield.Order of the White Shield)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Graveyard.Order of the White Shield.Power = 2
+Bot2.Graveyard.Stab.Colors = Black
