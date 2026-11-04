@@ -1,0 +1,56 @@
+# Coeurl: "{1}{W}, {T}: Tap target nonenchantment creature" (CR 602.2, 701.26a). Bot2's Ornithopter is tapped; Spirit of the Labyrinth, an enchantment creature, is refused. The cost is {1}{W} exactly: on turn 3 Mox Pearl, Bot1's only white source, has gone to a Savannah Lions, so with {B}{R} left the ability is not offered; on turn 5 Pearl and Mox Jet pay it and the pool is empty.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Coeurl
+Savannah Lions
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Spirit of the Labyrinth
+Mox Pearl
+Mox Jet
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Coeurl.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Spirit of the Labyrinth.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Coeurl.Activate(Ornithopter; Mana: short)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Coeurl.Activate(Spirit of the Labyrinth)
+Bot1.Battlefield.Coeurl.Activate(Ornithopter)
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Spirit of the Labyrinth.Tapped = false
+Bot1.Battlefield.Coeurl.Tapped = true
