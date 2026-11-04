@@ -1,0 +1,68 @@
+# Exorcist destroys black creatures of either player, including a multicolored one, but not a white creature or black enchantment (CR 105.2b, 701.8a).
+# Two nonwhite mana cannot pay {1}{W}; one blue and one white can, and activation taps the Exorcist.
+[Bot1 Deck]
+Black Lotus
+Exorcist
+Staunch Shieldmate
+Mox Sapphire
+Mox Jet
+Vampire of the Dire Moon
+Mox Pearl
+Delver of Secrets
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Baleful Strix
+Bad Moon
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Exorcist.Cast
+? Bot1.Mana = {W}
+Bot1.Hand.Staunch Shieldmate.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Vampire of the Dire Moon.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Baleful Strix.Cast
+Bot2.Hand.Bad Moon.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Battlefield.Exorcist.Activate(Bot2.Battlefield.Baleful Strix; Mana: short)
+Bot1.Hand.Delver of Secrets.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Exorcist.Activate(Bot1.Battlefield.Staunch Shieldmate)
+! Bot1.Battlefield.Exorcist.Activate(Bot2.Battlefield.Bad Moon)
+Bot1.Battlefield.Exorcist.Activate(Bot2.Battlefield.Baleful Strix)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Exorcist.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Baleful Strix; Black Lotus
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Exorcist.Activate(Bot1.Battlefield.Vampire of the Dire Moon)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Vampire of the Dire Moon; Black Lotus
+Bot2.Graveyard = Baleful Strix; Black Lotus
+Bot2.Battlefield.Bad Moon.Types = Enchantment
+Bot1.Battlefield.Staunch Shieldmate.Toughness = 3
