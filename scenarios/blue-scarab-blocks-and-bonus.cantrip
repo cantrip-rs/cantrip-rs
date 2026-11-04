@@ -1,0 +1,55 @@
+# Blue Scarab enchants a creature, bars blue blockers, and gives it +2/+2 only while an opponent controls a blue permanent (CR 303.4, 509.1b).
+
+[Bot1 Deck]
+Blue Scarab
+Mox Pearl
+Mox Sapphire
+Memnite
+Aegis Turtle
+Unsummon
+Island x20
+
+[Bot2 Deck]
+Island
+Aegis Turtle
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aegis Turtle.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Blue Scarab.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Blue Scarab.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Memnite.Power = 3
+? Bot1.Battlefield.Memnite.Toughness = 3
+Bot1.Attack(Memnite > Bot2)
+! Bot2.Block(Aegis Turtle > Memnite)
+Bot2.Block(Memnite > Memnite)
+[T4 Bot2.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Unsummon.Cast(Bot2.Battlefield.Aegis Turtle)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Blue Scarab.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 1
+Bot1.Battlefield.Memnite.Toughness = 1
+Bot2.Hand.Aegis Turtle.Power = 0
+Bot2.Graveyard.Memnite.Power = 1

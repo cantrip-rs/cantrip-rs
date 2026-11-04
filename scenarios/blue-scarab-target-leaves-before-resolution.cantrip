@@ -1,0 +1,43 @@
+# An Aura spell whose creature target leaves before resolution goes to the graveyard; a second copy attaches to a legal creature (CR 608.2b, 303.4a).
+[Bot1 Deck]
+Mox Pearl
+Mox Pearl
+Blue Scarab
+Blue Scarab
+Ornithopter
+Memnite
+Island
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Blue Scarab.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+? Bot2.Mana =
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ornithopter = (absent)
+? Bot1.Graveyard = Blue Scarab; Ornithopter
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Blue Scarab.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Blue Scarab.AttachedTo = Memnite
+Bot1.Battlefield.Memnite.Power = 1
