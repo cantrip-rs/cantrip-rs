@@ -1,0 +1,38 @@
+# Two Rays on different turns each mill one and draw only at the following turn's upkeep.
+[Bot1 Deck]
+Mox Sapphire
+Ray of Erasure x2
+Island x4
+Forest
+Plains
+Swamp
+Mountain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ray of Erasure.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ray of Erasure; Forest
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 6
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Ray of Erasure.Cast(Bot1)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Ray of Erasure; Mountain; Ray of Erasure; Forest
+? Bot1.Hand.Count = 6
+[T4 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+? Bot1.Hand.Count = 7
+[T5 Bot1.Upkeep]
+[Expect]
+Bot1.Hand.Count = 7
+Delayed.Count = 0

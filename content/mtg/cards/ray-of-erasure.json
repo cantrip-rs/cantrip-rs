@@ -1,0 +1,6 @@
+{
+  "name": "Ray of Erasure",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "Target player mills a card.\nDraw a card at the beginning of the next turn's upkeep."
+}
