@@ -1,0 +1,8 @@
+{
+  "name": "Qutrub Forayer",
+  "manaCost": "{2}{B}",
+  "type": "Creature — Zombie Horror",
+  "power": 3,
+  "toughness": 2,
+  "oracleText": "When this creature enters, choose one —\n• Destroy target creature that was dealt damage this turn.\n• Exile up to two target cards from a single graveyard."
+}

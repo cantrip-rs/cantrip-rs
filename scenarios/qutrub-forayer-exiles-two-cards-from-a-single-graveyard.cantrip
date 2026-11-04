@@ -1,0 +1,54 @@
+# Qutrub Forayer's second mode: "Exile up to two target cards from a single graveyard" (CR 701.13). Bot1's graveyard holds a Shock
+# and a Lightning Bolt, Bot2's holds a Lightning Bolt: Bot1 takes its own two, the second target cannot come from Bot2's graveyard
+# (the refusal), and Bot2's Bolt stays.
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Ruby
+Shock
+Lightning Bolt
+Qutrub Forayer
+Mountain
+Swamp x13
+
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x18
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Qutrub Forayer.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot1.Graveyard.Shock)
+! Bot1.Target(Bot2.Graveyard.Lightning Bolt)
+Bot1.Target(Bot1.Graveyard.Lightning Bolt)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Exile.Count = 2
+Bot1.Graveyard.Count = 0
+Bot2.Graveyard = Lightning Bolt
