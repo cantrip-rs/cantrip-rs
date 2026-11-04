@@ -1,0 +1,38 @@
+# Snowman blocks a 2/2, prevents combat damage both ways, and can tap to deal it one noncombat damage; another attacker is not a legal target (CR 615.1, 115.1c).
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Goblin Snowman
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Goblin Snowman.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Grizzly Bears > Bot1; Memnite > Bot1)
+Bot1.Block(Goblin Snowman > Grizzly Bears)
+[T4 Bot2.Blockers]
+Bot2.Pass
+! Bot1.Battlefield.Goblin Snowman.Activate(Memnite)
+Bot1.Battlefield.Goblin Snowman.Activate(Grizzly Bears)
+? Bot1.Battlefield.Goblin Snowman.Tapped = true
+! Bot1.Battlefield.Goblin Snowman.Activate(Grizzly Bears)
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 19
+Bot1.Battlefield.Goblin Snowman.Damage = 0
+Bot2.Battlefield.Grizzly Bears.Damage = 1
+Prevented = 2 Grizzly Bears > Goblin Snowman by Goblin Snowman; 1 Goblin Snowman > Grizzly Bears by Goblin Snowman
