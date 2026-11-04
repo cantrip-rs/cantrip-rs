@@ -1,0 +1,52 @@
+# If Icy Prison changes controller while its unpaid upkeep trigger is on the stack, the trigger's controller cannot sacrifice it.
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Gleemox
+Icy Prison
+Memnite
+Mox Ruby
+Valley Floodcaller
+Harmless Offering
+Island x18
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Valley Floodcaller.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Icy Prison.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Exile = Memnite
+[T5 Bot1.Upkeep]
+? Stack.Count = 1
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Bot1.Battlefield.Icy Prison)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Icy Prison.Tapped = false
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot2.Decline
+[Expect]
+Bot2.Battlefield.Icy Prison.Tapped = false
+Exile = Memnite
+Bot1.Battlefield.Memnite = (absent)

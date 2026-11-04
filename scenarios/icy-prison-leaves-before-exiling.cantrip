@@ -1,0 +1,44 @@
+# If Icy Prison leaves before its enters ability resolves, its leave trigger returns nothing and the creature is then exiled indefinitely.
+[Bot1 Deck]
+Mox Sapphire
+Gleemox
+Memnite
+Icy Prison
+Island x16
+[Bot2 Deck]
+Ornithopter
+Mox Pearl
+Mox Pearl
+Disenchant
+Island x16
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Icy Prison.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl#1.Activate
+Bot2.Battlefield.Mox Pearl#2.Activate
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Icy Prison)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Exile = Ornithopter
+Bot1.Graveyard.Icy Prison.Colors = Blue
+Bot2.Battlefield.Ornithopter = (absent)
+Bot1.Battlefield.Memnite.Power = 1

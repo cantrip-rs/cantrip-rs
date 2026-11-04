@@ -1,0 +1,46 @@
+# Both cards of a merged creature exiled by Icy Prison return when it leaves (CR 730.3c, 607.2a).
+[Bot1 Deck]
+Plains
+Plains
+Ornithopter
+Black Lotus
+Cubwarden
+Mox Sapphire
+Gleemox
+Icy Prison
+Island x20
+[Bot2 Deck]
+Island x25
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains#1.Activate
+Bot1.Hand.Cubwarden.Cast(Ornithopter; Ability: Mutate)
+Bot1.Pass
+Bot1.Modes(2)
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Blue)
+Bot1.Hand.Icy Prison.Cast
+Bot1.Pass
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Cubwarden; Ornithopter
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+Bot2.Decline
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Cubwarden.Power = 3
+Bot1.Battlefield.Ornithopter.Power = 0
+Exile =
