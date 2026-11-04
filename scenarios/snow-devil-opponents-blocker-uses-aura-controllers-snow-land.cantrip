@@ -1,0 +1,35 @@
+# The Aura's controller, not the enchanted blocker's controller, supplies the snow land (CR 109.5).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Snow Devil
+Snow-Covered Forest
+Memnite
+Island x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Snow-Covered Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Snow Devil.Cast(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Llanowar Elves.Keywords = Flying
+Bot1.Attack(Memnite > Bot2)
+Bot2.Block(Llanowar Elves > Memnite)
+? Bot2.Battlefield.Llanowar Elves.Keywords = FirstStrike; Flying
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard.Memnite.Power = 1
+Bot2.Battlefield.Llanowar Elves.Damage = 0
