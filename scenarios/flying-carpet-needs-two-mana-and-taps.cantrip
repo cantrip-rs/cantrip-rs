@@ -1,0 +1,38 @@
+# A single mana cannot pay the Carpet's {2}; two can, and activation taps it (CR 602.2b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Flying Carpet
+Memnite
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Flying Carpet.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Battlefield.Flying Carpet.Activate(Bot1.Battlefield.Memnite; Mana: short)
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Flying Carpet.Activate(Bot1.Battlefield.Memnite)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Flying Carpet.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Memnite.Keywords = Flying
+Bot1.Battlefield.Flying Carpet.Tapped = true
