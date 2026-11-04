@@ -1,0 +1,52 @@
+# Auron's Inspiration: "Attacking creatures get +2/+0 until end of turn" (CR 611.2c). Cast on turn 1 with nothing attacking it
+# pumps nothing (a creature that attacks later is unaffected). On turn 3 Bot1 flashes it back for {2}{W}{W} while one of its two
+# Ornithopters attacks: the attacker is 2/2, the other stays 0/2, and the card is exiled.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Auron's Inspiration
+Ornithopter
+Ornithopter
+Plains
+Island x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Auron's Inspiration.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 0
+[T3 Bot1.Main1]
+Bot1.Hand.Plains.Play
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ornithopter#1 > Bot2)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Plains.Activate
+Bot1.Graveyard.Auron's Inspiration.Cast(Ability: Flashback)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter#1.Power = 2
+? Bot1.Battlefield.Ornithopter#1.Toughness = 2
+? Bot1.Battlefield.Ornithopter#2.Power = 0
+
+[Expect]
+Bot1.Exile.Auron's Inspiration.Colors.Count = 1
+Bot1.Graveyard =

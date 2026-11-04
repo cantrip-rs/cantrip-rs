@@ -1,0 +1,6 @@
+{
+  "name": "Auron's Inspiration",
+  "manaCost": "{2}{W}",
+  "type": "Instant",
+  "oracleText": "Attacking creatures get +2/+0 until end of turn.\nFlashback {2}{W}{W} (You may cast this card from your graveyard for its flashback cost. Then exile it.)"
+}
