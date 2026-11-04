@@ -1,0 +1,34 @@
+# Blinking Spirit activates for zero mana in response to Lightning Bolt and returns to its owner's hand before the spell resolves (CR 602.2, 608.2b).
+[Bot1 Deck]
+Blinking Spirit
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Plains x20
+[Bot2 Deck]
+Mox Ruby
+Lightning Bolt
+Mountain x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Blinking Spirit.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Blinking Spirit)
+Bot1.Battlefield.Blinking Spirit.Activate
+? Bot1.Mana =
+[Bot2.Main2]
+[Expect]
+Bot1.Hand.Blinking Spirit.Colors = White
+Bot1.Battlefield.Blinking Spirit = (absent)
+Bot2.Graveyard = Lightning Bolt
