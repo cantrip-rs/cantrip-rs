@@ -1,0 +1,6 @@
+{
+  "name": "Touch of Darkness",
+  "manaCost": "{B}",
+  "type": "Instant",
+  "oracleText": "One or more target creatures become black until end of turn."
+}

@@ -1,0 +1,57 @@
+# When one target leaves, the other still becomes black; when the only target leaves, the spell does nothing (CR 608.2b).
+[Bot1 Deck]
+Touch of Darkness
+Touch of Darkness
+Touch of Darkness
+Mox Jet
+Mox Jet
+Ornithopter
+Memnite
+Swamp x20
+[Bot2 Deck]
+Mox Ruby
+Mox Ruby
+Shock
+Shock
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Mox Jet#1.Activate
+Bot1.Hand.Touch of Darkness.Cast
+Bot1.Target(Bot1.Battlefield.Ornithopter; Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot2.Battlefield.Mox Ruby#1.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Ornithopter.Colors = Black
+? Bot2.Graveyard = Ornithopter; Shock
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Touch of Darkness.Cast
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard = Touch of Darkness; Ornithopter; Touch of Darkness
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Touch of Darkness.Cast
+Bot1.Target(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Memnite.Colors = Black
