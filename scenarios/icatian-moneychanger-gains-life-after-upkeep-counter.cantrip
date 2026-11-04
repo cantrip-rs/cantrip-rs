@@ -1,0 +1,38 @@
+# Moneychanger enters with three credit counters and deals three damage; its next upkeep adds one before sacrificing it for four life (CR 614.1c, 113.7a).
+[Bot1 Deck]
+Icatian Moneychanger
+Mox Pearl
+Black Lotus
+Unflinching Hortimancer
+Plains x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Icatian Moneychanger.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Icatian Moneychanger.Counters.Credit = 3
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Unflinching Hortimancer.Cast
+! Bot1.Battlefield.Icatian Moneychanger.Activate
+[T2 Bot2.Upkeep]
+! Bot1.Battlefield.Icatian Moneychanger.Activate
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Icatian Moneychanger.Counters.Credit = 4
+Bot1.Battlefield.Icatian Moneychanger.Activate
+? Bot1.Graveyard = Icatian Moneychanger; Black Lotus
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 21
+Bot1.Graveyard = Icatian Moneychanger; Black Lotus
+Bot1.Battlefield.Unflinching Hortimancer.Counters.PlusOnePlusOne = 1
