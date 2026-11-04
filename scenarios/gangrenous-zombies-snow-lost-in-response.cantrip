@@ -1,0 +1,42 @@
+# Removing Prismatic Omen in response removes the Swamp type before resolution, so the Zombies deal 1 (CR 608.2h).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Gangrenous Zombies
+Prismatic Omen
+Snow-Covered Forest
+Ornithopter
+Swamp x20
+[Bot2 Deck]
+Ornithopter
+Black Lotus
+Disenchant
+Swamp x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Snow-Covered Forest.Play
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Black)
+Bot1.Hand.Gangrenous Zombies.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Prismatic Omen.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Gangrenous Zombies.Activate
+Bot1.Choose(Tap Gangrenous Zombies)
+? Bot1.Graveyard = Gangrenous Zombies; Black Lotus; Black Lotus
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Prismatic Omen)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Battlefield.Ornithopter.Damage = 1
+Bot2.Battlefield.Ornithopter.Damage = 1
