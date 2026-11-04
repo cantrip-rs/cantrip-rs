@@ -1,0 +1,38 @@
+# Reno and Rude (2/1 menace): "Whenever Reno and Rude deals combat damage to a player, exile the top card of that player's library.
+# Then you may sacrifice another creature or artifact. If you do, you may play the exiled card this turn, and mana of any type can
+# be spent to cast it." On turn 3 it hits Bot2 (2), exiling a Lightning Bolt; Bot1 sacrifices its Memnite (a creature and an
+# artifact, "another" so Reno and Rude itself is no choice) and casts the Bolt from exile paying {R} with black mana: Bot2 is at 15.
+[Bot1 Deck]
+Swamp
+Mox Jet
+Memnite
+Reno and Rude
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Island x8
+Lightning Bolt
+Island x11
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reno and Rude.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Reno and Rude > Bot2)
+Bot1.Choose(Memnite)
+Bot1.Battlefield.Swamp.Activate
+Bot1.Exile.Lightning Bolt.Cast(Bot2)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 15
+Bot1.Graveyard = Memnite
+Exile.Count = 0

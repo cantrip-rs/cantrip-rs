@@ -1,0 +1,35 @@
+# "You may play the exiled card this turn": Bot1 sacrifices its Memnite on turn 3 but does not cast the exiled Lightning Bolt; on
+# turn 5, with a Swamp untapped to pay for it, the Bolt in exile can no longer be cast (the refusal).
+[Bot1 Deck]
+Swamp
+Mox Jet
+Memnite
+Reno and Rude
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Island x8
+Lightning Bolt
+Island x11
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reno and Rude.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Reno and Rude > Bot2)
+Bot1.Choose(Memnite)
+[T5 Bot1.Main1]
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Bot2.Life = 18
+Exile = Lightning Bolt
+Exile.Count = 1
+Bot1.Graveyard = Memnite

@@ -1,0 +1,34 @@
+# The exiled card may be played, not only cast, so an Island exiled from Bot2's library is played as Bot1's land drop (CR 305.1;
+# Bot1 has not played a land on turn 3). "Another creature or artifact" excludes a land: Bot1 may not sacrifice a Swamp (the
+# refusal), so it sacrifices the Mox Jet, an artifact that is no creature, instead.
+[Bot1 Deck]
+Swamp
+Mox Jet
+Memnite
+Reno and Rude
+Swamp
+Swamp
+Swamp
+Swamp x12
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Reno and Rude.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(Reno and Rude > Bot2)
+! Bot1.Choose(Swamp)
+Bot1.Choose(Mox Jet)
+Bot1.Exile.Island.Play
+
+[Expect]
+Bot2.Life = 18
+Exile.Count = 0
+Bot1.Graveyard = Mox Jet
+Bot1.Battlefield.Count = 4

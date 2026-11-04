@@ -1,0 +1,35 @@
+# Menace (CR 702.110): one Memnite cannot block Reno and Rude (the refusal), so it connects. With no other creature or artifact on
+# Bot1's side there is nothing to sacrifice and nothing is asked: the exiled Lightning Bolt cannot be played (the refusal).
+
+[Bot1 Deck]
+Swamp
+Swamp
+Reno and Rude
+Swamp x17
+
+[Bot2 Deck]
+Memnite
+Island x8
+Lightning Bolt
+Island x10
+
+[Actions]
+Bot1.Hand.Swamp.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Swamp.Play
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Swamp#2.Activate
+Bot1.Hand.Reno and Rude.Cast
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Reno and Rude > Bot2)
+! Bot2.Block(Memnite > Reno and Rude)
+[T5 Bot1.Main2]
+! Bot1.Exile.Lightning Bolt.Cast(Bot2)
+
+[Expect]
+Bot2.Life = 18
+Exile = Lightning Bolt
+Exile.Count = 1
+Bot1.Battlefield.Count = 3
