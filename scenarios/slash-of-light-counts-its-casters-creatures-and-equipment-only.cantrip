@@ -1,0 +1,46 @@
+# Slash of Light deals damage equal to the creatures plus the Equipment its caster controls, counted as it resolves (the
+# ruling, CR 608.2h): Bot1's Ornithopter and Memnite and its Paradise Mantle make 3, so Bot2's Yoked Ox (0/4) is left
+# with 3 damage and lives. Bot1's Mox Pearl is an artifact but no Equipment, and Bot2's own creatures and Equipment are
+# not counted. "Target creature" refuses a player.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Paradise Mantle
+Ornithopter
+Memnite
+Slash of Light
+Island x10
+
+[Bot2 Deck]
+Plains
+Yoked Ox
+Ornithopter
+Paradise Mantle
+Island x10
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Paradise Mantle.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Memnite.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Plains.Play
+Bot2.Battlefield.Plains.Activate
+Bot2.Hand.Yoked Ox.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Paradise Mantle.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Plains.Activate
+! Bot1.Hand.Slash of Light.Cast(Bot2)
+Bot1.Hand.Slash of Light.Cast(Yoked Ox)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Yoked Ox.Damage = 3
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Battlefield.Yoked Ox.Damage = 3
+Bot1.Graveyard = Slash of Light
