@@ -1,0 +1,35 @@
+# Gate cannot be activated during an opponent's upkeep even before it has been activated that turn (CR 602.5).
+# Brainstorm ensures Bot1 has priority in that upkeep with a creature and a legal artifact available.
+[Bot1 Deck]
+Gate to Phyrexia
+Mox Jet
+Gleemox
+Ornithopter
+Brainstorm
+Mox Sapphire
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Gate to Phyrexia.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Upkeep]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Brainstorm.Cast
+! Bot1.Battlefield.Gate to Phyrexia.Activate(Bot1.Battlefield.Gleemox)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Gleemox.Tapped = true
+Bot1.Graveyard.Brainstorm.Colors = Blue

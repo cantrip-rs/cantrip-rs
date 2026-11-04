@@ -1,0 +1,6 @@
+{
+  "name": "Gate to Phyrexia",
+  "manaCost": "{B}{B}",
+  "type": "Enchantment",
+  "oracleText": "Sacrifice a creature: Destroy target artifact. Activate only during your upkeep and only once each turn."
+}

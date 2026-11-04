@@ -1,0 +1,65 @@
+# Its controller sacrifices one creature to destroy either player's artifact, only in its controller's upkeep and once per turn (CR 602.5, 701.8a).
+[Bot1 Deck]
+Gate to Phyrexia
+Mox Jet
+Gleemox
+Ornithopter
+Ornithopter
+Ornithopter
+Swamp x20
+
+[Bot2 Deck]
+Memnite
+Mox Ruby
+Mountain
+Lightning Bolt
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Gleemox.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: Black)
+Bot1.Hand.Gate to Phyrexia.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Gate to Phyrexia.Activate(Bot1.Battlefield.Mox Jet)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Hand.Mountain.Play
+[T3 Bot1.Upkeep]
+! Bot1.Battlefield.Gate to Phyrexia.Activate(Bot1.Battlefield.Gate to Phyrexia)
+Bot1.Battlefield.Gate to Phyrexia.Activate(Bot2.Battlefield.Mox Ruby)
+! Bot1.Choose(Mox Jet)
+! Bot1.Choose(Memnite)
+Bot1.Choose(Ornithopter)
+? Bot1.Graveyard.Ornithopter.Power = 0
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Gate to Phyrexia.Activate(Bot1.Battlefield.Mox Jet)
+? Bot2.Battlefield.Mox Ruby = (absent)
+[T4 Bot2.Upkeep]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1)
+Bot2.Pass
+! Bot1.Battlefield.Gate to Phyrexia.Activate(Bot1.Battlefield.Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 17
+[T5 Bot1.Upkeep]
+Bot1.Battlefield.Gate to Phyrexia.Activate(Bot1.Battlefield.Mox Jet)
+Bot1.Choose(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Mox Jet = (absent)
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Graveyard.Ornithopter#1.Power = 0
+Bot1.Graveyard.Ornithopter#2.Power = 0
+Bot2.Battlefield.Mox Ruby = (absent)
