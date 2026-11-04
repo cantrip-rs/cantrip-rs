@@ -1,0 +1,6 @@
+{
+  "name": "Circle of Power",
+  "manaCost": "{3}{B}",
+  "type": "Sorcery",
+  "oracleText": "You draw two cards and you lose 2 life. Create a 0/1 black Wizard creature token with \"Whenever you cast a noncreature spell, this token deals 1 damage to each opponent.\"\nWizards you control get +1/+0 and gain lifelink until end of turn."
+}

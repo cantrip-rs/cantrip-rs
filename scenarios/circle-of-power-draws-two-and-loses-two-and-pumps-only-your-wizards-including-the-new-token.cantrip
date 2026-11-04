@@ -1,0 +1,78 @@
+# Circle of Power: "You draw two cards and you lose 2 life. Create a 0/1 black Wizard ... Wizards you control get +1/+0 and gain
+# lifelink until end of turn." Bot1 made a Wizard token on turn 1 (Mage Siege). Bot2's Hero, a Wizard through Black Mage's Rod,
+# is 2/1. On turn 3 Bot1's Circle of Power draws two (hand 6 -> 7 after casting... see Expect), loses 2 (20 -> 18), makes the
+# second Wizard, and both of Bot1's Wizards get +1/+0 and lifelink: the older one attacks for 1 and Bot1 gains 1 (19), Bot2
+# 19; Bot2's Hero stays 2/1 without lifelink. On turn 5 the effect has ended: both tokens are 0/1 again with no keywords.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Sapphire
+Mox Pearl
+Lindblum, Industrial Regency
+Circle of Power
+Island
+Island x15
+
+[Bot2 Deck]
+Mox Jet
+Mox Ruby
+Black Mage's Rod
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Lindblum, Industrial Regency.Cast(Ability: Adventure)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Black Mage's Rod.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Circle of Power.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot2.Life = 19
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+? Bot1.Life = 18
+? Bot1.Hand.Count = 4
+? Bot1.Battlefield.Count = 6
+? Bot1.Battlefield.Wizard Token#1.Power = 1
+? Bot1.Battlefield.Wizard Token#1.Toughness = 1
+? Bot1.Battlefield.Wizard Token#1.Keywords = Lifelink
+? Bot1.Battlefield.Wizard Token#2.Power = 1
+? Bot1.Battlefield.Wizard Token#2.Keywords = Lifelink
+? Bot2.Battlefield.Hero Token.Power = 2
+? Bot2.Battlefield.Hero Token.Toughness = 1
+? Bot2.Battlefield.Hero Token.Keywords = (absent)
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Wizard Token#1 > Bot2)
+[T3 Bot1.Main2]
+? Bot1.Life = 19
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Wizard Token#1.Power = 0
+Bot1.Battlefield.Wizard Token#1.Toughness = 1
+Bot1.Battlefield.Wizard Token#1.Keywords = (absent)
+Bot1.Battlefield.Wizard Token#2.Power = 0
+Bot1.Battlefield.Wizard Token#2.Keywords = (absent)
+Bot2.Battlefield.Hero Token.Power = 2
