@@ -1,0 +1,72 @@
+# Summon: Primal Garuda's chapter I deals exactly 4 damage to a tapped creature an opponent controls: Bot2's Aegis
+# Turtle, tapped from attacking, is left 0/5 with 4 damage. Bot2's untapped Kobolds of Kher Keep and Bot1's own tapped
+# Ornithopter are refused. Chapters II and III give another creature Bot1 controls +1/+0 and flying until end of turn
+# (CR 611.2a), the Saga itself refused: Phyrexian Walker is 1/3 with flying, and 0/3 without it on Bot2's turn. The Saga
+# flies, and after chapter III it is sacrificed (CR 714.4).
+
+[Bot1 Deck]
+Plains
+Ornithopter
+Phyrexian Walker
+Black Lotus
+Summon: Primal Garuda
+Plains x12
+
+[Bot2 Deck]
+Island
+Aegis Turtle
+Memnite
+Kobolds of Kher Keep
+Island x12
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Phyrexian Walker.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Aegis Turtle.Cast
+Bot2.Hand.Memnite.Cast
+[T4 Bot2.Main1]
+Bot2.Hand.Kobolds of Kher Keep.Cast
+Bot2.Attack(Aegis Turtle; Memnite > Bot1)
+[T5 Bot1.Main1]
+Bot1.Attack(Ornithopter > Bot2)
+[T5 Bot1.Main2]
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Summon: Primal Garuda.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Ornithopter)
+! Bot1.Target(Kobolds of Kher Keep)
+Bot1.Target(Aegis Turtle)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Aegis Turtle.Damage = 4
+[T7 Bot1.Main1]
+! Bot1.Target(Summon: Primal Garuda)
+Bot1.Target(Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Phyrexian Walker.Power = 1
+? Bot1.Battlefield.Phyrexian Walker.Toughness = 3
+? Bot1.Battlefield.Phyrexian Walker.Keywords = Flying
+? Bot1.Battlefield.Summon: Primal Garuda.Keywords = Flying
+[T8 Bot2.Main1]
+? Bot1.Battlefield.Phyrexian Walker.Power = 0
+? Bot1.Battlefield.Phyrexian Walker.Keywords = (absent)
+[T9 Bot1.Main1]
+Bot1.Target(Phyrexian Walker)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Phyrexian Walker.Power = 1
+[T9 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Phyrexian Walker.Keywords = Flying
+Bot1.Battlefield.Summon: Primal Garuda = (absent)
+Bot1.Graveyard = Summon: Primal Garuda; Black Lotus
+Bot1.Life = 19

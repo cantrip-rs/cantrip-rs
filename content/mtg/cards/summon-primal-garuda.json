@@ -1,0 +1,11 @@
+{
+  "name": "Summon: Primal Garuda",
+  "manaCost": "{3}{W}",
+  "type": "Enchantment Creature — Saga Harpy",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Aerial Blast — This creature deals 4 damage to target tapped creature an opponent controls.\nII, III — Slipstream — Another target creature you control gets +1/+0 and gains flying until end of turn.\nFlying",
+  "keywords": [
+    "Flying"
+  ]
+}
