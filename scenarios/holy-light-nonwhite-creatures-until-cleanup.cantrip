@@ -1,0 +1,63 @@
+# Holy Light shrinks nonwhite creatures on both sides, including colorless creatures, while white multicolored creatures are spared; the effect ends at cleanup (CR 611.2a, 704.5f).
+[Bot1 Deck]
+Holy Light
+Black Lotus
+Black Lotus
+Grizzly Bears
+Llanowar Elves
+Mox Jet
+Mox Ruby
+Forest x20
+[Bot2 Deck]
+Ornithopter
+Watchwolf
+Serra Zealot
+Black Lotus
+Mox Emerald
+Black Lotus
+Ashcoat Bear
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+Bot1.Hand.Llanowar Elves.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Serra Zealot.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Watchwolf.Cast
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+! Bot1.Hand.Holy Light.Cast(Mana: short)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Holy Light.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Grizzly Bears.Power = 1
+? Bot1.Battlefield.Grizzly Bears.Toughness = 1
+? Bot1.Graveyard = Llanowar Elves; Holy Light; Black Lotus; Black Lotus
+? Bot2.Battlefield.Ornithopter.Power = -1
+? Bot2.Battlefield.Ornithopter.Toughness = 1
+? Bot2.Battlefield.Serra Zealot.Power = 1
+? Bot2.Battlefield.Serra Zealot.Toughness = 1
+? Bot2.Battlefield.Watchwolf.Power = 3
+? Bot2.Battlefield.Watchwolf.Toughness = 3
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Ashcoat Bear.Cast
+Bot2.Pass
+Bot1.Pass
+? Bot2.Battlefield.Ashcoat Bear.Power = 2
+? Bot2.Battlefield.Ashcoat Bear.Toughness = 2
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Grizzly Bears.Power = 2
+Bot1.Battlefield.Grizzly Bears.Toughness = 2
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Battlefield.Ornithopter.Toughness = 2
