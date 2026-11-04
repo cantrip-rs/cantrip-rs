@@ -1,0 +1,8 @@
+{
+  "name": "Hunding Gjornersen",
+  "manaCost": "{3}{W}{U}{U}",
+  "type": "Legendary Creature — Human Warrior",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Rampage 1 (Whenever this creature becomes blocked, it gets +1/+1 until end of turn for each creature blocking it beyond the first.)"
+}

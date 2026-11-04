@@ -1,0 +1,35 @@
+# One blocker gives no rampage bonus (CR 702.23a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Hunding Gjornersen
+Island x25
+[Bot2 Deck]
+Ornithopter
+Island x25
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Hunding Gjornersen.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Hunding Gjornersen > Bot2)
+Bot2.Block(Ornithopter > Hunding Gjornersen)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hunding Gjornersen.Power = 5
+? Bot1.Battlefield.Hunding Gjornersen.Toughness = 4
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Hunding Gjornersen.Power = 5
+Bot1.Battlefield.Hunding Gjornersen.Toughness = 4
