@@ -1,0 +1,66 @@
+# Two white creatures, an opposing white creature and a colorless creature cannot pay the cost; a white-black creature can, and only creatures are targets (CR 602.2b, 115.1c).
+# An attempted activation with insufficient eligible creatures rolls back (CR 733).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Hand of Justice
+Suntail Hawk
+Suntail Hawk
+Nip Gwyllion
+Memnite
+Island x20
+[Bot2 Deck]
+Mox Pearl
+Staunch Shieldmate
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Hand of Justice.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Staunch Shieldmate.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Hand of Justice.Activate(Staunch Shieldmate)
+? Bot1.Battlefield.Hand of Justice.Tapped = false
+? Bot1.Battlefield.Suntail Hawk#1.Tapped = false
+? Bot1.Battlefield.Suntail Hawk#2.Tapped = false
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot2.Battlefield.Staunch Shieldmate.Tapped = false
+? Bot1.Life = 20
+? Bot1.Mana =
+? Stack.Count = 0
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Nip Gwyllion.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Hand of Justice.Activate(Bot2.Battlefield.Mox Pearl)
+Bot1.Battlefield.Hand of Justice.Activate(Staunch Shieldmate)
+Bot1.Choose(Tap Hand of Justice)
+! Bot1.Choose(Suntail Hawk#1; Suntail Hawk#2)
+! Bot1.Choose(Memnite)
+! Bot1.Choose(Staunch Shieldmate)
+Bot1.Choose(Suntail Hawk#1; Suntail Hawk#2; Nip Gwyllion)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Graveyard.Staunch Shieldmate.Power = 1
+Bot1.Battlefield.Hand of Justice.Tapped = true
+Bot1.Battlefield.Suntail Hawk#1.Tapped = true
+Bot1.Battlefield.Suntail Hawk#2.Tapped = true
+Bot1.Battlefield.Nip Gwyllion.Tapped = true
+Bot1.Battlefield.Memnite.Tapped = false

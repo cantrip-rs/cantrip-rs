@@ -1,0 +1,44 @@
+# Hand of Justice taps itself and three white creatures, including the target, to destroy it (CR 602.2b, 701.8a).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Pearl
+Hand of Justice
+Suntail Hawk
+Suntail Hawk
+Suntail Hawk
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: White)
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Hand of Justice.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Suntail Hawk.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Hand of Justice.Activate(Suntail Hawk)
+Bot1.Choose(Tap Hand of Justice)
+Bot1.Choose(Suntail Hawk#1; Suntail Hawk#2; Suntail Hawk#3)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Suntail Hawk; Black Lotus; Black Lotus
+Bot1.Battlefield.Hand of Justice.Tapped = true
+Bot1.Battlefield.Suntail Hawk#1.Tapped = true
+Bot1.Battlefield.Suntail Hawk#2.Tapped = true
+Bot2.Battlefield.Memnite.Power = 1

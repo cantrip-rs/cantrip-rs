@@ -1,0 +1,8 @@
+{
+  "name": "Hand of Justice",
+  "manaCost": "{5}{W}",
+  "type": "Creature — Avatar",
+  "power": 2,
+  "toughness": 6,
+  "oracleText": "{T}, Tap three untapped white creatures you control: Destroy target creature."
+}
