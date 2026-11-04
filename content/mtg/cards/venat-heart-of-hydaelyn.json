@@ -1,0 +1,21 @@
+{
+  "name": "Venat, Heart of Hydaelyn",
+  "manaCost": "{1}{W}{W}",
+  "type": "Legendary Creature — Elder Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "Whenever you cast a legendary spell, draw a card. This ability triggers only once each turn.\nHero's Sundering — {7}, {T}: Exile target nonland permanent. Transform Venat. Activate only as a sorcery.",
+  "backFace": {
+    "name": "Hydaelyn, the Mothercrystal",
+    "colorIndicator": [
+      "White"
+    ],
+    "type": "Legendary Creature — God",
+    "power": 4,
+    "toughness": 4,
+    "oracleText": "Indestructible\nBlessing of Light — At the beginning of combat on your turn, put a +1/+1 counter on another target creature you control. Until your next turn, it gains indestructible. If that creature is legendary, draw a card.",
+    "keywords": [
+      "Indestructible"
+    ]
+  }
+}

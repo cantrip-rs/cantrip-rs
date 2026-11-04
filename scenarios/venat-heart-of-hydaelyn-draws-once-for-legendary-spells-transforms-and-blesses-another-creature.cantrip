@@ -1,0 +1,90 @@
+# Venat, Heart of Hydaelyn: on turn 1 Bot1 casts Memnite (not legendary: no card), then Isamaru (legendary: Venat draws
+# Sol Ring), then Mox Amber (legendary, but the ability triggers only once each turn: no card, a limit no numbered rule states), so its hand is
+# empty. On turn 3 Hero's Sundering is refused in the beginning of combat step (sorcery speed, CR 602.5d) and taken in the
+# second main phase: {7}, {T} exiles Bot2's Ornithopter and Venat transforms (CR 701.27a) into Hydaelyn, a 4/4 with
+# indestructible. At the beginning of combat on turn 5 Blessing of Light refuses Hydaelyn ("another") and puts a +1/+1 counter
+# on Isamaru, which is legendary, so Bot1 draws; Isamaru is indestructible through Bot2's turn 6 and not on turn 7 ("until
+# your next turn", CR 611.2a). On turn 7 the blessing on the nonlegendary Memnite draws nothing.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Venat, Heart of Hydaelyn
+Memnite
+Black Lotus
+Isamaru, Hound of Konda
+Mox Amber
+Sol Ring
+Black Lotus
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Venat, Heart of Hydaelyn.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 3
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Isamaru, Hound of Konda.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand = Mox Amber; Sol Ring
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Amber.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 0
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.BeginCombat]
+! Bot1.Battlefield.Venat, Heart of Hydaelyn.Activate(Ability: Hero's Sundering; Bot2.Battlefield.Ornithopter)
+[T3 Bot1.Main2]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Amber.Activate(Color: White)
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Venat, Heart of Hydaelyn.Activate(Ability: Hero's Sundering; Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Exile = Ornithopter
+? Bot1.Battlefield.Hydaelyn, the Mothercrystal.Power = 4
+? Bot1.Battlefield.Hydaelyn, the Mothercrystal.Keywords = Indestructible
+? Bot1.Battlefield.Hydaelyn, the Mothercrystal.Tapped = true
+[T5 Bot1.BeginCombat]
+! Bot1.Target(Hydaelyn, the Mothercrystal)
+Bot1.Target(Isamaru, Hound of Konda)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Isamaru, Hound of Konda.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = Indestructible
+? Bot1.Hand.Count = 2
+[T6 Bot2.Main1]
+? Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = Indestructible
+[T7 Bot1.Upkeep]
+? Bot1.Battlefield.Isamaru, Hound of Konda.Keywords = (absent)
+[T7 Bot1.BeginCombat]
+Bot1.Target(Memnite)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Memnite.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Memnite.Keywords = Indestructible
+Bot1.Battlefield.Isamaru, Hound of Konda.Counters.PlusOnePlusOne = 1
+Bot1.Hand.Count = 3
+Exile = Ornithopter
