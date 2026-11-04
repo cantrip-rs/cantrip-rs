@@ -81,6 +81,20 @@ pub fn target_creature_gets_and_gains_first_strike<const P: i16, const T: i16>(g
     Ok(())
 }
 
+/// "Target creature gets +1/+1 and gains hexproof until end of turn. Untap it." (CR 611.2a, 702.11, 701.26b): the pump and the
+/// keyword are one instruction, the untap another sentence; all three do nothing if the target is no longer legal as the
+/// spell resolves (CR 608.2b). Octopus Form, Shore Up and Magic Damper print it.
+pub fn target_creature_gets_plus_one_gains_hexproof_and_untaps(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    let Some(creature) = crate::targets::object(g, item, 0) else { return Ok(()) };
+    instruction(g, |g| {
+        crate::pump(g, item.object, creature, 1, 1);
+        gain_hexproof_until_end_of_turn(g, item.object, creature);
+    });
+    g.end_sentence();
+    g.untap(creature);
+    Ok(())
+}
+
 /// "Target creature gets +`P`/+`T` and gains haste until end of turn" (CR 611.2a, 702.10): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Wild Ride
 /// (+3/+0) and Fame (+2/+0) print it.
