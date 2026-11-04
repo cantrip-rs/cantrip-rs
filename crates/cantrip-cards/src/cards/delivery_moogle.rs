@@ -1,5 +1,5 @@
 use cantrip_api::*;
-use cantrip_mechanics::library::search_zone_and_or_library;
+use cantrip_mechanics::library::{put_found_into_hand, search_zone_and_or_library};
 use cantrip_mechanics::{select, triggers};
 use cantrip_oracle as oracle;
 
@@ -22,8 +22,8 @@ fn enters(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     let rule = select::artifact_cards(select::up_to(1)).with(select::mana_value_at_most(2));
     let (found, searched_library) =
         search_zone_and_or_library(g, you, item.object, Zone::graveyard(you), SearchDestination::Hand, Purpose::PutIntoHand, &ASK, rule)?;
-    let moves: Vec<(ObjectId, Zone)> = found.iter().map(|&c| (c, Zone::hand(you))).collect();
-    g.move_together_revealed(&moves, MoveReason::Search);
+    g.reveal(you, &found);
+    put_found_into_hand(g, you, &found, true);
     if searched_library {
         g.shuffle(you);
     }

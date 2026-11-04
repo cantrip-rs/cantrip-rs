@@ -90,7 +90,7 @@ fn another_creature(q: &dyn Query, choice: &Choice, _: u32) -> Verdict {
     Verdict::each(choice, |id| id != choice.source && q.chars(id).is(CardType::Creature))
 }
 
-fn forest(q: &dyn Query, choice: &Choice, word: u32) -> Verdict {
+fn subtype(q: &dyn Query, choice: &Choice, word: u32) -> Verdict {
     let wanted = crate::lands::word(q, choice.source, u16::try_from(word).unwrap_or(u16::MAX));
     Verdict::each(choice, |card| q.chars(card).has_subtype(wanted))
 }
@@ -140,7 +140,7 @@ pub const FOREST: Part = subtype_card(Subtype::Forest);
 /// "A [subtype] card" (CR 205.3, 612.2): a card with `subtype`, the type read through the words of the text of the card that asks
 /// and a card as it is where it is. `FOREST` is the Forest card; From Father to Son searches for a Vehicle card.
 pub const fn subtype_card(subtype: Subtype) -> Part {
-    part(&(forest as SelectFn), crate::lands::sub(subtype) as u32, "")
+    part(&(self::subtype as SelectFn), crate::lands::sub(subtype) as u32, "")
 }
 
 /// "A Vehicle card", which may be left unfound (CR 701.23b): From Father to Son searches for it.

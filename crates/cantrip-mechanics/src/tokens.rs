@@ -810,6 +810,16 @@ pub static CAT_LIFELINK: CardDef = CardDef {
     ..token!(Cat)
 };
 
+/// A 1/2 white Moogle creature token with lifelink (CR 111). Moogles' Valor and Mog, Moogle Warrior create this exact token.
+pub static MOOGLE_1_2_LIFELINK: CardDef = CardDef {
+    colors: Some(ColorSet::of(Color::White)),
+    types: TypeSet::of(&[CardType::Creature]),
+    power: Some(1),
+    toughness: Some(2),
+    keywords: Keywords::of(&[Keyword::Lifelink]),
+    ..token!(Moogle)
+};
+
 /// The colorless Equipment artifact token named Axe, "Equipped creature gets +1/+0" and equip {2}: its name is "Axe"
 /// (CR 111.4), it has no mana cost or color, and its subtype is Equipment (CR 301.5). Dáin Ironfoot and Iron Hills
 /// Blacksmith create this exact token.

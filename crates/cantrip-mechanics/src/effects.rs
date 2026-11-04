@@ -1382,6 +1382,16 @@ pub fn damage_each_creature(g: &mut dyn Game, item: &StackItem, n: u16) {
     damage_each_creature_dealt(g, item, n);
 }
 
+/// "Tap all creatures your opponents control" (CR 701.26a, 608.2c): every creature an opponent of the resolving item's
+/// controller controls as the effect is carried out, tapped together. Summon: Alexander (III), Subjugator Angel and
+/// Ultimecia, Temporal Threat print it.
+pub fn tap_all_creatures_opponents_control(g: &mut dyn Game, item: &StackItem) {
+    let opponents: Vec<PlayerId> = g.state().opponents(item.controller).collect();
+    let creatures: Vec<ObjectId> =
+        g.state().battlefield().iter().copied().filter(|&id| g.chars(id).is(CardType::Creature) && opponents.contains(&g.controller(id))).collect();
+    g.tap_together(&creatures);
+}
+
 /// "[This spell] deals `n` damage to each creature your opponents control" (CR 608.2c, 120.2): one damage event for every
 /// creature an opponent of the resolving item's controller controls as the effect is carried out, all dealt together.
 /// Iroh's Demonstration and Easy Pickings (Glóin the Mighty) print it.

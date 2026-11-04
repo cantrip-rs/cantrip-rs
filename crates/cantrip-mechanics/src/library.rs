@@ -92,8 +92,9 @@ pub fn find_to_top(g: &mut dyn Game, player: PlayerId, source: ObjectId, rule: S
 /// they don't, only `zone` is searched, and nothing is asked when no card there fits. A card may be left unfound only in a
 /// hidden zone (CR 701.23b): searched alone, a public zone such as the graveyard must give up a card that fits, so an
 /// "up to" count there is "as many as there are". The cards are left where they were found for the caller to move.
-/// Last Light of Durin's Day (a Dragon card from the hand, onto the battlefield) and Vision Quest (an artifact creature card
-/// from the graveyard, onto the battlefield) print it; Aether Searcher (a card with a noted name, cast) searches the hand.
+/// Last Light of Durin's Day (a Dragon card from the hand, onto the battlefield), Vision Quest (an artifact creature card
+/// from the graveyard, onto the battlefield) and Delivery Moogle (an artifact card from the graveyard, into the hand) print
+/// it; Aether Searcher (a card with a noted name, cast) searches the hand.
 pub fn search_zone_and_or_library(
     g: &mut dyn Game,
     player: PlayerId,
@@ -118,13 +119,20 @@ pub fn search_zone_and_or_library(
     Ok((found, false))
 }
 
-/// The cards found put into the hand, by the instruction that reveals them when the search says "reveal it" (CR 701.20a:
-/// `Game::move_together_revealed`).
+/// The cards found put into the hand, then the library shuffled.
 fn into_hand(g: &mut dyn Game, player: PlayerId, found: &[ObjectId], revealed: bool) -> Vec<ObjectId> {
-    let moves: Vec<(ObjectId, Zone)> = found.iter().map(|&c| (c, Zone::hand(player))).collect();
-    let moved = if revealed { g.move_together_revealed(&moves, MoveReason::Search) } else { g.move_together(&moves, MoveReason::Search) };
+    let moved = put_found_into_hand(g, player, found, revealed);
     g.shuffle(player);
     moved
+}
+
+/// The cards a search found put into `player`'s hand together (CR 701.23, 101.4), by the instruction that reveals them when
+/// the search says "reveal it" (CR 701.20a: `Game::move_together_revealed`, the cards shown with `reveal` first); no
+/// shuffle. The new objects, in order. `find_to_hand` uses it, and Delivery Moogle after `search_zone_and_or_library`, whose
+/// library is shuffled only if it was searched.
+pub fn put_found_into_hand(g: &mut dyn Game, player: PlayerId, found: &[ObjectId], revealed: bool) -> Vec<ObjectId> {
+    let moves: Vec<(ObjectId, Zone)> = found.iter().map(|&c| (c, Zone::hand(player))).collect();
+    if revealed { g.move_together_revealed(&moves, MoveReason::Search) } else { g.move_together(&moves, MoveReason::Search) }
 }
 
 fn into_graveyard(g: &mut dyn Game, player: PlayerId, found: &[ObjectId]) -> Vec<ObjectId> {
