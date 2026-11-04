@@ -1,0 +1,11 @@
+{
+  "name": "Cloudbound Moogle",
+  "manaCost": "{3}{W}{W}",
+  "type": "Creature — Moogle",
+  "power": 2,
+  "toughness": 3,
+  "oracleText": "Flying\nWhen this creature enters, put a +1/+1 counter on target creature.\nPlainscycling {2} ({2}, Discard this card: Search your library for a Plains card, reveal it, put it into your hand, then shuffle.)",
+  "keywords": [
+    "Flying"
+  ]
+}

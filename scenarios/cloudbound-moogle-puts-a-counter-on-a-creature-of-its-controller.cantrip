@@ -1,0 +1,43 @@
+# Cloudbound Moogle: "When this creature enters, put a +1/+1 counter on target creature" (CR 603.6a, 122.1). The target may be any creature: Bot1's own Ornithopter takes it (the Mox Pearl is not a creature and is refused). The counter is exactly one, so Ornithopter is 1/3, and the Moogle itself is a 2/3 flyer.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Cloudbound Moogle
+Ornithopter
+Plains x13
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Cloudbound Moogle.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Target(Mox Pearl)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot1.Battlefield.Ornithopter.Power = 1
+Bot1.Battlefield.Ornithopter.Toughness = 3
+Bot1.Battlefield.Cloudbound Moogle.Power = 2
+Bot1.Battlefield.Cloudbound Moogle.Toughness = 3
