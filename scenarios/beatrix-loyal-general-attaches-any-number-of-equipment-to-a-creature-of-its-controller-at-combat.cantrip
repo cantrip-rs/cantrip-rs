@@ -1,0 +1,81 @@
+# Beatrix, Loyal General: "you may attach any number of Equipment you control to target creature you control" (CR 701.3a, 507.1). The trigger takes only a creature of Bot1's (Bot2's Mother of Runes and Lightning Greaves are refused). On turn 5 Bot1 attaches nothing; on turn 7 both Equipment are in play and both go to Beatrix.
+
+[Bot1 Deck]
+Plains
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Mox Sapphire
+Beatrix, Loyal General
+Ornithopter
+Lightning Greaves
+Lavaspur Boots
+Plains x10
+
+[Bot2 Deck]
+Mox Pearl
+Mother of Runes
+Island x18
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Beatrix, Loyal General.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Mother of Runes.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.BeginCombat]
+! Bot1.Target(Mother of Runes)
+Bot1.Target(Beatrix, Loyal General)
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main2]
+? Bot1.Battlefield.Count = 8
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Greaves.Cast
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.BeginCombat]
+! Bot1.Target(Lightning Greaves)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose()
+[T5 Bot1.Main2]
+? Bot1.Battlefield.Lightning Greaves.AttachedTo = (absent)
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Lavaspur Boots.Cast
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.BeginCombat]
+Bot1.Target(Beatrix, Loyal General)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Lightning Greaves; Lavaspur Boots)
+[T7 Bot1.Main2]
+
+[Expect]
+Bot1.Battlefield.Lightning Greaves.AttachedTo = Beatrix, Loyal General
+Bot1.Battlefield.Lavaspur Boots.AttachedTo = Beatrix, Loyal General
+Bot1.Battlefield.Beatrix, Loyal General.Power = 5

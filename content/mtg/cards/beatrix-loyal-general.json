@@ -1,0 +1,11 @@
+{
+  "name": "Beatrix, Loyal General",
+  "manaCost": "{4}{W}{W}",
+  "type": "Legendary Creature — Human Soldier",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Vigilance (Attacking doesn't cause this creature to tap.)\nAt the beginning of combat on your turn, you may attach any number of Equipment you control to target creature you control.",
+  "keywords": [
+    "Vigilance"
+  ]
+}
