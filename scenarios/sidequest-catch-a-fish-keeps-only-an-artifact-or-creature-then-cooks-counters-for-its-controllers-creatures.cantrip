@@ -1,0 +1,83 @@
+# Sidequest: Catch a Fish: at Bot1's turn 3 upkeep the top card is a Plains, so nothing is asked and it is drawn. At turn 5
+# Bot1 is asked of an Ornithopter (an artifact creature) and declines: it stays on top, is drawn, and the enchantment does
+# not transform (the 2025-06-06 ruling). At turn 7 Bot1 reveals Memnite and puts it into its hand: a Food token, and the
+# enchantment transforms (CR 701.27a) into Cooking Campsite. Its "{3}, {T}, Sacrifice an artifact" is refused in the
+# beginning of combat step (sorcery speed, CR 602.5d) and in the second main phase taken off three Moxen, the pool empty
+# after, sacrificing the Food: a +1/+1 counter on each creature Bot1 controls, Savannah Lions and Ornithopter, and none on
+# Bot2's Ornithopter (CR 122.6). On turn 9 the Campsite taps for {W}.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Sidequest: Catch a Fish
+Savannah Lions
+Mox Pearl
+Mox Jet
+Mox Ruby
+Plains
+Ornithopter
+Memnite
+Plains x10
+
+[Bot2 Deck]
+Ornithopter
+Island x14
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Sidequest: Catch a Fish.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.Accept
+[T3 Bot1.Main1]
+? Bot1.Hand = Plains
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+? Bot1.Library.Count = 12
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Sidequest: Catch a Fish.Types = Enchantment
+Bot1.Hand.Ornithopter.Cast
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+[T7 Bot1.Main1]
+? Bot1.Hand = Memnite; Plains; Plains
+? Bot1.Battlefield.Cooking Campsite.Types = Land
+? Bot1.Battlefield.Food Token.Types = Artifact
+[T7 Bot1.BeginCombat]
+! Bot1.Battlefield.Cooking Campsite.Activate(Ability: Sacrifice an artifact)
+[T7 Bot1.Main2]
+Bot1.Battlefield.Cooking Campsite.Activate(Ability: Sacrifice an artifact)
+Bot1.Choose(Food Token)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+? Bot1.Mana = 
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.Counters.PlusOnePlusOne = 1
+? Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+? Bot2.Battlefield.Ornithopter.Counters.PlusOnePlusOne = (absent)
+[T9 Bot1.Main1]
+Bot1.Battlefield.Cooking Campsite.Activate(Ability: Add {W})
+? Bot1.Mana = {W}
+
+[Expect]
+Bot1.Battlefield = Cooking Campsite; Mox Jet; Mox Pearl; Mox Ruby; Ornithopter; Plains; Savannah Lions
+Exile.Count = 0
