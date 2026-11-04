@@ -1,0 +1,68 @@
+# Cumulative upkeep adds age counters and charges one mana per counter; the {1} ability gives +1/+0 until end of turn (CR 702.24a, 611.2a).
+[Bot1 Deck]
+Soldevi Simulacrum
+Black Lotus
+Sol Ring
+Mox Ruby
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Hand.Soldevi Simulacrum.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Soldevi Simulacrum.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Soldevi Simulacrum.Power = 3
+? Bot1.Battlefield.Soldevi Simulacrum.Toughness = 4
+! Bot1.Battlefield.Soldevi Simulacrum.Activate(Mana: short)
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Soldevi Simulacrum.Power = 2
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Soldevi Simulacrum.Counters.Age = 1
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Soldevi Simulacrum.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Soldevi Simulacrum.Power = 3
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+! Bot1.PayCost
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Soldevi Simulacrum.Counters.Age = 2
+? Bot1.Battlefield.Soldevi Simulacrum.Power = 2
+? Bot1.Battlefield.Soldevi Simulacrum.Toughness = 4
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot1.Graveyard = Soldevi Simulacrum; Black Lotus
+Bot1.Battlefield.Soldevi Simulacrum = (absent)
