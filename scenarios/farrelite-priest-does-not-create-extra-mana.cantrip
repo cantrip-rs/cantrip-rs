@@ -1,0 +1,29 @@
+# One red converted to white is still only one mana, so it cannot pay for a
+# two-mana spell; another source makes that spell affordable (CR 601.2h).
+[Bot1 Deck]
+Farrelite Priest
+Black Lotus
+Mox Ruby
+Mind Stone
+Island
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farrelite Priest.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Mind Stone.Cast(Mana: short)
+Bot1.Battlefield.Farrelite Priest.Activate
+? Bot1.Mana = {W}
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Mind Stone.Cast
+? Bot1.Mana =
+[Expect]
+Bot1.Battlefield.Mind Stone.Types = Artifact

@@ -1,0 +1,40 @@
+# Three activations in one turn and one on the next do not total four; the
+# fourth and fifth in a later turn each schedule a sacrifice (CR 603.7).
+[Bot1 Deck]
+Farrelite Priest
+Black Lotus
+Mox Ruby
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Farrelite Priest.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+? Bot1.Mana = {W}
+? Delayed.Count = 0
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Farrelite Priest.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+? Bot1.Mana = {W}
+? Delayed.Count = 0
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Farrelite Priest.Power = 1
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+Bot1.Battlefield.Farrelite Priest.Activate
+? Delayed.Count = 1
+Bot1.Battlefield.Farrelite Priest.Activate
+? Delayed.Count = 2
+[T6 Bot2.Main1]
+[Expect]
+Bot1.Graveyard = Farrelite Priest; Black Lotus
