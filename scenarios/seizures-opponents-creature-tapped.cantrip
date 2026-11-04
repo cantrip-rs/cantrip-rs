@@ -1,0 +1,33 @@
+# Tapping the enchanted opponent's creature triggers Seizures and deals exactly 3 to its controller when unpaid (CR 603.2, 118.12).
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Seizures
+Island x20
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Island x20
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Hand.Seizures.Cast(Bot1.Battlefield.Mox Jet)
+Bot1.Hand.Seizures.Cast(Bot2.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Seizures.AttachedTo = Llanowar Elves
+Bot2.Battlefield.Llanowar Elves.Activate
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 17
