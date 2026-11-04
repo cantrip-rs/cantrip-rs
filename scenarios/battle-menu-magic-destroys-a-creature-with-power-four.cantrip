@@ -1,0 +1,39 @@
+# Battle Menu, Magic: destroy target creature with power 4 or greater (CR 700.2). Frenzied Raptor has power 4: it dies.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Battle Menu
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Frenzied Raptor
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Frenzied Raptor.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Battle Menu.Cast
+Bot1.Modes(Magic)
+Bot1.Target(Frenzied Raptor)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Graveyard.Count = 1
+Bot2.Battlefield.Count = 3

@@ -1,0 +1,34 @@
+# Battle Menu, Ability: target creature gets +0/+4 until end of turn (CR 611.2): Bot2's Ornithopter is a 0/6 that turn and a 0/2 on the next.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Battle Menu
+Island
+Island x16
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Battle Menu.Cast
+Bot1.Modes(Ability)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Ornithopter.Toughness = 6
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T3 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter.Toughness = 2
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Toughness = 2

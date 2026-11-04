@@ -1,0 +1,40 @@
+# Battle Menu, Magic: destroy target creature with power 4 or greater (CR 700.2). Fearless Halberdier has power 3: it is not a legal target, so the mode cannot be chosen.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Battle Menu
+Island x17
+
+[Bot2 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Fearless Halberdier
+Island x16
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fearless Halberdier.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Battle Menu.Cast
+! Bot1.Modes(Magic)
+Bot1.Modes(Item)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 24
+Bot2.Graveyard.Count = 0
+Bot2.Battlefield.Count = 4

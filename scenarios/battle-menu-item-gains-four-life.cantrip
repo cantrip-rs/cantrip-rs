@@ -1,0 +1,25 @@
+# Battle Menu, Item: you gain 4 life, with no target asked (CR 700.2c).
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Battle Menu
+Island
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Battle Menu.Cast
+Bot1.Modes(Item)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Life = 24
+Bot2.Life = 20
