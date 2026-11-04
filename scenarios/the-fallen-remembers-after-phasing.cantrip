@@ -1,0 +1,31 @@
+# Phasing out and back in does not make a new object, so The Fallen remembers the opponent it damaged (CR 702.26d).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+The Fallen
+Sol Ring
+Teferi's Protection
+Mox Pearl
+Swamp x14
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Fallen.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Attack(The Fallen > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Teferi's Protection.Cast
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Life = 17

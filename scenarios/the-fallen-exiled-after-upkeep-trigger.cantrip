@@ -1,0 +1,38 @@
+# The Fallen's upkeep ability still deals damage to a previously damaged opponent if its source is exiled in response (CR 113.7a, 608.2h).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+The Fallen
+Swamp x17
+
+[Bot2 Deck]
+Mox Pearl
+Swords to Plowshares
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Fallen.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Pearl.Cast
+[T3 Bot1.Main1]
+Bot1.Attack(The Fallen > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Swords to Plowshares.Cast(Bot1.Battlefield.The Fallen)
+Bot2.Pass
+Bot1.Pass
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Exile.The Fallen.Power = 2
+Bot2.Life = 17

@@ -1,0 +1,49 @@
+# A phased-out source still damages a previously damaged planeswalker when its upkeep trigger resolves (CR 113.7a, 702.26b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+The Fallen
+Sol Ring
+Teferi's Protection
+Mox Pearl
+Swamp x14
+[Bot2 Deck]
+Black Lotus
+Mox Sapphire
+Jace, the Mind Sculptor
+Memnite
+Island x16
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Fallen.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Jace, the Mind Sculptor.Cast
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Sol Ring.Cast
+Bot1.Attack(The Fallen > Bot2)
+Bot2.Block(Memnite > The Fallen)
+[T5 Bot1.Main1]
+? Bot2.Life = 20
+? Bot2.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 3
+Bot1.Attack(The Fallen > Bot2.Battlefield.Jace, the Mind Sculptor)
+[T5 Bot1.Main2]
+? Bot2.Battlefield.Jace, the Mind Sculptor.Counters.Loyalty = 1
+[T7 Bot1.Upkeep]
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Teferi's Protection.Cast
+[T7 Bot1.Main1]
+[Expect]
+Bot2.Life = 20
+Bot2.Graveyard = Jace, the Mind Sculptor; Memnite; Black Lotus

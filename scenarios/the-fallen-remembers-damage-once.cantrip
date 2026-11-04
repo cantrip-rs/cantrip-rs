@@ -1,0 +1,28 @@
+# A player dealt damage twice takes only one damage at each later upkeep, and no damage at the first upkeep before combat (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+The Fallen
+Swamp x17
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.The Fallen.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot2.Life = 20
+Bot1.Attack(The Fallen > Bot2)
+[T3 Bot1.Main2]
+? Bot2.Life = 18
+[T5 Bot1.Main1]
+? Bot2.Life = 17
+Bot1.Attack(The Fallen > Bot2)
+[T5 Bot1.Main2]
+? Bot2.Life = 15
+[T7 Bot1.Main1]
+[Expect]
+Bot2.Life = 14
