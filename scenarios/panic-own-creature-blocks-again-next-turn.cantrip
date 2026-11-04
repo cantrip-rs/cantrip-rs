@@ -1,0 +1,37 @@
+# Panic can target its controller's creature; it cannot block that turn but can block in a later combat (CR 611.2a).
+[Bot1 Deck]
+Mox Ruby
+Panic
+Memnite
+Ornithopter
+Island x20
+[Bot2 Deck]
+Black Lotus
+Grizzly Bears
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T4 Bot2.BeginCombat]
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Panic.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Panic.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot2.Attack(Grizzly Bears > Bot1)
+! Bot1.Block(Memnite > Grizzly Bears)
+Bot1.Block(Ornithopter > Grizzly Bears)
+[T6 Bot2.Attackers]
+Bot2.Attack(Grizzly Bears > Bot1)
+Bot1.Block(Memnite > Grizzly Bears)
+[T6 Bot2.Main2]
+[Expect]
+Bot1.Graveyard.Memnite.Power = 1
+Bot1.Graveyard.Ornithopter.Power = 0
+Bot1.Life = 20
