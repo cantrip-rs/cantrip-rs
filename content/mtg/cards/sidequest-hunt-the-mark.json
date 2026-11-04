@@ -1,0 +1,16 @@
+{
+  "name": "Sidequest: Hunt the Mark",
+  "manaCost": "{3}{B}{B}",
+  "type": "Enchantment",
+  "oracleText": "When this enchantment enters, destroy up to one target creature.\nAt the beginning of your end step, if a creature died under an opponent's control this turn, create a Treasure token. Then if you control three or more Treasures, transform this enchantment.",
+  "backFace": {
+    "name": "Yiazmat, Ultimate Mark",
+    "colorIndicator": [
+      "Black"
+    ],
+    "type": "Legendary Creature — Dragon",
+    "power": 5,
+    "toughness": 6,
+    "oracleText": "{1}{B}, Sacrifice another creature or artifact: Yiazmat gains indestructible until end of turn. Tap it."
+  }
+}

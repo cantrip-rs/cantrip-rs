@@ -1,0 +1,80 @@
+# Sidequest: Hunt the Mark (CR 603.4, 701.27, 712): when it enters, Bot1 destroys Bot2's Memnite; at the beginning of Bot1's end step
+# a creature has died under an opponent's control, so Bot1 creates a Treasure (1; fewer than three, no transform). Turn 5 a Lightning
+# Bolt kills Bot2's second Memnite: a second Treasure (2, still not transformed); turn 7 a third (3): the enchantment transforms into
+# Yiazmat, Ultimate Mark, a 5/6 Dragon. Yiazmat's "{1}{B}, Sacrifice another creature or artifact" pays a Treasure's mana plus the
+# Jet's {B}, sacrifices the other Treasure (not itself), and it gains indestructible and taps.
+
+[Bot1 Deck]
+Black Lotus
+Mox Jet
+Mox Ruby
+Sidequest: Hunt the Mark
+Lightning Bolt
+Lightning Bolt
+Island
+Island x20
+
+[Bot2 Deck]
+Memnite
+Memnite
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Sidequest: Hunt the Mark.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard = Memnite
+? Bot2.Battlefield.Count = 0
+[T3 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 4
+[T4 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 5
+? Bot1.Battlefield.Sidequest: Hunt the Mark.Types = Enchantment
+[T6 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+[T7 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+[T7 Bot1.End]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Count = 6
+? Bot1.Battlefield.Yiazmat, Ultimate Mark.Transformed = true
+? Bot1.Battlefield.Yiazmat, Ultimate Mark.Power = 5
+? Bot1.Battlefield.Yiazmat, Ultimate Mark.Toughness = 6
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Treasure Token#1.Activate(Color: Red)
+Bot1.Battlefield.Yiazmat, Ultimate Mark.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Yiazmat, Ultimate Mark.Keywords = Indestructible
+Bot1.Battlefield.Yiazmat, Ultimate Mark.Tapped = true
+Bot1.Battlefield.Count = 4
