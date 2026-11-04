@@ -1,0 +1,6 @@
+{
+  "name": "Rally",
+  "manaCost": "{W}{W}",
+  "type": "Instant",
+  "oracleText": "Blocking creatures get +1/+1 until end of turn."
+}
