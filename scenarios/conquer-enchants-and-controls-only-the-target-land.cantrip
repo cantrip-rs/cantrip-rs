@@ -1,0 +1,52 @@
+# Conquer enchants a land, not a creature, and gives its controller control of only that land (CR 702.5a, 613.1b).
+# Destroying the Aura ends its control effect, returning the land to its owner.
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Conquer
+Disenchant
+Island x20
+
+[Bot2 Deck]
+Forest
+Island
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+! Bot1.Hand.Conquer.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Hand.Conquer.Cast(Bot2.Battlefield.Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Conquer.AttachedTo = Forest
+? Bot1.Battlefield.Forest.Types = Land
+? Bot2.Battlefield = Ornithopter
+? Bot2.Battlefield.Ornithopter.Types = Artifact; Creature
+[T4 Bot2.Main1]
+Bot2.Hand.Island.Play
+? Bot2.Battlefield.Island.Types = Land
+? Bot1.Battlefield.Forest.Types = Land
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Disenchant.Cast(Bot1.Battlefield.Conquer)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Graveyard = Disenchant; Conquer; Black Lotus
+Bot2.Battlefield.Forest.Types = Land
+Bot2.Battlefield.Island.Types = Land
+Bot1.Battlefield = Island; Mox Pearl; Mox Sapphire

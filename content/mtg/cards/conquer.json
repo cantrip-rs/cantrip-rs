@@ -1,0 +1,6 @@
+{
+  "name": "Conquer",
+  "manaCost": "{3}{R}{R}",
+  "type": "Enchantment — Aura",
+  "oracleText": "Enchant land\nYou control enchanted land."
+}
