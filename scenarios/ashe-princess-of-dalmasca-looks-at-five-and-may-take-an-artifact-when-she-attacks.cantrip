@@ -1,0 +1,44 @@
+# Ashe, Princess of Dalmasca: "Whenever Ashe attacks, look at the top five cards of your library. You may reveal an artifact card
+# from among them and put it into your hand. Put the rest on the bottom of your library in a random order." On turn 3 the fifth
+# card is Sol Ring (taken; exactly five are looked at) and the four Islands go to the bottom. On turn 5 the five hold a Mox
+# Emerald and Bot1 declines it: all five go to the bottom, the library keeps its size.
+
+[Bot1 Deck]
+Mox Pearl
+Mox Jet
+Mox Ruby
+Ashe, Princess of Dalmasca
+Island x8
+Sol Ring
+Island x3
+Mox Emerald
+Island x3
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Ashe, Princess of Dalmasca.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Ashe, Princess of Dalmasca > Bot2)
+Bot1.Arrange(Sol Ring | Island; Island; Island; Island)
+[T3 Bot1.Main2]
+? Bot1.Library.Count = 11
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Ashe, Princess of Dalmasca > Bot2)
+! Bot1.Arrange(Island | Island; Mox Emerald; Island; Island)
+Bot1.Arrange( | Island; Island; Mox Emerald; Island; Island)
+[T5 Bot1.Main2]
+
+[Expect]
+Turn = 5
+Bot1.Library.Count = 10
+Bot2.Life = 14
