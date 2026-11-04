@@ -1,0 +1,6 @@
+{
+  "name": "Nacre Talisman",
+  "manaCost": "{2}",
+  "type": "Artifact",
+  "oracleText": "Whenever a player casts a white spell, you may pay {3}. If you do, untap target permanent."
+}
