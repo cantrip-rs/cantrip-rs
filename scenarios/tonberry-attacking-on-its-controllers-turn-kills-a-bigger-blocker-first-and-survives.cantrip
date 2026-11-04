@@ -1,0 +1,38 @@
+# Tonberry's first strike and deathtouch on its controller's turn (CR 702.7, 702.2, 510.4): a 2/1 attacks on turn 5 into Bot2's 3/3 Hill Giant,
+# which blocks. First strike deals the damage before the Giant's regular damage, deathtouch makes 2 of it lethal, so the Giant dies and Tonberry
+# survives, and no damage is dealt to Bot2.
+
+[Bot1 Deck]
+Mox Jet
+Tonberry
+Swamp x22
+
+[Bot2 Deck]
+Black Lotus
+Mox Ruby
+Hill Giant
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tonberry.Cast
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Pass
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Tonberry > Bot2)
+Bot1.Pass
+Bot2.Block(Hill Giant > Tonberry)
+Bot1.Pass
+Bot2.Pass
+[T5 Bot1.Main2]
+
+[Expect]
+Bot2.Graveyard = Hill Giant; Black Lotus
+Bot2.Life = 20
+Bot1.Battlefield.Tonberry.Damage = 0

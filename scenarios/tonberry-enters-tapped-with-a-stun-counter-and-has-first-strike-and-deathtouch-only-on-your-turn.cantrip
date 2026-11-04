@@ -1,0 +1,31 @@
+# Tonberry (CR 614.1c-d, 122.1d, 702.7, 702.2): "This creature enters tapped with a stun counter on it" and "During your turn, this creature has first
+# strike and deathtouch". Turn 1: cast with Mox Jet - tapped, one stun counter, and both keywords on Bot1's own turn. Turn 2 (Bot2's): neither.
+# Turn 3: its untap step removes the stun counter instead of untapping it - still tapped. Turn 5: it untaps.
+
+[Bot1 Deck]
+Mox Jet
+Tonberry
+Swamp x22
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Tonberry.Cast
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Tonberry.Tapped = true
+? Bot1.Battlefield.Tonberry.Counters.Stun = 1
+? Bot1.Battlefield.Tonberry.Keywords = Deathtouch; FirstStrike
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Tonberry.Keywords = (absent)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Tonberry.Tapped = true
+? Bot1.Battlefield.Tonberry.Counters.Stun = (absent)
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Battlefield.Tonberry.Tapped = false
+Bot1.Battlefield.Tonberry.Keywords = Deathtouch; FirstStrike
