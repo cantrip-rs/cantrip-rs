@@ -1,0 +1,6 @@
+{
+  "name": "Combat Tutorial",
+  "manaCost": "{2}{U}",
+  "type": "Sorcery",
+  "oracleText": "Target player draws two cards. Put a +1/+1 counter on up to one target creature you control."
+}

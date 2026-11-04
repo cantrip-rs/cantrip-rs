@@ -1,0 +1,37 @@
+# Combat Tutorial's player target is any player and the creature is "up to one" (CR 115.1, 601.2c): Bot1 aims it at Bot2 and
+# chooses no creature, though it has an Ornithopter. Bot2 draws exactly two cards (library 12 -> 10), Bot1
+# draws none and the Ornithopter gets no counter.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Ornithopter
+Combat Tutorial
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Combat Tutorial.Cast
+Bot1.Target(Bot2)
+Bot1.Target()
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Hand.Count = 3
+Bot2.Hand.Count = 9
+Bot2.Library.Count = 10

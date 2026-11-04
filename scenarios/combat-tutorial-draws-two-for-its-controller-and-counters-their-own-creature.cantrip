@@ -1,0 +1,42 @@
+# Combat Tutorial: "Target player draws two cards. Put a +1/+1 counter on up to one target creature you control" (CR 121.1,
+# 122.1). Bot1 targets itself and its own Ornithopter: it draws exactly two cards (hand 3 -> 5, library 12 -> 10) and the
+# Ornithopter gets one counter. Bot2's Ornithopter is not a legal target (the refusal) and so gets none.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Jet
+Ornithopter
+Combat Tutorial
+Island x15
+
+[Bot2 Deck]
+Ornithopter
+Island x19
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Combat Tutorial.Cast
+Bot1.Target(Bot1)
+! Bot1.Target(Bot2.Battlefield.Ornithopter)
+Bot1.Target(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Battlefield.Ornithopter.Counters.PlusOnePlusOne = 1
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot1.Hand.Count = 5
+Bot1.Library.Count = 10
+Bot2.Hand.Count = 7
