@@ -1,6 +1,6 @@
 use cantrip_api::*;
-use cantrip_mechanics::attach::equipment_controlled;
-use cantrip_mechanics::{choose, pump, targets};
+use cantrip_mechanics::attach::attach_any_number_of_equipment_to;
+use cantrip_mechanics::{pump, targets};
 use cantrip_oracle as oracle;
 
 /// Target creature gets +2/+2 until end of turn. If that creature is attacking, you may attach any number of Equipment you
@@ -16,11 +16,7 @@ fn effect(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
     if !g.is_attacking(creature) {
         return Ok(());
     }
-    let equipment = equipment_controlled(g, item.controller);
-    for attachment in choose::any_number_of(g, item.controller, item.object, Purpose::Attach, "", equipment.clone(), equipment)? {
-        g.attach(attachment, creature);
-    }
-    Ok(())
+    attach_any_number_of_equipment_to(g, item.controller, item.object, creature)
 }
 
 pub static CARD: CardDef = CardDef {

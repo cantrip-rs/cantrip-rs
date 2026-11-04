@@ -2,7 +2,7 @@
 
 use cantrip_api::*;
 
-use crate::targets;
+use crate::{choose, targets};
 
 /// "Attach this to target creature you control": the effect of equip, and of an attach ability at any speed.
 pub fn attach_to_target(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
@@ -124,6 +124,18 @@ pub fn equipment_you_control_enters(q: &dyn Query, source: ObjectId, event: &Eve
 /// Improvisation chooses among them and "target Equipment you control" (`targets::EQUIPMENT_YOU_CONTROL`) is judged by it. Dwalin Weaponmaster too.
 pub fn equipment_controlled(q: &dyn Query, player: PlayerId) -> Vec<ObjectId> {
     q.permanents_of(player).into_iter().filter(|&id| q.chars(id).has_subtype(Subtype::Equipment)).collect()
+}
+
+/// "You may attach any number of Equipment you control to `creature`." "Any number" is a choice of Equipment, none included
+/// (CR 701.3a): made as the effect resolves, from the Equipment `player` controls then, and attached one after another. One
+/// that cannot be attached to the creature stays where it is (CR 701.3b). Battlefield Improvisation and Beatrix, Loyal General
+/// ask it.
+pub fn attach_any_number_of_equipment_to(g: &mut dyn Game, player: PlayerId, source: ObjectId, creature: ObjectId) -> Result<(), Suspend> {
+    let equipment = equipment_controlled(g, player);
+    for attachment in choose::any_number_of(g, player, source, Purpose::Attach, "", equipment.clone(), equipment)? {
+        g.attach(attachment, creature);
+    }
+    Ok(())
 }
 
 /// The Equipment attached to `creature` (CR 301.5a, 301.5c), through the layers, whoever controls them: those permanents on the
