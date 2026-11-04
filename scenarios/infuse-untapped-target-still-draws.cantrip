@@ -1,0 +1,29 @@
+# An already untapped creature is a legal target, and the delayed draw still occurs at the next upkeep (CR 609.3).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Memnite
+Infuse
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Infuse.Cast(Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Tapped = false
+? Bot1.Library.Count = 18
+[T2 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Library.Count = 17

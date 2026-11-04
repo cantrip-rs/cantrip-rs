@@ -1,0 +1,27 @@
+# Infuse can untap a tapped creature, including one whose mana paid for the spell (CR 608.2c).
+[Bot1 Deck]
+Forest
+Llanowar Elves
+Mox Sapphire
+Mox Pearl
+Infuse
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Forest.Activate
+Bot1.Hand.Llanowar Elves.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Llanowar Elves.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Infuse.Cast(Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Llanowar Elves.Tapped = false
+Bot1.Battlefield.Mox Sapphire.Tapped = true

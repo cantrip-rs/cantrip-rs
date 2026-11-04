@@ -1,0 +1,41 @@
+# Infuse can untap the opponent's land, but cannot target their enchantment (CR 115.1a).
+[Bot1 Deck]
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Infuse
+Island x20
+[Bot2 Deck]
+Forest
+Mox Emerald
+Elvish Mystic
+Rancor
+Island x20
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Elvish Mystic.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Rancor.Cast(Elvish Mystic)
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+! Bot1.Hand.Infuse.Cast(Rancor)
+Bot1.Hand.Infuse.Cast(Forest)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Forest.Tapped = false
+Bot2.Battlefield.Mox Emerald.Tapped = true
+Bot2.Battlefield.Rancor.Types = Enchantment
