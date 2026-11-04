@@ -1,0 +1,53 @@
+# Summon: Primal Odin ({4}{B}{B}, 5/3) is cast on turn 3 with Black Lotus and three Moxen. Chapter I destroys Bot2's Memnite (an
+# opponent's creature); on turn 5 chapter II gives it "Whenever this creature deals combat damage to a player, that player
+# loses the game" and its combat damage to Bot2 does that (CR 104.3e), with Bot2 still at 15 life.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Summon: Primal Odin
+Mountain x15
+
+[Bot2 Deck]
+Memnite
+Island x15
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Summon: Primal Odin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite = (absent)
+? Bot1.Battlefield.Summon: Primal Odin.Counters.Lore = 1
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Summon: Primal Odin.Counters.Lore = 2
+Bot1.Attack(Summon: Primal Odin)
+Bot1.Pass
+Bot1.Pass
+Bot1.Pass
+
+[Expect]
+Bot2.Life = 15
+Result = Bot1 won

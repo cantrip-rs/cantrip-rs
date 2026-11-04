@@ -1,0 +1,8 @@
+{
+  "name": "Summon: Primal Odin",
+  "manaCost": "{4}{B}{B}",
+  "type": "Enchantment Creature — Saga Knight",
+  "power": 5,
+  "toughness": 3,
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Gungnir — Destroy target creature an opponent controls.\nII — Zantetsuken — This creature gains \"Whenever this creature deals combat damage to a player, that player loses the game.\"\nIII — Hall of Sorrow — Draw two cards. Each player loses 2 life."
+}

@@ -1,0 +1,64 @@
+# Summon: Primal Odin on turn 3 (chapter I destroys Bot2's Memnite). Turn 5, after chapter II gives it "Whenever this creature
+# deals combat damage to a player, that player loses the game", it attacks and Bot2's Ornithopter blocks: damage to a creature
+# is not damage to a player (CR 510.2), so Bot2 stays at 20 life and in the game. Turn 7, chapter III: Bot1 draws two cards and each
+# player loses 2 life (18 each), and the Saga is sacrificed once it has left the stack (CR 714.4), the granted ability going with it.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Pearl
+Mox Jet
+Summon: Primal Odin
+Mountain x15
+
+[Bot2 Deck]
+Memnite
+Ornithopter
+Island x15
+
+[Actions]
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Summon: Primal Odin.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite = (absent)
+[T4 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T5 Bot1.Main1]
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Summon: Primal Odin.Counters.Lore = 2
+Bot1.Attack(Summon: Primal Odin)
+Bot2.Block(Ornithopter > Summon: Primal Odin)
+? Bot2.Life = 20
+[T7 Bot1.Main1]
+? Bot2.Battlefield.Ornithopter = (absent)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Result = InProgress
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Hand.Count = 7
+Bot1.Battlefield.Summon: Primal Odin = (absent)
