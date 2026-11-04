@@ -1,0 +1,52 @@
+# Self-Destruct: Anaba Bodyguard (2/3) targets Bot2's Ornithopter. In response Bot2 gives the Ornithopter hexproof with Snakeskin Veil,
+# which stays on the battlefield but is no longer a legal target (CR 702.11b, 608.2b), so it is dealt nothing: no damage, while
+# Anaba, still legal, deals X = 2 to itself. Anaba comes in on turn 1 (Black Lotus and Mox Pearl), the Ornithopter on turn 2.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Mox Pearl
+Anaba Bodyguard
+Self-Destruct
+Island x14
+
+[Bot2 Deck]
+Mox Emerald
+Ornithopter
+Snakeskin Veil
+Island x17
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Anaba Bodyguard.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Self-Destruct.Cast
+Bot1.Target(Anaba Bodyguard)
+Bot1.Target(Ornithopter)
+Bot1.Pass
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Hand.Snakeskin Veil.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Ornithopter.Damage = 0
+Bot1.Battlefield.Anaba Bodyguard.Damage = 2
+Bot2.Life = 20

@@ -1,0 +1,37 @@
+# Self-Destruct on Memnite with Bot2 as the other target. In response Bot1 Shocks its own Memnite, so the creature (the source) is an
+# illegal target on resolution and deals no damage at all: Bot2 stays at 20 even though Bot2 is still a legal target.
+
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Jet
+Memnite
+Self-Destruct
+Shock
+Island x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Self-Destruct.Cast
+Bot1.Target(Memnite)
+Bot1.Target(Bot2)
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Shock.Cast(Memnite)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Life = 20
+Bot1.Graveyard = Self-Destruct; Memnite; Shock; Black Lotus
