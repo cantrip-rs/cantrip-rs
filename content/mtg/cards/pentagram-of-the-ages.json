@@ -1,0 +1,6 @@
+{
+  "name": "Pentagram of the Ages",
+  "manaCost": "{4}",
+  "type": "Artifact",
+  "oracleText": "{4}, {T}: The next time a source of your choice would deal damage to you this turn, prevent that damage."
+}
