@@ -1,0 +1,39 @@
+# Ice Flan (CR 701.26a, 122.1d, 115.1): the target may be a creature that is no artifact. Bot2's Llanowar Elves is tapped and
+# gets a stun counter, so it stays tapped (CR 122.1d: untapping it removes the counter instead); Bot2's Mox Jet, also a legal
+# choice, is left untapped.
+
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Ice Flan
+Island x21
+
+[Bot2 Deck]
+Forest
+Llanowar Elves
+Mox Jet
+Forest x21
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Llanowar Elves.Cast
+Bot2.Hand.Mox Jet.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus#2.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Ice Flan.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Bot2.Battlefield.Llanowar Elves)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot2.Battlefield.Llanowar Elves.Tapped = true
+Bot2.Battlefield.Llanowar Elves.Counters.Stun = 1
+Bot2.Battlefield.Mox Jet.Tapped = false
+Bot2.Battlefield.Mox Jet.Counters.Stun = (absent)

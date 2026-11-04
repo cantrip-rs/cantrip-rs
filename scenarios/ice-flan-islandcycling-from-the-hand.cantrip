@@ -1,0 +1,28 @@
+# Ice Flan's islandcycling {2} (CR 702.29e): discarding it from the hand for {2} finds the Island in the library and puts it into
+# the hand. Mana Crypt's {C}{C} pays exactly, the pool ends empty, and with only Blasted Landscape's {C} it is not offered.
+
+[Bot1 Deck]
+Blasted Landscape
+Mana Crypt
+Ice Flan
+Plains x4
+Island
+Plains x12
+
+[Bot2 Deck]
+Island x24
+
+[Actions]
+Bot1.Hand.Blasted Landscape.Play
+! Bot1.Hand.Ice Flan.Activate(Ability: Islandcycling; Mana: short)
+Bot1.Hand.Mana Crypt.Cast
+Bot1.Pass
+Bot1.Battlefield.Mana Crypt.Activate
+Bot1.Hand.Ice Flan.Activate(Ability: Islandcycling)
+Bot1.Pass
+? Bot1.Mana =
+Bot1.Search(Island)
+
+[Expect]
+Bot1.Graveyard = Ice Flan
+Bot1.Hand = Island; Plains; Plains; Plains; Plains

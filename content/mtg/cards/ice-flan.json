@@ -1,0 +1,8 @@
+{
+  "name": "Ice Flan",
+  "manaCost": "{4}{U}{U}",
+  "type": "Creature — Elemental Ooze",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "When this creature enters, tap target artifact or creature an opponent controls. Put a stun counter on it. (If a permanent with a stun counter would become untapped, remove one from it instead.)\nIslandcycling {2} ({2}, Discard this card: Search your library for an Island card, reveal it, put it into your hand, then shuffle.)"
+}
