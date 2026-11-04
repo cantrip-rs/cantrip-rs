@@ -1,0 +1,64 @@
+# Each of two damaged blockers triggers separately, giving Giant Shark +4/+0 (CR 603.2).
+[Bot1 Deck]
+Giant Shark
+Island
+Mox Sapphire
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Emerald
+Pyroclasm
+Mountain
+Island x20
+[Bot2 Deck]
+Island
+Hill Giant x2
+Black Lotus x2
+Mox Ruby
+Mountain x20
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Shark.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Island.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Hill Giant.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Battlefield.Island.Activate
+Bot2.Hand.Hill Giant.Cast
+[T5 Bot1.Main1]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Pyroclasm.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Attack(Giant Shark)
+Bot2.Block(Hill Giant#1 > Giant Shark; Hill Giant#2 > Giant Shark)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Giant Shark.Power = 8
+? Bot1.Battlefield.Giant Shark.Toughness = 4
+? Bot1.Battlefield.Giant Shark.Keywords = Trample
+[T5 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Giant Shark; Pyroclasm
+Bot2.Graveyard.Count = 4
