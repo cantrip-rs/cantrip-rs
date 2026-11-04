@@ -1,0 +1,6 @@
+{
+  "name": "Inferno",
+  "manaCost": "{5}{R}{R}",
+  "type": "Instant",
+  "oracleText": "Inferno deals 6 damage to each creature and each player."
+}
