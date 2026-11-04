@@ -1,0 +1,37 @@
+# On its controller's creature the Aura damages that player at upkeep; declining cumulative upkeep sacrifices it (CR 603.2, 702.24a).
+
+[Bot1 Deck]
+Maddening Wind
+Ornithopter
+Black Lotus
+Mox Emerald
+Island
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Island x25
+
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Maddening Wind.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+? Bot1.Life = 20
+? Bot2.Life = 20
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T3 Bot1.Main1]
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
+Bot1.Battlefield.Maddening Wind = (absent)
+Bot1.Graveyard.Maddening Wind.Colors = Green

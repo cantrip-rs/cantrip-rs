@@ -1,0 +1,65 @@
+# Maddening Wind enchants an opponent's creature, damages its controller on their upkeep, and costs its own controller {G} per age counter (CR 702.24a, 603.2).
+
+[Bot1 Deck]
+Maddening Wind
+Black Lotus
+Mox Emerald
+Mox Pearl
+Forest
+Forest
+Island
+Island x20
+
+[Bot2 Deck]
+Ornithopter
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Forest.Play
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Maddening Wind.Cast(Bot1.Battlefield.Mox Pearl)
+Bot1.Hand.Maddening Wind.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+[T4 Bot2.Main1]
+? Bot2.Life = 18
+? Bot1.Life = 20
+? Bot1.Battlefield.Maddening Wind.AttachedTo = Ornithopter
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.PayCost(X: 1)
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana = {W}
+? Bot1.Battlefield.Maddening Wind.Counters.Age = 1
+[T5 Bot1.Main1]
+Bot1.Hand.Forest.Play
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Emerald.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Forest#1.Activate
+Bot1.PayCost
+Bot1.Pass
+? Bot1.Mana =
+? Bot1.Battlefield.Maddening Wind.Counters.Age = 2
+[T7 Bot1.Main1]
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 16
+Bot1.Battlefield.Maddening Wind.AttachedTo = Ornithopter
