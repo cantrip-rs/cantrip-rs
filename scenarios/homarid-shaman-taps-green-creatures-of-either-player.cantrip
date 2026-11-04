@@ -1,0 +1,58 @@
+# Homarid Shaman pays blue to tap either player's green creature, including a multicolored one; nongreen creatures and green noncreatures are illegal targets (CR 115.1c).
+[Bot1 Deck]
+Homarid Shaman
+Black Lotus
+Mox Pearl
+Mox Emerald
+Mox Sapphire
+Mox Sapphire
+Llanowar Elves
+Island x20
+[Bot2 Deck]
+Black Lotus
+Mox Pearl
+Prismatic Omen
+Watchwolf
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Homarid Shaman.Cast
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Llanowar Elves.Cast
+Bot2.Hand.Ornithopter.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Prismatic Omen.Cast
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Watchwolf.Cast
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Mox Sapphire#2.Activate
+[T3 Bot1.Main1]
+! Bot1.Battlefield.Homarid Shaman.Activate(Bot2.Battlefield.Watchwolf; Mana: short)
+! Bot1.Battlefield.Homarid Shaman.Activate(Bot2.Battlefield.Ornithopter)
+! Bot1.Battlefield.Homarid Shaman.Activate(Bot2.Battlefield.Prismatic Omen)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire#1.Activate
+Bot1.Battlefield.Homarid Shaman.Activate(Bot1.Battlefield.Llanowar Elves)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Llanowar Elves.Tapped = true
+Bot1.Battlefield.Mox Sapphire#2.Activate
+Bot1.Battlefield.Homarid Shaman.Activate(Bot2.Battlefield.Watchwolf)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Watchwolf.Tapped = true
+Bot1.Battlefield.Homarid Shaman.Tapped = false

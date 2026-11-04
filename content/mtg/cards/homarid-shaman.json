@@ -1,0 +1,8 @@
+{
+  "name": "Homarid Shaman",
+  "manaCost": "{2}{U}{U}",
+  "type": "Creature — Homarid Shaman",
+  "power": 2,
+  "toughness": 1,
+  "oracleText": "{U}: Tap target green creature."
+}
