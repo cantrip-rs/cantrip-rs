@@ -1,0 +1,71 @@
+# Paladin's Arms: job select makes a 1/1 Hero and attaches the Arms, so the Hero is a 3/2 Hero Knight with ward {1}: Bot2's
+# Bolt with no mana left over is countered (CR 702.21a). Lightbringer and Hero's Shield, Equip {4}, moves the Arms to
+# Savannah Lions (a 4/2 Cat Knight), and the Hero is a plain 1/1 again: a Bolt with no mana left over now kills it.
+
+[Bot1 Deck]
+Plains
+Black Lotus
+Paladin's Arms
+Savannah Lions
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mox Sapphire
+Plains x10
+
+[Bot2 Deck]
+Mountain
+Lightning Bolt
+Lightning Bolt
+Mountain x17
+
+[Actions]
+Bot1.Hand.Plains.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Paladin's Arms.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Paladin's Arms.AttachedTo = Hero Token
+? Bot1.Battlefield.Hero Token.Power = 3
+? Bot1.Battlefield.Hero Token.Toughness = 2
+? Bot1.Battlefield.Hero Token.Subtypes = Hero; Knight
+Bot1.Battlefield.Plains.Activate
+Bot1.Hand.Savannah Lions.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hero Token)
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Hero Token.Damage = 0
+? Bot2.Graveyard = Lightning Bolt
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Paladin's Arms.Activate(Ability: Lightbringer; Savannah Lions)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Paladin's Arms.AttachedTo = Savannah Lions
+? Bot1.Battlefield.Savannah Lions.Power = 4
+? Bot1.Battlefield.Savannah Lions.Toughness = 2
+? Bot1.Battlefield.Savannah Lions.Subtypes = Cat; Knight
+? Bot1.Battlefield.Hero Token.Power = 1
+? Bot1.Battlefield.Hero Token.Toughness = 1
+? Bot1.Battlefield.Hero Token.Subtypes = Hero
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Hero Token)
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Turn = 4
+Bot2.Graveyard = Lightning Bolt; Lightning Bolt
+Bot1.Battlefield = Mox Jet; Mox Pearl; Mox Ruby; Mox Sapphire; Paladin's Arms; Plains; Savannah Lions
