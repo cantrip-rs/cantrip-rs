@@ -30,9 +30,11 @@ fn wings_of_light(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
         g.permanents_of(item.controller).into_iter().filter(|&id| id != item.object && g.chars(id).is(CardType::Creature)).collect();
     effects::counters_on_each(g, &others, CounterKind::PlusOne, 1);
     g.end_sentence();
-    for id in others {
-        effects::gain_until_end_of_turn(g, item.object, id, Keyword::Flying);
-    }
+    instruction(g, |g| {
+        for &id in &others {
+            effects::gain_until_end_of_turn(g, item.object, id, Keyword::Flying);
+        }
+    });
     Ok(())
 }
 
