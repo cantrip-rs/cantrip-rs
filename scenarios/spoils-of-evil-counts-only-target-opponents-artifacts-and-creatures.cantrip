@@ -1,0 +1,56 @@
+# Spoils counts artifact cards and creature cards in the targeted opponent's graveyard once each,
+# including an artifact creature, but ignores a land and the caster's own creature (CR 608.2).
+# Cleanup discards force those graveyards without relying on random play.
+
+[Bot1 Deck]
+Spoils of Evil
+Mox Jet
+Mox Pearl
+Mox Ruby
+Grizzly Bears
+Swamp
+Swamp
+Swamp x13
+
+[Bot2 Deck]
+Ornithopter
+Grizzly Bears
+Black Lotus
+Island
+Island
+Island
+Island
+Island x13
+
+[Actions]
+[T2 Bot2.Cleanup]
+Bot2.Discard(Ornithopter)
+[T3 Bot1.Cleanup]
+Bot1.Discard(Grizzly Bears)
+[T4 Bot2.Cleanup]
+Bot2.Discard(Grizzly Bears)
+[T6 Bot2.Cleanup]
+Bot2.Discard(Black Lotus)
+[T8 Bot2.Cleanup]
+Bot2.Discard(Island)
+[T9 Bot1.Main1]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Hand.Spoils of Evil.Cast(Bot1)
+Bot1.Hand.Spoils of Evil.Cast(Bot2)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana = {C}{C}{C}
+? Bot1.Life = 23
+
+[Expect]
+Bot1.Life = 23
+Bot2.Life = 20
