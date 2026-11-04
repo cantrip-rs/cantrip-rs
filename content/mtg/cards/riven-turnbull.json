@@ -1,0 +1,8 @@
+{
+  "name": "Riven Turnbull",
+  "manaCost": "{5}{U}{B}",
+  "type": "Legendary Creature — Human Advisor",
+  "power": 5,
+  "toughness": 7,
+  "oracleText": "{T}: Add {B}."
+}
