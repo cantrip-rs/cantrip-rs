@@ -1,0 +1,11 @@
+{
+  "name": "Phantom Train",
+  "manaCost": "{3}{B}",
+  "type": "Artifact — Vehicle",
+  "power": 4,
+  "toughness": 4,
+  "oracleText": "Trample\nSacrifice another artifact or creature: Put a +1/+1 counter on this Vehicle. It becomes a Spirit artifact creature in addition to its other types until end of turn.",
+  "keywords": [
+    "Trample"
+  ]
+}

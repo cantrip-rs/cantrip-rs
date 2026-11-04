@@ -1,0 +1,31 @@
+# Phantom Train: "another" artifact or creature. Cast with Black Lotus (sacrificed for BBB) and a Swamp, the board is the Train and a Swamp only: neither
+# can be sacrificed, so the ability cannot be activated. Once a Memnite is cast it can.
+
+[Bot1 Deck]
+Swamp
+Black Lotus
+Phantom Train
+Memnite
+Plains x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Swamp.Activate
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Phantom Train.Cast
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Phantom Train.Activate
+Bot1.Hand.Memnite.Cast
+Bot1.Battlefield.Phantom Train.Activate
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Graveyard = Memnite; Black Lotus
+Bot1.Battlefield.Phantom Train.Counters.PlusOnePlusOne = 1

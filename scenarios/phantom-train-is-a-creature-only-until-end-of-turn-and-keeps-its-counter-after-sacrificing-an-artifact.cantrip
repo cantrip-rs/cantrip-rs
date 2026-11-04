@@ -1,0 +1,43 @@
+# Phantom Train: sacrificing a non-creature artifact (Mox Jet) pays too. The Train is an artifact creature that turn (turn 1), a 5/5 with its counter,
+# and on turn 3, back to just an artifact Vehicle, it keeps the counter but is no creature (CR 611.2a, 301.7b).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp
+Phantom Train
+Plains x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Phantom Train.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Phantom Train.Activate
+Bot1.Choose(Mox Jet)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Phantom Train.Types = Artifact; Creature
+? Bot1.Battlefield.Phantom Train.Power = 5
+[T2 Bot2.Main1]
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+
+[Expect]
+Stack.Count = 0
+Bot1.Battlefield.Phantom Train.Types = Artifact
+Bot1.Battlefield.Phantom Train.Subtypes = Vehicle
+Bot1.Battlefield.Phantom Train.Counters.PlusOnePlusOne = 1
+Bot1.Graveyard = Mox Jet

@@ -1,0 +1,60 @@
+# Phantom Train (4/4 Vehicle, trample): "Sacrifice another artifact or creature: Put a +1/+1 counter on this Vehicle. It becomes a Spirit artifact
+# creature in addition to its other types until end of turn." On turn 3 Bot1 sacrifices a Memnite: one counter, so the Train is a 5/5 Spirit artifact
+# creature. It attacks into Bot2's Memnite: 1 damage is lethal to the blocker and the other 4 trample through (20 -> 16).
+
+[Bot1 Deck]
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Swamp
+Phantom Train
+Memnite
+Memnite
+Plains x13
+
+[Bot2 Deck]
+Memnite
+Island x20
+
+[Actions]
+Bot1.Hand.Swamp.Play
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Swamp.Activate
+Bot1.Hand.Phantom Train.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Phantom Train.Activate
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Phantom Train.Types = Artifact; Creature
+? Bot1.Battlefield.Phantom Train.Subtypes = Spirit; Vehicle
+? Bot1.Battlefield.Phantom Train.Power = 5
+? Bot1.Battlefield.Phantom Train.Toughness = 5
+Bot1.Attack(Phantom Train > Bot2)
+Bot1.Pass
+[T3 Bot1.DeclareBlockers]
+Bot2.Block(Memnite > Phantom Train)
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.CombatDamage]
+Bot1.Pass
+
+[Expect]
+Stack.Count = 0
+Bot2.Life = 16
+Bot2.Graveyard = Memnite
+Bot1.Graveyard = Memnite
+Bot1.Battlefield.Phantom Train.Counters.PlusOnePlusOne = 1
