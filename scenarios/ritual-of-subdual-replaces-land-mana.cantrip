@@ -1,0 +1,69 @@
+# Both players' lands produce colorless rather than colored mana; a two-color land still produces two, while a Mox is unchanged (CR 614.1a, 702.24a).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Mox Jet
+Ritual of Subdual
+Forest
+Gruul Turf
+Sol Ring
+Island x20
+
+[Bot2 Deck]
+Forest
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Ritual of Subdual.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Battlefield.Forest.Activate
+? Bot2.Mana = {C}
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.PayCost
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Ritual of Subdual.Counters.Age = 1
+Bot1.Hand.Gruul Turf.Play
+Bot1.Choose(Forest)
+Bot1.Battlefield.Mox Jet.Activate
+? Bot1.Mana = {B}
+Bot1.Hand.Sol Ring.Cast
+? Bot1.Mana =
+[T5 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Sol Ring.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.PayCost
+? Bot1.Mana =
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Ritual of Subdual.Counters.Age = 2
+Bot1.Battlefield.Gruul Turf.Activate
+? Bot1.Mana = {C}{C}
+[T7 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[T7 Bot1.Main1]
+Bot1.Battlefield.Gruul Turf.Activate
+? Bot1.Mana = {R}{G}
+[Expect]
+Bot1.Graveyard = Ritual of Subdual; Black Lotus
