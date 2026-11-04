@@ -1,0 +1,53 @@
+# Riptide taps blue creatures controlled by either player, including a multicolored creature, but leaves a white creature untapped (CR 608.2, 701.26a).
+[Bot1 Deck]
+Island
+Mox Sapphire
+Mox Pearl
+Aven Envoy
+Aven Skirmisher
+Riptide
+Quest for Ancient Secrets
+Island x20
+
+[Bot2 Deck]
+Mox Sapphire
+Mox Jet
+Baleful Strix
+Island x20
+
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Aven Envoy.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Aven Skirmisher.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Hand.Mox Jet.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Hand.Baleful Strix.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Quest for Ancient Secrets.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Riptide.Cast
+? Bot1.Mana =
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield.Aven Envoy.Tapped = true
+Bot1.Battlefield.Aven Skirmisher.Tapped = false
+Bot1.Battlefield.Quest for Ancient Secrets.Tapped = false
+Bot2.Battlefield.Baleful Strix.Tapped = true

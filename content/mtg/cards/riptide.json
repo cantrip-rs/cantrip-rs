@@ -1,0 +1,6 @@
+{
+  "name": "Riptide",
+  "manaCost": "{U}",
+  "type": "Instant",
+  "oracleText": "Tap all blue creatures."
+}
