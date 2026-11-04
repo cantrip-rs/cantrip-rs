@@ -1,0 +1,32 @@
+# Shinra Reinforcements (2/3): "When this creature enters, mill three cards and you gain 3 life." (CR 701.17a, 119.1): Bot1 puts the
+# top three cards of its library into its graveyard and goes to 23 life; the opponent is unaffected.
+
+[Bot1 Deck]
+Mox Jet
+Mox Ruby
+Mox Pearl
+Shinra Reinforcements
+Island x16
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Shinra Reinforcements.Cast
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Stack.Count = 0
+Bot1.Life = 23
+Bot2.Life = 20
+Bot1.Graveyard.Count = 3
+Bot1.Library.Count = 10
+Bot2.Library.Count = 13
+Bot2.Graveyard.Count = 0
