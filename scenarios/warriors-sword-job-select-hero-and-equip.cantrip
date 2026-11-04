@@ -1,0 +1,63 @@
+# Warrior's Sword: job select makes a 1/1 Hero and attaches the Sword to it: "Equipped creature gets +3/+2 and is a Warrior in
+# addition to its other types", so the Hero is a 4/3 Hero Warrior. "Equip {5}" (CR 702.6a): with no untapped Mox it is refused,
+# and on turn 3 with five Moxen it moves the Sword to Bot1's Ornithopter (0/2 Thopter -> 3/4 Thopter Warrior); the Hero is a
+# plain 1/1 Hero again.
+
+[Bot1 Deck]
+Mox Ruby
+Mox Jet
+Mox Pearl
+Mox Sapphire
+Mox Emerald
+Warrior's Sword
+Ornithopter
+Mountain x15
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Jet.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Warrior's Sword.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Hero Token.Power = 4
+? Bot1.Battlefield.Hero Token.Toughness = 3
+? Bot1.Battlefield.Hero Token.Subtypes = Hero; Warrior
+? Bot1.Battlefield.Warrior's Sword.AttachedTo = Hero Token
+! Bot1.Battlefield.Warrior's Sword.Activate(Ornithopter; Mana: short)
+[T3 Bot1.Main1]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Warrior's Sword.Activate(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Turn = 3
+Bot1.Battlefield.Hero Token.Power = 1
+Bot1.Battlefield.Hero Token.Subtypes = Hero
+Bot1.Battlefield.Ornithopter.Power = 3
+Bot1.Battlefield.Ornithopter.Toughness = 4
+Bot1.Battlefield.Ornithopter.Subtypes = Thopter; Warrior
+Bot1.Battlefield.Warrior's Sword.AttachedTo = Ornithopter
