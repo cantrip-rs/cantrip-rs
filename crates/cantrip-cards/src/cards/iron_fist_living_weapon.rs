@@ -1,6 +1,6 @@
 use cantrip_api::*;
 use cantrip_mechanics::triggers::YOU_CAST_A_SPELL_THAT_TARGETS_A_CREATURE_YOU_CONTROL;
-use cantrip_mechanics::targets;
+use cantrip_mechanics::{fight, targets};
 use cantrip_oracle as oracle;
 
 /// "Iron Fist gains '{T}: ...' until end of turn" (CR 611.2a, 613.1f): a layer 6 effect that gives him the card's delayed ability 0
@@ -15,7 +15,7 @@ fn gain_the_ability(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
 /// "Iron Fist deals damage equal to his power to any other target" (CR 120.3): his power as the ability resolves, or as he last
 /// existed if he has left the battlefield (CR 113.7a); no damage for a power of 0 or less (CR 120.8).
 fn deal_damage_equal_to_power(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
-    let power = g.chars(item.object).power.unwrap_or(0).max(0) as u16;
+    let power = fight::damage_equal_to_power(g, item.object);
     g.damage(item.object, item.target(0), power);
     Ok(())
 }
