@@ -1,0 +1,8 @@
+{
+  "name": "Summon: Esper Ramuh",
+  "manaCost": "{2}{R}{R}",
+  "type": "Enchantment Creature — Saga Wizard",
+  "power": 3,
+  "toughness": 3,
+  "oracleText": "(As this Saga enters and after your draw step, add a lore counter. Sacrifice after III.)\nI — Judgment Bolt — This creature deals damage equal to the number of noncreature, nonland cards in your graveyard to target creature an opponent controls.\nII, III — Wizards you control get +1/+0 until end of turn."
+}
