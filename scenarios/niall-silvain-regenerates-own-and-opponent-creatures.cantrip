@@ -1,0 +1,80 @@
+# Niall taps and pays four green to regenerate either player's creature; the shield replaces lethal destruction (CR 701.19a, 602.2b).
+[Bot1 Deck]
+Niall Silvain
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Forest
+Island
+Forest x20
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Shock
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Niall Silvain.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+! Bot1.Battlefield.Niall Silvain.Activate(Bot1.Battlefield.Niall Silvain; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+! Bot1.Battlefield.Niall Silvain.Activate(Bot1.Battlefield.Mox Emerald#1)
+Bot1.Battlefield.Niall Silvain.Activate(Bot1.Battlefield.Niall Silvain)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Niall Silvain.Tapped = true
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Niall Silvain)
+Bot2.Pass
+Bot1.Pass
+? Bot1.Battlefield.Niall Silvain.Damage = 0
+? Bot1.Battlefield.Niall Silvain.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Niall Silvain.Activate(Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot2.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Niall Silvain.Power = 2
+Bot2.Battlefield.Ornithopter.Tapped = true
+Bot2.Battlefield.Ornithopter.Damage = 0

@@ -1,0 +1,59 @@
+# An unused regeneration shield ends at cleanup, so lethal damage on the following turn destroys Niall (CR 701.19a, 514.2).
+[Bot1 Deck]
+Niall Silvain
+Black Lotus
+Mox Emerald
+Mox Emerald
+Mox Emerald
+Forest
+Island
+Forest x20
+[Bot2 Deck]
+Ornithopter
+Mox Ruby
+Shock
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald#1.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Niall Silvain.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Emerald#1.Activate
+Bot1.Battlefield.Mox Emerald#2.Activate
+Bot1.Battlefield.Mox Emerald#3.Activate
+! Bot1.Battlefield.Niall Silvain.Activate(Bot1.Battlefield.Niall Silvain; Mana: short)
+Bot1.Hand.Forest.Play
+Bot1.Battlefield.Forest.Activate
+! Bot1.Battlefield.Niall Silvain.Activate(Bot1.Battlefield.Mox Emerald#1)
+Bot1.Battlefield.Niall Silvain.Activate(Bot1.Battlefield.Niall Silvain)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Niall Silvain.Tapped = true
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main1]
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Niall Silvain)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Niall Silvain = (absent)
+Bot1.Graveyard.Niall Silvain.Colors = Green
