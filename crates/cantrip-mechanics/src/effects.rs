@@ -77,6 +77,18 @@ pub fn target_creature_gets<const P: i16, const T: i16>(g: &mut dyn Game, item: 
     Ok(())
 }
 
+/// "Target creature gets -`SMALL`/-`SMALL` until end of turn. If this spell was kicked, that creature gets -`BIG`/-`BIG` until end of
+/// turn instead." One effect: the size is chosen from whether the spell was kicked (CR 702.33d), so a kicked spell gives -`BIG`/-`BIG`
+/// only (CR 608.2c); nothing if the target is no longer legal as the spell resolves (CR 608.2b). Eject the Warp Core (2, 6), Stomped
+/// by the Foot (2, 5) and Vayne's Treachery (2, 6) print it.
+pub fn target_creature_gets_minus_or_more_if_kicked<const SMALL: i16, const BIG: i16>(g: &mut dyn Game, item: &StackItem) -> Result<(), Suspend> {
+    if let Some(creature) = crate::targets::object(g, item, 0) {
+        let amount = if item.kicked > 0 { -BIG } else { -SMALL };
+        crate::pump(g, item.object, creature, amount, amount);
+    }
+    Ok(())
+}
+
 /// "Target creature gets +`P`/+`T` and gains first strike until end of turn" (CR 611.2a, 702.7): one instruction, the creature
 /// being the ability's first target; nothing if it is no longer a legal target as the spell resolves (CR 608.2b). Interjection
 /// (+2/+2), Charge the Sanctum's single-target mode (+2/+0) and Riverguard's Reflexes (+2/+2) print it.
