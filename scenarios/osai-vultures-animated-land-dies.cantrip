@@ -1,0 +1,31 @@
+# An animated Mutavault dies as a creature although it is a land in the graveyard (CR 700.4).
+[Bot1 Deck]
+Osai Vultures
+Mox Pearl
+Mox Jet
+Mox Ruby
+Mutavault
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mutavault.Play
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Osai Vultures.Cast
+? Bot1.Mana =
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mutavault.Activate(Ability: {1})
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Mutavault)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Osai Vultures.Counters.Carrion = 1
+Bot1.Graveyard = Mutavault; Lightning Bolt
