@@ -1,0 +1,6 @@
+{
+  "name": "Marsh Gas",
+  "manaCost": "{B}",
+  "type": "Instant",
+  "oracleText": "All creatures get -2/-0 until end of turn."
+}
