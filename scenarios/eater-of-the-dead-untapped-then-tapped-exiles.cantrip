@@ -1,0 +1,67 @@
+# The zero-cost ability can be activated untapped; stacked activations recheck tapped status, and the first resolution untaps Eater (CR 608.2, 701.26b).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mox Sapphire
+Eater of the Dead
+Memnite
+Mox Ruby
+Lightning Bolt
+Island x13
+[Bot2 Deck]
+Mox Ruby
+Memnite
+Lightning Bolt
+Island x17
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Eater of the Dead.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Memnite.Cast
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Lightning Bolt.Cast(Bot2.Battlefield.Memnite)
+[T3 Bot1.Main1]
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Memnite)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Eater of the Dead.Activate(Bot1.Graveyard.Lightning Bolt)
+Bot1.Battlefield.Eater of the Dead.Activate(Bot1.Graveyard.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Graveyard.Memnite.Power = 1
+? Bot1.Battlefield.Eater of the Dead.Tapped = false
+Bot1.Attack(Eater of the Dead > Bot2)
+? Bot1.Battlefield.Eater of the Dead.Tapped = true
+Bot1.Battlefield.Eater of the Dead.Activate(Bot2.Graveyard.Memnite)
+? Bot1.Mana =
+Bot1.Battlefield.Eater of the Dead.Activate(Bot1.Graveyard.Memnite)
+? Bot1.Battlefield.Eater of the Dead.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Eater of the Dead.Tapped = false
+Bot1.Pass
+Bot2.Pass
+? Bot2.Graveyard.Memnite.Power = 1
+[T3 Bot1.Main2]
+? Bot2.Life = 17
+[T5 Bot1.DeclareAttackers]
+Bot1.Attack(Eater of the Dead > Bot2)
+Bot1.Battlefield.Eater of the Dead.Activate(Bot2.Graveyard.Memnite)
+? Bot1.Mana =
+[T5 Bot1.Main2]
+[Expect]
+Bot2.Exile.Memnite.Power = 1
+Bot1.Exile.Memnite.Power = 1
+Bot1.Battlefield.Eater of the Dead.Tapped = false
+Bot2.Life = 14
