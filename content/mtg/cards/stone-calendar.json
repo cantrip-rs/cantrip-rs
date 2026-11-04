@@ -1,0 +1,6 @@
+{
+  "name": "Stone Calendar",
+  "manaCost": "{5}",
+  "type": "Artifact",
+  "oracleText": "Spells you cast cost {1} less to cast."
+}

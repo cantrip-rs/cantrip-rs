@@ -1,0 +1,58 @@
+# Stone Calendar reduces its controller's creature and noncreature spells by {1},
+# but does not change the opponent's costs, activated ability costs, or mana value (CR 601.2f, 602.2b).
+[Bot1 Deck]
+Stone Calendar
+Black Lotus
+Black Lotus
+Black Lotus
+Mind Stone
+Grizzly Bears
+Island
+Island x15
+
+[Bot2 Deck]
+Black Lotus
+Mind Stone
+Island x18
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Green)
+Bot1.Hand.Stone Calendar.Cast
+? Bot1.Mana = {G}
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Mind Stone.Cast
+? Bot1.Mana = {G}{G}{G}
+? Stack.Mind Stone.ManaValue = 2
+Bot1.Pass
+Bot2.Pass
+Bot1.Hand.Grizzly Bears.Cast
+? Bot1.Mana = {G}{G}
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mind Stone.Activate(Ability: Draw a card)
+Bot1.Choose(Pay mana)
+? Bot1.Mana = {G}
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Mind Stone.Cast
+? Bot2.Mana = {U}
+Bot2.Pass
+Bot1.Pass
+
+[Expect]
+Bot1.Battlefield = Stone Calendar; Grizzly Bears
+Bot2.Battlefield = Mind Stone
