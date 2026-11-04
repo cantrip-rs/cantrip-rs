@@ -1,0 +1,31 @@
+# An unused prevention shield expires at cleanup: Shock on the next turn deals its full two damage.
+[Bot1 Deck]
+Mox Pearl
+Fylgja
+Ornithopter
+Island x20
+[Bot2 Deck]
+Mox Ruby
+Shock
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Fylgja.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Fylgja.Activate(Ability: Remove a healing)
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Graveyard.Ornithopter.Colors =
+Bot1.Graveyard.Fylgja.Colors = White
