@@ -1,0 +1,43 @@
+# After Stone Rain removes the last Forest, Old Man of the Sea steals the Pack in response to its former
+# controller's state trigger. The former controller cannot sacrifice it (CR 701.21a, 603.8).
+[Bot1 Deck]
+Forest
+Gorilla Pack
+Black Lotus
+Island x20
+[Bot2 Deck]
+Forest
+Black Lotus
+Black Lotus
+Old Man of the Sea
+Giant Growth
+Stone Rain
+Island x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Gorilla Pack.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot2.Hand.Old Man of the Sea.Cast
+[T4 Bot2.Main1]
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Giant Growth.Cast(Bot2.Battlefield.Old Man of the Sea)
+Bot2.Pass
+Bot1.Pass
+Bot2.Hand.Black Lotus.Cast
+Bot2.Battlefield.Black Lotus.Activate(Color: Red)
+Bot2.Hand.Stone Rain.Cast(Bot1.Battlefield.Forest)
+Bot2.Pass
+Bot1.Pass
+Bot2.Battlefield.Old Man of the Sea.Activate(Bot1.Battlefield.Gorilla Pack)
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.Main2]
+[Expect]
+Bot2.Battlefield.Gorilla Pack.Power = 3
+Bot1.Graveyard.Forest.Colors =
