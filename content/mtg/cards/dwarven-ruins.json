@@ -1,0 +1,5 @@
+{
+  "name": "Dwarven Ruins",
+  "type": "Land",
+  "oracleText": "This land enters tapped.\n{T}: Add {R}.\n{T}, Sacrifice this land: Add {R}{R}."
+}

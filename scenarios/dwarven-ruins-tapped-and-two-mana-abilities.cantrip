@@ -1,0 +1,23 @@
+# Dwarven Ruins enters tapped, taps for one red, and on a later turn taps and
+# sacrifices itself for two red (CR 614.1d, 605.1a, 602.2b).
+[Bot1 Deck]
+Dwarven Ruins
+Mountain x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Dwarven Ruins.Play
+? Bot1.Battlefield.Dwarven Ruins.Tapped = true
+! Bot1.Battlefield.Dwarven Ruins.Activate(Ability: #1)
+! Bot1.Battlefield.Dwarven Ruins.Activate(Ability: #2)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Dwarven Ruins.Activate(Ability: #1)
+? Bot1.Mana = {R}
+? Bot1.Battlefield.Dwarven Ruins.Tapped = true
+! Bot1.Battlefield.Dwarven Ruins.Activate(Ability: #2)
+[T5 Bot1.Main1]
+Bot1.Battlefield.Dwarven Ruins.Activate(Ability: #2)
+? Bot1.Mana = {R}{R}
+[Expect]
+Bot1.Battlefield.Dwarven Ruins = (absent)
+Bot1.Graveyard = Dwarven Ruins
