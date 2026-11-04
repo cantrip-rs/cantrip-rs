@@ -1,0 +1,122 @@
+# Colossus tramples over a blocker, stays tapped in untap steps, and can be untapped twice in one upkeep for nine mana each (CR 702.19b, 602.5, 701.26b).
+[Bot1 Deck]
+Colossus of Sardia
+Black Lotus x3
+Relic Barrier
+Island x100
+[Bot2 Deck]
+Ornithopter
+Island x100
+[Actions]
+Bot1.Hand.Island.Play
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Colossus of Sardia.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Attack(Colossus of Sardia > Bot2)
+Bot2.Block(Ornithopter > Colossus of Sardia)
+[T3 Bot1.Main2]
+? Bot2.Life = 13
+? Bot1.Battlefield.Colossus of Sardia.Tapped = true
+[T5 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Relic Barrier.Cast
+Bot1.Pass
+[T7 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T9 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T11 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T13 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T15 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T17 Bot1.Upkeep]
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+! Bot1.Battlefield.Colossus of Sardia.Activate(Mana: short)
+[T17 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T19 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T21 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T23 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T25 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T27 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T29 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T31 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T33 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T35 Bot1.Main1]
+Bot1.Hand.Island.Play
+[T37 Bot1.Main1]
+Bot1.Hand.Island.Play
+! Bot1.Battlefield.Colossus of Sardia.Activate
+[T38 Bot2.Upkeep]
+! Bot1.Battlefield.Colossus of Sardia.Activate
+[T39 Bot1.Upkeep]
+? Bot1.Battlefield.Colossus of Sardia.Tapped = true
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Colossus of Sardia.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Colossus of Sardia.Tapped = false
+Bot1.Battlefield.Relic Barrier.Activate(Bot1.Battlefield.Colossus of Sardia)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Colossus of Sardia.Tapped = true
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Colossus of Sardia.Activate
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Colossus of Sardia.Tapped = false
+[T39 Bot1.Main1]
+[Expect]
+Bot1.Battlefield.Colossus of Sardia.Tapped = false
+Bot2.Life = 13

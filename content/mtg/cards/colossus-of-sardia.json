@@ -1,0 +1,11 @@
+{
+  "name": "Colossus of Sardia",
+  "manaCost": "{9}",
+  "type": "Artifact Creature — Golem",
+  "power": 9,
+  "toughness": 9,
+  "oracleText": "Trample (This creature can deal excess combat damage to the player or planeswalker it's attacking.)\nThis creature doesn't untap during your untap step.\n{9}: Untap this creature. Activate only during your upkeep.",
+  "keywords": [
+    "Trample"
+  ]
+}
