@@ -1,0 +1,33 @@
+# A hand with no creature cards is still revealed and no card is discarded by Rag Man (CR 701.20a).
+[Bot1 Deck]
+Black Lotus x2
+Mox Jet
+Rag Man
+Island x20
+[Bot2 Deck]
+Forest
+Island x22
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Hand.Rag Man.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+! Bot1.Battlefield.Rag Man.Activate(Bot2)
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+! Bot1.Battlefield.Rag Man.Activate(Bot1)
+Bot1.Battlefield.Rag Man.Activate(Bot2)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+? Bot1.Battlefield.Rag Man.Tapped = true
+[T3 Bot1.Main1]
+[Expect]
+Bot2.Hand.Forest.Colors =
+Bot2.Revealed.Count = 7
+Bot2.Graveyard.Count = 1
