@@ -1,0 +1,11 @@
+{
+  "name": "Valkyrie Aerial Unit",
+  "manaCost": "{5}{U}{U}",
+  "type": "Artifact Creature — Construct",
+  "power": 5,
+  "toughness": 4,
+  "oracleText": "Affinity for artifacts (This spell costs {1} less to cast for each artifact you control.)\nFlying\nWhen this creature enters, surveil 2. (Look at the top two cards of your library, then put any number of them into your graveyard and the rest on top of your library in any order.)",
+  "keywords": [
+    "Flying"
+  ]
+}

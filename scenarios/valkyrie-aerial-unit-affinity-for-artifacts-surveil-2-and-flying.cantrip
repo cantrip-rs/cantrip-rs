@@ -1,0 +1,56 @@
+# Valkyrie Aerial Unit ({5}{U}{U}, 5/4 flier, Affinity for artifacts): with five Moxen out it costs exactly {U}{U} (CR 702.41), paid by Mox Sapphire and an
+# Island with the other four Moxen left untapped. When it enters it surveils 2 (CR 701.25): of the Island and Swamp on top of the library Bot1 keeps the Island
+# and puts the Swamp into the graveyard. On turn 3 it attacks and Bot2's Grizzly Bears cannot block a flier.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Jet
+Mox Ruby
+Mox Pearl
+Mox Emerald
+Island
+Valkyrie Aerial Unit
+Island
+Swamp
+Plains x12
+
+[Bot2 Deck]
+Mox Emerald
+Mox Ruby
+Grizzly Bears
+Island x17
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Island.Activate
+Bot1.Hand.Valkyrie Aerial Unit.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Arrange(Island | Swamp)
+? Bot1.Battlefield.Mox Jet.Tapped = false
+? Bot1.Battlefield.Mox Ruby.Tapped = false
+? Bot1.Battlefield.Mox Pearl.Tapped = false
+? Bot1.Battlefield.Mox Emerald.Tapped = false
+? Bot1.Graveyard = Swamp
+? Bot1.Surveilled = 2 requested, 2 looked
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Emerald.Cast
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Battlefield.Mox Emerald.Activate
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot1.Pass
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(Valkyrie Aerial Unit > Bot2)
+! Bot2.Block(Grizzly Bears > Valkyrie Aerial Unit)
+[T3 Bot1.Main2]
+
+[Expect]
+Bot2.Life = 15
