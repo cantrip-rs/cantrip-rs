@@ -1,0 +1,25 @@
+# Giant Growth changes the target from 1/1 before Pendelhaven resolves, so its ability does nothing (CR 608.2b).
+[Bot1 Deck]
+Pendelhaven
+Memnite
+Mox Emerald
+Giant Growth
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Pendelhaven.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Pendelhaven.Activate(Bot1.Battlefield.Memnite; Ability: Target 1/1)
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Battlefield.Memnite.Power = 4
+Bot1.Battlefield.Memnite.Toughness = 4

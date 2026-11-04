@@ -1,0 +1,13 @@
+# Pendelhaven taps for exactly one green mana and cannot tap again (CR 605.1a).
+[Bot1 Deck]
+Pendelhaven
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Pendelhaven.Play
+Bot1.Battlefield.Pendelhaven.Activate(Ability: Add {G})
+? Bot1.Mana = {G}
+! Bot1.Battlefield.Pendelhaven.Activate(Ability: Add {G})
+[Expect]
+Bot1.Battlefield.Pendelhaven.Tapped = true

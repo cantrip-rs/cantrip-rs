@@ -1,0 +1,45 @@
+# Pendelhaven boosts a 1/1 of either player, refuses creatures with wrong power or toughness, and the first boost expires at cleanup (CR 611.2a).
+[Bot1 Deck]
+Pendelhaven
+Memnite
+Ornithopter
+Mox Pearl
+Goldmeadow Nomad
+Savannah Lions
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Pendelhaven.Play
+Bot1.Hand.Memnite.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Goldmeadow Nomad.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Battlefield.Pendelhaven.Activate(Bot1.Battlefield.Goldmeadow Nomad; Ability: Target 1/1)
+! Bot1.Battlefield.Pendelhaven.Activate(Bot1.Battlefield.Ornithopter; Ability: Target 1/1)
+Bot1.Battlefield.Pendelhaven.Activate(Bot1.Battlefield.Memnite; Ability: Target 1/1)
+? Bot1.Battlefield.Pendelhaven.Tapped = true
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Power = 2
+? Bot1.Battlefield.Memnite.Toughness = 3
+[T2 Bot2.Main1]
+? Bot1.Battlefield.Memnite.Power = 1
+? Bot1.Battlefield.Memnite.Toughness = 1
+Bot2.Hand.Memnite.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Savannah Lions.Cast
+? Bot1.Mana =
+Bot1.Pass
+! Bot1.Battlefield.Pendelhaven.Activate(Bot1.Battlefield.Savannah Lions; Ability: Target 1/1)
+Bot1.Battlefield.Pendelhaven.Activate(Bot2.Battlefield.Memnite; Ability: Target 1/1)
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot2.Battlefield.Memnite.Power = 2
+Bot2.Battlefield.Memnite.Toughness = 3
