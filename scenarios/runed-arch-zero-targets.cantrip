@@ -1,0 +1,26 @@
+# X may be zero: Runed Arch still taps and is sacrificed even with no targets (CR 107.3, 602.2b).
+[Bot1 Deck]
+Black Lotus
+Runed Arch
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Runed Arch.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T1 Bot1.Main2]
+! Bot1.Battlefield.Runed Arch.Activate(X: 0)
+? Bot1.Battlefield.Runed Arch.Tapped = true
+[T3 Bot1.Main1]
+Bot1.Battlefield.Runed Arch.Activate(X: 0)
+Bot1.Pass
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Graveyard = Runed Arch; Black Lotus
+Bot1.Mana =

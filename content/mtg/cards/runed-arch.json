@@ -1,0 +1,6 @@
+{
+  "name": "Runed Arch",
+  "manaCost": "{3}",
+  "type": "Artifact",
+  "oracleText": "This artifact enters tapped.\n{X}, {T}, Sacrifice this artifact: X target creatures with power 2 or less can't be blocked this turn."
+}

@@ -1,0 +1,75 @@
+# A targeted Ornithopter gains power before resolution and becomes illegal; the other target still becomes unblockable (CR 608.2b).
+[Bot1 Deck]
+Black Lotus
+Runed Arch
+Mox Pearl
+Mox Emerald
+Giant Growth
+Savannah Lions
+Ornithopter
+Island
+Island
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Cathar Commando
+Ornithopter
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: White)
+Bot1.Hand.Runed Arch.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Runed Arch.Tapped = true
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Hand.Savannah Lions.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Cathar Commando.Cast
+Bot2.Pass
+Bot2.Hand.Ornithopter.Cast
+Bot2.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Island.Play
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Runed Arch.Activate(X: 2)
+! Bot1.Target(Bot2.Battlefield.Cathar Commando)
+! Bot1.Target(Count: 1)
+! Bot1.Target(Count: 3)
+Bot1.Target(Bot1.Battlefield.Savannah Lions; Bot2.Battlefield.Ornithopter)
+Bot1.Choose(Pay mana)
+Bot1.Choose(Pay mana)
+? Bot1.Mana =
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Giant Growth.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Savannah Lions.CantBeBlocked = true
+? Bot2.Battlefield.Ornithopter.Power = 3
+? Bot2.Battlefield.Ornithopter.CantBeBlocked = (absent)
+? Bot2.Battlefield.Cathar Commando.CantBeBlocked = (absent)
+[T3 Bot1.BeginCombat]
+Bot1.Attack(Savannah Lions > Bot2)
+! Bot2.Block(Cathar Commando > Savannah Lions)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Savannah Lions.CantBeBlocked = (absent)
+Bot2.Graveyard = Black Lotus
+Bot1.Graveyard = Giant Growth; Runed Arch; Black Lotus
