@@ -912,6 +912,14 @@ pub fn another_card_in_the_same_graveyard(q: &dyn Query, asker: &Asker, t: Targe
 /// The second slot of "up to two target cards from a single graveyard": see `another_card_in_the_same_graveyard`.
 pub const ANOTHER_CARD_IN_THE_SAME_GRAVEYARD: TargetSpec = target(another_card_in_the_same_graveyard);
 
+/// The two slots of "up to two target cards from a single graveyard" (CR 115.1, 601.2c) as an ability's or mode's whole
+/// target list: zero, one or two cards that all lie in one graveyard. Unlicensed Hearse and Qutrub Forayer print it (Cease //
+/// Desist adds a third slot of its own).
+pub const UP_TO_TWO_CARDS_FROM_A_SINGLE_GRAVEYARD: &[TargetSpec] = &[
+    CARD_IN_A_GRAVEYARD.optional().labelled("First card to exile (up to two, from a single graveyard)"),
+    ANOTHER_CARD_IN_THE_SAME_GRAVEYARD.optional().labelled("Second card to exile, from the same graveyard"),
+];
+
 /// "Target card from a graveyard". Emperor of Bones, Ghost Vacuum, Keen-Eyed Curator and Lion Sash print it.
 pub const CARD_IN_A_GRAVEYARD: TargetSpec = target(card_in_a_graveyard_filter);
 /// "Target card from an opponent's graveyard" (CR 115.1, 404.1): a card in the graveyard of a player other than the ability's

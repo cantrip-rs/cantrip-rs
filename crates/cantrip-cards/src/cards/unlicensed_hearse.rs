@@ -22,10 +22,7 @@ fn exiled_with_it(q: &dyn LayerQuery, source: ObjectId, chars: &mut Chars) {
 
 pub static CARD: CardDef = CardDef {
     abilities: &[
-        ability(TAP, exile_cards, "{T}: Exile up to two target cards from a single graveyard.").targets(&[
-            targets::CARD_IN_A_GRAVEYARD.optional().labelled("First card to exile (up to two, from a single graveyard)"),
-            targets::ANOTHER_CARD_IN_THE_SAME_GRAVEYARD.optional().labelled("Second card to exile, from the same graveyard"),
-        ]),
+        ability(TAP, exile_cards, "{T}: Exile up to two target cards from a single graveyard.").targets(targets::UP_TO_TWO_CARDS_FROM_A_SINGLE_GRAVEYARD),
         crew(2, "Crew 2 (Tap any number of creatures you control with total power 2 or more: This Vehicle becomes an artifact creature until end of turn.)"),
     ],
     statics: &[characteristic_defining(Layer::PtDefine, exiled_with_it, "Unlicensed Hearse's power and toughness are each equal to the number of cards exiled with it.").lost_pt(0, 0)],
