@@ -1,0 +1,8 @@
+{
+  "name": "Freya Crescent",
+  "manaCost": "{R}",
+  "type": "Legendary Creature — Rat Knight",
+  "power": 1,
+  "toughness": 1,
+  "oracleText": "Jump — During your turn, Freya Crescent has flying.\n{T}: Add {R}. Spend this mana only to cast an Equipment spell or activate an equip ability."
+}

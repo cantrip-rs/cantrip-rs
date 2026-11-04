@@ -1,0 +1,56 @@
+# Freya Crescent {R}: "Jump - During your turn, Freya Crescent has flying. {T}: Add {R}. Spend this mana only to cast an Equipment spell or
+# activate an equip ability." (CR 604.1, 106.6, 602.2b, 702.6a). Turn 1 Bot1 casts Freya with a Mountain. Turn 3 Freya flies (it is Bot1's
+# turn); the Mountain pays for a Raging Goblin, which leaves Freya's {R} the only mana: it is restricted, so it can't pay the second Raging
+# Goblin, but it pays Coral Sword ({R}, an Equipment spell), whose trigger attaches it to Freya. Turn 4 (Bot2's) Freya has no flying. Turn 5 it
+# flies again, and Freya's {R} pays Coral Sword's equip {1}, moving it to the Raging Goblin: a 2/1.
+
+[Bot1 Deck]
+Mountain
+Freya Crescent
+Raging Goblin
+Raging Goblin
+Coral Sword
+Island x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Mountain.Play
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Freya Crescent.Cast
+Bot1.Pass
+Bot2.Pass
+[T3 Bot1.Main1]
+? Bot1.Battlefield.Freya Crescent.Keywords = Flying
+Bot1.Battlefield.Mountain.Activate
+Bot1.Hand.Raging Goblin.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Freya Crescent.Activate
+? Bot1.Mana = {R} (EquipmentSpellsOrEquipAbilities)
+! Bot1.Hand.Raging Goblin.Cast(Mana: short)
+Bot1.Hand.Coral Sword.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Target(Freya Crescent)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Coral Sword.AttachedTo = Freya Crescent
+? Bot1.Battlefield.Freya Crescent.Power = 2
+[T4 Bot2.Main1]
+? Bot1.Battlefield.Freya Crescent.Keywords = (absent)
+[T5 Bot1.Main1]
+? Bot1.Battlefield.Freya Crescent.Keywords = Flying
+Bot1.Battlefield.Freya Crescent.Activate
+Bot1.Battlefield.Coral Sword.Activate(Ability: Equip; Raging Goblin)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Mana =
+
+[Expect]
+Bot1.Battlefield.Coral Sword.AttachedTo = Raging Goblin
+Bot1.Battlefield.Raging Goblin.Power = 2
+Bot1.Battlefield.Freya Crescent.Power = 1
