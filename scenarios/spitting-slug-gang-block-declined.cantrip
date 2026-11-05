@@ -1,0 +1,40 @@
+# When two creatures block the attacking Slug, declining the trigger gives both blockers first strike (CR 509.1h, 702.7b).
+[Bot1 Deck]
+Spitting Slug
+Black Lotus
+Forest x20
+[Bot2 Deck]
+Grizzly Bears x2
+Black Lotus
+Forest x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spitting Slug.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Attackers]
+Bot1.Attack(Spitting Slug > Bot2)
+Bot2.Block(Grizzly Bears#1 > Spitting Slug; Grizzly Bears#2 > Spitting Slug)
+? Stack.Count = 1
+Bot1.Decline
+? Bot2.Battlefield.Grizzly Bears#1.Keywords = FirstStrike
+? Bot2.Battlefield.Grizzly Bears#2.Keywords = FirstStrike
+[T3 Bot1.Main2]
+? Bot2.Battlefield.Grizzly Bears#1.Damage = 0
+? Bot2.Battlefield.Grizzly Bears#2.Damage = 0
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Graveyard = Spitting Slug; Black Lotus
+Bot2.Battlefield.Grizzly Bears#1.Keywords = (absent)
+Bot2.Battlefield.Grizzly Bears#2.Keywords = (absent)

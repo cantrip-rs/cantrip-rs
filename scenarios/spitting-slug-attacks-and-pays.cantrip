@@ -1,0 +1,43 @@
+# Paying {1}{G} when the Slug becomes blocked gives it first strike before the two blockers deal damage (CR 509.1h, 702.7b).
+[Bot1 Deck]
+Spitting Slug
+Black Lotus
+Forest
+Mox Pearl
+Forest x20
+[Bot2 Deck]
+Grizzly Bears x2
+Black Lotus
+Forest x20
+[Actions]
+Bot1.Hand.Forest.Play
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Spitting Slug.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Hand.Forest.Play
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Battlefield.Forest.Activate
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+Bot2.Hand.Grizzly Bears.Cast
+Bot2.Pass
+[T3 Bot1.Attackers]
+Bot1.Attack(Spitting Slug > Bot2)
+Bot2.Block(Grizzly Bears#1 > Spitting Slug; Grizzly Bears#2 > Spitting Slug)
+Bot1.Pass
+Bot1.Battlefield.Forest.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+? Bot1.Mana =
+? Bot1.Battlefield.Spitting Slug.Keywords = FirstStrike
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Battlefield.Spitting Slug.Damage = 2
+Bot2.Graveyard = Grizzly Bears; Black Lotus
