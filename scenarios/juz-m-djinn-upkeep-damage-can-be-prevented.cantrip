@@ -1,0 +1,37 @@
+# The Djinn deals damage, so a prevention shield stops it; after the shield expires a later upkeep deals one (CR 615.1).
+
+[Bot1 Deck]
+Juzám Djinn
+Black Lotus
+Mox Pearl
+Healing Salve
+Swamp x20
+
+[Bot2 Deck]
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Juzám Djinn.Cast
+? Bot1.Mana =
+Bot1.Pass
+[T3 Bot1.Upkeep]
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Hand.Healing Salve.Cast
+Bot1.Modes(Prevent the next 3 damage)
+Bot1.Target(Bot1)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 20
+[T5 Bot1.Main1]
+
+[Expect]
+Bot1.Life = 19

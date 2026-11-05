@@ -1,0 +1,8 @@
+{
+  "name": "Juzám Djinn",
+  "manaCost": "{2}{B}{B}",
+  "type": "Creature — Djinn",
+  "power": 5,
+  "toughness": 5,
+  "oracleText": "At the beginning of your upkeep, this creature deals 1 damage to you."
+}
