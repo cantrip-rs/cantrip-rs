@@ -1,0 +1,61 @@
+# New Way Forward (CR 615.8, 603.12): "the next time a source of your choice would deal damage to you this turn". Bot1 chooses Bot2's
+# Fencing Ace (double strike, 1/1) as it attacks. Its first-strike damage is the next time: prevented, and the reflexive ability
+# deals that 1 damage to the Ace's controller, Bot2, and Bot1 draws 1 card. The effect is then used up, so the regular damage 1 is
+# dealt to Bot1: Bot1 19, Bot2 19. Bot1's hand is 2 cards once New Way Forward is cast and 3 after the ability resolves.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+New Way Forward
+Island
+Island x25
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Fencing Ace
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fencing Ace.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Fencing Ace > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Hand.New Way Forward.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fencing Ace)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Count = 2
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Bot1.Hand.Count = 3
+Prevented = 1 Fencing Ace > Bot1 by New Way Forward

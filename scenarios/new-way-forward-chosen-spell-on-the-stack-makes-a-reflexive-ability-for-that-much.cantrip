@@ -1,0 +1,54 @@
+# New Way Forward (CR 609.7a, 603.12, 615.5): Bot1 casts it in response to Bot2's Shock aimed at Bot1 and chooses that Shock - a spell on the
+# stack - as the source. Shock's 2 damage to Bot1 is prevented, and a reflexive ability goes on the stack (it is not part of
+# the Shock's resolution): when it resolves it deals 2 to the source's controller, Bot2, and Bot1 draws 2. Bot1 stays at 20, Bot2 ends
+# at 18, and Bot1's hand goes from 1 card to 3.
+
+[Bot1 Deck]
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Mox Jet
+Mox Emerald
+New Way Forward
+Island
+Island x25
+
+[Bot2 Deck]
+Mountain
+Shock
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Jet.Cast
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot1.Hand.New Way Forward.Cast
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Mox Jet.Activate
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Shock)
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 1
+? Bot1.Hand.Count = 1
+Bot1.Pass
+Bot2.Pass
+? Stack.Count = 0
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 20
+Bot2.Life = 18
+Bot1.Hand.Count = 3
+Prevented = 2 Shock > Bot1 by New Way Forward
