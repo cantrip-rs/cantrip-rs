@@ -1,0 +1,6 @@
+{
+  "name": "Regrowth",
+  "manaCost": "{1}{G}",
+  "type": "Sorcery",
+  "oracleText": "Return target card from your graveyard to your hand."
+}

@@ -1,0 +1,51 @@
+# Regrowth returns a card from its controller's graveyard, including a noncreature, while another player's card is ineligible (CR 115.1a, 400.3).
+
+[Bot1 Deck]
+Black Lotus
+Mox Emerald
+Ornithopter
+Shock
+Mox Ruby
+Regrowth
+Regrowth
+Island x20
+
+[Bot2 Deck]
+Black Lotus
+Island x20
+
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Shock.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Blue)
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+! Bot1.Hand.Regrowth.Cast(Bot2.Graveyard.Black Lotus)
+! Bot1.Hand.Regrowth.Cast(Bot1.Battlefield.Mox Ruby)
+Bot1.Hand.Regrowth.Cast(Bot1.Graveyard.Ornithopter)
+? Bot1.Mana = {G}
+Bot1.Pass
+Bot2.Pass
+? Bot1.Hand.Ornithopter.Power = 0
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Hand.Regrowth.Cast(Bot1.Graveyard.Shock)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+
+[Expect]
+Bot1.Hand = Ornithopter; Shock; Island
+Bot2.Graveyard = Black Lotus

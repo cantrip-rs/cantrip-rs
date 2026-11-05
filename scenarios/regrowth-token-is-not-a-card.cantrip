@@ -1,0 +1,36 @@
+# Etali casts Diabolic Intent by sacrificing a token, then attempts Regrowth during the same resolution. Tokens are not cards, even before state-based actions remove them (CR 111.6, 704.5d).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Gleeful Demolition
+Show and Tell
+Etali, Primal Conqueror
+Mox Pearl
+Tormod's Crypt
+Diabolic Intent
+Island x20
+[Bot2 Deck]
+Island x7
+Regrowth
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Tormod's Crypt.Cast
+Bot1.Battlefield.Black Lotus#1.Activate(Color: Red)
+Bot1.Hand.Gleeful Demolition.Cast(Mox Pearl)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Show and Tell.Cast
+Bot1.Choose(Etali, Primal Conqueror)
+Bot2.Choose()
+Bot1.Battlefield.Tormod's Crypt.Activate(Bot1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Diabolic Intent)
+Bot1.Choose(Phyrexian Goblin Token)
+[T1 Bot1.Main2]
+[Expect]
+Bot2.Exile.Regrowth.Colors = Green
