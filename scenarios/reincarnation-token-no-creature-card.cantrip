@@ -1,0 +1,38 @@
+# A watched token dies with no creature card in its owner's graveyard; the delayed ability returns nothing (CR 603.7, 111.7).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Boggart Mischief
+Ornithopter
+Reincarnation
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.Boggart Mischief.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Accept
+Bot1.Choose(Ornithopter)
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Reincarnation.Cast(Bot1.Battlefield.Goblin Token#1)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Goblin Token#1)
+Bot1.Pass
+Bot2.Pass
+[T1 Bot1.End]
+[Expect]
+Bot1.Battlefield.Goblin Token.Power = 1
+Bot1.Battlefield.Ornithopter.Power = -1
+Bot1.Graveyard.Count = 4
+Bot1.Life = 21
+Bot2.Life = 19

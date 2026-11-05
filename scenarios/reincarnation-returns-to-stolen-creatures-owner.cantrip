@@ -1,0 +1,36 @@
+# The targeted creature's owner gets the returned creature even if another player controlled it when it died.
+[Bot1 Deck]
+Black Lotus
+Mox Ruby
+Mox Ruby
+Claim the Firstborn
+Reincarnation
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Ruby.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Mox Ruby#1.Activate
+Bot1.Hand.Claim the Firstborn.Cast(Bot2.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Reincarnation.Cast(Bot1.Battlefield.Ornithopter)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby#2.Activate
+Bot1.Hand.Lightning Bolt.Cast(Bot1.Battlefield.Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Ornithopter)
+[Expect]
+Bot2.Battlefield.Ornithopter.Power = 0
+Bot2.Graveyard.Count = 0

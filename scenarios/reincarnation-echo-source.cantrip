@@ -1,0 +1,36 @@
+# Reincarnation's delayed trigger is from an instant, not a creature (CR 603.7d).
+[Bot1 Deck]
+Black Lotus
+Black Lotus
+Mox Ruby
+Mox Sapphire
+Echo, Perceptive Prodigy
+Reincarnation
+Ornithopter
+Lightning Bolt
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Echo, Perceptive Prodigy.Cast
+Bot1.Pass
+Bot1.Hand.Ornithopter.Cast
+Bot1.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Reincarnation.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Hand.Lightning Bolt.Cast(Ornithopter)
+Bot1.Pass
+Bot2.Pass
+! Bot1.Battlefield.Echo, Perceptive Prodigy.Activate
+Bot1.Pass
+[Expect]
+Bot1.Battlefield.Echo, Perceptive Prodigy.Tapped = false
