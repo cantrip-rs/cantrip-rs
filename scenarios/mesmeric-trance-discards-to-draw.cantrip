@@ -1,0 +1,40 @@
+# The ability requires blue mana and discards a chosen card as a cost before drawing the next card (CR 602.2b, 701.9a, 121.1).
+[Bot1 Deck]
+Black Lotus
+Mox Pearl
+Mesmeric Trance
+Island
+Forest
+Sol Ring
+Plains
+Mountain
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Mesmeric Trance.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Mox Pearl.Activate
+! Bot1.Battlefield.Mesmeric Trance.Activate(Mana: short)
+Bot1.Hand.Sol Ring.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Mesmeric Trance.Activate
+Bot1.Choose(Pay mana)
+Bot1.Choose(Forest)
+? Bot1.Mana =
+? Bot1.Graveyard.Forest.Colors =
+Bot1.Pass
+Bot2.Pass
+[Expect]
+Bot1.Library.Count = 20
+Bot1.Hand.Mountain.Colors =
+Bot1.Graveyard.Forest.Colors =
+Bot1.Battlefield.Mesmeric Trance.Types = Enchantment
