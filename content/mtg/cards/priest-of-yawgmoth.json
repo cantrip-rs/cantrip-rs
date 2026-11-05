@@ -1,0 +1,8 @@
+{
+  "name": "Priest of Yawgmoth",
+  "manaCost": "{1}{B}",
+  "type": "Creature — Phyrexian Human Cleric",
+  "power": 1,
+  "toughness": 2,
+  "oracleText": "{T}, Sacrifice an artifact: Add an amount of {B} equal to the sacrificed artifact's mana value."
+}
