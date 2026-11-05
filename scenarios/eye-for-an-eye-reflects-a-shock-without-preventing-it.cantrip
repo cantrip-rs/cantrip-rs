@@ -1,0 +1,33 @@
+# Eye for an Eye resolves before Shock and both players take its two damage (CR 614.1a).
+[Bot1 Deck]
+Mox Pearl
+Gleemox
+Eye for an Eye
+Island x17
+
+[Bot2 Deck]
+Mountain
+Shock
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Eye for an Eye.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Shock)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Graveyard = Eye for an Eye
+Bot2.Graveyard = Shock

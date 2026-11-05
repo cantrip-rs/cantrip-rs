@@ -1,0 +1,45 @@
+# Eye for an Eye (CR 614.1a): "the next time a source of your choice would deal damage to you this turn". Bot1 chooses Bot2's
+# Fencing Ace (double strike, 1/1) as it attacks. Its first-strike damage is the next time: the Ace deals it and Eye for an Eye deals that
+# 1 damage to the Ace's controller, Bot2. The effect is then used up, so the regular damage 1 is also dealt to Bot1: Bot1 18, Bot2 19.
+
+[Bot1 Deck]
+Mox Pearl x2
+Eye for an Eye
+Island x25
+
+[Bot2 Deck]
+Mox Ruby
+Mox Pearl
+Fencing Ace
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mox Ruby.Cast
+Bot2.Hand.Mox Pearl.Cast
+Bot2.Pass
+Bot2.Battlefield.Mox Ruby.Activate
+Bot2.Battlefield.Mox Pearl.Activate
+Bot2.Hand.Fencing Ace.Cast
+Bot2.Pass
+Bot1.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Fencing Ace > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Eye for an Eye.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Fencing Ace)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 19
+Prevented = (absent)

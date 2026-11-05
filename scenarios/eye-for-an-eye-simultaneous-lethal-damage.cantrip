@@ -1,0 +1,33 @@
+# Both players at two life are dealt lethal damage in the same replacement event, so the game is a draw (CR 104.4a, 614.1a).
+[Life]
+Bot1: 2
+Bot2: 2
+
+[Bot1 Deck]
+Mox Pearl
+Gleemox
+Eye for an Eye
+Island x17
+
+[Bot2 Deck]
+Mountain
+Shock
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Eye for an Eye.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Shock)
+
+[Expect]
+Result = Draw

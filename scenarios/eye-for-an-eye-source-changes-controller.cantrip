@@ -1,0 +1,46 @@
+# Eye for an Eye chooses a creature before control changes; when it deals damage, its current controller is dealt the same damage (CR 608.2h).
+
+[Bot1 Deck]
+Mox Pearl x2
+Memnite
+Eye for an Eye
+Island x25
+
+[Bot2 Deck]
+Mountain
+Mox Jet
+Mox Sapphire
+Act of Treason
+Island x25
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Hand.Mox Jet.Cast
+Bot2.Hand.Mox Sapphire.Cast
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Battlefield.Mox Jet.Activate
+Bot2.Battlefield.Mox Sapphire.Activate
+Bot2.Hand.Act of Treason.Cast(Bot1.Battlefield.Memnite)
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Eye for an Eye.Cast
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Memnite)
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Tapped = false
+[T2 Bot2.DeclareAttackers]
+Bot2.Attack(Memnite > Bot1)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 19
+Bot2.Life = 19
+Prevented = (absent)

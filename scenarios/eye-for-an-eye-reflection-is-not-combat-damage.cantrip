@@ -1,0 +1,40 @@
+# Holy Day prevents combat damage, but the damage Eye for an Eye deals in response to Shock is noncombat and still reaches its controller (CR 615.1).
+[Bot1 Deck]
+Mox Pearl x2
+Holy Day
+Gleemox
+Eye for an Eye
+Island x17
+
+[Bot2 Deck]
+Mountain
+Shock
+Island x18
+
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Hand.Gleemox.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Mountain.Play
+Bot2.Pass
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Hand.Holy Day.Cast
+Bot1.Pass
+Bot2.Pass
+Bot2.Battlefield.Mountain.Activate
+Bot2.Hand.Shock.Cast(Bot1)
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Battlefield.Gleemox.Activate(Color: White)
+Bot1.Hand.Eye for an Eye.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Stack.Shock)
+[T2 Bot2.Main2]
+
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 18
+Bot1.Graveyard = Eye for an Eye; Holy Day
+Bot2.Graveyard = Shock

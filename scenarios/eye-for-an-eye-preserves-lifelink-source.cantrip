@@ -1,0 +1,36 @@
+# The attacking Vampire Nighthawk remains the source of damage to Bot1, so its lifelink gains its controller life even as Eye for an Eye deals that controller damage (CR 120.3, 702.15b).
+[Bot1 Deck]
+Mox Pearl x2
+Eye for an Eye
+Island x20
+[Bot2 Deck]
+Black Lotus
+Vampire Nighthawk
+Island x20
+[Actions]
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Black)
+Bot2.Hand.Vampire Nighthawk.Cast
+Bot2.Pass
+[T4 Bot2.DeclareAttackers]
+Bot2.Attack(Vampire Nighthawk > Bot1)
+[T4 Bot2.DeclareBlockers]
+Bot1.Battlefield.Mox Pearl#1.Activate
+Bot1.Battlefield.Mox Pearl#2.Activate
+Bot1.Hand.Eye for an Eye.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Choose(Vampire Nighthawk)
+Bot1.Pass
+Bot2.Pass
+[T4 Bot2.Main2]
+[Expect]
+Bot1.Life = 18
+Bot2.Life = 20
