@@ -1,0 +1,66 @@
+# Bot1 gains 20, then gives Illusions to Bot2; only Bot2 loses 20 when it leaves. Bot2's Inn provides enough life to show the exact loss (CR 603.3a, 603.10a).
+[Bot1 Deck]
+Black Lotus
+Mox Sapphire
+Mox Ruby
+Mox Pearl
+Illusions of Grandeur
+Harmless Offering
+Island
+Black Lotus
+Island x20
+[Bot2 Deck]
+Adventurer's Inn
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Mox Pearl.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Illusions of Grandeur.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 40
+[T2 Bot2.Main1]
+Bot2.Hand.Adventurer's Inn.Play
+Bot2.Pass
+Bot1.Pass
+? Bot2.Life = 22
+[T3 Bot1.Upkeep]
+Bot1.Pass
+Bot2.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+Bot1.Battlefield.Mox Pearl.Activate
+Bot1.PayCost
+Bot1.Pass
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Harmless Offering.Cast
+Bot1.Target(Bot2)
+Bot1.Target(Illusions of Grandeur)
+Bot1.Pass
+Bot2.Pass
+? Bot1.Life = 40
+? Bot2.Life = 22
+? Bot2.Battlefield.Illusions of Grandeur.Colors = Blue
+[T4 Bot2.Upkeep]
+Bot2.Pass
+Bot1.Pass
+Bot2.Decline
+Bot2.Pass
+Bot1.Pass
+[Expect]
+Bot1.Life = 40
+Bot2.Life = 2
+Bot1.Graveyard.Illusions of Grandeur.Colors = Blue
