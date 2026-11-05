@@ -1,0 +1,36 @@
+# Removing the Aura after its end-step ability triggers does not save the creature it enchanted when the ability triggered (CR 113.7a, 603.3).
+[Bot1 Deck]
+Black Lotus
+Grizzly Bears
+Black Lotus
+Aggression
+Island
+Island
+Island
+Island x20
+[Bot2 Deck]
+Black Lotus
+Disenchant
+Island
+Island
+Island
+Island
+Island
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Green)
+Bot1.Hand.Grizzly Bears.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+[T3 Bot1.Main1]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Aggression.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T3 Bot1.End]
+Bot2.Battlefield.Black Lotus.Activate(Color: White)
+Bot2.Hand.Disenchant.Cast(Bot1.Battlefield.Aggression)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Graveyard.Grizzly Bears.Power = 2

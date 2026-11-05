@@ -1,0 +1,34 @@
+# The end-step ability keeps the creature it referred to when it triggered, even if the Aura moves in response.
+# Both hosts did not attack, so only the original creature may be destroyed (CR 603.3, 608.2h).
+[Bot1 Deck]
+Aggression
+Grizzly Bears
+Ornithopter
+Mox Emerald
+Black Lotus
+Mox Sapphire
+Enchantment Alteration
+Island x20
+[Bot2 Deck]
+Island x20
+[Actions]
+Bot1.Hand.Mox Emerald.Cast
+Bot1.Hand.Mox Sapphire.Cast
+Bot1.Hand.Black Lotus.Cast
+Bot1.Hand.Ornithopter.Cast
+Bot1.Battlefield.Mox Emerald.Activate
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Grizzly Bears.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Aggression.Cast(Bot1.Battlefield.Grizzly Bears)
+? Bot1.Mana =
+[T3 Bot1.End]
+Bot1.Battlefield.Mox Sapphire.Activate
+Bot1.Hand.Enchantment Alteration.Cast(Bot1.Battlefield.Aggression)
+Bot1.Choose(Bot1.Battlefield.Ornithopter)
+[T4 Bot2.Main1]
+[Expect]
+Bot1.Battlefield.Ornithopter.Power = 0
+Bot1.Battlefield.Aggression.AttachedTo = Ornithopter
+Bot1.Graveyard.Grizzly Bears.Power = 2

@@ -1,0 +1,21 @@
+# The enchanted creature's controller determines whose end step triggers Aggression (CR 603.2).
+[Bot1 Deck]
+Black Lotus
+Aggression
+Island x20
+[Bot2 Deck]
+Ornithopter
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+[T2 Bot2.Main1]
+Bot2.Hand.Ornithopter.Cast
+[T3 Bot1.Main1]
+Bot1.Battlefield.Black Lotus.Activate(Color: Red)
+Bot1.Hand.Aggression.Cast(Bot2.Battlefield.Ornithopter)
+? Bot1.Mana =
+[T4 Bot2.Main1]
+? Bot2.Battlefield.Ornithopter.Power = 0
+[T5 Bot1.Main1]
+[Expect]
+Bot2.Graveyard.Ornithopter.Power = 0
