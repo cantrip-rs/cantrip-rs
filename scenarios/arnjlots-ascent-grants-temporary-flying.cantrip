@@ -1,0 +1,48 @@
+# The ability targets either player's creature, not a land, and gives flying only until cleanup (CR 115.1c, 611.2a, 514.2).
+[Bot1 Deck]
+Arnjlot's Ascent
+Black Lotus
+Mox Ruby
+Memnite
+Island x20
+[Bot2 Deck]
+Memnite
+Island x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Hand.Mox Ruby.Cast
+Bot1.Pass
+Bot1.Hand.Memnite.Cast
+Bot1.Pass
+Bot1.Hand.Island.Play
+Bot1.Battlefield.Black Lotus.Activate(Color: Blue)
+Bot1.Hand.Arnjlot's Ascent.Cast
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+[T2 Bot2.Main1]
+Bot2.Hand.Memnite.Cast
+Bot2.Pass
+Bot1.Pass
+Bot1.Battlefield.Mox Ruby.Activate
+! Bot1.Battlefield.Arnjlot's Ascent.Activate(Bot1.Battlefield.Island)
+Bot1.Battlefield.Arnjlot's Ascent.Activate(Bot1.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot1.Battlefield.Memnite.Keywords = Flying
+Bot1.Battlefield.Island.Activate
+Bot1.Battlefield.Arnjlot's Ascent.Activate(Bot2.Battlefield.Memnite)
+? Bot1.Mana =
+Bot1.Pass
+Bot2.Pass
+? Bot2.Battlefield.Memnite.Keywords = Flying
+[T3 Bot1.Upkeep]
+? Bot1.Battlefield.Memnite.Keywords = (absent)
+? Bot2.Battlefield.Memnite.Keywords = (absent)
+Bot1.Pass
+Bot2.Pass
+Bot1.Decline
+[Expect]
+Bot1.Graveyard = Arnjlot's Ascent; Black Lotus
