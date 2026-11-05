@@ -1,0 +1,29 @@
+# El-Hajjâj deals damage to a creature and dies simultaneously; its triggered ability still gains one life (CR 603.2, 704.5g).
+[Bot1 Deck]
+El-Hajjâj
+Black Lotus
+Swamp x20
+[Bot2 Deck]
+Grizzly Bears
+Black Lotus
+Forest x20
+[Actions]
+Bot1.Hand.Black Lotus.Cast
+Bot1.Pass
+Bot1.Battlefield.Black Lotus.Activate(Color: Black)
+Bot1.Hand.El-Hajjâj.Cast
+? Bot1.Mana =
+[T2 Bot2.Main1]
+Bot2.Hand.Black Lotus.Cast
+Bot2.Pass
+Bot2.Battlefield.Black Lotus.Activate(Color: Green)
+Bot2.Hand.Grizzly Bears.Cast
+[T3 Bot1.DeclareAttackers]
+Bot1.Attack(El-Hajjâj)
+Bot2.Block(Grizzly Bears > El-Hajjâj)
+[T3 Bot1.Main2]
+[Expect]
+Bot1.Life = 21
+Bot2.Life = 20
+Bot1.Graveyard = El-Hajjâj; Black Lotus
+Bot2.Battlefield.Grizzly Bears.Damage = 1
